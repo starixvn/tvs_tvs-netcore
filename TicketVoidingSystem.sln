@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32407.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.Website", "TicketVoidingSystem.Website\TicketVoidingSystem.Website.csproj", "{6EB34E34-B7C9-4CB7-BCB2-D8A41FDCEF21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.Website", "TicketVoidingSystem.Website\TicketVoidingSystem.Website.csproj", "{6EB34E34-B7C9-4CB7-BCB2-D8A41FDCEF21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{1DAFDA22-5162-4A6E-B330-745C0DCB0073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.ABExceptionList", "Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj", "{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{6EB34E34-B7C9-4CB7-BCB2-D8A41FDCEF21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EB34E34-B7C9-4CB7-BCB2-D8A41FDCEF21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EB34E34-B7C9-4CB7-BCB2-D8A41FDCEF21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C225DEEC-3E60-478B-B241-CA1321AD50E2}

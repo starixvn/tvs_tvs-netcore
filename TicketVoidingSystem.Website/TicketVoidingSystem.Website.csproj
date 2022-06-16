@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
