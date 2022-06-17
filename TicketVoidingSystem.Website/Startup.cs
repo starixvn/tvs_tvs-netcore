@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -70,7 +71,6 @@ namespace TicketVoidingSystem.Website
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IUserService, UserService>();
 
-   
             services.AddSingleton(new UMClientConfiguration().Initialize(Configuration));
             services.AddSingleton<CheckUMFilterAttribute>();
             services.AddSingleton<IUMCacheService, UMCacheService>();
@@ -82,6 +82,7 @@ namespace TicketVoidingSystem.Website
             services.AddRazorPages();
             services.AddControllersWithViews(options =>
             {
+                options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)));
                 options.Filters.Add(new SessionAuthorizeAttribute());
             });
         }

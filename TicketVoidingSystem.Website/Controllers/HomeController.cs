@@ -7,7 +7,6 @@ using TicketVoidingSystem.Website.Models;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
-    //  [SessionAuthorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
