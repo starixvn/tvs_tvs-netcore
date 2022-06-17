@@ -1,10 +1,13 @@
 ﻿using System.Diagnostics;
+using Fanex.NAP.Signin.AspNetCore.Attribute;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TicketVoidingSystem.Website.Models;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
+    //  [SessionAuthorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,6 +22,7 @@ namespace TicketVoidingSystem.Website.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
