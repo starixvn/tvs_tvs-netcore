@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -33,6 +37,15 @@
     <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.SIT.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\dist\ab-exception-list\" />
+    <Folder Include="wwwroot\lib\tvs\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

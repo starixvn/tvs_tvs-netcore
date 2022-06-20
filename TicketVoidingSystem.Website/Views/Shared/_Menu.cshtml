@@ -1,0 +1,68 @@
+﻿@using Fanex.NAP.Client.AspNetCore.Session
+@using Microsoft.AspNetCore.Http
+@{
+    var session = new NapSession(new HttpContextAccessor());
+    var menuItemList = session.MenuItemList;
+}
+@if (menuItemList != null)
+{
+    var menuItems = menuItemList.Where(i => i.ParentId <= 0).OrderBy(i => i.DisplayOrder).ToList();
+
+    <nav class="hidden-phone">
+        <ul class="menu">
+            @for (int i = 0; i < menuItems.Count; i++)
+            {
+                var menuItem = menuItems[i];
+                var item = menuItemList.Where(x => x.ParentId > 0 && x.ParentId == menuItem.Id).OrderBy(x => x.DisplayOrder).ToList();
+                var className = "normal";
+
+                if (i == 0)
+                {
+                    className = " first";
+                }
+                if (i == menuItems.Count - 1 && i > 0)
+                {
+                    className = className.Length > 0 ? " last" : "last";
+                }
+                if (item.Count == 0)
+                {
+                    <li class="@className"><a href="@Url.Content("~" + menuItem.Url)">@menuItem.Name</a></li>
+                }
+                else
+                {
+                    className += className.Length > 0 ? " has-kids" : "has-kids";
+                    <li class="@className">
+                        <a id="@(menuItem.Name.Replace(" ", string.Empty))-menu">@menuItem.Name</a>
+                        <ul>
+                            @foreach (var subMenuItem in item)
+                            {
+                                <li><a href="@Url.Content("~" + subMenuItem.Url)">@subMenuItem.Name</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+    <select class="mini-menu visible-phone">
+        @for (int i = 0; i < menuItems.Count; i++)
+        {
+            var menuItem = menuItems[i];
+            var item = menuItemList.Where(x => x.ParentId > 0 && x.ParentId == menuItem.Id).OrderBy(x => x.DisplayOrder).ToList();
+
+            if (item.Count > 0)
+            {
+                <optgroup label="@menuItem.Name">
+                    @foreach (var subMenuItem in item)
+                    {
+                        <option value="@Url.Content("~" + subMenuItem.Url)">@subMenuItem.Name</option>
+                    }
+                </optgroup>
+            }
+            else
+            {
+                <option value="@Url.Content("~" + menuItem.Url)">@menuItem.Name</option>
+            }
+        }
+    </select>
+}

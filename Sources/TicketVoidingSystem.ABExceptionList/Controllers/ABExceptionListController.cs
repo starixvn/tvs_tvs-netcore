@@ -1,5 +1,4 @@
-﻿using System;
-using Fanex.NAP.Client.AspNetCore.Attributes;
+﻿using Fanex.NAP.Client.AspNetCore.Attributes;
 using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +12,7 @@ namespace TicketVoidingSystem.ABExceptionList.Controllers
         [NapAuth(FunctionKey = "ABExceptionList", Policy = Constant.Policy.Read)]
         public IActionResult Index()
         {
-            return Ok($"xxxx {DateTime.Now}");
+            return View("~/wwwroot/dist/ab-exception-list/index.cshtml");
         }
     }
 }
