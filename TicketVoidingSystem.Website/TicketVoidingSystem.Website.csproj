@@ -9,8 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fanex.Data" Version="4.2.2" />
+    <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0" />
     <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.0-beta05" />

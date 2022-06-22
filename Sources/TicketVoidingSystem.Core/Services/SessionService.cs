@@ -1,0 +1,62 @@
+﻿using Fanex.NAP.Client.Configuration;
+using Fanex.NAP.Client.Helpers.Common;
+using Fanex.NAP.Client.Helpers.Web;
+using Fanex.NAP.Client.Services;
+using Fanex.NAP.Core.Business;
+using Microsoft.AspNetCore.Http;
+
+namespace TicketVoidingSystem.Core.Services
+{
+    public interface SessionService
+    {
+        int UserId { get; }
+
+        string UserName { get; }
+
+        bool HasPermission(string functionKey, Constant.Policy policy);
+
+        string GetClientIp();
+
+        bool CheckPassword(string password);
+    }
+
+    public class SessionServiceImp : SessionService
+    {
+        private readonly INapSession currentSession;
+        private readonly IUserService userService;
+        private readonly INapSettings siteSettings;
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public SessionServiceImp(INapSession currentSession, IUserService userService, INapSettings siteSettings, IHttpContextAccessor httpContextAccessor)
+        {
+            this.currentSession = currentSession;
+            this.userService = userService;
+            this.siteSettings = siteSettings;
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public int UserId => currentSession.UserId;
+
+        public string UserName => currentSession.UserName;
+
+        public bool HasPermission(string functionKey, Constant.Policy policy)
+        {
+            return userService.IsHavingPermission(currentSession.UserId, siteSettings.SiteId, functionKey, policy);
+        }
+
+        public string GetClientIp()
+        {
+            return httpContextAccessor.HttpContext.Connection.RemoteIpAddress.Equals(httpContextAccessor.HttpContext
+                .Connection.LocalIpAddress)
+                ? "127.0.0.1"
+                : httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+        }
+
+        public bool CheckPassword(string password)
+        {
+            var user = userService.Get(UserId);
+            var encode = Cryptography.CfsEnCode(password);
+            return encode.Equals(user.Password);
+        }
+    }
+}

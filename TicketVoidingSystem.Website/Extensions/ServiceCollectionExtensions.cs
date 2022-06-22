@@ -1,11 +1,98 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data;
+using Fanex.Data.SqlServer;
+using Fanex.NAP.Client.AspNetCore.Configuration;
+using Fanex.NAP.Client.AspNetCore.Session;
+using Fanex.NAP.Client.Configuration;
+using Fanex.NAP.Client.Helpers.Web;
+using Fanex.NAP.Client.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using ONEbook.UM.AspNetCore;
+using ONEbook.UM.AspNetCore.Filters;
+using ONEbook.UM.Configurations;
+using ONEbook.UM.Helpers;
+using ONEbook.UM.Services;
+using ONEbook.UM.Transport;
 
 namespace TicketVoidingSystem.Website.Extensions
 {
-    public class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
+        public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connections = configuration.GetSection("ConnectionStrings")
+                .GetChildren()
+                .AsEnumerable()
+                .ToDictionary(
+                    x => x.Key,
+                    y => new ConnectionConfiguration(y.Key, y.Value)
+                );
+
+            DbSettingProviderManager
+                .StartNewSession()
+                .Use(connections)
+                .WithSqlServer()
+                .UseDefaultDbSettingProvider(configuration.GetSection("StoredProcedurePath").Value)
+                .Run();
+        }
+
+        public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    //// options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
+                    //// options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(configuration.GetSection("AuthSettings:CookieTimeOut").Value));
+                    options.Cookie = new CookieBuilder
+                    {
+                        Name = "TicketVoidingSystem.Cookie",
+                        SecurePolicy = CookieSecurePolicy.SameAsRequest
+                    };
+                    options.Events.OnRedirectToLogin = (context) =>
+                    {
+                        context.Response.Redirect(configuration.GetSection("AuthSettings:LoginPath").Value);
+                        return Task.CompletedTask;
+                    };
+                    options.Events.OnSigningOut = context =>
+                    {
+                        context.Response.Redirect(options.LoginPath);
+                        return Task.CompletedTask;
+                    };
+                });
+
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(configuration.GetSection("AuthSettings:SessionTimeOut").Value));
+                options.Cookie.Name = "TicketVoidingSystem.Session";
+            });
+        }
+
+        public static void RegisterInternalServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<INapSettings>(new NapSettings(configuration));
+            services.AddSingleton<INapSession, NapSession>();
+            services.AddSingleton<ISecurityService, SecurityService>();
+            services.AddSingleton<IGroupService, GroupService>();
+            services.AddSingleton<IUserService, UserService>();
+        }
+
+        public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
+            services.AddSingleton<CheckUMFilterAttribute>();
+            services.AddSingleton<IUMCacheService, UMCacheService>();
+            services.AddSingleton<IUMRestClient, UMRestClient>();
+            services.AddSingleton<IPHelper, IPHelperImpl>();
+            services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
+            services.AddSingleton<IMaintenanceService, MaintenanceService>();
+        }
     }
 }
