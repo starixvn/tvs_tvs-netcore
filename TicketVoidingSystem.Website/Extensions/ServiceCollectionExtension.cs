@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
+using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
 using Fanex.NAP.Client.AspNetCore.Configuration;
 using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -18,10 +20,13 @@ using ONEbook.UM.Configurations;
 using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
+using TicketVoidingSystem.ABExceptionList.Controllers;
+using TicketVoidingSystem.ABExceptionList.Services;
+using TicketVoidingSystem.Core.Services;
 
 namespace TicketVoidingSystem.Website.Extensions
 {
-    public static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtension
     {
         public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
         {
@@ -74,7 +79,7 @@ namespace TicketVoidingSystem.Website.Extensions
             });
         }
 
-        public static void RegisterInternalServices(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<INapSettings>(new NapSettings(configuration));
@@ -82,6 +87,7 @@ namespace TicketVoidingSystem.Website.Extensions
             services.AddSingleton<ISecurityService, SecurityService>();
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddScoped<IDynamicRepository, DynamicRepository>();
         }
 
         public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
@@ -93,6 +99,17 @@ namespace TicketVoidingSystem.Website.Extensions
             services.AddSingleton<IPHelper, IPHelperImpl>();
             services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
             services.AddSingleton<IMaintenanceService, MaintenanceService>();
+        }
+
+        public static void RegisterBusinessServices(this IServiceCollection services)
+        {
+            services.AddSingleton<SessionService, SessionServiceImp>();
+            services.AddTransient<GetUsersService, GetUsersServiceImp>();
+        }
+
+        public static void RegisterMediatR(this IServiceCollection services)
+        {
+            services.AddMediatR(typeof(ABExceptionListController));
         }
     }
 }

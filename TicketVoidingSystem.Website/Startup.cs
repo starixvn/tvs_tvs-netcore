@@ -31,11 +31,21 @@ namespace TicketVoidingSystem.Website
         public void ConfigureServices(IServiceCollection services)
         {
             services.RegisterAuthentication(Configuration);
-            services.RegisterInternalServices(Configuration);
-            services.RegisterONEbookUM(Configuration);
             services.RegisterFanexData(Configuration);
+            services.RegisterCoreServices(Configuration);
+            services.RegisterONEbookUM(Configuration);
+            services.RegisterBusinessServices();
+            services.RegisterMediatR();
             // services.RegisterSentry(Configuration);
-
+            services.AddResponseCompression(options =>
+            {
+                options.MimeTypes = new[]{
+                    "text/html",
+                    "text/css",
+                    "application/javascript",
+                    "application/json",
+                };
+            });
             services.AddRazorPages();
             services.AddControllersWithViews(options =>
             {
@@ -45,22 +55,13 @@ namespace TicketVoidingSystem.Website
             {
                 options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
             });
-            services.AddMediatR(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseResponseCompression();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
