@@ -16,12 +16,12 @@ export class FilterService {
   constructor(
     private readonly appService: AppService,
     private readonly commonService: CommonService,
-  ) {}
+  ) { }
 
   async getSites(): Promise<GroupSiteModel[]> {
     return this.commonService.getSites();
   }
-  
+
   initDefaultFilter(filterModel: FilterModel, groupSites: GroupSiteModel[], selectedSubType: string[], voidVIPSelection: Selection[]): void {
     filterModel.username = '';
     filterModel.level = ABWhiteListLevel.All;
@@ -51,11 +51,11 @@ export class FilterService {
 
     return multipleSelection;
   }
-  
+
   async initSubType(): Promise<Selection[]> {
     const selections = [];
     const subIssueTypes = await this.appService.getSubTypes();
-    _.forEach(subIssueTypes, function(item) {
+    _.forEach(subIssueTypes, function (item) {
       selections.push(
         {
           name: item.subIssueTypeName,
@@ -64,7 +64,7 @@ export class FilterService {
         }
       );
     });
-    
+
     return selections;
   }
 

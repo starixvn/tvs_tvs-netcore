@@ -128,31 +128,31 @@ const afterVoidHistory = {
   indexEJSPath: './src/after-void-history/index.ejs'
 };
 
-const abWhiteList = {
-  pageName: 'ABWhiteList',
+const abExceptionList = {
+  pageName: 'ABExceptionList',
   tsconfigFiles: [
-    'ab-white-list/main.ts',
+    'ab-exception-list/main.ts',
     'polyfills.ts'
   ],
-  deployUrl: 'dist/ticket-voiding-system/ab-white-list/',
-  index: 'src/ab-white-list/index.cshtml',
-  main: 'src/ab-white-list/main.ts',
-  transformFolder: '../dist/ticket-voiding-system/ab-white-list',
-  indexEJSPath: './src/ab-white-list/index.ejs'
+  deployUrl: 'dist/ab-exception-list/',
+  index: 'src/ab-exception-list/index.cshtml',
+  main: 'src/ab-exception-list/main.ts',
+  transformFolder: '../wwwroot/dist/ab-exception-list',
+  indexEJSPath: './src/ab-exception-list/index.ejs'
 };
 
 const configPages = [
-  voidSingleBet,
-  ticketListing,
-  markTickets,
-  addRequest,
-  editRequest,
-  manageRequest,
-  voidRequest,
-  getBetIdForVoiding,
-  voidFormulaBets,
-  afterVoidHistory,
-  abWhiteList
+  // voidSingleBet,
+  // ticketListing,
+  // markTickets,
+  // addRequest,
+  // editRequest,
+  // manageRequest,
+  // voidRequest,
+  // getBetIdForVoiding,
+  // voidFormulaBets,
+  // afterVoidHistory,
+  abExceptionList
 ];
 
 module.exports = configPages;
