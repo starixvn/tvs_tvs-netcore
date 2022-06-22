@@ -8,7 +8,7 @@
 {
     var menuItems = menuItemList.Where(i => i.ParentId <= 0).OrderBy(i => i.DisplayOrder).ToList();
 
-    <nav class="hidden-phone">
+    <nav class="d-none d-xl-block">
         <ul class="menu">
             @for (int i = 0; i < menuItems.Count; i++)
             {
@@ -44,7 +44,7 @@
             }
         </ul>
     </nav>
-    <select class="mini-menu visible-phone">
+    <select class="mini-menu d-block d-xl-none">
         @for (int i = 0; i < menuItems.Count; i++)
         {
             var menuItem = menuItems[i];

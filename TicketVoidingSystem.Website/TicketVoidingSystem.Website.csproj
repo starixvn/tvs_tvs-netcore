@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\dist\ab-exception-list\" />
-    <Folder Include="wwwroot\lib\tvs\css\" />
+    <Folder Include="wwwroot\lib\tvs\img\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿[
   {
-    "outputFile": "wwwroot/lib/tvs/css/angular-styles.css",
-    "inputFile": "wwwroot/lib/tvs/css/angular-styles.less"
+    "outputFile": "wwwroot/lib/tvs/css/styles.css",
+    "inputFile": "wwwroot/lib/tvs/css/styles.less"
   }
 ]

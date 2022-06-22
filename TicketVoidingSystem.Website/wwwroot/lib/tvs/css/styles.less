@@ -210,14 +210,14 @@ p, ul, ol, dl {
 }
 
 .icon-excel {
-    background: url(img/icon-excel.gif) no-repeat;
+    background: url(../img/icon-excel.gif) no-repeat;
     width: 16px;
     height: 16px;
     line-height: 16px;
 }
 
 .icon-tick {
-    background: url(img/tick-ico-16.png) no-repeat;
+    background: url(../img/tick-ico-16.png) no-repeat;
     width: 16px;
     height: 16px;
     line-height: 16px;
@@ -251,7 +251,7 @@ header, #headline, #body, .filter-bar {
 }
 
 header {
-    background: url('../../Content/base/img/bg-header.png') repeat-x;
+    background: url('../img/bg-header.png') repeat-x;
     background-color: @secondColor;
     border-top: 1px solid #FFFFFF;
 
@@ -286,7 +286,7 @@ header {
                     position: absolute;
                     top: 30px;
                     left: 0;
-                    z-index: @zindexDropdown;
+                    z-index: 1000;
                     display: none;
                     margin: 0;
                     padding: 4px 0;
@@ -378,7 +378,7 @@ header {
                 }
 
                 .has-kids {
-                    //> a { background: url(img/dot-white.png) no-repeat center 32px }
+                    //> a { background: url(../img/dot-white.png) no-repeat center 32px }
                 }
             }
         }
@@ -416,12 +416,12 @@ header {
     }
 
     .icon-avata {
-        background: url('../../Content/base/img/user.png') no-repeat !important;
+        background: url('../img/user.png') no-repeat !important;
         margin-top: 2px;
     }
 
     .icon-avata-hover {
-        background: url('../../Content/base/img/user-hover.png') no-repeat !important;
+        background: url('../img/user-hover.png') no-repeat !important;
         margin-top: 2px;
     }
 
@@ -434,22 +434,22 @@ header {
     }
 
     .icon-menu-down {
-        background: url('../../Content/base/img/arrow-up-down.png') no-repeat -1px -8px !important;
+        background: url('../img/arrow-up-down.png') no-repeat -1px -8px !important;
         margin-top: 10px;
     }
 
     .icon-menu-up {
-        background: url('../../Content/base/img/arrow-up-down.png') no-repeat -1px -1px !important;
+        background: url('../img/arrow-up-down.png') no-repeat -1px -1px !important;
         margin-top: 10px;
     }
 
     .icon-menu-down-hover {
-        background: url('../../Content/base/img/arrow-up-down-hover.png') no-repeat -1px -8px !important;
+        background: url('../img/arrow-up-down-hover.png') no-repeat -1px -8px !important;
         margin-top: 10px;
     }
 
     .icon-menu-up-hover {
-        background: url('../../Content/base/img/arrow-up-down-hover.png') no-repeat !important;
+        background: url('../img/arrow-up-down-hover.png') no-repeat !important;
         margin-top: 10px;
     }
 
@@ -464,6 +464,50 @@ header {
         margin: 0px !important;
         border: 0px !important;
     }
+    // The dropdown menu (ul)
+    // ----------------------
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none; // none by default, but block on "open" of the menu
+        float: left;
+        min-width: 160px;
+        padding: 5px 0;
+        margin: 2px 0 0; // override default ul
+        list-style: none;
+        background-color: @white;
+        border: 1px solid #ccc; // Fallback for IE7-8
+        border: 1px solid rgba(0,0,0,.2);
+        *border-right-width: 2px;
+        *border-bottom-width: 2px;
+        .border-radius(6px);
+        .box-shadow(0 5px 10px rgba(0,0,0,.2));
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding;
+        background-clip: padding-box;
+        // Aligns the dropdown menu to right
+        &.pull-right {
+            right: 0;
+            left: auto;
+        }
+        // Dividers (basically an hr) within the dropdown
+        .divider {
+            .nav-divider(#e5e5e5, @white);
+        }
+        // Links within the dropdown menu
+        li > a {
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-size: 13px;
+            font-weight: normal;
+            line-height: 20px;
+            color: @grayDark;
+            white-space: nowrap;
+        }
+    }
 }
 
 .user-info-background {
@@ -473,7 +517,7 @@ header {
     display: block !important;
 
     .logo {
-        background: url('../../Content/base/img/sprite.png') no-repeat;
+        background: url('../img/sprite.png') no-repeat;
         border-right: 1px solid #404040;
         float: left;
         padding: 18px 75px 0;
@@ -487,7 +531,7 @@ header {
         }
 
         .del {
-            background: @logoBackground url(img/icons/appbar.clear.reflect.horizontal.white.png) no-repeat;
+            background: @logoBackground url(../img/icons/appbar.clear.reflect.horizontal.white.png) no-repeat;
             padding-left: 32px;
             margin-left: 5px;
             height: 24px;
@@ -595,7 +639,7 @@ header {
 
     input[type=text], select {
         padding: 1px 2px;
-        color: @textColor;
+        color: @grayDark;
         width: 100px;
         height: 16px;
         .border-radius(0);
@@ -641,13 +685,13 @@ header {
             cursor: pointer;
 
             .icon-show-all-bettype {
-                background: url('../../Content/base/img/sprite.png') no-repeat -7px -142px !important;
+                background: url('../img/sprite.png') no-repeat -7px -142px !important;
                 width: 18px !important;
                 margin-top: 3px;
             }
 
             .icon-hide-all-bettype {
-                background: url('../../Content/base/img/sprite.png') no-repeat -25px -142px !important;
+                background: url('../img/sprite.png') no-repeat -25px -142px !important;
                 width: 18px !important;
                 margin-top: 3px;
             }
@@ -713,7 +757,7 @@ header {
         font-weight: bold;
 
         .lnk-toggle {
-            color: @textColor;
+            color: @white;
         }
     }
 
@@ -779,13 +823,13 @@ header {
     .submitMessage {
         float: left;
         clear: both;
-        background: url('../../Content/base/img/sprite.png') no-repeat -7px -86px;
+        background: url('../img/sprite.png') no-repeat -7px -86px;
         padding: 6px 12px;
         color: #FFF;
         font-weight: bold;
 
         &:hover {
-            background: url('../../Content/base/img/sprite.png') no-repeat -85px -86px;
+            background: url('../img/sprite.png') no-repeat -85px -86px;
             text-decoration: none;
             color: @white;
             font-weight: bold;
@@ -827,7 +871,7 @@ fieldset.form {
 .loading {
     width: 32px;
     height: 32px;
-    background: url(img/loading.gif) no-repeat scroll 0 0 transparent;
+    background: url(../img/loading.gif) no-repeat scroll 0 0 transparent;
 }
 
 .option {
@@ -837,7 +881,7 @@ fieldset.form {
 .undo {
     width: 16px;
     height: 16px;
-    background: url(img/undo.png) no-repeat scroll 0 0 transparent;
+    background: url(../img/undo.png) no-repeat scroll 0 0 transparent;
     cursor: pointer;
 }
 
@@ -958,7 +1002,7 @@ fieldset.form {
     display: block;
     clear: left;
     float: left;
-    background: url('../../Content/base/img/checkBox.png') white no-repeat;
+    background: url('../img/checkBox.png') white no-repeat;
     background-position: 0px -17px;
     cursor: pointer;
 }
@@ -976,11 +1020,11 @@ fieldset.form {
     cursor: pointer;
     margin-top: 12px;
     width: 10px;
-    background: url('../../Content/base/img/arrow-down.png') no-repeat center;
+    background: url('../img/arrow-down.png') no-repeat center;
 }
 
 .iconChecked {
-    background: url('../../Content/base/img/ion-check.png') no-repeat right;
+    background: url('../img/ion-check.png') no-repeat right;
 }
 
 .item-number {
@@ -1004,7 +1048,7 @@ fieldset.form {
 }
 
 .icon-delete {
-    background: url('../../Content/base/img/icon-close.png') no-repeat right;
+    background: url('../img/icon-close.png') no-repeat right;
     margin: 4px 2px 0 2px;
     float: right;
     cursor: pointer;
@@ -1040,19 +1084,19 @@ fieldset.form {
 }
 
 .icon-warning {
-    background: url('../../Content/base/img/sprite.png') no-repeat -45px -38px;
+    background: url('../img/sprite.png') no-repeat -45px -38px;
     width: 18px !important;
     height: 18px !important;
 }
 
 .icon-scroll-up {
-    background: url('../../Content/base/img/sprite.png') no-repeat -95px -38px;
+    background: url('../img/sprite.png') no-repeat -95px -38px;
     width: 18px !important;
     height: 18px !important;
 }
 
 .icon-scroll-down {
-    background: url('../../Content/base/img/sprite.png') no-repeat -110px -38px;
+    background: url('../img/sprite.png') no-repeat -110px -38px;
     width: 18px !important;
     height: 18px !important;
 }
@@ -1060,7 +1104,7 @@ fieldset.form {
 .submitRecover {
     float: left;
     clear: both;
-    background: url('../../Content/base/img/sprite.png') no-repeat -7px -89px;
+    background: url('../img/sprite.png') no-repeat -7px -89px;
     padding: 6px 14px;
     margin-top: 10px;
     margin-left: 20px;
@@ -1069,7 +1113,7 @@ fieldset.form {
     border: 0px;
 
     &:hover {
-        background: url('../../Content/base/img/sprite.png') no-repeat -85px -89px;
+        background: url('../img/sprite.png') no-repeat -85px -89px;
         text-decoration: none;
         color: @white;
         font-weight: bold;
@@ -1087,14 +1131,14 @@ fieldset.form {
 .submitRecover {
     float: left;
     clear: both;
-    background: url('../../../Content/base/img/sprite.png') no-repeat -7px -89px;
+    background: url('../../img/sprite.png') no-repeat -7px -89px;
     padding: 6px 14px;
     color: #FFF;
     font-weight: bold;
     border: 0px;
 
     &:hover {
-        background: url('../../../Content/base/img/sprite.png') no-repeat -85px -89px;
+        background: url('../../img/sprite.png') no-repeat -85px -89px;
         text-decoration: none;
         color: @white;
         font-weight: bold;
@@ -1124,14 +1168,14 @@ fieldset.form {
 }
 
 .icon-warning-sign {
-    background: url('../../Content/base/img/sprite.png') no-repeat -25px -122px !important;
+    background: url('../img/sprite.png') no-repeat -25px -122px !important;
     width: 18px !important;
     float: left;
     margin-left: 5px;
 }
 
 .icon-ok {
-    background: url('../../Content/base/img/sprite.png') no-repeat -7px -122px !important;
+    background: url('../img/sprite.png') no-repeat -7px -122px !important;
     width: 18px !important;
     float: left;
     margin-left: 5px;
@@ -1152,14 +1196,14 @@ fieldset.form {
 .submitRecover {
     float: left;
     clear: both;
-    background: url('../../Content/base/img/sprite.png') no-repeat -7px -89px;
+    background: url('../img/sprite.png') no-repeat -7px -89px;
     padding: 6px 14px;
     color: #FFF;
     font-weight: bold;
     border: 0px;
 
     &:hover {
-        background: url('../../Content/base/img/sprite.png') no-repeat -85px -89px;
+        background: url('../img/sprite.png') no-repeat -85px -89px;
         text-decoration: none;
         color: @white;
         font-weight: bold;
@@ -1277,4 +1321,74 @@ fieldset.form {
     border-radius: .25rem;
     font-weight: 700;
     margin-bottom: 10px;
+}
+
+/********************************************************/
+/*                       EXTENDED CSS                   */
+/********************************************************/
+
+ul, ol {
+    padding: 0;
+    margin: 0 0 10px 25px;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url(../img/glyphicons-halflings.png);
+    background-position: 14px 14px;
+    background-repeat: no-repeat;
+    margin-top: 1px;
+}
+
+.open > .dropdown-menu {
+    display: block;
+}
+
+/********************************************************/
+/*                 .   CORE VARIABLES         .         */
+/********************************************************/
+
+.transition(@transition) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    -o-transition: @transition;
+    transition: @transition;
+}
+
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.box-shadow(@shadow) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+
+.rotate(@degrees) {
+    -webkit-transform: rotate(@degrees);
+    -moz-transform: rotate(@degrees);
+    -o-transform: rotate(@degrees);
+    transform: rotate(@degrees);
+}
+
+.nav-divider(@top: #e5e5e5, @bottom: @white) {
+    // IE7 needs a set width since we gave a height. Restricting just
+    // to IE7 to keep the 1px left/right space in other browsers.
+    // It is unclear where IE is getting the extra space that we need
+    // to negative-margin away, but so it goes.
+    *width: 100%;
+    height: 1px;
+    margin: ((20px / 2) - 1) 1px; // 8px 1px
+    *margin: -5px 0 5px;
+    overflow: hidden;
+    background-color: @top;
+    border-bottom: 1px solid @bottom;
 }

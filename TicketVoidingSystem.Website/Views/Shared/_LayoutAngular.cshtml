@@ -16,7 +16,8 @@
     <link rel="shortcut icon" href="~/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/angular-styles.less"  />
+    <link rel="stylesheet" href="~/lib/tvs/css/styles.css" />
+
     @*@Styles.Render("~/css/libs")*@
     @await RenderSectionAsync("Head", false)
 </head>
@@ -54,11 +55,14 @@
     @*@Scripts.Render("~/scripts/libs")*@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <section id="body" user-name="@userName" user-id="@userId">
         @RenderBody()
     </section>
 
-    <script type="text/javascript" src="~/dist/SubParlayTicket.js"></script>
+    <script type="text/javascript" src="~/js/NapTicketControl.js"></script>
+    <script type="text/javascript" src="~/js/NapTicketControl.Helper.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     @*TODO - add matomo*@
 </body>
