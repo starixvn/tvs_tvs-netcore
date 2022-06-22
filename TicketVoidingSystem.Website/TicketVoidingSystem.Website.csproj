@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Angular\**" />
+    <Content Remove="Angular\**" />
+    <EmbeddedResource Remove="Angular\**" />
+    <None Remove="Angular\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="compilerconfig.json" />
   </ItemGroup>
 

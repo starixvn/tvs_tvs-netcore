@@ -1,0 +1,127 @@
+import { Injectable } from '@angular/core';
+import * as moment from 'moment';
+// import { CheckValidTransIdsQuery } from '../..//add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
+// import { CheckValidUsernamesQuery, CheckValidUsernamesResult } from '../../add-request/app/add-request/abnormal-accounts/abnormal-accounts.model';
+// import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
+// import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
+// import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
+import { Tooltip } from '../components/tooltip/tooltip.model';
+import { DateTimeFormat } from '../constants/config';
+import { BalanceUp } from '../models/balance-up.model';
+import { CheckingPermissionModel } from '../models/checking-permission.model';
+import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
+import { Result, SqlResult } from '../models/result';
+import { Selection } from '../models/selection.model';
+import { GroupSiteModel } from '../models/site.model';
+import { HttpService } from './http.service';
+// import { RequestDetailViewModel } from './../../edit-request/app/request.model';
+import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CommonService {
+  constructor(
+    private readonly httpService: HttpService
+  ) { }
+
+  async getIssueTypes(): Promise<IssueTypesModel> {
+    return this.httpService.getJson('TicketVoiding/GetIssueTypes');
+  }
+
+  async getActions(): Promise<Selection[]> {
+    return this.httpService.getJson('TicketVoiding/GetActions');
+  }
+
+  async getSites(): Promise<GroupSiteModel[]> {
+    return this.httpService.getJson('TicketVoiding/GetSites');
+  }
+
+  async getMatch(matchId: number): Promise<MatchModel> {
+    return this.httpService.postJson({ matchId, isMatch3rd: false }, 'Match/GetInfo');
+  }
+
+  // async getRequestById(id: number): Promise<RequestDetailViewModel> {
+  //   return this.httpService.getJson(`TicketVoidingSystem/ManageRequest/GetRequest/${id}`);
+  // }
+
+  async getIssueInfo(subId: number): Promise<IssueInfo> {
+    return this.httpService.getJson(`TicketVoiding/GetIssueTypeName?subId=${subId}`);
+  }
+
+  async getBalanceUp(): Promise<BalanceUp> {
+    return this.httpService.getJson(`TicketVoiding/GetBalanceUp`);
+  }
+
+  async checkMatchIdWithRefNo(query: CheckMatchWithRefNoQuery, tooltip: Tooltip): Promise<boolean> {
+    const NUMBER_ONE = 1;
+    const NUMBER_TWO = 2;
+    const NUMBER_THREE = 3;
+    const NUMBER_FOUR = 4;
+    const NUMBER_FIVE = 5;
+    const NUMBER_SIX = 6;
+    const url = 'Match/CheckMatchIdWithRefNo';
+    const data = await this.httpService.postJson<CheckMatchWithRefNoQuery, Result<string>>(query, url);
+
+    switch (data.errorCode) {
+      case NUMBER_ONE:
+      case NUMBER_TWO:
+      case NUMBER_THREE:
+      case NUMBER_FOUR:
+        tooltip.display('match-id', data.errorMsg);
+        break;
+      case NUMBER_FIVE:
+        tooltip.display('from-bet-id', data.errorMsg);
+        break;
+      case NUMBER_SIX:
+        tooltip.display('to-bet-id', data.errorMsg);
+        break;
+      default:
+        break;
+    }
+
+    return data.isSuccessful;
+  }
+
+  async getFirstTimeAndKickOffTime(id: number): Promise<FirstTicketTime> {
+    return this.httpService.getJson(`Match/GetFirstTimeAndKickOffTime/${id}`);
+  }
+
+  async checkVoidBetPermission(query: CheckingPermissionModel): Promise<SqlResult> {
+    return this.httpService.postJson(query, `state-api/simple-data/update`);
+  }
+
+  async getIssueTypePermissionList(): Promise<IssueType[]> {
+    return this.httpService.getJson('TicketVoiding/GetIssueTypePermissionList');
+  }
+
+  // async getPermissionManageRequest(): Promise<PermissionManage> {
+  //   return this.httpService.getJson('TicketVoidingSystem/ManageRequest/GetPermissionManage');
+  // }
+
+  // async checkValidTransIdsForAbnormalBet(query: CheckValidTransIdsQuery): Promise<CheckValidTransIdsResult> {
+  //   return this.httpService.postJson<CheckValidTransIdsQuery, CheckValidTransIdsResult>(query, 'TicketVoiding/CheckValidTransIdsRequest');
+  // }
+
+  // async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckValidUsernamesResult> {
+  //   return this.httpService.postJson<CheckValidUsernamesQuery, CheckValidUsernamesResult>(query, 'TicketVoiding/CheckValidUsernames');
+  // }
+
+  // async getLogInfo(query: GetLogInfoQuery): Promise<GetLogInfoModel[]> {
+  //   return this.httpService.postJson<GetLogInfoQuery, GetLogInfoModel[]>(query, 'TicketVoiding/GetLogInfo');
+  // }
+
+  async getMarkedTicketsCount(): Promise<number> {
+    return this.httpService.getJson('TicketVoidingSystem/ManageRequest/GetMarkedTicketsCount');
+  }
+
+  async getResultCache<T>(guid: string): Promise<Result<T>> {
+    return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `Utility/GetResultCache`);
+  }
+}
+
+export class CommonStaticService {
+  static convertToStrictTimeFormat(sourceTime: string): string {
+    return moment(sourceTime.trim(), DateTimeFormat.TIME_FORMAT, true).format(DateTimeFormat.TIME_FORMAT);
+  }
+}

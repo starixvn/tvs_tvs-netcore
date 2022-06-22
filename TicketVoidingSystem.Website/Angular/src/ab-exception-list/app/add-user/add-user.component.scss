@@ -1,0 +1,64 @@
+.modal-dialog-custom {
+  max-width: 50%;
+  height: 85%;
+  margin: 1.75rem auto;
+}
+
+.modal-header {
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background: #28a745;
+  height: 34px;
+
+  .modal-title {
+    line-height: 5px;
+  }
+}
+
+.modal-body {
+  padding: 0 16px 16px 16px;
+}
+
+.modal-body-content {
+  height: 100%;
+}
+
+.modal-control {
+  margin-top: -10px;
+  margin-right: -5px;
+}
+
+.sub-type {
+  .sub-type-dropdown {
+    flex-grow: 1;
+  }
+}
+
+::ng-deep .dropdown-down {
+  border-top: 5px solid #999 !important;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  margin-bottom: 2px !important;
+  margin-right: -6px !important;
+}
+
+::ng-deep .dropdown-up {
+  border-bottom: 5px solid #999 !important;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  margin-bottom: 2px !important;
+  margin-right: -6px !important;
+}
+
+::ng-deep .multiselect-dropdown .dropdown-btn {
+  height: 35px;
+}
+
+button.close {
+  line-height: 0px;
+  height: 32px;
+  background-color: inherit;
+  color: inherit;
+}

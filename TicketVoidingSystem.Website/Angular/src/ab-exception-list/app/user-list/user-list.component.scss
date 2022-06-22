@@ -1,0 +1,118 @@
+@import '../../../assets/styles/mixin.scss';
+
+.width-1400 {
+  width: 1420px !important;
+}
+
+.width-1300 {
+  width: 1300px !important;
+}
+
+.user-list {
+  .title-user-list {
+    @include grid-title('../images/excel-icon.png')
+  }
+
+  .col-tb-1 {
+    width: 48px;
+  }
+
+  .col-tb-2 {
+    width: 200px;
+  }
+
+  .col-tb-3 {
+    width: 100px;
+  }
+
+  .col-tb-4 {
+    width: 150px;
+  }
+
+  .col-tb-5 {
+    width: 350px;
+  }
+  
+  .col-tb-6 {
+    width: 100px;
+  }
+
+  .col-tb-7 {
+    width: 200px;
+  }
+
+  .col-tb-8 {
+    width: 150px;
+  }
+
+  table {
+    text-align: center;
+  }
+
+  .table-header {
+    border: solid #888888;
+    border-width: 1px 1px 0 1px;
+
+    table {
+      @include setTable();
+      border: solid #888888;
+      border-width: 1px 1px 0 1px;
+      tr {
+        th {
+          background: #4e71bb;
+          background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+          background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+          color: #fff;
+          border: solid #888888;
+          border-width: 1px 1px 0 1px;
+          padding: 3px 0px !important;
+        }
+    
+        .col-1 {
+          background: white;
+          width: 46px;
+          border: solid 2px #4e71bb;
+        }
+
+        .col-remove {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .table-content {
+    max-height: 545px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #888888;
+    @include scroll-style();
+
+    table {
+      @include setTable();
+      border: 1px solid #888888;
+
+      tbody:nth-child(odd) {
+        background-color: #dde2ed;
+      }
+
+      tbody:hover, tr:hover td {
+        background: #aebad4; 
+      }
+      
+      tbody {
+        td {
+          border-color: #888888;
+          border-style: solid;
+          border-width: 0 1px 1px 0;
+          line-height: 18px;
+          overflow: hidden;
+          white-space: normal;
+          padding: 5px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,115 @@
+.input-username {
+    max-height: 478px;
+    overflow: auto;
+    background-color: white;
+    min-height: 90px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+  
+    .item-username {
+      border: 2px solid #cfcfcf;
+      border-radius: 5px;
+      float: left;
+      margin-left: 5px;
+      margin-top: 2px;
+      height: 22px;
+  
+      span {
+        cursor: pointer;
+      }
+  
+      .icon-delete {
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        background: url(../../../assets/images/icon-close.png) no-repeat right;
+        margin: 4px 2px 0 2px;
+        float: right;
+      }
+  
+      &-invalid {
+        color: red;
+        border-color: red;
+      }
+  
+      &-move-bet {
+        color: orange;
+        border-color: orange;
+      }      
+
+      &-existed {
+        color: blue;
+        border-color: blue;
+      }
+  
+      &-selected {
+        color: blue;
+        border-color: blue;
+      }
+    }
+  
+    .username {
+      border: none;
+      outline: 0;
+      width: 105px;
+      padding-left: 2px;
+      margin: 0px;
+      box-shadow: none;
+    }
+  
+    .invalid-item-toolTip .tooltip-inner {
+      background-color: yellow;
+        color:red;
+    }
+  
+    .invalid-item-toolTip .arrow::before {
+      border-top-color: yellow;
+    }
+  }
+  
+  .note {
+    margin-right: 20px;
+  
+    &-invalid-username {
+      color: red;
+    }
+  
+    &-moved-username {
+      color: orange;
+    }
+  
+    &-different-username {
+      color: blue;
+    }
+
+    &-existed-username {
+      color: blue;
+    }
+  }
+  
+  .flex-between {
+    display: flex;
+    justify-content: space-between;
+  
+    .red {
+      color: red;
+    }
+  }
+  
+  .width-170 {
+    width:170px;
+  }
+  
+  .point-event-none {
+    pointer-events: none;
+  }
+  
+  .disabled-input {
+      background-color: #e9ecef !important;
+      opacity: 1;
+      .username {
+        background-color: #e9ecef !important;
+        opacity: 1;
+      }
+    }
+  

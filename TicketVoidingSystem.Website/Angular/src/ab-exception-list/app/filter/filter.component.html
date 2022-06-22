@@ -1,0 +1,74 @@
+<div class="filter bg-gray mg-bottom-10 min-width-1666">
+  <div class="d-flex flex-wrap mb-3">
+    <div class="filter-username d-flex mr-4">
+      <label class="col-form-label col-form-label-sm mr-2">Username</label>
+      <input class="username-txt form-control form-control-sm" type="text" [(ngModel)]="filterModel.username">
+    </div>
+    <div class="filter-level d-flex mr-4">
+      <label class="col-form-label col-form-label-sm mr-2">Level</label>
+      <div>
+        <ng-select
+          [clearable]="false"
+          [items]="levels"
+          [(ngModel)]="filterModel.level"
+          bindLabel="name"
+          bindValue="value">
+        </ng-select>
+      </div>
+    </div>
+    <div class="filter-site d-flex mr-4">
+      <label class="col-form-label col-form-label-sm mr-2">Site</label>
+      <div class="dropdown-select-sites">
+        <multiple-selection class="multiple-selection filter-site-dropdown" [multipleSelect]="multipleSelection" (checkedItems)="updateSelectedSites($event)">
+        </multiple-selection>
+      </div>
+    </div>
+    <div class="filter-sub-type d-flex mr-4">
+      <label class="col-form-label col-form-label-sm mg-right-10">Sub Type</label>
+      <ng-select class="sub-type-dropdown" [items]="subTypeSelectionFilter" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+        [clearable]="false" [(ngModel)]="selectedSubType" bindValue="value" (change)="updateSelectedSubIssueType()"
+        [disabled]="false" groupBy="group" [selectableGroup]="true"
+        [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+        <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+        </ng-template>
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value">
+            <span class="ng-value-label">
+              {{isNoneSubType ? 'N/A' : (items.length === subTypeSelectionFilter.length ? 'All' : items.length) + ' selected'}}
+            </span>
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="filter-void-vip d-flex mr-4">
+      <label class="col-form-label col-form-label-sm mg-right-10">Void VIP</label>
+      <ng-select class="void-vip-dropdown" [items]="voidVIPSelection" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+        [clearable]="false" [(ngModel)]="selectedVoidVIP" bindValue="value" (change)="updateSelectedVoidVIP()"
+        [disabled]="false" groupBy="group" [selectableGroup]="true"
+        [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+        <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+        </ng-template>
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+          <div class="ng-value">
+            <span class="ng-value-label">
+              {{isNoneSubType ? 'N/A' : (items.length === voidVIPSelection.length ? 'All' : items.length) + ' selected'}}
+            </span>
+          </div>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="button-area">
+    <button type="submit" class="btn btn-primary btn-sm mr-2" (click)="clickSearch()">Search</button>
+    <button type="submit" class="btn btn-success btn-sm" (click)="clickAddUser()" *ngIf="permission.abWhiteListHost">Add New</button>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

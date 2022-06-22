@@ -1,0 +1,19 @@
+.paging {
+  padding: 0 10px;
+  color: #616161;
+  border-bottom: 1px solid #c5c5c5;
+  border-right: 1px solid #c5c5c5;
+  border-left: 1px solid #c5c5c5;
+
+  label {
+    margin: 5px 0;
+  }
+  
+  .selection {
+    margin: 0 10px;
+  }
+
+  ::ng-deep.pagination {
+    margin-bottom: 0px;
+  }
+}

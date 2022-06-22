@@ -1,0 +1,160 @@
+﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+// import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { FunctionConst, TVSRequestActionType } from '../constants/config';
+import { IssueTypeConstant } from '../constants/issue-type.constant';
+
+export class StaticService {
+  static isVoidAction(actionId: number): boolean {
+    return actionId === TVSRequestActionType.MANUAL_VOID_ID
+      || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID
+      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID
+      || actionId === TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID
+      || actionId === TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID
+      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY;
+  }
+
+  static isAbnormalBet(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.ABNORMAL_BET;
+  }
+
+  static isAbnormalBetRealMember(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER;
+  }
+
+  static isDangerAccepted(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED;
+  }
+
+  static isRedCard(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.RED_CARD;
+  }
+
+  static isWrongScore(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_SCORE;
+  }
+
+  static isAbnormalAccount(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.ABNORMAL_ACCOUNT;
+  }
+
+  static isEarlyKickOff(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.EARLY_KICK_OFF;
+  }
+
+  static isWrongKickOff(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_KICK_OFF;
+  }
+
+  static isWrongOdds(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_ODDS;
+  }
+
+  static isWrongHDP(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_HDP;
+  }
+
+  static isWrong1stHDP(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_1ST_HDP;
+  }
+
+  static isWrongQuarterHDP(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_QUARTER_HDP;
+  }
+
+  static isWrongOU(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_OU;
+  }
+
+  static isWrong1stOU(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_1ST_OU;
+  }
+  
+  static isArchivedTicket(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.ARCHIVED_TICKET;
+  }
+
+  static convertToFullDate(ngbDate: NgbDate): string {
+    const transformMonth = `0${ngbDate.month}`.slice(-2);
+    const transformDay = `0${ngbDate.day}`.slice(-2);
+
+    return `${ngbDate.year}/${transformMonth}/${transformDay}`;
+  }
+
+  // static getSubIssueTypeId(requestDetail: RequestDetailViewModel): number {
+  //   if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.wrongScoreModels[0].subIssueTypeId;
+  //   } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).subIssueTypeId;
+  //   } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.redCardModels.find(x => x.isMainMatch).subIssueTypeId;
+  //   } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
+  //   } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
+  //   } else {
+  //     return requestDetail.event.subIssueTypeId;
+  //   }
+  // }
+
+  // static getEventDate(requestDetail: RequestDetailViewModel): Date {
+  //   if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.wrongScoreModels[0].eventDate;
+  //   } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).eventDate;
+  //   } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.redCardModels.find(x => x.isMainMatch).eventDate;
+  //   } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.wrongHdpModels.find(x => x.isMainMatch).eventDate;
+  //   } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
+  //     return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
+  //   } else {
+  //     return requestDetail.event.eventDate;
+  //   }
+  // }
+  
+  static checkHandlingCashOutAsUnSettledTicketByFunction(functionId: number): boolean {
+    return functionId === FunctionConst.SINGLE;
+  }
+  
+  static checkHandlingCashOutAsUnSettledTicketByIssueTypeId(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
+      issueTypeId === IssueTypeConstant.RED_CARD ||
+      issueTypeId === IssueTypeConstant.WRONG_SCORE ||
+      issueTypeId === IssueTypeConstant.EARLY_KICK_OFF ||
+      issueTypeId === IssueTypeConstant.WRONG_KICK_OFF;
+  }
+  
+  static isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+    return this.isShowCashOutCount(cashOutCount) || this.isShowSettleCount(settleCount)
+      || this.isShowInstantlySettleIncluded(instantlySettleCount);
+  }
+
+  static isShowCashOutCount(cashOutCount: number): boolean {
+    return (cashOutCount > 0) ? true : false;
+  }
+
+  static isShowSettleCount(settleCount: number): boolean {
+    return (settleCount > 0) ? true : false;
+  }
+
+  static isShowInstantlySettleIncluded(instantlySettleCount: number): boolean {
+    return (instantlySettleCount > 0) ? true : false;
+  }
+
+  static countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+    const info: string[] = [];
+    if (this.isShowCashOutCount(cashOutCount)) {
+      info.push(`Cash Out: <strong>${cashOutCount}</strong>`);
+    }
+
+    if (this.isShowSettleCount(settleCount)) {
+      info.push(`Settled: <strong>${settleCount}</strong>`);
+    }
+
+    if (this.isShowInstantlySettleIncluded(instantlySettleCount)) {
+      info.push(`Instantly Settled: <strong>${instantlySettleCount}</strong>`);
+    }
+
+    return ` (${info.join(', ')})`;
+  }
+}

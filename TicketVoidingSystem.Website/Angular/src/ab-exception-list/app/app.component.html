@@ -1,0 +1,17 @@
+<div class="title">
+  {{title}}
+</div>
+
+<div class="body mg-10">
+  <filter #filterComponent
+    [(filterModel)] = "filterModel"
+    [(subTypeSelection)]="subTypeSelection"
+    (addUserEvent)="showAddUserModal()"
+    (searchEvent)="handleSearchEvent()"
+    [permission]="permission">
+  </filter>
+  <user-list [(models)]="userModels" [permission]="permission"></user-list>
+</div>
+
+<add-user [(model)]="addUserModel" [subTypeSelection]="subTypeSelection"></add-user>
+<block-full-ui [isBlock]="isBlockingUi"></block-full-ui>

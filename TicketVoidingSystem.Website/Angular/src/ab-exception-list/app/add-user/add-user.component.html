@@ -1,0 +1,35 @@
+<div *ngIf="model.isOpen">
+  <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+  <div role="dialog" class="fade modal show d-block">
+    <div role="document" class="modal-dialog-custom modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <strong>Add New AB Exception List</strong>
+          </div>
+          <button class="close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body wrapper-tooltip">
+          <user-names #usernames [(model)]="model.usernames" isAbException="true"></user-names>          
+          <div>
+            <label class="col-form-label col-form-label-sm mg-right-10">Sub Type</label>
+            <ng-multiselect-dropdown class="sub-type" name="sub-type" [settings]="dropDownSetting" [data]="subTypeSelection"
+                [(ngModel)]="selectedSubType" [disabled]="isDisabled" placeholder=" ">
+            </ng-multiselect-dropdown>
+          </div>
+          <div class="d-flex align-items-center">
+            <input [(ngModel)]="isVoidVIP" type="checkbox" id="chk-void-vip" class="mr-1" />
+            <label class="col-form-label" for="chk-void-vip"> Void VIP</label>
+          </div>
+
+          <div class="mg-top-10 text-right button-area">
+            <button type="button" class="btn btn-primary btn-sm mg-right-10" (click)="clickSave()">Save</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="closeModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

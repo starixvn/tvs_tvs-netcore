@@ -1,0 +1,85 @@
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as _ from 'lodash';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ABWhiteListLevel, ABWhiteListVoidVIP } from '../../../utility/constants/config';
+import { Selection } from '../../../utility/models/selection.model';
+import { GroupSiteModel } from '../../../utility/models/site.model';
+import { AppStore } from '../app.store';
+import { PermissionABWhiteList } from '../models/permission.model';
+import { FilterService } from '../services/filter.service';
+import { FilterModel } from './filter.model';
+
+@Component({
+  selector: 'filter',
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.scss']
+})
+export class FilterComponent implements OnInit {
+  @Input() filterModel = new FilterModel();
+  @Input() permission = new PermissionABWhiteList();
+  @Input() subTypeSelection: Selection[];
+  @Output() subTypeSelectionChange = new EventEmitter<Selection[]>();
+
+  @Output() addUserEvent = new EventEmitter();
+  @Output() searchEvent = new EventEmitter();
+
+  multipleSelection = new MultipleSelection();
+  levels = ABWhiteListLevel.MULTIPLE_OPTIONS;
+  groupSites: GroupSiteModel[];
+  subTypeSelectionFilter: Selection[];  
+  selectedSubType: string[];
+  voidVIPSelection = ABWhiteListVoidVIP.MULTIPLE_OPTIONS;
+  selectedVoidVIP: string[];
+  tooltip = new Tooltip();
+
+  constructor(
+    readonly element: ElementRef,
+    private readonly abWhiteListStore: AppStore,
+    private readonly filterService: FilterService
+  ) {
+    this.tooltip.element = this.element;
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.initData();
+    this.clickSearch();
+  }
+
+  async initData() {
+    this.abWhiteListStore.changeBlockingUiStatus(true);
+    this.groupSites = await this.filterService.getSites();
+    this.multipleSelection = this.filterService.initMultiSelectSites(this.groupSites);
+
+    this.subTypeSelection = await this.filterService.initSubType();
+    this.subTypeSelectionChange.emit(this.subTypeSelection);
+    this.subTypeSelectionFilter = _.cloneDeep(this.subTypeSelection);
+    this.subTypeSelectionFilter.unshift({ name: '(Blank)', value: '0', group: 'All' });
+    this.selectedSubType = this.subTypeSelectionFilter.map(x => x.value);
+
+    this.selectedVoidVIP = this.voidVIPSelection.map(x => x.value);
+    this.abWhiteListStore.changeBlockingUiStatus(false);
+
+    this.filterService.initDefaultFilter(this.filterModel, this.groupSites, this.selectedSubType, this.voidVIPSelection);
+  }
+
+  clickAddUser() {
+    this.addUserEvent.emit();
+  }
+
+  clickSearch() {
+    this.searchEvent.emit();
+  }
+
+  updateSelectedSites(selectedItems: string[]): void {
+    this.filterModel.sites = selectedItems.join(',');
+  }
+
+  updateSelectedSubIssueType(): void {
+    this.filterModel.subTypes = this.selectedSubType.join(',');
+  }
+
+  updateSelectedVoidVIP(): void {
+    this.filterModel.voidVIP = this.selectedVoidVIP.join(',');
+  }
+}

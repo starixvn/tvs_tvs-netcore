@@ -1,0 +1,31 @@
+export class SubIssueTypeConstant {      
+    static readonly GOAL_HOME = 55;
+    static readonly GOAL_AWAY = 56;
+    static readonly WRONG_QUARTER_OU = '54';
+    static readonly WRONG_OU = '10';
+    static readonly SCHEDULED_OVERS_BEING_REDUCED = '50';
+    static readonly GOAL = 1;
+    static readonly MAIN_CORNER_HOME = 68;
+    static readonly MAIN_CORNER_AWAY = 69;
+    static readonly MAIN_CORNER = 2;
+    static readonly MAIN_BOOKING = 3;
+    static readonly MAIN_GOAL_KICK = 73;
+    static readonly NEXT_CORNER = 26;
+    static readonly PEN_GOAL_VAR_PEN_GOAL = 59;
+    static readonly BET_FC_PEN_GOAL_GOAL = 62;
+    static readonly GOAL_PEN_1ST_2ND_MARK = 77;
+    static readonly GOAL_PEN_FOUL_OBS = 81;
+    static readonly GOAL_PEN_FOUL_NOT_ALLOWANCE = 84;
+    static readonly NEXT_GOAL = 91;
+    static readonly PENALTY_SHOOTOUT = 92;
+    static readonly WRONG_HDP = 8;
+    static readonly WRONG_1ST_HDP = 9;
+    static readonly NO_INDICATION_HOME_SCORE_NO_ONWARDS = 7;
+    static readonly NO_INDICATION_HOME_SCORE_ONWARDS = 35;
+    static readonly NO_INDICATION_AWAY_SCORE_NO_ONWARDS = 94;
+    static readonly NO_INDICATION_AWAY_SCORE_ONWARDS = 95;
+    static readonly WRONG_INDICATION_SCORE_NO_ONWARDS = 96;
+    static readonly WRONG_INDICATION_SCORE_ONWARDS = 97;
+    static readonly WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS = 98;
+    static readonly WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS = 99;
+  }

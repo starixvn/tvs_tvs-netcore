@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppComponent #AppComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <app-root>
+    <div
+      class="title"
+    >
+       Home / AB Exception List
+    </div>
+    <div
+      class="body mg-10"
+    >
+      <filter />
+      <user-list />
+    </div>
+    <add-user />
+    <block-full-ui />
+  </app-root>
+</ng-component>
+`;

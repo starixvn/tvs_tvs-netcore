@@ -1,0 +1,27 @@
+<div class="modal-header"
+  [ngClass]="{'danger': data.type == 0, 'success': data.type == 1, 'warning': data.type == 2,
+            'primary': data.type == 3 || data.type == 4}">
+  <label class="modal-title">{{data.title}}</label>
+  <button type="button" class="close" aria-label="Close" (click)="dismissClick()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div *ngIf="!data.copyContent" [innerHtml]="data.message | sanitizeHtml"></div>
+  <div *ngIf="data.copyContent">
+    <ng-container *ngFor="let item of data.content">
+      <p class="m-0"><b>{{item.title}}</b></p>
+      <p class="m-0 cursor-pointer" ngxClipboard [cbContent]="item.message" (cbOnSuccess)="copiedContent($event)">{{item.message}}</p>
+    </ng-container>
+  </div>
+</div>
+<div class="modal-footer" *ngIf="data.type == 3">
+  <button type="button" class="btn confirm" (click)="confirmClick()">Ok</button>
+  <button type="button" class="btn cancel" (click)="closeClick()">Cancel</button>
+</div>
+
+<div class="modal-footer" *ngIf="data.type == 4">
+  <button type="button" class="btn confirm" (click)="confirmClickYes()">Yes</button>
+  <button type="button" class="btn confirm" (click)="confirmClickNo()">No</button>
+  <button type="button" class="btn cancel" (click)="closeClick()">Cancel</button>
+</div>

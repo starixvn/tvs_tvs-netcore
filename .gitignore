@@ -56,3 +56,4 @@ typings
 !wallaby.js
 /OpenCover/
 .axoCover/
+.angular/

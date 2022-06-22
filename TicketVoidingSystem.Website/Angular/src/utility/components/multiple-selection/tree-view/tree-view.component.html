@@ -1,0 +1,17 @@
+<ul class="multiple-select">
+  <li *ngFor="let item of items">
+      <div class="multiple-select-item" [ngClass]="{'margin-left-13': item.items.length === 0}">
+          <em *ngIf="item.items.length > 0" [ngClass]="{'i-expanded': item.expanded, 'i-collapsed': !item.expanded}"
+             (click)="item.expanded = !item.expanded"></em>
+          <label>
+              <input type="checkbox" [(ngModel)]="item.checked" class="mr-1"
+                     (ngModelChange)="item.checkChilds();handleClick(item)" 
+                     [disabled]="!item.enable" (keyup.shift)="keyUpEvent()" (keydown.shift)="keyDownEvent()" />
+              {{ item.text }}
+          </label>
+      </div>
+      <div *ngIf="item.expanded">
+          <tree-view [items]="item.items"></tree-view>
+      </div>
+  </li>
+</ul>
