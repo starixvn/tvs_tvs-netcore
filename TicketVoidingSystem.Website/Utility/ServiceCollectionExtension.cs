@@ -6,6 +6,9 @@ using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
 using Fanex.Logging;
+using Fanex.Logging.Extensions;
+using Fanex.Logging.Extensions.AspNetCore;
+using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry;
 using Fanex.NAP.Client.AspNetCore.Configuration;
 using Fanex.NAP.Client.AspNetCore.Session;
@@ -64,6 +67,15 @@ namespace TicketVoidingSystem.Website.Utility
                 });
         }
 
+        public static void RegisterFanexExceptionHandler(this IServiceCollection services)
+        {
+            var configuration = new LoggingConfiguration()
+                .GetHttpHeaderInfo()
+                .GetHttpSessionInfo()
+                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
+            ExceptionHandler.UseConfig(configuration);
+        }
+
         public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -106,6 +118,7 @@ namespace TicketVoidingSystem.Website.Utility
             services.AddSingleton<IGroupService, GroupService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddScoped<IDynamicRepository, DynamicRepository>();
+            services.AddTransient<ILogger, Logger>();
         }
 
         public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)

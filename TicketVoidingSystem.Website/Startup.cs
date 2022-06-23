@@ -1,10 +1,14 @@
+using System.Net;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Signin.AspNetCore.Attribute;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore.Filters;
@@ -27,6 +31,7 @@ namespace TicketVoidingSystem.Website
         {
             services.RegisterAuthentication(Configuration);
             services.RegisterFanexData(Configuration);
+            services.RegisterFanexExceptionHandler();
             services.RegisterSentry(Configuration);
             services.RegisterONEbookUM(Configuration);
             services.RegisterCoreServices(Configuration);
@@ -34,15 +39,9 @@ namespace TicketVoidingSystem.Website
             services.RegisterMediatR();
             services.RegisterSignalR();
 
-            services.AddResponseCompression(options =>
-            {
-                options.MimeTypes = new[]{
-                    "text/html",
-                    "text/css",
-                    "application/javascript",
-                    "application/json",
-                };
-            });
+            services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
+            services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
+            services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
             services.AddRazorPages();
             services.AddControllersWithViews(options =>
             {
@@ -63,6 +62,7 @@ namespace TicketVoidingSystem.Website
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
+
             app.UseMiddleware<ErrorHandler>();
             app.UseRouting();
             app.UseAuthentication();
