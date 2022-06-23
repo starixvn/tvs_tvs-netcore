@@ -111,5 +111,10 @@ namespace TicketVoidingSystem.Website.Extensions
         {
             services.AddMediatR(typeof(ABExceptionListController));
         }
+
+        public static void RegisterSignalR(this IServiceCollection services)
+        {
+            services.AddSignalR().AddStackExchangeRedis("Redis_connection_string");
+        }
     }
 }

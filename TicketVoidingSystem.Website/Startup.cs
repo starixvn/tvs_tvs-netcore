@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ONEbook.UM.AspNetCore.Filters;
+using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Website.Extensions;
 
 namespace TicketVoidingSystem.Website
@@ -36,6 +37,7 @@ namespace TicketVoidingSystem.Website
             services.RegisterONEbookUM(Configuration);
             services.RegisterBusinessServices();
             services.RegisterMediatR();
+            services.RegisterSignalR();
             // services.RegisterSentry(Configuration);
             services.AddResponseCompression(options =>
             {
@@ -79,6 +81,7 @@ namespace TicketVoidingSystem.Website
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<NotificationHub>("/SignalR/NotificationHub");
             });
         }
     }

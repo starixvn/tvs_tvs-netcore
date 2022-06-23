@@ -21,6 +21,8 @@
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="5.0.17" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0" />
     <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.0-beta05" />
@@ -29,6 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.Core\TicketVoidingSystem.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
