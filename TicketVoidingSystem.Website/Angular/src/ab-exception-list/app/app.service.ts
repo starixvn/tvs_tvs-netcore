@@ -16,31 +16,31 @@ export class AppService {
 
   /* istanbul ignore next */
   async getUsers(query: GetUserQuery): Promise<GetUserModel> {
-    return this.httpService.postJson<GetUserQuery, GetUserModel>(query, 'TicketVoidingSystem/ABExceptionList/GetUsers');
+    return this.httpService.postJson<GetUserQuery, GetUserModel>(query, 'api/ABExceptionList/GetUsers');
   }
   
   /* istanbul ignore next */
   async addUsers(query: AddUserQuery ): Promise<Result<null>> {
-    return this.httpService.postJson<AddUserQuery, Result<null>>(query, 'TicketVoidingSystem/ABExceptionList/AddUsers');
+    return this.httpService.postJson<AddUserQuery, Result<null>>(query, 'api/ABExceptionList/AddUsers');
   }
 
   /* istanbul ignore next */
   async getPermissionABWhiteList(): Promise<PermissionABWhiteList> {
-    return this.httpService.getJson('TicketVoidingSystem/ABExceptionList/GetPermission');
+    return this.httpService.getJson('api/ABExceptionList/GetPermission');
   }
 
   /* istanbul ignore next */
   async getSubTypes(): Promise<AbExceptionSubType[]> {
-    return this.httpService.getJson('TicketVoidingSystem/ABExceptionList/GetSubType');
+    return this.httpService.getJson('api/ABExceptionList/GetSubType');
   }
   
   /* istanbul ignore next */
   async checkUsernames(usernames: string): Promise<CheckUsernameModel> {
-    return this.httpService.postJson<{ usernames: string }, CheckUsernameModel>({ usernames: usernames }, 'TicketVoidingSystem/ABExceptionList/CheckUsernames');
+    return this.httpService.postJson<{ usernames: string }, CheckUsernameModel>({ usernames: usernames }, 'api/ABExceptionList/CheckUsernames');
   }
 
   /* istanbul ignore next */
   async removeUsers(custIds: string): Promise<Result<null>> {
-    return this.httpService.postJson<{ custIds: string }, Result<null>>({ custIds: custIds }, 'TicketVoidingSystem/ABExceptionList/RemoveUsers');
+    return this.httpService.postJson<{ custIds: string }, Result<null>>({ custIds: custIds }, 'api/ABExceptionList/RemoveUsers');
   }
 }

@@ -34,7 +34,7 @@ export class CommonService {
   }
 
   async getSites(): Promise<GroupSiteModel[]> {
-    return this.httpService.getJson('TicketVoiding/GetSites');
+    return this.httpService.getJson('api/TicketVoidingSystem/GetSites');
   }
 
   async getMatch(matchId: number): Promise<MatchModel> {

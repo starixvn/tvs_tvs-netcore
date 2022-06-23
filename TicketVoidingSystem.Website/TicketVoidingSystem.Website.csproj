@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.Core\TicketVoidingSystem.Core.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.Utility\TicketVoidingSystem.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

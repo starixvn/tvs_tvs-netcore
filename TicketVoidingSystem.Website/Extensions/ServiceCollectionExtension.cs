@@ -22,6 +22,7 @@ using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
+using TicketVoidingSystem.Core.Controllers;
 using TicketVoidingSystem.Core.Services;
 
 namespace TicketVoidingSystem.Website.Extensions
@@ -110,6 +111,7 @@ namespace TicketVoidingSystem.Website.Extensions
         public static void RegisterMediatR(this IServiceCollection services)
         {
             services.AddMediatR(typeof(ABExceptionListController));
+            services.AddMediatR(typeof(TicketVoidingSystemApiController));
         }
 
         public static void RegisterSignalR(this IServiceCollection services)

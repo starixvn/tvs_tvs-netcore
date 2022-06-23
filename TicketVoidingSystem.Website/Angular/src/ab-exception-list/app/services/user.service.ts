@@ -22,7 +22,7 @@ export class UserService {
 
   async getUsers(filterModel: FilterModel): Promise<GetUserModel> {
     const query: GetUserQuery = {
-      userName: filterModel.username?.trim(),
+      userName: filterModel.username ? filterModel.username.trim() : null,
       level: filterModel.level,
       sites: filterModel.sites,
       subTypes: filterModel.subTypes,
@@ -44,7 +44,7 @@ export class UserService {
         title: 'Add Result',
         message: TEXT.AB_WHITE_LIST_ADDED_SUCCESS,
         type: result.isSuccessful ? ModalType.Alert : ModalType.Error
-      },      
+      },
       async () => {
         window.location.reload();
       }
@@ -60,11 +60,11 @@ export class UserService {
         title: 'Remove',
         message: messageConfirmRemove,
         type: ModalType.Confirm
-      }, 
+      },
       async () => {
         await this.onYesConfirm(userIds, abWhiteListStore);
       },
-      () => {}
+      () => { }
     );
   }
 

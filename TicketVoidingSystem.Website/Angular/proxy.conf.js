@@ -1,26 +1,12 @@
 const PROXY_CONFIG = [
   {
     context: [
-      "/VirtualSports",
-      "/Match",
-      "/SportBook",
-      "/BetTypes",
-      "/Home",
-      "/Misc",
-      "/Tickets",
-      "/Gaming",
-      "/Content",
-      "/History",
-      "/MessageTemplate",
-      "/TicketVoidingSystem",
-      "/TicketVoiding",
-      "/Utility",
-      "/state-api",
-      "/Scripts",
-      "/signalr"
+      "/api"
     ],
     target: "https://localhost:44312/",
-    secure: true
+    secure: false,
+    logLevel: "debug",
+    changeOrigin: true
   }
 ]
 
