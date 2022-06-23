@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
+using Fanex.Logging;
+using Fanex.Logging.Sentry;
 using Fanex.NAP.Client.AspNetCore.Configuration;
 using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
@@ -20,12 +23,13 @@ using ONEbook.UM.Configurations;
 using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
+using Sentry;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.Core.Controllers;
 using TicketVoidingSystem.Core.Services;
 
-namespace TicketVoidingSystem.Website.Extensions
+namespace TicketVoidingSystem.Website.Utility
 {
     public static class ServiceCollectionExtension
     {
@@ -45,6 +49,19 @@ namespace TicketVoidingSystem.Website.Extensions
                 .WithSqlServer()
                 .UseDefaultDbSettingProvider(configuration.GetSection("StoredProcedurePath").Value)
                 .Run();
+        }
+
+        public static void RegisterSentry(this IServiceCollection services, IConfiguration configuration)
+        {
+            LogManager
+                .SetDefaultLogCategory(configuration.GetSection("CategorySentryLog").Value)
+                .Use(new List<ILogEngine>
+                {
+                    new SentryLogging(new SentryEngineOptions
+                    {
+                        Dsn = new Dsn(configuration.GetSection("SentryClientKey").Value)
+                    })
+                });
         }
 
         public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)

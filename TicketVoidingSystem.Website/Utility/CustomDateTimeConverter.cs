@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace TicketVoidingSystem.Website.Extensions
+namespace TicketVoidingSystem.Website.Utility
 {
     public class CustomDateTimeConverter : JsonConverter<DateTime>
     {

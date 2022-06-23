@@ -1,21 +1,15 @@
-using System;
-using System.Threading.Tasks;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Signin.AspNetCore.Attribute;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Core.SignalR;
-using TicketVoidingSystem.Website.Extensions;
+using TicketVoidingSystem.Website.Utility;
 
 namespace TicketVoidingSystem.Website
 {
@@ -33,12 +27,13 @@ namespace TicketVoidingSystem.Website
         {
             services.RegisterAuthentication(Configuration);
             services.RegisterFanexData(Configuration);
-            services.RegisterCoreServices(Configuration);
+            services.RegisterSentry(Configuration);
             services.RegisterONEbookUM(Configuration);
+            services.RegisterCoreServices(Configuration);
             services.RegisterBusinessServices();
             services.RegisterMediatR();
             services.RegisterSignalR();
-            // services.RegisterSentry(Configuration);
+
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = new[]{
@@ -68,6 +63,7 @@ namespace TicketVoidingSystem.Website
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
+            app.UseMiddleware<ErrorHandler>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
