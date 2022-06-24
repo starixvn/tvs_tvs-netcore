@@ -1,15 +1,14 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import 'signalr';
+import * as signalR from "@microsoft/signalr";
 import * as toastr from 'toastr';
 import { VoidBetResultCode } from '../constants/void-bet-result-code';
 import { RequestStatus, Result } from '../models/signal-r.model';
 
-declare const $: JQueryStatic;
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
-  public connection: SignalR.Hub.Connection;
+  public connection: signalR.HubConnection;
   public proxy: SignalR.Hub.Proxy;
   requestStatusChange = new EventEmitter<RequestStatus[]>();
 
@@ -17,31 +16,29 @@ export class SignalRService {
 
   public initializeConnection(): void {
     this.configToastr();
-    const originURL = window.location.origin + document.body.getAttribute('origin-url') + "signalr";
-    this.connection = $.hubConnection(originURL, { useDefaultPath: false });
-    this.proxy = this.connection.createHubProxy('notificationHub');
-    this.registerShowVoidResultEvent(this.proxy);
-    this.registerShowErrorMessage(this.proxy);
-    this.registerReceiveRequestStatusModelEvent(this.proxy);
-    this.connection.logging = true;
-    this.connection.start()
-      .done(() => { });
+    this.connection = new signalR.HubConnectionBuilder()
+      .withUrl("/notificationHub")
+      .build();
+    this.registerShowVoidResultEvent(this.connection);
+    this.registerShowErrorMessage(this.connection);
+    this.registerReceiveRequestStatusModelEvent(this.connection);
+    this.connection.start();
   }
 
-  private registerShowVoidResultEvent(proxy: SignalR.Hub.Proxy): void {
-    proxy.on('showVoidResult', (results: Result[]) => {
+  private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
+    connection.on("showVoidResult", (results: Result[]) => {
       toastr.info(this.buildMessageForVoidResult(results));
     });
   }
 
-  private registerShowErrorMessage(proxy: SignalR.Hub.Proxy) {
-    proxy.on('showErrorMessage', (message: string) => {
+  private registerShowErrorMessage(connection: signalR.HubConnection) {
+    connection.on('showErrorMessage', (message: string) => {
       toastr.error(message);
     });
   }
 
-  private registerReceiveRequestStatusModelEvent(proxy: SignalR.Hub.Proxy): void {
-    proxy.on('updateRequestStatus', (model: RequestStatus[]) => {
+  private registerReceiveRequestStatusModelEvent(connection: signalR.HubConnection): void {
+    connection.on('updateRequestStatus', (model: RequestStatus[]) => {
       this.requestStatusChange.emit(model);
     });
   }
