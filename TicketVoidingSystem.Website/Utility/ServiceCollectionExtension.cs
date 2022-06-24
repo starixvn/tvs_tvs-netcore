@@ -31,6 +31,7 @@ using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.Core.Controllers;
 using TicketVoidingSystem.Core.Services;
+using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.Website.Utility
 {
@@ -135,6 +136,7 @@ namespace TicketVoidingSystem.Website.Utility
         public static void RegisterBusinessServices(this IServiceCollection services)
         {
             services.AddSingleton<SessionService, SessionServiceImp>();
+            services.AddSingleton<LogActionFilterAttribute>();
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
         }
 

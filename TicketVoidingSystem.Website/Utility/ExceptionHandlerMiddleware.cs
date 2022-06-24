@@ -7,12 +7,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace TicketVoidingSystem.Website.Utility
 {
-    public class ErrorHandler
+    public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate next;
         public IConfiguration Configuration { get; }
 
-        public ErrorHandler(RequestDelegate next, IConfiguration configuration)
+        public ExceptionHandlerMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             this.next = next;
             Configuration = configuration;
@@ -31,7 +31,7 @@ namespace TicketVoidingSystem.Website.Utility
             }
         }
 
-        private async Task HandleException(HttpContext context, Exception exception)
+        private static async Task HandleException(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

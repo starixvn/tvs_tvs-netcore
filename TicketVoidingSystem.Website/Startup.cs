@@ -1,18 +1,16 @@
-using System.Net;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Signin.AspNetCore.Attribute;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Core.SignalR;
+using TicketVoidingSystem.Core.Web;
 using TicketVoidingSystem.Website.Utility;
 
 namespace TicketVoidingSystem.Website
@@ -47,6 +45,7 @@ namespace TicketVoidingSystem.Website
             {
                 options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)));
                 options.Filters.Add(new SessionAuthorizeAttribute());
+                options.Filters.Add(new ServiceFilterAttribute(typeof(LogActionFilterAttribute)));
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
@@ -62,8 +61,7 @@ namespace TicketVoidingSystem.Website
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
-
-            app.UseMiddleware<ErrorHandler>();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
