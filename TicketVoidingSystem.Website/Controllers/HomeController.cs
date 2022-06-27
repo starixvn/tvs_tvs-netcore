@@ -7,6 +7,7 @@ using TicketVoidingSystem.Website.Models;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,7 +22,6 @@ namespace TicketVoidingSystem.Website.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
