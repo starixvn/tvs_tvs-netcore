@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Fanex.Logging;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace TicketVoidingSystem.Core.Web
@@ -21,6 +23,18 @@ namespace TicketVoidingSystem.Core.Web
 
         public override async void OnActionExecuting(ActionExecutingContext context)
         {
+            if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
+            {
+                var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
+                var attrsInController =
+                    descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
+
+                if (attrsInAction.Any() || attrsInController.Any())
+                {
+                    return;
+                }
+            }
+
             var httpContext = context.HttpContext;
             var requestMethod = httpContext.Request.Method;
 
@@ -38,6 +52,18 @@ namespace TicketVoidingSystem.Core.Web
 
         public override async void OnActionExecuted(ActionExecutedContext context)
         {
+            if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
+            {
+                var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
+                var attrsInController =
+                    descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
+
+                if (attrsInAction.Any() || attrsInController.Any())
+                {
+                    return;
+                }
+            }
+
             var httpContext = context.HttpContext;
             var sw = httpContext.Items["timer"] as Stopwatch;
             var responseData = (context.Result is OkObjectResult objectResult) ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
@@ -52,5 +78,9 @@ namespace TicketVoidingSystem.Core.Web
 
             base.OnActionExecuted(context);
         }
+    }
+
+    public class SkipLoggingAttribute : Attribute
+    {
     }
 }

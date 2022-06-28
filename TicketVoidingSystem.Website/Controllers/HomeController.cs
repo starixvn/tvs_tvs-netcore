@@ -1,22 +1,15 @@
 ﻿using System.Diagnostics;
-using Fanex.NAP.Signin.AspNetCore.Attribute;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using TicketVoidingSystem.Core.Web;
 using TicketVoidingSystem.Website.Models;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
     [AllowAnonymous]
+    [SkipLogging]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public IActionResult Index()
         {
             return View();
