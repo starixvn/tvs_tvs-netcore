@@ -10,7 +10,7 @@
 <html lang="en">
 
 <head>
-    <base href="@Url.Content("~")" />
+    <base href="@Url.Content("~/")" />
     <meta charset="utf-8" />
     <title>@ViewBag.Title &mdash; Ticket Voiding System</title>
     <link rel="shortcut icon" href="~/favicon.ico" />
@@ -21,7 +21,7 @@
     @*@Styles.Render("~/css/libs")*@
     @await RenderSectionAsync("Head", false)
 </head>
-<body user-name="@userName" origin-url="@Url.Content("~")">
+<body user-name="@userName" origin-url="@Url.Content("~/")">
 
     <div class="header-user-info user-info-background">
         <a class="logo" href="~/?ref=logo">&nbsp;</a>
