@@ -146,9 +146,5 @@ namespace TicketVoidingSystem.Website.Utility
             services.AddMediatR(typeof(TicketVoidingSystemApiController));
         }
 
-        public static void RegisterSignalR(this IServiceCollection services)
-        {
-            services.AddSignalR().AddStackExchangeRedis("Redis_connection_string");
-        }
     }
 }

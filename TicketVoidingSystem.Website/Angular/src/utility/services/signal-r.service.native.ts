@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import * as signalR from "@microsoft/signalr";
-import * as toastr from 'toastr';
+import * as signalR from '@microsoft/signalr';
+import * as $ from "jquery";
+import { ToastrService } from 'ngx-toastr';
 import { VoidBetResultCode } from '../constants/void-bet-result-code';
 import { RequestStatus, Result } from '../models/signal-r.model';
 
@@ -8,32 +9,50 @@ import { RequestStatus, Result } from '../models/signal-r.model';
   providedIn: 'root'
 })
 export class SignalRService {
-  public connection: signalR.HubConnection;
-  public proxy: SignalR.Hub.Proxy;
+  public hubConnection: signalR.HubConnection;
+  //public proxy: signalR.HubConnection.proxy;
   requestStatusChange = new EventEmitter<RequestStatus[]>();
 
-  constructor() { }
+  toastConfig = {
+    timeOut: 100000,
+    positionClass: 'toast-bottom-right',
+    disableTimeOut: true
+  };
+
+  constructor(private toastr: ToastrService) { }
 
   public initializeConnection(): void {
-    this.configToastr();
-    this.connection = new signalR.HubConnectionBuilder()
-      .withUrl("/notificationHub")
+    //this.configToastr();
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:4000/SignalR/NotificationHub")
+      .configureLogging(signalR.LogLevel.Debug)
       .build();
-    this.registerShowVoidResultEvent(this.connection);
-    this.registerShowErrorMessage(this.connection);
-    this.registerReceiveRequestStatusModelEvent(this.connection);
-    this.connection.start();
+
+    this.registerShowVoidResultEvent(this.hubConnection);
+    this.registerShowErrorMessage(this.hubConnection);
+    this.registerReceiveRequestStatusModelEvent(this.hubConnection);
+    this.hubConnection.start();
+
+    document.getElementById('frm-send-message').addEventListener('submit', event => {
+      let message = $('#message').val();
+      let nick = $('#spn-nick').text();
+      const result = new Result();
+      result.ErrorCode = 0;
+      result.ErrorMsg = '111111111111111111';
+      this.hubConnection.invoke('ShowVoidResultToAllClient', [result ]);
+      event.preventDefault();
+  });
   }
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
     connection.on("showVoidResult", (results: Result[]) => {
-      toastr.info(this.buildMessageForVoidResult(results));
+      this.toastr.info(this.buildMessageForVoidResult(results), "", this.toastConfig);
     });
   }
 
   private registerShowErrorMessage(connection: signalR.HubConnection) {
     connection.on('showErrorMessage', (message: string) => {
-      toastr.error(message);
+    //  toastr.error(message);
     });
   }
 
@@ -43,20 +62,20 @@ export class SignalRService {
     });
   }
 
-  private configToastr(): void {
-    toastr.options.closeButton = true;
-    toastr.options.positionClass = 'toast-bottom-right';
-    toastr.options.showDuration = 100;
-    toastr.options.hideDuration = 200;
-    toastr.options.timeOut = 0;
-    toastr.options.extendedTimeOut = 0;
-    toastr.options.showEasing = 'swing';
-    toastr.options.hideEasing = 'linear';
-    toastr.options.showMethod = 'fadeIn';
-    toastr.options.hideMethod = 'slideUp';
-    toastr.options.tapToDismiss = true;
-    toastr.options.escapeHtml = false;
-  }
+  // private configToastr(): void {
+  //   toastr.options.closeButton = true;
+  //   toastr.options.positionClass = 'toast-bottom-right';
+  //   toastr.options.showDuration = 100;
+  //   toastr.options.hideDuration = 200;
+  //   toastr.options.timeOut = 0;
+  //   toastr.options.extendedTimeOut = 0;
+  //   toastr.options.showEasing = 'swing';
+  //   toastr.options.hideEasing = 'linear';
+  //   toastr.options.showMethod = 'fadeIn';
+  //   toastr.options.hideMethod = 'slideUp';
+  //   toastr.options.tapToDismiss = true;
+  //   toastr.options.escapeHtml = false;
+  // }
 
   private buildMessageForVoidResult(results: Result[]): string {
     const exceptionResult = results.find(x => x.ErrorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
@@ -67,7 +86,7 @@ export class SignalRService {
     let succeedLicenseeMsg = '';
     let failedLicenseeMsg = '';
     let sentLetsTalkMsg = '';
-    const voidRequestMsg = results.find(x => x.ErrorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS).ErrorMsg;
+    const voidRequestMsg = results.find(x => x.ErrorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.ErrorMsg;
     const succeedLicenseeResult = results.find(x => x.ErrorCode === VoidBetResultCode.LICENSEE_SUCCESS);
     const failedLicenseeResult = results.find(x => x.ErrorCode === VoidBetResultCode.LICENSEE_FAIL);
     const sentLetsTalkResult = results.find(x => x.ErrorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);

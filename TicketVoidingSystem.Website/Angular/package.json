@@ -13,7 +13,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~13.3.2",
+    "@angular/animations": "^13.3.11",
     "@angular/common": "~13.3.2",
     "@angular/compiler": "~13.3.2",
     "@angular/core": "~13.3.2",
@@ -22,7 +22,7 @@
     "@angular/platform-browser": "~13.3.2",
     "@angular/platform-browser-dynamic": "~13.3.2",
     "@angular/router": "~13.3.2",
-    "@microsoft/signalr": "^6.0.6",
+    "@microsoft/signalr": "^5.0.17",
     "@ng-bootstrap/ng-bootstrap": "^11.0.1",
     "@ng-select/ng-select": "^8.1.1",
     "@types/file-saver": "^2.0.0",
@@ -39,9 +39,8 @@
     "moment-timezone": "^0.5.34",
     "ng-multiselect-dropdown": "^0.2.10",
     "ngx-clipboard": "^12.2.0",
+    "ngx-toastr": "^14.3.0",
     "rxjs": "^6.5.4",
-    "signalr": "^2.4.1",
-    "toastr": "^2.1.4",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -53,8 +52,6 @@
     "@types/jquery": "^3.5.4",
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^12.11.1",
-    "@types/signalr": "^2.2.36",
-    "@types/toastr": "^2.1.38",
     "@types/webpack-env": "^1.14.0",
     "cheerio": "^1.0.0-rc.2",
     "codelyzer": "^6.0.0",

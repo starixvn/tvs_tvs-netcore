@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../utility/constants/labels';
 import { Selection } from '../../utility/models/selection.model';
-// import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AddUserModel } from './add-user/add-user.model';
 import { AppService } from './app.service';
 import { AppStore } from './app.store';
@@ -33,13 +33,12 @@ export class AppComponent implements OnInit {
   subTypeSelection: Selection[] = [];
   isBlockingUi = false;
   blockingUiSubscription: Subscription;
-
   private readonly FILTER_USERNAME_CLASS = 'username-txt';
 
   constructor(
     private readonly appService: AppService,
     private readonly userService: UserService,
-    // private readonly signalRService: SignalRService,
+    private readonly signalRService: SignalRService,
     private readonly abWhiteListStore: AppStore,
     private readonly validationService: ValidationService,
   ) { }
@@ -49,7 +48,7 @@ export class AppComponent implements OnInit {
       this.isBlockingUi = status;
     });
 
-    // this.signalRService.initializeConnection();
+    this.signalRService.initializeConnection();
     this.permission = await this.appService.getPermissionABWhiteList();
   }
 

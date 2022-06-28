@@ -36,7 +36,7 @@ namespace TicketVoidingSystem.Website
             services.RegisterCoreServices(Configuration);
             services.RegisterBusinessServices();
             services.RegisterMediatR();
-            services.RegisterSignalR();
+            services.AddSignalR();
 
             services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });

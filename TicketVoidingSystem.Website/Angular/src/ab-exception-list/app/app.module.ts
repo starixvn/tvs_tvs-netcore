@@ -2,9 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ToastrModule } from 'ngx-toastr';
 import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
 import { MultipleSelectionModule } from '../../utility/components/multiple-selection/multiple-selection.module';
 import { PagingModule } from '../../utility/components/paging/paging.module';
@@ -39,6 +41,8 @@ import { UserListComponent } from './user-list/user-list.component';
     BlockFullUiModule,
     MultipleSelectionModule,
     UtilityModule,
+    ToastrModule.forRoot(),
+    BrowserAnimationsModule,
     NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [HttpService, AppService],
