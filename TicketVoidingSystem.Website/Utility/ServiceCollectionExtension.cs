@@ -18,6 +18,7 @@ using Fanex.NAP.Client.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore;
@@ -31,6 +32,7 @@ using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.Core.Controllers;
 using TicketVoidingSystem.Core.Services;
+using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.Website.Utility
@@ -120,6 +122,7 @@ namespace TicketVoidingSystem.Website.Utility
             services.AddSingleton<IUserService, UserService>();
             services.AddScoped<IDynamicRepository, DynamicRepository>();
             services.AddTransient<ILogger, Logger>();
+            services.AddSingleton<IUserIdProvider, CustomIdProvider>();
         }
 
         public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
@@ -145,6 +148,5 @@ namespace TicketVoidingSystem.Website.Utility
             services.AddMediatR(typeof(ABExceptionListController));
             services.AddMediatR(typeof(TicketVoidingSystemApiController));
         }
-
     }
 }

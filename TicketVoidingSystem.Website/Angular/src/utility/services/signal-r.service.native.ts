@@ -9,8 +9,7 @@ import { RequestStatus, Result } from '../models/signal-r.model';
   providedIn: 'root'
 })
 export class SignalRService {
-  public hubConnection: signalR.HubConnection;
-  //public proxy: signalR.HubConnection.proxy;
+  public hubConnection: signalR.HubConnection; 
   requestStatusChange = new EventEmitter<RequestStatus[]>();
 
   toastConfig = {
@@ -24,8 +23,11 @@ export class SignalRService {
   public initializeConnection(): void {
     //this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:4000/SignalR/NotificationHub")
-      .configureLogging(signalR.LogLevel.Debug)
+      .withUrl(`${window.location.origin}${document.body.getAttribute('origin-url')}SignalR/NotificationHub`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
+      .configureLogging(signalR.LogLevel.Trace)
       .build();
 
     this.registerShowVoidResultEvent(this.hubConnection);
@@ -34,13 +36,14 @@ export class SignalRService {
     this.hubConnection.start();
 
     document.getElementById('frm-send-message').addEventListener('submit', event => {
+      event.preventDefault();
       let message = $('#message').val();
       let nick = $('#spn-nick').text();
       const result = new Result();
       result.ErrorCode = 0;
       result.ErrorMsg = '111111111111111111';
       this.hubConnection.invoke('ShowVoidResultToAllClient', [result ]);
-      event.preventDefault();
+  
   });
   }
 

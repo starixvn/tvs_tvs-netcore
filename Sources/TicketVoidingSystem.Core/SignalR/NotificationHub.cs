@@ -1,28 +1,29 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using TicketVoidingSystem.Core.Models;
 
 namespace TicketVoidingSystem.Core.SignalR
 {
     public class NotificationHub : Hub<ClientEvent>
     {
-        public void ShowVoidResultToAllClient(IEnumerable<Result> results)
+        public async Task ShowVoidResultToAllClient(IEnumerable<Result> results)
         {
-            Clients.All.showVoidResult(results);
+            await Clients.All.showVoidResult(results);
         }
 
-        public void UpdateRequestStatusToAllClient(IEnumerable<RequestStatus> status)
+        public async Task UpdateRequestStatusToAllClient(IEnumerable<RequestStatus> status)
         {
-            Clients.All.updateRequestStatus(status);
+            await Clients.All.updateRequestStatus(status);
         }
     }
 
     public interface ClientEvent
     {
-        void showVoidResult(IEnumerable<Result> results);
+        Task showVoidResult(IEnumerable<Result> results);
 
-        void updateRequestStatus(IEnumerable<RequestStatus> status);
+        Task updateRequestStatus(IEnumerable<RequestStatus> status);
 
-        void showErrorMessage(string message);
+        Task showErrorMessage(string message);
     }
 }

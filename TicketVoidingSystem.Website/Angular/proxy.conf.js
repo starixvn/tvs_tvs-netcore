@@ -2,12 +2,13 @@ const PROXY_CONFIG = [
   {
     context: [
       "/api",
-      "/signalr"
+      "/SignalR"
     ],
     target: "https://localhost:44312/",
     secure: false,
     logLevel: "debug",
-    changeOrigin: true
+    changeOrigin: true,
+    ws: true
   }
 ]
 
