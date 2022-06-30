@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="NewFolder\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="NewFolder\**" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,12 +13,6 @@
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.SignalR.Core">
-      <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\5.0.17\Microsoft.AspNetCore.SignalR.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

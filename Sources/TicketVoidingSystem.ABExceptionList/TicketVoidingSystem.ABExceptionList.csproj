@@ -3,7 +3,10 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
+   
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0" />
@@ -13,12 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TicketVoidingSystem.Core\TicketVoidingSystem.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.AspNetCore.SignalR.Core">
-      <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\5.0.17\Microsoft.AspNetCore.SignalR.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
