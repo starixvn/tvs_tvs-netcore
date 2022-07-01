@@ -7,7 +7,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
-import { HeaderWebsiteModule } from '../../shared/header-website/header-website.module';
 import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
 import { MultipleSelectionModule } from '../../utility/components/multiple-selection/multiple-selection.module';
 import { PagingModule } from '../../utility/components/paging/paging.module';
@@ -30,7 +29,6 @@ import { UserListComponent } from './user-list/user-list.component';
     AddUserComponent
   ],
   imports: [
-    HeaderWebsiteModule,
     NgSelectModule,
     BrowserModule,
     FormsModule,

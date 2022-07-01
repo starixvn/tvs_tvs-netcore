@@ -11,16 +11,10 @@ export class SignalRService {
   public hubConnection: signalR.HubConnection; 
   requestStatusChange = new EventEmitter<RequestStatus[]>();
 
-  toastConfig = {
-    timeOut: 100000,
-    positionClass: 'toast-bottom-right',
-    disableTimeOut: true
-  };
-
   constructor(private toastr: ToastrService) { }
 
   public initializeConnection(): void {
-    //this.configToastr();
+    this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${window.location.origin}${document.body.getAttribute('origin-url')}SignalR/NotificationHub`)
       .configureLogging(signalR.LogLevel.Trace)
@@ -43,7 +37,7 @@ export class SignalRService {
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
     connection.on("showVoidResult", (results: Result[]) => {
-      this.toastr.info(this.buildMessageForVoidResult(results), "", this.toastConfig);
+      this.toastr.info(this.buildMessageForVoidResult(results), "");
     });
   }
 
@@ -59,20 +53,11 @@ export class SignalRService {
     });
   }
 
-  // private configToastr(): void {
-  //   toastr.options.closeButton = true;
-  //   toastr.options.positionClass = 'toast-bottom-right';
-  //   toastr.options.showDuration = 100;
-  //   toastr.options.hideDuration = 200;
-  //   toastr.options.timeOut = 0;
-  //   toastr.options.extendedTimeOut = 0;
-  //   toastr.options.showEasing = 'swing';
-  //   toastr.options.hideEasing = 'linear';
-  //   toastr.options.showMethod = 'fadeIn';
-  //   toastr.options.hideMethod = 'slideUp';
-  //   toastr.options.tapToDismiss = true;
-  //   toastr.options.escapeHtml = false;
-  // }
+  private configToastr(): void {
+    this.toastr.toastrConfig.enableHtml = true;
+    this.toastr.toastrConfig.disableTimeOut = true;
+    this.toastr.toastrConfig.positionClass = 'toast-bottom-right';
+  }
 
   private buildMessageForVoidResult(results: Result[]): string {
     const exceptionResult = results.find(x => x.ErrorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);

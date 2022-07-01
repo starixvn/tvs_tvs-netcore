@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { MenuItem } from '../../utility/models/menu-item.model';
-import { CommonService } from '../../utility/services/common.service';
+import { MenuItem } from '../../../utility/models/menu-item.model';
+import { CommonService } from '../../../utility/services/common.service';
 
 @Component({
-  selector: 'header-website',
-  templateUrl: './header-website.component.html',
-  styleUrls: ['./header-website.component.scss']
+  selector: 'menu-bar',
+  templateUrl: './menu-bar.component.html',
+  styleUrls: ['./menu-bar.component.scss']
 })
-export class HeaderWebsiteComponent implements OnInit {
+export class MenuBarComponent implements OnInit {
   menuItems: MenuItem[] = [];
   username: string;
   isBlock: boolean;
@@ -26,5 +26,4 @@ export class HeaderWebsiteComponent implements OnInit {
     });
     this.isBlock = false;
   }
-
 }
