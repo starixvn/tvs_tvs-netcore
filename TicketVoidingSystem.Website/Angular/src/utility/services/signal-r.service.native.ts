@@ -22,10 +22,7 @@ export class SignalRService {
   public initializeConnection(): void {
     //this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${window.location.origin}${document.body.getAttribute('origin-url')}SignalR/NotificationHub`, {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets
-      })
+      .withUrl(`${window.location.origin}${document.body.getAttribute('origin-url')}SignalR/NotificationHub`)
       .configureLogging(signalR.LogLevel.Trace)
       .build();
 

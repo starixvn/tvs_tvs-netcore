@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fanex.NAP.Client.AspNetCore.Attributes;
 using Fanex.NAP.Core.Business;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using TicketVoidingSystem.ABExceptionList.Handlers;
-using TicketVoidingSystem.Core.Models;
-using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.ABExceptionList.Controllers
@@ -17,12 +13,10 @@ namespace TicketVoidingSystem.ABExceptionList.Controllers
     public class ABExceptionListController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly IHubContext<NotificationHub, ClientEvent> hubContext;
 
-        public ABExceptionListController(IMediator mediator, IHubContext<NotificationHub, ClientEvent> hubContext)
+        public ABExceptionListController(IMediator mediator)
         {
             this.mediator = mediator;
-            this.hubContext = hubContext;
         }
 
         [HttpGet]
@@ -62,7 +56,6 @@ namespace TicketVoidingSystem.ABExceptionList.Controllers
         public async Task<IActionResult> GetUsers(GetUsersRequest request)
         {
             var model = await mediator.Send(request);
-            await hubContext.Clients.All.showVoidResult(new List<Result>());
             return Ok(model);
         }
 
