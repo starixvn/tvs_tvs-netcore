@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import * as $ from "jquery";
 import { ToastrService } from 'ngx-toastr';
 import { VoidBetResultCode } from '../constants/void-bet-result-code';
 import { RequestStatus, Result } from '../models/signal-r.model';
@@ -35,10 +34,8 @@ export class SignalRService {
     this.registerReceiveRequestStatusModelEvent(this.hubConnection);
     this.hubConnection.start();
 
-    document.getElementById('frm-send-message').addEventListener('submit', event => {
+    document.getElementById('frm-send-message').addEventListener('submit', event => {     
       event.preventDefault();
-      let message = $('#message').val();
-      let nick = $('#spn-nick').text();
       const result = new Result();
       result.ErrorCode = 0;
       result.ErrorMsg = '111111111111111111';

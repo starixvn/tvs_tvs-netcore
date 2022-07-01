@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="filter-sub-type d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mg-right-10">Sub Type</label>
+      <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
       <ng-select class="sub-type-dropdown" [items]="subTypeSelectionFilter" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
         [clearable]="false" [(ngModel)]="selectedSubType" bindValue="value" (change)="updateSelectedSubIssueType()"
         [disabled]="false" groupBy="group" [selectableGroup]="true"
@@ -45,7 +45,7 @@
       </ng-select>
     </div>
     <div class="filter-void-vip d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mg-right-10">Void VIP</label>
+      <label class="col-form-label col-form-label-sm mr-2">Void VIP</label>
       <ng-select class="void-vip-dropdown" [items]="voidVIPSelection" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
         [clearable]="false" [(ngModel)]="selectedVoidVIP" bindValue="value" (change)="updateSelectedVoidVIP()"
         [disabled]="false" groupBy="group" [selectableGroup]="true"

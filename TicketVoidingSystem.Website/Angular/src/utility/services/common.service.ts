@@ -9,13 +9,14 @@ import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../constants/config';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
-import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
+import { IssueInfo, IssueType } from '../models/issue-type.model';
 import { Result, SqlResult } from '../models/result';
 import { Selection } from '../models/selection.model';
 import { GroupSiteModel } from '../models/site.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
+import { UserInfoModel } from '../models/user-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,11 @@ export class CommonService {
     private readonly httpService: HttpService
   ) { }
 
-  async getIssueTypes(): Promise<IssueTypesModel> {
+  async getUserInfo(): Promise<UserInfoModel> {
+    return this.httpService.getJson('api/TicketVoidingSystem/GetUserInfo');
+  }
+
+  async getIssueTypes(): Promise<UserInfoModel> {
     return this.httpService.getJson('TicketVoiding/GetIssueTypes');
   }
 
