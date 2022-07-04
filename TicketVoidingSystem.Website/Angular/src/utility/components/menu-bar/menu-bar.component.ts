@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { MenuItem } from '../../../utility/models/menu-item.model';
 import { CommonService } from '../../../utility/services/common.service';
+import { MenuName } from './menu-bar.constant';
+import { MenuItem } from './menu-bar.model';
 
 @Component({
   selector: 'menu-bar',
@@ -17,7 +18,8 @@ export class MenuBarComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;
-    const model = await this.commonService.getUserInfo();
+    const model = await this.commonService.getNapUserInfo();
+    this.replaceRootUrl(model.menuItem);
     this.username = model.userName;
     this.menuItems = _.orderBy(_.uniqBy(model.menuItem.filter(x => x.parentId <= 0), x => x.id), ['displayOrder'], ['asc']);
     this.menuItems.forEach(t => {
@@ -25,5 +27,13 @@ export class MenuBarComponent implements OnInit {
       t.items = _.orderBy(_.uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
     });
     this.isBlock = false;
+  }
+
+  private replaceRootUrl(menuItems: MenuItem[]): void {
+    menuItems.forEach(menu => {
+      if (menu.name !== MenuName.AB_EXCEPTION_LIST) {
+        menu.url = document.body.getAttribute('old-site-root-url') + menu.url;
+      }
+    });
   }
 }

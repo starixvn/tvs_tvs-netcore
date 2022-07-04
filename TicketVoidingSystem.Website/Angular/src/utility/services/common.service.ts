@@ -15,8 +15,8 @@ import { Selection } from '../models/selection.model';
 import { GroupSiteModel } from '../models/site.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
+import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
-import { UserInfoModel } from '../models/user-info.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +26,8 @@ export class CommonService {
     private readonly httpService: HttpService
   ) { }
 
-  async getUserInfo(): Promise<UserInfoModel> {
+  async getNapUserInfo(): Promise<NapUserInfoModel> {
     return this.httpService.getJson('api/TicketVoidingSystem/GetNapUserInfo');
-  }
-
-  async getIssueTypes(): Promise<UserInfoModel> {
-    return this.httpService.getJson('TicketVoiding/GetIssueTypes');
   }
 
   async getActions(): Promise<Selection[]> {

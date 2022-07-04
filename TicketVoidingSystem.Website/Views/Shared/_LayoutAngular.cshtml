@@ -16,7 +16,7 @@
 
     @await RenderSectionAsync("Head", false)
 </head>
-<body user-name="@userName" origin-url="@Url.Content("~/")">
+<body user-name="@userName" origin-url="@Url.Content("~/")" old-site-root-url="@Configuration["OldSiteRootUrl"]">
     <section id="body" user-name="@userName" user-id="@userId">
         @RenderBody()
     </section>

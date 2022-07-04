@@ -1,4 +1,4 @@
-export class MenuItem {    
+export class MenuItem {
   constructor() {
     this.items = [];
   }
@@ -15,4 +15,10 @@ export class MenuItem {
   parentName: string;
   validUrl: string;
   items: MenuItem[];
+}
+
+export class NapUserInfoModel {
+  menuItem: MenuItem[];
+  userName: string;
+  userId: number;
 }

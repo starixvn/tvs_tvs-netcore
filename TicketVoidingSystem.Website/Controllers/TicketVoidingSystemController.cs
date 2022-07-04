@@ -5,10 +5,12 @@ using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class TicketVoidingSystemController : Controller
     {
         [HttpGet]
+        [Route("[action]")]
+        [Route("[action]/Index")]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
         public IActionResult ABExceptionList()
         {

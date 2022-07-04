@@ -1,5 +1,5 @@
 <div class="header-user-info user-info-background">
-  <a class="logo" href="~/?ref=logo">&nbsp;</a>
+  <a class="logo" href="/?ref=logo">&nbsp;</a>
   <div class="user-info">
     <div class="dropdown">
       <div class="dropdown-user-info">
@@ -7,10 +7,10 @@
       </div>
       <div class="dropdown-content">
         <li>
-          <a class="nav-link" href="#">Change Password</a>
+          <a class="nav-link" href="/Auth/ChangePassword">Change Password</a>
         </li>
         <li>
-          <a class="nav-link" href="#">Sign Out</a>
+          <a class="nav-link" href="/Auth/LogOut">Sign Out</a>
         </li>
       </div>
     </div>
@@ -23,7 +23,7 @@
         <div *ngFor="let menuItem of menuItems">
           <div *ngIf="menuItem.items.length === 0">
             <li class="nav-item">
-              <a class="nav-link" href="{{menuItem.validUrl}}">{{menuItem.name}}</a>
+              <a class="nav-link" href="{{menuItem.url}}">{{menuItem.name}}</a>
             </li>
           </div>
           <div *ngIf="menuItem.items.length > 0">
@@ -31,7 +31,7 @@
               <a class="nav-link  dropdown-toggle" data-bs-toggle="dropdown">{{menuItem.name}}</a>
               <ul class="dropdown-menu">
                 <li *ngFor="let item of menuItem.items; index as i">
-                  <a class="dropdown-item" href="{{item.validUrl}}">{{item.name}}</a>
+                  <a class="dropdown-item" href="{{item.url}}">{{item.name}}</a>
                 </li>
               </ul>
             </li>
