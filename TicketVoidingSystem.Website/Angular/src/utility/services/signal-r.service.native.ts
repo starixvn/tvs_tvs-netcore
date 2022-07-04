@@ -24,20 +24,11 @@ export class SignalRService {
     this.registerShowErrorMessage(this.hubConnection);
     this.registerReceiveRequestStatusModelEvent(this.hubConnection);
     this.hubConnection.start();
-
-    document.getElementById('frm-send-message').addEventListener('submit', event => {
-      event.preventDefault();
-      const result = new Result();
-      result.ErrorCode = 0;
-      result.ErrorMsg = '111111111111111111';
-      this.hubConnection.invoke('ShowVoidResultToAllClient', [result]);
-
-    });
   }
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
     connection.on('showVoidResult', (results: Result[]) => {
-      this.toastr.info(this.buildMessageForVoidResult(results), '');
+      this.toastr.success(this.buildMessageForVoidResult(results), '');
     });
   }
 
@@ -60,27 +51,27 @@ export class SignalRService {
   }
 
   private buildMessageForVoidResult(results: Result[]): string {
-    const exceptionResult = results.find(x => x.ErrorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
+    const exceptionResult = results.find(x => x.errorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
     if (exceptionResult) {
-      return `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${exceptionResult.ErrorMsg}</span></div>`;
+      return `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${exceptionResult.errorMsg}</span></div>`;
     }
 
     let succeedLicenseeMsg = '';
     let failedLicenseeMsg = '';
     let sentLetsTalkMsg = '';
-    const voidRequestMsg = results.find(x => x.ErrorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.ErrorMsg;
-    const succeedLicenseeResult = results.find(x => x.ErrorCode === VoidBetResultCode.LICENSEE_SUCCESS);
-    const failedLicenseeResult = results.find(x => x.ErrorCode === VoidBetResultCode.LICENSEE_FAIL);
-    const sentLetsTalkResult = results.find(x => x.ErrorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
+    const voidRequestMsg = results.find(x => x.errorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.errorMsg;
+    const succeedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_SUCCESS);
+    const failedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_FAIL);
+    const sentLetsTalkResult = results.find(x => x.errorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
 
-    if (succeedLicenseeResult?.ErrorMsg) {
-      succeedLicenseeMsg = `<div class="licensee-success-msg"><span>- ${succeedLicenseeResult.ErrorMsg}</span></div>`;
+    if (succeedLicenseeResult?.errorMsg) {
+      succeedLicenseeMsg = `<div class="licensee-success-msg"><span>- ${succeedLicenseeResult.errorMsg}</span></div>`;
     }
-    if (failedLicenseeResult?.ErrorMsg) {
-      failedLicenseeMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${failedLicenseeResult.ErrorMsg}</span></div>`;
+    if (failedLicenseeResult?.errorMsg) {
+      failedLicenseeMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${failedLicenseeResult.errorMsg}</span></div>`;
     }
-    if (sentLetsTalkResult?.ErrorMsg) {
-      sentLetsTalkMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${sentLetsTalkResult.ErrorMsg}</span></div>`;
+    if (sentLetsTalkResult?.errorMsg) {
+      sentLetsTalkMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${sentLetsTalkResult.errorMsg}</span></div>`;
     }
 
     return `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${sentLetsTalkMsg}</div>`;
