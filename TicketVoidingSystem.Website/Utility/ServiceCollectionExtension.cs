@@ -30,10 +30,10 @@ using ONEbook.UM.Transport;
 using Sentry;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
-using TicketVoidingSystem.Core.Controllers;
 using TicketVoidingSystem.Core.Services;
 using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Utility.Controllers;
 
 namespace TicketVoidingSystem.Website.Utility
 {

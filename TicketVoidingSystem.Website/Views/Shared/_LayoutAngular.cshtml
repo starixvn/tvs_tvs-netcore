@@ -15,55 +15,16 @@
     <title>@ViewBag.Title &mdash; Ticket Voiding System</title>
     <link rel="shortcut icon" href="~/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/tvs/css/angular-styles.css" />
 
-    @*@Styles.Render("~/css/libs")*@
     @await RenderSectionAsync("Head", false)
 </head>
 <body user-name="@userName" origin-url="@Url.Content("~/")">
-
-    <div class="header-user-info user-info-background">
-        <a class="logo" href="~/?ref=logo">&nbsp;</a>
-        <div style="width: 60px; float: right;">
-            &nbsp;
-        </div>
-        <div class="user-info dropdown">
-            <span class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">
-                &nbsp;<em class="icon-avata"></em>&nbsp; Welcome, <span class="username">@userName</span>
-                <span class="icon-menu-down"></span>
-            </span>
-            <ul class="dropdown-menu" role="menu">
-                <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/ChangePassword")">
-                        Change Password
-                    </a>
-                </li>
-                <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/xxxxxxLogOut")">
-                        Sign Out
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <header>
-        @{await Html.RenderPartialAsync("~/Views/Shared/_Menu.cshtml"); }
-    </header>
-
-    @*@Scripts.Render("~/scripts/libs")*@
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <section id="body" user-name="@userName" user-id="@userId">
         @RenderBody()
     </section>
 
-    <script type="text/javascript" src="~/js/NapTicketControl.js"></script>
-    <script type="text/javascript" src="~/js/NapTicketControl.Helper.js"></script>
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    @*TODO - add matomo*@
+    @*<script type="text/javascript" src="~/js/NapTicketControl.js"></script>
+        <script type="text/javascript" src="~/js/NapTicketControl.Helper.js"></script>
+        <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
 </body>
 </html>

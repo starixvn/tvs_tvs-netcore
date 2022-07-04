@@ -3,7 +3,7 @@ using Fanex.NAP.Client.Models;
 
 namespace TicketVoidingSystem.Utility.Models
 {
-    internal class UserViewModel
+    internal class NapUserViewModel
     {
         public IList<MenuItem> MenuItem { get; set; }
         public string UserName { get; set; }

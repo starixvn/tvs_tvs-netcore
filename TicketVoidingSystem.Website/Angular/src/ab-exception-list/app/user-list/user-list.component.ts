@@ -1,9 +1,9 @@
 import { Component, Input, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
-import { ABWhiteListLevel, ABWhiteListVoidVIP } from '../../../utility/constants/config';
+import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { AppStore } from '../app.store';
-import { PermissionABWhiteList } from '../models/permission.model';
+import { PermissionABExceptionList } from '../models/permission.model';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../services/user.service';
 
@@ -14,17 +14,17 @@ import { UserService } from '../services/user.service';
 })
 export class UserListComponent {
   @Input() models: UserModel[] = [];
-  @Input() permission = new PermissionABWhiteList();
-  
+  @Input() permission = new PermissionABExceptionList();
+
   isBlock: boolean;
   isCheckedAll = false;
   paging = new PagingModel();
   displayedModels: UserModel[] = [];
-  
+
   constructor(
     private readonly userService: UserService,
-    private readonly abWhiteListStore: AppStore
-  ) {}
+    private readonly abExceptionListStore: AppStore
+  ) { }
 
   public ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['models']) {
@@ -41,12 +41,12 @@ export class UserListComponent {
   }
 
   public getLevel(id: string): string {
-    return ABWhiteListLevel.MULTIPLE_OPTIONS.find(x => x.value === id).name;
+    return ABExceptionListLevel.MULTIPLE_OPTIONS.find(x => x.value === id).name;
   }
 
   async removeUsers() {
     const checkedUsers = _.filter(this.displayedModels, { isChecked: true });
-    await this.userService.removeUsers(checkedUsers, this.abWhiteListStore);
+    await this.userService.removeUsers(checkedUsers, this.abExceptionListStore);
   }
 
   public changedCheckAll() {
@@ -54,7 +54,7 @@ export class UserListComponent {
       item.isChecked = this.isCheckedAll;
     });
   }
-  
+
   public changedCheckItem() {
     this.isCheckedAll = true;
     if (this.displayedModels.some(x => !x.isChecked)) {
@@ -67,8 +67,8 @@ export class UserListComponent {
   }
 
   public isShowCheckBoxVoidVIP(voidVIP: string): boolean {
-    return voidVIP === ABWhiteListVoidVIP.Yes
-      || voidVIP === ABWhiteListVoidVIP.No;
+    return voidVIP === ABExceptionListVoidVIP.Yes
+      || voidVIP === ABExceptionListVoidVIP.No;
   }
 
   private filterDisplayRequests() {

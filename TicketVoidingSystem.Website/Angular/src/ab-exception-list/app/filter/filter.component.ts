@@ -2,11 +2,11 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@ang
 import * as _ from 'lodash';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { ABWhiteListLevel, ABWhiteListVoidVIP } from '../../../utility/constants/config';
+import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { GroupSiteModel } from '../../../utility/models/site.model';
 import { AppStore } from '../app.store';
-import { PermissionABWhiteList } from '../models/permission.model';
+import { PermissionABExceptionList } from '../models/permission.model';
 import { FilterService } from '../services/filter.service';
 import { FilterModel } from './filter.model';
 
@@ -17,7 +17,7 @@ import { FilterModel } from './filter.model';
 })
 export class FilterComponent implements OnInit {
   @Input() filterModel = new FilterModel();
-  @Input() permission = new PermissionABWhiteList();
+  @Input() permission = new PermissionABExceptionList();
   @Input() subTypeSelection: Selection[];
   @Output() subTypeSelectionChange = new EventEmitter<Selection[]>();
 
@@ -25,17 +25,17 @@ export class FilterComponent implements OnInit {
   @Output() searchEvent = new EventEmitter();
 
   multipleSelection = new MultipleSelection();
-  levels = ABWhiteListLevel.MULTIPLE_OPTIONS;
+  levels = ABExceptionListLevel.MULTIPLE_OPTIONS;
   groupSites: GroupSiteModel[];
   subTypeSelectionFilter: Selection[];  
   selectedSubType: string[];
-  voidVIPSelection = ABWhiteListVoidVIP.MULTIPLE_OPTIONS;
+  voidVIPSelection = ABExceptionListVoidVIP.MULTIPLE_OPTIONS;
   selectedVoidVIP: string[];
   tooltip = new Tooltip();
 
   constructor(
     readonly element: ElementRef,
-    private readonly abWhiteListStore: AppStore,
+    private readonly abExceptionListStore: AppStore,
     private readonly filterService: FilterService
   ) {
     this.tooltip.element = this.element;
@@ -47,7 +47,7 @@ export class FilterComponent implements OnInit {
   }
 
   async initData() {
-    this.abWhiteListStore.changeBlockingUiStatus(true);
+    this.abExceptionListStore.changeBlockingUiStatus(true);
     this.groupSites = await this.filterService.getSites();
     this.multipleSelection = this.filterService.initMultiSelectSites(this.groupSites);
 
@@ -58,7 +58,7 @@ export class FilterComponent implements OnInit {
     this.selectedSubType = this.subTypeSelectionFilter.map(x => x.value);
 
     this.selectedVoidVIP = this.voidVIPSelection.map(x => x.value);
-    this.abWhiteListStore.changeBlockingUiStatus(false);
+    this.abExceptionListStore.changeBlockingUiStatus(false);
 
     this.filterService.initDefaultFilter(this.filterModel, this.groupSites, this.selectedSubType, this.voidVIPSelection);
   }

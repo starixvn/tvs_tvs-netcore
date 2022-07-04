@@ -8,8 +8,8 @@ import { RequestStatus, Result } from '../models/signal-r.model';
   providedIn: 'root'
 })
 export class SignalRService {
-  public hubConnection: signalR.HubConnection; 
-  requestStatusChange = new EventEmitter<RequestStatus[]>();
+  public hubConnection: signalR.HubConnection;
+  public requestStatusChange = new EventEmitter<RequestStatus[]>();
 
   constructor(private toastr: ToastrService) { }
 
@@ -25,25 +25,25 @@ export class SignalRService {
     this.registerReceiveRequestStatusModelEvent(this.hubConnection);
     this.hubConnection.start();
 
-    document.getElementById('frm-send-message').addEventListener('submit', event => {     
+    document.getElementById('frm-send-message').addEventListener('submit', event => {
       event.preventDefault();
       const result = new Result();
       result.ErrorCode = 0;
       result.ErrorMsg = '111111111111111111';
-      this.hubConnection.invoke('ShowVoidResultToAllClient', [result ]);
-  
-  });
+      this.hubConnection.invoke('ShowVoidResultToAllClient', [result]);
+
+    });
   }
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
-    connection.on("showVoidResult", (results: Result[]) => {
-      this.toastr.info(this.buildMessageForVoidResult(results), "");
+    connection.on('showVoidResult', (results: Result[]) => {
+      this.toastr.info(this.buildMessageForVoidResult(results), '');
     });
   }
 
   private registerShowErrorMessage(connection: signalR.HubConnection) {
     connection.on('showErrorMessage', (message: string) => {
-    //  toastr.error(message);
+      this.toastr.error(message);
     });
   }
 
@@ -64,7 +64,7 @@ export class SignalRService {
     if (exceptionResult) {
       return `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${exceptionResult.ErrorMsg}</span></div>`;
     }
-    
+
     let succeedLicenseeMsg = '';
     let failedLicenseeMsg = '';
     let sentLetsTalkMsg = '';

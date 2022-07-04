@@ -6,17 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Utility.Handlers;
 using TicketVoidingSystem.Utility.Models;
 
-namespace TicketVoidingSystem.Core.Controllers
+namespace TicketVoidingSystem.Utility.Controllers
 {
     [ApiController]
     [Route("api/TicketVoidingSystem/[action]")]
     public class TicketVoidingSystemApiController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TicketVoidingSystemApiController(IMediator mediator)
+        public TicketVoidingSystemApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
         {
             this.mediator = mediator;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -27,10 +29,10 @@ namespace TicketVoidingSystem.Core.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUserInfo()
+        public IActionResult GetNapUserInfo()
         {
-            var session = new NapSession(new HttpContextAccessor());
-            var viewModel = new UserViewModel()
+            var session = new NapSession(httpContextAccessor);
+            var viewModel = new NapUserViewModel()
             {
                 MenuItem = session.MenuItemList,
                 UserName = session.UserName,

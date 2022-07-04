@@ -6,7 +6,7 @@ import { AddUserQuery } from './models/add-user.query';
 import { CheckUsernameModel } from './models/check-username.model';
 import { GetUserModel } from './models/get-user.model';
 import { GetUserQuery } from './models/get-user.query';
-import { PermissionABWhiteList } from './models/permission.model';
+import { PermissionABExceptionList } from './models/permission.model';
 
 @Injectable()
 export class AppService {
@@ -25,7 +25,7 @@ export class AppService {
   }
 
   /* istanbul ignore next */
-  async getPermissionABWhiteList(): Promise<PermissionABWhiteList> {
+  async getPermissionABExceptionList(): Promise<PermissionABExceptionList> {
     return this.httpService.getJson('api/ABExceptionList/GetPermission');
   }
 

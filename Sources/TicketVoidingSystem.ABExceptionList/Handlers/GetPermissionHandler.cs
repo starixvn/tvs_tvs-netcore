@@ -8,11 +8,11 @@ using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers
 {
-    public class GetPermissionRequest : IRequest<PermissionABWhiteList>
+    public class GetPermissionRequest : IRequest<PermissionABExceptionList>
     {
     }
 
-    public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, PermissionABWhiteList>
+    public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, PermissionABExceptionList>
     {
         private readonly SessionService session;
 
@@ -21,11 +21,11 @@ namespace TicketVoidingSystem.ABExceptionList.Handlers
             this.session = session;
         }
 
-        public Task<PermissionABWhiteList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
+        public Task<PermissionABExceptionList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
         {
-            var permission = new PermissionABWhiteList
+            var permission = new PermissionABExceptionList
             {
-                ABWhiteListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host),
+                ABExceptionListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host),
             };
             return Task.FromResult(permission);
         }

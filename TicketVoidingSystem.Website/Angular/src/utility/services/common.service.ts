@@ -27,7 +27,7 @@ export class CommonService {
   ) { }
 
   async getUserInfo(): Promise<UserInfoModel> {
-    return this.httpService.getJson('api/TicketVoidingSystem/GetUserInfo');
+    return this.httpService.getJson('api/TicketVoidingSystem/GetNapUserInfo');
   }
 
   async getIssueTypes(): Promise<UserInfoModel> {

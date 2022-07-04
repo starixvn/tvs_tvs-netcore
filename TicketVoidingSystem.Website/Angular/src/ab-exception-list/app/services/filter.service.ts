@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
-import { ABWhiteListLevel } from '../../../utility/constants/config';
+import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { GroupSiteModel, SiteModel } from '../../../utility/models/site.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -24,7 +24,7 @@ export class FilterService {
 
   initDefaultFilter(filterModel: FilterModel, groupSites: GroupSiteModel[], selectedSubType: string[], voidVIPSelection: Selection[]): void {
     filterModel.username = '';
-    filterModel.level = ABWhiteListLevel.All;
+    filterModel.level = ABExceptionListLevel.All;
     let siteModels: SiteModel[] = [];
     groupSites.forEach(x => {
       siteModels = [...siteModels, ...x.sites];

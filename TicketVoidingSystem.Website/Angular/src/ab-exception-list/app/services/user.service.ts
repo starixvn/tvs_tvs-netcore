@@ -51,7 +51,7 @@ export class UserService {
     );
   }
 
-  async removeUsers(users: UserModel[], abWhiteListStore: AppStore): Promise<void> {
+  async removeUsers(users: UserModel[], abExceptionListStore: AppStore): Promise<void> {
     const messageConfirmRemove = `Are you sure you want to remove the Username(s)?<br>` +
       `- ${users.map(x => x.username).join(', ')}`;
     const userIds = users.map(x => x.custId).join(',');
@@ -62,16 +62,16 @@ export class UserService {
         type: ModalType.Confirm
       },
       async () => {
-        await this.onYesConfirm(userIds, abWhiteListStore);
+        await this.onYesConfirm(userIds, abExceptionListStore);
       },
       () => { }
     );
   }
 
-  private async onYesConfirm(userIds: string, abWhiteListStore: AppStore): Promise<void> {
-    abWhiteListStore.changeBlockingUiStatus(true);
+  private async onYesConfirm(userIds: string, abExceptionListStore: AppStore): Promise<void> {
+    abExceptionListStore.changeBlockingUiStatus(true);
     await this.appService.removeUsers(userIds);
-    abWhiteListStore.changeBlockingUiStatus(false);
+    abExceptionListStore.changeBlockingUiStatus(false);
     this.modalService.open(
       {
         title: 'Remove',

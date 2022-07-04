@@ -1,4 +1,4 @@
-<div class="user-list" [ngClass]="permission.abWhiteListHost ? 'width-1400' : 'width-1300'">
+<div class="user-list" [ngClass]="permission.abExceptionListHost ? 'width-1400' : 'width-1300'">
   <div class="title-user-list" *ngIf="paging.total > 0">
     <div class="title-user-list-label">AB Exception List</div>
   </div>
@@ -27,10 +27,10 @@
           <th scope="col" class="col-tb-7">
             <div>Added Date (GMT+8)</div>
           </th>
-          <th scope="col" [ngClass]="permission.abWhiteListHost ? 'col-tb-8' : ''">
+          <th scope="col" [ngClass]="permission.abExceptionListHost ? 'col-tb-8' : ''">
             <div>Added By</div>
           </th>
-          <th scope="col" class="col-tb-9 col-remove" *ngIf="permission.abWhiteListHost">
+          <th scope="col" class="col-tb-9 col-remove" *ngIf="permission.abExceptionListHost">
             <button class="button-remove-users mr-1" (click)="removeUsers()" [disabled]="isDisabledRemoveButton()">REMOVE</button>
             <input type="checkbox" [(ngModel)]="isCheckedAll" (change)="changedCheckAll()"/>
           </th>
@@ -67,10 +67,10 @@
             <td class="col-tb-7">
               <div>{{item.addedDate | date:'yyyy/MM/dd hh:mm:ss a'}}</div>
             </td>
-            <td [ngClass]="permission.abWhiteListHost ? 'col-tb-8' : ''">
+            <td [ngClass]="permission.abExceptionListHost ? 'col-tb-8' : ''">
               <div>{{item.addedBy}}</div>
             </td>
-            <td class="col-tb-9" *ngIf="permission.abWhiteListHost">
+            <td class="col-tb-9" *ngIf="permission.abExceptionListHost">
               <div>
                 <input type="checkbox" [(ngModel)]="item.isChecked" (change)="changedCheckItem()"/>
               </div>

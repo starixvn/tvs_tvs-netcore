@@ -31,7 +31,7 @@ export class AddUserComponent implements OnChanges {
   constructor(
     private readonly validationService: ValidationService,
     private readonly userService: UserService,
-    private readonly abWhiteListStore: AppStore
+    private readonly abExceptionListStore: AppStore
   ) { }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -42,14 +42,14 @@ export class AddUserComponent implements OnChanges {
   }
 
   async clickSave() {
-    this.abWhiteListStore.changeBlockingUiStatus(true);
+    this.abExceptionListStore.changeBlockingUiStatus(true);
     const usernames = this.usernamesComponent.groupUsername.getAllValue();
     const isValidUserNames = await this.validationService.validateUsernames(usernames, this.usernamesComponent);
     if (isValidUserNames) {
       this.model.isOpen = false;
       await this.userService.addUsers(usernames, this.selectedSubType, this.isVoidVIP);
     }
-    this.abWhiteListStore.changeBlockingUiStatus(false);
+    this.abExceptionListStore.changeBlockingUiStatus(false);
   }
 
   closeModal() {
