@@ -1,9 +1,7 @@
 ﻿@using Fanex.NAP.Client.AspNetCore.Session
-@using Microsoft.AspNetCore.Http
-
 @{
-    var session = new NapSession(new HttpContextAccessor());
-    var userName = User.Identity.Name;
+    var session = new NapSession(httpContextAccessor);
+    var userName = User?.Identity?.Name;
     var userId = session.UserId;
 }
 <!DOCTYPE html>
