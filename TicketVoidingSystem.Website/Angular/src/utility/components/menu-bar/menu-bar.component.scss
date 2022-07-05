@@ -28,14 +28,14 @@
 }
 
 .user-info {
-  height: 25px;
   cursor: default;
   color: white;
   float: right;
-  margin: 6px 60px 0 0;
   padding: 0 5px;
   display: flex;
   align-items: center;
+  height: 100%;
+  margin-right: 55px;
 
   .dropdown-user-info {
     display: flex;
@@ -44,6 +44,10 @@
 
   .user-name {
     color: #eac600;
+  }
+
+  .dropdown {
+    padding: 0 5px;
   }
   
   .dropdown-content li {
@@ -64,6 +68,8 @@
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    margin-left: -5px;
+    padding: 5px 0;
   }
   
   .dropdown-content a {
@@ -87,7 +93,7 @@
 .nav-tvs-expand {
   font-size: 14px;
   border-top: 1px solid white;
-  height: 46.5px;
+  height: 44px;
 
   .navbar-nav li:hover > a {
     border: 1px solid #8e9fc3;
@@ -115,7 +121,7 @@
   }
 
   .dropdown .dropdown-menu {
-    margin-top: 27px;
+    margin-top: 30px;
     padding: 0;
     border: none;
     border-radius: 0;
