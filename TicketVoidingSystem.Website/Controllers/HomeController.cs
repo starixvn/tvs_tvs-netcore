@@ -17,5 +17,11 @@ namespace TicketVoidingSystem.Website.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult HealthCheck()
+        {
+            return Ok("200-Ok");
+        }
     }
 }

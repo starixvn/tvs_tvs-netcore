@@ -80,6 +80,7 @@ namespace TicketVoidingSystem.Core.Web
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class SkipLoggingAttribute : Attribute
     {
     }

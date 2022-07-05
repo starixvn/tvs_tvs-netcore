@@ -32,7 +32,7 @@ namespace TicketVoidingSystem.Utility.Controllers
         public IActionResult GetNapUserInfo()
         {
             var session = new NapSession(httpContextAccessor);
-            var viewModel = new NapUserViewModel()
+            var viewModel = new NapUserViewModel
             {
                 MenuItem = session.MenuItemList,
                 UserName = session.UserName,
