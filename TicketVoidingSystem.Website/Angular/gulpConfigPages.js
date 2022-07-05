@@ -164,7 +164,7 @@ const configPages = [
   // getBetIdForVoiding,
   // voidFormulaBets,
   // afterVoidHistory,
-  //abExceptionList,
+  abExceptionList,
   homePage
 ];
 

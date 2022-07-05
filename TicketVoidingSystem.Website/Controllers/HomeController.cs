@@ -7,9 +7,18 @@ namespace TicketVoidingSystem.Website.Controllers
     [SkipLogging]
     public class HomeController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return View("~/wwwroot/dist/home-page/index.cshtml");
+        }
+
+        [AllowAnonymous]
+        [HttpHead]
+        [ActionName("Index")]
+        public IActionResult IndexHead()
+        {
+            return Ok("200-Ok");
         }
 
         [AllowAnonymous]
