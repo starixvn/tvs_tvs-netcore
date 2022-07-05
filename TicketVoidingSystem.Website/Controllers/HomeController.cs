@@ -11,5 +11,11 @@ namespace TicketVoidingSystem.Website.Controllers
         {
             return View("~/wwwroot/dist/home-page/index.cshtml");
         }
+
+        [AllowAnonymous]
+        public IActionResult About()
+        {
+            return View();
+        }
     }
 }
