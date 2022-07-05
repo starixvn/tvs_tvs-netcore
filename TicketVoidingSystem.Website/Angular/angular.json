@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/ab-exception-list/index.html",
-            "main": "src/ab-exception-list/main.ts",
+            "index": "src/home-page/index.html",
+            "main": "src/home-page/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

@@ -4,13 +4,12 @@ using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
-    [AllowAnonymous]
     [SkipLogging]
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
-            return View();
+            return View("~/wwwroot/dist/home-page/index.cshtml");
         }
     }
 }
