@@ -16,7 +16,7 @@ export class SignalRService {
   public initializeConnection(): void {
     this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${window.location.origin}${document.body.getAttribute('origin-url')}SignalR/NotificationHub`)
+      .withUrl(`${window.location.origin}${document.body.getAttribute('root-url')}SignalR/NotificationHub`)
       .configureLogging(signalR.LogLevel.Trace)
       .build();
 

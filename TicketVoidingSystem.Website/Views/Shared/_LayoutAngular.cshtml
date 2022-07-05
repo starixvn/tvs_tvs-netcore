@@ -16,13 +16,9 @@
 
     @await RenderSectionAsync("Head", false)
 </head>
-<body user-name="@userName" origin-url="@Url.Content("~/")" old-site-root-url="@Configuration["OldSiteRootUrl"]">
+<body user-name="@userName" root-url="@Url.Content("~/")" old-site-root-url="@Configuration["OldSiteRootUrl"]">
     <section id="body" user-name="@userName" user-id="@userId">
         @RenderBody()
     </section>
-
-    @*<script type="text/javascript" src="~/js/NapTicketControl.js"></script>
-        <script type="text/javascript" src="~/js/NapTicketControl.Helper.js"></script>
-        <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
 </body>
 </html>
