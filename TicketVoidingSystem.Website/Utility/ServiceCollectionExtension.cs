@@ -15,6 +15,7 @@ using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
+using Fanex.NAP.Signin.AspNetCore.Attribute;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore;
-using ONEbook.UM.AspNetCore.Filters;
 using ONEbook.UM.Configurations;
 using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
@@ -134,12 +134,12 @@ namespace TicketVoidingSystem.Website.Utility
             services.AddScoped<IDynamicRepository, DynamicRepository>();
             services.AddTransient<ILogger, Logger>();
             services.AddSingleton<IUserIdProvider, CustomIdProvider>();
+            services.AddSingleton<CheckUMFilterAttribute>();
         }
 
         public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-            services.AddSingleton<CheckUMFilterAttribute>();
             services.AddSingleton<IUMCacheService, UMCacheService>();
             services.AddSingleton<IUMRestClient, UMRestClient>();
             services.AddSingleton<IPHelper, IPHelperImpl>();

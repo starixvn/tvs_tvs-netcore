@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ONEbook.UM.Models;
+using ONEbook.UM.Services;
 using TicketVoidingSystem.Core.Web;
 
 namespace TicketVoidingSystem.Website.Controllers
@@ -7,6 +10,13 @@ namespace TicketVoidingSystem.Website.Controllers
     [SkipLogging]
     public class HomeController : Controller
     {
+        private readonly IMaintenanceService maintenanceService;
+
+        public HomeController(IMaintenanceService maintenanceService)
+        {
+            this.maintenanceService = maintenanceService;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -31,6 +41,15 @@ namespace TicketVoidingSystem.Website.Controllers
         public IActionResult About()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult<UnderMaintenanceTime>> Um()
+        {
+            var underMaintenanceInfo = await maintenanceService.GetUnderMaintenanceTimeAsync();
+
+            return underMaintenanceInfo;
         }
     }
 }

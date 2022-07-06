@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Core.Web;
 using TicketVoidingSystem.Website.Utility;
@@ -44,9 +43,9 @@ namespace TicketVoidingSystem.Website
             services.AddRazorPages();
             services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)));
                 options.Filters.Add(new SessionAuthorizeAttribute());
-                options.Filters.Add(new ServiceFilterAttribute(typeof(LogActionFilterAttribute)));
+                options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)) { Order = 0 });
+                options.Filters.Add(new ServiceFilterAttribute(typeof(LogActionFilterAttribute)) { Order = 1 });
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
