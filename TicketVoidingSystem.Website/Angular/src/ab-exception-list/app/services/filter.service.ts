@@ -4,22 +4,20 @@ import { ItemsSelect } from '../../../utility/components/multiple-selection/item
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
-import { GroupSiteModel, SiteModel } from '../../../utility/models/site.model';
-import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { FilterModel } from '../filter/filter.model';
+import { GroupSiteModel, SiteModel } from '../models/site.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
   constructor(
-    private readonly appService: AppService,
-    private readonly commonService: CommonService,
+    private readonly appService: AppService
   ) { }
 
   async getSites(): Promise<GroupSiteModel[]> {
-    return this.commonService.getSites();
+    return this.appService.getSites();
   }
 
   initDefaultFilter(filterModel: FilterModel, groupSites: GroupSiteModel[], selectedSubType: string[], voidVIPSelection: Selection[]): void {

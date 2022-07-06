@@ -12,7 +12,6 @@ import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { IssueInfo, IssueType } from '../models/issue-type.model';
 import { Result, SqlResult } from '../models/result';
 import { Selection } from '../models/selection.model';
-import { GroupSiteModel } from '../models/site.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
@@ -34,9 +33,6 @@ export class CommonService {
     return this.httpService.getJson('TicketVoiding/GetActions');
   }
 
-  async getSites(): Promise<GroupSiteModel[]> {
-    return this.httpService.getJson('api/TicketVoidingSystem/GetSites');
-  }
 
   async getMatch(matchId: number): Promise<MatchModel> {
     return this.httpService.postJson({ matchId, isMatch3rd: false }, 'Match/GetInfo');

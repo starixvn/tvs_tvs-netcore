@@ -1,6 +1,6 @@
 ﻿using Fanex.Data.Repository;
 
-namespace TicketVoidingSystem.Utility.Criteria
+namespace TicketVoidingSystem.ABExceptionList.Criteria
 {
     public class GetSitesCriteria : CriteriaBase
     {

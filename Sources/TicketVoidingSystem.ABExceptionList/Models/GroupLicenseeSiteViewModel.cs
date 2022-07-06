@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TicketVoidingSystem.Utility.Models
+namespace TicketVoidingSystem.ABExceptionList.Models
 {
     public class GroupLicenseeSiteViewModel
     {

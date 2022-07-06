@@ -19,14 +19,6 @@ namespace TicketVoidingSystem.ABExceptionList.Controllers
             this.mediator = mediator;
         }
 
-        [HttpGet]
-        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
-        public async Task<IActionResult> GetPermission()
-        {
-            var model = await mediator.Send(new GetPermissionRequest());
-            return Ok(model);
-        }
-
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
         public async Task<IActionResult> CheckUsernames(CheckUsernamesRequest request)
@@ -60,10 +52,23 @@ namespace TicketVoidingSystem.ABExceptionList.Controllers
         }
 
         [HttpGet]
-        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
+        public async Task<IActionResult> GetPermission()
+        {
+            var model = await mediator.Send(new GetPermissionRequest());
+            return Ok(model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetSubType()
         {
             var model = await mediator.Send(new GetSubTypeRequest());
+            return Ok(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSites()
+        {
+            var model = await mediator.Send(new GetSitesRequest());
             return Ok(model);
         }
     }

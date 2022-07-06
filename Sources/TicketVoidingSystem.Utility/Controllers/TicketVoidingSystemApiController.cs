@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
-using Fanex.NAP.Client.AspNetCore.Session;
-using MediatR;
+﻿using Fanex.NAP.Client.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketVoidingSystem.Utility.Handlers;
 using TicketVoidingSystem.Utility.Models;
 
 namespace TicketVoidingSystem.Utility.Controllers
@@ -12,20 +9,11 @@ namespace TicketVoidingSystem.Utility.Controllers
     [Route("api/TicketVoidingSystem/[action]")]
     public class TicketVoidingSystemApiController : ControllerBase
     {
-        private readonly IMediator mediator;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TicketVoidingSystemApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
+        public TicketVoidingSystemApiController(IHttpContextAccessor httpContextAccessor)
         {
-            this.mediator = mediator;
             this.httpContextAccessor = httpContextAccessor;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetSites()
-        {
-            var model = await mediator.Send(new GetSitesRequest());
-            return Ok(model);
         }
 
         [HttpGet]

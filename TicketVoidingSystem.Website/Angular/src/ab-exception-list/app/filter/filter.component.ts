@@ -4,9 +4,9 @@ import { MultipleSelection } from '../../../utility/components/multiple-selectio
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
-import { GroupSiteModel } from '../../../utility/models/site.model';
 import { AppStore } from '../app.store';
 import { PermissionABExceptionList } from '../models/permission.model';
+import { GroupSiteModel } from '../models/site.model';
 import { FilterService } from '../services/filter.service';
 import { FilterModel } from './filter.model';
 

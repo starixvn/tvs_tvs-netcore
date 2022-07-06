@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
 import { ABWhiteListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
-import { GroupSiteModel, SiteModel } from '../../../utility/models/site.model';
 import { MultipleSelection } from '../../../utility/modules/multiple-selection/multiple-selection';
 import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { FilterModel } from '../filter/filter.model';
 import { AbExceptionSubType } from '../models/ab-exception-sub-type.mode';
 import { GetUserModel } from '../models/get-user.model';
+import { GroupSiteModel, SiteModel } from '../models/site.model';
 import { UserModel } from '../models/user.model';
 import { FilterService } from './filter.service';
 

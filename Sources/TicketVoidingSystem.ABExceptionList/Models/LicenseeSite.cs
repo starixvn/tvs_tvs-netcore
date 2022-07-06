@@ -1,4 +1,4 @@
-﻿namespace TicketVoidingSystem.Utility.Models
+﻿namespace TicketVoidingSystem.ABExceptionList.Models
 {
     public class LicenseeSite
     {

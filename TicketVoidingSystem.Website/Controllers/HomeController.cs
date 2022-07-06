@@ -22,15 +22,15 @@ namespace TicketVoidingSystem.Website.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         public IActionResult HealthCheck()
         {
             return Ok("200-Ok");
+        }
+
+        [AllowAnonymous]
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }

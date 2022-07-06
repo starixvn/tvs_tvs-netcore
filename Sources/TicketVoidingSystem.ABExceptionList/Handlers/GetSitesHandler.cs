@@ -4,10 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.Utility.Criteria;
-using TicketVoidingSystem.Utility.Models;
+using TicketVoidingSystem.ABExceptionList.Criteria;
+using TicketVoidingSystem.ABExceptionList.Models;
 
-namespace TicketVoidingSystem.Utility.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers
 {
     public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>
     {
