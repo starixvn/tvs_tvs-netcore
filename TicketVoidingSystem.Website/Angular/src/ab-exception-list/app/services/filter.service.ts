@@ -13,13 +13,13 @@ import { GroupSiteModel, SiteModel } from '../models/site.model';
 })
 export class FilterService {
   constructor(
-    private readonly appService: AppService
-  ) { }
+    private readonly appService: AppService,
+  ) {}
 
   async getSites(): Promise<GroupSiteModel[]> {
     return this.appService.getSites();
   }
-
+  
   initDefaultFilter(filterModel: FilterModel, groupSites: GroupSiteModel[], selectedSubType: string[], voidVIPSelection: Selection[]): void {
     filterModel.username = '';
     filterModel.level = ABExceptionListLevel.All;
@@ -49,11 +49,11 @@ export class FilterService {
 
     return multipleSelection;
   }
-
+  
   async initSubType(): Promise<Selection[]> {
     const selections = [];
     const subIssueTypes = await this.appService.getSubTypes();
-    _.forEach(subIssueTypes, function (item) {
+    _.forEach(subIssueTypes, function(item) {
       selections.push(
         {
           name: item.subIssueTypeName,
@@ -62,8 +62,9 @@ export class FilterService {
         }
       );
     });
-
-    return selections;
+    
+    //TODO: only remove subtype on UI - feat: 173229
+    return selections.filter(x => x.value !== '27,41');
   }
 
   private initDefaultProperties(multipleSelection: MultipleSelection): void {

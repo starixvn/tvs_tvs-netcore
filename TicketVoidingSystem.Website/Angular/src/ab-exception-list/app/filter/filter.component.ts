@@ -21,6 +21,7 @@ export class FilterComponent implements OnInit {
   @Input() subTypeSelection: Selection[];
   @Output() subTypeSelectionChange = new EventEmitter<Selection[]>();
 
+  @Output() filterModelChange = new EventEmitter<FilterModel>();
   @Output() addUserEvent = new EventEmitter();
   @Output() searchEvent = new EventEmitter();
 

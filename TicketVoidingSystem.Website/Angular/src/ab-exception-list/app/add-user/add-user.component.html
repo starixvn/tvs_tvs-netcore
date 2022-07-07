@@ -1,4 +1,4 @@
-<div *ngIf="model.isOpen">
+<div *ngIf="model.isOpen" class="add-user-modal">
   <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
   <div role="dialog" class="fade modal show d-block">
     <div role="document" class="modal-dialog-custom modal-dialog-centered">
@@ -12,12 +12,29 @@
           </button>
         </div>
         <div class="modal-body wrapper-tooltip">
-          <user-names #usernames [(model)]="model.usernames" isAbException="true"></user-names>          
+          <user-names #usernames [isAbException]="true"></user-names>
           <div>
-            <label class="col-form-label col-form-label-sm mg-right-10">Sub Type</label>
-            <ng-multiselect-dropdown class="sub-type" name="sub-type" [settings]="dropDownSetting" [data]="subTypeSelection"
-                [(ngModel)]="selectedSubType" [disabled]="isDisabled" placeholder=" ">
-            </ng-multiselect-dropdown>
+            <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
+            <ng-select class="sub-type" [items]="subTypeSelection" [multiple]="true" bindLabel="name" groupBy="group"
+              [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
+              [(ngModel)]="selectedSubType"
+              [clearable]="false" [searchable]="false">
+              <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{subTypeSelection.length === selectedSubType.length ? 'Unselect All' : 'Select All'}}
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" />{{item.name}}
+              </ng-template>
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:9">
+                  {{item.name}}
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="number-of-more" *ngIf="items.length > 9">
+                  <span class="ng-value-label">+{{items.length - 9}}</span>
+                </div>
+              </ng-template>
+            </ng-select>
           </div>
           <div class="d-flex align-items-center">
             <input [(ngModel)]="isVoidVIP" type="checkbox" id="chk-void-vip" class="mr-1" />

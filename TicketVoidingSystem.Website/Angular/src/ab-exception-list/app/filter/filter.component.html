@@ -38,7 +38,7 @@
         <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
           <div class="ng-value">
             <span class="ng-value-label">
-              {{isNoneSubType ? 'N/A' : (items.length === subTypeSelectionFilter.length ? 'All' : items.length) + ' selected'}}
+              {{items.length === subTypeSelectionFilter.length ? 'All' : items.length + ' selected'}}
             </span>
           </div>
         </ng-template>
@@ -59,7 +59,7 @@
         <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
           <div class="ng-value">
             <span class="ng-value-label">
-              {{isNoneSubType ? 'N/A' : (items.length === voidVIPSelection.length ? 'All' : items.length) + ' selected'}}
+              {{items.length === voidVIPSelection.length ? 'All' : items.length + ' selected'}}
             </span>
           </div>
         </ng-template>

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
-import { Selection } from '../../../utility/models/selection.model';
 import { AppService } from '../app.service';
 import { AppStore } from '../app.store';
 import { FilterModel } from '../filter/filter.model';
@@ -32,10 +31,10 @@ export class UserService {
     return this.appService.getUsers(query);
   }
 
-  async addUsers(usernames: string, selectedSubType: Selection[], isVoidVIP: boolean): Promise<void> {
+  async addUsers(usernames: string, selectedSubType: string[], isVoidVIP: boolean): Promise<void> {
     const query: AddUserQuery = {
       usernames: usernames,
-      subTypes: selectedSubType.map(x => x.value).join(','),
+      subTypes: selectedSubType.join(','),
       voidVIP: isVoidVIP
     };
     const result = await this.appService.addUsers(query);
@@ -44,14 +43,14 @@ export class UserService {
         title: 'Add Result',
         message: TEXT.AB_WHITE_LIST_ADDED_SUCCESS,
         type: result.isSuccessful ? ModalType.Alert : ModalType.Error
-      },
+      },      
       async () => {
         window.location.reload();
       }
     );
   }
 
-  async removeUsers(users: UserModel[], abExceptionListStore: AppStore): Promise<void> {
+  async removeUsers(users: UserModel[], abWhiteListStore: AppStore): Promise<void> {
     const messageConfirmRemove = `Are you sure you want to remove the Username(s)?<br>` +
       `- ${users.map(x => x.username).join(', ')}`;
     const userIds = users.map(x => x.custId).join(',');
@@ -60,18 +59,18 @@ export class UserService {
         title: 'Remove',
         message: messageConfirmRemove,
         type: ModalType.Confirm
-      },
+      }, 
       async () => {
-        await this.onYesConfirm(userIds, abExceptionListStore);
+        await this.onYesConfirm(userIds, abWhiteListStore);
       },
-      () => { }
+      () => {}
     );
   }
 
-  private async onYesConfirm(userIds: string, abExceptionListStore: AppStore): Promise<void> {
-    abExceptionListStore.changeBlockingUiStatus(true);
+  private async onYesConfirm(userIds: string, abWhiteListStore: AppStore): Promise<void> {
+    abWhiteListStore.changeBlockingUiStatus(true);
     await this.appService.removeUsers(userIds);
-    abExceptionListStore.changeBlockingUiStatus(false);
+    abWhiteListStore.changeBlockingUiStatus(false);
     this.modalService.open(
       {
         title: 'Remove',

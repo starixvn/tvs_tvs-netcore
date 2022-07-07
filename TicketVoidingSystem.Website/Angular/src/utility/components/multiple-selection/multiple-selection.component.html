@@ -1,19 +1,23 @@
 <div class="multiple-selection" [style.width]="multipleSelect.maxWidth">
   <button type="button" readonly (click)="isCollapse = !isCollapse" [disabled]="isDisabled">
-      <span>{{multipleSelect.selectionTitle }}</span>
-      <span [ngClass]="{'i-up': isCollapse, 'i-down': !isCollapse}"></span>
+    <span>{{multipleSelect.selectionTitle }}</span>
+    <span [ngClass]="{'i-up': isCollapse, 'i-down': !isCollapse}"></span>
   </button>
   <div class="show-tree-view" *ngIf="multipleSelect.items != undefined && isCollapse">
-      <div class="dropdown-header" *ngIf="multipleSelect.showHeader">
-          <label>
-              <input type="checkbox" [(ngModel)]="multipleSelect.isCheckAll"
-                  (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" />
-              {{multipleSelect.checkAllCheckBoxText}}
-          </label>
-          <span [ngClass]="{'i-up': expanded, 'i-down': !expanded}" (click)="toggle()"></span>
+    <div class="dropdown-header d-flex" *ngIf="multipleSelect.showHeader">
+      <label>
+        <input type="checkbox" [(ngModel)]="multipleSelect.isCheckAll"
+          (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" />
+        {{multipleSelect.checkAllCheckBoxText}}
+      </label>
+
+      <div class="ml-auto icon-dropdown" (click)="toggle()"><i class="fa-solid fa-xs"
+          [ngClass]="{'fa-angle-up': isExpanded, 'fa-angle-down': !isExpanded}"></i>
       </div>
-      <div class="tree-view-content" [style.max-height]="multipleSelect.maxHeight">
-          <tree-view [items]="multipleSelect.items" (change)="changeItems()"></tree-view>
-      </div>
+    </div>
+    <div class="tree-view-content" [style.max-height]="multipleSelect.maxHeight"
+      *ngIf="multipleSelect.items?.length > 0">
+      <tree-view [items]="multipleSelect.items" (change)="changeItems()"></tree-view>
+    </div>
   </div>
 </div>

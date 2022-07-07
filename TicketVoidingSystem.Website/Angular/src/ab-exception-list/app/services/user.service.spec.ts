@@ -1,9 +1,8 @@
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
-import { Selection } from '../../../utility/models/selection.model';
-import { ModalType } from '../../../utility/modules/modal/modal';
-import { ModalService } from '../../../utility/modules/modal/modal.service';
 import { AppService } from '../app.service';
 import { AppStore } from '../app.store';
 import { FilterModel } from '../filter/filter.model';
@@ -45,7 +44,7 @@ describe('UserService', () => {
   let appService: AppService;
 
   beforeEach(() => {
-    modalService = new ModalService(new NgbModalConfig(), null, null);
+    modalService = new ModalService(new NgbModalConfig(null), null, null);
     appService = new AppService(null);
     userService = new UserService(appService, modalService);
   });
@@ -90,7 +89,7 @@ describe('UserService', () => {
       type: ModalType.Alert
     };
     // action
-    await userService.addUsers('aa', [new Selection()], false);
+    await userService.addUsers('aa', [], false);
 
     // Assert
     expect(spyModalServiceConfirm).toHaveBeenCalledTimes(1);

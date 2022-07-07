@@ -1,6 +1,6 @@
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
 import { GroupUsername } from '../../../utility/components/user-names/user-names.model';
-import { Tooltip } from '../../../utility/modules/tooltip/tooltip.model';
 import { AppService } from '../app.service';
 import { FilterComponent } from '../filter/filter.component';
 import { FilterModel } from '../filter/filter.model';

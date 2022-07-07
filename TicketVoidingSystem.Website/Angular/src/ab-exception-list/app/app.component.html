@@ -10,8 +10,8 @@
     (searchEvent)="handleSearchEvent()"
     [permission]="permission">
   </filter>
-  <user-list [(models)]="userModels" [permission]="permission"></user-list>
+  <user-list [models]="userModels" [permission]="permission"></user-list>
 </div>
 
-<add-user [(model)]="addUserModel" [subTypeSelection]="subTypeSelection"></add-user>
+<add-user [model]="addUserModel" [subTypeSelection]="subTypeSelection"></add-user>
 <block-full-ui [isBlock]="isBlockingUi"></block-full-ui>
