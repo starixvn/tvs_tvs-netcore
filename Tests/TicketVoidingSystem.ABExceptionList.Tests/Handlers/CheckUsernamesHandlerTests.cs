@@ -1,0 +1,33 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using NSubstitute;
+using TicketVoidingSystem.ABExceptionList.Criteria;
+using TicketVoidingSystem.ABExceptionList.Handlers;
+using TicketVoidingSystem.ABExceptionList.Models;
+using Xunit;
+
+namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
+{
+    public class CheckUsernamesHandlerTests
+    {
+        [Fact()]
+        public async Task Handler_RepositoryHasCalled_ReturnResult()
+        {
+            // Arrange
+            var request = new CheckUsernamesRequest { Usernames = "aaaa" };
+            var expectedResult = new CheckUsernamesModel() { ExistedUsernames = "ex", InvalidUsernames = "in" };
+            var repository = Substitute.For<IDynamicRepository>();
+            repository.GetAsync<CheckUsernamesModel>(Arg.Any<CheckUsernamesCriteria>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(expectedResult);
+            var handler = new CheckUsernamesHandler(repository);
+
+            // Act
+            var actualResult = await handler.Handle(request, default);
+
+            // Assert
+            await repository.Received(1).GetAsync<CheckUsernamesModel>(Arg.Is<CheckUsernamesCriteria>(x => x.Usernames == request.Usernames),
+                Arg.Any<CancellationToken>());
+            Assert.Equal(expectedResult, actualResult);
+        }
+    }
+}

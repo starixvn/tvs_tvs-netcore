@@ -29,8 +29,9 @@ namespace TicketVoidingSystem.Core.Web
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {
                     const string text = "{ \"code\": 999999, \"message\": \"Under maintenance time.\" }";
+                    const int serviceUnavailableCode = 503;
                     context.HttpContext.Response.Clear();
-                    context.HttpContext.Response.StatusCode = 503;
+                    context.HttpContext.Response.StatusCode = serviceUnavailableCode;
                     await context.HttpContext.Response.WriteAsync(text);
                 }
                 else
