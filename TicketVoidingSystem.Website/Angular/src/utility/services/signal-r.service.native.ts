@@ -13,7 +13,7 @@ export class SignalRService {
 
   constructor(private toastr: ToastrService) { }
 
-  public initializeConnection(): void {
+  public async initializeConnection(): Promise<void> {
     this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(`${window.location.origin}${document.body.getAttribute('root-url')}SignalR/NotificationHub`)
@@ -23,7 +23,7 @@ export class SignalRService {
     this.registerShowVoidResultEvent(this.hubConnection);
     this.registerShowErrorMessage(this.hubConnection);
     this.registerReceiveRequestStatusModelEvent(this.hubConnection);
-    this.hubConnection.start();
+     await this.hubConnection.start();
   }
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
@@ -47,6 +47,8 @@ export class SignalRService {
   private configToastr(): void {
     this.toastr.toastrConfig.enableHtml = true;
     this.toastr.toastrConfig.disableTimeOut = true;
+    this.toastr.toastrConfig.closeButton = true;
+    this.toastr.toastrConfig.toastClass = 'custom-toastr ngx-toastr';
     this.toastr.toastrConfig.positionClass = 'toast-bottom-right';
   }
 

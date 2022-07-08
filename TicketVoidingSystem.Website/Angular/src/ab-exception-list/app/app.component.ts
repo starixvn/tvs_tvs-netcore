@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.isBlockingUi = status;
     });
 
-    this.signalRService.initializeConnection();
+    await this.signalRService.initializeConnection();
     this.permission = await this.appService.getPermissionABExceptionList();
   }
 

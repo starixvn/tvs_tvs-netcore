@@ -23,8 +23,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this.isBlockingUi = status;
     });
     this.abExceptionListStore.changeBlockingUiStatus(true);
-    this.signalRService.initializeConnection();
-
+    await this.signalRService.initializeConnection();
   }
 
   ngOnDestroy(): void {
