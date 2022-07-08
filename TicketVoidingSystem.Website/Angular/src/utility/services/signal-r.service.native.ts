@@ -50,7 +50,7 @@ export class SignalRService {
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.toastClass = 'custom-toastr ngx-toastr';
     this.toastr.toastrConfig.positionClass = 'toast-bottom-right';
-    this.toastr.toastrConfig.easeTime = 100;
+    this.toastr.toastrConfig.easeTime = 200;
   }
 
   private showMessageForVoidResult(results: Result[]): void {
