@@ -67,13 +67,13 @@ export class SignalRService {
     const sentLetsTalkResult = results.find(x => x.errorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
 
     if (succeedLicenseeResult?.errorMsg) {
-      succeedLicenseeMsg = `<div class="licensee-success-msg"><span>- ${succeedLicenseeResult.errorMsg}</span></div>`;
+      succeedLicenseeMsg = `<div><span>- ${succeedLicenseeResult.errorMsg}</span></div>`;
     }
     if (failedLicenseeResult?.errorMsg) {
-      failedLicenseeMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${failedLicenseeResult.errorMsg}</span></div>`;
+      failedLicenseeMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg">&#160;${failedLicenseeResult.errorMsg}</span></div>`;
     }
     if (sentLetsTalkResult?.errorMsg) {
-      sentLetsTalkMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${sentLetsTalkResult.errorMsg}</span></div>`;
+      sentLetsTalkMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg">&#160;${sentLetsTalkResult.errorMsg}</span></div>`;
     }
 
     return `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${sentLetsTalkMsg}</div>`;

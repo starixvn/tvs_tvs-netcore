@@ -62,3 +62,11 @@ body {
   padding: 15px !important; 
   background-image: none !important;
 }
+
+.void-bet-notification {
+  .failed-msg {
+    .icon, .msg {
+      color: #ff0000;
+    }
+  }
+}
