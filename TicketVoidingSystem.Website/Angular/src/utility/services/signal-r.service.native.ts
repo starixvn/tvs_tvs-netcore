@@ -23,12 +23,12 @@ export class SignalRService {
     this.registerShowVoidResultEvent(this.hubConnection);
     this.registerShowErrorMessage(this.hubConnection);
     this.registerReceiveRequestStatusModelEvent(this.hubConnection);
-     await this.hubConnection.start();
+    await this.hubConnection.start();
   }
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
     connection.on('showVoidResult', (results: Result[]) => {
-      this.toastr.success(this.buildMessageForVoidResult(results), '');
+      this.showMessageForVoidResult(results);
     });
   }
 
@@ -50,32 +50,40 @@ export class SignalRService {
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.toastClass = 'custom-toastr ngx-toastr';
     this.toastr.toastrConfig.positionClass = 'toast-bottom-right';
+    this.toastr.toastrConfig.easeTime = 100;
   }
 
-  private buildMessageForVoidResult(results: Result[]): string {
+  private showMessageForVoidResult(results: Result[]): void {
     const exceptionResult = results.find(x => x.errorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
     if (exceptionResult) {
-      return `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${exceptionResult.errorMsg}</span></div>`;
+      this.toastr.error(`<i class="fa-solid fa-triangle-exclamation icon"></i> ${exceptionResult.errorMsg}`);
+      return;
     }
 
     let succeedLicenseeMsg = '';
     let failedLicenseeMsg = '';
-    let sentLetsTalkMsg = '';
+    let failedSentLetsTalkMsg = '';
     const voidRequestMsg = results.find(x => x.errorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.errorMsg;
     const succeedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_SUCCESS);
     const failedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_FAIL);
-    const sentLetsTalkResult = results.find(x => x.errorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
+    const failedSentLetsTalkResult = results.find(x => x.errorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
 
     if (succeedLicenseeResult?.errorMsg) {
       succeedLicenseeMsg = `<div><span>- ${succeedLicenseeResult.errorMsg}</span></div>`;
     }
     if (failedLicenseeResult?.errorMsg) {
-      failedLicenseeMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg">&#160;${failedLicenseeResult.errorMsg}</span></div>`;
+      failedLicenseeMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg"> ${failedLicenseeResult.errorMsg}</span></div>`;
     }
-    if (sentLetsTalkResult?.errorMsg) {
-      sentLetsTalkMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg">&#160;${sentLetsTalkResult.errorMsg}</span></div>`;
+    if (failedSentLetsTalkResult?.errorMsg) {
+      failedSentLetsTalkMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg"> ${failedSentLetsTalkResult.errorMsg}</span></div>`;
     }
 
-    return `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${sentLetsTalkMsg}</div>`;
+    const finalMessage = `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${failedSentLetsTalkMsg}</div>`;
+    if (failedLicenseeMsg || failedSentLetsTalkMsg) {
+      this.toastr.warning(finalMessage);
+      return;
+    }
+
+    this.toastr.success(finalMessage);
   }
 }
