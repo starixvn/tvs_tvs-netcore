@@ -14,14 +14,15 @@ export class MenuBarComponent implements OnInit {
   username: string;
   isBlock: boolean;
   rootUrl = '/';
-  oldSiteRootUrl = '/';
+  oldSiteAbsoluteUrl = 'https://';
+
 
   constructor(private readonly commonService: CommonService) { }
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;
     this.rootUrl = document.body.getAttribute('root-url');
-    this.oldSiteRootUrl = document.body.getAttribute('old-site-root-url');
+    this.oldSiteAbsoluteUrl = this.getOldSiteAbsoluteUrl(document.body.getAttribute('old-site-root-url'));
     const model = await this.commonService.getNapUserInfo();
     this.replaceRootUrl(model.menuItem);
     this.username = model.userName;
@@ -34,12 +35,21 @@ export class MenuBarComponent implements OnInit {
   }
 
   private replaceRootUrl(menuItems: MenuItem[]): void {
+
     menuItems.forEach(menu => {
       if (menu.name === MenuName.AB_EXCEPTION_LIST) {
         menu.url = this.rootUrl + menu.url.substring(1);
       } else {
-        menu.url = this.oldSiteRootUrl + menu.url.substring(1);
+        menu.url = `${this.oldSiteAbsoluteUrl}${menu.url.substring(1)}`;
       }
     });
+  }
+
+  private getOldSiteAbsoluteUrl(oldSiteRootUrl: string): string {
+    if (oldSiteRootUrl.startsWith('/')) {
+      return `${window.location.origin}${oldSiteRootUrl}`;
+    }
+
+    return oldSiteRootUrl;
   }
 }
