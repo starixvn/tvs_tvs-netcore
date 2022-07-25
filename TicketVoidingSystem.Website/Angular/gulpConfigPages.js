@@ -141,6 +141,18 @@ const abExceptionList = {
   indexEJSPath: './src/ab-exception-list/index.ejs'
 };
 
+const homePage = {
+  pageName: 'HomePage',
+  tsconfigFiles: [
+    'home-page/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/home-page/',
+  index: 'src/home-page/index.cshtml',
+  main: 'src/home-page/main.ts',
+  transformFolder: '../wwwroot/dist/home-page',
+  indexEJSPath: './src/home-page/index.ejs'
+};
 const configPages = [
   // voidSingleBet,
   // ticketListing,
@@ -152,7 +164,8 @@ const configPages = [
   // getBetIdForVoiding,
   // voidFormulaBets,
   // afterVoidHistory,
-  abExceptionList
+  abExceptionList,
+  homePage
 ];
 
 module.exports = configPages;

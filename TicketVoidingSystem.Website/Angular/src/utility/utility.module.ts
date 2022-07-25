@@ -22,6 +22,7 @@ import { ModalModule } from './components/modal/modal.module';
 import { PagingModule } from './components/paging/paging.module';
 // import { PipeModule } from './components/pipes/pipe.module';
 // import { TemplateMessageModule } from './components/template-message/template-message.module';
+import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { ToolTipModule } from './components/tooltip/tooltip.module';
 import { CommonService } from './services/common.service';
 import { HttpService } from './services/http.service';
@@ -44,6 +45,7 @@ import { HttpService } from './services/http.service';
   ],
   declarations: [
     UsernamesComponent,
+    MenuBarComponent,
     // BaseTicketsListComponent,
     // BetTypesComponent,
     // BetTypesVirtualSportComponent,
@@ -69,6 +71,7 @@ import { HttpService } from './services/http.service';
     // BetIdsComponent,
     // AutoRefreshComponent,
     UsernamesComponent,
+    MenuBarComponent
   ],
   providers: [HttpService, CommonService]
 })

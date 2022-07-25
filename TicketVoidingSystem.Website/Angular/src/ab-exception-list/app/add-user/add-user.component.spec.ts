@@ -2,11 +2,10 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { Shallow } from 'shallow-render';
+import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
 import { UsernamesComponent } from '../../../utility/components/user-names/user-names.component';
 import { GroupUsername } from '../../../utility/components/user-names/user-names.model';
-import { BlockFullUiModule } from '../../../utility/modules/block-full-ui/block-full-ui.module';
 import { AppStore } from '../app.store';
 import { UserService } from '../services/user.service';
 import { ValidationService } from '../services/validation.service';
@@ -27,8 +26,7 @@ describe('AddUserComponent', () => {
       NgbModule,
       FormsModule,
       BlockFullUiModule,
-      NgSelectModule,
-      NgMultiSelectDropDownModule
+      NgSelectModule
     ],
     providers: [
       ValidationService,

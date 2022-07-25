@@ -1,3 +1,3 @@
-export class PermissionABWhiteList {
-  abWhiteListHost: boolean;
+export class PermissionABExceptionList {
+  abExceptionListHost: boolean;
 }

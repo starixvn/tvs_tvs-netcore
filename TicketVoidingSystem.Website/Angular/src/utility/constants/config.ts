@@ -173,7 +173,7 @@ export class AcceptType {
   static readonly PENDING_ACCEPT = 3;
 }
 
-export class ABWhiteListLevel {
+export class ABExceptionListLevel {
   static readonly All = '0';
   static readonly Super = '4';
   static readonly Master = '3';
@@ -181,23 +181,23 @@ export class ABWhiteListLevel {
   static readonly Member = '1';
 
   static readonly MULTIPLE_OPTIONS: Selection[] = [
-    { value: ABWhiteListLevel.All, name: 'All' },
-    { value: ABWhiteListLevel.Super, name: 'Super' },
-    { value: ABWhiteListLevel.Master, name: 'Master' },
-    { value: ABWhiteListLevel.Agent, name: 'Agent' },
-    { value: ABWhiteListLevel.Member, name: 'Member' }
+    { value: ABExceptionListLevel.All, name: 'All' },
+    { value: ABExceptionListLevel.Super, name: 'Super' },
+    { value: ABExceptionListLevel.Master, name: 'Master' },
+    { value: ABExceptionListLevel.Agent, name: 'Agent' },
+    { value: ABExceptionListLevel.Member, name: 'Member' }
   ];
 }
 
-export class ABWhiteListVoidVIP {
+export class ABExceptionListVoidVIP {
   static readonly No = '0';
   static readonly Yes = '1';
   static readonly NA = '-1';
 
   static readonly MULTIPLE_OPTIONS: Selection[] = [
-    { value: ABWhiteListVoidVIP.Yes, name: 'Yes', group: 'All' },
-    { value: ABWhiteListVoidVIP.No, name: 'No', group: 'All' },
-    { value: ABWhiteListVoidVIP.NA, name: 'N/A', group: 'All' }
+    { value: ABExceptionListVoidVIP.Yes, name: 'Yes', group: 'All' },
+    { value: ABExceptionListVoidVIP.No, name: 'No', group: 'All' },
+    { value: ABExceptionListVoidVIP.NA, name: 'N/A', group: 'All' }
   ];
 }
 

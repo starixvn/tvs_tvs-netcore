@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import * as $ from "jquery";
 import { ToastrService } from 'ngx-toastr';
 import { VoidBetResultCode } from '../constants/void-bet-result-code';
 import { RequestStatus, Result } from '../models/signal-r.model';
@@ -9,53 +8,33 @@ import { RequestStatus, Result } from '../models/signal-r.model';
   providedIn: 'root'
 })
 export class SignalRService {
-  public hubConnection: signalR.HubConnection; 
-  requestStatusChange = new EventEmitter<RequestStatus[]>();
-
-  toastConfig = {
-    timeOut: 100000,
-    positionClass: 'toast-bottom-right',
-    disableTimeOut: true
-  };
+  public hubConnection: signalR.HubConnection;
+  public requestStatusChange = new EventEmitter<RequestStatus[]>();
 
   constructor(private toastr: ToastrService) { }
 
-  public initializeConnection(): void {
-    //this.configToastr();
+  public async initializeConnection(): Promise<void> {
+    this.configToastr();
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(`${window.location.origin}${document.body.getAttribute('origin-url')}SignalR/NotificationHub`, {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets
-      })
+      .withUrl(`${window.location.origin}${document.body.getAttribute('root-url')}SignalR/NotificationHub`)
       .configureLogging(signalR.LogLevel.Trace)
       .build();
 
     this.registerShowVoidResultEvent(this.hubConnection);
     this.registerShowErrorMessage(this.hubConnection);
     this.registerReceiveRequestStatusModelEvent(this.hubConnection);
-    this.hubConnection.start();
-
-    document.getElementById('frm-send-message').addEventListener('submit', event => {
-      event.preventDefault();
-      let message = $('#message').val();
-      let nick = $('#spn-nick').text();
-      const result = new Result();
-      result.ErrorCode = 0;
-      result.ErrorMsg = '111111111111111111';
-      this.hubConnection.invoke('ShowVoidResultToAllClient', [result ]);
-  
-  });
+    await this.hubConnection.start();
   }
 
   private registerShowVoidResultEvent(connection: signalR.HubConnection): void {
-    connection.on("showVoidResult", (results: Result[]) => {
-      this.toastr.info(this.buildMessageForVoidResult(results), "", this.toastConfig);
+    connection.on('showVoidResult', (results: Result[]) => {
+      this.showMessageForVoidResult(results);
     });
   }
 
   private registerShowErrorMessage(connection: signalR.HubConnection) {
     connection.on('showErrorMessage', (message: string) => {
-    //  toastr.error(message);
+      this.toastr.error(message);
     });
   }
 
@@ -65,45 +44,46 @@ export class SignalRService {
     });
   }
 
-  // private configToastr(): void {
-  //   toastr.options.closeButton = true;
-  //   toastr.options.positionClass = 'toast-bottom-right';
-  //   toastr.options.showDuration = 100;
-  //   toastr.options.hideDuration = 200;
-  //   toastr.options.timeOut = 0;
-  //   toastr.options.extendedTimeOut = 0;
-  //   toastr.options.showEasing = 'swing';
-  //   toastr.options.hideEasing = 'linear';
-  //   toastr.options.showMethod = 'fadeIn';
-  //   toastr.options.hideMethod = 'slideUp';
-  //   toastr.options.tapToDismiss = true;
-  //   toastr.options.escapeHtml = false;
-  // }
+  private configToastr(): void {
+    this.toastr.toastrConfig.enableHtml = true;
+    this.toastr.toastrConfig.disableTimeOut = true;
+    this.toastr.toastrConfig.closeButton = true;
+    this.toastr.toastrConfig.toastClass = 'custom-toastr ngx-toastr';
+    this.toastr.toastrConfig.positionClass = 'toast-bottom-right';
+    this.toastr.toastrConfig.easeTime = 200;
+  }
 
-  private buildMessageForVoidResult(results: Result[]): string {
-    const exceptionResult = results.find(x => x.ErrorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
+  private showMessageForVoidResult(results: Result[]): void {
+    const exceptionResult = results.find(x => x.errorCode === VoidBetResultCode.EXCEPTION_RUN_AFTER_VOID);
     if (exceptionResult) {
-      return `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${exceptionResult.ErrorMsg}</span></div>`;
+      this.toastr.error(`<i class="fa-solid fa-triangle-exclamation icon"></i> ${exceptionResult.errorMsg}`);
+      return;
     }
-    
+
     let succeedLicenseeMsg = '';
     let failedLicenseeMsg = '';
-    let sentLetsTalkMsg = '';
-    const voidRequestMsg = results.find(x => x.ErrorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.ErrorMsg;
-    const succeedLicenseeResult = results.find(x => x.ErrorCode === VoidBetResultCode.LICENSEE_SUCCESS);
-    const failedLicenseeResult = results.find(x => x.ErrorCode === VoidBetResultCode.LICENSEE_FAIL);
-    const sentLetsTalkResult = results.find(x => x.ErrorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
+    let failedSentLetsTalkMsg = '';
+    const voidRequestMsg = results.find(x => x.errorCode === VoidBetResultCode.VOID_REQUEST_SUCCESS)?.errorMsg;
+    const succeedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_SUCCESS);
+    const failedLicenseeResult = results.find(x => x.errorCode === VoidBetResultCode.LICENSEE_FAIL);
+    const failedSentLetsTalkResult = results.find(x => x.errorCode === VoidBetResultCode.SEND_LETSTALK_FAIL);
 
-    if (succeedLicenseeResult?.ErrorMsg) {
-      succeedLicenseeMsg = `<div class="licensee-success-msg"><span>- ${succeedLicenseeResult.ErrorMsg}</span></div>`;
+    if (succeedLicenseeResult?.errorMsg) {
+      succeedLicenseeMsg = `<div><span>- ${succeedLicenseeResult.errorMsg}</span></div>`;
     }
-    if (failedLicenseeResult?.ErrorMsg) {
-      failedLicenseeMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${failedLicenseeResult.ErrorMsg}</span></div>`;
+    if (failedLicenseeResult?.errorMsg) {
+      failedLicenseeMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg"> ${failedLicenseeResult.errorMsg}</span></div>`;
     }
-    if (sentLetsTalkResult?.ErrorMsg) {
-      sentLetsTalkMsg = `<div><span class="warn-custom warning-custom"></span><span class="failed-msg">&#160;${sentLetsTalkResult.ErrorMsg}</span></div>`;
+    if (failedSentLetsTalkResult?.errorMsg) {
+      failedSentLetsTalkMsg = `<div class="failed-msg"><i class="fa-solid fa-triangle-exclamation icon"></i><span class="msg"> ${failedSentLetsTalkResult.errorMsg}</span></div>`;
     }
 
-    return `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${sentLetsTalkMsg}</div>`;
+    const finalMessage = `<div class="void-bet-notification"><div><span>- ${voidRequestMsg}</span></div>${succeedLicenseeMsg}${failedLicenseeMsg}${failedSentLetsTalkMsg}</div>`;
+    if (failedLicenseeMsg || failedSentLetsTalkMsg) {
+      this.toastr.warning(finalMessage);
+      return;
+    }
+
+    this.toastr.success(finalMessage);
   }
 }

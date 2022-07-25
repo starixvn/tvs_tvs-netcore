@@ -1,13 +1,12 @@
 import * as _ from 'lodash';
-import { ABWhiteListLevel } from '../../../utility/constants/config';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
-import { GroupSiteModel, SiteModel } from '../../../utility/models/site.model';
-import { MultipleSelection } from '../../../utility/modules/multiple-selection/multiple-selection';
-import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { FilterModel } from '../filter/filter.model';
 import { AbExceptionSubType } from '../models/ab-exception-sub-type.mode';
 import { GetUserModel } from '../models/get-user.model';
+import { GroupSiteModel, SiteModel } from '../models/site.model';
 import { UserModel } from '../models/user.model';
 import { FilterService } from './filter.service';
 
@@ -43,14 +42,14 @@ describe('FilterService', () => {
   let filterService: FilterService;
 
   beforeEach(() => {
-    filterService = new FilterService(null, null);
+    filterService = new FilterService(null,);
   });
 
   it('#getSites should call #commonService.getSites', async () => {
     // Arrange
-    const commonService = new CommonService(null);
-    commonService.getSites = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeGroupSiteModel]));
-    const mockFilterService = new FilterService(null, commonService);
+    const appService = new AppService(null);
+    appService.getSites = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeGroupSiteModel]));
+    const mockFilterService = new FilterService(null);
 
     // action
     const result = await mockFilterService.getSites();
@@ -68,7 +67,7 @@ describe('FilterService', () => {
 
     // Assert
     expect(filterModel.username).toEqual('');
-    expect(filterModel.level).toEqual(ABWhiteListLevel.All);
+    expect(filterModel.level).toEqual(ABExceptionListLevel.All);
     expect(filterModel.sites).toEqual(Helper.fakeSiteModel.siteId);
   });
   
@@ -115,7 +114,7 @@ describe('FilterService', () => {
     const subIssueTypes = [subIssueType];
     const appService = new AppService(null);
     appService.getSubTypes = jest.fn().mockImplementation(() => Promise.resolve(subIssueTypes));
-    const mockFilterService = new FilterService(appService, null);
+    const mockFilterService = new FilterService(appService);
 
     // action
     const result = await mockFilterService.initSubType();

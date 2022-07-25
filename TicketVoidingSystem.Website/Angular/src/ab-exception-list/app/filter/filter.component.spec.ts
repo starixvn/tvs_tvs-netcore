@@ -3,11 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
-import { GroupSiteModel, SiteModel } from '../../../utility/models/site.model';
-import { MultipleSelectionModule } from '../../../utility/modules/multiple-selection/multiple-selection.module';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
+import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { AppStore } from '../app.store';
-import { PermissionABWhiteList } from '../models/permission.model';
+import { PermissionABExceptionList } from '../models/permission.model';
+import { GroupSiteModel, SiteModel } from '../models/site.model';
 import { FilterService } from '../services/filter.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
@@ -19,8 +19,8 @@ class Helper {
     subTypes: '',
     voidVIP: ''
   };
-  static fakePermission: PermissionABWhiteList = {
-    abWhiteListHost: true
+  static fakePermission: PermissionABExceptionList = {
+    abExceptionListHost: true
   };
   static fakeSiteModel: SiteModel = {
     siteId: '1111',

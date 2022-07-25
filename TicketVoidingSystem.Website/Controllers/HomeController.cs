@@ -1,29 +1,55 @@
-﻿using System.Diagnostics;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ONEbook.UM.Models;
+using ONEbook.UM.Services;
 using TicketVoidingSystem.Core.Web;
-using TicketVoidingSystem.Website.Models;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
-    [AllowAnonymous]
     [SkipLogging]
     public class HomeController : Controller
     {
+        private readonly IMaintenanceService maintenanceService;
+
+        public HomeController(IMaintenanceService maintenanceService)
+        {
+            this.maintenanceService = maintenanceService;
+        }
+
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            return View("~/wwwroot/dist/home-page/index.cshtml");
         }
 
-        public IActionResult Privacy()
+        [AllowAnonymous]
+        [HttpHead]
+        [ActionName("Index")]
+        public IActionResult IndexHead()
+        {
+            return Ok("200-Ok");
+        }
+
+        [AllowAnonymous]
+        public IActionResult HealthCheck()
+        {
+            return Ok("200-Ok");
+        }
+
+        [AllowAnonymous]
+        public IActionResult About()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult<UnderMaintenanceTime>> Um()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var underMaintenanceInfo = await maintenanceService.GetUnderMaintenanceTimeAsync();
+
+            return underMaintenanceInfo;
         }
     }
 }

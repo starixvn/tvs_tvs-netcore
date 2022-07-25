@@ -1,26 +1,33 @@
-﻿using System.Threading.Tasks;
-using MediatR;
+﻿using Fanex.NAP.Client.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketVoidingSystem.Utility.Handlers;
+using TicketVoidingSystem.Utility.Models;
 
-namespace TicketVoidingSystem.Core.Controllers
+namespace TicketVoidingSystem.Utility.Controllers
 {
     [ApiController]
     [Route("api/TicketVoidingSystem/[action]")]
     public class TicketVoidingSystemApiController : ControllerBase
     {
-        private readonly IMediator mediator;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TicketVoidingSystemApiController(IMediator mediator)
+        public TicketVoidingSystemApiController(IHttpContextAccessor httpContextAccessor)
         {
-            this.mediator = mediator;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSites()
+        public IActionResult GetNapUserInfo()
         {
-            var model = await mediator.Send(new GetSitesRequest());
-            return Ok(model);
+            var session = new NapSession(httpContextAccessor);
+            var viewModel = new NapUserViewModel
+            {
+                MenuItem = session.MenuItemList,
+                UserName = session.UserName,
+                UserId = session.UserId
+            };
+
+            return Ok(viewModel);
         }
     }
 }

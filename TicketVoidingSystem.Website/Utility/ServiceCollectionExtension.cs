@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore;
-using ONEbook.UM.AspNetCore.Filters;
 using ONEbook.UM.Configurations;
 using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
@@ -30,10 +29,10 @@ using ONEbook.UM.Transport;
 using Sentry;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
-using TicketVoidingSystem.Core.Controllers;
 using TicketVoidingSystem.Core.Services;
 using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Utility.Controllers;
 
 namespace TicketVoidingSystem.Website.Utility
 {
@@ -112,6 +111,17 @@ namespace TicketVoidingSystem.Website.Utility
             });
         }
 
+        public static void RegisterSignalR(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSignalR().AddStackExchangeRedis(options =>
+            {
+                options.Configuration.EndPoints.Add(configuration.GetSection("RedisConfig:EndPoint").Value);
+                options.Configuration.Password = configuration.GetSection("RedisConfig:Password").Value;
+                options.Configuration.DefaultDatabase = int.Parse(configuration.GetSection("RedisConfig:DefaultDatabase").Value);
+                options.Configuration.ChannelPrefix = configuration.GetSection("RedisConfig:ChannelPrefix").Value;
+            });
+        }
+
         public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -123,12 +133,12 @@ namespace TicketVoidingSystem.Website.Utility
             services.AddScoped<IDynamicRepository, DynamicRepository>();
             services.AddTransient<ILogger, Logger>();
             services.AddSingleton<IUserIdProvider, CustomIdProvider>();
+            services.AddSingleton<CheckUMFilterAttribute>();
         }
 
         public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-            services.AddSingleton<CheckUMFilterAttribute>();
             services.AddSingleton<IUMCacheService, UMCacheService>();
             services.AddSingleton<IUMRestClient, UMRestClient>();
             services.AddSingleton<IPHelper, IPHelperImpl>();

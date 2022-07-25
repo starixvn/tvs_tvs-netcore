@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ToastrModule } from 'ngx-toastr';
 import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
 import { MultipleSelectionModule } from '../../utility/components/multiple-selection/multiple-selection.module';
@@ -26,7 +25,7 @@ import { UserListComponent } from './user-list/user-list.component';
     AppComponent,
     FilterComponent,
     UserListComponent,
-    AddUserComponent,
+    AddUserComponent
   ],
   imports: [
     NgSelectModule,
@@ -42,8 +41,7 @@ import { UserListComponent } from './user-list/user-list.component';
     MultipleSelectionModule,
     UtilityModule,
     ToastrModule.forRoot(),
-    BrowserAnimationsModule,
-    NgMultiSelectDropDownModule.forRoot()
+    BrowserAnimationsModule
   ],
   providers: [HttpService, AppService],
   bootstrap: [AppComponent]

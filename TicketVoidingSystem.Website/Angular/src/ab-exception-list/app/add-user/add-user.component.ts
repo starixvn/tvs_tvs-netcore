@@ -16,24 +16,15 @@ export class AddUserComponent implements OnChanges {
   @Input() subTypeSelection: Selection[];
   @ViewChild('usernames') usernamesComponent: UsernamesComponent;
 
-  selectedSubType: Selection[];
+  selectedSubType: string[];
   isVoidVIP: boolean;
-  dropDownSetting = {
-    singleSelection: false,
-    idField: 'value',
-    textField: 'name',
-    selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
-    itemsShowLimit: 9,
-    allowSearchFilter: false
-  };
-
+  
   constructor(
     private readonly validationService: ValidationService,
     private readonly userService: UserService,
     private readonly abWhiteListStore: AppStore
   ) { }
-
+  
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['model']) {
       this.selectedSubType = [];
@@ -51,7 +42,7 @@ export class AddUserComponent implements OnChanges {
     }
     this.abWhiteListStore.changeBlockingUiStatus(false);
   }
-
+  
   closeModal() {
     this.model.isOpen = false;
   }

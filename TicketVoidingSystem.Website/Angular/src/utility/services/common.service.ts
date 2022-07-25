@@ -9,12 +9,12 @@ import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../constants/config';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
-import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
+import { IssueInfo, IssueType } from '../models/issue-type.model';
 import { Result, SqlResult } from '../models/result';
 import { Selection } from '../models/selection.model';
-import { GroupSiteModel } from '../models/site.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
+import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
 
 @Injectable({
@@ -25,17 +25,14 @@ export class CommonService {
     private readonly httpService: HttpService
   ) { }
 
-  async getIssueTypes(): Promise<IssueTypesModel> {
-    return this.httpService.getJson('TicketVoiding/GetIssueTypes');
+  async getNapUserInfo(): Promise<NapUserInfoModel> {
+    return this.httpService.getJson('api/TicketVoidingSystem/GetNapUserInfo');
   }
 
   async getActions(): Promise<Selection[]> {
     return this.httpService.getJson('TicketVoiding/GetActions');
   }
 
-  async getSites(): Promise<GroupSiteModel[]> {
-    return this.httpService.getJson('api/TicketVoidingSystem/GetSites');
-  }
 
   async getMatch(matchId: number): Promise<MatchModel> {
     return this.httpService.postJson({ matchId, isMatch3rd: false }, 'Match/GetInfo');

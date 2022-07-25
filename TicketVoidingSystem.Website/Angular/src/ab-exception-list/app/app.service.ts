@@ -6,26 +6,27 @@ import { AddUserQuery } from './models/add-user.query';
 import { CheckUsernameModel } from './models/check-username.model';
 import { GetUserModel } from './models/get-user.model';
 import { GetUserQuery } from './models/get-user.query';
-import { PermissionABWhiteList } from './models/permission.model';
+import { PermissionABExceptionList } from './models/permission.model';
+import { GroupSiteModel } from './models/site.model';
 
 @Injectable()
 export class AppService {
   constructor(
     private readonly httpService: HttpService
-  ) {}
+  ) { }
 
   /* istanbul ignore next */
   async getUsers(query: GetUserQuery): Promise<GetUserModel> {
     return this.httpService.postJson<GetUserQuery, GetUserModel>(query, 'api/ABExceptionList/GetUsers');
   }
-  
+
   /* istanbul ignore next */
-  async addUsers(query: AddUserQuery ): Promise<Result<null>> {
+  async addUsers(query: AddUserQuery): Promise<Result<null>> {
     return this.httpService.postJson<AddUserQuery, Result<null>>(query, 'api/ABExceptionList/AddUsers');
   }
 
   /* istanbul ignore next */
-  async getPermissionABWhiteList(): Promise<PermissionABWhiteList> {
+  async getPermissionABExceptionList(): Promise<PermissionABExceptionList> {
     return this.httpService.getJson('api/ABExceptionList/GetPermission');
   }
 
@@ -33,7 +34,11 @@ export class AppService {
   async getSubTypes(): Promise<AbExceptionSubType[]> {
     return this.httpService.getJson('api/ABExceptionList/GetSubType');
   }
-  
+
+  /* istanbul ignore next */
+  async getSites(): Promise<GroupSiteModel[]> {
+    return this.httpService.getJson('api/ABExceptionList/GetSites');
+  }
   /* istanbul ignore next */
   async checkUsernames(usernames: string): Promise<CheckUsernameModel> {
     return this.httpService.postJson<{ usernames: string }, CheckUsernameModel>({ usernames: usernames }, 'api/ABExceptionList/CheckUsernames');

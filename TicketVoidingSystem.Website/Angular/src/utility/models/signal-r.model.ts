@@ -3,21 +3,21 @@ export class SignalModel {
 }
 
 export class RequestStatus {
-    RequestId: number;
-    Status: string;
-    SimpleInfo: RequestSimpleInfo;
+    requestId: number;
+    status: string;
+    simpleInfo: RequestSimpleInfo;
 }
 
 export class RequestSimpleInfo {
-    LastPerformedBy: string;
-    TotalVoidedSingle: number;
-    TotalVoidedParlay: number;
-    MatchId: number;
+    lastPerformedBy: string;
+    totalVoidedSingle: number;
+    totalVoidedParlay: number;
+    matchId: number;
 }
 
 export class Result {
-    ErrorCode: number;
-    ErrorMsg: string;
-    IsSuccessful: boolean;
-    Data: string;
+    errorCode: number;
+    errorMsg: string;
+    isSuccessful: boolean;
+    data: string;
 }

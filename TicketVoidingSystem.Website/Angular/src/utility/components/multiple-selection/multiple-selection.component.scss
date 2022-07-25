@@ -3,137 +3,144 @@
   display: inline-block;
 
   label {
-      margin-bottom: 0px;
-      cursor: pointer;
+    margin-bottom: 0px;
+    cursor: pointer;
   }
 
   input[type="checkbox"] {
-      margin: 0;
-      cursor: pointer;
+    margin: 0;
+    cursor: pointer;
   }
 
   .i-down {
-      position: absolute;
-      right: 10px;
-      cursor: pointer;
-      width: 0;
-      height: 0;
-      display: inline-block;
-      vertical-align: middle;
-      top: 16px;
-      border-top: 5px dashed;
-      border-right: 5px solid;
-      border-left: 5px solid;
-      border-color: #999 transparent transparent;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+    display: inline-block;
+    vertical-align: middle;
+    top: 16px;
+    border-top: 5px dashed;
+    border-right: 5px solid;
+    border-left: 5px solid;
+    border-color: #999 transparent transparent;
   }
 
   .i-up {
-      position: absolute;
-      right: 10px;
-      cursor: pointer;
-      width: 0;
-      height: 0;
-      display: inline-block;
-      vertical-align: middle;
-      top: 16px;
-      border-bottom: 5px dashed;
-      border-right: 5px solid;
-      border-left: 5px solid;
-      border-color: transparent transparent #999;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    width: 0;
+    height: 0;
+    display: inline-block;
+    vertical-align: middle;
+    top: 16px;
+    border-bottom: 5px dashed;
+    border-right: 5px solid;
+    border-left: 5px solid;
+    border-color: transparent transparent #999;
   }
 
   .i-up:hover {
     border-color: transparent transparent #333;
-    }
+  }
+
   .i-down:hover {
     border-color: #333 transparent transparent;
   }
-  
+
 
   button {
-      width: 100%;
-      height: 36px;
+    width: 100%;
+    height: 36px;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    padding: 6px 30px 6px 12px;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 20px;
+    position: relative;
+
+    &:hover {
       color: #333;
-      background-color: #fff;
-      border-color: #ccc;
-      padding: 6px 30px 6px 12px;
-      cursor: pointer;
-      background-image: none;
-      border: 1px solid #cccccc;
-      border-radius: 4px;
-      text-align: left;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      font-size: 13px;
-      font-weight: normal;
-      line-height: 20px;
-      position: relative;
+      border-color: #adadad;
+    }
 
-      &:hover {
-          color: #333;
-          border-color: #adadad;
-      }
+    &:focus {
+      color: #333;
+      border-color: #8c8c8c;
+    }
 
-      &:focus {
-          color: #333;
-          border-color: #8c8c8c;
-      }
-
-      .i-down {
-          float: right;
-      }
+    .i-down {
+      float: right;
+    }
   }
 
   .show-tree-view {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 1000;
-      padding: 5px 0;
-      float: left;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    padding: 5px 0;
+    float: left;
+    width: 100%;
+    margin: 0px;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+
+    .tree-view-content {
+      padding-left: 10px;
+      display: inline-block;
       width: 100%;
-      margin: 0px;
-      font-size: 14px;
-      text-align: left;
-      list-style: none;
-      background-color: #fff;
-      -webkit-background-clip: padding-box;
-      background-clip: padding-box;
-      border: 1px solid #ccc;
-      border: 1px solid rgba(0, 0, 0, 0.15);
-      border-radius: 4px;
-      -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+      overflow: auto;
+    }
 
-      .tree-view-content {
-          display: inline-block;
-          width: 100%;
-          overflow: auto;
+    .dropdown-header {
+      border-bottom: 1px solid darkgray;
+      padding: 0 10px;
+      height: 25px;
+      line-height: 25px;
+
+      div.icon-dropdown {
+        width: auto;
+        margin-right: 2px;
       }
 
-      .dropdown-header {
-          border-bottom: 1px solid darkgray;
-          padding: 0 10px;
-          height: 25px;
-          line-height: 25px;
-
-          label {
-              display: inline-block;
-              margin-bottom: 0;
-          }
-
-          .i-up,
-          .i-down {
-              float: right;
-          }
+      label {
+        display: inline-block;
+        margin-bottom: 0;
       }
-  }    
 
-  .multiple-selection {       
-      button {
-          width: 100%;
-          margin-bottom: 0px;
+      .i-up,
+      .i-down {
+        float: right;
       }
     }
+  }
+
+  .multiple-selection {
+    button {
+      width: 100%;
+      margin-bottom: 0px;
+    }
+  }
 }

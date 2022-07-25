@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 import { AppStore } from './app.store';
 import { FilterComponent } from './filter/filter.component';
 import { FilterModel } from './filter/filter.model';
-import { PermissionABWhiteList } from './models/permission.model';
+import { PermissionABExceptionList } from './models/permission.model';
 import { UserModel } from './models/user.model';
 import { UserService } from './services/user.service';
 import { ValidationService } from './services/validation.service';
@@ -21,7 +21,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./app.component.scss'],
   providers: [AppStore]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('filterComponent') filterComponent: FilterComponent;
 
   title = 'Home / AB Exception List';
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   userModels: UserModel[] = [];
   tooltip = new Tooltip();
   addUserModel = new AddUserModel();
-  permission = new PermissionABWhiteList();
+  permission = new PermissionABExceptionList();
   subTypeSelection: Selection[] = [];
   isBlockingUi = false;
   blockingUiSubscription: Subscription;
@@ -39,17 +39,17 @@ export class AppComponent implements OnInit {
     private readonly appService: AppService,
     private readonly userService: UserService,
     private readonly signalRService: SignalRService,
-    private readonly abWhiteListStore: AppStore,
+    private readonly abExceptionListStore: AppStore,
     private readonly validationService: ValidationService,
   ) { }
 
   async ngOnInit() {
-    this.blockingUiSubscription = this.abWhiteListStore.blockingUiStatus.subscribe(status => {
+    this.blockingUiSubscription = this.abExceptionListStore.blockingUiStatus.subscribe(status => {
       this.isBlockingUi = status;
     });
 
-    this.signalRService.initializeConnection();
-    this.permission = await this.appService.getPermissionABWhiteList();
+    await this.signalRService.initializeConnection();
+    this.permission = await this.appService.getPermissionABExceptionList();
   }
 
   ngOnDestroy(): void {

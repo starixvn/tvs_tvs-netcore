@@ -182,7 +182,7 @@
     <Function Name="GetBetIDForVoiding">
         <Setting Key="TicketVoiding_GetBetIDForVoiding_Select" SpName="TicketVoiding_GetBetIDForVoiding_Select" DbName="DBTXN.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
-    <Function Name="ABWhiteList">
+    <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBTXN.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_ABWhiteList_CheckUserName" SpName="TicketVoiding_ABWhiteList_CheckUserName" DbName="DBTXN.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_ABWhiteList_Update" SpName="TicketVoiding_ABWhiteList_Update" DbName="DBTXN.bodb02.bodbAdminNet" TimeOut="600" />

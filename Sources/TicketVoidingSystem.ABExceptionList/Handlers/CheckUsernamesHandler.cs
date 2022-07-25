@@ -20,11 +20,6 @@ namespace TicketVoidingSystem.ABExceptionList.Handlers
             this.repository = repository;
         }
 
-        public async Task<CheckUsernamesModel> Handle(CheckUsernamesRequest message)
-        {
-            return await repository.GetAsync<CheckUsernamesModel>(message);
-        }
-
         public async Task<CheckUsernamesModel> Handle(CheckUsernamesRequest request, CancellationToken cancellationToken)
         {
             return await repository.GetAsync<CheckUsernamesModel>(request, cancellationToken);

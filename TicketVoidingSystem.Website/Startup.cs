@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Core.SignalR;
 using TicketVoidingSystem.Core.Web;
 using TicketVoidingSystem.Website.Utility;
@@ -36,56 +35,7 @@ namespace TicketVoidingSystem.Website
             services.RegisterCoreServices(Configuration);
             services.RegisterBusinessServices();
             services.RegisterMediatR();
-            services.AddSignalR(hubOptions =>
-            {
-                hubOptions.EnableDetailedErrors = true;
-            }).AddStackExchangeRedis(options =>
-             {
-                 options.Configuration.EndPoints.Add("ha.nexdev.net", 16379);
-                 options.Configuration.Password = "foo1@bared";
-                 options.Configuration.DefaultDatabase = 3;
-
-                 //options.ConnectionFactory = async writer =>
-                 //{
-                 //    var config = new ConfigurationOptions
-                 //    {
-                 //        AbortOnConnectFail = false,
-                 //        Password = "foo1@bared",
-                 //        ChannelPrefix = "TVS_WEBSITE_SIGNALR",
-                 //        DefaultDatabase = 3
-                 //    };
-                 //    config.EndPoints.Add("ha.nexdev.net", 16379);
-                 //    config.SetDefaultPorts();
-                 //    var connection = await ConnectionMultiplexer.ConnectAsync(config, writer);
-                 //    connection.ConnectionFailed += (_, e) =>
-                 //    {
-                 //        Debug.WriteLine("xxxxxxxxxxx Connection to Redis failed.");
-                 //        Debug.WriteLine(e.FailureType);
-                 //        Debug.WriteLine(e);
-                 //    };
-
-                 //    connection.InternalError += (_, e) =>
-                 //    {
-                 //        Debug.WriteLine("xxxxxxxxxxx InternalError Redis failed.");
-                 //        Debug.WriteLine(e.Origin);
-                 //        Debug.WriteLine(e);
-                 //    };
-
-                 //    connection.ErrorMessage += (_, e) =>
-                 //    {
-                 //        Debug.WriteLine("xxxxxxxxxxx ErrorMessage Redis failed.");
-                 //        Debug.WriteLine(e.Message);
-                 //        Debug.WriteLine(e);
-                 //    };
-
-                 //    Debug.WriteLine(!connection.IsConnected
-                 //        ? "xxxxxxxxxx Did not connect to Redis."
-                 //        : "xxxxxxxxxx CONNECTED to Redis.");
-                 //    Debug.WriteLine(connection.Configuration);
-                 //    Debug.WriteLine(connection.ClientName);
-                 //    return connection;
-                 //};
-             });
+            services.RegisterSignalR(Configuration);
 
             services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
             services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
@@ -93,9 +43,9 @@ namespace TicketVoidingSystem.Website
             services.AddRazorPages();
             services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)));
                 options.Filters.Add(new SessionAuthorizeAttribute());
-                options.Filters.Add(new ServiceFilterAttribute(typeof(LogActionFilterAttribute)));
+                options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)) { Order = 0 });
+                options.Filters.Add(new ServiceFilterAttribute(typeof(LogActionFilterAttribute)) { Order = 1 });
             }).AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
@@ -112,15 +62,6 @@ namespace TicketVoidingSystem.Website
             });
             app.UseDeveloperExceptionPage();
             app.UseResponseCompression();
-            //app.UseCors(builder => builder
-            //    .AllowAnyOrigin()
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader());
-            //app.UseCors(builder =>
-            //{
-            //    builder.WithOrigins("http://localhost:4200")
-            //        .AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-            //});
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

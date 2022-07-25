@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
-import { ABWhiteListLevel } from '../../../utility/constants/config';
+import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
-import { GroupSiteModel, SiteModel } from '../../../utility/models/site.model';
-import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { FilterModel } from '../filter/filter.model';
+import { GroupSiteModel, SiteModel } from '../models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,16 +14,15 @@ import { FilterModel } from '../filter/filter.model';
 export class FilterService {
   constructor(
     private readonly appService: AppService,
-    private readonly commonService: CommonService,
-  ) { }
+  ) {}
 
   async getSites(): Promise<GroupSiteModel[]> {
-    return this.commonService.getSites();
+    return this.appService.getSites();
   }
-
+  
   initDefaultFilter(filterModel: FilterModel, groupSites: GroupSiteModel[], selectedSubType: string[], voidVIPSelection: Selection[]): void {
     filterModel.username = '';
-    filterModel.level = ABWhiteListLevel.All;
+    filterModel.level = ABExceptionListLevel.All;
     let siteModels: SiteModel[] = [];
     groupSites.forEach(x => {
       siteModels = [...siteModels, ...x.sites];
@@ -51,11 +49,11 @@ export class FilterService {
 
     return multipleSelection;
   }
-
+  
   async initSubType(): Promise<Selection[]> {
     const selections = [];
     const subIssueTypes = await this.appService.getSubTypes();
-    _.forEach(subIssueTypes, function (item) {
+    _.forEach(subIssueTypes, function(item) {
       selections.push(
         {
           name: item.subIssueTypeName,
@@ -64,8 +62,9 @@ export class FilterService {
         }
       );
     });
-
-    return selections;
+    
+    //TODO: only remove subtype on UI - feat: 173229
+    return selections.filter(x => x.value !== '27,41');
   }
 
   private initDefaultProperties(multipleSelection: MultipleSelection): void {

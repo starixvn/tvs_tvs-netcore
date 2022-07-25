@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="filter-sub-type d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mg-right-10">Sub Type</label>
+      <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
       <ng-select class="sub-type-dropdown" [items]="subTypeSelectionFilter" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
         [clearable]="false" [(ngModel)]="selectedSubType" bindValue="value" (change)="updateSelectedSubIssueType()"
         [disabled]="false" groupBy="group" [selectableGroup]="true"
@@ -38,14 +38,14 @@
         <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
           <div class="ng-value">
             <span class="ng-value-label">
-              {{isNoneSubType ? 'N/A' : (items.length === subTypeSelectionFilter.length ? 'All' : items.length) + ' selected'}}
+              {{items.length === subTypeSelectionFilter.length ? 'All' : items.length + ' selected'}}
             </span>
           </div>
         </ng-template>
       </ng-select>
     </div>
     <div class="filter-void-vip d-flex mr-4">
-      <label class="col-form-label col-form-label-sm mg-right-10">Void VIP</label>
+      <label class="col-form-label col-form-label-sm mr-2">Void VIP</label>
       <ng-select class="void-vip-dropdown" [items]="voidVIPSelection" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
         [clearable]="false" [(ngModel)]="selectedVoidVIP" bindValue="value" (change)="updateSelectedVoidVIP()"
         [disabled]="false" groupBy="group" [selectableGroup]="true"
@@ -59,7 +59,7 @@
         <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
           <div class="ng-value">
             <span class="ng-value-label">
-              {{isNoneSubType ? 'N/A' : (items.length === voidVIPSelection.length ? 'All' : items.length) + ' selected'}}
+              {{items.length === voidVIPSelection.length ? 'All' : items.length + ' selected'}}
             </span>
           </div>
         </ng-template>
@@ -68,7 +68,7 @@
   </div>
   <div class="button-area">
     <button type="submit" class="btn btn-primary btn-sm mr-2" (click)="clickSearch()">Search</button>
-    <button type="submit" class="btn btn-success btn-sm" (click)="clickAddUser()" *ngIf="permission.abWhiteListHost">Add New</button>
+    <button type="submit" class="btn btn-success btn-sm" (click)="clickAddUser()" *ngIf="permission.abExceptionListHost">Add New</button>
   </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

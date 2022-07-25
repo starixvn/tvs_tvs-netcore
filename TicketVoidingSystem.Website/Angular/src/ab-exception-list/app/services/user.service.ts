@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
-import { Selection } from '../../../utility/models/selection.model';
 import { AppService } from '../app.service';
 import { AppStore } from '../app.store';
 import { FilterModel } from '../filter/filter.model';
@@ -32,10 +31,10 @@ export class UserService {
     return this.appService.getUsers(query);
   }
 
-  async addUsers(usernames: string, selectedSubType: Selection[], isVoidVIP: boolean): Promise<void> {
+  async addUsers(usernames: string, selectedSubType: string[], isVoidVIP: boolean): Promise<void> {
     const query: AddUserQuery = {
       usernames: usernames,
-      subTypes: selectedSubType.map(x => x.value).join(','),
+      subTypes: selectedSubType.join(','),
       voidVIP: isVoidVIP
     };
     const result = await this.appService.addUsers(query);
@@ -44,7 +43,7 @@ export class UserService {
         title: 'Add Result',
         message: TEXT.AB_WHITE_LIST_ADDED_SUCCESS,
         type: result.isSuccessful ? ModalType.Alert : ModalType.Error
-      },
+      },      
       async () => {
         window.location.reload();
       }
@@ -60,11 +59,11 @@ export class UserService {
         title: 'Remove',
         message: messageConfirmRemove,
         type: ModalType.Confirm
-      },
+      }, 
       async () => {
         await this.onYesConfirm(userIds, abWhiteListStore);
       },
-      () => { }
+      () => {}
     );
   }
 
