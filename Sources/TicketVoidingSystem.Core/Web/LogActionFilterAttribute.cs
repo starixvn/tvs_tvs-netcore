@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Fanex.Logging;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,7 @@ namespace TicketVoidingSystem.Core.Web
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class LogActionFilterAttribute : ActionFilterAttribute
     {
+        private readonly List<string> excludePatterns = new() { ".*/Auth/.*" };
         private readonly ILogger logger;
 
         public LogActionFilterAttribute(ILogger logger)
@@ -23,21 +26,20 @@ namespace TicketVoidingSystem.Core.Web
 
         public override async void OnActionExecuting(ActionExecutingContext context)
         {
+            var httpContext = context.HttpContext;
             if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
             {
                 var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
                 var attrsInController =
                     descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
 
-                if (attrsInAction.Any() || attrsInController.Any())
+                if (attrsInAction.Any() || attrsInController.Any() || IsExcluded(httpContext.Request.GetDisplayUrl()))
                 {
                     return;
                 }
             }
 
-            var httpContext = context.HttpContext;
             var requestMethod = httpContext.Request.Method;
-
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine($"REQUEST-{requestMethod} URL: {httpContext.Request.GetDisplayUrl()}");
             stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
@@ -52,19 +54,19 @@ namespace TicketVoidingSystem.Core.Web
 
         public override async void OnActionExecuted(ActionExecutedContext context)
         {
+            var httpContext = context.HttpContext;
             if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
             {
                 var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
                 var attrsInController =
                     descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
 
-                if (attrsInAction.Any() || attrsInController.Any())
+                if (attrsInAction.Any() || attrsInController.Any() || IsExcluded(httpContext.Request.GetDisplayUrl()))
                 {
                     return;
                 }
             }
 
-            var httpContext = context.HttpContext;
             var sw = httpContext.Items["timer"] as Stopwatch;
             var responseData = (context.Result is OkObjectResult objectResult) ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
             var stringBuilder = new StringBuilder();
@@ -77,6 +79,18 @@ namespace TicketVoidingSystem.Core.Web
             await logger.InfoAsync(stringBuilder.ToString());
 
             base.OnActionExecuted(context);
+        }
+
+        private bool IsExcluded(string url)
+        {
+            foreach (var excludePattern in excludePatterns)
+            {
+                if (new Regex(excludePattern, RegexOptions.IgnoreCase).IsMatch(url))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
