@@ -3,8 +3,8 @@ using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Handlers;
-using TicketVoidingSystem.Core.Models;
-using TicketVoidingSystem.Core.Services;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using Xunit;
 
 namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers

@@ -7,7 +7,7 @@ using ONEbook.UM;
 using ONEbook.UM.Configurations;
 using ONEbook.UM.Services;
 
-namespace TicketVoidingSystem.Core.Web
+namespace TicketVoidingSystem.Web
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class CheckUMFilterAttribute : ActionFilterAttribute

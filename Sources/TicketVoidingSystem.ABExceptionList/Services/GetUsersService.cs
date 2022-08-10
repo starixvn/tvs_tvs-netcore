@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.ABExceptionList.Models;
-using TicketVoidingSystem.Core.Extensions;
+using TicketVoidingSystem.Extensions;
 
 namespace TicketVoidingSystem.ABExceptionList.Services
 {

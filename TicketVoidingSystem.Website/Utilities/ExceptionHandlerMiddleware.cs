@@ -5,7 +5,7 @@ using Fanex.Logging.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace TicketVoidingSystem.Website.Utility
+namespace TicketVoidingSystem.Website.Utilities
 {
     public class ExceptionHandlerMiddleware
     {

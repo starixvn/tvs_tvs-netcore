@@ -5,7 +5,7 @@ using Fanex.NAP.Client.Services;
 using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Http;
 
-namespace TicketVoidingSystem.Core.Services
+namespace TicketVoidingSystem.Services
 {
     public interface SessionService
     {

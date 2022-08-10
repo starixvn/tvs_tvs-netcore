@@ -1,17 +1,16 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Session;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketVoidingSystem.Utility.Models;
 
-namespace TicketVoidingSystem.Utility.Controllers
+namespace TicketVoidingSystem.Website.Controllers
 {
     [ApiController]
     [Route("api/TicketVoidingSystem/[action]")]
-    public class TicketVoidingSystemApiController : ControllerBase
+    public class UtilityApiController : ControllerBase
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public TicketVoidingSystemApiController(IHttpContextAccessor httpContextAccessor)
+        public UtilityApiController(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
@@ -20,7 +19,7 @@ namespace TicketVoidingSystem.Utility.Controllers
         public IActionResult GetNapUserInfo()
         {
             var session = new NapSession(httpContextAccessor);
-            var viewModel = new NapUserViewModel
+            var viewModel = new
             {
                 MenuItem = session.MenuItemList,
                 UserName = session.UserName,

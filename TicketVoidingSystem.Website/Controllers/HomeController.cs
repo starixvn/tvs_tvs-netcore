@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ONEbook.UM.Models;
 using ONEbook.UM.Services;
-using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers
 {

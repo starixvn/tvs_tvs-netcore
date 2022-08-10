@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TicketVoidingSystem.Core.Extensions
+namespace TicketVoidingSystem.Extensions
 {
     public static class SystemTimeExtension
     {

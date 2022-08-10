@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace TicketVoidingSystem.Core.Web
+namespace TicketVoidingSystem.Web
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class LogActionFilterAttribute : ActionFilterAttribute

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using TicketVoidingSystem.Core.Models;
+using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.Core.SignalR
+namespace TicketVoidingSystem.SignalR
 {
     public class NotificationHub : Hub<ClientEvent>
     {

@@ -1,4 +1,4 @@
-﻿namespace TicketVoidingSystem.Core.Web
+﻿namespace TicketVoidingSystem.Web
 {
 /// <summary>
 /// Function keys.

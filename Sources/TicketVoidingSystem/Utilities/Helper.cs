@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace TicketVoidingSystem.Core.Utilities
+namespace TicketVoidingSystem.Utilities
 {
     internal class Helper
     {

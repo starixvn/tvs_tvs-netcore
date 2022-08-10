@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Fanex.NAP.Core.Business;
 using MediatR;
 using TicketVoidingSystem.ABExceptionList.Models;
-using TicketVoidingSystem.Core.Services;
-using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers
 {

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TicketVoidingSystem.Core\TicketVoidingSystem.Core.csproj" />
+    <ProjectReference Include="..\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 
 </Project>

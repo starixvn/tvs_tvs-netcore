@@ -8,7 +8,7 @@
 <#    
     string connectionString = "data source=10.18.200.54;initial catalog=NAP_UserControl;User Id=olympus; pwd=@tiger#;";    
 #>
-namespace TicketVoidingSystem.Core.Web
+namespace TicketVoidingSystem.Web
 {
 /// <summary>
 /// Function keys.

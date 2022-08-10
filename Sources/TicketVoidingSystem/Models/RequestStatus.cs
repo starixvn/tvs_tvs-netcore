@@ -1,4 +1,4 @@
-﻿namespace TicketVoidingSystem.Core.Models
+﻿namespace TicketVoidingSystem.Models
 {
     public class RequestStatus
     {

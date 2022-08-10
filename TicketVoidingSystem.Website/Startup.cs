@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TicketVoidingSystem.Core.SignalR;
-using TicketVoidingSystem.Core.Web;
-using TicketVoidingSystem.Website.Utility;
+using TicketVoidingSystem.SignalR;
+using TicketVoidingSystem.Web;
+using TicketVoidingSystem.Website.Utilities;
 
 namespace TicketVoidingSystem.Website
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace TicketVoidingSystem.Core.SignalR
+namespace TicketVoidingSystem.SignalR
 {
     public class CustomIdProvider : IUserIdProvider
     {

@@ -29,12 +29,11 @@ using ONEbook.UM.Transport;
 using Sentry;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
-using TicketVoidingSystem.Core.Services;
-using TicketVoidingSystem.Core.SignalR;
-using TicketVoidingSystem.Core.Web;
-using TicketVoidingSystem.Utility.Controllers;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.SignalR;
+using TicketVoidingSystem.Web;
 
-namespace TicketVoidingSystem.Website.Utility
+namespace TicketVoidingSystem.Website.Utilities
 {
     public static class ServiceCollectionExtension
     {
@@ -156,7 +155,6 @@ namespace TicketVoidingSystem.Website.Utility
         public static void RegisterMediatR(this IServiceCollection services)
         {
             services.AddMediatR(typeof(ABExceptionListController));
-            services.AddMediatR(typeof(TicketVoidingSystemApiController));
         }
     }
 }

@@ -9,13 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{1DAF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.ABExceptionList", "Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj", "{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.Core", "Sources\TicketVoidingSystem.Core\TicketVoidingSystem.Core.csproj", "{B0C87233-0D01-49DE-9B38-16288E166575}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.Utility", "Sources\TicketVoidingSystem.Utility\TicketVoidingSystem.Utility.csproj", "{7948EA59-3B37-472F-BCF5-D97A41648EFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem", "Sources\TicketVoidingSystem\TicketVoidingSystem.csproj", "{B0C87233-0D01-49DE-9B38-16288E166575}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8102D830-AEF3-4155-A063-BDA9B57B9FE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.ABExceptionList.Tests", "Tests\TicketVoidingSystem.ABExceptionList.Tests\TicketVoidingSystem.ABExceptionList.Tests.csproj", "{B5E7AC5D-1B67-494F-8467-F15784C90C95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.ABExceptionList.Tests", "Tests\TicketVoidingSystem.ABExceptionList.Tests\TicketVoidingSystem.ABExceptionList.Tests.csproj", "{B5E7AC5D-1B67-494F-8467-F15784C90C95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{B0C87233-0D01-49DE-9B38-16288E166575}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0C87233-0D01-49DE-9B38-16288E166575}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0C87233-0D01-49DE-9B38-16288E166575}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7948EA59-3B37-472F-BCF5-D97A41648EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7948EA59-3B37-472F-BCF5-D97A41648EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7948EA59-3B37-472F-BCF5-D97A41648EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7948EA59-3B37-472F-BCF5-D97A41648EFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B5E7AC5D-1B67-494F-8467-F15784C90C95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B5E7AC5D-1B67-494F-8467-F15784C90C95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5E7AC5D-1B67-494F-8467-F15784C90C95}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -50,7 +44,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6E7E60F7-F4C0-48B6-B8FF-1EE719101AE3} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{B0C87233-0D01-49DE-9B38-16288E166575} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
-		{7948EA59-3B37-472F-BCF5-D97A41648EFE} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{B5E7AC5D-1B67-494F-8467-F15784C90C95} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
