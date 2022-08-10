@@ -2,8 +2,8 @@
 using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.ABExceptionList.Handlers;
-using TicketVoidingSystem.Core.Services;
-using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers

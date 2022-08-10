@@ -1,9 +1,8 @@
 FROM hub.nexdev.net/base/dotnet/core/sdk:5.0.102-ca-patch-buster-slim AS builder
 WORKDIR /src
 
-COPY ./Sources/TicketVoidingSystem.Core ./Sources/TicketVoidingSystem.Core
+COPY ./Sources/TicketVoidingSystem ./Sources/TicketVoidingSystem
 COPY ./Sources/TicketVoidingSystem.ABExceptionList ./Sources/TicketVoidingSystem.ABExceptionList
-COPY ./Sources/TicketVoidingSystem.Utility ./Sources/TicketVoidingSystem.Utility
 COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
 WORKDIR /src/TicketVoidingSystem.Website

@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="compilerconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <AdditionalFiles Include="..\.sonarlint\tvs-website\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
 
@@ -28,7 +24,7 @@
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
     <PackageReference Include="Fanex.Logging.Sentry" Version="1.0.6" />
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.1-beta3" />
-    <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.2-beta3" />
+    <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.2-beta5" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="5.0.17" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -38,8 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
-    <ProjectReference Include="..\Sources\TicketVoidingSystem.Core\TicketVoidingSystem.Core.csproj" />
-    <ProjectReference Include="..\Sources\TicketVoidingSystem.Utility\TicketVoidingSystem.Utility.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,11 +57,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\dist\ab-exception-list\" />
-    <Folder Include="wwwroot\lib\tvs\img\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>

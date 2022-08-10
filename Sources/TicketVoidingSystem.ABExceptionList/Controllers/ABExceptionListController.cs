@@ -4,7 +4,7 @@ using Fanex.NAP.Core.Business;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.ABExceptionList.Handlers;
-using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ABExceptionList.Controllers
 {

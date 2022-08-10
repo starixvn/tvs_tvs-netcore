@@ -1,7 +1,7 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Attributes;
 using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Mvc;
-using TicketVoidingSystem.Core.Web;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers
 {
