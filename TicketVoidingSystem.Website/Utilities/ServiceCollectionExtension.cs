@@ -29,6 +29,8 @@ using ONEbook.UM.Transport;
 using Sentry;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
+using TicketVoidingSystem.ManageVoidServices.Controllers;
+using TicketVoidingSystem.ManageVoidServices.Services;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
@@ -150,11 +152,13 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSingleton<SessionService, SessionServiceImp>();
             services.AddSingleton<LogActionFilterAttribute>();
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
+            services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)
         {
             services.AddMediatR(typeof(ABExceptionListController));
+            services.AddMediatR(typeof(ManageVoidServicesController));
         }
     }
 }
