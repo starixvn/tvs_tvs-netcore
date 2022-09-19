@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/ab-exception-list/index.html",
-            "main": "src/ab-exception-list/main.ts",
+            "index": "src/manage-void-services/index.html",
+            "main": "src/manage-void-services/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
@@ -45,7 +45,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "deployUrl": "dist/ab-exception-list/",
+              "deployUrl": "dist/manage-void-services/",
               "optimization": true,
               "outputHashing": "all",
               "namedChunks": false,

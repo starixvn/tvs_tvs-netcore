@@ -1,0 +1,85 @@
+<div class="void-history">
+  <div class="container-area d-flex flex-wrap">
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">MatchId: </label>
+        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
+          [(ngModel)]="tmpModel.matchId" disabled />
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsRunExternalService</label>
+        <select [(ngModel)]="tmpModel.isRunExternalService">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">MessageId</label>
+        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
+          [(ngModel)]="tmpModel.messageId" numbersOnly />
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">ReasonId</label>
+        <input type="text" maxlength="150" class="input-control form-control form-control-sm"
+          [(ngModel)]="tmpModel.reasonId" numbersOnly />
+      </div>
+    </div>  
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsSentBatchMessage</label>
+        <select [(ngModel)]="tmpModel.isSentBatchMessage">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>    
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsSentMessageToAdminSite</label>
+        <select [(ngModel)]="tmpModel.isSentMessageToAdminSite">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsInsertedVoidedTransaction</label>
+        <select [(ngModel)]="tmpModel.isInsertedVoidedTransaction">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsUpdatedVoidingHistory</label>
+        <select [(ngModel)]="tmpModel.isUpdatedVoidingHistory">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsSentEmail</label>
+        <select [(ngModel)]="tmpModel.isSentEmail">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsSentLetsTalk</label>
+        <select [(ngModel)]="tmpModel.isSentLetsTalk">
+          <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+  </div>  
+  <div class="save-history-status mg-top-10">
+    <input type="button" class="btn btn-primary btn-sm font-weight-bold" value="Save"
+      (click)="confirmUpdateAfterVoidData()" />
+  </div>
+</div>

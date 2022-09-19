@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.ManageVoidServices.Handlers;
 
@@ -7,6 +8,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [AllowAnonymous]
     public class ManageVoidServicesController : ControllerBase
     {
         private readonly IMediator mediator;
