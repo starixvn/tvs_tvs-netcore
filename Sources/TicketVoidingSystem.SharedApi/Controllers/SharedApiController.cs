@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TicketVoidingSystem.Website.Controllers
+namespace TicketVoidingSystem.SharedApi.Controllers
 {
     [ApiController]
-    [Route("api/TicketVoidingSystem/[action]")]
-    public class UtilityApiController : ControllerBase
+    [Route("api/[controller]/[action]")]
+    public class SharedApiController : ControllerBase
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public UtilityApiController(IHttpContextAccessor httpContextAccessor)
+        public SharedApiController(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
@@ -22,8 +22,8 @@ namespace TicketVoidingSystem.Website.Controllers
             var viewModel = new
             {
                 MenuItem = session.MenuItemList,
-                UserName = session.UserName,
-                UserId = session.UserId
+                session.UserName,
+                session.UserId
             };
 
             return Ok(viewModel);
