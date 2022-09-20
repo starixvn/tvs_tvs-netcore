@@ -1,0 +1,40 @@
+<div>
+  <div class="filter">
+    <div class="action-area d-flex">
+      <label class="col-form-label mr-2">Request ID </label>
+      <input maxlength="150" id="request-id" class="request-id form-control form-control-sm" type="text" row="1"
+        [(ngModel)]="requestId" numbersOnly />
+
+      <label class="col-form-label ml-4 mr-2"> Voiding History ID </label>
+      <input maxlength="150" id="voiding-history-id" class="voiding-history-id form-control form-control-sm" type="text"
+        row="1" [(ngModel)]="voidingHistoryId" numbersOnly />
+
+      <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
+          value="Search" (click)="search()" /></div>
+    </div>
+  </div>
+
+  <div>
+    <after-void-status *ngIf="isShow()" [model]="model" [isAutoVoid]="model.isAutoVoid"></after-void-status>
+    <div *ngIf="isShow()" class="void-bet-auto">
+      <div class="row udp-status">
+        <div class="d-flex">
+          <label class="col-form-label font-weight-bold text-primary">VoidBet Status</label>
+          <select [(ngModel)]="tmpStatusId">
+            <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-save mg-top-10">
+        <input type="button" class="btn btn-primary btn-sm font-weight-bold" value="Save"
+          (click)="confirmUpdateStatus()" />
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isNoData" class="no-data text-center">
+    <span> There is no data! </span>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>
+<block-full-ui [isBlock]="isBlock"></block-full-ui>

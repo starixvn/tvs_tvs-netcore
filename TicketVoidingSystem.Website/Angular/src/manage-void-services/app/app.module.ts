@@ -10,7 +10,8 @@ import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { PipeModule } from '../../utility/pipes/pipe.module';
 import { HttpService } from '../../utility/services/http.service';
 import { UtilityModule } from '../../utility/utility.module';
-import { AfterVoidStatusComponent } from './after-void-status/after-void-status.component';
+import { AfterVoidStatusComponent } from './after-void/after-void-status/after-void-status.component';
+import { AfterVoidComponent } from './after-void/after-void.component';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 
@@ -18,6 +19,7 @@ import { AppService } from './app.service';
   declarations: [
     AppComponent,
     AfterVoidStatusComponent,
+    AfterVoidComponent,
   ],
   imports: [
     BrowserModule,

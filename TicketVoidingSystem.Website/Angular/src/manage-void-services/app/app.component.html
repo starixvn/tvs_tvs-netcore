@@ -3,42 +3,42 @@
 </div>
 
 <div>
-  <div class="filter">
-    <div class="action-area d-flex">
-      <label class="col-form-label mr-2">Request ID </label>
-      <input maxlength="150" id="request-id" class="request-id form-control form-control-sm" type="text" row="1"
-        [(ngModel)]="requestId" numbersOnly />
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills">
+    <li ngbNavItem="top">
+      <a ngbNavLink>After Void</a>
+      <ng-template ngbNavContent>
+        <after-void></after-void>
+      </ng-template>
+    </li>
+    <li ngbNavItem="middle">
+      <a ngbNavLink>Scanning Auto Void</a>
+      <ng-template ngbNavContent>
+        <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
+          farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts
+          ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
+          helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson
+          8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
+          stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+      </ng-template>
+    </li>
+    <li ngbNavItem="bottom">
+      <a ngbNavLink>Void</a>
+      <ng-template ngbNavContent>
+        <p>Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
+          Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
+          Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
+          egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
+          tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
+          magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
+          neque. Phasellus nec tortor vel tellus pulvinar feugiat.</p>
+      </ng-template>
+    </li>
+  </ul>
 
-      <label class="col-form-label ml-4 mr-2"> Voiding History ID </label>
-      <input maxlength="150" id="voiding-history-id" class="voiding-history-id form-control form-control-sm" type="text"
-        row="1" [(ngModel)]="voidingHistoryId" numbersOnly />
-
-      <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"
-          value="Search" (click)="search()" /></div>
-    </div>
-  </div>
-
-  <div>
-    <after-void-status *ngIf="isShow()" [model]="model" [isAutoVoid]="model.isAutoVoid"></after-void-status>
-    <div *ngIf="isShow()" class="void-bet-auto">
-      <div class="row udp-status">
-        <div class="d-flex">
-          <label class="col-form-label font-weight-bold text-primary">VoidBet Status</label>
-          <select [(ngModel)]="tmpStatusId">
-            <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
-          </select>
-        </div>
-      </div>
-      <div class="btn-save mg-top-10">
-        <input type="button" class="btn btn-primary btn-sm font-weight-bold" value="Save"
-          (click)="confirmUpdateStatus()" />
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="isNoData" class="no-data text-center">
-    <span> There is no data! </span>
-  </div>
+  <div [ngbNavOutlet]="nav" class="ms-2"></div>
 </div>
-<tooltip [tooltip]="tooltip"></tooltip>
-<block-full-ui [isBlock]="isBlock"></block-full-ui>
+
+
+
+
+<!-- ///////////////////////////////////// -->

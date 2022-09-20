@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
-import { ModalType } from '../../../utility/components/modal/modal';
-import { ModalService } from '../../../utility/components/modal/modal.service';
-import { Result } from '../../../utility/models/result';
-import { SELECTION_ITEM, VoidBetAutomationModel } from '../app.model';
-import { AppService } from '../app.service';
+import { ModalType } from '../../../../utility/components/modal/modal';
+import { ModalService } from '../../../../utility/components/modal/modal.service';
+import { Result } from '../../../../utility/models/result';
+import { SELECTION_ITEM, VoidBetAutomationModel } from '../../app.model';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'after-void-status',
