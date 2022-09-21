@@ -1,0 +1,47 @@
+<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
+  <ngb-panel id="toggle-1" title="First panel">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Find auto void request queue</h5>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="acc.collapseAll()">Clear input</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <div class="filter">
+        <div class="action-area d-flex">
+          <label class="col-form-label mr-2">Broadcast Session ID </label>
+          <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1" [(ngModel)]="broadcastSessionId" />
+          <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchAutoVoidRequestQueue()" /></div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel id="toggle-2" title="Second">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Second panel</h5>
+        <div>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle second</button>
+          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="acc.collapseAll()">Clear
+            input</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
+      officia
+      aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
+      tempor,
+      sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
+      helvetica,
+      craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+      occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+      labore sustainable VHS.
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+
+<tooltip [tooltip]="tooltip"></tooltip>
+<block-full-ui [isBlock]="isBlock"></block-full-ui>

@@ -19,7 +19,7 @@
     <div *ngIf="isShow()" class="void-bet-auto">
       <div class="row udp-status">
         <div class="d-flex">
-          <label class="col-form-label font-weight-bold text-primary">VoidBet Status</label>
+          <label class="col-form-label font-weight-bold text-primary">After Void Status</label>
           <select [(ngModel)]="tmpStatusId">
             <option *ngFor="let item of selectionItem" [attr.value]="item.value">{{item.name}}</option>
           </select>

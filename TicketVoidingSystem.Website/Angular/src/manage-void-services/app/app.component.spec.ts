@@ -1,8 +1,7 @@
-import { ToolTipModule } from '../../utility/modules/tooltip/tooltip.module';
-import { AppService } from './app.service';
 import { NgModule } from '@angular/core';
+import { ToolTipModule } from '../../utility/modules/tooltip/tooltip.module';
 import { HttpService } from '../../utility/services/http.service';
-import * as _ from 'lodash';
+import { AppApiService } from './app-api.service';
 
 class Helper {}
 
@@ -13,7 +12,7 @@ describe('AppComponent', () => {
     imports: [
       ToolTipModule
     ],
-    providers: [HttpService, AppService]
+    providers: [HttpService, AppApiService]
   })
   class AppModuleTest { }
 

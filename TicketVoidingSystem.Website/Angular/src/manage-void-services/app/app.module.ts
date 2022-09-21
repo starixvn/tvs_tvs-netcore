@@ -12,14 +12,20 @@ import { HttpService } from '../../utility/services/http.service';
 import { UtilityModule } from '../../utility/utility.module';
 import { AfterVoidStatusComponent } from './after-void/after-void-status/after-void-status.component';
 import { AfterVoidComponent } from './after-void/after-void.component';
+import { AppApiService } from './app-api.service';
 import { AppComponent } from './app.component';
-import { AppService } from './app.service';
+import { CheckingVoidStatusComponent } from './checking-void-status/checking-void-status.component';
+import { ScanningAutoVoidComponent } from './scanning-auto-void/scanning-auto-void.component';
+import { VoidComponent } from './void/void.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AfterVoidStatusComponent,
     AfterVoidComponent,
+    ScanningAutoVoidComponent,
+    VoidComponent,
+    CheckingVoidStatusComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +39,7 @@ import { AppService } from './app.service';
     UtilityModule,
     ToastrModule.forRoot()
   ],
-  providers: [HttpService, AppService],
+  providers: [HttpService, AppApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,8 +3,8 @@ import * as _ from 'lodash';
 import { ModalType } from '../../../../utility/components/modal/modal';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Result } from '../../../../utility/models/result';
+import { AppApiService } from '../../app-api.service';
 import { SELECTION_ITEM, VoidBetAutomationModel } from '../../app.model';
-import { AppService } from '../../app.service';
 
 @Component({
   selector: 'after-void-status',
@@ -21,7 +21,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
 
   constructor(
     private readonly modalService: ModalService,
-    private readonly appService: AppService,
+    private readonly appApiService: AppApiService,
   ) { }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -51,7 +51,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
       message: `Are you sure you want to update after void history data`
       },
       async () => {
-        const result = await this.appService.updateVoidBetAutomationInfo(this.initQueryUpdate());
+        const result = await this.appApiService.updateVoidBetAutomationInfo(this.initQueryUpdate());
         this.openModelResult(result);
       },
       () => {

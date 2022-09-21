@@ -31,5 +31,12 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers
             var model = await mediator.Send(request);
             return Ok(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAutoVoidRequestQueue(GetAutoVoidRequestQueueRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
     }
 }
