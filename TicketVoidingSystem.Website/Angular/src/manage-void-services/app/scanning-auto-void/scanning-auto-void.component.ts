@@ -1,9 +1,14 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { SiteDbGroupConstant } from 'src/utility/constants/config';
+import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { SiteDbGroupConstant } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
-import { AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel } from './scanning-auto-void.model';
+import {
+  AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel,
+  AUTO_VOID_REQUEST_QUEUE_STATUS_SELECTION, UpdateAutoVoidRequestQueueModel
+} from './scanning-auto-void.model';
 
 @Component({
   selector: 'scanning-auto-void',
@@ -11,13 +16,16 @@ import { AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel } from './scan
   styleUrls: ['./scanning-auto-void.component.scss']
 })
 export class ScanningAutoVoidComponent implements OnInit {
-  autoVoidRequestQueues: AutoVoidRequestQueueModel[] = [];
+  autoVoidRequestQueuesOrigin: AutoVoidRequestQueueModel[] = [];
+  autoVoidRequestQueuesViewModel: AutoVoidRequestQueueViewModel[] = [];
   tooltip = new Tooltip();
+  autoVoidRequestQueueStatusSelection = AUTO_VOID_REQUEST_QUEUE_STATUS_SELECTION;
   isBlock: boolean;
   inputBroadcastSessionId: string;
 
   constructor(private readonly element: ElementRef,
-    private readonly appApiService: AppApiService) {
+    private readonly appApiService: AppApiService,
+    private readonly modalService: ModalService) {
     this.tooltip.element = this.element;
   }
 
@@ -30,7 +38,8 @@ export class ScanningAutoVoidComponent implements OnInit {
       return;
     }
     this.isBlock = true;
-    this.autoVoidRequestQueues = await this.appApiService.getAutoVoidRequestQueue(this.inputBroadcastSessionId);
+    this.autoVoidRequestQueuesOrigin = await this.appApiService.getAutoVoidRequestQueue(this.inputBroadcastSessionId);
+    this.autoVoidRequestQueuesViewModel = this.transformAutoVoidRequestQueueViewModel(this.autoVoidRequestQueuesOrigin);
     this.isBlock = false;
   }
 
@@ -47,13 +56,42 @@ export class ScanningAutoVoidComponent implements OnInit {
         viewModel.requestId = queueInCurrentServer.requestId;
         viewModel.matchId = queueInCurrentServer.matchId;
         viewModel.statusId = queueInCurrentServer.statusId;
+        viewModel.statusIdSelected = queueInCurrentServer.statusId;
         viewModel.errMsg = queueInCurrentServer.errMsg;
       }
 
       return viewModel;
     });
 
+    console.log(transformViewModel);
     return transformViewModel;
+  }
+
+  confirmUpdateStatus(siteDbName: string, siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+    this.modalService.confirm({
+      title: 'Confirm',
+      message: `Are you sure you want to update:<br> - <strong>${siteDbName}</strong><br> - QueueId: <strong>${queueId}</strong><br> - StatusId: <strong>${statusIdSelected}</strong>`
+    },
+      async () => {
+        this.isBlock = true;
+        const isUpdateSuccessful = await this.appApiService.updateAutoVoidRequestQueue(
+          this.initUpdateQuery(siteDbGroupId, queueId, statusIdSelected));
+        this.isBlock = false;
+        this.openModelResult(isUpdateSuccessful);
+      },
+      () => {
+        // this.tmpStatusId = this.orgStatusId;
+      }
+    );
+  }
+
+  openModelResult(isSuccess: boolean) {
+    this.modalService.open(
+      {
+        title: 'Update result',
+        message: isSuccess ? 'Successful!' : 'Failed!',
+        type: isSuccess ? ModalType.Alert : ModalType.Error
+      });
   }
 
   clearInput() {
@@ -62,7 +100,8 @@ export class ScanningAutoVoidComponent implements OnInit {
   }
 
   private resetOldResult(): void {
-    this.autoVoidRequestQueues = [];
+    this.autoVoidRequestQueuesOrigin = [];
+    this.autoVoidRequestQueuesViewModel = [];
   }
 
   private isValidSearchQuery(): boolean {
@@ -72,5 +111,13 @@ export class ScanningAutoVoidComponent implements OnInit {
     }
 
     return true;
+  }
+
+  private initUpdateQuery(siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+    return {
+      siteDbGroupId: siteDbGroupId,
+      queueId: queueId,
+      statusId: statusIdSelected
+    } as UpdateAutoVoidRequestQueueModel;
   }
 }

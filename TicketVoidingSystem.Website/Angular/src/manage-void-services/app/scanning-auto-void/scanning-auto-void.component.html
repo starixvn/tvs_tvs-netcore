@@ -15,7 +15,7 @@
           <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchAutoVoidRequestQueue()" /></div>
       </div>
 
-      <table *ngIf="autoVoidRequestQueues.length > 0" class="table table-striped">
+      <table *ngIf="autoVoidRequestQueuesOrigin.length > 0" class="table table-striped">
         <thead>
         <tr>
           <th scope="col">SiteDbGroupId</th>
@@ -29,8 +29,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let queue of transformAutoVoidRequestQueueViewModel(autoVoidRequestQueues); index as i">
-          <th scope="row">{{queue.siteDbGroupId }}-{{queue.siteDbName}}</th>
+        <tr *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
+          <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
           <td>{{ queue.queueId }}</td>
           <td>{{ queue.broadcastSessionId }}</td>
           <td>{{ queue.action }}</td>
@@ -50,7 +50,21 @@
         <h5 class="m-0">Update queue status</h5>
       </div>
     </ng-template>
-    <ng-template ngbPanelContent>
+    <ng-template ngbPanelContent *ngIf="autoVoidRequestQueuesOrigin.length > 0">
+      <ng-container *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
+        <div *ngIf="queue.queueId" class="d-flex server-row">
+          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
+          <label class="col-form-label mr-2">QueueId </label>
+          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
+  
+          <label class="col-form-label ml-4 mr-2">StatusId</label>
+          <select [(ngModel)]="queue.statusIdSelected">
+            <option *ngFor="let item of autoVoidRequestQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
+          </select>    
+        
+          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" (click)="confirmUpdateStatus(queue.siteDbName, queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
+        </div>     
+      </ng-container>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>

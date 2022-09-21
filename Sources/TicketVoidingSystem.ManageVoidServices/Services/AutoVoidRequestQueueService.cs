@@ -10,6 +10,8 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
     public interface AutoVoidRequestQueueService
     {
         Task<IEnumerable<AutoVoidRequestQueueModel>> GetQueueInAllServers(string broadcastSessionId);
+
+        Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage);
     }
 
     public class AutoVoidRequestQueueServiceImp : AutoVoidRequestQueueService
@@ -36,11 +38,26 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
                 if (queue != null)
                 {
                     queue.SiteDbGroupId = server.Id;
+                    queueInAllServers.Add(queue);
                 }
-                queueInAllServers.Add(queue);
             }
 
             return queueInAllServers;
+        }
+
+        public async Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage)
+        {
+            var criteria = new UpdateAutoVoidRequestQueueCriteria
+            {
+                SiteDbGroupId = siteDbGroupId,
+                QueueId = queueId,
+                BroadcastSessionId = broadcastSessionId,
+                StatusId = statusId,
+                IsUpdateStartTime = isUpdateStartTime,
+                ErrMsg = errorMessage
+            };
+
+            await repository.ExecuteAsync(criteria);
         }
     }
 }

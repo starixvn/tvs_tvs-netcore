@@ -15,5 +15,7 @@
         <Setting Key="TicketVoiding_VoidBetAutomation_Service_Sel" SpName="TicketVoiding_VoidBetAutomation_Service_Sel" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBCTG.TicketVoiding_AutoVoidRequest_Queue_Select" SpName="TicketVoiding_AutoVoidRequest_Queue_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG.TicketVoiding_AutoVoidRequest_Queue_Select" SpName="TicketVoiding_AutoVoidRequest_Queue_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBCTG.TicketVoiding_AutoVoidRequest_Queue_Update" SpName="TicketVoiding_AutoVoidRequest_Queue_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_AutoVoidRequest_Queue_Update" SpName="TicketVoiding_AutoVoidRequest_Queue_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
 </Functions>
