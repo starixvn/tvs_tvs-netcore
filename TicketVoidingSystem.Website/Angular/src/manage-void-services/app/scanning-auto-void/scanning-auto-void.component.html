@@ -4,41 +4,53 @@
       <div class="d-flex align-items-center justify-content-between">
         <h5 class="m-0">Find auto void request queue</h5>
         <div>
-          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="acc.collapseAll()">Clear input</button>
+          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
         </div>
       </div>
     </ng-template>
     <ng-template ngbPanelContent>
-      <div class="filter">
-        <div class="action-area d-flex">
+      <div class="filter action-area d-flex">
           <label class="col-form-label mr-2">Broadcast Session ID </label>
-          <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1" [(ngModel)]="broadcastSessionId" />
+          <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1" [(ngModel)]="inputBroadcastSessionId" />
           <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchAutoVoidRequestQueue()" /></div>
-        </div>
       </div>
+
+      <table *ngIf="autoVoidRequestQueues.length > 0" class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">SiteDbGroupId</th>
+          <th scope="col">QueueId</th>
+          <th scope="col">BroadcastSessionId</th>
+          <th scope="col">Action</th>
+          <th scope="col">RequestId</th>
+          <th scope="col">MatchId</th>
+          <th scope="col">StatusId</th>
+          <th scope="col">ErrMsg</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let queue of transformAutoVoidRequestQueueViewModel(autoVoidRequestQueues); index as i">
+          <th scope="row">{{queue.siteDbGroupId }}-{{queue.siteDbName}}</th>
+          <td>{{ queue.queueId }}</td>
+          <td>{{ queue.broadcastSessionId }}</td>
+          <td>{{ queue.action }}</td>
+          <td>{{ queue.requestId }}</td>
+          <td>{{ queue.matchId }}</td>
+          <td>{{ queue.statusId }}</td>
+          <td>{{ queue.errMsg }}</td>
+        </tr>
+        </tbody>
+      </table>
     </ng-template>
   </ngb-panel>
+  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
   <ngb-panel id="toggle-2" title="Second">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
-        <h5 class="m-0">Second panel</h5>
-        <div>
-          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle second</button>
-          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="acc.collapseAll()">Clear
-            input</button>
-        </div>
+        <h5 class="m-0">Update queue status</h5>
       </div>
     </ng-template>
     <ng-template ngbPanelContent>
-      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
-      officia
-      aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
-      tempor,
-      sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-      helvetica,
-      craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-      occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-      labore sustainable VHS.
     </ng-template>
   </ngb-panel>
 </ngb-accordion>

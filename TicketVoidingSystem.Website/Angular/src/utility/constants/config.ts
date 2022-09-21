@@ -1,5 +1,6 @@
 import { Item } from '../models/item.model';
 import { Selection } from '../models/selection.model';
+import { SiteDbGroupModel } from '../models/site-db-group.model';
 import { SubIssueTypeConstant } from './sub-issue-type.constant';
 
 export enum IconCheckBox {
@@ -238,4 +239,14 @@ export class FunctionConst {
   static readonly EARLY_KICK_OFF = 1;
   static readonly TVS_VOID_PAGE = 2;
   static readonly MARK_TICKETS = 3;
+}
+
+export class SiteDbGroupConstant {
+  static readonly CentralDb = 0;
+  static readonly SiteDb1 = 1;
+
+  static readonly ServerList: SiteDbGroupModel[] = [
+    { id: SiteDbGroupConstant.CentralDb, serverName: 'CentralDb' },
+    { id: SiteDbGroupConstant.SiteDb1, serverName: 'SiteDb1' },
+  ];
 }

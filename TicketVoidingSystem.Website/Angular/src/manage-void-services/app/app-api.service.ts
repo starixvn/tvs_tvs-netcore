@@ -17,7 +17,7 @@ export class AppApiService {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidBetAutomationServiceInfo`);
   }
 
-  async getAutoVoidRequestQueue(broadcastSessionId: string): Promise<AutoVoidRequestQueueModel> {
+  async getAutoVoidRequestQueue(broadcastSessionId: string): Promise<AutoVoidRequestQueueModel[]> {
     return this.httpService.postJson({broadcastSessionId}, `api/ManageVoidServices/GetAutoVoidRequestQueue`);
   }
 }

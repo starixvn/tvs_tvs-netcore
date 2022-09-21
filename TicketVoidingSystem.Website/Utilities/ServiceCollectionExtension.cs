@@ -153,6 +153,7 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSingleton<LogActionFilterAttribute>();
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
+            services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)

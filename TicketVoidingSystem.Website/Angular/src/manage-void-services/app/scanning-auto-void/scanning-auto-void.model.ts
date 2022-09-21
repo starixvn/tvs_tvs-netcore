@@ -1,16 +1,13 @@
 export class AutoVoidRequestQueueModel {
+    siteDbGroupId: number;
+    queueId: number;
+    broadcastSessionId: string;
+    action: string;
     requestId: number;
-    voidingHistoryId: number;
-    statusId?: number;
-    matchId?: number;
-    isAutoVoid: boolean;
-    isRunExternalService?: boolean;
-    messageId?: number;
-    reasonId?: number;
-    isSentBatchMessage?: boolean;
-    isSentMessageToAdminSite?: boolean;
-    isInsertedVoidedTransaction?: boolean;
-    isUpdatedVoidingHistory?: boolean;
-    isSentEmail?: boolean;
-    isSentLetsTalk?: boolean;
+    matchId: number;
+    statusId: number;
+    errMsg: string;
+}
+export class AutoVoidRequestQueueViewModel extends AutoVoidRequestQueueModel {
+    siteDbName: string;
 }
