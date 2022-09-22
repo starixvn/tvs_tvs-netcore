@@ -1,5 +1,6 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Attributes;
 using Fanex.NAP.Core.Business;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Web;
 
@@ -15,6 +16,15 @@ namespace TicketVoidingSystem.Website.Controllers
         public IActionResult ABExceptionList()
         {
             return View("~/wwwroot/dist/ab-exception-list/index.cshtml");
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [Route("[action]/Index")]
+        [AllowAnonymous]
+        public IActionResult ManageVoidServices()
+        {
+            return View("~/wwwroot/dist/manage-void-services/index.cshtml");
         }
     }
 }

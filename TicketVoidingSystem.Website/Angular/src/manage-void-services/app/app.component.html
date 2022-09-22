@@ -1,0 +1,38 @@
+<div class="title">
+  {{title}}
+</div>
+
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills custom-nav">
+  <li ngbNavItem="1">
+    <a ngbNavLink>After Void</a>
+    <ng-template ngbNavContent>
+      <after-void></after-void>
+    </ng-template>
+  </li>
+  <li ngbNavItem="2">
+    <a ngbNavLink>Scanning Auto Void</a>
+    <ng-template ngbNavContent>
+      <div class="container-fluid">
+        <scanning-auto-void></scanning-auto-void>
+      </div>
+    </ng-template>
+  </li>
+  <li ngbNavItem="3">
+    <a ngbNavLink>Void</a>
+    <ng-template ngbNavContent>
+      <div class="container-fluid">
+        <void></void>
+      </div>
+    </ng-template>
+  </li>
+  <li ngbNavItem="4">
+    <a ngbNavLink>Checking Void Status</a>
+    <ng-template ngbNavContent>
+      <div class="container-fluid">
+        <checking-void-status></checking-void-status>
+      </div>
+    </ng-template>
+  </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="ms-2"></div>

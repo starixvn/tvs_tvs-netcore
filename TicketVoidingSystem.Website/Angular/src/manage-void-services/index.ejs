@@ -1,0 +1,13 @@
+@{
+Layout = "~/Views/Shared/_LayoutAngular.cshtml";
+ViewBag.Title = "Manage void services";
+}
+@section Head {
+<% files.css.forEach(function(css){ %>
+<link href="<%= css%>" rel="stylesheet" />
+<% }) %>
+}
+<app-root></app-root>
+<% files.js.forEach(function(js){ %>
+<script src="<%= js%>"></script>
+<% }) %>

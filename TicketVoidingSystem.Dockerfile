@@ -3,6 +3,8 @@ WORKDIR /src
 
 COPY ./Sources/TicketVoidingSystem ./Sources/TicketVoidingSystem
 COPY ./Sources/TicketVoidingSystem.ABExceptionList ./Sources/TicketVoidingSystem.ABExceptionList
+COPY ./Sources/TicketVoidingSystem.ManageVoidServices ./Sources/TicketVoidingSystem.ManageVoidServices
+COPY ./Sources/TicketVoidingSystem.SharedApi ./Sources/TicketVoidingSystem.SharedApi
 COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
 WORKDIR /src/TicketVoidingSystem.Website

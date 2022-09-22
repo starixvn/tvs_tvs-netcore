@@ -1,0 +1,46 @@
+.action-area,
+.send-data-area,
+.btn-reload {
+    margin: 12px 10px;
+}
+
+.filter {
+    margin: 0px 10px 0px;
+    border: 1px solid #ccc;
+    background-color: #ebebeb;
+
+    .action-area {
+        input.form-control {
+            width: 140px;
+        }
+    }
+}
+
+.no-data {
+    padding: 10px 0px; 
+    border: 1px solid #ccc;
+    margin: 0px 10px;
+}
+
+.void-bet-auto {
+    margin: 0px 10px 0px;
+    border: 1px solid #ccc;
+
+    .udp-status{    
+        label {
+            width: 165px !important;
+        }
+    
+        select {
+            padding: 1px 2px;
+            height: 22px;
+            border-radius: 0;
+            margin-top: 5px;
+            margin-left: 3px;
+        }
+    }
+    
+    .btn-save,.udp-status {
+        margin: 12px 25px;
+    }
+}

@@ -89,43 +89,17 @@ const voidRequest = {
   indexEJSPath: './src/void-request/index.ejs'
 };
 
-const getBetIdForVoiding = {
-  pageName: 'GetBetIdForVoiding',
+const manageVoidServices = {
+  pageName: 'ManageVoidServices',
   tsconfigFiles: [
-    'get-betid-for-voiding/main.ts',
+    'manage-void-services/main.ts',
     'polyfills.ts'
   ],
-  deployUrl: 'dist/ticket-voiding-system/get-betid-for-voiding/',
-  index: 'src/get-betid-for-voiding/index.cshtml',
-  main: 'src/get-betid-for-voiding/main.ts',
-  transformFolder: '../dist/ticket-voiding-system/get-betid-for-voiding',
-  indexEJSPath: './src/get-betid-for-voiding/index.ejs'
-};
-
-const voidFormulaBets = {
-  pageName: 'VoidFormulaBets',
-  tsconfigFiles: [
-    'void-formula-bets/main.ts',
-    'polyfills.ts'
-  ],
-  deployUrl: 'dist/ticket-voiding-system/void-formula-bets/',
-  index: 'src/void-formula-bets/index.cshtml',
-  main: 'src/void-formula-bets/main.ts',
-  transformFolder: '../dist/ticket-voiding-system/void-formula-bets',
-  indexEJSPath: './src/void-formula-bets/index.ejs'
-};
-
-const afterVoidHistory = {
-  pageName: 'AfterVoidHistory',
-  tsconfigFiles: [
-    'after-void-history/main.ts',
-    'polyfills.ts'
-  ],
-  deployUrl: 'dist/ticket-voiding-system/after-void-history/',
-  index: 'src/after-void-history/index.cshtml',
-  main: 'src/after-void-history/main.ts',
-  transformFolder: '../dist/ticket-voiding-system/after-void-history',
-  indexEJSPath: './src/after-void-history/index.ejs'
+  deployUrl: 'dist/manage-void-services/',
+  index: 'src/manage-void-services/index.cshtml',
+  main: 'src/manage-void-services/main.ts',
+  transformFolder: '../wwwroot/dist/manage-void-services',
+  indexEJSPath: './src/manage-void-services/index.ejs'
 };
 
 const abExceptionList = {
@@ -161,11 +135,9 @@ const configPages = [
   // editRequest,
   // manageRequest,
   // voidRequest,
-  // getBetIdForVoiding,
-  // voidFormulaBets,
-  // afterVoidHistory,
-  abExceptionList,
-  homePage
+  // manageVoidServices,
+  // abExceptionList,
+   homePage
 ];
 
 module.exports = configPages;
