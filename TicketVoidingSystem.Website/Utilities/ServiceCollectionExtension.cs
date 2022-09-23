@@ -155,6 +155,7 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
             services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
+            services.AddTransient<TicketVoidingQueueService, TicketVoidingQueueServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)

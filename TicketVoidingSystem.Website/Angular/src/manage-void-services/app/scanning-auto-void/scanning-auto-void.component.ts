@@ -39,32 +39,26 @@ export class ScanningAutoVoidComponent implements OnInit {
     }
     this.isBlock = true;
     this.autoVoidRequestQueuesOrigin = await this.appApiService.getAutoVoidRequestQueue(this.inputBroadcastSessionId);
-    this.autoVoidRequestQueuesViewModel = this.transformAutoVoidRequestQueueViewModel(this.autoVoidRequestQueuesOrigin);
+    this.autoVoidRequestQueuesViewModel = this.convertToAutoVoidRequestQueueViewModel(this.autoVoidRequestQueuesOrigin);
     this.isBlock = false;
   }
 
-  transformAutoVoidRequestQueueViewModel(queues: AutoVoidRequestQueueModel[]): AutoVoidRequestQueueViewModel[] {
-    const transformViewModel = SiteDbGroupConstant.ServerList.map(x => {
-      const viewModel = new AutoVoidRequestQueueViewModel();
-      viewModel.siteDbGroupId = x.id;
-      viewModel.siteDbName = x.serverName;
-      const queueInCurrentServer = queues.find(y => y?.siteDbGroupId === x.id);
-      if (queueInCurrentServer) {
-        viewModel.queueId = queueInCurrentServer.queueId;
-        viewModel.broadcastSessionId = queueInCurrentServer.broadcastSessionId;
-        viewModel.action = queueInCurrentServer.action;
-        viewModel.requestId = queueInCurrentServer.requestId;
-        viewModel.matchId = queueInCurrentServer.matchId;
-        viewModel.statusId = queueInCurrentServer.statusId;
-        viewModel.statusIdSelected = queueInCurrentServer.statusId;
-        viewModel.errMsg = queueInCurrentServer.errMsg;
-      }
+  private convertToAutoVoidRequestQueueViewModel(queues: AutoVoidRequestQueueModel[]): AutoVoidRequestQueueViewModel[] {
+    const results: AutoVoidRequestQueueViewModel[] = [];
+    for (const server of SiteDbGroupConstant.ServerList) {
+      const queuesInCurrentServer = queues.filter(x => x.siteDbGroupId === server.id);
+      const viewModel = queuesInCurrentServer.map(x => {
+        return {
+          ...x,
+          siteDbName: server.serverName,
+          statusIdSelected: x.statusId
+        } as AutoVoidRequestQueueViewModel;
+      });
 
-      return viewModel;
-    });
+      results.push(...viewModel);
+    }
 
-    console.log(transformViewModel);
-    return transformViewModel;
+    return results;
   }
 
   confirmUpdateStatus(siteDbName: string, siteDbGroupId: number, queueId: number, statusIdSelected: number) {
