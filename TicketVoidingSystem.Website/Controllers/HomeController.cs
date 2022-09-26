@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ONEbook.UM.AspNetCore.Filters;
 using ONEbook.UM.Models;
 using ONEbook.UM.Services;
 using TicketVoidingSystem.Web;
@@ -25,14 +26,9 @@ namespace TicketVoidingSystem.Website.Controllers
 
         [AllowAnonymous]
         [HttpHead]
+        [SkipUMFilter]
         [ActionName("Index")]
         public IActionResult IndexHead()
-        {
-            return Ok("200-Ok");
-        }
-
-        [AllowAnonymous]
-        public IActionResult HealthCheck()
         {
             return Ok("200-Ok");
         }
