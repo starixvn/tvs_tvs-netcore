@@ -7,6 +7,7 @@ export class AutoVoidRequestQueueModel {
     matchId: number;
     statusId: number;
     errMsg: string;
+    sportType: number;
 }
 
 export class AutoVoidRequestQueueViewModel extends AutoVoidRequestQueueModel {

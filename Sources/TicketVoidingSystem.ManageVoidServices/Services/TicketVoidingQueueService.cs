@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
     {
         Task<IEnumerable<TicketVoidingQueueModel>> GetQueueInAllServers(int voidingHistoryId);
 
-        Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage);
+        Task UpdateQueueByBatch(int siteDbGroupId, string queueIds, int statusId);
     }
 
     public class TicketVoidingQueueServiceImp : TicketVoidingQueueService
@@ -41,16 +41,13 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
             return queueInAllServers;
         }
 
-        public async Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage)
+        public async Task UpdateQueueByBatch(int siteDbGroupId, string queueIds, int statusId)
         {
-            var criteria = new UpdateAutoVoidRequestQueueCriteria
+            var criteria = new UpdateTicketVoidingQueueByBatchCriteria
             {
                 SiteDbGroupId = siteDbGroupId,
-                QueueId = queueId,
-                BroadcastSessionId = broadcastSessionId,
-                StatusId = statusId,
-                IsUpdateStartTime = isUpdateStartTime,
-                ErrMsg = errorMessage
+                QueueIds = queueIds,
+                StatusId = statusId
             };
 
             await repository.ExecuteAsync(criteria);

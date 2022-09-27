@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpService } from '../../utility/services/http.service';
 import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.model';
+import { VoidServiceModel } from './checking-void-status/checking-void-status.model';
 import { AutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel } from './void/void.model';
 
@@ -30,4 +31,15 @@ export class AppApiService {
     return this.httpService.postJson<any, TicketVoidingQueueModel[]>({ voidingHistoryId }, `api/ManageVoidServices/GetTicketVoidingQueue`);
   }
 
+  // async updateTicketVoidingQueue(model: UpdateAutoVoidRequestQueueModel): Promise<boolean> {
+  //   return this.httpService.postJson(model, `api/ManageVoidServices/UpdateTicketVoidingQueue`);
+  // }
+
+  async getVoidServiceData(broadcastSessionId: string): Promise<VoidServiceModel[]> {
+    return this.httpService.postJson<any, VoidServiceModel[]>({ broadcastSessionId }, `api/ManageVoidServices/GetVoidServiceData`);
+  }
+
+  async updateVoidServiceData(broadcastSessionId: string): Promise<VoidServiceModel[]> {
+    return this.httpService.postJson<any, VoidServiceModel[]>({ broadcastSessionId }, `api/ManageVoidServices/GetVoidServiceData`);
+  }
 }

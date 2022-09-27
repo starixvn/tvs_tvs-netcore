@@ -1,1 +1,73 @@
-<p>checking-void-status works!</p>
+<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
+  <ngb-panel id="toggle-1" title="First panel">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Find void service data</h5>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <div class="filter action-area d-flex">
+          <label class="col-form-label mr-2">BroadcastSessionId </label>
+          <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1" [(ngModel)]="inputBroadcastSessionId" />
+          <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidServiceData()" /></div>
+      </div>
+
+      <table *ngIf="autoVoidRequestQueuesOrigin.length > 0" class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col">SiteDbGroupId</th>
+          <th scope="col">QueueId</th>
+          <th scope="col">BroadcastSessionId</th>
+          <th scope="col">Action</th>
+          <th scope="col">RequestId</th>
+          <th scope="col">MatchId</th>
+          <th scope="col">StatusId</th>
+          <th scope="col">ErrMsg</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
+          <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
+          <td>{{ queue.queueId }}</td>
+          <td>{{ queue.broadcastSessionId }}</td>
+          <td>{{ queue.action }}</td>
+          <td>{{ queue.requestId }}</td>
+          <td>{{ queue.matchId }}</td>
+          <td>{{ queue.statusId }}</td>
+          <td>{{ queue.errMsg }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </ngb-panel>
+  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <ngb-panel id="toggle-2" title="Second">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Update void service status</h5>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent *ngIf="autoVoidRequestQueuesOrigin.length > 0">
+      <ng-container *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
+        <div *ngIf="queue.queueId" class="d-flex server-row">
+          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
+          <label class="col-form-label mr-2">QueueId </label>
+          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
+  
+          <label class="col-form-label ml-4 mr-2">StatusId</label>
+          <select [(ngModel)]="queue.statusIdSelected">
+            <option *ngFor="let item of voidServiceSelection" [attr.value]="item.value">{{item.name}}</option>
+          </select>    
+        
+          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" (click)="confirmUpdateStatus(queue.siteDbName, queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
+        </div>     
+      </ng-container>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+
+<tooltip [tooltip]="tooltip"></tooltip>
+<block-full-ui [isBlock]="isBlock"></block-full-ui>

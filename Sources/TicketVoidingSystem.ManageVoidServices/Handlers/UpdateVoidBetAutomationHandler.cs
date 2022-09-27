@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Fanex.Logging;
 using MediatR;
 using TicketVoidingSystem.ManageVoidServices.Models;
 using TicketVoidingSystem.ManageVoidServices.Services;
@@ -26,8 +28,9 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
                 await afterVoidService.UpdateVoidBetAutomationServiceInfo(request);
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                await LogService.ErrorAsync(nameof(AfterVoidService.UpdateVoidBetAutomationServiceInfo), e);
                 return false;
             }
         }
