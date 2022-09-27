@@ -16,7 +16,7 @@ namespace TicketVoidingSystem.Web
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class LogActionFilterAttribute : ActionFilterAttribute
     {
-        private readonly List<string> excludePatterns = new() { ".*/Auth/.*" };
+        private readonly List<string> excludePatterns = new() { "^.*/Auth.*$", "^.*/healthcheck.*$" };
         private readonly ILogger logger;
 
         public LogActionFilterAttribute(ILogger logger)
@@ -83,14 +83,7 @@ namespace TicketVoidingSystem.Web
 
         private bool IsExcluded(string url)
         {
-            foreach (var excludePattern in excludePatterns)
-            {
-                if (new Regex(excludePattern, RegexOptions.IgnoreCase).IsMatch(url))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return excludePatterns.Any(pattern => new Regex(pattern, RegexOptions.IgnoreCase).IsMatch(url));
         }
     }
 
