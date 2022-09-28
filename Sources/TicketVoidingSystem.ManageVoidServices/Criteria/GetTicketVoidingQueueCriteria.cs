@@ -1,27 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Fanex.Data;
+﻿using Fanex.Data;
 using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageVoidServices.Criteria
 {
     public class GetTicketVoidingQueueCriteria : CriteriaBase
     {
-        public int? VoidingHistoryId { get; set; }
+        public int VoidingHistoryId { get; set; }
 
         [SpParam(Ignored = true)]
         public int SiteDbGroupId { get; set; }
 
-        public override string GetSettingKey() => SpList.First(x => x.Id == SiteDbGroupId).SpName;
+        public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_ManageVoidServices_Queue_Select");
 
         public override bool IsValid() => true;
-
-        private static readonly IEnumerable<SiteDbGroupModel> SpList = new List<SiteDbGroupModel>
-        {
-            new () {Id = SiteDbGroupConstant.CentralDb, SpName = "DBCTG.TicketVoiding_Queue_Select"},
-            new () {Id = SiteDbGroupConstant.SiteDb1, SpName = "DBSIG.TicketVoiding_Queue_Select"}
-        };
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.ManageVoidServices.Models
+﻿using System;
+
+namespace TicketVoidingSystem.ManageVoidServices.Models
 {
     public class AutoVoidRequestQueueModel
     {
@@ -11,5 +13,7 @@
         public string BroadcastSessionId { get; set; }
         public int SportType { get; set; }
         public string ErrMsg { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime ExecTime { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
     public class GetAutoVoidRequestQueueRequest : IRequest<IEnumerable<AutoVoidRequestQueueModel>>
     {
         public string BroadcastSessionId { get; set; }
+        public int? StatusId { get; set; }
     }
 
     public class GetAutoVoidRequestQueueHandler : IRequestHandler<GetAutoVoidRequestQueueRequest, IEnumerable<AutoVoidRequestQueueModel>>
@@ -23,7 +24,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
 
         public async Task<IEnumerable<AutoVoidRequestQueueModel>> Handle(GetAutoVoidRequestQueueRequest request, CancellationToken cancellationToken)
         {
-            return await autoVoidRequestQueueService.GetQueueInAllServers(request.BroadcastSessionId);
+            return await autoVoidRequestQueueService.GetQueueInAllServers(request.BroadcastSessionId, request.StatusId);
         }
     }
 }
