@@ -34,24 +34,26 @@ export class CheckingVoidStatusComponent implements OnInit {
       return;
     }
     this.isBlock = true;
-    // this.autoVoidRequestQueuesOrigin = await this.appApiService.getAutoVoidRequestQueue(this.inputBroadcastSessionId);
-    this.autoVoidRequestQueuesViewModel = this.convertToAutoVoidRequestQueueViewModel(this.autoVoidRequestQueuesOrigin);
+    this.voidServiceDataOrigin = await this.appApiService.getVoidServiceData(this.inputBroadcastSessionId);
+    this.voidServiceDataViewModel = this.convertToVoidServiceViewModel(this.voidServiceDataOrigin);
     this.isBlock = false;
   }
 
   confirmUpdateStatus(siteDbGroupId: number, requestId: number, voidingHistoryId: number, statusIdSelected: number) {
     this.modalService.confirm({
       title: 'Confirm',
-      message: `Are you sure you want to update:<br> - SiteDbGroupId: <strong>${siteDbGroupId}</strong>
-                <br> - RequestId: <strong>${requestId}</strong><br> - VoidingHistoryId: <strong>${voidingHistoryId}</strong>
+      message: `Are you sure you want to update:
+                <br> - SiteDbGroupId: <strong>${siteDbGroupId}</strong>
+                <br> - RequestId: <strong>${requestId}</strong>
+                <br> - VoidingHistoryId: <strong>${voidingHistoryId}</strong>
                 <br> - StatusId: <strong>${statusIdSelected}</strong>`
     },
       async () => {
         this.isBlock = true;
-        // const isUpdateSuccessful = await this.appApiService.updateAutoVoidRequestQueue(
-        //   this.initUpdateQuery(siteDbGroupId, queueId, statusIdSelected));
+        const isUpdateSuccessful = await this.appApiService.updateVoidServiceData(
+          this.initUpdateQuery(siteDbGroupId, requestId, voidingHistoryId, statusIdSelected));
         this.isBlock = false;
-       // this.openModelResult(isUpdateSuccessful);
+        this.openModelResult(isUpdateSuccessful);
       },
       () => { }
     );
@@ -66,7 +68,6 @@ export class CheckingVoidStatusComponent implements OnInit {
       });
   }
 
-
   clearInput() {
     this.resetOldResult();
     this.inputBroadcastSessionId = null;
@@ -74,26 +75,17 @@ export class CheckingVoidStatusComponent implements OnInit {
 
 
   private resetOldResult(): void {
-    this.autoVoidRequestQueuesOrigin = [];
-    this.autoVoidRequestQueuesViewModel = [];
+    this.voidServiceDataOrigin = [];
+    this.voidServiceDataViewModel = [];
   }
 
-  private convertToAutoVoidRequestQueueViewModel(voidServiceData: VoidServiceModel[]): VoidServiceViewModel[] {
-    // const results: VoidServiceViewModel[] = [];
-    // for (const server of SiteDbGroupConstant.ServerList) {
-    //   const queuesInCurrentServer = voidServiceData.filter(x => x.siteDbGroupId === server.id);
-    //   const viewModel = queuesInCurrentServer.map(x => {
-    //     return {
-    //       ...x,
-    //       siteDbName: server.serverName,
-    //       statusIdSelected: x.statusId
-    //     } as AutoVoidRequestQueueViewModel;
-    //   });
-
-    //   results.push(...viewModel);
-    // }
-
-    // return results;
+  private convertToVoidServiceViewModel(voidServiceData: VoidServiceModel[]): VoidServiceViewModel[] {
+    return voidServiceData.map(x => {
+      return {
+        ...x,
+        statusIdSelected: x.statusId
+      } as VoidServiceViewModel;
+    });
   }
 
   private isValidSearchQuery(): boolean {
@@ -105,12 +97,12 @@ export class CheckingVoidStatusComponent implements OnInit {
     return true;
   }
 
-  private initUpdateQuery(siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+  private initUpdateQuery(siteDbGroupId: number, requestId: number, voidingHistoryId: number, statusIdSelected: number) {
     return {
       siteDbGroupId: siteDbGroupId,
-      queueId: queueId,
+      requestId: requestId,
+      voidingHistoryId: voidingHistoryId,
       statusId: statusIdSelected
     } as UpdateVoidServiceModel;
   }
-
 }

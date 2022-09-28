@@ -22,6 +22,12 @@ export class TicketVoidingQueueViewModel extends TicketVoidingQueueModel {
   statusIdSelected: number;
 }
 
+export class UpdateTicketVoidingQueueModel {
+  siteDbGroupId: number;
+  queueIds: string;
+  statusId: number;
+}
+
 export const VOIDING_QUEUE_STATUS_SELECTION = [
   {
     name: '1 - Running',

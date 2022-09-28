@@ -1,0 +1,20 @@
+.broadcast-session-id {
+  width: 330px;
+}
+
+.table-scrollable {
+  overflow: auto;
+
+  .table {
+    margin-top: 15px;
+    border-bottom: 1px;
+
+    .no-data {
+      text-align: center;
+    }
+  }
+}
+
+.server-row {
+  margin-bottom: 10px;
+}

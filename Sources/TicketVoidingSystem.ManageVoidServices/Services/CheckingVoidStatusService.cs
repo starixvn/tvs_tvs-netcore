@@ -10,8 +10,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
     {
         Task<IEnumerable<VoidServiceModel>> GetVoidServiceData(string broadcastSessionId);
 
-        Task UpdateVoidService(int? siteDbGroupId, int? requestId, int? voidingHistoryId, int? statusId,
-            string broadcastSessionId);
+        Task UpdateVoidService(int? siteDbGroupId, int? requestId, int? voidingHistoryId, int? statusId);
     }
 
     public class CheckingVoidStatusServiceImp : CheckingVoidStatusService
@@ -33,16 +32,14 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
             return await repository.FetchAsync<VoidServiceModel>(criteria);
         }
 
-        public async Task UpdateVoidService(int? siteDbGroupId, int? requestId, int? voidingHistoryId, int? statusId, string broadcastSessionId)
+        public async Task UpdateVoidService(int? siteDbGroupId, int? requestId, int? voidingHistoryId, int? statusId)
         {
             var criteria = new UpdateVoidServiceCriteria
             {
                 SiteDbGroupId = siteDbGroupId,
                 RequestId = requestId,
                 VoidingHistoryId = voidingHistoryId,
-                StatusId = statusId,
-                BroadcastSessionId = broadcastSessionId,
-                IsUpdateCreatedDate = null
+                StatusId = statusId
             };
 
             await repository.ExecuteAsync(criteria);

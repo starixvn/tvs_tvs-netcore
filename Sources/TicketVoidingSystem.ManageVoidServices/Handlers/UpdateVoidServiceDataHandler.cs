@@ -7,7 +7,6 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
 {
     public class UpdateVoidServiceDataRequest : IRequest<bool>
     {
-        public string BroadcastSessionId { get; set; }
         public int SiteDbGroupId { get; set; }
         public int RequestId { get; set; }
         public int VoidingHistoryId { get; set; }
@@ -26,7 +25,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
         public async Task<bool> Handle(UpdateVoidServiceDataRequest request, CancellationToken cancellationToken)
         {
             await checkingVoidStatusService.UpdateVoidService(request.SiteDbGroupId, request.RequestId,
-                  request.VoidingHistoryId, request.StatusId, request.BroadcastSessionId);
+                  request.VoidingHistoryId, request.StatusId);
             return true;
         }
     }

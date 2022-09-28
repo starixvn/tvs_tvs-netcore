@@ -1,23 +1,23 @@
 export class VoidServiceModel {
-    siteDbGroupId: number;
-    queueId: number;
     broadcastSessionId: string;
-    action: string;
+    siteDbGroupId: number;
     requestId: number;
-    matchId: number;
+    voidingHistoryId: number;
     statusId: number;
-    errMsg: string;
-    sportType: number;
+    isAutoVoid: boolean;
+    matchId: number;
+    createdDate: Date;
+    modifiedDate: Date;
 }
 
 export class VoidServiceViewModel extends VoidServiceModel {
-    siteDbName: string;
     statusIdSelected: number;
 }
 
 export class UpdateVoidServiceModel {
     siteDbGroupId: number;
-    queueId: number;
+    requestId: number;
+    voidingHistoryId: number;
     statusId: number;
 }
 

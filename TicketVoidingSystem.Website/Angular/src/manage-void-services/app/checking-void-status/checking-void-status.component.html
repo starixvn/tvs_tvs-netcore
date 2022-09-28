@@ -1,10 +1,11 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
-  <ngb-panel id="toggle-1" title="First panel">
+<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2">
+  <ngb-panel id="panel-1" title="First panel">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
         <h5 class="m-0">Find void service data</h5>
         <div>
           <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
         </div>
       </div>
     </ng-template>
@@ -14,57 +15,81 @@
           <input maxlength="150" class="broadcast-session-id form-control form-control-sm" type="text" row="1" [(ngModel)]="inputBroadcastSessionId" />
           <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidServiceData()" /></div>
       </div>
+      <div class="table-scrollable">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">BroadcastSessionId</th>
+              <th scope="col">SiteDbGroupId</th>
+              <th scope="col">RequestId</th>
+              <th scope="col">VoidingHistoryId</th>
+              <th scope="col">StatusId</th>
+              <th scope="col">IsAutoVoid</th>
+              <th scope="col">MatchId</th>
+              <th scope="col">CreatedDate</th>
+              <th scope="col">ModifiedDate</th>
+            </tr>
+          </thead>
 
-      <table *ngIf="autoVoidRequestQueuesOrigin.length > 0" class="table table-striped">
-        <thead>
-        <tr>
-          <th scope="col">SiteDbGroupId</th>
-          <th scope="col">QueueId</th>
-          <th scope="col">BroadcastSessionId</th>
-          <th scope="col">Action</th>
-          <th scope="col">RequestId</th>
-          <th scope="col">MatchId</th>
-          <th scope="col">StatusId</th>
-          <th scope="col">ErrMsg</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
-          <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
-          <td>{{ queue.queueId }}</td>
-          <td>{{ queue.broadcastSessionId }}</td>
-          <td>{{ queue.action }}</td>
-          <td>{{ queue.requestId }}</td>
-          <td>{{ queue.matchId }}</td>
-          <td>{{ queue.statusId }}</td>
-          <td>{{ queue.errMsg }}</td>
-        </tr>
-        </tbody>
-      </table>
+          <tbody *ngIf="voidServiceDataOrigin.length > 0">
+            <tr *ngFor="let item of voidServiceDataViewModel; index as i">
+              <td>{{ item.broadcastSessionId }}</td>
+              <td>{{ item.siteDbGroupId }}</td>
+              <td>{{ item.requestId }}</td>
+              <td>{{ item.voidingHistoryId }}</td>
+              <td>{{ item.statusId }}</td>
+              <td>{{ item.isAutoVoid }}</td>
+              <td>{{ item.matchId }}</td>
+              <td>{{ item.createdDate | date:'yyyy/MM/dd hh:mm:ss.SSS a' }}</td>
+              <td>{{ item.modifiedDate | date:'yyyy/MM/dd hh:mm:ss.SSS a' }}</td>
+            </tr>
+            <tr>
+              <td colspan="9"><strong>Count: {{voidServiceDataViewModel.length}}</strong></td>
+            </tr>          
+          </tbody>
+
+          <tbody *ngIf="voidServiceDataOrigin.length === 0">
+            <tr>
+              <td colspan="9" class="no-data">There is no data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </ng-template>
   </ngb-panel>
   <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel id="toggle-2" title="Second">
+  <ngb-panel id="panel-2" title="Second">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
         <h5 class="m-0">Update void service status</h5>
+        <div>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+        </div>
       </div>
     </ng-template>
-    <ng-template ngbPanelContent *ngIf="autoVoidRequestQueuesOrigin.length > 0">
-      <ng-container *ngFor="let queue of autoVoidRequestQueuesViewModel; index as i">
-        <div *ngIf="queue.queueId" class="d-flex server-row">
-          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
-          <label class="col-form-label mr-2">QueueId </label>
-          <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
-  
-          <label class="col-form-label ml-4 mr-2">StatusId</label>
-          <select [(ngModel)]="queue.statusIdSelected">
+    <ng-template ngbPanelContent *ngIf="voidServiceDataOrigin.length > 0">
+      <ng-container *ngFor="let item of voidServiceDataViewModel; index as i">
+        <div class="d-flex server-row">
+          <label class="col-form-label mr-2"><strong>SiteDbGroupId:</strong> {{item.siteDbGroupId}}</label>
+          <label class="col-form-label ml-4 mr-2"><strong>RequestId:</strong> {{item.requestId}}</label>
+          <label class="col-form-label ml-4 mr-2"><strong>VoidingHistoryId:</strong> {{item.voidingHistoryId}}</label>
+          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
+          <select [(ngModel)]="item.statusIdSelected">
             <option *ngFor="let item of voidServiceSelection" [attr.value]="item.value">{{item.name}}</option>
           </select>    
         
-          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" (click)="confirmUpdateStatus(queue.siteDbName, queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
+          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" 
+            (click)="confirmUpdateStatus(item.siteDbGroupId, item.requestId, item.voidingHistoryId, item.statusIdSelected)" /></div>
         </div>     
       </ng-container>
+    </ng-template>
+
+    <ng-template ngbPanelContent *ngIf="voidServiceDataOrigin.length === 0">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>
