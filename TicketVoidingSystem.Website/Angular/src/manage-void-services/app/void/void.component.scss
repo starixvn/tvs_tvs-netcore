@@ -4,6 +4,15 @@
 
 .table-scrollable {
   overflow: auto;
+  max-height: 600px;
+
+  table {
+    margin-top: 15px;
+
+    .no-data {
+      text-align: center;
+    }
+  }
 }
 
 .queue-id {
@@ -16,8 +25,4 @@
 
 .server-row {
   margin-bottom: 10px;
-}
-
-.table {
-  margin-top: 15px;
 }

@@ -5,7 +5,8 @@ import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { SiteDbGroupConstant } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
-import { TicketVoidingQueueModel, TicketVoidingQueueViewModel, VOIDING_QUEUE_STATUS_SELECTION } from './void.model';
+import { ServiceStatusConstant } from '../app.model';
+import { FailedVoidingQueueViewModel, TicketVoidingQueueModel, TicketVoidingQueueViewModel, UpdateTicketVoidingQueueModel } from './void.model';
 
 @Component({
   selector: 'void',
@@ -13,11 +14,12 @@ import { TicketVoidingQueueModel, TicketVoidingQueueViewModel, VOIDING_QUEUE_STA
   styleUrls: ['./void.component.scss']
 })
 export class VoidComponent implements OnInit {
-  voidingQueueStatusSelection = VOIDING_QUEUE_STATUS_SELECTION;
+  voidingQueueStatusSelection = ServiceStatusConstant.TicketVoidingQueueSelection;
   inputVoidingHistoryId: number;
   isBlock: boolean;
   voidingQueuesOrigin: TicketVoidingQueueModel[] = [];
   voidingQueuesViewModel: TicketVoidingQueueViewModel[] = [];
+  failedVoidingQueues: FailedVoidingQueueViewModel[] = [];
   tooltip = new Tooltip();
 
   constructor(private readonly element: ElementRef,
@@ -37,24 +39,49 @@ export class VoidComponent implements OnInit {
     this.isBlock = true;
     this.voidingQueuesOrigin = await this.appApiService.getTicketVoidingQueue(this.inputVoidingHistoryId);
     this.voidingQueuesViewModel = this.convertToTicketVoidingQueueViewModel(this.voidingQueuesOrigin);
+    this.failedVoidingQueues = this.getFailedVoidingQueues(this.voidingQueuesOrigin);
     this.isBlock = false;
   }
 
-  confirmUpdateStatus(siteDbName: string, siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+  confirmUpdateFailedQueuesToRunning(siteDbGroupId: number, queueIds: string): Promise<void> {
+    if (!queueIds || queueIds.trim() === '') {
+      return;
+    }
+
     this.modalService.confirm({
       title: 'Confirm',
-      message: `Are you sure you want to update:<br> - <strong>${siteDbName}</strong><br> - QueueId: <strong>${queueId}</strong><br> - StatusId: <strong>${statusIdSelected}</strong>`
+      message: `Are you sure you want to update:
+                <br> - SiteDbGroupId: <strong>${siteDbGroupId}</strong>
+                <br> - Failed Queues: <strong>${queueIds}</strong>
+                <br> - Status: <strong>Running</strong>`
     },
       async () => {
-        // this.isBlock = true;
-        // const isUpdateSuccessful = await this.appApiService.updateAutoVoidRequestQueue(
-        //   this.initUpdateQuery(siteDbGroupId, queueId, statusIdSelected));
-        // this.isBlock = false;
-        // this.openModelResult(isUpdateSuccessful);
+        this.isBlock = true;
+        const isUpdateSuccessful = await this.appApiService.updateTicketVoidingQueue(
+          this.initUpdateQuery(siteDbGroupId, queueIds, ServiceStatusConstant.Running));
+        this.isBlock = false;
+        this.openModelResult(isUpdateSuccessful);
       },
-      () => {
-        // this.tmpStatusId = this.orgStatusId;
-      }
+      () => {}
+    );
+  }
+
+  confirmUpdateStatus(siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+    this.modalService.confirm({
+      title: 'Confirm',
+      message: `Are you sure you want to update:
+                  <br> - SiteDbGroupId: <strong>${siteDbGroupId}</strong>
+                  <br> - QueueId: <strong>${queueId}</strong>
+                  <br> - StatusId: <strong>${statusIdSelected}</strong>`
+    },
+      async () => {
+        this.isBlock = true;
+        const isUpdateSuccessful = await this.appApiService.updateTicketVoidingQueue(
+          this.initUpdateQuery(siteDbGroupId, queueId.toString(), statusIdSelected));
+        this.isBlock = false;
+        this.openModelResult(isUpdateSuccessful);
+      },
+      () => {}
     );
   }
 
@@ -91,9 +118,27 @@ export class VoidComponent implements OnInit {
     return results;
   }
 
+  private getFailedVoidingQueues(queues: TicketVoidingQueueModel[]): FailedVoidingQueueViewModel[] {
+    const results: FailedVoidingQueueViewModel[] = [];
+    for (const server of SiteDbGroupConstant.ServerList) {
+      const failedQueues = queues.filter(x => x.siteDbGroupId === server.id && x.statusId === ServiceStatusConstant.Failed)
+        .map(x => x.queueId);
+      if (failedQueues.length > 0) {
+        results.push({
+          siteDbName: server.serverName,
+          siteDbGroupId: server.id,
+          queueIds: failedQueues.join(',')
+        });
+      }
+    }
+
+    return results;
+  }
+
   private resetOldResult(): void {
     this.voidingQueuesOrigin = [];
     this.voidingQueuesViewModel = [];
+    this.failedVoidingQueues = [];
   }
 
   private isValidSearchQuery(): boolean {
@@ -103,5 +148,13 @@ export class VoidComponent implements OnInit {
     }
 
     return true;
+  }
+
+  private initUpdateQuery(siteDbGroupId: number, queueIds: string, statusIdSelected: number) {
+    return {
+      siteDbGroupId: siteDbGroupId,
+      queueIds: queueIds,
+      statusId: statusIdSelected
+    } as UpdateTicketVoidingQueueModel;
   }
 }

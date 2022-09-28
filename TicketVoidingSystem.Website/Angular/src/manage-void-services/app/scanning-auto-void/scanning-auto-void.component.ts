@@ -5,9 +5,10 @@ import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { SiteDbGroupConstant } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
+import { ServiceStatusConstant } from '../app.model';
 import {
   AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel,
-  AUTO_VOID_REQUEST_QUEUE_STATUS_SELECTION, UpdateAutoVoidRequestQueueModel
+  UpdateAutoVoidRequestQueueModel
 } from './scanning-auto-void.model';
 
 @Component({
@@ -19,7 +20,7 @@ export class ScanningAutoVoidComponent implements OnInit {
   autoVoidRequestQueuesOrigin: AutoVoidRequestQueueModel[] = [];
   autoVoidRequestQueuesViewModel: AutoVoidRequestQueueViewModel[] = [];
   tooltip = new Tooltip();
-  autoVoidRequestQueueStatusSelection = AUTO_VOID_REQUEST_QUEUE_STATUS_SELECTION;
+  autoVoidRequestQueueStatusSelection = ServiceStatusConstant.AutoVoidRequestQueueSelection;
   isBlock: boolean;
   inputBroadcastSessionId: string;
 
@@ -61,10 +62,13 @@ export class ScanningAutoVoidComponent implements OnInit {
     return results;
   }
 
-  confirmUpdateStatus(siteDbName: string, siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+  confirmUpdateStatus(siteDbGroupId: number, queueId: number, statusIdSelected: number) {
     this.modalService.confirm({
       title: 'Confirm',
-      message: `Are you sure you want to update:<br> - <strong>${siteDbName}</strong><br> - QueueId: <strong>${queueId}</strong><br> - StatusId: <strong>${statusIdSelected}</strong>`
+      message: `Are you sure you want to update:
+      <br> - SiteDbGroupId: <strong>${siteDbGroupId}</strong>
+      <br> - QueueId: <strong>${queueId}</strong>
+      <br> - StatusId: <strong>${statusIdSelected}</strong>`
     },
       async () => {
         this.isBlock = true;
@@ -73,9 +77,7 @@ export class ScanningAutoVoidComponent implements OnInit {
         this.isBlock = false;
         this.openModelResult(isUpdateSuccessful);
       },
-      () => {
-        // this.tmpStatusId = this.orgStatusId;
-      }
+      () => {}
     );
   }
 

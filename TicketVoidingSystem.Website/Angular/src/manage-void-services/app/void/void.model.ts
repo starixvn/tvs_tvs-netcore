@@ -10,11 +10,12 @@ export class TicketVoidingQueueModel {
   startTime: Date;
   execTime: Date;
   duration: number;
-  totalTicket: number;
   voidingTypeId: number;
-  issueTypeId: number;
+  totalTicket: number;
+  errMsg: string;
   negativeBalanceUsers: string;
   failedTransIds: string;
+  issueTypeId: number;
 }
 
 export class TicketVoidingQueueViewModel extends TicketVoidingQueueModel {
@@ -22,23 +23,14 @@ export class TicketVoidingQueueViewModel extends TicketVoidingQueueModel {
   statusIdSelected: number;
 }
 
+export class FailedVoidingQueueViewModel {
+  siteDbName: string;
+  siteDbGroupId: number;
+  queueIds: string;
+}
+
 export class UpdateTicketVoidingQueueModel {
   siteDbGroupId: number;
   queueIds: string;
   statusId: number;
 }
-
-export const VOIDING_QUEUE_STATUS_SELECTION = [
-  {
-    name: '1 - Running',
-    value: '1'
-  },
-  {
-    name: '2 - Done',
-    value: '2'
-  },
-  {
-    name: '3 - Failed',
-    value: '3'
-  }
-];

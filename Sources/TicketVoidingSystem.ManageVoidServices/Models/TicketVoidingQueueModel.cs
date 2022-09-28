@@ -15,10 +15,11 @@ namespace TicketVoidingSystem.ManageVoidServices.Models
         public DateTime StartTime { get; set; }
         public DateTime ExecTime { get; set; }
         public int Duration { get; set; }
-        public int TotalTicket { get; set; }
         public int VoidingTypeId { get; set; }
-        public int IssueTypeId { get; set; }
+        public int TotalTicket { get; set; }
+        public string ErrMsg { get; set; }
         public string NegativeBalanceUsers { get; set; }
         public string FailedTransIds { get; set; }
+        public int IssueTypeId { get; set; }
     }
 }

@@ -16,8 +16,8 @@
           <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidServiceData()" /></div>
       </div>
       <div class="table-scrollable">
-        <table class="table table-striped">
-          <thead>
+        <table class="table table-sm table-hover table-striped table-bordered">
+          <thead class="thead-light">
             <tr>
               <th scope="col">BroadcastSessionId</th>
               <th scope="col">SiteDbGroupId</th>
@@ -31,7 +31,7 @@
             </tr>
           </thead>
 
-          <tbody *ngIf="voidServiceDataOrigin.length > 0">
+          <tbody *ngIf="voidServiceDataViewModel.length > 0">
             <tr *ngFor="let item of voidServiceDataViewModel; index as i">
               <td>{{ item.broadcastSessionId }}</td>
               <td>{{ item.siteDbGroupId }}</td>
@@ -40,15 +40,15 @@
               <td>{{ item.statusId }}</td>
               <td>{{ item.isAutoVoid }}</td>
               <td>{{ item.matchId }}</td>
-              <td>{{ item.createdDate | date:'yyyy/MM/dd hh:mm:ss.SSS a' }}</td>
-              <td>{{ item.modifiedDate | date:'yyyy/MM/dd hh:mm:ss.SSS a' }}</td>
+              <td>{{ item.createdDate }}</td>
+              <td>{{ item.modifiedDate }}</td>
             </tr>
             <tr>
               <td colspan="9"><strong>Count: {{voidServiceDataViewModel.length}}</strong></td>
             </tr>          
           </tbody>
 
-          <tbody *ngIf="voidServiceDataOrigin.length === 0">
+          <tbody *ngIf="voidServiceDataViewModel.length === 0">
             <tr>
               <td colspan="9" class="no-data">There is no data</td>
             </tr>
@@ -67,7 +67,7 @@
         </div>
       </div>
     </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidServiceDataOrigin.length > 0">
+    <ng-template ngbPanelContent *ngIf="voidServiceDataViewModel.length > 0">
       <ng-container *ngFor="let item of voidServiceDataViewModel; index as i">
         <div class="d-flex server-row">
           <label class="col-form-label mr-2"><strong>SiteDbGroupId:</strong> {{item.siteDbGroupId}}</label>
@@ -84,7 +84,7 @@
       </ng-container>
     </ng-template>
 
-    <ng-template ngbPanelContent *ngIf="voidServiceDataOrigin.length === 0">
+    <ng-template ngbPanelContent *ngIf="voidServiceDataViewModel.length === 0">
       <tbody>
         <tr>
           <td class="no-data">There is no data</td>

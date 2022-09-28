@@ -1,10 +1,11 @@
-<ngb-accordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2">
-  <ngb-panel id="toggle-1" title="First panel">
+<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2,panel-3">
+  <ngb-panel id="panel-1" title="First panel">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
         <h5 class="m-0">Find voiding queue</h5>
         <div>
           <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
         </div>
       </div>
     </ng-template>
@@ -15,46 +16,58 @@
           <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidingQueue()" /></div>
       </div>
       <div class="table-scrollable">
-        <table *ngIf="voidingQueuesOrigin.length > 0" class="table table-striped">
-          <thead>
-          <tr>
-            <th scope="col">SiteDbGroupId</th>
-            <th scope="col">QueueId</th>
-            <th scope="col">RequestId</th>
-            <th scope="col">MatchId</th>
-            <th scope="col">VoidingHistoryId</th>
-            <th scope="col">StatusId</th>
-            <th scope="col">TransIds</th>
-            <th scope="col">UserId</th>
-            <th scope="col">StartTime</th>
-            <th scope="col">ExecTime</th>
-            <th scope="col">Duration</th>
-            <th scope="col">TotalTicket</th>
-            <th scope="col">VoidingTypeId</th>
-            <th scope="col">IssueTypeId</th>
-            <th scope="col">NegativeBalanceUsers</th>
-            <th scope="col">FailedTransIds</th>
-          </tr>
+        <table class="table table-sm table-hover table-striped table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">SiteDbGroupId</th>
+              <th scope="col">QueueId</th>
+              <th scope="col">RequestId</th>
+              <th scope="col">MatchId</th>
+              <th scope="col">VoidingHistoryId</th>
+              <th scope="col">StatusId</th>
+              <th scope="col">TransIds</th>
+              <th scope="col">UserId</th>
+              <th scope="col">StartTime</th>
+              <th scope="col">ExecTime</th>
+              <th scope="col">Duration</th>
+              <th scope="col">VoidingTypeId</th>
+              <th scope="col">TotalTicket</th>
+              <th scope="col">ErrMsg</th>
+              <th scope="col">NegativeBalanceUsers</th>
+              <th scope="col">FailedTransIds</th>
+              <th scope="col">IssueTypeId</th>
+            </tr>
           </thead>
-          <tbody>
-          <tr *ngFor="let queue of voidingQueuesViewModel; index as i">
-            <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
-            <td>{{ queue.queueId }}</td>
-            <td>{{ queue.requestId }}</td>
-            <td>{{ queue.matchId }}</td>
-            <td>{{ queue.voidingHistoryId }}</td>
-            <td>{{ queue.statusId }}</td>
-            <td>{{ queue.transIds }}</td>
-            <td>{{ queue.userId }}</td>
-            <td>{{ queue.startTime }}</td>
-            <td>{{ queue.execTime }}</td>
-            <td>{{ queue.duration }}</td>
-            <td>{{ queue.totalTicket }}</td>
-            <td>{{ queue.voidingTypeId }}</td>
-            <td>{{ queue.issueTypeId }}</td>
-            <td>{{ queue.negativeBalanceUsers }}</td>
-            <td>{{ queue.failedTransIds }}</td>
-          </tr>
+
+          <tbody *ngIf="voidingQueuesViewModel.length > 0">
+            <tr *ngFor="let queue of voidingQueuesViewModel; index as i">
+              <th scope="row">{{queue.siteDbGroupId}}-{{queue.siteDbName}}</th>
+              <td>{{ queue.queueId }}</td>
+              <td>{{ queue.requestId }}</td>
+              <td>{{ queue.matchId }}</td>
+              <td>{{ queue.voidingHistoryId }}</td>
+              <td>{{ queue.statusId }}</td>
+              <td>{{ queue.transIds }}</td>
+              <td>{{ queue.userId }}</td>
+              <td>{{ queue.startTime }}</td>
+              <td>{{ queue.execTime }}</td>
+              <td>{{ queue.duration }}</td>
+              <td>{{ queue.voidingTypeId }}</td>
+              <td>{{ queue.totalTicket }}</td>
+              <td>{{ queue.errMsg }}</td>
+              <td>{{ queue.negativeBalanceUsers }}</td>
+              <td>{{ queue.failedTransIds }}</td>
+              <td>{{ queue.issueTypeId }}</td>
+            </tr>
+            <tr>
+              <td colspan="17"><strong>Count: {{voidingQueuesViewModel.length}}</strong></td>
+            </tr>
+          </tbody>
+
+          <tbody *ngIf="voidingQueuesViewModel.length === 0">
+            <tr>
+              <td colspan="17" class="no-data">There is no data</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -62,15 +75,48 @@
   </ngb-panel>
 
   <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-  <ngb-panel id="toggle-2" title="Second">
+  <ngb-panel id="panel-2" title="Second">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Update failed queues to running status</h5>
+        <div>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent *ngIf="failedVoidingQueues.length > 0">
+      <ng-container *ngFor="let queue of failedVoidingQueues; index as i">
+        <div class="d-flex server-row">
+          <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
+          <label class="col-form-label mr-2"><strong>Failed Queues:</strong> {{queue.queueIds}}</label>  
+        
+          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Update to Running" 
+            (click)="confirmUpdateFailedQueuesToRunning(queue.siteDbGroupId, queue.queueIds)" /></div>
+        </div>     
+      </ng-container>
+    </ng-template>
+    <ng-template ngbPanelContent *ngIf="failedVoidingQueues.length === 0">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </ng-template>
+  </ngb-panel>
+
+  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <ngb-panel id="panel-3" title="Third">
     <ng-template ngbPanelHeader>
       <div class="d-flex align-items-center justify-content-between">
         <h5 class="m-0">Update voiding queue status</h5>
+        <div>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+        </div>
       </div>
     </ng-template>
-    <ng-template ngbPanelContent *ngIf="voidingQueuesOrigin.length > 0">
+    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length > 0">
       <ng-container *ngFor="let queue of voidingQueuesViewModel; index as i">
-        <div *ngIf="queue.queueId" class="d-flex server-row">
+        <div class="d-flex server-row">
           <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
           <label class="col-form-label mr-2">QueueId </label>
           <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
@@ -80,9 +126,17 @@
             <option *ngFor="let item of voidingQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
           </select>    
         
-          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" (click)="confirmUpdateStatus(queue.siteDbName, queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
+          <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" 
+            (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
         </div>     
       </ng-container>
+    </ng-template>
+    <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length === 0">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>
