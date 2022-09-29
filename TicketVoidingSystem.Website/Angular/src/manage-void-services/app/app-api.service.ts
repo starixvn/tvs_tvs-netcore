@@ -2,7 +2,7 @@
 import { HttpService } from '../../utility/services/http.service';
 import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.model';
 import { UpdateVoidServiceModel, VoidServiceModel } from './checking-void-status/checking-void-status.model';
-import { AutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
+import { AutoVoidRequestQueueModel, GetAutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel, UpdateTicketVoidingQueueModel } from './void/void.model';
 
 @Injectable()
@@ -19,8 +19,8 @@ export class AppApiService {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidBetAutomationServiceInfo`);
   }
 
-  async getAutoVoidRequestQueue(broadcastSessionId: string, statusId?: number): Promise<AutoVoidRequestQueueModel[]> {
-    return this.httpService.postJson<any, AutoVoidRequestQueueModel[]>({ broadcastSessionId, statusId }, `api/ManageVoidServices/GetAutoVoidRequestQueue`);
+  async getAutoVoidRequestQueue(model: GetAutoVoidRequestQueueModel): Promise<AutoVoidRequestQueueModel[]> {
+    return this.httpService.postJson<any, AutoVoidRequestQueueModel[]>(model, `api/ManageVoidServices/GetAutoVoidRequestQueue`);
   }
 
   async updateAutoVoidRequestQueue(model: UpdateAutoVoidRequestQueueModel): Promise<boolean> {

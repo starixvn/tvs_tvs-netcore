@@ -17,6 +17,11 @@ export class AutoVoidRequestQueueViewModel extends AutoVoidRequestQueueModel {
     statusIdSelected: number;
 }
 
+export class GetAutoVoidRequestQueueModel {
+    broadcastSessionId?: string;
+    statusId?: number;
+}
+
 export class UpdateAutoVoidRequestQueueModel {
     siteDbGroupId: number;
     queueId: number;
