@@ -4,7 +4,8 @@ import { ModalService } from 'src/utility/components/modal/modal.service';
 import { TEXT } from 'src/utility/constants/text';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { AppApiService } from '../app-api.service';
-import { UpdateVoidServiceModel, VoidServiceModel, VoidServiceViewModel, VOID_SERVICE_STATUS_SELECTION } from './checking-void-status.model';
+import { ServiceStatusConstant } from '../app.model';
+import { UpdateVoidServiceModel, VoidServiceModel, VoidServiceViewModel } from './checking-void-status.model';
 
 @Component({
   selector: 'checking-void-status',
@@ -14,7 +15,7 @@ import { UpdateVoidServiceModel, VoidServiceModel, VoidServiceViewModel, VOID_SE
 export class CheckingVoidStatusComponent implements OnInit {
   voidServiceDataOrigin: VoidServiceModel[] = [];
   voidServiceDataViewModel: VoidServiceViewModel[] = [];
-  voidServiceSelection = VOID_SERVICE_STATUS_SELECTION;
+  voidServiceSelection = ServiceStatusConstant.VoidServiceSelection;
   tooltip = new Tooltip();
   isBlock: boolean;
   inputBroadcastSessionId: string;

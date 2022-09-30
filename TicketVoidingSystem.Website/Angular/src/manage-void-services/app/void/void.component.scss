@@ -1,4 +1,5 @@
-.voiding-history-id {
+.voiding-history-id,
+.queue-id {
   width: 140px;
 }
 
@@ -13,10 +14,6 @@
       text-align: center;
     }
   }
-}
-
-.queue-id {
-  width: 140px;
 }
 
 .server-label {

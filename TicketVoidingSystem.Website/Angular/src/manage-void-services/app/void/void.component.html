@@ -118,10 +118,10 @@
       <ng-container *ngFor="let queue of voidingQueuesViewModel; index as i">
         <div class="d-flex server-row">
           <label class="col-form-label mr-4 server-label"><strong>{{queue.siteDbGroupId}}-{{queue.siteDbName}}</strong></label>
-          <label class="col-form-label mr-2">QueueId </label>
+          <label class="col-form-label mr-2"><strong>QueueId </strong></label>
           <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
   
-          <label class="col-form-label ml-4 mr-2">StatusId</label>
+          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
           <select [(ngModel)]="queue.statusIdSelected">
             <option *ngFor="let item of voidingQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
           </select>    

@@ -4,6 +4,7 @@ import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.
 import { UpdateVoidServiceModel, VoidServiceModel } from './checking-void-status/checking-void-status.model';
 import { AutoVoidRequestQueueModel, GetAutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel, UpdateTicketVoidingQueueModel } from './void/void.model';
+import { UpdateVoidingHistory, VoidingHistoryModel } from './voiding-history/voiding-history.model';
 
 @Injectable()
 export class AppApiService {
@@ -20,7 +21,7 @@ export class AppApiService {
   }
 
   async getAutoVoidRequestQueue(model: GetAutoVoidRequestQueueModel): Promise<AutoVoidRequestQueueModel[]> {
-    return this.httpService.postJson<any, AutoVoidRequestQueueModel[]>(model, `api/ManageVoidServices/GetAutoVoidRequestQueue`);
+    return this.httpService.postJson(model, `api/ManageVoidServices/GetAutoVoidRequestQueue`);
   }
 
   async updateAutoVoidRequestQueue(model: UpdateAutoVoidRequestQueueModel): Promise<boolean> {
@@ -28,7 +29,7 @@ export class AppApiService {
   }
 
   async getTicketVoidingQueue(voidingHistoryId: number): Promise<TicketVoidingQueueModel[]> {
-    return this.httpService.postJson<any, TicketVoidingQueueModel[]>({ voidingHistoryId }, `api/ManageVoidServices/GetTicketVoidingQueue`);
+    return this.httpService.postJson({ voidingHistoryId }, `api/ManageVoidServices/GetTicketVoidingQueue`);
   }
 
   async updateTicketVoidingQueue(model: UpdateTicketVoidingQueueModel): Promise<boolean> {
@@ -36,10 +37,18 @@ export class AppApiService {
   }
 
   async getVoidServiceData(broadcastSessionId: string): Promise<VoidServiceModel[]> {
-    return this.httpService.postJson<any, VoidServiceModel[]>({ broadcastSessionId }, `api/ManageVoidServices/GetVoidServiceData`);
+    return this.httpService.postJson({ broadcastSessionId }, `api/ManageVoidServices/GetVoidServiceData`);
   }
 
   async updateVoidServiceData(model: UpdateVoidServiceModel): Promise<boolean> {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidServiceData`);
+  }
+
+  async getVoidingHistory(requestId: number): Promise<VoidingHistoryModel[]> {
+    return this.httpService.postJson({ requestId }, `api/ManageVoidServices/GetVoidingHistory`);
+  }
+
+  async updateVoidingHistory(model: UpdateVoidingHistory): Promise<boolean> {
+    return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidingHistory`);
   }
 }

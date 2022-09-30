@@ -6,8 +6,8 @@ export class AutoVoidRequestQueueModel {
     action: string;
     statusId: number;
     errMsg: string;
-    startTime: Date;
-    execTime: Date;
+    startTime?: Date;
+    execTime?: Date;
     sportType: number;
     broadcastSessionId: string;
 }

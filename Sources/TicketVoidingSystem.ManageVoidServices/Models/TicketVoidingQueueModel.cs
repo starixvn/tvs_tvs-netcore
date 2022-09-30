@@ -12,8 +12,8 @@ namespace TicketVoidingSystem.ManageVoidServices.Models
         public int StatusId { get; set; }
         public string TransIds { get; set; }
         public int UserId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime ExecTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? ExecTime { get; set; }
         public int Duration { get; set; }
         public int VoidingTypeId { get; set; }
         public int TotalTicket { get; set; }

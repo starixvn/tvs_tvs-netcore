@@ -7,8 +7,8 @@ export class TicketVoidingQueueModel {
   statusId: number;
   transIds: string;
   userId: number;
-  startTime: Date;
-  execTime: Date;
+  startTime?: Date;
+  execTime?: Date;
   duration: number;
   voidingTypeId: number;
   totalTicket: number;

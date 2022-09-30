@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Models
         public int StatusId { get; set; }
         public bool IsAutoVoid { get; set; }
         public int MatchId { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     }
 }

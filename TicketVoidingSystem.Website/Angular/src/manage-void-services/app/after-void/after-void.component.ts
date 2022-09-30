@@ -4,7 +4,7 @@ import { ModalService } from 'src/utility/components/modal/modal.service';
 import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 import { TEXT } from 'src/utility/constants/text';
 import { AppApiService } from '../app-api.service';
-import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel, VOID_BET_AUTO_STATUS_ITEM } from '../app.model';
+import { SelectVoidBetAutomationInfoQuery, ServiceStatusConstant, VoidBetAutomationModel } from '../app.model';
 
 @Component({
   selector: 'after-void',
@@ -13,27 +13,27 @@ import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel, VOID_BET_AUTO
 })
 export class AfterVoidComponent implements OnInit {
 
-  selectionItem = VOID_BET_AUTO_STATUS_ITEM;
+  selectionItem = ServiceStatusConstant.AfterVoidSelection;
   model = new VoidBetAutomationModel();
   requestId: number;
   voidingHistoryId: number;
   isBlock: boolean;
   isNoData = false;
-  orgStatusId: string;
-  tmpStatusId: string;
+  orgStatusId: number;
+  tmpStatusId: number;
   tooltip = new Tooltip();
 
   constructor(
     readonly element: ElementRef,
     private readonly appApiService: AppApiService,
     private readonly modalService: ModalService
-    ) {
+  ) {
     this.tooltip.element = this.element;
   }
 
   ngOnInit(): void {
   }
-  
+
   resetData() {
     this.isNoData = false;
     this.model = new VoidBetAutomationModel();
@@ -50,7 +50,7 @@ export class AfterVoidComponent implements OnInit {
     if (!this.model || !this.model.requestId) {
       this.isNoData = true;
     }
-    this.orgStatusId = this.tmpStatusId = this.model?.statusId.toString();
+    this.orgStatusId = this.tmpStatusId = this.model?.statusId;
   }
 
   initQuerySelect(): SelectVoidBetAutomationInfoQuery {
@@ -81,14 +81,14 @@ export class AfterVoidComponent implements OnInit {
     },
       async () => {
         this.isBlock = true;
-        const result = await this.appApiService. updateVoidBetAutomationInfo(this.initQueryUpdate());
+        const result = await this.appApiService.updateVoidBetAutomationInfo(this.initQueryUpdate());
         this.isBlock = false;
         this.openModelResult(result);
       },
       () => {
         this.tmpStatusId = this.orgStatusId;
-       }
-      );
+      }
+    );
   }
 
   openModelResult(isSuccess: boolean) {

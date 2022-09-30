@@ -73,5 +73,19 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers
             var model = await mediator.Send(request);
             return Ok(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetVoidingHistory(GetVoidingHistoryRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateVoidingHistory(UpdateVoidingHistoryRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
     }
 }

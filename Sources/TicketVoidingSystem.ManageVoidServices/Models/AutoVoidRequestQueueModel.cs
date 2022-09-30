@@ -11,8 +11,8 @@ namespace TicketVoidingSystem.ManageVoidServices.Models
         public string Action { get; set; }
         public int StatusId { get; set; }
         public string ErrMsg { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime ExecTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? ExecTime { get; set; }
         public int SportType { get; set; }
         public string BroadcastSessionId { get; set; }
     }

@@ -33,6 +33,14 @@
       </div>
     </ng-template>
   </li>
+  <li ngbNavItem="5">
+    <a ngbNavLink>Voiding History</a>
+    <ng-template ngbNavContent>
+      <div class="container-fluid mb-3">
+        <voiding-history></voiding-history>
+      </div>
+    </ng-template>
+  </li>
 </ul>
 
 <div [ngbNavOutlet]="nav" class="ms-2"></div>
