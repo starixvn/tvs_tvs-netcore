@@ -22,11 +22,11 @@ namespace TicketVoidingSystem.Constants
                     Id = SiteDb1,
                     ServerName = "DBSIG"
                 },
-                //new SiteDbGroupModel
-                //{
-                //    Id = SiteDb2,
-                //    ServerName = "DBSIG2"
-                //}
+                new SiteDbGroupModel
+                {
+                    Id = SiteDb2,
+                    ServerName = "DBSIG2"
+                }
             };
     }
 }
