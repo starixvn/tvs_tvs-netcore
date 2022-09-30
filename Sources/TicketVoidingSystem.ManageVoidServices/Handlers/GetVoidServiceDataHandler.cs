@@ -10,6 +10,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
     public class GetVoidServiceDataRequest : IRequest<IEnumerable<VoidServiceModel>>
     {
         public string BroadcastSessionId { get; set; }
+        public int? RequestId { get; set; }
     }
 
     public class GetVoidServiceDataHandler : IRequestHandler<GetVoidServiceDataRequest, IEnumerable<VoidServiceModel>>
@@ -23,7 +24,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
 
         public async Task<IEnumerable<VoidServiceModel>> Handle(GetVoidServiceDataRequest request, CancellationToken cancellationToken)
         {
-            return await checkingVoidStatusService.GetVoidServiceData(request.BroadcastSessionId);
+            return await checkingVoidStatusService.GetVoidServiceData(request.BroadcastSessionId, request.RequestId);
         }
     }
 }

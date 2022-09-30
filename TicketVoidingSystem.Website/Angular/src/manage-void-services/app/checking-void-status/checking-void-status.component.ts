@@ -5,7 +5,7 @@ import { TEXT } from 'src/utility/constants/text';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
-import { UpdateVoidServiceModel, VoidServiceModel, VoidServiceViewModel } from './checking-void-status.model';
+import { GetVoidServiceModel, UpdateVoidServiceModel, VoidServiceModel, VoidServiceViewModel } from './checking-void-status.model';
 
 @Component({
   selector: 'checking-void-status',
@@ -18,7 +18,9 @@ export class CheckingVoidStatusComponent implements OnInit {
   voidServiceSelection = ServiceStatusConstant.VoidServiceSelection;
   tooltip = new Tooltip();
   isBlock: boolean;
-  inputBroadcastSessionId: string;
+  filterBroadcastSessionIdValue: string;
+  filterRequestIdValue: number;
+  filterBy = 0;
 
   constructor(private readonly element: ElementRef,
     private readonly appApiService: AppApiService,
@@ -35,7 +37,7 @@ export class CheckingVoidStatusComponent implements OnInit {
       return;
     }
     this.isBlock = true;
-    this.voidServiceDataOrigin = await this.appApiService.getVoidServiceData(this.inputBroadcastSessionId);
+    this.voidServiceDataOrigin = await this.appApiService.getVoidServiceData(this.initGetQuery());
     this.voidServiceDataViewModel = this.convertToVoidServiceViewModel(this.voidServiceDataOrigin);
     this.isBlock = false;
   }
@@ -71,9 +73,9 @@ export class CheckingVoidStatusComponent implements OnInit {
 
   clearInput() {
     this.resetOldResult();
-    this.inputBroadcastSessionId = null;
+    this.filterBroadcastSessionIdValue = null;
+    this.filterRequestIdValue = null;
   }
-
 
   private resetOldResult(): void {
     this.voidServiceDataOrigin = [];
@@ -90,12 +92,32 @@ export class CheckingVoidStatusComponent implements OnInit {
   }
 
   private isValidSearchQuery(): boolean {
-    if (!this.inputBroadcastSessionId || this.inputBroadcastSessionId.trim() === '') {
+    if (this.filterBy === 0 && (!this.filterBroadcastSessionIdValue || this.filterBroadcastSessionIdValue.trim() === '')) {
       this.tooltip.display('broadcast-session-id', TEXT.REQUIRED_INPUT);
       return false;
     }
 
+    if (this.filterBy === 1 &&
+      (!this.filterRequestIdValue || this.filterRequestIdValue <= 0 || isNaN(Number(this.filterRequestIdValue)))) {
+      this.tooltip.display('request-id', TEXT.REQUIRED_INPUT);
+      return false;
+    }
+
     return true;
+  }
+
+  private initGetQuery(): GetVoidServiceModel {
+    if (this.filterBy === 0) {
+      return {
+        broadcastSessionId: this.filterBroadcastSessionIdValue,
+        requestId: null
+      };
+    }
+
+    return {
+      broadcastSessionId: null,
+      requestId: this.filterRequestIdValue
+    };
   }
 
   private initUpdateQuery(siteDbGroupId: number, requestId: number, voidingHistoryId: number, statusIdSelected: number) {

@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
 {
     public interface CheckingVoidStatusService
     {
-        Task<IEnumerable<VoidServiceModel>> GetVoidServiceData(string broadcastSessionId);
+        Task<IEnumerable<VoidServiceModel>> GetVoidServiceData(string broadcastSessionId, int? requestId);
 
         Task UpdateVoidService(int? siteDbGroupId, int? requestId, int? voidingHistoryId, int? statusId);
     }
@@ -22,11 +22,12 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<VoidServiceModel>> GetVoidServiceData(string broadcastSessionId)
+        public async Task<IEnumerable<VoidServiceModel>> GetVoidServiceData(string broadcastSessionId, int? requestId)
         {
             var criteria = new GetVoidServiceDataCriteria
             {
-                BroadcastSessionId = broadcastSessionId
+                BroadcastSessionId = broadcastSessionId,
+                RequestId = requestId
             };
 
             return await repository.FetchAsync<VoidServiceModel>(criteria);

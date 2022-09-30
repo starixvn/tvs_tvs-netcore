@@ -7,10 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'Manage Void Services';
-  active = '5';
+  active = '1';
 
   public ngOnInit() {
   }
-
-
 }

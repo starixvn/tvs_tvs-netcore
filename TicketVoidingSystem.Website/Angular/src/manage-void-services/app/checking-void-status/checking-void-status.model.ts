@@ -14,6 +14,11 @@ export class VoidServiceViewModel extends VoidServiceModel {
     statusIdSelected: number;
 }
 
+export class GetVoidServiceModel {
+    broadcastSessionId?: string;
+    requestId?: number;
+}
+
 export class UpdateVoidServiceModel {
     siteDbGroupId: number;
     requestId: number;
