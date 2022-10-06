@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "types": []
-  }, 
+  },
   "files": ["manage-void-services/main.ts", "polyfills.ts"],
   "exclude": ["test.ts", "**/*.spec.ts"]
 }

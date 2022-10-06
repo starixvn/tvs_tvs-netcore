@@ -17,6 +17,7 @@ using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +29,7 @@ using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using Sentry;
+using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
@@ -105,6 +107,26 @@ namespace TicketVoidingSystem.Website.Utilities
                     };
                 });
 
+            var redisConfig = new ConfigurationOptions();
+            redisConfig.EndPoints.Add(configuration.GetSection("RedisConfig:EndPoint").Value);
+            redisConfig.Password = configuration.GetSection("RedisConfig:Password").Value;
+            redisConfig.DefaultDatabase = int.Parse(configuration.GetSection("RedisConfig:DefaultDatabase").Value);
+            redisConfig.ConnectRetry = 1000;
+            redisConfig.ConnectTimeout = 300000;
+            redisConfig.SyncTimeout = 60000;
+            redisConfig.AsyncTimeout = 60000;
+            var redisMultiplexer = ConnectionMultiplexer.Connect(redisConfig);
+
+            // Persist data protection keys to distributed cache
+            services.AddDataProtection()
+                .PersistKeysToStackExchangeRedis(redisMultiplexer, "TicketVoidingSystem.DataProtection.Keys");
+            services.AddDistributedMemoryCache();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.ConfigurationOptions = redisConfig;
+                options.InstanceName = "TicketVoidingSystem.Redis.Session";
+            });
+
             services.AddSession(options =>
             {
                 options.Cookie.IsEssential = true;
@@ -120,7 +142,7 @@ namespace TicketVoidingSystem.Website.Utilities
                 options.Configuration.EndPoints.Add(configuration.GetSection("RedisConfig:EndPoint").Value);
                 options.Configuration.Password = configuration.GetSection("RedisConfig:Password").Value;
                 options.Configuration.DefaultDatabase = int.Parse(configuration.GetSection("RedisConfig:DefaultDatabase").Value);
-                options.Configuration.ChannelPrefix = configuration.GetSection("RedisConfig:ChannelPrefix").Value;
+                options.Configuration.ChannelPrefix = configuration.GetSection("RedisConfig:SignalRChannelPrefix").Value;
             });
         }
 
@@ -155,6 +177,9 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
             services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
+            services.AddTransient<TicketVoidingQueueService, TicketVoidingQueueServiceImp>();
+            services.AddTransient<CheckingVoidStatusService, CheckingVoidStatusServiceImp>();
+            services.AddTransient<VoidingHistoryService, VoidingHistoryServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)

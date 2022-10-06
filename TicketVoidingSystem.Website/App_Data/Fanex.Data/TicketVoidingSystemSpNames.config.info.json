@@ -1,0 +1,88 @@
+{
+  "FilesToGenerate": [
+    {
+      "Filename": "TicketVoidingSystemSpNames.LOCAL.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.LOCAL_1.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.LOCAL_2.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.LOCAL_3.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.SIT.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.SIT_1.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.SIT_2.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.SIT_3.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.UAT.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.UAT_1.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.UAT_2.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.UAT_3.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.PROD.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    },
+    {
+      "Filename": "TicketVoidingSystemSpNames.AWS.xml",
+      "Project": null,
+      "Path": "App_Data\\Fanex.Data",
+      "Properties": {}
+    }
+  ]
+}

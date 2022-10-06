@@ -21,8 +21,17 @@ namespace TicketVoidingSystem.Website.Controllers
         [HttpGet]
         [Route("[action]")]
         [Route("[action]/Index")]
-        [AllowAnonymous]
+        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AfterVoidHistory, Policy = Constant.Policy.Read)]
         public IActionResult ManageVoidServices()
+        {
+            return View("~/wwwroot/dist/manage-void-services/index.cshtml");
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [Route("[action]/Index")]
+        [AllowAnonymous]
+        public IActionResult ManageVoidServicesNoAuth()
         {
             return View("~/wwwroot/dist/manage-void-services/index.cshtml");
         }

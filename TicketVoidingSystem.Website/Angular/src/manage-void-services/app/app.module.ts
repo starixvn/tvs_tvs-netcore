@@ -17,6 +17,7 @@ import { AppComponent } from './app.component';
 import { CheckingVoidStatusComponent } from './checking-void-status/checking-void-status.component';
 import { ScanningAutoVoidComponent } from './scanning-auto-void/scanning-auto-void.component';
 import { VoidComponent } from './void/void.component';
+import { VoidingHistoryComponent } from './voiding-history/voiding-history.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { VoidComponent } from './void/void.component';
     ScanningAutoVoidComponent,
     VoidComponent,
     CheckingVoidStatusComponent,
+    VoidingHistoryComponent,
   ],
   imports: [
     BrowserModule,

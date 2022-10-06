@@ -135,9 +135,9 @@ const configPages = [
   // editRequest,
   // manageRequest,
   // voidRequest,
-  // manageVoidServices,
+  manageVoidServices,
   // abExceptionList,
-   homePage
+  // homePage
 ];
 
 module.exports = configPages;

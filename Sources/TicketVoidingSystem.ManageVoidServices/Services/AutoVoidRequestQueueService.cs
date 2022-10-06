@@ -9,7 +9,9 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
 {
     public interface AutoVoidRequestQueueService
     {
-        Task<IEnumerable<AutoVoidRequestQueueModel>> GetQueueInAllServers(string broadcastSessionId);
+        Task<IEnumerable<AutoVoidRequestQueueModel>> GetQueueInAllServers(string broadcastSessionId, int? statusId);
+
+        Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage);
     }
 
     public class AutoVoidRequestQueueServiceImp : AutoVoidRequestQueueService
@@ -21,26 +23,38 @@ namespace TicketVoidingSystem.ManageVoidServices.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<AutoVoidRequestQueueModel>> GetQueueInAllServers(string broadcastSessionId)
+        public async Task<IEnumerable<AutoVoidRequestQueueModel>> GetQueueInAllServers(string broadcastSessionId, int? statusId)
         {
             var queueInAllServers = new List<AutoVoidRequestQueueModel>();
             var criteria = new GetAutoVoidRequestQueueCriteria
             {
-                BroadcastSessionId = broadcastSessionId
+                BroadcastSessionId = broadcastSessionId,
+                StatusId = statusId
             };
 
             foreach (var server in SiteDbGroupConstant.ServerList)
             {
                 criteria.SiteDbGroupId = server.Id;
-                var queue = await repository.GetAsync<AutoVoidRequestQueueModel>(criteria);
-                if (queue != null)
-                {
-                    queue.SiteDbGroupId = server.Id;
-                }
-                queueInAllServers.Add(queue);
+                var queues = await repository.FetchAsync<AutoVoidRequestQueueModel>(criteria);
+                queueInAllServers.AddRange(queues);
             }
 
             return queueInAllServers;
+        }
+
+        public async Task UpdateQueue(int siteDbGroupId, int queueId, string broadcastSessionId, int? statusId, bool? isUpdateStartTime, string errorMessage)
+        {
+            var criteria = new UpdateAutoVoidRequestQueueCriteria
+            {
+                SiteDbGroupId = siteDbGroupId,
+                QueueId = queueId,
+                BroadcastSessionId = broadcastSessionId,
+                StatusId = statusId,
+                IsUpdateStartTime = isUpdateStartTime,
+                ErrMsg = errorMessage
+            };
+
+            await repository.ExecuteAsync(criteria);
         }
     }
 }

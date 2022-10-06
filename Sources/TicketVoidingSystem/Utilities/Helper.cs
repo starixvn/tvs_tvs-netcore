@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Linq;
+using TicketVoidingSystem.Constants;
 
 namespace TicketVoidingSystem.Utilities
 {
-    internal class Helper
+    public static class Helper
     {
+        public static string GetSettingKeyBySiteDbGroupId(int siteDbGroupId, string spName)
+        {
+            var serverName = SiteDbGroupConstant.ServerList.First(x => x.Id == siteDbGroupId).ServerName;
+
+            return $"{serverName}.{spName}";
+        }
     }
 }

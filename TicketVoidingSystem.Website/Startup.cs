@@ -63,15 +63,13 @@ namespace TicketVoidingSystem.Website
             });
             app.UseDeveloperExceptionPage();
             app.UseResponseCompression();
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            app.UseSession();
             app.UseMiddleware<ExceptionHandlerMiddleware>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseSession();
             NapClientManager
                 .UseConfig(app.ApplicationServices.GetService<INapSettings>())
                 .UseSession(app.ApplicationServices.GetService<INapSession>());

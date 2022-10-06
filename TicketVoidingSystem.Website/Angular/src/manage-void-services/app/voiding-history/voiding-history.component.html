@@ -1,0 +1,104 @@
+<ngb-accordion #acc="ngbAccordion" activeIds="panel-1,panel-2">
+  <ngb-panel id="panel-1" title="First panel">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Find voiding history</h5>
+        <div>
+          <button type="button" class="btn btn-sm btn-outline-danger ml-2" (click)="clearInput()">Clear input</button>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <div class="filter action-area d-flex">
+          <label class="col-form-label mr-2">RequestId </label>
+          <input maxlength="150" class="request-id form-control form-control-sm" type="text" row="1" [(ngModel)]="inputRequestId" />
+          <div class="btn-search ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Search" (click)="searchVoidingHistory()" /></div>
+      </div>
+      <div class="table-scrollable">
+        <table class="table table-sm table-hover table-striped table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">VoidingHistoryId</th>
+              <th scope="col">StatusId</th>
+              <th scope="col">RequestId</th>
+              <th scope="col">MessageId</th>
+              <th scope="col">ReasonId</th>
+              <th scope="col">UserId</th>
+              <th scope="col">CreatedDate</th>
+              <th scope="col">ModifiedDate</th>
+              <th scope="col">VoidData</th>
+              <th scope="col">TransIds</th>
+              <th scope="col">MinWinLostDate</th>
+              <th scope="col">MaxWinLostDate</th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="voidingHistoryViewModel.length > 0">
+            <tr *ngFor="let item of voidingHistoryViewModel; index as i">
+              <td>{{ item.voidingHistoryId }}</td>
+              <td>{{ item.statusId }}</td>
+              <td>{{ item.requestId }}</td>
+              <td>{{ item.messageId }}</td>
+              <td>{{ item.reasonId }}</td>
+              <td>{{ item.userId }}</td>
+              <td>{{ item.createdDate }}</td>
+              <td>{{ item.modifiedDate }}</td>
+              <td>{{ item.voidData }}</td>
+              <td>{{ item.transIds }}</td>              
+              <td>{{ item.minWinLostDate }}</td>
+              <td>{{ item.maxWinLostDate }}</td>
+            </tr>
+            <tr>
+              <td colspan="12"><strong>Count: {{voidingHistoryViewModel.length}}</strong></td>
+            </tr>          
+          </tbody>
+
+          <tbody *ngIf="voidingHistoryViewModel.length === 0">
+            <tr>
+              <td colspan="12" class="no-data">There is no data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-template>
+  </ngb-panel>
+  <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <ngb-panel id="panel-2" title="Second">
+    <ng-template ngbPanelHeader>
+      <div class="d-flex align-items-center justify-content-between">
+        <h5 class="m-0">Update void service status</h5>
+        <div>
+          <button ngbPanelToggle class="btn btn-sm btn-outline-primary ml-2">Toggle</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template ngbPanelContent *ngIf="voidingHistoryViewModel.length > 0">
+      <ng-container *ngFor="let item of voidingHistoryViewModel; index as i">
+        <div class="d-flex voiding-history-row">
+          <label class="col-form-label mr-2"><strong>VoidingHistoryId </strong></label>
+          <input maxlength="150" class="form-control form-control-sm voiding-history-id" type="text" row="1" disabled [(ngModel)]="item.voidingHistoryId" />
+
+          <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
+          <select [(ngModel)]="item.statusIdSelected">
+            <option *ngFor="let item of voidingHistorySelection" [attr.value]="item.value">{{item.name}}</option>
+          </select>    
+        
+          <div class="ml-4"><input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save" 
+            (click)="confirmUpdateStatus(item.voidingHistoryId, item.statusIdSelected)" /></div>
+        </div>   
+      </ng-container>
+    </ng-template>
+
+    <ng-template ngbPanelContent *ngIf="voidingHistoryViewModel.length === 0">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>
+
+<tooltip [tooltip]="tooltip"></tooltip>
+<block-full-ui [isBlock]="isBlock"></block-full-ui>

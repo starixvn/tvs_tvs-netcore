@@ -38,5 +38,54 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers
             var model = await mediator.Send(request);
             return Ok(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAutoVoidRequestQueue(UpdateAutoVoidRequestQueueRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetTicketVoidingQueue(GetTicketVoidingQueueRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateTicketVoidingQueue(UpdateTicketVoidingQueueRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetVoidServiceData(GetVoidServiceDataRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateVoidServiceData(UpdateVoidServiceDataRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetVoidingHistory(GetVoidingHistoryRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateVoidingHistory(UpdateVoidingHistoryRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
     }
 }

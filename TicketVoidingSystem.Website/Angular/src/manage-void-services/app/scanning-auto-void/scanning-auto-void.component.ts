@@ -1,9 +1,16 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { SiteDbGroupConstant } from 'src/utility/constants/config';
+import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { SiteDbGroupConstant } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
-import { AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel } from './scanning-auto-void.model';
+import { ServiceStatusConstant } from '../app.model';
+import {
+  AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel,
+  GetAutoVoidRequestQueueModel,
+  UpdateAutoVoidRequestQueueModel
+} from './scanning-auto-void.model';
 
 @Component({
   selector: 'scanning-auto-void',
@@ -11,13 +18,18 @@ import { AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel } from './scan
   styleUrls: ['./scanning-auto-void.component.scss']
 })
 export class ScanningAutoVoidComponent implements OnInit {
-  autoVoidRequestQueues: AutoVoidRequestQueueModel[] = [];
+  autoVoidRequestQueuesOrigin: AutoVoidRequestQueueModel[] = [];
+  autoVoidRequestQueuesViewModel: AutoVoidRequestQueueViewModel[] = [];
   tooltip = new Tooltip();
+  autoVoidRequestQueueStatusSelection = ServiceStatusConstant.AutoVoidRequestQueueSelection;
   isBlock: boolean;
-  inputBroadcastSessionId: string;
+  filterBroadcastSessionIdValue: string;
+  filterStatusIdValue = 0;
+  filterBy = 0;
 
   constructor(private readonly element: ElementRef,
-    private readonly appApiService: AppApiService) {
+    private readonly appApiService: AppApiService,
+    private readonly modalService: ModalService) {
     this.tooltip.element = this.element;
   }
 
@@ -30,47 +42,96 @@ export class ScanningAutoVoidComponent implements OnInit {
       return;
     }
     this.isBlock = true;
-    this.autoVoidRequestQueues = await this.appApiService.getAutoVoidRequestQueue(this.inputBroadcastSessionId);
+    this.autoVoidRequestQueuesOrigin = await this.appApiService.getAutoVoidRequestQueue(this.initGetQuery());
+    this.autoVoidRequestQueuesViewModel = this.convertToAutoVoidRequestQueueViewModel(this.autoVoidRequestQueuesOrigin);
     this.isBlock = false;
   }
 
-  transformAutoVoidRequestQueueViewModel(queues: AutoVoidRequestQueueModel[]): AutoVoidRequestQueueViewModel[] {
-    const transformViewModel = SiteDbGroupConstant.ServerList.map(x => {
-      const viewModel = new AutoVoidRequestQueueViewModel();
-      viewModel.siteDbGroupId = x.id;
-      viewModel.siteDbName = x.serverName;
-      const queueInCurrentServer = queues.find(y => y?.siteDbGroupId === x.id);
-      if (queueInCurrentServer) {
-        viewModel.queueId = queueInCurrentServer.queueId;
-        viewModel.broadcastSessionId = queueInCurrentServer.broadcastSessionId;
-        viewModel.action = queueInCurrentServer.action;
-        viewModel.requestId = queueInCurrentServer.requestId;
-        viewModel.matchId = queueInCurrentServer.matchId;
-        viewModel.statusId = queueInCurrentServer.statusId;
-        viewModel.errMsg = queueInCurrentServer.errMsg;
-      }
+  confirmUpdateStatus(siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+    this.modalService.confirm({
+      title: 'Confirm',
+      message: `Are you sure you want to update:
+      <br> - SiteDbGroupId: <strong>${siteDbGroupId}</strong>
+      <br> - QueueId: <strong>${queueId}</strong>
+      <br> - StatusId: <strong>${statusIdSelected}</strong>`
+    },
+      async () => {
+        this.isBlock = true;
+        const isUpdateSuccessful = await this.appApiService.updateAutoVoidRequestQueue(
+          this.initUpdateQuery(siteDbGroupId, queueId, statusIdSelected));
+        this.isBlock = false;
+        this.openModelResult(isUpdateSuccessful);
+      },
+      () => { }
+    );
+  }
 
-      return viewModel;
-    });
-
-    return transformViewModel;
+  openModelResult(isSuccess: boolean) {
+    this.modalService.open(
+      {
+        title: 'Update result',
+        message: isSuccess ? 'Successful!' : 'Failed!',
+        type: isSuccess ? ModalType.Alert : ModalType.Error
+      });
   }
 
   clearInput() {
     this.resetOldResult();
-    this.inputBroadcastSessionId = null;
+    this.filterBroadcastSessionIdValue = null;
+    this.filterStatusIdValue = 0;
+  }
+
+  private convertToAutoVoidRequestQueueViewModel(queues: AutoVoidRequestQueueModel[]): AutoVoidRequestQueueViewModel[] {
+    const results: AutoVoidRequestQueueViewModel[] = [];
+    for (const server of SiteDbGroupConstant.ServerList) {
+      const queuesInCurrentServer = queues.filter(x => x.siteDbGroupId === server.id);
+      const viewModel = queuesInCurrentServer.map(x => {
+        return {
+          ...x,
+          siteDbName: server.serverName,
+          statusIdSelected: x.statusId
+        } as AutoVoidRequestQueueViewModel;
+      });
+
+      results.push(...viewModel);
+    }
+
+    return results;
   }
 
   private resetOldResult(): void {
-    this.autoVoidRequestQueues = [];
+    this.autoVoidRequestQueuesOrigin = [];
+    this.autoVoidRequestQueuesViewModel = [];
   }
 
   private isValidSearchQuery(): boolean {
-    if (!this.inputBroadcastSessionId || this.inputBroadcastSessionId.trim() === '') {
+    if (this.filterBy === 0 && (!this.filterBroadcastSessionIdValue || this.filterBroadcastSessionIdValue.trim() === '')) {
       this.tooltip.display('broadcast-session-id', TEXT.REQUIRED_INPUT);
       return false;
     }
 
     return true;
+  }
+
+  private initGetQuery(): GetAutoVoidRequestQueueModel {
+    if (this.filterBy === 0) {
+      return {
+        broadcastSessionId: this.filterBroadcastSessionIdValue,
+        statusId: null
+      };
+    }
+
+    return {
+      broadcastSessionId: null,
+      statusId: this.filterStatusIdValue
+    };
+  }
+
+  private initUpdateQuery(siteDbGroupId: number, queueId: number, statusIdSelected: number) {
+    return {
+      siteDbGroupId: siteDbGroupId,
+      queueId: queueId,
+      statusId: statusIdSelected
+    } as UpdateAutoVoidRequestQueueModel;
   }
 }

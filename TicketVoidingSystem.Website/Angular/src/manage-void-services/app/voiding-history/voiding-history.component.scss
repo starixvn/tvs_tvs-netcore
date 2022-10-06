@@ -1,0 +1,21 @@
+.request-id,
+.voiding-history-id {
+  width: 140px;
+}
+
+.table-scrollable {
+  overflow: auto;
+  max-height: 600px;
+
+  table {
+    margin-top: 15px;
+
+    .no-data {
+      text-align: center;
+    }
+  }
+}
+
+.voiding-history-row {
+  margin-bottom: 10px;
+}

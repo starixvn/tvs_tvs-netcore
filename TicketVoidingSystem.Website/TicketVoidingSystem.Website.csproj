@@ -26,11 +26,14 @@
     <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.1-beta3" />
     <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.3-beta6" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="5.0.17" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0" />
     <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.0-beta12" />
     <PackageReference Include="ONEbook.UM.Transport" Version="3.1.1" />
+    <PackageReference Include="T4.FileManager.VisualStudio" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +44,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.config.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TicketVoidingSystemSpNames.config.txt</LastGenOutput>
+    </None>
+    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.config.txt">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TicketVoidingSystemSpNames.config.tt</DependentUpon>
+    </None>
     <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -60,6 +72,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\dist\ab-exception-list\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>

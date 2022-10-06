@@ -18,7 +18,7 @@ export class TEXT {
     static readonly REQUIRED_SITE = 'Site is required.';
     static readonly REQUIRED_SUB_TYPE = 'Sub Type is required.';
     static readonly REQUIRED_VOID_VIP = 'Void VIP is required.';
-    static readonly REQUIRED_INPUT = 'Please input!';
+    static readonly REQUIRED_INPUT = 'Please input valid value!';
 
 
     static readonly EMPTY_LICENSEE = 'At least one Licensee  must be selected.';
