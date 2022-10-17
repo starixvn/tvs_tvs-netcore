@@ -1,0 +1,105 @@
+﻿using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.MarkTickets.Handlers;
+
+namespace TicketVoidingSystem.MarkTickets.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]/[action]")]
+    [AllowAnonymous]
+    public class MarkTicketsController
+    {
+        private readonly IMediator mediator;
+
+        public MarkTicketsController(IMediator mediator)
+        {
+            this.mediator = mediator;
+        }
+
+        //public async Task<ActionResult> Index()
+        //{
+        //    var viewModel = await mediator.Send(new IndexRequest()).ConfigureAwait(false);
+        //    viewModel.Root = Url.Content("~");
+        //    return View("~/dist/mark-tickets/index.cshtml", viewModel);
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> GetTickets(GetTicketsRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetDetailTickets(GetDetailTicketsRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetAllMarkedTickets(AllMarkedTicketsRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ExportExcel(ExportExcelRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return new ExcelResult(model.Content, model.FileName);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ExportExcelDetailTicket(ExportExcelToDetailTicketsRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return new ExcelResult(model.Content, model.FileName);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> MarkTickets(MarkTicketsRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> MarkAllTickets(MarkAllTicketsRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetUserLogs(GetUserLogsRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDataPermission(GetDataPermissionRequest request)
+        {
+            var model = await mediator.Send(request).ConfigureAwait(false);
+            return this.JsonNet(model);
+        }
+    }
+}
