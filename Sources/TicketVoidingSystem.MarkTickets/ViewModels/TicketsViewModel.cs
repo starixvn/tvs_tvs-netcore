@@ -1,8 +1,8 @@
-﻿namespace TicketVoidingSystem.MarkTickets.ViewModels
-{
-    using System.Collections.Generic;
-    using Core.DTO;
+﻿using System.Collections.Generic;
+using TicketVoidingSystem.Models;
 
+namespace TicketVoidingSystem.MarkTickets.ViewModels
+{
     public class TicketsViewModel
     {
         public TicketsViewModel()

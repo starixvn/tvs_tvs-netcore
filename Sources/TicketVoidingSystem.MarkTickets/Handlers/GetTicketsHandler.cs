@@ -30,10 +30,11 @@ namespace TicketVoidingSystem.MarkTickets.Handlers
             this.getTicketsService = getTicketsService;
             this.pagingService = pagingService;
         }
-        public Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
+
+        public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
         {
             var model = new TicketsViewModel();
-            var getTicketsResult = getTicketsService.GetTickets(request);
+            var getTicketsResult = await getTicketsService.GetTickets(request);
 
             model.TotalItemsList = getTicketsResult.Tickets.Select(ticket =>
                 new BetId
@@ -45,7 +46,7 @@ namespace TicketVoidingSystem.MarkTickets.Handlers
             model.MarkedTransIds = getTicketsResult.Validation.MarkedTransIds;
             model.MovedTransIds = getTicketsResult.Validation.MovedTransIds;
 
-            var groups = GenerateGroup(getTicketsResult.Tickets, message);
+            var groups = GenerateGroup(getTicketsResult.Tickets, request);
 
             foreach (var item in groups.Where(item => item.Tickets.Any()))
             {
@@ -56,7 +57,6 @@ namespace TicketVoidingSystem.MarkTickets.Handlers
 
             return model;
         }
-
 
         private static void UpdateViewModel(TicketsViewModel model, IReadOnlyCollection<GetTicketModel> tickets)
         {
@@ -82,21 +82,18 @@ namespace TicketVoidingSystem.MarkTickets.Handlers
 
         private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> data, GetTicketsRequest message)
         {
-            var groups = new List<Group<GetTicketModel>>();
-            var tickets = pagingService.Paging(data.ToList(), message.PageIndex, message.PageSize);
+            var tickets = pagingService.Paging(data, message.PageIndex, message.PageSize);
             if (!tickets.Any())
             {
-                return groups;
+                return Enumerable.Empty<Group<GetTicketModel>>();
             }
-            var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay).ToList();
+            var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
             var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay)
-                .OrderBy(ticket => ticket.TransId).ToList();
-            groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName);
+                .OrderBy(ticket => ticket.TransId);
+            var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
             groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
 
             return groups;
         }
-
-
     }
 }

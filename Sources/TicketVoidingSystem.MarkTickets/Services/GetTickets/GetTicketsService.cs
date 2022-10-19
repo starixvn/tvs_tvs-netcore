@@ -20,7 +20,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
 {
     public interface IGetTicketsService
     {
-        (GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets) GetTickets(GetTicketsQuery query);
+        Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query);
 
         IEnumerable<GetTicketModel> GetDetailTickets(GetDetailTicketsQuery query);
 
@@ -50,7 +50,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
             this.repository = repository;
         }
 
-        public (GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets) GetTickets(GetTicketsQuery query)
+        public async Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query)
         {
             var validationInAllServers = new List<GetTicketValidationModel>();
             var ticketsInAllServers = new List<GetTicketModel>();
@@ -61,7 +61,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
             foreach (var server in SiteDbGroupConstant.ServerList)
             {
                 criteria.SiteDbGroupId = server.Id;
-                var (validation, tickets) = repository.FetchMultiple<GetTicketValidationModel, GetTicketModel>(criteria);
+                var (validation, tickets) = await repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(criteria);
 
                 validationInAllServers.AddRange(validation);
                 ticketsInAllServers.AddRange(tickets);
@@ -77,12 +77,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
                 MovedTransIds = Helper.GetUnionTransIdString(validationInAllServers.Select(x => x.MovedTransIds))
             };
 
-            return (combineValidation, ticketsInAllServers);
-
-            var getTicketsResult = repository.GetTickets(query);
-            var tickets = getTicketsResult.Tickets.OrderBy(x => x.IsMixParlay);
-
-            return (getTicketsResult.Validation, tickets);
+            return (combineValidation, ticketsInAllServers.OrderBy(x => x.IsMixParlay));
         }
 
         public IEnumerable<GetTicketModel> GetDetailTickets(GetDetailTicketsQuery query)
