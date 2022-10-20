@@ -1,8 +1,8 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Criteria
-{
-    using System;
-    using Core.DTO;
+﻿using System;
+using TicketVoidingSystem.Models;
 
+namespace TicketVoidingSystem.MarkTickets.Criteria
+{
     public class GetDetailTicketsQuery
     {
         public int MatchId { get; set; }
@@ -16,6 +16,5 @@
         public int PageIndex { get; set; }
 
         public int PageSize { get; set; }
-
     }
 }

@@ -2,10 +2,12 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace TicketVoidingSystem.Website.Utilities
+namespace TicketVoidingSystem.Web.JsonConverter
 {
-    public class CustomDateTimeConverter : JsonConverter<DateTime>
+    public class GMT8DateTimeJsonConverter : JsonConverter<DateTime>
     {
+        private const int OffSetHours = 12;
+
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             return DateTime.Parse(reader.GetString() ?? string.Empty);
@@ -13,7 +15,9 @@ namespace TicketVoidingSystem.Website.Utilities
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+            var customDateTime = value;
+            customDateTime = customDateTime.AddHours(OffSetHours);
+            writer.WriteStringValue(customDateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
         }
     }
 }

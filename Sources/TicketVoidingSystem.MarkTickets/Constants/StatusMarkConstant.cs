@@ -1,4 +1,4 @@
-﻿namespace SpecialDelete.MarkTickets.Constants
+﻿namespace TicketVoidingSystem.MarkTickets.Constants
 {
     public static class StatusMarkConstant
     {

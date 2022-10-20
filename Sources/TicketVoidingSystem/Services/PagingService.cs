@@ -7,22 +7,22 @@ namespace TicketVoidingSystem.Services
 {
     public interface PagingService
     {
-        IEnumerable<T> Paging<T>(IEnumerable<T> tickets, int index, int size);
+        IEnumerable<T> Paging<T>(in IEnumerable<T> tickets, int index, int size);
 
-        IEnumerable<Group<T>> Groups<T>(IEnumerable<T> tickets, Func<T, string> filter);
+        IEnumerable<Group<T>> Groups<T>(in IEnumerable<T> tickets, Func<T, string> filter);
 
-        IEnumerable<Group<T>> PagingGroups<T>(IEnumerable<Group<T>> groups, int pageIndex, int pageSize);
+        IEnumerable<Group<T>> PagingGroups<T>(in IEnumerable<Group<T>> groups, int pageIndex, int pageSize);
     }
 
     public class PagingServiceImp : PagingService
     {
-        public IEnumerable<T> Paging<T>(IEnumerable<T> tickets, int index, int size)
+        public IEnumerable<T> Paging<T>(in IEnumerable<T> tickets, int index, int size)
         {
             var skip = index * size;
             return tickets.Skip(skip).Take(size);
         }
 
-        public IEnumerable<Group<T>> Groups<T>(IEnumerable<T> tickets, Func<T, string> filter)
+        public IEnumerable<Group<T>> Groups<T>(in IEnumerable<T> tickets, Func<T, string> filter)
         {
             var groups = tickets.GroupBy(filter);
             return groups.Select(group => new Group<T>
@@ -32,7 +32,7 @@ namespace TicketVoidingSystem.Services
             });
         }
 
-        public IEnumerable<Group<T>> PagingGroups<T>(IEnumerable<Group<T>> groups, int pageIndex, int pageSize)
+        public IEnumerable<Group<T>> PagingGroups<T>(in IEnumerable<Group<T>> groups, int pageIndex, int pageSize)
         {
             var skip = pageIndex * pageSize;
             var allTickets = groups.Select(groupTicket =>

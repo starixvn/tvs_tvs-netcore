@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MediatR;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.MarkTickets.Criteria;
+using TicketVoidingSystem.MarkTickets.Models;
+using TicketVoidingSystem.MarkTickets.ViewModels;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers
 {

@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
     [ApiController]
     [Route("api/[controller]/[action]")]
     [AllowAnonymous]
-    public class MarkTicketsController
+    public class MarkTicketsController : ControllerBase
     {
         private readonly IMediator mediator;
 
@@ -26,18 +26,10 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         //}
 
         [HttpPost]
-        public async Task<IActionResult> GetTickets(GetTicketsRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
+        public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
-        public async Task<JsonResult> GetDetailTickets(GetDetailTicketsRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
+        public async Task<IActionResult> GetDetailTickets(GetDetailTicketsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
         public async Task<JsonResult> GetAllMarkedTickets(AllMarkedTicketsRequest request)

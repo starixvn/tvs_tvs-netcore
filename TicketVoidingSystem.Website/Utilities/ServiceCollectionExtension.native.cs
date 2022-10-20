@@ -34,6 +34,8 @@ using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Services;
+using TicketVoidingSystem.MarkTickets.Controllers;
+using TicketVoidingSystem.MarkTickets.Services.GetTickets;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
@@ -174,6 +176,8 @@ namespace TicketVoidingSystem.Website.Utilities
         {
             services.AddSingleton<SessionService, SessionServiceImp>();
             services.AddSingleton<LoggingService, LoggingServiceImp>();
+            services.AddSingleton<PagingService, PagingServiceImp>();
+            services.AddSingleton<RemotingRefWrapperService, RemotingRefWrapperServiceImp>();
             services.AddSingleton<LogActionFilterAttribute>();
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
@@ -181,12 +185,16 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<TicketVoidingQueueService, TicketVoidingQueueServiceImp>();
             services.AddTransient<VoidingHistoryService, VoidingHistoryServiceImp>();
             services.AddTransient<LetstalkService, LetstalkServiceImp>();
+
+            // Mark Tickets
+            services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)
         {
             services.AddMediatR(typeof(ABExceptionListController));
             services.AddMediatR(typeof(ManageVoidServicesController));
+            services.AddMediatR(typeof(MarkTicketsController));
         }
     }
 }

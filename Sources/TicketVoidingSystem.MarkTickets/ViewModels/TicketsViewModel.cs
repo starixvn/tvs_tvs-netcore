@@ -5,11 +5,6 @@ namespace TicketVoidingSystem.MarkTickets.ViewModels
 {
     public class TicketsViewModel
     {
-        public TicketsViewModel()
-        {
-            Groups = new List<Group<TicketViewModel>>();
-        }
-
         public IEnumerable<BetId> TotalItemsList { get; set; }
         public int TotalItems { get; set; }
         public int SingleCount { get; set; }
@@ -20,6 +15,6 @@ namespace TicketVoidingSystem.MarkTickets.ViewModels
         public string MovedTransIds { get; set; }
         public string MarkedTransIds { get; set; }
         public string LicenseesName { get; set; }
-        public IList<Group<TicketViewModel>> Groups { get; }
+        public IEnumerable<Group<TicketViewModel>> Groups { get; set; }
     }
 }

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using Fanex.NAP.Core.Business;
-using SpecialDelete.MarkTickets.Constants;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.MarkTickets.Constants;
 using TicketVoidingSystem.MarkTickets.Criteria;
 using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
@@ -18,27 +18,27 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
 {
-    public interface IGetTicketsService
+    public interface GetTicketsService
     {
         Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query);
 
-        IEnumerable<GetTicketModel> GetDetailTickets(GetDetailTicketsQuery query);
+        Task<IEnumerable<GetTicketModel>> GetDetailTickets(GetDetailTicketsQuery query);
 
         IEnumerable<AllMarkedTicketModel> GetAllMarkedTickets(AllMarkedTicketsQuery query);
 
         Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query);
 
-        Group<TicketViewModel> AssignData(Group<GetTicketModel> group);
+        Group<TicketViewModel> MapToViewModel(in Group<GetTicketModel> group);
     }
 
-    public class GetTicketsService : IGetTicketsService
+    public class GetTicketsServiceImp : GetTicketsService
     {
         private readonly IMapper mapper;
         private readonly ITicketService ticketService;
         private readonly SessionService sessionService;
         private readonly IDynamicRepository repository;
 
-        public GetTicketsService(
+        public GetTicketsServiceImp(
             IMapper mapper,
             ITicketService ticketService,
             SessionService sessionService,
@@ -80,9 +80,18 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
             return (combineValidation, ticketsInAllServers.OrderBy(x => x.IsMixParlay));
         }
 
-        public IEnumerable<GetTicketModel> GetDetailTickets(GetDetailTicketsQuery query)
+        public async Task<IEnumerable<GetTicketModel>> GetDetailTickets(GetDetailTicketsQuery query)
         {
-            return repository.GetDetailTickets(query).OrderBy(x => x.IsMixParlay);
+            var ticketsInAllServers = new List<GetTicketModel>();
+            var criteria = mapper.Map<GetDetailTicketsCriteria>(query);
+            foreach (var server in SiteDbGroupConstant.ServerList)
+            {
+                criteria.SiteDbGroupId = server.Id;
+                var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
+                ticketsInAllServers.AddRange(tickets);
+            }
+
+            return ticketsInAllServers.OrderBy(x => x.IsMixParlay);
         }
 
         public IEnumerable<AllMarkedTicketModel> GetAllMarkedTickets(AllMarkedTicketsQuery query)
@@ -97,7 +106,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
             return result;
         }
 
-        public Group<TicketViewModel> AssignData(Group<GetTicketModel> group)
+        public Group<TicketViewModel> MapToViewModel(in Group<GetTicketModel> group)
         {
             var permission = new UserPermission
             {
