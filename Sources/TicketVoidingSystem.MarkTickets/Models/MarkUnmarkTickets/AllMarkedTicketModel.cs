@@ -1,7 +1,7 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Models
-{
-    using System;
+﻿using System;
 
+namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
+{
     public class AllMarkedTicketModel
     {
         public int MatchId { get; set; }

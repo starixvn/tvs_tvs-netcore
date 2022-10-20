@@ -1,6 +1,7 @@
 ﻿namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
 {
     using Models;
+    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 
     public interface ICheckBoxService
     {

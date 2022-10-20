@@ -35,7 +35,7 @@ using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Services;
 using TicketVoidingSystem.MarkTickets.Controllers;
-using TicketVoidingSystem.MarkTickets.Services.GetTickets;
+using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
@@ -188,6 +188,8 @@ namespace TicketVoidingSystem.Website.Utilities
 
             // Mark Tickets
             services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
+            services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
+            services.AddTransient<MarkAllTicketsService, MarkAllTicketsServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)

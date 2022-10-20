@@ -7,6 +7,7 @@
     using Fanex.BetList.Core.Entities;
     using Fanex.BetList.Core.TicketHelper;
     using Models;
+    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
     using ViewModels;
 
     public interface IBetListCoreService

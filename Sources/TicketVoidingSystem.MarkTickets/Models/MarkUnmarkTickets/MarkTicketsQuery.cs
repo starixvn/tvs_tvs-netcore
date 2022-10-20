@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SpecialDelete.Core.DTO;
+using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.MarkTickets.Criteria
+namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
 {
     public class MarkTicketsQuery
     {

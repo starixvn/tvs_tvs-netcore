@@ -3,18 +3,12 @@
     using System.Collections.Generic;
     using System.Drawing;
     using AutoMapper;
-    using Common.Extensions;
-    using Common.Services;
     using Constants;
-    using Core.Constants;
-    using Core.DTO;
-    using Core.Web;
     using Criteria;
-    using Epplus.Mapper.Extensions;
     using Fanex.NAP.Core.Business;
     using GetTickets;
     using Models;
-    using OfficeOpenXml;
+    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 
     public interface ISheetService
     {

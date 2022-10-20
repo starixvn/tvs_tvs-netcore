@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.Utilities
 {
@@ -12,7 +13,6 @@ namespace TicketVoidingSystem.Utilities
 
             return $"{serverName}.{spName}";
         }
-
 
         public static string GetIntersectTransIdString(IEnumerable<string> items)
         {
@@ -49,6 +49,11 @@ namespace TicketVoidingSystem.Utilities
             }
 
             return string.Join(",", result);
+        }
+
+        public static string JoinBetIdList(IEnumerable<BetId> items)
+        {
+            return string.Join(",", items.Select(x => x.TransId));
         }
     }
 }

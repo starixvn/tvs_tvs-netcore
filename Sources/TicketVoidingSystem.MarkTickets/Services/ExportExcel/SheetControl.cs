@@ -2,7 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Criteria;
+    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 
     public class SheetControlImp : SheetControl<GetTicketsQuery>
     {

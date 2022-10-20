@@ -4,6 +4,7 @@
     using Common.Extensions;
     using Core.Constants;
     using Models;
+    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
     using ViewModels;
 
     public interface ITicketService

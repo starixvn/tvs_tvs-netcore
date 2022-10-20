@@ -1,4 +1,8 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Criteria
+﻿using Fanex.Data;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Utilities;
+
+namespace TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets
 {
     public class AllMarkedTicketsCriteria : CriteriaBase
     {

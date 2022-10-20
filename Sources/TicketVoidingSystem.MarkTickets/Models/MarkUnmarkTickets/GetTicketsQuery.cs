@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.MarkTickets.Criteria
+namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
 {
     public class GetTicketsQuery
     {

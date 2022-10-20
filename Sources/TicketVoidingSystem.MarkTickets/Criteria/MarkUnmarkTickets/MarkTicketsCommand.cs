@@ -1,8 +1,8 @@
 ﻿using Fanex.Data;
 using Fanex.Data.Repository;
-using SpecialDelete.Core.Utils;
+using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.MarkTickets.Criteria
+namespace TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets
 {
     public class MarkTicketsCommand : CriteriaBase
     {

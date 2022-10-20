@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.MarkTickets.Handlers;
+using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 
 namespace TicketVoidingSystem.MarkTickets.Controllers
 {
@@ -32,11 +33,13 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         public async Task<IActionResult> GetDetailTickets(GetDetailTicketsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
-        public async Task<JsonResult> GetAllMarkedTickets(AllMarkedTicketsRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
+        public async Task<IActionResult> GetAllMarkedTickets(AllMarkedTicketsRequest request) => Ok(await mediator.Send(request));
+
+        [HttpPost]
+        public async Task<IActionResult> MarkTickets(MarkTicketsRequest request) => Ok(await mediator.Send(request));
+
+        [HttpPost]
+        public async Task<IActionResult> MarkAllTickets(MarkAllTicketsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
         public async Task<ActionResult> ExportExcel(ExportExcelRequest request)
@@ -50,20 +53,6 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         {
             var model = await mediator.Send(request).ConfigureAwait(false);
             return new ExcelResult(model.Content, model.FileName);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> MarkTickets(MarkTicketsRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> MarkAllTickets(MarkAllTicketsRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
         }
 
         [HttpPost]

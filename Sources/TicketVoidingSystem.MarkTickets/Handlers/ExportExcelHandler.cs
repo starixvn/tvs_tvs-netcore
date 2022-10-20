@@ -1,10 +1,7 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Handlers
+﻿using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+
+namespace TicketVoidingSystem.MarkTickets.Handlers
 {
-    using Common.Constants;
-    using Common.Excel;
-    using Common.Models;
-    using Common.Systems;
-    using Criteria;
     using MediatR;
 
     public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>

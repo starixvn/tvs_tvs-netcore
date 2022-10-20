@@ -3,20 +3,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
-using Fanex.NAP.Core.Business;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.MarkTickets.Constants;
 using TicketVoidingSystem.MarkTickets.Criteria;
-using TicketVoidingSystem.MarkTickets.Models;
+using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
+using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Services.GetTickets;
 using TicketVoidingSystem.MarkTickets.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.Web;
 
-namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
+namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
 {
     public interface GetTicketsService
     {
@@ -24,7 +25,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
 
         Task<IEnumerable<GetTicketModel>> GetDetailTickets(GetDetailTicketsQuery query);
 
-        IEnumerable<AllMarkedTicketModel> GetAllMarkedTickets(AllMarkedTicketsQuery query);
+        Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query);
 
         Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query);
 
@@ -94,9 +95,18 @@ namespace TicketVoidingSystem.MarkTickets.Services.GetTickets
             return ticketsInAllServers.OrderBy(x => x.IsMixParlay);
         }
 
-        public IEnumerable<AllMarkedTicketModel> GetAllMarkedTickets(AllMarkedTicketsQuery query)
+        public async Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query)
         {
-            return repository.GetAllMarkedTickets(query);
+            var dataInAllServers = new List<AllMarkedTicketModel>();
+            var criteria = mapper.Map<AllMarkedTicketsCriteria>(query);
+            foreach (var server in SiteDbGroupConstant.ServerList)
+            {
+                criteria.SiteDbGroupId = server.Id;
+                var data = await repository.FetchAsync<AllMarkedTicketModel>(criteria);
+                dataInAllServers.AddRange(data);
+            }
+
+            return dataInAllServers;
         }
 
         public async Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)

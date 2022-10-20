@@ -6,6 +6,7 @@
     using Common.Systems;
     using Criteria;
     using MediatR;
+    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 
     public class ExportExcelToDetailTicketsRequest : GetDetailTicketsQuery, IRequest<ExcelFileModel>
     {

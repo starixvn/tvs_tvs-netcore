@@ -1,4 +1,4 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Models
+﻿namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
 {
     public class UserPermission
     {

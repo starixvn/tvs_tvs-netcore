@@ -1,7 +1,7 @@
 ﻿using System;
 using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.MarkTickets.Criteria
+namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
 {
     public class GetDetailTicketsQuery
     {
