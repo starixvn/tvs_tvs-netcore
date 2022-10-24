@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
@@ -54,6 +56,11 @@ namespace TicketVoidingSystem.Utilities
         public static string JoinBetIdList(IEnumerable<BetId> items)
         {
             return string.Join(",", items.Select(x => x.TransId));
+        }
+
+        public static string GetFilePath(string path)
+        {
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
         }
     }
 }

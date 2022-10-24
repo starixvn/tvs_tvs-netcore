@@ -1,9 +1,14 @@
-﻿using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers
 {
-    using MediatR;
-
     public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>
     {
     }
@@ -17,13 +22,13 @@ namespace TicketVoidingSystem.MarkTickets.Handlers
             this.excelService = excelService;
         }
 
-        public ExcelFileModel Handle(ExportExcelRequest message)
+        public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
         {
-            var createDate = $"{SystemTime.Now:yyyy_MM_dd_HH_mm_ss}";
-            var fileName = $"{message.MatchId}_Mark_Unmark_Tickets_{createDate}";
+            var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+            var fileName = $"{request.MatchId}_Mark_Unmark_Tickets_{createDate}";
             return new ExcelFileModel
             {
-                Content = excelService.CreateStream(message, TemplateExcel.MarkUnmarkTickets),
+                Content = await excelService.CreateStream(request, TemplateExcelPath.MarkUnmarkTickets),
                 FileName = fileName
             };
         }

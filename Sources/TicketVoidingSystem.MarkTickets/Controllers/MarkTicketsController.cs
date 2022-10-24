@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.MarkTickets.Handlers;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
+using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.MarkTickets.Controllers
 {
@@ -44,15 +45,15 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         [HttpPost]
         public async Task<ActionResult> ExportExcel(ExportExcelRequest request)
         {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return new ExcelResult(model.Content, model.FileName);
+            var model = await mediator.Send(request);
+            return File(model.Content, ExcelFileModel.ContentType, model.FileName);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ExportExcelDetailTicket(ExportExcelToDetailTicketsRequest request)
+        public async Task<ActionResult> ExportExcelDetailTicket(ExportExcelDetailTicketsRequest request)
         {
             var model = await mediator.Send(request).ConfigureAwait(false);
-            return new ExcelResult(model.Content, model.FileName);
+            return File(model.Content, ExcelFileModel.ContentType, model.FileName);
         }
 
         [HttpPost]

@@ -1,7 +1,7 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Handlers
+﻿using TicketVoidingSystem.Web;
+
+namespace TicketVoidingSystem.MarkTickets.Handlers
 {
-    using Common.Services;
-    using Core.Web;
     using Fanex.NAP.Core.Business;
     using MediatR;
     using Models;

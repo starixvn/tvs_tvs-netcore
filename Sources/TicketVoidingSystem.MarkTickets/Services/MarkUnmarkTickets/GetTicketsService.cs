@@ -3,11 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
+using Fanex.NAP.Core.Business;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.MarkTickets.Constants;
-using TicketVoidingSystem.MarkTickets.Criteria;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.GetTickets;
@@ -23,7 +24,11 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
     {
         Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query);
 
+        Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(GetTicketsQuery query);
+
         Task<IEnumerable<GetTicketModel>> GetDetailTickets(GetDetailTicketsQuery query);
+
+        Task<IEnumerable<ExcelTicketModel>> GetDetailTicketsForExportExcel(GetDetailTicketsQuery query);
 
         Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query);
 
@@ -81,6 +86,14 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
             return (combineValidation, ticketsInAllServers.OrderBy(x => x.IsMixParlay));
         }
 
+        public async Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(GetTicketsQuery query)
+        {
+            var getTicketsResult = await GetTickets(query);
+            var tickets = MapToExcelTicketModel(getTicketsResult.Tickets);
+
+            return tickets;
+        }
+
         public async Task<IEnumerable<GetTicketModel>> GetDetailTickets(GetDetailTicketsQuery query)
         {
             var ticketsInAllServers = new List<GetTicketModel>();
@@ -93,6 +106,14 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
             }
 
             return ticketsInAllServers.OrderBy(x => x.IsMixParlay);
+        }
+
+        public async Task<IEnumerable<ExcelTicketModel>> GetDetailTicketsForExportExcel(GetDetailTicketsQuery query)
+        {
+            var data = await GetDetailTickets(query);
+            var tickets = MapToExcelTicketModel(data);
+
+            return tickets;
         }
 
         public async Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query)
@@ -138,6 +159,29 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
             }
 
             return new Group<TicketViewModel> { Name = group.Name, Tickets = tickets };
+        }
+
+        private IEnumerable<ExcelTicketModel> MapToExcelTicketModel(in IEnumerable<GetTicketModel> data)
+        {
+            var index = 1;
+            var tickets = new List<ExcelTicketModel>();
+            var canViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameofSpecialSiteonBetList, Constant.Policy.Read);
+            foreach (var item in data)
+            {
+                var ticketDetail = ticketService.Render(item);
+                var ticket = mapper.Map<ExcelTicketModel>(ticketDetail);
+                ticket.No = index++;
+                ticket.BetId = ticketDetail.BetId.LineBreak();
+                ticket.Member = !canViewUserName && item.GroupName == SpecialSiteConstant.Site789Y ? "-".LineBreak() : ticketDetail.Member.LineBreak();
+                ticket.Currency = !canViewUserName && item.GroupName == SpecialSiteConstant.Site789Y ? "-".LineBreak() : ticketDetail.Currency.LineBreak();
+                ticket.Odds = ticketDetail.Odds.DefaultText();
+                ticket.Stake = ticketDetail.Stake.StakeText();
+                ticket.Status = ticketDetail.Status.DefaultText();
+                ticket.Choice = ticketDetail.Choice.ChoiceSubParlay(item.IsMixParlay);
+                tickets.Add(ticket);
+            }
+
+            return tickets;
         }
     }
 }
