@@ -3,12 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.BetList.Core.Entities;
 using MediatR;
-using SpecialDelete.Common.Services;
-using SpecialDelete.Core.Constants;
-using SpecialDelete.Core.Services;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
-using TicketVoidingSystem.MarkTickets.Services.GetTickets;
 using TicketVoidingSystem.MarkTickets.ViewModels;
+using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers
 {

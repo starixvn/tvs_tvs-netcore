@@ -7,22 +7,22 @@ using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.Excel;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers
+namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets
 {
-    public class ExportExcelDetailTicketsRequest : GetDetailTicketsQuery, IRequest<ExcelFileModel>
+    public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>
     {
     }
 
-    public class ExportExcelDetailTicketsHandler : IRequestHandler<ExportExcelDetailTicketsRequest, ExcelFileModel>
+    public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
     {
-        private readonly ExcelService<GetDetailTicketsQuery> excelService;
+        private readonly ExcelService<GetTicketsQuery> excelService;
 
-        public ExportExcelDetailTicketsHandler(ExcelService<GetDetailTicketsQuery> excelService)
+        public ExportExcelHandler(ExcelService<GetTicketsQuery> excelService)
         {
             this.excelService = excelService;
         }
 
-        public async Task<ExcelFileModel> Handle(ExportExcelDetailTicketsRequest request, CancellationToken cancellationToken)
+        public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
         {
             var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
             var fileName = $"{request.MatchId}_Mark_Unmark_Tickets_{createDate}";

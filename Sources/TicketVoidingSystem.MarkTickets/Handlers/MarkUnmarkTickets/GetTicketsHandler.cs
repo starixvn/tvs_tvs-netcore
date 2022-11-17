@@ -20,13 +20,16 @@ namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets
     public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewModel>
     {
         private readonly GetTicketsService getTicketsService;
+        private readonly MapTicketService mapTicketService;
         private readonly PagingService pagingService;
 
         public GetTicketsHandler(
             GetTicketsService getTicketsService,
+            MapTicketService mapTicketService,
             PagingService pagingService)
         {
             this.getTicketsService = getTicketsService;
+            this.mapTicketService = mapTicketService;
             this.pagingService = pagingService;
         }
 
@@ -73,7 +76,7 @@ namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets
             groupsTickets.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
 
             return groupsTickets.Where(item => item.Tickets.Any())
-                .Select(item => getTicketsService.MapToViewModel(item));
+                .Select(item => mapTicketService.MapToGroupTicketViewModel(item));
         }
 
         private static string GetLicenseesName(IEnumerable<GetTicketModel> tickets)
