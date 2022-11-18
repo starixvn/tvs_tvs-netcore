@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.ABExceptionList.Models;
 using Xunit;
@@ -16,8 +17,14 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
         public async Task Handler_RepositoryHasCalled_ReturnTrue()
         {
             // Arrange
+            var criteria = new GetSubTypeCriteria();
+            criteria.GetSettingKey();
+            criteria.IsValid();
             var request = new GetSubTypeRequest();
-            var subTypes = new List<AbExceptionSubTypeViewModel>();
+            var subTypes = new List<AbExceptionSubTypeViewModel>
+            {
+                new() {SubIssueTypeIds = "", SubIssueTypeName = ""}
+            };
             var repository = Substitute.For<IDynamicRepository>();
             repository.FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(subTypes);
             var handler = new GetSubTypeHandler(repository);

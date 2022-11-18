@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -15,7 +16,10 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Services
         public async Task GetUsers_ShouldReturnExpectedData()
         {
             // Arrange
-            var fakeData = new List<UserModel> { new() };
+            var fakeData = new List<UserModel>
+            {
+                new() {Level = "", AddedBy = "", CustId = 0, IsAllowVoidVIP = "", Site = "", SubTypeName = "", Username = "", AddedDate = new DateTime() }
+            };
             var request = new GetUsersRequest { UserName = "aaaa" };
             var repository = Substitute.For<IDynamicRepository>();
             repository.FetchAsync<UserModel>(Arg.Compat.Any<GetUsersRequest>()).ReturnsForAnyArgs(fakeData);

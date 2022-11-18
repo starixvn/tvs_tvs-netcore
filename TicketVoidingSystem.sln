@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32407.337
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.Website", "TicketVoidingSystem.Website\TicketVoidingSystem.Website.csproj", "{6EB34E34-B7C9-4CB7-BCB2-D8A41FDCEF21}"
 EndProject
@@ -17,7 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.ABExcep
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.ManageVoidServices", "Sources\TicketVoidingSystem.ManageVoidServices\TicketVoidingSystem.ManageVoidServices.csproj", "{419D73C9-4135-47C5-B69A-26607DA57837}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.SharedApi", "Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj", "{7492B44F-B541-4A32-B5F5-8A6427EB3A73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.SharedApi", "Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj", "{7492B44F-B541-4A32-B5F5-8A6427EB3A73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.Tests", "Tests\TicketVoidingSystem.Tests\TicketVoidingSystem.Tests.csproj", "{E35BFD07-7D6D-492F-8269-0BD771CF250D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.SharedApi.Tests", "Tests\TicketVoidingSystem.SharedApi.Tests\TicketVoidingSystem.SharedApi.Tests.csproj", "{72267859-E6D6-4F38-93FF-B34883EF1A9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.ManageVoidServices.Tests", "Tests\TicketVoidingSystem.ManageVoidServices.Tests\TicketVoidingSystem.ManageVoidServices.Tests.csproj", "{586FFC73-E25F-45E0-9E0D-5405DD4EB83B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +55,18 @@ Global
 		{7492B44F-B541-4A32-B5F5-8A6427EB3A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7492B44F-B541-4A32-B5F5-8A6427EB3A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7492B44F-B541-4A32-B5F5-8A6427EB3A73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E35BFD07-7D6D-492F-8269-0BD771CF250D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E35BFD07-7D6D-492F-8269-0BD771CF250D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E35BFD07-7D6D-492F-8269-0BD771CF250D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E35BFD07-7D6D-492F-8269-0BD771CF250D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72267859-E6D6-4F38-93FF-B34883EF1A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72267859-E6D6-4F38-93FF-B34883EF1A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72267859-E6D6-4F38-93FF-B34883EF1A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72267859-E6D6-4F38-93FF-B34883EF1A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586FFC73-E25F-45E0-9E0D-5405DD4EB83B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586FFC73-E25F-45E0-9E0D-5405DD4EB83B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586FFC73-E25F-45E0-9E0D-5405DD4EB83B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586FFC73-E25F-45E0-9E0D-5405DD4EB83B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +77,9 @@ Global
 		{B5E7AC5D-1B67-494F-8467-F15784C90C95} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
 		{419D73C9-4135-47C5-B69A-26607DA57837} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{7492B44F-B541-4A32-B5F5-8A6427EB3A73} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
+		{E35BFD07-7D6D-492F-8269-0BD771CF250D} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
+		{72267859-E6D6-4F38-93FF-B34883EF1A9E} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
+		{586FFC73-E25F-45E0-9E0D-5405DD4EB83B} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C225DEEC-3E60-478B-B241-CA1321AD50E2}

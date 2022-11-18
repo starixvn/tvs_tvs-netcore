@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
 {
     public class ABExceptionListControllerTests
     {
-        [Fact()]
+        [Fact]
         public async Task CheckUsernames_HasRequest_CallMediatorRequest()
         {
             // Arrange
@@ -27,7 +27,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
             await mediator.Received(1).Send(request);
         }
 
-        [Fact()]
+        [Fact]
         public async Task AddUsers_HasRequest_CallMediatorRequest()
         {
             // Arrange
@@ -42,7 +42,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
             await mediator.Received(1).Send(request);
         }
 
-        [Fact()]
+        [Fact]
         public async Task RemoveUsers_HasRequest_CallMediatorRequest()
         {
             // Arrange
@@ -57,7 +57,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
             await mediator.Received(1).Send(request);
         }
 
-        [Fact()]
+        [Fact]
         public async Task GetUsers_HasRequest_CallMediatorRequest()
         {
             // Arrange
@@ -72,7 +72,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
             await mediator.Received(1).Send(request);
         }
 
-        [Fact()]
+        [Fact]
         public async Task GetPermission_HasRequest_CallMediatorRequest()
         {            // Arrange
             var permission = new PermissionABExceptionList();
@@ -87,7 +87,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
             await mediator.Received(1).Send(Arg.Compat.Any<GetPermissionRequest>());
         }
 
-        [Fact()]
+        [Fact]
         public async Task GetSubType_HasRequest_CallMediatorRequest()
         {
             // Arrange
@@ -103,7 +103,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
             await mediator.Received(1).Send(Arg.Compat.Any<GetSubTypeRequest>());
         }
 
-        [Fact()]
+        [Fact]
         public async Task GetSites_WhenCalled_ReturnJsonData()
         {
             var models = new List<GroupLicenseeSiteViewModel> { new() { GroupName = "credit" } };

@@ -15,6 +15,9 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
         public async Task Handler_RepositoryHasCalled_ReturnResult()
         {
             // Arrange
+            var criteria = new CheckUsernamesCriteria();
+            criteria.GetSettingKey();
+            criteria.IsValid();
             var request = new CheckUsernamesRequest { Usernames = "aaaa" };
             var expectedResult = new CheckUsernamesModel() { ExistedUsernames = "ex", InvalidUsernames = "in" };
             var repository = Substitute.For<IDynamicRepository>();

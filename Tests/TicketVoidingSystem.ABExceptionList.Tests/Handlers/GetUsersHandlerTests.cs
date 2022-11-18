@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using NSubstitute;
+using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.ABExceptionList.Models;
 using TicketVoidingSystem.ABExceptionList.Services;
@@ -14,6 +15,9 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
         public async Task Handler_RepositoryHasCalled_ReturnResult()
         {
             // Arrange
+            var criteria = new GetUsersCriteria { Level = "", Sites = "", InvalidUsername = "", SubTypes = "", UserName = "", VoidVIP = "" };
+            criteria.GetSettingKey();
+            criteria.IsValid();
             var request = new GetUsersRequest { UserName = "aaa" };
             var expectedResult = new List<UserModel>();
             var getUsersService = Substitute.For<GetUsersService>();

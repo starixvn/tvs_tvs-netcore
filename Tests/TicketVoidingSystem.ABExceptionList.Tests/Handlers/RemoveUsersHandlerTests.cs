@@ -15,6 +15,9 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
         public async Task Handler_RepositoryHasCalled_ReturnResult()
         {
             // Arrange
+            var command = new RemoveUsersCommand();
+            command.GetSettingKey();
+            command.IsValid();
             var request = new RemoveUsersRequest();
             var expectedResult = new Result { ErrorCode = 0 };
             var repository = Substitute.For<IDynamicRepository>();

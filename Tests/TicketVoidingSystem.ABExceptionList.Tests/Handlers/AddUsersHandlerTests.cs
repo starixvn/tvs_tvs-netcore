@@ -19,6 +19,9 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
             var expectedResult = new Result();
             var repository = Substitute.For<IDynamicRepository>();
             var sessionService = Substitute.For<SessionService>();
+            var command = new AddUsersCommand();
+            command.GetSettingKey();
+            command.IsValid();
             sessionService.UserId.Returns(1);
             sessionService.GetClientIp().Returns("1.1.1.1");
             repository.ExecuteAsync(Arg.Compat.Do<AddUsersCommand>(x =>
