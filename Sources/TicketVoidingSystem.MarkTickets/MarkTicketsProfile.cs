@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
-using TicketVoidingSystem.MarkTickets.Criteria;
 using TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Criteria.UserLogs;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Models.UserLogs;
 
 namespace TicketVoidingSystem.MarkTickets
 {

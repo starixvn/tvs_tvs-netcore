@@ -1,7 +1,7 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Criteria
-{
-    using System;
+﻿using System;
 
+namespace TicketVoidingSystem.MarkTickets.Models.UserLogs
+{
     public class GetUserLogsQuery
     {
         public DateTime? LogDateFrom { get; set; }
@@ -17,6 +17,5 @@
         public int PageIndex { get; set; }
 
         public int PageSize { get; set; }
-
     }
 }

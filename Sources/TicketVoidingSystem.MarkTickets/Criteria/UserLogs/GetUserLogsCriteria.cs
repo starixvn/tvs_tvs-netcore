@@ -1,8 +1,8 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Criteria
-{
-    using System;
-    using Fanex.Data.Repository;
+﻿using System;
+using Fanex.Data.Repository;
 
+namespace TicketVoidingSystem.MarkTickets.Criteria.UserLogs
+{
     public class GetUserLogsCriteria : CriteriaBase
     {
         public DateTime? LogDateFrom { get; set; }

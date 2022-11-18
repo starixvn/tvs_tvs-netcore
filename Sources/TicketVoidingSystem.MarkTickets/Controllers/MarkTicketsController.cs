@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.MarkTickets.Handlers;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.MarkTickets.Controllers

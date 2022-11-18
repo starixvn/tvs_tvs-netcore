@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
+using TicketVoidingSystem.Web.JsonConverter;
 using TicketVoidingSystem.Website.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +43,7 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(new ServiceFilterAttribute(typeof(LogActionFilterAttribute)) { Order = 1 });
 }).AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
+    options.JsonSerializerOptions.Converters.Add(new CustomDateTimeJsonConverter());
 });
 
 //

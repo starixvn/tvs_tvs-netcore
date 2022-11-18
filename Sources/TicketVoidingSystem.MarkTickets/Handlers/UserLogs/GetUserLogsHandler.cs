@@ -1,13 +1,16 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Handlers
-{
-    using System.Threading.Tasks;
-    using MediatR;
+﻿using System.Threading.Tasks;
+using MediatR;
+using TicketVoidingSystem.MarkTickets.Models.UserLogs;
+using TicketVoidingSystem.MarkTickets.Services.UserLogs;
+using TicketVoidingSystem.MarkTickets.ViewModels;
 
+namespace TicketVoidingSystem.MarkTickets.Handlers.UserLogs
+{
     public class GetUserLogsRequest : GetUserLogsQuery, IRequest<GetUserLogsViewModel>
     {
     }
 
-    public class GetUserLogsHandler : IAsyncRequestHandler<GetUserLogsRequest, GetUserLogsViewModel>
+    public class GetUserLogsHandler : IRequestHandler<GetUserLogsRequest, GetUserLogsViewModel>
     {
         private readonly UserLogsService userLogsService;
         private readonly IPagingService paggingService;

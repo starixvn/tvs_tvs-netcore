@@ -1,7 +1,7 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Criteria
-{
-    using Fanex.Data.Repository;
+﻿using Fanex.Data.Repository;
 
+namespace TicketVoidingSystem.MarkTickets.Criteria.UserLogs
+{
     public class GetUserLogTicketInfoCriteria : CriteriaBase
     {
         public string TransIdsXml { get; set; }

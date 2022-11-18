@@ -1,8 +1,8 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Models
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace TicketVoidingSystem.MarkTickets.Models.UserLogs
+{
     public class GetUserLogModel
     {
         public int SessionId { get; set; }

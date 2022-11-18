@@ -1,23 +1,21 @@
-﻿using SpecialDelete.Common.Systems;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.MarkTickets.Constants;
+using TicketVoidingSystem.MarkTickets.Criteria;
+using TicketVoidingSystem.MarkTickets.Criteria.UserLogs;
+using TicketVoidingSystem.MarkTickets.Models.UserLogs;
+using TicketVoidingSystem.MarkTickets.ViewModels;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Services.UserLogs
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using Constants;
-    using Core.Constants;
-    using Core.Services;
-    using Criteria;
-    using Extensions;
-    using Models;
-    using Repositories;
-    using ViewModels;
-
     public interface UserLogsService
     {
-        Task<List<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query);
+        Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query);
 
         Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs);
     }
@@ -33,7 +31,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.UserLogs
             this.remotingRefService = remotingRefService;
         }
 
-        public async Task<List<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query)
+        public async Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query)
         {
             var criteria = Mapper.Map<GetUserLogsCriteria>(query);
             criteria.LogDateFrom = query.LogDateFrom.ZoneCanada();
