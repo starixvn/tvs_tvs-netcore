@@ -44,9 +44,8 @@ builder.Services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
 });
 
-
+//
 var app = builder.Build();
-
 app.Use((context, next) =>
 {
     context.Request.PathBase = new PathString(app.Configuration.GetSection("PathBase").Value);
@@ -63,7 +62,6 @@ app.UseSession();
 NapClientManager
     .UseConfig(app.Services.GetService<INapSettings>())
     .UseSession(app.Services.GetService<INapSession>());
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
