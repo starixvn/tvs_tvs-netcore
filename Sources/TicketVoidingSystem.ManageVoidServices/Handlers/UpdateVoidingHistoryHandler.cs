@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
         public int StatusId { get; set; }
     }
 
-    internal class UpdateVoidingHistoryHandler : IRequestHandler<UpdateVoidingHistoryRequest, bool>
+    public class UpdateVoidingHistoryHandler : IRequestHandler<UpdateVoidingHistoryRequest, bool>
     {
         private readonly VoidingHistoryService voidingHistoryService;
 

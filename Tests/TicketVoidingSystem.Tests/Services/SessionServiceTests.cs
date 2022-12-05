@@ -89,5 +89,20 @@ namespace TicketVoidingSystem.Tests.Services
             // Assert
             Assert.True(actual);
         }
+
+        [Fact]
+        public void UserName_HasName_ReturnExpected()
+        {
+            // Arrange
+            var currentSession = Substitute.For<INapSession>();
+            currentSession.UserName = "AAA";
+            var service = new SessionServiceImp(currentSession, null, null, null);
+
+            // Act
+            var actual = service.UserName;
+
+            // Assert
+            Assert.Equal(currentSession.UserName, actual);
+        }
     }
 }
