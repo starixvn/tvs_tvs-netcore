@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MarkUnmarkTicketComponent #MarkUnmarkTicketComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <mark-unmark-ticket>
+    <filter-tickets />
+    <div>
+      <all-marked-ticket-list />
+      <match-detail />
+      <tickets-list />
+    </div>
+  </mark-unmark-ticket>
+</ng-component>
+`;
+
+exports[`MarkUnmarkTicketComponent MarkUnmarkTicketComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <mark-unmark-ticket>
+    <filter-tickets />
+    <div>
+      <all-marked-ticket-list />
+      <match-detail />
+      <tickets-list />
+    </div>
+  </mark-unmark-ticket>
+</ng-component>
+`;

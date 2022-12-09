@@ -1,0 +1,39 @@
+<div class="group-licensee area-filter">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col" colspan="2">
+          <label>
+            <input class="check-group-licensee" type="checkbox" [(ngModel)]="checkAllLicensee"
+              (ngModelChange)="changeCheckAllLicensee();changeLicensees()" />
+            All Licensees
+          </label>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of groupLicensees">
+        <td>
+          <span [ngClass]="{'icon-collapse':group.isCollapse, 'icon-expand':!group.isCollapse}"
+            (click)="group.isCollapse = !group.isCollapse"></span>
+          <label>
+            <input type="checkbox" [(ngModel)]="group.isChecked"
+              (ngModelChange)="group.checkedGroup(); checkAllCheckBox();changeLicensees()" />
+            {{group.groupName}}
+          </label>
+        </td>
+        <td>
+          <div class="licensee-in-group" [ngClass]="{'hide':group.isCollapse}">
+            <div class="licensee" *ngFor="let licensee of group.licensees">
+              <label>
+                <input type="checkbox" [(ngModel)]="licensee.isChecked"
+                  (ngModelChange)="group.checkedLicensee(); checkAllCheckBox();changeLicensees()" />
+                {{licensee.name}}
+              </label>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

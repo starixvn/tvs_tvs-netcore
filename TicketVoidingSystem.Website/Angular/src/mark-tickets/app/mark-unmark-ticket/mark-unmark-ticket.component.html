@@ -1,0 +1,28 @@
+<filter-tickets #filterTickets [status]="currentTab" (searchEvent)="searchEvent($event)"
+    (changeSearch)="changeSearchBy()" (changeMatchInfo)="hideComponent()" [isExternalUrl]="isExternalUrl">
+</filter-tickets>
+
+<div>
+    <all-marked-ticket-list [model]="allMarkedTicketsModel" [isShowAllTickets]="isShowAllTickets"
+        [isBlock]="isBlockAllTickets" [autoRefreshMode]="autoRefreshMode" (getDetailTickets)="getDetailTickets($event)"
+        (updateAllMarkedTickets)="updateAllMarkedTickets($event)" [(paging)]="pagingOfAllMarked"
+        (pagingChange)="pagingEventOfAllMarked()" (refreshData)="refreshAllMarkedTickets()" [dataPermission]="dataPermission">
+    </all-marked-ticket-list>
+    <match-detail [matchDetail]="match" [isShowMatch]="isShowMatch && query.searchBy === '0'"></match-detail>
+    <div class="affected-licensees" *ngIf="showLicensees && licenseesName.length > 0">
+        <div class="collapse-licensees fa" (click)="isShowAffectLicenseees = !isShowAffectLicenseees">
+            <em [ngClass]="{'fa-chevron-up':isShowAffectLicenseees, 'fa-chevron-down':!isShowAffectLicenseees}"></em>
+        </div>
+        <div class="collapse-licensees-content">
+            <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
+            <span [hidden]="!isShowAffectLicenseees" class="affected-licensees-highlight"
+                id="affected-licensees-highlight" ngxClipboard [cbContent]="licenseesName"
+                (cbOnSuccess)="copiedAffectLicenseees()">{{licenseesName}}</span>
+        </div>
+    </div>
+
+    <tickets-list [model]="ticketsModel" [isShowTickets]="isShowTickets" [isBlock]="isBlockTickets" [(paging)]="paging"
+        [getStatus]="getStatus" (pagingChange)="pagingEvent()" [isBorder]="isBetIdBorder"
+        (exportExcelEvent)="exportExcel()" (updateMarkedTickets)="updateMarkedTickets($event)" [dataPermission]="dataPermission">
+    </tickets-list>
+</div>

@@ -1,0 +1,27 @@
+<div class="fitler " [blockUi]="isBlock">
+  <div class="search-by row no-gutters">
+    <div class="width-170"><label>Search By</label></div>
+    <div class="col-4 d-flex">
+      <div class="form-check form-check-inline" *ngFor="let item of searchBy.items">
+        <input *ngIf="!item.hidden" class="form-check-input" type="radio" name="inlineRadioOptions"
+          [checked]="item.value === searchBy.value" [attr.value]="item.value" id="inlineRadio-{{item.value}}"
+          (change)="changeSearchBy(item.value)">
+        <label *ngIf="!item.hidden" class="form-check-label" for="inlineRadio-{{item.value}}">{{item.name}}</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-auto mg-bottom-10" *ngIf="searchBy.value === '2'">
+    <div class="row">
+        <label class="col-form-label col-form-label-sm mg-right-10">Marked By</label>
+        <ng-select class="marked-by-dropdown mg-right-25" [items]="markedByOptions" bindLabel="name" bindValue="value"
+            [(ngModel)]="this.model.markedBy" [clearable]="false" [searchable]="false">
+        </ng-select>
+      </div>
+  </div>
+  <match-id #matchId *ngIf="searchBy.value === '0'" [currencies]="currencies" [groupLicensees]="groupLicensees"
+    [(model)]="model" (blockComponent)="blockComponent($event)" (changeMatch)="changeMatch()"></match-id>
+  <bet-ids #betIds *ngIf="searchBy.value === '1'" [betIdComponentCss]="'row'"></bet-ids>
+  <div class="search">
+    <input type="submit" class="btn btn-primary btn-sm" value="Search" (click)="search()" />
+  </div>
+</div>

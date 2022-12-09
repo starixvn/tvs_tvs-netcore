@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ModalType } from 'src/utility/components/modal/modal';
-import { ModalService } from 'src/utility/components/modal/modal.service';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
+import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalService } from '../../../utility/components/modal/modal.service';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { SiteDbGroupConstant } from 'src/utility/constants/config';
-import { TEXT } from 'src/utility/constants/text';
+import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
 import { UpdateVoidingHistory, VoidingHistoryModel, VoidingHistoryViewModel } from './voiding-history.model';

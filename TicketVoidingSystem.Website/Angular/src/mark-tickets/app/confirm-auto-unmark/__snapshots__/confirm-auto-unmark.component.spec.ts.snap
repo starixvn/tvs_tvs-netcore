@@ -1,0 +1,724 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match snapshot with expected data 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <confirm-auto-unmark>
+    <div
+      class="tab-underline"
+    />
+    <div
+      class="filter-area"
+    >
+      <div
+        class="row mg-left-0"
+      >
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-10"
+            >
+              Match Id
+            </label>
+            <input
+              class="match-id form-control form-control-sm mg-right-25 ng-untouched ng-pristine ng-valid"
+              numbersonly=""
+              type="text"
+            />
+          </div>
+        </div>
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-10"
+            >
+              Sport
+            </label>
+            <div
+              class="sport mg-right-25"
+            >
+              <ng-select
+                bindlabel="name"
+                bindvalue="value"
+                class="custom-sm ng-untouched ng-pristine ng-valid"
+                groupby="group"
+                placeholder="Select an option"
+              >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-10"
+            >
+              Marked By
+            </label>
+            <ng-select
+              bindlabel="name"
+              bindvalue="value"
+              class="marked-by-dropdown mg-right-25 ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-25"
+            >
+              <input
+                class="checkbox-exclude-test ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+              Exclude test data 
+            </label>
+          </div>
+        </div>
+        <div
+          class="col-auto mr-auto"
+        >
+          <input
+            class="btn btn-primary btn-sm btn-search"
+            type="submit"
+            value="Search"
+          />
+        </div>
+        <div
+          class="col-auto"
+        >
+          <auto-refresh />
+        </div>
+      </div>
+    </div>
+    <div
+      class="confirm-auto-unmark-area"
+    >
+      <div
+        class="header"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 40px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 200px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 300px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 190px;"
+            />
+            <col
+              style="width: 90px;"
+            />
+          </colgroup>
+          <thead>
+            <tr>
+              <th
+                scope="col"
+              >
+                <div>
+                  #
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Match ID
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Kick Off Time(GMT+8)
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Sport
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Event
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  HT Score
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  FT Score
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Marked By
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Marked Tickets
+                  <br />
+                  (33)
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Bet Type
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Auto Unmark
+                </div>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div
+        class="content scroller-firefox"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 40px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 200px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 300px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 190px;"
+            />
+            <col
+              style="width: 90px;"
+            />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td>
+                <div>
+                  1
+                </div>
+              </td>
+              <td>
+                <div>
+                  1999
+                </div>
+              </td>
+              <td>
+                <div>
+                  04/30/2020 07:00:00.000 PM
+                </div>
+              </td>
+              <td>
+                <div>
+                  sportname
+                </div>
+              </td>
+              <td>
+                <div>
+                  eventname
+                </div>
+              </td>
+              <td>
+                <div>
+                  1-1
+                </div>
+              </td>
+              <td>
+                <div>
+                  x
+                </div>
+              </td>
+              <td>
+                <div>
+                  sa
+                </div>
+              </td>
+              <td>
+                <div
+                  class="marked-ticket"
+                >
+                  11
+                </div>
+              </td>
+              <td>
+                <div>
+                  <b>
+                    hdp
+                  </b>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <button
+                    class="btn btn-secondary btn-sm button-confirm"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>
+                  2
+                </div>
+              </td>
+              <td>
+                <div>
+                  22229
+                </div>
+              </td>
+              <td>
+                <div>
+                  03/10/2020 07:00:00.000 PM
+                </div>
+              </td>
+              <td>
+                <div>
+                  sportname2
+                </div>
+              </td>
+              <td>
+                <div>
+                  eventname2
+                </div>
+              </td>
+              <td>
+                <div>
+                  2-2
+                </div>
+              </td>
+              <td>
+                <div>
+                  2
+                </div>
+              </td>
+              <td>
+                <div>
+                  sa22
+                </div>
+              </td>
+              <td>
+                <div
+                  class="marked-ticket"
+                >
+                  22
+                </div>
+              </td>
+              <td>
+                <div>
+                  <b>
+                    OU
+                  </b>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <div
+                    class="text-confirm"
+                  >
+                    <span>
+                      <b>
+                        Confirmed
+                      </b>
+                    </span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <paging />
+    </div>
+  </confirm-auto-unmark>
+</ng-component>
+`;
+
+exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match snapshot with no data 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <confirm-auto-unmark>
+    <div
+      class="tab-underline"
+    />
+    <div
+      class="filter-area"
+    >
+      <div
+        class="row mg-left-0"
+      >
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-10"
+            >
+              Match Id
+            </label>
+            <input
+              class="match-id form-control form-control-sm mg-right-25 ng-untouched ng-pristine ng-valid"
+              numbersonly=""
+              type="text"
+            />
+          </div>
+        </div>
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-10"
+            >
+              Sport
+            </label>
+            <div
+              class="sport mg-right-25"
+            >
+              <ng-select
+                bindlabel="name"
+                bindvalue="value"
+                class="custom-sm ng-untouched ng-pristine ng-valid"
+                groupby="group"
+                placeholder="Select an option"
+              >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-10"
+            >
+              Marked By
+            </label>
+            <ng-select
+              bindlabel="name"
+              bindvalue="value"
+              class="marked-by-dropdown mg-right-25 ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="col-auto"
+        >
+          <div
+            class="row"
+          >
+            <label
+              class="col-form-label col-form-label-sm mg-right-25"
+            >
+              <input
+                class="checkbox-exclude-test ng-untouched ng-pristine ng-valid"
+                type="checkbox"
+              />
+              Exclude test data 
+            </label>
+          </div>
+        </div>
+        <div
+          class="col-auto mr-auto"
+        >
+          <input
+            class="btn btn-primary btn-sm btn-search"
+            type="submit"
+            value="Search"
+          />
+        </div>
+        <div
+          class="col-auto"
+        >
+          <auto-refresh />
+        </div>
+      </div>
+    </div>
+    <div
+      class="confirm-auto-unmark-area"
+    >
+      <div
+        class="header"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 40px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 200px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 300px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 190px;"
+            />
+            <col
+              style="width: 90px;"
+            />
+          </colgroup>
+          <thead>
+            <tr>
+              <th
+                scope="col"
+              >
+                <div>
+                  #
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Match ID
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Kick Off Time(GMT+8)
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Sport
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Event
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  HT Score
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  FT Score
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Marked By
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Marked Tickets
+                  <br />
+                  (0)
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Bet Type
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Auto Unmark
+                </div>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div
+        class="content scroller-firefox"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 40px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 200px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 300px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 80px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 120px;"
+            />
+            <col
+              style="width: 190px;"
+            />
+            <col
+              style="width: 90px;"
+            />
+          </colgroup>
+          <tbody>
+          </tbody>
+        </table>
+        <table>
+          <tbody>
+            <tr>
+              <td
+                class="no-data"
+              >
+                There is no data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <paging />
+    </div>
+  </confirm-auto-unmark>
+</ng-component>
+`;
+
+exports[`ConfirmAutoUnmarkComponent Should show confirm modal when click Confirm button 1`] = `
+Object {
+  "message": "<div><div class=\\"confirm-auto-unmark-content\\">eventname (ID: 1999)</div>
+                      <span>Are you sure you want auto unmark for \\"hdp\\" bet type of this match?</span>
+                  </div>",
+  "title": "Auto Unmark",
+  "type": 3,
+}
+`;

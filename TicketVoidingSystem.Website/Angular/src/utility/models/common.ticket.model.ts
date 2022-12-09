@@ -1,7 +1,7 @@
 export class CommonTicketModel {
     no: number;
     betId: string;
-    value: number;
+    value: string;
     member: string;
     transDate: string;
     betType: string;
@@ -16,8 +16,9 @@ export class CommonTicketModel {
     isDisable: boolean;
     isChecked: boolean;
     isCricket: boolean;
-    soldId: number;
-    mainTransId: number;
+    soldId: string;
+    mainTransId: string;
+    siteDbGroupId: number;
 
     constructor(item = null) {
         for (const key in item) {

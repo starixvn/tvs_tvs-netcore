@@ -1,0 +1,24 @@
+﻿<div class="match-detail" *ngIf="isShowMatch">
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Match Event</th>
+                <th scope="col">Event Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <span *ngIf="isBitCoinProduct()">{{matchDetail.matchId}}</span>
+                    <span *ngIf="!isBitCoinProduct()">{{matchDetail.matchCode}}</span>
+                </td>
+                <td>
+                    <span *ngIf="isBitCoinProduct()">{{matchDetail.startTime | date:"h:mm:ss"}} - {{matchDetail.endTime | date:"h:mm:ss"}}</span>
+                    <span *ngIf="!isBitCoinProduct()">{{matchDetail.matchEvent}}</span>
+                </td>
+                <td>{{matchDetail.eventDate | date:"MM/dd/yyyy"}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,55 @@
+.search-by-match {
+  ::ng-deep .multiselect-dropdown {
+    background: white;
+  }
+
+  .width-40 {
+    width: 40px;
+  }
+
+  .width-320 {
+    width: 320px;
+  }
+  .width-170 {
+    width: 170px;
+    height: 36px;
+  }
+
+  .control-bet {
+    margin-left: 10px;
+    
+    label {
+      margin-left: 15px;
+    }
+  }
+   
+  .currency-filter {
+    ::ng-deep ng-select {
+      .ng-option-selected,
+      .ng-value {
+        background-color: #d2e8ff !important;
+      }
+  
+      .ng-value-icon {
+        padding: 1px 3px !important;
+      }
+  
+      .ng-value-icon:hover {
+        background-color: #9fcdff !important;
+      }
+  
+      .ng-value-icon.right {
+        border-left: 1px solid #9fcdff !important;
+      }
+  
+      .displayed-name {
+        padding-left: 3px;
+      }
+  
+      .number-of-more {
+        background-color: transparent !important;
+        margin-bottom: 5px;
+      }
+    } 
+  }  
+}

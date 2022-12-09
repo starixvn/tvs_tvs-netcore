@@ -1,0 +1,3 @@
+<filter-logs (searchEvent)="searchLogs($event)"></filter-logs>
+<logs-list [model]="logsModel" [isShowLogs]="isShowLogs" [isBlock]="isBlockLogs" [(paging)]="pagingOfLogs"
+    (pagingChange)="pagingEventOfLogs()"></logs-list>

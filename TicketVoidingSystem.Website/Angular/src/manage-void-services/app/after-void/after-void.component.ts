@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ModalType } from 'src/utility/components/modal/modal';
-import { ModalService } from 'src/utility/components/modal/modal.service';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
-import { TEXT } from 'src/utility/constants/text';
+import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalService } from '../../../utility/components/modal/modal.service';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { SelectVoidBetAutomationInfoQuery, ServiceStatusConstant, VoidBetAutomationModel } from '../app.model';
 

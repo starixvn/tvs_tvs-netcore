@@ -1,0 +1,10 @@
+<div class="refresh-area">
+    <div class="refresh-area-inner">
+        <ng-select class="refresh-time-selection" [items]="refreshTime.items" bindLabel="name" bindValue="value"
+            [(ngModel)]="refreshTime.value" [clearable]="false" [disabled]="isBlock" (change)="startOverCountdown()">
+        </ng-select>
+        <button type="button" class="btn btn-default btn-sm" [disabled]="isBlock" (click)="refreshImmediately()">
+            <span><i class="fa fa-refresh" aria-hidden="true"></i> {{intervalTimeText}}</span>
+        </button>
+    </div>
+</div>

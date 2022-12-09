@@ -1,7 +1,10 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-// import { RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { FunctionConst, TVSRequestActionType } from '../constants/config';
+import moment from 'moment';
+import { Tooltip } from '../components/tooltip/tooltip.model';
+import { DateTimeFormat, FunctionConst, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
+import { LABELS } from '../constants/labels';
+import { RegexConstant } from '../constants/regex';
 
 export class StaticService {
   static isVoidAction(actionId: number): boolean {
@@ -71,6 +74,10 @@ export class StaticService {
   
   static isArchivedTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.ARCHIVED_TICKET;
+  }
+
+  static isOtherIssues(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.OTHER_ISSUES;
   }
 
   static convertToFullDate(ngbDate: NgbDate): string {
@@ -156,5 +163,20 @@ export class StaticService {
     }
 
     return ` (${info.join(', ')})`;
+  }
+  
+  static isCorrectFormatMultipleDecimal(value: string): boolean {
+    return RegexConstant.MULTIPLE_DECIMAL.test(value);
+  }
+  
+  static isFromTimeSameOrBeforeToTime(fromDateTime: string, toDateTime: string, tooltip: Tooltip, fromDateTimeClass: string): boolean {
+    const momentFromDateTime = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const momentToDateTime = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    if (!momentFromDateTime.isSameOrBefore(momentToDateTime)) {
+      tooltip.display(fromDateTimeClass, LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      return false;
+    }
+
+    return true;
   }
 }

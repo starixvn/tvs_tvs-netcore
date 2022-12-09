@@ -1,0 +1,16 @@
+<div class="title">
+  Home / {{title}}
+</div>
+
+<div class="mg-10">
+  <div>
+    <tab-mark-ticket (changeTab)="changeTab($event)" [isExternalUrl]="isExternalUrl" [dataPermission]="dataPermission"></tab-mark-ticket>
+  </div>
+  <div class="position-relative wrapper-tooltip">
+    <mark-unmark-ticket *ngIf="isMarkOrUnmarkTab()" [currentTab]="currentTab" [isExternalUrl]="isExternalUrl" [dataPermission]="dataPermission"></mark-unmark-ticket>
+
+    <user-log *ngIf="isLogTab()"></user-log>
+
+    <confirm-auto-unmark *ngIf="isConfirmAutoUnmarkTab()"></confirm-auto-unmark>
+  </div>
+</div>

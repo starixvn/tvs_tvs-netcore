@@ -1,0 +1,189 @@
+<div class="tab-underline"></div>
+
+<div class="filter-area">
+    <div class="row mg-left-0">
+        <div class="col-auto">
+            <div class="row">
+                <label class="col-form-label col-form-label-sm mg-right-10">Match Id</label>
+                <input class="match-id form-control form-control-sm mg-right-25" type="text" numbersOnly [(ngModel)]="query.matchId">
+            </div>
+        </div>
+
+        <div class="col-auto">
+            <div class="row">
+                <label class="col-form-label col-form-label-sm mg-right-10">Sport</label>
+                <div class="sport mg-right-25">
+                    <ng-select
+                        class="custom-sm"
+                        [clearable]="false"
+                        [items]="sportOptions"
+                        [multiple]="true"
+                        bindLabel="name"
+                        groupBy="group"
+                        [selectableGroup]="true"
+                        [selectableGroupAsModel]="false"
+                        [closeOnSelect]="false"
+                        bindValue="value"
+                        placeholder="Select an option"
+                        [(ngModel)]="selectedSports">
+                        <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.group}}
+                        </ng-template>
+                        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.name}}
+                        </ng-template>
+                        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                            <div class="ng-value">
+                              <span class="ng-value-label">
+                                {{items.length === sportOptions.length ? 'All' : items.length}} selected
+                              </span>
+                            </div>
+                          </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-auto">
+            <div class="row">
+                <label class="col-form-label col-form-label-sm mg-right-10">Marked By</label>
+                <ng-select class="marked-by-dropdown mg-right-25" [items]="markedByOptions" bindLabel="name" bindValue="value"
+                    [(ngModel)]="query.markedBy" [clearable]="false" [searchable]="false">
+                </ng-select>
+              </div>
+        </div>
+
+        <div class="col-auto">
+            <div class="row">
+                <label class="col-form-label col-form-label-sm mg-right-25">
+                    <input class="checkbox-exclude-test" type="checkbox" [(ngModel)]="query.isExcludeTest"/>Exclude test data
+                </label>
+            </div>
+        </div>
+
+        <div class="col-auto mr-auto">
+            <input type="submit" class="btn btn-primary btn-sm btn-search" value="Search" (click)="resetPagingAndSearchData()" />
+        </div>
+
+        <div class="col-auto">
+            <auto-refresh [mode]="autoRefreshMode" (countdownEnd)="onCountdownRefreshEnd()"></auto-refresh>
+        </div>
+    </div>
+</div>
+
+<ng-template #colgroup>
+    <colgroup>
+        <col style="width: 40px" />
+        <col style="width: 100px" />
+        <col style="width: 200px" />
+        <col style="width: 100px" />
+        <col style="width: 300px" />
+        <col style="width: 80px" />
+        <col style="width: 80px" />
+        <col style="width: 120px" />
+        <col style="width: 120px" />
+        <col style="width: 190px" />
+        <col style="width: 90px" />
+    </colgroup>
+</ng-template>
+<div class="confirm-auto-unmark-area" [blockUi]="isBlock">
+    <div class="header">
+        <table>
+            <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <div>#</div>
+                    </th>
+                    <th scope="col">
+                        <div>Match ID</div>
+                    </th>
+                    <th scope="col">
+                        <div>Kick Off Time(GMT+8)</div>
+                    </th>
+                    <th scope="col">
+                        <div>Sport</div>
+                    </th>
+                    <th scope="col">
+                        <div>Event</div>
+                    </th>
+                    <th scope="col">
+                        <div>HT Score</div>
+                    </th>
+                    <th scope="col">
+                        <div>FT Score</div>
+                    </th>
+                    <th scope="col">
+                        <div>Marked By</div>
+                    </th>
+                    <th scope="col">
+                        <div>Marked Tickets<br />({{getTotalItemsOfModels()}})</div>
+                    </th>
+                    <th scope="col">
+                        <div>Bet Type</div>
+                    </th>
+                    <th scope="col">
+                        <div>Auto Unmark</div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="content scroller-firefox">
+        <table>
+            <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+            <tbody>
+                <tr *ngFor="let item of models">
+                    <td>
+                        <div>{{item.no}}</div>
+                    </td>
+                    <td>
+                        <div>{{item.matchId}}</div>
+                    </td>
+                    <td>
+                        <div>{{convertToGMT8(item.kickOffTime) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>
+                    </td>
+                    <td>
+                        <div>{{item.sportName}}</div>
+                    </td>
+                    <td>
+                        <div>{{item.event}}</div>
+                    </td>
+                    <td>
+                        <div>{{item.htScore}}</div>
+                    </td>
+                    <td>
+                        <div>{{item.ftScore}}</div>
+                    </td>
+                    <td>
+                        <div>{{item.markedBy}}</div>
+                    </td>
+                    <td>
+                        <div class="marked-ticket">{{item.totalItems}}</div>
+                    </td>
+                    <td>
+                        <div><b>{{item.bettypeName}}</b></div>
+                    </td>
+                    <td>
+                        <div *ngIf="isShowConfirm(item.markType)">
+                            <button *ngIf="!item.isConfirm" class="btn btn-secondary btn-sm button-confirm"
+                                (click)="onClickConfirm(item)">Confirm</button>
+                            <div class="text-confirm" *ngIf="item.isConfirm">
+                                <span><b>Confirmed</b></span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table *ngIf="models === undefined || models.length === 0 || models === null">
+            <tbody>
+                <tr>
+                    <td class="no-data">There is no data</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <paging [(model)]="paging" (modelChange)="searchData()"></paging>
+</div>
