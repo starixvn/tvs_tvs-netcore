@@ -11,8 +11,8 @@
     <EmbeddedResource Remove="Angular\**" />
     <None Remove="Angular\**" />
   </ItemGroup>
-
-    <ItemGroup>
+    
+  <ItemGroup>
     <AdditionalFiles Include="..\.sonarlint\tvs-website\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
 
@@ -33,7 +33,6 @@
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0" />
     <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.0-beta12" />
     <PackageReference Include="ONEbook.UM.Transport" Version="3.1.1" />
-    <PackageReference Include="T4.FileManager.VisualStudio" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,28 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.config.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TicketVoidingSystemSpNames.config.txt</LastGenOutput>
-    </None>
-    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.config.txt">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TicketVoidingSystemSpNames.config.tt</DependentUpon>
-    </None>
     <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.AWS.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.LOCAL.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.PROD.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="App_Data\Fanex.Data\TicketVoidingSystemSpNames.SIT.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
