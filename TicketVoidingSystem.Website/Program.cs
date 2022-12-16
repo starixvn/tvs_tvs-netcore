@@ -16,7 +16,8 @@ using TicketVoidingSystem.Website.Utilities;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5000); // to listen for incoming http connection on port 5000
+    const int port = 5000;
+    options.ListenAnyIP(port); // to listen for incoming http connection on port 5000
 });
 
 // Add services to the container.
@@ -68,4 +69,3 @@ app.MapControllerRoute(
 app.MapHub<NotificationHub>("/SignalR/NotificationHub");
 
 app.Run();
-
