@@ -4,7 +4,7 @@ using SpecialDelete.Core.DTO;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers
+namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark
 {
     public class UpdateConfirmAutoUnmarkRequest : UpdateConfirmAutoUnmarkQuery, IRequest<Result>
     {

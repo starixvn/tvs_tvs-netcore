@@ -24,5 +24,22 @@ namespace TicketVoidingSystem.MarkTickets.Extensions
 
             return $"<Matches>{stringBuilder.ToString().Trim()}</Matches>";
         }
+
+        public static string ToTransIdsXml(this IEnumerable<string> transIds)
+        {
+            if (transIds == null)
+            {
+                return string.Empty;
+            }
+
+            var stringBuilder = new StringBuilder();
+            foreach (var transId in transIds)
+            {
+                var line = $"<Ticket Id='{transId}'/>";
+                stringBuilder.AppendLine(line);
+            }
+
+            return $"<Tickets>{stringBuilder.ToString().Trim()}</Tickets>";
+        }
     }
 }

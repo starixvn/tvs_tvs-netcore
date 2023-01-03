@@ -36,21 +36,11 @@ namespace TicketVoidingSystem.Utilities
 
         public static string GetUnionTransIdString(IEnumerable<string> items)
         {
-            if (!items.Any())
-            {
-                return string.Empty;
-            }
+            var splitItems = items.Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => x.Split(','));
 
-            var splitItems = items.Select(x =>
-                string.IsNullOrWhiteSpace(x) ? string.Empty.Split(',').ToList() : x.Split(',').ToList());
-
-            var result = Enumerable.Empty<string>();
-            foreach (var transIdList in splitItems)
-            {
-                result = result.Union(transIdList);
-            }
-
-            return string.Join(",", result);
+            var transIds = splitItems.SelectMany(x => x).Distinct();
+            return string.Join(",", transIds);
         }
 
         public static string JoinBetIdList(IEnumerable<BetId> items)

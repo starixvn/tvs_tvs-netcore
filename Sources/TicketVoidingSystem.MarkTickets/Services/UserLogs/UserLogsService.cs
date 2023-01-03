@@ -2,14 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using TicketVoidingSystem.Constants;
+using Fanex.Data.Repository;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.MarkTickets.Constants;
-using TicketVoidingSystem.MarkTickets.Criteria;
 using TicketVoidingSystem.MarkTickets.Criteria.UserLogs;
+using TicketVoidingSystem.MarkTickets.Extensions;
+using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.UserLogs;
 using TicketVoidingSystem.MarkTickets.ViewModels;
-using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.MarkTickets.Services.UserLogs
 {
@@ -22,101 +21,54 @@ namespace TicketVoidingSystem.MarkTickets.Services.UserLogs
 
     public class UserLogServiceImp : UserLogsService
     {
-        private readonly Repository repository;
-        private readonly RemotingRefWrapperService remotingRefService;
+        private readonly IMapper mapper;
+        private readonly IDynamicRepository repository;
+        private readonly MapUserLogsService mapUserLogsService;
 
-        public UserLogServiceImp(Repository repository, RemotingRefWrapperService remotingRefService)
+        public UserLogServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
         {
+            this.mapper = mapper;
             this.repository = repository;
-            this.remotingRefService = remotingRefService;
+            this.mapUserLogsService = mapUserLogsService;
         }
 
         public async Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query)
         {
-            var criteria = Mapper.Map<GetUserLogsCriteria>(query);
+            var criteria = mapper.Map<GetUserLogsCriteria>(query);
             criteria.LogDateFrom = query.LogDateFrom.ZoneCanada();
             criteria.LogDateTo = query.LogDateTo.AddDays(1).ZoneCanada();
-            var logs = await repository.GetLogs(criteria);
 
-            return logs.ToList();
+            return await repository.FetchAsync<GetUserLogModel>(criteria);
         }
 
         public async Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs)
         {
-            var listTransIds = new List<string>();
-            foreach (var log in originalLogs)
-            {
-                if (!string.IsNullOrWhiteSpace(log.LogData))
-                {
-                    log.TransIds = log.LogData.Split(',');
-                    listTransIds.AddRange(log.TransIds);
-                }
-                else
-                {
-                    log.TransIds = new List<string>();
-                }
-            }
+            UpdateTransIdsProp(originalLogs);
+            var transIdsInAllLogs = originalLogs.SelectMany(x => x.TransIds).Distinct();
+            var ticketsInfo = await GetTicketsInfo(transIdsInAllLogs);
+            var viewModel = mapUserLogsService.MapToUserLogViewModels(originalLogs, ticketsInfo);
 
-            var ticketInfoCriteria = new GetUserLogTicketInfoCriteria { TransIdsXml = listTransIds.Distinct().ToXml() };
-            var ticketInfo = await repository.GetUserLogTicketInfo(ticketInfoCriteria);
-
-            var finalLogs = new List<GetUserLogViewModel>();
-            var index = 1;
-            foreach (var log in originalLogs)
-            {
-                var finalLog = new GetUserLogViewModel
-                {
-                    No = index++,
-                    ActionId = log.SessionId,
-                    LogDate = log.CreatedDate,
-                    Action = UpdateAction(log.LogActionId),
-                    SingleTickets = log.TransIds.Where(id => ticketInfo.SingleTickets.Any(y => y.TransId == id)),
-                    ParlayTickets = log.TransIds.Where(id => ticketInfo.ParlayTickets.Any(y => y.TransId == id)),
-                    MatchId = log.MatchId,
-                    Event = remotingRefService.GetTeamName(log.HomeId, LanguageCode.English) + " - vs - " + remotingRefService.GetTeamName(log.AwayId, LanguageCode.English),
-                    DoneBy = log.DoneBy,
-                    HTScore = log.HTScore,
-                    FTScore = log.FTScore,
-                    KickOffTime = log.KickOffTime
-                };
-
-                finalLogs.Add(finalLog);
-            }
-
-            return finalLogs;
+            return viewModel;
         }
 
-        private static string UpdateAction(int logActionId)
+        private static void UpdateTransIdsProp(IEnumerable<GetUserLogModel> originalLogs)
         {
-            string actionText;
-            switch (logActionId)
+            foreach (var log in originalLogs)
             {
-                case UserLogConstant.ManualMark:
-                    actionText = UserLogConstant.ManualMarkText;
-                    break;
-
-                case UserLogConstant.ManualUnmark:
-                    actionText = UserLogConstant.ManualUnmarkText;
-                    break;
-
-                case UserLogConstant.AutoMark:
-                    actionText = UserLogConstant.AutoMarkText;
-                    break;
-
-                case UserLogConstant.AutoUnmark:
-                    actionText = UserLogConstant.AutoUnmarkText;
-                    break;
-
-                case UserLogConstant.UnmarkAll:
-                    actionText = UserLogConstant.UnmarkAllText;
-                    break;
-
-                default:
-                    actionText = "";
-                    break;
+                log.TransIds = !string.IsNullOrWhiteSpace(log.LogData) ? log.LogData.Split(',') : new List<string>();
             }
+        }
 
-            return actionText;
+        private async Task<UserLogTicketInfo> GetTicketsInfo(IEnumerable<string> transIdsInAllLogs)
+        {
+            var criteria = new GetUserLogTicketInfoCriteria { TransIdsXml = transIdsInAllLogs.ToTransIdsXml() };
+            var (singleTickets, parlayTickets) = await repository.FetchMultipleAsync<TicketInfo, TicketInfo>(criteria);
+
+            return new UserLogTicketInfo
+            {
+                SingleTickets = singleTickets,
+                ParlayTickets = parlayTickets
+            };
         }
     }
 }

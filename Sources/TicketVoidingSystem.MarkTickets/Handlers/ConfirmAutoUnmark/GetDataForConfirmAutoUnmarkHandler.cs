@@ -1,14 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fanex.BetList.Core.Entities;
-using MediatR;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
-using TicketVoidingSystem.MarkTickets.ViewModels;
-using TicketVoidingSystem.Services.BetList;
-
-namespace TicketVoidingSystem.MarkTickets.Handlers
+﻿namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark
 {
     public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery,
         IRequest<GetDataForConfirmAutoUnmarkViewModel>

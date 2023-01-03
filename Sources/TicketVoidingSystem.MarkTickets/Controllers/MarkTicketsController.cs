@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.MarkTickets.Handlers;
+using TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
 using TicketVoidingSystem.Models;
@@ -44,25 +45,21 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         public async Task<IActionResult> MarkAllTickets(MarkAllTicketsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
-        public async Task<ActionResult> ExportExcel(ExportExcelRequest request)
+        public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
         {
             var model = await mediator.Send(request);
             return File(model.Content, ExcelFileModel.ContentType, model.FileName);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ExportExcelDetailTicket(ExportExcelDetailTicketsRequest request)
+        public async Task<IActionResult> ExportExcelDetailTicket(ExportExcelDetailTicketsRequest request)
         {
             var model = await mediator.Send(request).ConfigureAwait(false);
             return File(model.Content, ExcelFileModel.ContentType, model.FileName);
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetUserLogs(GetUserLogsRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
+        public async Task<IActionResult> GetUserLogs(GetUserLogsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
         public async Task<JsonResult> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkRequest request)
