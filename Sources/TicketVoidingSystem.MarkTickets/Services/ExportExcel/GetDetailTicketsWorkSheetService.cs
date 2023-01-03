@@ -26,7 +26,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.ExportExcel
             {
                 cellService.AddMatch(worksheet, model.Match);
             }
-            var tickets = await getTicketsService.GetDetailTickets(model);
+            var tickets = await getTicketsService.GetDetailTicketsForExportExcel(model);
             worksheet.ApplyVertical(tickets, startRow);
             cellService.SetStyle(worksheet);
         }

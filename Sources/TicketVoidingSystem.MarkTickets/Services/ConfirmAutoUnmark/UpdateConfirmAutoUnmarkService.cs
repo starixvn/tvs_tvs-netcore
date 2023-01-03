@@ -1,29 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark
 {
-    public interface AutoUnmarkService
+    public interface UpdateConfirmAutoUnmarkService
     {
         Task InsertAutoUnmarkSetting(UpdateConfirmAutoUnmarkQuery query);
 
         Task<IEnumerable<BetId>> GetTicketsAbnormalBetByMatchId(int matchId);
 
-        Task<UpdateConfirmAutoUnmarkValidation> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkQuery query);
+        Task<UpdateConfirmAutoUnmarkValidation> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkQuery query,
+            IEnumerable<BetId> abnormalBetTickets);
     }
 
-    public class AutoUnmarkServiceImp : AutoUnmarkService
+    public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
     {
         private readonly IDynamicRepository repository;
-        private readonly ISessionService session;
+        private readonly SessionService sessionService;
+        private readonly CombineValidationService combineValidationService;
 
-        public AutoUnmarkServiceImp(IDynamicRepository repository, ISessionService session)
+        public UpdateConfirmAutoUnmarkServiceImp(IDynamicRepository repository, SessionService sessionService, CombineValidationService combineValidationService)
         {
             this.repository = repository;
-            this.session = session;
+            this.sessionService = sessionService;
+            this.combineValidationService = combineValidationService;
         }
 
         public async Task InsertAutoUnmarkSetting(UpdateConfirmAutoUnmarkQuery query)
@@ -34,7 +42,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark
                 Bettype = query.Bettype,
                 MarkedBy = query.MarkedBy,
                 BetId = query.BetId,
-                UserId = session.UserId
+                UserId = sessionService.UserId
             };
             await repository.ExecuteAsync(criteria);
         }
@@ -49,11 +57,8 @@ namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark
             return await repository.FetchAsync<BetId>(criteria);
         }
 
-        public async Task<UpdateConfirmAutoUnmarkValidation> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkQuery query)
+        public async Task<UpdateConfirmAutoUnmarkValidation> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkQuery query, IEnumerable<BetId> abnormalBetTickets)
         {
-            await InsertAutoUnmarkSetting(query);
-            var tickets = await GetTicketsAbnormalBetByMatchId(query.MatchId);
-
             var validationInAllServers = new List<UpdateConfirmAutoUnmarkValidation>();
             var criteria = new UpdateConfirmAutoUnmarkCriteria
             {
@@ -61,12 +66,12 @@ namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark
                 Bettype = query.Bettype,
                 MarkedBy = query.MarkedBy,
                 BetId = query.BetId,
-                UserId = session.UserId
+                UserId = sessionService.UserId
             };
 
             foreach (var server in SiteDbGroupConstant.ServerList)
             {
-                var ticketsInCurrentServer = tickets.Where(x => x.SiteDbGroupId == server.Id);
+                var ticketsInCurrentServer = abnormalBetTickets.Where(x => x.SiteDbGroupId == server.Id);
                 criteria.SiteDbGroupId = server.Id;
                 criteria.TransIds = Helper.JoinBetIdList(ticketsInCurrentServer);
                 var validation = await repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(criteria);
@@ -74,26 +79,7 @@ namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark
                 validationInAllServers.AddRange(validation);
             }
 
-            return CombineValidation(validationInAllServers);
-        }
-
-        private static UpdateConfirmAutoUnmarkValidation CombineValidation(IEnumerable<UpdateConfirmAutoUnmarkValidation> validationInAllServers)
-        {
-            const int CodeConfirmOkButNoTickets = 111;
-            var errorResult = validationInAllServers.FirstOrDefault(x => x.ErrorCode != 0 && x.ErrorCode != CodeConfirmOkButNoTickets);
-            if (errorResult == null)
-            {
-                errorResult = validationInAllServers.All(x => x.ErrorCode == CodeConfirmOkButNoTickets)
-                    ? validationInAllServers.First()
-                    : new UpdateConfirmAutoUnmarkValidation { ErrorCode = 0, ErrorMsg = string.Empty };
-            }
-
-            return new UpdateConfirmAutoUnmarkValidation
-            {
-                ErrorCode = errorResult.ErrorCode,
-                ErrorMsg = errorResult.ErrorMsg,
-                NegativeBalanceUsers = Helper.GetUnionTransIdString(validationInAllServers.Select(x => x.NegativeBalanceUsers))
-            };
+            return combineValidationService.CombineUpdateResult(validationInAllServers);
         }
     }
 }

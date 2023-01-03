@@ -1,4 +1,4 @@
-﻿using SpecialDelete.Core.DTO;
+﻿using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark
 {

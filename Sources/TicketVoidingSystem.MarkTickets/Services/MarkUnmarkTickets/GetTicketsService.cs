@@ -7,7 +7,6 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models;
-using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Utilities;
 
@@ -24,8 +23,6 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
         Task<IEnumerable<ExcelTicketModel>> GetDetailTicketsForExportExcel(GetDetailTicketsQuery query);
 
         Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query);
-
-        Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query);
     }
 
     public class GetTicketsServiceImp : GetTicketsService
@@ -116,13 +113,6 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
             }
 
             return dataInAllServers;
-        }
-
-        public async Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
-        {
-            var transInfoData = await repository.GetTransInfoForAutoUnmark(query);
-            var result = await repository.GetDataForConfirmAutoUnmark(transInfoData);
-            return result;
         }
     }
 }

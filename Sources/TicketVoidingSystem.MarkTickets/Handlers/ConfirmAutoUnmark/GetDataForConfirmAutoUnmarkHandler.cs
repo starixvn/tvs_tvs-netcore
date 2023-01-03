@@ -1,85 +1,44 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
+using TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark;
+using TicketVoidingSystem.MarkTickets.ViewModels;
+using TicketVoidingSystem.Services;
+
+namespace TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark
 {
-    public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery,
-        IRequest<GetDataForConfirmAutoUnmarkViewModel>
+    public class GetDataForConfirmAutoUnmarkRequest : GetDataForConfirmAutoUnmarkQuery, IRequest<GetDataForConfirmAutoUnmarkViewModel>
     {
     }
 
-    public class GetDataForConfirmAutoUnmarkHandler : IAsyncRequestHandler<GetDataForConfirmAutoUnmarkRequest,
-        GetDataForConfirmAutoUnmarkViewModel>
+    public class GetDataForConfirmAutoUnmarkHandler : IRequestHandler<GetDataForConfirmAutoUnmarkRequest, GetDataForConfirmAutoUnmarkViewModel>
     {
-        private readonly IGetTicketsService getTicketsService;
-        private readonly IPagingService paggingService;
-        private readonly BetListService betListService;
+        private readonly ConfirmAutoUnmarkService confirmAutoUnmarkService;
+        private readonly PagingService pagingService;
+        private readonly MapDataForConfirmAutoUnmarkService mapDataForConfirmAutoUnmarkService;
 
         public GetDataForConfirmAutoUnmarkHandler(
-            IGetTicketsService getTicketsService,
-            IPagingService paggingService,
-            BetListService betListService)
+            ConfirmAutoUnmarkService confirmAutoUnmarkService,
+            PagingService pagingService,
+            MapDataForConfirmAutoUnmarkService mapDataForConfirmAutoUnmarkService)
         {
-            this.getTicketsService = getTicketsService;
-            this.paggingService = paggingService;
-            this.betListService = betListService;
+            this.confirmAutoUnmarkService = confirmAutoUnmarkService;
+            this.pagingService = pagingService;
+            this.mapDataForConfirmAutoUnmarkService = mapDataForConfirmAutoUnmarkService;
         }
 
-        public async Task<GetDataForConfirmAutoUnmarkViewModel> Handle(GetDataForConfirmAutoUnmarkRequest message)
+        public async Task<GetDataForConfirmAutoUnmarkViewModel> Handle(GetDataForConfirmAutoUnmarkRequest message, CancellationToken cancellationToken)
         {
             var model = new GetDataForConfirmAutoUnmarkViewModel();
+            var data = await confirmAutoUnmarkService.GetDataForConfirmAutoUnmark(message);
+            model.TotalItems = data.Count();
 
-            var data = (await getTicketsService.GetDataForConfirmAutoUnmark(message)).ToList();
-
-            model.TotalItems = data.Count;
-
-            var dataPaging = paggingService.Paging(data, message.PageIndex, message.PageSize);
-
-            model.Items = CreateViewModel(dataPaging);
+            var dataPaging = pagingService.Paging(data, message.PageIndex, message.PageSize);
+            model.Items = mapDataForConfirmAutoUnmarkService.MapToConfirmAutoUnmarkViewModels(dataPaging);
 
             return model;
-        }
-
-        private IEnumerable<ConfirmAutoUnmarkViewModel> CreateViewModel(IEnumerable<ConfirmAutoUnmarkModel> model)
-        {
-            var index = 1;
-            return model.Select(itemModel => new ConfirmAutoUnmarkViewModel
-            {
-                No = index++,
-                IsConfirm = itemModel.IsConfirm,
-                MatchId = itemModel.MatchId,
-                HTScore = itemModel.HTScore,
-                FTScore = itemModel.FTScore,
-                Bettype = itemModel.Bettype,
-                BetId = ParseBetId(itemModel.BetId),
-                BettypeName = GetBettypeName(itemModel.Bettype, itemModel.BetId),
-                KickOffTime = itemModel.KickOffTime,
-                UserId = itemModel.UserId,
-                MarkedBy = itemModel.MarkedBy,
-                TotalItems = itemModel.MarkedTrans,
-                SportName = RemotingWrapper.GetSportName(itemModel.SportType.ToString(), ""),
-                Event = RemotingWrapper.GetTeamName(itemModel.HomeId, LanguageCode.English) + " - vs - " +
-                        RemotingWrapper.GetTeamName(itemModel.AwayId, LanguageCode.English),
-                MarkType = itemModel.MarkType
-            });
-        }
-
-        private string GetBettypeName(int bettype, string betid)
-        {
-            var ticket = new Ticket
-            {
-                BetId = ParseBetId(betid),
-                BetTypeId = bettype
-            };
-            return betListService.GetBetTypeName(ticket);
-        }
-
-        private static long? ParseBetId(string betId)
-        {
-            var isParseSuccess = long.TryParse(betId, out var betIdNumber);
-            if (isParseSuccess)
-            {
-                return betIdNumber;
-            }
-
-            return null;
         }
     }
 }

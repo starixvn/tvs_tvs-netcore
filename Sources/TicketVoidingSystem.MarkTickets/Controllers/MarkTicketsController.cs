@@ -62,24 +62,12 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         public async Task<IActionResult> GetUserLogs(GetUserLogsRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
-        public async Task<JsonResult> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
+        public async Task<IActionResult> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
-        public async Task<JsonResult> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
+        public async Task<IActionResult> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkRequest request) => Ok(await mediator.Send(request));
 
         [HttpGet]
-        public async Task<JsonResult> GetDataPermission(GetDataPermissionRequest request)
-        {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return this.JsonNet(model);
-        }
+        public async Task<IActionResult> GetDataPermission(GetDataPermissionRequest request) => Ok(await mediator.Send(request));
     }
 }
