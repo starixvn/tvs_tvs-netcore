@@ -15,6 +15,7 @@ using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
+using Fanex.RemotingRef;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -35,8 +36,14 @@ using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Services;
 using TicketVoidingSystem.MarkTickets.Controllers;
+using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark;
+using TicketVoidingSystem.MarkTickets.Services.ExportExcel;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.Services.UserLogs;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
 
@@ -160,6 +167,7 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<ILogger, Logger>();
             services.AddSingleton<IUserIdProvider, CustomIdProvider>();
             services.AddSingleton<CheckUMFilterAttribute>();
+            services.AddSingleton<IRemotingRefService, RemotingRefService>();
         }
 
         public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
@@ -177,8 +185,14 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSingleton<SessionService, SessionServiceImp>();
             services.AddSingleton<LoggingService, LoggingServiceImp>();
             services.AddSingleton<PagingService, PagingServiceImp>();
+            services.AddSingleton<LoggingService, LoggingServiceImp>();
+            services.AddScoped(typeof(ExcelService<>), typeof(ExcelServiceImp<>));
             services.AddSingleton<RemotingRefWrapperService, RemotingRefWrapperServiceImp>();
+            services.AddSingleton<BetListService, BetListServiceImp>();
+            services.AddSingleton<OddsService, OddsServiceImp>();
             services.AddSingleton<LogActionFilterAttribute>();
+
+            // AB Exception List
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
             services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
@@ -187,9 +201,20 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<LetstalkService, LetstalkServiceImp>();
 
             // Mark Tickets
+            services.AddTransient<CombineValidationService, CombineValidationServiceImp>();
+            services.AddTransient<ConfirmAutoUnmarkService, ConfirmAutoUnmarkServiceImp>();
+            services.AddTransient<MapDataForConfirmAutoUnmarkService, MapDataForConfirmAutoUnmarkServiceImp>();
+            services.AddTransient<UpdateConfirmAutoUnmarkService, UpdateConfirmAutoUnmarkServiceImp>();
+            services.AddTransient<CellService, CellServiceImp>();
+            services.AddTransient<WorkSheetService<GetDetailTicketsQuery>, GetDetailTicketsWorkSheetService>();
+            services.AddTransient<WorkSheetService<GetTicketsQuery>, GetTicketsWorkSheetService>();
+            services.AddTransient<CheckBoxService, CheckBoxServiceImp>();
             services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
+            services.AddTransient<MapTicketService, MapTicketServiceImp>();
             services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
             services.AddTransient<MarkAllTicketsService, MarkAllTicketsServiceImp>();
+            services.AddTransient<MapUserLogsService, MapUserLogsServiceImp>();
+            services.AddTransient<UserLogsService, UserLogsServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)
@@ -197,6 +222,11 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddMediatR(typeof(ABExceptionListController));
             services.AddMediatR(typeof(ManageVoidServicesController));
             services.AddMediatR(typeof(MarkTicketsController));
+        }
+
+        public static void RegisterAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(MarkTicketsController));
         }
     }
 }

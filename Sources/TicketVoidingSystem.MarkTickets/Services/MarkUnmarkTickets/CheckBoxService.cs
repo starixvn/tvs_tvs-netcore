@@ -1,13 +1,13 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
-{
-    using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+﻿using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 
-    public interface ICheckBoxService
+namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
+{
+    public interface CheckBoxService
     {
         bool IsDisable(GetTicketModel item, UserPermission permission);
     }
 
-    public class CheckBoxService : ICheckBoxService
+    public class CheckBoxServiceImp : CheckBoxService
     {
         public bool IsDisable(GetTicketModel item, UserPermission permission)
         {

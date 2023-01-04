@@ -19,13 +19,13 @@ namespace TicketVoidingSystem.MarkTickets.Services.UserLogs
         Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs);
     }
 
-    public class UserLogServiceImp : UserLogsService
+    public class UserLogsServiceImp : UserLogsService
     {
         private readonly IMapper mapper;
         private readonly IDynamicRepository repository;
         private readonly MapUserLogsService mapUserLogsService;
 
-        public UserLogServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
+        public UserLogsServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
         {
             this.mapper = mapper;
             this.repository = repository;

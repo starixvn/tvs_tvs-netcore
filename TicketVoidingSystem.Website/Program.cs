@@ -31,6 +31,7 @@ builder.Services.RegisterONEbookUM(builder.Configuration);
 builder.Services.RegisterCoreServices(builder.Configuration);
 builder.Services.RegisterBusinessServices();
 builder.Services.RegisterMediatR();
+builder.Services.RegisterAutoMapper();
 builder.Services.RegisterSignalR(builder.Configuration);
 builder.Services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
 builder.Services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });

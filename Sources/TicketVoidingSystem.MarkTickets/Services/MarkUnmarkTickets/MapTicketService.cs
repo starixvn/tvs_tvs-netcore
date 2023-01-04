@@ -30,9 +30,9 @@ namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
         private readonly IMapper mapper;
         private readonly SessionService sessionService;
         private readonly BetListService betListService;
-        private readonly ICheckBoxService checkBoxService;
+        private readonly CheckBoxService checkBoxService;
 
-        public MapTicketServiceImp(IMapper mapper, SessionService sessionService, BetListService betListService, ICheckBoxService checkBoxService)
+        public MapTicketServiceImp(IMapper mapper, SessionService sessionService, BetListService betListService, CheckBoxService checkBoxService)
         {
             this.mapper = mapper;
             this.sessionService = sessionService;
