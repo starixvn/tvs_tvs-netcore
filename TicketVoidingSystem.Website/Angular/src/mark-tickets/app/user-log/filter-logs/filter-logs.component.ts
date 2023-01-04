@@ -6,7 +6,7 @@ import { PagingConstant } from '../../../../utility/components/paging/paging/pag
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { ModeType } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
-import { AppService } from '../../app.service';
+import { CommonService } from '../../../../utility/services/common.service';
 import { GetLogsQuery } from '../../models/query.model';
 import { FilterAction, FilterDate } from './filter-logs.model';
 
@@ -26,7 +26,9 @@ export class FilterLogsComponent implements OnInit {
 
   @Output() searchEvent = new EventEmitter<GetLogsQuery>();
 
-  constructor(private readonly appService: AppService, private readonly element: ElementRef) {
+  constructor(
+    private readonly commonService: CommonService, 
+    private readonly element: ElementRef) {
     this.tooltip.element = element;
   }
 
@@ -75,7 +77,7 @@ export class FilterLogsComponent implements OnInit {
     }
 
     const query: GetBetTypesQuery = { mode: ModeType.SPORT_BOOK, matchId: parseInt(this.model.matchId, 10) };
-    const data = await this.appService.getGroupBetTypes(query);
+    const data = await this.commonService.getGroupBetTypes(query);
 
     if (data.result.errorCode === 0) {
       if (data.groupBetTypes.length === 0) {

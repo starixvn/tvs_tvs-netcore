@@ -14,7 +14,9 @@ import { Result, SqlResult } from '../models/result';
 import { Selection } from '../models/selection.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
+import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
+import { SportInfo } from '../models/event.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
 
 @Injectable({
@@ -28,6 +30,19 @@ export class CommonService {
   async getNapUserInfo(): Promise<NapUserInfoModel> {
     return this.httpService.getJson('api/SharedApi/GetNapUserInfo');
   }
+
+  async getBalanceUpZoneManila(): Promise<BalanceUp> {
+    return this.httpService.getJson(`api/SharedApi/GetBalanceUpZoneManila`);
+  }
+
+  async getGroupBetTypes(query: GetBetTypesQuery): Promise<GroupBetTypesModel> {
+    return this.httpService.postJson(query, `api/SharedApi/GetGroupBetTypesNg`);
+  }
+
+  async getSportsType(): Promise<SportInfo[]> {
+    return this.httpService.getJson('api/SharedApi/GetSportsType');
+  }
+
 
   async getActions(): Promise<Selection[]> {
     return this.httpService.getJson('TicketVoiding/GetActions');

@@ -3,6 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Selection } from '../../../../utility/models/selection.model';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/query.model';
 import { Currencies, FilterSearchBy } from './filter.model';
@@ -34,6 +35,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
   moveBetNgbDate: NgbDate;
 
   constructor(
+    private readonly commonService: CommonService,
     private readonly appService: AppService,
     private readonly elementRef: ElementRef
   ) { }
@@ -50,9 +52,8 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
     }
   }
 
-
   async initData() {
-    const balanceUp = await this.appService.getBalanceUpZoneManila();
+    const balanceUp = await this.commonService.getBalanceUpZoneManila();
     const moveBetDay = new Date(balanceUp.moveBetsDay);
     this.moveBetNgbDate = new NgbDate(moveBetDay.getFullYear(), moveBetDay.getMonth() + 1, moveBetDay.getDate() + 1);
     const userName = document.getElementById('body').getAttribute('user-id');

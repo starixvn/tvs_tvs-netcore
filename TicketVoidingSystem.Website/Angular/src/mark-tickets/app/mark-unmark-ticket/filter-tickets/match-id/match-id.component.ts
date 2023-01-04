@@ -15,7 +15,6 @@ import { DateTimeFormat, ModeType } from '../../../../../utility/constants/confi
 import { LABELS } from '../../../../../utility/constants/labels';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { AppService } from '../../../app.service';
 import { GetTicketsQuery, RangeTime } from '../../../models/query.model';
 import { EventType } from '../filter.model';
 import { Duration } from './../../../models/query.model';
@@ -49,7 +48,6 @@ export class MatchIdComponent implements OnInit {
   tooltip = new Tooltip();
 
   constructor(
-    private readonly appService: AppService,
     private readonly commonService: CommonService,
     private readonly element: ElementRef
   ) {
@@ -106,7 +104,7 @@ export class MatchIdComponent implements OnInit {
   async getGroupBetTypes() {
     this.blockComponent.emit(true);
     const query: GetBetTypesQuery = { mode: ModeType.MARK_TICKET, matchId: parseInt(this.model.matchId, 10) };
-    const data = await this.appService.getGroupBetTypes(query);
+    const data = await this.commonService.getGroupBetTypes(query);
     this.handleGroupBetTypes(data);
     this.blockComponent.emit(false);
   }

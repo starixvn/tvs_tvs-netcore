@@ -44,6 +44,9 @@ using TicketVoidingSystem.MarkTickets.Services.UserLogs;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.Services.Excel;
+using TicketVoidingSystem.SharedApi.Controllers;
+using TicketVoidingSystem.SharedApi.Services;
+using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
 
@@ -192,6 +195,11 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSingleton<OddsService, OddsServiceImp>();
             services.AddSingleton<LogActionFilterAttribute>();
 
+            // Shared Api
+            services.AddTransient<BetTypesService, BetTypesServiceImp>();
+            services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
+            services.AddTransient<BalanceUpService, BalanceUpServiceImp>();
+
             // AB Exception List
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
@@ -219,6 +227,7 @@ namespace TicketVoidingSystem.Website.Utilities
 
         public static void RegisterMediatR(this IServiceCollection services)
         {
+            services.AddMediatR(typeof(SharedApiController));
             services.AddMediatR(typeof(ABExceptionListController));
             services.AddMediatR(typeof(ManageVoidServicesController));
             services.AddMediatR(typeof(MarkTicketsController));

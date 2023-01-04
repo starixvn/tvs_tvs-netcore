@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 
@@ -51,6 +52,13 @@ namespace TicketVoidingSystem.Utilities
         public static string GetFilePath(string path)
         {
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+        }
+
+        public static T DeserializeJsonFileToObject<T>(string jsonPath)
+        {
+            var path = GetFilePath(jsonPath);
+            var jsonString = File.ReadAllText(path);
+            return JsonSerializer.Deserialize<T>(jsonString);
         }
     }
 }

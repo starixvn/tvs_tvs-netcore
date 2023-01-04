@@ -1,6 +1,6 @@
 ﻿using Fanex.Data.Repository;
 
-namespace TicketVoidingSystem.MarkTickets.Criteria
+namespace TicketVoidingSystem.SharedApi.Criteria
 {
     public class GetBalanceUpDayCriteria : CriteriaBase
     {

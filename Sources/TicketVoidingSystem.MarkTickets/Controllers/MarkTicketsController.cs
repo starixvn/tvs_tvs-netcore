@@ -26,13 +26,14 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBalanceUpZoneManila(GetBalanceUpDayZoneManilaRequest request) => Ok(await mediator.Send(request));
-
-        [HttpGet]
         public async Task<IActionResult> GetCurrencies() => Ok(await mediator.Send(new GetCurrenciesRequest()));
 
         [HttpGet]
         public async Task<IActionResult> GetLicensees() => Ok(await mediator.Send(new GetLicenseesRequest()));
+
+        [HttpGet]
+        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
+        public async Task<IActionResult> GetDataPermission() => Ok(await mediator.Send(new GetDataPermissionRequest()));
 
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
@@ -81,9 +82,5 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
         public async Task<IActionResult> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkRequest request) => Ok(await mediator.Send(request));
-
-        [HttpGet]
-        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
-        public async Task<IActionResult> GetDataPermission(GetDataPermissionRequest request) => Ok(await mediator.Send(request));
     }
 }

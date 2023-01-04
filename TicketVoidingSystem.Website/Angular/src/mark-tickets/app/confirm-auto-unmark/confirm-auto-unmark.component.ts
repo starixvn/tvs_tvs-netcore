@@ -10,6 +10,7 @@ import { SportType } from '../../../utility/constants/sport.constant';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
+import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark.model';
 
@@ -30,6 +31,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   autoRefreshMode: number;
 
   constructor(
+    private readonly commonService: CommonService,
     private readonly appService: AppService,
     private readonly modalService: ModalService
   ) { }
@@ -58,7 +60,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   }
 
   async getSportTypes() {
-    let sportTypes = await this.appService.getSportsType();
+    let sportTypes = await this.commonService.getSportsType();
     sportTypes = sportTypes.filter(x => x.sportType !== SportType.CRICKET);
     this.sportOptions = [];
     this.mapObject(sportTypes);
