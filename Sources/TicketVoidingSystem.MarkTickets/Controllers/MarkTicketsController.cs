@@ -25,6 +25,15 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
             this.mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetBalanceUpZoneManila(GetBalanceUpDayZoneManilaRequest request) => Ok(await mediator.Send(request));
+
+        [HttpGet]
+        public async Task<IActionResult> GetCurrencies() => Ok(await mediator.Send(new GetCurrenciesRequest()));
+
+        [HttpGet]
+        public async Task<IActionResult> GetLicensees() => Ok(await mediator.Send(new GetLicenseesRequest()));
+
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
         public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));

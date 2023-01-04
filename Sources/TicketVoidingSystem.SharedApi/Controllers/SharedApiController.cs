@@ -1,4 +1,5 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Session;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,12 @@ namespace TicketVoidingSystem.SharedApi.Controllers
     [Route("api/[controller]/[action]")]
     public class SharedApiController : ControllerBase
     {
+        private readonly IMediator mediator;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public SharedApiController(IHttpContextAccessor httpContextAccessor)
+        public SharedApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
         {
+            this.mediator = mediator;
             this.httpContextAccessor = httpContextAccessor;
         }
 

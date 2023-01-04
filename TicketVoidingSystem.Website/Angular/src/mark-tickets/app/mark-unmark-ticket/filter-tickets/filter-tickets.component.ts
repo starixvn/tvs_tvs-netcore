@@ -52,7 +52,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
 
   async initData() {
-    const balanceUp = await this.appService.getBalanceUp();
+    const balanceUp = await this.appService.getBalanceUpZoneManila();
     const moveBetDay = new Date(balanceUp.moveBetsDay);
     this.moveBetNgbDate = new NgbDate(moveBetDay.getFullYear(), moveBetDay.getMonth() + 1, moveBetDay.getDate() + 1);
     const userName = document.getElementById('body').getAttribute('user-id');

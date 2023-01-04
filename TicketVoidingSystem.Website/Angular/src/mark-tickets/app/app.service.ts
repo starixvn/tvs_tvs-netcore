@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BalanceUp } from 'src/utility/models/balance-up.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { BalanceUp } from '../../utility/models/balance-up.model';
 import { SportInfo } from '../../utility/models/event.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -19,16 +19,16 @@ import { LogsModel } from './user-log/logs-list/logs-list.model';
 export class AppService {
   constructor(private readonly httpService: HttpService) { }
 
-  async getBalanceUp(): Promise<BalanceUp> {
-    return this.httpService.getJson(`Utility/GetBalanceUp`);
+  async getBalanceUpZoneManila(): Promise<BalanceUp> {
+    return this.httpService.getJson(`api/MarkTickets/GetBalanceUpZoneManila`);
   }
 
   async getCurrencies(): Promise<Currency[]> {
-    return this.httpService.getJson(`Utility/GetCurrencies`);
+    return this.httpService.getJson(`api/MarkTickets/GetCurrencies`);
   }
 
   async getLicensees(): Promise<GroupLicensee[]> {
-    return this.httpService.getJson(`Utility/GetLicensees`);
+    return this.httpService.getJson(`api/MarkTickets/GetLicensees`);
   }
 
   async getGroupBetTypes(query: GetBetTypesQuery): Promise<GroupBetTypesModel> {
