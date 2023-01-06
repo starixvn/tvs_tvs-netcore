@@ -11,15 +11,16 @@
     <base href="@Url.Content("~/")" />
     <meta charset="utf-8" />
     <title>@ViewBag.Title &mdash; Ticket Voiding System</title>
-    <link rel="shortcut icon" href="~/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <link rel="shortcut icon" href="~/favicon.ico" />
+@*    <link rel="stylesheet" href="~/css/BetList.css" />*@
     @await RenderSectionAsync("Head", false)
 </head>
 <body user-name="@userName" root-url="@Url.Content("~/")" old-site-root-url="@Configuration["OldSiteRootUrl"]">
     <section id="body" user-name="@userName" user-id="@userId">
         @RenderBody()
     </section>
+    <script src="~/js/SubParlayTicket.js"></script>
     <script src="@Url.Content("~/auth/recheckinscript")" type="text/javascript"></script>
 </body>
 </html>

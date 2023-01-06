@@ -158,6 +158,14 @@ namespace TicketVoidingSystem.Website.Utilities
             });
         }
 
+        public static void RegisterRemotingRef(this IServiceCollection services, IConfiguration configuration)
+        {
+            RefDataTypeContainer
+                .ConnectTo(new Uri(configuration.GetSection("FanexRemotingRefServiceUrl").Value))
+                .FromApplication(configuration.GetSection("ServiceName").Value)
+                .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
+        }
+
         public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

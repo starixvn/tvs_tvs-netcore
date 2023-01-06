@@ -28,6 +28,7 @@ builder.Services.RegisterFanexData(builder.Configuration);
 builder.Services.RegisterFanexExceptionHandler();
 builder.Services.RegisterSentry(builder.Configuration);
 builder.Services.RegisterONEbookUM(builder.Configuration);
+builder.Services.RegisterRemotingRef(builder.Configuration);
 builder.Services.RegisterCoreServices(builder.Configuration);
 builder.Services.RegisterBusinessServices();
 builder.Services.RegisterMediatR();
