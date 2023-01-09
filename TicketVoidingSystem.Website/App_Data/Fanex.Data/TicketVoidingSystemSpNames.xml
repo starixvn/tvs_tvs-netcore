@@ -13,6 +13,9 @@
         <Setting Key="NAP_SelectionTypeSel" SpName="NAP_SelectionTypeSel" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_SportsType_Select" SpName="TicketVoiding_SportsType_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_OddsOSInfo_Select" SpName="NAP_SpecialDelete_OddsOSInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_Match_FirstTicketTime_Select" SpName="NAP_SpecialDelete_Match_FirstTicketTime_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_MatchInfo_Select" SpName="NAP_SpecialDelete_MatchInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />

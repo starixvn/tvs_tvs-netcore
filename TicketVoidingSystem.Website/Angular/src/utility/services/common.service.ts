@@ -36,7 +36,7 @@ export class CommonService {
   }
 
   async getGroupBetTypes(query: GetBetTypesQuery): Promise<GroupBetTypesModel> {
-    return this.httpService.postJson(query, `api/SharedApi/GetGroupBetTypesNg`);
+    return this.httpService.postJson(query, `api/BetTypes/GetGroupBetTypesNg`);
   }
 
   async getSportsType(): Promise<SportInfo[]> {
@@ -50,7 +50,7 @@ export class CommonService {
 
 
   async getMatch(matchId: number): Promise<MatchModel> {
-    return this.httpService.postJson({ matchId, isMatch3rd: false }, 'Match/GetInfo');
+    return this.httpService.postJson({ matchId, isMatch3rd: false }, 'api/MatchInfo/GetInfo');
   }
 
   // async getRequestById(id: number): Promise<RequestDetailViewModel> {
@@ -63,6 +63,11 @@ export class CommonService {
 
   async getBalanceUp(): Promise<BalanceUp> {
     return this.httpService.getJson(`TicketVoiding/GetBalanceUp`);
+  }
+
+  
+  async getFirstTimeAndKickOffTime(id: number): Promise<FirstTicketTime> {
+    return this.httpService.getJson(`api/MatchInfo/GetFirstTimeAndKickOffTime/${id}`);
   }
 
   async checkMatchIdWithRefNo(query: CheckMatchWithRefNoQuery, tooltip: Tooltip): Promise<boolean> {
@@ -95,9 +100,6 @@ export class CommonService {
     return data.isSuccessful;
   }
 
-  async getFirstTimeAndKickOffTime(id: number): Promise<FirstTicketTime> {
-    return this.httpService.getJson(`Match/GetFirstTimeAndKickOffTime/${id}`);
-  }
 
   async checkVoidBetPermission(query: CheckingPermissionModel): Promise<SqlResult> {
     return this.httpService.postJson(query, `state-api/simple-data/update`);

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1" />

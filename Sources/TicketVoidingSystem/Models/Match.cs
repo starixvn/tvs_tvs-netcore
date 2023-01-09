@@ -1,46 +1,32 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Resources;
-using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web.JsonConverter;
 
 namespace TicketVoidingSystem.Models
 {
     public class Match
     {
-        private readonly RemotingRefWrapperService remotingRefWrapperService;
-
-        public Match(RemotingRefWrapperService remotingRefWrapperService)
-        {
-            this.remotingRefWrapperService = remotingRefWrapperService;
-        }
-
         public int MatchId { get; set; }
 
         public int HomeId { get; set; }
 
-        public string HomeName => IsNeutral ?
-            remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.English) + " (N)" : remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.English);
+        public string HomeName { get; set; }
 
-        public string HomeNameSimplified => IsNeutral ?
-            remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.ChineseSimplified) + " (中)" : remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.ChineseSimplified);
+        public string HomeNameSimplified { get; set; }
 
-        public string HomeNameNewSimplified => IsNeutral ?
-            remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.NewChineseSimplified) + " (中)" : remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.NewChineseSimplified);
+        public string HomeNameNewSimplified { get; set; }
 
-        public string HomeNameTraditional => IsNeutral ?
-            remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.ChineseTraditional) + " (中)" : remotingRefWrapperService.GetTeamName(HomeId, LanguageCode.ChineseTraditional);
+        public string HomeNameTraditional { get; set; }
 
         public int AwayId { get; set; }
 
-        public string AwayName => remotingRefWrapperService.GetTeamName(AwayId, LanguageCode.English);
+        public string AwayName { get; set; }
 
-        public string AwayNameSimplified => remotingRefWrapperService.GetTeamName(AwayId, LanguageCode.ChineseSimplified);
+        public string AwayNameSimplified { get; set; }
 
-        public string AwayNameNewSimplified => remotingRefWrapperService.GetTeamName(AwayId, LanguageCode.NewChineseSimplified);
+        public string AwayNameNewSimplified { get; set; }
 
-        public string AwayNameTraditional => remotingRefWrapperService.GetTeamName(AwayId, LanguageCode.ChineseTraditional);
+        public string AwayNameTraditional { get; set; }
 
         public string MatchCode { get; set; }
 
@@ -52,65 +38,21 @@ namespace TicketVoidingSystem.Models
 
         public int LeagueGroupId { get; set; }
 
-        public string LeagueName => remotingRefWrapperService.GetLeagueName(LeagueId, LanguageCode.English);
+        public string LeagueName { get; set; }
 
-        public string LeagueNameSimplified => remotingRefWrapperService.GetLeagueName(LeagueId, LanguageCode.ChineseSimplified);
+        public string LeagueNameSimplified { get; set; }
 
-        public string LeagueNameNewSimplified => remotingRefWrapperService.GetLeagueName(LeagueId, LanguageCode.NewChineseSimplified);
+        public string LeagueNameNewSimplified { get; set; }
 
-        public string LeagueNameTraditional => remotingRefWrapperService.GetLeagueName(LeagueId, LanguageCode.ChineseTraditional);
+        public string LeagueNameTraditional { get; set; }
 
         public bool IsOutright { get; set; }
 
-        public string MatchEvent
-        {
-            get
-            {
-                switch (SportType)
-                {
-                    case 161:
-                        return StringResource.NumberGameNo + MatchCode;
+        public string MatchEvent { get; set; }
 
-                    case 164:
-                        return $"Happy 5 No .{MatchCode}";
+        public string MatchEventSimplified { get; set; }
 
-                    case 160:
-                        return $"Lucky 3 Game No.{MatchCode}";
-
-                    case 207:
-                        return $"{remotingRefWrapperService.GetBFName(HomeId)} - vs - {remotingRefWrapperService.GetBFName(AwayId)}";
-
-                    default:
-                        return IsOutright ? $"{HomeName} - {LeagueName}" : $"{HomeName} - vs - {AwayName}";
-                }
-            }
-        }
-
-        public string MatchEventSimplified
-        {
-            get
-            {
-                if (SportType == 161 || SportType == 160 || SportType == 207)
-                {
-                    return string.Empty;
-                }
-
-                return IsOutright ? $"{HomeNameSimplified} - {LeagueNameSimplified}" : $"{HomeNameSimplified} - vs - {AwayNameSimplified}";
-            }
-        }
-
-        public string MatchEventNewSimplified
-        {
-            get
-            {
-                if (SportType == 161 || SportType == 160 || SportType == 207)
-                {
-                    return string.Empty;
-                }
-
-                return IsOutright ? $"{HomeNameNewSimplified} - {LeagueNameNewSimplified}" : $"{HomeNameNewSimplified} - vs - {AwayNameNewSimplified}";
-            }
-        }
+        public string MatchEventNewSimplified { get; set; }
 
         public bool IsNeutral { get; set; }
 
@@ -121,12 +63,12 @@ namespace TicketVoidingSystem.Models
 
         public int SportType { get; set; }
 
-        public string SportTypeName => remotingRefWrapperService.GetSportName(SportType.ToString(), LanguageCode.English);
+        public string SportTypeName { get; set; }
 
-        public string SportTypeNameSimplified => remotingRefWrapperService.GetSportName(SportType.ToString(), LanguageCode.ChineseSimplified);
+        public string SportTypeNameSimplified { get; set; }
 
-        public string SportTypeNameNewSimplified => remotingRefWrapperService.GetSportName(SportType.ToString(), LanguageCode.NewChineseSimplified);
+        public string SportTypeNameNewSimplified { get; set; }
 
-        public string SportTypeNameTraditional => remotingRefWrapperService.GetSportName(SportType.ToString(), LanguageCode.ChineseTraditional);
+        public string SportTypeNameTraditional { get; set; }
     }
 }

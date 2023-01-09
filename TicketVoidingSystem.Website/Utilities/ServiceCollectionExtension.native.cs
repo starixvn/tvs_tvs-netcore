@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.BetList.Core;
+using Fanex.BetList.Core.RemotingRef;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
@@ -164,6 +166,8 @@ namespace TicketVoidingSystem.Website.Utilities
                 .ConnectTo(new Uri(configuration.GetSection("FanexRemotingRefServiceUrl").Value))
                 .FromApplication(configuration.GetSection("ServiceName").Value)
                 .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
+
+            BetListManager.RegisterRemotingRef(new CacheRef());
         }
 
         public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
@@ -201,11 +205,13 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSingleton<RemotingRefWrapperService, RemotingRefWrapperServiceImp>();
             services.AddSingleton<BetListService, BetListServiceImp>();
             services.AddSingleton<OddsService, OddsServiceImp>();
+            services.AddSingleton<MatchService, MatchServiceImp>();
             services.AddSingleton<LogActionFilterAttribute>();
 
             // Shared Api
             services.AddTransient<BetTypesService, BetTypesServiceImp>();
             services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
+            services.AddTransient<BetTeamsService, BetTeamsServiceImp>();
             services.AddTransient<BalanceUpService, BalanceUpServiceImp>();
 
             // AB Exception List
@@ -236,6 +242,8 @@ namespace TicketVoidingSystem.Website.Utilities
         public static void RegisterMediatR(this IServiceCollection services)
         {
             services.AddMediatR(typeof(SharedApiController));
+            services.AddMediatR(typeof(BetTypesController));
+            services.AddMediatR(typeof(MatchInfoController));
             services.AddMediatR(typeof(ABExceptionListController));
             services.AddMediatR(typeof(ManageVoidServicesController));
             services.AddMediatR(typeof(MarkTicketsController));

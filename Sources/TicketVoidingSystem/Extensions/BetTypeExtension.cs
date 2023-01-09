@@ -59,6 +59,13 @@ namespace TicketVoidingSystem.Extensions
             return BetTypeConstant.FirstVirtualSport <= id && id <= BetTypeConstant.SecondVirtualSport || BetTypeConstant.MinVirtualSportBetType <= id && id <= BetTypeConstant.MaxVirtualSportBetType;
         }
 
+        private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194 };
+
+        public static bool IsVirtualSport(this int sportTypeId)
+        {
+            return VirtualSports.Contains(sportTypeId);
+        }
+
         public static bool IsHideHandicap(this int id)
         {
             return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();

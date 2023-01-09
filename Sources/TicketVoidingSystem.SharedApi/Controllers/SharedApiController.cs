@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers;
-using TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Controllers
 {
@@ -43,8 +42,5 @@ namespace TicketVoidingSystem.SharedApi.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetSportsType() => Ok(await mediator.Send(new GetSportsTypeRequest()));
-
-        [HttpPost]
-        public async Task<IActionResult> GetGroupBetTypesNg(GetGroupBetTypesRequest request) => Ok(await mediator.Send(request));
     }
 }
