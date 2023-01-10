@@ -20,12 +20,14 @@ namespace TicketVoidingSystem.Constants
             {
                 var betTypeOfDecimalOdds = new List<int> { 1, 2, 3, 7, 12, 8, 20, 124, 125, 801, 802, 803, 804, 805, 806 };
 
-                for (var i = 81; i <= 88; i++)
+                const int betType88 = 88;
+                for (var i = 81; i <= betType88; i++)
                 {
                     betTypeOfDecimalOdds.Add(i);
                 }
 
-                for (var i = 91; i <= 120; i++)
+                const int betType120 = 120;
+                for (var i = 91; i <= betType120; i++)
                 {
                     betTypeOfDecimalOdds.Add(i);
                 }

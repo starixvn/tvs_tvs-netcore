@@ -12,14 +12,13 @@ namespace TicketVoidingSystem.Extensions.TN
             {
                 return extend;
             }
-            else if (string.IsNullOrWhiteSpace(extend))
+
+            if (string.IsNullOrWhiteSpace(extend))
             {
                 return root;
             }
-            else
-            {
-                return root + $"{Environment.NewLine}{extend}";
-            }
+
+            return root + $"{Environment.NewLine}{extend}";
         }
 
         public static string Intersected(this string textWithComma, List<string> listString)
@@ -53,19 +52,18 @@ namespace TicketVoidingSystem.Extensions.TN
             {
                 return string.Empty;
             }
-            else if (string.IsNullOrWhiteSpace(elimination))
+
+            if (string.IsNullOrWhiteSpace(elimination))
             {
                 return root;
             }
-            else
-            {
-                var rootItems = root.Split(',');
-                var elinimatedItems = elimination.Split(',');
-                var result = from x in rootItems
-                             where !elinimatedItems.Contains(x)
-                             select x;
-                return string.Join(",", result);
-            }
+
+            var rootItems = root.Split(',');
+            var eliminatedItems = elimination.Split(',');
+            var result = from x in rootItems
+                         where !eliminatedItems.Contains(x)
+                         select x;
+            return string.Join(",", result);
         }
     }
 }

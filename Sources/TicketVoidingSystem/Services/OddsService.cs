@@ -28,7 +28,8 @@ namespace TicketVoidingSystem.Services
                 return odds + 1;
             }
 
-            return OddsTypeConstant.BetTypeOfDecimalOdds.Contains(betType) && oddsType == OddsTypeConstant.Us ? odds * 100 : odds;
+            const int oneHundredPercent = 100;
+            return OddsTypeConstant.BetTypeOfDecimalOdds.Contains(betType) && oddsType == OddsTypeConstant.Us ? odds * oneHundredPercent : odds;
         }
 
         public string GetOddsTypeName(int betType, int oddsType)

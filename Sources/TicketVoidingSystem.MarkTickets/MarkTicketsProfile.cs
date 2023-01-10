@@ -3,9 +3,11 @@ using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Criteria.UserLogs;
+using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models.UserLogs;
+using TicketVoidingSystem.MarkTickets.ViewModels;
 
 namespace TicketVoidingSystem.MarkTickets
 {
@@ -17,6 +19,7 @@ namespace TicketVoidingSystem.MarkTickets
             CreateMap<GetDetailTicketsQuery, GetDetailTicketsCriteria>();
             CreateMap<AllMarkedTicketsQuery, AllMarkedTicketsCriteria>();
             CreateMap<GetUserLogsQuery, GetUserLogsCriteria>();
+            CreateMap<TicketViewModel, ExcelTicketModel>();
             CreateMap<GetTicketModel, Ticket>();
             CreateMap<MarkTicketsQuery, MarkTicketsCommand>();
             CreateMap<MarkAllTicketsQuery, MarkAllTicketsCommand>();

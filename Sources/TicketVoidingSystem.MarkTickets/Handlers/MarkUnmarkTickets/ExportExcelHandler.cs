@@ -28,7 +28,7 @@ namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets
             var fileName = $"{request.MatchId}_Mark_Unmark_Tickets_{createDate}";
             return new ExcelFileModel
             {
-                Content = await excelService.CreateStream(request, TemplateExcelPath.MarkUnmarkTickets),
+                ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets),
                 FileName = fileName
             };
         }

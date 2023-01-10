@@ -12,14 +12,12 @@ namespace TicketVoidingSystem.Extensions.TN
             {
                 return string.Empty;
             }
-            else
-            {
-                var array = text.Split(',')
-                    .Distinct()
-                    .Where(x => !string.IsNullOrWhiteSpace(x))
-                    .ToArray();
-                return string.Join(",", array);
-            }
+
+            var array = text.Split(',')
+                .Distinct()
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToArray();
+            return string.Join(",", array);
         }
 
         public static string StripHtml(this string htmlText)

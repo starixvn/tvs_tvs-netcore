@@ -11,7 +11,8 @@ namespace TicketVoidingSystem.Extensions
     {
         public static bool IsParlay(this int id)
         {
-            return id == 29 || id == 2799;
+            const int betTypeParlay = 29;
+            return id == betTypeParlay;
         }
 
         public static bool IsParlayAndBetBuilder(this int id)
@@ -21,17 +22,18 @@ namespace TicketVoidingSystem.Extensions
 
         public static bool IsNumberGame(this int id)
         {
-            return BetTypeConstant.FirstNumberGame <= id && id <= BetTypeConstant.SecondNumberGame;
+            return id is >= BetTypeConstant.FirstNumberGame and <= BetTypeConstant.SecondNumberGame;
         }
 
         public static bool IsLucky3(this int id)
         {
-            return BetTypeConstant.FirstLucky3 <= id && id <= BetTypeConstant.SecondLucky3;
+            return id is >= BetTypeConstant.FirstLucky3 and <= BetTypeConstant.SecondLucky3;
         }
 
         public static bool IsSingleMatchParlay(this int id)
         {
-            return id == 38;
+            const int betTypeSingleMatchParlay = 38;
+            return id == betTypeSingleMatchParlay;
         }
 
         public static bool IsBitCoin(this int id)
@@ -41,7 +43,9 @@ namespace TicketVoidingSystem.Extensions
 
         public static bool IsSabaPromotion(this int id)
         {
-            return id == 17000 || id == 17003;
+            const int betType17000 = 17000;
+            const int betType17003 = 17003;
+            return id is betType17000 or betType17003;
         }
 
         public static bool IsOutright(this int id)
@@ -56,7 +60,8 @@ namespace TicketVoidingSystem.Extensions
 
         public static bool IsVirtualSportBetType(this int id)
         {
-            return BetTypeConstant.FirstVirtualSport <= id && id <= BetTypeConstant.SecondVirtualSport || BetTypeConstant.MinVirtualSportBetType <= id && id <= BetTypeConstant.MaxVirtualSportBetType;
+            return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
+                   || id is >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType;
         }
 
         private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194 };

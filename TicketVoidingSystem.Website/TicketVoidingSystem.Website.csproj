@@ -11,9 +11,83 @@
     <EmbeddedResource Remove="Angular\**" />
     <None Remove="Angular\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="App_Data\Template\MarkUnmarkTicket.xlsx" />
+    <None Remove="App_Data\Template\TicketListing.xlsx" />
+    <None Remove="App_Data\Template\TicketListing_Send_File.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_ManageRequest.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_VoidedTickets.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_VoidTickets.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_VoidTickets_NoMatch.xlsx" />
+    <None Remove="App_Data\Template\VoidByBetId.xlsx" />
+    <None Remove="App_Data\Template\VoidByCurrency.xlsx" />
+    <None Remove="App_Data\Template\VoidCashOutTransaction.xlsx" />
+    <None Remove="App_Data\Template\VoidEarlyKickOffBet.xlsx" />
+    <None Remove="App_Data\Template\VoidMetricGamingBet.xlsx" />
+    <None Remove="App_Data\Template\VoidNumberGameBet.xlsx" />
+    <None Remove="App_Data\Template\VoidOutRightBet.xlsx" />
+    <None Remove="App_Data\Template\VoidParlayTicket.xlsx" />
+    <None Remove="App_Data\Template\VoidParlayVirtualSportsBet.xlsx" />
+    <None Remove="App_Data\Template\VoidSingleBet.xlsx" />
+  </ItemGroup>
     
   <ItemGroup>
     <AdditionalFiles Include="..\.sonarlint\tvs-website\CSharp\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Content Include="App_Data\Template\MarkUnmarkTicket.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketListing.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketListing_Send_File.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_ManageRequest.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_VoidedTickets.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_VoidTickets.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_VoidTickets_NoMatch.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidByBetId.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidByCurrency.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidCashOutTransaction.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidEarlyKickOffBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidMetricGamingBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidNumberGameBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidOutRightBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidParlayTicket.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidParlayVirtualSportsBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidSingleBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

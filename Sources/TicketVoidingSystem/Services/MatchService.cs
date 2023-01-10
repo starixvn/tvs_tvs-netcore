@@ -64,7 +64,7 @@ namespace TicketVoidingSystem.Services
             return match;
         }
 
-        private string GetMatchEventSimplified(int sportType, bool isOutright, string homeNameSimplified, string awayNameSimplified, string leagueNameSimplified)
+        private static string GetMatchEventSimplified(int sportType, bool isOutright, string homeNameSimplified, string awayNameSimplified, string leagueNameSimplified)
         {
             if (sportType == 161 || sportType == 160 || sportType == 207)
             {
@@ -74,7 +74,7 @@ namespace TicketVoidingSystem.Services
             return isOutright ? $"{homeNameSimplified} - {leagueNameSimplified}" : $"{homeNameSimplified} - vs - {awayNameSimplified}";
         }
 
-        private string GetMatchEventNewSimplified(int sportType, bool isOutright, string homeNameNewSimplified, string awayNameNewSimplified, string leagueNameNewSimplified)
+        private static string GetMatchEventNewSimplified(int sportType, bool isOutright, string homeNameNewSimplified, string awayNameNewSimplified, string leagueNameNewSimplified)
         {
             if (sportType == 161 || sportType == 160 || sportType == 207)
             {

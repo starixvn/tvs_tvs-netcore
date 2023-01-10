@@ -60,7 +60,7 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
         {
             var model = await mediator.Send(request);
-            return File(model.Content, ExcelFileModel.ContentType, model.FileName);
+            return File(model.ContentAsByteArray, ExcelFileModel.ContentType, model.FileName);
         }
 
         [HttpPost]
