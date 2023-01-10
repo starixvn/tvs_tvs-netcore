@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.Models
     {
         public string TransId { get; set; }
         public int SiteDbGroupId { get; set; }
-        public int MatchId { get; set; }
+        public int? MatchId { get; set; }
     }
 
     public class BetIdEqualityComparer : IEqualityComparer<BetId>

@@ -40,9 +40,10 @@ namespace TicketVoidingSystem.SharedApi.Handlers.MatchInfo
 
         private static DateTime GetMinTransDate(FirstTicketTime ticketTime)
         {
+            const int yearPrefix = 2000;
             if (ticketTime.MinTransDate == default)
             {
-                ticketTime.MinTransDate = new DateTime(ticketTime.MinTransDate.Year + 2000, ticketTime.MinTransDate.Month, ticketTime.MinTransDate.Day);
+                ticketTime.MinTransDate = new DateTime(ticketTime.MinTransDate.Year + yearPrefix, ticketTime.MinTransDate.Month, ticketTime.MinTransDate.Day);
             }
 
             return ticketTime.MinTransDate;

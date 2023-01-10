@@ -11,10 +11,6 @@ namespace TicketVoidingSystem.SharedApi.Services.BetTypes
 
     public class BetTeamsServiceImp : BetTeamsService
     {
-        public BetTeamsServiceImp()
-        {
-        }
-
         public IEnumerable<BetTeam> Get()
         {
             const string jsonPath = "App_Data/Data/AdvancedMode.json";

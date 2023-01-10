@@ -2,6 +2,7 @@ const PROXY_CONFIG = [
   {
     context: [
       "/api",
+      "/state-api",
       "/SignalR",
       "/css",
       "/js"

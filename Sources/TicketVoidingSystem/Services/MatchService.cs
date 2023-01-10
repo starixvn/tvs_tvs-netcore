@@ -12,6 +12,10 @@ namespace TicketVoidingSystem.Services
     public class MatchServiceImp : MatchService
     {
         private readonly RemotingRefWrapperService remotingRefWrapperService;
+        private const int SportType160 = 160;
+        private const int SportType161 = 161;
+        private const int SportType164 = 164;
+        private const int SportType207 = 207;
 
         public MatchServiceImp(RemotingRefWrapperService remotingRefWrapperService)
         {
@@ -45,15 +49,7 @@ namespace TicketVoidingSystem.Services
             match.LeagueNameSimplified = remotingRefWrapperService.GetLeagueName(match.LeagueId, LanguageCode.ChineseSimplified);
             match.LeagueNameNewSimplified = remotingRefWrapperService.GetLeagueName(match.LeagueId, LanguageCode.NewChineseSimplified);
             match.LeagueNameTraditional = remotingRefWrapperService.GetLeagueName(match.LeagueId, LanguageCode.ChineseTraditional);
-            match.MatchEvent = match.SportType switch
-            {
-                161 => StringResource.NumberGameNo + match.MatchCode,
-                164 => $"Happy 5 No .{match.MatchCode}",
-                160 => $"Lucky 3 Game No.{match.MatchCode}",
-                207 => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
-                _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
-            };
-
+            match.MatchEvent = GetMatchEvent(match, remotingRefWrapperService);
             match.MatchEventSimplified = GetMatchEventSimplified(match.SportType, match.IsOutright, match.HomeNameSimplified, match.AwayNameSimplified, match.LeagueNameSimplified);
             match.MatchEventNewSimplified = GetMatchEventNewSimplified(match.SportType, match.IsOutright, match.HomeNameNewSimplified, match.AwayNameNewSimplified, match.LeagueNameNewSimplified);
             match.SportTypeName = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.English);
@@ -64,9 +60,21 @@ namespace TicketVoidingSystem.Services
             return match;
         }
 
+        private static string GetMatchEvent(Match match, RemotingRefWrapperService remotingRefWrapperService)
+        {
+            return match.SportType switch
+            {
+                SportType160 => $"Lucky 3 Game No.{match.MatchCode}",
+                SportType161 => StringResource.NumberGameNo + match.MatchCode,
+                SportType164 => $"Happy 5 No .{match.MatchCode}",
+                SportType207 => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
+                _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
+            };
+        }
+
         private static string GetMatchEventSimplified(int sportType, bool isOutright, string homeNameSimplified, string awayNameSimplified, string leagueNameSimplified)
         {
-            if (sportType == 161 || sportType == 160 || sportType == 207)
+            if (sportType is SportType160 or SportType161 or SportType207)
             {
                 return string.Empty;
             }
@@ -76,7 +84,7 @@ namespace TicketVoidingSystem.Services
 
         private static string GetMatchEventNewSimplified(int sportType, bool isOutright, string homeNameNewSimplified, string awayNameNewSimplified, string leagueNameNewSimplified)
         {
-            if (sportType == 161 || sportType == 160 || sportType == 207)
+            if (sportType is SportType160 or SportType161 or SportType207)
             {
                 return string.Empty;
             }

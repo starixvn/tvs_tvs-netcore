@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 
@@ -58,7 +59,23 @@ namespace TicketVoidingSystem.Utilities
         {
             var path = GetFilePath(jsonPath);
             var jsonString = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<T>(jsonString);
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<T>(jsonString, options);
+        }
+
+        public static T DeserializeObjectIgnoreNullValue<T>(string input)
+        {
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNameCaseInsensitive = true
+            };
+
+            return JsonSerializer.Deserialize<T>(input, options);
         }
     }
 }

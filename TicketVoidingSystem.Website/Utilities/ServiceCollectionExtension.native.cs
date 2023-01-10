@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Olympus.SimpleDataApi;
 using ONEbook.UM.AspNetCore;
 using ONEbook.UM.AspNetCore.Filters;
 using ONEbook.UM.Configurations;
@@ -50,6 +51,8 @@ using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SharedApi.Services;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.SignalR;
+using TicketVoidingSystem.SimpleDataApi;
+using TicketVoidingSystem.SimpleDataApi.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Utilities
@@ -209,6 +212,10 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSingleton<LogActionFilterAttribute>();
 
             // Shared Api
+            services.AddTransient<SimpleCriteriaFactory, SimpleCriteriaFactoryImp>();
+            services.AddTransient<SimpleFunctionPermissionFactory, SimpleFunctionPermissionFactoryImp>();
+            services.AddTransient<SimpleMapperFactory, SimpleMapperFactoryImp>();
+            services.AddTransient<TicketsCheckPermissionService, TicketsCheckPermissionServiceImp>();
             services.AddTransient<BetTypesService, BetTypesServiceImp>();
             services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
             services.AddTransient<BetTeamsService, BetTeamsServiceImp>();
