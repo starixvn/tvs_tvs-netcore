@@ -7,8 +7,6 @@ namespace TicketVoidingSystem.Services.Excel
 {
     public interface ExcelService<in T>
     {
-        Task<Stream> CreateStream(T model, string templatePath);
-
         Task<byte[]> CreateFileAsByteArray(T model, string templatePath);
     }
 
@@ -19,18 +17,6 @@ namespace TicketVoidingSystem.Services.Excel
         public ExcelServiceImp(WorkSheetService<T> workSheetService)
         {
             this.workSheetService = workSheetService;
-        }
-
-        public async Task<Stream> CreateStream(T model, string templatePath)
-        {
-            var fullFilePath = Helper.GetFilePath(templatePath);
-            await using var stream = new FileStream(fullFilePath, FileMode.Open, FileAccess.Read);
-            using var excelPackage = new ExcelPackage(stream);
-            var worksheet = excelPackage.Workbook.Worksheets[0];
-            await workSheetService.BindingContent(worksheet, model);
-            await excelPackage.SaveAsync();
-
-            return excelPackage.Stream;
         }
 
         public async Task<byte[]> CreateFileAsByteArray(T model, string templatePath)

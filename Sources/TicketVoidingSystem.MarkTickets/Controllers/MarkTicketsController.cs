@@ -4,11 +4,11 @@ using Fanex.NAP.Core.Business;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.MarkTickets.Handlers;
 using TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
-using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.MarkTickets.Controllers
@@ -60,15 +60,15 @@ namespace TicketVoidingSystem.MarkTickets.Controllers
         public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
         {
             var model = await mediator.Send(request);
-            return File(model.ContentAsByteArray, ExcelFileModel.ContentType, model.FileName);
+            return this.ExcelFileResult(Response, model);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
         public async Task<IActionResult> ExportExcelDetailTicket(ExportExcelDetailTicketsRequest request)
         {
-            var model = await mediator.Send(request).ConfigureAwait(false);
-            return File(model.Content, ExcelFileModel.ContentType, model.FileName);
+            var model = await mediator.Send(request);
+            return this.ExcelFileResult(Response, model);
         }
 
         [HttpPost]
