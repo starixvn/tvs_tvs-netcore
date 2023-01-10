@@ -181,7 +181,7 @@ namespace TicketVoidingSystem.Extensions
             return choice.AppendWithNewLine(handicap.StripHtml())
                 .AppendWithNewLine(bettype)
                 .AppendWithNewLine(match.InnerHtml.StripHtml())
-                .AppendWithNewLine(league.InnerHtml.StripHtml());
+                .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
         }
 
         private static string HeaderParlay(HtmlDocument doc)
