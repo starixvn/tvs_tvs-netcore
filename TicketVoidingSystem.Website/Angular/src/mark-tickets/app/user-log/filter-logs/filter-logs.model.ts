@@ -6,7 +6,7 @@ export class FilterAction {
     { name: 'Mark(Manual)', value: '90500', group: 'All' },
     { name: 'Mark(Auto)', value: '90508', group: 'All' },
     { name: 'Unmark(Manual)', value: '90501', group: 'All' },
-    { name: 'Unmark(Auto)', value: '90510', group: 'All' },
+    { name: 'Unmark(Auto)', value: '90511', group: 'All' },
     { name: 'Unmark All', value: '90502', group: 'All' }
   ];
 }
