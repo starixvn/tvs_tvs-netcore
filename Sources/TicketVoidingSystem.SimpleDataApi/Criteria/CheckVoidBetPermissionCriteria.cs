@@ -18,28 +18,7 @@ namespace TicketVoidingSystem.SimpleDataApi.Criteria
 
         public bool IsHostVoidUnsettledTickets { get; set; }
 
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
-
-        public override string GetSettingKey() => "NAP_SpecialDelete_CheckVoidBetPermission";
-
-        public abstract override bool IsValid();
-    }
-
-    public abstract class TicketVoidingCheckVoidBetPermissionCriteria : TransInfoNonQueryCommand
-    {
-        public int? MatchId { get; set; }
-
-        public bool IsCheckForTVS { get; set; }
-
-        public bool? IsCashOutAsUnSettledTicket { get; set; }
-
-        public bool IsHostVoidSettledTickets { get; set; }
-
-        public bool IsHostVoidInstantlySettledTickets { get; set; }
-
-        public bool IsHostVoidUnsettledTickets { get; set; }
+        public string TransInfoJson { get; set; }
 
         public int ErrCode { get; set; }
 
@@ -80,7 +59,7 @@ namespace TicketVoidingSystem.SimpleDataApi.Criteria
         public override bool IsValid() => MatchId == null;
     }
 
-    public class CheckVoidBetPermissionTicketVoidingCriteria : TicketVoidingCheckVoidBetPermissionCriteria
+    public class CheckVoidBetPermissionTicketVoidingCriteria : CheckVoidBetPermissionCriteria
     {
         public override bool IsValid() => MatchId.HasValue;
     }

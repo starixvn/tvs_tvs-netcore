@@ -24,7 +24,6 @@
         <Setting Key="NAP_SpecialDelete_OddsOSInfo_Select" SpName="NAP_SpecialDelete_OddsOSInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_Match_FirstTicketTime_Select" SpName="NAP_SpecialDelete_Match_FirstTicketTime_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_MatchInfo_Select" SpName="NAP_SpecialDelete_MatchInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="NAP_SpecialDelete_CheckVoidBetPermission" SpName="NAP_SpecialDelete_CheckVoidBetPermission" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_CheckVoidBetPermission" SpName="TicketVoiding_CheckVoidBetPermission" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">

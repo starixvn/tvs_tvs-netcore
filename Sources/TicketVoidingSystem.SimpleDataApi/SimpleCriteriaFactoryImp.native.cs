@@ -1,7 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using Fanex.NAP.Core.Business;
 using Olympus.SimpleDataApi;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SimpleDataApi.Criteria;
 using TicketVoidingSystem.SimpleDataApi.Services;
@@ -36,7 +35,7 @@ namespace TicketVoidingSystem.SimpleDataApi
         {
             if (commandType == typeof(CheckVoidBetPermissionVoidByBetIdCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledTickets, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledTickets, Constant.Policy.Host));
 
@@ -45,7 +44,7 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckVoidBetPermissionVoidSingleBetCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledandInstantlySettledSingleBet, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host));
@@ -55,7 +54,7 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckVoidBetPermissionVoidEarlyKickOffCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidEarlyKickOffBet, Constant.Policy.Host));
 
                 return base.CreateNonQueryCommand(commandType, queryModel);
@@ -63,7 +62,7 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckVoidBetPermissionVoidParlayBetCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledParlayBet, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledParlayBet, Constant.Policy.Host));
 
@@ -72,7 +71,7 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckVoidBetPermissionVoidByCurrencyCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledCurrencyBet, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledCurrencyBet, Constant.Policy.Host));
 
@@ -81,7 +80,7 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckVoidBetPermissionVoidCashOutTransactionCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelSettledCashOut, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelUnSettledCashOut, Constant.Policy.Host));
 
@@ -90,7 +89,7 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckVoidBetPermissionTicketVoidingCriteria))
             {
-                MapTransInfoJson(queryModel);
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host));
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host));
@@ -100,19 +99,17 @@ namespace TicketVoidingSystem.SimpleDataApi
 
             if (commandType == typeof(CheckPermissionMarkTicketsCriteria))
             {
-                queryModel.SafeAdd("TransInfo", ticketsCheckPermissionService.GetTicketsCheckPermission(queryModel));
+                AddTransInfoJson(queryModel);
                 queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host));
             }
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
 
-        private void MapTransInfoJson(Dictionary<string, object> queryModel)
+        private void AddTransInfoJson(Dictionary<string, object> queryModel)
         {
             var transInfoJsonList = ticketsCheckPermissionService.GetTransInfoForCheckPermission(queryModel);
-            queryModel.SafeAdd("TransInfoJson0", transInfoJsonList.FirstOrDefault(x => x.SiteDbGroupId == SiteDbGroupConstant.CentralDb)?.TransInfoJson);
-            queryModel.SafeAdd("TransInfoJson1", transInfoJsonList.FirstOrDefault(x => x.SiteDbGroupId == SiteDbGroupConstant.SiteDb1)?.TransInfoJson);
-            queryModel.SafeAdd("TransInfoJson2", transInfoJsonList.FirstOrDefault(x => x.SiteDbGroupId == SiteDbGroupConstant.SiteDb2)?.TransInfoJson);
+            queryModel.SafeAdd("TransInfoJson", string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x))));
         }
     }
 }
