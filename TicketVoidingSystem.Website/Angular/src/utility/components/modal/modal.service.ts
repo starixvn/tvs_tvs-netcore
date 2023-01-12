@@ -79,9 +79,9 @@ export class ModalService {
 
   async confirmPermission(query: CheckingPermissionModel, data: IModal, onYes?: () => void, onNo?: () => void) {
     const result = await this.commonService.checkVoidBetPermission(query);
-    if (result.ErrCode !== 0 && query.action) {
+    if (result.errCode !== 0 && query.action) {
       const modalContent = this.openModalContent();
-      data.message = result.ErrMsg;
+      data.message = result.errMsg;
       modalContent.data = data;
       modalContent.confirm.subscribe(() => {
         onNo();

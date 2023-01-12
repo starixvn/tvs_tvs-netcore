@@ -11,8 +11,8 @@ export class RecoverResult extends Result<string> {
 }
 
 export class SqlResult {
-  ErrCode: number;
-  ErrMsg: string;
+  errCode: number;
+  errMsg: string;
   isSuccessful: boolean;
 }
 
