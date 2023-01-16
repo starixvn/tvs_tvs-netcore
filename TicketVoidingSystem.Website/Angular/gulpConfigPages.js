@@ -33,7 +33,7 @@ const markTickets = {
   deployUrl: 'dist/mark-tickets/',
   index: 'src/mark-tickets/index.cshtml',
   main: 'src/mark-tickets/main.ts',
-  transformFolder: '../dist/mark-tickets',
+  transformFolder: '../wwwroot/dist/mark-tickets',
   indexEJSPath: './src/mark-tickets/index.ejs'
 };
 
@@ -130,12 +130,12 @@ const homePage = {
 const configPages = [
   // voidSingleBet,
   // ticketListing,
-  // markTickets,
+   markTickets,
   // addRequest,
   // editRequest,
   // manageRequest,
   // voidRequest,
-  manageVoidServices,
+  // manageVoidServices,
   // abExceptionList,
   // homePage
 ];
