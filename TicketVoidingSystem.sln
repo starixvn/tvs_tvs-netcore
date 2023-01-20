@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.SimpleD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.MarkTickets.Tests", "Tests\TicketVoidingSystem.MarkTickets.Tests\TicketVoidingSystem.MarkTickets.Tests.csproj", "{39BEF946-B81A-46F1-B5D9-DDBA3CCB273B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.TicketListing", "Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj", "{FC0F669E-4D0E-4B79-8C4D-98907538CB32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{39BEF946-B81A-46F1-B5D9-DDBA3CCB273B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39BEF946-B81A-46F1-B5D9-DDBA3CCB273B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39BEF946-B81A-46F1-B5D9-DDBA3CCB273B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0F669E-4D0E-4B79-8C4D-98907538CB32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0F669E-4D0E-4B79-8C4D-98907538CB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0F669E-4D0E-4B79-8C4D-98907538CB32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0F669E-4D0E-4B79-8C4D-98907538CB32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{586FFC73-E25F-45E0-9E0D-5405DD4EB83B} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
 		{0D56B227-6EFC-4AE1-AB88-2CE5CF137E37} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{39BEF946-B81A-46F1-B5D9-DDBA3CCB273B} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
+		{FC0F669E-4D0E-4B79-8C4D-98907538CB32} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C225DEEC-3E60-478B-B241-CA1321AD50E2}
