@@ -41,7 +41,10 @@ namespace TicketVoidingSystem.TicketListing.Services
             criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
             var model = await repository.FetchAsync<SummaryTicketModel>(criteria);
             var viewModel = new GetSummaryViewModel();
-            if (model == null) return viewModel;
+            if (model == null)
+            {
+                return viewModel;
+            }
 
             UpdateBetTypeName(model);
             viewModel.GroupByBetTypes = GroupTicketsByBetTypes(model, query);

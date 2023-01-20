@@ -1,47 +1,57 @@
 ﻿using MediatR;
+using TicketVoidingSystem.TicketListing.Criteria;
+using TicketVoidingSystem.TicketListing.Models;
+using TicketVoidingSystem.TicketListing.Services;
+using TicketVoidingSystem.TicketListing.Services.SendDataOic;
 
-namespace TicketVoidingSystem.TicketListing.Handlers
+namespace TicketVoidingSystem.TicketListing.Handlers;
+
+public class SendDataToOicRequest : IRequest<IList<AmendmentReponse>>
 {
-    public class SendDataToOicRequest : IRequest<IEnumerable<AmendmentReponse>>
+    public IList<SendFileQuery> Queries { get; set; }
+}
+
+public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<AmendmentReponse>>
+{
+    private readonly SendDataToOicService sendDataToOicService;
+    private readonly AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService;
+
+    public SendDataOicHandler(SendDataToOicService sendDataToOicService, AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService)
     {
-        public SendFileQuery[] Queries { get; set; }
+        this.sendDataToOicService = sendDataToOicService;
+        this.affectTicketsFromSettlementHistoryService = affectTicketsFromSettlementHistoryService;
     }
 
-    public class SendDataOicHandler : IAsyncRequestHandler<SendDataToOicRequest, IEnumerable<AmendmentReponse>>
+    public async Task<IList<AmendmentReponse>> Handle(SendDataToOicRequest request, CancellationToken cancellationToken)
     {
-        private readonly SendDataToOicService sendDataToOicService;
-        private readonly TicketListingRepository ticketListingRepository;
+        var resultLicensees = new List<AmendmentReponse>();
+        var firstQuery = request.Queries.First();
+        var affectedTickets = await affectTicketsFromSettlementHistoryService.GetTickets(firstQuery.IsReSettled, firstQuery.MatchId);
+        await SendForNormalLicensee(request.Queries, affectedTickets, resultLicensees);
+        await SendForChinaViewLicensee(request.Queries, affectedTickets, resultLicensees);
 
-        public SendDataOicHandler(SendDataToOicService sendDataToOicService, TicketListingRepository ticketListingRepository)
+        return resultLicensees;
+    }
+
+    private async Task SendForNormalLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentReponse> response)
+    {
+        var normalQueries = queries.Where(x => !x.IsChinaView).ToList();
+        if (normalQueries.Any())
         {
-            this.sendDataToOicService = sendDataToOicService;
-            this.ticketListingRepository = ticketListingRepository;
+            var result = await sendDataToOicService.Send(normalQueries, affectedTickets);
+            result.IsChinaView = false;
+            response.Add(result);
         }
+    }
 
-        public async Task<IEnumerable<AmendmentReponse>> Handle(SendDataToOicRequest message)
+    private async Task SendForChinaViewLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentReponse> response)
+    {
+        var chinaViewQueries = queries.Where(x => x.IsChinaView).ToList();
+        if (chinaViewQueries.Any())
         {
-            var resultLicensees = new List<AmendmentReponse>();
-            var chinaViewQueries = message.Queries.Where(x => x.IsChinaView);
-            var normalQueries = message.Queries.Where(x => !x.IsChinaView);
-            var firstQuery = message.Queries.First();
-            var affectedTickets = await ticketListingRepository.GetAffectTicketsFromSettlementHistory(firstQuery.IsReSettled, firstQuery.MatchId);
-            if (normalQueries.Any())
-            {
-                var result = await sendDataToOicService.SendData(normalQueries.ToList(), affectedTickets);
-                result.IsChinaView = false;
-
-                resultLicensees.Add(result);
-            }
-
-            if (chinaViewQueries.Any())
-            {
-                var result = await sendDataToOicService.SendData(chinaViewQueries.ToList(), affectedTickets);
-                result.IsChinaView = true;
-
-                resultLicensees.Add(result);
-            }
-
-            return resultLicensees;
+            var result = await sendDataToOicService.Send(chinaViewQueries, affectedTickets);
+            result.IsChinaView = true;
+            response.Add(result);
         }
     }
 }

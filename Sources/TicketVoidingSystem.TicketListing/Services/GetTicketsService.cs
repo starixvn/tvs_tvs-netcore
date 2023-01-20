@@ -13,6 +13,8 @@ namespace TicketVoidingSystem.TicketListing.Services
         Task<TicketsViewModel> GetTickets(GetTicketsDetailQuery query);
 
         Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(ExportExcelQuery query);
+
+        Task<IEnumerable<ExcelOicModel>> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets);
     }
 
     public class GetTicketsServiceImp : GetTicketsService
@@ -22,7 +24,8 @@ namespace TicketVoidingSystem.TicketListing.Services
         private readonly AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService;
         private readonly MapTicketService mapTicketService;
 
-        public GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository, AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService, MapTicketService mapTicketService)
+        public GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository,
+            AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService, MapTicketService mapTicketService)
         {
             this.mapper = mapper;
             this.repository = repository;
@@ -33,7 +36,8 @@ namespace TicketVoidingSystem.TicketListing.Services
         public async Task<TicketsViewModel> GetTickets(GetTicketsDetailQuery query)
         {
             var viewModel = new TicketsViewModel();
-            var criteria = await CreateCriteria(query);
+            var criteria = CreateCriteria(query);
+            criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
             var tickets = await repository.FetchAsync<DetailTicketModel>(criteria);
             var pagingTickets = Paging(tickets, query.PageSize, query.PageIndex);
             viewModel.Tickets = mapTicketService.MapToListTicketsViewModel(pagingTickets);
@@ -44,14 +48,25 @@ namespace TicketVoidingSystem.TicketListing.Services
 
         public async Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(ExportExcelQuery query)
         {
-            var criteria = await CreateCriteria(query);
+            var criteria = CreateCriteria(query);
+            criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
             var tickets = await repository.FetchAsync<DetailTicketModel>(criteria);
             var ticketsViewModel = mapTicketService.MapToListTicketsViewModel(tickets);
             var excelTickets = mapTicketService.MapToListExcelTicketsModel(ticketsViewModel);
             return excelTickets;
         }
 
-        private async Task<GetTicketsDetailCriteria> CreateCriteria(GetDetailQuery query)
+        public async Task<IEnumerable<ExcelOicModel>> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets)
+        {
+            var ticketDetailCriteria = CreateCriteria(query);
+            var criteria = mapper.Map<GetTicketExcelOicCriteria>(ticketDetailCriteria);
+            criteria.AffectTickets = affectedTickets;
+            var tickets = await repository.FetchAsync<ExcelOicModel>(criteria);
+
+            return tickets;
+        }
+
+        private GetTicketsDetailCriteria CreateCriteria(GetDetailQuery query)
         {
             var criteria = mapper.Map<GetTicketsDetailCriteria>(query);
             criteria.BetTypes = query.BetTypes.DistinctWithComma();
@@ -61,7 +76,6 @@ namespace TicketVoidingSystem.TicketListing.Services
             criteria.SecondAcceptFlag = query.TicketType;
             criteria.Type = query.Product;
             criteria.BetTeams = query.BetTeams.ToBetTypeXml();
-            criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
 
             return criteria;
         }

@@ -46,12 +46,9 @@ namespace TicketVoidingSystem.TicketListing.Controllers
             return this.ExcelFileResult(Response, model);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> SendDataToOic(SendDataToOicRequest request)
-        //{
-        //    var model = await mediator.Send(request).ConfigureAwait(false);
-        //    return this.JsonNet(model);
-        //}
+        [HttpPost]
+        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
+        public async Task<IActionResult> SendDataToOic(SendDataToOicRequest request) => Ok(await mediator.Send(request));
 
         //[HttpPost]
         //public async Task<IActionResult> SendCreditDataToLetstalk(SendCreditDataToLetstalkRequest request)
