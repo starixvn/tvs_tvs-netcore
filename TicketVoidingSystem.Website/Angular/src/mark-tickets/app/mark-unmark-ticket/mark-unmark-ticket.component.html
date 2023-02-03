@@ -5,7 +5,7 @@
 <div>
     <all-marked-ticket-list [model]="allMarkedTicketsModel" [isShowAllTickets]="isShowAllTickets"
         [isBlock]="isBlockAllTickets" [autoRefreshMode]="autoRefreshMode" (getDetailTickets)="getDetailTickets($event)"
-        (updateAllMarkedTickets)="updateAllMarkedTickets($event)" [(paging)]="pagingOfAllMarked"
+        (updateAllMarkedTickets)="confirmUpdateAllMarkedTickets($event)" [(paging)]="pagingOfAllMarked"
         (pagingChange)="pagingEventOfAllMarked()" (refreshData)="refreshAllMarkedTickets()" [dataPermission]="dataPermission">
     </all-marked-ticket-list>
     <match-detail [matchDetail]="match" [isShowMatch]="isShowMatch && query.searchBy === '0'"></match-detail>

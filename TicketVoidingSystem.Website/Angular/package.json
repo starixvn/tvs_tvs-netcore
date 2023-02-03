@@ -48,7 +48,6 @@
     "@angular/compiler-cli": "~13.3.11",
     "@angular/language-service": "~13.3.11",
     "@types/jest": "^27.5.2",
-    "@types/jquery": "^3.5.4",
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^12.11.1",
     "@types/webpack-env": "^1.14.0",

@@ -1,5 +1,5 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import moment from 'moment';
+import * as moment from 'moment';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat, FunctionConst, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';

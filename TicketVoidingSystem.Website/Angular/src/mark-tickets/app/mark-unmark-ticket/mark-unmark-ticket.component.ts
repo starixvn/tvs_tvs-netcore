@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal';
@@ -21,7 +21,7 @@ import { FilterSearchBy } from './filter-tickets/filter.model';
   templateUrl: './mark-unmark-ticket.component.html',
   styleUrls: ['./mark-unmark-ticket.component.scss']
 })
-export class MarkUnmarkTicketComponent implements OnInit {
+export class MarkUnmarkTicketComponent {
   @ViewChild('filterTickets') filterTickets: FilterTicketsComponent;
   @Input() currentTab: string;
   @Input() isExternalUrl: boolean;
@@ -53,9 +53,6 @@ export class MarkUnmarkTicketComponent implements OnInit {
     private readonly commonService: CommonService,
     private readonly modalService: ModalService
   ) { }
-
-  ngOnInit() {
-  }
 
   async searchEvent(query: GetTicketsQuery) {
     this.getStatus = query.status === '0' ? 'Mark' : 'Unmark';
@@ -230,20 +227,7 @@ export class MarkUnmarkTicketComponent implements OnInit {
         title: 'WARNING!',
         type: ModalType.Confirm
       }, async () => {
-        query.status = this.query.status;
-        this.isBlockTickets = true;
-        const result = await this.appService.updateMarkedTicket(query);
-        this.isBlockTickets = false;
-        this.modalService.open(
-          {
-            title: 'Mark tickets result',
-            message: this.replaceErrorMessageLockMatch(result),
-            type: result.isSuccessful ? ModalType.Alert : ModalType.Error
-          },
-          async () => {
-            this.researchMarkedTickets(true);
-          }
-        );
+        await this.updateMarkedTicket(query);
       }, async () => {
         this.researchMarkedTickets(false);
       });
@@ -265,34 +249,16 @@ export class MarkUnmarkTicketComponent implements OnInit {
     this.isBlockTickets = false;
   }
 
-  async updateAllMarkedTickets(matches: AllMarkedTicketModel[]) {
+  async confirmUpdateAllMarkedTickets(matches: AllMarkedTicketModel[]) {
     const header = 'Mark/Unmark All Tickets';
     const body = LABELS.CONFIRM_UNMARK_TICKET;
-    this.modalService.confirm({ title: header, message: body, type: ModalType.Confirm }, async () => {
-      const query = new AllMarkedTicketQuery();
-      query.matches = matches;
-      this.isBlockTickets = true;
-      const result = await this.appService.updateAllMarkedTickets(query);
-      this.isBlockTickets = false;
-      this.modalService.open(
-        {
-          title: 'Mark ticket with Match',
-          message: this.replaceErrorMessageLockMatch(result),
-          type: result.isSuccessful ? ModalType.Alert : ModalType.Error
-        },
-        async () => {
-          await this.refreshAllMarkedTickets();
-          if (
-            _.includes(matches, {
-              matchId: this.queryTicket.matchId,
-              userId: this.queryTicket.userId,
-              createdDate: this.queryTicket.createdDate
-            })
-          ) {
-            this.getDetailTickets(null);
-          }
-        }
-      );
+    this.modalService.confirm(
+      {
+        title: header,
+        message: body,
+        type: ModalType.Confirm
+      }, async () => {
+        await this.updateAllMarkedTickets(matches);
     });
   }
 
@@ -306,5 +272,49 @@ export class MarkUnmarkTicketComponent implements OnInit {
   hideComponent(): void {
     this.isShowMatch = false;
     this.isShowTickets = false;
+  }
+
+  private async updateMarkedTicket(query: MarkedTicketQuery) {
+    query.status = this.query.status;
+    this.isBlockTickets = true;
+    const result = await this.appService.updateMarkedTicket(query);
+    this.isBlockTickets = false;
+    this.modalService.open(
+      {
+        title: 'Mark tickets result',
+        message: this.replaceErrorMessageLockMatch(result),
+        type: result.isSuccessful ? ModalType.Alert : ModalType.Error
+      },
+      async () => {
+        this.researchMarkedTickets(true);
+      }
+    );
+  }
+
+  private async updateAllMarkedTickets(matches: AllMarkedTicketModel[]) {
+    const query = new AllMarkedTicketQuery();
+    query.matches = matches;
+    this.isBlockTickets = true;
+    const result = await this.appService.updateAllMarkedTickets(query);
+    this.isBlockTickets = false;
+    this.modalService.open(
+      {
+        title: 'Mark ticket with Match',
+        message: this.replaceErrorMessageLockMatch(result),
+        type: result.isSuccessful ? ModalType.Alert : ModalType.Error
+      },
+      async () => {
+        await this.refreshAllMarkedTickets();
+        if (
+          _.includes(matches, {
+            matchId: this.queryTicket.matchId,
+            userId: this.queryTicket.userId,
+            createdDate: this.queryTicket.createdDate
+          })
+        ) {
+          this.getDetailTickets(null);
+        }
+      }
+    );
   }
 }

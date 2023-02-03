@@ -21,7 +21,6 @@ module.exports = {
     '<rootDir>/src/void-request/app/void-other-issue/',
     '<rootDir>/src/void-request/app/app.service.spec.ts',
   ],
-  setupFiles  : ['<rootDir>/src/test-global.ts'],
   setupFilesAfterEnv : ['<rootDir>/src/test-setup.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
