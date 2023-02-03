@@ -50,21 +50,6 @@ describe('TabMarkTicketComponent', () => {
     expect(instance.currentTab).toBe('0');
   });
 
-  it('TabMarkTicketComponent init with permission HostAutoMarkService should match snapshot', async () => {
-    const fakePermission = _.cloneDeep(Helper.fakeDataPermission);
-    fakePermission.isReadMarkTickets = false;
-    fakePermission.isHostMarkTickets = false;
-    const { fixture, instance } = await shallow
-    .render({
-      bind: {
-        dataPermission: fakePermission
-      }
-    });
-
-    expect(fixture).toMatchSnapshot();
-    expect(instance.currentTab).toBe('4');
-  });
-
   it('TabMarkTicketComponent init with permission ReadMarkTickets & HostAutoMarkService should match snapshot', async () => {
     const fakePermission = _.cloneDeep(Helper.fakeDataPermission);
     fakePermission.isReadMarkTickets = true;
@@ -79,7 +64,7 @@ describe('TabMarkTicketComponent', () => {
     expect(instance.currentTab).toBe('0');
   });
 
-  [0, 1, 2, 3, 4].forEach(tabId => {
+  [0, 1, 2, 3].forEach(tabId => {
     it('TabMarkTicketComponent should call #setTabPage when change tab nav', async () => {
       const { find, instance } = await shallow
       .render({

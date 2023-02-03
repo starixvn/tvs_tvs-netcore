@@ -3,17 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
-import { PagingModule } from '../../../utility/modules/paging/paging.module';
-import { PagingModel } from '../../../utility/modules/paging/paging/paging.model';
+import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { AppStore } from '../app.store';
-import { PermissionABWhiteList } from '../models/permission.model';
+import { PermissionABExceptionList } from '../models/permission.model';
 import { UserModel } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { UserListComponent } from './user-list.component';
 
 class Helper {
-  static fakePermission: PermissionABWhiteList = {
-    abWhiteListHost: true
+  static fakePermission: PermissionABExceptionList = {
+    abExceptionListHost: true
   };
   static fakeUserModel: UserModel = {
     username: 'name',

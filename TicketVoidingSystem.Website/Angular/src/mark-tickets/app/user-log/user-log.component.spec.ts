@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
-import { PagingModel } from '../../../utility/modules/paging/paging/paging.model';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { AppService } from '../app.service';
 import { GetLogsQuery } from '../models/query.model';
 import { FilterLogsComponent } from './filter-logs/filter-logs.component';

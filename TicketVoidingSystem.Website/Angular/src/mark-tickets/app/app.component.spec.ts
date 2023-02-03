@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -14,6 +15,7 @@ describe('AppComponent', () => {
             ConfirmAutoUnmarkComponent,
             TabMarkTicketComponent,
             MarkUnmarkTicketComponent,
+            MenuBarComponent,
             UserLogComponent],
         providers: [AppService]
     })

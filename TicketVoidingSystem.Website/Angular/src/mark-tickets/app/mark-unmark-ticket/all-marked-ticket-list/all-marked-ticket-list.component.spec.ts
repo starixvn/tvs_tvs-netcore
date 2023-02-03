@@ -1,16 +1,17 @@
-import { AllMarkedTicketListComponent } from './all-marked-ticket-list.component';
-import { BlockUiModule } from '../../../../utility/modules/block-ui/block-ui.module';
-import { FormsModule } from '@angular/forms';
-import { PagingModule } from '../../../../utility/modules/paging/paging.module';
 import { NgModule } from '@angular/core';
-import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
-import { PipeModule } from '../../../../utility/modules/pipes/pipe.module';
+import { FormsModule } from '@angular/forms';
+import * as moment from 'moment';
 import { Shallow } from 'shallow-render';
-import { PagingModel } from '../../../../utility/modules/paging/paging/paging.model';
-import { ToolTipModule } from '../../../../utility/modules/tooltip/tooltip.module';
-import { AllMarkedTicketModel } from './all-marked-ticket.model';
-import { TicketDetailId } from '../../models/query.model';
+import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { PagingModule } from '../../../../utility/components/paging/paging.module';
+import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../utility/constants/labels';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
+import { TicketDetailId } from '../../models/query.model';
+import { AllMarkedTicketListComponent } from './all-marked-ticket-list.component';
+import { AllMarkedTicketModel } from './all-marked-ticket.model';
 
 enum IconCheckBox {
   none = 0,
@@ -253,7 +254,7 @@ describe('AllMarkedTicketListComponent', () => {
     const actual = instance.convertToGMT8(date);
 
     // Assert
-    expect(actual.format('YYYY-MM-DD HH:mm:ss')).toBe('2020-03-12 06:59:59');
+    expect(moment(actual).format('YYYY-MM-DD HH:mm:ss')).toBe('2020-03-12 06:59:59');
   });
 
   it('refreshData event should emit and set iconCheckBox is all after call #refreshTickets', async () => {

@@ -5,6 +5,7 @@ exports[`AppComponent AppComponent should render </confirm-auto-unmark> 1`] = `
   __ngContext__={[Function LRootView]}
 >
   <app-root>
+    <menu-bar />
     <div
       class="title"
     >
@@ -31,6 +32,7 @@ exports[`AppComponent AppComponent should render </mark-unmark-ticket> 0 1`] = `
   __ngContext__={[Function LRootView]}
 >
   <app-root>
+    <menu-bar />
     <div
       class="title"
     >
@@ -57,6 +59,7 @@ exports[`AppComponent AppComponent should render </mark-unmark-ticket> 1 1`] = `
   __ngContext__={[Function LRootView]}
 >
   <app-root>
+    <menu-bar />
     <div
       class="title"
     >
@@ -83,6 +86,7 @@ exports[`AppComponent AppComponent should render </user-log> 1`] = `
   __ngContext__={[Function LRootView]}
 >
   <app-root>
+    <menu-bar />
     <div
       class="title"
     >

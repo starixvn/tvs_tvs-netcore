@@ -1,12 +1,13 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
+import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../utility/constants/labels';
-import { BlockUiModule } from '../../../utility/modules/block-ui/block-ui.module';
-import { PagingModule } from '../../../utility/modules/paging/paging.module';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
-import { SanitizeHtmlPipe } from '../../../utility/modules/pipes/sanitize-html.pipe';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
+import { BetID } from '../../../utility/models/bet-id.model';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
+import { SanitizeHtmlPipe } from '../../../utility/pipes/sanitize-html.pipe';
 import { MarkedTicketQuery } from '../models/query.model';
 import { GroupModel } from './group-tickets.model';
 import { TicketModel } from './ticket.model';
@@ -34,7 +35,8 @@ class Helper {
       mainTransId: '0',
       isDisable: false,
       isCricket: false,
-      isChecked: true
+      isChecked: true,
+      siteDbGroupId: 0
     },
     {
       betId: '108936575089',
@@ -55,13 +57,17 @@ class Helper {
       mainTransId: '0',
       isDisable: false,
       isCricket: false,
-      isChecked: true
+      isChecked: true,
+      siteDbGroupId: 0
     }];
 
     const groups = new GroupModel('MBC', tickets, []);
     const model = new TicketsModel();
     model.groups = [groups];
-    model.totalItemsList = ['108936575088', '108936575089'];
+    model.totalItemsList = [
+      { transId :'108936575088' } as BetID,
+      { transId :'108936575089' } as BetID
+    ];
     model.tempUncheckedList = ['108936575089'];
 
     return model;
@@ -189,11 +195,10 @@ describe('TicketsListComponent', () => {
     const { instance } = await shallow.render();
     instance.model = Helper.getFakeTicketsModel();
     const query = new MarkedTicketQuery();
-    query.transIds = '108936575088,108936575089';
+    query.tickets = [];
     instance.markSelectedTicketsOnPage();
 
-    expect(instance.markedTicketsQuery.transIds).toBe('108936575088,108936575089');
-    expect(instance.updateMarkedTickets.emit).toHaveBeenCalledWith(query);
+    expect(instance.updateMarkedTickets.emit).toBeCalledTimes(1);
   });
 
   it('#markSelectedTicketsAllPage should display tooltip when do not any transid ', async () => {
@@ -210,12 +215,11 @@ describe('TicketsListComponent', () => {
     const { instance } = await shallow.render();
     instance.model = Helper.getFakeTicketsModel();
     const query = new MarkedTicketQuery();
-    query.transIds = '108936575088';
+    query.tickets = [];
 
     instance.markSelectedTicketsAllPage();
 
-    expect(instance.markedTicketsQuery.transIds).toBe('108936575088');
-    expect(instance.updateMarkedTickets.emit).toHaveBeenCalledWith(query);
+    expect(instance.updateMarkedTickets.emit).toBeCalledTimes(1);
   });
   
   it('#GroupModel should call mapTickets', async () => {

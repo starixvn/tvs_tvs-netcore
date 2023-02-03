@@ -3,12 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
+import { GroupBetType, GroupBetTypesModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { ModeType } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Selection } from '../../../../utility/models/selection.model';
-import { GroupBetType, GroupBetTypesModel, Result } from '../../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
-import { Tooltip } from '../../../../utility/modules/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../../utility/modules/tooltip/tooltip.module';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
 import { GetLogsQuery } from '../../models/query.model';
 import { FilterLogsComponent } from './filter-logs.component';
@@ -27,7 +28,7 @@ class Helper {
 
   static getFakeErrorGroupBetTypesModel(): GroupBetTypesModel {
     const model = new GroupBetTypesModel([], null);
-    model.result = { errorCode: 1, errorMsg: 'errorABC' } as Result;
+    model.result = { errorCode: 1, errorMsg: 'errorABC' };
     return model;
   }
 }
@@ -40,6 +41,9 @@ class Helper {
     NgbModule,
     NgSelectModule
   ],
+  providers: [
+    CommonService
+  ]
 })
 class ModuleTest { }
 
@@ -62,7 +66,7 @@ describe('FilterLogsComponent', () => {
     expect(instance.action).toStrictEqual(new FilterAction());
     expect(instance.tooltip.element).toBeInstanceOf(ElementRef);
     expect(instance.isSuccessMatch).toBe(true);
-    expect(instance.selectedActions).toStrictEqual(['90500', '90508', '90509', '90501', '90510', '90502']);
+    expect(instance.selectedActions).toStrictEqual(['90500', '90508', '90501', '90511', '90502']);
     const date = new Date();
     expect(instance.date.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
     expect(instance.date.ngbToDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));
@@ -81,7 +85,7 @@ describe('FilterLogsComponent', () => {
   it('Should call checkValidMatch not display tooltip when matchId input blur', async () => {
     const mockGetGroupBetTypes = jest.fn();
     const { instance, find } = await shallow
-      .mock(AppService, { getGroupBetTypes: mockGetGroupBetTypes })
+      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
       .render();
     const spyCheckValidMatch = jest.spyOn(instance, 'checkValidMatch');
     const matchId = find(Helper.matchIdSelector);
@@ -96,11 +100,11 @@ describe('FilterLogsComponent', () => {
 
   it('Should display tooltip with error from server when matchId input blur', async () => {
     const model = new GroupBetTypesModel([], null);
-    model.result = { errorCode: 1, errorMsg: 'errorABC' } as Result;
+    model.result = { errorCode: 1, errorMsg: 'errorABC' };
     const mockGetGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(model));
     const mockTooltipDisplay = jest.fn();
     const { instance, find, fixture } = await shallow
-      .mock(AppService, { getGroupBetTypes: mockGetGroupBetTypes })
+      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
       .render();
 
     instance.tooltip.display = mockTooltipDisplay;
@@ -120,11 +124,11 @@ describe('FilterLogsComponent', () => {
   it('Should display tooltip with invalid match error when matchId input blur', async () => {
     const model = new GroupBetTypesModel([], null);
     model.groupBetTypes = [];
-    model.result = { errorCode: 0 } as Result;
+    model.result = { errorCode: 0, errorMsg: '' };
     const mockGetGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(model));
     const mockTooltipDisplay = jest.fn();
     const { instance, find, fixture } = await shallow
-      .mock(AppService, { getGroupBetTypes: mockGetGroupBetTypes })
+      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
       .render();
 
     instance.tooltip.display = mockTooltipDisplay;
@@ -144,10 +148,10 @@ describe('FilterLogsComponent', () => {
   it('Match id should be valid when matchId input blur', async () => {
     const model = new GroupBetTypesModel([], null);
     model.groupBetTypes = [{ groupName: 'acb' } as GroupBetType];
-    model.result = { errorCode: 0 } as Result;
+    model.result = { errorCode: 0, errorMsg: '' };
     const mockGetGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(model));
     const { instance, find, fixture } = await shallow
-      .mock(AppService, { getGroupBetTypes: mockGetGroupBetTypes })
+      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
       .render();
 
     const matchId = find(Helper.matchIdSelector);

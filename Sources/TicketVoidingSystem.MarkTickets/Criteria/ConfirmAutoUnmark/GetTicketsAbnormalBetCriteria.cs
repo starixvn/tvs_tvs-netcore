@@ -2,7 +2,7 @@
 
 namespace TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark
 {
-    internal class GetTicketsAbnormalBetCriteria : CriteriaBase
+    public class GetTicketsAbnormalBetCriteria : CriteriaBase
     {
         public int MatchId { get; set; }
 

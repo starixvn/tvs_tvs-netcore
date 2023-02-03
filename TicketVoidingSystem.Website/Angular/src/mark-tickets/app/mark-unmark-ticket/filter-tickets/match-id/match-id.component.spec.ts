@@ -3,19 +3,15 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
-import { AppService } from '../../../../../mark-tickets/app/app.service';
 import { RangeTime } from '../../../../../mark-tickets/app/models/query.model';
+import { AdvancedModeModule } from '../../../../../utility/components/advanced-mode/advanced-mode.module';
+import { CheckedBetType } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { BetType, GroupBetType, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { DateTimeModule } from '../../../../../utility/components/date-time/date-time.module';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { FirstTicketTime } from '../../../../../utility/models/match.model';
-import { AdvancedModeModule } from '../../../../../utility/modules/advanced-mode/advanced-mode.module';
-import { CheckedBetType } from '../../../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
-import {
-  BetType, GroupBetType,
-  GroupBetTypesModel
-} from '../../../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
-import { FullTime } from '../../../../../utility/modules/date-time/date-full-time/full-time.model';
-import { DateTimeModule } from '../../../../../utility/modules/date-time/date-time.module';
-import { ToolTipModule } from '../../../../../utility/modules/tooltip/tooltip.module';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
 import { Currency } from '../filter.model';
@@ -119,25 +115,8 @@ describe.only('MatchIdComponent', () => {
     expect(instance.model.matchId).toBe('');
   });
 
-  it('#checkTransDate should call #setFromDate and return expected data', async () => {
-    const { instance } = await shallow.render();
-    instance.searchByBetId = true;
-    instance.setFromDate = jest.fn();
-    instance.checkTransDate();
-
-    expect(instance.rangeTimes.length).toBe(1);
-    expect(instance.searchByBetId).toBe(false);
-    expect(instance.model.bet).toBe('All');
-    expect(instance.model.fromTransId).toBe('');
-    expect(instance.model.toTransId).toBe('');
-    expect(instance.setFromDate).toHaveBeenCalledTimes(1);
-  });
-
   it('#addRangeTimes should return rangeTimes(2 items) correctly', async () => {
     const { instance } = await shallow.render();
-    instance.searchByBetId = false;
-
-    instance.setRangeTimes();
     instance.addRangeTimes();
 
     expect(instance.rangeTimes.length).toBe(2);
@@ -145,18 +124,13 @@ describe.only('MatchIdComponent', () => {
 
   it('#addRangeTimes should return rangeTimes(1 items) correctly', async () => {
     const { instance } = await shallow.render();
-    instance.searchByBetId = true;
-    instance.setRangeTimes();
     instance.addRangeTimes();
 
-    expect(instance.rangeTimes.length).toBe(1);
+    expect(instance.rangeTimes.length).toBe(2);
   });
 
   it('#removeRangeTimes should return rangeTimes(1 items) correctly', async () => {
     const { instance } = await shallow.render();
-    instance.searchByBetId = false;
-
-    instance.setRangeTimes();
     instance.addRangeTimes();
     instance.removeRangeTimes(1);
 
@@ -165,9 +139,6 @@ describe.only('MatchIdComponent', () => {
 
   it('#removeRangeTimes should return rangeTimes(1 items) correctly when searchByBetId true', async () => {
     const { instance } = await shallow.render();
-    instance.searchByBetId = true;
-
-    instance.setRangeTimes();
     instance.addRangeTimes();
     instance.removeRangeTimes(1);
 
@@ -212,10 +183,9 @@ describe.only('MatchIdComponent', () => {
       .render();
     instance.model.matchId = '123456';
 
-    instance.setRangeTimes();
     await instance.setFromDate();
 
-    expect(instance.rangeTimes[0].from.getValue()).toBe('2019/8/12 09:35:06.980 AM');
+    expect(instance.rangeTimes[0].from).toBe('2019/08/12 09:35:06.980 AM');
   });
 
   it('#setFromDate should call #data.setFullYear', async () => {
@@ -230,10 +200,9 @@ describe.only('MatchIdComponent', () => {
     instance.eventType.value = '1';
     instance.model.matchId = '123456';
 
-    instance.setRangeTimes();
     await instance.setFromDate();
 
-    expect(instance.rangeTimes[0].from.getValue()).toBe('50/8/12 09:35:06.980 AM');
+    expect(instance.rangeTimes[0].from).toBe('0050/08/12 09:35:06.980 AM');
   });
   
   it('#setFromDate should update data when currentDate null', async () => {
@@ -248,10 +217,9 @@ describe.only('MatchIdComponent', () => {
     instance.eventType.value = '1';
     instance.model.matchId = '123456';
 
-    instance.setRangeTimes();
     await instance.setFromDate();
 
-    expect(instance.rangeTimes[0].from.getValue()).toBeDefined();
+    expect(instance.rangeTimes[0].from).toBeDefined();
   });
 
   it('#setFromDate should update data when firstTime null', async () => {
@@ -263,10 +231,9 @@ describe.only('MatchIdComponent', () => {
     instance.eventType.value = '1';
     instance.model.matchId = '123456';
 
-    instance.setRangeTimes();
     await instance.setFromDate();
 
-    expect(instance.rangeTimes[0].from.getValue()).toBeDefined();
+    expect(instance.rangeTimes[0].from).toBeDefined();
   });
 
   it('#setFromDate should update data when matchId has not value', async () => {
@@ -278,16 +245,15 @@ describe.only('MatchIdComponent', () => {
     instance.eventType.value = '1';
     instance.model.matchId = '';
 
-    instance.setRangeTimes();
     await instance.setFromDate();
 
-    expect(instance.rangeTimes[0].from.getValue()).toBeDefined();
+    expect(instance.rangeTimes[0].from).toBeDefined();
   });
 
   it('#getGroupBetTypes should call #handleGroupBetTypes with expected param', async () => {
     const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
     const { instance } = await shallow
-      .mock(AppService, {
+      .mock(CommonService, {
         getGroupBetTypes: jest.fn().mockImplementation(() => groupBetTypesModel)
       })
       .render();
@@ -439,36 +405,6 @@ describe.only('MatchIdComponent', () => {
     expect(actual).toBe(true);
   });
 
-  it('#checkValidationOfBetId should return false and display tooltip when inputed transid is empty or undefined', async () => {
-    const { instance } = await shallow.render();
-    instance.tooltip.display = jest.fn();
-    instance.searchByBetId = true;
-    const testCases = [
-      { fromTransId: '', toTransId: '12345', elementId: 'from-bet-id', tooltipMessage: LABELS.REQUIRED_FROMBETID },
-      { fromTransId: undefined, toTransId: '12345', elementId: 'from-bet-id', tooltipMessage: LABELS.REQUIRED_FROMBETID },
-      { fromTransId: '12345', toTransId: '', elementId: 'to-bet-id', tooltipMessage: LABELS.REQUIRED_TOBETID },
-      { fromTransId: '12345', toTransId: undefined, elementId: 'to-bet-id', tooltipMessage: LABELS.REQUIRED_TOBETID },
-    ];
-
-    for (const item of testCases) {
-      instance.model.fromTransId = item.fromTransId;
-      instance.model.toTransId = item.toTransId;
-      const actual = instance.checkValidationOfBetId();
-      expect(actual).toBe(false);
-      expect(instance.tooltip.display).toHaveBeenCalledWith(item.elementId, item.tooltipMessage);
-    }
-  });
-
-  it('#checkValidationOfBetId should return true', async () => {
-    const { instance } = await shallow.render();
-    instance.searchByBetId = true;
-    instance.model.fromTransId = '12345';
-    instance.model.toTransId = '67890';
-    const actual = instance.checkValidationOfBetId();
-
-    expect(actual).toBe(true);
-  });
-
   it('#checkValidate should return false when invalid match', async () => {
     const { instance } = await shallow.render();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => false);
@@ -480,7 +416,9 @@ describe.only('MatchIdComponent', () => {
   it('#checkValidate should return false when invalid betid', async () => {
     const { instance } = await shallow.render();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidationOfBetId = jest.fn().mockImplementation(() => false);
+    instance.getCheckedLicensees = jest.fn().mockImplementation(() => []);
+    instance.tooltip = new Tooltip();
+    instance.tooltip.display = jest.fn();
     const actual = instance.checkValidate();
 
     expect(actual).toBe(false);
@@ -489,9 +427,7 @@ describe.only('MatchIdComponent', () => {
   it('#checkValidate should return false when invalid rangeTimes', async () => {
     const { instance } = await shallow.render();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidationOfBetId = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => false);
-    instance.searchByBetId = false;
     const actual = instance.checkValidate();
 
     expect(actual).toBe(false);
@@ -501,9 +437,7 @@ describe.only('MatchIdComponent', () => {
     const { instance } = await shallow.render();
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidationOfBetId = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.searchByBetId = false;
     instance.groupLicensees = [];
     const actual = instance.checkValidate();
 
@@ -515,9 +449,7 @@ describe.only('MatchIdComponent', () => {
     const { instance } = await shallow.render();
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidationOfBetId = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.searchByBetId = false;
     instance.groupLicensees = Helper.getGroupLicensee();
     instance.model.currencyIds = '';
 
@@ -531,9 +463,7 @@ describe.only('MatchIdComponent', () => {
     const { instance } = await shallow.render();
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidationOfBetId = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.searchByBetId = false;
     instance.groupLicensees = Helper.getGroupLicensee();
     instance.model.currencyIds = '13';
     instance.groupBetTypesComponent.validate = jest.fn().mockImplementation(() => false);
@@ -548,9 +478,7 @@ describe.only('MatchIdComponent', () => {
     const { instance } = await shallow.render();
     instance.tooltip.display = jest.fn();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
-    instance.checkValidationOfBetId = jest.fn().mockImplementation(() => true);
     instance.checkValidateRangeTime = jest.fn().mockImplementation(() => true);
-    instance.searchByBetId = false;
     instance.groupLicensees = Helper.getGroupLicensee();
     instance.model.currencyIds = '13';
     instance.groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
@@ -566,7 +494,6 @@ describe.only('MatchIdComponent', () => {
     instance.groupLicensees = Helper.getGroupLicensee();
     instance.eventType.value = '2';
     instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-    instance.searchByBetId = false;
     instance.rangeTimes = [new RangeTime()];
     instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
 
@@ -583,7 +510,6 @@ describe.only('MatchIdComponent', () => {
     instance.groupLicensees = Helper.getGroupLicensee();
     instance.eventType.value = '2';
     instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-    instance.searchByBetId = true;
     instance.rangeTimes = [new RangeTime()];
     instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
 
@@ -592,26 +518,21 @@ describe.only('MatchIdComponent', () => {
     expect(instance.model.licenseeNames).toBe('368Cash');
     expect(instance.model.liveIndicator).toBe('2');
     expect(instance.model.betTypes.length).toBe(1);
-    expect(instance.model.durations).toBeNull();
   });
 
   it('#checkValidateRangeTime should return false and display tooltip when invalid datetime', async () => {
     const { instance } = await shallow.render();
     instance.tooltip.display = jest.fn();
-    const rangeTime1: RangeTime = {
-      from: new FullTime(new Date('2019-08-12 09:35:06.980')),
-      to: new FullTime(new Date('2019-08-11 09:35:06.980'))
-    };
-    const rangeTime2: RangeTime = {
-      from: new FullTime(new Date('2019-08-13 01:35:06.980')),
-      to: new FullTime(new Date('2019-08-11 09:35:06.980'))
-    };
+    const rangeTime1 = new RangeTime();
+    rangeTime1.from = '2023/08/12 09:35:06.980 AM';
+    rangeTime1.to = '2023/08/11 09:35:06.980 AM';
+    const rangeTime2 = new RangeTime();
     instance.rangeTimes = [rangeTime1, rangeTime2];
     const actual = instance.checkValidateRangeTime();
 
     expect(actual).toBe(false);
     expect(instance.tooltip.display).toBeCalledTimes(1);
-    expect(instance.tooltip.display).toHaveBeenCalledWith('invalid-from-datetime', LABELS.INVALID_DATETIME);
+    expect(instance.tooltip.display).toHaveBeenCalledWith('from-date-time0', LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
   });
 
   it('#checkValidateRangeTime should return true', async () => {

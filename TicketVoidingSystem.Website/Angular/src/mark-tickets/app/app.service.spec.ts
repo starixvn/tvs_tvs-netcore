@@ -1,12 +1,12 @@
+import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BalanceUp } from '../../utility/models/balance-up.model';
 import { SportInfo } from '../../utility/models/event.model';
 import { Result } from '../../utility/models/result';
-import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
+import { CommonService } from '../../utility/services/common.service';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
 import {
-  ConfirmAutoUnmarkModel,
-  ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark
+    ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark
 } from './confirm-auto-unmark/confirm-auto-unmark.model';
 import { AllMarkedTicketsModel } from './mark-unmark-ticket/all-marked-ticket-list/all-marked-ticket.model';
 import { Currency } from './mark-unmark-ticket/filter-tickets/filter.model';
@@ -22,10 +22,12 @@ jest.mock('../../utility/services/http.service');
 describe('AppService', () => {
     let mockHttpService: jest.Mocked<HttpService>;
     let appService: AppService;
+    let commonService: CommonService;
 
     beforeEach(() => {
         mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
         appService = new AppService(mockHttpService);
+        commonService = new CommonService(mockHttpService);
     });
 
     it('Get balance up', async () => {
@@ -38,7 +40,7 @@ describe('AppService', () => {
         mockHttpService.getJson.mockResolvedValue(expectedBalanceUp);
 
         // Action and Assert
-        const result = await appService.getBalanceUp();
+        const result = await commonService.getBalanceUp();
         expect(result.moveBetsDay).toBe(expectedBalanceUp.moveBetsDay);
         expect(result.balanceUpDay).toBe(expectedBalanceUp.balanceUpDay);
     });
@@ -83,7 +85,7 @@ describe('AppService', () => {
         mockHttpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
 
         // Action and Assert
-        const result = await appService.getGroupBetTypes(new GetBetTypesQuery());
+        const result = await commonService.getGroupBetTypes(new GetBetTypesQuery());
 
         expect(result.groupBetTypes.length).toBe(2);
         expect(result.groupBetTypes[0].groupName).toBe('1H');
@@ -159,7 +161,7 @@ describe('AppService', () => {
     it('#exportExcel should return nothing', async () => {
         // Arrange
         const query = new GetTicketsQuery();
-        const url = `SportBook/MarkTickets/ExportExcel`;
+        const url = `api/MarkTickets/ExportExcel`;
         mockHttpService.downloadFile.mockResolvedValue();
 
         // Action and Assert
@@ -171,7 +173,7 @@ describe('AppService', () => {
     it('#exportExcelDetailTickets should return nothing', async () => {
         // Arrange
         const query = new TicketDetailQuery();
-        const url = `SportBook/MarkTickets/ExportExcelDetailTicket`;
+        const url = `api/MarkTickets/ExportExcelDetailTicket`;
         mockHttpService.downloadFile.mockResolvedValue();
 
         // Action and Assert
@@ -209,7 +211,7 @@ describe('AppService', () => {
             if (result.isSuccessful) {
                 expect(result.errorMsg).toBe(item.message);
             } else {
-                expect(result.errorMsg).toBe(item.message + '<br/> - ' + item.errorMsg);
+                expect(result.errorMsg).toBe(item.errorMsg);
             }
         }
     });
@@ -256,7 +258,7 @@ describe('AppService', () => {
         // Arrange
         const fakeQuery = new ConfirmAutoUnmarkQuery();
         fakeQuery.matchId = '21';
-        const fakeConfirmAutoUnmarkModel = new ConfirmAutoUnmarkModel();
+        const fakeConfirmAutoUnmarkModel = new ConfirmAutoUnmarkViewModel();
         fakeConfirmAutoUnmarkModel.matchId = '11';
         const expected = new ConfirmAutoUnmarkViewModel();
         expected.totalItems = 20;
@@ -268,7 +270,7 @@ describe('AppService', () => {
         // Assert
         expect(result).toBe(expected);
         expect(mockHttpService.postJson).toHaveBeenCalledTimes(1);
-        expect(mockHttpService.postJson).toHaveBeenCalledWith(fakeQuery, 'SportBook/MarkTickets/GetDataForConfirmAutoUnmark');
+        expect(mockHttpService.postJson).toHaveBeenCalledWith(fakeQuery, 'api/MarkTickets/GetDataForConfirmAutoUnmark');
     });
 
     it('#updateConfirmAutoUnmark should return expected Result', async () => {
@@ -286,7 +288,7 @@ describe('AppService', () => {
         // Assert
         expect(result).toBe(expected);
         expect(mockHttpService.postJson).toHaveBeenCalledTimes(1);
-        expect(mockHttpService.postJson).toHaveBeenCalledWith(fakeUpdateData, 'SportBook/MarkTickets/UpdateConfirmAutoUnmark');
+        expect(mockHttpService.postJson).toHaveBeenCalledWith(fakeUpdateData, 'api/MarkTickets/UpdateConfirmAutoUnmark');
     });
 
     it('#getSportsType should return expected data', async () => {
@@ -295,12 +297,12 @@ describe('AppService', () => {
 
         mockHttpService.getJson.mockResolvedValue(expected);
         // Act
-        const result = await appService.getSportsType();
+        const result = await commonService.getSportsType();
 
         // Assert
         expect(result).toBe(expected);
         expect(mockHttpService.getJson).toHaveBeenCalledTimes(1);
-        expect(mockHttpService.getJson).toHaveBeenCalledWith('TicketVoiding/GetSportsType');
+        expect(mockHttpService.getJson).toHaveBeenCalledWith('api/SharedApi/GetSportsType');
     });
     
     it('#getDataPermission should return expected data', async () => {
@@ -315,6 +317,6 @@ describe('AppService', () => {
         // Assert
         expect(result).toBe(expected);
         expect(mockHttpService.getJson).toHaveBeenCalledTimes(1);
-        expect(mockHttpService.getJson).toHaveBeenCalledWith('SportBook/MarkTickets/GetDataPermission');
+        expect(mockHttpService.getJson).toHaveBeenCalledWith('api/MarkTickets/GetDataPermission');
     });
 });

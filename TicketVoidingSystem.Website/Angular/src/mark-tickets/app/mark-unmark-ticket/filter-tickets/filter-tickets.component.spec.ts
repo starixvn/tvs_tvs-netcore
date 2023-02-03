@@ -3,8 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { BalanceUp } from '../../../../utility/models/balance-up.model';
-import { BlockUiModule } from '../../../../utility/modules/block-ui/block-ui.module';
+import { CommonService } from '../../../../utility/services/common.service';
 import { HttpService } from '../../../../utility/services/http.service';
 import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/query.model';
@@ -117,8 +118,8 @@ describe('FilterTicketsComponent', () => {
 
   it('#initData should init expected data and call #search', async () => {
     const { instance } = await shallow
-      .mock(AppService, {
-        getBalanceUp: jest.fn().mockImplementation(() => Helper.fakeBalanceUp)
+      .mock(CommonService, {
+        getBalanceUpZoneManila: jest.fn().mockImplementation(() => Helper.fakeBalanceUp)
       })
       .render();
     instance.isExternalUrl = false;
@@ -138,8 +139,8 @@ describe('FilterTicketsComponent', () => {
   
   it('#initData should call #search', async () => {
     const { instance } = await shallow
-      .mock(AppService, {
-        getBalanceUp: jest.fn().mockImplementation(() => Helper.fakeBalanceUp)
+      .mock(CommonService, {
+        getBalanceUpZoneManila: jest.fn().mockImplementation(() => Helper.fakeBalanceUp)
       })
       .render();
     instance.isExternalUrl = true;
