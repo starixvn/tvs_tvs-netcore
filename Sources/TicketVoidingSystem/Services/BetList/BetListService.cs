@@ -5,6 +5,7 @@ using Fanex.BetList.Core.Factories;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
 using HtmlAgilityPack;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 
 namespace TicketVoidingSystem.Services.BetList
@@ -25,7 +26,7 @@ namespace TicketVoidingSystem.Services.BetList
 
         string GetBetTypeName(ITicket ticket);
 
-        string GetBetTypeNameSimplified(ITicket ticket);
+        string GetBetTypeNameChineseSimplified(ITicket ticket);
 
         string GetBetTypeNameChineseTraditional(ITicket ticket);
 
@@ -116,15 +117,15 @@ namespace TicketVoidingSystem.Services.BetList
 
         public string GetBetTypeName(ITicket ticket)
         {
-            var ticketHelper = new TicketHelper();
+            var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseSimplified));
             var factory = new BetListBaseBuilder();
             var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
             return builder.GetBetTypeName(ticket, ticketHelper);
         }
 
-        public string GetBetTypeNameSimplified(ITicket ticket)
+        public string GetBetTypeNameChineseSimplified(ITicket ticket)
         {
-            var ticketHelper = new TicketHelper(new ChineseSimplifiedCacheRef());
+            var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseSimplified));
             var factory = new BetListBaseBuilder();
             var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
             var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);
@@ -134,7 +135,7 @@ namespace TicketVoidingSystem.Services.BetList
 
         public string GetBetTypeNameChineseTraditional(ITicket ticket)
         {
-            var ticketHelper = new TicketHelper(new ChineseTraditionalCacheRef());
+            var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseTraditional));
             var factory = new BetListBaseBuilder();
             var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
             var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);
@@ -144,7 +145,7 @@ namespace TicketVoidingSystem.Services.BetList
 
         public string GetBetTypeNameNewChineseSimplified(ITicket ticket)
         {
-            var ticketHelper = new TicketHelper(new NewChineseSimplifiedCacheRef());
+            var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.NewChineseSimplified));
             var factory = new BetListBaseBuilder();
             var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
             var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);

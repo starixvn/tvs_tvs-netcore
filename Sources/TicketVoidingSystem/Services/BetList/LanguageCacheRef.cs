@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
 using Fanex.BetList.Core.TicketHelper;
 using Fanex.RemotingRef;
-using TicketVoidingSystem.Constants;
 
 namespace TicketVoidingSystem.Services.BetList
 {
-    public class ChineseSimplifiedCacheRef : ICacheRef
+    internal class LanguageCacheRef : ICacheRef
     {
+        private readonly string CurrentLanguage;
         private static readonly string DefaultValue = string.Empty;
 
         private readonly IRemotingRefService remotingRefService;
 
-        public ChineseSimplifiedCacheRef(IRemotingRefService remotingRefService = null)
+        internal LanguageCacheRef(string language, IRemotingRefService remotingRefService = null)
         {
             this.remotingRefService = remotingRefService ?? new RemotingRefService();
+            this.CurrentLanguage = language;
         }
-
-        private const string CurrentLanguage = LanguageCode.ChineseSimplified;
 
         public string GetBetType(string betTypeId, string resourceId, long refNo)
             => remotingRefService.GetBetTypeName(betTypeId, CurrentLanguage, DefaultValue, resourceId, refNo);
