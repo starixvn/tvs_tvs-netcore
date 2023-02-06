@@ -1,9 +1,8 @@
-﻿namespace TicketVoidingSystem.TicketListing.Constants
-{
-    public static class GroupByConstants
-    {
-        public const int Licensees = 0;
+﻿namespace TicketVoidingSystem.TicketListing.Constants;
 
-        public const int BetType = 1;
-    }
+public static class GroupByConstants
+{
+    public const int Licensees = 0;
+
+    public const int BetType = 1;
 }

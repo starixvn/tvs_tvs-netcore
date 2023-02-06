@@ -54,7 +54,10 @@ using TicketVoidingSystem.SharedApi.Services.SubParlayTicket;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.SimpleDataApi;
 using TicketVoidingSystem.SimpleDataApi.Services;
+using TicketVoidingSystem.TicketListing.Controllers;
 using TicketVoidingSystem.Web;
+using MarkTicketsCellService = TicketVoidingSystem.MarkTickets.Services.ExportExcel.CellService;
+using MarkTicketsCellServiceImp = TicketVoidingSystem.MarkTickets.Services.ExportExcel.CellServiceImp;
 
 namespace TicketVoidingSystem.Website.Utilities
 {
@@ -241,7 +244,7 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<ConfirmAutoUnmarkService, ConfirmAutoUnmarkServiceImp>();
             services.AddTransient<MapDataForConfirmAutoUnmarkService, MapDataForConfirmAutoUnmarkServiceImp>();
             services.AddTransient<UpdateConfirmAutoUnmarkService, UpdateConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<CellService, CellServiceImp>();
+            services.AddTransient<MarkTicketsCellService, MarkTicketsCellServiceImp>();
             services.AddTransient<WorkSheetService<GetDetailTicketsQuery>, GetDetailTicketsWorkSheetService>();
             services.AddTransient<WorkSheetService<GetTicketsQuery>, GetTicketsWorkSheetService>();
             services.AddTransient<CheckBoxService, CheckBoxServiceImp>();
@@ -251,6 +254,9 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddTransient<MarkAllTicketsService, MarkAllTicketsServiceImp>();
             services.AddTransient<MapUserLogsService, MapUserLogsServiceImp>();
             services.AddTransient<UserLogsService, UserLogsServiceImp>();
+
+            // Ticket Listing
+            services.AddTransient<CellService, CellServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)
@@ -261,11 +267,13 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddMediatR(typeof(ABExceptionListController));
             services.AddMediatR(typeof(ManageVoidServicesController));
             services.AddMediatR(typeof(MarkTicketsController));
+            services.AddMediatR(typeof(TicketListingController));
         }
 
         public static void RegisterAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MarkTicketsController));
+            services.AddAutoMapper(typeof(TicketListingController));
         }
     }
 }

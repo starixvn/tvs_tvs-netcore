@@ -50,7 +50,7 @@ public class SendDataToOicServiceImp : SendDataToOicService
         return (isInsertToAmendmentTableSuccessful, resultLicensees);
     }
 
-    private async Task<bool> InsertToAmendmentTableByQuery(SendFileQuery currentQuery, string affectedTickets, IList<LicenseeFile> resultInsert)
+    private async Task<bool> InsertToAmendmentTableByQuery(SendFileQuery currentQuery, string affectedTickets, ICollection<LicenseeFile> resultInsert)
     {
         var sessionId = Guid.NewGuid().ToString();
         var tickets = await getTicketsService.GetTicketsForSendDataOic(currentQuery, affectedTickets);
