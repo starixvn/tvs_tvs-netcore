@@ -11,9 +11,9 @@ export class GetTicketsQuery {
   markedBy: string;
   matchId?: string;
   durations?: Duration[];
-  liveHomeScore?: string;
-  liveAwayScore?: string;
-  liveIndicator?: string;
+  liveHomeScore?: number;
+  liveAwayScore?: number;
+  liveIndicator?: number;
   currencyIds?: string;
   licenseeNames?: string;
   betTypes?: CheckedBetType[];

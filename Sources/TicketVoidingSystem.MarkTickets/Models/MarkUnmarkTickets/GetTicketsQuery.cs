@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
 
         public IEnumerable<TransDateXmlModel> Durations { get; set; }
 
-        public int LiveIndicator { get; set; }
+        public short? LiveIndicator { get; set; }
 
         public short? LiveHomeScore { get; set; }
 

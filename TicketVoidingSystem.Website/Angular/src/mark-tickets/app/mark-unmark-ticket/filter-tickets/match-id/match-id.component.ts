@@ -139,8 +139,8 @@ export class MatchIdComponent implements OnInit {
   }
 
   changeEventType() {
-    this.model.liveHomeScore = '';
-    this.model.liveAwayScore = '';
+    this.model.liveHomeScore = null;
+    this.model.liveAwayScore = null;
     this.setFromDate();
   }
 
@@ -190,7 +190,10 @@ export class MatchIdComponent implements OnInit {
 
   getParams(): GetTicketsQuery {
     this.model.licenseeNames = this.getCheckedLicensees().join(',');
-    this.model.liveIndicator = this.eventType.value.toString();
+    this.model.liveIndicator = this.eventType.value.isNumber() ?  Number(this.eventType.value) : null;
+    this.model.liveAwayScore =  `${this.model.liveAwayScore}`.isNumber() ?  Number(this.model.liveAwayScore) : null;
+    this.model.liveHomeScore = `${this.model.liveHomeScore}`.isNumber() ?  Number(this.model.liveHomeScore) : null;
+
     const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
     this.model.betTypes = this.advancedModelComponent.getBetTypeModels(checkedBetTypes);
     this.getDurationTime();

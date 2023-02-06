@@ -14,7 +14,7 @@ namespace TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets
 
         public string Duration { get; set; }
 
-        public int LiveIndicator { get; set; }
+        public short? LiveIndicator { get; set; }
 
         public short? LiveHomeScore { get; set; }
 
