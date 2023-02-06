@@ -95,4 +95,11 @@
         <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" SpName="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" DbName="DBCUST.CustDB.bodbAdminNet" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" SpName="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" DbName="DBOIC.bodb_OIC.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="ParlayTicket">
+        <Setting Key="DBCTG.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="NAP_SpecialDelete_SMP_Selections_Select" SpName="NAP_SpecialDelete_SMP_Selections_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>

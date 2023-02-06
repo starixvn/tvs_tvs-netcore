@@ -117,7 +117,7 @@ namespace TicketVoidingSystem.Services.BetList
 
         public string GetBetTypeName(ITicket ticket)
         {
-            var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.ChineseSimplified));
+            var ticketHelper = new TicketHelper(new LanguageCacheRef(LanguageCode.English));
             var factory = new BetListBaseBuilder();
             var builder = factory.CreateChoiceBuilder(ticket.BetTypeId);
             return builder.GetBetTypeName(ticket, ticketHelper);

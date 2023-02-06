@@ -325,7 +325,7 @@ div.divBoxRight {
 }
 
 .loading {
-    background: url(Images/loading.gif) no-repeat scroll 0 0 transparent;
+    background: url(../img/loading.gif) no-repeat scroll 0 0 transparent;
     height: 32px;
     width: 32px;
 }

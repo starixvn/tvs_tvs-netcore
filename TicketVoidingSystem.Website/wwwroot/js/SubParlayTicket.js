@@ -38,10 +38,10 @@ var subTicketParlay = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    if (BigInt(subTransId) === BigInt(row.SubTransId)) {
-                        arrChoice.push('<div class="line"><div class="selected">' + row.Choice + '</div></div>');
+                    if (BigInt(subTransId) === BigInt(row.subTransId)) {
+                        arrChoice.push('<div class="line"><div class="selected">' + row.choice + '</div></div>');
                     } else {
-                        arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
 
@@ -89,7 +89,7 @@ var subTicketParlay = {
 
         $.ajax({
             type: "POST",
-            url: "SubParlayTicket/GetComboParlay",
+            url: "api/SubParlayTicket/GetComboParlay",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -100,13 +100,13 @@ var subTicketParlay = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    if (row.SubTransId === "") {
-                        arrChoice.push('<div>' + row.Choice + '</div>');
+                    if (row.subTransId === "") {
+                        arrChoice.push('<div>' + row.choice + '</div>');
                     }
-                    else if (BigInt(subTransId) === BigInt(row.SubTransId)) {
-                        arrChoice.push('<div class="line"><div class="selected">' + row.Choice + '</div></div>');
+                    else if (BigInt(subTransId) === BigInt(row.subTransId)) {
+                        arrChoice.push('<div class="line"><div class="selected">' + row.choice + '</div></div>');
                     } else {
-                        arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
 
@@ -161,7 +161,7 @@ var mainTicketParlay = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                    arrChoice.push('<div class="line">' + row.choice + '</div>');
                 }
 
                 $('#divEvent_' + refNo).html(arrChoice.join('')).show();
@@ -217,11 +217,11 @@ var mainTicketParlay = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    if (row.SubTransId === "") {
-                        arrChoice.push('<div>' + row.Choice + '</div>');
+                    if (row.subTransId === "") {
+                        arrChoice.push('<div>' + row.choice + '</div>');
                     }
                     else {
-                        arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
 
@@ -308,7 +308,7 @@ var Helper = {
 };
 
 $(function () {
-    $("#copy-clipboard").live("click", function (e) {
+    $(document).on("click", "#copy-clipboard", function (e) {
         Helper.copyToClipboard();
     });
 });

@@ -128,7 +128,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\dist\ab-exception-list\" />
     <Folder Include="wwwroot\dist\mark-tickets\" />
-    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
   <ItemGroup>
