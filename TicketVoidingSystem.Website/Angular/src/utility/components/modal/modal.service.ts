@@ -25,9 +25,7 @@ export class ModalService {
     const modalContent = this.openModalContent();
     modalContent.data = data;
     modalContent.close.subscribe(() => {
-      if (!_.isUndefined(closeEvent)) {
-        closeEvent();
-      }
+      this.executeMethodUndefinedable(closeEvent);
     });
   }
 
@@ -40,11 +38,11 @@ export class ModalService {
     const modalContent = this.openModalContent();
     modalContent.data = data;
     modalContent.confirm.subscribe(() => {
-      onYes();
+      this.executeMethodUndefinedable(onYes);
     });
 
     modalContent.close.subscribe(() => {
-      onNo();
+      this.executeMethodUndefinedable(onNo);
     });
   }
 
@@ -57,15 +55,15 @@ export class ModalService {
     const modalContent = this.openModalContent();
     modalContent.data = data;
     modalContent.confirmYes.subscribe(() => {
-      onYes();
+      this.executeMethodUndefinedable(onYes);
     });
 
     modalContent.confirmNo.subscribe(() => {
-      onNo();
+      this.executeMethodUndefinedable(onNo);
     });
 
     modalContent.close.subscribe(() => {
-      onCancel();
+      this.executeMethodUndefinedable(onCancel);
     });
   }
 
@@ -84,10 +82,10 @@ export class ModalService {
       data.message = result.errMsg;
       modalContent.data = data;
       modalContent.confirm.subscribe(() => {
-        onNo();
+        this.executeMethodUndefinedable(onNo);
       });
     } else {
-      onYes();
+      this.executeMethodUndefinedable(onYes);
     }
   }
 
@@ -99,6 +97,12 @@ export class ModalService {
   close() {
     if (this.modalReference) {
       this.modalReference.close();
+    }
+  }
+
+  private executeMethodUndefinedable(method?: () => void): void {
+    if (!_.isUndefined(method)) {
+      method();
     }
   }
 }
