@@ -54,7 +54,9 @@ export class Product {
 
 export class SportTypeConst {
   static readonly E_SPORTS = 43;
-  static readonly CRICKET = 50;
+  static readonly CRICKET = 50;  
+  static readonly VOLEYBALL = 6;
+  static readonly TENNIS = 5;
 }
 
 export class TicketStatus {

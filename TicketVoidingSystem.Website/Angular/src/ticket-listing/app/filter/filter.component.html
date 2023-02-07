@@ -1,0 +1,136 @@
+﻿<div class="filter">
+  <div class="display-flex-between">
+    <div class="line-1">
+      <label class="match">
+        Match ID
+        <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId" (change)="handleBetTypesAndAdvancedMode();unCheckAffectedTickets()"
+          (blur)="blurMatchId()" autofocus />
+      </label>
+      <label class="licensees">
+        LicenseeId
+        <select [(ngModel)]="query.licenseeId">
+          <option selected="selected" value="0">All</option>
+          <option value="-1">Credit</option>
+          <optgroup label="Licensee">
+            <option *ngFor="let item of licensees" [attr.value]="item.id">{{item.name}}</option>
+          </optgroup>
+        </select>
+      </label>
+      <label class="group-by">
+        Group by
+        <select [(ngModel)]="query.groupBy">
+          <option *ngFor="let item of groupBy.items" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </label>
+      <label class="ticket-type">
+        Ticket Type
+        <select [(ngModel)]="query.ticketType">
+          <option *ngFor="let item of ticketType.items" [attr.value]="item.value">{{item.name}}</option>
+        </select>
+      </label>
+    </div>
+    <div class="scroll-filter" (click)="isShowFilter = !isShowFilter">
+      <em [ngClass]="{'icon-scroll-down':isShowFilter, 'icon-scroll-up':!isShowFilter}"></em>
+    </div>
+  </div>
+  <div class="content-filter" [hidden]="!isShowFilter">
+    <div class="line-2">
+      <div class="product-type">
+        <label *ngFor="let item of product.items">
+          <input type="radio" name="product" [attr.value]="item.value" [checked]="item.value === 0"
+            (change)="changeProduct(item.value)" />
+          {{item.name}}
+        </label>
+      </div>
+      <div class="event-type" *ngIf="query.product === 0">
+        <label>
+          Event Type
+          <select [(ngModel)]="query.eventType">
+            <option *ngFor="let item of eventType.items" [attr.value]="item.value">{{item.name}}</option>
+          </select>
+        </label>
+      </div>
+      <div class="single-or-sub-parlay" *ngIf="query.product === 0">
+        <label>Bet</label>
+        <label>
+          <input type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="All">
+          All
+        </label>
+        <label>
+          <input type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="Single">
+          Single
+        </label>
+        <label>
+          <input type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay">
+          Sub Parlay
+        </label>
+      </div>
+    </div>
+    <div class="line-3" *ngIf="isShowFilterTime()">
+      <fieldset>
+        <legend>
+          <em class="icon-filter"></em>Optional Filters
+        </legend>
+        <div class="optional-filters">
+          <div class="score">
+            <span class="bold">Score:</span>
+            <label>Home<input type="text" class="form-control" only-number maxlength="3" [(ngModel)]="query.liveHomeScore" /></label>
+            <label>Away<input type="text" class="form-control" only-number maxlength="3" [(ngModel)]="query.liveAwayScore" /></label>
+          </div>
+          <label><span class="bold">Trans Date (GMT+ 8):</span> <input type="checkbox"
+              (change)="setDateTime();disabledTransDate=!disabledTransDate" /></label>
+          <div class="date-time">
+            <label class="mg-right-10">From</label>
+            <date-full-time-new #fromDateTime
+              class="from-date-time mr-2"
+              [isDisabled]="disabledTransDate"
+              [(dateTime)]="fromDate">
+            </date-full-time-new>
+            <label class="mg-10-20">To</label>
+            <date-full-time-new #fromDateTime
+              class="to-date-time mr-2"
+              [isDisabled]="disabledTransDate"
+              [(dateTime)]="toDate">
+            </date-full-time-new>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="line-3" *ngIf="query.product === 1 && sportType === 161">
+      <fieldset>
+        <legend>
+          <em class="icon-filter"></em>Optional Filters
+        </legend>
+        <div class="optional-filters">
+          <span>Ball Sequence:</span>
+          <label>
+            <input type="checkbox" [(ngModel)]="ballSequences.isChecked" (ngModelChange)="ballSequences.changeAll()" />
+            {{ballSequences.name}}
+          </label>
+          <label *ngFor="let item of ballSequences.items">
+            <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="ballSequences.changeItem()" />
+            {{item.name}}
+          </label>
+        </div>
+      </fieldset>
+    </div>
+    <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" [product]="query.product"
+      (betTypesEvent)="changeBetTypes($event)"></group-bettypes>
+    <div *ngIf="isShowCheckboxAffected()" class="mg-bottom-10 d-flex align-items-center">
+        <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled" (change)="handleBetTypesAndAdvancedMode()"/>
+        <label for="checkbox-resettle" class="ml-1">Get affected tickets of Result Amendment</label>
+    </div>
+    <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
+      [ballSequence]="ballSequences.value"></bettypes>
+    <bettypes-virtualsport #betTypesVSComponent [groups]="groupsBetTypesVS" [sportType]="sportType"
+      [product]="query.product"></bettypes-virtualsport>
+    <advanced-mode-basketball class="advanced-mode-basketball" #advancedModeBasetball [checkedIds]="checkedIds"></advanced-mode-basketball>
+    <div [hidden]="isHideNormalAdvancedMode()">
+      <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true" [allBetTypes]="allBetTypes"></advanced-mode>
+    </div>
+    <div class="search">
+      <input type="button" class="submit" value="Search" (click)="search()" />
+    </div>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

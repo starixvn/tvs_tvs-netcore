@@ -1,0 +1,207 @@
+﻿@import '../../../styles/mixin.scss';
+
+.total-bet-count {
+    padding-left: 10px;
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.summary {
+    margin: 10px;
+    max-height: 408px;
+
+    .summary-table {
+        display: inline-block;
+        .btn-sm {
+            padding: 4px 0 !important;
+            line-height: 0.8 !important;
+            width: 105px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border-style: none;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        .summary-header {
+            thead {
+                tr {
+                    th {
+                        background: #4e71bb;
+                        background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+                        color: #fff;
+                        font-size: 0.9em;
+                        border: solid 1px #c5c5c5;
+                        border-left: none;
+                        border-top: none;
+                        height: 25px;
+                        padding: 4px;
+                        text-align: center;
+                    }
+
+                    th:nth-child(1) {
+                        >div {
+                            width: 410px;
+                        }
+                    }
+
+                    th:nth-child(4) {
+                        >div {
+                            width: 130px;
+                        }
+                    }
+
+                    th {
+                        >div {
+                            width: 85px;
+                            height: 26px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .summary-content {
+            max-height: 355px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-color: #888888;
+            border-style: solid;
+            border-width: 0px 1px 1px 1px;
+            @include scroll-style();
+
+            .icon-down {
+                width: 0;
+                height: 0;
+                display: inline-block;
+                vertical-align: middle;
+                border-top: 4px dashed;
+                border-right: 4px solid transparent;
+                border-left: 4px solid transparent;
+            }
+
+            .icon-right {
+                width: 0;
+                height: 0;
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0 2px;
+                border-left: 4px dashed;
+                border-top: 4px solid transparent;
+                border-bottom: 4px solid transparent;
+            }
+
+            .display-none {
+                display: none;
+            }
+
+            .summary-parent {
+                font-weight: bold;
+
+                .expanded {
+                    cursor: pointer;
+                }
+            }
+
+            .child-name {
+                padding-left: 15px;
+            }
+
+            .icon-excel {
+                background: url(../../../assets/images/icon-excel.gif) no-repeat;
+                width: 16px;
+                height: 16px;
+                line-height: 16px;
+                display: inline-block;
+                transition: all 0.1s;
+                cursor: pointer;
+
+                &:hover {
+                    -ms-transform: rotate(30deg);
+                    -webkit-transform: rotate(30deg);
+                    transform: rotate(30deg);
+                }
+            }
+
+            .empty-table {
+                width: 100%;
+
+                td {
+                    background: #fff !important;
+                    color: red;
+                    font-weight: bold;
+                    text-align: center !important;
+                }
+            }
+
+            tbody {
+                tr:nth-child(odd) {
+                    td {
+                        background: #dde2ed;
+                    }
+                }
+
+                tr:hover {
+                    td {
+                        background-color: #aebad4;
+                    }
+                }
+
+                tr {
+                    td {
+                        background-color: #fff;
+                        border-color: #888888;
+                        border-style: solid;
+                        border-width: 0 1px 1px 0;
+                        line-height: 18px;
+                        overflow: hidden;
+                        white-space: normal;
+                        padding: 4px;
+                        text-align: center;
+
+                        >div {
+                            width: 85px;
+                        }
+
+                        a {
+                            cursor: pointer;
+                        }
+                    }
+
+                    td:nth-child(1) {
+                        text-align: left;
+
+                        >div {
+                            width: 409px;
+                        }
+                    }
+
+                    td:nth-child(2) {
+                        text-align: right;
+                        color: #0066cc;
+                    }
+
+                    td:nth-child(4) {
+                        >div {
+                            width: 130px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .affected-licensees {
+        @include affected-licensees(#cce5ff, #004085);
+        display: block !important;
+        max-height: 256px !important;
+    }
+
+    .licensee-info-total-bet {
+        @include affected-licensees(#b1f7ce, #004085);
+        display: block !important;
+        max-height: 147px !important;
+    }
+}

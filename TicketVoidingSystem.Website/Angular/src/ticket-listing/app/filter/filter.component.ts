@@ -1,0 +1,500 @@
+﻿import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import * as momenttimezone from 'moment-timezone';
+import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
+import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
+import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { BetTypesVirtualSportComponent } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.component';
+import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
+import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
+import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { DateTimeFormat, ModeType, Product, SportTypeConst } from '../../../utility/constants/config';
+import { SportType } from '../../../utility/constants/sport.constant';
+import { TEXT } from '../../../utility/constants/text';
+import { BallSequences } from '../../../utility/models/ball-sequences';
+import { MatchModel } from '../../../utility/models/match.model';
+import { StaticService } from '../../../utility/services/static.service';
+import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/advanced-mode-basketball.component';
+import { AppService } from '../app.service';
+import { GetSummaryQuery } from '../models/query.model';
+import { FilterEvent, Item, Licensee, Type } from './filter.model';
+
+@Component({
+  selector: 'filter',
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.scss']
+})
+export class FilterComponent implements OnInit {
+  @Output() searchEvent = new EventEmitter<FilterEvent>();
+  @Output() changeMatchEvent = new EventEmitter<string>();
+  @ViewChild('groupBetTypesComponent') groupBetTypesComponent: GroupBetTypesComponent;
+  @ViewChild('bettypesComponent') betTypesComponent: BetTypesComponent;
+  @ViewChild('betTypesVSComponent') betTypesVSComponent: BetTypesVirtualSportComponent;
+  @ViewChild('advancedMode') advancedModeComponent: AdvancedModeComponent;
+  @ViewChild('advancedModeBasetball') advancedModeBasketball: AdvancedModeBasketballComponent;
+  public query = new GetSummaryQuery();
+  tooltip = new Tooltip();
+  isShowFilter = true;
+  matchId: string;
+  preMatchId: string;
+  checkMatch: string;
+  match: MatchModel;
+  sportType: number;
+  singleOrSubParlay = 'All';
+  isReSettled = false;
+  licensees: Licensee[];
+  groupBy = new Type();
+  ticketType = new Type();
+  product = new Type();
+  eventType = new Type();
+  liveHomeScore: string;
+  liveAwayScore: string;
+  disabledTransDate = true;
+  fromDate: string;
+  toDate: string;
+  groupBetTypes: GroupBetTypesModel;
+  groupsBetTypesVS: Array<GroupBetTypeVirtualSport>;
+  betTypes: BetTypesModel;
+  commonBetTypes: BetTypesModel;
+  ballSequences = new BallSequences();
+  isMatch3rd: boolean;
+  switchMatch3rd: boolean;
+  checkedIds: number[];
+  allBetTypes: BetType[];
+  
+  private readonly sportTypeHaveNormalAdvancedMode = [
+    SportTypeConst.CRICKET,
+    SportTypeConst.E_SPORTS,
+    SportTypeConst.TENNIS,
+    SportTypeConst.VOLEYBALL
+  ];
+
+  constructor(private readonly element: ElementRef, private readonly appService: AppService) {
+    this.tooltip.element = this.element;
+  }
+
+  async ngOnInit() {
+    await this.initFilter();
+    this.setDateTime();
+    this.groupBetTypes = new GroupBetTypesModel([], false);
+    this.query.quarter = 'All';
+  }
+
+  setDateTime() {
+    const date = new Date(
+      momenttimezone()
+        .tz('Etc/GMT-8')
+        .format('YYYY-MM-DD HH:mm:ss.SSS')
+    );
+    this.fromDate = moment(date).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    this.toDate = moment(date).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+  }
+
+  async initFilter() {
+    await this.getLicensees();
+    this.renderGroupBy();
+    this.renderTicketType();
+    this.renderProduct();
+    this.renderEventType();
+    await this.getBetTypes();
+    await this.getBetTypesVS();
+  }
+
+  async getLicensees() {
+    this.query.licenseeId = 0;
+    this.licensees = await this.appService.getLicensees();
+  }
+
+  renderGroupBy() {
+    this.groupBy.items = [];
+    this.groupBy.items.push(new Item(0, 'Licensee and Bet type'));
+    this.groupBy.items.push(new Item(1, 'Bet type and Licensee'));
+    this.query.groupBy = 0;
+  }
+
+  renderTicketType() {
+    this.ticketType.items = [];
+    this.ticketType.items.push(new Item(0, 'All'));
+    this.ticketType.items.push(new Item(1, 'Normal Tickets'));
+    this.ticketType.items.push(new Item(2, 'SA Tickets'));
+    this.query.ticketType = 0;
+  }
+
+  renderProduct() {
+    this.product.items = [];
+    for (const key of Object.keys(Product.DISPLAY)) {
+      this.product.items.push(new Item(Product.DISPLAY[key], key));
+    }
+
+    this.query.product = 0;
+  }
+
+  renderEventType() {
+    this.eventType.items = [];
+    this.eventType.items.push(new Item(2, 'All'));
+    this.eventType.items.push(new Item(0, 'Dead Ball'));
+    this.eventType.items.push(new Item(1, 'Live Ball'));
+    this.query.eventType = 2;
+  }
+
+  async changeProduct(value: number) {
+    this.switchMatch3rd = Product.IS_MATCH_3RD.indexOf(this.query.product) > -1;
+    this.query.product = value;
+    this.isMatch3rd = Product.IS_MATCH_3RD.indexOf(value) > -1;
+    this.switchMatch3rd = this.switchMatch3rd !== this.isMatch3rd;
+    if (value !== Product.SPORTS_BOOK) {
+      this.disabledTransDate = true;
+      this.liveAwayScore = '';
+      this.liveHomeScore = '';
+    } else {
+      this.groupBetTypes.isChecked = true;
+      this.groupBetTypes.changeCheckedModelToGroup();
+    }
+
+    if (Product.STATIC_BETTYPES.indexOf(value) > -1) {
+      this.betTypes = this.commonBetTypes;
+    }
+
+    if (Product.BET_BUILDER === value) {
+      this.betTypes = new BetTypesModel([], false);
+    }
+
+    await this.blurMatchId();
+  }
+
+  async getBetTypes() {
+    const query: GetBetTypesQuery = {
+      mode: ModeType.TICKET_LISTING,
+      matchId: 0
+    };
+    const data = await this.appService.getBetTypes(query);
+    if (data.result.errorCode === 0) {
+      this.commonBetTypes = new BetTypesModel(data.bettypes, true);
+    }
+  }
+
+  async getBetTypesVS() {
+    const data = await this.appService.getBetTypesVirtualSports();
+    this.renderBetTypes(data);
+  }
+
+  renderBetTypes(data: Array<GroupBetTypeVirtualSport>) {
+    this.groupsBetTypesVS = [];
+    data.forEach(group => {
+      const item = new GroupBetTypeVirtualSport(group.sportTypes, group.betTypes);
+      this.groupsBetTypesVS.push(item);
+    });
+  }
+
+  async blurMatchId() {
+    if (_.isUndefined(this.matchId) || this.matchId === '') {
+      this.sportType = 0;
+    } else if (this.matchId !== this.preMatchId || this.switchMatch3rd) {
+      this.preMatchId = this.matchId;
+      await this.getMatchInfo();
+    } else if (this.match !== null && this.match !== undefined) {
+      await this.checkSportType();
+    } else {
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
+    }
+  }
+
+  async getMatchInfo() {
+    this.match = await this.appService.getMatchInfo(this.matchId, this.isMatch3rd);
+    if (this.match === null) {
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
+    } else {
+      this.sportType = this.match.sportType;
+      await this.checkSportType();
+    }
+  }
+
+  async checkSportType() {
+    this.advancedModeComponent.resetBetTeam();
+    if (this.validateProduct()) {
+      this.advancedModeBasketball.renderSelection();
+      await this.handleByProduct();
+    }
+  }
+
+  validateProduct(): boolean {
+    const product = this.query.product;
+    if (this.isInvalidProduct0And4(product, this.sportType)
+      || this.isInvalidProduct1(product, this.sportType)
+      || this.isInvalidProduct2(product, this.sportType)
+      || this.isInvalidProduct5(product, this.sportType)
+      || this.isInvalidProduct6(product, this.sportType)
+      || this.isInvalidProduct7(product, this.sportType)
+      || this.isInvalidProduct9(product, this.sportType)
+      || this.isInvalidOtherProducts(this.sportType)) {
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
+      return false;
+    }
+
+    return true;
+  }
+
+  private isInvalidProduct0And4(product: number, sportType: number): boolean {
+    return ((product === 0 || product === 4) && sportType > 99 && sportType !== 154);
+  }
+
+  private isInvalidProduct1(product: number, sportType: number): boolean {
+    return (product === 1 && sportType !== 161 && sportType !== 164);
+  }
+
+  private isInvalidProduct2(product: number, sportType: number): boolean {
+    return (product === 2 && (sportType < 180 || sportType > 186));
+  }
+
+  private isInvalidProduct5(product: number, sportType: number): boolean {
+    return (product === 5 && (sportType < 190 || sportType > 199));
+  }
+
+  private isInvalidProduct6(product: number, sportType: number): boolean {
+    return (product === 6 && sportType !== 160);
+  }
+
+  private isInvalidProduct7(product: number, sportType: number): boolean {
+    return (product === 7 && sportType !== 207);
+  }
+
+  private isInvalidProduct9(product: number, sportType: number): boolean {
+    return (product === 9 && sportType !== 175);
+  }
+
+  private isInvalidOtherProducts(sportType: number): boolean {
+    return (
+      this.isInvalidFirstGroupOtherProducts(sportType) &&
+      this.isInvalidSecondGroupOtherProducts(sportType)
+    );
+  }
+
+  private isInvalidFirstGroupOtherProducts(sportType: number): boolean {
+    return (
+      sportType > 99 &&
+      sportType !== 154 &&
+      sportType !== 161 &&
+      sportType !== 164 &&
+      (sportType < 180 || sportType > 186) &&
+      (sportType < 190 || sportType > 199)
+    );
+  }
+
+  private isInvalidSecondGroupOtherProducts(sportType: number): boolean {
+    return (
+      sportType !== 160 &&
+      sportType !== 207 &&
+      sportType !== 175
+    );
+  }
+
+  async handleByProduct() {
+    if (Product.GET_BETTYPES.indexOf(this.query.product) > -1) {
+      this.groupBetTypes = new GroupBetTypesModel([], false);
+      await this.handleBetTypes();
+      this.changeMatchEvent.emit(this.matchId);
+    }
+  }
+
+  isNumber(value: string): boolean {
+    return /^\+?(0|[1-9]\d*)$/.test(value);
+  }
+
+  async handleBetTypes() {
+    const query: GetBetTypesQuery = {
+      mode: ModeType.TICKET_LISTING,
+      matchId: parseInt(this.matchId, 10)
+    };
+
+    if (this.query.product === Product.SPORTS_BOOK) {
+      this.handleGroupBetTypesOfSportBook(query);
+    }
+
+    if (this.query.product === Product.BET_BUILDER) {
+      this.handlBetTypesOfBetBuilder(query);
+    }
+  }
+
+  async handleGroupBetTypesOfSportBook(query: GetBetTypesQuery) {
+    const data = await this.appService.getGroupBetTypes(query);
+    if (data.result.errorCode === 0) {
+      this.checkMatch = '';
+      if (data.groupBetTypes.length === 0) {
+        this.tooltip.display('match-id', TEXT.NO_BETTYPE);
+        this.checkMatch = TEXT.NO_BETTYPE;
+      }
+    } else {
+      this.checkMatch = data.result.errorMsg;
+      this.tooltip.display('match-id', data.result.errorMsg);
+    }
+
+    if (this.query.product === Product.SPORTS_BOOK) {
+      const specialGroups = _.filter(data.groupBetTypes, {
+        groupName: 'Special'
+      });
+      if (specialGroups.length > 0) {
+        specialGroups[0].betTypes = _.reject(specialGroups[0].betTypes, {
+          name: 'System Parlay'
+        });
+      }
+    }
+
+    this.groupBetTypes = new GroupBetTypesModel(data.groupBetTypes, true);
+    this.changeBetTypes(this.groupBetTypes.getAllBetType());
+  }
+
+  async handlBetTypesOfBetBuilder(query: GetBetTypesQuery) {
+    const data = await this.appService.getSelectionTypes(query);
+    if (data.length === 0) {
+      this.tooltip.display('match-id', TEXT.NO_BETTYPE);
+      this.checkMatch = TEXT.NO_BETTYPE;
+    }
+
+    const betTypes: BetTypeModel[] = [];
+    data.forEach(item => {
+      betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, 8, true));
+    });
+    this.betTypes = new BetTypesModel(betTypes, true);
+  }
+
+  search() {
+    if (this.checkFilterParams() && this.validateProduct() && this.validateBetTypes() && this.advancedModeBasketball.validate()) {
+      const event: FilterEvent = {
+        match: this.match,
+        query: this.getParams()
+      };
+      this.searchEvent.emit(event);
+    }
+  }
+
+  checkFilterParams(): boolean {
+    if (this.matchId === '' || this.matchId === undefined) {
+      this.tooltip.display('match-id', TEXT.REQUIRED_MATCHID);
+      return false;
+    }
+    if (!this.isNumber(this.matchId) || this.match === null) {
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
+      return false;
+    }
+    if (this.isShowFilterTime() && !this.disabledTransDate && !StaticService.isFromTimeSameOrBeforeToTime(this.fromDate, this.toDate, this.tooltip, 'from-date-time')) {
+      return false;
+    }
+    if (!this.isHideNormalAdvancedMode()) {
+      return this.advancedModeComponent.validate();
+    }
+
+    return true;
+  }
+
+  validateBetTypes() {
+    if (this.query.product === Product.SPORTS_BOOK) {
+      if (this.checkMatch === '') {
+        return this.groupBetTypesComponent.validate();
+      } else {
+        this.tooltip.display('match-id', this.checkMatch);
+        return false;
+      }
+    } else if (this.query.product === Product.VIRTUAL_SPORTS_2) {
+      return this.betTypesVSComponent.validate();
+    } else {
+      return this.betTypesComponent.validate();
+    }
+  }
+
+  getParams(): GetSummaryQuery {
+    this.query.matchId = parseInt(this.matchId, 10);
+    this.query.ballSequence = this.ballSequences.value.join(',');
+    this.query.fromTransDate = this.disabledTransDate ? null : this.fromDate;
+    this.query.toTransDate = this.disabledTransDate ? null : this.toDate;
+    this.query.quarter = this.advancedModeBasketball.isShow ? this.advancedModeBasketball.getSelection() : 'All';
+    this.query.singleOrSubParlay = this.singleOrSubParlay;
+    this.query.isReSettled = this.isReSettled;
+
+    if (this.query.product === Product.BET_BUILDER) {
+      this.query.betTypes = '38';
+      this.query.selectionType = this.getCheckedBetTypes();
+    } else {
+      this.query.betTypes = this.getCheckedBetTypes();
+      this.query.selectionType = '';
+    }
+    if (!this.isHideNormalAdvancedMode()) {
+      const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
+      const betTeams = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
+      this.query.betTeams = betTeams;
+    }
+    return this.query;
+  }
+
+  getCheckedBetTypes(): string {
+    if (this.query.product === Product.SPORTS_BOOK) {
+      return this.groupBetTypes.getValueCheckedBetTypes();
+    } else if (this.query.product === Product.VIRTUAL_SPORTS_2) {
+      return this.betTypesVSComponent.getCheckedBetTypes();
+    } else {
+      return this.betTypes.getCheckedBetTypes().join(',');
+    }
+  }
+
+  resetFilter() {
+    this.matchId = '';
+    this.preMatchId = '';
+    this.groupBetTypes = new GroupBetTypesModel([], false);
+    this.advancedModeComponent.resetBetTeam();
+  }
+
+  changeBetTypes(betTypes: BetType[]) {
+    this.checkedIds = betTypes.filter(x => x.isChecked).map(item => item.id);
+    this.allBetTypes = betTypes;
+  }
+
+  isShowCheckboxAffected(): boolean {
+    if (this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0 && this.query.product === Product.SPORTS_BOOK
+      && this.sportType === SportType.SOCCER) {
+      return true;
+    }
+
+    return false;
+  }
+
+  unCheckAffectedTickets(): void {
+    this.isReSettled = false;
+    this.enableBetTypesAndAdvancedMode();
+  }
+
+  private enableBetTypesAndAdvancedMode(): void {
+    this.groupBetTypesComponent.isDisabledAllBetTypes = false;
+    this.advancedModeBasketball.isDisabled = false;
+    if (this.advancedModeBasketball.isBasketball() || this.advancedModeBasketball.isBadminton() || this.advancedModeBasketball.isPHAIO5()) {
+      this.advancedModeBasketball.isShow = true ;
+      this.advancedModeBasketball.isShowContent = true;
+    }
+  }
+
+  handleBetTypesAndAdvancedMode(): void {
+    if (this.isReSettled) {
+      this.groupBetTypesComponent.isDisabledAllBetTypes = true;
+      this.groupBetTypes.isChecked = true;
+      this.groupBetTypes.groupBetTypes.forEach(x => {
+        x.isChecked = true;
+        x.betTypes.forEach(y => y.isChecked = true);
+      });
+      this.advancedModeBasketball.isDisabled = true;
+      if (this.advancedModeBasketball.isBasketball() || this.advancedModeBasketball.isBadminton() || this.advancedModeBasketball.isPHAIO5()) {
+        this.advancedModeBasketball.isShow = true ;
+        this.advancedModeBasketball.isShowContent = false;
+      }
+    } else {
+      this.enableBetTypesAndAdvancedMode();
+    }
+  }
+
+  isHideNormalAdvancedMode(): boolean {
+    return !this.sportTypeHaveNormalAdvancedMode.includes(this.sportType);
+  }
+
+  isShowFilterTime(): boolean {
+    return this.query.eventType && this.query.eventType.toString() === '1' && this.query.product === 0;
+  }
+}

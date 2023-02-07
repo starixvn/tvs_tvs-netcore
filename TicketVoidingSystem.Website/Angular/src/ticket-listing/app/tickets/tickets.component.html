@@ -1,0 +1,121 @@
+﻿<ng-template #colgroup>
+    <colgroup>
+      <col style="width: 140px" />
+      <col style="width: 152px" />
+      <col style="width: 145px" />
+      <col style="width: 310px" />
+      <col style="width: 80px" />
+      <col style="width: 100px" />
+      <col style="width: 50px" />
+      <col style="width: 60px" />
+      <col style="width: 125px" />
+      <col *ngIf="product === 1" style="width: 80px" />
+      <col style="width: 65px" />
+      <col style="width: 40px" />
+    </colgroup>
+</ng-template>
+
+<div class="tickets" *ngIf="isShowTickets" [style.width]="getWidth()">
+    <div class="grid-title" *ngIf="model.tickets.length > 0">
+        <div class="grid-title-label">{{model.title}}</div>
+        <div class="grid-title-toolbox">
+            <input type="button" class="grid-title-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+        </div>
+    </div>
+    <div class="ticket-header">
+        <table>
+            <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <div>BetID</div>
+                    </th>
+                    <th scope="col">
+                        <div>Trans.Date</div>
+                    </th>
+                    <th scope="col">
+                        <div>Member</div>
+                    </th>
+                    <th scope="col">
+                        <div>Choice</div>
+                    </th>
+                    <th scope="col">
+                        <div>Odds</div>
+                    </th>
+                    <th scope="col">
+                        <div>Stake</div>
+                    </th>
+                    <th scope="col">
+                        <div>Winloss</div>
+                    </th>
+                    <th scope="col">
+                        <div>Currency</div>
+                    </th>
+                    <th scope="col">
+                        <div>Bettype</div>
+                    </th>
+                    <th scope="col" *ngIf="product === 1">
+                        <div>Ball Sequence</div>
+                    </th>
+                    <th scope="col">
+                        <div>Status</div>
+                    </th>
+                    <th scope="col">
+                        <div>S.A</div>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="ticket-content">
+        <table>
+            <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+            <tbody>
+                <tr *ngFor="let ticket of model.tickets">
+                    <td><div [class.betIdBorder]="ticket.isMarked === true">{{ticket.betId}}</div></td>                    
+                    <td>
+                        <div>{{ticket.transDate}}</div>
+                    </td>
+                    <td>
+                        <div title="{{ticket.member}}">{{ticket.member}}</div>
+                    </td>
+                    <td class="text-right">
+                        <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
+                    </td>
+                    <td class="text-right">
+                        <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
+                    </td>
+                    <td class="text-right">
+                        <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
+                    </td>
+                    <td class="text-right">
+                        <div [innerHTML]="ticket.winLoss | sanitizeHtml"></div>
+                    </td>
+                    <td>
+                        <div>{{ticket.currency}}</div>
+                    </td>
+                    <td>
+                        <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
+                    </td>
+                    <td *ngIf="product === 1" class="text-right">
+                        <div>{{ticket.ballSequence}}</div>
+                    </td>
+                    <td>
+                        <div [innerHTML]="ticket.status | sanitizeHtml"></div>
+                    </td>
+                    <td>
+                        <div [innerHTML]="ticket.secondAcceptFlag | sanitizeHtml"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table *ngIf="model.tickets.length == 0">
+            <tbody>
+                <tr>
+                    <td class="no-data">There is no data</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
+</div>

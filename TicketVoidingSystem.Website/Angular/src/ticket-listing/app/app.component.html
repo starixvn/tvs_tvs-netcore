@@ -1,0 +1,30 @@
+<div class="title">
+  {{title}}
+</div>
+
+<div id="body">
+  <filter (searchEvent)="searchEvent($event)" (changeMatchEvent)="hideContent()"></filter>
+  <match-detail [matchDetail]="matchViewModel" [isShowMatch]="isShowMatch" [product]="commonQuery.product"></match-detail>  
+  <div class="list-bettype-affected mg-top-10 mg-bottom-5" *ngIf="isShowListBetTypeAffected">
+    List affected bet types: <span class="affected-bettype-highlight" id="affected-bettype-highlight"
+    (click)="copyClipboard(betTypesAffected)">{{betTypesAffected}}</span>
+  </div>
+  <summary-tickets #summaryComponent [items]="summaryItems" [itemsGroupByLicensee]="summaryItemsGroupByLicensee"
+    [display]="isShowSummary" [showSendColumn]="showSendColumn" (getTicketsEvent)="getTicketsEvent($event)" [groupBy]="commonQuery.groupBy"
+    (exportExcelEvent)="exportExcelEvent($event)" (sendExcelFileEvent)="sendExcelFileEvent($event)" (sendCreditToLetstalk)="sendCreditToLetstalk($event)"></summary-tickets>
+  <tickets [model]="ticketsModel" [isShowTickets]="isShowTickets" [product]="commonQuery.product"
+    (pagingSearchTicket)="pagingSearchTicket($event)" (exportExcelEvent)="exportExcelEvent($event)"></tickets>
+</div>
+
+<notification [notification]="notification"></notification>
+<messages-response [messagesResponse]="messagesResponse" (resendDataEvent)="resendData($event)"></messages-response>
+<tooltip [tooltip]="tooltip"></tooltip>
+
+<div *ngIf="blockUI">
+  <div class="in modal-backdrop spinner-overlay"></div>
+  <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+    <div class="loading-message">
+      <div class="loading"></div>
+    </div>
+  </div>
+</div>
