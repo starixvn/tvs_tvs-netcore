@@ -14,8 +14,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/css/BetList.css" />
-    <link rel="stylesheet" href="~/js/FanexGrid/Fanex.Grid.css" />
-    <link rel="stylesheet" href="~/js/FanexGrid/Fanex.Pagination.css" />
     @await RenderSectionAsync("Head", false)
 </head>
 <body user-name="@userName" root-url="@Url.Content("~/")" old-site-root-url="@Configuration["OldSiteRootUrl"]">
@@ -23,12 +21,7 @@
     @RenderBody()
 </section>
     <script src="~/lib/jquery/dist/jquery-1.8.2.min.js"></script>
-    <script src="~/js/FanexGrid/Fanex.Grid.js"></script>
-    <script src="~/js/FanexGrid/Fanex.Pagination.js"></script>
-    <script src="~/js/FanexGrid/Fanex.Pagination.js"></script>
-    <script src="~/js/jquery.blockUI.1.33.js"></script>
-    <script src="~/js/NapTicketControl.js"></script>
-    <script src="~/js/NapTicketControl.Helper.js"></script>
+    <script src="~/lib/jquery/dist/jquery.blockUI.1.33.js"></script>
     <script src="~/js/SubParlayTicket.js"></script>
     <script src="@Url.Content("~/auth/recheckinscript")" type="text/javascript"></script>
 </body>

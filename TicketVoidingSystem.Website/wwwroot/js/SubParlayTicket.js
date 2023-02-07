@@ -1,5 +1,4 @@
 ﻿/* exported showMP, showCombMP*/
-/*global NapTicketControl*/
 
 "use strict";
 
@@ -21,7 +20,6 @@ var subTicketParlay = {
                 $('#dvFavorite_' + subTransId).hide();
             }
 
-            $("#ticketInfo").fanexGrid('resizeGrid');
             return;
         }
 
@@ -32,7 +30,7 @@ var subTicketParlay = {
             dataType: "json",
             data: JSON.stringify(param),
             beforeSend: function () {
-                NapTicketControl.disableInput();
+                Helper.disableInput();
             },
             success: function (rs) {
                 var arrChoice = [];
@@ -46,16 +44,15 @@ var subTicketParlay = {
                 }
 
                 $('#divEvent_' + subTransId).html(arrChoice.join('')).show();
-                $("#ticketInfo").fanexGrid('resizeGrid');
                 $('#dvFavorite_' + subTransId).hide();
             },
             error: function () {
             },
             complete: function (e) {
                 if (parseInt(e.status) === 403) {
-                    NapTicketControl.Helper.showMsgBox(NapTicketControl.Helper.authorizedMessage);
+                    Helper.showMsgBox('You do not have permission on this function');
                 }
-                NapTicketControl.enableInput();
+                Helper.enableInput();
             }
         });
     },
@@ -83,7 +80,6 @@ var subTicketParlay = {
                 $('#combinationOfferName_' + subTransId + transIndex).find('div').hide();
             }
 
-            $("#ticketInfo").fanexGrid('resizeGrid');
             return;
         }
 
@@ -94,7 +90,7 @@ var subTicketParlay = {
             dataType: "json",
             data: JSON.stringify(param),
             beforeSend: function () {
-                NapTicketControl.disableInput();
+                Helper.disableInput();
             },
             success: function (rs) {
                 var arrChoice = [];
@@ -111,7 +107,6 @@ var subTicketParlay = {
                 }
 
                 $('#divEvent_' + subTransId).html(arrChoice.join('')).show();
-                $("#ticketInfo").fanexGrid('resizeGrid');
                 $('#dvFavorite_' + subTransId).hide();
                 $('#combinationOfferName_' + subTransId + transIndex).find('div').hide();
             },
@@ -119,9 +114,9 @@ var subTicketParlay = {
             },
             complete: function (e) {
                 if (parseInt(e.status) === 403) {
-                    NapTicketControl.Helper.showMsgBox(messages.authorizedMessage);
+                    Helper.showMsgBox('You are not authorized on this function.');
                 }
-                NapTicketControl.enableInput();
+                Helper.enableInput();
             }
         });
     }
@@ -144,7 +139,6 @@ var mainTicketParlay = {
                 subTicket.show();
             }
 
-            $("#ticketInfo").fanexGrid('resizeGrid');
             return;
         }
 
@@ -155,7 +149,7 @@ var mainTicketParlay = {
             dataType: "json",
             data: JSON.stringify(param),
             beforeSend: function () {
-                NapTicketControl.disableInput();
+                Helper.disableInput();
             },
             success: function (rs) {
                 var arrChoice = [];
@@ -165,15 +159,14 @@ var mainTicketParlay = {
                 }
 
                 $('#divEvent_' + refNo).html(arrChoice.join('')).show();
-                $("#ticketInfo").fanexGrid('resizeGrid');
             },
             error: function () {
             },
             complete: function (e) {
                 if (parseInt(e.status) === 403) {
-                    NapTicketControl.Helper.showMsgBox(messages.authorizedMessage);
+                    Helper.showMsgBox('You are not authorized on this function.');
                 }
-                NapTicketControl.enableInput();
+                Helper.enableInput();
             }
         });
     },
@@ -200,7 +193,6 @@ var mainTicketParlay = {
                 $('#combinationOfferName_' + refNo + transIndex).find('div').hide();
             }
 
-            $("#ticketInfo").fanexGrid('resizeGrid');
             return;
         }
 
@@ -211,7 +203,7 @@ var mainTicketParlay = {
             dataType: "json",
             data: JSON.stringify(param),
             beforeSend: function () {
-                NapTicketControl.disableInput();
+                Helper.disableInput();
             },
             success: function (rs) {
                 var arrChoice = [];
@@ -227,15 +219,14 @@ var mainTicketParlay = {
 
                 $('#divEvent_' + +refNo + transIndex).html(arrChoice.join('')).show();
                 $('#combinationOfferName_' + refNo + transIndex).find('div').hide();
-                $("#ticketInfo").fanexGrid('resizeGrid');
             },
             error: function () {
             },
             complete: function (e) {
                 if (parseInt(e.status) === 403) {
-                    NapTicketControl.Helper.showMsgBox(messages.authorizedMessage);
+                    Helper.showMsgBox('You are not authorized on this function.');
                 }
-                NapTicketControl.enableInput();
+                Helper.enableInput();
             }
         });
     }
@@ -296,15 +287,68 @@ var Helper = {
                 Helper.copyToClipboardFF($("#copy-clipboard-value").val());
             }
             if (success) {
-                alert(messages.infoCopyClipboard);
+                alert('The list of betids has been copied into clipboard already. Please paste it immediately for the next necessary action.');
                 tmpElem.remove();
             }
         }
     },
 
     copyToClipboardFF: function (text) {
-        window.prompt(messages.pressCtrlC, text);
-    }
+        window.prompt('Please press the hot key &quot;Ctrl + C&quot; to copy the following list of betids into clipboard.', text);
+    },
+
+    disableInput: function () {
+        $.blockUI();
+    },
+
+    enableInput: function () {
+        $.unblockUI();
+    },
+
+    showMsgBox: function (msgs) {
+        var msgbox = $('#msg-box');
+
+        if (msgbox.length === 0) {
+            msgbox = $(
+                '<div class="alert alert-error" id="msg-box">' +
+                '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                '<div class="alert-content">' +
+                '</div>' +
+                '</div>').prependTo('body');
+        }
+
+        var html = [];
+
+        if ($.isPlainObject(msgs)) {
+            if (msgs.ErrorCode > 0) {
+                html.push('<span class="fail">' + msgs.ErrorMsg + '&nbsp;<i class="icon-warning-sign"></i></span><br/>');
+            } else {
+                var message = msgs.ErrorMsg.split('~');
+                for (var i = 0; i < message.length; i++) {
+                    message[i].indexOf('-') !== -1 ?
+                        html.push('<span class="fail">' + message[i].substring(1) + '&nbsp;<i class="icon-warning-sign"></i></span><br/>') :
+                        html.push('<span>' + message[i] + '&nbsp;<i class="icon-ok"></i></span><br/>');
+                }
+            }
+        } else {
+            if ($.isArray(msgs)) {
+                for (var j = 0; j < msgs.length; j++) {
+                    var msg = msgs[j];
+                    if (msg.ErrorCode > 0) {
+                        html.push('<span class="fail">' + msg.ErrorMsg + '&nbsp;<i class="icon-warning-sign"></i></span><br/>');
+                    } else {
+                        html.push('<span>' + msg.ErrorMsg + '&nbsp;<i class="icon-ok"></i></span><br/>');
+                    }
+                }
+            } else {
+                html.push('<span class="fail">' + msgs + '<i class="icon-warning-sign"></i></span><br/>');
+            }
+        }
+
+        msgbox.attr('class', 'alert alert-success').find('.alert-content').html(html.join(''));
+        msgbox.fadeIn();
+        msgbox.show();
+    },
 };
 
 $(function () {
@@ -325,8 +369,6 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
         } else {
             subTicket.show();
         }
-
-        $("#ticketInfo").fanexGrid('resizeGrid');
         return;
     }
 
@@ -337,19 +379,18 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
         dataType: "json",
         data: JSON.stringify(param),
         beforeSend: function () {
-            NapTicketControl.disableInput();
+            Helper.disableInput();
         },
         success: function (rs) {
             $('#divEvent_' + transId + index).html(rs).show();
-            $("#ticketInfo").fanexGrid('resizeGrid');
         },
         error: function () {
         },
         complete: function (e) {
             if (parseInt(e.status) === 403) {
-                NapTicketControl.Helper.showMsgBox(messages.authorizedMessage);
+                Helper.showMsgBox('You are not authorized on this function.');
             }
-            NapTicketControl.enableInput();
+            Helper.enableInput();
         }
     });
 }
