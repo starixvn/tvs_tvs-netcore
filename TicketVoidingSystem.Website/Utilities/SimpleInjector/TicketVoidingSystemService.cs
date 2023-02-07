@@ -4,6 +4,9 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.Services.Letstalk;
+using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
+using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
+using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
@@ -21,7 +24,15 @@ public static class TicketVoidingSystemService
         services.AddSingleton<OddsService, OddsServiceImp>();
         services.AddSingleton<MatchService, MatchServiceImp>();
         services.AddSingleton<LogActionFilterAttribute>();
+
+        //Letstalk
         services.AddSingleton<LetstalkClientService, LetstalkClientServiceImp>();
+        services.AddSingleton<LetstalkSingleMessageService, LetstalkSingleMessageServiceImp>();
         services.AddSingleton<NotificationLetstalkService, NotificationLetstalkServiceImp>();
+        services.AddSingleton<UusTicketService, UusTicketServiceImp>();
+        services.AddSingleton<MessageContentService, MessageContentServiceImp>();
+        services.AddSingleton<GroupVoidSettledBetService, GroupVoidSettledBetServiceImp>();
+        services.AddSingleton<GroupTicketListingService, GroupTicketListingServiceImp>();
+        services.AddSingleton<GroupAbnormalBetRequestService, GroupAbnormalBetRequestServiceImp>();
     }
 }

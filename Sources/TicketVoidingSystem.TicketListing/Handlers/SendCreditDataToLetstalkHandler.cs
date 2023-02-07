@@ -1,12 +1,11 @@
 ﻿using System.Text;
+using Fanex.LetstalkService.Core.Models;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.Services.Letstalk;
 using TicketVoidingSystem.TicketListing.Criteria;
+using Result = TicketVoidingSystem.Models.Result;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
@@ -16,50 +15,45 @@ public class SendCreditDataToLetstalkRequest : ExportExcelQuery, IRequest<Result
 
 public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToLetstalkRequest, Result>
 {
-    private readonly IConfiguration configuration;
     private readonly ExcelService<ExportExcelQuery> excelService;
     private readonly NotificationLetstalkService notificationLetstalkService;
 
-    public SendCreditDataToLetstalkHandler(ExcelService<ExportExcelQuery> excelService,
-        NotificationLetstalkService notificationLetstalkService, IConfiguration configuration)
+    public SendCreditDataToLetstalkHandler(ExcelService<ExportExcelQuery> excelService, NotificationLetstalkService notificationLetstalkService)
     {
         this.excelService = excelService;
         this.notificationLetstalkService = notificationLetstalkService;
-        this.configuration = configuration;
     }
 
     public async Task<Result> Handle(SendCreditDataToLetstalkRequest request, CancellationToken cancellationToken)
     {
-        var dataAttachments = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketListing);
-        var isSentLetstalk = await notificationLetstalkService.Send(CreateNotificationLetstalkModel(request, dataAttachments));
-        var resultSendSucceed = new Result
+        var sentResult = await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), await CreateAttachment(request));
+        if (sentResult.IsSuccessful)
         {
-            ErrorCode = 0,
-            ErrorMsg = "Data of Credit are sent successfully!"
-        };
-        var resultSendFailed = new Result
+            return new Result
+            {
+                ErrorCode = 0,
+                ErrorMsg = "Data of Credit are sent successfully!"
+            };
+        }
+
+        return new Result
         {
             ErrorCode = 1,
             ErrorMsg = "Failed to send data."
         };
-
-        return isSentLetstalk.IsSuccessful ? resultSendSucceed : resultSendFailed;
     }
 
-    private NotificationLetstalkModel CreateNotificationLetstalkModel(ExportExcelQuery query, byte[] attachment)
+    private async Task<LetstalkAttachment> CreateAttachment(ExportExcelQuery query)
     {
-        return new NotificationLetstalkModel
+        var excelAttachments = await excelService.CreateFileAsByteArray(query, TemplateExcelPath.TicketListing);
+        return new LetstalkAttachment
         {
-            TargetName = "Ticket-Voiding-System",
-            Subject = "Result Amendment Notification - Credit",
-            Content = GetContentLetstalkModel(query),
-            Group = configuration.GetSection("Letstalk:TicketListingAlert").Value,
             FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
-            Attachment = attachment
+            Bytes = excelAttachments
         };
     }
 
-    private static string GetContentLetstalkModel(ExportExcelQuery query)
+    private static string CreateContent(ExportExcelQuery query)
     {
         var content = new StringBuilder();
         content.AppendLine($"Event Date: {query.EventDate:dd MMMM yyyy}");

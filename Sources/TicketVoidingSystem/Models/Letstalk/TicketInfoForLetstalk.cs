@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.Models.Letstalk;
 
-public class NotificationLetstalkModel
+public class TicketInfoForLetstalk
 {
     public Match Match { get; set; }
 
@@ -39,8 +39,4 @@ public class NotificationLetstalkModel
     public string Content { get; set; }
 
     public string Group { get; set; }
-
-    public string FileName { get; set; }
-
-    public byte[] Attachment { get; set; }
 }
