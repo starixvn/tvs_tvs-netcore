@@ -25,7 +25,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Olympus.SimpleDataApi;
 using ONEbook.UM.AspNetCore;
 using ONEbook.UM.AspNetCore.Filters;
 using ONEbook.UM.Configurations;
@@ -35,29 +34,12 @@ using ONEbook.UM.Transport;
 using Sentry;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
-using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
-using TicketVoidingSystem.ManageVoidServices.Services;
 using TicketVoidingSystem.MarkTickets.Controllers;
-using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
-using TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark;
-using TicketVoidingSystem.MarkTickets.Services.ExportExcel;
-using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
-using TicketVoidingSystem.MarkTickets.Services.UserLogs;
-using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.BetList;
-using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.SharedApi.Controllers;
-using TicketVoidingSystem.SharedApi.Services;
-using TicketVoidingSystem.SharedApi.Services.BetTypes;
-using TicketVoidingSystem.SharedApi.Services.SubParlayTicket;
 using TicketVoidingSystem.SignalR;
-using TicketVoidingSystem.SimpleDataApi;
-using TicketVoidingSystem.SimpleDataApi.Services;
 using TicketVoidingSystem.TicketListing.Controllers;
-using TicketVoidingSystem.Web;
-using MarkTicketsCellService = TicketVoidingSystem.MarkTickets.Services.ExportExcel.CellService;
-using MarkTicketsCellServiceImp = TicketVoidingSystem.MarkTickets.Services.ExportExcel.CellServiceImp;
+using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 namespace TicketVoidingSystem.Website.Utilities
 {
@@ -209,54 +191,13 @@ namespace TicketVoidingSystem.Website.Utilities
 
         public static void RegisterBusinessServices(this IServiceCollection services)
         {
-            services.AddSingleton<SessionService, SessionServiceImp>();
+            services.RegisterTicketVoidingSystemServices();
             services.AddSingleton<LoggingService, LoggingServiceImp>();
-            services.AddSingleton<PagingService, PagingServiceImp>();
-            services.AddSingleton<LoggingService, LoggingServiceImp>();
-            services.AddScoped(typeof(ExcelService<>), typeof(ExcelServiceImp<>));
-            services.AddSingleton<RemotingRefWrapperService, RemotingRefWrapperServiceImp>();
-            services.AddSingleton<BetListService, BetListServiceImp>();
-            services.AddSingleton<OddsService, OddsServiceImp>();
-            services.AddSingleton<MatchService, MatchServiceImp>();
-            services.AddSingleton<LogActionFilterAttribute>();
-
-            // Shared Api
-            services.AddTransient<SimpleCriteriaFactory, SimpleCriteriaFactoryImp>();
-            services.AddTransient<SimpleFunctionPermissionFactory, SimpleFunctionPermissionFactoryImp>();
-            services.AddTransient<SimpleMapperFactory, SimpleMapperFactoryImp>();
-            services.AddTransient<TicketsCheckPermissionService, TicketsCheckPermissionServiceImp>();
-            services.AddTransient<BetTypesService, BetTypesServiceImp>();
-            services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
-            services.AddTransient<BetTeamsService, BetTeamsServiceImp>();
-            services.AddTransient<BalanceUpService, BalanceUpServiceImp>();
-            services.AddTransient<TicketsService, TicketsServiceImp>();
-
-            // AB Exception List
-            services.AddTransient<GetUsersService, GetUsersServiceImp>();
-            services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
-            services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
-            services.AddTransient<TicketVoidingQueueService, TicketVoidingQueueServiceImp>();
-            services.AddTransient<VoidingHistoryService, VoidingHistoryServiceImp>();
+            services.RegisterSharedApiServices();
+            services.RegisterAbExceptionListServices();
+            services.RegisterMarkTicketsServices();
+            services.RegisterTicketListingServices();
             services.AddTransient<LetstalkService, LetstalkServiceImp>();
-
-            // Mark Tickets
-            services.AddTransient<CombineValidationService, CombineValidationServiceImp>();
-            services.AddTransient<ConfirmAutoUnmarkService, ConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<MapDataForConfirmAutoUnmarkService, MapDataForConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<UpdateConfirmAutoUnmarkService, UpdateConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<MarkTicketsCellService, MarkTicketsCellServiceImp>();
-            services.AddTransient<WorkSheetService<GetDetailTicketsQuery>, GetDetailTicketsWorkSheetService>();
-            services.AddTransient<WorkSheetService<GetTicketsQuery>, GetTicketsWorkSheetService>();
-            services.AddTransient<CheckBoxService, CheckBoxServiceImp>();
-            services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
-            services.AddTransient<MapTicketService, MapTicketServiceImp>();
-            services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
-            services.AddTransient<MarkAllTicketsService, MarkAllTicketsServiceImp>();
-            services.AddTransient<MapUserLogsService, MapUserLogsServiceImp>();
-            services.AddTransient<UserLogsService, UserLogsServiceImp>();
-
-            // Ticket Listing
-            services.AddTransient<CellService, CellServiceImp>();
         }
 
         public static void RegisterMediatR(this IServiceCollection services)

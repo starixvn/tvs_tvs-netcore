@@ -26,6 +26,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     private readonly IConfiguration configuration;
     private readonly LetstalkClientService letstalkService;
     private readonly LoggingService loggingService;
+    private readonly bool isProdEnvForLetstalk;
     private const int maxContent = 1024;
     private const int currency20 = 20;
 
@@ -34,6 +35,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         this.configuration = configuration;
         this.letstalkService = letstalkService;
         this.loggingService = loggingService;
+        isProdEnvForLetstalk = Convert.ToBoolean(configuration.GetSection("Letstalk:IsProdEnv").Value);
     }
 
     public async Task<Result> Send(NotificationLetstalkModel model)
@@ -164,13 +166,13 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
             TargetName = "Ticket-Voiding-System",
             Subject = "Void Settled Bet Notification",
             Content = content,
-            Group = configuration["TVS-Void-Settled-Bets"]
+            Group = configuration.GetSection("Letstalk:VoidSettledBets").Value
         };
     }
 
     private bool IsValidCashOut(TicketEmailModel ticket)
     {
-        if (configuration["IsPROEnvironment"]!.Equals("True"))
+        if (isProdEnvForLetstalk)
         {
             return ticket.IsCashOut && ticket.Currency != currency20;
         }
@@ -182,7 +184,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         var result = !ticket.BetTypeId.IsParlayAndBetBuilder()
                     && !ticket.IsCashOut
                     && ticket.Status.IsSettled();
-        if (configuration["IsPROEnvironment"]!.Equals("True"))
+        if (isProdEnvForLetstalk)
         {
             return result && ticket.Currency != currency20;
         }
@@ -193,7 +195,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     {
         var result = isCheckMainParlay ? ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsSettled()
             : ticket.IsMixParlay && ticket.SubStatus.IsSettled();
-        if (configuration["IsPROEnvironment"]!.Equals("True"))
+        if (isProdEnvForLetstalk)
         {
             return result && ticket.Currency != currency20;
         }

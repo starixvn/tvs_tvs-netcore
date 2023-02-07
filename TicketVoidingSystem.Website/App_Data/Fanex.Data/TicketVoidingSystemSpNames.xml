@@ -102,4 +102,16 @@
 
         <Setting Key="NAP_SpecialDelete_SMP_Selections_Select" SpName="NAP_SpecialDelete_SMP_Selections_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="TicketListing">
+        <Setting Key="Acc_SiteSel_Licensee" SpName="Acc_SiteSel_Licensee" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600">
+            <Mapping DataField="LicenseeID" ObjectProperty="Id" />
+            <Mapping DataField="LicenseeName" ObjectProperty="Name" />
+        </Setting>
+        <Setting Key="NAP_SpecialDelete_TicketListing_Summary" SpName="NAP_SpecialDelete_TicketListing_Summary" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_TicketListing_Detail" SpName="NAP_SpecialDelete_TicketListing_Detail" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_TicketListing_ExcelOic" SpName="NAP_SpecialDelete_TicketListing_ExcelOic" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_TicketListing_SendOIC" SpName="NAP_SpecialDelete_TicketListing_SendOIC" DbName="DBLIC.bodb_Licensee.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_TicketListing_SendOIC_Backup" SpName="NAP_SpecialDelete_TicketListing_SendOIC" DbName="DBLIC_STANDBY.bodb_Licensee.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_TicketListing_SettlementHistory" SpName="NAP_SpecialDelete_TicketListing_SettlementHistory" DbName="DBBAH.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>

@@ -53,7 +53,7 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
             TargetName = "Ticket-Voiding-System",
             Subject = "Result Amendment Notification - Credit",
             Content = GetContentLetstalkModel(query),
-            Group = configuration["TVS-Ticket-Listing-Alert"],
+            Group = configuration.GetSection("Letstalk:TicketListingAlert").Value,
             FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
             Attachment = attachment
         };
