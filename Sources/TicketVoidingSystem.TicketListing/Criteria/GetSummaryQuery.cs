@@ -28,7 +28,7 @@ namespace TicketVoidingSystem.TicketListing.Criteria
 
         public string Quarter { get; set; }
 
-        public IEnumerable<BetTypeXml> BetTeams { get; set; }
+        public IEnumerable<BetTypeXml>? BetTeams { get; set; }
 
         public string SingleOrSubParlay { get; set; }
 

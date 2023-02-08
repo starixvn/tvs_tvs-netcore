@@ -31,7 +31,7 @@ public class TicketListingController : ControllerBase
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetTicketsDetail(GetTicketsDetailRequest request) => Ok(await mediator.Send(request));
 
-    [HttpGet]
+    [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
     {

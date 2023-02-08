@@ -7,11 +7,11 @@ using TicketVoidingSystem.SharedApi.Services.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
-public class GetBettypesRequest : GetBetTypesCriteria, IRequest<BetTypesViewModel>
+public class GetBetTypesRequest : GetBetTypesCriteria, IRequest<BetTypesViewModel>
 {
 }
 
-public class GetBetTypesHandler : IRequestHandler<GetBettypesRequest, BetTypesViewModel>
+public class GetBetTypesHandler : IRequestHandler<GetBetTypesRequest, BetTypesViewModel>
 {
     private readonly BetTypesService betTypeService;
 
@@ -20,7 +20,7 @@ public class GetBetTypesHandler : IRequestHandler<GetBettypesRequest, BetTypesVi
         this.betTypeService = betTypeService;
     }
 
-    public async Task<BetTypesViewModel> Handle(GetBettypesRequest message, CancellationToken cancellationToken)
+    public async Task<BetTypesViewModel> Handle(GetBetTypesRequest message, CancellationToken cancellationToken)
     {
         return await betTypeService.GetBetTypes(message);
     }

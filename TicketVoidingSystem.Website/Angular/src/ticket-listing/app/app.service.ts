@@ -33,7 +33,7 @@ export class AppService {
 
   async getMatchInfo(id: string, isMatch3rd: boolean): Promise<MatchModel> {
     const query: GetMatchQuery = { matchId: parseInt(id, 10), isMatch3rd: isMatch3rd };
-    const url = 'Match/GetInfo';
+    const url = 'api/MatchInfo/GetInfo';
     this.blockUIService.start();
     const result = await this.httpService.postJson<GetMatchQuery, MatchModel>(query, url);
     this.blockUIService.stop();

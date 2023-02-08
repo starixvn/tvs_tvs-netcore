@@ -29,9 +29,6 @@ namespace TicketVoidingSystem.SharedApi.Controllers
         public async Task<IActionResult> GetVirtualSport() => Ok(await mediator.Send(new GetBetTypesVirtualSportRequest()));
 
         [HttpPost]
-        public async Task<IActionResult> GetBettypes() => Ok(await mediator.Send(new GetBettypesRequest()));
-
-        [HttpPost]
-        public async Task<IActionResult> GetBettypesNg() => Ok(await mediator.Send(new GetBettypesRequest()));
+        public async Task<IActionResult> GetBetTypes() => Ok(await mediator.Send(new GetBetTypesRequest()));
     }
 }

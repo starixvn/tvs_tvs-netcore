@@ -46,7 +46,7 @@ export class CommonService {
   }
 
   async getBetTypes(query: GetBetTypesQuery): Promise<BetTypesModel> {
-    return this.httpService.postJson(query, `api/BetTypes/GetBettypesNg`);
+    return this.httpService.postJson(query, `api/BetTypes/GetBetTypes`);
   }
 
   async getSportsType(): Promise<SportInfo[]> {

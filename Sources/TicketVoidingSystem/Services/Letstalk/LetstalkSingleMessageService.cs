@@ -32,7 +32,7 @@ public class LetstalkSingleMessageServiceImp : LetstalkSingleMessageService
         }
         catch (Exception exception)
         {
-            await loggingService.ErrorAsync(exception.Message);
+            await loggingService.ErrorAsync(nameof(LetstalkSingleMessageService), exception);
             return new Result { ErrorCode = ErrorCode.SendLetstalkFail, ErrorMsg = exception.Message };
         }
     }

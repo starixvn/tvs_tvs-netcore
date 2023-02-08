@@ -7,6 +7,7 @@ using Fanex.BetList.Core.RemotingRef;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
+using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
@@ -162,6 +163,11 @@ namespace TicketVoidingSystem.Website.Utilities
                 .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
 
             BetListManager.RegisterRemotingRef(new CacheRef());
+        }
+
+        public static void RegisterLetstalk(this IServiceCollection services, IConfiguration configuration)
+        {
+            AppConfigService.Config.LetstalkServiceApi = configuration.GetSection("Letstalk:LetstalkServiceApi").Value;
         }
 
         public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)

@@ -14,7 +14,7 @@ public interface MessageContentService
 
 public class MessageContentServiceImp : MessageContentService
 {
-    private const int maxContent = 1024;
+    private const int MaxContent = 1024;
     private readonly UusTicketService uusTicketService;
 
     public MessageContentServiceImp(UusTicketService uusTicketService)
@@ -82,7 +82,7 @@ public class MessageContentServiceImp : MessageContentService
         content.AppendLine($"(Settled ticket: Single Count: {model.SingleCount}, Instant OU: {model.InstantOUCount}, Cash Out: {model.CashOutCount}, Parlay Count: {model.ParlayCount}");
         content.AppendLine($"Outstanding: Single Count: {model.OutstandingSingleCount}, Parlay Count: {model.OutstandingParlayCount})");
 
-        if ($"{content}{userNames}".Length > maxContent)
+        if ($"{content}{userNames}".Length > MaxContent)
         {
             messages.AddRange(GenerateMultipleContent(content, members));
         }
@@ -102,7 +102,7 @@ public class MessageContentServiceImp : MessageContentService
         var index = 0;
         foreach (var member in members)
         {
-            if ($"{tempContent}, {member}".Length > maxContent)
+            if ($"{tempContent}, {member}".Length > MaxContent)
             {
                 results.Add(tempContent);
                 patch++;

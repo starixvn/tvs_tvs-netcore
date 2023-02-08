@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/mark-tickets/index.html",
-            "main": "src/mark-tickets/main.ts",
+            "index": "src/ticket-listing/index.html",
+            "main": "src/ticket-listing/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
@@ -42,7 +42,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "deployUrl": "dist/mark-tickets/",
+              "deployUrl": "dist/ticket-listing/",
               "optimization": true,
               "outputHashing": "all",
               "namedChunks": false,

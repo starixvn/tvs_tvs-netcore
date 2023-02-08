@@ -43,8 +43,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
             Group = configuration.GetSection("Letstalk:VoidSettledBets").Value
         };
 
-        var results = await groupVoidSettledBetService.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
-        return results;
+        return await groupVoidSettledBetService.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
     }
 
     public async Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment)

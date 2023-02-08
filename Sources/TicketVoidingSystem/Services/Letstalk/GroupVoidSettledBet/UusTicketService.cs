@@ -16,7 +16,7 @@ public interface UusTicketService
 
 public class UusTicketServiceImp : UusTicketService
 {
-    private const int currency20 = 20;
+    private const int Currency20 = 20;
     private readonly bool isProdEnvForLetstalk;
 
     public UusTicketServiceImp(IConfiguration configuration)
@@ -28,7 +28,7 @@ public class UusTicketServiceImp : UusTicketService
     {
         if (isProdEnvForLetstalk)
         {
-            return ticket.IsCashOut && ticket.Currency != currency20;
+            return ticket.IsCashOut && ticket.Currency != Currency20;
         }
         return ticket.IsCashOut;
     }
@@ -40,7 +40,7 @@ public class UusTicketServiceImp : UusTicketService
                      && ticket.Status.IsSettled();
         if (isProdEnvForLetstalk)
         {
-            return result && ticket.Currency != currency20;
+            return result && ticket.Currency != Currency20;
         }
         return result;
     }
@@ -51,7 +51,7 @@ public class UusTicketServiceImp : UusTicketService
             : ticket.IsMixParlay && ticket.SubStatus.IsSettled();
         if (isProdEnvForLetstalk)
         {
-            return result && ticket.Currency != currency20;
+            return result && ticket.Currency != Currency20;
         }
         return result;
     }
