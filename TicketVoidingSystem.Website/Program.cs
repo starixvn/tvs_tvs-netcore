@@ -22,18 +22,19 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 // Add services to the container.
+builder.Services.LoadAppSetting(builder.Configuration);
 builder.Services.AddRazorPages();
-builder.Services.RegisterAuthentication(builder.Configuration);
+builder.Services.RegisterAuthentication();
 builder.Services.RegisterFanexData(builder.Configuration);
 builder.Services.RegisterFanexExceptionHandler();
-builder.Services.RegisterSentry(builder.Configuration);
+builder.Services.RegisterSentry();
 builder.Services.RegisterONEbookUM(builder.Configuration);
-builder.Services.RegisterRemotingRef(builder.Configuration);
+builder.Services.RegisterRemotingRef();
 builder.Services.RegisterCoreServices(builder.Configuration);
 builder.Services.RegisterBusinessServices();
 builder.Services.RegisterMediatR();
 builder.Services.RegisterAutoMapper();
-builder.Services.RegisterSignalR(builder.Configuration);
+builder.Services.RegisterSignalR();
 builder.Services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
 builder.Services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
 builder.Services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });

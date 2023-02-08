@@ -60,6 +60,11 @@ namespace TicketVoidingSystem.Website.Utilities
 {
     public static class ServiceCollectionExtension
     {
+        public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
+        {
+            AppSettingService.InitSetting(configuration);
+        }
+
         public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
         {
             var connections = configuration.GetSection("ConnectionStrings")
@@ -78,15 +83,15 @@ namespace TicketVoidingSystem.Website.Utilities
                 .Run();
         }
 
-        public static void RegisterSentry(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterSentry(this IServiceCollection services)
         {
             LogManager
-                .SetDefaultLogCategory(configuration.GetSection("CategorySentryLog").Value)
+                .SetDefaultLogCategory(AppSettingService.AppSetting.CategorySentryLog)
                 .Use(new List<ILogEngine>
                 {
                     new SentryLogging(new SentryEngineOptions
                     {
-                        Dsn = new Dsn(configuration.GetSection("SentryClientKey").Value)
+                        Dsn = new Dsn(AppSettingService.AppSetting.SentryClientKey)
                     })
                 });
         }
@@ -100,14 +105,14 @@ namespace TicketVoidingSystem.Website.Utilities
             ExceptionHandler.UseConfig(configuration);
         }
 
-        public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     //// options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
                     //// options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(configuration.GetSection("AuthSettings:CookieTimeOut").Value));
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.CookieTimeOut);
                     options.Cookie = new CookieBuilder
                     {
                         Name = "TicketVoidingSystem.Cookie",
@@ -115,7 +120,7 @@ namespace TicketVoidingSystem.Website.Utilities
                     };
                     options.Events.OnRedirectToLogin = (context) =>
                     {
-                        context.Response.Redirect(configuration.GetSection("AuthSettings:LoginPath").Value);
+                        context.Response.Redirect(AppSettingService.AppSetting.AuthSettings.LoginPath);
                         return Task.CompletedTask;
                     };
                     options.Events.OnSigningOut = context =>
@@ -126,9 +131,9 @@ namespace TicketVoidingSystem.Website.Utilities
                 });
 
             var redisConfig = new ConfigurationOptions();
-            redisConfig.EndPoints.Add(configuration.GetSection("RedisConfig:EndPoint").Value);
-            redisConfig.Password = configuration.GetSection("RedisConfig:Password").Value;
-            redisConfig.DefaultDatabase = int.Parse(configuration.GetSection("RedisConfig:DefaultDatabase").Value);
+            redisConfig.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
+            redisConfig.Password = AppSettingService.AppSetting.RedisConfig.Password;
+            redisConfig.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
             redisConfig.ConnectRetry = 1000;
             redisConfig.ConnectTimeout = 300000;
             redisConfig.SyncTimeout = 60000;
@@ -148,27 +153,27 @@ namespace TicketVoidingSystem.Website.Utilities
             services.AddSession(options =>
             {
                 options.Cookie.IsEssential = true;
-                options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(configuration.GetSection("AuthSettings:SessionTimeOut").Value));
+                options.IdleTimeout = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.SessionTimeOut);
                 options.Cookie.Name = "TicketVoidingSystem.Session";
             });
         }
 
-        public static void RegisterSignalR(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterSignalR(this IServiceCollection services)
         {
             services.AddSignalR().AddStackExchangeRedis(options =>
             {
-                options.Configuration.EndPoints.Add(configuration.GetSection("RedisConfig:EndPoint").Value);
-                options.Configuration.Password = configuration.GetSection("RedisConfig:Password").Value;
-                options.Configuration.DefaultDatabase = int.Parse(configuration.GetSection("RedisConfig:DefaultDatabase").Value);
-                options.Configuration.ChannelPrefix = configuration.GetSection("RedisConfig:SignalRChannelPrefix").Value;
+                options.Configuration.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
+                options.Configuration.Password = AppSettingService.AppSetting.RedisConfig.Password;
+                options.Configuration.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
+                options.Configuration.ChannelPrefix = AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix;
             });
         }
 
-        public static void RegisterRemotingRef(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterRemotingRef(this IServiceCollection services)
         {
             RefDataTypeContainer
-                .ConnectTo(new Uri(configuration.GetSection("FanexRemotingRefServiceUrl").Value))
-                .FromApplication(configuration.GetSection("ServiceName").Value)
+                .ConnectTo(new Uri(AppSettingService.AppSetting.FanexRemotingRefServiceUrl))
+                .FromApplication(AppSettingService.AppSetting.ServiceName)
                 .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
 
             BetListManager.RegisterRemotingRef(new CacheRef());
