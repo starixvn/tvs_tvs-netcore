@@ -4,6 +4,9 @@ using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.Services.Letstalk;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Handlers;
+using TicketVoidingSystem.TicketListing.Models;
+using TicketVoidingSystem.TicketListing.Services;
+using TicketVoidingSystem.TicketListing.Services.SendDataOic;
 using Xunit;
 
 namespace TicketVoidingSystem.TicketListing.Tests.Handlers;
@@ -32,54 +35,54 @@ public class SendCreditDataToLetstalkHandlerTest
         Assert.Equal(result.IsSuccessful, actual.IsSuccessful);
     }
 
-    //[Test]
-    //public async Task Handle_HasOnlyNormalQuery_ReturnResult()
-    //{
-    //    // Arrange
-    //    var expected = new AmendmentReponse();
-    //    var chinaViewQuery = new SendFileQuery { IsChinaView = false };
-    //    var request = new SendDataToOicRequest
-    //    {
-    //        Queries = new[] { chinaViewQuery }
-    //    };
-    //    var repository = Substitute.For<TicketListingRepository>();
-    //    var sendDataToOicService = Substitute.For<SendDataToOicService>();
-    //    sendDataToOicService.SendData(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
-    //    repository.GetAffectTicketsFromSettlementHistory(false, 1).ReturnsForAnyArgs("");
+    [Fact]
+    public async Task Handle_HasOnlyNormalQuery_ReturnResult()
+    {
+        // Arrange
+        var expected = new AmendmentReponse();
+        var chinaViewQuery = new SendFileQuery { IsChinaView = false };
+        var request = new SendDataToOicRequest
+        {
+            Queries = new[] { chinaViewQuery }
+        };
+        var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
+        var sendDataToOicService = Substitute.For<SendDataToOicService>();
+        sendDataToOicService.Send(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
+        affectTicketsFromSettlementHistoryService.GetTickets(false, 1).ReturnsForAnyArgs("");
 
-    //    var handler = new SendDataOicHandler(sendDataToOicService, repository);
+        var handler = new SendDataOicHandler(sendDataToOicService, affectTicketsFromSettlementHistoryService);
 
-    //    // Act
-    //    var actual = await handler.Handle(request);
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-    //    // Assert
-    //    AssertExtension.AreEqual(1, actual.Count());
-    //}
+        // Assert
+        Assert.Equal(1, actual.Count);
+    }
 
-    //[Test]
-    //public async Task Handle_SendDataSuccessfully_ReturnResult()
-    //{
-    //    // Arrange
-    //    var expected = new AmendmentReponse();
-    //    var chinaViewQuery = new SendFileQuery { IsChinaView = true };
-    //    var normalQuery = new SendFileQuery { IsChinaView = false };
-    //    var request = new SendDataToOicRequest
-    //    {
-    //        Queries = new[] { chinaViewQuery, normalQuery }
-    //    };
-    //    var sendDataToOicService = Substitute.For<SendDataToOicService>();
-    //    var repository = Substitute.For<TicketListingRepository>();
-    //    sendDataToOicService.SendData(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
-    //    repository.GetAffectTicketsFromSettlementHistory(false, 1).ReturnsForAnyArgs("");
+    [Fact]
+    public async Task Handle_SendDataSuccessfully_ReturnResult()
+    {
+        // Arrange
+        var expected = new AmendmentReponse();
+        var chinaViewQuery = new SendFileQuery { IsChinaView = true };
+        var normalQuery = new SendFileQuery { IsChinaView = false };
+        var request = new SendDataToOicRequest
+        {
+            Queries = new[] { chinaViewQuery, normalQuery }
+        };
+        var sendDataToOicService = Substitute.For<SendDataToOicService>();
+        var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
+        sendDataToOicService.Send(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
+        affectTicketsFromSettlementHistoryService.GetTickets(false, 1).ReturnsForAnyArgs("");
 
-    //    var handler = new SendDataOicHandler(sendDataToOicService, repository);
+        var handler = new SendDataOicHandler(sendDataToOicService, affectTicketsFromSettlementHistoryService);
 
-    //    // Act
-    //    var actual = await handler.Handle(request);
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-    //    // Assert
-    //    await sendDataToOicService.Received()
-    //        .SendData(Arg.Compat.Any<List<SendFileQuery>>(), Arg.Compat.Any<string>());
-    //    AssertExtension.AreEqual(2, actual.Count());
-    //}
+        // Assert
+        await sendDataToOicService.Received()
+            .Send(Arg.Compat.Any<List<SendFileQuery>>(), Arg.Compat.Any<string>());
+        Assert.Equal(2, actual.Count);
+    }
 }
