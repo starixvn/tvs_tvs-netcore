@@ -27,7 +27,7 @@
               </ng-template>
               <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
                 <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:9">
-                  {{item.name}}
+                  {{item['name']}}
                   <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
                 </div>
                 <div class="number-of-more" *ngIf="items.length > 9">

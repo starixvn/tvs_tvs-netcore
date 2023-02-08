@@ -83,7 +83,8 @@ import { HttpService } from './services/http.service';
     BetIdsComponent,
     AutoRefreshComponent,
     UsernamesComponent,
-    MenuBarComponent
+    MenuBarComponent,
+    BlockFullUiModule
   ],
   providers: [HttpService, CommonService]
 })
