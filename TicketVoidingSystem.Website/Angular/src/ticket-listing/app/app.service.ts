@@ -1,7 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { GetBetTypesQuery, GroupBetTypesModel } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { GroupBetTypeVirtualSport } from '../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
-import { BetTypesModel } from '../../utility/components/bettypes/bettypes.model';
+import { GetBetTypesQuery } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -18,39 +16,15 @@ export class AppService {
   constructor(private readonly httpService: HttpService, private readonly blockUIService: BlockUiService) { }
 
   async getLicensees(): Promise<Array<Licensee>> {
-    const url = 'Misc/TicketListing/GetLicensees';
+    const url = 'api/TicketListing/GetLicensees';
     this.blockUIService.start();
     const result = await this.httpService.getJson<Array<Licensee>>(url);
     this.blockUIService.stop();
     return result;
   }
 
-  async getBetTypesVirtualSports(): Promise<Array<GroupBetTypeVirtualSport>> {
-    const url = 'BetTypes/GetVirtualSport';
-    this.blockUIService.start();
-    const result = await this.httpService.getJson<Array<GroupBetTypeVirtualSport>>(url);
-    this.blockUIService.stop();
-    return result;
-  }
-
-  async getGroupBetTypes(query: GetBetTypesQuery): Promise<GroupBetTypesModel> {
-    const url = 'BetTypes/GetGroupBetTypesNg';
-    this.blockUIService.start();
-    const result = await this.httpService.postJson<GetBetTypesQuery, GroupBetTypesModel>(query, url);
-    this.blockUIService.stop();
-    return result;
-  }
-
-  async getBetTypes(query: GetBetTypesQuery): Promise<BetTypesModel> {
-    const url = 'BetTypes/GetBettypesNg';
-    this.blockUIService.start();
-    const result = await this.httpService.postJson<GetBetTypesQuery, BetTypesModel>(query, url);
-    this.blockUIService.stop();
-    return result;
-  }
-
   async getSelectionTypes(query: GetBetTypesQuery): Promise<Array<SelectionTypeModel>> {
-    const url = 'BetTypes/GetSelectionTypes';
+    const url = 'api/TicketListing/GetSelectionTypes';
     this.blockUIService.start();
     const result = await this.httpService.postJson<GetBetTypesQuery, Array<SelectionTypeModel>>(query, url);
     this.blockUIService.stop();
@@ -67,7 +41,7 @@ export class AppService {
   }
 
   async getSummary(query: GetSummaryQuery): Promise<SummaryItemViewModel> {
-    const url = 'Misc/TicketListing/GetSummaryTickets';
+    const url = 'api/TicketListing/GetSummaryTickets';
     this.blockUIService.start();
     const result = await this.httpService.postJson<GetSummaryQuery, SummaryItemViewModel>(query, url);
     this.blockUIService.stop();
@@ -75,7 +49,7 @@ export class AppService {
   }
 
   async getTicketsDetail(query: GetTicketsDetailQuery): Promise<GetTicketsDetailModel> {
-    const url = 'Misc/TicketListing/GetTicketsDetail';
+    const url = 'api/TicketListing/GetTicketsDetail';
     this.blockUIService.start();
     const result = await this.httpService.postJson<GetTicketsDetailQuery, GetTicketsDetailModel>(query, url);
     this.blockUIService.stop();
@@ -83,7 +57,7 @@ export class AppService {
   }
 
   async exportExcel(query: ExportExcelQuery) {
-    const url = 'Misc/TicketListing/ExportExcel';
+    const url = 'api/TicketListing/ExportExcel';
     this.blockUIService.start();
     const result = await this.httpService.downloadFile<ExportExcelQuery>(query, url);
     this.blockUIService.stop();
@@ -91,14 +65,15 @@ export class AppService {
   }
 
   async sendCreditDataToLetstalk(query: ExportExcelQuery) {
+    const url = 'api/TicketListing/SendCreditDataToLetstalk';
     this.blockUIService.start();
-    const result = await this.httpService.postJson<ExportExcelQuery, Result<null>>(query, 'Misc/TicketListing/SendCreditDataToLetstalk');
+    const result = await this.httpService.postJson<ExportExcelQuery, Result<null>>(query, url);
     this.blockUIService.stop();
     return result;
   }
 
   async sendDataToOic(queries: SendFileQuery[]): Promise<AmendmentReponse[]> {
-    const url = 'Misc/TicketListing/SendDataToOic';
+    const url = 'api/TicketListing/SendDataToOic';
     this.blockUIService.start();
     const result = await this.httpService.postJson<{queries: SendFileQuery[]}, AmendmentReponse[]>({queries: queries}, url);
     this.blockUIService.stop();

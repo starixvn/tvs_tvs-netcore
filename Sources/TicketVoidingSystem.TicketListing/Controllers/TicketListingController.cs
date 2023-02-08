@@ -46,4 +46,8 @@ public class TicketListingController : ControllerBase
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> SendCreditDataToLetsTalk(SendCreditDataToLetstalkRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
+    public async Task<IActionResult> GetSelectionTypes(GetSelectionTypesRequest request) => Ok(await mediator.Send(request));
 }

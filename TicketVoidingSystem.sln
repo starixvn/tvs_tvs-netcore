@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.SimpleD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.MarkTickets.Tests", "Tests\TicketVoidingSystem.MarkTickets.Tests\TicketVoidingSystem.MarkTickets.Tests.csproj", "{39BEF946-B81A-46F1-B5D9-DDBA3CCB273B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketVoidingSystem.TicketListing", "Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj", "{FC0F669E-4D0E-4B79-8C4D-98907538CB32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.TicketListing", "Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj", "{FC0F669E-4D0E-4B79-8C4D-98907538CB32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

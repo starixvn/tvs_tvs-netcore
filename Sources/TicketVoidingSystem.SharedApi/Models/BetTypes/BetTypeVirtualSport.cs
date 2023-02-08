@@ -18,6 +18,6 @@ namespace TicketVoidingSystem.SharedApi.Models.BetTypes
 
     public class BetTypesArea
     {
-        public IEnumerable<GroupBetTypeVirtualSport> Groups { get; set; }
+        public IList<GroupBetTypeVirtualSport> Groups { get; set; }
     }
 }

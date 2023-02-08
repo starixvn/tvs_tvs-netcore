@@ -14,8 +14,6 @@ namespace TicketVoidingSystem.SharedApi.Services.BetTypes
         Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria);
 
         Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
-
-        IEnumerable<SelectionTypeModel> GetSelectionTypes(GetSelectionTypesCriteria criteria);
     }
 
     public class BetTypesRepositoryImp : BetTypesRepository
@@ -59,11 +57,6 @@ namespace TicketVoidingSystem.SharedApi.Services.BetTypes
             }
 
             return betTypesInAllServers.Distinct();
-        }
-
-        public IEnumerable<SelectionTypeModel> GetSelectionTypes(GetSelectionTypesCriteria criteria)
-        {
-            return repository.Fetch<SelectionTypeModel>(criteria).ToList();
         }
     }
 }

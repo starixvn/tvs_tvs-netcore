@@ -14,9 +14,7 @@ namespace TicketVoidingSystem.SharedApi.Services.BetTypes
 
         Task<GroupBetTypesViewModel> GetGroupBetTypes(BetTypeQueryModel query);
 
-        IEnumerable<GroupBetTypeVirtualSport> GetVirtualSports();
-
-        IEnumerable<SelectionTypeModel> GetSelectionTypes(BetTypeQueryModel query);
+        IList<GroupBetTypeVirtualSport> GetVirtualSports();
     }
 
     public class BetTypesServiceImp : BetTypesService
@@ -65,20 +63,10 @@ namespace TicketVoidingSystem.SharedApi.Services.BetTypes
             return await repository.GetBetTypesHaveTickets(query);
         }
 
-        public IEnumerable<GroupBetTypeVirtualSport> GetVirtualSports()
+        public IList<GroupBetTypeVirtualSport> GetVirtualSports()
         {
             const string jsonPath = "App_Data/Data/VirtualSportsBetTypes.json";
             return Helper.DeserializeJsonFileToObject<BetTypesArea>(jsonPath).Groups;
-        }
-
-        public IEnumerable<SelectionTypeModel> GetSelectionTypes(BetTypeQueryModel query)
-        {
-            var criteria = new GetSelectionTypesCriteria
-            {
-                MatchId = query.MatchId
-            };
-
-            return repository.GetSelectionTypes(criteria);
         }
     }
 }

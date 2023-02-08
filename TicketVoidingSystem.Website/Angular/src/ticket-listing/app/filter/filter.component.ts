@@ -2,6 +2,8 @@
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as momenttimezone from 'moment-timezone';
+import { BlockUiService } from 'src/utility/components/block-ui/block-ui.service';
+import { CommonService } from 'src/utility/services/common.service';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
@@ -71,7 +73,12 @@ export class FilterComponent implements OnInit {
     SportTypeConst.VOLEYBALL
   ];
 
-  constructor(private readonly element: ElementRef, private readonly appService: AppService) {
+  constructor(
+    private readonly element: ElementRef,
+    private readonly appService: AppService,
+    private readonly commonService: CommonService,
+    private readonly blockUIService: BlockUiService
+    ) {
     this.tooltip.element = this.element;
   }
 
@@ -169,14 +176,18 @@ export class FilterComponent implements OnInit {
       mode: ModeType.TICKET_LISTING,
       matchId: 0
     };
-    const data = await this.appService.getBetTypes(query);
+    this.blockUIService.start();
+    const data = await this.commonService.getBetTypes(query);
+    this.blockUIService.stop();
     if (data.result.errorCode === 0) {
       this.commonBetTypes = new BetTypesModel(data.bettypes, true);
     }
   }
 
   async getBetTypesVS() {
-    const data = await this.appService.getBetTypesVirtualSports();
+    this.blockUIService.start();
+    const data = await this.commonService.getBetTypesVirtualSports();
+    this.blockUIService.stop();
     this.renderBetTypes(data);
   }
 
@@ -318,7 +329,9 @@ export class FilterComponent implements OnInit {
   }
 
   async handleGroupBetTypesOfSportBook(query: GetBetTypesQuery) {
-    const data = await this.appService.getGroupBetTypes(query);
+    this.blockUIService.start();
+    const data = await this.commonService.getGroupBetTypes(query);
+    this.blockUIService.stop();
     if (data.result.errorCode === 0) {
       this.checkMatch = '';
       if (data.groupBetTypes.length === 0) {
