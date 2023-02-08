@@ -4,6 +4,6 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
-  "files": ["mark-tickets/main.ts", "polyfills.ts"],
+  "files": ["ab-exception-list/main.ts", "polyfills.ts"],
   "exclude": ["test.ts", "**/*.spec.ts"]
 }

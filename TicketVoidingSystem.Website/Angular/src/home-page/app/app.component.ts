@@ -15,14 +15,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private readonly signalRService: SignalRService,
-    private readonly abExceptionListStore: AppStore,
+    private readonly homePageStore: AppStore,
   ) { }
 
   async ngOnInit() {
-    this.blockingUiSubscription = this.abExceptionListStore.blockingUiStatus.subscribe(status => {
+    this.blockingUiSubscription = this.homePageStore.blockingUiStatus.subscribe(status => {
       this.isBlockingUi = status;
     });
-    this.abExceptionListStore.changeBlockingUiStatus(true);
+    this.homePageStore.changeBlockingUiStatus(true);
     await this.signalRService.initializeConnection();
   }
 
@@ -31,6 +31,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.abExceptionListStore.changeBlockingUiStatus(false);
+    this.homePageStore.changeBlockingUiStatus(false);
   }
 }
