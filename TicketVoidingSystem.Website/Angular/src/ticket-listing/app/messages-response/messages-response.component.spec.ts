@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { MessagesResponseComponent } from './messages-response.component';
 import { MessagesResponse } from './messages-response.model';
 

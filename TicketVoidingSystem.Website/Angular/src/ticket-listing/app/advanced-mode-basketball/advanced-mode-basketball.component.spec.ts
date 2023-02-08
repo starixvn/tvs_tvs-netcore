@@ -1,9 +1,9 @@
 import { NgModule, SimpleChange } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { MultipleSelectComponent } from '../../../utility/modules/advanced-mode/multiple-selection/multiple-select.component';
-import { MultipleSelection } from '../../../utility/modules/multiple-selection/multiple-selection';
-import { Tooltip } from '../../../utility/modules/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
+import { MultipleSelectComponent } from '../../../utility/components/advanced-mode/multiple-selection/multiple-select.component';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { AdvancedModeBasketballComponent } from './advanced-mode-basketball.component';
 
 describe('AdvancedModeBasketballComponent', () => {
@@ -54,7 +54,7 @@ describe('AdvancedModeBasketballComponent', () => {
       instance.ngOnChanges(changes);
       expect(instance.renderSelection).toHaveBeenCalled();
       expect(instance.isShow).toBe(item.expectedResult);
-    };
+    }
   });
 
   it('Is Basketball', async () => {

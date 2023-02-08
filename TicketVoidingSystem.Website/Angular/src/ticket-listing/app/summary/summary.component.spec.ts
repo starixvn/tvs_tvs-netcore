@@ -230,13 +230,13 @@ describe('SummaryComponent', () => {
       instance.groupBy = x;
       Helper.fakeSummaryItem.isChecked = true;
       Helper.fakeSummaryItemByCredit.isChecked = true;
-      instance.items = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCredit]
-      instance.itemsGroupByLicensee = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCredit]
+      instance.items = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCredit];
+      instance.itemsGroupByLicensee = [Helper.fakeSummaryItem, Helper.fakeSummaryItemByCredit];
       instance.updateAffectedLicensees();
 
       // Assert
       expect(instance.affectedLicensees).toBe('12Bet');
       expect(instance.chinaViewLicensees ).toBe('12Bet');
-    })
+    });
   });
 });

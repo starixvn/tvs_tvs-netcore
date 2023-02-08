@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
+import { PagingComponent } from 'src/utility/components/paging/paging/paging.component';
+import { PagingModel } from 'src/utility/components/paging/paging/paging.model';
+import { PipeModule } from 'src/utility/pipes/pipe.module';
 import { Product } from '../../../utility/constants/config';
-import { PagingComponent } from '../../../utility/modules/paging/paging/paging.component';
-import { PagingModel } from '../../../utility/modules/paging/paging/paging.model';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
 import { SummaryItem } from '../summary/summary.model';
 import { TicketsModel } from './ticket.model';
 import { TicketsComponent } from './tickets.component';
@@ -33,13 +33,14 @@ class Helper {
         transDate: '08/26/2020 10:37:00 PM',
         winLoss: ''
       }
-    ]
+    ];
     return model;
   }
   static getFakeTicketsModelNoData(): TicketsModel {
     const model = new TicketsModel();
     model.title = 'NoData';
-    model.tickets = []
+    model.tickets = [];
+
     return model;
   }
 }

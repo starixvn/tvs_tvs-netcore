@@ -1,48 +1,48 @@
 @mixin select-style {
-    width: 100%;
-    margin-bottom: 0px;
-    padding: 1px 2px;
-    height: 22px;
-    border-radius: 0;
+  width: 100%;
+  margin-bottom: 0px;
+  padding: 1px 2px;
+  height: 22px;
+  border-radius: 0;
 }
 
 .advanced-mode {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 
-    .fieldset-collapse {
-        height: 0px;
-        border-bottom: none;
-        border-left: none;
-        border-right: none;
+  .fieldset-collapse {
+    height: 0px;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  fieldset {
+    legend {
+      font-style: italic;
+      cursor: pointer;
     }
 
-    fieldset {
-        legend {
-            font-style: italic;
-            cursor: pointer;
+    .content {
+      display: flex;
+      justify-content: flex-start;
+
+      label {
+        margin-right: 20px;
+      }
+
+      select {
+        width: 100px;
+      }
+
+      .multiple-selection {
+        ::ng-deep button {
+          width: 100%;
+          margin-bottom: 0px;
+          padding: 1px 2px;
+          height: 22px;
+          border-radius: 0;
         }
-
-        .content {
-            display: flex;
-            justify-content: flex-start;
-
-            label {
-                margin-right: 20px;
-            }
-
-            select {
-                width: 100px;
-            }
-
-            .multiple-selection {
-                ::ng-deep button {
-                    width: 100%;
-                    margin-bottom: 0px;
-                    padding: 1px 2px;
-                    height: 22px;
-                    border-radius: 0;
-                }
-            }
-        }
+      }
     }
+  }
 }

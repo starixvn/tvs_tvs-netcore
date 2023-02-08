@@ -3,13 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AdvancedModeModule } from 'src/utility/components/advanced-mode/advanced-mode.module';
-import { BlockUiService } from 'src/utility/components/block-ui/block-ui.service';
-import { DateTimeModule } from 'src/utility/components/date-time/date-time.module';
-import { ModalModule } from 'src/utility/components/modal/modal.module';
-import { PagingModule } from 'src/utility/components/paging/paging.module';
-import { ToolTipModule } from 'src/utility/components/tooltip/tooltip.module';
-import { PipeModule } from 'src/utility/pipes/pipe.module';
+import { ToastrModule } from 'ngx-toastr';
+import { AdvancedModeModule } from '../../utility/components/advanced-mode/advanced-mode.module';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { DateTimeModule } from '../../utility/components/date-time/date-time.module';
+import { ModalModule } from '../../utility/components/modal/modal.module';
+import { PagingModule } from '../../utility/components/paging/paging.module';
+import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
+import { PipeModule } from '../../utility/pipes/pipe.module';
 import { HttpService } from '../../utility/services/http.service';
 import { UtilityModule } from './../../utility/utility.module';
 import { AdvancedModeBasketballComponent } from './advanced-mode-basketball/advanced-mode-basketball.component';
@@ -40,6 +41,7 @@ import { TicketsComponent } from './tickets/tickets.component';
     PagingModule,
     PipeModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot(),
     ToolTipModule,
     UtilityModule
   ],

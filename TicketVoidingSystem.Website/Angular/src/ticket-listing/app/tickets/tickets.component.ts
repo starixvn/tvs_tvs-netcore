@@ -1,7 +1,7 @@
 ﻿import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Product } from '../../../utility/constants/config';
 import { SummaryItem } from '../summary/summary.model';
-import { PagingModel } from './../../../utility/modules/paging/paging/paging.model';
 import { TicketsModel } from './ticket.model';
 
 @Component({

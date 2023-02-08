@@ -1,4 +1,4 @@
-﻿import { PrimaryBetType } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
+﻿import { PrimaryBetType } from "../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model";
 
 export class SummaryItem {
   name: string;

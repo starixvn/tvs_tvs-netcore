@@ -1,183 +1,184 @@
 ﻿@import '../../../assets/styles/mixin.scss';
 
 @mixin setIconCheckBox() {
-    width: 20px;
-    height: 18px;
-    margin: 0 auto;
-    display: block;
-    background: url(../../../assets/images/checkBox.png) white no-repeat;
-    cursor: pointer;
+  width: 20px;
+  height: 18px;
+  margin: 0 auto;
+  display: block;
+  background: url(../../../assets/images/checkBox.png) white no-repeat;
+  cursor: pointer;
 }
 
 @mixin setTable() {
-    border-spacing: 0;
-    font-size: 0.9em;
-    width: 100%;
-    text-align: center;
+  border-spacing: 0;
+  font-size: 0.9em;
+  width: 100%;
+  text-align: center;
 }
 
 @mixin setCellTable() {
-    padding: 2px;
+  padding: 2px;
 
-    >div {
-        width: 100%;
-    }
+  >div {
+    width: 100%;
+  }
 }
 
 .tickets {
-    margin: 10px;
-    border-left: solid 1px #c5c5c5;
+  margin: 10px;
+  border-left: solid 1px #c5c5c5;
 
-    .icon-checkbox-none {
-        @include setIconCheckBox();
-        background-position: 0px -17px;
+  .icon-checkbox-none {
+    @include setIconCheckBox();
+    background-position: 0px -17px;
+  }
+
+  .icon-checkbox-any {
+    @include setIconCheckBox();
+    background-position: 0px -34px;
+  }
+
+  .icon-checkbox-all {
+    @include setIconCheckBox();
+    background-position: 0px 0px;
+  }
+
+  .li-checked {
+    background: url(../../../assets/images/icon-check.png) no-repeat right;
+  }
+
+  .icon-arrow-white-down {
+    float: right;
+    cursor: pointer;
+    margin-top: -12px;
+    width: 10px;
+    height: 5px;
+    background: url(../../../assets/images/arrow-down.png) no-repeat center;
+  }
+
+  .grid-title {
+    background: #555555;
+    background: -moz-linear-gradient(#555555, #555555);
+    border: solid 1px #989998;
+    height: 25px;
+    margin-bottom: 3px;
+    vertical-align: middle;
+    display: flex;
+    justify-content: space-between;
+
+    &-label {
+      color: #FFFFFF;
+      font-size: 0.9em;
+      font-weight: bold;
+      height: 18px;
+      padding-left: 4px;
+      padding-top: 5px;
     }
 
-    .icon-checkbox-any {
-        @include setIconCheckBox();
-        background-position: 0px -34px;
-    }
+    &-toolbox {
+      padding-right: 2px;
+      padding-top: 3px;
 
-    .icon-checkbox-all {
-        @include setIconCheckBox();
-        background-position: 0px 0px;
-    }
-
-    .li-checked {
-        background: url(../../../assets/images/icon-check.png) no-repeat right;
-    }
-
-    .icon-arrow-white-down {
-        float: right;
+      &-excel {
+        background: url(../../../assets/images/excel-icon.png) 0px -26px no-repeat;
+        border: 0 solid red;
         cursor: pointer;
-        margin-top: -12px;
-        width: 10px;
-        height: 5px;
-        background: url(../../../assets/images/arrow-down.png) no-repeat center;
+        font-size: 11px;
+        height: 17px;
+        margin: 0 2px;
+        overflow: visible;
+        padding-left: 6px;
+        padding-right: 6px;
+        width: 18px;
+
+        &:hover {
+          background: url(../../../assets/images/excel-icon.png) 0px 0px no-repeat;
+        }
+      }
+
+      &:hover {
+        -moz-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
+        -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
+      }
+    }
+  }
+
+
+  .ticket-header {
+    table {
+      @include setTable();
+      border-left: 1px solid #888888;
+
+      tr {
+        th {
+          background: #4e71bb;
+          background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+          background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+          color: #fff;
+          border: solid #c5c5c5;
+          border-width: 0 1px 1px 0;
+          padding: 10px 2px !important;
+        }
+      }
+    }
+  }
+
+  .ticket-content {
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #888888;
+    @include scroll-style();
+
+    table {
+      @include setTable();
+
+      tbody {
+        tr:nth-child(even) {
+          td {
+            background: #dde2ed;
+          }
+        }
+
+        tr:hover {
+          td {
+            background-color: #aebad4;
+          }
+        }
+      }
+
+      tr {
+        .no-data {
+          background: #fff !important;
+          color: red;
+          font-weight: bold;
+        }
+
+        td {
+          background-color: #fff;
+          border-color: #888888;
+          border-style: solid;
+          border-width: 0 1px 1px 0;
+          line-height: 18px;
+          overflow: hidden;
+          white-space: normal;
+          padding: 2px;
+
+          .betIdBorder {
+            border: 3px solid yellow;
+          }
+        }
+      }
     }
 
-    .grid-title {
-        background: #555555;
-        background: -moz-linear-gradient(#555555, #555555);
-        border: solid 1px #989998;
-        height: 25px;
-        margin-bottom: 3px;
-        vertical-align: middle;
-        display: flex;
-        justify-content: space-between;
-
-        &-label {
-            color: #FFFFFF;
-            font-size: 0.9em;
-            font-weight: bold;
-            height: 18px;
-            padding-left: 4px;
-            padding-top: 5px;
-        }
-
-        &-toolbox {
-            padding-right: 2px;
-            padding-top: 3px;
-
-            &-excel {
-                background: url(../../../assets/images/excel-icon.png) 0px -26px no-repeat;
-                border: 0 solid red;
-                cursor: pointer;
-                font-size: 11px;
-                height: 17px;
-                margin: 0 2px;
-                overflow: visible;
-                padding-left: 6px;
-                padding-right: 6px;
-                width: 18px;
-
-                &:hover {
-                    background: url(../../../assets/images/excel-icon.png) 0px 0px no-repeat;
-                }
-            }
-
-            &:hover {
-                -moz-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
-                -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
-                box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
-            }
-        }
+    input[type=checkbox] {
+      margin: 0px;
+      cursor: pointer;
     }
 
-
-    .ticket-header {
-        table {
-            @include setTable();
-            border-left: 1px solid #888888;
-
-            tr {
-                th {
-                    background: #4e71bb;
-                    background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
-                    background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
-                    color: #fff;
-                    border: solid #c5c5c5;
-                    border-width: 0 1px 1px 0;
-                    padding: 10px 2px !important;
-                }
-            }
-        }
+    input[type=checkbox][disabled] {
+      cursor: not-allowed;
     }
-
-    .ticket-content {
-        max-height: 800px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border: 1px solid #888888;
-        @include scroll-style();
-
-        table {
-            @include setTable();
-
-            tbody {
-                tr:nth-child(even) {
-                    td {
-                        background: #dde2ed;
-                    }
-                }
-
-                tr:hover {
-                    td {
-                        background-color: #aebad4;
-                    }
-                }
-            }
-
-            tr {
-                .no-data {
-                    background: #fff !important;
-                    color: red;
-                    font-weight: bold;
-                }
-
-                td {
-                    background-color: #fff;
-                    border-color: #888888;
-                    border-style: solid;
-                    border-width: 0 1px 1px 0;
-                    line-height: 18px;
-                    overflow: hidden;
-                    white-space: normal;
-                    padding: 2px;
-                    .betIdBorder {
-                        border:3px solid yellow;
-                    }
-                }      
-            }
-        }
-
-        input[type=checkbox] {
-            margin: 0px;
-            cursor: pointer;
-        }
-
-        input[type=checkbox][disabled] {
-            cursor: not-allowed;
-        }
-    }
+  }
 }

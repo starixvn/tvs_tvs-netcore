@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
+import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
+import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
+import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BetTypesVirtualSportComponent } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.component';
 import { BetTypeVirtualSport, GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
 import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
+import { DateFullTimeComponent } from '../../../utility/components/date-time/date-full-time/date-full-time.component';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { Product, SportTypeConst } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { MatchModel } from '../../../utility/models/match.model';
 import { Result } from '../../../utility/models/result';
-import { AdvancedModeComponent } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.component';
-import { GroupBetTypesComponent } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.component';
-import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
-import { DateFullTimeComponent } from '../../../utility/modules/date-time/date-full-time/date-full-time.component';
-import { Tooltip } from '../../../utility/modules/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
 import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/advanced-mode-basketball.component';
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
@@ -92,7 +92,6 @@ describe('FilterComponent', () => {
   it('#ngOnInit should call #initFilter and init from-to date with current date', async() => {
     // Arrange
     const { instance } = await shallow.render();
-    const date = new Date();
     instance.initFilter = jest.fn();
 
     // Action
