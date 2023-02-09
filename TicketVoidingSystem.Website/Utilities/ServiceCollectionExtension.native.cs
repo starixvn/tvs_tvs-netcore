@@ -37,6 +37,7 @@ using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
 using TicketVoidingSystem.MarkTickets.Controllers;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing.Controllers;
@@ -165,9 +166,9 @@ namespace TicketVoidingSystem.Website.Utilities
             BetListManager.RegisterRemotingRef(new CacheRef());
         }
 
-        public static void RegisterLetstalk(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterLetstalk(this IServiceCollection services)
         {
-            AppConfigService.Config.LetstalkServiceApi = configuration.GetSection("Letstalk:LetstalkServiceApi").Value;
+            AppConfigService.Config.LetstalkServiceApi = AppSettingService.AppSetting.LetstalkConfig.LetstalkServiceApi;
         }
 
         public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)

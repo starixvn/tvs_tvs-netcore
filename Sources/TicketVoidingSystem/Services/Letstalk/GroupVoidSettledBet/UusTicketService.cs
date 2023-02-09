@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
-using TicketVoidingSystem.Extensions;
+﻿using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 
 namespace TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
@@ -17,16 +15,10 @@ public interface UusTicketService
 public class UusTicketServiceImp : UusTicketService
 {
     private const int Currency20 = 20;
-    private readonly bool isProdEnvForLetstalk;
-
-    public UusTicketServiceImp(IConfiguration configuration)
-    {
-        isProdEnvForLetstalk = Convert.ToBoolean(configuration.GetSection("Letstalk:IsProdEnv").Value);
-    }
 
     public bool IsValidCashOut(TicketEmailModel ticket)
     {
-        if (isProdEnvForLetstalk)
+        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
         {
             return ticket.IsCashOut && ticket.Currency != Currency20;
         }
@@ -38,7 +30,7 @@ public class UusTicketServiceImp : UusTicketService
         var result = !ticket.BetTypeId.IsParlayAndBetBuilder()
                      && !ticket.IsCashOut
                      && ticket.Status.IsSettled();
-        if (isProdEnvForLetstalk)
+        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
         {
             return result && ticket.Currency != Currency20;
         }
@@ -49,7 +41,7 @@ public class UusTicketServiceImp : UusTicketService
     {
         var result = isCheckMainParlay ? ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsSettled()
             : ticket.IsMixParlay && ticket.SubStatus.IsSettled();
-        if (isProdEnvForLetstalk)
+        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
         {
             return result && ticket.Currency != Currency20;
         }

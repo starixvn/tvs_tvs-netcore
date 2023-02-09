@@ -1,5 +1,4 @@
 ﻿using Fanex.Data.Repository;
-using Microsoft.Extensions.Configuration;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Extensions;
@@ -15,12 +14,10 @@ public interface InsertToAmendmentTableStage
 public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
 {
     private readonly IDynamicRepository repository;
-    private readonly IConfiguration configuration;
     private readonly LoggingService loggingService;
 
-    public InsertToAmendmentTableStageImp(IConfiguration configuration, IDynamicRepository repository, LoggingService loggingService)
+    public InsertToAmendmentTableStageImp(IDynamicRepository repository, LoggingService loggingService)
     {
-        this.configuration = configuration;
         this.repository = repository;
         this.loggingService = loggingService;
     }
@@ -28,7 +25,7 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
     public async Task<bool> Execute(IEnumerable<ExcelOicModel> tickets, SendFileQuery sendFileQuery, string sessionId)
     {
         var isInsertMainDbSuccessful = await InsertToMainDb(tickets, sendFileQuery, sessionId);
-        var env = configuration["EnvironmentName"];
+        var env = AppSettingService.AppSetting.EnvironmentName;
         if (env.Equals("UAT") || env.Equals("PRO") || env.Equals("PROAWS"))
         {
             var isInsertBackupDbSuccessful = await InsertToBackupDb(tickets, sendFileQuery, sessionId);

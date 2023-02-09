@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Core.Models;
-using Microsoft.Extensions.Configuration;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
@@ -24,14 +23,11 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
 {
     private readonly GroupVoidSettledBetService groupVoidSettledBetService;
     private readonly GroupTicketListingService groupTicketListingService;
-    private readonly IConfiguration configuration;
 
-    public NotificationLetstalkServiceImp(GroupVoidSettledBetService groupVoidSettledBetService, GroupTicketListingService groupTicketListingService,
-        IConfiguration configuration)
+    public NotificationLetstalkServiceImp(GroupVoidSettledBetService groupVoidSettledBetService, GroupTicketListingService groupTicketListingService)
     {
         this.groupVoidSettledBetService = groupVoidSettledBetService;
         this.groupTicketListingService = groupTicketListingService;
-        this.configuration = configuration;
     }
 
     public async Task<IEnumerable<Result>> SendToGroupVoidSettledBets(TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
@@ -40,7 +36,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         {
             TargetName = "Ticket-Voiding-System",
             Subject = "Void Settled Bet Notification",
-            Group = configuration.GetSection("Letstalk:VoidSettledBets").Value
+            Group = AppSettingService.AppSetting.LetstalkConfig.VoidSettledBets
         };
 
         return await groupVoidSettledBetService.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
@@ -52,7 +48,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         {
             TargetName = "Ticket-Voiding-System",
             Subject = "Result Amendment Notification - Credit",
-            Group = configuration.GetSection("Letstalk:TicketListingAlert").Value
+            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert
         };
 
         return await groupTicketListingService.SendMessage(letstalkModel, content, attachment);
