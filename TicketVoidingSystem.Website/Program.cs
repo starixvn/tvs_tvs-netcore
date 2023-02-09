@@ -7,10 +7,8 @@ using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Signin.AspNetCore.Attribute;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.SignalR;
@@ -19,11 +17,6 @@ using TicketVoidingSystem.Web.JsonConverter;
 using TicketVoidingSystem.Website.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options =>
-{
-    const int port = 5000;
-    options.ListenAnyIP(port); // to listen for incoming http connection on port 5000
-});
 
 // Add services to the container.
 builder.Services.LoadAppSetting(builder.Configuration);
@@ -40,8 +33,6 @@ builder.Services.RegisterMediatR();
 builder.Services.RegisterAutoMapper();
 builder.Services.RegisterSignalR();
 builder.Services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
-builder.Services.Configure<KestrelServerOptions>(options => { options.AllowSynchronousIO = true; });
-builder.Services.Configure<IISServerOptions>(options => { options.AllowSynchronousIO = true; });
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews(options =>
 {
@@ -78,7 +69,6 @@ void WriteLogWhenApplicationIsStopping(object title)
 app.Lifetime.ApplicationStopping.Register(WriteLogWhenApplicationIsStopping, @"ApplicationStopping was called");
 app.Lifetime.ApplicationStopped.Register(WriteLogWhenApplicationIsStopping, @"ApplicationStopped was called");
 
-
 app.Use((context, next) =>
 {
     context.Request.PathBase = new PathString(app.Configuration.GetSection("PathBase").Value);
@@ -100,24 +90,8 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapHub<NotificationHub>("/SignalR/NotificationHub");
 
-app.Lifetime.ApplicationStopping.Register(() =>
-{
-    using var currentProcess = Process.GetCurrentProcess();
-    var stringBuilder = new StringBuilder();
-
-    stringBuilder.AppendFormat("GC.GetTotalMemory(false): {0:n0}\n", GC.GetTotalMemory(false));
-    stringBuilder.AppendFormat("VirtualMemorySize64 is: {0:n0}\n", currentProcess.VirtualMemorySize64);
-    stringBuilder.AppendFormat("PrivateMemorySize64 is: {0:n0}\n", currentProcess.PrivateMemorySize64);
-    stringBuilder.AppendFormat("WorkingSet64 is: {0:n0}\n", currentProcess.WorkingSet64);
-    stringBuilder.AppendFormat("PagedMemorySize64 is: {0:n0}\n", currentProcess.PagedMemorySize64);
-    stringBuilder.AppendFormat("NonpagedSystemMemorySize64 is: {0:n0}\n", currentProcess.NonpagedSystemMemorySize64);
-    stringBuilder.AppendFormat("NonpagedSystemMemorySize64 is: {0:n0}\n", currentProcess.NonpagedSystemMemorySize64);
-    stringBuilder.AppendLine($@"ThreadPool.PendingWorkItemCount: {ThreadPool.PendingWorkItemCount}");
-    stringBuilder.AppendLine($@"Threads.Count: {currentProcess.Threads.Count}");
-
-    Console.WriteLine(stringBuilder.ToString());
-
-    Console.WriteLine(@"Application is forced to shutdown");
-});
-
+#if DEBUG
 app.Run();
+#endif
+
+await app.RunAsync("http://0.0.0.0:5000");
