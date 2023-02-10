@@ -44,7 +44,7 @@ builder.Services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDateTimeJsonConverter());
 });
 
-//
+// Build app
 var app = builder.Build();
 
 void WriteLogWhenApplicationIsStopping(object title)
@@ -92,6 +92,6 @@ app.MapHub<NotificationHub>("/SignalR/NotificationHub");
 
 #if DEBUG
 app.Run();
-#endif
-
+#else
 await app.RunAsync("http://0.0.0.0:5000");
+#endif
