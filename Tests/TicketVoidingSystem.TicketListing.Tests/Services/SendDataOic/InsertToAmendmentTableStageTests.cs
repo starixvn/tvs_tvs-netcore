@@ -111,9 +111,10 @@ public class InsertToAmendmentTableStageTests
         };
         var query = new SendFileQuery { MatchId = 900001 };
         var repository = Substitute.For<IDynamicRepository>();
-
+        var configuration = new ConfigurationManager();
         var loggingService = Substitute.For<LoggingService>();
-
+        configuration["EnvironmentName"] = "UAT";
+        AppSettingService.InitSetting(configuration);
         repository.ExecuteAsync(Arg.Any<SendDataOicCriteria>()).ReturnsForAnyArgs(1);
         repository.When(x => x.ExecuteAsync(Arg.Any<SendDataOicBackupCriteria>()))
             .Do(y => throw exception);
