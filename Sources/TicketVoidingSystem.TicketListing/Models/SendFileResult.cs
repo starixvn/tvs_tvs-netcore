@@ -1,11 +1,10 @@
 ﻿using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.TicketListing.Models
-{
-    public class SendFileResult
-    {
-        public string FileName { get; set; }
+namespace TicketVoidingSystem.TicketListing.Models;
 
-        public Result Result { get; set; }
-    }
+public class SendFileResult
+{
+    public string FileName { get; set; }
+
+    public Result Result { get; set; }
 }

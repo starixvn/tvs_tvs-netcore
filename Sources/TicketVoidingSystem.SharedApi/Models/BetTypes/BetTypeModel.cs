@@ -1,15 +1,14 @@
-﻿namespace TicketVoidingSystem.SharedApi.Models.BetTypes
+﻿namespace TicketVoidingSystem.SharedApi.Models.BetTypes;
+
+public class BetTypeModel
 {
-    public class BetTypeModel
-    {
-        public string Id { get; set; }
+    public string Id { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public bool LiveIndicator { get; set; }
+    public bool LiveIndicator { get; set; }
 
-        public int Type { get; set; }
+    public int Type { get; set; }
 
-        public string GroupName { get; set; }
-    }
+    public string GroupName { get; set; }
 }

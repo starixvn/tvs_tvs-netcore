@@ -7,36 +7,35 @@ using TicketVoidingSystem.MarkTickets.Services.UserLogs;
 using TicketVoidingSystem.MarkTickets.ViewModels;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers.UserLogs
+namespace TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
+
+public class GetUserLogsRequest : GetUserLogsQuery, IRequest<GetUserLogsViewModel>
 {
-    public class GetUserLogsRequest : GetUserLogsQuery, IRequest<GetUserLogsViewModel>
+}
+
+public class GetUserLogsHandler : IRequestHandler<GetUserLogsRequest, GetUserLogsViewModel>
+{
+    private readonly UserLogsService userLogsService;
+    private readonly PagingService pagingService;
+
+    public GetUserLogsHandler(
+        UserLogsService userLogsService,
+        PagingService pagingService)
     {
+        this.userLogsService = userLogsService;
+        this.pagingService = pagingService;
     }
 
-    public class GetUserLogsHandler : IRequestHandler<GetUserLogsRequest, GetUserLogsViewModel>
+    public async Task<GetUserLogsViewModel> Handle(GetUserLogsRequest message, CancellationToken cancellationToken)
     {
-        private readonly UserLogsService userLogsService;
-        private readonly PagingService pagingService;
+        var model = new GetUserLogsViewModel();
 
-        public GetUserLogsHandler(
-            UserLogsService userLogsService,
-            PagingService pagingService)
-        {
-            this.userLogsService = userLogsService;
-            this.pagingService = pagingService;
-        }
+        var originalLogs = await userLogsService.GetUserLogs(message);
+        model.TotalLogs = originalLogs.Count();
 
-        public async Task<GetUserLogsViewModel> Handle(GetUserLogsRequest message, CancellationToken cancellationToken)
-        {
-            var model = new GetUserLogsViewModel();
+        var pagingLogs = pagingService.Paging(originalLogs, message.PageIndex, message.PageSize);
+        model.LogList = await userLogsService.CreateUserLogViewModels(pagingLogs);
 
-            var originalLogs = await userLogsService.GetUserLogs(message);
-            model.TotalLogs = originalLogs.Count();
-
-            var pagingLogs = pagingService.Paging(originalLogs, message.PageIndex, message.PageSize);
-            model.LogList = await userLogsService.CreateUserLogViewModels(pagingLogs);
-
-            return model;
-        }
+        return model;
     }
 }

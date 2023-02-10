@@ -1,7 +1,6 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Models
+﻿namespace TicketVoidingSystem.MarkTickets.Models;
+
+public class TicketInfo
 {
-    public class TicketInfo
-    {
-        public string TransId { get; set; }
-    }
+    public string TransId { get; set; }
 }

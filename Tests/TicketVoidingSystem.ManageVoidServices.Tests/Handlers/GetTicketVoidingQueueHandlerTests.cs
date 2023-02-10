@@ -8,28 +8,27 @@ using TicketVoidingSystem.ManageVoidServices.Models;
 using TicketVoidingSystem.ManageVoidServices.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers
+namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers;
+
+public class GetTicketVoidingQueueHandlerTests
 {
-    public class GetTicketVoidingQueueHandlerTests
+    [Fact]
+    public async Task Handle_HasRequest_ReturnExpected()
     {
-        [Fact]
-        public async Task Handle_HasRequest_ReturnExpected()
-        {
-            // Arrange
-            var model = new TicketVoidingQueueModel();
-            var expected = new List<TicketVoidingQueueModel> { model };
-            var request = new GetTicketVoidingQueueRequest();
-            var queueService = Substitute.For<TicketVoidingQueueService>();
-            queueService.GetQueueInAllServers(1).ReturnsForAnyArgs(expected);
-            var handler = new GetTicketVoidingQueueHandler(queueService);
+        // Arrange
+        var model = new TicketVoidingQueueModel();
+        var expected = new List<TicketVoidingQueueModel> { model };
+        var request = new GetTicketVoidingQueueRequest();
+        var queueService = Substitute.For<TicketVoidingQueueService>();
+        queueService.GetQueueInAllServers(1).ReturnsForAnyArgs(expected);
+        var handler = new GetTicketVoidingQueueHandler(queueService);
 
-            // Act
-            var actual = await handler.Handle(request, CancellationToken.None);
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            await queueService.Received(1)
-                .GetQueueInAllServers(Arg.Compat.Is<int>(x => x == request.VoidingHistoryId));
-            Assert.Equal(expected.Count, actual.Count());
-        }
+        // Assert
+        await queueService.Received(1)
+            .GetQueueInAllServers(Arg.Compat.Is<int>(x => x == request.VoidingHistoryId));
+        Assert.Equal(expected.Count, actual.Count());
     }
 }

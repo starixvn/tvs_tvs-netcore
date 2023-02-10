@@ -9,58 +9,57 @@ using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets
+namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
+
+public interface MarkAllTicketsService
 {
-    public interface MarkAllTicketsService
+    Task<Result> Execute(MarkAllTicketsQuery query);
+}
+
+public class MarkAllTicketsServiceImp : MarkAllTicketsService
+{
+    private readonly IDynamicRepository repository;
+    private readonly SessionService session;
+
+    public MarkAllTicketsServiceImp(IDynamicRepository repository, SessionService session)
     {
-        Task<Result> Execute(MarkAllTicketsQuery query);
+        this.repository = repository;
+        this.session = session;
     }
 
-    public class MarkAllTicketsServiceImp : MarkAllTicketsService
+    public async Task<Result> Execute(MarkAllTicketsQuery query)
     {
-        private readonly IDynamicRepository repository;
-        private readonly SessionService session;
-
-        public MarkAllTicketsServiceImp(IDynamicRepository repository, SessionService session)
+        var resultInAllServers = new List<Result>();
+        var criteria = new MarkAllTicketsCommand
         {
-            this.repository = repository;
-            this.session = session;
+            Matches = query.Matches.ToMarkedMatchXml(),
+            UserId = session.UserId,
+            Ip = session.GetClientIp()
+        };
+
+        foreach (var server in SiteDbGroupConstant.ServerList)
+        {
+            criteria.SiteDbGroupId = server.Id;
+            var results = await repository.FetchAsync<Result>(criteria);
+
+            resultInAllServers.AddRange(results);
         }
 
-        public async Task<Result> Execute(MarkAllTicketsQuery query)
+        return CombineResult(resultInAllServers);
+    }
+
+    private static Result CombineResult(in IEnumerable<Result> resultInAllServers)
+    {
+        var firstErrorResult = resultInAllServers.FirstOrDefault(x => !x.IsSuccessful);
+        if (firstErrorResult == null)
         {
-            var resultInAllServers = new List<Result>();
-            var criteria = new MarkAllTicketsCommand
-            {
-                Matches = query.Matches.ToMarkedMatchXml(),
-                UserId = session.UserId,
-                Ip = session.GetClientIp()
-            };
-
-            foreach (var server in SiteDbGroupConstant.ServerList)
-            {
-                criteria.SiteDbGroupId = server.Id;
-                var results = await repository.FetchAsync<Result>(criteria);
-
-                resultInAllServers.AddRange(results);
-            }
-
-            return CombineResult(resultInAllServers);
+            return new Result { ErrorCode = 0, ErrorMsg = "Unmark tickets successfully!" };
         }
 
-        private static Result CombineResult(in IEnumerable<Result> resultInAllServers)
+        return new Result
         {
-            var firstErrorResult = resultInAllServers.FirstOrDefault(x => !x.IsSuccessful);
-            if (firstErrorResult == null)
-            {
-                return new Result { ErrorCode = 0, ErrorMsg = "Unmark tickets successfully!" };
-            }
-
-            return new Result
-            {
-                ErrorCode = firstErrorResult.ErrorCode,
-                ErrorMsg = firstErrorResult.ErrorMsg
-            };
-        }
+            ErrorCode = firstErrorResult.ErrorCode,
+            ErrorMsg = firstErrorResult.ErrorMsg
+        };
     }
 }

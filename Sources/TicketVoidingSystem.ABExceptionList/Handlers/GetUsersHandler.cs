@@ -5,30 +5,29 @@ using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Models;
 using TicketVoidingSystem.ABExceptionList.Services;
 
-namespace TicketVoidingSystem.ABExceptionList.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+public class GetUsersRequest : GetUsersCriteria, IRequest<UserViewModel>
 {
-    public class GetUsersRequest : GetUsersCriteria, IRequest<UserViewModel>
+}
+
+public class GetUsersHandler : IRequestHandler<GetUsersRequest, UserViewModel>
+{
+    private readonly GetUsersService getUsersService;
+
+    public GetUsersHandler(GetUsersService getUsersService)
     {
+        this.getUsersService = getUsersService;
     }
 
-    public class GetUsersHandler : IRequestHandler<GetUsersRequest, UserViewModel>
+    public async Task<UserViewModel> Handle(GetUsersRequest request, CancellationToken cancellationToken)
     {
-        private readonly GetUsersService getUsersService;
-
-        public GetUsersHandler(GetUsersService getUsersService)
+        var viewModel = new UserViewModel
         {
-            this.getUsersService = getUsersService;
-        }
+            Users = await getUsersService.GetUsers(request),
+            InvalidUsername = request.InvalidUsername
+        };
 
-        public async Task<UserViewModel> Handle(GetUsersRequest request, CancellationToken cancellationToken)
-        {
-            var viewModel = new UserViewModel
-            {
-                Users = await getUsersService.GetUsers(request),
-                InvalidUsername = request.InvalidUsername
-            };
-
-            return viewModel;
-        }
+        return viewModel;
     }
 }

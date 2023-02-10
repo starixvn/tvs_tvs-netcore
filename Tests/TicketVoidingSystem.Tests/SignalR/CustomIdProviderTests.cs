@@ -5,25 +5,24 @@ using NSubstitute;
 using TicketVoidingSystem.SignalR;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.SignalR
+namespace TicketVoidingSystem.Tests.SignalR;
+
+public class CustomIdProviderTests
 {
-    public class CustomIdProviderTests
+    [Fact]
+    public void GetUserId_HasConnection_ReturnName()
     {
-        [Fact]
-        public void GetUserId_HasConnection_ReturnName()
-        {
-            // Arrange
-            var connectionContext = Substitute.For<ConnectionContext>();
-            var contextOptions = Substitute.For<HubConnectionContextOptions>();
-            var loggerFactory = Substitute.For<ILoggerFactory>();
-            var connection = new HubConnectionContext(connectionContext, contextOptions, loggerFactory);
-            var provider = new CustomIdProvider();
+        // Arrange
+        var connectionContext = Substitute.For<ConnectionContext>();
+        var contextOptions = Substitute.For<HubConnectionContextOptions>();
+        var loggerFactory = Substitute.For<ILoggerFactory>();
+        var connection = new HubConnectionContext(connectionContext, contextOptions, loggerFactory);
+        var provider = new CustomIdProvider();
 
-            // Act
-            var actual = provider.GetUserId(connection);
+        // Act
+        var actual = provider.GetUserId(connection);
 
-            // Assert
-            Assert.Equal("", actual);
-        }
+        // Assert
+        Assert.Equal("", actual);
     }
 }

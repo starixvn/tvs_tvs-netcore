@@ -9,32 +9,31 @@ using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.ABExceptionList.Models;
 using Xunit;
 
-namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
+
+public class GetSubTypeHandlerTests
 {
-    public class GetSubTypeHandlerTests
+    [Fact()]
+    public async Task Handler_RepositoryHasCalled_ReturnTrue()
     {
-        [Fact()]
-        public async Task Handler_RepositoryHasCalled_ReturnTrue()
+        // Arrange
+        var criteria = new GetSubTypeCriteria();
+        criteria.GetSettingKey();
+        criteria.IsValid();
+        var request = new GetSubTypeRequest();
+        var subTypes = new List<AbExceptionSubTypeViewModel>
         {
-            // Arrange
-            var criteria = new GetSubTypeCriteria();
-            criteria.GetSettingKey();
-            criteria.IsValid();
-            var request = new GetSubTypeRequest();
-            var subTypes = new List<AbExceptionSubTypeViewModel>
-            {
-                new() {SubIssueTypeIds = "", SubIssueTypeName = ""}
-            };
-            var repository = Substitute.For<IDynamicRepository>();
-            repository.FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(subTypes);
-            var handler = new GetSubTypeHandler(repository);
+            new() {SubIssueTypeIds = "", SubIssueTypeName = ""}
+        };
+        var repository = Substitute.For<IDynamicRepository>();
+        repository.FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(subTypes);
+        var handler = new GetSubTypeHandler(repository);
 
-            // Act
-            var actualResult = await handler.Handle(request, default);
+        // Act
+        var actualResult = await handler.Handle(request, default);
 
-            // Assert
-            await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>());
-            Assert.Equal(subTypes.Count, actualResult.Count());
-        }
+        // Assert
+        await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>());
+        Assert.Equal(subTypes.Count, actualResult.Count());
     }
 }

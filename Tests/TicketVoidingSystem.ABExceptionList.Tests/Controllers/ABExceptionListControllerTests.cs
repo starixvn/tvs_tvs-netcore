@@ -8,114 +8,113 @@ using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.ABExceptionList.Models;
 using Xunit;
 
-namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers
+namespace TicketVoidingSystem.ABExceptionList.Tests.Controllers;
+
+public class ABExceptionListControllerTests
 {
-    public class ABExceptionListControllerTests
+    [Fact]
+    public async Task CheckUsernames_HasRequest_CallMediatorRequest()
     {
-        [Fact]
-        public async Task CheckUsernames_HasRequest_CallMediatorRequest()
-        {
-            // Arrange
-            var request = new CheckUsernamesRequest();
-            var mediator = Substitute.For<IMediator>();
-            var controller = new ABExceptionListController(mediator);
+        // Arrange
+        var request = new CheckUsernamesRequest();
+        var mediator = Substitute.For<IMediator>();
+        var controller = new ABExceptionListController(mediator);
 
-            // Act
-            await controller.CheckUsernames(request);
+        // Act
+        await controller.CheckUsernames(request);
 
-            // Assert
-            await mediator.Received(1).Send(request);
-        }
+        // Assert
+        await mediator.Received(1).Send(request);
+    }
 
-        [Fact]
-        public async Task AddUsers_HasRequest_CallMediatorRequest()
-        {
-            // Arrange
-            var request = new AddUsersRequest();
-            var mediator = Substitute.For<IMediator>();
-            var controller = new ABExceptionListController(mediator);
+    [Fact]
+    public async Task AddUsers_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var request = new AddUsersRequest();
+        var mediator = Substitute.For<IMediator>();
+        var controller = new ABExceptionListController(mediator);
 
-            // Act
-            await controller.AddUsers(request);
+        // Act
+        await controller.AddUsers(request);
 
-            // Assert
-            await mediator.Received(1).Send(request);
-        }
+        // Assert
+        await mediator.Received(1).Send(request);
+    }
 
-        [Fact]
-        public async Task RemoveUsers_HasRequest_CallMediatorRequest()
-        {
-            // Arrange
-            var request = new RemoveUsersRequest();
-            var mediator = Substitute.For<IMediator>();
-            var controller = new ABExceptionListController(mediator);
+    [Fact]
+    public async Task RemoveUsers_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var request = new RemoveUsersRequest();
+        var mediator = Substitute.For<IMediator>();
+        var controller = new ABExceptionListController(mediator);
 
-            // Act
-            await controller.RemoveUsers(request);
+        // Act
+        await controller.RemoveUsers(request);
 
-            // Assert
-            await mediator.Received(1).Send(request);
-        }
+        // Assert
+        await mediator.Received(1).Send(request);
+    }
 
-        [Fact]
-        public async Task GetUsers_HasRequest_CallMediatorRequest()
-        {
-            // Arrange
-            var request = new GetUsersRequest();
-            var mediator = Substitute.For<IMediator>();
-            var controller = new ABExceptionListController(mediator);
+    [Fact]
+    public async Task GetUsers_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var request = new GetUsersRequest();
+        var mediator = Substitute.For<IMediator>();
+        var controller = new ABExceptionListController(mediator);
 
-            // Act
-            await controller.GetUsers(request);
+        // Act
+        await controller.GetUsers(request);
 
-            // Assert
-            await mediator.Received(1).Send(request);
-        }
+        // Assert
+        await mediator.Received(1).Send(request);
+    }
 
-        [Fact]
-        public async Task GetPermission_HasRequest_CallMediatorRequest()
-        {            // Arrange
-            var permission = new PermissionABExceptionList();
-            var mediator = Substitute.For<IMediator>();
-            mediator.Send(Arg.Compat.Any<GetPermissionRequest>()).ReturnsForAnyArgs(permission);
-            var controller = new ABExceptionListController(mediator);
+    [Fact]
+    public async Task GetPermission_HasRequest_CallMediatorRequest()
+    {            // Arrange
+        var permission = new PermissionABExceptionList();
+        var mediator = Substitute.For<IMediator>();
+        mediator.Send(Arg.Compat.Any<GetPermissionRequest>()).ReturnsForAnyArgs(permission);
+        var controller = new ABExceptionListController(mediator);
 
-            // Act
-            await controller.GetPermission();
+        // Act
+        await controller.GetPermission();
 
-            // Assert
-            await mediator.Received(1).Send(Arg.Compat.Any<GetPermissionRequest>());
-        }
+        // Assert
+        await mediator.Received(1).Send(Arg.Compat.Any<GetPermissionRequest>());
+    }
 
-        [Fact]
-        public async Task GetSubType_HasRequest_CallMediatorRequest()
-        {
-            // Arrange
-            var subTypes = new List<AbExceptionSubTypeViewModel>();
-            var mediator = Substitute.For<IMediator>();
-            mediator.Send(Arg.Compat.Any<GetSubTypeRequest>()).ReturnsForAnyArgs(subTypes);
-            var controller = new ABExceptionListController(mediator);
+    [Fact]
+    public async Task GetSubType_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var subTypes = new List<AbExceptionSubTypeViewModel>();
+        var mediator = Substitute.For<IMediator>();
+        mediator.Send(Arg.Compat.Any<GetSubTypeRequest>()).ReturnsForAnyArgs(subTypes);
+        var controller = new ABExceptionListController(mediator);
 
-            // Act
-            await controller.GetSubType();
+        // Act
+        await controller.GetSubType();
 
-            // Assert
-            await mediator.Received(1).Send(Arg.Compat.Any<GetSubTypeRequest>());
-        }
+        // Assert
+        await mediator.Received(1).Send(Arg.Compat.Any<GetSubTypeRequest>());
+    }
 
-        [Fact]
-        public async Task GetSites_WhenCalled_ReturnJsonData()
-        {
-            var models = new List<GroupLicenseeSiteViewModel> { new() { GroupName = "credit" } };
+    [Fact]
+    public async Task GetSites_WhenCalled_ReturnJsonData()
+    {
+        var models = new List<GroupLicenseeSiteViewModel> { new() { GroupName = "credit" } };
 
-            var mediator = Substitute.For<IMediator>();
-            mediator.Send(Arg.Compat.Any<GetSitesRequest>()).ReturnsForAnyArgs(models);
-            var controller = new ABExceptionListController(mediator);
+        var mediator = Substitute.For<IMediator>();
+        mediator.Send(Arg.Compat.Any<GetSitesRequest>()).ReturnsForAnyArgs(models);
+        var controller = new ABExceptionListController(mediator);
 
-            var okObjectResult = await controller.GetSites() as OkObjectResult;
-            var actual = okObjectResult?.Value as List<GroupLicenseeSiteViewModel>;
-            await mediator.Received(1).Send(Arg.Compat.Any<GetSitesRequest>());
-            Assert.Equal(models, actual);
-        }
+        var okObjectResult = await controller.GetSites() as OkObjectResult;
+        var actual = okObjectResult?.Value as List<GroupLicenseeSiteViewModel>;
+        await mediator.Received(1).Send(Arg.Compat.Any<GetSitesRequest>());
+        Assert.Equal(models, actual);
     }
 }

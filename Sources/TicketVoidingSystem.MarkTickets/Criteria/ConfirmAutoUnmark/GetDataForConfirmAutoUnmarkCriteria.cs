@@ -1,13 +1,12 @@
 ﻿using Fanex.Data.Repository;
 
-namespace TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark
+namespace TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
+
+public class GetDataForConfirmAutoUnmarkCriteria : CriteriaBase
 {
-    public class GetDataForConfirmAutoUnmarkCriteria : CriteriaBase
-    {
-        public string TransInfo { get; set; }
+    public string TransInfo { get; set; }
 
-        public override string GetSettingKey() => "TicketVoiding_AutoUnmark_Select";
+    public override string GetSettingKey() => "TicketVoiding_AutoUnmark_Select";
 
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

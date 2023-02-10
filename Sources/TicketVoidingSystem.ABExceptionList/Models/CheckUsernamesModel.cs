@@ -1,8 +1,7 @@
-﻿namespace TicketVoidingSystem.ABExceptionList.Models
+﻿namespace TicketVoidingSystem.ABExceptionList.Models;
+
+public class CheckUsernamesModel
 {
-    public class CheckUsernamesModel
-    {
-        public string InvalidUsernames { get; set; }
-        public string ExistedUsernames { get; set; }
-    }
+    public string InvalidUsernames { get; set; }
+    public string ExistedUsernames { get; set; }
 }

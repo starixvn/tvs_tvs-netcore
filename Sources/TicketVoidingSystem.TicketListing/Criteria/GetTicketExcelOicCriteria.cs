@@ -1,7 +1,6 @@
-﻿namespace TicketVoidingSystem.TicketListing.Criteria
+﻿namespace TicketVoidingSystem.TicketListing.Criteria;
+
+public class GetTicketExcelOicCriteria : GetTicketsDetailCriteria
 {
-    public class GetTicketExcelOicCriteria : GetTicketsDetailCriteria
-    {
-        public override string GetSettingKey() => "NAP_SpecialDelete_TicketListing_ExcelOic";
-    }
+    public override string GetSettingKey() => "NAP_SpecialDelete_TicketListing_ExcelOic";
 }

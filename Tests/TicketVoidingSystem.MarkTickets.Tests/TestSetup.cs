@@ -1,25 +1,24 @@
 ﻿using AutoMapper;
 using OfficeOpenXml;
 
-namespace TicketVoidingSystem.MarkTickets.Tests
+namespace TicketVoidingSystem.MarkTickets.Tests;
+
+internal static class TestSetup
 {
-    internal static class TestSetup
+    internal static IMapper CreateMapper()
     {
-        internal static IMapper CreateMapper()
+        var mockMapper = new MapperConfiguration(cfg =>
         {
-            var mockMapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new MarkTicketsProfile());
-            });
+            cfg.AddProfile(new MarkTicketsProfile());
+        });
 
-            return mockMapper.CreateMapper();
-        }
+        return mockMapper.CreateMapper();
+    }
 
-        internal static ExcelWorksheet CreateTestingSheet()
-        {
-            var package = new ExcelPackage();
-            var sheet = package.Workbook.Worksheets.Add("Template");
-            return sheet;
-        }
+    internal static ExcelWorksheet CreateTestingSheet()
+    {
+        var package = new ExcelPackage();
+        var sheet = package.Workbook.Worksheets.Add("Template");
+        return sheet;
     }
 }

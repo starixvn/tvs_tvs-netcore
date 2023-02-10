@@ -1,9 +1,8 @@
-﻿namespace TicketVoidingSystem.TicketListing.Models
-{
-    public class Licensee
-    {
-        public string Id { get; set; }
+﻿namespace TicketVoidingSystem.TicketListing.Models;
 
-        public string Name { get; set; }
-    }
+public class Licensee
+{
+    public string Id { get; set; }
+
+    public string Name { get; set; }
 }

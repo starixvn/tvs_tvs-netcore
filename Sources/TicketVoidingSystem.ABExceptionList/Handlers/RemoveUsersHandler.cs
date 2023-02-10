@@ -6,35 +6,34 @@ using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.ABExceptionList.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+public class RemoveUsersRequest : RemoveUsersCommand, IRequest<Result>
 {
-    public class RemoveUsersRequest : RemoveUsersCommand, IRequest<Result>
+}
+
+public class RemoveUsersHandler : IRequestHandler<RemoveUsersRequest, Result>
+{
+    private readonly IDynamicRepository repository;
+    private readonly SessionService session;
+
+    public RemoveUsersHandler(IDynamicRepository repository, SessionService session)
     {
+        this.repository = repository;
+        this.session = session;
     }
 
-    public class RemoveUsersHandler : IRequestHandler<RemoveUsersRequest, Result>
+    public async Task<Result> Handle(RemoveUsersRequest request, CancellationToken cancellationToken)
     {
-        private readonly IDynamicRepository repository;
-        private readonly SessionService session;
-
-        public RemoveUsersHandler(IDynamicRepository repository, SessionService session)
+        var command = new RemoveUsersCommand
         {
-            this.repository = repository;
-            this.session = session;
-        }
+            CustIds = request.CustIds,
+            UserId = session.UserId,
+            IP = session.GetClientIp()
+        };
 
-        public async Task<Result> Handle(RemoveUsersRequest request, CancellationToken cancellationToken)
-        {
-            var command = new RemoveUsersCommand
-            {
-                CustIds = request.CustIds,
-                UserId = session.UserId,
-                IP = session.GetClientIp()
-            };
+        await repository.ExecuteAsync(command, cancellationToken);
 
-            await repository.ExecuteAsync(command, cancellationToken);
-
-            return new Result();
-        }
+        return new Result();
     }
 }

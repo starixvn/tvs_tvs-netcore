@@ -6,28 +6,27 @@ using TicketVoidingSystem.ABExceptionList.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
-namespace TicketVoidingSystem.ABExceptionList.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+public class GetPermissionRequest : IRequest<PermissionABExceptionList>
 {
-    public class GetPermissionRequest : IRequest<PermissionABExceptionList>
+}
+
+public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, PermissionABExceptionList>
+{
+    private readonly SessionService session;
+
+    public GetPermissionHandler(SessionService session)
     {
+        this.session = session;
     }
 
-    public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, PermissionABExceptionList>
+    public Task<PermissionABExceptionList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
     {
-        private readonly SessionService session;
-
-        public GetPermissionHandler(SessionService session)
+        var permission = new PermissionABExceptionList
         {
-            this.session = session;
-        }
-
-        public Task<PermissionABExceptionList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
-        {
-            var permission = new PermissionABExceptionList
-            {
-                ABExceptionListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host),
-            };
-            return Task.FromResult(permission);
-        }
+            ABExceptionListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host),
+        };
+        return Task.FromResult(permission);
     }
 }

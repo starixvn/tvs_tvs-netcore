@@ -1,14 +1,13 @@
-﻿namespace TicketVoidingSystem.TicketListing.ViewModels
+﻿namespace TicketVoidingSystem.TicketListing.ViewModels;
+
+public class TicketsViewModel
 {
-    public class TicketsViewModel
+    public TicketsViewModel()
     {
-        public TicketsViewModel()
-        {
-            Tickets = new List<TicketViewModel>();
-        }
-
-        public IEnumerable<TicketViewModel> Tickets { get; set; }
-
-        public int TotalItems { get; set; }
+        Tickets = new List<TicketViewModel>();
     }
+
+    public IEnumerable<TicketViewModel> Tickets { get; set; }
+
+    public int TotalItems { get; set; }
 }

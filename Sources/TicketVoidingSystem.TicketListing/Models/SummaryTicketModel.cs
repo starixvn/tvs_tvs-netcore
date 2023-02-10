@@ -1,19 +1,18 @@
-﻿namespace TicketVoidingSystem.TicketListing.Models
+﻿namespace TicketVoidingSystem.TicketListing.Models;
+
+public class SummaryTicketModel
 {
-    public class SummaryTicketModel
-    {
-        public string LicenseeName { get; set; }
+    public string LicenseeName { get; set; }
 
-        public int BetTypeId { get; set; }
+    public int BetTypeId { get; set; }
 
-        public bool LiveIndicator { get; set; }
+    public bool LiveIndicator { get; set; }
 
-        public long RefNo { get; set; }
+    public long RefNo { get; set; }
 
-        public int TotalTrans { get; set; }
+    public int TotalTrans { get; set; }
 
-        public string BetTypeName { get; set; }
+    public string BetTypeName { get; set; }
 
-        public bool IsChinaView { get; set; }
-    }
+    public bool IsChinaView { get; set; }
 }

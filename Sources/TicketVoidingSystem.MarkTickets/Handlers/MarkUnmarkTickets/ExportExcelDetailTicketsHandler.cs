@@ -7,30 +7,29 @@ using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.Excel;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets
+namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
+
+public class ExportExcelDetailTicketsRequest : GetDetailTicketsQuery, IRequest<ExcelFileModel>
 {
-    public class ExportExcelDetailTicketsRequest : GetDetailTicketsQuery, IRequest<ExcelFileModel>
+}
+
+public class ExportExcelDetailTicketsHandler : IRequestHandler<ExportExcelDetailTicketsRequest, ExcelFileModel>
+{
+    private readonly ExcelService<GetDetailTicketsQuery> excelService;
+
+    public ExportExcelDetailTicketsHandler(ExcelService<GetDetailTicketsQuery> excelService)
     {
+        this.excelService = excelService;
     }
 
-    public class ExportExcelDetailTicketsHandler : IRequestHandler<ExportExcelDetailTicketsRequest, ExcelFileModel>
+    public async Task<ExcelFileModel> Handle(ExportExcelDetailTicketsRequest request, CancellationToken cancellationToken)
     {
-        private readonly ExcelService<GetDetailTicketsQuery> excelService;
-
-        public ExportExcelDetailTicketsHandler(ExcelService<GetDetailTicketsQuery> excelService)
+        var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+        var fileName = $"{request.MatchId}_Mark_Unmark_Tickets_{createDate}";
+        return new ExcelFileModel
         {
-            this.excelService = excelService;
-        }
-
-        public async Task<ExcelFileModel> Handle(ExportExcelDetailTicketsRequest request, CancellationToken cancellationToken)
-        {
-            var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
-            var fileName = $"{request.MatchId}_Mark_Unmark_Tickets_{createDate}";
-            return new ExcelFileModel
-            {
-                ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets),
-                FileName = fileName
-            };
-        }
+            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets),
+            FileName = fileName
+        };
     }
 }

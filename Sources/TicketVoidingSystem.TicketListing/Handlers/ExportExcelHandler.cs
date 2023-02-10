@@ -5,30 +5,29 @@ using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.TicketListing.Criteria;
 
-namespace TicketVoidingSystem.TicketListing.Handlers
+namespace TicketVoidingSystem.TicketListing.Handlers;
+
+public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>
 {
-    public class ExportExcelRequest : ExportExcelQuery, IRequest<ExcelFileModel>
+}
+
+public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
+{
+    private readonly ExcelService<ExportExcelQuery> excelService;
+
+    public ExportExcelHandler(ExcelService<ExportExcelQuery> excelService)
     {
+        this.excelService = excelService;
     }
 
-    public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
+    public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
-        private readonly ExcelService<ExportExcelQuery> excelService;
-
-        public ExportExcelHandler(ExcelService<ExportExcelQuery> excelService)
+        var betTypeName = string.IsNullOrEmpty(request.BetTypeName) ? string.Empty : $"_{request.BetTypeName}";
+        var fileName = string.Format(StringResource.FileNameExportExcel, betTypeName, request.LicenseeName).Replace(' ', '_');
+        return new ExcelFileModel
         {
-            this.excelService = excelService;
-        }
-
-        public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
-        {
-            var betTypeName = string.IsNullOrEmpty(request.BetTypeName) ? string.Empty : $"_{request.BetTypeName}";
-            var fileName = string.Format(StringResource.FileNameExportExcel, betTypeName, request.LicenseeName).Replace(' ', '_');
-            return new ExcelFileModel
-            {
-                ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketListing),
-                FileName = fileName
-            };
-        }
+            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketListing),
+            FileName = fileName
+        };
     }
 }

@@ -2,13 +2,12 @@
 using Olympus.SimpleDataApi;
 using TicketVoidingSystem.Web;
 
-namespace TicketVoidingSystem.SimpleDataApi
+namespace TicketVoidingSystem.SimpleDataApi;
+
+public class SimpleFunctionPermissionFactoryImp : SimpleFunctionPermissionFactoryBase
 {
-    public class SimpleFunctionPermissionFactoryImp : SimpleFunctionPermissionFactoryBase
+    static SimpleFunctionPermissionFactoryImp()
     {
-        static SimpleFunctionPermissionFactoryImp()
-        {
-            AddFunctionPermission("soccer-early-get-match", SpecialDeleteFunctionKeys.SportsbookSpecialDelete, Constant.Policy.Read);
-        }
+        AddFunctionPermission("soccer-early-get-match", SpecialDeleteFunctionKeys.SportsbookSpecialDelete, Constant.Policy.Read);
     }
 }

@@ -10,65 +10,64 @@ using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.UserLogs;
 using TicketVoidingSystem.MarkTickets.ViewModels;
 
-namespace TicketVoidingSystem.MarkTickets.Services.UserLogs
-{
-    public interface UserLogsService
-    {
-        Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query);
+namespace TicketVoidingSystem.MarkTickets.Services.UserLogs;
 
-        Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs);
+public interface UserLogsService
+{
+    Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query);
+
+    Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs);
+}
+
+public class UserLogsServiceImp : UserLogsService
+{
+    private readonly IMapper mapper;
+    private readonly IDynamicRepository repository;
+    private readonly MapUserLogsService mapUserLogsService;
+
+    public UserLogsServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
+    {
+        this.mapper = mapper;
+        this.repository = repository;
+        this.mapUserLogsService = mapUserLogsService;
     }
 
-    public class UserLogsServiceImp : UserLogsService
+    public async Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query)
     {
-        private readonly IMapper mapper;
-        private readonly IDynamicRepository repository;
-        private readonly MapUserLogsService mapUserLogsService;
+        var criteria = mapper.Map<GetUserLogsCriteria>(query);
+        criteria.LogDateFrom = query.LogDateFrom.ZoneCanada();
+        criteria.LogDateTo = query.LogDateTo.AddDays(1).ZoneCanada();
 
-        public UserLogsServiceImp(IMapper mapper, IDynamicRepository repository, MapUserLogsService mapUserLogsService)
+        return await repository.FetchAsync<GetUserLogModel>(criteria);
+    }
+
+    public async Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs)
+    {
+        UpdateTransIdsProp(originalLogs);
+        var transIdsInAllLogs = originalLogs.SelectMany(x => x.TransIds).Distinct();
+        var ticketsInfo = await GetTicketsInfo(transIdsInAllLogs);
+        var viewModel = mapUserLogsService.MapToUserLogViewModels(originalLogs, ticketsInfo);
+
+        return viewModel;
+    }
+
+    private static void UpdateTransIdsProp(IEnumerable<GetUserLogModel> originalLogs)
+    {
+        foreach (var log in originalLogs)
         {
-            this.mapper = mapper;
-            this.repository = repository;
-            this.mapUserLogsService = mapUserLogsService;
+            log.TransIds = !string.IsNullOrWhiteSpace(log.LogData) ? log.LogData.Split(',') : new List<string>();
         }
+    }
 
-        public async Task<IEnumerable<GetUserLogModel>> GetUserLogs(GetUserLogsQuery query)
+    private async Task<UserLogTicketInfo> GetTicketsInfo(IEnumerable<string> transIdsInAllLogs)
+    {
+        var criteria = new GetUserLogTicketInfoCriteria { TransIdsXml = transIdsInAllLogs.ToTransIdsXml() };
+        var (singleTickets, parlayTickets) = await repository.FetchMultipleAsync<TicketInfo, TicketInfo>(criteria);
+
+        return new UserLogTicketInfo
         {
-            var criteria = mapper.Map<GetUserLogsCriteria>(query);
-            criteria.LogDateFrom = query.LogDateFrom.ZoneCanada();
-            criteria.LogDateTo = query.LogDateTo.AddDays(1).ZoneCanada();
-
-            return await repository.FetchAsync<GetUserLogModel>(criteria);
-        }
-
-        public async Task<IEnumerable<GetUserLogViewModel>> CreateUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs)
-        {
-            UpdateTransIdsProp(originalLogs);
-            var transIdsInAllLogs = originalLogs.SelectMany(x => x.TransIds).Distinct();
-            var ticketsInfo = await GetTicketsInfo(transIdsInAllLogs);
-            var viewModel = mapUserLogsService.MapToUserLogViewModels(originalLogs, ticketsInfo);
-
-            return viewModel;
-        }
-
-        private static void UpdateTransIdsProp(IEnumerable<GetUserLogModel> originalLogs)
-        {
-            foreach (var log in originalLogs)
-            {
-                log.TransIds = !string.IsNullOrWhiteSpace(log.LogData) ? log.LogData.Split(',') : new List<string>();
-            }
-        }
-
-        private async Task<UserLogTicketInfo> GetTicketsInfo(IEnumerable<string> transIdsInAllLogs)
-        {
-            var criteria = new GetUserLogTicketInfoCriteria { TransIdsXml = transIdsInAllLogs.ToTransIdsXml() };
-            var (singleTickets, parlayTickets) = await repository.FetchMultipleAsync<TicketInfo, TicketInfo>(criteria);
-
-            return new UserLogTicketInfo
-            {
-                SingleTickets = singleTickets,
-                ParlayTickets = parlayTickets
-            };
-        }
+            SingleTickets = singleTickets,
+            ParlayTickets = parlayTickets
+        };
     }
 }

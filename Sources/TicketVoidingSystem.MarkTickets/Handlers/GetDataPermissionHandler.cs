@@ -6,28 +6,27 @@ using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers
+namespace TicketVoidingSystem.MarkTickets.Handlers;
+
+public class GetDataPermissionRequest : IRequest<DataPermission>
 {
-    public class GetDataPermissionRequest : IRequest<DataPermission>
+}
+
+public class GetDataPermissionHandler : IRequestHandler<GetDataPermissionRequest, DataPermission>
+{
+    private readonly SessionService sessionService;
+
+    public GetDataPermissionHandler(SessionService sessionService)
     {
+        this.sessionService = sessionService;
     }
 
-    public class GetDataPermissionHandler : IRequestHandler<GetDataPermissionRequest, DataPermission>
+    public async Task<DataPermission> Handle(GetDataPermissionRequest request, CancellationToken cancellationToken)
     {
-        private readonly SessionService sessionService;
-
-        public GetDataPermissionHandler(SessionService sessionService)
+        return await Task.FromResult(new DataPermission
         {
-            this.sessionService = sessionService;
-        }
-
-        public async Task<DataPermission> Handle(GetDataPermissionRequest request, CancellationToken cancellationToken)
-        {
-            return await Task.FromResult(new DataPermission
-            {
-                IsReadMarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read),
-                IsHostMarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host)
-            });
-        }
+            IsReadMarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read),
+            IsHostMarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host)
+        });
     }
 }

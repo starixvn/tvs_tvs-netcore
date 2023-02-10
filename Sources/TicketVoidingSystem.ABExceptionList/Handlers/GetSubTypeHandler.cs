@@ -6,24 +6,23 @@ using MediatR;
 using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Models;
 
-namespace TicketVoidingSystem.ABExceptionList.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+public class GetSubTypeRequest : GetSubTypeCriteria, IRequest<IEnumerable<AbExceptionSubTypeViewModel>>
 {
-    public class GetSubTypeRequest : GetSubTypeCriteria, IRequest<IEnumerable<AbExceptionSubTypeViewModel>>
+}
+
+public class GetSubTypeHandler : IRequestHandler<GetSubTypeRequest, IEnumerable<AbExceptionSubTypeViewModel>>
+{
+    private readonly IDynamicRepository repository;
+
+    public GetSubTypeHandler(IDynamicRepository repository)
     {
+        this.repository = repository;
     }
 
-    public class GetSubTypeHandler : IRequestHandler<GetSubTypeRequest, IEnumerable<AbExceptionSubTypeViewModel>>
+    public async Task<IEnumerable<AbExceptionSubTypeViewModel>> Handle(GetSubTypeRequest request, CancellationToken cancellationToken)
     {
-        private readonly IDynamicRepository repository;
-
-        public GetSubTypeHandler(IDynamicRepository repository)
-        {
-            this.repository = repository;
-        }
-
-        public async Task<IEnumerable<AbExceptionSubTypeViewModel>> Handle(GetSubTypeRequest request, CancellationToken cancellationToken)
-        {
-            return await repository.FetchAsync<AbExceptionSubTypeViewModel>(request, cancellationToken);
-        }
+        return await repository.FetchAsync<AbExceptionSubTypeViewModel>(request, cancellationToken);
     }
 }

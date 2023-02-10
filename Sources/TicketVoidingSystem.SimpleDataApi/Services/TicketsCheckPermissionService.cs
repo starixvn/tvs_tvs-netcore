@@ -4,44 +4,43 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SimpleDataApi.Criteria;
 using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.SimpleDataApi.Services
+namespace TicketVoidingSystem.SimpleDataApi.Services;
+
+public interface TicketsCheckPermissionService
 {
-    public interface TicketsCheckPermissionService
+    IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel);
+}
+
+public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
+{
+    private readonly IDynamicRepository repository;
+
+    public TicketsCheckPermissionServiceImp(IDynamicRepository repository)
     {
-        IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel);
+        this.repository = repository;
     }
 
-    public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
+    public IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel)
     {
-        private readonly IDynamicRepository repository;
-
-        public TicketsCheckPermissionServiceImp(IDynamicRepository repository)
+        var tickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["tickets"].ToString());
+        var transInfoJsonList = new List<string>();
+        foreach (var server in SiteDbGroupConstant.ServerList)
         {
-            this.repository = repository;
-        }
-
-        public IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel)
-        {
-            var tickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["tickets"].ToString());
-            var transInfoJsonList = new List<string>();
-            foreach (var server in SiteDbGroupConstant.ServerList)
+            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
+            if (!ticketsInSiteDb.Any())
             {
-                var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
-                if (!ticketsInSiteDb.Any())
-                {
-                    continue;
-                }
-
-                var criteria = new GetTransInfoForCheckPermissionCriteria
-                {
-                    SiteDbGroupId = server.Id,
-                    TransIds = Helper.JoinBetIdList(ticketsInSiteDb)
-                };
-                var response = repository.Get<string>(criteria);
-                transInfoJsonList.Add(response);
+                continue;
             }
 
-            return transInfoJsonList;
+            var criteria = new GetTransInfoForCheckPermissionCriteria
+            {
+                SiteDbGroupId = server.Id,
+                TransIds = Helper.JoinBetIdList(ticketsInSiteDb)
+            };
+            var response = repository.Get<string>(criteria);
+            transInfoJsonList.Add(response);
         }
+
+        return transInfoJsonList;
     }
 }

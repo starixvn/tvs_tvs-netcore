@@ -7,26 +7,25 @@ using MediatR;
 using TicketVoidingSystem.MarkTickets.Criteria;
 using TicketVoidingSystem.MarkTickets.Models;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers
+namespace TicketVoidingSystem.MarkTickets.Handlers;
+
+public class GetLicenseesRequest : GetLicenseesCriteria, IRequest<IEnumerable<GroupLicensee>>
 {
-    public class GetLicenseesRequest : GetLicenseesCriteria, IRequest<IEnumerable<GroupLicensee>>
+}
+
+public class GetLicenseesHandler : IRequestHandler<GetLicenseesRequest, IEnumerable<GroupLicensee>>
+{
+    private readonly IDynamicRepository repository;
+
+    public GetLicenseesHandler(IDynamicRepository repository)
     {
+        this.repository = repository;
     }
 
-    public class GetLicenseesHandler : IRequestHandler<GetLicenseesRequest, IEnumerable<GroupLicensee>>
+    public async Task<IEnumerable<GroupLicensee>> Handle(GetLicenseesRequest request, CancellationToken cancellationToken)
     {
-        private readonly IDynamicRepository repository;
-
-        public GetLicenseesHandler(IDynamicRepository repository)
-        {
-            this.repository = repository;
-        }
-
-        public async Task<IEnumerable<GroupLicensee>> Handle(GetLicenseesRequest request, CancellationToken cancellationToken)
-        {
-            var licensees = await repository.FetchAsync<Licensee>(request, cancellationToken);
-            return licensees.GroupBy(b => b.GroupName)
-                .Select(group => new GroupLicensee { GroupName = group.Key, Licensees = group });
-        }
+        var licensees = await repository.FetchAsync<Licensee>(request, cancellationToken);
+        return licensees.GroupBy(b => b.GroupName)
+            .Select(group => new GroupLicensee { GroupName = group.Key, Licensees = group });
     }
 }

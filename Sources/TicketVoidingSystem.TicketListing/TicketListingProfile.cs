@@ -3,16 +3,15 @@ using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
 
-namespace TicketVoidingSystem.TicketListing
+namespace TicketVoidingSystem.TicketListing;
+
+public class TicketListingProfile : Profile
 {
-    public class TicketListingProfile : Profile
+    public TicketListingProfile()
     {
-        public TicketListingProfile()
-        {
-            CreateMap<DetailTicketModel, Ticket>();
-            CreateMap<GetTicketsDetailCriteria, GetTicketExcelOicCriteria>();
-            CreateMap<GetSummaryQuery, GetSummaryCriteria>();
-            CreateMap<GetDetailQuery, GetTicketsDetailCriteria>();
-        }
+        CreateMap<DetailTicketModel, Ticket>();
+        CreateMap<GetTicketsDetailCriteria, GetTicketExcelOicCriteria>();
+        CreateMap<GetSummaryQuery, GetSummaryCriteria>();
+        CreateMap<GetDetailQuery, GetTicketsDetailCriteria>();
     }
 }

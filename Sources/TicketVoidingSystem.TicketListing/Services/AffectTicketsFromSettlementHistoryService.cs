@@ -3,35 +3,34 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Extensions;
 
-namespace TicketVoidingSystem.TicketListing.Services
+namespace TicketVoidingSystem.TicketListing.Services;
+
+public interface AffectTicketsFromSettlementHistoryService
 {
-    public interface AffectTicketsFromSettlementHistoryService
+    Task<string> GetTickets(bool isReSettled, int matchId);
+}
+
+public class AffectTicketsFromSettlementHistoryServiceImp : AffectTicketsFromSettlementHistoryService
+{
+    private readonly IDynamicRepository repository;
+
+    public AffectTicketsFromSettlementHistoryServiceImp(IDynamicRepository repository)
     {
-        Task<string> GetTickets(bool isReSettled, int matchId);
+        this.repository = repository;
     }
 
-    public class AffectTicketsFromSettlementHistoryServiceImp : AffectTicketsFromSettlementHistoryService
+    public async Task<string> GetTickets(bool isReSettled, int matchId)
     {
-        private readonly IDynamicRepository repository;
-
-        public AffectTicketsFromSettlementHistoryServiceImp(IDynamicRepository repository)
+        if (!isReSettled)
         {
-            this.repository = repository;
+            return string.Empty;
         }
 
-        public async Task<string> GetTickets(bool isReSettled, int matchId)
+        var criteria = new GetSettlementHistoryCriteria
         {
-            if (!isReSettled)
-            {
-                return string.Empty;
-            }
-
-            var criteria = new GetSettlementHistoryCriteria
-            {
-                MatchId = matchId
-            };
-            var transIds = await repository.FetchAsync<BetId>(criteria);
-            return transIds.ToAffectTicketsXml();
-        }
+            MatchId = matchId
+        };
+        var transIds = await repository.FetchAsync<BetId>(criteria);
+        return transIds.ToAffectTicketsXml();
     }
 }

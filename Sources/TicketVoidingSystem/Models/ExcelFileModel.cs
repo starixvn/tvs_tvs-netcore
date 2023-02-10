@@ -1,9 +1,8 @@
-﻿namespace TicketVoidingSystem.Models
-{
-    public class ExcelFileModel
-    {
-        public byte[] ContentAsByteArray { get; set; }
+﻿namespace TicketVoidingSystem.Models;
 
-        public string FileName { get; set; }
-    }
+public class ExcelFileModel
+{
+    public byte[] ContentAsByteArray { get; set; }
+
+    public string FileName { get; set; }
 }
