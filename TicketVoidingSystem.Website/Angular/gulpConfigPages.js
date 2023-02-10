@@ -130,10 +130,10 @@ const markTickets = {
 
 
 const configPages = [
- // homePage,
-  manageVoidServices,
-  //abExceptionList,
-  markTickets,
+  // homePage,
+  // manageVoidServices,
+  // abExceptionList,
+  // markTickets,
   ticketListing,
   
   // addRequest,
