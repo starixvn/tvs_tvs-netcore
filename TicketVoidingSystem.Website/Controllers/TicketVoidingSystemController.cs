@@ -30,15 +30,6 @@ namespace TicketVoidingSystem.Website.Controllers
         [HttpGet]
         [Route("[action]")]
         [Route("[action]/Index")]
-        [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketListing, Policy = Constant.Policy.Read)]
-        public IActionResult TicketListing()
-        {
-            return View("~/wwwroot/dist/ticket-listing/index.cshtml");
-        }
-
-        [HttpGet]
-        [Route("[action]")]
-        [Route("[action]/Index")]
         [AllowAnonymous]
         public IActionResult ManageVoidServicesNoAuth()
         {

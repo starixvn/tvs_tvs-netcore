@@ -134,8 +134,8 @@ const configPages = [
   manageVoidServices,
   //abExceptionList,
   markTickets,
-
-  //ticketListing,
+  ticketListing,
+  
   // addRequest,
   // editRequest,
   // manageRequest,
