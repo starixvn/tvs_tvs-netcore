@@ -37,7 +37,7 @@ public class InsertToAmendmentTableStageTests
         var actual = await service.Send(queries, "");
 
         // Assert
-        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Compat.Any<SendFileQuery>(), Arg.Compat.Any<string>());
+        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Any<SendFileQuery>(), Arg.Any<string>());
         Assert.Equal(expected, actual);
     }
 
@@ -58,15 +58,16 @@ public class InsertToAmendmentTableStageTests
         var configuration = Substitute.For<IConfiguration>();
         var loggingService = Substitute.For<LoggingService>();
         configuration["EnvironmentName"] = env;
-        repository.ExecuteAsync(Arg.Compat.Any<SendDataOicCriteria>()).ReturnsForAnyArgs(1);
-        repository.ExecuteAsync(Arg.Compat.Any<SendDataOicBackupCriteria>()).ReturnsForAnyArgs(1);
-        var service = new InsertToAmendmentTableStageImp(configuration, repository, loggingService);
+        AppSettingService.InitSetting(configuration);
+        repository.ExecuteAsync(Arg.Any<SendDataOicCriteria>()).ReturnsForAnyArgs(1);
+        repository.ExecuteAsync(Arg.Any<SendDataOicBackupCriteria>()).ReturnsForAnyArgs(1);
+        var service = new InsertToAmendmentTableStageImp(repository, loggingService);
 
         // Act
         var actual = await service.Execute(excelOicModels, query, "1");
 
         // Assert
-        await repository.Received(1).ExecuteAsync(Arg.Compat.Any<SendDataOicCriteria>());
+        await repository.Received(1).ExecuteAsync(Arg.Any<SendDataOicCriteria>());
         Assert.True(actual);
     }
 
@@ -83,17 +84,19 @@ public class InsertToAmendmentTableStageTests
         var repository = Substitute.For<IDynamicRepository>();
         var configuration = Substitute.For<IConfiguration>();
         var loggingService = Substitute.For<LoggingService>();
-        repository.When(x => x.ExecuteAsync(Arg.Compat.Any<SendDataOicCriteria>()))
+        configuration["EnvironmentName"] = "UAT";
+        AppSettingService.InitSetting(configuration);
+        repository.When(x => x.ExecuteAsync(Arg.Any<SendDataOicCriteria>()))
             .Do(y => throw exception);
-        repository.ExecuteAsync(Arg.Compat.Any<SendDataOicBackupCriteria>()).ReturnsForAnyArgs(1);
-        var service = new InsertToAmendmentTableStageImp(configuration, repository, loggingService);
+        repository.ExecuteAsync(Arg.Any<SendDataOicBackupCriteria>()).ReturnsForAnyArgs(1);
+        var service = new InsertToAmendmentTableStageImp(repository, loggingService);
 
         // Act
         var actual = await service.Execute(excelOicModels, query, "1");
 
         // Assert
-        await repository.Received(1).ExecuteAsync(Arg.Compat.Any<SendDataOicCriteria>());
-        await loggingService.Received(1).ErrorAsync(Arg.Compat.Any<string>(), Arg.Compat.Any<Exception>());
+        await repository.Received(1).ExecuteAsync(Arg.Any<SendDataOicCriteria>());
+        await loggingService.Received(1).ErrorAsync(Arg.Any<string>(), Arg.Any<Exception>());
         Assert.False(actual);
     }
 
@@ -108,20 +111,20 @@ public class InsertToAmendmentTableStageTests
         };
         var query = new SendFileQuery { MatchId = 900001 };
         var repository = Substitute.For<IDynamicRepository>();
-        var configuration = Substitute.For<IConfiguration>();
+
         var loggingService = Substitute.For<LoggingService>();
-        repository.ExecuteAsync(Arg.Compat.Any<SendDataOicCriteria>()).ReturnsForAnyArgs(1);
-        repository.When(x => x.ExecuteAsync(Arg.Compat.Any<SendDataOicBackupCriteria>()))
+
+        repository.ExecuteAsync(Arg.Any<SendDataOicCriteria>()).ReturnsForAnyArgs(1);
+        repository.When(x => x.ExecuteAsync(Arg.Any<SendDataOicBackupCriteria>()))
             .Do(y => throw exception);
-        var service = new InsertToAmendmentTableStageImp(configuration, repository, loggingService);
-        configuration["EnvironmentName"] = "UAT";
+        var service = new InsertToAmendmentTableStageImp(repository, loggingService);
 
         // Act
         var actual = await service.Execute(excelOicModels, query, "1");
 
         // Assert
-        await repository.Received(1).ExecuteAsync(Arg.Compat.Any<SendDataOicCriteria>());
-        await loggingService.Received(1).ErrorAsync(Arg.Compat.Any<string>(), Arg.Compat.Any<Exception>());
+        await repository.Received(1).ExecuteAsync(Arg.Any<SendDataOicCriteria>());
+        await loggingService.Received(1).ErrorAsync(Arg.Any<string>(), Arg.Any<Exception>());
         Assert.True(actual);
     }
 }

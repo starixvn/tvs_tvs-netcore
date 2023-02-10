@@ -26,14 +26,14 @@ public class GetSubTypeHandlerTests
             new() {SubIssueTypeIds = "", SubIssueTypeName = ""}
         };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(subTypes);
+        repository.FetchAsync<AbExceptionSubTypeViewModel>(Arg.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(subTypes);
         var handler = new GetSubTypeHandler(repository);
 
         // Act
         var actualResult = await handler.Handle(request, default);
 
         // Assert
-        await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(Arg.Compat.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>());
+        await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(Arg.Any<GetSubTypeRequest>(), Arg.Any<CancellationToken>());
         Assert.Equal(subTypes.Count, actualResult.Count());
     }
 }

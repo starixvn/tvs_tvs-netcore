@@ -30,7 +30,7 @@ public class VoidingHistoryServiceTests
 
         // Assert
         await repository.Received()
-            .FetchAsync<VoidingHistoryModel>(Arg.Compat.Any<GetVoidingHistoryCriteria>());
+            .FetchAsync<VoidingHistoryModel>(Arg.Any<GetVoidingHistoryCriteria>());
         Assert.NotNull(actual);
     }
 

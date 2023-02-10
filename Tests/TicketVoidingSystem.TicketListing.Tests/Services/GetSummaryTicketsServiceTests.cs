@@ -36,7 +36,7 @@ public class GetSummaryTicketsServiceTests
         var actual = await service.GetSummaryTickets(query);
 
         // Assert
-        await affectTicketsFromSettlementHistoryService.Received(1).GetTickets(Arg.Compat.Any<bool>(), Arg.Compat.Any<int>());
+        await affectTicketsFromSettlementHistoryService.Received(1).GetTickets(Arg.Any<bool>(), Arg.Any<int>());
         Assert.NotNull(actual.GroupByBetTypes);
         Assert.NotNull(actual.GroupByLicensees);
     }
@@ -58,7 +58,7 @@ public class GetSummaryTicketsServiceTests
         var actual = await service.GetSummaryTickets(query);
 
         // Assert
-        await affectTicketsFromSettlementHistoryService.Received(1).GetTickets(Arg.Compat.Any<bool>(), Arg.Compat.Any<int>());
+        await affectTicketsFromSettlementHistoryService.Received(1).GetTickets(Arg.Any<bool>(), Arg.Any<int>());
         Assert.Empty(actual.GroupByBetTypes);
         Assert.Empty(actual.GroupByLicensees);
     }

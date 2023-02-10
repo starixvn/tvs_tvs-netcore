@@ -24,14 +24,14 @@ public class GetSitesHandlerTests
         var model = new GroupLicenseeSiteViewModel() { GroupName = "Deposit", Sites = sites };
         var models = new List<GroupLicenseeSiteViewModel> { model };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<LicenseeSite>(Arg.Compat.Any<GetSitesCriteria>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(sites);
+        repository.FetchAsync<LicenseeSite>(Arg.Any<GetSitesCriteria>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(sites);
         var handler = new GetSitesHandler(repository);
 
         // Act
         var actual = await handler.Handle(new GetSitesRequest(), default);
 
         // Assert
-        await repository.Received(1).FetchAsync<LicenseeSite>(Arg.Compat.Any<GetSitesCriteria>(), Arg.Any<CancellationToken>());
+        await repository.Received(1).FetchAsync<LicenseeSite>(Arg.Any<GetSitesCriteria>(), Arg.Any<CancellationToken>());
         Assert.Equal(models[0].GroupName, actual.FirstOrDefault().GroupName);
         Assert.Equal(models[0].Sites.Count(), actual.FirstOrDefault().Sites.Count());
     }

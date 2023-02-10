@@ -30,7 +30,7 @@ public class TicketVoidingQueueServiceTests
 
         // Assert
         await repository.Received()
-            .FetchAsync<TicketVoidingQueueModel>(Arg.Compat.Any<GetTicketVoidingQueueCriteria>());
+            .FetchAsync<TicketVoidingQueueModel>(Arg.Any<GetTicketVoidingQueueCriteria>());
         Assert.NotNull(actual);
     }
 

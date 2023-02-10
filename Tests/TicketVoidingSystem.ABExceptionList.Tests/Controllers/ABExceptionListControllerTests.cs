@@ -77,14 +77,14 @@ public class ABExceptionListControllerTests
     {            // Arrange
         var permission = new PermissionABExceptionList();
         var mediator = Substitute.For<IMediator>();
-        mediator.Send(Arg.Compat.Any<GetPermissionRequest>()).ReturnsForAnyArgs(permission);
+        mediator.Send(Arg.Any<GetPermissionRequest>()).ReturnsForAnyArgs(permission);
         var controller = new ABExceptionListController(mediator);
 
         // Act
         await controller.GetPermission();
 
         // Assert
-        await mediator.Received(1).Send(Arg.Compat.Any<GetPermissionRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetPermissionRequest>());
     }
 
     [Fact]
@@ -93,14 +93,14 @@ public class ABExceptionListControllerTests
         // Arrange
         var subTypes = new List<AbExceptionSubTypeViewModel>();
         var mediator = Substitute.For<IMediator>();
-        mediator.Send(Arg.Compat.Any<GetSubTypeRequest>()).ReturnsForAnyArgs(subTypes);
+        mediator.Send(Arg.Any<GetSubTypeRequest>()).ReturnsForAnyArgs(subTypes);
         var controller = new ABExceptionListController(mediator);
 
         // Act
         await controller.GetSubType();
 
         // Assert
-        await mediator.Received(1).Send(Arg.Compat.Any<GetSubTypeRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetSubTypeRequest>());
     }
 
     [Fact]
@@ -109,12 +109,12 @@ public class ABExceptionListControllerTests
         var models = new List<GroupLicenseeSiteViewModel> { new() { GroupName = "credit" } };
 
         var mediator = Substitute.For<IMediator>();
-        mediator.Send(Arg.Compat.Any<GetSitesRequest>()).ReturnsForAnyArgs(models);
+        mediator.Send(Arg.Any<GetSitesRequest>()).ReturnsForAnyArgs(models);
         var controller = new ABExceptionListController(mediator);
 
         var okObjectResult = await controller.GetSites() as OkObjectResult;
         var actual = okObjectResult?.Value as List<GroupLicenseeSiteViewModel>;
-        await mediator.Received(1).Send(Arg.Compat.Any<GetSitesRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetSitesRequest>());
         Assert.Equal(models, actual);
     }
 }

@@ -81,7 +81,7 @@ public class SendDataOicHandlerTest
 
         // Assert
         await sendDataToOicService.Received()
-            .Send(Arg.Compat.Any<List<SendFileQuery>>(), Arg.Compat.Any<string>());
+            .Send(Arg.Any<List<SendFileQuery>>(), Arg.Any<string>());
         Assert.Equal(2, actual.Count);
     }
 }

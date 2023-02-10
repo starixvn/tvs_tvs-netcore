@@ -16,7 +16,7 @@ public class GetPermissionHandlerTests
         // Arrange
         var request = new GetPermissionRequest();
         var sessionService = Substitute.For<SessionService>();
-        sessionService.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Arg.Compat.Any<Constant.Policy>()).Returns(true);
+        sessionService.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Arg.Any<Constant.Policy>()).Returns(true);
         var handler = new GetPermissionHandler(sessionService);
 
         // Act

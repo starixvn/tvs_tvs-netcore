@@ -46,7 +46,7 @@ public class GetDetailTicketsHandlerTests
 
         // Assert
         await getTicketsService.Received(1).GetDetailTickets(Arg.Compat.Is<GetDetailTicketsRequest>(x => x.MatchId == 9000001));
-        pagingService.Received(1).Paging(Arg.Compat.Any<List<GetTicketModel>>(), 500, 300);
+        pagingService.Received(1).Paging(Arg.Any<List<GetTicketModel>>(), 500, 300);
         Assert.Equal("CN88, CN89, CN90", result.LicenseesName);
         Assert.Equal(4, result.ParlayCount);
         Assert.Equal(1, result.SingleCount);
@@ -83,7 +83,7 @@ public class GetDetailTicketsHandlerTests
 
         // Assert
         await getTicketsService.Received(1).GetDetailTickets(Arg.Compat.Is<GetDetailTicketsRequest>(x => x.MatchId == 9000001));
-        pagingService.Received(1).Paging(Arg.Compat.Any<List<GetTicketModel>>(), 500, 300);
+        pagingService.Received(1).Paging(Arg.Any<List<GetTicketModel>>(), 500, 300);
         Assert.Equal(0, result.TotalItems);
     }
 }

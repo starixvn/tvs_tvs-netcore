@@ -21,7 +21,7 @@ public class GetUsersHandlerTests
         var request = new GetUsersRequest { UserName = "aaa" };
         var expectedResult = new List<UserModel>();
         var getUsersService = Substitute.For<GetUsersService>();
-        getUsersService.GetUsers(Arg.Compat.Any<GetUsersRequest>()).ReturnsForAnyArgs(expectedResult);
+        getUsersService.GetUsers(Arg.Any<GetUsersRequest>()).ReturnsForAnyArgs(expectedResult);
         var handler = new GetUsersHandler(getUsersService);
 
         // Act

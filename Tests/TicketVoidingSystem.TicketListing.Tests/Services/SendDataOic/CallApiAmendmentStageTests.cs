@@ -23,14 +23,14 @@ public class CallApiAmendmentStageTests
         };
         var loggingService = Substitute.For<LoggingService>();
         var apiService = Substitute.For<AmendmentOicHttpClientService>();
-        apiService.AmendmentOic(Arg.Compat.Any<AmendmentOicQuery>()).ReturnsForAnyArgs(expected);
+        apiService.AmendmentOic(Arg.Any<AmendmentOicQuery>()).ReturnsForAnyArgs(expected);
         var service = new CallApiAmendmentStageImp(apiService, loggingService);
 
         // Act
         var actual = await service.Execute(licensee, "", new DateTime());
 
         // Assert
-        await apiService.Received(1).AmendmentOic(Arg.Compat.Any<AmendmentOicQuery>());
+        await apiService.Received(1).AmendmentOic(Arg.Any<AmendmentOicQuery>());
         Assert.Equal(expected, actual);
     }
 }

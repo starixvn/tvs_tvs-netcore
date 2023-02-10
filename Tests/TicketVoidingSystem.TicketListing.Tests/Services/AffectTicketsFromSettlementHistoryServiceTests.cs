@@ -23,7 +23,7 @@ public class AffectTicketsFromSettlementHistoryServiceTests
         var actual = await service.GetTickets(true, 1);
 
         // Assert
-        await repository.Received(1).FetchAsync<BetId>(Arg.Compat.Any<GetSettlementHistoryCriteria>());
+        await repository.Received(1).FetchAsync<BetId>(Arg.Any<GetSettlementHistoryCriteria>());
         Assert.Equal(expected.ToAffectTicketsXml(), actual);
     }
 

@@ -19,10 +19,10 @@ public class MarkTicketsControllerTests
     //    var fakeResponse = Task.FromResult(fakeIndexViewModel);
 
     //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(Arg.Compat.Any<IndexRequest>()).ReturnsForAnyArgs(fakeResponse);
+    //    mediator.Send(Arg.Any<IndexRequest>()).ReturnsForAnyArgs(fakeResponse);
     //    var controller = new MarkTicketsController(mediator);
     //    controller.Url = Substitute.ForPartsOf<UrlHelper>();
-    //    controller.Url.Content(Arg.Compat.Any<string>()).ReturnsForAnyArgs("~");
+    //    controller.Url.Content(Arg.Any<string>()).ReturnsForAnyArgs("~");
 
     //    // Act
     //    var view = await controller.Index() as ViewResult;
@@ -41,10 +41,10 @@ public class MarkTicketsControllerTests
     //    var fakeResponse = Task.FromResult(fakeIndexViewModel);
 
     //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(Arg.Compat.Any<IndexRequest>()).ReturnsForAnyArgs(fakeResponse);
+    //    mediator.Send(Arg.Any<IndexRequest>()).ReturnsForAnyArgs(fakeResponse);
     //    var controller = new MarkTicketsController(mediator);
     //    controller.Url = Substitute.ForPartsOf<UrlHelper>();
-    //    controller.Url.Content(Arg.Compat.Any<string>()).ReturnsForAnyArgs("~");
+    //    controller.Url.Content(Arg.Any<string>()).ReturnsForAnyArgs("~");
 
     //    // Act
     //    var view = await controller.Index() as ViewResult;

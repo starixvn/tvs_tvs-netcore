@@ -36,7 +36,7 @@ public class SendDataToOicServiceImpTest
         var actual = await service.Send(queries, "");
 
         // Assert
-        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Compat.Any<SendFileQuery>(), Arg.Compat.Any<string>());
+        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Any<SendFileQuery>(), Arg.Any<string>());
         Assert.Equal(expected, actual);
     }
 
@@ -64,7 +64,7 @@ public class SendDataToOicServiceImpTest
         var actual = await service.Send(queries, "");
 
         // Assert
-        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Compat.Any<SendFileQuery>(), Arg.Compat.Any<string>());
+        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Any<SendFileQuery>(), Arg.Any<string>());
         Assert.Equal(expected.Code, actual.Code);
         Assert.Equal(expected.Message, actual.Message);
         Assert.Equal(expected.IsChinaView, actual.IsChinaView);

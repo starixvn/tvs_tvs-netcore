@@ -22,17 +22,17 @@ public class SessionServiceTests
         var currentSession = Substitute.For<INapSession>();
         var siteSettings = Substitute.For<INapSettings>();
 
-        userService.IsHavingPermission(Arg.Compat.Any<int>(), Arg.Compat.Any<int>(), Arg.Compat.Any<string>(),
-            Arg.Compat.Any<Constant.Policy>()).ReturnsForAnyArgs(true);
+        userService.IsHavingPermission(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(),
+            Arg.Any<Constant.Policy>()).ReturnsForAnyArgs(true);
         var service = new SessionServiceImp(currentSession, userService, siteSettings, null);
 
         // Act
         var actual = service.HasPermission("", Constant.Policy.Host);
 
         // Assert
-        userService.Received(1).IsHavingPermission(Arg.Compat.Any<int>(), Arg.Compat.Any<int>(),
-            Arg.Compat.Any<string>(),
-            Arg.Compat.Any<Constant.Policy>());
+        userService.Received(1).IsHavingPermission(Arg.Any<int>(), Arg.Any<int>(),
+            Arg.Any<string>(),
+            Arg.Any<Constant.Policy>());
         Assert.True(actual);
     }
 
@@ -80,7 +80,7 @@ public class SessionServiceTests
         var user = new User { Username = "A", Id = 1, Password = Cryptography.CfsEnCode(password) };
         var userService = Substitute.For<IUserService>();
         var currentSession = Substitute.For<INapSession>();
-        userService.Get(Arg.Compat.Any<int>()).ReturnsForAnyArgs(user);
+        userService.Get(Arg.Any<int>()).ReturnsForAnyArgs(user);
         var service = new SessionServiceImp(currentSession, userService, null, null);
 
         // Act

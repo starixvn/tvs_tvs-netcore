@@ -30,7 +30,7 @@ public class AutoVoidRequestQueueServiceTests
 
         // Assert
         await repository.Received()
-            .FetchAsync<AutoVoidRequestQueueModel>(Arg.Compat.Any<GetAutoVoidRequestQueueCriteria>());
+            .FetchAsync<AutoVoidRequestQueueModel>(Arg.Any<GetAutoVoidRequestQueueCriteria>());
         Assert.NotNull(actual);
     }
 

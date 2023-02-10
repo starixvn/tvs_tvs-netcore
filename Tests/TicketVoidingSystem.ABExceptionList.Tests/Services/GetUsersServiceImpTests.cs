@@ -22,7 +22,7 @@ public class GetUsersServiceImpTests
         };
         var request = new GetUsersRequest { UserName = "aaaa" };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<UserModel>(Arg.Compat.Any<GetUsersRequest>()).ReturnsForAnyArgs(fakeData);
+        repository.FetchAsync<UserModel>(Arg.Any<GetUsersRequest>()).ReturnsForAnyArgs(fakeData);
         var service = new GetUsersServiceImp(repository);
 
         // Act

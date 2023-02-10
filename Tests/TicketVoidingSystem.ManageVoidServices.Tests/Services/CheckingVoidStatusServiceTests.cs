@@ -30,7 +30,7 @@ public class CheckingVoidStatusServiceTests
 
         // Assert
         await repository.Received()
-            .FetchAsync<VoidServiceModel>(Arg.Compat.Any<GetVoidServiceDataCriteria>());
+            .FetchAsync<VoidServiceModel>(Arg.Any<GetVoidServiceDataCriteria>());
         Assert.NotNull(actual);
     }
 

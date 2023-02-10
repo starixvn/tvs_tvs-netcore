@@ -40,7 +40,7 @@ public class GetTicketsHandlerTests
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await getTicketsService.Received().GetTickets(Arg.Compat.Any<GetTicketsQuery>());
+        await getTicketsService.Received().GetTickets(Arg.Any<GetTicketsQuery>());
         Assert.NotNull(result);
     }
 
