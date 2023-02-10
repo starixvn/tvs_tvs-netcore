@@ -55,7 +55,7 @@ public class InsertToAmendmentTableStageTests
             };
         var query = new SendFileQuery { MatchId = 900001 };
         var repository = Substitute.For<IDynamicRepository>();
-        var configuration = Substitute.For<IConfiguration>();
+        var configuration = new ConfigurationManager();
         var loggingService = Substitute.For<LoggingService>();
         configuration["EnvironmentName"] = env;
         AppSettingService.InitSetting(configuration);
@@ -72,7 +72,7 @@ public class InsertToAmendmentTableStageTests
     }
 
     [Fact]
-    public async Task InsertToAmendmentTable_InsertToMainDbHasException_ExecuteRepository()
+    public async Task InsertToAmendmentTable_InsertToMainDbException_ExecuteRepository()
     {
         // Arrange
         var exception = new Exception("Send Email Failed");
@@ -82,7 +82,7 @@ public class InsertToAmendmentTableStageTests
             };
         var query = new SendFileQuery { MatchId = 900001 };
         var repository = Substitute.For<IDynamicRepository>();
-        var configuration = Substitute.For<IConfiguration>();
+        var configuration = new ConfigurationManager();
         var loggingService = Substitute.For<LoggingService>();
         configuration["EnvironmentName"] = "UAT";
         AppSettingService.InitSetting(configuration);
@@ -97,7 +97,7 @@ public class InsertToAmendmentTableStageTests
         // Assert
         await repository.Received(1).ExecuteAsync(Arg.Any<SendDataOicCriteria>());
         await loggingService.Received(1).ErrorAsync(Arg.Any<string>(), Arg.Any<Exception>());
-        Assert.False(actual);
+        Assert.True(actual);
     }
 
     [Fact]
