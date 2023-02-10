@@ -16,11 +16,11 @@ public class SendFileQuery : GetDetailQuery
 {
     public string BetTypeName { get; set; }
 
-    public string MatchCode { get; set; }
+    public string? MatchCode { get; set; }
 
     public DateTime EventDate { get; set; }
 
-    public string MatchEvent { get; set; }
+    public string? MatchEvent { get; set; }
 
     public string? Title { get; set; }
 
