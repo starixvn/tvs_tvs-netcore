@@ -16,27 +16,7 @@ public class TicketInfoForLetstalk
 
     public string VoidToDate { get; set; }
 
-    public int SingleCount { get; set; }
-
-    public int InstantOUCount { get; set; }
-
-    public int CashOutCount { get; set; }
-
-    public int ParlayCount { get; set; }
-
-    public int OutstandingSingleCount { get; set; }
-
-    public int OutstandingParlayCount { get; set; }
-
     public bool IsMemberTemplate { get; set; }
 
     public bool IsCheckMainParlay { get; set; }
-
-    public string TargetName { get; set; }
-
-    public string Subject { get; set; }
-
-    public string Content { get; set; }
-
-    public string Group { get; set; }
 }

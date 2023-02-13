@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
@@ -38,75 +38,62 @@ public class MessageContentServiceImp : MessageContentService
         {
             return new List<string>();
         }
-        model.SingleCount = singleCount;
-        model.InstantOUCount = instantOUCount;
-        model.ParlayCount = parlayCount;
-        model.CashOutCount = cashOutCount;
+
         var matchEvent = model.Match.AwayId > 0 ? $"{model.Match.HomeName} - vs - {model.Match.AwayName}" : $"{model.Match.HomeName}";
-        var content = new StringBuilder();
-        content.AppendLine($"Match ID: {model.Match.MatchId}");
-        content.AppendLine($"Event Date: {model.Match.EventDate:dd MMMM yyyy}");
-        content.AppendLine($"Kick Off: {model.Match.KickOffTime:h:mm tt}");
-        content.AppendLine($"League: {model.Match.LeagueName}");
-        content.AppendLine($"Match: {matchEvent}");
-        content.AppendLine($"Voided by: {model.UserName}");
-        content.AppendLine($"Void Time: {model.VoidFromTime} - {model.VoidToTime}");
-        content.Append($"(Single Count: {model.SingleCount}, Instant OU: {model.InstantOUCount}, Cash Out: {model.CashOutCount}, Parlay Count: {model.ParlayCount})");
-        return new List<string> { content.ToString() };
+        var content = $"Match ID: {model.Match.MatchId}{Environment.NewLine}"
+                      + $"Event Date: {model.Match.EventDate:dd MMMM yyyy}{Environment.NewLine}"
+                      + $"Kick Off: {model.Match.KickOffTime:h:mm tt}{Environment.NewLine}"
+                      + $"League: {model.Match.LeagueName}{Environment.NewLine}"
+                      + $"Match: {matchEvent}{Environment.NewLine}"
+                      + $"Voided by: {model.UserName}{Environment.NewLine}"
+                      + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}"
+                      + $"(Single Count: {singleCount}, Instant OU: {instantOUCount}, Cash Out: {cashOutCount}, Parlay Count: {parlayCount})";
+
+        return new List<string> { content };
     }
 
     private IList<string> CreateMessageContentWithMemberTemplate(TicketInfoForLetstalk model, IEnumerable<TicketEmailModel> tickets)
     {
-        var messages = new List<string>();
         var singleTickets = tickets.Where(uusTicketService.IsValidSettledSingleTicket);
         var singleCount = singleTickets.Count(ticket => !ticket.IsInstantSettlementTicket);
-        var instantOUCount = singleTickets.Count(ticket => ticket.IsInstantSettlementTicket);
+        var instantOuCount = singleTickets.Count(ticket => ticket.IsInstantSettlementTicket);
         var cashOutCount = tickets.Count(uusTicketService.IsValidCashOut);
         var parlayCount = tickets.Count(ticket => uusTicketService.IsValidSettledParlayTicket(ticket, model.IsCheckMainParlay));
         if (singleCount == 0 && parlayCount == 0 && cashOutCount == 0)
         {
             return new List<string>();
         }
-        model.SingleCount = singleCount;
-        model.InstantOUCount = instantOUCount;
-        model.CashOutCount = cashOutCount;
-        model.ParlayCount = parlayCount;
-        model.OutstandingSingleCount = tickets.Count(ticket => !ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsRunningOrWaiting());
-        model.OutstandingParlayCount = tickets.Count(ticket => ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsRunningOrWaiting());
+
+        var outstandingSingleCount = tickets.Count(ticket => !ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsRunningOrWaiting());
+        var outstandingParlayCount = tickets.Count(ticket => ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsRunningOrWaiting());
         var members = tickets.Where(ticket => ticket.Status.IsSettled()).Select(item => item.UserName).Distinct();
         var userNames = $"Username: {string.Join(", ", members)}";
+        var content = $"Void Date: {model.VoidFromDate} - {model.VoidToDate}{Environment.NewLine}"
+                      + $"Voided by: {model.UserName}"
+                      + $"(Settled ticket: Single Count: {singleCount}, Instant OU: {instantOuCount}, Cash Out: {cashOutCount}, Parlay Count: {parlayCount}{Environment.NewLine}"
+                      + $"Outstanding: Single Count: {outstandingSingleCount}, Parlay Count: {outstandingParlayCount}){Environment.NewLine}";
 
-        var content = new StringBuilder();
-        content.AppendLine($"Void Date: {model.VoidFromDate} - {model.VoidToDate}");
-        content.AppendLine($"Voided by: {model.UserName}");
-        content.AppendLine($"(Settled ticket: Single Count: {model.SingleCount}, Instant OU: {model.InstantOUCount}, Cash Out: {model.CashOutCount}, Parlay Count: {model.ParlayCount}");
-        content.AppendLine($"Outstanding: Single Count: {model.OutstandingSingleCount}, Parlay Count: {model.OutstandingParlayCount})");
-
-        if ($"{content}{userNames}".Length > MaxContent)
-        {
-            messages.AddRange(GenerateMultipleContent(content, members));
-        }
-        else
-        {
-            messages.Add($"{content}{userNames}");
-        }
-        return messages;
+        return CreateMessageContentWithMemberTemplate(content, members, userNames);
     }
 
-    private static IEnumerable<string> GenerateMultipleContent(StringBuilder content, IEnumerable<string> members)
+    private static IList<string> CreateMessageContentWithMemberTemplate(string content, IEnumerable<string> members, string userNames)
+    {
+        return content.Length + userNames.Length > MaxContent ? GenerateMultipleContent(content, members) : new List<string> { $"{content}{userNames}" };
+    }
+
+    private static IList<string> GenerateMultipleContent(string content, IEnumerable<string> members)
     {
         var results = new List<string>();
-        content.AppendLine("Username (p1): ");
-        var tempContent = content.ToString();
-        var patch = 1;
+        var tempContent = $"{content}{Environment.NewLine}Username (p1): ";
+        var contentPart = 1;
         var index = 0;
         foreach (var member in members)
         {
             if ($"{tempContent}, {member}".Length > MaxContent)
             {
                 results.Add(tempContent);
-                patch++;
-                tempContent = $"Username (p{patch}): \r\n{member}";
+                contentPart++;
+                tempContent = $"Username (p{contentPart}): {Environment.NewLine}{member}";
             }
             else
             {
