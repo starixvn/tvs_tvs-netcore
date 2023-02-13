@@ -2,8 +2,6 @@
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as momenttimezone from 'moment-timezone';
-import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
-import { CommonService } from '../../../utility/services/common.service';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
@@ -11,12 +9,14 @@ import { BetTypesVirtualSportComponent } from '../../../utility/components/betty
 import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
 import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ModeType, Product, SportTypeConst } from '../../../utility/constants/config';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
+import { CommonService } from '../../../utility/services/common.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/advanced-mode-basketball.component';
 import { AppService } from '../app.service';
@@ -180,7 +180,7 @@ export class FilterComponent implements OnInit {
     const data = await this.commonService.getBetTypes(query);
     this.blockUIService.stop();
     if (data.result.errorCode === 0) {
-      this.commonBetTypes = new BetTypesModel(data.bettypes, true);
+      this.commonBetTypes = new BetTypesModel(data.betTypes, true);
     }
   }
 

@@ -10,7 +10,7 @@ public class BetTypesViewModel
         Result = new Result();
     }
 
-    public IEnumerable<BetTypeModel> Betypes { get; set; }
+    public IEnumerable<BetTypeModel> BetTypes { get; set; }
 
     public Result Result { get; set; }
 }

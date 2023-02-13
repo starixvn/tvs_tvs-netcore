@@ -40,7 +40,7 @@ export class BetTypesComponent implements OnChanges {
     changeIsShow() {
         if (this.model !== undefined) {
             this.model.isChecked = true;
-            this.model.bettypes.forEach(item => {
+            this.model.betTypes.forEach(item => {
                 item.isShow = item.type === this.product;
                 item.displayNumberGame(this.product, this.sportType, this.ballSequence);
                 item.isChecked = item.isShow;

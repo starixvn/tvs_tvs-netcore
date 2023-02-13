@@ -227,7 +227,7 @@ describe('FilterComponent', () => {
 
     // Assert
     expect(instance.blurMatchId).toHaveBeenCalledTimes(1);
-    expect(instance.betTypes.bettypes.length).toBe(0);
+    expect(instance.betTypes.betTypes.length).toBe(0);
   });
 
   it('#getBetTypes should return expected commonBetTypes', async() => {
@@ -240,7 +240,7 @@ describe('FilterComponent', () => {
     await instance.getBetTypes();
 
     // Assert
-    expect(instance.commonBetTypes.bettypes.length).toBe(1);
+    expect(instance.commonBetTypes.betTypes.length).toBe(1);
   });
 
   it('#getBetTypesVS should return expected groupsBetTypesVS', async() => {

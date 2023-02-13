@@ -30,7 +30,7 @@ public class BetTypesRepositoryImp : BetTypesRepository
         var betTypes = await repository.FetchAsync<BetTypeModel>(criteria);
         return new BetTypesViewModel
         {
-            Betypes = betTypes,
+            BetTypes = betTypes,
             Result = new Result
             {
                 ErrorCode = criteria.ErrCode,

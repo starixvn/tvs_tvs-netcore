@@ -1,5 +1,5 @@
-import { BetTypeModel, BallSequence, BetTypesModel } from "./bettypes.model";
 import { Product } from '../..//constants/config';
+import { BallSequence, BetTypeModel, BetTypesModel } from "./bettypes.model";
 
 describe('BetTypeModel', () => {
     const betTypeModel = new BetTypeModel('2702', '1H 1X2', false, 5, true);
@@ -59,15 +59,15 @@ describe('BetTypeModel', () => {
       // Arrange
       // Action and Asert
       betTypesModel.changeAll();
-      betTypesModel.bettypes.forEach(item => {
+      betTypesModel.betTypes.forEach(item => {
         expect(item.isChecked).toBe(true);
       });
     });
 
     it('Change item', () => {
         // Arrange
-        betTypesModel.bettypes[0].isChecked = false;
-        betTypesModel.bettypes[0].isShow = true;
+        betTypesModel.betTypes[0].isChecked = false;
+        betTypesModel.betTypes[0].isShow = true;
         // Action and Asert
         betTypesModel.changeItem();
         expect(betTypesModel.isChecked).toBe(false);

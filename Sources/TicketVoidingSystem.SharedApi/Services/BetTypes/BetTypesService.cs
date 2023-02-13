@@ -44,7 +44,7 @@ public class BetTypesServiceImp : BetTypesService
         return new GroupBetTypesViewModel
         {
             Result = betTypes.Result,
-            GroupBetTypes = betTypes.Result.IsSuccessful ? betTypes.Betypes
+            GroupBetTypes = betTypes.Result.IsSuccessful ? betTypes.BetTypes
                     .GroupBy(b => b.GroupName)
                     .Select(group => new GroupBetTypeModel { GroupName = group.Key, BetTypes = group.ToList() })
                     .OrderBy(gr => gr.GroupName)
