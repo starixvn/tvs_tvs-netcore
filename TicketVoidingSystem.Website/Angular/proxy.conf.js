@@ -5,7 +5,8 @@ const PROXY_CONFIG = [
       "/state-api",
       "/SignalR",
       "/css",
-      "/js"
+      "/js",
+      "/lib"
     ],
     target: "https://localhost:44312/",
     secure: false,
