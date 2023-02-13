@@ -17,6 +17,7 @@ import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { MatchModel } from '../../../utility/models/match.model';
 import { Result } from '../../../utility/models/result';
+import { CommonService } from '../../../utility/services/common.service';
 import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/advanced-mode-basketball.component';
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
@@ -69,7 +70,8 @@ describe('FilterComponent', () => {
       FormsModule
     ],
     providers: [
-      AppService
+      AppService,
+      CommonService
     ]
   })
   class AppModuleTest { }
@@ -170,7 +172,7 @@ describe('FilterComponent', () => {
     instance.renderProduct();
 
     // Assert
-    expect(instance.product.items.length).toBe(6);
+    expect(instance.product.items.length).toBe(7);
  });
 
  it('#renderEventType should return expected list eventtType', async() => {
@@ -231,7 +233,7 @@ describe('FilterComponent', () => {
   it('#getBetTypes should return expected commonBetTypes', async() => {
     // Arrange
     const { instance } = await shallow
-      .mock(AppService, { getBetTypes: jest.fn().mockImplementation(() => Helper.getFakeBetTypesModel()) })
+      .mock(CommonService, { getBetTypes: jest.fn().mockImplementation(() => Helper.getFakeBetTypesModel()) })
       .render();
 
     // Action
@@ -244,7 +246,7 @@ describe('FilterComponent', () => {
   it('#getBetTypesVS should return expected groupsBetTypesVS', async() => {
      // Arrange
      const { instance } = await shallow
-     .mock(AppService, { getBetTypesVirtualSports: jest.fn().mockImplementation(() => Helper.fakeGroupBetTypeVirtualSportList) })
+     .mock(CommonService, { getBetTypesVirtualSports: jest.fn().mockImplementation(() => Helper.fakeGroupBetTypeVirtualSportList) })
      .render();
 
    // Action
@@ -977,7 +979,7 @@ describe('FilterComponent', () => {
     groupBetTypes.result = new Result();
     groupBetTypes.result.errorCode = 0;
     const { instance } = await shallow
-    .mock(AppService, { getGroupBetTypes: jest.fn().mockImplementation(() => Promise.resolve(groupBetTypes)) })
+    .mock(CommonService, { getGroupBetTypes: jest.fn().mockImplementation(() => Promise.resolve(groupBetTypes)) })
     .render();
     instance.query.product = Product.SPORTS_BOOK;
     instance.tooltip.display = jest.fn();
@@ -992,7 +994,7 @@ describe('FilterComponent', () => {
     groupBetTypes.result = new Result();
     groupBetTypes.result.errorCode = 0;
     const { instance } = await shallow
-    .mock(AppService, { getGroupBetTypes: jest.fn().mockImplementation(() => Promise.resolve(groupBetTypes)) })
+    .mock(CommonService, { getGroupBetTypes: jest.fn().mockImplementation(() => Promise.resolve(groupBetTypes)) })
     .render();
     instance.query.product = Product.SPORTS_BOOK;
     instance.tooltip.display = jest.fn();
@@ -1007,7 +1009,7 @@ describe('FilterComponent', () => {
     groupBetTypes.result = new Result();
     groupBetTypes.result.errorCode = 1;
     const { instance } = await shallow
-    .mock(AppService, { getGroupBetTypes: jest.fn().mockImplementation(() => Promise.resolve(groupBetTypes)) })
+    .mock(CommonService, { getGroupBetTypes: jest.fn().mockImplementation(() => Promise.resolve(groupBetTypes)) })
     .render();
     instance.query.product = Product.SPORTS_BOOK;
     instance.tooltip.display = jest.fn();

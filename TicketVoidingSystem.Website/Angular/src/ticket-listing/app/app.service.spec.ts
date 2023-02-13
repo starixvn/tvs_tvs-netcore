@@ -1,9 +1,7 @@
-import { BetTypeVirtualSport, GroupBetTypeVirtualSport } from '../../utility/components/bettypes-virtualsports/bettypes-virtualsports.model';
-import { BetTypeModel, BetTypesModel } from '../../utility/components/bettypes/bettypes.model';
+import { GetBetTypesQuery } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MatchModel } from '../../utility/models/match.model';
 import { Result } from '../../utility/models/result';
-import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
-import { BlockUiService } from '../../utility/modules/block-ui/block-ui.service';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
 import { SelectionTypeModel } from './filter/filter.model';
@@ -35,48 +33,6 @@ describe('AppService', () => {
 
     // Action
    const actualData = await appService.getLicensees();
-
-   // Assert
-   expect(actualData).toStrictEqual(expectedData);
-  });
-
-  it('#getBetTypesVirtualSports should return expected data', async () => {
-    // Arrange
-    const expectedData = [
-      new GroupBetTypeVirtualSport([0,1],[new BetTypeVirtualSport(1, 'Handicap')])
-    ];
-    mockHttpService.getJson.mockResolvedValue(expectedData);
-
-    // Action
-   const actualData = await appService.getBetTypesVirtualSports();
-
-   // Assert
-   expect(actualData).toStrictEqual(expectedData);
-  });
-
-  it('#getGroupBetTypes should return expected data', async () => {
-    // Arrange
-    const groupBettype: GroupBetType[] = [
-      new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
-      new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
-    ];
-    const expectedGroupBettypesModel = new GroupBetTypesModel(groupBettype, true);
-    mockHttpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
-
-    // Action
-   const actualData = await appService.getGroupBetTypes(new GetBetTypesQuery());
-
-   // Assert
-   expect(actualData).toStrictEqual(expectedGroupBettypesModel);
-  });
-
-  it('#getBetTypes should return expected data', async () => {
-    // Arrange
-    const expectedData = new BetTypesModel([new BetTypeModel('2702', '1H 1X2', false, 5, true)], true);
-    mockHttpService.postJson.mockResolvedValue(expectedData);
-
-    // Action
-   const actualData = await appService.getBetTypes(new GetBetTypesQuery());
 
    // Assert
    expect(actualData).toStrictEqual(expectedData);
@@ -175,7 +131,7 @@ describe('AppService', () => {
   it('#exportExcel should call #downloadFile with expected params', async() => {
     // Arrange
     const query = new ExportExcelQuery();
-    const url = `Misc/TicketListing/ExportExcel`;
+    const url = `api/TicketListing/ExportExcel`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action

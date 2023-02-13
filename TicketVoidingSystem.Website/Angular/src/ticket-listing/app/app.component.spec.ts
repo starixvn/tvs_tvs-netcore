@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { ModalType } from '../../utility/components/modal/modal';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { NotificationComponent } from '../../utility/components/notification/notification.component';
@@ -183,7 +184,8 @@ describe('AppComponent', () => {
       SummaryComponent,
       TicketsComponent,
       NotificationComponent,
-      MessagesResponseComponent
+      MessagesResponseComponent,
+      MenuBarComponent
     ],
     imports: [
       ToolTipModule

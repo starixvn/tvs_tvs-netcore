@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { PagingComponent } from 'src/utility/components/paging/paging/paging.component';
-import { PagingModel } from 'src/utility/components/paging/paging/paging.model';
-import { PipeModule } from 'src/utility/pipes/pipe.module';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Product } from '../../../utility/constants/config';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { SummaryItem } from '../summary/summary.model';
 import { TicketsModel } from './ticket.model';
 import { TicketsComponent } from './tickets.component';

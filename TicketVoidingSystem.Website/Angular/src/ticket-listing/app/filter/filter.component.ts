@@ -2,8 +2,8 @@
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as momenttimezone from 'moment-timezone';
-import { BlockUiService } from 'src/utility/components/block-ui/block-ui.service';
-import { CommonService } from 'src/utility/services/common.service';
+import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
+import { CommonService } from '../../../utility/services/common.service';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';

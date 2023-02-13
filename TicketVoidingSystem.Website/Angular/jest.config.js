@@ -6,20 +6,11 @@ module.exports = {
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
     '<rootDir>/src/**/*.spec.ts'
-    //'<rootDir>/src/ab-white-list/**/*.spec.ts'
+    //'<rootDir>/src/mark-tickets/app/mark-unmark-ticket/filter-tickets/match-id/match-id.component.spec.ts'
   ],
   testPathIgnorePatterns: [
-    '<rootDir>/src/void-single-bet/app/tickets/group.model.spec.ts',
-    '<rootDir>/src/void-single-bet/app/testing/',
-    '<rootDir>/src/ticket-listing/app/advanced-mode-basketball/advanced-mode-basketball.component.spec.ts',
+    '<rootDir>/src/manage-void-services/',
     '<rootDir>/src/utility/',
-    '<rootDir>/src/void-formula-bets/',
-    '<rootDir>/src/get-betid-for-voiding/',
-    '<rootDir>/src/after-void-history/',
-    '<rootDir>/src/add-request/app/add-request/filter/sub-issue-type-dialog/',
-    '<rootDir>/src/add-request/app/add-request/league-event/',
-    '<rootDir>/src/void-request/app/void-other-issue/',
-    '<rootDir>/src/void-request/app/app.service.spec.ts',
   ],
   setupFilesAfterEnv : ['<rootDir>/src/test-setup.ts'],
   collectCoverage: true,
