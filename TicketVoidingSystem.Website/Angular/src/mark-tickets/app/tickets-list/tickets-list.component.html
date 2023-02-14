@@ -156,7 +156,7 @@
   </div>
 
   <div class="pt-3">
-    <button *ngIf="model.getNumberOfTickets() > 0" class="btn btn-sm btn-primary mr-4 ml-4"
+    <button *ngIf="model.getNumberOfTickets() > 0" class="btn btn-sm btn-primary"
       (click)="markSelectedTicketsOnPage()" [disabled]="!dataPermission.isHostMarkTickets">
       {{getStatus}} selected tickets ({{model.getNumberOfCheckedTickets()}}/{{model.getNumberOfTickets()}}) on current
       page

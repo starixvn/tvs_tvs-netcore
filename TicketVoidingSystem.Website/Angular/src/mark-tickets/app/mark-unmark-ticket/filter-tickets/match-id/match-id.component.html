@@ -1,6 +1,6 @@
 <div class="search-by-match">
   <div class="row no-gutters">
-    <div class="width-170"><label>Match ID</label></div>
+    <div class="width-170 col-form-label"><label>Match ID</label></div>
     <div class="col-1">
       <input class="match-id form-control form-control-sm" type="text" numbersOnly [(ngModel)]="model.matchId"
         (blur)="blurMatchId()">
@@ -8,34 +8,33 @@
   </div>
 
   <div class="row no-gutters">
-    <div class="width-170"><label>Trans Date (GMT +8)</label></div>
+    <div class="width-170 col-form-label"><label>Trans Date (GMT +8)</label></div>
     <div class="col-auto wrapper-tooltip">
       <div class="d-flex" *ngFor="let item of rangeTimes; first as isFirst; last as isLast; index as index">
-        <label class="mg-right-10">From</label>
+        <label class="col-form-label mr-2">From</label>
         <date-full-time-new #dateTimeComponent
           [index]="index"
           class="from-date-time{{index}} mr-2"
           [isDisabled]="false"
           [(dateTime)]="item.from">
         </date-full-time-new>
-        <label class="mg-10-20">To</label>
+        <label class="col-form-label mr-2">To</label>
         <date-full-time-new #dateTimeComponent
           [index]="index"
           class="to-date-time{{index}} mr-2"
           [isDisabled]="false"
           [(dateTime)]="item.to">
         </date-full-time-new>
-        <div *ngIf="isLast"><em class="pointer mg-10-20 fa fa-plus-circle" (click)="addRangeTimes()"></em></div>
-        <div *ngIf="!isLast"><em class="pointer mg-10-20 fa fa-minus-circle" (click)="removeRangeTimes(index)"></em>
+        <div *ngIf="isLast" class="add-range-time"><em class="pointer fa fa-plus-circle" (click)="addRangeTimes()"></em></div>
+        <div *ngIf="!isLast" class="add-range-time"><em class="pointer fa fa-minus-circle" (click)="removeRangeTimes(index)"></em>
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="row no-gutters">
-    <div class="width-170"><label>Currency</label></div>
-    <div class="col-2 currency-filter">
+    <div class="width-170 col-form-label"><label>Currency</label></div>
+    <div class="currency-filter mr-4">
       <ng-select class="currencies-id" [items]="currencies.items" [multiple]="true" bindLabel="currencyCode"
         groupBy="group" [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="id"
         [(ngModel)]="currencies.selected" placeholder="Select currency..." (change)="updateSelectedCurrency()"
@@ -57,37 +56,45 @@
         </ng-template>
       </ng-select>
     </div>
-    <div class="col-1 text-right mg-right-10"><label>Event Type</label></div>
-    <div class="col-1">
-      <ng-select class="custom-sm" [items]="eventType.items" bindLabel="name" bindValue="value"
-        [(ngModel)]="eventType.value" [clearable]="false" (change)="changeEventType()">
-      </ng-select>
-    </div>
-    <div class="col-3" *ngIf="eventType.value === '1'">
-      <div class="mg-10-20 padding-2-10 d-flex border border-dark rounded width-320">
-        <span class="bold">Live Score:</span>
-        <label class="mg-10-20 d-flex">Home </label>
-        <input class="width-40 form-control form-control-sm" type="text" numbersOnly maxlength="2"
-          [(ngModel)]="model.liveHomeScore" />
-        <label class="mg-10-20 d-flex">Away </label>
-        <input class="width-40 form-control form-control-sm" type="text" numbersOnly maxlength="2"
-          [(ngModel)]="model.liveAwayScore" />
+    <div class="d-flex mr-4">
+      <div class="text-right col-form-label mr-2"><label>Event Type</label></div>
+      <div class="event-type-filter mr-2">
+        <ng-select class="custom-sm" [items]="eventType.items" bindLabel="name" bindValue="value"
+          [(ngModel)]="eventType.value" [clearable]="false" (change)="changeEventType()">
+        </ng-select>
+      </div>
+      <div class="" *ngIf="eventType.value === '1'">
+        <div class="padding-2-10 d-flex align-items-center rounded width-320 live-score">
+          <span class="bold">Live Score:</span>
+          <label class="mg-10-20 d-flex">Home </label>
+          <input class="width-40 form-control form-control-sm" type="text" numbersOnly maxlength="2"
+            [(ngModel)]="model.liveHomeScore" />
+          <label class="mg-10-20 d-flex">Away </label>
+          <input class="width-40 form-control form-control-sm" type="text" numbersOnly maxlength="2"
+            [(ngModel)]="model.liveAwayScore" />
+        </div>
       </div>
     </div>
     <div class="control-bet">
-      <label>Bet</label>
-      <label>
-        <input type="radio" name="bet" value="All" [(ngModel)]="model.bet" />
-        All
-      </label>
-      <label>
-        <input type="radio" name="bet" value="Single" [(ngModel)]="model.bet" />
-        Single
-      </label>
-      <label>
-        <input type="radio" name="bet" value="Parlay" [(ngModel)]="model.bet" />
-        Sub Parlay
-      </label>
+      <div class="form-check form-check-inline"><label class="form-check-label">Bet</label></div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="bet" id="radio-all" value="All" [(ngModel)]="model.bet" />
+        <label class="form-check-label" for="radio-all">
+          All
+        </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="bet" id="radio-single" value="Single" [(ngModel)]="model.bet" />
+        <label class="form-check-label" for="radio-single">
+          Single
+        </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="bet" id="radio-parlay" value="Parlay" [(ngModel)]="model.bet" />
+        <label class="form-check-label" for="radio-parlay">
+          Sub Parlay
+        </label>
+      </div>
     </div>
   </div>
 

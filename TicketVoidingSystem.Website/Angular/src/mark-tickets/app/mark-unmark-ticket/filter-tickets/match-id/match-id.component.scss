@@ -16,14 +16,26 @@
   }
 
   .control-bet {
-    margin-left: 10px;
-    
-    label {
-      margin-left: 15px;
-    }
+    height: 36px;
+    display: flex;
+    align-items: center;
   }
-   
+  
+  .add-range-time {
+    height: 29.5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .live-score {
+    border: 1px solid #ced4da;
+  }
+  .event-type-filter {
+    width: 100px;
+  }
+
   .currency-filter {
+    width: 360px;
     ::ng-deep ng-select {
       .ng-option-selected,
       .ng-value {

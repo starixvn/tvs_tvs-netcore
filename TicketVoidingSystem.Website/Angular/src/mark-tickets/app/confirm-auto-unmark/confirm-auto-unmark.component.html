@@ -54,9 +54,10 @@
         </div>
 
         <div class="col-auto">
-            <div class="row">
-                <label class="col-form-label col-form-label-sm mg-right-25">
-                    <input class="checkbox-exclude-test" type="checkbox" [(ngModel)]="query.isExcludeTest"/>Exclude test data
+            <div class="form-check form-check-inline d-flex align-items-center h-100">
+                <input class="form-check-input" type="checkbox" id="checkbox-test" value="Single" [(ngModel)]="query.isExcludeTest" />
+                <label class="form-check-label" for="checkbox-test">
+                    Exclude test data
                 </label>
             </div>
         </div>

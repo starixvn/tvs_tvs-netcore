@@ -29,8 +29,19 @@
     line-height: 1.5;
     align-items: center;
 
-    label {
+    input {
+      cursor: pointer;
+    }
+
+    .multiple-select-item-action {
+      cursor: pointer;
+      margin-left: -5px;
+      padding-left: 5px;
+    }
+
+    .options {
       margin-bottom: 0;
+      cursor: pointer;
     }
 
     .i-expanded {

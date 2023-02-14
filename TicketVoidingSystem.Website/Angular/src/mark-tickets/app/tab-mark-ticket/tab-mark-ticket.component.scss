@@ -4,7 +4,9 @@ ul.nav {
     li.nav-item {
         margin-right: 10px;
         border: 1px solid #ccc;
-        border-radius: .2rem;
+        border-top-left-radius: .2rem;
+        border-top-right-radius: .2rem;
+        
         button, button:focus {
             background-color: #4e71bb;
             color:#fff;
@@ -29,6 +31,9 @@ ul.nav {
     }
     
     ::ng-deep button {
-        border-radius: 2px;
+        border-top-left-radius: .2rem;
+        border-top-right-radius: .2rem;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }

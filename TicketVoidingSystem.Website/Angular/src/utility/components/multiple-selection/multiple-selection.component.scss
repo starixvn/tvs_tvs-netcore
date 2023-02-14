@@ -20,7 +20,7 @@
     height: 0;
     display: inline-block;
     vertical-align: middle;
-    top: 16px;
+    top: 12px;
     border-top: 5px dashed;
     border-right: 5px solid;
     border-left: 5px solid;
@@ -35,7 +35,7 @@
     height: 0;
     display: inline-block;
     vertical-align: middle;
-    top: 16px;
+    top: 12px;
     border-bottom: 5px dashed;
     border-right: 5px solid;
     border-left: 5px solid;
@@ -66,7 +66,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 13px;
     font-weight: normal;
     line-height: 20px;
     position: relative;
@@ -95,7 +94,6 @@
     float: left;
     width: 100%;
     margin: 0px;
-    font-size: 14px;
     text-align: left;
     list-style: none;
     background-color: #fff;
@@ -121,8 +119,10 @@
       line-height: 25px;
 
       div.icon-dropdown {
-        width: auto;
-        margin-right: 2px;
+        cursor: pointer;
+        width: 20px;
+        text-align: right;
+        padding-right: 2px;
       }
 
       label {
@@ -139,8 +139,9 @@
 
   .multiple-selection {
     button {
-      width: 100%;
-      margin-bottom: 0px;
+      height: 29.5px;
+      display: flex;
+      align-items: center;
     }
   }
 }

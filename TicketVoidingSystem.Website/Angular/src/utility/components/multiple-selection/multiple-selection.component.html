@@ -5,8 +5,8 @@
   </button>
   <div class="show-tree-view" *ngIf="multipleSelect.items != undefined && isCollapse">
     <div class="dropdown-header d-flex" *ngIf="multipleSelect.showHeader">
-      <label>
-        <input type="checkbox" [(ngModel)]="multipleSelect.isCheckAll"
+      <label class="d-flex align-items-center">
+        <input class="mr-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll"
           (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" />
         {{multipleSelect.checkAllCheckBoxText}}
       </label>

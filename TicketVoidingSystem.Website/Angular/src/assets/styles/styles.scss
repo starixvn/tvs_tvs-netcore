@@ -5,7 +5,10 @@
 @import url("~ngx-toastr/toastr.css");
 @import url("~@ng-select/ng-select/themes/default.theme.css");
 
-body {
+body,
+label,
+.btn,
+.form-control {
   font-size: 13px !important;
 }
 
@@ -63,7 +66,6 @@ body::-webkit-scrollbar-thumb {
 
 .ng-select.custom-sm,
 .ng-dropdown-panel.custom-sm {
-  font-size: .875rem;
   border-radius: .2rem;
 }
 
@@ -242,4 +244,24 @@ fieldset {
 .border-radius-right {
   border-top-right-radius: 0.25rem;
   border-bottom-right-radius: 0.25rem;
+}
+
+.btn {
+  border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
+}
+
+.ng-select {
+  .ng-value {
+    font-size: 13px !important;
+  }
+  .ng-select-container {
+    min-height: auto;
+    height: 29.5px !important;
+  }
+}
+
+input[type=checkbox],
+input[type=radio],
+.form-check-label {
+  cursor: pointer;
 }

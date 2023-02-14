@@ -19,7 +19,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   @Input() isDisabled: boolean;
   @Input() maxDate: NgbDate;
   @Input() minDate: NgbDate;
-  @Input() allowedHideDate: boolean;
+  @Input() allowedHideDate = false;
   @Input() readonly = true;
   @Output() dateTimeChange = new EventEmitter<string>();
   @Output() changeEvent = new EventEmitter();

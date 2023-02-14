@@ -19,7 +19,12 @@
     }
 
     .input-group-append {
-        height: 31px;
+        height: 29.5px;
+
+        .input-group-text {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
     }
 
     label {
@@ -28,6 +33,8 @@
     
     .input-date {
         width: 106px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
         z-index: 0;
     }
 }

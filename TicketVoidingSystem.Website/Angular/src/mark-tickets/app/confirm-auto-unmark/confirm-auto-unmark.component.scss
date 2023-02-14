@@ -1,6 +1,5 @@
 @import "../../../assets/styles/mixin.scss";
 
-$inputHeight: 36px;
 $inputWidth: 140px;
 $areaMaxWidth: 1423px;
 
@@ -16,22 +15,15 @@ $areaMaxWidth: 1423px;
 
   .match-id{
     width: $inputWidth;
-    height: $inputHeight;
   }
 
   .sport {
     width: 240px;
-    height: $inputHeight;
   }
 
   .marked-by-dropdown {
     width: $inputWidth;
     display: inline-block;
-  }
-
-  .checkbox-exclude-test {
-    margin-bottom: 3px;
-    margin-right: 5px;
   }
 
   .btn-search {
