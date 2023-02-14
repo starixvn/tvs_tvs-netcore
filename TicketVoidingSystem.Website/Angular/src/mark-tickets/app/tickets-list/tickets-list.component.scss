@@ -6,17 +6,17 @@
   position: relative;
 
   .icon-checkbox-none {
-    @include setIconCheckBox('../../../assets/images/checkBox.png');
+    @include setIconCheckBox('../images/checkBox.png');
     background-position: 0px -17px;
   }
 
   .icon-checkbox-any {
-    @include setIconCheckBox('../../../assets/images/checkBox.png');
+    @include setIconCheckBox('../images/checkBox.png');
     background-position: 0px -34px;
   }
 
   .icon-checkbox-all {
-    @include setIconCheckBox('../../../assets/images/checkBox.png');
+    @include setIconCheckBox('../images/checkBox.png');
     background-position: 0px 0px;
   }
 
@@ -25,11 +25,11 @@
   }
 
   .icon-arrow-white-down {
-    @include icon-arrow-white-down('../../../assets/images/arrow-down.png');
+    @include icon-arrow-white-down('../images/arrow-down.png');
   }
 
   .title-tickets-list {
-    @include grid-title('../../../assets/images/excel-icon.png')
+    @include grid-title('../images/excel-icon.png')
   }
 
   table {
