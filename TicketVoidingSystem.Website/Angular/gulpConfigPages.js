@@ -62,84 +62,12 @@ const markTickets = {
   transformFolder: '../wwwroot/dist/mark-tickets',
   indexEJSPath: './src/mark-tickets/index.ejs'
 };
-
-// const voidSingleBet = {
-//   pageName: 'VoidSingleBet',
-//   tsconfigFiles: [
-//     'void-single-bet/main.ts',
-//     'polyfills.ts'
-//   ],
-//   deployUrl: 'dist/void-single-bet/',
-//   index: 'src/void-single-bet/index.cshtml',
-//   main: 'src/void-single-bet/main.ts',
-//   transformFolder: '../dist/void-single-bet',
-//   indexEJSPath: './src/void-single-bet/index.ejs'
-// };
-
-// const addRequest = {
-//   pageName: 'AddRequest',
-//   tsconfigFiles: [
-//     'add-request/main.ts',
-//     'polyfills.ts'
-//   ],
-//   deployUrl: 'dist/ticket-voiding-system/add-request/',
-//   index: 'src/add-request/index.cshtml',
-//   main: 'src/add-request/main.ts',
-//   transformFolder: '../dist/ticket-voiding-system/add-request',
-//   indexEJSPath: './src/add-request/index.ejs'
-// };
-
-// const editRequest = {
-//   pageName: 'EditRequest',
-//   tsconfigFiles: [
-//     'edit-request/main.ts',
-//     'polyfills.ts'
-//   ],
-//   deployUrl: 'dist/ticket-voiding-system/edit-request/',
-//   index: 'src/edit-request/index.cshtml',
-//   main: 'src/edit-request/main.ts',
-//   transformFolder: '../dist/ticket-voiding-system/edit-request',
-//   indexEJSPath: './src/edit-request/index.ejs'
-// };
-
-// const manageRequest = {
-//   pageName: 'ManageRequest',
-//   tsconfigFiles: [
-//     'manage-request/main.ts',
-//     'polyfills.ts'
-//   ],
-//   deployUrl: 'dist/ticket-voiding-system/manage-request/',
-//   index: 'src/manage-request/index.cshtml',
-//   main: 'src/manage-request/main.ts',
-//   transformFolder: '../dist/ticket-voiding-system/manage-request',
-//   indexEJSPath: './src/manage-request/index.ejs'
-// };
-
-// const voidRequest = {
-//   pageName: 'VoidRequest',
-//   tsconfigFiles: [
-//     'void-request/main.ts',
-//     'polyfills.ts'
-//   ],
-//   deployUrl: 'dist/ticket-voiding-system/void-request/',
-//   index: 'src/void-request/index.cshtml',
-//   main: 'src/void-request/main.ts',
-//   transformFolder: '../dist/ticket-voiding-system/void-request',
-//   indexEJSPath: './src/void-request/index.ejs'
-// };
-
-
 const configPages = [
   // homePage,
   // manageVoidServices,
   // abExceptionList,
   // markTickets,
-  ticketListing,
-  
-  // addRequest,
-  // editRequest,
-  // manageRequest,
-  // voidRequest
+  ticketListing
 ];
 
 module.exports = configPages;

@@ -37,7 +37,7 @@
     <div class="line-2">
       <div class="product-type">
         <label *ngFor="let item of product.items">
-          <input type="radio" name="product" [attr.value]="item.value" [checked]="item.value === 0"
+          <input class="mr-1" type="radio" name="product" [attr.value]="item.value" [checked]="item.value === 0"
             (change)="changeProduct(item.value)" />
           {{item.name}}
         </label>
@@ -53,15 +53,15 @@
       <div class="single-or-sub-parlay" *ngIf="query.product === 0">
         <label>Bet</label>
         <label>
-          <input type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="All">
+          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="All">
           All
         </label>
         <label>
-          <input type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="Single">
+          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="Single">
           Single
         </label>
         <label>
-          <input type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay">
+          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay">
           Sub Parlay
         </label>
       </div>
@@ -73,11 +73,11 @@
         </legend>
         <div class="optional-filters">
           <div class="score">
-            <span class="bold">Score:</span>
+            <span class="bold d-flex align-items-center">Score:</span>
             <label>Home<input type="text" class="form-control" only-number maxlength="3" [(ngModel)]="query.liveHomeScore" /></label>
             <label>Away<input type="text" class="form-control" only-number maxlength="3" [(ngModel)]="query.liveAwayScore" /></label>
           </div>
-          <label><span class="bold">Trans Date (GMT+ 8):</span> <input type="checkbox"
+          <label><span class="bold mr-1">Trans Date (GMT+ 8):</span> <input type="checkbox"
               (change)="setDateTime();disabledTransDate=!disabledTransDate" /></label>
           <div class="date-time">
             <label class="mg-right-10">From</label>
@@ -128,7 +128,7 @@
     <div [hidden]="isHideNormalAdvancedMode()">
       <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true" [allBetTypes]="allBetTypes"></advanced-mode>
     </div>
-    <div class="search">
+    <div class="search mt-2">
       <input type="button" class="submit" value="Search" (click)="search()" />
     </div>
   </div>
