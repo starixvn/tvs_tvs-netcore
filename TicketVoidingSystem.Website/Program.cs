@@ -42,6 +42,7 @@ builder.Services.AddControllersWithViews(options =>
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new CustomDateTimeJsonConverter());
+    options.JsonSerializerOptions.Converters.Add(new CustomIntJsonConverter());
 });
 
 // Build app
