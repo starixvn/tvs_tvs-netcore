@@ -1,64 +1,51 @@
-﻿using Fanex.NAP.Core.Business;
-using TicketVoidingSystem.Models;
+﻿using AutoMapper;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Models;
-using TicketVoidingSystem.VoidSingleBet.ViewModels;
-using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
 
 public interface GetTicketsService
 {
-    Task<Match> GetMatch(int matchId);
-
-    Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query);
-
-    Group<TicketViewModel> AssignData(Group<GetTicketModel> group, Match match);
+    Task<IList<GetTicketModel>> GetTickets(GetTicketsQuery query);
 }
 
-public class GetTicketsServiceImp : GetTicketsService
+public class GetTicketsRepositoryImp : GetTicketsService
 {
-    private readonly TicketService ticketService;
-    private readonly ISessionService sessionService;
-    private readonly Repository repository;
+    private readonly IMapper mapper;
+    private readonly IDynamicRepository repository;
 
-    public GetTicketsServiceImp(
-        TicketService ticketService,
-        ISessionService sessionService,
-        Repository repository)
+    public GetTicketsRepositoryImp(IDynamicRepository repository, IMapper mapper)
     {
-        this.ticketService = ticketService;
-        this.sessionService = sessionService;
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public async Task<Match> GetMatch(int matchId)
+    public async Task<IList<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
-        return await repository.GetMatch(matchId);
-    }
-
-    public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
-    {
-        return await repository.GetTickets(query);
-    }
-
-    public Group<TicketViewModel> AssignData(Group<GetTicketModel> group, Match match)
-    {
-        var permission = new UserPermission
+        var ticketsInAllServers = new List<GetTicketModel>();
+        var criteria = CreateGetTicketsCriteria(query);
+        foreach (var server in SiteDbGroupConstant.ServerList)
         {
-            SettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host),
-            UnSettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host),
-            InstantlySettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledandInstantlySettledSingleBet, Constant.Policy.Host)
-        };
-        var tickets = new List<TicketViewModel>();
-        var index = 1;
-        foreach (var item in group.Tickets)
-        {
-            var ticket = ticketService.Render(item, match, permission);
-            ticket.No = index++;
-            tickets.Add(ticket);
+            criteria.SiteDbGroupId = server.Id;
+            var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
+            ticketsInAllServers.AddRange(tickets);
         }
 
-        return new Group<TicketViewModel> { Name = group.Name, Tickets = tickets };
+        return ticketsInAllServers.OrderBy(x => x.IsMixParlay).ToList();
+    }
+
+    private GetTicketsCriteria CreateGetTicketsCriteria(GetTicketsQuery query)
+    {
+        var criteria = mapper.Map<GetTicketsCriteria>(query);
+        criteria.SecondAcceptFlag = query.TicketType;
+        criteria.LiveIndicator = query.EventType;
+        criteria.FromTransDate = query.FromTransDate.ZoneCanada();
+        criteria.ToTransDate = query.ToTransDate.ZoneCanada();
+        criteria.BetTypes = query.BetTypes.ToBetTypeXml();
+
+        return criteria;
     }
 }

@@ -11,6 +11,8 @@ public interface MatchService
 {
     Task<Match> GetMatch(GetMatchInfoCriteria criteria);
 
+    Task<Match> GetMatch(int matchId);
+
     Match UpdateMatchInfoFromRemotingRef(Match match);
 }
 
@@ -31,6 +33,12 @@ public class MatchServiceImp : MatchService
 
     public async Task<Match> GetMatch(GetMatchInfoCriteria criteria)
     {
+        return await repository.GetAsync<Match>(criteria);
+    }
+
+    public async Task<Match> GetMatch(int matchId)
+    {
+        var criteria = new GetMatchInfoCriteria { MatchId = matchId };
         return await repository.GetAsync<Match>(criteria);
     }
 

@@ -5,11 +5,6 @@ namespace TicketVoidingSystem.VoidSingleBet.ViewModels;
 
 public class ListTicketsViewModel
 {
-    public ListTicketsViewModel()
-    {
-        Groups = new List<Group<TicketViewModel>>();
-    }
-
     public int TotalItems { get; set; }
 
     public int SingleCount { get; set; }
@@ -36,5 +31,5 @@ public class ListTicketsViewModel
 
     public string Id { get; set; }
 
-    public List<Group<TicketViewModel>> Groups { get; set; }
+    public IEnumerable<Group<TicketViewModel>> Groups { get; set; }
 }
