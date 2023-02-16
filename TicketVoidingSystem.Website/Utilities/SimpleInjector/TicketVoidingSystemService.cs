@@ -22,7 +22,7 @@ public static class TicketVoidingSystemService
         services.AddSingleton<RemotingRefWrapperService, RemotingRefWrapperServiceImp>();
         services.AddSingleton<BetListService, BetListServiceImp>();
         services.AddSingleton<OddsService, OddsServiceImp>();
-        services.AddSingleton<MatchService, MatchServiceImp>();
+        services.AddTransient<MatchService, MatchServiceImp>();
         services.AddSingleton<LogActionFilterAttribute>();
 
         //Letstalk

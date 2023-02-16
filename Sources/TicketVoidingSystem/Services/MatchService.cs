@@ -1,4 +1,7 @@
-﻿using TicketVoidingSystem.Constants;
+﻿using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
 
@@ -6,23 +9,32 @@ namespace TicketVoidingSystem.Services;
 
 public interface MatchService
 {
-    Match UpdateDataFromRemotingRef(Match match);
+    Task<Match> GetMatch(GetMatchInfoCriteria criteria);
+
+    Match UpdateMatchInfoFromRemotingRef(Match match);
 }
 
 public class MatchServiceImp : MatchService
 {
+    private readonly IDynamicRepository repository;
     private readonly RemotingRefWrapperService remotingRefWrapperService;
     private const int SportType160 = 160;
     private const int SportType161 = 161;
     private const int SportType164 = 164;
     private const int SportType207 = 207;
 
-    public MatchServiceImp(RemotingRefWrapperService remotingRefWrapperService)
+    public MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefWrapperService)
     {
+        this.repository = repository;
         this.remotingRefWrapperService = remotingRefWrapperService;
     }
 
-    public Match UpdateDataFromRemotingRef(Match match)
+    public async Task<Match> GetMatch(GetMatchInfoCriteria criteria)
+    {
+        return await repository.GetAsync<Match>(criteria);
+    }
+
+    public Match UpdateMatchInfoFromRemotingRef(Match match)
     {
         if (match == null)
         {

@@ -1,6 +1,6 @@
 ﻿using Fanex.Data.Repository;
 
-namespace TicketVoidingSystem.SharedApi.Criteria.MatchInfo;
+namespace TicketVoidingSystem.Criteria;
 
 public class GetMatchInfoCriteria : CriteriaBase
 {
