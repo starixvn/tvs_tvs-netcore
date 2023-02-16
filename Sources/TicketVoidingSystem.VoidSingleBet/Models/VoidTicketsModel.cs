@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.VoidSingleBet.Models;
+﻿using TicketVoidingSystem.Models.SendEmail;
+
+namespace TicketVoidingSystem.VoidSingleBet.Models;
 
 public class VoidTicketsModel
 {

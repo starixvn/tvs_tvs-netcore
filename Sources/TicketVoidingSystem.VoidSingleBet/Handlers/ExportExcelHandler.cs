@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
@@ -9,7 +10,7 @@ public class ExportExcelRequest : GetTicketsQuery, IRequest<ExcelFileModel>
 {
 }
 
-public class ExportExcelHandler : IAsyncRequestHandler<ExportExcelRequest, ExcelFileModel>
+public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileModel>
 {
     private readonly ExcelService<GetTicketsQuery> excelService;
 
@@ -18,13 +19,13 @@ public class ExportExcelHandler : IAsyncRequestHandler<ExportExcelRequest, Excel
         this.excelService = excelService;
     }
 
-    public async Task<ExcelFileModel> Handle(ExportExcelRequest message)
+    public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
-        var createDate = $"{SystemTime.Now:yyyy_MM_dd_HH_mm_ss}";
-        var fileName = $"{message.MatchId}_Single_Tickets_{createDate}";
+        var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+        var fileName = $"{request.MatchId}_Single_Tickets_{createDate}";
         return new ExcelFileModel
         {
-            Content = await excelService.CreateStreamAsync(message, TemplateExcel.VoidSingleBet),
+            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.VoidSingleBet),
             FileName = fileName
         };
     }

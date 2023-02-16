@@ -14,6 +14,8 @@ namespace TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
 public interface MapTicketService
 {
     TicketViewModel MapToTicketViewModel(GetTicketModel item, Match match, UserPermission permission);
+
+    ExcelTicketModel MapToTicketExcelModel(GetTicketModel item, Match match);
 }
 
 public class MapTicketServiceImp : MapTicketService
@@ -30,6 +32,18 @@ public class MapTicketServiceImp : MapTicketService
     }
 
     public TicketViewModel MapToTicketViewModel(GetTicketModel item, Match match, UserPermission permission)
+    {
+        var viewModel = MapToTicketViewModel(item, match);
+        viewModel.IsDisable = checkBoxService.IsDisable(item, permission);
+        viewModel.Value = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString();
+        viewModel.MainTransId = item.MainTransId.ToString();
+        viewModel.IsCricket = item.IsCricket;
+        viewModel.IsMarked = item.IsMarked;
+
+        return viewModel;
+    }
+
+    private TicketViewModel MapToTicketViewModel(GetTicketModel item, Match match)
     {
         var viewModel = new TicketViewModel();
         var ticketHelper = new TicketHelper
@@ -52,14 +66,26 @@ public class MapTicketServiceImp : MapTicketService
         viewModel.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();
         viewModel.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
         viewModel.Currency = item.CurrencyName;
-        viewModel.SiteDbGroupId = item.SiteDbGroupId;
-        viewModel.IsDisable = checkBoxService.IsDisable(item, permission);
-        viewModel.Value = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString();
-        viewModel.MainTransId = item.MainTransId.ToString();
-        viewModel.IsCricket = item.IsCricket;
-        viewModel.IsMarked = item.IsMarked;
 
+        viewModel.SiteDbGroupId = item.SiteDbGroupId;
         return viewModel;
+    }
+
+    public ExcelTicketModel MapToTicketExcelModel(GetTicketModel item, Match match)
+    {
+        var viewModel = MapToTicketViewModel(item, match);
+        viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "x" : string.Empty;
+
+        var excelTicket = mapper.Map<ExcelTicketModel>(viewModel);
+        excelTicket.BetId = viewModel.BetId.LineBreak();
+        excelTicket.Member = viewModel.Member.LineBreak();
+        excelTicket.Odds = viewModel.Odds.DefaultText();
+        excelTicket.Stake = viewModel.Stake.StakeText();
+        excelTicket.Status = viewModel.Status.DefaultText();
+        excelTicket.Sa = item.SecAcceptFlag ? "√" : string.Empty;
+        excelTicket.Choice = viewModel.Choice.ChoiceSubParlay(item.IsMixParlay);
+
+        return excelTicket;
     }
 
     private Ticket CreateTicketBetList(GetTicketModel item, Match match)

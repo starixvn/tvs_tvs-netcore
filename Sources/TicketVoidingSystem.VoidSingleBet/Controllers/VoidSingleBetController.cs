@@ -31,19 +31,11 @@ public class VoidSingleBetController : ControllerBase
 
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
-    public async Task<JsonResult> GetTickets(GetTicketsRequest request)
-    {
-        var model = await mediator.Send(request).ConfigureAwait(false);
-        return this.JsonNet(model);
-    }
+    public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
-    public async Task<JsonResult> GetLogInfo(GetLogInfoRequest request)
-    {
-        var model = await mediator.Send(request).ConfigureAwait(false);
-        return this.JsonNet(model);
-    }
+    public async Task<IActionResult> GetLogInfo(GetLogInfoRequest request) => Ok(await mediator.Send(request));
 
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
