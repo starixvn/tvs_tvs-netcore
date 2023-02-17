@@ -12,7 +12,7 @@ public class CallApiAmendmentStageTests
     public async Task CallApiAmendment_ValidQuery_AmendmentOicHasCalled()
     {
         // Arrange
-        var expected = new AmendmentReponse
+        var expected = new AmendmentResponse
         {
             Code = 1,
             Message = ""

@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.TicketListing.Services.SendDataOic;
 
 public interface CallApiAmendmentStage
 {
-    Task<AmendmentReponse> Execute(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate);
+    Task<AmendmentResponse> Execute(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate);
 }
 
 public class CallApiAmendmentStageImp : CallApiAmendmentStage
@@ -20,7 +20,7 @@ public class CallApiAmendmentStageImp : CallApiAmendmentStage
         this.loggingService = loggingService;
     }
 
-    public async Task<AmendmentReponse> Execute(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate)
+    public async Task<AmendmentResponse> Execute(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate)
     {
         var query = CreateQuery(licensees, title, eventDate);
         var result = await amendmentOicHttpClientService.AmendmentOic(query);
@@ -42,7 +42,7 @@ public class CallApiAmendmentStageImp : CallApiAmendmentStage
         };
     }
 
-    private void WriteLog(string title, AmendmentReponse result)
+    private void WriteLog(string title, AmendmentResponse result)
     {
         loggingService.InfoAsync($"Amendment OIC: {title} - Date: {DateTime.Now} {Environment.NewLine}Result: {result.Code} - {result.Message}");
     }

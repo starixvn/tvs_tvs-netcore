@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.MarkTickets.Tests.Handlers.ConfirmAutoUnmark;
 public class GetDataForConfirmAutoUnmarkHandlerTests
 {
     [Fact]
-    public async Task GetAutoUnmarkTickets_HaveTickets_TotalMarkedTicketsHavePagging()
+    public async Task GetAutoUnmarkTickets_HaveTickets_TotalMarkedTicketsHavePaging()
     {
         // Arrange
         var request = new GetDataForConfirmAutoUnmarkRequest();

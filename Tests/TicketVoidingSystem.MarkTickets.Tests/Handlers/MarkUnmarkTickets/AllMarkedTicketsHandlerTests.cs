@@ -10,7 +10,7 @@ namespace SpecialDelete.UnitTests.MarkTickets.Handlers;
 public class AllMarkedTicketsHandlerTests
 {
     [Fact]
-    public async Task GetTickets_HaveTickets_TotalMarkedTicketsHavePagging()
+    public async Task GetTickets_HaveTickets_TotalMarkedTicketsHavePaging()
     {
         // Arrange
         var request = new AllMarkedTicketsRequest();

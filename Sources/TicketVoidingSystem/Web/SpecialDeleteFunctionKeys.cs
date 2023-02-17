@@ -57,7 +57,7 @@ public static class SpecialDeleteFunctionKeys
     public const string TicketVoidingVoidTickets = "TicketVoidingVoidTickets";
     public const string UnsettledTickets = "UnsettledTickets";
     public const string UploadBatchMsg = "UploadBatchMsg";
-    public const string ViewUsernameofSpecialSiteonBetList = "ViewUsernameofSpecialSiteonBetList";
+    public const string ViewUsernameOfSpecialSiteOnBetList = "ViewUsernameOfSpecialSiteOnBetList";
     public const string VirtualSportsSpecialDelete = "VirtualSportsSpecialDelete";
     public const string VoidBetTradeTransaction = "VoidBetTradeTransaction";
     public const string VoidByBetID = "VoidByBetID";
@@ -78,7 +78,7 @@ public static class SpecialDeleteFunctionKeys
     public const string VoidSettledSingleBet = "VoidSettledSingleBet";
     public const string VoidSettledTickets = "VoidSettledTickets";
     public const string VoidSingleBet = "VoidSingleBet";
-    public const string VoidUnsettledandInstantlySettledSingleBet = "VoidUnsettledandInstantlySettledSingleBet";
+    public const string VoidUnsettledAndInstantlySettledSingleBet = "VoidUnsettledAndInstantlySettledSingleBet";
     public const string VoidUnSettledBetTradeTransaction = "VoidUnSettledBetTradeTransaction";
     public const string VoidUnsettledCurrencyBet = "VoidUnsettledCurrencyBet";
     public const string VoidUnSettledMetricGamingBet = "VoidUnSettledMetricGamingBet";

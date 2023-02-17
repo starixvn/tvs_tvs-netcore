@@ -7,7 +7,7 @@ namespace TicketVoidingSystem.TicketListing.Services.SendDataOic;
 
 public interface AmendmentOicHttpClientService
 {
-    Task<AmendmentReponse> AmendmentOic(AmendmentOicQuery query);
+    Task<AmendmentResponse> AmendmentOic(AmendmentOicQuery query);
 }
 
 public class AmendmentOicHttpClientServiceImp : AmendmentOicHttpClientService
@@ -25,15 +25,15 @@ public class AmendmentOicHttpClientServiceImp : AmendmentOicHttpClientService
         this.httpClient.DefaultRequestHeaders.Add("Accept", MediaTypeNames.Application.Json);
     }
 
-    public async Task<AmendmentReponse> AmendmentOic(AmendmentOicQuery query)
+    public async Task<AmendmentResponse> AmendmentOic(AmendmentOicQuery query)
     {
         var response = await httpClient.PostAsync("api/Amendment", Helper.CreateRequestStringContent(query));
         if (response.IsSuccessStatusCode)
         {
-            return await Helper.DeserializeResponseStream<AmendmentReponse>(response);
+            return await Helper.DeserializeResponseStream<AmendmentResponse>(response);
         }
 
         await loggingService.ErrorAsync($"URL: {AppSettingService.AppSetting.AmendmentApi}api/Amendment{Environment.NewLine}Response:{Environment.NewLine}{response}");
-        return new AmendmentReponse { Code = (int)response.StatusCode, Message = response.ReasonPhrase };
+        return new AmendmentResponse { Code = (int)response.StatusCode, Message = response.ReasonPhrase };
     }
 }

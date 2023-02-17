@@ -81,7 +81,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         {
             SettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host),
             UnSettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host),
-            InstantlySettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledandInstantlySettledSingleBet, Constant.Policy.Host)
+            InstantlySettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host)
         };
         var tickets = new List<TicketViewModel>();
         var index = 1;

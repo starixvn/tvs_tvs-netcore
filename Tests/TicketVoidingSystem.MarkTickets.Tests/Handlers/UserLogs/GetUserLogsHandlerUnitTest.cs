@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.MarkTickets.Tests.Handlers.UserLogs;
 public class GetUserLogsHandlerUnitTest
 {
     [Fact]
-    public async Task GetUserLogs_HaveLogs_TotalUserLogsHavePagging()
+    public async Task GetUserLogs_HaveLogs_TotalUserLogsHavePaging()
     {
         // Arrange
         var request = new GetUserLogsRequest();

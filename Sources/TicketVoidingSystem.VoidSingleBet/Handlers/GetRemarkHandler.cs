@@ -29,13 +29,13 @@ public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, List<string>>
         else
         {
             if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host) ||
-                sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledandInstantlySettledSingleBet, Constant.Policy.Host))
+                sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host))
             {
                 results.Add(StringResource.You_only_void_Unsettled_tickets);
             }
         }
 
-        if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledandInstantlySettledSingleBet, Constant.Policy.Host))
+        if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host))
         {
             results.Add(StringResource.You_can_void_Instantly_Settled);
         }

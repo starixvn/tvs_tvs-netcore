@@ -20,7 +20,7 @@ public class AmendmentOicQuery
     public bool IsTest { get; set; }
 }
 
-public class AmendmentReponse
+public class AmendmentResponse
 {
     public int Code { get; set; }
 

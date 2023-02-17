@@ -14,7 +14,7 @@ public class SendDataToOicServiceImpTest
     public async Task SendData_ValidQuery_ReturnAmendmentResponse()
     {
         // Arrange
-        var expected = new AmendmentReponse
+        var expected = new AmendmentResponse
         {
             Code = 1,
             Message = ""
@@ -44,7 +44,7 @@ public class SendDataToOicServiceImpTest
     public async Task SendData_InsertToAmendmentTableFail_ReturnAmendmentResponse()
     {
         // Arrange
-        var expected = new AmendmentReponse
+        var expected = new AmendmentResponse
         {
             Code = 1,
             Message = "Error when insert to Amendment table."
