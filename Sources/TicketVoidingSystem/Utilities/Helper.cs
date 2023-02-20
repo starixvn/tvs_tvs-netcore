@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Utilities;
 
@@ -98,5 +99,14 @@ public static class Helper
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
+    }
+        
+    public static string MessageFailApiCricket(string transIdCrickets, string actionType)
+    {
+        var result = actionType == NetPositionConstant.ActionVoid ?
+            string.Format(StringResource.FailAPIVoidCricket, transIdCrickets.Replace(",", ", ")) :
+            string.Format(StringResource.FailAPIRecoverCricket, transIdCrickets.Replace(",", ", "));
+
+        return result;
     }
 }

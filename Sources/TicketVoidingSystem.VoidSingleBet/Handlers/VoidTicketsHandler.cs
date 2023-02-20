@@ -1,19 +1,25 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.Letstalk;
+using TicketVoidingSystem.Services.NetPosition;
+using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
+using TicketVoidingSystem.VoidSingleBet.Models;
+using TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>?>
 {
 }
 
-public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>
+public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>?>
 {
     private readonly VoidTicketsService voidTicketsService;
-    private readonly ILoggingService loggingService;
+    private readonly LoggingService loggingService;
     private readonly NetPositionService netPositionService;
     private readonly HelperService helperService;
     private readonly NotificationLetstalkService notificationLetstalkService;
@@ -22,7 +28,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
 
     public VoidTicketsHandler(
         VoidTicketsService voidTicketsService,
-        ILoggingService loggingService,
+        LoggingService loggingService,
         NetPositionService netPositionService,
         HelperService helperService,
         NotificationLetstalkService notificationLetstalkService,
@@ -38,35 +44,47 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
         this.cashOutApi = cashOutApi;
     }
 
-    public async Task<IEnumerable<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Result>?> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
         if (await voidResultCacheService.IsExistVoidResult(request.Guid))
         {
             return null;
         }
 
-        var results = new List<Result>();
-        await voidResultCacheService.SetVoidResultCache(message.Guid, results);
-        var warningCricket = string.Empty;
-        var isSuccessfullyUpdateNetPosition = netPositionService.UpdateNetPosition(message.TransIdCrickets, ActionApiType.Void);
-        if (!isSuccessfullyUpdateNetPosition)
-        {
-            warningCricket = helperService.MessageFailApiCricket(message.TransIdCrickets, ActionApiType.Void);
-            message.Tickets = message.Tickets.Where(x => !message.TransIdCrickets.Split(',').Contains(x.TransId));
-        }
+        return await ProcessVoid(request);
+    }
 
-        if (!message.Tickets.Any())
+    private async Task<IEnumerable<Result>> ProcessVoid(VoidTicketsRequest request)
+    {
+        var results = new List<Result>();
+        await voidResultCacheService.SetVoidResultCache(request.Guid, results);
+        var updateNpResult = await UpdateNetPositionForCrickets(request);
+        if (!updateNpResult.TicketsAfterUpdateNp.Any())
         {
-            results.Add(new Result { ErrorCode = ErrorCode.ExecuteQueryAPIFail, ErrorMsg = warningCricket });
+            results.Add(new Result { ErrorCode = ErrorCode.ExecuteQueryAPIFail, ErrorMsg = updateNpResult.WarningCricket });
         }
         else
         {
-            results = await ResultsVoidTicket(message, warningCricket);
+            request.Tickets = updateNpResult.TicketsAfterUpdateNp;
+            results = await ResultsVoidTicket(request, updateNpResult.WarningCricket);
         }
-
-        await voidResultCacheService.SetVoidResultCache(message.Guid, results);
+        await voidResultCacheService.SetVoidResultCache(request.Guid, results);
 
         return results;
+    }
+
+    private async Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> UpdateNetPositionForCrickets(VoidTicketsRequest request)
+    {
+        var isSuccessfullyUpdateNetPosition = await netPositionService.UpdateNetPosition(request.TransIdCrickets, NetPositionConstant.ActionVoid);
+        if (!isSuccessfullyUpdateNetPosition)
+        {
+            var warningCricket = Helper.MessageFailApiCricket(request.TransIdCrickets, NetPositionConstant.ActionVoid);
+            var ticketsAfterRemoveCricket = request.Tickets.Where(x => !request.TransIdCrickets.Split(',').Contains(x.TransId));
+
+            return (warningCricket, ticketsAfterRemoveCricket);
+        }
+
+        return (string.Empty, request.Tickets);
     }
 
     private async Task<List<Result>> ResultsVoidTicket(VoidTicketsQuery query, string warningCrickets)
