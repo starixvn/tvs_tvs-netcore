@@ -6,11 +6,11 @@ using TicketVoidingSystem.VoidSingleBet.Criteria;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
+public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>>
 {
 }
 
-public class VoidTicketsHandler : IAsyncRequestHandler<VoidTicketsRequest, List<Result>>
+public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>>
 {
     private readonly VoidTicketsService voidTicketsService;
     private readonly ILoggingService loggingService;
@@ -38,9 +38,9 @@ public class VoidTicketsHandler : IAsyncRequestHandler<VoidTicketsRequest, List<
         this.cashOutApi = cashOutApi;
     }
 
-    public async Task<List<Result>> Handle(VoidTicketsRequest message)
+    public async Task<IEnumerable<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
-        if (await voidResultCacheService.IsExistVoidResult(message.Guid))
+        if (await voidResultCacheService.IsExistVoidResult(request.Guid))
         {
             return null;
         }

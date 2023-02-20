@@ -95,6 +95,7 @@
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
+    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.3" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.1" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />

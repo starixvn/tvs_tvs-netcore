@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
+using Fanex.Caching.Redis;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
@@ -184,6 +185,11 @@ public static class ServiceCollectionExtension
         services.AddSingleton<IUserIdProvider, CustomIdProvider>();
         services.AddSingleton<CheckUMFilterAttribute>();
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
+    }
+
+    public static void RegisterFanexCaching(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
     }
 
     public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)

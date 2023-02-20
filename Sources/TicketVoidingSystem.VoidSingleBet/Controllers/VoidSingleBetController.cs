@@ -2,6 +2,7 @@
 using Fanex.NAP.Core.Business;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.VoidSingleBet.Handlers;
 using TicketVoidingSystem.Web;
 
@@ -37,16 +38,16 @@ public class VoidSingleBetController : ControllerBase
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetLogInfo(GetLogInfoRequest request) => Ok(await mediator.Send(request));
 
-    [HttpGet]
+    [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
-    public async Task<ActionResult> ExportExcel(ExportExcelRequest request)
+    public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
     {
-        var model = await mediator.Send(request).ConfigureAwait(false);
-        return new ExcelResult(model.Content, model.FileName);
+        var model = await mediator.Send(request);
+        return this.ExcelFileResult(Response, model);
     }
 
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Host)]
     [HttpPost]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Host)]
     public async Task<JsonResult> VoidTickets(VoidTicketsRequest request)
     {
         var model = await mediator.Send(request).ConfigureAwait(false);
