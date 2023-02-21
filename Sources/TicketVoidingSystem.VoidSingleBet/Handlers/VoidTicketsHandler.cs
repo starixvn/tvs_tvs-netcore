@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.Letstalk;
-using TicketVoidingSystem.Services.NetPosition;
-using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
-using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
@@ -18,30 +13,17 @@ public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>
 
 public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>?>
 {
-    private readonly VoidTicketsService voidTicketsService;
-    private readonly LoggingService loggingService;
-    private readonly NetPositionService netPositionService;
-    private readonly HelperService helperService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
     private readonly VoidResultCacheService voidResultCacheService;
-    private readonly CashOutApi cashOutApi;
+    private readonly NetPositionForCricketService netPositionForCricketService;
+    private readonly VoidTicketsService voidTicketsService;
+    private readonly AfterVoidService afterVoidService;
 
-    public VoidTicketsHandler(
-        VoidTicketsService voidTicketsService,
-        LoggingService loggingService,
-        NetPositionService netPositionService,
-        HelperService helperService,
-        NotificationLetstalkService notificationLetstalkService,
-        VoidResultCacheService voidResultCacheService,
-        CashOutApi cashOutApi)
+    public VoidTicketsHandler(VoidResultCacheService voidResultCacheService, NetPositionForCricketService netPositionForCricketService, VoidTicketsService voidTicketsService, AfterVoidService afterVoidService)
     {
-        this.voidTicketsService = voidTicketsService;
-        this.loggingService = loggingService;
-        this.netPositionService = netPositionService;
-        this.helperService = helperService;
-        this.notificationLetstalkService = notificationLetstalkService;
         this.voidResultCacheService = voidResultCacheService;
-        this.cashOutApi = cashOutApi;
+        this.netPositionForCricketService = netPositionForCricketService;
+        this.voidTicketsService = voidTicketsService;
+        this.afterVoidService = afterVoidService;
     }
 
     public async Task<IEnumerable<Result>?> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
@@ -51,106 +33,30 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
             return null;
         }
 
-        return await ProcessVoid(request);
+        return await HandleWhenRequestValid(request);
     }
 
-    private async Task<IEnumerable<Result>> ProcessVoid(VoidTicketsRequest request)
+    private async Task<IEnumerable<Result>> HandleWhenRequestValid(VoidTicketsQuery query)
     {
         var results = new List<Result>();
-        await voidResultCacheService.SetVoidResultCache(request.Guid, results);
-        var updateNpResult = await UpdateNetPositionForCrickets(request);
+        await voidResultCacheService.SetVoidResultCache(query.Guid, results);
+
+        var updateNpResult = await netPositionForCricketService.Update(query);
         if (!updateNpResult.TicketsAfterUpdateNp.Any())
         {
             results.Add(new Result { ErrorCode = ErrorCode.ExecuteQueryAPIFail, ErrorMsg = updateNpResult.WarningCricket });
         }
         else
         {
-            request.Tickets = updateNpResult.TicketsAfterUpdateNp;
-            results = await ResultsVoidTicket(request, updateNpResult.WarningCricket);
+            query.Tickets = updateNpResult.TicketsAfterUpdateNp;
+            var voidResult = await voidTicketsService.VoidBet(query);
+            results.AddRange(await afterVoidService.ExecuteWhenVoidSuccess(query, voidResult, updateNpResult.WarningCricket));
+            results.AddRange(afterVoidService.ExecuteWhenVoidFailed(voidResult));
+            await netPositionForCricketService.Rollback(query.TransIdCrickets, voidResult);
         }
-        await voidResultCacheService.SetVoidResultCache(request.Guid, results);
+
+        await voidResultCacheService.SetVoidResultCache(query.Guid, results);
 
         return results;
-    }
-
-    private async Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> UpdateNetPositionForCrickets(VoidTicketsRequest request)
-    {
-        var isSuccessfullyUpdateNetPosition = await netPositionService.UpdateNetPosition(request.TransIdCrickets, NetPositionConstant.ActionVoid);
-        if (!isSuccessfullyUpdateNetPosition)
-        {
-            var warningCricket = Helper.MessageFailApiCricket(request.TransIdCrickets, NetPositionConstant.ActionVoid);
-            var ticketsAfterRemoveCricket = request.Tickets.Where(x => !request.TransIdCrickets.Split(',').Contains(x.TransId));
-
-            return (warningCricket, ticketsAfterRemoveCricket);
-        }
-
-        return (string.Empty, request.Tickets);
-    }
-
-    private async Task<List<Result>> ResultsVoidTicket(VoidTicketsQuery query, string warningCrickets)
-    {
-        var results = new List<Result>();
-        var model = await voidTicketsService.ExecuteQuery(query);
-        results.AddRange(await CheckVoidTicketsSuccess(query, model, warningCrickets));
-        results.AddRange(CheckVoidTicketsFail(query, model));
-
-        return results;
-    }
-
-    private async Task<IEnumerable<Result>> CheckVoidTicketsSuccess(VoidTicketsQuery query, VoidTicketsModel model, string warningCricket)
-    {
-        var results = new List<Result>();
-        if (!model.Tickets.Any())
-        {
-            return Enumerable.Empty<Result>();
-        }
-
-        await cashOutApi.VoidBetForCashOutBasketball(model.Tickets);
-        try
-        {
-            results.AddRange(voidTicketsService.CreateWarningMessage(warningCricket));
-            results.AddRange(await ContactUser(query, model));
-            results.AddRange(SendLetstalk(query, model));
-            results.InsertNegativeBalance(model.Validation.NegativeBalanceUsers);
-        }
-        catch (Exception exception)
-        {
-            loggingService.WriteWithMatchId(query.MatchId.ToString(), exception);
-            results.Clear();
-            results.Add(new Result { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message });
-        }
-
-        return results;
-    }
-
-    private IEnumerable<Result> CheckVoidTicketsFail(VoidTicketsQuery query, VoidTicketsModel model)
-    {
-        var results = new List<Result>();
-        if (model.Validation.ErrorCode == 0)
-        {
-            return Enumerable.Empty<Result>();
-        }
-
-        results.Add(new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg });
-        if (model.IsNeedToRollBackNetPosition)
-        {
-            netPositionService.RollBackNetPosition(query.TransIdCrickets, ActionApiType.Void, model.Validation.ErrorMsg);
-        }
-
-        return results;
-    }
-
-    private async Task<IEnumerable<Result>> ContactUser(VoidTicketsQuery query, VoidTicketsModel model)
-    {
-        await voidTicketsService.InsertMessage(query, model);
-        var result = voidTicketsService.SendEmail(query, model);
-
-        return result;
-    }
-
-    private IEnumerable<Result> SendLetstalk(VoidTicketsQuery query, VoidTicketsModel model)
-    {
-        var notificationLetstalkModel = Mapper.Map<NotificationLetstalkModel>(query);
-        return notificationLetstalkService.Send(notificationLetstalkModel, model.Tickets);
     }
 }

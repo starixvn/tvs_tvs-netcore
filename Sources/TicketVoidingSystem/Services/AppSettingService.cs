@@ -39,6 +39,7 @@ public static class AppSettingService
             ServiceName = configuration.GetValue<string>(nameof(AppSettingModel.ServiceName)),
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),
             EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
+            JackTimeCashOutUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeCashOutUrl)),
             IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb))
         };
 

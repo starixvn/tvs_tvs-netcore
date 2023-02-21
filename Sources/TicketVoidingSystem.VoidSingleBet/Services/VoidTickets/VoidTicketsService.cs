@@ -1,9 +1,113 @@
-﻿namespace TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
+﻿using AutoMapper;
+using Fanex.Data.Repository;
+using Fanex.NAP.Client.Helpers.Common;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Utilities;
+using TicketVoidingSystem.VoidSingleBet.Criteria;
+using TicketVoidingSystem.VoidSingleBet.Models;
+
+namespace TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
 
 public interface VoidTicketsService
 {
+    Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query);
 }
 
 public class VoidTicketsServiceImp : VoidTicketsService
 {
+    private readonly IMapper mapper;
+    private readonly SessionService sessionService;
+    private readonly IDynamicRepository repository;
+    private readonly LoggingService loggingService;
+
+    public VoidTicketsServiceImp(SessionService sessionService, IMapper mapper, IDynamicRepository repository, LoggingService loggingService)
+    {
+        this.sessionService = sessionService;
+        this.mapper = mapper;
+        this.repository = repository;
+        this.loggingService = loggingService;
+    }
+
+    public async Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query)
+    {
+        try
+        {
+            return await HandleVoidWhenSuccess(query);
+        }
+        catch (Exception exception)
+        {
+            await loggingService.ErrorAsync($"{query.MatchId}: {exception.Message}", exception);
+            var validation = new VoidTicketValidation
+            {
+                ErrorCode = ErrorCode.ExecuteQueryFail,
+                ErrorMsg = exception.Message
+            };
+
+            return new VoidTicketsModel
+            {
+                Validation = validation,
+                Tickets = Enumerable.Empty<TicketEmailModel>()
+            };
+        }
+    }
+
+    private async Task<VoidTicketsModel> HandleVoidWhenSuccess(VoidTicketsQuery query)
+    {
+        var ticketsInAllServers = new List<TicketEmailModel>();
+        var validationsInAllServers = new List<VoidTicketValidation>();
+
+        var criteria = CreateVoidTicketsCriteria(query);
+        foreach (var server in SiteDbGroupConstant.ServerList)
+        {
+            var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+            if (!ticketsInSiteDb.Any())
+            {
+                continue;
+            }
+
+            criteria.SiteDbGroupId = server.Id;
+            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            var (validation, emailTicketsSiteDb) = await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
+            ticketsInAllServers.AddRange(emailTicketsSiteDb);
+            validationsInAllServers.AddRange(validation);
+        }
+
+        return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers);
+    }
+
+    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
+    {
+        var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
+        var validation = new VoidTicketValidation
+        {
+            ErrorCode = failedResult?.ErrorCode ?? 0,
+            ErrorMsg = failedResult?.ErrorMsg ?? string.Empty,
+            NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers)),
+        };
+
+        return new VoidTicketsModel
+        {
+            Tickets = tickets.ToList(),
+            Validation = validation,
+            IsNeedToRollBackNetPosition = validations.Any(x => !x.IsSuccessful && x.SiteDbGroupId == SiteDbGroupConstant.CentralDb)
+        };
+    }
+
+    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
+    {
+        var criteria = mapper.Map<VoidTicketsCriteria>(query);
+        criteria.FromTransDate = query.FromTransDate.ZoneCanada();
+        criteria.ToTransDate = query.ToTransDate.ZoneCanada();
+        criteria.Ip = sessionService.GetClientIp();
+        criteria.LiveIndicator = query.EventType;
+        criteria.SecondAcceptFlag = query.TicketType;
+        criteria.BetTypes = query.BetTypes.ToBetTypeXml();
+        criteria.UserPassword = Cryptography.CfsEnCode(query.UserPassword);
+        criteria.UserId = sessionService.UserId;
+
+        return criteria;
+    }
 }

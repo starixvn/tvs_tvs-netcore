@@ -48,9 +48,5 @@ public class VoidSingleBetController : ControllerBase
 
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Host)]
-    public async Task<JsonResult> VoidTickets(VoidTicketsRequest request)
-    {
-        var model = await mediator.Send(request).ConfigureAwait(false);
-        return this.JsonNet(model);
-    }
+    public async Task<IActionResult> VoidTickets(VoidTicketsRequest request) => Ok(await mediator.Send(request));
 }

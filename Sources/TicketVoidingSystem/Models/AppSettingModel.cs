@@ -23,6 +23,7 @@ public class AppSettingModel
     public string EnvironmentName { get; init; }
 
     public string IgnoreSiteDb { get; init; }
+    public string JackTimeCashOutUrl { get; init; }
 }
 
 public class AuthSettings
