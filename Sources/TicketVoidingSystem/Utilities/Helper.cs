@@ -109,4 +109,50 @@ public static class Helper
 
         return result;
     }
+
+    public static int GetMessageContentType(bool isLikelyAbnormalBet, string messageContent)
+    {
+        if (isLikelyAbnormalBet)
+        {
+            return MessageContentType.VoidAbnormal;
+        }
+
+        if (messageContent.ToLower().Contains("kindly double check your statement again"))
+        {
+            return MessageContentType.VoidSettled;
+        }
+
+        return MessageContentType.VoidUnsettled;
+    }
+
+    public static bool IsLikelyAbnormalBet(int issueTypeId)
+    {
+        return IsAbnormalBet(issueTypeId) || IsAbnormalBetRealMember(issueTypeId);
+    }
+
+    public static bool IsAbnormalBet(int issueTypeId)
+    {
+        return IssueTypeConstant.AbnormalBet == issueTypeId;
+    }
+
+    public static bool IsAbnormalBetMixParlay(int issueTypeId, int? filterBy)
+    {
+        const int filterByMixParlay = 1;
+        return IssueTypeConstant.AbnormalBet == issueTypeId && filterBy == filterByMixParlay;
+    }
+
+    public static bool IsAbnormalAccount(int issueTypeId)
+    {
+        return IssueTypeConstant.AbnormalAccount == issueTypeId;
+    }
+
+    public static bool IsAbnormalBetRealMember(int issueTypeId)
+    {
+        return IssueTypeConstant.AbnormalBetRealMember == issueTypeId;
+    }
+
+    public static bool IsArchivedTicket(int issueTypeId)
+    {
+        return IssueTypeConstant.ArchivedTicket == issueTypeId;
+    }
 }

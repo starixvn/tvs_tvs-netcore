@@ -28,14 +28,16 @@ public class AfterVoidServiceImp : AfterVoidService
     private readonly SendEmailService sendEmailService;
     private readonly NotificationLetstalkService notificationLetstalkService;
     private readonly LoggingService loggingService;
+    private readonly SessionService sessionService;
 
-    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageService sendMessageService, SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService)
+    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageService sendMessageService, SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService, SessionService sessionService)
     {
         this.cashOutApiService = cashOutApiService;
         this.sendMessageService = sendMessageService;
         this.sendEmailService = sendEmailService;
         this.notificationLetstalkService = notificationLetstalkService;
         this.loggingService = loggingService;
+        this.sessionService = sessionService;
         this.mapper = mapper;
     }
 
@@ -91,7 +93,14 @@ public class AfterVoidServiceImp : AfterVoidService
 
     private async Task<IEnumerable<Result>> SendMessageAndEmail(VoidTicketsQuery query, VoidTicketsModel model)
     {
-        await sendMessageService.ToDo();
+        query.Message.CreatorId = sessionService.UserId;
+        query.Message.CreatorName = sessionService.UserName;
+        var messageId = await sendMessageService.InsertMessage(query.Message, query.MatchId, query.Match.LeagueGroupId, false);
+        var reasonId = await sendMessageService.InsertReason(query.Reason, query.ReasonSc);
+        await sendMessageService.SendMessage(model.Tickets, messageId, 0, query.Message.CreatorId);
+        await sendMessageService.InsertMessageIntoAdminSite(query.Message);
+        await sendMessageService.InsertVoidedTransaction(model.Tickets, messageId, reasonId, 0, 0, query.MatchId);
+
         var result = await sendEmailService.ToDo();
 
         return result;
