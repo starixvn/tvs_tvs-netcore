@@ -67,8 +67,8 @@
     </div>
   </div>
   <div class="button-area">
-    <button type="submit" class="btn btn-primary btn-sm mr-2" (click)="clickSearch()">Search</button>
-    <button type="submit" class="btn btn-success btn-sm" (click)="clickAddUser()" *ngIf="permission.abExceptionListHost">Add New</button>
+    <button type="button" class="btn btn-primary btn-sm mr-2" (click)="clickSearch()">Search</button>
+    <button type="button" class="btn btn-success btn-sm" (click)="clickAddUser()" *ngIf="permission.abExceptionListHost">Add New</button>
   </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

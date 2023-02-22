@@ -12,17 +12,15 @@
   }
   .width-170 {
     width: 170px;
-    height: 36px;
   }
 
   .control-bet {
-    height: 36px;
     display: flex;
     align-items: center;
   }
   
   .add-range-time {
-    height: 29.5px;
+    height: 31px;
     display: flex;
     align-items: center;
   }
@@ -32,6 +30,31 @@
   }
   .event-type-filter {
     width: 100px;
+  }
+
+  .live-score {
+    height: 31px;
+    display: flex;
+    align-items: center;
+    
+    input {
+      display: block;
+      height: 26px !important;
+      border-radius: 0.2rem;
+      padding: 0.25rem 0.5rem;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ced4da;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+
+    input:focus {
+      color: #495057;
+      background-color: #fff;
+      border-color: #80bdff;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+    }
   }
 
   .currency-filter {

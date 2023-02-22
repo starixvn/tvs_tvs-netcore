@@ -1,72 +1,56 @@
 <div class="tab-underline"></div>
 
 <div class="filter-area">
-    <div class="row mg-left-0">
-        <div class="col-auto">
-            <div class="row">
-                <label class="col-form-label col-form-label-sm mg-right-10">Match Id</label>
-                <input class="match-id form-control form-control-sm mg-right-25" type="text" numbersOnly [(ngModel)]="query.matchId">
-            </div>
+    <div class="d-flex">
+        <div class="d-flex mr-4">
+            <label class="col-form-label col-form-label-sm mr-2">Match Id</label>
+            <input class="match-id form-control form-control-sm" type="text" numbersOnly
+                [(ngModel)]="query.matchId">
         </div>
 
-        <div class="col-auto">
-            <div class="row">
-                <label class="col-form-label col-form-label-sm mg-right-10">Sport</label>
-                <div class="sport mg-right-25">
-                    <ng-select
-                        class="custom-sm"
-                        [clearable]="false"
-                        [items]="sportOptions"
-                        [multiple]="true"
-                        bindLabel="name"
-                        groupBy="group"
-                        [selectableGroup]="true"
-                        [selectableGroupAsModel]="false"
-                        [closeOnSelect]="false"
-                        bindValue="value"
-                        placeholder="Select an option"
-                        [(ngModel)]="selectedSports">
-                        <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-                            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.group}}
-                        </ng-template>
-                        <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-                            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.name}}
-                        </ng-template>
-                        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-                            <div class="ng-value">
-                              <span class="ng-value-label">
+        <div class="d-flex mr-4">
+            <label class="col-form-label col-form-label-sm mr-2">Sport</label>
+            <div class="sport">
+                <ng-select class="custom-sm" [clearable]="false" [items]="sportOptions" [multiple]="true"
+                    bindLabel="name" groupBy="group" [selectableGroup]="true" [selectableGroupAsModel]="false"
+                    [closeOnSelect]="false" bindValue="value" placeholder="Select an option"
+                    [(ngModel)]="selectedSports">
+                    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+                    </ng-template>
+                    <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                        <div class="ng-value">
+                            <span class="ng-value-label">
                                 {{items.length === sportOptions.length ? 'All' : items.length}} selected
-                              </span>
-                            </div>
-                          </ng-template>
-                    </ng-select>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-auto">
-            <div class="row">
-                <label class="col-form-label col-form-label-sm mg-right-10">Marked By</label>
-                <ng-select class="marked-by-dropdown mg-right-25" [items]="markedByOptions" bindLabel="name" bindValue="value"
-                    [(ngModel)]="query.markedBy" [clearable]="false" [searchable]="false">
+                            </span>
+                        </div>
+                    </ng-template>
                 </ng-select>
-              </div>
-        </div>
-
-        <div class="col-auto">
-            <div class="form-check form-check-inline d-flex align-items-center h-100">
-                <input class="form-check-input" type="checkbox" id="checkbox-test" value="Single" [(ngModel)]="query.isExcludeTest" />
-                <label class="form-check-label" for="checkbox-test">
-                    Exclude test data
-                </label>
             </div>
         </div>
 
-        <div class="col-auto mr-auto">
-            <input type="submit" class="btn btn-primary btn-sm btn-search" value="Search" (click)="resetPagingAndSearchData()" />
+        <div class="d-flex mr-4">
+            <label class="col-form-label col-form-label-sm mr-2">Marked By</label>
+            <ng-select class="marked-by-dropdown" [items]="markedByOptions" bindLabel="name"
+                bindValue="value" [(ngModel)]="query.markedBy" [clearable]="false" [searchable]="false">
+            </ng-select>
         </div>
 
-        <div class="col-auto">
+        <div class="form-check form-check-inline d-flex align-items-center h-100">
+            <input class="form-check-input" type="checkbox" id="checkbox-test" value="Single"
+                [(ngModel)]="query.isExcludeTest" />
+            <label class="form-check-label" for="checkbox-test">
+                Exclude test data
+            </label>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-sm btn-search mr-auto"
+                (click)="resetPagingAndSearchData()">Search</button>
+
+        <div>
             <auto-refresh [mode]="autoRefreshMode" (countdownEnd)="onCountdownRefreshEnd()"></auto-refresh>
         </div>
     </div>

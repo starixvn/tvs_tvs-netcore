@@ -9,7 +9,7 @@ $areaMaxWidth: 1423px;
 }
 
 .filter-area {
-  margin: 10px 10px 5px;
+  margin: 10px 10px 7px;
   max-width: $areaMaxWidth;
   width: 100%;
 
@@ -24,10 +24,6 @@ $areaMaxWidth: 1423px;
   .marked-by-dropdown {
     width: $inputWidth;
     display: inline-block;
-  }
-
-  .btn-search {
-      margin: 3px 0;
   }
 
   .ng-value {

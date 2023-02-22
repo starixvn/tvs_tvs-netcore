@@ -1,7 +1,7 @@
 <div class="filter-log">
-  <div class="filter row mg-left-0">
+  <div class="filter row no-gutters mb-2">
     <div class="row no-gutters">
-      <label class="col-form-label col-form-label-sm mg-right-10">Log Date From</label>
+      <label class="col-form-label col-form-label-sm mr-2">Log Date From</label>
       <div class="select-date">
         <div class="input-group">
           <input class="form-control form-control-sm bg-white" placeholder="yyyy/mm/dd" name="ngbFromDate"
@@ -15,7 +15,7 @@
     </div>
 
     <div class="row no-gutters">
-      <label class="col-form-label col-form-label-sm mg-right-10">Log Date To</label>
+      <label class="col-form-label col-form-label-sm mr-2">Log Date To</label>
       <div class="select-date">
         <div class="input-group">
           <input class="form-control form-control-sm bg-white" placeholder="yyyy/mm/dd" name="ngbToDate"
@@ -29,7 +29,7 @@
     </div>
 
     <div class="row no-gutters">
-      <label class="col-form-label col-form-label-sm mg-right-25">Match Id</label>
+      <label class="col-form-label col-form-label-sm mr-2">Match Id</label>
       <div>
         <input class="match-id form-control form-control-sm" type="text" numbersOnly [(ngModel)]="model.matchId"
           (blur)="checkValidMatch()">
@@ -37,8 +37,8 @@
     </div>
 
     <div class="row no-gutters">
-      <label class="col-form-label col-form-label-sm mg-right-10">Action</label>
-      <div class="action mg-right-25">
+      <label class="col-form-label col-form-label-sm mr-2">Action</label>
+      <div class="action">
         <ng-select class="custom-sm" [clearable]="false" [items]="action.items" [multiple]="true" [searchable]="false"
           bindLabel="name" groupBy="group" [selectableGroup]="true" [selectableGroupAsModel]="false"
           [closeOnSelect]="false" bindValue="value" placeholder="Select an option" [(ngModel)]="selectedActions">
@@ -60,14 +60,14 @@
     </div>
 
     <div class="row no-gutters">
-      <label class="col-form-label col-form-label-sm mg-right-25">Done By</label>
+      <label class="col-form-label col-form-label-sm mr-2">Done By</label>
       <div>
         <input class="form-control form-control-sm" type="text" [(ngModel)]="model.doneBy">
       </div>
     </div>
   </div>
-  <div class="row mg-left-0 pt-3">
-    <input type="submit" class="btn btn-primary btn-sm" value="Search" (click)="search()" />
+  <div class="row no-gutters">
+    <button type="button" class="btn btn-primary btn-sm" (click)="search()">Search</button>
   </div>
   <tooltip [tooltip]="tooltip"></tooltip>
 </div>
