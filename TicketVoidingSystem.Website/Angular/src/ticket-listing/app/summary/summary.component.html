@@ -15,7 +15,7 @@
             </th>
             <th *ngIf="showSendColumn">
               <div>
-                <button class="btn btn-success btn-sm" *ngIf="isShowSend" (click)="sendExcelFile()">SEND DATA</button>
+                <button class="btn-send-data btn btn-success btn-sm" *ngIf="isShowSend" (click)="sendExcelFile()">SEND DATA</button>
               </div>
               <input type="checkbox" [(ngModel)]="checkedAll" (change)="changedCheckAll()" />
             </th>
@@ -43,7 +43,7 @@
               <div>
                 <input *ngIf="item.name != 'Credit'" type="checkbox"
                   [(ngModel)]="item.isChecked" (change)="changedCheckItem()" />
-                <button class="btn btn-success btn-sm" *ngIf="item.name == 'Credit'" (click)="sendCreditDataToLetstalk(item)">SEND LETSTALK</button>
+                <button class="btn-send-letstalk btn btn-success btn-sm" *ngIf="item.name == 'Credit'" (click)="sendCreditDataToLetstalk(item)">SEND LETSTALK</button>
               </div>
             </td>
           </tr>
