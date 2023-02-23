@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using TicketVoidingSystem.Models.SendMessage;
 
 namespace TicketVoidingSystem.Models.SendEmail;
@@ -15,11 +14,9 @@ public class MailViewModel
     public string NegativeBalanceUsers { get; set; }
 }
 
-public class MailVoidViewModel<TViewModel> : MailViewModel
+public class MailVoidViewModel : MailViewModel
 {
     public Match Match { get; set; }
-
-    public List<TViewModel> Tickets { get; set; }
 
     public string VoidReason { get; set; }
 
@@ -37,7 +34,7 @@ public class MailVoidViewModel<TViewModel> : MailViewModel
     public bool IsFilterByUserName { get; set; }
 }
 
-public class MailRecoverViewModel<TViewModel> : MailViewModel
+public class MailRecoverViewModel : MailViewModel
 {
-    public List<Group<TViewModel>> Groups { get; set; }
+    //public List<Group<TViewModel>> Groups { get; set; }
 }

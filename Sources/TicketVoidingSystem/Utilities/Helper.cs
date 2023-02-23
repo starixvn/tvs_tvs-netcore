@@ -155,4 +155,28 @@ public static class Helper
     {
         return IssueTypeConstant.ArchivedTicket == issueTypeId;
     }
+
+    public static string GetBetFrom(string betFrom)
+    {
+        string result;
+        switch (betFrom)
+        {
+            case "p":
+            case "s":
+            case "l":
+                result = StringResource.Phone;
+                break;
+
+            case "w":
+            case "m":
+                result = StringResource.Wap;
+                break;
+
+            default:
+                result = StringResource.Internet;
+                break;
+        }
+
+        return result;
+    }
 }
