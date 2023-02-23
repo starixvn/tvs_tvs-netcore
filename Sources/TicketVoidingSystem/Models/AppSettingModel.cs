@@ -24,6 +24,8 @@ public class AppSettingModel
 
     public string IgnoreSiteDb { get; init; }
     public string JackTimeCashOutUrl { get; init; }
+
+    public string MailingList { get; init; }
 }
 
 public class AuthSettings

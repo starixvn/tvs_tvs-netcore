@@ -12,8 +12,6 @@ namespace TicketVoidingSystem.Services.SendMessage;
 
 public interface SendMessageService
 {
-    Task ToDo();
-
     Task<int> InsertMessage(Message message, int matchId, int? leagueGroupId, bool isLikelyAbnormalBet);
 
     Task<int> InsertReason(string reasonEnglish, string reasonChineseSimplified);
@@ -34,11 +32,6 @@ public class SendMessageServiceImp : SendMessageService
     {
         this.repository = repository;
         this.messageItemService = messageItemService;
-    }
-
-    public Task ToDo()
-    {
-        throw new System.NotImplementedException();
     }
 
     public async Task<int> InsertMessage(Message message, int matchId, int? leagueGroupId, bool isLikelyAbnormalBet)

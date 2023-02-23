@@ -40,6 +40,7 @@ public static class AppSettingService
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),
             EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
             JackTimeCashOutUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeCashOutUrl)),
+            MailingList = configuration.GetValue<string>(nameof(AppSettingModel.MailingList)),
             IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb))
         };
 
