@@ -75,7 +75,7 @@ public class UserLogsServiceTests
 
         // Assert
         var userLog = actual.FirstOrDefault();
-        Assert.Equal(9000001, userLog.MatchId);
-        Assert.Equal("TPS Turky - vs - TPS Turky", userLog.Event);
+        Assert.Equal(9000001, userLog?.MatchId);
+        Assert.Equal("TPS Turky - vs - TPS Turky", userLog?.Event);
     }
 }
