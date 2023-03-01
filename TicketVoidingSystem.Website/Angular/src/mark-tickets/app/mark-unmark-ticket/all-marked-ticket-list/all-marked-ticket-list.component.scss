@@ -1,15 +1,23 @@
 @import '../../../../assets/styles/mixin.scss';
 
-.auto-refresh {
-    display: block;
-    margin-left: 1113px;
-    margin-right: 0;
-    margin-top: 10px;
+
+.list-ticket-info {
+    margin: 10px;
+    width: 1293px;
+    position: relative;
+}
+
+.auto-refresh-div {
+    display: flex;
+    justify-content: flex-end;
+
+    .auto-refresh {
+        display: block;
+        margin-right: 0;
+    }
 }
 
 .all-marked-tickets-list {
-    margin: 0 10px 10px;
-    width: 1293px;
     position: relative;
     border-left: solid 1px #c5c5c5;
 
