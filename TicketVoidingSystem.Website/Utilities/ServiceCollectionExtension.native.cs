@@ -173,6 +173,7 @@ namespace TicketVoidingSystem.Website.Utilities
         public static void RegisterBusinessServices(this IServiceCollection services)
         {
             services.AddSingleton<SessionService, SessionServiceImp>();
+            services.AddSingleton<LoggingService, LoggingServiceImp>();
             services.AddSingleton<LogActionFilterAttribute>();
             services.AddTransient<GetUsersService, GetUsersServiceImp>();
             services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
