@@ -3,39 +3,47 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Fanex.MailDeliver.Model;
+using Force.DeepCloner;
 using TicketVoidingSystem.Criteria.SendEmail;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Subject;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
 public interface VoidEmailContentService
 {
-    Task<MailRecord> Create(IEnumerable<TicketEmailModel> tickets, EmailGroup group, bool isFromAfterVoidService);
+    Task<MailRecord> Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets,
+        EmailGroup group, bool isFromAfterVoidService);
 }
 
 public class VoidEmailContentServiceImp : VoidEmailContentService
 {
     private readonly TicketService ticketService;
+    private readonly SubjectService subjectService;
+    private readonly TemplateEmailService templateEmailService;
     private readonly IDynamicRepository repository;
 
-    public VoidEmailContentServiceImp(IDynamicRepository repository)
+    public VoidEmailContentServiceImp(IDynamicRepository repository, TicketService ticketService, SubjectService subjectService, TemplateEmailService templateEmailService)
     {
         this.repository = repository;
+        this.ticketService = ticketService;
+        this.subjectService = subjectService;
+        this.templateEmailService = templateEmailService;
     }
 
-    public async Task<MailRecord> Create(IEnumerable<TicketEmailModel> tickets, EmailGroup group,
-        bool isFromAfterVoidService)
+    public async Task<MailRecord> Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, EmailGroup group, bool isFromAfterVoidService)
     {
-        if (model.Valid())
+        if (tickets.Valid(site))
         {
-            model.ViewModel.NegativeBalanceUsers = model.GetNegativeBalanceUsers(group, t => t.UserName);
-            model.ViewModel.Tickets = await AssignTickets(model.Tickets, model.ViewModel.Match, model.Site, isFromAfterVoidService).ToList();
-
-            var voidType = model.ViewModel.IsLikelyAbnormalBet || model.ViewModel.IsAbnormalAccount || model.ViewModel.IsFilterByUserName ? VoidType.Abnormal : VoidType.None;
-            var subject = subjectService.CreateVoid(model, group, voidType);
-            var mailRecord = templateEmailService.Create(model, subject);
+            var transformTickets = await AssignTickets(tickets, mailVoidViewModel.Match, site, isFromAfterVoidService);
+            var voidType = mailVoidViewModel.IsLikelyAbnormalBet || mailVoidViewModel.IsAbnormalAccount
+                                                                 || mailVoidViewModel.IsFilterByUserName ? VoidType.Abnormal : VoidType.None;
+            var subject = subjectService.CreateVoid(mailVoidViewModel, tickets, site, group, voidType);
+            var mailVoidModelClone = mailVoidViewModel.DeepClone();
+            mailVoidModelClone.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, mailVoidViewModel.NegativeBalanceUsers);
+            var mailRecord = templateEmailService.Create(mailVoidModelClone, transformTickets, site, subject);
 
             return mailRecord.MailRecord;
         }
@@ -50,7 +58,7 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
         var operators = await GetOperators(ticketModels);
         foreach (var item in ticketModels)
         {
-            item.OperatorID = operators.FirstOrDefault(x => x.AgentId == item.Recommend).OperatorID;
+            item.OperatorID = operators.FirstOrDefault(x => x.AgentId == item.Recommend)?.OperatorID;
             var ticket = ticketService.GetTicket(item, match, site, isFromAfterVoidService);
             ticket.No = index++;
             tickets.Add(ticket);

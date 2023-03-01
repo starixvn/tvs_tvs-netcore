@@ -3,6 +3,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.Letstalk;
+using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;
 using TicketVoidingSystem.Services.Letstalk;
@@ -59,7 +60,8 @@ public class AfterVoidServiceImp : AfterVoidService
         try
         {
             results.AddRange(CreateWarningMessage(warningCricket));
-            results.AddRange(await SendMessageAndEmail(query, voidResult));
+            await SendMessage(query, voidResult);
+            results.AddRange(await SendEmail(query, voidResult));
             results.AddRange(await SendLetstalk(query, voidResult));
             results.InsertNegativeBalanceWarning(voidResult.Validation.NegativeBalanceUsers);
         }
@@ -91,7 +93,7 @@ public class AfterVoidServiceImp : AfterVoidService
         return results;
     }
 
-    private async Task<IEnumerable<Result>> SendMessageAndEmail(VoidTicketsQuery query, VoidTicketsModel model)
+    private async Task SendMessage(VoidTicketsQuery query, VoidTicketsModel model)
     {
         query.Message.CreatorId = sessionService.UserId;
         query.Message.CreatorName = sessionService.UserName;
@@ -100,10 +102,13 @@ public class AfterVoidServiceImp : AfterVoidService
         await sendMessageService.SendMessage(model.Tickets, messageId, 0, query.Message.CreatorId);
         await sendMessageService.InsertMessageIntoAdminSite(query.Message);
         await sendMessageService.InsertVoidedTransaction(model.Tickets, messageId, reasonId, 0, 0, query.MatchId);
+    }
 
-        var result = await sendEmailService.ToDo();
-
-        return result;
+    private async Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, VoidTicketsModel model)
+    {
+        var emailModel = mapper.Map<EmailVoidModel>(query);
+        emailModel.NegativeBalanceUsers = model.Validation.NegativeBalanceUsers;
+        return await sendEmailService.SendEmail(emailModel, model.Tickets);
     }
 
     private async Task<IEnumerable<Result>> SendLetstalk(VoidTicketsQuery query, VoidTicketsModel model)

@@ -16,7 +16,7 @@ public interface SitesEmailService
 
     Task<IEnumerable<SiteEmail>> GetSitesByCategory(bool isLikelyAbnormalBet);
 
-    SiteEmail GetSiteByName(List<SiteEmail> sites, string name);
+    SiteEmail GetSiteByName(IEnumerable<SiteEmail> sites, string name);
 }
 
 public class SitesEmailServiceImp : SitesEmailService
@@ -81,7 +81,7 @@ public class SitesEmailServiceImp : SitesEmailService
         });
     }
 
-    public SiteEmail GetSiteByName(List<SiteEmail> sites, string name)
+    public SiteEmail GetSiteByName(IEnumerable<SiteEmail> sites, string name)
     {
         var item = sites.Where(site => site.Site.Equals(name)).ToList();
         return item.Count == 0 ? new SiteEmail() : item[0];
