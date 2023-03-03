@@ -51,8 +51,6 @@ export class FilterComponent implements OnInit {
   ticketType = new Type();
   product = new Type();
   eventType = new Type();
-  liveHomeScore: string;
-  liveAwayScore: string;
   disabledTransDate = true;
   fromDate: string;
   toDate: string;
@@ -153,8 +151,10 @@ export class FilterComponent implements OnInit {
     this.switchMatch3rd = this.switchMatch3rd !== this.isMatch3rd;
     if (value !== Product.SPORTS_BOOK) {
       this.disabledTransDate = true;
-      this.liveAwayScore = '';
-      this.liveHomeScore = '';
+      this.singleOrSubParlay = 'All';
+      this.query.liveAwayScore = null;
+      this.query.liveHomeScore = null;
+      this.query.eventType = 2;
     } else {
       this.groupBetTypes.isChecked = true;
       this.groupBetTypes.changeCheckedModelToGroup();
