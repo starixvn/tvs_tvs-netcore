@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpService } from '../../utility/services/http.service';
 import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.model';
-import { GetVoidServiceModel, UpdateVoidServiceModel, VoidServiceModel } from './checking-void-status/checking-void-status.model';
+import { GetLetstalkModel, LetstalkModel, UpdateLetstalkModel } from './letstalk/letstalk.model';
 import { AutoVoidRequestQueueModel, GetAutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel, UpdateTicketVoidingQueueModel } from './void/void.model';
 import { UpdateVoidingHistory, VoidingHistoryModel } from './voiding-history/voiding-history.model';
@@ -36,19 +36,19 @@ export class AppApiService {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateTicketVoidingQueue`);
   }
 
-  async getVoidServiceData(model: GetVoidServiceModel): Promise<VoidServiceModel[]> {
-    return this.httpService.postJson(model, `api/ManageVoidServices/GetVoidServiceData`);
-  }
-
-  async updateVoidServiceData(model: UpdateVoidServiceModel): Promise<boolean> {
-    return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidServiceData`);
-  }
-
   async getVoidingHistory(requestId: number): Promise<VoidingHistoryModel[]> {
     return this.httpService.postJson({ requestId }, `api/ManageVoidServices/GetVoidingHistory`);
   }
 
   async updateVoidingHistory(model: UpdateVoidingHistory): Promise<boolean> {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidingHistory`);
+  }
+  
+  async getLetstalk(model: GetLetstalkModel): Promise<LetstalkModel[]> {
+    return this.httpService.postJson(model, `api/ManageVoidServices/GetLetstalk`);
+  }
+
+  async updateLetstalk(model: UpdateLetstalkModel): Promise<boolean> {
+    return this.httpService.postJson(model, `api/ManageVoidServices/UpdateLetstalk`);
   }
 }

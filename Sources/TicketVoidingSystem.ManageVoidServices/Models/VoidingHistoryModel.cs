@@ -14,6 +14,8 @@ namespace TicketVoidingSystem.ManageVoidServices.Models
         public DateTime? ModifiedDate { get; set; }
         public string TransIds { get; set; }
         public string VoidData { get; set; }
+        public string BroadcastSessionId { get; set; }
+        public int SiteDbGroupId { get; set; }
         public DateTime? MinWinLostDate { get; set; }
         public DateTime? MaxWinLostDate { get; set; }
     }

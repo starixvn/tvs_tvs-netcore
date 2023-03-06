@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckingVoidStatusComponent } from './checking-void-status.component';
+import { LetstalkComponent } from './letstalk.component';
 
-describe('CheckingVoidStatusComponent', () => {
-  let component: CheckingVoidStatusComponent;
-  let fixture: ComponentFixture<CheckingVoidStatusComponent>;
+describe('LetstalkComponent', () => {
+  let component: LetstalkComponent;
+  let fixture: ComponentFixture<LetstalkComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CheckingVoidStatusComponent ]
+      declarations: [ LetstalkComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CheckingVoidStatusComponent);
+    fixture = TestBed.createComponent(LetstalkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

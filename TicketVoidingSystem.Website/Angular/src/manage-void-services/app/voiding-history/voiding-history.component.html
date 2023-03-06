@@ -19,6 +19,7 @@
         <table class="table table-sm table-hover table-striped table-bordered">
           <thead class="thead-light">
             <tr>
+              <th scope="col">SiteDbGroupId</th>
               <th scope="col">VoidingHistoryId</th>
               <th scope="col">StatusId</th>
               <th scope="col">RequestId</th>
@@ -31,11 +32,13 @@
               <th scope="col">TransIds</th>
               <th scope="col">MinWinLostDate</th>
               <th scope="col">MaxWinLostDate</th>
+              <th scope="col">BroadcastSessionId</th>
             </tr>
           </thead>
 
           <tbody *ngIf="voidingHistoryViewModel.length > 0">
             <tr *ngFor="let item of voidingHistoryViewModel; index as i">
+              <th scope="row">{{item.siteDbGroupId}}-{{item.siteDbName}}</th>
               <td>{{ item.voidingHistoryId }}</td>
               <td>{{ item.statusId }}</td>
               <td>{{ item.requestId }}</td>
@@ -45,13 +48,14 @@
               <td>{{ item.createdDate }}</td>
               <td>{{ item.modifiedDate }}</td>
               <td>{{ item.voidData }}</td>
-              <td>{{ item.transIds }}</td>              
+              <td>{{ item.transIds }}</td>
               <td>{{ item.minWinLostDate }}</td>
               <td>{{ item.maxWinLostDate }}</td>
+              <td>{{ item.broadcastSessionId }}</td>
             </tr>
             <tr>
-              <td colspan="12"><strong>Count: {{voidingHistoryViewModel.length}}</strong></td>
-            </tr>          
+              <td colspan="14"><strong>Count: {{voidingHistoryViewModel.length}}</strong></td>
+            </tr>
           </tbody>
 
           <tbody *ngIf="voidingHistoryViewModel.length === 0">
@@ -80,13 +84,13 @@
           <input maxlength="150" class="form-control form-control-sm voiding-history-id" type="text" row="1" disabled [(ngModel)]="item.voidingHistoryId" />
 
           <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
-          <select [(ngModel)]="item.statusIdSelected">
+          <select class="form-control status-select" [(ngModel)]="item.statusIdSelected">
             <option *ngFor="let item of voidingHistorySelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>    
+          </select>
         
           <div class="ml-4"><input type="button" class="btn btn-success btn-sm font-weight-bold" value="Save" 
             (click)="confirmUpdateStatus(item.voidingHistoryId, item.statusIdSelected)" /></div>
-        </div>   
+        </div>
       </ng-container>
     </ng-template>
 

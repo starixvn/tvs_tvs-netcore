@@ -14,7 +14,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers
         {
             // Arrange
             var request = new UpdateVoidServiceDataRequest();
-            var checkingVoidStatusService = Substitute.For<CheckingVoidStatusService>();
+            var checkingVoidStatusService = Substitute.For<CheckingTicketStatusService>();
             var handler = new UpdateVoidServiceDataHandler(checkingVoidStatusService);
 
             // Act

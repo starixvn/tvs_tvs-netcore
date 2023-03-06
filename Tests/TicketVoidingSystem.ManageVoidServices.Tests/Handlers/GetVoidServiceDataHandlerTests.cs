@@ -18,7 +18,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers
             var model = new VoidServiceModel();
             var expected = new List<VoidServiceModel> { model };
             var request = new GetVoidServiceDataRequest();
-            var checkingVoidStatusService = Substitute.For<CheckingVoidStatusService>();
+            var checkingVoidStatusService = Substitute.For<CheckingTicketStatusService>();
             checkingVoidStatusService.GetVoidServiceData("", 1).ReturnsForAnyArgs(expected);
             var handler = new GetVoidServiceDataHandler(checkingVoidStatusService);
 

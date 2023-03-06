@@ -11,9 +11,12 @@ export class VoidingHistoryModel {
   transIds: string;
   minWinLostDate?: Date;
   maxWinLostDate?: Date;
+  siteDbGroupId: number;
+  broadcastSessionId: string;
 }
 
 export class VoidingHistoryViewModel extends VoidingHistoryModel {
+  siteDbName: string;
   statusIdSelected: number;
 }
 

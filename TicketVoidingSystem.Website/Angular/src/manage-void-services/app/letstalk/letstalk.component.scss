@@ -2,10 +2,6 @@
   width: 330px;
 }
 
-.request-id {
-  width: 140px;
-}
-
 .table-scrollable {
   overflow: auto;
   max-height: 600px;
@@ -19,6 +15,13 @@
   }
 }
 
-.server-row {
-  margin-bottom: 10px;
+.request-id {
+  width: 140px;
+}
+
+.status-select {
+  width: 110px;
+  height: 31px;
+  font-size: 13px;
+  padding: 5px 5px;
 }
