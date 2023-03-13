@@ -1,0 +1,97 @@
+﻿@import '../../../assets/styles/mixin.scss';
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+    opacity: 0.1;
+}
+
+.modal {
+    position: fixed;
+    top: 15%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    font-weight: bold;
+    display: block;
+
+    .modal-content {
+        margin: 0 auto;
+        width: 500px;
+        background: white;
+        -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+        border: 1px solid rgba(0,0,0,.2);
+        background-clip: padding-box;
+        border-radius: 6px;
+
+        .modal-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #337ab7;
+            color: #fff;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+
+            .modal-cancel {
+                cursor: pointer;
+                font-size: 21px;
+                font-weight: 700;
+                line-height: 1;
+                text-shadow: 0 1px 0 #fff;
+                opacity: .6;
+
+                &:hover {
+                    opacity: .8;
+                }
+            }
+        }
+
+        .modal-body {
+            padding: 15px;
+            font-size: 15px;
+            max-height: 500px;
+            overflow: auto;
+            @include scroll-style();
+        }
+
+        .modal-footer {
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #e5e5e5;
+
+            input[type=button] {
+                cursor: pointer;
+                padding: 6px 12px;
+                margin-left: 5px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+                opacity: .9;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
+            .modal-confirm {
+                color: #fff;
+                background-color: #136fbd;
+            }
+
+            .modal-cancel {
+                color: #fff;
+                background-color: #d61414;
+            }
+        }
+    }
+}

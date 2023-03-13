@@ -9,7 +9,7 @@ import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../constants/config';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
-import { IssueInfo, IssueType } from '../models/issue-type.model';
+import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
 import { Result, SqlResult } from '../models/result';
 import { Selection } from '../models/selection.model';
 import { HttpService } from './http.service';
@@ -109,13 +109,16 @@ export class CommonService {
     return data.isSuccessful;
   }
 
-
   async checkVoidBetPermission(query: CheckingPermissionModel): Promise<SqlResult> {
     return this.httpService.postJson(query, `state-api/simple-data/update`);
   }
 
   async getIssueTypePermissionList(): Promise<IssueType[]> {
     return this.httpService.getJson('TicketVoiding/GetIssueTypePermissionList');
+  }
+
+  async getIssueTypes(): Promise<IssueTypesModel> {
+    return this.httpService.getJson('TicketVoiding/GetIssueTypes');
   }
 
   // async getPermissionManageRequest(): Promise<PermissionManage> {

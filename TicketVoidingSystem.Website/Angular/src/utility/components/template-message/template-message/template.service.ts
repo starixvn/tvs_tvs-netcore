@@ -1,0 +1,231 @@
+import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
+import * as moment from 'moment';
+import { EventType } from '../../../../utility/constants/sport.constant';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { Message } from './../messages/message';
+import { Format, MessageTemplateId, TemplateContentConst, TemplateReplace } from './template.const';
+import { TemplateContent, TemplateValue } from './template.model';
+
+
+
+const NUMBER_FIVE = 5;
+const MESSAGE_TEMPLATE_IDS_HAVE_TIME_RANGE_NC = [
+  MessageTemplateId.NEXT_CORNER,
+  MessageTemplateId.MATCH_COMPLETED,
+  MessageTemplateId.NEXT_GOAL_KICK,
+  MessageTemplateId.NEXT_BOOKING,
+  MessageTemplateId.NEXT_GOAL,
+  MessageTemplateId.PENALTY_SHOOTOUT,
+  MessageTemplateId.PENALTY_SHOOTOUT_VIRTUAL
+];
+
+@Injectable()
+export class TemplateService {
+  constructor() { }
+
+  getTemplateValue(match: MatchModel): TemplateValue {
+    return {
+      sportType: {
+        msgEnglish: match.sportTypeName,
+        msgChineseTraditional: match.sportTypeNameTraditional,
+        msgChineseSimplified: match.sportTypeNameSimplified,
+        msgChineseNewSimplified: match.sportTypeNameNewSimplified
+      },
+      homeTeamName: {
+        msgEnglish: match.homeName,
+        msgChineseTraditional: match.homeNameTraditional,
+        msgChineseSimplified: match.homeNameSimplified,
+        msgChineseNewSimplified: match.homeNameNewSimplified
+      },
+      awayTeamName: {
+        msgEnglish: match.awayName,
+        msgChineseTraditional: match.awayNameTraditional,
+        msgChineseSimplified: match.awayNameSimplified,
+        msgChineseNewSimplified: match.awayNameNewSimplified
+      },
+      leagueName: {
+        msgEnglish: match.leagueName,
+        msgChineseTraditional: match.leagueNameTraditional,
+        msgChineseSimplified: match.leagueNameSimplified,
+        msgChineseNewSimplified: match.leagueNameNewSimplified
+      },
+      eventDate: moment(new Date(match.eventDate)).format(Format.EVENT_DATE),
+      sportTypeId: match.sportType,
+      matchId: match.matchId
+    };
+  }
+
+  replaceEachLanguage(message: Message, destination: string, value: TemplateContent) {
+    if (!_.isNil(value)) {
+      message.contentEnglish = _.isNil(message.contentEnglish) ? '' :
+        message.contentEnglish.replace(new RegExp(destination, 'g'), value.msgEnglish);
+      message.contentChineseTraditional = _.isNil(message.contentChineseTraditional) ? '' :
+        message.contentChineseTraditional.replace(new RegExp(destination, 'g'), value.msgChineseTraditional);
+      message.contentChineseSimplified = _.isNil(message.contentChineseSimplified) ? '' :
+        message.contentChineseSimplified.replace(new RegExp(destination, 'g'), value.msgChineseSimplified);
+      message.contentNewChineseSimplified = _.isNil(message.contentNewChineseSimplified) ? '' :
+        message.contentNewChineseSimplified.replace(new RegExp(destination, 'g'), value.msgChineseNewSimplified);
+    }
+  }
+
+  replaceAll(message: Message, destination: string, value: string) {
+    if (!_.isNil(value)) {
+      message.contentEnglish = _.isNil(message.contentEnglish) ? '' :
+        message.contentEnglish.replace(new RegExp(destination, 'g'), value);
+      message.contentChineseTraditional = _.isNil(message.contentChineseTraditional) ? '' :
+        message.contentChineseTraditional.replace(new RegExp(destination, 'g'), value);
+      message.contentChineseSimplified = _.isNil(message.contentChineseSimplified) ? '' :
+        message.contentChineseSimplified.replace(new RegExp(destination, 'g'), value);
+      message.contentNewChineseSimplified = _.isNil(message.contentNewChineseSimplified) ? '' :
+        message.contentNewChineseSimplified.replace(new RegExp(destination, 'g'), value);
+    }
+  }
+
+  replaceKickOffTime(message: Message, time: string) {
+    const kickOffTime = moment(new Date(time)).format(TemplateContentConst.DATE_TIME);
+    const replacedContent: TemplateContent = {
+      msgEnglish: `${kickOffTime} ${TemplateContentConst.GMT_8.msgEnglish}`,
+      msgChineseTraditional: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseTraditional}`,
+      msgChineseSimplified: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseSimplified}`,
+      msgChineseNewSimplified: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseNewSimplified}`
+    };
+    this.replaceEachLanguage(message, TemplateReplace.KO_TIME, replacedContent);
+  }
+
+  replaceTime(message: Message, value: TemplateValue, messageTemplateId: number) {
+    const isTheSameDay = moment(new Date(value.fromTransTime)).format('DD/MM') === moment(new Date(value.toTransTime)).format('DD/MM');
+    const fromTime = moment(new Date(value.fromTransTime)).format(TemplateContentConst.DATE_TIME);
+    const toTime = isTheSameDay ?
+      moment(new Date(value.toTransTime)).format('h:mm:ss A')
+      : moment(new Date(value.toTransTime)).format(TemplateContentConst.DATE_TIME);
+
+    const timeRange = `${fromTime} - ${toTime} `;
+    this.replacePlacedFromTimeRange(message, value, timeRange, messageTemplateId);
+    this.replaceFromTimeRange(message, value, timeRange);
+  }
+
+  private replacePlacedFromTimeRange(message: Message, value: TemplateValue, timeRange: string,
+    messageTemplateId: number) {
+    const isTemplateHaveTimeRangeNC = MESSAGE_TEMPLATE_IDS_HAVE_TIME_RANGE_NC.indexOf(messageTemplateId) > -1;
+
+    if (value.totalTickets > NUMBER_FIVE) {
+      const replacedContent: TemplateContent = {
+        msgEnglish: `${TemplateContentConst.PLACED_FROM.msgEnglish} ${timeRange}${TemplateContentConst.GMT_8.msgEnglish} `,
+        msgChineseTraditional:
+          `${TemplateContentConst.PLACED_FROM.msgChineseTraditional} ${timeRange}${TemplateContentConst.GMT_8.msgChineseTraditional} `,
+        msgChineseSimplified:
+          `${TemplateContentConst.PLACED_FROM.msgChineseSimplified} ${timeRange}${TemplateContentConst.GMT_8.msgChineseSimplified} `,
+        msgChineseNewSimplified:
+          `${TemplateContentConst.PLACED_FROM.msgChineseNewSimplified} ${timeRange}${TemplateContentConst.GMT_8.msgChineseNewSimplified} `
+      };
+
+      const destination = isTemplateHaveTimeRangeNC ? TemplateReplace.PLACED_FROM_TIME_RANGE_NC : TemplateReplace.PLACED_FROM_TIME_RANGE;
+      this.replaceEachLanguage(message, destination, replacedContent);
+    } else {
+      if (isTemplateHaveTimeRangeNC) {
+        this.replaceAll(message, TemplateReplace.PLACED_FROM_TIME_RANGE_NC, '');
+      } else {
+        if (value.totalTickets <= 5 && value.eventType === EventType.LIVE) {
+          this.replaceEachLanguage(message, TemplateReplace.PLACED_FROM_TIME_RANGE, TemplateContentConst.PLACED_AT);
+        } else {
+          this.replaceAll(message, TemplateReplace.PLACED_FROM_TIME_RANGE, '');
+        }
+      }
+    }
+  }
+
+  private replaceFromTimeRange(message: Message, value: TemplateValue, timeRange: string) {
+    if (value.totalTickets > NUMBER_FIVE) {
+      const replacedContent: TemplateContent = {
+        msgEnglish: `${TemplateContentConst.FROM.msgEnglish} ${timeRange}${TemplateContentConst.GMT_8.msgEnglish} `,
+        msgChineseTraditional:
+          `${TemplateContentConst.FROM.msgChineseTraditional} ${timeRange}${TemplateContentConst.GMT_8.msgChineseTraditional} `,
+        msgChineseSimplified:
+          `${TemplateContentConst.FROM.msgChineseSimplified} ${timeRange}${TemplateContentConst.GMT_8.msgChineseSimplified} `,
+        msgChineseNewSimplified:
+          `${TemplateContentConst.FROM.msgChineseNewSimplified} ${timeRange}${TemplateContentConst.GMT_8.msgChineseNewSimplified} `
+      };
+      this.replaceEachLanguage(message, TemplateReplace.FROM_TIME_RANGE, replacedContent);
+    } else {
+      this.replaceAll(message, TemplateReplace.FROM_TIME_RANGE, '');
+    }
+  }
+
+  replaceScoreOfWrongMarketOffered(message: Message, score: string, isOnwardsSubtype: boolean) {
+    const replacedContent: TemplateContent = {
+      msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
+      msgChineseTraditional:
+        `(${TemplateContentConst.SCORE.msgChineseTraditional} ${score} ${TemplateContentConst.ONWARDS.msgChineseTraditional}) `,
+      msgChineseSimplified:
+        `(${TemplateContentConst.SCORE.msgChineseSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseSimplified}) `,
+      msgChineseNewSimplified:
+        `(${TemplateContentConst.SCORE.msgChineseNewSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}) `
+    };
+    if (!isOnwardsSubtype) {
+      replacedContent.msgEnglish = replacedContent.msgEnglish.replace(' ' + TemplateContentConst.ONWARDS.msgEnglish, '');
+      replacedContent.msgChineseTraditional =
+        replacedContent.msgChineseTraditional.replace(' ' + TemplateContentConst.ONWARDS.msgChineseTraditional, '');
+      replacedContent.msgChineseSimplified =
+        replacedContent.msgChineseSimplified.replace(' ' + TemplateContentConst.ONWARDS.msgChineseSimplified, '');
+      replacedContent.msgChineseNewSimplified =
+        replacedContent.msgChineseNewSimplified.replace(' ' + TemplateContentConst.ONWARDS.msgChineseNewSimplified, '');
+    }
+    this.replaceEachLanguage(message, TemplateReplace.SCORE, replacedContent);
+  }
+
+  replaceWrongScoreOfWrongScoreIssueType(message: Message, score: string) {
+    if (score?.length > 0) {
+      const replacedContent: TemplateContent = {
+        msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
+        msgChineseTraditional:
+          `(${TemplateContentConst.SCORE.msgChineseTraditional} ${score} ${TemplateContentConst.ONWARDS.msgChineseTraditional}) `,
+        msgChineseSimplified:
+          `(${TemplateContentConst.SCORE.msgChineseSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseSimplified}) `,
+        msgChineseNewSimplified:
+          `(${TemplateContentConst.SCORE.msgChineseNewSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}) `
+      };
+
+      this.replaceEachLanguage(message, TemplateReplace.WRONG_SCORE_ONWARDS, replacedContent);
+    } else {
+      this.replaceAll(message, TemplateReplace.WRONG_SCORE_ONWARDS, '');
+    }
+  }
+
+  replaceActualScoreOfWrongScoreIssueType(message: Message, score: string) {
+    if (score?.length > 0) {
+      const replacedContent: TemplateContent = {
+        msgEnglish: `${score} ${TemplateContentConst.ONWARDS.msgEnglish}`,
+        msgChineseTraditional: `${score} ${TemplateContentConst.ONWARDS.msgChineseTraditional}`,
+        msgChineseSimplified: `${score} ${TemplateContentConst.ONWARDS.msgChineseSimplified}`,
+        msgChineseNewSimplified: `${score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}`
+      };
+
+      this.replaceEachLanguage(message, TemplateReplace.ACTUAL_SCORE_ONWARDS, replacedContent);
+    } else {
+      this.replaceAll(message, TemplateReplace.ACTUAL_SCORE_ONWARDS, '');
+    }
+  }
+
+  replaceAOIMessage(message: Message) {
+    const replacedContent: TemplateContent = {
+      msgEnglish: `${TemplateContentConst.AIO_MESSAGE.msgEnglish}`,
+      msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE.msgChineseTraditional}`,
+      msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE.msgChineseSimplified}`,
+      msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE.msgChineseNewSimplified}`
+    };
+
+    this.replaceEachLanguage(message, TemplateReplace.AOI_MESSAGE, replacedContent);
+  }
+  
+  replaceSpecialBetType(message: Message, betTypeNameReplaceMessage: Message) {
+    const replacedContent: TemplateContent = {
+      msgEnglish: `"${betTypeNameReplaceMessage.contentEnglish}" `,
+      msgChineseTraditional: `"${betTypeNameReplaceMessage.contentChineseTraditional}" `,
+      msgChineseSimplified: `"${betTypeNameReplaceMessage.contentChineseSimplified}" `,
+      msgChineseNewSimplified: `"${betTypeNameReplaceMessage.contentNewChineseSimplified}" `
+    };
+
+    this.replaceEachLanguage(message, TemplateReplace.SPECIAL_BET_TYPE, replacedContent);
+  }
+}

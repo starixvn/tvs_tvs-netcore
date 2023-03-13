@@ -1,0 +1,292 @@
+﻿@import '../../../assets/styles/mixin.scss';
+
+@mixin InputText($width) {
+    margin: 0 0px 0 5px;
+    padding: 1px 2px;
+    height: 20px;
+    font-size: 13px;
+    border-radius: 0;
+    width: $width;
+}
+
+.text-red {
+    color: red;
+}
+
+.filter {
+    background-color: #ebebeb;
+    margin: 0 10px;
+    padding: 5px 10px 10px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    label {
+        .form-control {
+            display: inline;
+        }
+    }
+
+    .display-flex-between {
+        display: flex;
+        justify-content: space-between;
+
+        .remark {
+            padding: 5px 0px 3px;
+            color: #ed1c24;
+
+            span {
+                display: block;
+            }
+        }
+
+        .scroll-filter {
+            cursor: pointer;
+
+            i {
+                display: block;
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+
+    .display-flex {
+        display: flex;
+    }
+
+    .affected-licensees {
+        @include affected-licensees(#b4f0c6, #0a0c0f);
+    }
+
+    .instant-licensee {
+        color: #ff0000;
+        padding-top: 5px;
+    }
+
+    .cash-out-licensee {
+        color: #5548cc;
+        padding-top: 5px;
+    }
+
+    .china-view-licensee {
+        color: #dd5edd;
+        padding-top: 5px;
+    }
+
+    .line-1 {
+        display: flex;
+        flex-wrap: wrap;
+
+        .match {
+            line-height: 15px;
+            margin-right: 20px;
+
+            .match-id {
+                @include InputText(102px);
+            }
+
+            .red {
+                color: red;
+            }
+
+            .green {
+                color: limegreen;
+            }
+        }
+        .odds {
+            line-height: 15px;
+            margin-right: 20px;
+
+            .odds-input {
+                @include InputText(110px);
+            }
+
+            select {
+                margin: 0 !important;
+                border: 1px solid #ced4da;
+                border-left: 0;
+                @include InputText(52px);
+            }
+        }
+    }
+
+    .date-time {
+        display: flex;
+
+        .trans-time{
+            color: #9c000d;
+            margin-left: 10px;
+        }
+
+        .check-time{
+            color: #005ec2;
+            margin-left: 10px;
+            margin-right: 20px;
+        }
+
+        label {
+            margin: 5px 0;
+
+            input[type="checkbox"] {
+                margin-bottom: 2px;
+            }
+        }
+
+        .from-date-time-text,
+        .to-date-time-text {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .control-bet {
+        display: flex;
+
+        label {
+            margin: 5px 5px 5px 10px;
+
+            input {
+                margin: 0;
+                
+                &:disabled {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    .line-2 {
+        display: flex;
+        margin-top: 10px;
+
+        .ticket-type,
+        .event-type,
+        .settled-type,
+        .group-bettypes-handler,
+        .issue-type,
+        .sub-issue-type {
+            margin: -2px 20px 0 0px;
+        }
+
+        .event-type {
+            margin-left: 20px;
+        }
+
+        .settled-type {
+            margin-left: 5px;
+        }
+
+        .issue-type select {
+            min-width: 150px
+        }
+
+        .sub-issue-type select {
+            min-width: 200px
+        }
+
+        select {
+            padding: 1px 2px;
+            width: 100px;
+            height: 22px;
+            border-radius: 0;
+            
+            &:disabled {
+                background-color: #eee;
+                cursor: not-allowed;
+                opacity: 1;
+            }
+        }
+
+        .multiple-selection {
+            ::ng-deep button {
+                width: 100%;
+                margin-bottom: 0px;
+                padding: 1px 2px;
+                height: 22px;
+                border-radius: 0;
+            }
+        }
+    }
+
+    .line-3 {
+        .optional-filters {
+            display: flex;
+
+            .bold {
+                font-weight: bold;
+                margin-right: 5px;
+            }
+
+            .score {
+                display: flex;
+                padding: 2px;
+                margin-top: -3px;
+                margin-right: 20px;
+
+                input {
+                    @include InputText(16px);
+                }
+
+                label {
+                    margin: 0 0 0 5px;
+                }
+            }
+        }
+    }
+
+    .search {
+        height: 25px;
+        margin-top: 10px;
+
+        .search-only {
+            display: inline-block;
+            padding: 2px 13px 3px;
+            border: 0px;
+            background: url(../../../assets/images/sprite.png) no-repeat -7px -62px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            font-size: 13px;
+            height: 24px;
+            line-height: 20px;
+
+            &:hover {
+                background: url(../../../assets/images/sprite.png) no-repeat -75px -62px;
+                text-decoration: none;
+                padding: 2px 13px 3px;
+                font-weight: bold;
+                color: white;
+            }
+        }
+
+        .view-log-only {
+            display: inline-block;
+            padding: 2px 13px 3px;
+            border: 0px;
+            background: url(../../../assets/images/view-log-info.png);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            font-size: 13px;
+            height: 24px;
+            line-height: 20px;
+
+            &:hover {
+                background: url(../../../assets/images/view-log-info-hover.png);
+                text-decoration: none;
+                padding: 2px 13px 3px;
+                font-weight: bold;
+                color: white;
+            }
+        }
+    }
+}
+
+::ng-deep date-full-time-new {
+    input[type="text"] {
+        height: 30px;
+        margin: 0;
+    }
+}

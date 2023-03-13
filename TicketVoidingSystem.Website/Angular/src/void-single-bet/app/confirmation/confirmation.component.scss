@@ -1,0 +1,33 @@
+﻿.confirm-delete {
+    margin: 5px 10px;
+    float: left;
+
+    legend {
+        font-weight: bold;
+    }
+
+    table {
+        tr {
+            td:first-child {
+                min-width: 140px;
+            }
+
+            td {
+                label {
+                    margin: 0;
+                }
+            }
+
+            textarea, input[type="text"], input[type="password"] {
+                width: 500px;
+                height: 31px;
+                display: inline-block;
+                margin-bottom: 5px;            
+            }
+
+            input[disabled] {
+                cursor: not-allowed;
+            }
+        }
+    }
+}

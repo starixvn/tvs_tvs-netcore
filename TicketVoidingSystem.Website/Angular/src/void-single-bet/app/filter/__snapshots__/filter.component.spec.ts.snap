@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <filter>
+    <div
+      class="filter"
+    >
+      <div
+        class="display-flex-between"
+      >
+        <div
+          class="remark"
+        >
+          <span>
+            <em
+              class="icon-warning"
+            />
+            You can void "Settled" or "Unsettled" tickets. 
+          </span>
+          <span>
+            <em
+              class="icon-warning"
+            />
+            You can void "Instantly Settled" tickets settled by Instant Settlement during live time. 
+          </span>
+        </div>
+        <div
+          class="scroll-filter"
+        >
+          <em
+            class="icon-scroll-down"
+          />
+        </div>
+      </div>
+      <div
+        class="content-filter"
+      >
+        <div
+          class="display-flex"
+        >
+          <div>
+            <div
+              class="line-1"
+            >
+              <label
+                class="match"
+              >
+                 Match ID 
+                <input
+                  autofocus=""
+                  class="match-id form-control ng-untouched ng-pristine ng-valid"
+                  maxlength="10"
+                  only-number=""
+                  type="text"
+                />
+                <span
+                  class="red"
+                >
+                  (✹)
+                </span>
+              </label>
+              <label
+                class="odds"
+              >
+                 Odds 
+                <input
+                  class="odds-input form-control ng-untouched ng-pristine ng-valid"
+                  placeholder="Ex: 0.75&1&1.25"
+                  type="text"
+                />
+                <select
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </select>
+              </label>
+            </div>
+            <div
+              class="date-time"
+            >
+              <div
+                class="time-type d-flex"
+              >
+                <label
+                  class="bold d-flex align-items-center"
+                >
+                  (GMT + 8)
+                </label>
+                <label
+                  class="trans-time bold d-flex align-items-center"
+                >
+                  <input
+                    class="mr-1 ng-untouched ng-pristine ng-valid"
+                    type="radio"
+                  />
+                   Trans Time 
+                </label>
+                <label
+                  class="check-time bold d-flex align-items-center"
+                >
+                  <input
+                    class="mr-1 ng-untouched ng-pristine ng-valid"
+                    type="radio"
+                  />
+                   Accept Time 
+                </label>
+              </div>
+              <div
+                class="date-time"
+              >
+                <span
+                  class="from-date-time-text mr-1"
+                >
+                  From
+                </span>
+                <date-full-time-new
+                  class="from-date-time mr-2"
+                />
+                <span
+                  class="to-date-time-text mr-1"
+                >
+                  To
+                </span>
+                <date-full-time-new
+                  class="to-date-time mr-2"
+                />
+              </div>
+              <div
+                class="control-bet"
+              >
+                <label>
+                  Bet
+                </label>
+                <label>
+                  <input
+                    name="bet"
+                    type="radio"
+                    value="All"
+                  />
+                   All 
+                </label>
+                <label>
+                  <input
+                    name="bet"
+                    type="radio"
+                    value="Single"
+                  />
+                   Single 
+                </label>
+                <label>
+                  <input
+                    name="bet"
+                    type="radio"
+                    value="Sub Parlay"
+                  />
+                   Sub Parlay 
+                </label>
+              </div>
+            </div>
+            <div
+              class="line-2"
+            >
+              <label
+                class="ticket-type"
+              >
+                 Ticket Type 
+                <select
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </select>
+              </label>
+              <label
+                class="event-type"
+              >
+                 Event Type 
+                <select
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </select>
+              </label>
+              <label
+                class="settled-type"
+              >
+                 Settled Type 
+                <select
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </select>
+              </label>
+              <label
+                class="issue-type"
+              >
+                 Issue Type 
+                <select
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </select>
+              </label>
+              <label
+                class="sub-issue-type"
+              >
+                 Sub Type 
+                <select
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+        <group-bettypes />
+        <advanced-mode />
+        <div
+          class="search d-flex"
+        >
+          <input
+            class="submit search-only mr-2"
+            type="button"
+            value="Search"
+          />
+          <input
+            class="submit view-log-only"
+            type="button"
+            value="View Log Info"
+          />
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </filter>
+</ng-component>
+`;
