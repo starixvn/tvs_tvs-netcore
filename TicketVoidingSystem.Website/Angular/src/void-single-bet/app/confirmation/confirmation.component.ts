@@ -1,6 +1,6 @@
 ﻿import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
-import { Tooltip } from '../../../utility/modules/tooltip/tooltip.model';
 import { Confirmation } from './confirmation.model';
 
 @Component({

@@ -1,7 +1,7 @@
 ﻿import { ElementRef } from '@angular/core';
-import { BetID } from '../../../utility/models/bet-id.mode';
-import { PagingModel } from '../../../utility/modules/paging/paging/paging.model';
-import { Message } from '../../../utility/modules/template-message/messages/message';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { Message } from '../../../utility/components/template-message/messages/message';
+import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group.model';
 
 enum IconCheckBox {

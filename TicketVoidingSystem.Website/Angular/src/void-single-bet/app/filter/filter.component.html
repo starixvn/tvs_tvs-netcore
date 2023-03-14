@@ -60,8 +60,8 @@
                         <label>{{bet.name}}</label>
                         <label *ngFor="let item of bet.items">
                             <input type="radio" name="bet" [attr.value]="item"
-                                [attr.disabled]="!searchByBetId ? null: ''"
-                                [checked]="item === bet.value && !searchByBetId" (change)="changeControlBet(item)" />
+                                [attr.disabled]="null"
+                                [checked]="item === bet.value" (change)="changeControlBet(item)" />
                             {{item}}
                         </label>
                     </div>

@@ -14,7 +14,7 @@ export class MessagesComponent {
   @Input() message = new Message();
   @Output() messageChange = new EventEmitter<Message>();
   tooltip = new Tooltip();
-
+  isShowOtherLanguage= false;
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
 

@@ -29,6 +29,7 @@ import { BlockUiModule } from './components/block-ui/block-ui.module';
 import { DateTimeModule } from './components/date-time/date-time.module';
 import { MatchDetailComponent } from './components/match-detail/match-detail.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { MessagesResultComponent } from './components/messages-result/messages-result.component';
 import { ModalModule } from './components/modal/modal.module';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PagingModule } from './components/paging/paging.module';
@@ -66,7 +67,7 @@ import { HttpService } from './services/http.service';
     BetTypesVirtualSportComponent,
     // ConfirmationComponent,
     MatchDetailComponent,
-    // MessagesResultComponent,
+    MessagesResultComponent,
     NotificationComponent,
     NumbersOnlyDirective,
     OnlyNumberDirective,
@@ -79,7 +80,7 @@ import { HttpService } from './services/http.service';
     BetTypesVirtualSportComponent,
     // ConfirmationComponent,
     MatchDetailComponent,
-    // MessagesResultComponent,
+    MessagesResultComponent,
     NotificationComponent,
     NumbersOnlyDirective,
     OnlyNumberDirective,

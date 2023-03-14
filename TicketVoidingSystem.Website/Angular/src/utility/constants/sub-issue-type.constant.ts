@@ -28,4 +28,5 @@ export class SubIssueTypeConstant {
     static readonly WRONG_INDICATION_SCORE_ONWARDS = 97;
     static readonly WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS = 98;
     static readonly WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS = 99;
+    static readonly TECHNICAL_ERROR = 108;
   }

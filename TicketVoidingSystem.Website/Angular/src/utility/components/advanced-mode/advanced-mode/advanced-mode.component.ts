@@ -32,8 +32,8 @@ export class AdvancedModeComponent implements OnChanges {
   isShowAdvancedMode: boolean;
   isShowContent: boolean;
   isShowAllBetType: boolean;
-
   tooltip = new Tooltip();
+  oddsInfo: OddsInfo[];
 
   constructor(
     private readonly service: AdvancedModeService,
@@ -94,6 +94,7 @@ export class AdvancedModeComponent implements OnChanges {
   public async getSpecialBetTeamCricket(matchId: string): Promise<void> {
     const data = await this.service.GetOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
     this.updatePlayerCricket(data);
+    this.oddsInfo = data;
   }
 
   changedBetTypes() {
