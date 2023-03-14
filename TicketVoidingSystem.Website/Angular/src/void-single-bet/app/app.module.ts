@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ToastrModule } from 'ngx-toastr';
 import { AdvancedModeModule } from '../../utility/components/advanced-mode/advanced-mode.module';
 import { AdvancedModeService } from '../../utility/components/advanced-mode/advanced-mode/advanced-mode.service';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
@@ -44,6 +45,7 @@ import { TicketsComponent } from './tickets/tickets.component';
         UtilityModule,
         AdvancedModeModule,
         TemplateMessageModule,
+        ToastrModule.forRoot(),
         PipeModule,
         ClipboardModule
     ],

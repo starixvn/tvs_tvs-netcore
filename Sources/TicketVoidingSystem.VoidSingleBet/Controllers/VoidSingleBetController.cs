@@ -19,13 +19,6 @@ public class VoidSingleBetController : ControllerBase
         this.mediator = mediator;
     }
 
-    //public async Task<ActionResult> Index()
-    //{
-    //    var viewModel = await mediator.Send(new IndexRequest()).ConfigureAwait(false);
-    //    viewModel.Root = Url.Content("~");
-    //    return View("~/dist/void-single-bet/index.cshtml", viewModel);
-    //}
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetRemark() => Ok(await mediator.Send(new GetRemarkRequest()));

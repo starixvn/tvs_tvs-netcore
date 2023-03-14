@@ -42,6 +42,7 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing.Controllers;
+using TicketVoidingSystem.VoidSingleBet.Controllers;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 namespace TicketVoidingSystem.Website.Utilities;
@@ -210,6 +211,7 @@ public static class ServiceCollectionExtension
         services.RegisterManageVoidServices();
         services.RegisterMarkTicketsServices();
         services.RegisterTicketListingServices();
+        services.RegisterVoidSingleBetServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -221,11 +223,13 @@ public static class ServiceCollectionExtension
         services.AddMediatR(typeof(ManageVoidServicesController));
         services.AddMediatR(typeof(MarkTicketsController));
         services.AddMediatR(typeof(TicketListingController));
+        services.AddMediatR(typeof(VoidSingleBetController));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(MarkTicketsController));
         services.AddAutoMapper(typeof(TicketListingController));
+        services.AddAutoMapper(typeof(VoidSingleBetController));
     }
 }

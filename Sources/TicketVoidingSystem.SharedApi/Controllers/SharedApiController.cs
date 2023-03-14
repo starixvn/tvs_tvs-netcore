@@ -42,4 +42,11 @@ public class SharedApiController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetSportsType() => Ok(await mediator.Send(new GetSportsTypeRequest()));
+
+    [HttpPost]
+    public async Task<IActionResult> GetVoidResultCache(GetVoidResultCacheRequest request)
+    {
+        var model = await mediator.Send(request).ConfigureAwait(false);
+        return this.JsonNet(model);
+    }
 }

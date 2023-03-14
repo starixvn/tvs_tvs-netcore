@@ -124,6 +124,7 @@
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SimpleDataApi\TicketVoidingSystem.SimpleDataApi.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.VoidSingleBet\TicketVoidingSystem.VoidSingleBet.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 
