@@ -77,10 +77,10 @@
                     @transaction.TransDate
             </td>
             <td align="Right">
-                @Raw(transaction.Odds)
+                @Html.Raw(transaction.Odds)
         </td>
         <td align="Right">
-            @Raw(transaction.Stake)
+            @Html.Raw(transaction.Stake)
     </td>
     <td align="Right">
         @transaction.WinLost
@@ -89,7 +89,7 @@
     @transaction.Status
 </td>
 <td align="Right">
-    @Raw(transaction.Choice)
+    @Html.Raw(transaction.Choice)
 </td>
 <td align="Center">
     @transaction.BetFrom
