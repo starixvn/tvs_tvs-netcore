@@ -31,7 +31,8 @@ public class AfterVoidServiceImp : AfterVoidService
     private readonly LoggingService loggingService;
     private readonly SessionService sessionService;
 
-    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageService sendMessageService, SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService, SessionService sessionService)
+    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageService sendMessageService,
+        SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService, SessionService sessionService)
     {
         this.cashOutApiService = cashOutApiService;
         this.sendMessageService = sendMessageService;

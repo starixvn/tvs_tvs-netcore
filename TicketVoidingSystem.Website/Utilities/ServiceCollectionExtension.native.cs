@@ -228,6 +228,7 @@ public static class ServiceCollectionExtension
 
     public static void RegisterAutoMapper(this IServiceCollection services)
     {
+        services.AddAutoMapper(typeof(SharedApiController));
         services.AddAutoMapper(typeof(MarkTicketsController));
         services.AddAutoMapper(typeof(TicketListingController));
         services.AddAutoMapper(typeof(VoidSingleBetController));

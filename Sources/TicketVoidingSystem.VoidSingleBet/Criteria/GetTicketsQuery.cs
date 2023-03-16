@@ -11,9 +11,9 @@ public class CommonQuery
 
     public string OddsType { get; set; }
 
-    public string OddsValue { get; set; }
+    public string? OddsValue { get; set; }
 
-    public string OddsFilter => string.IsNullOrWhiteSpace(OddsValue)
+    public string? OddsFilter => string.IsNullOrWhiteSpace(OddsValue)
         ? null
         : $"<root><r o='{SecurityElement.Escape(OddsValue)}' ost='{OddsType}'/></root>";
 
@@ -33,9 +33,9 @@ public class CommonQuery
 
     public byte TimeType { get; set; }
 
-    public string VoidFromTime { get; set; }
+    public string? VoidFromTime { get; set; }
 
-    public string VoidToTime { get; set; }
+    public string? VoidToTime { get; set; }
 }
 
 public class GetTicketsQuery : CommonQuery
@@ -46,5 +46,5 @@ public class GetTicketsQuery : CommonQuery
 
     public int PageSize { get; set; }
 
-    public Match Match { get; set; }
+    public Match? Match { get; set; }
 }

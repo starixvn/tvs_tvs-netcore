@@ -18,7 +18,8 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
     private readonly VoidTicketsService voidTicketsService;
     private readonly AfterVoidService afterVoidService;
 
-    public VoidTicketsHandler(VoidResultCacheService voidResultCacheService, NetPositionForCricketService netPositionForCricketService, VoidTicketsService voidTicketsService, AfterVoidService afterVoidService)
+    public VoidTicketsHandler(VoidResultCacheService voidResultCacheService, NetPositionForCricketService netPositionForCricketService,
+        VoidTicketsService voidTicketsService, AfterVoidService afterVoidService)
     {
         this.voidResultCacheService = voidResultCacheService;
         this.netPositionForCricketService = netPositionForCricketService;

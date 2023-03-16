@@ -118,7 +118,7 @@ export class CommonService {
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
-    return this.httpService.getJson('TicketVoiding/GetIssueTypes');
+    return this.httpService.getJson('api/SharedApi/GetIssueTypes');
   }
 
   // async getPermissionManageRequest(): Promise<PermissionManage> {

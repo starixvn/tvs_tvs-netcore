@@ -23,7 +23,8 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
     private readonly MapTicketService mapTicketService;
     private readonly UpdateListTicketsViewModelService updateListTicketsViewModelService;
 
-    public GetTicketsHandler(PagingService pagingService, GetTicketsService getTicketsService, MatchService matchService, SessionService sessionService, MapTicketService mapTicketService, UpdateListTicketsViewModelService updateListTicketsViewModelService)
+    public GetTicketsHandler(PagingService pagingService, GetTicketsService getTicketsService, MatchService matchService,
+        SessionService sessionService, MapTicketService mapTicketService, UpdateListTicketsViewModelService updateListTicketsViewModelService)
     {
         this.pagingService = pagingService;
         this.getTicketsService = getTicketsService;

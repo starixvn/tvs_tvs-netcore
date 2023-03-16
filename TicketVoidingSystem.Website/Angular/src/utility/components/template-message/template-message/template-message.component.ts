@@ -89,7 +89,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   async getTemplateSetting() {
-    const data = await this.httpService.getJson<TemplateSettings>('MessageTemplate/GetTemplateSettings');
+    const data = await this.httpService.getJson<TemplateSettings>('api/MessageTemplate/GetTemplateSettings');
     const messageTemplates = data.messageTemplates;
     messageTemplates.forEach(item => {
       this.setInputTextValue(item);

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.SharedApi.Criteria;
+using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.SharedApi.Models;
 
 namespace TicketVoidingSystem.SharedApi.Services;

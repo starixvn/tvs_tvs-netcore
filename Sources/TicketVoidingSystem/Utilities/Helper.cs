@@ -117,7 +117,7 @@ public static class Helper
             return MessageContentType.VoidAbnormal;
         }
 
-        if (messageContent.ToLower().Contains("kindly double check your statement again"))
+        if (messageContent.ToLowerInvariant().Contains("kindly double check your statement again"))
         {
             return MessageContentType.VoidSettled;
         }

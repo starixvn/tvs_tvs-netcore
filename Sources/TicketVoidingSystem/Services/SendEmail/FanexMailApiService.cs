@@ -57,7 +57,6 @@ public class FanexMailApiServiceImp : FanexMailApiService
                 await loggingService.ErrorAsync(ErrorSendEmail.It, exception);
                 break;
 
-            case EmailGroup.None:
             default:
                 await loggingService.ErrorAsync(ErrorSendEmail.WrongGroup, exception);
                 break;

@@ -25,6 +25,8 @@
         <Setting Key="NAP_SpecialDelete_Match_FirstTicketTime_Select" SpName="NAP_SpecialDelete_Match_FirstTicketTime_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="NAP_SpecialDelete_MatchInfo_Select" SpName="NAP_SpecialDelete_MatchInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_CheckVoidBetPermission" SpName="TicketVoiding_CheckVoidBetPermission" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_Email_OperatorInfo_Select" SpName="TicketVoiding_Email_OperatorInfo_Select" DbName="DBCUST.SiteConfig.bodbAdminNet" TimeOut="600" />
+        <Setting Key="SpecialDelete_MailingList_Select" SpName="SpecialDelete_MailingList_Select" DbName="DBOIC.bodb_OIC.bodbAdminNet" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
@@ -126,5 +128,22 @@
         <Setting Key="DBCTG.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG2.NAP_SpecialDelete_VoidSingleBet_Update" SpName="NAP_SpecialDelete_VoidSingleBet_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
+
+    <Function Name="UpdateMessage">
+        <Setting Key="Acc_BettransSelBet_BatchMsg" SpName="Acc_BettransSelBet_BatchMsg" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_Message_Select" SpName="NAP_SpecialDelete_Message_Select" DbName="DBMSG.bodb_Message.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_Message_Insert" SpName="NAP_SpecialDelete_Message_Insert" DbName="DBMSG.bodb_Message.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_BatchMessage_Upload" SpName="NAP_SpecialDelete_BatchMessage_Upload" DbName="DBMSG.bodb_Message.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_RecoverBet_MessageDel" SpName="NAP_RecoverBet_MessageDel" DbName="DBMSG.bodb_Message.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_MessageTemplate_Select" SpName="TicketVoiding_MessageTemplate_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_MessageTemplate_IssueType_Select" SpName="TicketVoiding_MessageTemplate_IssueType_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_MessageTemplate_SubIssueType_Select" SpName="TicketVoiding_MessageTemplate_SubIssueType_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_MessageTemplate_Settings_Select" SpName="TicketVoiding_MessageTemplate_Settings_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_Reason_Select" SpName="TicketVoiding_Reason_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_Reason_Insert" SpName="TicketVoiding_Reason_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_VoidedTransaction_Delete" SpName="TicketVoiding_VoidedTransaction_Delete" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_VoidedTransaction_Insert" SpName="TicketVoiding_VoidedTransaction_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="Dot_Admin_message_new_insert" SpName="Dot_Admin_message_new_insert" DbName="DBONUSER.ON_USER.bodbAdminNet" TimeOut="600" />
     </Function>
 </Functions>
