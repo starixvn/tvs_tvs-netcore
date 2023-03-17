@@ -57,7 +57,7 @@ public class SitesEmailServiceImp : SitesEmailService
 
     private static void HandleEmailConfiguration(List<SiteEmail> sites)
     {
-        var jsonPath = AppSettingService.AppSetting.MailingList;
+        var jsonPath = AppSettingService.AppSetting.FanexMailService.MailingList;
         var specialSites = Helper.DeserializeJsonFileToObject<List<SiteEmail>>(jsonPath);
         // 9999999 convert to hex (Underscores should be used to make large numbers readable -- code smell)
         const int SiteId = 0x98967F;

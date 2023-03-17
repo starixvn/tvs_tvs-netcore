@@ -14,6 +14,7 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry;
+using Fanex.MailDeliver.MailClient;
 using Fanex.NAP.Client.AspNetCore.Configuration;
 using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
@@ -201,6 +202,12 @@ public static class ServiceCollectionExtension
         services.AddSingleton<IPHelper, IPHelperImpl>();
         services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
         services.AddSingleton<IMaintenanceService, MaintenanceService>();
+    }
+
+    public static void RegisterFanexMailService(this IServiceCollection services)
+    {
+        AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
+        AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;
     }
 
     public static void RegisterBusinessServices(this IServiceCollection services)

@@ -13,7 +13,6 @@ public class AppSettingModel
 
     public string SentryClientKey { get; init; }
 
-    //
     public string FanexRemotingRefServiceUrl { get; init; }
 
     public string ServiceName { get; init; }
@@ -25,7 +24,7 @@ public class AppSettingModel
     public string IgnoreSiteDb { get; init; }
     public string JackTimeCashOutUrl { get; init; }
 
-    public string MailingList { get; init; }
+    public FanexMailService FanexMailService { get; init; }
 }
 
 public class AuthSettings
@@ -51,4 +50,11 @@ public class LetstalkConfig
     public string AbnormalBetRequest { get; init; }
     public string LetstalkServiceApi { get; init; }
     public bool IsProdEnv { get; init; }
+}
+
+public class FanexMailService
+{
+    public string MailingList { get; init; }
+    public string AppMailId { get; init; }
+    public string AppMailAddress { get; init; }
 }

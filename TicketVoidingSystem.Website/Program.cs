@@ -35,6 +35,7 @@ builder.Services.RegisterLetstalk();
 builder.Services.RegisterCoreServices(builder.Configuration);
 builder.Services.RegisterBusinessServices();
 builder.Services.RegisterFanexCaching(builder.Configuration);
+builder.Services.RegisterFanexMailService();
 builder.Services.RegisterMediatR();
 builder.Services.RegisterAutoMapper();
 builder.Services.RegisterSignalR();
