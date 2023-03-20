@@ -1,4 +1,5 @@
-﻿<head>
+﻿@using RazorEngine.Text
+<head>
     <style type="text/css">
         .auto-style1 {
             height: 23px;
@@ -152,46 +153,46 @@
         <tr valign="Middle" style="background-color: @backghroundColor; height: 25px;">
             <td align="Center">@ticket.No
             </td>
-            <td align="Center">@Html.Raw(ticket.BetId)
+            <td align="Center">@(new RawString(ticket.BetId))
             </td>
             <td align="Center">@ticket.TransDate
             </td>
             <td align="Center">@if ((Model.IsLikelyAbnormalBet || Model.IsFilterByUserName) && ticket.IsVipMember)
                 {
-                    <span style="color: red">@Html.Raw(ticket.Member)</span>
+                    <span style="color: red">@(new RawString(ticket.Member))</span>
                 }
                 else
                 {
-                    @Html.Raw(ticket.Member)
+                    @(new RawString(ticket.Member))
                 }
                 @if(!String.IsNullOrEmpty(ticket.OperatorID)){
                 <br />
-                @Html.Raw("(" + @ticket.OperatorID + ")")
+                @(new RawString("(" + @ticket.OperatorID + ")"))
                 }
             </td>
             <td align="Center">@ticket.DepositName
             </td>
             <td align="Center">@if(!String.IsNullOrEmpty(ticket.BetTypeSimplified)){
-                @Html.Raw(@ticket.BetTypeSimplified)
+                @(new RawString(@ticket.BetTypeSimplified))
                 <br />
                 }
-                @Html.Raw(@ticket.BetType)
+                @(new RawString(@ticket.BetType))
             </td>
-            <td align="Right">@Html.Raw(ticket.Odds)
+            <td align="Right">@(new RawString(ticket.Odds))
             </td>
-            <td align="Right" class="auto-style2">@Html.Raw(@ticket.Stake)
+            <td align="Right" class="auto-style2">@(new RawString(@ticket.Stake))
             </td>
             <td align="Right">@ticket.WinLoss
             </td>
             <td align="Center">@ticket.Currency
             </td>
-            <td align="Center">@Html.Raw(ticket.Status)
+            <td align="Center">@(new RawString(ticket.Status))
             </td>
             <td align="Center">@ticket.Score
             </td>
-            <td align="Center">@Html.Raw(ticket.Handicap)
+            <td align="Center">@(new RawString(ticket.Handicap))
             </td>
-            <td align="Right">@Html.Raw(ticket.Choice)
+            <td align="Right">@(new RawString(ticket.Choice))
             </td>
             <td align="Center">@ticket.BetFrom
             </td>

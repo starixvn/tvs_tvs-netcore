@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using RazorEngine;
 using RazorEngine.Templating;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail;
 
@@ -16,6 +16,7 @@ public class TemplateEmailServiceImp : TemplateEmailService
 {
     public MailRecordResult Create(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailViewModel> tickets, SiteEmail site, string subject)
     {
+        mailVoidViewModel.Tickets = tickets;
         return new MailRecordResult
         {
             SiteEmail = site,
@@ -24,11 +25,11 @@ public class TemplateEmailServiceImp : TemplateEmailService
         };
     }
 
-    public virtual string GetEmailBody<T>(string path, T model)
+    protected virtual string GetEmailBody(string path, MailVoidViewModel model)
     {
-        var fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+        var fullPath = Helper.GetFilePath(path);
         var template = File.ReadAllText(fullPath);
-        var key = typeof(T) + path;
-        return Engine.Razor.RunCompile(template, key, typeof(T), model);
+        var key = typeof(MailVoidViewModel) + path;
+        return Engine.Razor.RunCompile(template, key, typeof(MailVoidViewModel), model);
     }
 }

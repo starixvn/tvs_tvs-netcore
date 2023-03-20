@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TicketVoidingSystem.Models.SendMessage;
 
 namespace TicketVoidingSystem.Models.SendEmail;
@@ -32,6 +33,8 @@ public class MailVoidViewModel : MailViewModel
     public bool IsAbnormalAccount { get; set; }
 
     public bool IsFilterByUserName { get; set; }
+
+    public IEnumerable<TicketEmailViewModel> Tickets { get; set; }
 }
 
 public class MailRecoverViewModel : MailViewModel
