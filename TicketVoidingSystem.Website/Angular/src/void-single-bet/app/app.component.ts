@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import CryptoJS from '../../assets/scripts/cryptojs';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MessagesResult } from '../../utility/components/messages-result/messages-result';
 import { ModalType } from '../../utility/components/modal/modal';
@@ -386,7 +387,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       transIdCrickets: this.ticketsModel.getTicketCricket(),
       message: this.messagesComponent.message,
       userName: this.confirmation.userName,
-      userPassword: this.confirmation.userPassword,
+      userPassword: CryptoJS.CfsEnCode(this.confirmation.userPassword),
       reason: this.confirmation.reason,
       reasonSC: this.confirmation.reasonSC,
       match: this.matchViewModel,

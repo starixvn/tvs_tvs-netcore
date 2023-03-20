@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
-using Fanex.NAP.Client.Helpers.Common;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
@@ -105,7 +104,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
         criteria.LiveIndicator = query.EventType;
         criteria.SecondAcceptFlag = query.TicketType;
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
-        criteria.UserPassword = Cryptography.CfsEnCode(query.UserPassword);
+        criteria.UserPassword = query.UserPassword;
         criteria.UserId = sessionService.UserId;
 
         return criteria;
