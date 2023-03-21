@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Logging;
 using MediatR;
 using TicketVoidingSystem.ManageVoidServices.Models;
 using TicketVoidingSystem.ManageVoidServices.Services;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageVoidServices.Handlers
 {
@@ -15,10 +15,12 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
     public class UpdateVoidBetAutomationHandler : IRequestHandler<UpdateVoidBetAutomationInfoRequest, bool>
     {
         private readonly AfterVoidService afterVoidService;
+        private readonly LoggingService loggingService;
 
-        public UpdateVoidBetAutomationHandler(AfterVoidService afterVoidService)
+        public UpdateVoidBetAutomationHandler(AfterVoidService afterVoidService, LoggingService loggingService)
         {
             this.afterVoidService = afterVoidService;
+            this.loggingService = loggingService;
         }
 
         public async Task<bool> Handle(UpdateVoidBetAutomationInfoRequest request, CancellationToken cancellationToken)
@@ -30,7 +32,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Handlers
             }
             catch (Exception e)
             {
-                await LogService.ErrorAsync(nameof(AfterVoidService.UpdateVoidBetAutomationServiceInfo), e);
+                await loggingService.ErrorAsync(nameof(AfterVoidService.UpdateVoidBetAutomationServiceInfo), e);
                 return false;
             }
         }

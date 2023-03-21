@@ -3,17 +3,19 @@
 </div>
 
 <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills custom-nav">
-  <li ngbNavItem="1">
-    <a ngbNavLink>After Void</a>
-    <ng-template ngbNavContent>
-      <after-void></after-void>
-    </ng-template>
-  </li>
   <li ngbNavItem="2">
     <a ngbNavLink>Scanning Auto Void</a>
     <ng-template ngbNavContent>
       <div class="container-fluid mb-3">
         <scanning-auto-void></scanning-auto-void>
+      </div>
+    </ng-template>
+  </li>
+  <li ngbNavItem="5">
+    <a ngbNavLink>Voiding History</a>
+    <ng-template ngbNavContent>
+      <div class="container-fluid mb-3">
+        <voiding-history></voiding-history>
       </div>
     </ng-template>
   </li>
@@ -25,19 +27,17 @@
       </div>
     </ng-template>
   </li>
-  <li ngbNavItem="4">
-    <a ngbNavLink>Checking Void Status</a>
+  <li ngbNavItem="1">
+    <a ngbNavLink>After Void</a>
     <ng-template ngbNavContent>
-      <div class="container-fluid mb-3">
-        <checking-void-status></checking-void-status>
-      </div>
+      <after-void></after-void>
     </ng-template>
   </li>
-  <li ngbNavItem="5">
-    <a ngbNavLink>Voiding History</a>
+  <li ngbNavItem="6">
+    <a ngbNavLink>Letstalk</a>
     <ng-template ngbNavContent>
       <div class="container-fluid mb-3">
-        <voiding-history></voiding-history>
+        <letstalk></letstalk>
       </div>
     </ng-template>
   </li>

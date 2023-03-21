@@ -122,13 +122,13 @@
           <input maxlength="150" class="form-control form-control-sm queue-id" type="text" row="1" disabled [(ngModel)]="queue.queueId" />
   
           <label class="col-form-label ml-4 mr-2"><strong>StatusId</strong></label>
-          <select [(ngModel)]="queue.statusIdSelected">
+          <select class="form-control status-select" [(ngModel)]="queue.statusIdSelected">
             <option *ngFor="let item of voidingQueueStatusSelection" [attr.value]="item.value">{{item.name}}</option>
-          </select>    
+          </select>
         
           <div class="ml-4"> <input type="button" class="btn btn-success btn-sm font-weight-bold"  value="Save" 
             (click)="confirmUpdateStatus(queue.siteDbGroupId, queue.queueId, queue.statusIdSelected)" /></div>
-        </div>     
+        </div>
       </ng-container>
     </ng-template>
     <ng-template ngbPanelContent *ngIf="voidingQueuesViewModel.length === 0">

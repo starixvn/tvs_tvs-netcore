@@ -61,20 +61,6 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetVoidServiceData(GetVoidServiceDataRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateVoidServiceData(UpdateVoidServiceDataRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
-
-        [HttpPost]
         public async Task<IActionResult> GetVoidingHistory(GetVoidingHistoryRequest request)
         {
             var model = await mediator.Send(request);
@@ -83,6 +69,20 @@ namespace TicketVoidingSystem.ManageVoidServices.Controllers
 
         [HttpPost]
         public async Task<IActionResult> UpdateVoidingHistory(UpdateVoidingHistoryRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetLetstalk(GetLetstalkRequest request)
+        {
+            var model = await mediator.Send(request);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateLetstalk(UpdateLetstalkRequest request)
         {
             var model = await mediator.Send(request);
             return Ok(model);

@@ -1,14 +1,13 @@
 export class AutoVoidRequestQueueModel {
     siteDbGroupId: number;
     queueId: number;
-    requestId: number;
+    requestIds: string;
     matchId: number;
     action: string;
     statusId: number;
     errMsg: string;
-    startTime?: Date;
-    execTime?: Date;
-    sportType: number;
+    createdDate?: Date;
+    modifiedDate?: Date;
     broadcastSessionId: string;
 }
 

@@ -14,7 +14,7 @@ import { AfterVoidStatusComponent } from './after-void/after-void-status/after-v
 import { AfterVoidComponent } from './after-void/after-void.component';
 import { AppApiService } from './app-api.service';
 import { AppComponent } from './app.component';
-import { CheckingVoidStatusComponent } from './checking-void-status/checking-void-status.component';
+import { LetstalkComponent } from './letstalk/letstalk.component';
 import { ScanningAutoVoidComponent } from './scanning-auto-void/scanning-auto-void.component';
 import { VoidComponent } from './void/void.component';
 import { VoidingHistoryComponent } from './voiding-history/voiding-history.component';
@@ -26,8 +26,8 @@ import { VoidingHistoryComponent } from './voiding-history/voiding-history.compo
     AfterVoidComponent,
     ScanningAutoVoidComponent,
     VoidComponent,
-    CheckingVoidStatusComponent,
     VoidingHistoryComponent,
+    LetstalkComponent,
   ],
   imports: [
     BrowserModule,

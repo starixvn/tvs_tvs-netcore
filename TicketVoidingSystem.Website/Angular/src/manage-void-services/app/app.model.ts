@@ -68,4 +68,10 @@ export class ServiceStatusConstant {
         { name: '2 - Done', value: ServiceStatusConstant.Done },
         { name: '3 - Failed', value: ServiceStatusConstant.Failed }
     ];
+    
+    static readonly LetstalkSelection = [
+        { name: '1 - Running', value: ServiceStatusConstant.Running },
+        { name: '2 - Done', value: ServiceStatusConstant.Done },
+        { name: '3 - Failed', value: ServiceStatusConstant.Failed }
+    ];
 }

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { ModalType } from 'src/utility/components/modal/modal';
 import { ModalService } from 'src/utility/components/modal/modal.service';
 import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
+import { SiteDbGroupConstant } from 'src/utility/constants/config';
 import { TEXT } from 'src/utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
@@ -75,13 +76,23 @@ export class VoidingHistoryComponent implements OnInit {
   }
 
   private convertToVoidingHistoryViewModel(items: VoidingHistoryModel[]): VoidingHistoryViewModel[] {
-    return items.map(x => {
-      return {
-        ...x,
-        statusIdSelected: x.statusId
-      } as VoidingHistoryViewModel;
-    });
+    const results: VoidingHistoryViewModel[] = [];
+    for (const server of SiteDbGroupConstant.ServerList) {
+      const voidingHistoryInCurrentServer = items.filter(x => x.siteDbGroupId === server.id);
+      const viewModel = voidingHistoryInCurrentServer.map(x => {
+        return {
+          ...x,
+          siteDbName: server.serverName,
+          statusIdSelected: x.statusId
+        } as VoidingHistoryViewModel;
+      });
+
+      results.push(...viewModel);
+    }
+
+    return results;
   }
+
 
   private resetOldResult(): void {
     this.voidingHistoryOrigin = [];
