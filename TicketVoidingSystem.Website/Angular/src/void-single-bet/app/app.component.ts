@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import CryptoJS from '../../assets/scripts/cryptojs';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MessagesResult } from '../../utility/components/messages-result/messages-result';
 import { ModalType } from '../../utility/components/modal/modal';
@@ -19,6 +18,7 @@ import { TEXT } from '../../utility/constants/text';
 import { CheckingPermissionModel } from '../../utility/models/checking-permission.model';
 import { MatchModel } from '../../utility/models/match.model';
 import { Result } from '../../utility/models/result';
+import { PasswordService } from '../../utility/services/password.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
 import { AppService } from './app.service';
@@ -80,7 +80,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private readonly appService: AppService,
     private readonly templateService: TemplateService,
     private readonly modalService: ModalService,
-    private readonly signalRService: SignalRService
+    private readonly signalRService: SignalRService,
+    private readonly passwordService: PasswordService
   ) { }
 
   public async ngOnInit() {
@@ -387,7 +388,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       transIdCrickets: this.ticketsModel.getTicketCricket(),
       message: this.messagesComponent.message,
       userName: this.confirmation.userName,
-      userPassword: CryptoJS.CfsEnCode(this.confirmation.userPassword),
+      userPassword: this.passwordService.hash(this.confirmation.userPassword),
       reason: this.confirmation.reason,
       reasonSC: this.confirmation.reasonSC,
       match: this.matchViewModel,
