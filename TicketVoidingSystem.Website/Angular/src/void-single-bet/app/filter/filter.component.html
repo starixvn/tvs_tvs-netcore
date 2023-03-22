@@ -1,169 +1,161 @@
 ﻿<div class="filter">
-    <div class="display-flex-between">
-        <div class="remark">
-            <span *ngFor="let item of remark">
-                <em class="icon-warning"></em>{{item}}
-            </span>
-        </div>
-        <div class="scroll-filter" (click)="isShowFilter = !isShowFilter">
-            <em [ngClass]="{'icon-scroll-down':isShowFilter, 'icon-scroll-up':!isShowFilter}"></em>
-        </div>
+  <div class="display-flex-between">
+    <div class="remark">
+      <span *ngFor="let item of remark">
+        <em class="icon-warning"></em>{{item}}
+      </span>
     </div>
-    <div class="content-filter" [hidden]="!isShowFilter">
-        <div class="display-flex">
-            <div>
-                <div class="line-1">
-                    <label class="match">
-                        Match ID
-                        <input maxlength="10" class="match-id form-control" type="text" only-number
-                            [(ngModel)]="matchId" (blur)="blurMatchId()" autofocus />
-                        <span class="red" *ngIf="!isSuccessMatch">(&#10041;)</span>
-                        <span class="green" *ngIf="isSuccessMatch">(&#10004;)</span>
-                    </label>
-                    <label class="odds">
-                        Odds
-                        <input class="odds-input form-control" type="text" [(ngModel)]="oddsValue" placeholder="Ex: 0.75&1&1.25" 
-                            (ngModelChange)="isCorrectFormatOdds($event, 'odds-input')"/>
-                        <select [(ngModel)]="oddsType.value">
-                            <option *ngFor="let item of oddsType.items" [attr.value]="item.value">{{item.name}}
-                            </option>
-                        </select>
-                        <span class="text-red ml-1" *ngIf="oddsValue">(You should select 1 bet type only when filtering tickets by odds)</span>
-                    </label>
-                </div>
-                <div class="date-time">
-                    <div class="time-type d-flex">
-                        <label class="bold d-flex align-items-center">(GMT + 8)</label>
-                        <label class="trans-time bold d-flex align-items-center">
-                            <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="0"/>
-                            Trans Time
-                        </label>
-
-                        <label class="check-time bold d-flex align-items-center">
-                            <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="1"/>
-                            Accept Time
-                        </label>
-                    </div>
-                    <div class="date-time">
-                        <span class="from-date-time-text mr-1">From</span>
-                        <date-full-time-new #fromTimeComponent
-                            class="from-date-time mr-2"
-                            [(dateTime)]="fromDateTime">
-                        </date-full-time-new>
-                        <span class="to-date-time-text mr-1">To</span>
-                        <date-full-time-new #toTimeComponent
-                            class="to-date-time mr-2"
-                            [(dateTime)]="toDateTime">
-                        </date-full-time-new>
-                    </div>
-                    <div class="control-bet">
-                        <label>{{bet.name}}</label>
-                        <label *ngFor="let item of bet.items">
-                            <input type="radio" name="bet" [attr.value]="item"
-                                [attr.disabled]="null"
-                                [checked]="item === bet.value" (change)="changeControlBet(item)" />
-                            {{item}}
-                        </label>
-                    </div>
-                </div>
-                <div class="line-2">
-                    <label class="ticket-type">
-                        Ticket Type
-                        <select [(ngModel)]="ticketType.value"
-                            [attr.disabled]="!searchParlay ? null : ''">
-                            <option *ngFor="let item of ticketType.items" [attr.value]="item.value">{{item.name}}
-                            </option>
-                        </select>
-                    </label>
-                    <label class="event-type">
-                        Event Type
-                        <select [(ngModel)]="eventType.value" (ngModelChange)="changeEventType()">
-                            <option *ngFor="let item of eventType.items" [attr.value]="item.value">{{item.name}}
-                            </option>
-                        </select>
-                    </label>
-                    <label class="settled-type">
-                        Settled Type
-                        <select [(ngModel)]="settledType.value"
-                            [attr.disabled]="!searchParlay ? null : ''">
-                            <option *ngFor="let item of settledType.items" [attr.value]="item.value">{{item.name}}
-                            </option>
-                        </select>
-                    </label>
-                    <label class="group-bettypes-handler"
-                        *ngIf="groupBetTypes !== undefined && groupBetTypes.groupBetTypes.length > 0">
-                        Bet Type
-                        <multiple-select class="multiple-selection" [multipleSelect]="groupBetTypesHandler"
-                            (checkedItems)="displayGroupBetTypes($event)"></multiple-select>
-                    </label>
-                    <label class="issue-type">
-                        Issue Type
-                        <select [(ngModel)]="issueType.value" (ngModelChange)="changeIssueTypeEvent()">
-                            <option *ngFor="let item of issueType.items" [attr.value]="item.value">{{item.name}}
-                            </option>
-                        </select>
-                    </label>
-                    <label class="sub-issue-type">
-                        Sub Type
-                        <select [(ngModel)]="subIssueType.value" (ngModelChange)="changeSubIssueTypeEvent()">
-                            <option *ngFor="let item of subIssueType.items" [attr.value]="item.value">{{item.name}}
-                            </option>
-                        </select>
-                    </label>
-                </div>
-                <div class="line-3" *ngIf="eventType.value === '1'">
-                    <fieldset>
-                        <legend>
-                            <em class="icon-filter"></em>Optional Filters
-                        </legend>
-                        <div class="optional-filters">
-                            <div class="score">
-                                <span class="bold">Score:</span>
-                                <label>Live Home Score <input type="text" only-number maxlength="2"
-                                        [(ngModel)]="liveHomeScore" /></label>
-                                <label>Live Away Score <input type="text" only-number maxlength="2"
-                                        [(ngModel)]="liveAwayScore" /></label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-            <div class="affected-licensees" *ngIf="isShowAffectedLicenseeArea()">
-                <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
-                <div 
-                    *ngIf="affectedLicensee.show && affectedLicensee.licenseesName.length > 0">                    
-                    <span class="affected-licensees-highlight" id="all-licensees-highlight"
-                        (click)="copyClipboard(affectedLicensee.licenseesName)">{{affectedLicensee.licenseesName}}</span>
-                </div>                               
-                <div class="china-view-licensee"
-                    *ngIf="chinaViewLicensee.show && chinaViewLicensee.licenseesName.length > 0">
-                    <span class="note">China View Licensee Affected List:</span><br />
-                    <span class="affected-licensees-highlight" id="china-view-licensees-highlight"
-                        (click)="copyClipboard(chinaViewLicensee.licenseesName)">{{chinaViewLicensee.licenseesName}}</span>
-                </div>
-                <div class="instant-licensee"
-                    *ngIf="affectedInstantLicensee.show && affectedInstantLicensee.licenseesName.length > 0">
-                    <span class="note">Instant OU Licensee Affected List:</span><br />
-                    <span class="affected-licensees-highlight"
-                        (click)="copyClipboard(affectedInstantLicensee.licenseesName)">{{affectedInstantLicensee.licenseesName}}</span>
-                </div>
-                <div class="cash-out-licensee"
-                    *ngIf="cashOutLicensee.show && cashOutLicensee.licenseesName.length > 0">
-                    <span class="note">Cash Out Licensee Affected List:</span><br />
-                    <span class="affected-licensees-highlight" id="cash-out-licensees-highlight"
-                        (click)="copyClipboard(cashOutLicensee.licenseesName)">{{cashOutLicensee.licenseesName}}</span>
-                </div>
-            </div>
-        </div>
-
-        <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" (betTypesEvent)="changeBetTypes($event)">
-        </group-bettypes>
-        
-        <advanced-mode #advancedMode [matchId]="matchId" [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery"></advanced-mode>
-        <div class="search d-flex">
-            <input type="button" class="submit search-only mr-2" value="Search" (click)="search()" />
-            <input type="button" class="submit view-log-only" value="View Log Info" (click)="viewLogInfo()"/>
-        </div>
+    <div class="scroll-filter" (click)="isShowFilter = !isShowFilter">
+      <em [ngClass]="{'icon-scroll-down':isShowFilter, 'icon-scroll-up':!isShowFilter}"></em>
     </div>
+  </div>
+  <div class="content-filter" [hidden]="!isShowFilter">
+    <div class="display-flex">
+      <div>
+        <div class="line-1">
+          <label class="input-match d-flex">
+            Match ID
+            <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId"
+              (blur)="blurMatchId()" autofocus />
+            <span class="star red" *ngIf="!isSuccessMatch">(&#10041;)</span>
+            <span class="star green" *ngIf="isSuccessMatch">(&#10003;)</span>
+          </label>
+          <label class="odds d-flex">
+            Odds
+            <input class="odds-input form-control" type="text" [(ngModel)]="oddsValue" placeholder="Ex: 0.75&1&1.25"
+              (ngModelChange)="isCorrectFormatOdds($event, 'odds-input')" />
+            <select [(ngModel)]="oddsType.value">
+              <option *ngFor="let item of oddsType.items" [attr.value]="item.value">{{item.name}}
+              </option>
+            </select>
+            <span class="text-red ml-1" *ngIf="oddsValue">(You should select 1 bet type only when filtering tickets by
+              odds)</span>
+          </label>
+        </div>
+        <div class="line-2 mt-2">
+          <div class="time-type d-flex">
+            <label class="col-form-label font-weight-bold mr-1">(GMT + 8)</label>
+            <label class="col-form-label font-weight-bold trans-time d-flex">
+              <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="0" />
+              Trans Time
+            </label>
+
+            <label class="col-form-label check-time font-weight-bold d-flex">
+              <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="1" />
+              Accept Time
+            </label>
+          </div>
+          <div class="date-time">
+            <span class="from-date-time-text mr-1">From</span>
+            <date-full-time-new #fromTimeComponent class="from-date-time mr-2" [(dateTime)]="fromDateTime">
+            </date-full-time-new>
+            <span class="to-date-time-text mr-1">To</span>
+            <date-full-time-new #toTimeComponent class="to-date-time mr-2" [(dateTime)]="toDateTime">
+            </date-full-time-new>
+          </div>
+          <div class="control-bet">
+            <label>{{bet.name}}</label>
+            <label *ngFor="let item of bet.items">
+              <input type="radio" name="bet" [attr.value]="item" [attr.disabled]="null" [checked]="item === bet.value"
+                (change)="changeControlBet(item)" />
+              {{item}}
+            </label>
+          </div>
+        </div>
+        <div class="line-3 mt-2">
+          <label class="ticket-type">
+            Ticket Type
+            <select [(ngModel)]="ticketType.value" [attr.disabled]="!searchParlay ? null : ''">
+              <option *ngFor="let item of ticketType.items" [attr.value]="item.value">{{item.name}}
+              </option>
+            </select>
+          </label>
+          <label class="event-type">
+            Event Type
+            <select [(ngModel)]="eventType.value" (ngModelChange)="changeEventType()">
+              <option *ngFor="let item of eventType.items" [attr.value]="item.value">{{item.name}}
+              </option>
+            </select>
+          </label>
+          <label class="settled-type">
+            Settled Type
+            <select [(ngModel)]="settledType.value" [attr.disabled]="!searchParlay ? null : ''">
+              <option *ngFor="let item of settledType.items" [attr.value]="item.value">{{item.name}}
+              </option>
+            </select>
+          </label>
+          <label class="group-bettypes-handler"
+            *ngIf="groupBetTypes !== undefined && groupBetTypes.groupBetTypes.length > 0">
+            Bet Type
+            <multiple-select class="multiple-selection" [multipleSelect]="groupBetTypesHandler"
+              (checkedItems)="displayGroupBetTypes($event)"></multiple-select>
+          </label>
+          <label class="issue-type">
+            Issue Type
+            <select [(ngModel)]="issueType.value" (ngModelChange)="changeIssueTypeEvent()">
+              <option *ngFor="let item of issueType.items" [attr.value]="item.value">{{item.name}}
+              </option>
+            </select>
+          </label>
+          <label class="sub-issue-type">
+            Sub Type
+            <select [(ngModel)]="subIssueType.value" (ngModelChange)="changeSubIssueTypeEvent()">
+              <option *ngFor="let item of subIssueType.items" [attr.value]="item.value">{{item.name}}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="line-4" *ngIf="eventType.value === '1'">
+          <fieldset>
+            <legend>
+              <em class="icon-filter"></em>Optional Filters
+            </legend>
+            <div class="optional-filters">
+              <div class="score">
+                <span class="bold">Score:</span>
+                <label>Live Home Score <input type="text" only-number maxlength="2"
+                    [(ngModel)]="liveHomeScore" /></label>
+                <label>Live Away Score <input type="text" only-number maxlength="2"
+                    [(ngModel)]="liveAwayScore" /></label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="affected-licensees" *ngIf="isShowAffectedLicenseeArea()">
+        <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
+        <div *ngIf="affectedLicensee.show && affectedLicensee.licenseesName.length > 0">
+          <span class="affected-licensees-highlight" id="all-licensees-highlight"
+            (click)="copyClipboard(affectedLicensee.licenseesName)">{{affectedLicensee.licenseesName}}</span>
+        </div>
+        <div class="china-view-licensee" *ngIf="chinaViewLicensee.show && chinaViewLicensee.licenseesName.length > 0">
+          <span class="note">China View Licensee Affected List:</span><br />
+          <span class="affected-licensees-highlight" id="china-view-licensees-highlight"
+            (click)="copyClipboard(chinaViewLicensee.licenseesName)">{{chinaViewLicensee.licenseesName}}</span>
+        </div>
+        <div class="instant-licensee"
+          *ngIf="affectedInstantLicensee.show && affectedInstantLicensee.licenseesName.length > 0">
+          <span class="note">Instant OU Licensee Affected List:</span><br />
+          <span class="affected-licensees-highlight"
+            (click)="copyClipboard(affectedInstantLicensee.licenseesName)">{{affectedInstantLicensee.licenseesName}}</span>
+        </div>
+        <div class="cash-out-licensee" *ngIf="cashOutLicensee.show && cashOutLicensee.licenseesName.length > 0">
+          <span class="note">Cash Out Licensee Affected List:</span><br />
+          <span class="affected-licensees-highlight" id="cash-out-licensees-highlight"
+            (click)="copyClipboard(cashOutLicensee.licenseesName)">{{cashOutLicensee.licenseesName}}</span>
+        </div>
+      </div>
+    </div>
+
+    <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" (betTypesEvent)="changeBetTypes($event)">
+    </group-bettypes>
+
+    <advanced-mode #advancedMode [matchId]="matchId" [allBetTypes]="allBetTypes"
+      [getPlayerQuery]="getPlayerQuery"></advanced-mode>
+    <div class="search d-flex">
+      <input type="button" class="submit search-only mr-2" value="Search" (click)="search()" />
+      <input type="button" class="submit view-log-only" value="View Log Info" (click)="viewLogInfo()" />
+    </div>
+  </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>
