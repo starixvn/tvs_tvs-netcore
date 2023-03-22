@@ -66,7 +66,7 @@ const configPages = [
   // homePage,
   // manageVoidServices,
   // abExceptionList,
-  // markTickets,
+  markTickets,
   ticketListing
 ];
 

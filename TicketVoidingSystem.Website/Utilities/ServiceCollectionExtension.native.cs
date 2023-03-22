@@ -199,12 +199,11 @@ public static class ServiceCollectionExtension
     public static void RegisterBusinessServices(this IServiceCollection services)
     {
         services.RegisterTicketVoidingSystemServices();
-            services.AddSingleton<LoggingService, LoggingServiceImp>();
         services.RegisterSharedApiServices();
         services.RegisterAbExceptionListServices();
+        services.RegisterManageVoidServices();
         services.RegisterMarkTicketsServices();
         services.RegisterTicketListingServices();
-            services.AddTransient<LetstalkService, LetstalkServiceImp>();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
