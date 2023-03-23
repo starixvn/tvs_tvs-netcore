@@ -1,6 +1,9 @@
-﻿using Fanex.NAP.Client.AspNetCore.Session;
+﻿using System.Threading.Tasks;
+using Fanex.NAP.Client.AspNetCore.Session;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.SharedApi.Handlers;
 
 namespace TicketVoidingSystem.SharedApi.Controllers
 {
@@ -8,10 +11,12 @@ namespace TicketVoidingSystem.SharedApi.Controllers
     [Route("api/[controller]/[action]")]
     public class SharedApiController : ControllerBase
     {
+        private readonly IMediator mediator;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public SharedApiController(IHttpContextAccessor httpContextAccessor)
+        public SharedApiController(IMediator mediator, IHttpContextAccessor httpContextAccessor)
         {
+            this.mediator = mediator;
             this.httpContextAccessor = httpContextAccessor;
         }
 
@@ -28,5 +33,14 @@ namespace TicketVoidingSystem.SharedApi.Controllers
 
             return Ok(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBalanceUp() => Ok(await mediator.Send(new GetBalanceUpDayRequest()));
+
+        [HttpGet]
+        public async Task<IActionResult> GetBalanceUpZoneManila() => Ok(await mediator.Send(new GetBalanceUpDayZoneManilaRequest()));
+
+        [HttpGet]
+        public async Task<IActionResult> GetSportsType() => Ok(await mediator.Send(new GetSportsTypeRequest()));
     }
 }

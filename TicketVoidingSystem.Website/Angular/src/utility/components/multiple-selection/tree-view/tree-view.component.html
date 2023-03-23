@@ -1,13 +1,13 @@
 <ul class="multiple-select">
   <li *ngFor="let item of items">
     <div class="multiple-select-item" [ngClass]="{'margin-left-13': item.items.length === 0}">
-      <div (click)="item.expanded = !item.expanded">
+      <div class="multiple-select-item-action" (click)="item.expanded = !item.expanded">
         <i *ngIf="item.items.length > 0" class="fa-solid fa-xs mr-2"
           [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}">
         </i>
       </div>
-      <label>
-        <input type="checkbox" [(ngModel)]="item.checked" class="mr-1"
+      <label class="d-flex align-items-center options">
+        <input class="mr-1" type="checkbox" [(ngModel)]="item.checked" class="mr-1"
           (ngModelChange)="item.checkChilds();handleClick(item)" [disabled]="!item.enable" (keyup.shift)="keyUpEvent()"
           (keydown.shift)="keyDownEvent()" />
         {{item.text}}

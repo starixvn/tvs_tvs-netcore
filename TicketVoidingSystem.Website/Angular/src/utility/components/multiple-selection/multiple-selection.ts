@@ -33,6 +33,10 @@ export class MultipleSelection {
 
         return value.toString().replace(/,/g, this.characterValue);
     }
+    
+    getValueCheckedItemsList() {
+        return this.items.filter(x => x.checked).map(y => y.value);
+    }
 
     getDisplayedItems() {
         const maxNumberItems = this.numberItemsDisplay;

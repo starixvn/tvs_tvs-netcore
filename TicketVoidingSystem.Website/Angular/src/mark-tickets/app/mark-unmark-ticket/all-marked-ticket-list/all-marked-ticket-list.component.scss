@@ -1,0 +1,153 @@
+@import '../../../../assets/styles/mixin.scss';
+
+
+.list-ticket-info {
+    margin: 10px;
+    width: 1293px;
+    position: relative;
+}
+
+.auto-refresh-div {
+    display: flex;
+    justify-content: flex-end;
+
+    .auto-refresh {
+        display: block;
+        margin-right: 0;
+    }
+}
+
+.all-marked-tickets-list {
+    position: relative;
+    border-left: solid 1px #c5c5c5;
+
+    .icon-checkbox-none {
+        @include setIconCheckBox('../images/checkBox.png');
+        background-position: 0px -17px;
+    }
+
+    .icon-checkbox-any {
+        @include setIconCheckBox('../images/checkBox.png');
+        background-position: 0px -34px;
+    }
+
+    .icon-checkbox-all {
+        @include setIconCheckBox('../images/checkBox.png');
+        background-position: 0px 0px;
+    }
+
+    .li-checked {
+        background: url(../../../../assets/images/icon-check.png) no-repeat right;
+    }
+
+    .icon-arrow-white-down {
+        @include icon-arrow-white-down('../images/arrow-down.png');
+    }
+
+    .title-tickets-list {
+        @include grid-title('../images/excel-icon.png')
+    }
+
+    table {
+        table-layout: fixed;
+    }
+    
+   
+    .ticket-header {
+        table {
+            @include setTable();
+            @include ticket-header();
+        }
+    }
+
+    .ticket-content {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border: 1px solid #888888;
+        @include scroll-style();
+
+        table {
+            @include setTable();
+
+            tr {
+                .group-ticket {
+                    text-align: left;
+                    font-weight: bold;
+                    cursor: pointer;
+
+                    .icon-down {
+                        @include icon-down();
+                    }
+
+                    .icon-right {
+                        @include icon-right();
+                    }
+                }
+
+                .no-data {
+                    background: #fff !important;
+                    color: red;
+                    font-weight: bold;
+                }
+
+                td {
+                    background-color: #fff;
+                    border-color: #888888;
+                    border-style: solid;
+                    border-width: 0 1px 1px 0;
+                    line-height: 18px;
+                    overflow: hidden;
+                    white-space: normal;
+
+                    .ticket-detail {
+                        color: #4e71bb;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+                }
+
+                .col-tb-2 {
+                    text-align: right;
+                }
+            }
+
+            tbody {
+                tr:nth-child(odd) {
+                    td {
+                        background: #dde2ed;
+                    }
+                }
+
+                tr:hover {
+                    td {
+                        background-color: #aebad4;
+                    }
+                }
+            }
+        }
+
+        input[type=checkbox] {
+            margin: 0px;
+            cursor: pointer;
+        }
+
+        input[type=checkbox][disabled] {
+            cursor: not-allowed;
+        }
+
+        .display-none {
+            display: none;
+        }
+    }
+
+    .list-check-groups {
+        @include dropdown-check-all();
+    }
+
+}
+
+.note-lasted-bettrade {
+    padding-left: 10px;
+    color: red;
+}

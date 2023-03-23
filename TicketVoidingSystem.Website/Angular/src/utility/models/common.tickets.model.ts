@@ -1,6 +1,5 @@
 import { ElementRef } from '@angular/core';
 
-import * as _ from 'lodash';
 import { CommonGroupTicketsModel } from './common.group-tickets.model';
 import { CommonTicketModel } from './common.ticket.model';
 
@@ -17,8 +16,8 @@ export class CommonTicketsModel<T extends CommonGroupTicketsModel<CommonTicketMo
     iconCheckBox: IconCheckBox;
     iconCheckBoxTop: string;
 
-    getCheckedTickets(isChecked: boolean): number[] {
-        const result: number[] = [];
+    getCheckedTickets(isChecked: boolean): string[] {
+        const result: string[] = [];
         this.groups.forEach(group => {
             group.tickets.forEach(ticket => {
                 if (ticket.isChecked === isChecked) {
@@ -37,7 +36,7 @@ export class CommonTicketsModel<T extends CommonGroupTicketsModel<CommonTicketMo
         this.iconCheckBoxTop = `${top}px`;
     }
 
-    updateTicketsByUncheckTransIds(uncheckTransIds: number[]): void {
+    updateTicketsByUncheckTransIds(uncheckTransIds: string[]): void {
         this.groups.forEach(group => {
             group.tickets.forEach(item => {
                 item.isChecked = uncheckTransIds.indexOf(item.value) > -1 ? false : item.isChecked;

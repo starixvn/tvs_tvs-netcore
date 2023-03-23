@@ -1,0 +1,31 @@
+<div class="full-time d-flex">
+    <div class="d-inline-flex mr-2">
+        <input *ngIf="isShowInputDate"
+            class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}"
+            placeholder="yyyy-mm-dd"
+            [(ngModel)]="date"
+            ngbDatepicker #d="ngbDatepicker"
+            (click)="d.toggle()"
+            [maxDate]="maxDate"
+            [minDate]="minDate"
+            [disabled]="isDisabled"
+            [readonly]="readonly"
+            (ngModelChange)="changeModel();validateWithTooltip()"
+        />
+        <div class="input-group-append pointer">
+            <span class="input-group-text" (click)="allowedHideDate && (isShowInputDate = !isShowInputDate)">
+                <em class="fa fa-calendar"></em>
+            </span>
+        </div>
+    </div>
+    <div class="time-filter">
+        <input type="text" class="form-control form-control-sm time-input{{index}}"
+            [(ngModel)]="time" placeholder="HH:mm:ss.SSS AM/PM"
+            (ngModelChange)="changeModel();onChangeTime($event)"
+            [disabled]="isDisabled"
+            (paste)="onPasteTime()"
+            (blur)="validateWithTooltip()"
+        />
+    </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

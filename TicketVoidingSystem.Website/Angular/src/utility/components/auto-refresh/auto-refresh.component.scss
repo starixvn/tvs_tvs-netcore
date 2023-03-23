@@ -1,0 +1,16 @@
+.refresh-area {    
+    .refresh-area-inner {        
+        .refresh-time-selection {
+            width: 120px;
+            display: inline-block;
+        }
+
+        button {
+            width: 55px;
+            background: #4e71bb;
+            background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+            background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+            color: #fff;
+        }
+    }
+}

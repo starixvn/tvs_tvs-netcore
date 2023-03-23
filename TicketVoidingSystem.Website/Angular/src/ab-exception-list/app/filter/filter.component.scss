@@ -4,8 +4,8 @@
 
 .username-txt {
   width: 140px;
-  height: 36px;
 }
+
 .filter-level ng-select{
   width: 120px;
 }
@@ -17,32 +17,6 @@
 .ng-value {
   background-color: transparent !important;
   border: none !important;
-}
-
-::ng-deep ngx-dropdown-treeview {
-  .btn-outline-secondary {
-    height: 36px;
-    font-size: 13px;
-    color: #212529;
-    border-color: #b3b3b3 #ccc #d9d9d9;
-    background-color: #fff;
-  }
-  .btn-outline-secondary:hover, .btn-outline-secondary:not(:disabled):not(.disabled).active, .btn-outline-secondary:not(:disabled):not(.disabled):active, .show>.btn-outline-secondary.dropdown-toggle {
-    color: #212529;
-    border-color: #b3b3b3 #ccc #d9d9d9;
-    background-color: #fff;
-  }
-  .dropdown-menu {
-    width: 100%;
-  }
-
-  .btn-outline-secondary:not(:disabled):not(.disabled).active:focus, .btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .show>.btn-outline-secondary.dropdown-toggle:focus {
-    box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
-  }
-
-  .dropdown-toggle::after {
-    color: #333;
-  }
 }
 
 .sub-type-dropdown {

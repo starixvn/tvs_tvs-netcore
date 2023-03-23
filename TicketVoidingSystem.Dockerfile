@@ -5,6 +5,8 @@ COPY ./Sources/TicketVoidingSystem ./Sources/TicketVoidingSystem
 COPY ./Sources/TicketVoidingSystem.ABExceptionList ./Sources/TicketVoidingSystem.ABExceptionList
 COPY ./Sources/TicketVoidingSystem.ManageVoidServices ./Sources/TicketVoidingSystem.ManageVoidServices
 COPY ./Sources/TicketVoidingSystem.SharedApi ./Sources/TicketVoidingSystem.SharedApi
+COPY ./Sources/TicketVoidingSystem.MarkTickets ./Sources/TicketVoidingSystem.MarkTickets
+COPY ./Sources/TicketVoidingSystem.SimpleDataApi ./Sources/TicketVoidingSystem.SimpleDataApi
 COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
 WORKDIR /src/TicketVoidingSystem.Website
@@ -13,7 +15,7 @@ RUN dotnet restore -v n
 
 COPY ./TicketVoidingSystem.Website .
 
-RUN dotnet publish -r linux-x64 --self-contained false -o /app
+RUN dotnet publish -r linux-x64 --self-contained false -c Release -o /app 
 
 FROM hub.nexdev.net/base/dotnet/core/aspnet:7.0 AS base
 

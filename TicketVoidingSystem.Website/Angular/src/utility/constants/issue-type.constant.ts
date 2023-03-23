@@ -14,4 +14,5 @@ export class IssueTypeConstant {
   static readonly WRONG_1ST_HDP = '5';
   static readonly WRONG_QUARTER_HDP = '16';
   static readonly ARCHIVED_TICKET = '17';
+  static readonly OTHER_ISSUES = '18';
 }

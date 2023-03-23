@@ -12,8 +12,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    BlockFullUiModule,
     UtilityModule,
+    BlockFullUiModule,
     ToastrModule.forRoot(),
   ],
   providers: [],

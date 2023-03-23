@@ -1,7 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Functions SiteName="NAP - Special Delete Site">
     <Function Name="TicketVoiding">
+        <Setting Key="DBCTG.NAP_SpecialDelete_TransInfo_Select" SpName="NAP_SpecialDelete_TransInfo_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_TransInfo_Select" SpName="NAP_SpecialDelete_TransInfo_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_TransInfo_Select" SpName="NAP_SpecialDelete_TransInfo_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
         <Setting Key="TicketVoiding_Site_Select" SpName="TicketVoiding_Site_Select" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_BetTypeSel" SpName="NAP_BetTypeSel" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600">
+            <Mapping DataField="typeid" ObjectProperty="Id" />
+            <Mapping DataField="bettypename" ObjectProperty="Name" />
+        </Setting>
+        <Setting Key="NAP_SelectionTypeSel" SpName="NAP_SelectionTypeSel" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_SportsType_Select" SpName="TicketVoiding_SportsType_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_OddsOSInfo_Select" SpName="NAP_SpecialDelete_OddsOSInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_Match_FirstTicketTime_Select" SpName="NAP_SpecialDelete_Match_FirstTicketTime_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_MatchInfo_Select" SpName="NAP_SpecialDelete_MatchInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_CheckVoidBetPermission" SpName="TicketVoiding_CheckVoidBetPermission" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
@@ -33,5 +56,50 @@
         <Setting Key="TicketVoiding_VoidBetAutomation_Service_Upd" SpName="TicketVoiding_VoidBetAutomation_Service_Upd" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_ManageVoidServices_VoidingHistory_Select" SpName="TicketVoiding_ManageVoidServices_VoidingHistory_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_VoidingHistory_Update" SpName="TicketVoiding_VoidingHistory_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
+    <Function Name="MarkTickets">
+        <Setting Key="DBCTG.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_AutoUnmark_Update" SpName="TicketVoiding_AutoUnmark_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.Nap_SpecialDelete_AllMarkedTicketsSummary_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.Nap_SpecialDelete_AllMarkedTicketsSummary_Update" SpName="Nap_SpecialDelete_AllMarkedTicketsSummary_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.Nap_SpecialDelete_AllMarkedTicketsDetail_Select" SpName="Nap_SpecialDelete_AllMarkedTicketsDetail_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.Nap_SpecialDelete_MarkTickets_Select" SpName="Nap_SpecialDelete_MarkTickets_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="TicketVoiding_AutoUnmark_Select" SpName="TicketVoiding_AutoUnmark_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_AutoUnmark_Ticket_Select" SpName="TicketVoiding_AutoUnmark_Ticket_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_AutoUnmarkSetting_Insert" SpName="TicketVoiding_AutoUnmarkSetting_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="Nap_SpecialDelete_UserLog_MarkTickets_Select" SpName="Nap_SpecialDelete_UserLog_MarkTickets_Select" DbName="DBLOG.bodb_CustomerLog.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_UserLog_TicketInfo_Select" SpName="NAP_SpecialDelete_UserLog_TicketInfo_Select" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" SpName="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" DbName="DBCUST.CustDB.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" SpName="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" DbName="DBOIC.bodb_OIC.bodbAdminNet" TimeOut="600" />
+    </Function>
+    <Function Name="ParlayTicket">
+        <Setting Key="DBCTG.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransSelDetailSpecialDel_MixParlay" SpName="NAP_BettransSelDetailSpecialDel_MixParlay" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="NAP_SpecialDelete_SMP_Selections_Select" SpName="NAP_SpecialDelete_SMP_Selections_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
 </Functions>

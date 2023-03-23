@@ -1,0 +1,14 @@
+<ul class="nav">
+  <li *ngIf="dataPermission.isReadMarkTickets" class="nav-item" [ngClass]="{'active': currentTab === '0'}">
+    <button class="btn btn-sm nav-link" (click)="setTabPage('0')">Mark Ticket</button>
+  </li>
+  <li *ngIf="dataPermission.isReadMarkTickets" class="nav-item" [ngClass]="{'active': currentTab === '1'}">
+    <button class="btn btn-sm nav-link" (click)="setTabPage('1')">Unmark Ticket</button>
+  </li>
+  <li *ngIf="dataPermission.isReadMarkTickets" class="nav-item" [ngClass]="{'active': currentTab === '2'}">
+    <button class="btn btn-sm nav-link" (click)="setTabPage('2')">User Log</button>
+  </li>
+  <li *ngIf="dataPermission.isReadMarkTickets" class="nav-item" [ngClass]="{'active': currentTab === '3'}">
+    <button class="btn btn-sm nav-link" (click)="setTabPage('3')">Confirm Auto Unmark</button>
+  </li>
+</ul>

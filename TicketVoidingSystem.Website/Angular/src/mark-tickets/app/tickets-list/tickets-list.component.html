@@ -1,0 +1,169 @@
+<ng-template #colgroup>
+  <colgroup>
+    <col style="width: 45px" />
+    <col style="width: 60px" />
+    <col style="width: 140px" />
+    <col style="width: 170px" />
+    <col style="width: 135px" />
+    <col style="width: 170px" />
+    <col style="width: 100px" />
+    <col style="width: 100px" />
+    <col style="width: 65px" />
+    <col style="width: 70px" />
+    <col style="width: auto" />
+  </colgroup>
+</ng-template>
+<div class="tickets-list" *ngIf="isShowTickets" [blockUi]="isBlock">
+  <div class="title-tickets-list" *ngIf="model.groups !== undefined && model.groups.length > 0">
+    <div class="title-tickets-list-label">{{getTitle()}}</div>
+    <div class="title-tickets-list-toolbox">
+      <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+    </div>
+  </div>
+  <div class="ticket-header">
+    <table>
+      <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+      <thead>
+        <tr>
+          <th scope="col" class="list-check-groups-input">
+            <div>
+              <span [ngClass]="{'checkbox-dropdown-list': true,
+                                  'icon-checkbox-none':model.iconCheckBox == 0,
+                                  'icon-checkbox-any':model.iconCheckBox == 1,
+                                  'icon-checkbox-all':model.iconCheckBox == 2}"
+                (click)="model.checkGroups();changeTickets();">
+              </span>
+              <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
+            </div>
+          </th>
+          <th scope="col">
+            <div>No</div>
+          </th>
+          <th scope="col">
+            <div>BetID</div>
+          </th>
+          <th scope="col">
+            <div>Trans.Date</div>
+          </th>
+          <th scope="col">
+            <div>Member</div>
+          </th>
+          <th scope="col">
+            <div>Bettype</div>
+          </th>
+          <th scope="col">
+            <div>Odds</div>
+          </th>
+          <th scope="col">
+            <div>Stake</div>
+          </th>
+          <th scope="col">
+            <div>Currency</div>
+          </th>
+          <th scope="col">
+            <div>Status</div>
+          </th>
+          <th scope="col">
+            <div>Choice</div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="ticket-content scroller-firefox">
+    <table>
+      <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+      <tbody *ngFor="let group of model.groups">
+        <tr>
+          <td>
+            <div>
+              <input type="checkbox" [(ngModel)]="group.isCheckAll" (ngModelChange)="group.checkAllTickets();
+                                                    model.changeIconCheckBox();
+                                                    model.getUncheckedTicketListFromGroup(group);
+                                                    changeTickets()" [disabled]="group.isDisabled" />
+            </div>
+          </td>
+          <td [attr.colspan]="10" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
+            <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
+            {{group.name}}
+          </td>
+        </tr>
+        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
+          <td>
+            <div>
+              <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketChecked(ticket);
+                                             model.changeIconCheckBox();
+                                             model.getUncheckedTicketList(ticket);
+                                             changeTickets()" [disabled]="ticket.isDisable" />
+            </div>
+          </td>
+          <td>
+            <div>{{ticket.no}}</div>
+          </td>
+          <td>
+            <div><span [class.betIdBorder]="isBorder" [innerHTML]="ticket.betId | sanitizeHtml"></span></div>
+          </td>
+          <td>
+            <div>{{ticket.transDate}}</div>
+          </td>
+          <td>
+            <div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div>
+          </td>
+          <td>
+            <div [innerHTML]="ticket.betType | sanitizeHtml"></div>
+          </td>
+          <td class="text-right">
+            <div [innerHTML]="ticket.odds | sanitizeHtml"></div>
+          </td>
+          <td class="text-right">
+            <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
+          </td>
+          <td>
+            <div>{{ticket.currency}}</div>
+          </td>
+          <td>
+            <div [innerHTML]="ticket.status | sanitizeHtml"></div>
+          </td>
+          <td class="text-right">
+            <div [innerHTML]="ticket.choice | sanitizeHtml"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table *ngIf="model.groups === undefined || model.groups.length == 0 || model.groups == null">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <tooltip [tooltip]="tooltip"></tooltip>
+
+  <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
+  <div class="list-check-groups" *ngIf="isShowListCheckGroup">
+    <ul [style.top]="model.iconCheckBoxTop">
+      <li [ngClass]="{'li-checked':model.iconCheckBox == 2}" (click)="model.checkAllGroupsDropDown()">All</li>
+      <li *ngFor="let group of model.groups" [ngClass]="{'li-checked':group.isCheckAll}" 
+          (click)="group.isCheckAll = group.isDisabled ? false : !group.isCheckAll;
+                group.checkAllTickets();
+                model.changeIconCheckBox();
+                changeTickets()">
+        {{group.name}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="pt-3">
+    <button *ngIf="model.getNumberOfTickets() > 0" class="btn btn-sm btn-primary"
+      (click)="markSelectedTicketsOnPage()" [disabled]="!dataPermission.isHostMarkTickets">
+      {{getStatus}} selected tickets ({{model.getNumberOfCheckedTickets()}}/{{model.getNumberOfTickets()}}) on current
+      page
+    </button>
+    <button *ngIf="model.totalItems > model.getNumberOfTickets()" class="btn btn-sm btn-primary"
+      (click)="markSelectedTicketsAllPage()" [disabled]="!dataPermission.isHostMarkTickets">
+      {{getStatus}} selected tickets ({{model.checkedTotalItems}}/{{model.totalItems}}) on all page
+    </button>
+  </div>
+</div>

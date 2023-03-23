@@ -1,0 +1,27 @@
+<div class="full-time">
+  <div class="input-group">
+    <input class=" form-control form-control-sm" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model.ngbDate"
+      [minDate]="minDate" [maxDate]="maxDate" (ngModelChange)="updateModel()" ngbDatepicker #d="ngbDatepicker"
+      (click)="d.toggle()" [disabled]="disabled" [ngClass]="{'bg-white': !disabled}" [readOnly]="true">
+    <div class="input-group-append pointer">
+      <span class="input-group-text" (click)="d.toggle()"><em class="fa fa-calendar"></em></span>
+    </div>
+  </div>
+  <div class="time" [ngClass]="{'disabled':disabled}">
+    <input type="text" maxlength="2" min="1" max="12" class="hour" [(ngModel)]="model.hour" full-time-control
+      (keydown)="model.eventHour($event);updateModel()" (paste)="eventPaste($event)" [disabled]="disabled" />
+    <span>:</span>
+    <input type="text" maxlength="2" min="0" max="59" class="minute" [(ngModel)]="model.minute" full-time-control
+      (keydown)="model.eventMinute($event);updateModel()" (paste)="eventPaste($event)" [disabled]="disabled" />
+    <span>:</span>
+    <input type="text" maxlength="2" min="0" max="59" class="second" [(ngModel)]="model.second" full-time-control
+      (keydown)="model.eventSecond($event);updateModel()" (paste)="eventPaste($event)" [disabled]="disabled" />
+    <span>.</span>
+    <input type="text" maxlength="3" min="0" max="999" class="millisecond" [(ngModel)]="model.millisecond"
+      full-time-control (keydown)="model.eventMillisecond($event);updateModel()" (paste)="eventPaste($event)"
+      [disabled]="disabled" />
+    <input type="text" maxlength="2" class="meridiem" [(ngModel)]="model.meridiem" full-time-control
+      (keydown)="model.eventMeridiem($event);updateModel()" (paste)="eventPaste($event)" [disabled]="disabled" />
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

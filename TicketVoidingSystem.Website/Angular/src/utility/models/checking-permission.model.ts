@@ -1,13 +1,15 @@
+import { BetID } from './bet-id.model';
+
 export class CheckingPermissionModel {
-    transIds: string;
+    tickets: BetID[];
     matchId: number;
     apikey: string;
     action: boolean;
     isCashOutAsUnSettledTicket: boolean;
     isCheckForTVS: boolean;
 
-    setParam(transIds: string, matchId: number, apiKey: string, action: boolean, isCashOutAsUnSettledTicket: boolean, isCheckForTVS: boolean) {
-        this.transIds = transIds;
+    setParam(tickets: BetID[], matchId: number, apiKey: string, action: boolean, isCashOutAsUnSettledTicket: boolean, isCheckForTVS: boolean) {
+        this.tickets = tickets;
         this.matchId = matchId;
         this.apikey = apiKey;
         this.action = action;

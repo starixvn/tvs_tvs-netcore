@@ -1,0 +1,118 @@
+<ng-template #colgroup>
+  <colgroup>
+    <col style="width: 40px" />
+    <col style="width: 90px" />
+    <col style="width: 190px" />
+    <col style="width: 110px" />
+    <col style="width: 100px" />
+    <col style="width: 300px" />
+    <col style="width: 190px" />
+    <col style="width: 100px" />
+    <col style="width: 100px" />
+    <col style="width: 100px" />
+    <col style="width: 100px" />
+    <col style="width: 100px" />
+  </colgroup>
+</ng-template>
+<div class="log-list" style="width: 1520px" *ngIf="isShowLogs" [blockUi]="isBlock">
+  <div class="log-header">
+    <table>
+      <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+      <thead>
+        <tr>
+          <th scope="col">
+            <div>No</div>
+          </th>
+          <th scope="col">
+            <div>Action ID</div>
+          </th>
+          <th scope="col">
+            <div>Log Date(GMT+8)</div>
+          </th>
+          <th scope="col">
+            <div>Action</div>
+          </th>
+          <th scope="col">
+            <div>Match ID</div>
+          </th>
+          <th scope="col">
+            <div>Event</div>
+          </th>
+          <th scope="col">
+            <div>Kick Off Time(GMT+8)</div>
+          </th>
+          <th scope="col">
+            <div>HT Score</div>
+          </th>
+          <th scope="col">
+            <div>FT Score</div>
+          </th>
+          <th scope="col">
+            <div>Total Tickets</div>
+          </th>
+          <th scope="col">
+            <div>Description</div>
+          </th>
+          <th scope="col">
+            Done By
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="log-content">
+    <table>
+      <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+      <tbody>
+        <tr *ngFor="let log of model">
+          <td>
+            <div>{{log.no}}</div>
+          </td>
+          <td>
+            <div>{{log.actionId}}</div>
+          </td>
+          <td>
+            <div>{{convertToGMT8(log.logDate) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>
+          </td>
+          <td>
+            <div><strong>{{log.action}}</strong></div>
+          </td>
+          <td>
+            <div>{{log.matchId}}</div>
+          </td>
+          <td>
+            <div>{{log.event}}</div>
+          </td>
+          <td>
+            <div>{{convertToGMT8(log.kickOffTime) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>
+          </td>
+          <td>
+            <div>{{log.htScore}}</div>
+          </td>
+          <td>
+            <div>{{log.ftScore}}</div>
+          </td>
+          <td>
+            <div>{{countTotalTicket(log.singleTickets, log.parlayTickets)}}</div>
+          </td>
+          <td>
+            <div><em ngbTooltip="List of BetID" (click)="displayTransIdList(log.singleTickets, log.parlayTickets)"
+                class="fa fa-align-justify text-primary cursor-pointer"></em></div>
+          </td>
+          <td>
+            <div>{{log.doneBy}}</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table *ngIf="model === undefined || model.length == 0 || model == null">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
+</div>

@@ -18,15 +18,12 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/manage-void-services/index.html",
-            "main": "src/manage-void-services/main.ts",
+            "index": "src/mark-tickets/index.html",
+            "main": "src/mark-tickets/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
-            "styles": [              
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/@fortawesome/fontawesome-free/css/all.css",
-              "./node_modules/ngx-toastr/toastr.css",
+            "styles": [
               "src/assets/styles/styles.scss"
             ],
             "scripts": [],
@@ -45,7 +42,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "deployUrl": "dist/manage-void-services/",
+              "deployUrl": "dist/mark-tickets/",
               "optimization": true,
               "outputHashing": "all",
               "namedChunks": false,

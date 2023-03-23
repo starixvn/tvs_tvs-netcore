@@ -11,20 +11,100 @@
     <EmbeddedResource Remove="Angular\**" />
     <None Remove="Angular\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="App_Data\Template\MarkUnmarkTicket.xlsx" />
+    <None Remove="App_Data\Template\TicketListing.xlsx" />
+    <None Remove="App_Data\Template\TicketListing_Send_File.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_ManageRequest.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_VoidedTickets.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_VoidTickets.xlsx" />
+    <None Remove="App_Data\Template\TicketVoiding_VoidTickets_NoMatch.xlsx" />
+    <None Remove="App_Data\Template\VoidByBetId.xlsx" />
+    <None Remove="App_Data\Template\VoidByCurrency.xlsx" />
+    <None Remove="App_Data\Template\VoidCashOutTransaction.xlsx" />
+    <None Remove="App_Data\Template\VoidEarlyKickOffBet.xlsx" />
+    <None Remove="App_Data\Template\VoidMetricGamingBet.xlsx" />
+    <None Remove="App_Data\Template\VoidNumberGameBet.xlsx" />
+    <None Remove="App_Data\Template\VoidOutRightBet.xlsx" />
+    <None Remove="App_Data\Template\VoidParlayTicket.xlsx" />
+    <None Remove="App_Data\Template\VoidParlayVirtualSportsBet.xlsx" />
+    <None Remove="App_Data\Template\VoidSingleBet.xlsx" />
+  </ItemGroup>
     
   <ItemGroup>
     <AdditionalFiles Include="..\.sonarlint\tvs-website\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
+    
+  <ItemGroup>
+    <Content Include="App_Data\Template\MarkUnmarkTicket.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketListing.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketListing_Send_File.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_ManageRequest.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_VoidedTickets.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_VoidTickets.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\TicketVoiding_VoidTickets_NoMatch.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidByBetId.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidByCurrency.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidCashOutTransaction.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidEarlyKickOffBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidMetricGamingBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidNumberGameBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidOutRightBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidParlayTicket.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidParlayVirtualSportsBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Template\VoidSingleBet.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fanex.BetList.Bitcoin" Version="2.0.0" />
+    <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
+    <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />
+    <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
+    <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.1" />
+    <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1" />
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.0.1-beta1" />
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
     <PackageReference Include="Fanex.Logging.Sentry" Version="1.0.6" />
-    <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.1-beta3" />
-    <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.3-beta6" />
+    <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.1" />
+    <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.5-beta2" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="7.0.0" />
@@ -38,7 +118,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ManageVoidServices\TicketVoidingSystem.ManageVoidServices.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.SimpleDataApi\TicketVoidingSystem.SimpleDataApi.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 
@@ -50,6 +132,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\dist\ab-exception-list\" />
+    <Folder Include="wwwroot\dist\mark-tickets\" />
   </ItemGroup>
 
   <ItemGroup>

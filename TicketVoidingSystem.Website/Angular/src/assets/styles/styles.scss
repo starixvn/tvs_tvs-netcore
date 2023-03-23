@@ -1,7 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@ng-select/ng-select/themes/default.theme.css";
 
-body {
+@import url("~bootstrap/dist/css/bootstrap.min.css");
+@import url("~@fortawesome/fontawesome-free/css/all.css");
+@import url("~ngx-toastr/toastr.css");
+@import url("~@ng-select/ng-select/themes/default.theme.css");
+
+body,
+label,
+.btn,
+.form-control {
   font-size: 13px !important;
 }
 
@@ -59,7 +66,6 @@ body::-webkit-scrollbar-thumb {
 
 .ng-select.custom-sm,
 .ng-dropdown-panel.custom-sm {
-  font-size: .875rem;
   border-radius: .2rem;
 }
 
@@ -70,6 +76,10 @@ body::-webkit-scrollbar-thumb {
 
 .mg-10 {
   margin: 10px;
+}
+
+.mg-bottom-5 {
+  margin-bottom: 5px;
 }
 
 .mg-bottom-10 {
@@ -87,4 +97,197 @@ body::-webkit-scrollbar-thumb {
       color: #ff0000;
     }
   }
+}
+
+.area-filter {
+  background-color: white;
+  border: solid 1px #c8c8c8;
+  box-shadow: inset 0 0 3px #6b6b6b;
+  padding: 5px 5px 10px 8px;
+  margin: 10px 0;
+}
+
+fieldset {
+  border: 1px solid !important;
+  padding: 10px !important;
+
+  legend {
+    display: block;
+    width: auto !important;
+    max-width: initial !important;
+    padding: 0 !important;
+    margin-bottom: 10px !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    white-space: normal !important;
+  }
+}
+
+.mg-top-2 {
+  margin-top: 2px;
+}
+
+.mg-top-10 {
+  margin-top: 10px;
+}
+
+.mg-top-20 {
+  margin-top: 20px;
+}
+
+.mg-right-0 {
+  margin-right: 0px !important;
+}
+
+.mg-right-5 {
+  margin-right: 5px;
+}
+
+.mg-right-8 {
+  margin-right: 8px;
+}
+
+.mg-right-10 {
+  margin-right: 10px;
+}
+
+.mg-right-25 {
+  margin-right: 25px;
+}
+
+.mg-left-0 {
+  margin-left: 0px !important;
+}
+
+.mg-left-5 {
+  margin-left: 5px !important;
+}
+
+.mg-left-10 {
+  margin-left: 10px !important;
+}
+
+.mg-left-17 {
+  margin-left: 15px !important;
+}
+
+.mg-left-25 {
+  margin-left: 25px !important;
+}
+
+.mg-10-10 {
+  margin: 0 10px 0 10px
+}
+
+.mg-10-20 {
+  margin: 0 10px 0 20px
+}
+
+.mg-10-25 {
+  margin: 0 10px 0 25px
+}
+
+.mg-10-50 {
+  margin: 0 10px 0 50px;
+}
+
+.pd-right-0 {
+  padding-right: 0 !important;
+}
+
+.pd-right-25 {
+  padding-right: 25px !important;
+}
+
+.pd-left-5 {
+  padding-left: 5px !important;
+}
+
+.pd-left-10 {
+  padding-left: 10px !important;
+}
+
+.pd-left-20 {
+  padding-left: 20px !important;
+}
+
+.pd-top-8 {
+  padding-top: 8px !important;
+}
+
+.pd-top-5 {
+  padding-top: 5px !important;
+}
+
+.padding-2-10 {
+  padding: 2px 10px !important;
+}
+
+.modal-85-percent .modal-lg {
+  max-width: 85%;
+}
+
+.font-small {
+  font-size: small !important;
+}
+
+.failed-msg {
+  color: red;
+}
+
+.border-radius-left {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.border-radius-right {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.btn {
+  border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
+}
+
+.ng-select .ng-dropdown-panel .ng-dropdown-panel-items {
+  .ng-optgroup,
+  .ng-option {
+    padding: 6px 10px;
+  }
+}
+
+.ng-select .ng-select-container,
+.form-control,
+.form-check,
+.btn,
+.col-form-label {
+  min-height: auto;
+  height: 31px !important;
+}
+
+.ng-select .ng-value {
+  font-size: 13px !important;
+}
+
+input[type=checkbox],
+input[type=radio],
+.form-check-label {
+  cursor: pointer;
+}
+
+.col-form-label {
+  padding: 6px 0;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+  white-space: nowrap;
+}
+
+.form-check-label {
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: #4e71bb;
+  background: -webkit-linear-gradient(#4e71bb, #4e71bb)
 }

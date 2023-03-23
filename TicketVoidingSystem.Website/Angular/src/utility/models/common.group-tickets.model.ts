@@ -8,7 +8,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
     isDisabled: boolean;
     tickets: Array<T>;
     displayTotalTickets: number;
-    disabledTickets: Array<number>;
+    disabledTickets: Array<string>;
 
     setCommonValue(name: string) {
         this.name = name;
@@ -24,7 +24,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
             return item.mainTransId;
         });
         this.disabledTickets = list.filter(function (item, index) {
-            return list.indexOf(item) === index && item > 0;
+            return list.indexOf(item) === index && BigInt(item)> 0;
         });
     }
 
@@ -78,7 +78,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return count;
     }
 
-    getEnableTickets(): number[] {
+    getEnableTickets(): string[] {
         const result = [];
         this.tickets.forEach(ticket => {
             if (ticket.isChecked && !ticket.isDisable) {
@@ -89,7 +89,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getTicketCricket(): number[] {
+    getTicketCricket(): string[] {
         const result = [];
         this.tickets.forEach(ticket => {
             if (ticket.isChecked && ticket.isCricket) {
@@ -100,7 +100,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getTicketSold(): number[] {
+    getTicketSold(): string[] {
         const result = [];
         this.tickets.forEach(ticket => {
             if (ticket.isChecked && ticket.status.toLowerCase().indexOf('sold') !== -1) {
@@ -111,14 +111,14 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getTicketCheckBalance(): number[] {
+    getTicketCheckBalance(): string[] {
         const soldIds = this.getTicketSold();
         const enableTickets = this.getEnableTickets();
         return enableTickets.concat(soldIds);
     }
 
-    getCheckedTickets(): number[] {
-        const result: number[] = [];
+    getCheckedTickets(): string[] {
+        const result: string[] = [];
         this.tickets.forEach(item => {
             if (item.isChecked) {
                 result.push(item.mainTransId);
@@ -138,7 +138,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getEnableSingleTickets(): number[] {
+    getEnableSingleTickets(): string[] {
         const result = [];
         this.tickets.forEach(item => {
             if (item.isChecked && !item.isDisable) {
@@ -149,7 +149,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getDisableBonusTickets(): number[] {
+    getDisableBonusTickets(): string[] {
         const result = [];
         this.tickets.forEach(item => {
             if (item.isChecked && item.isDisable) {
@@ -160,7 +160,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getEnableParlayTickets(): number[] {
+    getEnableParlayTickets(): string[] {
         return this.getEnableSingleTickets();
     }
 }

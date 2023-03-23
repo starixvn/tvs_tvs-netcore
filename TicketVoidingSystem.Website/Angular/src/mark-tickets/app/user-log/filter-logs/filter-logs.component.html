@@ -1,0 +1,73 @@
+<div class="filter-log">
+  <div class="filter row no-gutters mb-2">
+    <div class="row no-gutters">
+      <label class="col-form-label col-form-label-sm mr-2">Log Date From</label>
+      <div class="select-date">
+        <div class="input-group">
+          <input class="form-control form-control-sm bg-white" placeholder="yyyy/mm/dd" name="ngbFromDate"
+            [(ngModel)]="date.ngbFromDate" ngbDatepicker #ngbFromDate="ngbDatepicker" [minDate]="minDate"
+            (click)="ngbFromDate.toggle()" [maxDate]="date.ngbToDate" [readOnly]="true">
+          <div class="input-group-append pointer">
+            <span class="input-group-text" (click)="ngbFromDate.toggle()"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row no-gutters">
+      <label class="col-form-label col-form-label-sm mr-2">Log Date To</label>
+      <div class="select-date">
+        <div class="input-group">
+          <input class="form-control form-control-sm bg-white" placeholder="yyyy/mm/dd" name="ngbToDate"
+            [(ngModel)]="date.ngbToDate" [minDate]="date.ngbFromDate" ngbDatepicker #ngbToDate="ngbDatepicker"
+            (click)="ngbToDate.toggle()" [readOnly]="true">
+          <div class="input-group-append pointer">
+            <span class="input-group-text" (click)="ngbToDate.toggle()"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row no-gutters">
+      <label class="col-form-label col-form-label-sm mr-2">Match Id</label>
+      <div>
+        <input class="match-id form-control form-control-sm" type="text" numbersOnly [(ngModel)]="model.matchId"
+          (blur)="checkValidMatch()">
+      </div>
+    </div>
+
+    <div class="row no-gutters">
+      <label class="col-form-label col-form-label-sm mr-2">Action</label>
+      <div class="action">
+        <ng-select class="custom-sm" [clearable]="false" [items]="action.items" [multiple]="true" [searchable]="false"
+          bindLabel="name" groupBy="group" [selectableGroup]="true" [selectableGroupAsModel]="false"
+          [closeOnSelect]="false" bindValue="value" placeholder="Select an option" [(ngModel)]="selectedActions">
+          <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+          </ng-template>
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <div class="ng-value">
+              <span class="ng-value-label">
+                {{items.length === action.items.length ? 'All' : items.length}} selected
+              </span>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="row no-gutters">
+      <label class="col-form-label col-form-label-sm mr-2">Done By</label>
+      <div>
+        <input class="form-control form-control-sm" type="text" [(ngModel)]="model.doneBy">
+      </div>
+    </div>
+  </div>
+  <div class="row no-gutters">
+    <button type="button" class="btn btn-primary btn-sm" (click)="search()">Search</button>
+  </div>
+  <tooltip [tooltip]="tooltip"></tooltip>
+</div>

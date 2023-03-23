@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserListComponent #UserListComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <user-list>
+    <div
+      class="user-list width-1400"
+    >
+      <div
+        class="title-user-list"
+      >
+        <div
+          class="title-user-list-label"
+        >
+          AB Exception List
+        </div>
+      </div>
+      <div
+        class="table-header"
+      >
+        <table>
+          <thead>
+            <tr>
+              <th
+                class="col-tb-1"
+                scope="col"
+              >
+                <div>
+                  No
+                </div>
+              </th>
+              <th
+                class="col-tb-2"
+                scope="col"
+              >
+                <div>
+                  Username
+                </div>
+              </th>
+              <th
+                class="col-tb-3"
+                scope="col"
+              >
+                <div>
+                  Level
+                </div>
+              </th>
+              <th
+                class="col-tb-4"
+                scope="col"
+              >
+                <div>
+                  Site
+                </div>
+              </th>
+              <th
+                class="col-tb-5"
+                scope="col"
+              >
+                <div>
+                  Sub Type (Allow Voiding)
+                </div>
+              </th>
+              <th
+                class="col-tb-6"
+                scope="col"
+              >
+                <div>
+                  Void VIP
+                </div>
+              </th>
+              <th
+                class="col-tb-7"
+                scope="col"
+              >
+                <div>
+                  Added Date (GMT+8)
+                </div>
+              </th>
+              <th
+                class="col-tb-8"
+                scope="col"
+              >
+                <div>
+                  Added By
+                </div>
+              </th>
+              <th
+                class="col-tb-9 col-remove"
+                scope="col"
+              >
+                <button
+                  class="button-remove-users mr-1"
+                >
+                  REMOVE
+                </button>
+                <input
+                  class="ng-untouched ng-pristine ng-valid"
+                  type="checkbox"
+                />
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div
+        class="table-content"
+      >
+        <table>
+          <tbody>
+            <tr>
+              <td
+                class="col-tb-1"
+              >
+                <div>
+                  1
+                </div>
+              </td>
+              <td
+                class="col-tb-2 text-left"
+              >
+                <div>
+                  name
+                </div>
+              </td>
+              <td
+                class="col-tb-3"
+              >
+                <div>
+                  Member
+                </div>
+              </td>
+              <td
+                class="col-tb-4"
+              >
+                <div>
+                  1,2
+                </div>
+              </td>
+              <td
+                class="col-tb-5 text-left"
+              >
+                <div>
+                </div>
+              </td>
+              <td
+                class="col-tb-6"
+              >
+                <div>
+                  N/A
+                </div>
+              </td>
+              <td
+                class="col-tb-7"
+              >
+                <div>
+                  2020/11/06 12:00:00 AM
+                </div>
+              </td>
+              <td
+                class="col-tb-8"
+              >
+                <div>
+                  zane
+                </div>
+              </td>
+              <td
+                class="col-tb-9"
+              >
+                <div>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <paging />
+    </div>
+  </user-list>
+</ng-component>
+`;

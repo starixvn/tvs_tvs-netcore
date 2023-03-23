@@ -1,0 +1,117 @@
+<div class="list-ticket-info">
+  <div class="auto-refresh-div">
+    <auto-refresh class="auto-refresh mb-1 ml-auto" [mode]="autoRefreshMode" (countdownEnd)="refreshTickets()" *ngIf="isShowAllTickets"></auto-refresh>
+  </div>
+  <ng-template #colgroup>
+    <colgroup>
+      <col style="width: 40px" />
+      <col style="width: 100px" />
+      <col style="width: 190px" />
+      <col style="width: 100px" />
+      <col style="width: 100px" />
+      <col style="width: 190px" />
+      <col style="width: 90px" />
+      <col style="width: 300px" />
+      <col style="width: 90px" />
+      <col style="width: 90px" />
+    </colgroup>
+  </ng-template>
+  <div class="all-marked-tickets-list" *ngIf="isShowAllTickets" [blockUi]="isBlock">
+    <div class="ticket-header">
+      <table>
+        <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+        <thead>
+          <tr>
+            <th scope="col">
+              <div>#</div>
+            </th>
+            <th scope="col">
+              <div>Match ID</div>
+            </th>
+            <th scope="col">
+              <div>Kick Off Time(GMT+8)</div>
+            </th>
+            <th scope="col">
+              <div>HT Score</div>
+            </th>
+            <th scope="col">
+              <div>FT Score</div>
+            </th>
+            <th scope="col">
+              <div>Marked Date(GMT+8)</div>
+            </th>
+            <th scope="col">
+              <div>Marked By</div>
+            </th>
+            <th scope="col">
+              <div>Event</div>
+            </th>
+            <th scope="col">
+              <div>Marked Tickets<br />({{getTotalMarkedTickets()}})</div>
+            </th>
+            <th scope="col">
+              <div><button class="btn btn-light btn-sm font-weight-bold" [disabled]="!dataPermission.isHostMarkTickets"
+                  (click)="unmarkAllCheckedMarkedTickets()">Unmark</button><br />
+                <span [ngClass]="{'checkbox-dropdown-list': true,
+                                    'icon-checkbox-none':iconCheckBox == 0,
+                                    'icon-checkbox-any':iconCheckBox == 1,
+                                    'icon-checkbox-all':iconCheckBox == 2}" (click)="checkGroups();">
+                </span>
+              </div>
+              <tooltip [tooltip]="tooltip"></tooltip>
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="ticket-content">
+      <table>
+        <ng-template [ngTemplateOutlet]="colgroup"></ng-template>
+        <tbody>
+          <tr *ngFor="let ticket of model">
+            <td>
+              <div>{{ticket.no}}</div>
+            </td>
+            <td>
+              <div>{{ticket.matchId}}</div>
+            </td>
+            <td>
+              <div>{{convertToGMT8(ticket.kickOffTime) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>
+            </td>
+            <td>
+              <div>{{ticket.htScore}}</div>
+            </td>
+            <td>
+              <div>{{ticket.ftScore}}</div>
+            </td>
+            <td>
+              <div>{{convertToGMT8(ticket.createdDate) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>
+            </td>
+            <td>
+              <div>{{ticket.username}}</div>
+            </td>
+            <td>
+              <div [innerHTML]="ticket.event | sanitizeHtml"></div>
+            </td>
+            <td>
+              <div class="ticket-detail" (click)="getMarkedTicketDetail(ticket)">{{ticket.total}}</div>
+            </td>
+            <td>
+              <div>
+                <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="getUncheckedTicketList(ticket)" />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table *ngIf="model === undefined || model.length == 0 || model == null">
+        <tbody>
+          <tr>
+            <td class="no-data">There is no data</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>  
+    <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
+  </div>
+</div>

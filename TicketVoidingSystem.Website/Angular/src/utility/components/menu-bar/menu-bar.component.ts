@@ -35,9 +35,8 @@ export class MenuBarComponent implements OnInit {
   }
 
   private replaceRootUrl(menuItems: MenuItem[]): void {
-
     menuItems.forEach(menu => {
-      if (menu.name === MenuName.AB_EXCEPTION_LIST) {
+      if (this.isNewSite(menu.name)) {
         menu.url = this.rootUrl + menu.url.substring(1);
       } else {
         menu.url = `${this.oldSiteAbsoluteUrl}${menu.url.substring(1)}`;
@@ -51,5 +50,9 @@ export class MenuBarComponent implements OnInit {
     }
 
     return oldSiteRootUrl;
+  }
+
+  private isNewSite(menuName: string): boolean {
+    return menuName === MenuName.AB_EXCEPTION_LIST || menuName === MenuName.MARK_UNMARK_TICKETS;
   }
 }

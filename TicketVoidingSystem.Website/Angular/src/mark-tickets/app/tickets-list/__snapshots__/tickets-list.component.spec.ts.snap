@@ -1,0 +1,615 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TicketsListComponent TicketsListComponent init with empty model groups should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <tickets-list>
+    <div
+      class="tickets-list"
+    >
+      <div
+        class="ticket-header"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 45px;"
+            />
+            <col
+              style="width: 60px;"
+            />
+            <col
+              style="width: 140px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 135px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 65px;"
+            />
+            <col
+              style="width: 70px;"
+            />
+            <col
+              style="width: auto;"
+            />
+          </colgroup>
+          <thead>
+            <tr>
+              <th
+                class="list-check-groups-input"
+                scope="col"
+              >
+                <div>
+                  <span
+                    class="checkbox-dropdown-list"
+                  />
+                  <span
+                    class="icon-arrow-white-down"
+                  />
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  No
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  BetID
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Trans.Date
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Member
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Bettype
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Odds
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Stake
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Currency
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Status
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Choice
+                </div>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div
+        class="ticket-content scroller-firefox"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 45px;"
+            />
+            <col
+              style="width: 60px;"
+            />
+            <col
+              style="width: 140px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 135px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 65px;"
+            />
+            <col
+              style="width: 70px;"
+            />
+            <col
+              style="width: auto;"
+            />
+          </colgroup>
+        </table>
+        <table>
+          <tbody>
+            <tr>
+              <td
+                class="no-data"
+              >
+                There is no data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <tooltip />
+      <paging />
+      <div
+        class="pt-3"
+      >
+      </div>
+    </div>
+  </tickets-list>
+</ng-component>
+`;
+
+exports[`TicketsListComponent TicketsListComponent init with expected model groups should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <tickets-list>
+    <div
+      class="tickets-list"
+    >
+      <div
+        class="title-tickets-list"
+      >
+        <div
+          class="title-tickets-list-label"
+        >
+          Mark Time: undefined - undefined (Single Count: undefined ,Parlay: undefined )
+        </div>
+        <div
+          class="title-tickets-list-toolbox"
+        >
+          <input
+            class="title-tickets-list-toolbox-excel"
+            title="Export to Excel"
+            type="button"
+          />
+        </div>
+      </div>
+      <div
+        class="ticket-header"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 45px;"
+            />
+            <col
+              style="width: 60px;"
+            />
+            <col
+              style="width: 140px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 135px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 65px;"
+            />
+            <col
+              style="width: 70px;"
+            />
+            <col
+              style="width: auto;"
+            />
+          </colgroup>
+          <thead>
+            <tr>
+              <th
+                class="list-check-groups-input"
+                scope="col"
+              >
+                <div>
+                  <span
+                    class="checkbox-dropdown-list"
+                  />
+                  <span
+                    class="icon-arrow-white-down"
+                  />
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  No
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  BetID
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Trans.Date
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Member
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Bettype
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Odds
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Stake
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Currency
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Status
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div>
+                  Choice
+                </div>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div
+        class="ticket-content scroller-firefox"
+      >
+        <table>
+          <colgroup>
+            <col
+              style="width: 45px;"
+            />
+            <col
+              style="width: 60px;"
+            />
+            <col
+              style="width: 140px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 135px;"
+            />
+            <col
+              style="width: 170px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 100px;"
+            />
+            <col
+              style="width: 65px;"
+            />
+            <col
+              style="width: 70px;"
+            />
+            <col
+              style="width: auto;"
+            />
+          </colgroup>
+          <tbody>
+            <tr>
+              <td>
+                <div>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                </div>
+              </td>
+              <td
+                class="group-ticket"
+                colspan="10"
+              >
+                <span
+                  class="icon-down"
+                />
+                 MBC 
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                </div>
+              </td>
+              <td>
+                <div>
+                  1
+                </div>
+              </td>
+              <td>
+                <div>
+                  <span>
+                    108936575088
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div>
+                  04/27/2020 12:51:48.573 AM
+                </div>
+              </td>
+              <td>
+                <div
+                  title="i-emvictor"
+                >
+                  i-emvictor
+                </div>
+              </td>
+              <td>
+                <div>
+                  Handicap
+                </div>
+              </td>
+              <td
+                class="text-right"
+              >
+                <div>
+                  <span
+                    class="underdog"
+                  >
+                    <font
+                      color="#B50000"
+                    >
+                      -0.89
+                    </font>
+                  </span>
+                   (
+                  <span
+                    class="oddstype"
+                  >
+                    MY
+                  </span>
+                  )
+                </div>
+              </td>
+              <td
+                class="text-right"
+              >
+                <div>
+                  <div
+                    class="stake"
+                  >
+                    1,000
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div>
+                  UUS
+                </div>
+              </td>
+              <td>
+                <div>
+                  <div
+                    class="status"
+                  >
+                    Running
+                  </div>
+                </div>
+              </td>
+              <td
+                class="text-right"
+              >
+                <div />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>
+                  <input
+                    class="ng-untouched ng-pristine ng-valid"
+                    type="checkbox"
+                  />
+                </div>
+              </td>
+              <td>
+                <div>
+                  2
+                </div>
+              </td>
+              <td>
+                <div>
+                  <span>
+                    108936575089
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div>
+                  04/27/2020 12:51:48.573 AM
+                </div>
+              </td>
+              <td>
+                <div
+                  title="i-emvictor"
+                >
+                  i-emvictor
+                </div>
+              </td>
+              <td>
+                <div>
+                  Handicap
+                </div>
+              </td>
+              <td
+                class="text-right"
+              >
+                <div>
+                  <span
+                    class="underdog"
+                  >
+                    <font
+                      color="#B50000"
+                    >
+                      -0.89
+                    </font>
+                  </span>
+                   (
+                  <span
+                    class="oddstype"
+                  >
+                    MY
+                  </span>
+                  )
+                </div>
+              </td>
+              <td
+                class="text-right"
+              >
+                <div>
+                  <div
+                    class="stake"
+                  >
+                    1,000
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div>
+                  UUS
+                </div>
+              </td>
+              <td>
+                <div>
+                  <div
+                    class="status"
+                  >
+                    Running
+                  </div>
+                </div>
+              </td>
+              <td
+                class="text-right"
+              >
+                <div />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <tooltip />
+      <paging />
+      <div
+        class="pt-3"
+      >
+        <button
+          class="btn btn-sm btn-primary mr-4 ml-4"
+          disabled=""
+        >
+            selected tickets (2/2) on current page 
+        </button>
+      </div>
+    </div>
+  </tickets-list>
+</ng-component>
+`;

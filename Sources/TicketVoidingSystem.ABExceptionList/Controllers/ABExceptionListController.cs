@@ -21,55 +21,27 @@ namespace TicketVoidingSystem.ABExceptionList.Controllers
 
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
-        public async Task<IActionResult> CheckUsernames(CheckUsernamesRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
+        public async Task<IActionResult> CheckUsernames(CheckUsernamesRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Host)]
-        public async Task<IActionResult> AddUsers(AddUsersRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
+        public async Task<IActionResult> AddUsers(AddUsersRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Host)]
-        public async Task<IActionResult> RemoveUsers(RemoveUsersRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
+        public async Task<IActionResult> RemoveUsers(RemoveUsersRequest request) => Ok(await mediator.Send(request));
 
         [HttpPost]
         [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
-        public async Task<IActionResult> GetUsers(GetUsersRequest request)
-        {
-            var model = await mediator.Send(request);
-            return Ok(model);
-        }
+        public async Task<IActionResult> GetUsers(GetUsersRequest request) => Ok(await mediator.Send(request));
 
         [HttpGet]
-        public async Task<IActionResult> GetPermission()
-        {
-            var model = await mediator.Send(new GetPermissionRequest());
-            return Ok(model);
-        }
+        public async Task<IActionResult> GetPermission() => Ok(await mediator.Send(new GetPermissionRequest()));
 
         [HttpGet]
-        public async Task<IActionResult> GetSubType()
-        {
-            var model = await mediator.Send(new GetSubTypeRequest());
-            return Ok(model);
-        }
+        public async Task<IActionResult> GetSubType() => Ok(await mediator.Send(new GetSubTypeRequest()));
 
         [HttpGet]
-        public async Task<IActionResult> GetSites()
-        {
-            var model = await mediator.Send(new GetSitesRequest());
-            return Ok(model);
-        }
+        public async Task<IActionResult> GetSites() => Ok(await mediator.Send(new GetSitesRequest()));
     }
 }

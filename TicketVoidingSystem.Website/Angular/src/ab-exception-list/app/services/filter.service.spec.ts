@@ -45,11 +45,11 @@ describe('FilterService', () => {
     filterService = new FilterService(null,);
   });
 
-  it('#getSites should call #commonService.getSites', async () => {
+  it('#getSites should call #appService.getSites', async () => {
     // Arrange
     const appService = new AppService(null);
     appService.getSites = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeGroupSiteModel]));
-    const mockFilterService = new FilterService(null);
+    const mockFilterService = new FilterService(appService);
 
     // action
     const result = await mockFilterService.getSites();
