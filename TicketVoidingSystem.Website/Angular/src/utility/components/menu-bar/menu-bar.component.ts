@@ -55,6 +55,7 @@ export class MenuBarComponent implements OnInit {
   private isNewSite(menuName: string): boolean {
     return menuName === MenuName.AB_EXCEPTION_LIST 
     || menuName === MenuName.MARK_UNMARK_TICKETS
-    || menuName === MenuName.TICKET_LISTING;
+    || menuName === MenuName.TICKET_LISTING
+    || menuName === MenuName.VOID_SINGLE_BET;
   }
 }
