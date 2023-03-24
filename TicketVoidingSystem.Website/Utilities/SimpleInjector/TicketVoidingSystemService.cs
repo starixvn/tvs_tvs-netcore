@@ -46,7 +46,6 @@ public static class TicketVoidingSystemService
         services.AddSingleton<CashOutApiService, CashOutApiServiceImp>();
 
         //NetPosition
-        services.AddSingleton<ApiService, ApiServiceImp>();
         services.AddScoped<NetPositionService, NetPositionServiceImp>();
 
         //Send Email

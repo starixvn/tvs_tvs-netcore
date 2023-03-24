@@ -15,16 +15,16 @@ public interface NetPositionService
 
 public class NetPositionServiceImp : NetPositionService
 {
-    private readonly ApiService apiService;
+    private readonly NetPositionHttpClientService netPositionHttpClientService;
     private readonly SessionService sessionService;
     private readonly IDynamicRepository repository;
 
     public NetPositionServiceImp(
-        ApiService apiService,
+        NetPositionHttpClientService netPositionHttpClientService,
         SessionService sessionService,
         IDynamicRepository repository)
     {
-        this.apiService = apiService;
+        this.netPositionHttpClientService = netPositionHttpClientService;
         this.sessionService = sessionService;
         this.repository = repository;
     }
@@ -50,7 +50,7 @@ public class NetPositionServiceImp : NetPositionService
     private async Task<bool> IsNetPosition(UpdateNetPositionLogCriteria command)
     {
         command.StartTime = DateTime.Now;
-        var result = await apiService.CallNetPositionService(command.TransIds, command.Action);
+        var result = await netPositionHttpClientService.PostRequest(command.TransIds, command.Action);
         command.EndTime = DateTime.Now;
 
         if (result.IsSuccessful)

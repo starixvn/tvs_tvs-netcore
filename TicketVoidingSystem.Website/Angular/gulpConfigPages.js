@@ -77,11 +77,11 @@ const voidSingleBet = {
 };
 
 const configPages = [
-  homePage,
-  manageVoidServices,
-  abExceptionList,
-  markTickets,
-  ticketListing,
+  // homePage,
+  // manageVoidServices,
+  // abExceptionList,
+  // markTickets,
+  // ticketListing,
   voidSingleBet
 ];
 
