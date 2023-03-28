@@ -1,0 +1,102 @@
+.messages-results {
+  .overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+    opacity: 0.1;
+  }
+
+  &-content {
+    position: fixed;
+    top: 15%;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    z-index: 1050;
+    width: 800px;
+    padding: .2em;
+    border: 1px solid #a6c9e2;
+    border-radius: 5px;
+    color: #222222;
+    background: #fcfdfd;
+
+    .messages-results-header {
+      background-color: #466ab6 !important;
+      padding: .4em 1em;
+      position: relative;
+      border-radius: 5px;
+      border: 1px solid #3d5c9e;
+      color: #ffffff;
+      font-weight: bold;
+      font-family: Verdana, Arial, sans-serif;
+      display: flex;
+      justify-content: space-between;
+
+      .messages-results-cancel {
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 15px;
+        border-radius: 2px;
+
+        &:hover {
+          background: #5476bb;
+          border: 1px solid #6483c4;
+        }
+      }
+    }
+
+    .messages-results-body {
+      padding: 0 5px 5px 5px;
+      max-height: 500px;
+      overflow: auto;
+
+      .icon-warning {
+        background: url(../../../assets/images/sprite.png) no-repeat -25px -122px;
+        width: 16px;
+        height: 16px;
+        float: left;
+        margin: 3px 3px 0 3px;
+      }
+
+      .icon-success {
+        background: url(../../../assets/images/sprite.png) no-repeat -7px -122px;
+        width: 16px;
+        height: 16px;
+        float: left;
+        margin: 3px 3px 0 3px;
+      }
+
+      .success {
+        border: 1px solid #6a8f5c;
+        background-color: #e5f7df;
+        margin-top: 5px;
+        padding: 2px;
+      }
+
+      .fail {
+        max-height: 150px;
+        overflow: auto;
+        border: 1px solid #904444;
+        background-color: #f8dada;
+        margin-top: 5px;
+        padding: 2px;
+      }
+
+      .btn-resend {
+        height: 21px;
+        width: 97px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

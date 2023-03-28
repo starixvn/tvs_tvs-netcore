@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace TicketVoidingSystem.SharedApi.Models.MatchInfo
-{
-    public class FirstTicketTime
-    {
-        public DateTime MinTransDate { get; set; }
+namespace TicketVoidingSystem.SharedApi.Models.MatchInfo;
 
-        public DateTime KickOffTime { get; set; }
-    }
+public class FirstTicketTime
+{
+    public DateTime MinTransDate { get; set; }
+
+    public DateTime KickOffTime { get; set; }
 }

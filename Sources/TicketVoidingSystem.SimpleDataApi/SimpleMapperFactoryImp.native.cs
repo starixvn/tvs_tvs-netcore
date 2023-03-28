@@ -1,13 +1,12 @@
 ﻿using Olympus.SimpleDataApi;
 using TicketVoidingSystem.SimpleDataApi.Mapper;
 
-namespace TicketVoidingSystem.SimpleDataApi
+namespace TicketVoidingSystem.SimpleDataApi;
+
+public class SimpleMapperFactoryImp : SimpleMapperFactoryBase
 {
-    public class SimpleMapperFactoryImp : SimpleMapperFactoryBase
+    static SimpleMapperFactoryImp()
     {
-        static SimpleMapperFactoryImp()
-        {
-            AddSimpleMapperService("soccer-early-get-match", typeof(GoalIconMapperService));
-        }
+        AddSimpleMapperService("soccer-early-get-match", typeof(GoalIconMapperService));
     }
 }

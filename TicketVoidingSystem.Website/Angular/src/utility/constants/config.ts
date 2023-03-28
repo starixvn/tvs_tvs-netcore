@@ -31,7 +31,6 @@ export class Product {
   static readonly SPORTS_BOOK = 0;
   static readonly NUMBER_GAME = 1;
   static readonly VIRTUAL_SPORTS = 2;
-  static readonly METRIC_GAMING = 4;
   static readonly VIRTUAL_SPORTS_2 = 5;
   static readonly BET_BUILDER = 8;
   static readonly BITCOIN = 9;
@@ -40,7 +39,6 @@ export class Product {
     'Sportsbook': 0,
     'Number Game': 1,
     'Virtual Sports': 2,
-    'Metric Gaming': 4,
     'Virtual Sports 2': 5,
     'Bet Builder': 8,
     'Bitcoin': 9
@@ -49,12 +47,14 @@ export class Product {
   static readonly IS_MATCH_3RD = [Product.BITCOIN];
   static readonly SHOW_SEND_COLUMN = [Product.SPORTS_BOOK, Product.NUMBER_GAME, Product.BET_BUILDER];
   static readonly GET_BETTYPES = [Product.SPORTS_BOOK, Product.BET_BUILDER];
-  static readonly STATIC_BETTYPES = [Product.NUMBER_GAME, Product.VIRTUAL_SPORTS, Product.METRIC_GAMING, Product.BITCOIN];
+  static readonly STATIC_BETTYPES = [Product.NUMBER_GAME, Product.VIRTUAL_SPORTS, Product.BITCOIN];
 }
 
 export class SportTypeConst {
   static readonly E_SPORTS = 43;
-  static readonly CRICKET = 50;
+  static readonly CRICKET = 50;  
+  static readonly VOLEYBALL = 6;
+  static readonly TENNIS = 5;
 }
 
 export class TicketStatus {

@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <filter>
+    <div
+      class="filter"
+    >
+      <div
+        class="display-flex-between"
+      >
+        <div
+          class="line-1"
+        >
+          <label
+            class="match"
+          >
+             Match ID 
+            <input
+              autofocus=""
+              class="match-id form-control ng-untouched ng-pristine ng-valid"
+              maxlength="10"
+              only-number=""
+              type="text"
+            />
+          </label>
+          <label
+            class="licensees"
+          >
+             LicenseeId 
+            <select
+              class="ng-untouched ng-pristine ng-valid"
+            >
+              <option
+                selected="selected"
+                value="0"
+              >
+                All
+              </option>
+              <option
+                value="-1"
+              >
+                Credit
+              </option>
+              <optgroup
+                label="Licensee"
+              >
+              </optgroup>
+            </select>
+          </label>
+          <label
+            class="group-by"
+          >
+             Group by 
+            <select
+              class="ng-untouched ng-pristine ng-valid"
+            >
+            </select>
+          </label>
+          <label
+            class="ticket-type"
+          >
+             Ticket Type 
+            <select
+              class="ng-untouched ng-pristine ng-valid"
+            >
+            </select>
+          </label>
+        </div>
+        <div
+          class="scroll-filter"
+        >
+          <em
+            class="icon-scroll-down"
+          />
+        </div>
+      </div>
+      <div
+        class="content-filter"
+      >
+        <div
+          class="line-2"
+        >
+          <div
+            class="product-type"
+          >
+          </div>
+        </div>
+        <group-bettypes />
+        <bettypes />
+        <bettypes-virtualsport />
+        <advanced-mode-basketball
+          class="advanced-mode-basketball"
+        />
+        <div
+          hidden=""
+        >
+          <advanced-mode />
+        </div>
+        <div
+          class="search"
+        >
+          <input
+            class="submit"
+            type="button"
+            value="Search"
+          />
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </filter>
+</ng-component>
+`;

@@ -6,6 +6,7 @@ COPY ./Sources/TicketVoidingSystem.ABExceptionList ./Sources/TicketVoidingSystem
 COPY ./Sources/TicketVoidingSystem.ManageVoidServices ./Sources/TicketVoidingSystem.ManageVoidServices
 COPY ./Sources/TicketVoidingSystem.SharedApi ./Sources/TicketVoidingSystem.SharedApi
 COPY ./Sources/TicketVoidingSystem.MarkTickets ./Sources/TicketVoidingSystem.MarkTickets
+COPY ./Sources/TicketVoidingSystem.TicketListing ./Sources/TicketVoidingSystem.TicketListing
 COPY ./Sources/TicketVoidingSystem.SimpleDataApi ./Sources/TicketVoidingSystem.SimpleDataApi
 COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 

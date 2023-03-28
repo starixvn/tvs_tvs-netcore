@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace TicketVoidingSystem.Models
-{
-    public class TransDateXmlModel
-    {
-        public DateTime? FromTransDate { get; set; }
+namespace TicketVoidingSystem.Models;
 
-        public DateTime? ToTransDate { get; set; }
-    }
+public class TransDateXmlModel
+{
+    public DateTime? FromTransDate { get; set; }
+
+    public DateTime? ToTransDate { get; set; }
 }

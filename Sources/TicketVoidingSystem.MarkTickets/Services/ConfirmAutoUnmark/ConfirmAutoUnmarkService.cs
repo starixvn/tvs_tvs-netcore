@@ -6,52 +6,51 @@ using TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Extensions;
 using TicketVoidingSystem.MarkTickets.Models.ConfirmAutoUnmark;
 
-namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark
+namespace TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark;
+
+public interface ConfirmAutoUnmarkService
 {
-    public interface ConfirmAutoUnmarkService
+    Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query);
+}
+
+public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
+{
+    private readonly IDynamicRepository repository;
+
+    public ConfirmAutoUnmarkServiceImp(IDynamicRepository repository)
     {
-        Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query);
+        this.repository = repository;
     }
 
-    public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
+    public async Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
     {
-        private readonly IDynamicRepository repository;
+        var transInfoList = await GetTransInfoForAutoUnmark(query);
 
-        public ConfirmAutoUnmarkServiceImp(IDynamicRepository repository)
+        var criteria = new GetDataForConfirmAutoUnmarkCriteria
         {
-            this.repository = repository;
-        }
+            TransInfo = transInfoList.ToTransInfoXml()
+        };
 
-        public async Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
+        return await repository.FetchAsync<ConfirmAutoUnmarkModel>(criteria);
+    }
+
+    private async Task<IEnumerable<TransInfoAutoUnmarkModel>> GetTransInfoForAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
+    {
+        var dataInAllServers = new List<TransInfoAutoUnmarkModel>();
+        var criteria = new GetTransInfoForAutoUnmarkCriteria
         {
-            var transInfoList = await GetTransInfoForAutoUnmark(query);
+            MatchId = query.MatchId,
+            SportType = query.SportType,
+            MarkedBy = query.MarkedBy,
+            IsExcludeTest = query.IsExcludeTest
+        };
 
-            var criteria = new GetDataForConfirmAutoUnmarkCriteria
-            {
-                TransInfo = transInfoList.ToTransInfoXml()
-            };
-
-            return await repository.FetchAsync<ConfirmAutoUnmarkModel>(criteria);
-        }
-
-        private async Task<IEnumerable<TransInfoAutoUnmarkModel>> GetTransInfoForAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
+        foreach (var server in SiteDbGroupConstant.ServerList)
         {
-            var dataInAllServers = new List<TransInfoAutoUnmarkModel>();
-            var criteria = new GetTransInfoForAutoUnmarkCriteria
-            {
-                MatchId = query.MatchId,
-                SportType = query.SportType,
-                MarkedBy = query.MarkedBy,
-                IsExcludeTest = query.IsExcludeTest
-            };
-
-            foreach (var server in SiteDbGroupConstant.ServerList)
-            {
-                criteria.SiteDbGroupId = server.Id;
-                var data = await repository.FetchAsync<TransInfoAutoUnmarkModel>(criteria);
-                dataInAllServers.AddRange(data);
-            }
-            return dataInAllServers;
+            criteria.SiteDbGroupId = server.Id;
+            var data = await repository.FetchAsync<TransInfoAutoUnmarkModel>(criteria);
+            dataInAllServers.AddRange(data);
         }
+        return dataInAllServers;
     }
 }

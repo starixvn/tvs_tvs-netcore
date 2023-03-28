@@ -6,36 +6,35 @@ using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.ABExceptionList.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+public class AddUsersRequest : AddUsersCommand, IRequest<Result>
 {
-    public class AddUsersRequest : AddUsersCommand, IRequest<Result>
+}
+
+public class AddUsersHandler : IRequestHandler<AddUsersRequest, Result>
+{
+    private readonly IDynamicRepository repository;
+    private readonly SessionService session;
+
+    public AddUsersHandler(IDynamicRepository repository, SessionService session)
     {
+        this.repository = repository;
+        this.session = session;
     }
 
-    public class AddUsersHandler : IRequestHandler<AddUsersRequest, Result>
+    public async Task<Result> Handle(AddUsersRequest request, CancellationToken cancellationToken)
     {
-        private readonly IDynamicRepository repository;
-        private readonly SessionService session;
-
-        public AddUsersHandler(IDynamicRepository repository, SessionService session)
+        var criteria = new AddUsersCommand
         {
-            this.repository = repository;
-            this.session = session;
-        }
+            Usernames = request.Usernames,
+            UserId = session.UserId,
+            SubTypes = request.SubTypes,
+            VoidVIP = request.VoidVIP,
+            IP = session.GetClientIp()
+        };
+        await repository.ExecuteAsync(criteria, cancellationToken);
 
-        public async Task<Result> Handle(AddUsersRequest request, CancellationToken cancellationToken)
-        {
-            var criteria = new AddUsersCommand
-            {
-                Usernames = request.Usernames,
-                UserId = session.UserId,
-                SubTypes = request.SubTypes,
-                VoidVIP = request.VoidVIP,
-                IP = session.GetClientIp()
-            };
-            await repository.ExecuteAsync(criteria, cancellationToken);
-
-            return new Result();
-        }
+        return new Result();
     }
 }

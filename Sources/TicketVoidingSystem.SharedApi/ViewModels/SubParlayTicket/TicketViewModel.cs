@@ -1,9 +1,8 @@
-﻿namespace TicketVoidingSystem.SharedApi.ViewModels.SubParlayTicket
-{
-    public class TicketViewModel
-    {
-        public string SubTransId { get; set; }
+﻿namespace TicketVoidingSystem.SharedApi.ViewModels.SubParlayTicket;
 
-        public string Choice { get; set; }
-    }
+public class TicketViewModel
+{
+    public string SubTransId { get; set; }
+
+    public string Choice { get; set; }
 }

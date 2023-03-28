@@ -2,35 +2,34 @@
 using TicketVoidingSystem.Extensions;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions
+namespace TicketVoidingSystem.Tests.Extensions;
+
+public class SystemTimeExtensionTests
 {
-    public class SystemTimeExtensionTests
+    [Fact]
+    public void ZoneManila_DateTimeIsNull_ReturnExpected()
     {
-        [Fact]
-        public void ZoneManila_DateTimeIsNull_ReturnExpected()
-        {
-            // Arrange
-            DateTime? dateTime = null;
+        // Arrange
+        DateTime? dateTime = null;
 
-            // Act
-            var actual = dateTime.ZoneManila();
+        // Act
+        var actual = dateTime.ZoneManila();
 
-            // Assert
-            Assert.Null(actual);
-        }
+        // Assert
+        Assert.Null(actual);
+    }
 
-        [Fact]
-        public void ZoneManila_DateTimeIsNotNull_ReturnExpected()
-        {
-            // Arrange
-            DateTime? dateTime = new DateTime(2020, 12, 12, 12, 00, 00);
-            DateTime? expected = new DateTime(2020, 12, 13, 00, 00, 00);
+    [Fact]
+    public void ZoneManila_DateTimeIsNotNull_ReturnExpected()
+    {
+        // Arrange
+        DateTime? dateTime = new DateTime(2020, 12, 12, 12, 00, 00);
+        DateTime? expected = new DateTime(2020, 12, 13, 00, 00, 00);
 
-            // Act
-            var actual = dateTime.ZoneManila();
+        // Act
+        var actual = dateTime.ZoneManila();
 
-            // Assert
-            Assert.Equal(expected, actual);
-        }
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

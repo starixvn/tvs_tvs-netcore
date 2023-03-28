@@ -1,11 +1,10 @@
-﻿namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
+﻿namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+
+public class AllMarkedTicketsQuery
 {
-    public class AllMarkedTicketsQuery
-    {
-        public int PageIndex { get; set; }
+    public int PageIndex { get; set; }
 
-        public int PageSize { get; set; }
+    public int PageSize { get; set; }
 
-        public int MarkedBy { get; set; }
-    }
+    public int MarkedBy { get; set; }
 }

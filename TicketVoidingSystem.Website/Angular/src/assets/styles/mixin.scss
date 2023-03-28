@@ -219,3 +219,33 @@
   }
 }
 
+@mixin bettypes() {
+  background-color: #f6f6f6;
+  box-shadow: inset 0 0 3px #6b6b6b;
+  border: solid 1px #c8c8c8;
+  padding: 5px 10px;
+  margin: 10px 0;
+  max-width: 1200px;
+
+  input {
+      margin-top: 0px;
+  }
+
+  .header {
+      border-bottom: 1px solid #d2d2d2;
+
+      label {
+          font-weight: bold;
+      }
+  }
+
+  .content {
+      display: flex;
+      flex-wrap: wrap;
+
+      label {
+          display: block;
+          min-width: 230px;
+      }
+  }
+}

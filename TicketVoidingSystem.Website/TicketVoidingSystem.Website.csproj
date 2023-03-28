@@ -99,6 +99,7 @@
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
+    <PackageReference Include="Fanex.LetstalkService.Client" Version="1.0.0.15" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1" />
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.0.1-beta1" />
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
@@ -121,6 +122,7 @@
     <ProjectReference Include="..\Sources\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SimpleDataApi\TicketVoidingSystem.SimpleDataApi.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 

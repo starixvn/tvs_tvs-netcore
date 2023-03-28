@@ -4,23 +4,22 @@ using NSubstitute;
 using TicketVoidingSystem.SharedApi.Controllers;
 using Xunit;
 
-namespace TicketVoidingSystem.SharedApi.Tests.Controllers
+namespace TicketVoidingSystem.SharedApi.Tests.Controllers;
+
+public class SharedApiControllerTests
 {
-    public class SharedApiControllerTests
+    [Fact()]
+    public void GetPermission_HasRequest_ReturnIActionResult()
     {
-        [Fact()]
-        public void GetPermission_HasRequest_ReturnIActionResult()
-        {
-            // Arrange
-            var mediator = Substitute.For<IMediator>();
-            var httpContextAccessortor = Substitute.For<IHttpContextAccessor>();
-            var controller = new SharedApiController(mediator, httpContextAccessortor);
+        // Arrange
+        var mediator = Substitute.For<IMediator>();
+        var httpContextAccessortor = Substitute.For<IHttpContextAccessor>();
+        var controller = new SharedApiController(mediator, httpContextAccessortor);
 
-            // Act
-            var actual = controller.GetNapUserInfo();
+        // Act
+        var actual = controller.GetNapUserInfo();
 
-            // Assert
-            Assert.NotNull(actual);
-        }
+        // Assert
+        Assert.NotNull(actual);
     }
 }

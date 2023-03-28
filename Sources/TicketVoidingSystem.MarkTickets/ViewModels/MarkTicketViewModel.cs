@@ -1,7 +1,6 @@
-﻿namespace TicketVoidingSystem.MarkTickets.ViewModels
+﻿namespace TicketVoidingSystem.MarkTickets.ViewModels;
+
+public class MarkTicketViewModel
 {
-    public class MarkTicketViewModel
-    {
-        public string TransIds { get; set; }
-    }
+    public string TransIds { get; set; }
 }

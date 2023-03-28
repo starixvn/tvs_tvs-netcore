@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets
+namespace TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
+
+public class MarkAllTicketsQuery
 {
-    public class MarkAllTicketsQuery
-    {
-        public IEnumerable<MarkedMatchXmlModel> Matches { get; set; }
-    }
+    public IEnumerable<MarkedMatchXmlModel> Matches { get; set; }
 }

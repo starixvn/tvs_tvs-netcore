@@ -1,30 +1,29 @@
-﻿namespace TicketVoidingSystem.MarkTickets.ViewModels
+﻿namespace TicketVoidingSystem.MarkTickets.ViewModels;
+
+using System;
+
+public class AllMarkedTicketViewModel
 {
-    using System;
+    public int No { get; set; }
 
-    public class AllMarkedTicketViewModel
-    {
-        public int No { get; set; }
+    public int MatchId { get; set; }
 
-        public int MatchId { get; set; }
+    public string HTScore { get; set; }
 
-        public string HTScore { get; set; }
+    public string FTScore { get; set; }
 
-        public string FTScore { get; set; }
+    public DateTime KickOffTime { get; set; }
 
-        public DateTime KickOffTime { get; set; }
+    public int UserId { get; set; }
 
-        public int UserId { get; set; }
+    public string Username { get; set; }
 
-        public string Username { get; set; }
+    public DateTime CreatedDate { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+    public string Event { get; set; }
 
-        public string Event { get; set; }
+    public int Total { get; set; }
 
-        public int Total { get; set; }
+    public bool IsChecked { get; set; }
 
-        public bool IsChecked { get; set; }
-
-    }
 }

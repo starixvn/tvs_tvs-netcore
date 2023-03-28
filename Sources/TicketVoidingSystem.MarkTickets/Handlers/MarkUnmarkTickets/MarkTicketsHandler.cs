@@ -5,24 +5,23 @@ using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets
+namespace TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
+
+public class MarkTicketsRequest : MarkTicketsQuery, IRequest<Result>
 {
-    public class MarkTicketsRequest : MarkTicketsQuery, IRequest<Result>
+}
+
+public class MarkTicketsHandler : IRequestHandler<MarkTicketsRequest, Result>
+{
+    private readonly MarkTicketsService markTicketsService;
+
+    public MarkTicketsHandler(MarkTicketsService markTicketsService)
     {
+        this.markTicketsService = markTicketsService;
     }
 
-    public class MarkTicketsHandler : IRequestHandler<MarkTicketsRequest, Result>
+    public async Task<Result> Handle(MarkTicketsRequest request, CancellationToken cancellationToken)
     {
-        private readonly MarkTicketsService markTicketsService;
-
-        public MarkTicketsHandler(MarkTicketsService markTicketsService)
-        {
-            this.markTicketsService = markTicketsService;
-        }
-
-        public async Task<Result> Handle(MarkTicketsRequest request, CancellationToken cancellationToken)
-        {
-            return await markTicketsService.Execute(request);
-        }
+        return await markTicketsService.Execute(request);
     }
 }

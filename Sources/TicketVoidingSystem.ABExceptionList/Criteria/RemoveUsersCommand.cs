@@ -1,16 +1,15 @@
 ﻿using Fanex.Data.Repository;
 
-namespace TicketVoidingSystem.ABExceptionList.Criteria
+namespace TicketVoidingSystem.ABExceptionList.Criteria;
+
+public class RemoveUsersCommand : NonQueryCommand
 {
-    public class RemoveUsersCommand : NonQueryCommand
-    {
-        public string CustIds { get; set; }
+    public string CustIds { get; set; }
 
-        public int UserId { get; set; }
-        public string IP { get; set; }
+    public int UserId { get; set; }
+    public string IP { get; set; }
 
-        public override string GetSettingKey() => "TicketVoiding_ABWhiteList_Update";
+    public override string GetSettingKey() => "TicketVoiding_ABWhiteList_Update";
 
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

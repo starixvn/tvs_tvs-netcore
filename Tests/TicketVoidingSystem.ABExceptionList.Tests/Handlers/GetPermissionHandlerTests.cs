@@ -6,24 +6,23 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 using Xunit;
 
-namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
+
+public class GetPermissionHandlerTests
 {
-    public class GetPermissionHandlerTests
+    [Fact()]
+    public async Task Handler_RepositoryHasCalled_ReturnTrue()
     {
-        [Fact()]
-        public async Task Handler_RepositoryHasCalled_ReturnTrue()
-        {
-            // Arrange
-            var request = new GetPermissionRequest();
-            var sessionService = Substitute.For<SessionService>();
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Arg.Compat.Any<Constant.Policy>()).Returns(true);
-            var handler = new GetPermissionHandler(sessionService);
+        // Arrange
+        var request = new GetPermissionRequest();
+        var sessionService = Substitute.For<SessionService>();
+        sessionService.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Arg.Any<Constant.Policy>()).Returns(true);
+        var handler = new GetPermissionHandler(sessionService);
 
-            // Act
-            var actualResult = await handler.Handle(request, default);
+        // Act
+        var actualResult = await handler.Handle(request, default);
 
-            // Assert
-            Assert.True(actualResult.ABExceptionListHost);
-        }
+        // Assert
+        Assert.True(actualResult.ABExceptionListHost);
     }
 }

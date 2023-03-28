@@ -5,31 +5,30 @@ using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.ABExceptionList.Models;
 using TicketVoidingSystem.Extensions;
 
-namespace TicketVoidingSystem.ABExceptionList.Services
+namespace TicketVoidingSystem.ABExceptionList.Services;
+
+public interface GetUsersService
 {
-    public interface GetUsersService
+    Task<IEnumerable<UserModel>> GetUsers(GetUsersRequest request);
+}
+
+public class GetUsersServiceImp : GetUsersService
+{
+    private readonly IDynamicRepository repository;
+
+    public GetUsersServiceImp(IDynamicRepository repository)
     {
-        Task<IEnumerable<UserModel>> GetUsers(GetUsersRequest request);
+        this.repository = repository;
     }
 
-    public class GetUsersServiceImp : GetUsersService
+    public async Task<IEnumerable<UserModel>> GetUsers(GetUsersRequest request)
     {
-        private readonly IDynamicRepository repository;
-
-        public GetUsersServiceImp(IDynamicRepository repository)
+        var users = await repository.FetchAsync<UserModel>(request);
+        foreach (var user in users)
         {
-            this.repository = repository;
+            user.AddedDate = user.AddedDate.ZoneManila();
         }
 
-        public async Task<IEnumerable<UserModel>> GetUsers(GetUsersRequest request)
-        {
-            var users = await repository.FetchAsync<UserModel>(request);
-            foreach (var user in users)
-            {
-                user.AddedDate = user.AddedDate.ZoneManila();
-            }
-
-            return users;
-        }
+        return users;
     }
 }

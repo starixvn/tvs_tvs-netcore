@@ -15,6 +15,8 @@ import { Selection } from '../models/selection.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
+import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
+import { BetTypesModel } from '../components/bettypes/bettypes.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
 import { SportInfo } from '../models/event.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
@@ -39,6 +41,14 @@ export class CommonService {
     return this.httpService.postJson(query, `api/BetTypes/GetGroupBetTypesNg`);
   }
 
+  async getBetTypesVirtualSports(): Promise<Array<GroupBetTypeVirtualSport>> {
+    return this.httpService.getJson(`api/BetTypes/GetVirtualSport`);
+  }
+
+  async getBetTypes(query: GetBetTypesQuery): Promise<BetTypesModel> {
+    return this.httpService.postJson(query, `api/BetTypes/GetBetTypes`);
+  }
+
   async getSportsType(): Promise<SportInfo[]> {
     return this.httpService.getJson('api/SharedApi/GetSportsType');
   }
@@ -47,7 +57,6 @@ export class CommonService {
   async getActions(): Promise<Selection[]> {
     return this.httpService.getJson('TicketVoiding/GetActions');
   }
-
 
   async getMatch(matchId: number): Promise<MatchModel> {
     return this.httpService.postJson({ matchId, isMatch3rd: false }, 'api/MatchInfo/GetInfo');

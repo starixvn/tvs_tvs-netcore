@@ -7,25 +7,24 @@ using MediatR;
 using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Models;
 
-namespace TicketVoidingSystem.ABExceptionList.Handlers
+namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>
 {
-    public class GetSitesRequest : GetSitesCriteria, IRequest<IEnumerable<GroupLicenseeSiteViewModel>>
+}
+
+public class GetSitesHandler : IRequestHandler<GetSitesRequest, IEnumerable<GroupLicenseeSiteViewModel>>
+{
+    private readonly IDynamicRepository repository;
+
+    public GetSitesHandler(IDynamicRepository repository)
     {
+        this.repository = repository;
     }
 
-    public class GetSitesHandler : IRequestHandler<GetSitesRequest, IEnumerable<GroupLicenseeSiteViewModel>>
+    public async Task<IEnumerable<GroupLicenseeSiteViewModel>> Handle(GetSitesRequest request, CancellationToken cancellationToken)
     {
-        private readonly IDynamicRepository repository;
-
-        public GetSitesHandler(IDynamicRepository repository)
-        {
-            this.repository = repository;
-        }
-
-        public async Task<IEnumerable<GroupLicenseeSiteViewModel>> Handle(GetSitesRequest request, CancellationToken cancellationToken)
-        {
-            var data = await repository.FetchAsync<LicenseeSite>(request, cancellationToken);
-            return data.GroupBy(b => b.GroupName).Select(group => new GroupLicenseeSiteViewModel { GroupName = group.Key, Sites = group });
-        }
+        var data = await repository.FetchAsync<LicenseeSite>(request, cancellationToken);
+        return data.GroupBy(b => b.GroupName).Select(group => new GroupLicenseeSiteViewModel { GroupName = group.Key, Sites = group });
     }
 }

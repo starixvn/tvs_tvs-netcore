@@ -5,25 +5,24 @@ using MediatR;
 using TicketVoidingSystem.ManageVoidServices.Models;
 using TicketVoidingSystem.ManageVoidServices.Services;
 
-namespace TicketVoidingSystem.ManageVoidServices.Handlers
+namespace TicketVoidingSystem.ManageVoidServices.Handlers;
+
+public class GetTicketVoidingQueueRequest : IRequest<IEnumerable<TicketVoidingQueueModel>>
 {
-    public class GetTicketVoidingQueueRequest : IRequest<IEnumerable<TicketVoidingQueueModel>>
+    public int VoidingHistoryId { get; set; }
+}
+
+public class GetTicketVoidingQueueHandler : IRequestHandler<GetTicketVoidingQueueRequest, IEnumerable<TicketVoidingQueueModel>>
+{
+    private readonly TicketVoidingQueueService ticketVoidingQueueService;
+
+    public GetTicketVoidingQueueHandler(TicketVoidingQueueService ticketVoidingQueueService)
     {
-        public int VoidingHistoryId { get; set; }
+        this.ticketVoidingQueueService = ticketVoidingQueueService;
     }
 
-    public class GetTicketVoidingQueueHandler : IRequestHandler<GetTicketVoidingQueueRequest, IEnumerable<TicketVoidingQueueModel>>
+    public async Task<IEnumerable<TicketVoidingQueueModel>> Handle(GetTicketVoidingQueueRequest request, CancellationToken cancellationToken)
     {
-        private readonly TicketVoidingQueueService ticketVoidingQueueService;
-
-        public GetTicketVoidingQueueHandler(TicketVoidingQueueService ticketVoidingQueueService)
-        {
-            this.ticketVoidingQueueService = ticketVoidingQueueService;
-        }
-
-        public async Task<IEnumerable<TicketVoidingQueueModel>> Handle(GetTicketVoidingQueueRequest request, CancellationToken cancellationToken)
-        {
-            return await ticketVoidingQueueService.GetQueueInAllServers(request.VoidingHistoryId);
-        }
+        return await ticketVoidingQueueService.GetQueueInAllServers(request.VoidingHistoryId);
     }
 }

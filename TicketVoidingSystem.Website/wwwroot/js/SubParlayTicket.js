@@ -25,7 +25,7 @@ var subTicketParlay = {
 
         $.ajax({
             type: "POST",
-            url: "SubParlayTicket/GetNormalParlay",
+            url: "api/SubParlayTicket/GetNormalParlay",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -144,7 +144,7 @@ var mainTicketParlay = {
 
         $.ajax({
             type: "POST",
-            url: "SubParlayTicket/GetNormalParlay",
+            url: "api/SubParlayTicket/GetNormalParlay",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -198,7 +198,7 @@ var mainTicketParlay = {
 
         $.ajax({
             type: "POST",
-            url: "SubParlayTicket/GetComboParlay",
+            url: "api/SubParlayTicket/GetComboParlay",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -374,9 +374,9 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
 
     $.ajax({
         type: "POST",
-        url: "SubParlayTicket/GetSelectionsSMP",
+        url: "api/SubParlayTicket/GetSelectionsSMP",
         contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        dataType: "text",
         data: JSON.stringify(param),
         beforeSend: function () {
             Helper.disableInput();

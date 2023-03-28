@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, OnChanges, SimpleChange } from '@angular/core';
-import { GroupBetTypesModel, GroupBetType, BetType } from './group-bettypes.model';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { Product } from '../../../../utility/constants/config';
-import { Tooltip } from '../../tooltip/tooltip.model';
 import { LABELS } from '../../../../utility/constants/labels';
+import { Tooltip } from '../../tooltip/tooltip.model';
+import { BetType, GroupBetType, GroupBetTypesModel } from './group-bettypes.model';
 
 @Component({
   selector: 'group-bettypes',
@@ -14,7 +14,7 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
   @Input() model: GroupBetTypesModel;
   @Input() product: number = Product.SPORTS_BOOK;
   @Output() betTypesEvent = new EventEmitter<BetType[]>();
-  tooltip = new Tooltip;
+  tooltip = new Tooltip();
   isDisabledAllBetTypes: boolean;
 
   @Input() scroll: boolean;

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ToolTipModule } from '../../utility/modules/tooltip/tooltip.module';
+import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { HttpService } from '../../utility/services/http.service';
 import { AppApiService } from './app-api.service';
 

@@ -1,7 +1,6 @@
-﻿namespace TicketVoidingSystem.ABExceptionList.Models
+﻿namespace TicketVoidingSystem.ABExceptionList.Models;
+
+public class PermissionABExceptionList
 {
-    public class PermissionABExceptionList
-    {
-        public bool ABExceptionListHost { get; set; }
-    }
+    public bool ABExceptionListHost { get; set; }
 }

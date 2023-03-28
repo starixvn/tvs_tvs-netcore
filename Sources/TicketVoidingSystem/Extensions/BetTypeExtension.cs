@@ -1,85 +1,84 @@
 ﻿using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 
-namespace TicketVoidingSystem.Extensions
+namespace TicketVoidingSystem.Extensions;
+
+public static class BetTypeExtension
 {
-    public static class BetTypeExtension
+    public static bool IsParlay(this int id)
     {
-        public static bool IsParlay(this int id)
-        {
-            const int betTypeParlay = 29;
-            return id == betTypeParlay;
-        }
+        const int betTypeParlay = 29;
+        return id == betTypeParlay;
+    }
 
-        public static bool IsParlayAndBetBuilder(this int id)
-        {
-            return id.IsParlay() || id.IsSingleMatchParlay();
-        }
+    public static bool IsParlayAndBetBuilder(this int id)
+    {
+        return id.IsParlay() || id.IsSingleMatchParlay();
+    }
 
-        public static bool IsNumberGame(this int id)
-        {
-            return id is >= BetTypeConstant.FirstNumberGame and <= BetTypeConstant.SecondNumberGame;
-        }
+    public static bool IsNumberGame(this int id)
+    {
+        return id is >= BetTypeConstant.FirstNumberGame and <= BetTypeConstant.SecondNumberGame;
+    }
 
-        public static bool IsLucky3(this int id)
-        {
-            return id is >= BetTypeConstant.FirstLucky3 and <= BetTypeConstant.SecondLucky3;
-        }
+    public static bool IsLucky3(this int id)
+    {
+        return id is >= BetTypeConstant.FirstLucky3 and <= BetTypeConstant.SecondLucky3;
+    }
 
-        public static bool IsSingleMatchParlay(this int id)
-        {
-            const int betTypeSingleMatchParlay = 38;
-            return id == betTypeSingleMatchParlay;
-        }
+    public static bool IsSingleMatchParlay(this int id)
+    {
+        const int betTypeSingleMatchParlay = 38;
+        return id == betTypeSingleMatchParlay;
+    }
 
-        public static bool IsBitCoin(this int id)
-        {
-            return id == BetTypeConstant.BitCoinOverUnder;
-        }
+    public static bool IsBitCoin(this int id)
+    {
+        return id == BetTypeConstant.BitCoinOverUnder;
+    }
 
-        public static bool IsSabaPromotion(this int id)
-        {
-            const int betType17000 = 17000;
-            const int betType17003 = 17003;
-            return id is betType17000 or betType17003;
-        }
+    public static bool IsSabaPromotion(this int id)
+    {
+        const int betType17000 = 17000;
+        const int betType17003 = 17003;
+        return id is betType17000 or betType17003;
+    }
 
-        public static bool IsOutright(this int id)
-        {
-            return id == BetTypeConstant.Outright;
-        }
+    public static bool IsOutright(this int id)
+    {
+        return id == BetTypeConstant.Outright;
+    }
 
-        public static bool IsPenaltyShootoutCombo(this int id)
-        {
-            return id == BetTypeConstant.PenaltyShootoutCombo;
-        }
+    public static bool IsPenaltyShootoutCombo(this int id)
+    {
+        return id == BetTypeConstant.PenaltyShootoutCombo;
+    }
 
-        public static bool IsVirtualSportBetType(this int id)
-        {
-            return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
-                   || id is >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType;
-        }
+    public static bool IsVirtualSportBetType(this int id)
+    {
+        return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
+               || id is >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType;
+    }
 
-        private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194 };
+    private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194 };
 
-        public static bool IsVirtualSport(this int sportTypeId)
-        {
-            return VirtualSports.Contains(sportTypeId);
-        }
+    public static bool IsVirtualSport(this int sportTypeId)
+    {
+        return VirtualSports.Contains(sportTypeId);
+    }
 
-        public static bool IsHideHandicap(this int id)
-        {
-            return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();
-        }
+    public static bool IsHideHandicap(this int id)
+    {
+        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();
+    }
 
-        public static bool HideScore(this int id)
-        {
-            return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsVirtualSportBetType() || id.IsLucky3();
-        }
+    public static bool HideScore(this int id)
+    {
+        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsVirtualSportBetType() || id.IsLucky3();
+    }
 
-        public static string TranslateChineseSimplified(this string name)
-        {
-            return name.Replace("Next", "下一个");
-        }
+    public static string TranslateChineseSimplified(this string name)
+    {
+        return name.Replace("Next", "下一个");
     }
 }

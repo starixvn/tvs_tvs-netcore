@@ -7,63 +7,55 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
-namespace TicketVoidingSystem.SharedApi.Services.BetTypes
+namespace TicketVoidingSystem.SharedApi.Services.BetTypes;
+
+public interface BetTypesRepository
 {
-    public interface BetTypesRepository
+    Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria);
+
+    Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
+}
+
+public class BetTypesRepositoryImp : BetTypesRepository
+{
+    private readonly IDynamicRepository repository;
+
+    public BetTypesRepositoryImp(IDynamicRepository repository)
     {
-        Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria);
-
-        Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
-
-        IEnumerable<SelectionTypeModel> GetSelectionTypes(GetSelectionTypesCriteria criteria);
+        this.repository = repository;
     }
 
-    public class BetTypesRepositoryImp : BetTypesRepository
+    public async Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria)
     {
-        private readonly IDynamicRepository repository;
-
-        public BetTypesRepositoryImp(IDynamicRepository repository)
+        var betTypes = await repository.FetchAsync<BetTypeModel>(criteria);
+        return new BetTypesViewModel
         {
-            this.repository = repository;
-        }
-
-        public async Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria)
-        {
-            var betTypes = await repository.FetchAsync<BetTypeModel>(criteria);
-            return new BetTypesViewModel
+            BetTypes = betTypes,
+            Result = new Result
             {
-                Betypes = betTypes,
-                Result = new Result
-                {
-                    ErrorCode = criteria.ErrCode,
-                    ErrorMsg = criteria.ErrMsg
-                }
-            };
-        }
-
-        public async Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query)
-        {
-            var betTypesInAllServers = new List<int>();
-            var criteria = new GetBetTypesHaveTicketsCriteria
-            {
-                MatchId = query.MatchId,
-                Mode = query.Mode
-            };
-
-            foreach (var server in SiteDbGroupConstant.ServerList)
-            {
-                criteria.SiteDbGroupId = server.Id;
-                var betTypes = await repository.FetchAsync<int>(criteria);
-
-                betTypesInAllServers.AddRange(betTypes);
+                ErrorCode = criteria.ErrCode,
+                ErrorMsg = criteria.ErrMsg
             }
+        };
+    }
 
-            return betTypesInAllServers.Distinct();
-        }
-
-        public IEnumerable<SelectionTypeModel> GetSelectionTypes(GetSelectionTypesCriteria criteria)
+    public async Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query)
+    {
+        var betTypesInAllServers = new List<int>();
+        var criteria = new GetBetTypesHaveTicketsCriteria
         {
-            return repository.Fetch<SelectionTypeModel>(criteria).ToList();
+            MatchId = query.MatchId,
+            Mode = query.Mode
+        };
+
+        foreach (var server in SiteDbGroupConstant.ServerList)
+        {
+            criteria.SiteDbGroupId = server.Id;
+            var betTypes = await repository.FetchAsync<int>(criteria);
+
+            betTypesInAllServers.AddRange(betTypes);
         }
+
+        return betTypesInAllServers.Distinct();
     }
 }

@@ -1,0 +1,197 @@
+﻿@mixin input-style($width) {
+  padding: 1px 2px;
+  height: 22px;
+  margin: 0px;
+  border-radius: 0;
+  width: $width;
+}
+
+
+.filter {
+  background-color: #ebebeb;
+  margin: 0 10px;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  label {
+    margin-bottom: 0px;
+
+    .form-control {
+      display: inline;
+    }
+  }
+
+  .display-flex-between {
+    display: flex;
+    justify-content: space-between;
+
+    .remark {
+      padding: 5px 0px 3px;
+      color: #ed1c24;
+    }
+
+    .scroll-filter {
+      cursor: pointer;
+
+      i {
+        display: block;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .line-1 {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+
+    .match {
+      margin-right: 20px;
+
+      .match-id {
+        margin: 0 0px 0 5px;
+        padding: 1px 2px;
+        width: 100px;
+        height: 22px !important;
+        border-radius: 0;
+      }
+    }
+
+    label {
+      margin-right: 32px;
+    }
+
+    select {
+      @include input-style(auto);
+    }
+  }
+
+  .line-2 {
+    display: flex;
+    height: 24px;
+    margin-bottom: 10px;
+
+    .single-or-sub-parlay,
+    .product-type {
+      margin-right: 40px;
+      display: flex;
+
+      label {
+        margin-right: 10px;
+        display: flex;
+
+        input {
+          margin-top: -3px;
+        }
+      }
+    }
+
+    .event-type {
+      line-height: 21px;
+      width: 185px;
+
+      select {
+        @include input-style(auto);
+      }
+    }
+  }
+
+  .line-3 {
+    .optional-filters {
+      display: flex;
+
+      label {
+        display: flex;
+        align-items: center;
+        margin: 0px 5px 0px 5px;
+
+        input {
+          margin: 0px;
+        }
+      }
+      
+      .bold {
+        font-weight: bold;
+      }
+
+      .score {
+        display: flex;
+
+        label {
+          margin-left: 5px;
+        }
+
+        input {
+          @include input-style(25px);
+          margin-left: 5px;
+          margin-bottom: 0px;
+        }
+
+        input[type="text"] {
+          margin-top: 0px;
+          height: 22px !important;
+        }
+      }
+
+      .date-time {
+        display: flex;
+
+        .from-date-time-text,
+        .to-date-time-text {
+          margin: 0 5px 0 10px;
+        }
+
+        form {
+          width: 115px;
+          margin: 0px;
+
+          ::ng-deep input.datepicker-actions__input {
+            padding: 1px 2px;
+            margin: 0px;
+            width: 80px;
+            height: 16px;
+            border-radius: 0;
+          }
+
+          ::ng-deep button.datepicker-actions__button {
+            border: none;
+            background-color: #ebebeb;
+            padding: 1px 5px;
+          }
+
+          ::ng-deep button.datepicker-actions__button {
+            margin-left: 0px;
+          }
+        }
+      }
+    }
+  }
+
+  .search {
+    height: 25px;
+
+    .submit {
+      display: inline-block;
+      padding: 2px 13px 3px;
+      border: 0px;
+      background: url(../../../assets/images/sprite.png) no-repeat -7px -62px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 13px;
+      height: 25px;
+      line-height: 20px;
+
+      &:hover {
+        background: url(../../../assets/images/sprite.png) no-repeat -75px -62px;
+        text-decoration: none;
+        padding: 2px 13px 3px;
+        font-weight: bold;
+        color: white;
+      }
+    }
+  }
+}

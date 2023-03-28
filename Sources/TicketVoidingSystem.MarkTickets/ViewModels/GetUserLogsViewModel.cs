@@ -1,11 +1,10 @@
-﻿namespace TicketVoidingSystem.MarkTickets.ViewModels
+﻿namespace TicketVoidingSystem.MarkTickets.ViewModels;
+
+using System.Collections.Generic;
+
+public class GetUserLogsViewModel
 {
-    using System.Collections.Generic;
+    public IEnumerable<GetUserLogViewModel> LogList { get; set; }
 
-    public class GetUserLogsViewModel
-    {
-        public IEnumerable<GetUserLogViewModel> LogList { get; set; }
-
-        public int TotalLogs { get; set; }
-    }
+    public int TotalLogs { get; set; }
 }

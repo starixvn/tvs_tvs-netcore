@@ -5,58 +5,57 @@ using Fanex.NAP.Client.Services;
 using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Http;
 
-namespace TicketVoidingSystem.Services
+namespace TicketVoidingSystem.Services;
+
+public interface SessionService
 {
-    public interface SessionService
+    int UserId { get; }
+
+    string UserName { get; }
+
+    bool HasPermission(string functionKey, Constant.Policy policy);
+
+    string GetClientIp();
+
+    bool CheckPassword(string password);
+}
+
+public class SessionServiceImp : SessionService
+{
+    private readonly INapSession currentSession;
+    private readonly IUserService userService;
+    private readonly INapSettings siteSettings;
+    private readonly IHttpContextAccessor httpContextAccessor;
+
+    public SessionServiceImp(INapSession currentSession, IUserService userService, INapSettings siteSettings, IHttpContextAccessor httpContextAccessor)
     {
-        int UserId { get; }
-
-        string UserName { get; }
-
-        bool HasPermission(string functionKey, Constant.Policy policy);
-
-        string GetClientIp();
-
-        bool CheckPassword(string password);
+        this.currentSession = currentSession;
+        this.userService = userService;
+        this.siteSettings = siteSettings;
+        this.httpContextAccessor = httpContextAccessor;
     }
 
-    public class SessionServiceImp : SessionService
+    public int UserId => currentSession.UserId;
+
+    public string UserName => currentSession.UserName;
+
+    public bool HasPermission(string functionKey, Constant.Policy policy)
     {
-        private readonly INapSession currentSession;
-        private readonly IUserService userService;
-        private readonly INapSettings siteSettings;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        return userService.IsHavingPermission(currentSession.UserId, siteSettings.SiteId, functionKey, policy);
+    }
 
-        public SessionServiceImp(INapSession currentSession, IUserService userService, INapSettings siteSettings, IHttpContextAccessor httpContextAccessor)
-        {
-            this.currentSession = currentSession;
-            this.userService = userService;
-            this.siteSettings = siteSettings;
-            this.httpContextAccessor = httpContextAccessor;
-        }
+    public string GetClientIp()
+    {
+        return httpContextAccessor.HttpContext.Connection.RemoteIpAddress.Equals(httpContextAccessor.HttpContext
+            .Connection.LocalIpAddress)
+            ? "127.0.0.1"
+            : httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+    }
 
-        public int UserId => currentSession.UserId;
-
-        public string UserName => currentSession.UserName;
-
-        public bool HasPermission(string functionKey, Constant.Policy policy)
-        {
-            return userService.IsHavingPermission(currentSession.UserId, siteSettings.SiteId, functionKey, policy);
-        }
-
-        public string GetClientIp()
-        {
-            return httpContextAccessor.HttpContext.Connection.RemoteIpAddress.Equals(httpContextAccessor.HttpContext
-                .Connection.LocalIpAddress)
-                ? "127.0.0.1"
-                : httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-        }
-
-        public bool CheckPassword(string password)
-        {
-            var user = userService.Get(UserId);
-            var encode = Cryptography.CfsEnCode(password);
-            return encode.Equals(user.Password);
-        }
+    public bool CheckPassword(string password)
+    {
+        var user = userService.Get(UserId);
+        var encode = Cryptography.CfsEnCode(password);
+        return encode.Equals(user.Password);
     }
 }

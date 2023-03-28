@@ -22,6 +22,8 @@ import { AdvancedModeModule } from './components/advanced-mode/advanced-mode.mod
 import { AutoRefreshComponent } from './components/auto-refresh/auto-refresh.component';
 import { BaseTicketsListComponent } from './components/base-tickets-list/base-tickets-list.component';
 import { BetIdsComponent } from './components/bet-ids/bet-ids.component';
+import { BetTypesVirtualSportComponent } from './components/bettypes-virtualsports/bettypes-virtualsports.component';
+import { BetTypesComponent } from './components/bettypes/bettypes.component';
 import { BlockFullUiModule } from './components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from './components/block-ui/block-ui.module';
 import { DateTimeModule } from './components/date-time/date-time.module';
@@ -30,6 +32,7 @@ import { NumbersOnlyDirective } from './components/directives/numbers-only.direc
 import { MatchDetailComponent } from './components/match-detail/match-detail.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { ModalModule } from './components/modal/modal.module';
+import { NotificationComponent } from './components/notification/notification.component';
 import { PagingModule } from './components/paging/paging.module';
 import { ToolTipModule } from './components/tooltip/tooltip.module';
 import { PipeModule } from './pipes/pipe.module';
@@ -59,12 +62,12 @@ import { HttpService } from './services/http.service';
     MenuBarComponent,
     AutoRefreshComponent,
     BaseTicketsListComponent,
-    // BetTypesComponent,
-    // BetTypesVirtualSportComponent,
+    BetTypesComponent,
+    BetTypesVirtualSportComponent,
     // ConfirmationComponent,
     MatchDetailComponent,
     // MessagesResultComponent,
-    // NotificationComponent,
+    NotificationComponent,
     NumbersOnlyDirective,
     OnlyNumberDirective,
     BetIdsComponent,
@@ -72,12 +75,12 @@ import { HttpService } from './services/http.service';
   ],
   exports: [
     BaseTicketsListComponent,
-    // BetTypesComponent,
-    // BetTypesVirtualSportComponent,
+    BetTypesComponent,
+    BetTypesVirtualSportComponent,
     // ConfirmationComponent,
     MatchDetailComponent,
     // MessagesResultComponent,
-    // NotificationComponent,
+    NotificationComponent,
     NumbersOnlyDirective,
     OnlyNumberDirective,
     BetIdsComponent,

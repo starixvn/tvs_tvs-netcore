@@ -7,6 +7,7 @@ using Fanex.BetList.Core.RemotingRef;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
+using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
@@ -25,7 +26,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Olympus.SimpleDataApi;
 using ONEbook.UM.AspNetCore;
 using ONEbook.UM.AspNetCore.Filters;
 using ONEbook.UM.Configurations;
@@ -35,237 +35,191 @@ using ONEbook.UM.Transport;
 using Sentry;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
-using TicketVoidingSystem.ABExceptionList.Services;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
-using TicketVoidingSystem.ManageVoidServices.Services;
 using TicketVoidingSystem.MarkTickets.Controllers;
-using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
-using TicketVoidingSystem.MarkTickets.Services.ConfirmAutoUnmark;
-using TicketVoidingSystem.MarkTickets.Services.ExportExcel;
-using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
-using TicketVoidingSystem.MarkTickets.Services.UserLogs;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.BetList;
-using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.SharedApi.Controllers;
-using TicketVoidingSystem.SharedApi.Services;
-using TicketVoidingSystem.SharedApi.Services.BetTypes;
-using TicketVoidingSystem.SharedApi.Services.SubParlayTicket;
 using TicketVoidingSystem.SignalR;
-using TicketVoidingSystem.SimpleDataApi;
-using TicketVoidingSystem.SimpleDataApi.Services;
-using TicketVoidingSystem.Web;
+using TicketVoidingSystem.TicketListing.Controllers;
+using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
-namespace TicketVoidingSystem.Website.Utilities
+namespace TicketVoidingSystem.Website.Utilities;
+
+public static class ServiceCollectionExtension
 {
-    public static class ServiceCollectionExtension
+    public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
-        {
-            AppSettingService.InitSetting(configuration);
-        }
+        AppSettingService.InitSetting(configuration);
+    }
 
-        public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
-        {
-            var connections = configuration.GetSection("ConnectionStrings")
-                .GetChildren()
-                .AsEnumerable()
-                .ToDictionary(
-                    x => x.Key,
-                    y => new ConnectionConfiguration(y.Key, y.Value)
-                );
+    public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connections = configuration.GetSection("ConnectionStrings")
+            .GetChildren()
+            .AsEnumerable()
+            .ToDictionary(
+                x => x.Key,
+                y => new ConnectionConfiguration(y.Key, y.Value)
+            );
 
-            DbSettingProviderManager
-                .StartNewSession()
-                .Use(connections)
-                .WithSqlServer()
-                .UseDefaultDbSettingProvider(configuration.GetSection("StoredProcedurePath").Value)
-                .Run();
-        }
+        DbSettingProviderManager
+            .StartNewSession()
+            .Use(connections)
+            .WithSqlServer()
+            .UseDefaultDbSettingProvider(configuration.GetSection("StoredProcedurePath").Value)
+            .Run();
+    }
 
-        public static void RegisterSentry(this IServiceCollection services)
-        {
-            LogManager
-                .SetDefaultLogCategory(AppSettingService.AppSetting.CategorySentryLog)
-                .Use(new List<ILogEngine>
+    public static void RegisterSentry(this IServiceCollection services)
+    {
+        LogManager
+            .SetDefaultLogCategory(AppSettingService.AppSetting.CategorySentryLog)
+            .Use(new List<ILogEngine>
+            {
+                new SentryLogging(new SentryEngineOptions
                 {
-                    new SentryLogging(new SentryEngineOptions
-                    {
-                        Dsn = new Dsn(AppSettingService.AppSetting.SentryClientKey)
-                    })
-                });
-        }
+                    Dsn = new Dsn(AppSettingService.AppSetting.SentryClientKey)
+                })
+            });
+    }
 
-        public static void RegisterFanexExceptionHandler(this IServiceCollection services)
-        {
-            var configuration = new LoggingConfiguration()
-                .GetHttpHeaderInfo()
-                .GetHttpSessionInfo()
-                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
-            ExceptionHandler.UseConfig(configuration);
-        }
+    public static void RegisterFanexExceptionHandler(this IServiceCollection services)
+    {
+        var configuration = new LoggingConfiguration()
+            .GetHttpHeaderInfo()
+            .GetHttpSessionInfo()
+            .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
+        ExceptionHandler.UseConfig(configuration);
+    }
 
-        public static void RegisterAuthentication(this IServiceCollection services)
-        {
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+    public static void RegisterAuthentication(this IServiceCollection services)
+    {
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                //// options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
+                //// options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.CookieTimeOut);
+                options.Cookie = new CookieBuilder
                 {
-                    //// options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
-                    //// options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.CookieTimeOut);
-                    options.Cookie = new CookieBuilder
-                    {
-                        Name = "TicketVoidingSystem.Cookie",
-                        SecurePolicy = CookieSecurePolicy.SameAsRequest
-                    };
-                    options.Events.OnRedirectToLogin = (context) =>
-                    {
-                        context.Response.Redirect(AppSettingService.AppSetting.AuthSettings.LoginPath);
-                        return Task.CompletedTask;
-                    };
-                    options.Events.OnSigningOut = context =>
-                    {
-                        context.Response.Redirect(options.LoginPath);
-                        return Task.CompletedTask;
-                    };
-                });
-
-            var redisConfig = new ConfigurationOptions();
-            redisConfig.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
-            redisConfig.Password = AppSettingService.AppSetting.RedisConfig.Password;
-            redisConfig.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
-            redisConfig.ConnectRetry = 1000;
-            redisConfig.ConnectTimeout = 300000;
-            redisConfig.SyncTimeout = 60000;
-            redisConfig.AsyncTimeout = 60000;
-            var redisMultiplexer = ConnectionMultiplexer.Connect(redisConfig);
-
-            // Persist data protection keys to distributed cache
-            services.AddDataProtection()
-                .PersistKeysToStackExchangeRedis(redisMultiplexer, "TicketVoidingSystem.DataProtection.Keys");
-            services.AddDistributedMemoryCache();
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.ConfigurationOptions = redisConfig;
-                options.InstanceName = "TicketVoidingSystem.Redis.Session";
+                    Name = "TicketVoidingSystem.Cookie",
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+                options.Events.OnRedirectToLogin = (context) =>
+                {
+                    context.Response.Redirect(AppSettingService.AppSetting.AuthSettings.LoginPath);
+                    return Task.CompletedTask;
+                };
+                options.Events.OnSigningOut = context =>
+                {
+                    context.Response.Redirect(options.LoginPath);
+                    return Task.CompletedTask;
+                };
             });
 
-            services.AddSession(options =>
-            {
-                options.Cookie.IsEssential = true;
-                options.IdleTimeout = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.SessionTimeOut);
-                options.Cookie.Name = "TicketVoidingSystem.Session";
-            });
-        }
+        var redisConfig = new ConfigurationOptions();
+        redisConfig.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
+        redisConfig.Password = AppSettingService.AppSetting.RedisConfig.Password;
+        redisConfig.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
+        redisConfig.ConnectRetry = 1000;
+        redisConfig.ConnectTimeout = 300000;
+        redisConfig.SyncTimeout = 60000;
+        redisConfig.AsyncTimeout = 60000;
+        var redisMultiplexer = ConnectionMultiplexer.Connect(redisConfig);
 
-        public static void RegisterSignalR(this IServiceCollection services)
+        // Persist data protection keys to distributed cache
+        services.AddDataProtection()
+            .PersistKeysToStackExchangeRedis(redisMultiplexer, "TicketVoidingSystem.DataProtection.Keys");
+        services.AddDistributedMemoryCache();
+        services.AddStackExchangeRedisCache(options =>
         {
-            services.AddSignalR().AddStackExchangeRedis(options =>
-            {
-                options.Configuration.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
-                options.Configuration.Password = AppSettingService.AppSetting.RedisConfig.Password;
-                options.Configuration.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
-                options.Configuration.ChannelPrefix = AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix;
-            });
-        }
+            options.ConfigurationOptions = redisConfig;
+            options.InstanceName = "TicketVoidingSystem.Redis.Session";
+        });
 
-        public static void RegisterRemotingRef(this IServiceCollection services)
+        services.AddSession(options =>
         {
-            RefDataTypeContainer
-                .ConnectTo(new Uri(AppSettingService.AppSetting.FanexRemotingRefServiceUrl))
-                .FromApplication(AppSettingService.AppSetting.ServiceName)
-                .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
+            options.Cookie.IsEssential = true;
+            options.IdleTimeout = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.SessionTimeOut);
+            options.Cookie.Name = "TicketVoidingSystem.Session";
+        });
+    }
 
-            BetListManager.RegisterRemotingRef(new CacheRef());
-        }
-
-        public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterSignalR(this IServiceCollection services)
+    {
+        services.AddSignalR().AddStackExchangeRedis(options =>
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<INapSettings>(new NapSettings(configuration));
-            services.AddSingleton<INapSession, NapSession>();
-            services.AddSingleton<ISecurityService, SecurityService>();
-            services.AddSingleton<IGroupService, GroupService>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddScoped<IDynamicRepository, DynamicRepository>();
-            services.AddTransient<ILogger, Logger>();
-            services.AddSingleton<IUserIdProvider, CustomIdProvider>();
-            services.AddSingleton<CheckUMFilterAttribute>();
-            services.AddSingleton<IRemotingRefService, RemotingRefService>();
-        }
+            options.Configuration.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
+            options.Configuration.Password = AppSettingService.AppSetting.RedisConfig.Password;
+            options.Configuration.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
+            options.Configuration.ChannelPrefix = AppSettingService.AppSetting.RedisConfig.SignalRChannelPrefix;
+        });
+    }
 
-        public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-            services.AddSingleton<IUMCacheService, UMCacheService>();
-            services.AddSingleton<IUMRestClient, UMRestClient>();
-            services.AddSingleton<IPHelper, IPHelperImpl>();
-            services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
-            services.AddSingleton<IMaintenanceService, MaintenanceService>();
-        }
+    public static void RegisterRemotingRef(this IServiceCollection services)
+    {
+        RefDataTypeContainer
+            .ConnectTo(new Uri(AppSettingService.AppSetting.FanexRemotingRefServiceUrl))
+            .FromApplication(AppSettingService.AppSetting.ServiceName)
+            .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
 
-        public static void RegisterBusinessServices(this IServiceCollection services)
-        {
-            services.AddSingleton<SessionService, SessionServiceImp>();
-            services.AddSingleton<LoggingService, LoggingServiceImp>();
-            services.AddSingleton<PagingService, PagingServiceImp>();
-            services.AddSingleton<LoggingService, LoggingServiceImp>();
-            services.AddScoped(typeof(ExcelService<>), typeof(ExcelServiceImp<>));
-            services.AddSingleton<RemotingRefWrapperService, RemotingRefWrapperServiceImp>();
-            services.AddSingleton<BetListService, BetListServiceImp>();
-            services.AddSingleton<OddsService, OddsServiceImp>();
-            services.AddSingleton<MatchService, MatchServiceImp>();
-            services.AddSingleton<LogActionFilterAttribute>();
+        BetListManager.RegisterRemotingRef(new CacheRef());
+    }
 
-            // Shared Api
-            services.AddTransient<SimpleCriteriaFactory, SimpleCriteriaFactoryImp>();
-            services.AddTransient<SimpleFunctionPermissionFactory, SimpleFunctionPermissionFactoryImp>();
-            services.AddTransient<SimpleMapperFactory, SimpleMapperFactoryImp>();
-            services.AddTransient<TicketsCheckPermissionService, TicketsCheckPermissionServiceImp>();
-            services.AddTransient<BetTypesService, BetTypesServiceImp>();
-            services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
-            services.AddTransient<BetTeamsService, BetTeamsServiceImp>();
-            services.AddTransient<BalanceUpService, BalanceUpServiceImp>();
-            services.AddTransient<TicketsService, TicketsServiceImp>();
+    public static void RegisterLetstalk(this IServiceCollection services)
+    {
+        AppConfigService.Config.LetstalkServiceApi = AppSettingService.AppSetting.LetstalkConfig.LetstalkServiceApi;
+    }
 
-            // AB Exception List
-            services.AddTransient<GetUsersService, GetUsersServiceImp>();
-            services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
-            services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
-            services.AddTransient<TicketVoidingQueueService, TicketVoidingQueueServiceImp>();
-            services.AddTransient<VoidingHistoryService, VoidingHistoryServiceImp>();
-            services.AddTransient<LetstalkService, LetstalkServiceImp>();
+    public static void RegisterCoreServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddSingleton<INapSettings>(new NapSettings(configuration));
+        services.AddSingleton<INapSession, NapSession>();
+        services.AddSingleton<ISecurityService, SecurityService>();
+        services.AddSingleton<IGroupService, GroupService>();
+        services.AddSingleton<IUserService, UserService>();
+        services.AddScoped<IDynamicRepository, DynamicRepository>();
+        services.AddTransient<ILogger, Logger>();
+        services.AddSingleton<IUserIdProvider, CustomIdProvider>();
+        services.AddSingleton<CheckUMFilterAttribute>();
+        services.AddSingleton<IRemotingRefService, RemotingRefService>();
+    }
 
-            // Mark Tickets
-            services.AddTransient<CombineValidationService, CombineValidationServiceImp>();
-            services.AddTransient<ConfirmAutoUnmarkService, ConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<MapDataForConfirmAutoUnmarkService, MapDataForConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<UpdateConfirmAutoUnmarkService, UpdateConfirmAutoUnmarkServiceImp>();
-            services.AddTransient<CellService, CellServiceImp>();
-            services.AddTransient<WorkSheetService<GetDetailTicketsQuery>, GetDetailTicketsWorkSheetService>();
-            services.AddTransient<WorkSheetService<GetTicketsQuery>, GetTicketsWorkSheetService>();
-            services.AddTransient<CheckBoxService, CheckBoxServiceImp>();
-            services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
-            services.AddTransient<MapTicketService, MapTicketServiceImp>();
-            services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
-            services.AddTransient<MarkAllTicketsService, MarkAllTicketsServiceImp>();
-            services.AddTransient<MapUserLogsService, MapUserLogsServiceImp>();
-            services.AddTransient<UserLogsService, UserLogsServiceImp>();
-        }
+    public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
+        services.AddSingleton<IUMCacheService, UMCacheService>();
+        services.AddSingleton<IUMRestClient, UMRestClient>();
+        services.AddSingleton<IPHelper, IPHelperImpl>();
+        services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
+        services.AddSingleton<IMaintenanceService, MaintenanceService>();
+    }
 
-        public static void RegisterMediatR(this IServiceCollection services)
-        {
-            services.AddMediatR(typeof(SharedApiController));
-            services.AddMediatR(typeof(BetTypesController));
-            services.AddMediatR(typeof(MatchInfoController));
-            services.AddMediatR(typeof(ABExceptionListController));
-            services.AddMediatR(typeof(ManageVoidServicesController));
-            services.AddMediatR(typeof(MarkTicketsController));
-        }
+    public static void RegisterBusinessServices(this IServiceCollection services)
+    {
+        services.RegisterTicketVoidingSystemServices();
+        services.RegisterSharedApiServices();
+        services.RegisterAbExceptionListServices();
+        services.RegisterManageVoidServices();
+        services.RegisterMarkTicketsServices();
+        services.RegisterTicketListingServices();
+    }
 
-        public static void RegisterAutoMapper(this IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(MarkTicketsController));
-        }
+    public static void RegisterMediatR(this IServiceCollection services)
+    {
+        services.AddMediatR(typeof(SharedApiController));
+        services.AddMediatR(typeof(BetTypesController));
+        services.AddMediatR(typeof(MatchInfoController));
+        services.AddMediatR(typeof(ABExceptionListController));
+        services.AddMediatR(typeof(ManageVoidServicesController));
+        services.AddMediatR(typeof(MarkTicketsController));
+        services.AddMediatR(typeof(TicketListingController));
+    }
+
+    public static void RegisterAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(MarkTicketsController));
+        services.AddAutoMapper(typeof(TicketListingController));
     }
 }

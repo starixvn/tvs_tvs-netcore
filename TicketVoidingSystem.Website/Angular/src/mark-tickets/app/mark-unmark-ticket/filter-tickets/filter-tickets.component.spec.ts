@@ -54,7 +54,7 @@ class Helper {
   static getParamsForMatchid(): GetTicketsQuery {
     const result = new GetTicketsQuery();
     result.licenseeNames = '12Bet';
-    result.liveIndicator = '0';
+    result.liveIndicator = 0;
     result.betTypes = [];
     result.durations = [];
     return result;
@@ -291,7 +291,7 @@ describe('FilterTicketsComponent', () => {
       searchBy: FilterSearchBy.MATCH_ID,
       markedBy: '8',
       licenseeNames: '12Bet',
-      liveIndicator: '0',
+      liveIndicator: 0,
       betTypes: [],
       durations: [],
       pageIndex: 0,
