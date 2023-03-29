@@ -38,7 +38,8 @@ public static class AppSettingService
             FanexRemotingRefServiceUrl = configuration.GetValue<string>(nameof(AppSettingModel.FanexRemotingRefServiceUrl)),
             ServiceName = configuration.GetValue<string>(nameof(AppSettingModel.ServiceName)),
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),
-            EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName))
+            EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
+            IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb))
         };
 
         AppSetting = setting;
