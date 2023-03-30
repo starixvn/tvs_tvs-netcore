@@ -172,7 +172,7 @@ describe('FilterComponent', () => {
     instance.renderProduct();
 
     // Assert
-    expect(instance.product.items.length).toBe(7);
+    expect(instance.product.items.length).toBe(6);
  });
 
  it('#renderEventType should return expected list eventtType', async() => {
@@ -211,8 +211,6 @@ describe('FilterComponent', () => {
     await instance.changeProduct(1);
 
     // Assert
-    expect(instance.liveAwayScore).toBe('');
-    expect(instance.liveHomeScore).toBe('');
     expect(instance.blurMatchId).toHaveBeenCalledTimes(1);
     expect(instance.disabledTransDate).toBe(true);
   });

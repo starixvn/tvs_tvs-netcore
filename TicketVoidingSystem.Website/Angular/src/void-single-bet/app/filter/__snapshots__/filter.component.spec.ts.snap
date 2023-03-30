@@ -46,7 +46,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
               class="line-1"
             >
               <label
-                class="match"
+                class="input-match d-flex"
               >
                  Match ID 
                 <input
@@ -57,13 +57,13 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
                   type="text"
                 />
                 <span
-                  class="red"
+                  class="star red"
                 >
                   (✹)
                 </span>
               </label>
               <label
-                class="odds"
+                class="odds d-flex"
               >
                  Odds 
                 <input
@@ -78,18 +78,18 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
               </label>
             </div>
             <div
-              class="date-time"
+              class="line-2 mt-2"
             >
               <div
                 class="time-type d-flex"
               >
                 <label
-                  class="bold d-flex align-items-center"
+                  class="col-form-label font-weight-bold mr-1"
                 >
                   (GMT + 8)
                 </label>
                 <label
-                  class="trans-time bold d-flex align-items-center"
+                  class="col-form-label font-weight-bold trans-time d-flex"
                 >
                   <input
                     class="mr-1 ng-untouched ng-pristine ng-valid"
@@ -98,7 +98,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
                    Trans Time 
                 </label>
                 <label
-                  class="check-time bold d-flex align-items-center"
+                  class="col-form-label check-time font-weight-bold d-flex"
                 >
                   <input
                     class="mr-1 ng-untouched ng-pristine ng-valid"
@@ -160,7 +160,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
               </div>
             </div>
             <div
-              class="line-2"
+              class="line-3 mt-2"
             >
               <label
                 class="ticket-type"

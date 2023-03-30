@@ -2,9 +2,9 @@
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { Shallow } from 'shallow-render';
-import { PagingModule } from '../../../utility/modules/paging/paging.module';
-import { PagingModel } from '../../../utility/modules/paging/paging/paging.model';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
+import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { GroupModel } from './group.model';
 import { TicketModel } from './ticket.model';
 import { TicketsComponent } from './tickets.component';

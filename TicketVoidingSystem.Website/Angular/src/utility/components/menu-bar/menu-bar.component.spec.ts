@@ -1,25 +1,33 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { NgModule } from '@angular/core';
+import { Shallow } from 'shallow-render';
+import { CommonService } from '../../../utility/services/common.service';
 import { MenuBarComponent } from './menu-bar.component';
 
-describe('MenuBarComponent', () => {
-  let component: MenuBarComponent;
-  let fixture: ComponentFixture<MenuBarComponent>;
+describe('FilterComponent', () => {
+  @NgModule({
+    declarations: [
+      MenuBarComponent
+    ],
+    imports: [
+    ],
+    providers: [
+      CommonService
+    ]
+  })
+  class AppModuleTest { }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ MenuBarComponent ]
-    })
-    .compileComponents();
-  });
+  let shallow: Shallow<MenuBarComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuBarComponent);
-    component = fixture.componentInstance;
+    shallow = new Shallow(MenuBarComponent, AppModuleTest);
+  });  
+  
+  it('MenuBarComponent should init match snapshot', async () => {
+    // Arrange
+    const { fixture } = await shallow.render();
     fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    // Assert
+    expect(fixture).toMatchSnapshot();
   });
 });

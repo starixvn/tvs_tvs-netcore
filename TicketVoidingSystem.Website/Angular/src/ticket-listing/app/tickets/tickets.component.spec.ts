@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
 import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
@@ -51,7 +52,8 @@ describe('TicketsComponent', () => {
       PagingComponent
     ],
     imports: [
-      PipeModule
+      PipeModule,
+      FormsModule
     ],
     providers: []
   })

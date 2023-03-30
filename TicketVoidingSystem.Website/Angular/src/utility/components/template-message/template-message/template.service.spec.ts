@@ -1,7 +1,7 @@
 import { Message } from '../messages/message';
-import { TemplateService } from './template.service';
-import { TemplateContent } from './template.model';
 import { TemplateContentConst, TemplateReplace } from './template.const';
+import { TemplateContent } from './template.model';
+import { TemplateService } from './template.service';
 
 describe('TemplateService', () => {
   const templateService = new TemplateService();
@@ -19,7 +19,7 @@ describe('TemplateService', () => {
       msgChineseNewSimplified:
         `(${TemplateContentConst.SCORE.msgChineseNewSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}) `
     };
-    spyOn(templateService, 'replaceEachLanguage');
+    jest.spyOn(templateService, 'replaceEachLanguage');
     // Action and Assert
     templateService.replaceWrongScoreOfWrongScoreIssueType(message, score);
     expect(templateService.replaceEachLanguage).toHaveBeenCalledWith(message, TemplateReplace.WRONG_SCORE_ONWARDS, replacedContent);
@@ -29,7 +29,7 @@ describe('TemplateService', () => {
     // Arrange
     const message = new Message();
     const score = '';
-    spyOn(templateService, 'replaceAll');
+    jest.spyOn(templateService, 'replaceAll');
     // Action and Assert
     templateService.replaceWrongScoreOfWrongScoreIssueType(message, score);
     expect(templateService.replaceAll).toHaveBeenCalledWith(message, TemplateReplace.WRONG_SCORE_ONWARDS, '');
@@ -45,7 +45,7 @@ describe('TemplateService', () => {
       msgChineseSimplified: `${score} ${TemplateContentConst.ONWARDS.msgChineseSimplified}`,
       msgChineseNewSimplified: `${score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}`
     };
-    spyOn(templateService, 'replaceEachLanguage');
+    jest.spyOn(templateService, 'replaceEachLanguage');
     // Action and Assert
     templateService.replaceActualScoreOfWrongScoreIssueType(message, score);
     expect(templateService.replaceEachLanguage).toHaveBeenCalledWith(message, TemplateReplace.ACTUAL_SCORE_ONWARDS, replacedContent);
@@ -55,7 +55,7 @@ describe('TemplateService', () => {
     // Arrange
     const message = new Message();
     const score = '';
-    spyOn(templateService, 'replaceAll');
+    jest.spyOn(templateService, 'replaceAll');
     // Action and Assert
     templateService.replaceActualScoreOfWrongScoreIssueType(message, score);
     expect(templateService.replaceAll).toHaveBeenCalledWith(message, TemplateReplace.ACTUAL_SCORE_ONWARDS, '');

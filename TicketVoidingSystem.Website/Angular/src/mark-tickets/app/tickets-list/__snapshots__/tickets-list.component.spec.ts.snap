@@ -603,7 +603,7 @@ exports[`TicketsListComponent TicketsListComponent init with expected model grou
         class="pt-3"
       >
         <button
-          class="btn btn-sm btn-primary mr-4 ml-4"
+          class="btn btn-sm btn-primary"
           disabled=""
         >
             selected tickets (2/2) on current page 

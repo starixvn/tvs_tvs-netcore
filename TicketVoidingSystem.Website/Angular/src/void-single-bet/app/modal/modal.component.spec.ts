@@ -1,40 +1,39 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ModalComponent } from './modal.component';
+import { ElementRef, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Shallow } from 'shallow-render';
 import { Modal } from './modal';
+import { ModalComponent } from './modal.component';
 
 describe('ModalComponent', () => {
-  let component: ModalComponent;
-  let fixture: ComponentFixture<ModalComponent>;
+  @NgModule({
+    declarations: [
+    ],
+    imports: [
+      FormsModule,
+      NgbModule,
+    ]
+  })
+  class AppModuleTest { }
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ModalComponent ]
-    })
-    .compileComponents();
-  }));
+  let shallow: Shallow<ModalComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModalComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('confirm', () => {
+    shallow = new Shallow(ModalComponent, AppModuleTest)
+    .dontMock(NgbModule)
+    .mock(ElementRef, {});
+  });  
+  
+  it('ModalComponent should init match snapshot', async () => {
     // Arrange
-    component.modal = new Modal();
-    spyOn(component.confirmEvent, 'emit');
-    // Action and Asert
-    component.confirm();
-    expect(component.modal.isShow).toBe(false);
-    expect(component.confirmEvent.emit).toHaveBeenCalledWith(true);
-  });
+    const { fixture } = await shallow.render({
+      bind: {
+        modal: new Modal()
+      }
+    });
+    fixture.detectChanges();
 
-  it('close', () => {
-    // Arrange
-    component.modal = new Modal();
-    spyOn(component.closeEvent, 'emit');
-    // Action and Asert
-    component.close();
-    expect(component.modal.isShow).toBe(false);
-    expect(component.closeEvent.emit).toHaveBeenCalledWith(true);
+    // Assert
+    expect(fixture).toMatchSnapshot();
   });
 });

@@ -1,29 +1,30 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { Confirmation } from '../../utility/components/confirmation/confirmation';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { MessagesResult } from '../../utility/components/messages-result/messages-result';
 import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
-import { ModalComponent } from '../../utility/components/modal/modal.component';
+import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
 import { NotificationComponent } from '../../utility/components/notification/notification.component';
+import { PagingModel } from '../../utility/components/paging/paging/paging.model';
+import { Message } from '../../utility/components/template-message/messages/message';
+import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
+import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
+import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
+import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { TEXT } from '../../utility/constants/text';
 import { MatchModel } from '../../utility/models/match.model';
 import { Result, SqlResult } from '../../utility/models/result';
-import { ModalService } from '../../utility/modules/modal/modal.service';
-import { PagingModel } from '../../utility/modules/paging/paging/paging.model';
-import { Message } from '../../utility/modules/template-message/messages/message';
-import { TemplateMessageComponent } from '../../utility/modules/template-message/template-message/template-message.component';
-import { TemplateValue } from '../../utility/modules/template-message/template-message/template.model';
-import { TemplateService } from '../../utility/modules/template-message/template-message/template.service';
-import { ToolTipModule } from '../../utility/modules/tooltip/tooltip.module';
 import { CommonService } from '../../utility/services/common.service';
 import { HttpService } from '../../utility/services/http.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { Confirmation } from './confirmation/confirmation.model';
 import { FilterComponent } from './filter/filter.component';
+import { ModalComponent } from './modal/modal.component';
 import { FilterParams, GetTicketsQuery } from './models/query.model';
 import { GroupModel } from './tickets/group.model';
 import { TicketsComponent } from './tickets/tickets.component';
@@ -117,8 +118,8 @@ class Helper {
 
   static getFakeSuccessfulSqlResult(): SqlResult {
     return {
-      ErrCode: 0,
-      ErrMsg: '',
+      errCode: 0,
+      errMsg: '',
       isSuccessful: true
     };
   }
@@ -142,7 +143,8 @@ describe('AppComponent', () => {
       MessagesResultComponent,
       MatchDetailComponent,
       NotificationComponent,
-      TemplateMessageComponent
+      TemplateMessageComponent,
+      MenuBarComponent
     ],
     imports: [
       ToolTipModule
@@ -434,6 +436,7 @@ describe('AppComponent', () => {
     instance.getTicketsQuery.pageSize = 10;
     instance.filterParamsBeforeVoid = new FilterParams();
     instance.confirmation = new Confirmation();
+    instance.confirmation.userPassword = '111';
     instance.ticketsModel = Helper.getFakeTicketsModel();
     instance.ticketsModel.pagingModel = new PagingModel();
     instance.ticketsModel.pagingModel.total = 3;
@@ -697,6 +700,7 @@ describe('AppComponent', () => {
     instance.ticketsModel.getTicketCricket = jest.fn();
     instance.messagesComponent = new TemplateMessageComponent(null, null);
     instance.confirmation = new Confirmation();
+    instance.confirmation.userPassword = '111';
     instance['getVoidResultCache'] = jest.fn();
 
     await instance.voidTickets();

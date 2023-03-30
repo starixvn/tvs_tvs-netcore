@@ -1,10 +1,11 @@
+import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MatchModel } from '../../utility/models/match.model';
-import { Result, SqlResult } from '../../utility/models/result';
-import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
-import { BlockUiService } from '../../utility/modules/block-ui/block-ui.service';
+import { Result } from '../../utility/models/result';
+import { CommonService } from '../../utility/services/common.service';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
-import { CheckVoidBetPermissionQuery, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
+import { GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { GroupModel } from './tickets/group.model';
 import { TicketModel } from './tickets/ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
@@ -13,15 +14,17 @@ jest.mock('../../utility/services/http.service');
 describe('AppService', () => {
   let mockHttpService: jest.Mocked<HttpService>;
   let appService: AppService;
+  let mockCommonService: CommonService;
   let mockBlockUiService: BlockUiService;
 
   beforeEach(() => {
     mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
     mockBlockUiService = new BlockUiService();
+    mockCommonService = new CommonService(mockHttpService);
     mockBlockUiService.start = jest.fn();
     mockBlockUiService.stop = jest.fn();
     
-    appService = new AppService(mockHttpService, mockBlockUiService);
+    appService = new AppService(mockHttpService, mockCommonService, mockBlockUiService);
   });
 
   it('#getRemark should return expected data', async () => {
@@ -117,7 +120,7 @@ describe('AppService', () => {
   it('#exportExcel should call #downloadFile with expected params', async() => {
     // Arrange
     const query = new GetTicketsQuery();
-    const url = `SportBook/VoidSingleBet/ExportExcel`;
+    const url = `api/VoidSingleBet/ExportExcel`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action
@@ -142,35 +145,12 @@ describe('AppService', () => {
     // Assert
     expect(actualResult).toStrictEqual(expectedValue);
   });
-
-  it('#checkVoidBetPermission should return expected data', async() => {
-    // Arrange
-    const expectedValue: SqlResult = {
-      isSuccessful: true,
-      ErrCode: 0,
-      ErrMsg: ''
-    };
-    const param: CheckVoidBetPermissionQuery = {
-      transIds: '123456789',
-      matchId: 12345,
-      apikey: 'void-single-bet-check-void-bet-permission'
-    };
-    const url = 'state-api/simple-data/update';
-    mockHttpService.postJson.mockResolvedValue(expectedValue);
-    
-    // Action
-   const actualResult = await appService.checkVoidBetPermission(param);
-
-    // Assert
-    expect(actualResult).toStrictEqual(expectedValue);
-    expect(mockHttpService.postJson).toHaveBeenCalledWith(param, url);
-  });
   
   it('#GetLogInfo should return expected data', async() => {
     // Arrange
     const expectedValue = new TicketsModel();
     const query = new GetTicketsQuery();
-    const url = 'SportBook/VoidSingleBet/GetLogInfo';
+    const url = 'api/VoidSingleBet/GetLogInfo';
     mockHttpService.postJson.mockResolvedValue(expectedValue);
     
     // Action
@@ -184,7 +164,7 @@ describe('AppService', () => {
   it('#getVoidResultCache should return expected data', async() => {
     // Arrange
     const expectedValue = [new Result<null>()];
-    const url = 'Utility/GetVoidResultCache';
+    const url = 'api/SharedApi/GetVoidResultCache';
     mockHttpService.postJson.mockResolvedValue(expectedValue);
     
     // Action

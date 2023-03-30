@@ -21,7 +21,7 @@ import { GetDataForConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from '.
 class Helper {
   static readonly matchIdSelector = 'input.match-id';
   static readonly excludeTestSelector = 'input.checkbox-exclude-test';
-  static readonly searchButtonSelector = 'input.btn-search';
+  static readonly searchButtonSelector = 'button.btn-search';
   static getFakeConfirmAutoUnmarkViewModel(): GetDataForConfirmAutoUnmarkViewModel {
     return {
       totalItems: 29,

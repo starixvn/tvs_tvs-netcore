@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent TemplateMessageComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <template-message>
+    <div
+      class="message-handler"
+    >
+    </div>
+    <div
+      class="d-flex mg-left-10 mb-2"
+    >
+    </div>
+    <div
+      class="message"
+    >
+      <messages />
+    </div>
+  </template-message>
+</ng-component>
+`;

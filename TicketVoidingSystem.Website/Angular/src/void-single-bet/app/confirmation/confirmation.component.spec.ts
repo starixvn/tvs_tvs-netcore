@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { Shallow } from 'shallow-render';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { TEXT } from '../../../utility/constants/text';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
 import { ConfirmationComponent } from './confirmation.component';
 
 class Helper {
@@ -25,16 +25,15 @@ describe('ConfirmationComponent', () => {
   class AppModuleTest { }
 
   let shallow: Shallow<ConfirmationComponent>;
-
+  const htmlElement = '<confirmation-single [isShowConfirm]="true"></confirmation-single>';
+  
   beforeEach(() => {
     shallow = new Shallow(ConfirmationComponent, AppModuleTest);
   });
 
   it('ConfirmationComponent should init match snapshot', async () => {
     // Arrange
-    const { find, fixture } = await shallow.render(
-      '<confirmation-single [isShowConfirm]="true"></confirmation-single>'
-    );
+    const { find, fixture } = await shallow.render(htmlElement);
     fixture.detectChanges();
 
     // Assert
@@ -44,9 +43,7 @@ describe('ConfirmationComponent', () => {
 
   it('Should return expected model after manipulate elements', async () => {
     // Arrange
-    const { find, fixture, instance } = await shallow.render(
-      '<confirmation-single [isShowConfirm]="true"></confirmation-single>'
-    );
+    const { find, fixture, instance } = await shallow.render(htmlElement);
     fixture.detectChanges();
     
     const reason = find(Helper.reasonSelector);
@@ -67,9 +64,7 @@ describe('ConfirmationComponent', () => {
 
   it('Should call #voidBet when click voidbet button', async() => {
     // Arrange
-    const { find, fixture, instance } = await shallow.render(
-      '<confirmation-single [isShowConfirm]="true"></confirmation-single>'
-    );
+    const { find, fixture, instance } = await shallow.render(htmlElement);
     const spyVoidBet = jest.spyOn(instance, 'voidBet');
     fixture.detectChanges();
     const button = find(Helper.voidBetButtonSelector);
@@ -82,9 +77,7 @@ describe('ConfirmationComponent', () => {
 
   it('#checkValidation should return false and display tooltip', async () => {
     // Arrange
-    const { instance } = await shallow.render(
-      '<confirmation-single [isShowConfirm]="true"></confirmation-single>'
-    );
+    const { instance } = await shallow.render(htmlElement);
     const testCases = [
       { reason: '', reasonSC: '', userPassword: '', title: 'reason',  message:  TEXT.INPUT_REASON },
       { reason: 'reason', reasonSC: '', userPassword: '', title: 'reasonSC', message:  TEXT.INPUT_REASON, },
@@ -105,9 +98,7 @@ describe('ConfirmationComponent', () => {
 
   it('#checkValidation should return true', async () => {
     // Arrange
-    const { instance } = await shallow.render(
-      '<confirmation-single [isShowConfirm]="true"></confirmation-single>'
-    );
+    const { instance } = await shallow.render(htmlElement);
     instance.confirmation.reason = 'reason';
     instance.confirmation.reasonSC = 'reasonSC';
     instance.confirmation.userPassword = '1234aa';
@@ -121,9 +112,7 @@ describe('ConfirmationComponent', () => {
 
   it('#clearData should return empty confirmation model', async () => {
     // Arrange
-    const { instance } = await shallow.render(
-      '<confirmation-single [isShowConfirm]="true"></confirmation-single>'
-    );
+    const { instance } = await shallow.render(htmlElement);
     instance.confirmation.reason = 'reason';
     instance.confirmation.reasonSC = 'reasonSC';
     instance.confirmation.userPassword = '1234aa';

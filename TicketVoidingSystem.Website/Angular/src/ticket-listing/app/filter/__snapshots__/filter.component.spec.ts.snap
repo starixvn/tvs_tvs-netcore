@@ -100,7 +100,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
           <advanced-mode />
         </div>
         <div
-          class="search"
+          class="search mt-2"
         >
           <input
             class="submit"

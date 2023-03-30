@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MultipleSelectionComponent MultipleSelectionComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <multiple-selection>
+    <div
+      class="multiple-selection"
+      style="width: 170px;"
+    >
+      <button
+        readonly=""
+        type="button"
+      >
+        <span>
+          All
+        </span>
+        <span
+          class="i-down"
+        />
+      </button>
+    </div>
+  </multiple-selection>
+</ng-component>
+`;
