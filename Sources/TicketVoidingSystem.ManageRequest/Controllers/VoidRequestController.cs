@@ -18,21 +18,17 @@ public class VoidRequestController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetRemark() => Ok(await mediator.Send(new GetRemarkRequest()));
 
-    //[HttpPost]
-    //public async Task<JsonResult> GetTickets()
-    //{
-    //    var request = Helper.GetModelFromJsonRequest<GetTicketsRequest>(HttpContext.Request);
-    //    var result = await mediator.Send(request);
-    //    return this.JsonNet(result);
-    //}
+    [HttpPost]
+    public async Task<IActionResult> GetLastModifiedDate(GetLastModifiedDateRequest request) => Ok(await mediator.Send(request));
 
-    //[HttpPost]
-    //public async Task<JsonResult> GetTicketsMini()
-    //{
-    //    var request = Helper.GetModelFromJsonRequest<GetTicketsMiniRequest>(HttpContext.Request);
-    //    var result = await mediator.Send(request);
-    //    return this.JsonNet(result);
-    //}
+    [HttpPost]
+    public async Task<IActionResult> GetVoidedReason(GetReasonNameRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetTickets(GetTicketsRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetTicketsMini(GetTicketsMiniRequest request) => Ok(await mediator.Send(request));
 
     //[HttpPost]
     //public async Task<JsonResult> InsertQueue()
@@ -42,9 +38,6 @@ public class VoidRequestController : ControllerBase
     //    return this.JsonNet(result);
     //}
 
-    //public async Task<ActionResult> ExportExcel(ExportExcelRequest request)
-    //{
-    //    var model = await mediator.Send(request);
-    //    return new ExcelResult(model.Content, model.FileName);
-    //}
+    [HttpPost]
+    public async Task<IActionResult> GetTicketsMini(ExportExcelRequest request) => Ok(await mediator.Send(request));
 }

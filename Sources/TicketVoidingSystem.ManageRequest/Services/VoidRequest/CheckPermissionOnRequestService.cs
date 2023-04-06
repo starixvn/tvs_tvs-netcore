@@ -4,12 +4,15 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface CheckPermissionOnRequestService
 {
     Task<bool> IsHasPermissionOnRequest(int requestId);
+
+    VoidPermission GetVoidPermission();
 }
 
 public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestService
@@ -39,5 +42,15 @@ public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestServic
         }
 
         return false;
+    }
+
+    public VoidPermission GetVoidPermission()
+    {
+        return new VoidPermission
+        {
+            Settled = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host),
+            UnSettled = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host),
+            InstantlySettled = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host)
+        };
     }
 }

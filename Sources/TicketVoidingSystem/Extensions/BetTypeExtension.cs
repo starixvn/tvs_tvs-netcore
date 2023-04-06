@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Extensions;
 
@@ -80,5 +84,23 @@ public static class BetTypeExtension
     public static string TranslateChineseSimplified(this string name)
     {
         return name.Replace("Next", "下一个");
+    }
+
+    public static string ToXml(this IEnumerable<BetTypeXml> betTypes)
+    {
+        if (betTypes == null)
+        {
+            return null;
+        }
+
+        var temp = new StringBuilder();
+        foreach (var item in betTypes)
+        {
+            var betType = Environment.NewLine + string.Format(StringResource.BetTypeXml,
+                item.Id, item.BetTeam, item.Set, item.Game, item.Value, item.ValueHdp1, item.ValueHdp2, item.Goal, item.BetOption, item.OddsSpread, item.OddsId, item.Transdesc);
+            temp.Append(betType.Replace("=\"\"", "=\"All\""));
+        }
+
+        return $"<BetTypes>{temp}{Environment.NewLine}</BetTypes>";
     }
 }

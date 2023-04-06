@@ -1,0 +1,67 @@
+﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.Models;
+
+namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+
+public interface MapTicketsService
+{
+    Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, Match match, int startIndex, int issueTypeId, VoidPermission voidPermission);
+
+    TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
+}
+
+public class MapTicketsServiceImp : MapTicketsService
+{
+    private readonly BetListCoreService betListCoreService;
+
+    public MapTicketsServiceImp(BetListCoreService betListCoreService)
+    {
+        this.betListCoreService = betListCoreService;
+    }
+
+    public Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, Match match, int startIndex, int issueTypeId, VoidPermission voidPermission)
+    {
+        var tickets = new List<TicketViewModel>();
+        var index = startIndex;
+
+        foreach (var item in group.Tickets)
+        {
+            var ticket = MapFromGetTicketModelToTicketViewModel(item, match, ChoiceType.None, issueTypeId);
+            ticket.No = index++;
+            ticket.IsDisable = item.IsDisable(voidPermission, issueTypeId);
+            tickets.Add(ticket);
+        }
+
+        return new Group<TicketViewModel>
+        {
+            Name = group.Name,
+            Tickets = tickets,
+            DisplayTotalTickets = group.DisplayTotalTickets
+        };
+    }
+
+    public TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
+    {
+        var ticket = betListCoreService.GetTicket(item, match, choiceType, issueTypeId);
+        ticket.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
+        ticket.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
+        ticket.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
+        ticket.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();
+        ticket.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
+        ticket.Currency = item.CurrencyName;
+
+        ticket.Value = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString();
+        ticket.MainTransId = item.MainTransId.ToString();
+        ticket.IsCricket = item.IsCricket;
+        ticket.IsParlay = item.IsMixParlay;
+        ticket.IsMarked = item.IsMarked;
+        ticket.SiteDbGroupId = item.SiteDbGroupId;
+        ticket.BetTypeId = item.BetType;
+        ticket.IsBonus = item.WalletType > 0;
+        ticket.IsCancelCashOut = item.IsCancelCashOut;
+        return ticket;
+    }
+}

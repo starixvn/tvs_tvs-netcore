@@ -15,6 +15,10 @@ public class ManageRequestController : ControllerBase
         this.mediator = mediator;
     }
 
+    [HttpGet]
+    [Route("[action]/{id}")]
+    public async Task<IActionResult> GetRequest(int id) => Ok(await mediator.Send(new GetRequestRequest { RequestId = id }));
+
     [HttpPost]
     public async Task<IActionResult> GetRequests(SelectRequestsRequest request) => Ok(await mediator.Send(request));
 }
