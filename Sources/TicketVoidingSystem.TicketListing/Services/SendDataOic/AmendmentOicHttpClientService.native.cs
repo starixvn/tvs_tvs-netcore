@@ -1,8 +1,7 @@
-﻿using System.Net.Http.Json;
-using System.Net.Mime;
-using System.Text.Json;
+﻿using System.Net.Mime;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.TicketListing.Models;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.TicketListing.Services.SendDataOic;
 
@@ -28,11 +27,10 @@ public class AmendmentOicHttpClientServiceImp : AmendmentOicHttpClientService
 
     public async Task<AmendmentReponse> AmendmentOic(AmendmentOicQuery query)
     {
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        var response = await httpClient.PostAsJsonAsync("api/Amendment", query, options);
+        var response = await httpClient.PostAsync("api/Amendment", Helper.CreateRequestStringContent(query));
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadFromJsonAsync<AmendmentReponse>(options);
+            return await Helper.DeserializeResponseStream<AmendmentReponse>(response);
         }
 
         await loggingService.ErrorAsync($"URL: {AppSettingService.AppSetting.AmendmentApi}api/Amendment{Environment.NewLine}Response:{Environment.NewLine}{response}");
