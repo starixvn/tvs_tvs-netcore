@@ -49,7 +49,7 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
             {
                 modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
                 modelClone.NegativeBalanceUsers = negativeBalanceUsers;
-                await Send(modelClone, site, tickets, results, isFromAfterVoidService);
+                await Send(modelClone, site, ticketsInSite, results, isFromAfterVoidService);
             }
         }
 
