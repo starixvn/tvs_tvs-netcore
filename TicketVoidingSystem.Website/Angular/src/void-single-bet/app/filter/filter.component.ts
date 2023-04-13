@@ -547,7 +547,7 @@ export class FilterComponent implements OnInit {
     }
 
     if (!StaticService.isCorrectFormatMultipleDecimal(value)) {
-      this.tooltip.display(elementClass, 'Invalid OU!');
+      this.tooltip.display(elementClass, 'Invalid Odds!');
       return false;
     }
     this.tooltip.hide();
