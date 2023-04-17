@@ -1,0 +1,241 @@
+﻿using System.Security;
+using System.Text;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.ViewModels;
+
+namespace TicketVoidingSystem.ManageRequest.Extension;
+
+public static class ObjectToXMLExtension
+{
+    private const int FILTER_BY_CHECKTIME = 2;
+
+    public static string ToRequestXml(this IEnumerable<RequestXMLModel> models)
+    {
+        if (models == null)
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<Request RequestId='{model.RequestId}' TransIds='{model.TransIds}' />";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<Requests>{stringBuilder.ToString().Trim()}</Requests>";
+    }
+
+    public static string ToRequestIdXml(this IEnumerable<int> requestIds)
+    {
+        if (requestIds == null)
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var requestId in requestIds)
+        {
+            var line = $"<RequestId Id='{requestId}' />";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"{stringBuilder.ToString().Trim()}";
+    }
+
+    public static string ToXml(this VoidDataXMLModel voidData)
+    {
+        if (voidData == null)
+        {
+            return string.Empty;
+        }
+
+        var voidDataXml = $"<VoidData Reason='{SecurityElement.Escape(voidData.Reason)}' ReasonSC='{SecurityElement.Escape(voidData.ReasonSC)}'"
+                + $" ContentChineseTraditional='{SecurityElement.Escape(voidData.ContentChineseTraditional)}'"
+                + $" ContentChineseSimplified='{SecurityElement.Escape(voidData.ContentChineseSimplified)}'"
+                + $" ContentNewChineseSimplified='{SecurityElement.Escape(voidData.ContentNewChineseSimplified)}'"
+                + $" ContentEnglish='{SecurityElement.Escape(voidData.ContentEnglish)}' ContentSpanish='{SecurityElement.Escape(voidData.ContentSpanish)}'"
+                + $" ContentItalian='{SecurityElement.Escape(voidData.ContentItalian)}' ContentJapanese='{SecurityElement.Escape(voidData.ContentJapanese)}'"
+                + $" ContentKorean='{SecurityElement.Escape(voidData.ContentKorean)}' ContentThai='{SecurityElement.Escape(voidData.ContentThai)}'"
+                + $" CreatorId='{voidData.CreatorId}' CreatorName='{voidData.CreatorName}' HistoryStatusId='{voidData.HistoryStatusId}' DecidedBy='{SecurityElement.Escape(voidData.DecidedBy)}'"
+                + $" VoidFromTime='{voidData.VoidFromTime}' VoidToTime='{voidData.VoidToTime}'"
+                + $" VoidFromDate='{voidData.VoidFromDate}' VoidToDate='{voidData.VoidToDate}' />";
+
+        return voidDataXml;
+    }
+
+    public static string ToEventWrongScoreXml(this IEnumerable<WrongScoreInfoViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var liveHomeScore = "";
+            var liveAwayScore = "";
+            if (model.FilterBy != FILTER_BY_CHECKTIME)
+            {
+                var scores = model.WrongScore.Split('-');
+                liveHomeScore = scores[0].Trim();
+                liveAwayScore = scores[1].Trim();
+            }
+            var line = $"<r LiveHomeScore='{liveHomeScore}' "
+                + $"LiveAwayScore='{liveAwayScore}' "
+                + $"ScoreId='{model.ScoreId}' "
+                + $"AATime='{model.AATime}' "
+                + $"PATime='{model.PATime}' "
+                + $"SATime='{model.SATime}' "
+                + $"LiveScores='{model.LogInfoDetail.LiveScores}' "
+                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"MatchId='{model.LogInfoDetail.MatchId}' "
+                + $"SingleCount='{model.LogInfoDetail.SingleCount}' "
+                + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
+                + $"FilterBy='{model.FilterBy}' "
+                + $"IsCheckedVar='{model.IsCheckedVar}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToEventDangerAcceptedXml(this IEnumerable<DangerAcceptedViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                + $"AATime='{model.AATime}' "
+                + $"PATime='{model.PATime}' "
+                + $"SATime='{model.SATime}' "
+                + $"FilterBy='{model.FilterBy}' "
+                + $"IsMainMatch='{model.IsMainMatch.ToString().ToLowerInvariant()}' "
+                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                + $"LiveScores='{model.LogInfoDetail.LiveScores}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"SingleCount='{model.LogInfoDetail.SingleCount}' "
+                + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                + $"IsCheckedVar='{model.IsCheckedVar}' />";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToEventWrongHdpXml(this IEnumerable<WrongHdpViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                + $"LiveScores='{model.LogInfoDetail.LiveScores}' "
+                + $"IsMainMatch='{model.IsMainMatch.ToString().ToLowerInvariant()}' "
+                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
+                + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' "
+                + $"LiveGameEarlySingleCount ='{model.LogInfoDetail.LiveGameEarlySingleCount}' "
+                + $"LiveGameEarlyCashOutCount='{model.LogInfoDetail.LiveGameEarlyCashOutCount}' "
+                + $"LiveGameEarlySettleCount='{model.LogInfoDetail.LiveGameEarlySettleCount}' "
+                + $"PoolHouseSingleCount='{model.LogInfoDetail.PoolHouseSingleCount}' "
+                + $"PoolHouseCashOutCount='{model.LogInfoDetail.PoolHouseCashOutCount}' "
+                + $"PoolHouseMainParlayCount='{model.LogInfoDetail.PoolHouseMainParlayCount}' "
+                + $"PoolHouseInstantlySettleCount='{model.LogInfoDetail.PoolHouseInstantlySettleCount}' "
+                + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
+                + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"LiveIndicator='{model.LiveIndicator}' "
+                + $"HomeFavorite='{SecurityElement.Escape(model.HomeFavorite)}' "
+                + $"AwayFavorite='{SecurityElement.Escape(model.AwayFavorite)}' "
+                + $"ActualMarket='{SecurityElement.Escape(model.ActualMarket)}' "
+                + $"HdpValue='{SecurityElement.Escape(model.HdpValue)}' />";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToEventWrongOuXml(this IEnumerable<WrongOuViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                + $"LiveScores='{model.LogInfoDetail.LiveScores}' "
+                + $"IsMainMatch='{model.IsMainMatch.ToString().ToLowerInvariant()}' "
+                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"SingleCount='{model.LogInfoDetail.SingleCount}' "
+                + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"ActualMarket='{SecurityElement.Escape(model.ActualMarket)}' "
+                + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' />";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToAbnormalAccountXml(this AbnormalAccountViewModel model)
+    {
+        if (model == null)
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = $"<r Usernames='{model.Usernames}' "
+                            + $"ProductIds='{model.ProductIds}' "
+                            + $"StatusIds='{model.StatusIds}' "
+                            + $"FromDate='{model.FromDate}' "
+                            + $"ToDate='{model.ToDate}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
+    public static string ToRequestInfoGetVoidedTicketXml(this IEnumerable<GetRequestInfoModel> requests)
+    {
+        if (requests == null || !requests.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var request in requests)
+        {
+            var line = $"<r req='{request.RequestId}' vh='{request.VoidingHistoryId}' i='{request.IssueTypeId}' mid='{request.MatchId}'/>";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+}

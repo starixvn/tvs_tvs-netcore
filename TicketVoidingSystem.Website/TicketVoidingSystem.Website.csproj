@@ -122,6 +122,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.ManageRequest\TicketVoidingSystem.ManageRequest.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ManageVoidServices\TicketVoidingSystem.ManageVoidServices.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />

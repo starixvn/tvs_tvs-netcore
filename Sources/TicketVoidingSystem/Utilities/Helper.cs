@@ -141,6 +141,11 @@ public static class Helper
         return IssueTypeConstant.AbnormalBet == issueTypeId && filterBy == filterByMixParlay;
     }
 
+    public static bool IsAbnormalBetSingleRequest(int issueTypeId, int? filterBy)
+    {
+        return IsAbnormalBet(issueTypeId) && filterBy == null;
+    }
+
     public static bool IsAbnormalAccount(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalAccount == issueTypeId;
