@@ -34,14 +34,15 @@ public static class MessageExtension
         return element;
     }
 
-    public static string CreateCustInfoXml(this IEnumerable<TicketEmailModel> emailTickets)
+    public static string CreateTicketsXml(this IEnumerable<TicketEmailModel> emailTickets)
     {
-        var custInfo = new XElement("CustInfo");
+        var custInfo = new XElement("root");
         foreach (var ticket in emailTickets)
         {
-            var element = new XElement("Item",
+            var element = new XElement("r",
                 new XAttribute("TransId", ticket.TransId),
-                new XAttribute("CustId", ticket.CustId));
+                new XAttribute("CustId", ticket.CustId),
+                new XAttribute("MatchId", ticket.MatchId));
             custInfo.Add(element);
         }
 

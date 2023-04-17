@@ -100,7 +100,7 @@ public static class Helper
 
         return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
     }
-        
+
     public static string MessageFailApiCricket(string transIdCrickets, string actionType)
     {
         var result = actionType == NetPositionConstant.ActionVoid ?
@@ -178,23 +178,5 @@ public static class Helper
         }
 
         return result;
-    }
-
-    public static StringContent CreateRequestStringContent<T>(T data)
-    {
-        var dataJson = new StringContent(
-            JsonSerializer.Serialize(data, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
-            Encoding.UTF8,
-            MediaTypeNames.Application.Json);
-
-        return dataJson;
-    }
-
-    public static async Task<T> DeserializeResponseStream<T>(HttpResponseMessage response)
-    {
-        await using var responseStream = await response.Content.ReadAsStreamAsync();
-        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-        return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
     }
 }
