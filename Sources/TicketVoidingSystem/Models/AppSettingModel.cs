@@ -27,6 +27,8 @@ public class AppSettingModel
     public string NetPositionUrl { get; init; }
 
     public FanexMailService FanexMailService { get; init; }
+
+    public string TicketVoidingSystemUrl { get; init; }
 }
 
 public class AuthSettings

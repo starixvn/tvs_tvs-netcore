@@ -39,5 +39,5 @@ public class VoidRequestController : ControllerBase
     //}
 
     [HttpPost]
-    public async Task<IActionResult> GetTicketsMini(ExportExcelRequest request) => Ok(await mediator.Send(request));
+    public async Task<IActionResult> ExportExcel(ExportExcelRequest request) => Ok(await mediator.Send(request));
 }

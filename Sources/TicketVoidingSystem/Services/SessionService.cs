@@ -15,6 +15,8 @@ public interface SessionService
     bool HasPermission(string functionKey, Constant.Policy policy);
 
     string GetClientIp();
+
+    bool CheckPassword(string encodedPassword);
 }
 
 public class SessionServiceImp : SessionService
@@ -47,5 +49,11 @@ public class SessionServiceImp : SessionService
             .Connection.LocalIpAddress)
             ? "127.0.0.1"
             : httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+    }
+
+    public bool CheckPassword(string encodedPassword)
+    {
+        var user = userService.Get(UserId);
+        return encodedPassword.Equals(user.Password);
     }
 }
