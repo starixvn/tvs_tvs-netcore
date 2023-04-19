@@ -1,5 +1,4 @@
 ﻿using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Common;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
 using Fanex.NAP.Core.Business;
@@ -16,8 +15,6 @@ public interface SessionService
     bool HasPermission(string functionKey, Constant.Policy policy);
 
     string GetClientIp();
-
-    bool CheckPassword(string password);
 }
 
 public class SessionServiceImp : SessionService
@@ -50,12 +47,5 @@ public class SessionServiceImp : SessionService
             .Connection.LocalIpAddress)
             ? "127.0.0.1"
             : httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-    }
-
-    public bool CheckPassword(string password)
-    {
-        var user = userService.Get(UserId);
-        var encode = Cryptography.CfsEnCode(password);
-        return encode.Equals(user.Password);
     }
 }
