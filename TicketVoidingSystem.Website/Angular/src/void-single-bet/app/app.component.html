@@ -1,0 +1,61 @@
+<menu-bar></menu-bar>
+
+<div class="title">
+    {{title}}
+</div>
+
+<div id="body">
+
+    <filter #filter
+            (searchEvent)="searchEvent($event)"
+            (viewLogInfoEvent)="viewLogInfoEvent($event)"
+            (changeMatchEvent)="hideContent()"
+            (updateEventType)="updateEventType($event)"
+            (updateIssueTypeEvent)="updateIssueType($event)"
+            (updateSubIssueTypeEvent)="updateSubIssueType($event)"
+            [matchViewModel]="matchViewModel"
+            [affectedLicensee]="affectedLicensee"
+            [affectedInstantLicensee]="affectedInstantLicensee"
+            [cashOutLicensee]="cashOutLicensee"
+            [chinaViewLicensee]="chinaViewLicensee">
+    </filter>
+    <match-detail [matchDetail]="matchViewModel"
+                  [isShowMatch]="isShowMatch"></match-detail>
+
+    <div class="log-info" *ngIf="isShowLogInfoOnly">
+        <div class="title d-flex align-items-center">
+            <div class="title-label pt-0 mr-2">Void Time: {{ticketsModel.strFromTime}} - {{ticketsModel.strToTime}} (Single Count: {{ticketsModel.singleCount}}, Parlay Count: {{ticketsModel.parlayCount}})</div>
+            <div class="title-toolbox d-flex align-items-center">
+                <input type="button" class="title-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+            </div>
+        </div>
+    </div>
+
+    <tickets #ticket
+             [ticketsModel]="ticketsModel"
+             [isShowTickets]="isShowTickets"
+             (pagingSearchTicket)="pagingSearchTicket($event)"
+             (exportExcelEvent)="exportExcel()"
+             (ticketsChange)="ticketsChange($event)"></tickets>
+
+    <template-message #messages [issueTypeId]="issueTypeId" [subIssueTypeId]="subIssueTypeId"
+                      [isShowMessages]="isShowMessages"
+                      [voidFunction]="0"
+                      [value]="templateValue"></template-message>
+    <confirmation-single #confirmation
+                  [isShowConfirm]="isShowConfirm"
+                  (voidEvent)="voidBet()"></confirmation-single>
+</div>
+
+<modal [modal]="modal" (confirmEvent)="confirmEvent()"></modal>
+<notification [notification]="notification"></notification>
+<tooltip [tooltip]="tooltip"></tooltip>
+<messages-result [messagesResult]="messagesResult"></messages-result>
+<div *ngIf="blockUI">
+    <div class="in modal-backdrop spinner-overlay"></div>
+    <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+        <div class="loading-message">
+            <div class="loading"></div>
+        </div>
+    </div>
+</div>

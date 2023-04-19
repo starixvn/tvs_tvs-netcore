@@ -1,0 +1,18 @@
+﻿<div *ngIf="modal.isShow">
+    <div class="overlay"></div>
+    <div class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span [innerHTML]="modal.header | sanitizeHtml"></span>
+                <span class="modal-cancel" (click)="close()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div [innerHTML]="modal.body | sanitizeHtml"></div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="modal-confirm" value="OK" (click)="confirm()" />
+                <input type="button" class="modal-cancel" value="Cancel" (click)="close()" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -18,7 +18,6 @@ describe('LicenseesComponent', () => {
     ],
     imports: [
       NgbModule,
-      FormsModule,
       FormsModule
     ],
     providers: [

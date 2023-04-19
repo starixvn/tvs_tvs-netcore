@@ -5,7 +5,7 @@ namespace TicketVoidingSystem.TicketListing.Services.SendDataOic;
 
 public interface SendDataToOicService
 {
-    Task<AmendmentReponse> Send(IList<SendFileQuery> queries, string affectedTickets);
+    Task<AmendmentResponse> Send(IList<SendFileQuery> queries, string affectedTickets);
 }
 
 public class SendDataToOicServiceImp : SendDataToOicService
@@ -21,7 +21,7 @@ public class SendDataToOicServiceImp : SendDataToOicService
         this.callApiAmendmentStage = callApiAmendmentStage;
     }
 
-    public async Task<AmendmentReponse> Send(IList<SendFileQuery> queries, string affectedTickets)
+    public async Task<AmendmentResponse> Send(IList<SendFileQuery> queries, string affectedTickets)
     {
         var (isInsertToAmendmentTableSuccessful, resultLicensees) = await InsertToAmendmentTable(queries, affectedTickets);
         if (isInsertToAmendmentTableSuccessful)
@@ -29,7 +29,7 @@ public class SendDataToOicServiceImp : SendDataToOicService
             return await callApiAmendmentStage.Execute(resultLicensees, queries[0].Title, queries[0].EventDate);
         }
 
-        return new AmendmentReponse
+        return new AmendmentResponse
         {
             Code = 1,
             Message = "Error when insert to Amendment table."

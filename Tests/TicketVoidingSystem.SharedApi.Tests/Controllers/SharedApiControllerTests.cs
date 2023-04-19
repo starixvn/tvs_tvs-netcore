@@ -13,8 +13,8 @@ public class SharedApiControllerTests
     {
         // Arrange
         var mediator = Substitute.For<IMediator>();
-        var httpContextAccessortor = Substitute.For<IHttpContextAccessor>();
-        var controller = new SharedApiController(mediator, httpContextAccessortor);
+        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        var controller = new SharedApiController(mediator, httpContextAccessor);
 
         // Act
         var actual = controller.GetNapUserInfo();

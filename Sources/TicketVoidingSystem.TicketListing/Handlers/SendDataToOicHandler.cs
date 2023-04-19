@@ -6,12 +6,12 @@ using TicketVoidingSystem.TicketListing.Services.SendDataOic;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
 
-public class SendDataToOicRequest : IRequest<IList<AmendmentReponse>>
+public class SendDataToOicRequest : IRequest<IList<AmendmentResponse>>
 {
     public IList<SendFileQuery> Queries { get; set; }
 }
 
-public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<AmendmentReponse>>
+public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<AmendmentResponse>>
 {
     private readonly SendDataToOicService sendDataToOicService;
     private readonly AffectTicketsFromSettlementHistoryService affectTicketsFromSettlementHistoryService;
@@ -22,9 +22,9 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         this.affectTicketsFromSettlementHistoryService = affectTicketsFromSettlementHistoryService;
     }
 
-    public async Task<IList<AmendmentReponse>> Handle(SendDataToOicRequest request, CancellationToken cancellationToken)
+    public async Task<IList<AmendmentResponse>> Handle(SendDataToOicRequest request, CancellationToken cancellationToken)
     {
-        var resultLicensees = new List<AmendmentReponse>();
+        var resultLicensees = new List<AmendmentResponse>();
         var firstQuery = request.Queries.First();
         var affectedTickets = await affectTicketsFromSettlementHistoryService.GetTickets(firstQuery.IsReSettled, firstQuery.MatchId);
         await SendForNormalLicensee(request.Queries, affectedTickets, resultLicensees);
@@ -33,7 +33,7 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         return resultLicensees;
     }
 
-    private async Task SendForNormalLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentReponse> response)
+    private async Task SendForNormalLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
     {
         var normalQueries = queries.Where(x => !x.IsChinaView).ToList();
         if (normalQueries.Any())
@@ -44,7 +44,7 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         }
     }
 
-    private async Task SendForChinaViewLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentReponse> response)
+    private async Task SendForChinaViewLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
     {
         var chinaViewQueries = queries.Where(x => x.IsChinaView).ToList();
         if (chinaViewQueries.Any())

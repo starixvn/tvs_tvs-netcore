@@ -16,7 +16,7 @@ public class InsertToAmendmentTableStageTests
     public async Task SendData_ValidQuery_ReturnAmendmentResponse()
     {
         // Arrange
-        var expected = new AmendmentReponse
+        var expected = new AmendmentResponse
         {
             Code = 1,
             Message = ""

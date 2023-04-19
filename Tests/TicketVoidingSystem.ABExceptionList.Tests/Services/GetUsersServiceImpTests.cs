@@ -20,7 +20,7 @@ public class GetUsersServiceImpTests
         {
             new() {Level = "", AddedBy = "", CustId = 0, IsAllowVoidVIP = "", Site = "", SubTypeName = "", Username = "", AddedDate = new DateTime() }
         };
-        var request = new GetUsersRequest { UserName = "aaaa" };
+        var request = new GetUsersRequest { UserName = "maria" };
         var repository = Substitute.For<IDynamicRepository>();
         repository.FetchAsync<UserModel>(Arg.Any<GetUsersRequest>()).ReturnsForAnyArgs(fakeData);
         var service = new GetUsersServiceImp(repository);

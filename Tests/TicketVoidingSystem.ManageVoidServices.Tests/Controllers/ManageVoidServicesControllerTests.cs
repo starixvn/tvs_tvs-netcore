@@ -100,36 +100,6 @@ public class ManageVoidServicesControllerTests
     }
 
     [Fact]
-    public async Task GetVoidServiceData_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = new GetVoidServiceDataRequest();
-        var mediator = Substitute.For<IMediator>();
-        var controller = new ManageVoidServicesController(mediator);
-
-        // Act
-        await controller.GetVoidServiceData(request);
-
-        // Assert
-        await mediator.Received(1).Send(request);
-    }
-
-    [Fact]
-    public async Task UpdateVoidServiceData_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = new UpdateVoidServiceDataRequest();
-        var mediator = Substitute.For<IMediator>();
-        var controller = new ManageVoidServicesController(mediator);
-
-        // Act
-        await controller.UpdateVoidServiceData(request);
-
-        // Assert
-        await mediator.Received(1).Send(request);
-    }
-
-    [Fact]
     public async Task GetVoidingHistory_HasRequest_CallMediatorRequest()
     {
         // Arrange

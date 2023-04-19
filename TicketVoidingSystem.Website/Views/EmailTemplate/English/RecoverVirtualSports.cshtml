@@ -1,0 +1,121 @@
+<table cellspacing="0" style="border: 1px solid; border-collapse: collapse; font-size: 8pt; font-family: 'Segoe UI',Tahoma,Arial,sans-serif; background-color: #E7F1F3">
+    <tr height="70">
+        <th style="background-color: #404C5A; color: #ffffff; text-transform: uppercase; padding-left: 10px; font-size: 20px; text-align: left;">
+            Recover Virtual Sports Bet Information
+        </th>
+    </tr>
+    <tr>
+        <td style="padding: 0 0 10px 10px; border-bottom: 1 solid #CBCBCB;">
+            <br />
+            Dear all,<br />
+            Please be notified that the list in table below is the summary of all tickets which
+            have been recovered by <span style="text-transform: uppercase; font-weight: bold;">@Model.ActorUsername</span>.
+            <br />
+        </td>
+    </tr>
+    <tr style="border-bottom: 1px solid #CBCBCB; margin-top: 10px; margin-bottom: 10px;">
+        <td></td>
+    </tr>
+    <tr>
+        <td style="padding: 10px 0 0 10px;">
+            <br />
+            <strong>List of recovered tickets</strong>
+            <table cellspacing="1" style="background-color: #CBCBCB; font-size: 8pt;">
+                <tr align="Center" valign="Middle" style="background-color: #7891A5; font-weight: bold; color: #ffffff;">
+                    <td width="25" height="25">
+                        No
+                    </td>
+                    <td width="90">
+                        Ref No
+                    </td>
+                    <td width="150">
+                        Member
+                    </td>
+                    <td width="160">
+                        Trans.Date
+                    </td>
+                    <td width="80">
+                        Odds
+                    </td>
+                    <td width="60">
+                        Stake
+                    </td>
+                    <td width="70">
+                        WinLoss
+                    </td>
+                    <td width="50">
+                        Status
+                    </td>
+                    <td width="300">
+                        Choice
+                    </td>
+                    <td width="30">
+                        Bet From
+                    </td>
+                </tr>
+                @foreach (var group in Model.Groups)
+                {
+                    <tr>
+                        <td>
+                            @group.Name
+                    </td>
+                </tr>
+                    foreach (var ticket in group.Tickets)
+                    {
+                        var backghroundColor = @ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                        <tr valign="Middle" style="background-color: @backghroundColor; height: 25px;">
+                            <td align="Center">
+                                @ticket.No
+                        </td>
+                        <td align="Center">
+                            @ticket.BetId
+                    </td>
+                    <td align="Center">
+                        @ticket.Member
+                </td>
+                <td align="Center">
+                    @ticket.TransDate
+            </td>
+            <td align="Center">
+                @Html.Raw(ticket.Odds)
+        </td>
+        <td align="Center">
+            @Html.Raw(@ticket.Stake)
+    </td>
+    <td align="Right">
+        @Html.Raw(@ticket.WinLoss)
+</td>
+<td align="Center">
+    @Html.Raw(@ticket.Status)
+</td>
+<td align="Right">
+    @Html.Raw(ticket.Choice)
+</td>
+<td align="Center">
+    @ticket.BetFrom
+</td>
+</tr>
+                    }
+                }
+            </table>
+            <br>
+            @if (!String.IsNullOrEmpty(Model.NegativeBalanceUsers))
+            {
+                <span>
+                    Negative Balance Customers: <strong>@Model.NegativeBalanceUsers</strong>
+                </span>
+                <br>
+            }
+            Recovered by: <strong>@Model.ActorUsername</strong>
+            <br>
+            Date: <strong>@Model.DateTime</strong>
+            <br>
+            <br>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left: 10px; background-color: #404C5A; color: #ffffff;" height="20">
+            <em>This is system auto generated email, please do not reply to this email directly.</em>
+        </td>
+    </tr>
+</table>

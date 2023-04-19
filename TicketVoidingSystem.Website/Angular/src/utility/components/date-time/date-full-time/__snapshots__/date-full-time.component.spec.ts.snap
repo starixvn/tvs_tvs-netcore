@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent DateFullTimeComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <date-full-time>
+    <div
+      class="full-time"
+    >
+      <div
+        class="input-group"
+      >
+        <input
+          class="form-control form-control-sm bg-white ng-untouched ng-pristine ng-valid"
+          name="dp"
+          ngbdatepicker=""
+          placeholder="yyyy-mm-dd"
+          readonly=""
+        />
+        <div
+          class="input-group-append pointer"
+        >
+          <span
+            class="input-group-text"
+          >
+            <em
+              class="fa fa-calendar"
+            />
+          </span>
+        </div>
+      </div>
+      <div
+        class="time"
+      >
+        <input
+          class="hour ng-untouched ng-pristine ng-valid"
+          full-time-control=""
+          max="12"
+          maxlength="2"
+          min="1"
+          type="text"
+        />
+        <span>
+          :
+        </span>
+        <input
+          class="minute ng-untouched ng-pristine ng-valid"
+          full-time-control=""
+          max="59"
+          maxlength="2"
+          min="0"
+          type="text"
+        />
+        <span>
+          :
+        </span>
+        <input
+          class="second ng-untouched ng-pristine ng-valid"
+          full-time-control=""
+          max="59"
+          maxlength="2"
+          min="0"
+          type="text"
+        />
+        <span>
+          .
+        </span>
+        <input
+          class="millisecond ng-untouched ng-pristine ng-valid"
+          full-time-control=""
+          max="999"
+          maxlength="3"
+          min="0"
+          type="text"
+        />
+        <input
+          class="meridiem ng-untouched ng-pristine ng-valid"
+          full-time-control=""
+          maxlength="2"
+          type="text"
+        />
+      </div>
+    </div>
+    <tooltip />
+  </date-full-time>
+</ng-component>
+`;

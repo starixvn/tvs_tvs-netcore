@@ -14,7 +14,7 @@ public class SendDataOicHandlerTest
     public async Task Handle_HasOnlyChinaView_ReturnResult()
     {
         // Arrange
-        var expected = new AmendmentReponse();
+        var expected = new AmendmentResponse();
         var chinaViewQuery = new SendFileQuery { IsChinaView = true };
         var request = new SendDataToOicRequest
         {
@@ -38,7 +38,7 @@ public class SendDataOicHandlerTest
     public async Task Handle_HasOnlyNormalQuery_ReturnResult()
     {
         // Arrange
-        var expected = new AmendmentReponse();
+        var expected = new AmendmentResponse();
         var chinaViewQuery = new SendFileQuery { IsChinaView = false };
         var request = new SendDataToOicRequest
         {
@@ -62,7 +62,7 @@ public class SendDataOicHandlerTest
     public async Task Handle_SendDataSuccessfully_ReturnResult()
     {
         // Arrange
-        var expected = new AmendmentReponse();
+        var expected = new AmendmentResponse();
         var chinaViewQuery = new SendFileQuery { IsChinaView = true };
         var normalQuery = new SendFileQuery { IsChinaView = false };
         var request = new SendDataToOicRequest

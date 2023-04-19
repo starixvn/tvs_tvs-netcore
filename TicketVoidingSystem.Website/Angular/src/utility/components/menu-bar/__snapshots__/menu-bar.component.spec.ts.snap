@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent MenuBarComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <menu-bar>
+    <div
+      class="menu-bar"
+    >
+      <div
+        class="header-user-info user-info-background"
+      >
+        <a
+          class="logo"
+          href="?ref=logo"
+        >
+        </a>
+        <div
+          class="user-info"
+        >
+          <div
+            class="dropdown"
+          >
+            <div
+              class="dropdown-user-info"
+            >
+              <i
+                class="fa-solid fa-user"
+              />
+                Welcome,  
+              <span
+                class="user-name"
+              >
+              </span>
+              <i
+                class="fa-solid fa-sort-down"
+              />
+            </div>
+            <div
+              class="dropdown-content"
+            >
+              <li>
+                <a
+                  class="nav-link"
+                  href="https://Auth/ChangePassword"
+                >
+                  Change Password
+                </a>
+              </li>
+              <li>
+                <a
+                  class="nav-link"
+                  href="https://Auth/LogOut"
+                >
+                  Sign Out
+                </a>
+              </li>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav
+        class="nav-tvs-expand navbar navbar-expand bg-header-tvs"
+      >
+        <div
+          class="container-fluid"
+        >
+          <div
+            class="collapse navbar-collapse"
+            id="main_nav"
+          >
+            <ul
+              class="navbar-nav"
+            >
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </menu-bar>
+</ng-component>
+`;

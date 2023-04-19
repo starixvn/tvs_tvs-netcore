@@ -46,7 +46,7 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         {
             AddTransInfoJson(queryModel);
             queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledandInstantlySettledSingleBet, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host));
             queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host));
 
             return base.CreateNonQueryCommand(commandType, queryModel);

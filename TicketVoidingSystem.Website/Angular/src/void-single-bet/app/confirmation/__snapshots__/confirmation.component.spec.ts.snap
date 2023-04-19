@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmationComponent ConfirmationComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <confirmation-single>
+    <fieldset
+      class="confirm-delete"
+    >
+      <legend>
+        Confirmation
+      </legend>
+      <table>
+        <tr>
+          <td>
+            <label
+              for="reason"
+            >
+              Reason (EN)
+            </label>
+          </td>
+          <td>
+            <textarea
+              class="reason form-control form-control-sm ng-untouched ng-pristine ng-valid"
+              maxlength="150"
+            />
+          </td>
+          <td>
+            <span
+              class="required"
+            >
+                (*)
+            </span>
+            <span>
+              Max 150 characters
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label
+              for="reasonSC"
+            >
+              Reason (SC)
+            </label>
+          </td>
+          <td>
+            <textarea
+              class="reasonSC form-control form-control-sm ng-untouched ng-pristine ng-valid"
+              maxlength="150"
+            />
+          </td>
+          <td>
+            <span
+              class="required"
+            >
+                (*)
+            </span>
+            <span>
+              Max 150 characters
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>
+              Username
+            </label>
+          </td>
+          <td>
+            <input
+              class="form-control form-control-sm"
+              disabled=""
+              type="text"
+            />
+          </td>
+          <td />
+        </tr>
+        <tr>
+          <td>
+            <label>
+              Password
+            </label>
+          </td>
+          <td>
+            <input
+              autocomplete="new-password"
+              class="password form-control form-control-sm ng-untouched ng-pristine ng-valid"
+              type="password"
+            />
+            <span>
+                (*)
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td />
+          <td>
+            <input
+              class="void-bet btn btn-primary btn-sm mg-right-10 font-weight-bold"
+              type="button"
+              value="Void Bet"
+            />
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+    <tooltip />
+  </confirmation-single>
+</ng-component>
+`;

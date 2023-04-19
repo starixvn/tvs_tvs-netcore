@@ -18,7 +18,7 @@ public class CheckUsernamesHandlerTests
         var criteria = new CheckUsernamesCriteria();
         criteria.GetSettingKey();
         criteria.IsValid();
-        var request = new CheckUsernamesRequest { Usernames = "aaaa" };
+        var request = new CheckUsernamesRequest { Usernames = "maria" };
         var expectedResult = new CheckUsernamesModel() { ExistedUsernames = "ex", InvalidUsernames = "in" };
         var repository = Substitute.For<IDynamicRepository>();
         repository.GetAsync<CheckUsernamesModel>(Arg.Any<CheckUsernamesCriteria>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(expectedResult);

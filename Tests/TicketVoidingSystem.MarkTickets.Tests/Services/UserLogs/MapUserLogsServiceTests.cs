@@ -35,7 +35,7 @@ public class MapUserLogsServiceTests
         var actual = service.MapToUserLogViewModels(originalLogs, userLogTicketInfo);
 
         // Assert
-        Assert.Equal(originalLogs.FirstOrDefault().SessionId, actual.FirstOrDefault().ActionId);
-        Assert.Equal(originalLogs.FirstOrDefault().MatchId, actual.FirstOrDefault().MatchId);
+        Assert.Equal(originalLogs.First().SessionId, actual.First().ActionId);
+        Assert.Equal(originalLogs.First().MatchId, actual.First().MatchId);
     }
 }

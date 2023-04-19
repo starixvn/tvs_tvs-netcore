@@ -10,7 +10,6 @@ public static class ManageVoidServices
         services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
         services.AddTransient<AutoVoidRequestQueueService, AutoVoidRequestQueueServiceImp>();
         services.AddTransient<TicketVoidingQueueService, TicketVoidingQueueServiceImp>();
-        services.AddTransient<CheckingVoidStatusService, CheckingVoidStatusServiceImp>();
         services.AddTransient<VoidingHistoryService, VoidingHistoryServiceImp>();
         services.AddTransient<LetstalkService, LetstalkServiceImp>();
     }

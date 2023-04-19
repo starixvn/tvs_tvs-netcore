@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
+using Fanex.Caching.Redis;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.Data.SqlServer;
@@ -13,6 +14,7 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry;
+using Fanex.MailDeliver.MailClient;
 using Fanex.NAP.Client.AspNetCore.Configuration;
 using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
@@ -41,6 +43,7 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing.Controllers;
+using TicketVoidingSystem.VoidSingleBet.Controllers;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 namespace TicketVoidingSystem.Website.Utilities;
@@ -186,6 +189,11 @@ public static class ServiceCollectionExtension
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
     }
 
+    public static void RegisterFanexCaching(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
+    }
+
     public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
@@ -196,6 +204,12 @@ public static class ServiceCollectionExtension
         services.AddSingleton<IMaintenanceService, MaintenanceService>();
     }
 
+    public static void RegisterFanexMailService(this IServiceCollection services)
+    {
+        AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
+        AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;
+    }
+
     public static void RegisterBusinessServices(this IServiceCollection services)
     {
         services.RegisterTicketVoidingSystemServices();
@@ -204,6 +218,7 @@ public static class ServiceCollectionExtension
         services.RegisterManageVoidServices();
         services.RegisterMarkTicketsServices();
         services.RegisterTicketListingServices();
+        services.RegisterVoidSingleBetServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -215,11 +230,15 @@ public static class ServiceCollectionExtension
         services.AddMediatR(typeof(ManageVoidServicesController));
         services.AddMediatR(typeof(MarkTicketsController));
         services.AddMediatR(typeof(TicketListingController));
+        services.AddMediatR(typeof(VoidSingleBetController));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
     {
+        services.AddAutoMapper(typeof(TicketVoidingSystemProfile));
+        services.AddAutoMapper(typeof(SharedApiController));
         services.AddAutoMapper(typeof(MarkTicketsController));
         services.AddAutoMapper(typeof(TicketListingController));
+        services.AddAutoMapper(typeof(VoidSingleBetController));
     }
 }

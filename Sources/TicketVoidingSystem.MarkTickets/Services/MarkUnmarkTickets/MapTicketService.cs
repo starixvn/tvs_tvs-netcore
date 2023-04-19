@@ -45,7 +45,7 @@ public class MapTicketServiceImp : MapTicketService
         var permission = new UserPermission
         {
             MarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host),
-            ViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameofSpecialSiteonBetList, Constant.Policy.Read)
+            ViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read)
         };
         var tickets = new List<TicketViewModel>();
         var index = 1;
@@ -69,7 +69,7 @@ public class MapTicketServiceImp : MapTicketService
     {
         var index = 1;
         var tickets = new List<ExcelTicketModel>();
-        var canViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameofSpecialSiteonBetList, Constant.Policy.Read);
+        var canViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read);
         foreach (var item in data)
         {
             var ticketDetail = MapToTicketViewModel(item);

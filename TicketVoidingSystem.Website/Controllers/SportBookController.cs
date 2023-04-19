@@ -16,4 +16,13 @@ public class SportBookController : Controller
     {
         return View("~/wwwroot/dist/mark-tickets/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
+    public IActionResult VoidSingleBet()
+    {
+        return View("~/wwwroot/dist/void-single-bet/index.cshtml");
+    }
 }

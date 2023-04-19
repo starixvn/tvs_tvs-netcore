@@ -123,10 +123,10 @@ public class MarkTicketsControllerTests
     //    var context = new ControllerContext();
     //    context.HttpContext = new DefaultHttpContext();
     //    var excelFileModel = new ExcelFileModel { FileName = "123465_Mark_Unmark_Tickets_" };
-    //    var reponse = Task.FromResult(excelFileModel);
+    //    var response = Task.FromResult(excelFileModel);
     //    var request = new ExportExcelDetailTicketsRequest { MatchId = 123465 };
     //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(request).ReturnsForAnyArgs(reponse);
+    //    mediator.Send(request).ReturnsForAnyArgs(response);
     //    var controller = new MarkTicketsController(mediator);
 
     //    // Act

@@ -1,25 +1,38 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ElementRef, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { Shallow } from 'shallow-render';
+import { ToolTipModule } from '../tooltip/tooltip.module';
 import { AutoRefreshComponent } from './auto-refresh.component';
 
 describe('AutoRefreshComponent', () => {
-  let component: AutoRefreshComponent;
-  let fixture: ComponentFixture<AutoRefreshComponent>;
+  @NgModule({
+    declarations: [
+    ],
+    imports: [
+      ToolTipModule,
+      NgSelectModule,
+      FormsModule,
+      NgbModule
+    ]
+  })
+  class AppModuleTest { }
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ AutoRefreshComponent ]
-    })
-    .compileComponents();
-  }));
+  let shallow: Shallow<AutoRefreshComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AutoRefreshComponent);
-    component = fixture.componentInstance;
+    shallow = new Shallow(AutoRefreshComponent, AppModuleTest)
+    .dontMock(NgbModule)
+    .mock(ElementRef, {});
+  });  
+  
+  it('AutoRefreshComponent should init match snapshot', async () => {
+    // Arrange
+    const { fixture } = await shallow.render();
     fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    // Assert
+    expect(fixture).toMatchSnapshot();
   });
 });

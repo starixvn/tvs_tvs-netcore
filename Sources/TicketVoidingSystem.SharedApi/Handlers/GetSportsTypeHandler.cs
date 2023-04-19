@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.SharedApi.Criteria;
+using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.SharedApi.Models;
 
 namespace TicketVoidingSystem.SharedApi.Handlers;

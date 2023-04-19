@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <CodeAnalysisRuleSet>..\.sonarlint\tvs-websitecsharp.ruleset</CodeAnalysisRuleSet>
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
   </PropertyGroup>
 
   <ItemGroup>
@@ -95,6 +96,7 @@
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
+    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.3" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.1" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
@@ -123,6 +125,7 @@
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.SimpleDataApi\TicketVoidingSystem.SimpleDataApi.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj" />
+    <ProjectReference Include="..\Sources\TicketVoidingSystem.VoidSingleBet\TicketVoidingSystem.VoidSingleBet.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 
@@ -138,7 +141,46 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\dist\void-single-bet\fa-brands-400.859fc3887485de84.woff2" />
+    <None Include="wwwroot\dist\void-single-bet\fa-regular-400.2ffd018f0eda6f7b.woff2" />
+    <None Include="wwwroot\dist\void-single-bet\fa-solid-900.40ddefd79fe7af45.woff2" />
+    <None Include="wwwroot\dist\void-single-bet\fa-v4compatibility.ee06c6f803f379bb.woff2" />
+    <None Include="wwwroot\dist\void-single-bet\index.cshtml" />
+    <None Include="wwwroot\dist\void-single-bet\main.83c773a8164b84e8.js.map" />
+    <None Include="wwwroot\dist\void-single-bet\main.js" />
+    <None Include="wwwroot\dist\void-single-bet\polyfills.2b2378bd625ef8a0.js.map" />
+    <None Include="wwwroot\dist\void-single-bet\polyfills.js" />
+    <None Include="wwwroot\dist\void-single-bet\runtime.c1537d69d8c85512.js.map" />
+    <None Include="wwwroot\dist\void-single-bet\runtime.js" />
+    <None Include="wwwroot\dist\void-single-bet\styles.4f58098aa203c231.css.map" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\EmailTemplate\Chinese\VoidBet.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmailTemplate\English\RecoverBet.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmailTemplate\English\RecoverByBetId.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmailTemplate\English\RecoverCashout.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmailTemplate\English\RecoverNumberGameBet.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmailTemplate\English\RecoverParlayBet.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\EmailTemplate\English\RecoverVirtualSports.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

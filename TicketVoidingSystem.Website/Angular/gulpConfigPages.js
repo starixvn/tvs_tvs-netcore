@@ -62,12 +62,27 @@ const markTickets = {
   transformFolder: '../wwwroot/dist/mark-tickets',
   indexEJSPath: './src/mark-tickets/index.ejs'
 };
+
+const voidSingleBet = {
+  pageName: 'VoidSingleBet',
+  tsconfigFiles: [
+    'void-single-bet/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/void-single-bet/',
+  index: 'src/void-single-bet/index.cshtml',
+  main: 'src/void-single-bet/main.ts',
+  transformFolder: '../wwwroot/dist/void-single-bet',
+  indexEJSPath: './src/void-single-bet/index.ejs'
+};
+
 const configPages = [
   // homePage,
   // manageVoidServices,
   // abExceptionList,
-  markTickets,
-  ticketListing
+  // markTickets,
+  // ticketListing,
+  voidSingleBet
 ];
 
 module.exports = configPages;

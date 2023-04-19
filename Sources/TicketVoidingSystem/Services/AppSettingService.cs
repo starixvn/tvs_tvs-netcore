@@ -39,6 +39,14 @@ public static class AppSettingService
             ServiceName = configuration.GetValue<string>(nameof(AppSettingModel.ServiceName)),
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),
             EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
+            JackTimeCashOutUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeCashOutUrl)),
+            NetPositionUrl = configuration.GetValue<string>(nameof(AppSettingModel.NetPositionUrl)),
+            FanexMailService = new FanexMailService
+            {
+                MailingList = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.MailingList)}"),
+                AppMailId = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailId)}"),
+                AppMailAddress = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailAddress)}")
+            },              
             IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb))
         };
 

@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers;
+using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
 
@@ -42,4 +43,10 @@ public class SharedApiController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetSportsType() => Ok(await mediator.Send(new GetSportsTypeRequest()));
+
+    [HttpPost]
+    public async Task<IActionResult> GetVoidResultCache(GetVoidResultCacheRequest request) => Ok(await mediator.Send(request));
+
+    [HttpGet]
+    public async Task<IActionResult> GetIssueTypes() => Ok(await mediator.Send(new GetIssueTypesRequest()));
 }

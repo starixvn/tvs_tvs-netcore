@@ -1,25 +1,36 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
+import { ElementRef, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Shallow } from 'shallow-render';
+import { ToolTipModule } from '../tooltip/tooltip.module';
 import { UsernamesComponent } from './user-names.component';
 
-describe('UserNamesComponent', () => {
-  let component: UsernamesComponent;
-  let fixture: ComponentFixture<UsernamesComponent>;
+describe('UsernamesComponent', () => {
+  @NgModule({
+    declarations: [
+    ],
+    imports: [
+      ToolTipModule,
+      NgbModule,
+      FormsModule
+    ]
+  })
+  class AppModuleTest { }
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ UsernamesComponent ]
-    })
-    .compileComponents();
-  }));
+  let shallow: Shallow<UsernamesComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UsernamesComponent);
-    component = fixture.componentInstance;
+    shallow = new Shallow(UsernamesComponent, AppModuleTest)
+    .dontMock(NgbModule)
+    .mock(ElementRef, {});
+  });  
+  
+  it('UsernamesComponent should init match snapshot', async () => {
+    // Arrange
+    const { fixture } = await shallow.render();
     fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    // Assert
+    expect(fixture).toMatchSnapshot();
   });
 });

@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Utilities;
 
@@ -98,5 +99,84 @@ public static class Helper
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
+    }
+
+    public static string MessageFailApiCricket(string transIdCrickets, string actionType)
+    {
+        var result = actionType == NetPositionConstant.ActionVoid ?
+            string.Format(StringResource.FailAPIVoidCricket, transIdCrickets.Replace(",", ", ")) :
+            string.Format(StringResource.FailAPIRecoverCricket, transIdCrickets.Replace(",", ", "));
+
+        return result;
+    }
+
+    public static int GetMessageContentType(bool isLikelyAbnormalBet, string messageContent)
+    {
+        if (isLikelyAbnormalBet)
+        {
+            return MessageContentType.VoidAbnormal;
+        }
+
+        if (messageContent.ToLowerInvariant().Contains("kindly double check your statement again"))
+        {
+            return MessageContentType.VoidSettled;
+        }
+
+        return MessageContentType.VoidUnsettled;
+    }
+
+    public static bool IsLikelyAbnormalBet(int issueTypeId)
+    {
+        return IsAbnormalBet(issueTypeId) || IsAbnormalBetRealMember(issueTypeId);
+    }
+
+    public static bool IsAbnormalBet(int issueTypeId)
+    {
+        return IssueTypeConstant.AbnormalBet == issueTypeId;
+    }
+
+    public static bool IsAbnormalBetMixParlay(int issueTypeId, int? filterBy)
+    {
+        const int filterByMixParlay = 1;
+        return IssueTypeConstant.AbnormalBet == issueTypeId && filterBy == filterByMixParlay;
+    }
+
+    public static bool IsAbnormalAccount(int issueTypeId)
+    {
+        return IssueTypeConstant.AbnormalAccount == issueTypeId;
+    }
+
+    public static bool IsAbnormalBetRealMember(int issueTypeId)
+    {
+        return IssueTypeConstant.AbnormalBetRealMember == issueTypeId;
+    }
+
+    public static bool IsArchivedTicket(int issueTypeId)
+    {
+        return IssueTypeConstant.ArchivedTicket == issueTypeId;
+    }
+
+    public static string GetBetFrom(string betFrom)
+    {
+        string result;
+        switch (betFrom)
+        {
+            case "p":
+            case "s":
+            case "l":
+                result = StringResource.Phone;
+                break;
+
+            case "w":
+            case "m":
+                result = StringResource.Wap;
+                break;
+
+            default:
+                result = StringResource.Internet;
+                break;
+        }
+
+        return result;
     }
 }

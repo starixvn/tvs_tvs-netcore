@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UsernamesComponent UsernamesComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <user-names>
+    <div
+      class="no-gutters"
+    >
+      <div
+        class="width-170 col-sm-1 col-form-label text-right pd-right-25"
+      >
+        Username(s)
+      </div>
+      <div>
+        <div
+          class="input-username"
+        >
+          <input
+            class="username ng-untouched ng-pristine ng-valid"
+            maxlength="30"
+            type="text"
+          />
+        </div>
+        <span
+          class="invalid-data"
+        />
+        <div
+          class="flex-between"
+        >
+          <span
+            class="note note-invalid-username"
+          >
+            (*) Invalid Username(s) are highlighted in RED. 
+            <span
+              class="note note-moved-username mg-left-5"
+            >
+              (*) Duplicated Usernames are highlighted in ORANGE.
+            </span>
+          </span>
+          <span
+            class="red"
+          >
+            Max: 50 Usernames
+          </span>
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </user-names>
+</ng-component>
+`;

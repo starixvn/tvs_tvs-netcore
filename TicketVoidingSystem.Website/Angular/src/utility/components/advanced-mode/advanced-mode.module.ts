@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DecimalOnlyDirective, MultipleDecimalDirective } from '../directives/numbers-only.directive';
+import { DecimalOnlyDirective, MultipleDecimalDirective } from '../../directives/numbers-only.directive';
 import { ToolTipModule } from './../tooltip/tooltip.module';
 import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
 import { AdvancedModeService } from './advanced-mode/advanced-mode.service';

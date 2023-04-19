@@ -10,7 +10,7 @@ module.exports = {
   ],
   testPathIgnorePatterns: [
     '<rootDir>/src/manage-void-services/',
-    '<rootDir>/src/utility/',
+    // '<rootDir>/src/utility/',
   ],
   setupFilesAfterEnv : ['<rootDir>/src/test-setup.ts'],
   collectCoverage: true,

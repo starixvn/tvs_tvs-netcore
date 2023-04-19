@@ -45,23 +45,23 @@ public class CellServiceImp : CellService
     public void AddMatch(ExcelWorksheet worksheet, ExportExcelQuery query)
     {
         var eventDate = query.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
-        const int MatchRow = 5;
-        const int MatchCodeColumn = 1;
-        const int MatchEventColumn = 2;
-        const int EventTimeColumn = 4;
+        const int matchRow = 5;
+        const int matchCodeColumn = 1;
+        const int matchEventColumn = 2;
+        const int eventTimeColumn = 4;
 
         if (query.Product == GameType.BitCoin)
         {
             var eventTime = $"{query.StartTime.ToString(FormatKey.OnlyTimeFormat)} - {query.EndTime.ToString(FormatKey.OnlyTimeFormat)}";
-            worksheet.Cells[MatchRow, MatchCodeColumn].Value = query.MatchId;
-            worksheet.Cells[MatchRow, MatchEventColumn].Value = eventTime;
+            worksheet.Cells[matchRow, matchCodeColumn].Value = query.MatchId;
+            worksheet.Cells[matchRow, matchEventColumn].Value = eventTime;
         }
         else
         {
-            worksheet.Cells[MatchRow, MatchCodeColumn].Value = query.MatchCode;
-            worksheet.Cells[MatchRow, MatchEventColumn].Value = query.MatchEvent;
+            worksheet.Cells[matchRow, matchCodeColumn].Value = query.MatchCode;
+            worksheet.Cells[matchRow, matchEventColumn].Value = query.MatchEvent;
         }
-        worksheet.Cells[MatchRow, EventTimeColumn].Value = eventDate;
+        worksheet.Cells[matchRow, eventTimeColumn].Value = eventDate;
     }
 
     public void SetStyle(ExcelWorksheet worksheet, bool isNumberGame)
@@ -76,8 +76,8 @@ public class CellServiceImp : CellService
         }
         else
         {
-            const int DeleteColumn = 10;
-            worksheet.DeleteColumn(DeleteColumn);
+            const int deleteColumn = 10;
+            worksheet.DeleteColumn(deleteColumn);
             worksheet.HighlightBackground($"A8:K{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
         }
     }

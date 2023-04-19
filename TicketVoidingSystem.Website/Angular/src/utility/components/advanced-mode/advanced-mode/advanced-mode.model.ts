@@ -693,4 +693,6 @@ export class OddsInfo {
   playerId: string;
   playerName: string;
   betChoice: string;
+  playNamesChineseTraditional: string;
+  playNamesChineseSimplified: string;
 }

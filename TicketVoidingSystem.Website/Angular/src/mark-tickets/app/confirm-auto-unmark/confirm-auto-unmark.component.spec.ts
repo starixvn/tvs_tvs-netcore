@@ -5,11 +5,11 @@ import { Shallow } from 'shallow-render';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { NumbersOnlyDirective } from '../../../utility/components/directives/numbers-only.directive';
 import { ModalType } from '../../../utility/components/modal/modal';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingModule } from '../../../utility/components/paging/paging.module';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { NumbersOnlyDirective } from '../../../utility/directives/numbers-only.directive';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
@@ -21,7 +21,7 @@ import { GetDataForConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from '.
 class Helper {
   static readonly matchIdSelector = 'input.match-id';
   static readonly excludeTestSelector = 'input.checkbox-exclude-test';
-  static readonly searchButtonSelector = 'input.btn-search';
+  static readonly searchButtonSelector = 'button.btn-search';
   static getFakeConfirmAutoUnmarkViewModel(): GetDataForConfirmAutoUnmarkViewModel {
     return {
       totalItems: 29,
