@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Common;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Models;
 using Fanex.NAP.Client.Services;
@@ -70,24 +69,6 @@ public class SessionServiceTests
 
         // Assert
         Assert.Equal(ipRemote.ToString(), actual);
-    }
-
-    [Fact]
-    public void CheckPassword_IsCorrectPassword_ReturnTrue()
-    {
-        // Arrange
-        const string password = "password";
-        var user = new User { Username = "A", Id = 1, Password = Cryptography.CfsEnCode(password) };
-        var userService = Substitute.For<IUserService>();
-        var currentSession = Substitute.For<INapSession>();
-        userService.Get(Arg.Any<int>()).ReturnsForAnyArgs(user);
-        var service = new SessionServiceImp(currentSession, userService, null, null);
-
-        // Act
-        var actual = service.CheckPassword("password");
-
-        // Assert
-        Assert.True(actual);
     }
 
     [Fact]

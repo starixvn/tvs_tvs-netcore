@@ -14,6 +14,7 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry;
+using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
 using Fanex.NAP.Client.AspNetCore.Configuration;
 using Fanex.NAP.Client.AspNetCore.Session;
@@ -34,7 +35,7 @@ using ONEbook.UM.Configurations;
 using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
-using Sentry;
+using SharpRaven;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
@@ -84,6 +85,7 @@ public static class ServiceCollectionExtension
                     Dsn = new Dsn(AppSettingService.AppSetting.SentryClientKey)
                 })
             });
+
     }
 
     public static void RegisterFanexExceptionHandler(this IServiceCollection services)
