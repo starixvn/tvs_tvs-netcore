@@ -4,7 +4,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Services.ConfirmAutoUnmark;
 
-public class CombineValidationServiceTests
+public class CombineValidationServiceTests : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public void CombineUpdateResult_HasError_ReturnFailedResult()

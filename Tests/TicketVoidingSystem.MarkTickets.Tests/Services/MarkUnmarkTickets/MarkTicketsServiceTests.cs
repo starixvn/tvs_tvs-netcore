@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Services.MarkUnmarkTickets;
 
-public class MarkTicketsServiceTests
+public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
 {
     [Theory]
     [InlineData(0, 0)]

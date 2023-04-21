@@ -8,7 +8,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Services.MarkUnmarkTickets;
 
-public class MarkAllTicketsServiceTests
+public class MarkAllTicketsServiceTests : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task Execute_WithPermission_MarkDoneAllServer_ReturnSuccessful()

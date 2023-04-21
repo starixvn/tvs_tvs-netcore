@@ -7,7 +7,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.VoidSingleBet.Tests.Services.GetTickets;
 
-public class GetTicketsServiceTests
+public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task GetTickets_ValidCriteria_ReturnDataFromRepository()

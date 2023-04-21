@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Services.MarkUnmarkTickets;
 
-public class GetTicketsServiceTests
+public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
 {
     private static GetTicketsServiceImp CreateService(IDynamicRepository repository)
     {

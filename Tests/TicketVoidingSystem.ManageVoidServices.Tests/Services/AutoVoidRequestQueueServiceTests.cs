@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.ManageVoidServices.Tests.Services;
 
-public class AutoVoidRequestQueueServiceTests
+public class AutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFixture>
 {
     [Fact]
     public async Task GetQueueInAllServers_ExecuteSuccessful_ReturnExpected()
