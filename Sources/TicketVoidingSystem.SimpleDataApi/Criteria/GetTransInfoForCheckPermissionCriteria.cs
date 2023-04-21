@@ -7,6 +7,7 @@ namespace TicketVoidingSystem.SimpleDataApi.Criteria;
 public class GetTransInfoForCheckPermissionCriteria : CriteriaBase
 {
     public string TransIds { get; set; }
+    public string CancelCashOutTransIds { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
