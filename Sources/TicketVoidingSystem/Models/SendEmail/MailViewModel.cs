@@ -36,8 +36,3 @@ public class MailVoidViewModel : MailViewModel
 
     public IEnumerable<TicketEmailViewModel> Tickets { get; set; }
 }
-
-public class MailRecoverViewModel : MailViewModel
-{
-    //public List<Group<TViewModel>> Groups { get; set; }
-}

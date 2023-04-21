@@ -18,11 +18,4 @@ public class MessageTemplateController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetTemplateSettings() => Ok(await mediator.Send(new GetTemplateSettingRequest()));
-
-    //[HttpGet]
-    //public async Task<JsonResult> GetTemplateAbnormalBet(GetTemplateAbnormalBetRequest request)
-    //{
-    //    var model = await mediator.Send(request).ConfigureAwait(false);
-    //    return this.JsonNet(model);
-    //}
 }
