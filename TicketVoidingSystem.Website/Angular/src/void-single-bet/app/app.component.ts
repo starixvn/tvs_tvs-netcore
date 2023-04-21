@@ -368,7 +368,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async confirmEvent() {
     const checkingPermissionModel = new CheckingPermissionModel();
-    checkingPermissionModel.setParam(this.ticketsModel.getTicketEnable(), this.matchViewModel.matchId,
+    checkingPermissionModel.setParam(this.ticketsModel.getAllTicket(), this.matchViewModel.matchId,
       'void-single-bet-check-void-bet-permission', true, StaticService.checkHandlingCashOutAsUnSettledTicketByFunction(FunctionConst.SINGLE), false);
     this.modalService.confirmPermission(checkingPermissionModel, {
       title: 'WARNING!',

@@ -38,11 +38,21 @@ export class TicketsModel {
         const top = targetElement[0].offsetParent.offsetTop * 1 + targetElement[0].offsetHeight * 1;
         this.iconCheckBoxTop = `${top}px`;
     }
-    
+
     getTicketEnable(): BetID[] {
         const result = [];
         this.groups.forEach(group => {
             const ticketInGroup = group.getEnableTickets();
+            result.push(...ticketInGroup);
+        });
+
+        return result;
+    }
+
+    getAllTicket(): BetID[] {
+        const result = [];
+        this.groups.forEach(group => {
+            const ticketInGroup = group.getTickets();
             result.push(...ticketInGroup);
         });
 
