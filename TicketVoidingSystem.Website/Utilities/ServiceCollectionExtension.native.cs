@@ -13,7 +13,6 @@ using Fanex.Logging;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Extensions.Database;
-using Fanex.Logging.Sentry;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
 using Fanex.NAP.Client.AspNetCore.Configuration;
@@ -45,6 +44,7 @@ using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing.Controllers;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
+using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 namespace TicketVoidingSystem.Website.Utilities;
@@ -85,7 +85,6 @@ public static class ServiceCollectionExtension
                     Dsn = new Dsn(AppSettingService.AppSetting.SentryClientKey)
                 })
             });
-
     }
 
     public static void RegisterFanexExceptionHandler(this IServiceCollection services)
@@ -199,7 +198,7 @@ public static class ServiceCollectionExtension
     public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-        services.AddSingleton<IUMCacheService, UMCacheService>();
+        services.AddSingleton<IUMCacheService, MemoryUMCacheService>();
         services.AddSingleton<IUMRestClient, UMRestClient>();
         services.AddSingleton<IPHelper, IPHelperImpl>();
         services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
