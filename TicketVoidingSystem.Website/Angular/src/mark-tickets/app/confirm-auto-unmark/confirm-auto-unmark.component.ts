@@ -61,7 +61,6 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
 
   async getSportTypes() {
     let sportTypes = await this.commonService.getSportsType();
-    sportTypes = sportTypes.filter(x => x.sportType !== SportType.CRICKET);
     this.sportOptions = [];
     this.mapObject(sportTypes);
   }
