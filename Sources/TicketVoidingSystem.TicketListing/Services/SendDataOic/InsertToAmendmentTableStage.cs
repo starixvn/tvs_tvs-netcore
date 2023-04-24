@@ -25,12 +25,6 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
     public async Task<bool> Execute(IEnumerable<ExcelOicModel> tickets, SendFileQuery sendFileQuery, string sessionId)
     {
         var isInsertMainDbSuccessful = await InsertToMainDb(tickets, sendFileQuery, sessionId);
-        var env = AppSettingService.AppSetting.EnvironmentName;
-        if (env.Equals("UAT") || env.Equals("PRO") || env.Equals("PROAWS"))
-        {
-            var isInsertBackupDbSuccessful = await InsertToBackupDb(tickets, sendFileQuery, sessionId);
-            return isInsertMainDbSuccessful || isInsertBackupDbSuccessful;
-        }
 
         return isInsertMainDbSuccessful;
     }
