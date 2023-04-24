@@ -45,6 +45,7 @@ using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing.Controllers;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
+using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 namespace TicketVoidingSystem.Website.Utilities;
@@ -199,7 +200,7 @@ public static class ServiceCollectionExtension
     public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
-        services.AddSingleton<IUMCacheService, UMCacheService>();
+        services.AddSingleton<IUMCacheService, MemoryUMCacheService>();
         services.AddSingleton<IUMRestClient, UMRestClient>();
         services.AddSingleton<IPHelper, IPHelperImpl>();
         services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
