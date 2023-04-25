@@ -6,7 +6,6 @@ import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { MarkType } from '../../../utility/constants/config';
-import { SportType } from '../../../utility/constants/sport.constant';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
@@ -45,7 +44,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   private initializeFilterSearch() {
     this.selectedSports = this.sportOptions.map(x => x.value);
     const userName = document.getElementById('body').getAttribute('user-id');
-    this.markedByOptions = [{name: '<<<< Me >>>>', value: userName}, {name: 'All', value: '0'}];
+    this.markedByOptions = [{ name: '<<<< Me >>>>', value: userName }, { name: 'All', value: '0' }];
     this.query.matchId = null;
     this.query.markedBy = this.markedByOptions[0].value;
     this.query.isExcludeTest = true;
@@ -77,7 +76,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
 
   async searchData() {
     this.autoRefreshMode = AutoRefreshMode.STOP;
-    this.query.sporttype =  this.selectedSports.join(',');
+    this.query.sporttype = this.selectedSports.join(',');
     this.query.pageIndex = this.paging.page - 1;
     this.query.pageSize = this.paging.pageSize;
     this.isBlock = true;
@@ -120,6 +119,10 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
       });
   }
 
+  isShowChildMatchId(childMatchId: string) {
+    return (childMatchId.toString() !== "0");
+  }
+  
   private async onYesConfirmModal(item: ConfirmAutoUnmarkViewModel) {
     let modalMessage: string;
     let modalType: number;

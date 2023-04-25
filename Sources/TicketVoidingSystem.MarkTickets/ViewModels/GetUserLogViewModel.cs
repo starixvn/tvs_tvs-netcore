@@ -28,4 +28,6 @@ public class GetUserLogViewModel
     public string DoneBy { get; set; }
 
     public DateTime KickOffTime { get; set; }
+
+    public int ChildMatchId { get; set; }
 }

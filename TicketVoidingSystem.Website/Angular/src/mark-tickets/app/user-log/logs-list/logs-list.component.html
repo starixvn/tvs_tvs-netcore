@@ -78,7 +78,13 @@
             <div><strong>{{log.action}}</strong></div>
           </td>
           <td>
-            <div>{{log.matchId}}</div>
+            <div>
+              {{log.matchId}}
+              <br/>
+              <span *ngIf="isShowChildMatchId(log.childMatchId.toString())">
+                  ({{log.childMatchId}})
+              </span>
+            </div>
           </td>
           <td>
             <div>{{log.event}}</div>

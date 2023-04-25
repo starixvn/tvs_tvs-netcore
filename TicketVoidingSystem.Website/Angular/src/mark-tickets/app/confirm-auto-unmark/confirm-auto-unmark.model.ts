@@ -14,6 +14,7 @@ export class ConfirmAutoUnmarkViewModel {
     totalItems?: number;
     isConfirm: boolean;
     markType: number;
+    childMatchId?:  string;
 }
 
 export class GetDataForConfirmAutoUnmarkViewModel {

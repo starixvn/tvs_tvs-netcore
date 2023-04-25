@@ -134,4 +134,8 @@ export class AllMarkedTicketListComponent implements OnInit {
     this.refreshData.emit();
     this.iconCheckBox = IconCheckBox.all;
   }
+ 
+  isShowChildMatchId(childMatchId: string) {
+    return (childMatchId.toString() !== "0");
+  }
 }

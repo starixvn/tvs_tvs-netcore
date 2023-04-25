@@ -123,7 +123,13 @@
                         <div>{{item.no}}</div>
                     </td>
                     <td>
-                        <div>{{item.matchId}}</div>
+                        <div>
+                            {{item.matchId}}
+                            <br/>
+                            <span *ngIf="isShowChildMatchId(item.childMatchId)">
+                                ({{item.childMatchId}})
+                            </span>
+                        </div>
                     </td>
                     <td>
                         <div>{{convertToGMT8(item.kickOffTime) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>

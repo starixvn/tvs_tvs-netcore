@@ -38,7 +38,8 @@ public class MapUserLogsServiceImp : MapUserLogsService
             DoneBy = log.DoneBy,
             HTScore = log.HTScore,
             FTScore = log.FTScore,
-            KickOffTime = log.KickOffTime
+            KickOffTime = log.KickOffTime,
+            ChildMatchId = log.ChildMatchId
         });
     }
 

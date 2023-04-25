@@ -10,6 +10,7 @@ export class AllMarkedTicketModel {
   event?: string;
   total?: number;
   isChecked?: boolean;
+  childMatchId?:  string;
 }
 
 export class AllMarkedTicketsModel {
