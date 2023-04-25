@@ -30,14 +30,9 @@ public class VoidRequestController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetTicketsMini(GetTicketsMiniRequest request) => Ok(await mediator.Send(request));
 
-    //[HttpPost]
-    //public async Task<JsonResult> InsertQueue()
-    //{
-    //    var request = Helper.GetModelFromJsonRequest<InsertQueueRequest>(HttpContext.Request);
-    //    var result = await mediator.Send(request);
-    //    return this.JsonNet(result);
-    //}
-
     [HttpPost]
     public async Task<IActionResult> ExportExcel(ExportExcelRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> InsertQueue(InsertQueueRequest request) => Ok(await mediator.Send(request));
 }

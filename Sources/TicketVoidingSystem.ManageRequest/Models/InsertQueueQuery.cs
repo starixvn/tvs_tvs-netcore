@@ -14,7 +14,7 @@ public class InsertQueueQuery
     public IEnumerable<BetId>? CricketTickets { get; set; }
     public string Reason { get; set; }
     public string ReasonSC { get; set; }
-    public Message Message { get; set; }
+    public Message? Message { get; set; }
     public string VoidFromTime { get; set; }
     public string VoidToTime { get; set; }
     public string VoidFromDate { get; set; }
