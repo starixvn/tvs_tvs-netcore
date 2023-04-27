@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
@@ -24,22 +25,20 @@ public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
 
     public async Task<IEnumerable<ConfirmAutoUnmarkModel>> GetDataForConfirmAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
     {
-        var transInfoList = await GetTransInfoForAutoUnmark(query);
+        var transInfoJsonList = await GetTransInfoForAutoUnmark(query);
+        var criteria = new GetDataForConfirmAutoUnmarkCriteria();
 
-        var criteria = new GetDataForConfirmAutoUnmarkCriteria
-        {
-            TransInfo = transInfoList.ToTransInfoXml()
-        };
+        criteria.TransInfo = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return await repository.FetchAsync<ConfirmAutoUnmarkModel>(criteria);
     }
 
-    private async Task<IEnumerable<TransInfoAutoUnmarkModel>> GetTransInfoForAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
+    private async Task<IEnumerable<string>> GetTransInfoForAutoUnmark(GetDataForConfirmAutoUnmarkQuery query)
     {
-        var dataInAllServers = new List<TransInfoAutoUnmarkModel>();
+        var dataInAllServers = new List<string>();
         var criteria = new GetTransInfoForAutoUnmarkCriteria
         {
-            MatchId = query.MatchId,
+            MatchId = int.Parse(query.MatchId),
             SportType = query.SportType,
             MarkedBy = query.MarkedBy,
             IsExcludeTest = query.IsExcludeTest
@@ -48,8 +47,8 @@ public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;
-            var data = await repository.FetchAsync<TransInfoAutoUnmarkModel>(criteria);
-            dataInAllServers.AddRange(data);
+            var data = await repository.GetAsync<string>(criteria);
+            dataInAllServers.Add(data);
         }
         return dataInAllServers;
     }

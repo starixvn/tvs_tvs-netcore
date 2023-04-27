@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
 
 public class GetTransInfoForAutoUnmarkCriteria : CriteriaBase
 {
-    public string MatchId { get; set; }
+    public int MatchId { get; set; }
 
     public string SportType { get; set; }
 
