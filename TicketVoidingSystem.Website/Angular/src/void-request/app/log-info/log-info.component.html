@@ -1,0 +1,22 @@
+  <div class="row no-gutters mt-2">
+    <label class="col-form-label log-info-label">Log Info </label>
+    <div class="col-sm-6 pd-top-8 remark-content">
+      <div *ngFor="let item of logInfoDetails" class="log-info p-2 mb-3">
+        {{displayScoreLabel(isWrongScore, filterBy)}}<strong>{{item.liveScores}}</strong>.
+        {{displayVoidTimeLabel(isWrongScore, filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
+        Affected Single Count: <strong>{{item.singleCount}}</strong>
+        <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
+        [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+        </span>,
+        Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
+        <span><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
+      </div>
+
+      <div *ngIf="isWrongScore" class="d-flex">
+        <label class="col-form-label mr-3">Actual Score</label>
+        <div>
+            <input class="input-actual-score form-control form-control-sm" type="text" [(ngModel)]="actualScore" disabled/>
+        </div>
+    </div>
+    </div>
+  </div>

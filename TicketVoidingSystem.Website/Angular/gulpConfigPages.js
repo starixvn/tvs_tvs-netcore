@@ -76,13 +76,27 @@ const voidSingleBet = {
   indexEJSPath: './src/void-single-bet/index.ejs'
 };
 
+const voidRequest = {
+  pageName: 'VoidRequest',
+  tsconfigFiles: [
+    'void-request/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/ticket-voiding-system/void-request/',
+  index: 'src/void-request/index.cshtml',
+  main: 'src/void-request/main.ts',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/void-request',
+  indexEJSPath: './src/void-request/index.ejs'
+};
+
 const configPages = [
   // homePage,
   // manageVoidServices,
   // abExceptionList,
   markTickets,
   // ticketListing,
- // voidSingleBet
+  // voidSingleBet,
+  voidRequest
 ];
 
 module.exports = configPages;

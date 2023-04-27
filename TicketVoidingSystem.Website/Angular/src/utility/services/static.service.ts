@@ -1,7 +1,8 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
-import { DateTimeFormat, FunctionConst, TVSRequestActionType } from '../constants/config';
+import { DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
 import { LABELS } from '../constants/labels';
 import { RegexConstant } from '../constants/regex';
@@ -87,37 +88,37 @@ export class StaticService {
     return `${ngbDate.year}/${transformMonth}/${transformDay}`;
   }
 
-  // static getSubIssueTypeId(requestDetail: RequestDetailViewModel): number {
-  //   if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.wrongScoreModels[0].subIssueTypeId;
-  //   } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).subIssueTypeId;
-  //   } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.redCardModels.find(x => x.isMainMatch).subIssueTypeId;
-  //   } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
-  //   } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
-  //   } else {
-  //     return requestDetail.event.subIssueTypeId;
-  //   }
-  // }
+  static getSubIssueTypeId(requestDetail: RequestDetailViewModel): number {
+    if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongScoreModels[0].subIssueTypeId;
+    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).subIssueTypeId;
+    } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.redCardModels.find(x => x.isMainMatch).subIssueTypeId;
+    } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
+    } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
+    } else {
+      return requestDetail.event.subIssueTypeId;
+    }
+  }
 
-  // static getEventDate(requestDetail: RequestDetailViewModel): Date {
-  //   if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.wrongScoreModels[0].eventDate;
-  //   } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).eventDate;
-  //   } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.redCardModels.find(x => x.isMainMatch).eventDate;
-  //   } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.wrongHdpModels.find(x => x.isMainMatch).eventDate;
-  //   } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
-  //     return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
-  //   } else {
-  //     return requestDetail.event.eventDate;
-  //   }
-  // }
+  static getEventDate(requestDetail: RequestDetailViewModel): Date {
+    if (this.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongScoreModels[0].eventDate;
+    } else if (this.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.dangerAcceptedModels.find(x => x.isMainMatch).eventDate;
+    } else if (this.isRedCard(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.redCardModels.find(x => x.isMainMatch).eventDate;
+    } else if (this.isWrongHDP(requestDetail.request.issueTypeId.toString()) || this.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongHdpModels.find(x => x.isMainMatch).eventDate;
+    } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
+    } else {
+      return requestDetail.event.eventDate;
+    }
+  }
   
   static checkHandlingCashOutAsUnSettledTicketByFunction(functionId: number): boolean {
     return functionId === FunctionConst.SINGLE;
@@ -178,5 +179,15 @@ export class StaticService {
     }
 
     return true;
+  }  
+  
+  static isShowVarCheck(subIssueTypeId: number) {
+    return subIssueTypeId && SubIssueTypeGroup.SUBTYPE_VAR.includes(subIssueTypeId);
   }
+  
+  static isHaveCancelCashOutTicket(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
+      issueTypeId === IssueTypeConstant.RED_CARD ||
+      issueTypeId === IssueTypeConstant.WRONG_SCORE;
+}
 }

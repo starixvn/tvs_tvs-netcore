@@ -1,0 +1,77 @@
+import { Component, Input } from '@angular/core';
+import * as _ from 'lodash';
+import * as moment from 'moment-timezone';
+import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
+import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
+import { StaticService } from '../../../utility/services/static.service';
+
+@Component({
+  selector: 'log-info',
+  templateUrl: './log-info.component.html',
+  styleUrls: ['./log-info.component.scss']
+})
+export class LogInfoComponent {
+  @Input() logInfoDetails: LogInfoDetail[];
+  @Input() isWrongScore: boolean;
+  @Input() actualScore: string;
+  @Input() filterBy: number;
+  acceptTypeName = "";
+
+  displayScoreLabel(isWrongScore: boolean, filterBy: number): string {
+    return (isWrongScore && (filterBy === TVSRequestFilterBy.TRANS_TIME || filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME)) ?
+      'Wrong Score: ' : 'Live Score: ';
+  }
+
+  displayVoidTimeLabel(isWrongScore: boolean, filterBy: number): string {
+    if (isWrongScore) {
+      if (filterBy === TVSRequestFilterBy.TRANS_TIME || filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME) {
+        return 'Void Trans Time (GMT-4): ';
+      } else if (filterBy === TVSRequestFilterBy.CHECK_TIME) {
+        return 'Void Accept Time (GMT-4): ';
+      }
+    }
+
+    return 'Void time (GMT-4): ';
+  }
+
+  displayFullDateTimeFormat(time: Date): string {
+    return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+  }
+
+  isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+    return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+    return StaticService.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  getHighlightMinTimeClass(logInfoDetail: LogInfoDetail): string {
+    if (logInfoDetail.highlightMinTime && logInfoDetail.highlightAcceptType) {
+      switch (logInfoDetail.highlightAcceptType) {
+        case AcceptType.AUTO_ACCEPT: {
+          this.acceptTypeName = "AA";
+          return 'highlight-min-aa';
+        }
+        case AcceptType.SECOND_ACCEPT: {
+          this.acceptTypeName = "SA";
+          return 'highlight-min-sa';
+        }
+        case AcceptType.PENDING_ACCEPT: {
+          this.acceptTypeName = "PA";
+          return 'highlight-min-pa';
+        }
+      }
+    }
+
+    return '';
+  }
+
+  displayMinTime(minTime?: Date): string {
+    if(_.isNull(minTime)){
+      return '-';
+    }
+    return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}`:
+    `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
+  }
+}

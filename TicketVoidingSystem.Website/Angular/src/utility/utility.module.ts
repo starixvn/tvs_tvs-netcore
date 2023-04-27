@@ -9,7 +9,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 // import { BetIdsComponent } from './components/bet-ids/bet-ids.component';
 // import { BetTypesVirtualSportComponent } from './components/bettypes-virtualsports/bettypes-virtualsports.component';
 // import { BetTypesComponent } from './components/bettypes/bettypes.component';
-// import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+ import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 // import { MatchDetailComponent } from './components/match-detail/match-detail.component';
 // import { MessagesResultComponent } from './components/messages-result/messages-result.component';
 // import { NotificationComponent } from './components/notification/notification.component';
@@ -65,7 +65,7 @@ import { HttpService } from './services/http.service';
     BaseTicketsListComponent,
     BetTypesComponent,
     BetTypesVirtualSportComponent,
-    // ConfirmationComponent,
+    ConfirmationComponent,
     MatchDetailComponent,
     MessagesResultComponent,
     NotificationComponent,
@@ -78,7 +78,7 @@ import { HttpService } from './services/http.service';
     BaseTicketsListComponent,
     BetTypesComponent,
     BetTypesVirtualSportComponent,
-    // ConfirmationComponent,
+    ConfirmationComponent,
     MatchDetailComponent,
     MessagesResultComponent,
     NotificationComponent,

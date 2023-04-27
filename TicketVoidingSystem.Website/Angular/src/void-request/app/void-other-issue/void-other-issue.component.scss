@@ -1,0 +1,41 @@
+@import '../../../assets/styles/mixin.scss';
+
+
+  .header-info {
+    position: relative;
+  }
+  
+  .affected-licensees {
+      @include affected-licensees(#b4f0c6, #0a0c0f);
+      margin: 10px 0;
+      height: fit-content;
+      min-width: 500px;
+      max-height: 150px;
+  }
+  
+  .china-view-licensee {
+    color: #dd5edd;
+  }
+
+  .instant-licensee {
+    color: #ff0000;
+  }
+
+  .cash-out-licensee {
+    color: #5548cc;
+    padding-top: 5px;
+  }
+  
+  .display-none {
+    display: none;
+  }
+  
+  .display-block {
+    display: block;
+  }
+
+  .affected-username {
+    overflow-y: scroll;
+    max-height: 200px;
+    @include scroll-style();
+  }

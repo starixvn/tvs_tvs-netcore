@@ -1,0 +1,16 @@
+import { MatchModel } from '../../../utility/models/match.model';
+import { CheckedBetType } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
+
+export class GetTicketsQuery {
+  pageIndex: number;
+  pageSize: number;
+  match: MatchModel;
+  kickOffDate: string;
+  requestId?: number;
+  issueTypeId: number;
+  betTypes?: CheckedBetType[];
+  actionId?: number;
+  liveHomeScore?: number;
+  liveAwayScore?: number;
+  transInfoJson?: string; // only use for EKO search tickets
+}

@@ -1,0 +1,32 @@
+import { Injectable } from '@angular/core';
+import { ModalType } from '../../../utility/modules/modal/modal';
+import { ModalService } from '../../../utility/modules/modal/modal.service';
+import { AppService } from '../app.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CheckRequestService {
+
+  constructor(private readonly appService: AppService,
+    private readonly modalService: ModalService) { }
+
+  async isRequestModified(requestId: number, currentModifiedDate: Date): Promise<boolean> {
+    const lastModifiedDate = (await this.appService.getLastModifiedDate(requestId)).lastModifiedDate;
+
+    if (currentModifiedDate !== lastModifiedDate) {
+      this.showWarningPopupRequestModified();
+      return true;
+    }
+
+    return false;
+  }
+
+  private showWarningPopupRequestModified(): void {
+    this.modalService.open({
+      title: 'Warning',
+      message: 'The request was changed. You are about to back the page and check again.',
+      type: ModalType.Warning
+    }, () => { window.location.reload(); });
+  }
+}

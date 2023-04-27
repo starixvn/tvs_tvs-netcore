@@ -1,0 +1,6 @@
+<group-bettypes #groupBetTypesComponent [model]="groupBetTypes" (betTypesEvent)="changeBetTypes($event)">
+</group-bettypes>
+<advanced-mode #advancedMode [matchId]="match.matchId" [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery"></advanced-mode>
+<div class="search">
+  <input *ngIf="isShowSearch" type="submit" class="btn btn-primary btn-sm" value="Search" (click)="getBetTypeModels()" />
+</div>

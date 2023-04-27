@@ -1,0 +1,264 @@
+@import '../../../assets/styles/mixin.scss';
+
+.display-none {
+    display: none;
+  }
+  
+.display-block {
+    display: block;
+  }
+
+.match-void {
+  margin: 0 10px 5px 10px;
+  padding: 5px 0 2px 0;
+
+  .log-info-cell {
+    height: 100%;
+    background-color: #CCE5FF;
+  }
+
+  .match-info {
+    background-color: #CCE5FF;
+    .match-text {
+      color: #2C568A;
+    }
+  }
+}
+
+.affected-licensees {
+  @include affected-licensees(#b4f0c6, #0a0c0f);
+  max-height: 150px;
+  margin-top: 5px;
+  margin-left: 49px;
+}
+
+.china-view-licensee {
+  color: #dd5edd;
+}
+
+.instant-licensee {
+  color: #ff0000;
+}
+
+.cash-out-licensee {
+  color: #5548cc;
+  padding-top: 5px;
+}
+
+.area-icon {
+  text-align: right!important;
+}
+
+.icon-show-tickets {
+  background-image: url('../../../assets/images/icon-show-tickets.png');
+  background-size: 70%;
+  background-position: center;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.icon-show-template-message {
+  background-image: url('../../../assets/images/icon-show-message.png');
+  background-size: 90%;
+  background-position: center;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.icon-show-tickets-expanded {
+  background-image: url('../../../assets/images/icon-show-tickets-expanded.png');
+  background-size: 70%;
+  background-position: center;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.icon-show-template-message-expanded {
+  background-image: url('../../../assets/images/icon-show-message-expanded.png');
+  background-size: 90%;
+  background-position: center;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.number-circle {
+  display: inline-block;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  min-width: 10px;
+  min-height: 10px;
+  padding: 2px;
+  border: 2px solid #666;
+  text-align: center;
+  line-height: 1;
+  box-sizing: content-box;
+  white-space: nowrap;
+
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 100%;
+    height: 0;
+  }
+
+  span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.gray-header {
+  background: gray;
+  color: white;
+  font-weight: bold;
+  padding: 0 10px;
+  margin-bottom: 5px;
+  width: 50%;
+}
+
+.reason-area {
+  margin: 10px;  
+
+  table {
+    width: 50%;
+    font-size: 9pt;
+    border-spacing: 1px;
+    background-color: white;
+    text-align: center;
+    font-weight: bold;
+  
+    tr {
+      th {
+        background-color: #4e71bb;
+        color: white;
+      }
+  
+      td {
+        width: 25%;
+
+        textarea {
+          width: 100%;
+          padding: 0px;
+          margin: 0px;
+          font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+          resize: vertical;
+        }
+      }
+    }
+  
+    .header-language {
+      background-color: #cccccc;
+    }
+  
+    .header-other-language {
+      color: #ffcc00;
+      cursor: pointer;
+    }
+  }
+
+  .no-data-text {
+    width: 50%;
+    padding: 0px;
+    margin: 0px;
+    resize: none;
+    color: #ed1c24;
+  }
+}
+
+.confirm-delete {
+  margin: 10px;
+  padding: 10px;
+  float: left;
+  border-width: 2px;
+  border-style: groove;
+  border-image: initial;
+
+  legend {
+    font-weight: bold;
+    width: auto;
+  }
+
+  table {
+    tr {
+      td:first-child {
+        min-width: 140px;
+      }
+
+      textarea {
+        width: 500px;
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      }
+
+      input[disabled] {
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+
+.error-text {
+    margin-top: 30px;
+    color: #ed1c24;
+
+    .icon-error-message {
+      padding-top: 1px;
+      width: 19px;
+  }  
+}
+
+//////////////@at-root
+
+.spinner-overlay {
+  background-color: white;
+}
+
+.spinner-message-container {
+  position: fixed;
+  top: 45%;
+  left: 0;
+  right: 0;
+  height: 0;
+  text-align: center;
+  z-index: 10001;
+}
+
+
+.loading-message {
+  .loading {
+      margin: 0 auto;
+      width: 32px;
+      height: 32px;
+      background: url('../../../assets/images/loading.gif') no-repeat scroll 0 0 transparent;
+  }
+}
+
+.modal-backdrop.in {
+  filter: alpha(opacity=10);
+  opacity: .2;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+
+.wrong-market div, .actual-market div, .hdp-value div {
+  white-space: nowrap;
+  min-width: 90px;
+}
