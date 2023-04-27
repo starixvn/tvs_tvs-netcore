@@ -1,7 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
@@ -10,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Services.JackTimeCashOut;
 using TicketVoidingSystem.Services.NetPosition;
@@ -56,28 +53,6 @@ builder.Services.AddControllersWithViews(options =>
 
 // Build app
 var app = builder.Build();
-
-void WriteLogWhenApplicationIsStopping(object title)
-{
-    Console.WriteLine(title);
-
-    using var currentProcess = Process.GetCurrentProcess();
-    var stringBuilder = new StringBuilder();
-
-    stringBuilder.AppendFormat("GC.GetTotalMemory(false): {0:n0}\n", GC.GetTotalMemory(false));
-    stringBuilder.AppendFormat("VirtualMemorySize64 is: {0:n0}\n", currentProcess.VirtualMemorySize64);
-    stringBuilder.AppendFormat("PrivateMemorySize64 is: {0:n0}\n", currentProcess.PrivateMemorySize64);
-    stringBuilder.AppendFormat("WorkingSet64 is: {0:n0}\n", currentProcess.WorkingSet64);
-    stringBuilder.AppendFormat("PagedMemorySize64 is: {0:n0}\n", currentProcess.PagedMemorySize64);
-    stringBuilder.AppendFormat("NonpagedSystemMemorySize64 is: {0:n0}\n", currentProcess.NonpagedSystemMemorySize64);
-    stringBuilder.AppendFormat("NonpagedSystemMemorySize64 is: {0:n0}\n", currentProcess.NonpagedSystemMemorySize64);
-    stringBuilder.AppendLine($@"Threads.Count: {currentProcess.Threads.Count}");
-    stringBuilder.AppendLine($@"ThreadPool.PendingWorkItemCount: {ThreadPool.PendingWorkItemCount}");
-
-    Console.WriteLine(stringBuilder.ToString());
-}
-app.Lifetime.ApplicationStopping.Register(WriteLogWhenApplicationIsStopping, @"ApplicationStopping was called");
-app.Lifetime.ApplicationStopped.Register(WriteLogWhenApplicationIsStopping, @"ApplicationStopped was called");
 
 app.Use((context, next) =>
 {

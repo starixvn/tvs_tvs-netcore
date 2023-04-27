@@ -58,3 +58,4 @@ typings
 .axoCover/
 .angular/
 /TicketVoidingSystem.Website/Angular/reports/**
+*/Logs/*
