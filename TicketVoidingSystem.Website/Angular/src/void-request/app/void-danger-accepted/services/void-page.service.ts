@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
@@ -39,7 +39,7 @@ export class VoidPageService {
       voidMatchInfo.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
       voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType,
         issueTypes);
-      voidMatchInfo.matchModel = await this.appService.getMatch(element.matchId);
+      voidMatchInfo.matchModel = await this.commonService.getMatch(element.matchId);
       voidMatchInfo.logInfoDetail = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).logInfoDetail;
       voidMatchInfo.wrongMarket = element.wrongMarket;
       voidMatchInfo.actualMarket = element.actualMarket;

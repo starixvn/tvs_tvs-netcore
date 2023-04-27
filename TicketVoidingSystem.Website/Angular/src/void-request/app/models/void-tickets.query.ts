@@ -1,6 +1,6 @@
-import { BetID } from '../../../utility/models/bet-id.mode';
+import { Message } from '../../../utility/components/template-message/messages/message';
+import { BetID } from '../../../utility/models/bet-id.model';
 import { Result } from '../../../utility/models/result';
-import { Message } from '../../../utility/modules/template-message/messages/message';
 
 export class VoidTicketsQuery {
   requestId: number;

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core';
+import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
+import { CheckedBetType, GetPlayersQuery } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
+import { BetType, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { MatchModel } from '../../../utility/models/match.model';
-import { AdvancedModeComponent } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.component';
-import { CheckedBetType, GetPlayersQuery } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
-import { GroupBetTypesComponent } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.component';
-import { BetType, GroupBetTypesModel } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
 
 @Component({
   selector: 'filter',

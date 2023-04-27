@@ -1,5 +1,5 @@
+import { CheckedBetType } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { MatchModel } from '../../../utility/models/match.model';
-import { CheckedBetType } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
 
 export class GetTicketsQuery {
   pageIndex: number;

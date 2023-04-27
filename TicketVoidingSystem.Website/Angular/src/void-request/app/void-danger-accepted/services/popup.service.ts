@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { ModalType } from '../../../../utility/components/modal/modal';
+import { ModalService } from '../../../../utility/components/modal/modal.service';
+import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
 import { Result } from '../../../../utility/models/result';
-import { ModalType } from '../../../../utility/modules/modal/modal';
-import { ModalService } from '../../../../utility/modules/modal/modal.service';
-import { TemplateMessageComponent } from '../../../../utility/modules/template-message/template-message/template-message.component';
 import { VoidMatch } from '../../models/void-match.model';
 
 @Injectable({

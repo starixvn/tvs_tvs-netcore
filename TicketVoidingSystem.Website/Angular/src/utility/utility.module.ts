@@ -33,6 +33,7 @@ import { MessagesResultComponent } from './components/messages-result/messages-r
 import { ModalModule } from './components/modal/modal.module';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PagingModule } from './components/paging/paging.module';
+import { RequestInfoModule } from './components/request-info/request-info.module';
 import { ToolTipModule } from './components/tooltip/tooltip.module';
 import { OnlyNumberDirective } from './directives/number.directive';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
@@ -42,7 +43,6 @@ import { HttpService } from './services/http.service';
 
 @NgModule({
   imports: [
-
     CommonModule,
     FormsModule,
     HttpClientModule,
@@ -56,7 +56,8 @@ import { HttpService } from './services/http.service';
     AdvancedModeModule,
     DateTimeModule,
     BlockUiModule,
-    BlockFullUiModule
+    BlockFullUiModule,
+    RequestInfoModule
   ],
   declarations: [
     UsernamesComponent,

@@ -35,6 +35,7 @@ export class MatchModel {
   sportTypeNameNewSimplified: string;
   sportTypeNameSimplified: string;
   sportTypeNameTraditional: string;
+  numberOfCorner?: number;
 }
 
 

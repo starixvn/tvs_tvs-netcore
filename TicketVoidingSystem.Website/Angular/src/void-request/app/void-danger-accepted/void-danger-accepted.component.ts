@@ -2,12 +2,12 @@ import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../add-request/app/add-request/models/request.model';
+import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
-import { TemplateMessageComponent } from '../../../utility/modules/template-message/template-message/template-message.component';
-import { Tooltip } from '../../../utility/modules/tooltip/tooltip.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';

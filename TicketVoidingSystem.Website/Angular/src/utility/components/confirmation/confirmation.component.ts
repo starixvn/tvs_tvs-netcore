@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { Confirmation } from './confirmation';
-import { Tooltip } from '../../modules/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
+import { Tooltip } from '../../components/tooltip/tooltip.model';
+import { Confirmation } from './confirmation';
 
 @Component({
   selector: 'confirmation',

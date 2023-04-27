@@ -1,0 +1,77 @@
+<div>
+  <div class="row no-gutters">
+    <div class="mr-3">
+      <label class="col-form-label mr-2">Issue Type</label>
+      <label class="col-form-label">
+        <strong>
+          <span class="padding-2-10 alert alert-dark">{{issueTypeName}}</span>
+          <span *ngIf="isShowVar" class="alert padding-2-10 mg-left-5 text-white bg-danger">VAR</span>
+        </strong>
+      </label>
+    </div>
+
+    <div *ngIf="isEarlyKOIssueType" class="nowrap d-flex mr-3">
+      <label class="col-form-label text-right mg-right-10">KO Time</label>
+      <div class="d-flex">
+        <date-time [model]="kickOffTime" [disabled]="true" class="mr-1"></date-time>
+        <label class="col-form-label">(GMT+8)</label>
+      </div>
+    </div>
+
+    <div *ngIf="isShowGeneralInfo" class="pt-2 fa" style="cursor: pointer;" (click)="isExpandGeneralInfo = !isExpandGeneralInfo">
+      <span [ngClass]="{'fa-chevron-up':isExpandGeneralInfo, 'fa-chevron-down':!isExpandGeneralInfo}" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <div *ngIf="isAbnormalAccount && isShowAbnormalAccountInfo">
+    <div class="row no-gutters">Product:&nbsp;<strong>{{product}}</strong></div>
+    <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{status}}</strong></div>
+    <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{model.event.fromDate | date: 'yyyy/MM/dd'}} - 
+      {{model.event.toDate | date: 'yyyy/MM/dd'}}
+    </strong></div>
+  </div>
+  <div *ngIf="isShowGeneralInfo">
+    <div [hidden]="!isExpandGeneralInfo">
+      <div class="row no-gutters general-info-tab">
+        <div class="inner-border">
+          <span><strong>General Info</strong></span>
+        </div>
+      </div>
+      <div class="mb-3 mt-3">
+        <div class="mb-2" *ngIf="isShowMatchInfo()">
+          <span class="row no-gutters">Kick Off: {{generalInfoViewModel.generalInfoModel.kickOffTimeString}}<br/></span>
+          <span class="row no-gutters">League: {{generalInfoViewModel.generalInfoModel.leagueName}}<br/></span>
+          <span class="row no-gutters">Match: {{generalInfoViewModel.generalInfoModel.matchEvent}}<br/></span>
+        </div>
+        <span class="row no-gutters">Affected: {{generalInfoViewModel.generalInfoModel.licenseeNames}}<br/></span>
+        <div *ngIf="isLikelyAbnormalBetIssueType()">
+          <span *ngIf="!isAbnormalBetMixParlay()" class="row no-gutters">Bettype: {{generalInfoViewModel.generalInfoModel.generalBetTypeCombinations}}<br/></span>
+          <span class="row no-gutters">Reason: {{generalInfoViewModel.generalInfoModel.reason}}<br/></span>
+          <span *ngIf="!isAbnormalBetMixParlay()" class="row no-gutters">Results: {{generalInfoViewModel.generalInfoModel.scoreResult}}<br/></span>
+        </div>
+        <span class="row no-gutters">Total voided tickets: {{generalInfoViewModel.generalInfoModel.totalVoidedTickets}}<br/></span>
+        <span class="row no-gutters">Cancel cash out: {{generalInfoViewModel.generalInfoModel.totalCancelCashOut}}<br/></span>
+        <span class="row no-gutters">Decided by: {{generalInfoViewModel.generalInfoModel.decidedBy}}<br/></span>
+        <span class="row no-gutters">Requested by: {{generalInfoViewModel.generalInfoModel.requestedBy}}<br/></span>
+         
+        <div class="mt-2" *ngIf="generalInfoViewModel.userVoidMessages?.length > 0">
+          <div class="mb-2 no-gutters" *ngFor="let userVoidMessage of generalInfoViewModel.userVoidMessages">
+            <span class="row no-gutters">Voided by: {{userVoidMessage.voidedBy}}<br/></span>
+            <div *ngFor="let message of userVoidMessage.messages"> 
+              <span class="row no-gutters">{{message.contentEnglish}}<br/></span>
+              <span class="row no-gutters">{{message.contentChineseSimplified}}<br/></span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-2" *ngIf="generalInfoViewModel.succeedEmails?.length > 0">
+          <span class="row no-gutters" *ngFor="let succeedEmail of generalInfoViewModel.succeedEmails">{{succeedEmail}}</span>
+        </div>
+        <div class="mb-2" *ngIf="generalInfoViewModel.failedEmails?.length > 0">
+          <span class="row no-gutters" *ngFor="let failedEmail of generalInfoViewModel.failedEmails">{{failedEmail}}</span>
+        </div>
+        <div class="mt-2" *ngIf="generalInfoViewModel.generalInfoModel.negativeBalanceUsers" >
+          <span class="row no-gutters">Negative Balance Customers: <strong>{{generalInfoViewModel.generalInfoModel.negativeBalanceUsers}}</strong><br/></span>
+        </div>
+      </div>
+  </div>
+</div>

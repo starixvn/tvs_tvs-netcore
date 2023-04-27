@@ -17,8 +17,8 @@
         </filter>
     </div>
     <div class="d-flex">            
-        <tickets-list *ngIf="isShowTicket" [(model)]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
-        (exportExcelEvent)="exportExcel($event)" [isBlock]="isBlockBetList" (ticketsChange)="ticketsChange()"
+        <tickets-list *ngIf="isShowTicket" [model]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
+        (exportExcelEvent)="exportExcel()" [isBlock]="isBlockBetList" (ticketsChange)="ticketsChange()"
         [issueTypeId]="issue.issueTypeId">
         </tickets-list>
 

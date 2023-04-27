@@ -1,11 +1,11 @@
 
+import { PagingModel } from "../../..//utility/components/paging/paging/paging.model";
+import { Message } from "../../..//utility/components/template-message/messages/message";
+import { TemplateValue } from "../../..//utility/components/template-message/template-message/template.model";
 import { SubIssueType } from "../../..//utility/models/issue-type.model";
 import { LogInfoDetail } from "../../..//utility/models/log-info-detail.model";
 import { MatchModel } from "../../..//utility/models/match.model";
 import { VoidedReason } from "../../..//utility/models/reason.model";
-import { PagingModel } from "../../..//utility/modules/paging/paging/paging.model";
-import { Message } from "../../..//utility/modules/template-message/messages/message";
-import { TemplateValue } from "../../..//utility/modules/template-message/template-message/template.model";
 import { TicketsModel } from "../../..//void-request/app/tickets-list/tickets.model";
 import { AffectedLicensee } from "../../../utility/models/affected-licensee.model";
 

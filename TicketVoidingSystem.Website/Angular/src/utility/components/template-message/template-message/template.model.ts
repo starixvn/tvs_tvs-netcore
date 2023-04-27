@@ -53,4 +53,5 @@ export class TemplateValue {
   betTypeNameReplaceMessage?: Message;
   isCheckedVar?: boolean;
   playerName?: TemplateContent;
+  numberOfCorner?: number;
 }

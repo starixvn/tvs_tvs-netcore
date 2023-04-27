@@ -91,7 +91,7 @@
           </div>
         </div>
 
-        <tickets-list class="m-0" *ngIf="item.isShowTicketFull" [(model)]="item.voidTicketsFull"
+        <tickets-list class="m-0" *ngIf="item.isShowTicketFull" [model]="item.voidTicketsFull"
           [(paging)]="item.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(item)" (exportExcelEvent)="exportTickets(item)"
           [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
           [isDisableCheckbox]="true">

@@ -1,27 +1,28 @@
-import { AppComponent } from './app.component';
-import { BlockUiModule } from './../../utility/modules/block-ui/block-ui.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { ClipboardModule } from 'ngx-clipboard';
-import { DateTimeModule } from '../../utility/modules/date-time/date-time.module';
-import { EventInfoComponent } from './event-info/event-info.component';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PagingModule } from '../../utility/modules/paging/paging.module';
-import { PipeModule } from './../../utility/modules/pipes/pipe.module';
-import { RequestInfoModule } from '../../utility/modules/request-info/request-info.module';
-import { TemplateMessageModule } from '../../utility/modules/template-message/template-message.module';
-import { TicketsListComponent } from './tickets-list/tickets-list.component';
-import { ToolTipModule } from './../../utility/modules/tooltip/tooltip.module';
+import { ClipboardModule } from 'ngx-clipboard';
+import { ToastrModule } from 'ngx-toastr';
+import { AdvancedModeModule } from '../../utility/components/advanced-mode/advanced-mode.module';
+import { DateTimeModule } from '../../utility/components/date-time/date-time.module';
+import { PagingModule } from '../../utility/components/paging/paging.module';
+import { RequestInfoModule } from '../../utility/components/request-info/request-info.module';
+import { TemplateMessageModule } from '../../utility/components/template-message/template-message.module';
+import { BlockUiModule } from './../../utility/components/block-ui/block-ui.module';
+import { ToolTipModule } from './../../utility/components/tooltip/tooltip.module';
+import { PipeModule } from './../../utility/pipes/pipe.module';
 import { UtilityModule } from './../../utility/utility.module';
-import { AdvancedModeModule } from '../../utility/modules/advanced-mode/advanced-mode.module';
+import { AppComponent } from './app.component';
+import { EventInfoComponent } from './event-info/event-info.component';
 import { FilterComponent } from './filter/filter.component';
+import { LogInfoNewComponent } from './log-info-new/log-info-new.component';
 import { LogInfoComponent } from './log-info/log-info.component';
+import { TicketsListComponent } from './tickets-list/tickets-list.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
-import { LogInfoNewComponent } from './log-info-new/log-info-new.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { LogInfoNewComponent } from './log-info-new/log-info-new.component';
     RequestInfoModule,
     TemplateMessageModule,
     ToolTipModule,
+    ToastrModule.forRoot(),
     UtilityModule
   ],
   providers: [

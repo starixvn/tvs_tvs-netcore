@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BetID } from '../../../..//utility/models/bet-id.mode';
+import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../../utility/constants/labels';
+import { BetID } from '../../../../utility/models/bet-id.model';
 import { CheckingPermissionModel } from '../../../../utility/models/checking-permission.model';
 import { Result } from '../../../../utility/models/result';
-import { TemplateMessageComponent } from '../../../../utility/modules/template-message/template-message/template-message.component';
 import { CommonService } from '../../../../utility/services/common.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -52,8 +52,8 @@ export class ValidationService {
       checkingPermissionModel.matchId = StaticService.isAbnormalAccount(issueTypeId.toString()) ? 0 : checkingPermissionModel.matchId;
 
       const result = await this.commonService.checkVoidBetPermission(checkingPermissionModel);
-      if (result.ErrCode !== 0 && checkingPermissionModel.action) {
-        return ResultModelService.createFailResult(result.ErrMsg, 1);
+      if (result.errCode !== 0 && checkingPermissionModel.action) {
+        return ResultModelService.createFailResult(result.errMsg, 1);
       }
     }
 

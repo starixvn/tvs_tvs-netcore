@@ -8,12 +8,18 @@ export class LogInfoDetail {
     settleCount: number;
     instantlySettleCount: number;
     mainParlayCount: number;
-    minSingleTransId: string;
-    maxSingleTransId: string;
-    minMainParlayTransId: string;
-    maxMainParlayTransId: string;
-    highlightTransId?: string;
+    cancelCashOutCount: number;
+    highlightMinTime?: Date;
     highlightAcceptType?: number;
     scoreNormalTicket: string;
     scoreOfMatch: string;
+    // Wrong HDP/1stHDP
+    liveGameEarlySingleCount?: number;
+    liveGameEarlyCashOutCount?: number;
+    liveGameEarlySettleCount?: number;
+    poolHouseSingleCount?: number;
+    poolHouseCashOutCount?: number;
+    poolHouseSettleCount?: number;
+    poolHouseMainParlayCount?: number;
+    poolHouseInstantlySettleCount?: number;
 }

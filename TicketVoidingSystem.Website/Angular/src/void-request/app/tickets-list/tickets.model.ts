@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { BetID } from '../../../utility/models/bet-id.mode';
+import { BetID } from '../../../utility/models/bet-id.model';
 import { CommonTicketsModel } from '../../../utility/models/common.tickets.model';
 import { GroupModel } from './group-tickets.model';
 

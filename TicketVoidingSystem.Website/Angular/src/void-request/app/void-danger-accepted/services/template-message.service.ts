@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
-import { TemplateValue } from '../../../../utility/modules/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/modules/template-message/template-message/template.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidMatch } from '../../models/void-match.model';
 

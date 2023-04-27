@@ -108,7 +108,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.initDataForDisplayLogInfo();
     this.initLiveScore();
     await this.getMatchInfo();
-    this.issue = await this.appService.getIssueInfo(StaticService.getSubIssueTypeId(this.requestDetail));
+    this.issue = await this.commonService.getIssueInfo(StaticService.getSubIssueTypeId(this.requestDetail));
     this.reason = await this.appService.getVoidedReason(this.issue.subIssueTypeId, this.isHasMatchInfo() ? this.match.sportType : 0);
     await this.initQuery();
     await this.getTickets();
@@ -120,13 +120,13 @@ export class VoidOtherIssueComponent implements OnInit {
   private async getMatchInfo(): Promise<void> {
     if (this.isHasMatchInfo()) {
       if (this.isWrongScore()) {
-        this.match = await this.appService.getMatch(this.requestDetail.wrongScoreModels[0].matchId);
+        this.match = await this.commonService.getMatch(this.requestDetail.wrongScoreModels[0].matchId);
         this.isShowVar = this.requestDetail.wrongScoreModels[0].isCheckedVar;
       } else if (this.isRedCard()) {
-        this.match = await this.appService.getMatch(this.requestDetail.redCardModels[0].matchId);
+        this.match = await this.commonService.getMatch(this.requestDetail.redCardModels[0].matchId);
         this.isShowVar = this.requestDetail.redCardModels[0].isCheckedVar;
       } else {
-        this.match = await this.appService.getMatch(this.requestDetail.event.matchId);
+        this.match = await this.commonService.getMatch(this.requestDetail.event.matchId);
       }
     }
   }
@@ -380,10 +380,10 @@ export class VoidOtherIssueComponent implements OnInit {
 
           const result = await this.commonService.checkVoidBetPermission(checkingPermissionModel);
 
-          if (result.ErrCode !== 0 && checkingPermissionModel.action) {
+          if (result.errCode !== 0 && checkingPermissionModel.action) {
             this.modalService.open({
               title: 'Warning!',
-              message: result.ErrMsg,
+              message: result.errMsg,
               type: ModalType.Warning
             }, async () => this.executeGetTickets(true));
           } else {
@@ -488,7 +488,7 @@ export class VoidOtherIssueComponent implements OnInit {
         matchId: this.match.matchId,
         betTypes: this.ticketsModel.betTypes
       };
-      const data = await this.appService.getGroupBetTypes(query);
+      const data = await this.commonService.getGroupBetTypes(query);
       this.handleGroupBetTypes(data);
     } else {
       this.groupBetTypes = new GroupBetTypesModel([], true);

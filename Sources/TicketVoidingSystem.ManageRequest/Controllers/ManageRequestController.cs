@@ -16,7 +16,11 @@ public class ManageRequestController : ControllerBase
     }
 
     [HttpGet]
-    [Route("[action]/{id}")]
+    [Route("{id}")]
+    public async Task<IActionResult> GetIssueTypeName(int id) => Ok(await mediator.Send(new GetIssueNameRequest { SubId = id }));
+
+    [HttpGet]
+    [Route("{id}")]
     public async Task<IActionResult> GetRequest(int id) => Ok(await mediator.Send(new GetRequestRequest { RequestId = id }));
 
     [HttpPost]

@@ -1,0 +1,19 @@
+.general-info-tab {
+    border-bottom: 1px solid #cee1ee; 
+    width: 70%;
+
+    .inner-border {
+        border-left:1px solid #3361a2; 
+        border-right:1px solid #3361a2; 
+        border-top:1px solid #3361a2;
+        background-color:#cddef2; 
+        padding:5px;
+
+        span {
+            color:#3361a2;
+        }
+    }
+}
+::ng-deep .card-header {
+    padding: 0px;
+}

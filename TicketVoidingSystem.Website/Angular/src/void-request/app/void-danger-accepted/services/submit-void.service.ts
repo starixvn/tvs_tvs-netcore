@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import * as moment from 'moment';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
+import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { Result } from '../../../../utility/models/result';
-import { TemplateMessageComponent } from '../../../../utility/modules/template-message/template-message/template-message.component';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { AppService } from '../../app.service';
 import { VoidMatch } from '../../models/void-match.model';
