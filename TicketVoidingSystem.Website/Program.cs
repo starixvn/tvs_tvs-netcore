@@ -1,7 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
@@ -10,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Services.JackTimeCashOut;
 using TicketVoidingSystem.Services.NetPosition;
