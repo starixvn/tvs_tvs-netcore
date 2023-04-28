@@ -29,6 +29,6 @@ public class GetUserLogModel
 
     public DateTime KickOffTime { get; set; }
 
-    public int ChildMatchId { get; set; }
+    public int? ChildMatchId { get; set; }
 
 }

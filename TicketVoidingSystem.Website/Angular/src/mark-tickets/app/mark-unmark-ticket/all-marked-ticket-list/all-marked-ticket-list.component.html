@@ -76,7 +76,7 @@
               <div>
                 {{ticket.matchId}}
                 <br/>
-                <span *ngIf="isShowChildMatchId(ticket.childMatchId)">
+                <span *ngIf="ticket.childMatchId">
                     ({{ticket.childMatchId}})
                 </span>
               </div>

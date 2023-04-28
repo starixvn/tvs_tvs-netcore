@@ -81,7 +81,7 @@
             <div>
               {{log.matchId}}
               <br/>
-              <span *ngIf="isShowChildMatchId(log.childMatchId.toString())">
+              <span *ngIf="log.childMatchId">
                   ({{log.childMatchId}})
               </span>
             </div>

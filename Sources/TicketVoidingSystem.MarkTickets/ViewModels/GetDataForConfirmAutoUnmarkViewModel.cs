@@ -42,6 +42,6 @@ public class ConfirmAutoUnmarkViewModel
 
     public int MarkType { get; set; }
 
-    public int ChildMatchId { get; set; }
+    public int? ChildMatchId { get; set; }
 
 }

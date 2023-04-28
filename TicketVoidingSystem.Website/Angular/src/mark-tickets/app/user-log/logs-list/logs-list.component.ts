@@ -58,7 +58,4 @@ export class LogsListComponent implements OnInit {
     return result;
   }
 
-  isShowChildMatchId(childMatchId: string) {
-    return (childMatchId.toString() !== "0");
-  }
 }

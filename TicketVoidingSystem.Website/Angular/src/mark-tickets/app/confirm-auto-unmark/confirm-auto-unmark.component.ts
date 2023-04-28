@@ -130,10 +130,6 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
       });
   }
 
-  isShowChildMatchId(childMatchId: string) {
-    return (childMatchId.toString() !== "0");
-  }
-
   private async onYesConfirmModal(item: ConfirmAutoUnmarkViewModel) {
     let modalMessage: string;
     let modalType: number;
