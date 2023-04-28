@@ -58,4 +58,12 @@ export class LogsListComponent implements OnInit {
     return result;
   }
 
+  getShowMatchId(matchId: number, childMatchId :number){
+    if(childMatchId){
+      return `${matchId}\n(${childMatchId})`
+    }
+    else{
+      return `${matchId}`
+    }
+  }
 }

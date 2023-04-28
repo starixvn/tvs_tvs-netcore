@@ -73,13 +73,7 @@
               <div>{{ticket.no}}</div>
             </td>
             <td>
-              <div>
-                {{ticket.matchId}}
-                <br/>
-                <span *ngIf="ticket.childMatchId">
-                    ({{ticket.childMatchId}})
-                </span>
-              </div>
+              <div>{{getShowMatchId(ticket.matchId, ticket.childMatchId)}}</div>                
             </td>
             <td>
               <div>{{convertToGMT8(ticket.kickOffTime) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>

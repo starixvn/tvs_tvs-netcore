@@ -172,4 +172,13 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
 
     return result.errorMsg;
   }
+
+  getShowMatchId(matchId: string, childMatchId :string){
+    if(childMatchId){
+      return `${matchId}\n(${childMatchId})`
+    }
+    else{
+      return `${matchId}`
+    }
+  }
 }
