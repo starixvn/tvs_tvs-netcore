@@ -28,7 +28,7 @@ public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
         var transInfoJsonList = await GetTransInfoForAutoUnmark(query);
         var criteria = new GetDataForConfirmAutoUnmarkCriteria();
 
-        criteria.TransInfo = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
+        criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return await repository.FetchAsync<ConfirmAutoUnmarkModel>(criteria);
     }
@@ -38,7 +38,7 @@ public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
         var dataInAllServers = new List<string>();
         var criteria = new GetTransInfoForAutoUnmarkCriteria
         {
-            MatchId = int.Parse(query.MatchId),
+            MatchId = (query.MatchId != null) ? int.Parse(query.MatchId) : null,
             SportType = query.SportType,
             MarkedBy = query.MarkedBy,
             IsExcludeTest = query.IsExcludeTest

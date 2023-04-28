@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal';
@@ -12,6 +12,8 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark.model';
+import { CheckValidateService } from '../services/check-validate.service';
+import { LABELS } from '../../../utility/constants/labels';
 
 @Component({
   selector: 'confirm-auto-unmark',
@@ -32,8 +34,11 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   constructor(
     private readonly commonService: CommonService,
     private readonly appService: AppService,
-    private readonly modalService: ModalService
-  ) { }
+    private readonly modalService: ModalService,
+    private readonly element: ElementRef,
+    private readonly checkValidateService: CheckValidateService) {
+    this.tooltip.element = element;
+  }
 
   async ngOnInit() {
     await this.getSportTypes();
@@ -53,9 +58,15 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   }
 
   async resetPagingAndSearchData() {
-    this.paging = new PagingModel();
-    this.paging.pageSize = PagingConstant.SIZE_ONE;
-    await this.searchData();
+    const isSuccessMatch = await this.checkValidateService.checkValidMatch(this.query.matchId, this.tooltip)
+    if (isSuccessMatch) {
+      this.paging = new PagingModel();
+      this.paging.pageSize = PagingConstant.SIZE_ONE;
+      await this.searchData();
+    } else {
+      this.tooltip.display('match-id', LABELS.INVALID_MATCHID);
+    }
+
   }
 
   async getSportTypes() {
@@ -122,7 +133,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   isShowChildMatchId(childMatchId: string) {
     return (childMatchId.toString() !== "0");
   }
-  
+
   private async onYesConfirmModal(item: ConfirmAutoUnmarkViewModel) {
     let modalMessage: string;
     let modalType: number;

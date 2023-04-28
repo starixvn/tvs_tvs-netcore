@@ -4,7 +4,7 @@ namespace TicketVoidingSystem.MarkTickets.Criteria.ConfirmAutoUnmark;
 
 public class GetDataForConfirmAutoUnmarkCriteria : CriteriaBase
 {
-    public string TransInfo { get; set; }
+    public string TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_AutoUnmark_Select";
 
