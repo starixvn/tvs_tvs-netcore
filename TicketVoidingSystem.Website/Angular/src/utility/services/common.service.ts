@@ -69,7 +69,7 @@ export class CommonService {
   // }
 
   async getIssueInfo(subId: number): Promise<IssueInfo> {
-    return this.httpService.getJson(`TicketVoiding/GetIssueTypeName?subId=${subId}`);
+    return this.httpService.getJson(`api/ManageRequest/GetIssueTypeName/${subId}`);
   }
 
   async getBalanceUp(): Promise<BalanceUp> {

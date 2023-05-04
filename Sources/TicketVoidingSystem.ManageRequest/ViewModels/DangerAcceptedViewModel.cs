@@ -5,9 +5,9 @@ namespace TicketVoidingSystem.ManageRequest.ViewModels;
 public class DangerAcceptedViewModel
 {
     public int MatchId { get; set; }
-    public string MatchCode { get; set; }
-    public string Name { get; set; }
-    public string LeagueName { get; set; }
+    public string? MatchCode { get; set; }
+    public string? Name { get; set; }
+    public string? LeagueName { get; set; }
     public bool IsMainMatch { get; set; }
     public int IssueTypeId { get; set; }
     public int SubIssueTypeId { get; set; }
@@ -17,10 +17,10 @@ public class DangerAcceptedViewModel
     public DateTime FilterToTransTime { get; set; }
     public DateTime? VoidFromTime { get; set; }
     public DateTime? VoidToTime { get; set; }
-    public string TypeAccept { get; set; }
+    public string? TypeAccept { get; set; }
     public int? AATime { get; set; }
     public int? PATime { get; set; }
     public int? SATime { get; set; }
-    public LogInfoDetail LogInfoDetail { get; set; }
+    public LogInfoDetail? LogInfoDetail { get; set; }
     public bool? IsCheckedVar { get; set; }
 }

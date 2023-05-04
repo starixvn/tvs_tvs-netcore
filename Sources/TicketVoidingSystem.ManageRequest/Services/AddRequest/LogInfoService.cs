@@ -189,13 +189,13 @@ public class LogInfoServiceImp : LogInfoService
         criteria.UserId = session.UserId;
         criteria.KickOffInfo = (query.IssueTypeId == IssueTypeConstant.EarlyKickOffTime || query.IssueTypeId == IssueTypeConstant.WrongKickOffTime)
             ? ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
-        criteria.WrongScoreInfo = query.WrongScoreModels.ToWrongScoreInfoXml();
-        criteria.DangerAcceptedInfo = query.DangerAcceptedModels.ToDangerAcceptedInfoXml();
-        criteria.RedCardInfo = query.RedCardModels.ToDangerAcceptedInfoXml();
-        criteria.WrongHdpInfo = query.WrongHdpModels.ToWrongHdpInfoXml();
-        criteria.Wrong1stHdpInfo = query.Wrong1stHdpModels.ToWrongHdpInfoXml();
-        criteria.WrongOuInfo = query.WrongOuModels.ToWrongOuInfoXml();
-        criteria.Wrong1stOuInfo = query.Wrong1stOuModels.ToWrongOuInfoXml();
+        criteria.WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml();
+        criteria.DangerAcceptedInfo = query.DangerAcceptedModels?.ToDangerAcceptedInfoXml();
+        criteria.RedCardInfo = query.RedCardModels?.ToDangerAcceptedInfoXml();
+        criteria.WrongHdpInfo = query.WrongHdpModels?.ToWrongHdpInfoXml();
+        criteria.Wrong1stHdpInfo = query.Wrong1stHdpModels?.ToWrongHdpInfoXml();
+        criteria.WrongOuInfo = query.WrongOuModels?.ToWrongOuInfoXml();
+        criteria.Wrong1stOuInfo = query.Wrong1stOuModels?.ToWrongOuInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;

@@ -6,11 +6,11 @@ public class WrongHdpViewModel
 {
     public int MatchId { get; set; }
 
-    public string MatchCode { get; set; }
+    public string? MatchCode { get; set; }
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
-    public string LeagueName { get; set; }
+    public string? LeagueName { get; set; }
 
     public bool IsMainMatch { get; set; }
 
@@ -28,15 +28,15 @@ public class WrongHdpViewModel
 
     public DateTime? VoidToTime { get; set; }
 
-    public string HomeFavorite { get; set; }
+    public string? HomeFavorite { get; set; }
 
-    public string AwayFavorite { get; set; }
+    public string? AwayFavorite { get; set; }
 
-    public string ActualMarket { get; set; }
+    public string? ActualMarket { get; set; }
 
-    public string HdpValue { get; set; }
+    public string? HdpValue { get; set; }
 
-    public string PoolHouseCheckedBetTypes { get; set; }
+    public string? PoolHouseCheckedBetTypes { get; set; }
 
     public bool IsLinkGroup1X2 { get; set; }
 
@@ -46,5 +46,5 @@ public class WrongHdpViewModel
 
     public int LiveIndicator { get; set; }
 
-    public LogInfoDetail LogInfoDetail { get; set; }
+    public LogInfoDetail? LogInfoDetail { get; set; }
 }

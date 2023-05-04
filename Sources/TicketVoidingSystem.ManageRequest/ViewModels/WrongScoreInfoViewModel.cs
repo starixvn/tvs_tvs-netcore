@@ -7,14 +7,14 @@ public class WrongScoreInfoViewModel
     public int ScoreId { get; set; }
     public bool IsActive { get; set; }
     public bool IsChecked { get; set; }
-    public string WrongScore { get; set; }
+    public string? WrongScore { get; set; }
     public int? FilterBy { get; set; }
     public DateTime FilterFromTransTime { get; set; }
     public DateTime? FilterToTransTime { get; set; }
     public DateTime? VoidFromTime { get; set; }
     public DateTime? VoidToTime { get; set; }
-    public LogInfoDetail LogInfoDetail { get; set; }
-    public string ActualScore { get; set; }
+    public LogInfoDetail? LogInfoDetail { get; set; }
+    public string? ActualScore { get; set; }
     public int MatchId { get; set; }
     public int SubIssueTypeId { get; set; }
     public DateTime? EventDate { get; set; }

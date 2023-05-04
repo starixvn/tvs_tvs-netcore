@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
 import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { Result } from '../../../../utility/models/result';
+import { PasswordService } from '../../../../utility/services/password.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { AppService } from '../../app.service';
 import { VoidMatch } from '../../models/void-match.model';
@@ -21,7 +22,8 @@ export class SubmitVoidService {
     private readonly validationService: ValidationService,
     private readonly popupService: PopupService,
     private readonly checkRequestService: CheckRequestService,
-    private readonly appService: AppService) { }
+    private readonly appService: AppService,
+    private readonly passwordService: PasswordService) { }
 
   public async voidAllMatches(templateMessageComponents: TemplateMessageComponent[], voidMatches: VoidMatch[],
     requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<void> {
@@ -86,7 +88,7 @@ export class SubmitVoidService {
 
       cricketTickets: voidMatch.voidTicketsMini.cricketTickets,
       userName: userName,
-      userPassword: userPassword,
+      userPassword: this.passwordService.hash(userPassword),
       reason: voidMatch.voidReason.reasonEnglish,
       reasonSC: voidMatch.voidReason.reasonChineseSimplified,
       message: voidMatch.templateMessage,

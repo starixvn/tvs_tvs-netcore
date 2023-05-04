@@ -15,7 +15,7 @@ public class GetTicketsQuery
 
     public int? LiveAwayScore { get; set; }
 
-    public List<BetTypeXml> BetTypes { get; set; }
+    public IEnumerable<BetTypeXml>? BetTypes { get; set; }
 
     public int PageIndex { get; set; }
 
@@ -28,5 +28,5 @@ public class GetTicketsQuery
     public int? ActionId { get; set; }
 
     // only user for search tickets EKO with validation existing other request
-    public string TransInfoJson { get; set; }
+    public string? TransInfoJson { get; set; }
 }

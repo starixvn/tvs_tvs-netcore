@@ -27,6 +27,7 @@ import { MatchModel } from '../../../utility/models/match.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../utility/services/mapping-model-static.service';
+import { PasswordService } from '../../../utility/services/password.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { CheckRequestService } from '../services/check-request.service';
 import { ConfirmationComponent } from './../../../utility/components/confirmation/confirmation.component';
@@ -89,7 +90,8 @@ export class VoidOtherIssueComponent implements OnInit {
     private readonly templateService: TemplateService,
     private readonly checkRequestService: CheckRequestService,
     private readonly clipboardService: ClipboardService,
-    private readonly element: ElementRef
+    private readonly element: ElementRef,
+    private readonly passwordService: PasswordService
   ) {
     this.tooltip.element = this.element;
   }
@@ -343,7 +345,7 @@ export class VoidOtherIssueComponent implements OnInit {
         return this.ticketsModel.cricketTickets.find(y => y.transId === x);
       }),
       userName: this.confirmationComponent.confirmation.userName,
-      userPassword: this.confirmationComponent.confirmation.userPassword,
+      userPassword: this.passwordService.hash(this.confirmationComponent.confirmation.userPassword),
       reason: this.confirmationComponent.confirmation.reason,
       reasonSC: this.confirmationComponent.confirmation.reasonSC,
       message: this.messagesComponent?.message,
