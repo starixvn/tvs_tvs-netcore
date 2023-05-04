@@ -13,6 +13,7 @@ using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.Services.SendMessage;
+using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
@@ -68,5 +69,8 @@ public static class TicketVoidingSystemService
         //Send Message
         services.AddSingleton<MessageItemService, MessageItemServiceImp>();
         services.AddScoped<SendMessageService, SendMessageServiceImp>();
+
+        // SignalR
+        services.AddSingleton<NotificationSignalRService, NotificationSignalRServiceImp>();
     }
 }
