@@ -111,13 +111,22 @@ export class GroupModel {
         });
     }
 
+    getTickets(): BetID[] {
+        return this.tickets.map(ticket => {
+            return {
+                transId: ticket.value,
+                siteDbGroupId: ticket.siteDbGroupId
+            } as BetID;
+        });
+    }
+
     getTicketCricket(): string {
         let result = '';
         this.tickets.forEach(ticket => {
             result = ticket.isChecked && ticket.isCricket ?
                 result !== '' ?
                     result + ',' + ticket.value : ticket.value
-                    : result;
+                : result;
         });
 
         return result;

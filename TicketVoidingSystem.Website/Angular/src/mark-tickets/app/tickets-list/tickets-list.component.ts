@@ -36,6 +36,7 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
       this.tooltip.display('invalid-data', LABELS.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
+      this.markedTicketsQuery.checkPermissionTickets = this.model.getAllTickets();
       this.updateMarkedTickets.emit(this.markedTicketsQuery);
     }
   }
@@ -46,6 +47,7 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
       this.tooltip.display('invalid-data', LABELS.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
+      this.markedTicketsQuery.checkPermissionTickets = this.model.getAllTickets();
       this.updateMarkedTickets.emit(this.markedTicketsQuery);
     }
   }

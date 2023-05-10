@@ -23,10 +23,16 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
     public IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel)
     {
         var tickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["tickets"].ToString());
+        IEnumerable<BetId> cancelCashOutTickets = new List<BetId>();
+        if (queryModel.ContainsKey("cancelCashOutTickets"))
+        {
+            cancelCashOutTickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["cancelCashOutTickets"].ToString());
+        }
         var transInfoJsonList = new List<string>();
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
+            var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
                 continue;
@@ -35,7 +41,8 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
             var criteria = new GetTransInfoForCheckPermissionCriteria
             {
                 SiteDbGroupId = server.Id,
-                TransIds = Helper.JoinBetIdList(ticketsInSiteDb)
+                TransIds = Helper.JoinBetIdList(ticketsInSiteDb),
+                CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSiteDb)
             };
             var response = repository.Get<string>(criteria);
             transInfoJsonList.Add(response);

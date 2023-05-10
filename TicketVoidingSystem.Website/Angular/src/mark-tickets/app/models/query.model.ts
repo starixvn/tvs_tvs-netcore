@@ -62,6 +62,7 @@ export class Duration {
 export class MarkedTicketQuery {
   tickets: BetID[];
   status: string;
+  checkPermissionTickets: BetID[];
 }
 
 

@@ -222,7 +222,7 @@ export class MarkUnmarkTicketComponent {
     }
     this.modalService.confirm({ title: header, message: body, type: ModalType.Confirm }, async () => {
       const checkingPermissionModel = new CheckingPermissionModel();
-      checkingPermissionModel.setParam(query.tickets, null, 'mark-tickets-check-permission', isMarked, null, false);
+      checkingPermissionModel.setParam(query.checkPermissionTickets, null, 'mark-tickets-check-permission', isMarked, null, false);
       this.modalService.confirmPermission(checkingPermissionModel, {
         title: 'WARNING!',
         type: ModalType.Confirm

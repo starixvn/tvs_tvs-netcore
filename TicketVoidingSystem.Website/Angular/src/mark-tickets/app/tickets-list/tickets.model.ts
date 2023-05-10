@@ -86,8 +86,22 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
             transId: ticket.value,
             matchId: null,
             siteDbGroupId: ticket.siteDbGroupId
-           });
+          });
         }
+      });
+    });
+    return result;
+  }
+
+  getAllTickets(): BetID[] {
+    const result: BetID[] = [];
+    this.groups.forEach(group => {
+      group.tickets.forEach(ticket => {
+        result.push({
+          transId: ticket.value,
+          matchId: null,
+          siteDbGroupId: ticket.siteDbGroupId
+        });
       });
     });
     return result;
