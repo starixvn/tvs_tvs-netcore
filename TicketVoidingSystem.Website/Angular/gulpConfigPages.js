@@ -80,9 +80,9 @@ const configPages = [
   // homePage,
   // manageVoidServices,
   // abExceptionList,
-  // markTickets,
+  markTickets,
   // ticketListing,
-  voidSingleBet
+ // voidSingleBet
 ];
 
 module.exports = configPages;
