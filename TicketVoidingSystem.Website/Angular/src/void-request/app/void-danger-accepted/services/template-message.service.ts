@@ -8,7 +8,6 @@ import { TemplateService } from '../../../../utility/components/template-message
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { VoidMatch } from '../../models/void-match.model';
 
@@ -38,7 +37,7 @@ export class TemplateMessageService {
     } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
       this.initValueForWrongHdp(templateValue, voidMatch, requestDetail.wrongHdpModels);
     } else if (StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId)) {
-      this.initValueForWrongOu(templateValue, voidMatch.logInfoDetail.liveScores, requestDetail.wrongOuModels, voidMatch.matchModel, voidMatch.isAllLiveTickets);
+      this.initValueForWrongOu(templateValue, voidMatch, requestDetail.wrongOuModels);
     }
 
     return templateValue;
@@ -66,17 +65,16 @@ export class TemplateMessageService {
     templateValue.checkAIOMessage = voidMatch.voidTicketsMini.isHasAioMessage;
   }
 
-  private initValueForWrongOu(templateValue: TemplateValue, liveScoreText: string, wrongOuModels: WrongOuModel[],
-    match: MatchModel, isAllLiveTickets: boolean): void {
-    const wrongOuModel = wrongOuModels.find(x => x.matchId === match.matchId);
-    const liveScoreList = liveScoreText.split('|');
+  private initValueForWrongOu(templateValue: TemplateValue, voidMatch: VoidMatch, wrongOuModels: WrongOuModel[]): void {
+    const wrongOuModel = wrongOuModels.find(x => x.matchId === voidMatch.matchModel.matchId);
+    const liveScoreList = voidMatch.logInfoDetail.liveScores.split('|');
 
-    templateValue.eventType = isAllLiveTickets ? EventType.LIVE : null;
+    templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
     templateValue.score = _.first(liveScoreList).replace(/ /g, '');
     templateValue.wrongMarket = wrongOuModel.wrongMarket;
     templateValue.actualMarket = wrongOuModel.actualMarket;
+    templateValue.checkAIOMessage = voidMatch.voidTicketsMini.isHasAioMessage;
   }
-
   private initValueForWrongScore(templateValue: TemplateValue, wrongScore: string, actualScore: string, isCheckedVar = false) {
     //// TODO
   }

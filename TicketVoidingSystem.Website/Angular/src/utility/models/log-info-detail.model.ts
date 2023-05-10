@@ -17,6 +17,7 @@ export class LogInfoDetail {
     liveGameEarlySingleCount?: number;
     liveGameEarlyCashOutCount?: number;
     liveGameEarlySettleCount?: number;
+    liveGameEarlyInstantlySettleCount?: number;
     poolHouseSingleCount?: number;
     poolHouseCashOutCount?: number;
     poolHouseSettleCount?: number;

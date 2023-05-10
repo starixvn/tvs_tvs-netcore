@@ -34,6 +34,8 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   isHasSettledTicket: boolean;
   isAllLiveTickets: boolean;
   isHasAioMessage: boolean;
+  checkPermissionTickets: BetID[];
+  allCancelCashOutTickets: BetID[];
 
   initData(data: TicketsModel) {
     this.total = data.total;
@@ -55,6 +57,8 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.cricketTickets = data.cricketTickets;
     this.uncheckedTransIds = data.uncheckedTransIds;
     this.betTypes = data.betTypes;
+    this.checkPermissionTickets = data.checkPermissionTickets;
+    this.allCancelCashOutTickets = data.allCancelCashOutTickets;
   }
 
   mapGroups(groups: Array<GroupModel>) {

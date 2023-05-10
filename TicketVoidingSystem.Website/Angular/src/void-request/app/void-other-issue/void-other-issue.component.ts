@@ -315,7 +315,10 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   private checkValidation(): boolean {
-    if (this.voidQuery.singleTickets.length === 0 && this.voidQuery.parlayTickets.length === 0 && this.voidQuery.cancelCashOutTickets.length === 0 && this.voidQuery.cricketTickets.length === 0) {
+    if (this.voidQuery.singleTickets.length === 0
+      && this.voidQuery.parlayTickets.length === 0
+      && this.voidQuery.cancelCashOutTickets.length === 0
+      && this.voidQuery.cricketTickets.length === 0) {
       this.tooltip.display('checkbox-dropdown-list', LABELS.EMPTY_TICKET);
       return false;
     }
@@ -373,9 +376,8 @@ export class VoidOtherIssueComponent implements OnInit {
         const isRequestModified = await this.checkRequestService.isRequestModified(this.requestDetail.requestId, this.requestDetail.lastModifiedDate);
         if (!isRequestModified) {
           const checkingPermissionModel = new CheckingPermissionModel();
-          const voidTickets = this.voidQuery.singleTickets.concat(this.voidQuery.parlayTickets).concat(this.voidQuery.cricketTickets);
-          checkingPermissionModel.setParam(voidTickets, this.voidQuery.matchId, 'ticket-voiding-check-void-bet-permission', true,
-            StaticService.checkHandlingCashOutAsUnSettledTicketByIssueTypeId(this.requestDetail.request.issueTypeId.toString()), true, this.voidQuery.cancelCashOutTickets);
+          checkingPermissionModel.setParam(this.ticketsModel.checkPermissionTickets, this.voidQuery.matchId, 'ticket-voiding-check-void-bet-permission', true,
+            StaticService.checkHandlingCashOutAsUnSettledTicketByIssueTypeId(this.requestDetail.request.issueTypeId.toString()), true, this.ticketsModel.allCancelCashOutTickets);
           if (this.isAbnormalAccount() || this.isAbnormalBetMixParlay() || this.isArchivedTickets()) {
             checkingPermissionModel.matchId = 0;
           }

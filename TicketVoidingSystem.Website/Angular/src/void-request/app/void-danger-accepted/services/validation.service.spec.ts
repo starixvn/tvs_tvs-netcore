@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../../utility/constants/labels';
 import { AffectedLicensee } from '../../../../utility/models/affected-licensee.model';
-import { BetID } from '../../../../utility/models/bet-id.mode';
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -45,13 +44,13 @@ class Helper {
     isPoolHouseAffected: false
   };
   static readonly fakeSqlResultError: SqlResult = {
-    ErrCode: 1,
-    ErrMsg: 'error',
+    errCode: 1,
+    errMsg: 'error',
     isSuccessful: false,
   };  
   static readonly fakeSqlResultSuccessful: SqlResult = {
-    ErrCode: 0,
-    ErrMsg: '',
+    errCode: 0,
+    errMsg: '',
     isSuccessful: true,
   };
 }
@@ -136,6 +135,11 @@ describe('ValidationService', () => {
     fakeVoidMatch.voidReason = new VoidedReason();
     fakeVoidMatch.voidReason.reasonEnglish = 'reason';
     fakeVoidMatch.voidReason.reasonChineseSimplified = 'reason';
+    fakeVoidMatch.voidTicketsMini.cancelCashOutTickets = [];
+    fakeVoidMatch.voidTicketsMini.cricketTickets = [];
+    fakeVoidMatch.voidTicketsMini.singleTickets = [];
+    fakeVoidMatch.voidTicketsMini.parlayTickets = [];
+
     validationService['getTicketsForCheckPermission'] = jest.fn().mockImplementation(() => []);
     const spyCommonServiceCheckVoidBetPermission = jest.spyOn(commonService, 'checkVoidBetPermission').mockImplementation(() => Promise.resolve(Helper.fakeSqlResultError));
     const issueTypeIds = [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.ABNORMAL_ACCOUNT];
@@ -146,7 +150,7 @@ describe('ValidationService', () => {
       // Assert
       expect(spyCommonServiceCheckVoidBetPermission).toHaveBeenCalledTimes(2);
       expect(result.errorCode).toBe(1);
-      expect(result.errorMsg).toBe(Helper.fakeSqlResultError.ErrMsg);
+      expect(result.errorMsg).toBe(Helper.fakeSqlResultError.errMsg);
     });
   });
   
@@ -180,19 +184,5 @@ describe('ValidationService', () => {
 
     // Assert
     expect(voidMatch.templateMessage).toBe(templateMessageComponent.message);
-  });
-  
-  it('#getTicketsForCheckPermission should return expected', async () => {
-    // Arrange
-    const ticketsModel = new TicketsModel();
-    ticketsModel.uncheckedTransIds = ['1'];
-    ticketsModel.singleTickets = [new BetID()];
-    ticketsModel.parlayTickets = [new BetID()];
-
-    // Action
-    const actual = validationService['getTicketsForCheckPermission'](ticketsModel);
-
-    // Assert
-    expect(actual.length).toBe(2);
   });
 });

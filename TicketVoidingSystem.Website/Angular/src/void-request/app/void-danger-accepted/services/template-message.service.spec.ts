@@ -197,11 +197,16 @@ describe('TemplateMessageService', () => {
   it('#initValueForWrongOu should update expected model', async () => {
     // Arrange
     const templateValue = new TemplateValue();
-    const match = new MatchModel();
+    const voidMatch = new VoidMatch();
     const wrongOuModel = new WrongOuModel();
+    voidMatch.matchModel = new MatchModel();
+    voidMatch.logInfoDetail = new LogInfoDetail();
+    voidMatch.logInfoDetail.liveScores = '1|0';
+    voidMatch.voidTicketsMini = new TicketsModel();
+    voidMatch.isAllLiveTickets = true;
 
     // Action
-    templateMessageService['initValueForWrongOu'](templateValue, '', [wrongOuModel], match, true);
+    templateMessageService['initValueForWrongOu'](templateValue, voidMatch, [wrongOuModel]);
 
     // Assert
     expect(templateValue.eventType).toBe(EventType.LIVE);

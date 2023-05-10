@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
 
@@ -11,7 +12,7 @@ import { StaticService } from '../../../utility/services/static.service';
   styleUrls: ['./log-info-new.component.scss']
 })
 export class LogInfoNewComponent {
-  @Input() isWrongHdp: boolean;
+  @Input() issueTypeId: number;
   @Input() isMainMatch: boolean;
   @Input() isPoolHouseAffected: boolean;
   @Input() logInfoDetail: LogInfoDetail;
@@ -20,7 +21,18 @@ export class LogInfoNewComponent {
   displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
+  
+  isShowPoolHouseTickets() {
+    const issueTypesHavePoolHouse = [
+      Number(IssueTypeConstant.WRONG_HDP),
+      Number(IssueTypeConstant.WRONG_1ST_HDP),
+      Number(IssueTypeConstant.WRONG_OU),
+      Number(IssueTypeConstant.WRONG_1ST_OU)
+    ];
 
+    return issueTypesHavePoolHouse.includes(this.issueTypeId);
+  }
+  
   isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
@@ -40,13 +52,13 @@ export class LogInfoNewComponent {
           this.acceptTypeName = "AA";
           return 'highlight-min-aa';
         }
-        case AcceptType.SECOND_ACCEPT: {
-          this.acceptTypeName = "SA";
-          return 'highlight-min-sa';
-        }
         case AcceptType.PENDING_ACCEPT: {
           this.acceptTypeName = "PA";
           return 'highlight-min-pa';
+        }
+        case AcceptType.SECOND_ACCEPT: {
+          this.acceptTypeName = "SA";
+          return 'highlight-min-sa';
         }
       }
     }
@@ -60,5 +72,9 @@ export class LogInfoNewComponent {
     }
     return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}` :
       `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
+  }
+
+  isHaveCancelCashOut(): boolean {
+    return StaticService.isHaveCancelCashOutTicket(this.issueTypeId?.toString());
   }
 }

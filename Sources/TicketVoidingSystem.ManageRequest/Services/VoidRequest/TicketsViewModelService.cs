@@ -37,15 +37,32 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateLicenseeName(model, allTickets);
         UpdateBetTypes(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
+        UpdateCheckPermissionTickets(model, allTickets);
 
         model.Total = allTickets.Count();
         model.TotalSingle = ticketsInRequest.SingleTickets.Union(ticketsInRequest.CricketTickets).Count();
         model.TotalParlay = ticketsInRequest.ParlayTickets.Count();
         model.TotalCancelCashOut = ticketsInRequest.CancelCashOutTickets.Count();
 
-        model.IsHasSettledTicket = voidTickets.Any(item => item.IsSettledTicket());
         model.IsAllLiveTickets = voidTickets.All(x => x.IsLiveIndicator);
         model.IsHasAioMessage = voidTickets.Any(x => IsValidTicketHaveAioMessage(issueTypeId, x));
+    }
+
+    private static void UpdateCheckPermissionTickets(TicketsViewModel model, IEnumerable<GetTicketModel> data)
+    {
+        model.CheckPermissionTickets = data.Where(item => !item.IsCancelCashOut).Select(item => new BetId
+        {
+            TransId = item.TransId.ToString(),
+            SiteDbGroupId = item.SiteDbGroupId,
+            MatchId = item.MatchId
+        }).ToList();
+
+        model.AllCancelCashOutTickets = data.Where(item => item.IsCancelCashOut).Select(item => new BetId
+        {
+            TransId = item.TransId.ToString(),
+            SiteDbGroupId = item.SiteDbGroupId,
+            MatchId = item.MatchId
+        }).ToList();
     }
 
     private static BetId ConvertGetTicketModelToBetId(GetTicketModel model)

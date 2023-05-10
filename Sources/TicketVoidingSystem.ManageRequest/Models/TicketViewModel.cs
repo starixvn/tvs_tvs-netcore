@@ -30,7 +30,11 @@ public class TicketsViewModel
     public List<BetId> CancelCashOutTickets { get; set; }
     public List<BetId> CricketTickets { get; set; }
     public List<string> UncheckedTransIds { get; set; }
-    public bool IsHasSettledTicket { get; set; }
+    public bool IsHasSingleSettledTicket { get; set; }
+    public bool IsHasParlaySettledTicket { get; set; }
+    public bool IsHasSettledTicket => IsHasSingleSettledTicket || IsHasParlaySettledTicket;
+    public List<BetId> CheckPermissionTickets { get; set; }
+    public List<BetId> AllCancelCashOutTickets { get; set; }
 }
 
 public class TicketViewModel

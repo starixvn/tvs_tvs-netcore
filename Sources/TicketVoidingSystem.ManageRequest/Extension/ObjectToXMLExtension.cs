@@ -160,6 +160,7 @@ public static class ObjectToXMLExtension
                 + $"LiveGameEarlySingleCount ='{model.LogInfoDetail.LiveGameEarlySingleCount}' "
                 + $"LiveGameEarlyCashOutCount='{model.LogInfoDetail.LiveGameEarlyCashOutCount}' "
                 + $"LiveGameEarlySettleCount='{model.LogInfoDetail.LiveGameEarlySettleCount}' "
+                + $"LiveGameEarlyInstantlySettleCount='{model.LogInfoDetail.LiveGameEarlyInstantlySettleCount}' "
                 + $"PoolHouseSingleCount='{model.LogInfoDetail.PoolHouseSingleCount}' "
                 + $"PoolHouseCashOutCount='{model.LogInfoDetail.PoolHouseCashOutCount}' "
                 + $"PoolHouseMainParlayCount='{model.LogInfoDetail.PoolHouseMainParlayCount}' "

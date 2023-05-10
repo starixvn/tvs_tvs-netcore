@@ -41,7 +41,12 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   }
 
   initTitle() {
-    this.title = `(Single Count: ${this.model.totalSingle}, Parlay Count: ${this.model.totalParlay}, Cancel CO: ${this.model.totalCancelCashOut})`;
+    if (StaticService.isHaveCancelCashOutTicket(this.issueTypeId?.toString())) {
+      this.title = `(Single Count: ${this.model.totalSingle}, Parlay Count: ${this.model.totalParlay}, Cancel CO: ${this.model.totalCancelCashOut})`;
+    } else {
+      this.title = `(Single Count: ${this.model.totalSingle}, Parlay Count: ${this.model.totalParlay})`;
+    }
+
     if (!StaticService.isAbnormalAccount(this.issueTypeId?.toString())) {
       this.title = `Void Time: ${this.model.strFromTime} - ${this.model.strToTime} ${this.title}`;
     }

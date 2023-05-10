@@ -29,7 +29,7 @@
         </div>
         <div class="col-sm-6 m-0 pd-right-0 pd-left-5">
           <div class="log-info-cell alert alert-dark p-1 m-0">
-            <log-info-new [logInfoDetail]="item.logInfoDetail" [isWrongHdp]="isWrongHdp() || isWrong1stHdp()" [isMainMatch]="item.isMainMatch" [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
+            <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId" [isMainMatch]="item.isMainMatch" [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
           </div>
         </div>
         <div class="ml-3" *ngIf="isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()">

@@ -38,6 +38,7 @@ public class LogInfoDetail
     public int LiveGameEarlySingleCount { get; set; }
     public int LiveGameEarlyCashOutCount { get; set; }
     public int LiveGameEarlySettleCount { get; set; }
+    public int LiveGameEarlyInstantlySettleCount { get; set; }
     public int PoolHouseSingleCount { get; set; }
     public int PoolHouseCashOutCount { get; set; }
     public int PoolHouseSettleCount { get; set; }

@@ -3,18 +3,18 @@
     <span>Live Score: </span><strong>{{logInfoDetail.liveScores}}</strong>.
     Void time (GMT-4): <strong>{{displayFullDateTimeFormat(logInfoDetail.voidFromTime)}} -
         {{displayFullDateTimeFormat(logInfoDetail.voidToTime)}}</strong><br />
-    <ng-container *ngIf="!isWrongHdp">
+    <ng-container *ngIf="!isShowPoolHouseTickets()">
         Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
         <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red" 
         [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
         </span>,
         Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong><span *ngIf="logInfoDetail.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span><br/>
-        Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong>
+        <span *ngIf="isHaveCancelCashOut()">Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
     </ng-container>
-    <ng-container *ngIf="isWrongHdp">
+    <ng-container *ngIf="isShowPoolHouseTickets()">
         LG/Early - Single Count: <strong>{{logInfoDetail.liveGameEarlySingleCount}}</strong>
-        <span *ngIf="isShowCountInfo(logInfoDetail.liveGameEarlyCashOutCount, logInfoDetail.liveGameEarlySettleCount, 0)" class="text-red" 
-        [innerHTML]="countInfoContent(logInfoDetail.liveGameEarlyCashOutCount, logInfoDetail.liveGameEarlySettleCount, 0) | sanitizeHtml">
+        <span *ngIf="isShowCountInfo(logInfoDetail.liveGameEarlyCashOutCount, logInfoDetail.liveGameEarlySettleCount, logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
+        [innerHTML]="countInfoContent(logInfoDetail.liveGameEarlyCashOutCount, logInfoDetail.liveGameEarlySettleCount, logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
         </span><br />
         <ng-container *ngIf="isMainMatch">
         <div *ngIf="isPoolHouseAffected">
