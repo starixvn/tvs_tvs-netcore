@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Functions SiteName="NAP - Special Delete Site">
     <Function Name="TicketVoiding">
-        <Setting Key="DBCTG.NAP_SpecialDelete_TransInfo_Select" SpName="NAP_SpecialDelete_TransInfo_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG.NAP_SpecialDelete_TransInfo_Select" SpName="NAP_SpecialDelete_TransInfo_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG2.NAP_SpecialDelete_TransInfo_Select" SpName="NAP_SpecialDelete_TransInfo_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
-
-        <Setting Key="DBCTG.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+	    <Setting Key="DBCTG.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG2.TicketVoiding_CheckVoidBetPermission_TransInfo" SpName="TicketVoiding_CheckVoidBetPermission_TransInfo" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
 
