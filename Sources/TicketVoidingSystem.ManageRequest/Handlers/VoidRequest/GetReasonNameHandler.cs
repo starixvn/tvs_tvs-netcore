@@ -26,7 +26,7 @@ public class GetReasonNameHandler : IRequestHandler<GetReasonNameRequest, Voided
 
     public async Task<VoidedReason> Handle(GetReasonNameRequest request, CancellationToken cancellationToken)
     {
-        var criteria = new GetReasonNameCriteria()
+        var criteria = new GetReasonNameCriteria
         {
             SubIssueTypeId = request.SubId,
             SportType = request.SportTypeId

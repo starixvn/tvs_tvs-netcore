@@ -38,8 +38,8 @@ public class CellServiceImp : CellService
     {
         var headerRange = worksheet.Cells[$"A{rowNumber}:M{rowNumber}"];
         headerRange.Merge = true;
-        const int FontSize = 8;
-        headerRange.Style.Font.Size = FontSize;
+        const int fontSize = 8;
+        headerRange.Style.Font.Size = fontSize;
         headerRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
         headerRange.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
         headerRange.Style.Font.Bold = true;
