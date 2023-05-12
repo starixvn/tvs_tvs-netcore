@@ -40,7 +40,7 @@ public class MapUserLogsServiceImp : MapUserLogsService
             FTScore = log.FTScore,
             KickOffTime = log.KickOffTime,
             ChildMatchId = log.ChildMatchId
-        });
+        }).ToList();
     }
 
     private static string UpdateAction(int logActionId)

@@ -126,7 +126,7 @@ export class MarkUnmarkTicketComponent {
 
   async getDetailTickets(ticketDetailId: TicketDetailId) {
     if (ticketDetailId) {
-      this.queryTicket.matchId = ticketDetailId ? ticketDetailId.childMatchId : ticketDetailId.matchId;
+      this.queryTicket.matchId = ticketDetailId.childMatchId ? ticketDetailId.childMatchId : ticketDetailId.matchId;
       this.queryTicket.userId = ticketDetailId.userId;
       this.queryTicket.createdDate = ticketDetailId.createdDate;
     }

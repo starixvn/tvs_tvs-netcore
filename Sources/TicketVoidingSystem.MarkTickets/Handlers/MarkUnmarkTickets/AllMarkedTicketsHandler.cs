@@ -60,6 +60,6 @@ public class AllMarkedTicketsHandler : IRequestHandler<AllMarkedTicketsRequest, 
             Event = remotingRefWrapperService.GetTeamName(itemModel.HomeId, LanguageCode.English)
                     + "- vs -" + remotingRefWrapperService.GetTeamName(itemModel.AwayId, LanguageCode.English),
             ChildMatchId = itemModel.ChildMatchId
-        });
+        }).ToList();
     }
 }
