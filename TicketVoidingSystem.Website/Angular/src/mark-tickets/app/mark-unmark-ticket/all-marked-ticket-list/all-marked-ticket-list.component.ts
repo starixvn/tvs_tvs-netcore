@@ -56,7 +56,8 @@ export class AllMarkedTicketListComponent implements OnInit {
     const ticketDetailId: TicketDetailId = {
       matchId: ticket.matchId,
       userId: ticket.userId,
-      createdDate: ticket.createdDate
+      createdDate: ticket.createdDate,
+      childMatchId: ticket.childMatchId
     };
     this.getDetailTickets.emit(ticketDetailId);
   }

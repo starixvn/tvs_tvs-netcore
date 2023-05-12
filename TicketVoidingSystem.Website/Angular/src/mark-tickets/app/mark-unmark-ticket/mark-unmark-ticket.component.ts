@@ -126,7 +126,7 @@ export class MarkUnmarkTicketComponent {
 
   async getDetailTickets(ticketDetailId: TicketDetailId) {
     if (ticketDetailId) {
-      this.queryTicket.matchId = ticketDetailId.matchId;
+      this.queryTicket.matchId = ticketDetailId ? ticketDetailId.childMatchId : ticketDetailId.matchId;
       this.queryTicket.userId = ticketDetailId.userId;
       this.queryTicket.createdDate = ticketDetailId.createdDate;
     }
@@ -137,7 +137,7 @@ export class MarkUnmarkTicketComponent {
     this.isShowMatch = false;
     this.isBetIdBorder = true;
     this.isBlockTickets = true;
-    this.match = await this.commonService.getMatch(parseInt(this.queryTicket.matchId, 10));
+    this.match = await this.commonService.getMatch(parseInt(ticketDetailId.matchId, 10));
     const data = await this.appService.getTicketsDetail(this.queryTicket);
     this.isBlockTickets = false;
     this.ticketsModel.initData(data);
@@ -292,8 +292,7 @@ export class MarkUnmarkTicketComponent {
   }
 
   private async updateAllMarkedTickets(matches: AllMarkedTicketModel[]) {
-    const query = new AllMarkedTicketQuery();
-    query.matches = matches;
+    const query = this.getAllMarkedTicketQuery(matches);
     this.isBlockTickets = true;
     const result = await this.appService.updateAllMarkedTickets(query);
     this.isBlockTickets = false;
@@ -316,5 +315,15 @@ export class MarkUnmarkTicketComponent {
         }
       }
     );
+  }
+  private getAllMarkedTicketQuery(matches: AllMarkedTicketModel[]) : AllMarkedTicketQuery{
+    const query = new AllMarkedTicketQuery();
+    query.matches = matches.map(match => {
+      return {
+        ...match,
+        matchId: match.childMatchId ? match.childMatchId : match.matchId,
+      } as AllMarkedTicketModel;
+    });
+    return query;
   }
 }

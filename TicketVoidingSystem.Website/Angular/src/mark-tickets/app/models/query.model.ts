@@ -70,6 +70,7 @@ export class TicketDetailId {
   matchId: string;
   userId: number;
   createdDate: Date;
+  childMatchId?:  string;
 }
 
 export class TicketDetailQuery extends TicketDetailId {
