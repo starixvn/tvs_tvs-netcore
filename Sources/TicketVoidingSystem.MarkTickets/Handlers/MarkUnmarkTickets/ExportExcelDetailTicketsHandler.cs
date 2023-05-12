@@ -25,7 +25,7 @@ public class ExportExcelDetailTicketsHandler : IRequestHandler<ExportExcelDetail
     public async Task<ExcelFileModel> Handle(ExportExcelDetailTicketsRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
-        var fileName = $"{request.MatchId}_Mark_Unmark_Tickets_{createDate}";
+        var fileName = $"{request.Match.MatchId}_Mark_Unmark_Tickets_{createDate}";
         return new ExcelFileModel
         {
             ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets),
