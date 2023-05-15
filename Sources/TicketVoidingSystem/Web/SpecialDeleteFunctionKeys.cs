@@ -91,4 +91,5 @@ public static class SpecialDeleteFunctionKeys
     public const string WrongHDP = "WrongHDP";
     public const string WrongOU = "WrongOU";
     public const string WrongScore = "WrongScore";
+    public const string WrongOdds = "WrongOdds";
 }
