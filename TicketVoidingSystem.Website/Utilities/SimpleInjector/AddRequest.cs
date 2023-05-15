@@ -9,10 +9,5 @@ public static class AddRequest
     {
         services.AddTransient<GetTransInfoService, GetTransInfoServiceImp>();
         services.AddTransient<LogInfoService, LogInfoServiceImp>();
-        services.AddTransient<LogInfoService, LogInfoServiceImp>();
-        services.AddTransient<LogInfoService, LogInfoServiceImp>();
-        services.AddTransient<LogInfoService, LogInfoServiceImp>();
-        services.AddTransient<LogInfoService, LogInfoServiceImp>();
-        services.AddTransient<LogInfoService, LogInfoServiceImp>();
     }
 }
