@@ -8,6 +8,7 @@ export class GetTicketsQuery {
   kickOffDate: string;
   requestId?: number;
   issueTypeId: number;
+  subIssueTypeId: number;
   betTypes?: CheckedBetType[];
   actionId?: number;
   liveHomeScore?: number;

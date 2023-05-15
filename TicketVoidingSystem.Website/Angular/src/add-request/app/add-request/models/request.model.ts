@@ -4,6 +4,7 @@ import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { WrongOuModel } from '../models/event-wrong-ou.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { OperatorInfo } from '../others/others.model';
+import { WrongOddsModel } from './event-wrong-odds.model';
 
 export class RequestDetailModel {
   sportType: number;
@@ -69,5 +70,7 @@ export class RequestDetailViewModel {
   redCardModels: RedCardModel[];
   wrongHdpModels: WrongHdpModel[];
   wrongOuModels: WrongOuModel[];
+  wrongOddsModels: WrongOddsModel[];
+
   messages: Message[];
 }

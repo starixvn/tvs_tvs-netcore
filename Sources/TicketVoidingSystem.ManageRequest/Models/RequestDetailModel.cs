@@ -240,6 +240,96 @@ public class RequestEventModel
         }
     }
 
+    public string FilterOddsType
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.FilterOddsType;
+        }
+    }
+
+    public string FilterFavoriteType
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.FilterFavoriteType;
+        }
+    }
+
+    public string FilterOuType
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.FilterOuType;
+        }
+    }
+
+    public string OddsValue
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.OddsValue;
+        }
+    }
+
+    public string FromOdds
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.FromOdds;
+        }
+    }
+
+    public string ToOdds
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.ToOdds;
+        }
+    }
+
+    public string CorrectOdds
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.CorrectOdds;
+        }
+    }
+
+    public string BetTeam
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.BetTeam;
+        }
+    }
+
+    public string OuValue
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.OuValue;
+        }
+    }
+
+    public string FavoriteValue
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.FavoriteValue;
+        }
+    }
+
     public string RequestExtraInfo { get; set; }
 
     public string Usernames { get; set; }

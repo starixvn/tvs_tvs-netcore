@@ -352,6 +352,41 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToWrongOddsInfoXml(this IEnumerable<WrongOddsViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"LiveIndicator='{model.LiveIndicator}' "
+                       + $"FilterOddsType='{SecurityElement.Escape(model.FilterOddsType)}' "
+                       + $"FilterFavoriteType='{SecurityElement.Escape(model.FilterFavoriteType)}' "
+                       + $"FilterOuType='{SecurityElement.Escape(model.FilterOuType)}' "
+                       + $"OddsValue='{SecurityElement.Escape(model.OddsValue)}' "
+                       + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
+                       + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
+                       + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
+                       + $"BetTeam='{SecurityElement.Escape(model.BetTeam)}' "
+                       + $"OuValue='{SecurityElement.Escape(model.OuValue)}' "
+                       + $"FavoriteValue='{SecurityElement.Escape(model.FavoriteValue)}' "
+                       + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
+                       + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
+                       + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
     public static string GetAbnormalAccountInfoXml(string usernames, string productIds, string statusIds, DateTime? fromDate, DateTime? toDate)
     {
         return $"<root><r Usernames='{usernames}' "

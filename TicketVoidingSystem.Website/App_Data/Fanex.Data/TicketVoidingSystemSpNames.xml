@@ -160,9 +160,9 @@
         <Setting Key="DBSIG.TicketVoiding_VoidedTicket14_Select" SpName="TicketVoiding_VoidedTicket14_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG2.TicketVoiding_VoidedTicket14_Select" SpName="TicketVoiding_VoidedTicket14_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
 
-        <Setting Key="DBCTG.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG2.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBCTG.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select_uat3" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select_uat3" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_TransInfo_Select" SpName="TicketVoiding_TransInfo_Select_uat3" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
 
         <Setting Key="DBCTG.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG.TicketVoiding_TransInfo_Void_Select" SpName="TicketVoiding_TransInfo_Void_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
@@ -207,11 +207,11 @@
         <Setting Key="TicketVoiding_Request_Insert" SpName="TicketVoiding_Request_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_Request_Update" SpName="TicketVoiding_Request_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_Request_Select" SpName="TicketVoiding_Request_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="TicketVoiding_RequestList_Select" SpName="TicketVoiding_RequestList_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_RequestList_Select" SpName="TicketVoiding_RequestList_Select_uat3" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_RequestListInfo_Select" SpName="TicketVoiding_RequestListInfo_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_RequestList_Archive_Select" SpName="TicketVoiding_RequestList_Archive_Select" DbName="DBARC.bodb_Archive.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_RequestListInfo_Archive_Select" SpName="TicketVoiding_RequestListInfo_Archive_Select" DbName="DBARC.bodb_Archive.bodbAdminNet" TimeOut="600" />
-        <Setting Key="TicketVoiding_Void_Select" SpName="TicketVoiding_Void_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_Void_Select" SpName="TicketVoiding_Void_Select_uat3" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_VoidingHistory_Insert" SpName="TicketVoiding_VoidingHistory_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_VoidingHistory_Update" SpName="TicketVoiding_VoidingHistory_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_Email_OperatorInfo_Select" SpName="TicketVoiding_Email_OperatorInfo_Select" DbName="DBCUST.SiteConfig.bodbAdminNet" TimeOut="600" />
@@ -219,7 +219,7 @@
         <Setting Key="TicketVoiding_BettypesForRequest_Select" SpName="TicketVoiding_BettypesForRequest_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_BettypesForRequest_Archive_Select" SpName="TicketVoiding_BettypesForRequest_Archive_Select" DbName="DBARC.bodb_Archive.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_RelatedEvent_Select" SpName="TicketVoiding_RelatedEvent_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="TicketVoiding_LogInfo_Select" SpName="TicketVoiding_LogInfo_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_LogInfo_Select" SpName="TicketVoiding_LogInfo_Select_uat3" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_ScoreInfo_Select" SpName="TicketVoiding_ScoreInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_CheckUserName" SpName="TicketVoiding_CheckUserName" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_CheckTickets14" SpName="TicketVoiding_CheckTickets14" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />

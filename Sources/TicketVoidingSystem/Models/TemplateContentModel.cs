@@ -1,4 +1,4 @@
-﻿namespace TicketVoidingSystem.VoidSingleBet.Models;
+﻿namespace TicketVoidingSystem.Models;
 
 public class TemplateContentModel
 {

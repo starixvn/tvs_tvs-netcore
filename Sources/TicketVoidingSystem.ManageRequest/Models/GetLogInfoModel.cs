@@ -4,22 +4,22 @@ public class GetLogInfoModel
 {
     public int MatchId { get; set; }
     public int ScoreId { get; set; }
-    public LogInfoDetail LogInfoDetail { get; set; }
-    public Validation Validation { get; set; }
-    public IEnumerable<TicketRequest> TicketRequest { get; set; }
+    public LogInfoDetail? LogInfoDetail { get; set; }
+    public Validation? Validation { get; set; }
+    public IEnumerable<TicketRequest>? TicketRequest { get; set; }
 }
 
 public class GetLogInfoViewModel
 {
-    public IEnumerable<GetLogInfoModel> GetLogInfoModels { get; set; }
-    public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
+    public IEnumerable<GetLogInfoModel>? GetLogInfoModels { get; set; }
+    public TransInfoAddRequestModel? TransInfoAddRequestModel { get; set; }
 }
 
 public class LogInfoDetail
 {
     public int MatchId { get; set; }
     public int ScoreId { get; set; }
-    public string LiveScores { get; set; }
+    public string? LiveScores { get; set; }
     public DateTime VoidFromTime { get; set; }
     public DateTime VoidToTime { get; set; }
     public int SingleCount { get; set; }
@@ -30,8 +30,8 @@ public class LogInfoDetail
     public int MainParlayCount { get; set; }
     public DateTime? HighlightMinTime { get; set; }
     public int? HighlightAcceptType { get; set; }
-    public string ScoreNormalTicket { get; set; }
-    public string ScoreOfMatch { get; set; }
+    public string? ScoreNormalTicket { get; set; }
+    public string? ScoreOfMatch { get; set; }
 
     // Wrong HDP/1stHDP
 

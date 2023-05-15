@@ -43,7 +43,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
             model.Groups.Add(currentGroup);
             index += currentGroup.Tickets.Count();
         }
-        ticketsViewModelService.UpdateViewModel(model, data, request.IssueTypeId, voidPermission);
+        ticketsViewModelService.UpdateViewModel(model, data, request.IssueTypeId, request.SubIssueTypeId, voidPermission);
 
         return model;
     }

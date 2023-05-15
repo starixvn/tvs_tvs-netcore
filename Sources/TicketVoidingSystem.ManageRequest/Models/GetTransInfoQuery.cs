@@ -13,11 +13,11 @@ public class GetTransInfoQuery
     public DateTime? ToDate { get; set; }
     public string ProductIds { get; set; }
     public string StatusIds { get; set; }
-    public IEnumerable<WrongScoreInfoViewModel> WrongScoreModels { get; set; }
-    public IEnumerable<DangerAcceptedViewModel> DangerAcceptedModels { get; set; }
-    public IEnumerable<DangerAcceptedViewModel> RedCardModels { get; set; }
-    public IEnumerable<WrongHdpViewModel> WrongHdpModels { get; set; }
-    public IEnumerable<WrongHdpViewModel> Wrong1stHdpModels { get; set; }
-    public IEnumerable<WrongOuViewModel> WrongOuModels { get; set; }
-    public IEnumerable<WrongOuViewModel> Wrong1stOuModels { get; set; }
+    public IEnumerable<WrongScoreInfoViewModel>? WrongScoreModels { get; set; }
+    public IEnumerable<DangerAcceptedViewModel>? DangerAcceptedModels { get; set; }
+    public IEnumerable<DangerAcceptedViewModel>? RedCardModels { get; set; }
+    public IEnumerable<WrongHdpViewModel>? WrongHdpModels { get; set; }
+    public IEnumerable<WrongHdpViewModel>? Wrong1stHdpModels { get; set; }
+    public IEnumerable<WrongOuViewModel>? WrongOuModels { get; set; }
+    public IEnumerable<WrongOuViewModel>? Wrong1stOuModels { get; set; }
 }

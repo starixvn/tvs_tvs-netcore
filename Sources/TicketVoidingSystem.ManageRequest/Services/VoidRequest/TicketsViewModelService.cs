@@ -1,26 +1,31 @@
-﻿using TicketVoidingSystem.Constants;
+﻿using AutoMapper;
+using Fanex.BetList.Core.Entities;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface TicketsViewModelService
 {
-    void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, VoidPermission voidPermission);
+    void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, int subIssueTypeId, VoidPermission voidPermission);
 }
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
-    private readonly GetTicketsService getTicketsService;
+    private readonly BetListService betListService;
+    private readonly IMapper mapper;
 
-    public TicketsViewModelServiceImp(GetTicketsService getTicketsService)
+    public TicketsViewModelServiceImp(BetListService betListService, IMapper mapper)
     {
-        this.getTicketsService = getTicketsService;
+        this.betListService = betListService;
+        this.mapper = mapper;
     }
 
-    public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, VoidPermission voidPermission)
+    public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, int subIssueTypeId, VoidPermission voidPermission)
     {
         var ticketsInRequest = GetTicketsInRequest(allTickets);
         var validTickets = GetValidTickets(ticketsInRequest.SingleTickets, ticketsInRequest.ParlayTickets,
@@ -37,6 +42,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateLicenseeName(model, allTickets);
         UpdateBetTypes(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
+        UpdateBetTypeName(model, allTickets);
         UpdateCheckPermissionTickets(model, allTickets);
 
         model.Total = allTickets.Count();
@@ -45,7 +51,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         model.TotalCancelCashOut = ticketsInRequest.CancelCashOutTickets.Count();
 
         model.IsAllLiveTickets = voidTickets.All(x => x.IsLiveIndicator);
-        model.IsHasAioMessage = voidTickets.Any(x => IsValidTicketHaveAioMessage(issueTypeId, x));
+        model.IsHasAioMessage = voidTickets.Any(x => IsValidTicketHaveAioMessage(issueTypeId, subIssueTypeId, x));
     }
 
     private static void UpdateCheckPermissionTickets(TicketsViewModel model, IEnumerable<GetTicketModel> data)
@@ -135,9 +141,9 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         }
     }
 
-    private static bool IsValidTicketHaveAioMessage(int issueTypeId, GetTicketModel ticket)
+    private static bool IsValidTicketHaveAioMessage(int issueTypeId, int subIssueTypeId, GetTicketModel ticket)
     {
-        return CheckAioMessageWrongHdp(issueTypeId, ticket) || CheckAioMessageWrong1stHdp(issueTypeId, ticket);
+        return CheckAioMessageWrongHdp(issueTypeId, ticket) || CheckAioMessageWrong1stHdp(issueTypeId, ticket) || CheckAioMessageWrongOdds(issueTypeId, subIssueTypeId, ticket);
     }
 
     private static bool CheckAioMessageWrongHdp(int issueTypeId, GetTicketModel ticket)
@@ -150,5 +156,71 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         return issueTypeId == IssueTypeConstant.Wrong1stHDP
                && (ticket.IsMixParlay ? ticket.SubBetType != BetTypeConstant.FirstHalfHandicap : ticket.BetType != BetTypeConstant.FirstHalfHandicap);
+    }
+
+    private static bool CheckAioMessageWrongOdds(int issueTypeId, int subIssueTypeId, GetTicketModel ticket)
+    {
+        if (issueTypeId == IssueTypeConstant.WrongOdds)
+        {
+            return subIssueTypeId switch
+            {
+                SubIssueTypeConstant.Handicap => ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.Handicap
+                    : ticket.BetType != BetTypeConstant.Handicap,
+                SubIssueTypeConstant.FirstHalfHandicap => ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.FirstHalfHandicap
+                    : ticket.BetType != BetTypeConstant.FirstHalfHandicap,
+                SubIssueTypeConstant.OverUnder => ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.OverUnder
+                    : ticket.BetType != BetTypeConstant.OverUnder,
+                SubIssueTypeConstant.FirstHalfOverUnder => ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.FirstHalfOverUnder
+                    : ticket.BetType != BetTypeConstant.FirstHalfOverUnder,
+                _ => false
+            };
+        }
+
+        return false;
+    }
+
+    private void UpdateBetTypeName(TicketsViewModel model, IEnumerable<GetTicketModel> data)
+    {
+        if (!data.Any())
+        {
+            return;
+        }
+
+        var ticket = data.First().IsMixParlay ? CreateSubTicketBetList(data.First()) : CreateTicketBetList(data.First());
+        model.BetTypeNameReplaceMessage = new TemplateContentModel
+        {
+            ContentEnglish = betListService.GetBetTypeName(ticket),
+            ContentChineseTraditional = betListService.GetBetTypeNameChineseTraditional(ticket),
+            ContentChineseSimplified = betListService.GetBetTypeNameChineseSimplified(ticket),
+            ContentNewChineseSimplified = betListService.GetBetTypeNameNewChineseSimplified(ticket),
+        };
+    }
+
+    private Ticket CreateTicketBetList(GetTicketModel item)
+    {
+        var ticket = mapper.Map<Ticket>(item);
+        ticket.BetTypeId = item.BetType;
+        ticket.BetId = item.BetId;
+
+        return ticket;
+    }
+
+    private Ticket CreateSubTicketBetList(GetTicketModel item)
+    {
+        var ticket = mapper.Map<Ticket>(item);
+        ticket.BetId = default;
+        ticket.OddsType = string.Empty;
+        ticket.BetCheck = item.SubBetCheck;
+        ticket.BetTypeId = item.SubBetType;
+        ticket.BetTeam = item.SubBetTeam;
+        ticket.Handicap1 = item.SubHdp1;
+        ticket.Handicap2 = item.SubHdp2;
+        ticket.Odds = item.SubOdds;
+
+        return ticket;
     }
 }

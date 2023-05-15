@@ -57,6 +57,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.WrongOuModels = MapEventWrongOu(secondResultSet);
                 break;
 
+            case IssueTypeConstant.WrongOdds:
+                viewModel.WrongOddsModels = MapEventWrongOdds(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
                 break;
@@ -154,6 +158,34 @@ public class GetRequestServiceImp : GetRequestService
             VoidToTime = model.VoidToTime,
             ActualMarket = model.ActualMarket,
             WrongMarket = model.WrongMarket
+        });
+    }
+
+    public IEnumerable<WrongOddsViewModel> MapEventWrongOdds(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        return requestEventModels.Select(model => new WrongOddsViewModel
+        {
+            MatchId = model.MatchId,
+            PoolHouseCheckedBetTypes = model.PoolHouseCheckedBetTypes,
+            IsLinkGroup1X2 = model.IsLinkGroup1X2,
+            IsLinkGroupAIO = model.IsLinkGroupAIO,
+            SubIssueTypeId = model.SubIssueTypeId,
+            EventDate = model.EventDate,
+            FilterFromTransTime = model.FilterFromTransTime,
+            FilterToTransTime = model.FilterToTransTime,
+            VoidFromTime = model.VoidFromTime,
+            VoidToTime = model.VoidToTime,
+            LiveIndicator = model.LiveIndicator,
+            FilterOddsType = model.FilterOddsType,
+            FilterFavoriteType = model.FilterFavoriteType,
+            FilterOuType = model.FilterOuType,
+            OddsValue = model.OddsValue,
+            FromOdds = model.FromOdds,
+            ToOdds = model.ToOdds,
+            CorrectOdds = model.CorrectOdds,
+            BetTeam = model.BetTeam,
+            OuValue = model.OuValue,
+            FavoriteValue = model.FavoriteValue
         });
     }
 

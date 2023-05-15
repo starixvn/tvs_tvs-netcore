@@ -16,6 +16,8 @@ public class GetLogInfoQuery
     public IEnumerable<WrongHdpViewModel>? Wrong1stHdpModels { get; set; }
     public IEnumerable<WrongOuViewModel>? WrongOuModels { get; set; }
     public IEnumerable<WrongOuViewModel>? Wrong1stOuModels { get; set; }
+    public IEnumerable<WrongOddsViewModel>? WrongOddsModels { get; set; }
+
     public bool? IsShowLogOnly { get; set; }
     public DateTime? KickOffTime { get; set; }
 }

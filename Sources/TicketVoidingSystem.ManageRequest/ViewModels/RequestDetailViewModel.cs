@@ -13,4 +13,5 @@ public class RequestDetailViewModel
     public IEnumerable<DangerAcceptedViewModel> RedCardModels { get; set; }
     public IEnumerable<WrongHdpViewModel> WrongHdpModels { get; set; }
     public IEnumerable<WrongOuViewModel> WrongOuModels { get; set; }
+    public IEnumerable<WrongOddsViewModel> WrongOddsModels { get; set; }
 }

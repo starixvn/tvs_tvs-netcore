@@ -49,4 +49,34 @@ public class RequestExtraInfoXml
 
     [XmlAttribute(AttributeName = "IsCheckedVar")]
     public bool IsCheckedVar { get; set; }
+
+    [XmlAttribute(AttributeName = "FilterOddsType")]
+    public string FilterOddsType { get; set; }
+
+    [XmlAttribute(AttributeName = "FilterFavoriteType")]
+    public string FilterFavoriteType { get; set; }
+
+    [XmlAttribute(AttributeName = "FilterOuType")]
+    public string FilterOuType { get; set; }
+
+    [XmlAttribute(AttributeName = "OddsValue")]
+    public string OddsValue { get; set; }
+
+    [XmlAttribute(AttributeName = "FromOdds")]
+    public string FromOdds { get; set; }
+
+    [XmlAttribute(AttributeName = "ToOdds")]
+    public string ToOdds { get; set; }
+
+    [XmlAttribute(AttributeName = "CorrectOdds")]
+    public string CorrectOdds { get; set; }
+
+    [XmlAttribute(AttributeName = "BetTeam")]
+    public string BetTeam { get; set; }
+
+    [XmlAttribute(AttributeName = "OuValue")]
+    public string OuValue { get; set; }
+
+    [XmlAttribute(AttributeName = "FavoriteValue")]
+    public string FavoriteValue { get; set; }
 }

@@ -67,6 +67,7 @@ export class VoidOtherIssueComponent implements OnInit {
   isShowTicket = true;
   filterBy: number;
   actualScore: string = null;
+  correctOdds: string = null;
   isShowVar?: boolean;
 
   affectedLicensee = new AffectedLicensee();
@@ -127,6 +128,8 @@ export class VoidOtherIssueComponent implements OnInit {
       } else if (this.isRedCard()) {
         this.match = await this.commonService.getMatch(this.requestDetail.redCardModels[0].matchId);
         this.isShowVar = this.requestDetail.redCardModels[0].isCheckedVar;
+      } else if (this.isWrongOdds()) {
+        this.match = await this.commonService.getMatch(this.requestDetail.wrongOddsModels[0].matchId);
       } else {
         this.match = await this.commonService.getMatch(this.requestDetail.event.matchId);
       }
@@ -134,7 +137,7 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   private initLiveScore(): void {
-    if (this.isRedCard() || this.isWrongScore()) {
+    if (this.isRedCard() || this.isWrongScore() || this.isWrongOdds()) {
       this.liveScoreSelection = this.logInfoDetails[0].liveScores.split('|');
     }
   }
@@ -144,12 +147,20 @@ export class VoidOtherIssueComponent implements OnInit {
       this.filterBy = this.requestDetail.wrongScoreModels[0].filterBy;
       this.actualScore = this.requestDetail.wrongScoreModels[0].actualScore;
     }
+
+    if (this.isWrongOdds()) {
+      this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+    }
   }
 
   async updateTemplate() {
     if (this.paging.total > 0) {
       this.updateTemplateValue();
       this.updateVoidedReason();
+    }
+
+    if (this.isWrongOdds()) {
+      this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
     }
   }
 
@@ -160,6 +171,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.query.kickOffDate = this.getKickOffDate();
     this.query.requestId = this.requestId;
     this.query.issueTypeId = this.requestDetail.request.issueTypeId;
+    this.query.subIssueTypeId = StaticService.getSubIssueTypeId(this.requestDetail);
   }
 
   private getKickOffDate(): string {
@@ -169,6 +181,10 @@ export class VoidOtherIssueComponent implements OnInit {
 
     if (this.isRedCard()) {
       return this.requestDetail.redCardModels[0].eventDate.toString();
+    }
+
+    if (this.isWrongOdds()) {
+      return this.requestDetail.wrongOddsModels[0].eventDate.toString();
     }
 
     return this.requestDetail.event.kickOffTime?.toString();
@@ -239,6 +255,7 @@ export class VoidOtherIssueComponent implements OnInit {
       this.templateValue.isCheckedVar = this.requestDetail.redCardModels[0].isCheckedVar;
     }
   }
+
   updateTemplateValueForWrongScore() {
     if (this.isWrongScore()) {
       const score = (this.filterBy === TVSRequestFilterBy.TRANS_TIME || this.filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME)
@@ -256,6 +273,20 @@ export class VoidOtherIssueComponent implements OnInit {
       this.templateValue.isCheckedVar = this.requestDetail.wrongScoreModels[0].isCheckedVar;
     }
   }
+
+  updateTemplateValueForAbnormalBet() {
+    if (this.isAbnormalBet()) {
+      this.templateValue.filterBy = this.requestDetail.event.filterBy;
+    }
+  }
+
+  updateTemplateValueForWrongOdds() {
+    if (this.isWrongOdds()) {
+      this.templateValue.checkAIOMessage = true;
+      this.templateValue.betTypeNameReplaceMessage = this.ticketsModel.betTypeNameReplaceMessage;
+    }
+  }
+
   updateTemplateValue() {
     if (this.isArchivedTickets()) {
       return;
@@ -265,11 +296,10 @@ export class VoidOtherIssueComponent implements OnInit {
     this.templateValue.checkSettled = this.checkSettled();
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
     this.templateValue.toTransTime = this.ticketsModel.toTime;
-    if (this.isAbnormalBet()) {
-      this.templateValue.filterBy = this.requestDetail.event.filterBy;
-    }
+    this.updateTemplateValueForAbnormalBet();
     this.updateTemplateValueForRedCard();
     this.updateTemplateValueForWrongScore();
+    this.updateTemplateValueForWrongOdds();
     this.templateValue.totalTickets = this.ticketsModel.total;
   }
 
@@ -478,6 +508,10 @@ export class VoidOtherIssueComponent implements OnInit {
     return StaticService.isArchivedTicket(this.requestDetail.request.issueTypeId.toString());
   }
 
+  isWrongOdds() {
+    return StaticService.isWrongOdds(this.requestDetail.request.issueTypeId.toString());
+  }
+
   public isShowAffectedLicenseeArea(): boolean {
     return this.affectedLicensee.show && this.affectedLicensee.licenseesName.length > 0
       || this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName.length > 0
@@ -531,34 +565,28 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   async getLogInfoModel(): Promise<void> {
+    const query: GetLogInfoQuery = {
+      requestId: this.requestId,
+      actionId: this.requestDetail.request.actionId,
+      isShowLogOnly: true,
+      issueTypeId: this.requestDetail.request.issueTypeId,
+      subIssueTypeId: StaticService.getSubIssueTypeId(this.requestDetail),
+    };
+
     if (this.isRedCard()) {
-      const query: GetLogInfoQuery = {
-        requestId: this.requestId,
-        matchId: this.requestDetail.redCardModels[0].matchId,
-        isShowLogOnly: true,
-        issueTypeId: this.requestDetail.request.issueTypeId,
-        redCardModels: MappingModelStaticService.buidRedCardGetLogInfoModel(this.requestDetail.redCardModels)
-      };
-
-      const data = await this.commonService.getLogInfo(query);
-      this.logInfoDetails[0] = data.getLogInfoModels[0].logInfoDetail;
+      query.matchId = this.requestDetail.redCardModels[0].matchId;
+      query.redCardModels = MappingModelStaticService.buidRedCardGetLogInfoModel(this.requestDetail.redCardModels);
+    } else if (this.isWrongScore()) {
+      query.matchId = this.requestDetail.wrongScoreModels[0].matchId;
+      query.wrongScoreModels = MappingModelStaticService.buidWrongScoreGetLogInfoModel(this.requestDetail.wrongScoreModels);
+    } else if (this.isWrongOdds()) {
+      query.matchId = this.requestDetail.wrongOddsModels[0].matchId;
+      query.wrongOddsModels = MappingModelStaticService.buidWrongOddsGetLogInfoModel(this.requestDetail.wrongOddsModels);
     }
 
-    if (this.isWrongScore()) {
-      const query: GetLogInfoQuery = {
-        requestId: this.requestId,
-        matchId: this.requestDetail.wrongScoreModels[0].matchId,
-        actionId: this.requestDetail.request.actionId,
-        isShowLogOnly: true,
-        issueTypeId: this.requestDetail.request.issueTypeId,
-        subIssueTypeId: StaticService.getSubIssueTypeId(this.requestDetail),
-        wrongScoreModels: MappingModelStaticService.buidWrongScoreGetLogInfoModel(this.requestDetail.wrongScoreModels)
-      };
-
-      const logInfoList = await this.commonService.getLogInfo(query);
-      logInfoList.getLogInfoModels.forEach(logInfo => {
-        this.logInfoDetails.push(logInfo.logInfoDetail);
-      });
-    }
+    const logInfoList = await this.commonService.getLogInfo(query);
+    logInfoList.getLogInfoModels.forEach(logInfo => {
+      this.logInfoDetails.push(logInfo.logInfoDetail);
+    });
   }
 }

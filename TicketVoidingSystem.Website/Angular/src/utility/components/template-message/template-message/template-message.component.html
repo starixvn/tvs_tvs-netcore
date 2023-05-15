@@ -25,11 +25,11 @@
 </div>
 
 <div class="d-flex mg-left-10 mb-2">
-  <div class="d-flex align-items-center mr-3" *ngIf="isShowCheckBoxMessage()">
+  <div class="d-flex align-items-center mr-3" *ngIf="isShowAioCheckBoxMessage()">
     <input [(ngModel)]="value.checkAIOMessage" type="checkbox" id="chk-aio-msg" class="mr-1" (ngModelChange)="updateMessage()"/>
     <label class="col-form-label" for="chk-aio-msg"> AIO Message</label>
   </div>
-  <div class="d-flex align-items-center mr-3" *ngIf="isShowCheckBoxMessage()">
+  <div class="d-flex align-items-center mr-3" *ngIf="isShowEarlyEventCheckBoxMessage()">
     <input [(ngModel)]="value.isCheckedEarlyEvent" [disabled]="isDisabledCheckBoxEarlyEvent()" type="checkbox" id="chk-early-event" class="mr-1" (ngModelChange)="updateMessage()"/>
     <label class="col-form-label" for="chk-early-event"> Early Event</label>
   </div>

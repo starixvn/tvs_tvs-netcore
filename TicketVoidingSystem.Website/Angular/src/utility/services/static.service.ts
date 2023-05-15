@@ -99,6 +99,8 @@ export class StaticService {
       return requestDetail.wrongHdpModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
+    } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongOddsModels[0].subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -115,6 +117,8 @@ export class StaticService {
       return requestDetail.wrongHdpModels.find(x => x.isMainMatch).eventDate;
     } else if (this.isWrongOU(requestDetail.request.issueTypeId.toString()) || this.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
+    } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongOddsModels[0].eventDate;
     } else {
       return requestDetail.event.eventDate;
     }

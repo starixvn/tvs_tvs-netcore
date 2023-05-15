@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import { WrongOddsGetLogInfoQuery, WrongOddsModel } from "src/add-request/app/add-request/models/event-wrong-odds.model";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query";
 import { WrongScoreGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-score/event-wrong-score.model";
@@ -71,5 +72,32 @@ export class MappingModelStaticService {
       filterToTransTime: x.voidToTime,
       wrongMarket: x.wrongMarket
     } as WrongOuGetLogInfoQuery));
+  }
+
+  static buidWrongOddsGetLogInfoModel(wrongOuModels: WrongOddsModel[]): WrongOddsGetLogInfoQuery[] {
+    if (_.isNull(wrongOuModels) || _.isUndefined(wrongOuModels)) {
+      return null;
+    }
+
+    return wrongOuModels.map(x => ({
+      matchId: x.matchId,
+      subIssueTypeId: x.subIssueTypeId,
+      filterFromTransTime: x.voidFromTime,
+      filterToTransTime: x.voidToTime,
+      poolHouseCheckedBetTypes: x.poolHouseCheckedBetTypes,
+      isLinkGroup1X2: x.isLinkGroup1X2,
+      isLinkGroupAIO: x.isLinkGroupAIO,
+      liveIndicator: x.liveIndicator,
+      filterOddsType: x.filterOddsType,
+      filterFavoriteType: x.filterFavoriteType,
+      filterOuType: x.filterOuType,
+      oddsValue: x.oddsValue,
+      fromOdds: x.fromOdds,
+      toOdds: x.toOdds,
+      correctOdds: x.correctOdds,
+      betTeam: x.betTeam,
+      ouValue: x.ouValue,
+      favoriteValue: x.favoriteValue
+    } as WrongOddsGetLogInfoQuery));
   }
 }

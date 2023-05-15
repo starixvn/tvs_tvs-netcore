@@ -5,6 +5,7 @@ import { OperatorInfo } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
+import { WrongOddsGetLogInfoQuery } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
 
@@ -71,4 +72,5 @@ export class GetLogInfoQuery {
   wrong1stHdpModels?: WrongHdpGetLogInfoQuery[];
   wrongOuModels?: WrongOuGetLogInfoQuery[];
   wrong1stOuModels?: WrongOuGetLogInfoQuery[];
+  wrongOddsModels?: WrongOddsGetLogInfoQuery[];
 }

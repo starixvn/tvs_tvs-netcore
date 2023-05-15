@@ -25,6 +25,8 @@ public class GetTicketsQuery
 
     public int IssueTypeId { get; set; }
 
+    public int SubIssueTypeId { get; set; }
+
     public int? ActionId { get; set; }
 
     // only user for search tickets EKO with validation existing other request

@@ -8,11 +8,11 @@
         <request-info [model]="requestDetail" [issue]="issue" [isShowGeneralInfo]="false"
             [isShowAbnormalAccountInfo]="isAbnormalAccount()" [isShowVar]="isShowVar"></request-info>
 
-        <log-info *ngIf="isRedCard() || isWrongScore()" [logInfoDetails]="logInfoDetails"
+        <log-info *ngIf="isRedCard() || isWrongScore() || isWrongOdds()" [logInfoDetails]="logInfoDetails"
             [isWrongScore]="isWrongScore()" [filterBy]="filterBy" [actualScore]="actualScore">
         </log-info>
 
-        <filter *ngIf="isRedCard() || isWrongScore()" [groupBetTypes]="groupBetTypes" [match]="match"
+        <filter *ngIf="isRedCard() || isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"
             [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
         </filter>
     </div>
