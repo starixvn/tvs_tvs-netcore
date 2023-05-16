@@ -52,7 +52,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         model.CheckPermissionTickets = data.Where(item => !item.IsCancelCashOut).Select(item => new BetId
         {
-            TransId = item.TransId.ToString(),
+            TransId = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString(),
             SiteDbGroupId = item.SiteDbGroupId,
             MatchId = item.MatchId
         }).ToList();
