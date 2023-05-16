@@ -27,6 +27,7 @@ export class UpdateConfirmAutoUnmark {
     betType: number;
     betId?: number;
     markedBy: number;
+    childMatchId?:  string;
 }
 
 export class ConfirmAutoUnmarkQuery {

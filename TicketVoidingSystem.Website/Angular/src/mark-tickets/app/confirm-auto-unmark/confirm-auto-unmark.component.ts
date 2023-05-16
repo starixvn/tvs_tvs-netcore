@@ -138,6 +138,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
     data.betType = item.bettype;
     data.markedBy = item.userId;
     data.betId = item.betId;
+    data.childMatchId = item.childMatchId;
 
     this.isBlock = true;
     this.autoRefreshMode = AutoRefreshMode.STOP;
