@@ -36,9 +36,10 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         var groups = GenerateGroup(data.ToList(), request);
         var index = (request.PageIndex * request.PageSize) + 1;
         var voidPermission = checkPermissionOnRequestService.GetVoidPermission();
+        var match = request.Match?.MatchId == 0 ? null : request.Match;
         foreach (var item in groups.Where(item => item.Tickets.Any()))
         {
-            var currentGroup = mapTicketsService.MapToGroupTicketViewModel(item, request.Match, index, request.IssueTypeId, voidPermission);
+            var currentGroup = mapTicketsService.MapToGroupTicketViewModel(item, match, index, request.IssueTypeId, voidPermission);
             model.Groups.Add(currentGroup);
             index += currentGroup.Tickets.Count();
         }

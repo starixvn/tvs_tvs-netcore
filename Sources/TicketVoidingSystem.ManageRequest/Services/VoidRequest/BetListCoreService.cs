@@ -85,7 +85,10 @@ public class BetListCoreServiceImp : BetListCoreService
         }
         else
         {
-            ticket.SportTypeId = item.SportType;
+            ticket.AwayId = item.AwayId;
+            ticket.HomeId = item.HomeId;
+            ticket.LeagueId = item.LeagueId;
+            ticket.SportTypeId = item.SportType != 0 ? item.SportType : 1;
         }
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
