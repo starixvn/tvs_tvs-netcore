@@ -1,10 +1,11 @@
 import * as _ from "lodash";
-import { WrongOddsGetLogInfoQuery, WrongOddsModel } from "src/add-request/app/add-request/models/event-wrong-odds.model";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
+import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
 import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query";
 import { WrongScoreGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-score/event-wrong-score.model";
 import { RedCardGetLogInfoQuery, RedCardModel } from "../../add-request/app/add-request/models/event-red-card.model";
 import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wrong-hdp.model";
+import { WrongOddsModel } from "../../add-request/app/add-request/models/event-wrong-odds.model";
 import { WrongOuModel } from "../../add-request/app/add-request/models/event-wrong-ou.model";
 import { WrongScoreModel } from "../../add-request/app/add-request/models/event-wrong-score.model";
 

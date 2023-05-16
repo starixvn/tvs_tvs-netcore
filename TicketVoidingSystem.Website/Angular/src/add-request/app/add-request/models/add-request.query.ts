@@ -1,11 +1,11 @@
 import { WrongHdpGetLogInfoQuery } from '../event-wrong-hdp/models/get-log-info.query';
+import { WrongOddsGetLogInfoQuery } from '../event-wrong-odds/models/get-log-info.query';
 import { WrongOuGetLogInfoQuery } from '../event-wrong-ou/models/get-log-info.query';
 import { WrongScoreGetLogInfoQuery } from '../event-wrong-score/event-wrong-score.model';
 import { OperatorInfo } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
-import { WrongOddsGetLogInfoQuery } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
 
