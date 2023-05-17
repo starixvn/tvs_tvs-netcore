@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CommonService } from '../../../utility/services/common.service';
-import { LABELS } from '../../../utility/constants/labels';
-import { GetLogsQuery } from '../models/query.model';
-import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { GetBetTypesQuery } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { ModeType } from '../../../utility/constants/config';
 import _ from 'lodash';
+import { GetBetTypesQuery } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ModeType } from '../../../utility/constants/config';
+import { LABELS } from '../../../utility/constants/labels';
+import { CommonService } from '../../../utility/services/common.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +24,7 @@ export class CheckValidateService {
         return true;
       }
   
-      const query: GetBetTypesQuery = { mode: ModeType.SPORT_BOOK, matchId: parseInt(matchId, 10) };
+      const query: GetBetTypesQuery = { mode: ModeType.MARK_TICKET, matchId: parseInt(matchId, 10) };
       const data = await this.commonService.getGroupBetTypes(query);
   
       if (data.result.errorCode === 0) {

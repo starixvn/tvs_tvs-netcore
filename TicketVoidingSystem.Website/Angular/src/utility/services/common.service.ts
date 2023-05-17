@@ -58,8 +58,8 @@ export class CommonService {
     return this.httpService.getJson('TicketVoiding/GetActions');
   }
 
-  async getMatch(matchId: number): Promise<MatchModel> {
-    return this.httpService.postJson({ matchId, isMatch3rd: false }, 'api/MatchInfo/GetInfo');
+  async getMatch(matchId: number, isExcludeChildMatchCricket?: boolean): Promise<MatchModel> {
+    return this.httpService.postJson({ matchId, isMatch3rd: false, isExcludeChildMatchCricket: isExcludeChildMatchCricket }, 'api/MatchInfo/GetInfo');
   }
 
   // async getRequestById(id: number): Promise<RequestDetailViewModel> {

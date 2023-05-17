@@ -116,7 +116,7 @@ export class MarkUnmarkTicketComponent {
 
   async getMatchInfo(matchId: number) {
     if (this.query.searchBy === FilterSearchBy.MATCH_ID && (this.match === undefined || this.match.matchId !== matchId)) {
-      this.match = await this.commonService.getMatch(matchId);
+      this.match = await this.commonService.getMatch(matchId, true);
     }
   }
 
@@ -137,7 +137,7 @@ export class MarkUnmarkTicketComponent {
     this.isShowMatch = false;
     this.isBetIdBorder = true;
     this.isBlockTickets = true;
-    this.match = await this.commonService.getMatch(parseInt(ticketDetailId.matchId, 10));
+    this.match = await this.commonService.getMatch(parseInt(ticketDetailId.matchId, 10), true);
     const data = await this.appService.getTicketsDetail(this.queryTicket);
     this.isBlockTickets = false;
     this.ticketsModel.initData(data);
