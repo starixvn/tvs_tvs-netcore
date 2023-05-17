@@ -160,4 +160,25 @@ export class TemplateContentConst {
     msgChineseSimplified: '[串关]',
     msgChineseNewSimplified: '[串关]'
   };
+
+  static readonly FIRST_HALF: TemplateContent = {
+    msgEnglish: '1H ',
+    msgChineseTraditional: '上半場 ',
+    msgChineseSimplified: '上半场 ',
+    msgChineseNewSimplified: '上半场 '
+  };
+
+  static readonly OVER: TemplateContent = {
+    msgEnglish: 'Over',
+    msgChineseTraditional: '大盘',
+    msgChineseSimplified: '大盘',
+    msgChineseNewSimplified: '大盘'
+  };
+
+  static readonly UNDER: TemplateContent = {
+    msgEnglish: 'Under',
+    msgChineseTraditional: '小盤',
+    msgChineseSimplified: '小盘',
+    msgChineseNewSimplified: '小盘'
+  };
 }

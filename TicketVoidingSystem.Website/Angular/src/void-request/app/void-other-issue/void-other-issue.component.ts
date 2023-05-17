@@ -284,6 +284,11 @@ export class VoidOtherIssueComponent implements OnInit {
     if (this.isWrongOdds()) {
       this.templateValue.checkAIOMessage = true;
       this.templateValue.betTypeNameReplaceMessage = this.ticketsModel.betTypeNameReplaceMessage;
+      this.templateValue.match = this.match;
+      this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
+      this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
+      this.templateValue.ouValue = this.requestDetail.wrongOddsModels[0].ouValue;
+      this.templateValue.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
     }
   }
 

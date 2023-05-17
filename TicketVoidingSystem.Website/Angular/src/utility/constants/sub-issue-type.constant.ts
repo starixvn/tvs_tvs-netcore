@@ -26,6 +26,10 @@ export class SubIssueTypeConstant {
   static readonly PENALTY_SHOOTOUT = 92;
   static readonly WRONG_HDP = 8;
   static readonly WRONG_1ST_HDP = 9;
+  static readonly HANDICAP = 6;
+  static readonly FIRST_HALF_HANDICAP = 119;
+  static readonly OVER_UNDER = 120;
+  static readonly FIRST_HALF_OVER_UNDER = 121;
   static readonly NO_INDICATION_HOME_GOAL_NO_ONWARDS = 7;
   static readonly NO_INDICATION_HOME_GOAL_ONWARDS = 35;
   static readonly NO_INDICATION_AWAY_GOAL_NO_ONWARDS = 94;

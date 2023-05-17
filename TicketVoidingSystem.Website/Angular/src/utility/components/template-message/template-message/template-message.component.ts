@@ -153,6 +153,9 @@ export class TemplateMessageComponent implements OnChanges {
       this.selectedTemplated.inputTexts = [];
       this.updateWrongMarketTVS();
       this.updateActualMarketTVS();
+    } else if (this.isTVSVoidPage() && this.isWrongOdds()) {
+      this.selectedTemplated.inputTexts = [];
+      this.updateActualMarketTvsWrongOdds();
     } else {
       this.updateInputs();
     }
@@ -162,6 +165,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.updateCheckStatement();
     this.updateAIOMessage();
     this.updateSpecialBetType();
+    this.updateActualMarketTvsWrongOdds();
   }
 
   resetMessage() {
@@ -365,6 +369,14 @@ export class TemplateMessageComponent implements OnChanges {
       this.templateService.replaceSpecialBetType(this.message, this.value.betTypeNameReplaceMessage);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.SPECIAL_BET_TYPE, '');
+    }
+  }
+
+  updateActualMarketTvsWrongOdds() {
+    if (this.isTVSVoidPage() && this.isWrongOdds()) {
+      this.templateService.replaceActualMarketTvsWrongOdds(this.message, this.subIssueTypeId, this.value);
+    } else {
+      this.templateService.replaceAll(this.message, TemplateReplace.ACTUAL_MARKET, '');
     }
   }
 
