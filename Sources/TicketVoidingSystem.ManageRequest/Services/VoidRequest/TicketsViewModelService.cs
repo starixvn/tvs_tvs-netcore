@@ -50,19 +50,8 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
     private static void UpdateCheckPermissionTickets(TicketsViewModel model, IEnumerable<GetTicketModel> data)
     {
-        model.CheckPermissionTickets = data.Where(item => !item.IsCancelCashOut).Select(item => new BetId
-        {
-            TransId = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString(),
-            SiteDbGroupId = item.SiteDbGroupId,
-            MatchId = item.MatchId
-        }).ToList();
-
-        model.AllCancelCashOutTickets = data.Where(item => item.IsCancelCashOut).Select(item => new BetId
-        {
-            TransId = item.TransId.ToString(),
-            SiteDbGroupId = item.SiteDbGroupId,
-            MatchId = item.MatchId
-        }).ToList();
+        model.CheckPermissionTickets = data.Where(item => !item.IsCancelCashOut).Select(ConvertGetTicketModelToBetId).ToList();
+        model.AllCancelCashOutTickets = data.Where(item => item.IsCancelCashOut).Select(ConvertGetTicketModelToBetId).ToList();
     }
 
     private static BetId ConvertGetTicketModelToBetId(GetTicketModel model)
