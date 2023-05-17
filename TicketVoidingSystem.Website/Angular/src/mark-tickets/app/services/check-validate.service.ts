@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import _ from 'lodash';
 import { GetBetTypesQuery } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ModeType } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { CommonService } from '../../../utility/services/common.service';
+import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'

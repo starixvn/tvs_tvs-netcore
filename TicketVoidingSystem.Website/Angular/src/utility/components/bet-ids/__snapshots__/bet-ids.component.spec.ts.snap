@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BetIdsComponent BetIdsComponent should init match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
->
+<ng-component>
   <bet-ids>
     <div
       class="no-gutters"

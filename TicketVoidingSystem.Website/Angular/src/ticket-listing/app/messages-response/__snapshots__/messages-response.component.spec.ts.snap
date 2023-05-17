@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MessagesResponseComponent MessagesResponseComponent init should match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
->
+<ng-component>
   <messages-response>
   </messages-response>
 </ng-component>

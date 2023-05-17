@@ -1,4 +1,4 @@
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('./tsconfig');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
     '<rootDir>/src/manage-void-services/',
     // '<rootDir>/src/utility/',
   ],
-  setupFilesAfterEnv : ['<rootDir>/src/test-setup.ts'],
+  setupFilesAfterEnv : ['<rootDir>/setup.jest.ts'],
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
   //collectCoverageFrom: ['src/ab-white-list/**/*.ts'],
@@ -21,7 +21,7 @@ module.exports = {
   coverageDirectory: 'reports/coverage',
   globals: {
     'ts-jest': {
-      tsconfig: "<rootDir>/src/tsconfig.spec.json"
+      tsconfig: "<rootDir>/tsconfig.spec.json"
     }
   },
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
