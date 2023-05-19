@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 // import { CheckValidTransIdsQuery } from '../..//add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
 // import { CheckValidUsernamesQuery, CheckValidUsernamesResult } from '../../add-request/app/add-request/abnormal-accounts/abnormal-accounts.model';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
