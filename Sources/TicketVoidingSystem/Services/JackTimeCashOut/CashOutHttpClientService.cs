@@ -20,7 +20,7 @@ public class CashOutHttpClientServiceImp : CashOutHttpClientService
         this.loggingService = loggingService;
 
         this.httpClient = httpClient;
-        this.httpClient.BaseAddress = new Uri(AppSettingService.AppSetting.AmendmentApi);
+        this.httpClient.BaseAddress = new Uri(AppSettingService.AppSetting.JackTimeCashOutUrl);
         this.httpClient.DefaultRequestHeaders.Clear();
         this.httpClient.DefaultRequestHeaders.Add("Accept", MediaTypeNames.Application.Json);
     }
@@ -42,7 +42,7 @@ public class CashOutHttpClientServiceImp : CashOutHttpClientService
         var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
         var responseContent = response.Content != null ? await response.Content.ReadAsStringAsync() : string.Empty;
 
-        return $"{AppSettingService.AppSetting.AmendmentApi}{actionName}" +
+        return $"{AppSettingService.AppSetting.JackTimeCashOutUrl}{actionName}" +
                $"{Environment.NewLine}RequestContent:{Environment.NewLine}{requestContent}" +
                $"{Environment.NewLine}Response:{Environment.NewLine}{response}" +
                $"{Environment.NewLine}ResponseContent:{Environment.NewLine}{responseContent}";
