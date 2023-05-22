@@ -11,6 +11,7 @@ export class LogModel {
   singleTickets: string[];
   parlayTickets: string[];
   doneBy: string;
+  childMatchId?:  number;
 }
 
 export class LogsModel {

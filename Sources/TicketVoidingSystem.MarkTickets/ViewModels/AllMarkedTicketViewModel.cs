@@ -26,4 +26,5 @@ public class AllMarkedTicketViewModel
 
     public bool IsChecked { get; set; }
 
+    public int? ChildMatchId { get; set; }
 }

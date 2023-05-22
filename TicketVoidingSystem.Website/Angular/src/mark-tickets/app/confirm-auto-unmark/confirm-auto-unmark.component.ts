@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import * as moment from 'moment';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal';
@@ -6,13 +6,14 @@ import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { MarkType } from '../../../utility/constants/config';
-import { SportType } from '../../../utility/constants/sport.constant';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark.model';
+import { CheckValidateService } from '../services/check-validate.service';
+import { LABELS } from '../../../utility/constants/labels';
 
 @Component({
   selector: 'confirm-auto-unmark',
@@ -33,8 +34,11 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   constructor(
     private readonly commonService: CommonService,
     private readonly appService: AppService,
-    private readonly modalService: ModalService
-  ) { }
+    private readonly modalService: ModalService,
+    private readonly element: ElementRef,
+    private readonly checkValidateService: CheckValidateService) {
+    this.tooltip.element = element;
+  }
 
   async ngOnInit() {
     await this.getSportTypes();
@@ -45,7 +49,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   private initializeFilterSearch() {
     this.selectedSports = this.sportOptions.map(x => x.value);
     const userName = document.getElementById('body').getAttribute('user-id');
-    this.markedByOptions = [{name: '<<<< Me >>>>', value: userName}, {name: 'All', value: '0'}];
+    this.markedByOptions = [{ name: '<<<< Me >>>>', value: userName }, { name: 'All', value: '0' }];
     this.query.matchId = null;
     this.query.markedBy = this.markedByOptions[0].value;
     this.query.isExcludeTest = true;
@@ -54,14 +58,19 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   }
 
   async resetPagingAndSearchData() {
-    this.paging = new PagingModel();
-    this.paging.pageSize = PagingConstant.SIZE_ONE;
-    await this.searchData();
+    const isSuccessMatch = await this.checkValidateService.checkValidMatch(this.query.matchId, this.tooltip)
+    if (isSuccessMatch) {
+      this.paging = new PagingModel();
+      this.paging.pageSize = PagingConstant.SIZE_ONE;
+      await this.searchData();
+    } else {
+      this.tooltip.display('match-id', LABELS.INVALID_MATCHID);
+    }
+
   }
 
   async getSportTypes() {
     let sportTypes = await this.commonService.getSportsType();
-    sportTypes = sportTypes.filter(x => x.sportType !== SportType.CRICKET);
     this.sportOptions = [];
     this.mapObject(sportTypes);
   }
@@ -78,7 +87,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
 
   async searchData() {
     this.autoRefreshMode = AutoRefreshMode.STOP;
-    this.query.sporttype =  this.selectedSports.join(',');
+    this.query.sporttype = this.selectedSports.join(',');
     this.query.pageIndex = this.paging.page - 1;
     this.query.pageSize = this.paging.pageSize;
     this.isBlock = true;
@@ -129,6 +138,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
     data.betType = item.bettype;
     data.markedBy = item.userId;
     data.betId = item.betId;
+    data.childMatchId = item.childMatchId;
 
     this.isBlock = true;
     this.autoRefreshMode = AutoRefreshMode.STOP;
@@ -162,5 +172,14 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
     }
 
     return result.errorMsg;
+  }
+
+  getShowMatchId(matchId: string, childMatchId :string){
+    if(childMatchId){
+      return `${matchId}\n(${childMatchId})`
+    }
+    else{
+      return `${matchId}`
+    }
   }
 }

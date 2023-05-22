@@ -186,7 +186,8 @@ describe('AppService', () => {
         // Arrange
         const query: MarkedTicketQuery = {
             tickets: [],
-            status: '0'
+            status: '0',
+            checkPermissionTickets: []
         };
         const expectedResult: ResultMarkTicketModel = {
             isSuccessful: true,

@@ -123,7 +123,7 @@
                         <div>{{item.no}}</div>
                     </td>
                     <td>
-                        <div>{{item.matchId}}</div>
+                        <div>{{getShowMatchId(item.matchId, item.childMatchId)}}</div>
                     </td>
                     <td>
                         <div>{{convertToGMT8(item.kickOffTime) | date: 'MM/dd/yyyy hh:mm:ss.SSS a'}}</div>
@@ -172,3 +172,5 @@
 
     <paging [(model)]="paging" (modelChange)="searchData()"></paging>
 </div>
+
+<tooltip [tooltip]="tooltip"></tooltip>

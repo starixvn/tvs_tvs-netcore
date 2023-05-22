@@ -28,4 +28,7 @@ public class GetUserLogModel
     public string FTScore { get; set; }
 
     public DateTime KickOffTime { get; set; }
+
+    public int? ChildMatchId { get; set; }
+
 }

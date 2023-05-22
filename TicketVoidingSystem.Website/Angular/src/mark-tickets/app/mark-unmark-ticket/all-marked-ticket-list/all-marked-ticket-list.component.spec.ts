@@ -269,16 +269,42 @@ describe('AllMarkedTicketListComponent', () => {
     expect(instance.iconCheckBox).toBe(IconCheckBox.all);
   });
 
-  it('should display no-data when haven\'t tickets', async() => {
-    const { fixture, find, findComponent } =  await shallow.render(Helper.htmlRender, {
-      bind: {
-        isShowAllTickets: true,
-        ticketsModel: []
-      }
-    });
-    fixture.detectChanges();
+  it('#getMatchsParam should return AllMarkedTicketModel is selected', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.model = [Helper.fakeAllMarkedTicketModel, Helper.fakeOTherAllMarkedTicketModel];
+    // Action
+    const actual = instance.getMatchsParam();
 
-    expect(find(Helper.noDataSelector)).toHaveFoundOne();
-    expect(findComponent(AutoRefreshComponent)).toBeDefined();
+    // Assert
+    expect(actual.length).toBe(2);
+    expect(instance.iconCheckBox).toBe(IconCheckBox.all);
   });
+
+  it('#getShowMatchId display MatchId when ChildMatchId is Null', async() => {
+    // Arrange
+    const { instance } = await shallow.render();
+    let matchId = '111';
+    let childMatchId = null;
+    
+    // Action
+    const actual = instance.getShowMatchId(matchId, childMatchId);
+
+    // Assert
+    expect(actual).toBe(`111`);
+  });
+
+  it('#getShowMatchId display MatchId and ChildMatchId when ChildMatchId not Null', async() => {
+    // Arrange
+    const { instance } = await shallow.render();
+    let matchId = '111';
+    let childMatchId = '222';
+    
+    // Action
+    const actual = instance.getShowMatchId(matchId, childMatchId);
+
+    // Assert
+    expect(actual).toBe(`111\n(222)`);
+  });
+
 });

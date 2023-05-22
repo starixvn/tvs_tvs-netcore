@@ -25,7 +25,7 @@ describe('AppComponent', () => {
 
     beforeEach(() => {
         shallow = new Shallow(AppComponent, AppModuleTest)
-        .mock(SignalRService, { initializeConnection: jest.fn()});;
+            .mock(SignalRService, { initializeConnection: jest.fn() });;
     });
 
     ['0', '1'].forEach((tab, index) => {
@@ -53,16 +53,127 @@ describe('AppComponent', () => {
         expect(fixture).toMatchSnapshot();
         expect(instance.currentTab).toBe('3');
     });
-    
-    it('ngOnInit should update isExternalUrl = true', async () => {        
+
+    it('ngOnInit should update isExternalUrl = true', async () => {
         const mockSignalRServiceInitializeConnection = jest.fn();
         const mockGetDataPermission = jest.fn();
         const { instance, } = await shallow
-        .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
-        .mock(AppService, { getDataPermission: mockGetDataPermission })
-        .render();
+            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+            .mock(AppService, { getDataPermission: mockGetDataPermission })
+            .render();
         jest.spyOn(URLSearchParams.prototype, "get").mockReturnValue('1');
         await instance.ngOnInit();
         expect(instance.isExternalUrl).toBe(true);
     });
+
+    it('#isConfirmAutoUnmarkTab should return true when currentTab is 3', async () => {
+        // Arrange
+        const mockSignalRServiceInitializeConnection = jest.fn();
+        const mockGetDataPermission = jest.fn();
+        const { instance, } = await shallow
+            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+            .mock(AppService, { getDataPermission: mockGetDataPermission })
+            .render();
+
+        instance.currentTab = '3';
+
+        // Action
+        const actual = instance.isConfirmAutoUnmarkTab();
+
+        // Assert
+        expect(actual).toBe(true);
+    });
+
+    it('#isConfirmAutoUnmarkTab should return false when currentTab is not 3', async () => {
+        // Arrange
+        const mockSignalRServiceInitializeConnection = jest.fn();
+        const mockGetDataPermission = jest.fn();
+        const { instance, } = await shallow
+            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+            .mock(AppService, { getDataPermission: mockGetDataPermission })
+            .render();
+
+        instance.currentTab = '4';
+
+        // Action
+        const actual = instance.isConfirmAutoUnmarkTab();
+
+        // Assert
+        expect(actual).toBeFalsy();
+    });
+
+    it('#isLogTab should return true when currentTab is 2', async () => {
+        // Arrange
+        const mockSignalRServiceInitializeConnection = jest.fn();
+        const mockGetDataPermission = jest.fn();
+        const { instance, } = await shallow
+            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+            .mock(AppService, { getDataPermission: mockGetDataPermission })
+            .render();
+
+        instance.currentTab = '2';
+
+        // Action
+        const actual = instance.isLogTab();
+
+        // Assert
+        expect(actual).toBe(true);
+    });
+
+    it('#isLogTab should return false when currentTab is not 2', async () => {
+        // Arrange
+        const mockSignalRServiceInitializeConnection = jest.fn();
+        const mockGetDataPermission = jest.fn();
+        const { instance, } = await shallow
+            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+            .mock(AppService, { getDataPermission: mockGetDataPermission })
+            .render();
+
+        instance.currentTab = '4';
+
+        // Action
+        const actual = instance.isLogTab();
+
+        // Assert
+        expect(actual).toBeFalsy();
+    });
+
+    ['0', '1'].forEach((tab, index) => {
+        it(`#isMarkOrUnmarkTab should return true when currentTab is ${index}`, async () => {
+            // Arrange
+            const mockSignalRServiceInitializeConnection = jest.fn();
+            const mockGetDataPermission = jest.fn();
+            const { instance, } = await shallow
+                .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+                .mock(AppService, { getDataPermission: mockGetDataPermission })
+                .render();
+
+            instance.currentTab = tab;
+
+            // Action
+            const actual = instance.isMarkOrUnmarkTab();
+
+            // Assert
+            expect(actual).toBe(true);
+        });
+    });
+
+    it('#isMarkOrUnmarkTab should return false when currentTab is not 0 and 1', async () => {
+        // Arrange
+        const mockSignalRServiceInitializeConnection = jest.fn();
+        const mockGetDataPermission = jest.fn();
+        const { instance, } = await shallow
+            .mock(SignalRService, { initializeConnection: mockSignalRServiceInitializeConnection })
+            .mock(AppService, { getDataPermission: mockGetDataPermission })
+            .render();
+
+        instance.currentTab = '4';
+
+        // Action
+        const actual = instance.isMarkOrUnmarkTab();
+
+        // Assert
+        expect(actual).toBeFalsy();
+    });
+
 });

@@ -31,4 +31,7 @@ public class ConfirmAutoUnmarkModel
     public int SportType { get; set; }
 
     public int MarkType { get; set; }
+
+    public int? ChildMatchId { get; set; }
+
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 // import { CheckValidTransIdsQuery } from '../..//add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
 // import { CheckValidUsernamesQuery, CheckValidUsernamesResult } from '../../add-request/app/add-request/abnormal-accounts/abnormal-accounts.model';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
@@ -58,8 +58,8 @@ export class CommonService {
     return this.httpService.getJson('TicketVoiding/GetActions');
   }
 
-  async getMatch(matchId: number): Promise<MatchModel> {
-    return this.httpService.postJson({ matchId, isMatch3rd: false }, 'api/MatchInfo/GetInfo');
+  async getMatch(matchId: number, isExcludeChildMatchCricket?: boolean): Promise<MatchModel> {
+    return this.httpService.postJson({ matchId, isMatch3rd: false, isExcludeChildMatchCricket: isExcludeChildMatchCricket }, 'api/MatchInfo/GetInfo');
   }
 
   // async getRequestById(id: number): Promise<RequestDetailViewModel> {

@@ -21,7 +21,7 @@ public class GetDetailTicketsWorkSheetService : WorkSheetService<GetDetailTicket
     public async Task BindingContent(ExcelWorksheet worksheet, GetDetailTicketsQuery model)
     {
         const int startRow = 8;
-        worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId);
+        worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.Match.MatchId);
         if (model.MatchId > 0)
         {
             cellService.AddMatch(worksheet, model.Match);

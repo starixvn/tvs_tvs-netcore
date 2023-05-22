@@ -6,4 +6,5 @@ public class UpdateConfirmAutoUnmarkQuery
     public int Bettype { get; set; }
     public int MarkedBy { get; set; }
     public long? BetId { get; set; }
+    public int? ChildMatchId { get; set; }
 }

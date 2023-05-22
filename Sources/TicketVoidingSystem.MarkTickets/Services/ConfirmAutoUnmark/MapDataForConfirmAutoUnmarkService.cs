@@ -44,8 +44,9 @@ public class MapDataForConfirmAutoUnmarkServiceImp : MapDataForConfirmAutoUnmark
             TotalItems = itemModel.MarkedTrans,
             SportName = remotingRefService.GetSportName(itemModel.SportType.ToString(), ""),
             Event = $"{remotingRefService.GetTeamName(itemModel.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(itemModel.AwayId, LanguageCode.English)}",
-            MarkType = itemModel.MarkType
-        });
+            MarkType = itemModel.MarkType,
+            ChildMatchId = itemModel.ChildMatchId
+        }).ToList();
     }
 
     private string GetBetTypeName(int betType, string betId)

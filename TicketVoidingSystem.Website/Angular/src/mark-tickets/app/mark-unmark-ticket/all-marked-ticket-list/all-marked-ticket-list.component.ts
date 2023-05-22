@@ -56,7 +56,8 @@ export class AllMarkedTicketListComponent implements OnInit {
     const ticketDetailId: TicketDetailId = {
       matchId: ticket.matchId,
       userId: ticket.userId,
-      createdDate: ticket.createdDate
+      createdDate: ticket.createdDate,
+      childMatchId: ticket.childMatchId
     };
     this.getDetailTickets.emit(ticketDetailId);
   }
@@ -133,5 +134,14 @@ export class AllMarkedTicketListComponent implements OnInit {
   refreshTickets() {
     this.refreshData.emit();
     this.iconCheckBox = IconCheckBox.all;
+  }
+  
+  getShowMatchId(matchId: string, childMatchId :string){
+    if(childMatchId){
+      return `${matchId}\n(${childMatchId})`
+    }
+    else{
+      return `${matchId}`
+    }
   }
 }

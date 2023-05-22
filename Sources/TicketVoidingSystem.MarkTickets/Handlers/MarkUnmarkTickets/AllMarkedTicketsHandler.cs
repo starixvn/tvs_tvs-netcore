@@ -58,7 +58,8 @@ public class AllMarkedTicketsHandler : IRequestHandler<AllMarkedTicketsRequest, 
             CreatedDate = itemModel.CreatedDate,
             Total = itemModel.Total,
             Event = remotingRefWrapperService.GetTeamName(itemModel.HomeId, LanguageCode.English)
-                    + "- vs -" + remotingRefWrapperService.GetTeamName(itemModel.AwayId, LanguageCode.English)
-        });
+                    + "- vs -" + remotingRefWrapperService.GetTeamName(itemModel.AwayId, LanguageCode.English),
+            ChildMatchId = itemModel.ChildMatchId
+        }).ToList();
     }
 }

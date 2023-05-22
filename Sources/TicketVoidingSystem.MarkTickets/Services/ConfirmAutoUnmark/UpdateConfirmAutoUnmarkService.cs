@@ -62,7 +62,7 @@ public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
         var validationInAllServers = new List<UpdateConfirmAutoUnmarkValidation>();
         var criteria = new UpdateConfirmAutoUnmarkCriteria
         {
-            MatchId = query.MatchId,
+            MatchId = query.ChildMatchId ?? query.MatchId,
             Bettype = query.Bettype,
             MarkedBy = query.MarkedBy,
             BetId = query.BetId,

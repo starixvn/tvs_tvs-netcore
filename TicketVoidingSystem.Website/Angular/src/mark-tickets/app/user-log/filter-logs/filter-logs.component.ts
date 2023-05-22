@@ -9,6 +9,7 @@ import { LABELS } from '../../../../utility/constants/labels';
 import { CommonService } from '../../../../utility/services/common.service';
 import { GetLogsQuery } from '../../models/query.model';
 import { FilterAction, FilterDate } from './filter-logs.model';
+import { CheckValidateService } from '../../services/check-validate.service';
 
 @Component({
   selector: 'filter-logs',
@@ -28,7 +29,8 @@ export class FilterLogsComponent implements OnInit {
 
   constructor(
     private readonly commonService: CommonService, 
-    private readonly element: ElementRef) {
+    private readonly element: ElementRef,
+    private readonly checkValidateService: CheckValidateService) {
     this.tooltip.element = element;
   }
 
@@ -46,12 +48,12 @@ export class FilterLogsComponent implements OnInit {
   }
 
   async search() {
-    await this.checkValidMatch();
+    this.isSuccessMatch = await this.checkValidateService.checkValidMatch(this.model.matchId, this.tooltip);
     if (this.isSuccessMatch) {
       const query = this.getParams();
       this.searchEvent.emit(query);
     } else {
-      this.tooltip.display('match-id', LABELS.INVALID_MATCH);
+      this.tooltip.display('match-id', LABELS.INVALID_MATCHID);
     }
   }
 
@@ -66,29 +68,6 @@ export class FilterLogsComponent implements OnInit {
   }
 
   async checkValidMatch() {
-    if (this.model.matchId === '' || this.model.matchId === null || _.isUndefined(this.model.matchId)) {
-      this.isSuccessMatch = true;
-      return;
-    }
-
-    if (this.model.matchId === '29') {
-      this.isSuccessMatch = true;
-      return;
-    }
-
-    const query: GetBetTypesQuery = { mode: ModeType.SPORT_BOOK, matchId: parseInt(this.model.matchId, 10) };
-    const data = await this.commonService.getGroupBetTypes(query);
-
-    if (data.result.errorCode === 0) {
-      if (data.groupBetTypes.length === 0) {
-        this.tooltip.display('match-id', LABELS.INVALID_MATCH);
-        this.isSuccessMatch = false;
-      } else {
-        this.isSuccessMatch = true;
-      }
-    } else {
-      this.tooltip.display('match-id', data.result.errorMsg);
-      this.isSuccessMatch = false;
-    }
+    this.isSuccessMatch = await this.checkValidateService.checkValidMatch(this.model.matchId, this.tooltip);
   }
 }

@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TicketsComponent Should display bettrade message 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
->
+<ng-component>
   <tickets>
     <div
       class="tickets"
@@ -491,9 +489,7 @@ exports[`TicketsComponent Should display bettrade message 1`] = `
 `;
 
 exports[`TicketsComponent TicketsComponent should display html and model correctly 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
->
+<ng-component>
   <tickets>
     <div
       class="tickets"
@@ -976,9 +972,7 @@ exports[`TicketsComponent TicketsComponent should display html and model correct
 `;
 
 exports[`TicketsComponent TicketsComponent should display no-data 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
->
+<ng-component>
   <tickets>
     <div
       class="tickets"

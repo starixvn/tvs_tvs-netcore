@@ -57,4 +57,5 @@ export class LogsListComponent implements OnInit {
 
     return result;
   }
+
 }
