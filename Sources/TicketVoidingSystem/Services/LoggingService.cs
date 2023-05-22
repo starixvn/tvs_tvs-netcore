@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.Database;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace TicketVoidingSystem.Services;
 
@@ -15,6 +18,8 @@ public interface LoggingService
     Task ErrorAsync(Exception exception);
 
     Task InfoAsync(string message);
+
+    Task HandleException(HttpContext context, Exception exception);
 }
 
 public class LoggingServiceImp : LoggingService
@@ -40,6 +45,17 @@ public class LoggingServiceImp : LoggingService
         await LogService.InfoAsync(message);
     }
 
+    public async Task HandleException(HttpContext context, Exception exception)
+    {
+        var logMessage = new LogMessage(exception.Message)
+            .AddSection("Request Info", GetRequestInfo(context))
+            .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
+            .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
+            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException))
+            .ToString();
+        await LogService.ErrorAsync(logMessage);
+    }
+
     private static async Task HandleException(Exception exception)
     {
         var logMessage = new LogMessage(exception.Message)
@@ -48,5 +64,15 @@ public class LoggingServiceImp : LoggingService
             .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException))
             .ToString();
         await LogService.ErrorAsync(logMessage);
+    }
+
+    private static Dictionary<string, object> GetRequestInfo(HttpContext context)
+    {
+        return new Dictionary<string, object>
+        {
+            { "Url", context.Request.GetDisplayUrl() },
+            { "Username", context.User.Identity?.Name },
+            { "User IP", context.Request.Headers["X-Forwarded-For"] }
+        };
     }
 }

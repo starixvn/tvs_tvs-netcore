@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Fanex.Logging.Extensions.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Website.Utilities;
 
 public class ExceptionHandlerMiddleware
 {
     private readonly RequestDelegate next;
+
     public IConfiguration Configuration { get; }
 
-    public ExceptionHandlerMiddleware(RequestDelegate next, IConfiguration configuration)
+    private readonly LoggingService loggingService;
+
+    public ExceptionHandlerMiddleware(RequestDelegate next, IConfiguration configuration, LoggingService loggingService)
     {
         this.next = next;
         Configuration = configuration;
+        this.loggingService = loggingService;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -26,12 +30,12 @@ public class ExceptionHandlerMiddleware
         }
         catch (Exception exception)
         {
-            await ExceptionHandler.HandleAsync(exception, context);
-            await HandleException(context, exception);
+            await loggingService.HandleException(context, exception);
+            await HandleResponseException(context, exception);
         }
     }
 
-    private static async Task HandleException(HttpContext context, Exception exception)
+    private static async Task HandleResponseException(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
