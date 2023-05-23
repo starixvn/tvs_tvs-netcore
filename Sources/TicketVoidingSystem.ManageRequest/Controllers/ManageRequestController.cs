@@ -29,4 +29,11 @@ public class ManageRequestController : ControllerBase
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]
     public async Task<IActionResult> GetRequests(SelectRequestsRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<JsonResult> GetVoidedTickets(GetVoidedTicketsRequest request)
+    {
+        var model = await mediator.Send(request);
+        return this.JsonNet(model);
+    }
 }
