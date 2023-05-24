@@ -35,7 +35,7 @@ class Helper {
   };
 }
 
-describe('FilterComponent', () => { 
+describe('FilterComponent', () => {
   @NgModule({
     declarations: [
     ],
@@ -47,8 +47,9 @@ describe('FilterComponent', () => {
       MultipleSelectionModule
     ],
     providers: [
+      AppStore,
       FilterService,
-      AppStore 
+      //AppStore
     ]
   })
   class AppModuleTest { }
@@ -122,7 +123,7 @@ describe('FilterComponent', () => {
     expect(mockInitDefaultFilter).toHaveBeenCalled();
     expect(mockInitMultiSelectSites).toHaveBeenCalled();
   });
-  
+
   it('#clickAddUser should emit #addUserEvent', async () => {
     // Arrange
     const mockAddUserEvent = jest.fn();
@@ -141,7 +142,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(mockAddUserEvent).toHaveBeenCalled();
   });
-  
+
   it('#clickSearch should emit #searchEvent', async () => {
     // Arrange
     const mockSearchEvent = jest.fn();
@@ -160,7 +161,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(mockSearchEvent).toHaveBeenCalled();
   });
-  
+
   it('#updateSelectedSites should update correct model', async () => {
     // Arrange
     const filterModel = new FilterModel();
@@ -178,7 +179,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(filterModel.sites).toBe('1,2');
   });
-  
+
   it('#updateSelectedSubIssueType should update correct model', async () => {
     // Arrange
     const filterModel = new FilterModel();
@@ -197,7 +198,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(filterModel.subTypes).toBe('1,2,3');
   });
-  
+
   it('#updateSelectedVoidVIP should update correct model', async () => {
     // Arrange
     const filterModel = new FilterModel();

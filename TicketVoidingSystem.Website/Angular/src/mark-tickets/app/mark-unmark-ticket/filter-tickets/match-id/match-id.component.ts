@@ -4,7 +4,7 @@ import {
   OnInit, Output, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GetPlayersQuery } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';

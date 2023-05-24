@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
@@ -21,7 +21,7 @@ export class LogInfoNewComponent {
   displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
-  
+
   isShowPoolHouseTickets() {
     const issueTypesHavePoolHouse = [
       Number(IssueTypeConstant.WRONG_HDP),
@@ -32,7 +32,7 @@ export class LogInfoNewComponent {
 
     return issueTypesHavePoolHouse.includes(this.issueTypeId);
   }
-  
+
   isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }

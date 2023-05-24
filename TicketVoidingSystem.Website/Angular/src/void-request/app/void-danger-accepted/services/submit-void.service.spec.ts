@@ -1,10 +1,11 @@
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
-import { BetID } from '../../../../utility/models/bet-id.mode';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../add-request/app/add-request/models/request.model';
+import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
+import { BetID } from '../../../../utility/models/bet-id.model';
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { Result } from '../../../../utility/models/result';
-import { TemplateMessageComponent } from '../../../../utility/modules/template-message/template-message/template-message.component';
+import { PasswordService } from '../../../../utility/services/password.service';
 import { AppService } from '../../app.service';
 import { VoidMatch } from '../../models/void-match.model';
 import { CheckRequestService } from '../../services/check-request.service';
@@ -77,7 +78,8 @@ class Helper {
     dangerAcceptedModels: [],
     redCardModels: [],
     wrongHdpModels: [],
-    wrongOuModels: []
+    wrongOuModels: [],
+    wrongOddsModels: []
   };
 }
 
@@ -87,13 +89,16 @@ describe('SubmitVoidService', () => {
   let popupService: PopupService;
   let checkRequestService: CheckRequestService;
   let appService: AppService;
+  let passwordService: PasswordService;
 
   beforeEach(() => {
-    submitVoidService = new SubmitVoidService(null, null, null, null);
     validationService = new ValidationService(null);
     popupService = new PopupService(null);
     checkRequestService = new CheckRequestService(null, null);
     appService = new AppService(null);
+    passwordService = new PasswordService();
+    passwordService.hash = jest.fn();
+    submitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
   });
 
   it('#voidAllMatches should call #showVoidBetConfirm when #checkValidationBeforeVoid return model successful', async () => {
@@ -109,7 +114,7 @@ describe('SubmitVoidService', () => {
     validationService.checkValidationBeforeVoid = mockCheckValidationBeforeVoid;
     popupService.showVoidBetConfirm = mockShowVoidBetConfirm;
 
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['checkRequestModified'] = mockCheckRequestModified;
 
     // Action
@@ -138,7 +143,7 @@ describe('SubmitVoidService', () => {
     validationService.checkValidationBeforeVoid = mockCheckValidationBeforeVoid;
     popupService.showVoidBetConfirm = mockShowVoidBetConfirm;
 
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
 
     // Action
     await mockSubmitVoidService.voidAllMatches(null, [voidMatch], null, primitiveProperty);
@@ -157,7 +162,7 @@ describe('SubmitVoidService', () => {
     const requestDetailViewModel = new RequestDetailViewModel();
     checkRequestService.isRequestModified = mockIsRequestModified;
 
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['reCheckVoidBetPermission'] = mockReCheckVoidBetPermission;
 
     // Action
@@ -177,7 +182,7 @@ describe('SubmitVoidService', () => {
     const requestDetailViewModel = new RequestDetailViewModel();
     checkRequestService.isRequestModified = mockIsRequestModified;
 
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['reCheckVoidBetPermission'] = mockReCheckVoidBetPermission;
 
     // Action
@@ -193,7 +198,7 @@ describe('SubmitVoidService', () => {
     const mockCheckVoidBetPermission = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
     const mockProcessVoid = jest.fn();
     validationService.checkVoidBetPermission = mockCheckVoidBetPermission;
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['processVoid'] = mockProcessVoid;
 
     // Action
@@ -210,7 +215,7 @@ describe('SubmitVoidService', () => {
     const mockShowWarningVoidBetPermission = jest.fn();
     validationService.checkVoidBetPermission = mockCheckVoidBetPermission;
     popupService.showWarningVoidBetPermission = mockShowWarningVoidBetPermission;
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
 
     // Action
     await mockSubmitVoidService['reCheckVoidBetPermission'](null, Helper.fakeRequestDetailViewModel, null);
@@ -225,7 +230,7 @@ describe('SubmitVoidService', () => {
     const mockInsertQueue = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
     const mockShowSubmitVoidRequestSuccess = jest.fn();
     popupService.showSubmitVoidRequestSuccess = mockShowSubmitVoidRequestSuccess;
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['insertQueue'] = mockInsertQueue;
 
     // Action
@@ -241,7 +246,7 @@ describe('SubmitVoidService', () => {
     const mockInsertQueue = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeResultError));
     const mockShowSubmitVoidRequestError = jest.fn();
     popupService.showSubmitVoidRequestError = mockShowSubmitVoidRequestError;
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['insertQueue'] = mockInsertQueue;
 
     // Action
@@ -257,7 +262,7 @@ describe('SubmitVoidService', () => {
     const mockInsertQueue = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeResultError));
     appService.insertQueue = mockInsertQueue;
     const voidMatch = new VoidMatch();
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['getVoidQuery'] = jest.fn();
 
     // Action
@@ -272,7 +277,7 @@ describe('SubmitVoidService', () => {
     const mockInsertQueue = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
     appService.insertQueue = mockInsertQueue;
     const voidMatch = new VoidMatch();
-    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService);
+    const mockSubmitVoidService = new SubmitVoidService(validationService, popupService, checkRequestService, appService, passwordService);
     mockSubmitVoidService['getVoidQuery'] = jest.fn();
 
     // Action

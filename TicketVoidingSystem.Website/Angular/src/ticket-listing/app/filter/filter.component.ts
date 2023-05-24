@@ -1,6 +1,6 @@
 ﻿import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import * as momenttimezone from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';

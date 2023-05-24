@@ -5,6 +5,7 @@ exports[`AppComponent AppComponent should init match snapshot 1`] = `
   __ngContext__={[Function LRootView]}
 >
   <app-root>
+    <menu-bar />
     <div
       class="title"
     >

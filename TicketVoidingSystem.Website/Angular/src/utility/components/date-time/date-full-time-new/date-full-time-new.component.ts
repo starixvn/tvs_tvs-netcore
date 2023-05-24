@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { CommonStaticService } from '../../../../utility/services/common.service';
@@ -46,7 +46,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.updateData();    
+    this.updateData();
   }
 
   public updateData(): void {
@@ -66,7 +66,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
     this.dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`,DateTimeFormat.FULL_DATE_TIME_FORMAT, true)
       .format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     this.dateTimeChange.emit(this.dateTime);
-    
+
     return true;
   }
 
@@ -78,7 +78,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
 
     return true;
   }
-  
+
   public changeModel(): void {
     this.changeEvent.emit();
   }

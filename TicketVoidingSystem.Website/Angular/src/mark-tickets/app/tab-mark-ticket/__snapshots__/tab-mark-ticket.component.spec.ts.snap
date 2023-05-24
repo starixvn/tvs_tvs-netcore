@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TabMarkTicketComponent TabMarkTicketComponent init with NO permission should match snapshot 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <tab-mark-ticket>
     <ul
       class="nav"
@@ -12,7 +14,9 @@ exports[`TabMarkTicketComponent TabMarkTicketComponent init with NO permission s
 `;
 
 exports[`TabMarkTicketComponent TabMarkTicketComponent init with permission ReadMarkTickets & HostAutoMarkService should match snapshot 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <tab-mark-ticket>
     <ul
       class="nav"
@@ -59,7 +63,9 @@ exports[`TabMarkTicketComponent TabMarkTicketComponent init with permission Read
 `;
 
 exports[`TabMarkTicketComponent TabMarkTicketComponent init with permission ReadMarkTickets should match snapshot 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <tab-mark-ticket>
     <ul
       class="nav"

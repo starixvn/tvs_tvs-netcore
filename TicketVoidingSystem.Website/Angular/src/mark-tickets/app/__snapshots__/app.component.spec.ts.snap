@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AppComponent AppComponent should render </confirm-auto-unmark> 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <app-root>
     <menu-bar />
     <div
@@ -26,7 +28,9 @@ exports[`AppComponent AppComponent should render </confirm-auto-unmark> 1`] = `
 `;
 
 exports[`AppComponent AppComponent should render </mark-unmark-ticket> 0 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <app-root>
     <menu-bar />
     <div
@@ -51,7 +55,9 @@ exports[`AppComponent AppComponent should render </mark-unmark-ticket> 0 1`] = `
 `;
 
 exports[`AppComponent AppComponent should render </mark-unmark-ticket> 1 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <app-root>
     <menu-bar />
     <div
@@ -76,7 +82,9 @@ exports[`AppComponent AppComponent should render </mark-unmark-ticket> 1 1`] = `
 `;
 
 exports[`AppComponent AppComponent should render </user-log> 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <app-root>
     <menu-bar />
     <div

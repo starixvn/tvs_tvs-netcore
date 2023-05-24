@@ -1,12 +1,12 @@
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from '../../../../utility/components/modal/modal';
+import { ModalService } from '../../../../utility/components/modal/modal.service';
+import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { Result } from '../../../../utility/models/result';
-import { ModalType } from '../../../../utility/modules/modal/modal';
-import { ModalService } from '../../../../utility/modules/modal/modal.service';
-import { TemplateMessageComponent } from '../../../../utility/modules/template-message/template-message/template-message.component';
-import { TemplateValue } from '../../../../utility/modules/template-message/template-message/template.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { PopupService } from './popup.service';
 
@@ -15,7 +15,7 @@ class Helper {
     isSuccessful: false,
     errorCode: 111111,
     errorMsg: '',
-  }; 
+  };
 }
 
 describe('PopupService', () => {
@@ -36,7 +36,7 @@ describe('PopupService', () => {
     };
     const mockPopupService = new PopupService(modalService);
     mockPopupService['getWarningInTemplateMessage'] = jest.fn().mockImplementation(() => '');
-    
+
     // Action
     mockPopupService.showVoidBetConfirm(null, null, () => {});
 
@@ -49,7 +49,7 @@ describe('PopupService', () => {
     spyModalServiceConfirm.mock.calls[0][1]();
     spyModalServiceConfirm.mock.calls[0][2]();
   });
-  
+
   it('#showWarningVoidBetPermission should call expected function', async () => {
     // Arrange
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
@@ -75,7 +75,7 @@ describe('PopupService', () => {
 
     spyModalServiceConfirm.mock.calls[0][1]();
   });
-  
+
   it('#showWarningExportExcel should call expected function', async () => {
     // Arrange
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
@@ -120,7 +120,7 @@ describe('PopupService', () => {
     spyModalServiceConfirm.mock.calls[0][1]();
     expect(window.close).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#showSubmitVoidRequestError should call expected function when input wrong password', async () => {
     // Arrange
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
@@ -147,7 +147,7 @@ describe('PopupService', () => {
     spyModalServiceConfirm.mock.calls[0][1]();
     expect(window.close).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#showSubmitVoidRequestError should call expected function when input correct password', async () => {
     // Arrange
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
@@ -176,9 +176,9 @@ describe('PopupService', () => {
     spyModalServiceConfirm.mock.calls[0][1]();
     expect(window.close).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#showSubmitVoidRequestError should return message when #getMatchesHaveWarning return list matchId', async () => {
-    // Arrange    
+    // Arrange
     popupService['getMatchesHaveWarning'] = jest.fn().mockImplementation(() => [1,2]);
 
     // Action
@@ -188,9 +188,9 @@ describe('PopupService', () => {
 
     expect(result.length).toBeGreaterThan(0);
   });
-  
+
   it('#showSubmitVoidRequestError should return message when #getMatchesHaveWarning return empty array', async () => {
-    // Arrange    
+    // Arrange
     popupService['getMatchesHaveWarning'] = jest.fn().mockImplementation(() => []);
 
     // Action
@@ -200,9 +200,9 @@ describe('PopupService', () => {
 
     expect(result.length).toBe(0);
   });
-  
+
   it('#getMatchesHaveWarning should return expect list match', async () => {
-    // Arrange    
+    // Arrange
     const voidMatch = new VoidMatch();
     voidMatch.matchModel = new MatchModel();
     voidMatch.matchModel.matchId = 90000;

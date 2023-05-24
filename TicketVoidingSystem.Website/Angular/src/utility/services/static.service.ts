@@ -1,5 +1,5 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
@@ -72,7 +72,7 @@ export class StaticService {
   static isWrong1stOU(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_1ST_OU;
   }
-  
+
   static isArchivedTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.ARCHIVED_TICKET;
   }
@@ -123,11 +123,11 @@ export class StaticService {
       return requestDetail.event.eventDate;
     }
   }
-  
+
   static checkHandlingCashOutAsUnSettledTicketByFunction(functionId: number): boolean {
     return functionId === FunctionConst.SINGLE;
   }
-  
+
   static checkHandlingCashOutAsUnSettledTicketByIssueTypeId(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
       issueTypeId === IssueTypeConstant.RED_CARD ||
@@ -135,7 +135,7 @@ export class StaticService {
       issueTypeId === IssueTypeConstant.EARLY_KICK_OFF ||
       issueTypeId === IssueTypeConstant.WRONG_KICK_OFF;
   }
-  
+
   static isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return this.isShowCashOutCount(cashOutCount) || this.isShowSettleCount(settleCount)
       || this.isShowInstantlySettleIncluded(instantlySettleCount);
@@ -169,11 +169,11 @@ export class StaticService {
 
     return ` (${info.join(', ')})`;
   }
-  
+
   static isCorrectFormatMultipleDecimal(value: string): boolean {
     return RegexConstant.MULTIPLE_DECIMAL.test(value);
   }
-  
+
   static isFromTimeSameOrBeforeToTime(fromDateTime: string, toDateTime: string, tooltip: Tooltip, fromDateTimeClass: string): boolean {
     const momentFromDateTime = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const momentToDateTime = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
@@ -183,12 +183,12 @@ export class StaticService {
     }
 
     return true;
-  }  
-  
+  }
+
   static isShowVarCheck(subIssueTypeId: number) {
     return subIssueTypeId && SubIssueTypeGroup.SUBTYPE_VAR.includes(subIssueTypeId);
   }
-  
+
   static isHaveCancelCashOutTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
       issueTypeId === IssueTypeConstant.RED_CARD ||

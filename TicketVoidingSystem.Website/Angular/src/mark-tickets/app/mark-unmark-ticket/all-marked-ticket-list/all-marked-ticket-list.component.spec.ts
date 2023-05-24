@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
@@ -286,7 +286,7 @@ describe('AllMarkedTicketListComponent', () => {
     const { instance } = await shallow.render();
     let matchId = '111';
     let childMatchId = null;
-    
+
     // Action
     const actual = instance.getShowMatchId(matchId, childMatchId);
 
@@ -299,7 +299,7 @@ describe('AllMarkedTicketListComponent', () => {
     const { instance } = await shallow.render();
     let matchId = '111';
     let childMatchId = '222';
-    
+
     // Action
     const actual = instance.getShowMatchId(matchId, childMatchId);
 

@@ -1,12 +1,12 @@
-import { TicketsListComponent } from './tickets-list.component';
-import { BlockUiModule } from '../../../utility/modules/block-ui/block-ui.module';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
-import { FormsModule } from '@angular/forms';
-import { TicketsModel } from './tickets.model';
-import { GroupModel } from './group-tickets.model';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
-import { PagingComponent } from '../../../utility/modules/paging/paging/paging.component';
+import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
+import { GroupModel } from './group-tickets.model';
+import { TicketsListComponent } from './tickets-list.component';
+import { TicketsModel } from './tickets.model';
 
 class Helper {
   static readonly titleSelector = 'div.title-tickets-list-label';

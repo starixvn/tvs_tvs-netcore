@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
+import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
+import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
+import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../utility/constants/issue-type.constant';
-import { BlockUiModule } from '../../utility/modules/block-ui/block-ui.module';
-import { TemplateService } from '../../utility/modules/template-message/template-message/template.service';
-import { ToolTipModule } from '../../utility/modules/tooltip/tooltip.module';
 import { HttpService } from '../../utility/services/http.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
@@ -43,7 +43,8 @@ class Helper {
     dangerAcceptedModels: [],
     redCardModels: [],
     wrongHdpModels: [],
-    wrongOuModels: []
+    wrongOuModels: [],
+    wrongOddsModels: []
   };
 }
 

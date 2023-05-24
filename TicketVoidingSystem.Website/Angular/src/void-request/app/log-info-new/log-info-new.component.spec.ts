@@ -4,7 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { AcceptType } from '../../../utility/constants/config';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { LogInfoNewComponent } from './log-info-new.component';
 
 class Helper {

@@ -1,4 +1,8 @@
 import * as _ from 'lodash';
+import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { Message } from '../../../../utility/components/template-message/messages/message';
+import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../../utility/constants/labels';
 import { AffectedLicensee } from '../../../../utility/models/affected-licensee.model';
@@ -7,10 +11,6 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { SqlResult } from '../../../../utility/models/result';
-import { PagingModel } from '../../../../utility/modules/paging/paging/paging.model';
-import { Message } from '../../../../utility/modules/template-message/messages/message';
-import { TemplateMessageComponent } from '../../../../utility/modules/template-message/template-message/template-message.component';
-import { TemplateValue } from '../../../../utility/modules/template-message/template-message/template.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { VoidMatch } from '../../models/void-match.model';

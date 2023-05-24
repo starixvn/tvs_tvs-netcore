@@ -35,10 +35,6 @@ exports[`LogInfoNewComponent LogInfoNewComponent init should match snapshot 1`] 
         1
       </strong>
       <br />
-       Cancel Cash Out: 
-      <strong>
-        1
-      </strong>
     </div>
   </log-info-new>
 </ng-component>

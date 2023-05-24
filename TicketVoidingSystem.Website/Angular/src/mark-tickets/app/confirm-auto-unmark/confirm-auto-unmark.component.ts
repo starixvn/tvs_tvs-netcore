@@ -1,19 +1,19 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
-import * as moment from 'moment';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import * as moment from 'moment-timezone';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { MarkType } from '../../../utility/constants/config';
+import { LABELS } from '../../../utility/constants/labels';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
-import { ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark.model';
 import { CheckValidateService } from '../services/check-validate.service';
-import { LABELS } from '../../../utility/constants/labels';
+import { ConfirmAutoUnmarkQuery, ConfirmAutoUnmarkViewModel, UpdateConfirmAutoUnmark } from './confirm-auto-unmark.model';
 
 @Component({
   selector: 'confirm-auto-unmark',

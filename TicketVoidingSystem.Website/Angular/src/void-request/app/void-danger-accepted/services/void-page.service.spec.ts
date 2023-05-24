@@ -3,8 +3,11 @@ import { RedCardModel } from '../../../../add-request/app/add-request/models/eve
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { Message } from '../../../../utility/components/template-message/messages/message';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { AffectedLicensee } from '../../../../utility/models/affected-licensee.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
@@ -12,9 +15,6 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { SqlResult } from '../../../../utility/models/result';
-import { PagingModel } from '../../../../utility/modules/paging/paging/paging.model';
-import { Message } from '../../../../utility/modules/template-message/messages/message';
-import { TemplateValue } from '../../../../utility/modules/template-message/template-message/template.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
@@ -53,13 +53,13 @@ class Helper {
     isPoolHouseAffected: false
   };
   static readonly fakeSqlResultError: SqlResult = {
-    ErrCode: 1,
-    ErrMsg: 'error',
+    errCode: 1,
+    errMsg: 'error',
     isSuccessful: false,
   };  
   static readonly fakeSqlResultSuccessful: SqlResult = {
-    ErrCode: 0,
-    ErrMsg: '',
+    errCode: 0,
+    errMsg: '',
     isSuccessful: true,
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
@@ -88,7 +88,8 @@ class Helper {
     dangerAcceptedModels: [],
     redCardModels: [],
     wrongHdpModels: [],
-    wrongOuModels: []
+    wrongOuModels: [],
+    wrongOddsModels: []
   };
   
   static readonly fakeIssueTypeList: IssueType[] = [
@@ -175,7 +176,7 @@ describe('VoidPageService', () => {
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
     fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
     fakeRequestDetailViewModel.dangerAcceptedModels = [dangerAcceptedModel];
-    const spyGetMatch = jest.spyOn(appService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
+    const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
 
     voidPageService['getAllLogInfo'] = jest.fn().mockImplementation(() => [getLogInfoModel]);
     voidPageService['getSubIssueTypeModel'] = jest.fn();

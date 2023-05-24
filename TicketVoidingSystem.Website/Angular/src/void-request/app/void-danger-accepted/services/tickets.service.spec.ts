@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
+import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { Message } from '../../../../utility/components/template-message/messages/message';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { AffectedLicensee } from '../../../../utility/models/affected-licensee.model';
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
-import { PagingConstant, PagingModel } from '../../../../utility/modules/paging/paging/paging.model';
-import { Message } from '../../../../utility/modules/template-message/messages/message';
-import { TemplateValue } from '../../../../utility/modules/template-message/template-message/template.model';
 import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { VoidMatch } from '../../models/void-match.model';
@@ -66,7 +66,8 @@ class Helper {
     dangerAcceptedModels: [],
     redCardModels: [],
     wrongHdpModels: [],
-    wrongOuModels: []
+    wrongOuModels: [],
+    wrongOddsModels: []
   };
 }
 

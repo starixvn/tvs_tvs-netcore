@@ -1,15 +1,15 @@
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from 'src/add-request/app/add-request/models/request.model';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../../add-request/app/add-request/models/event-wrong-score.model';
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
-import { TemplateValue } from '../../../../utility/modules/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/modules/template-message/template-message/template.service';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
@@ -66,7 +66,8 @@ class Helper {
     dangerAcceptedModels: [],
     redCardModels: [],
     wrongHdpModels: [],
-    wrongOuModels: []
+    wrongOuModels: [],
+    wrongOddsModels: []
   };
   static readonly fakeTemplateValue: TemplateValue = {
     matchId: 9000,

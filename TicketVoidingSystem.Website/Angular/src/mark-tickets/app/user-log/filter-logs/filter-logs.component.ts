@@ -1,15 +1,11 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
-import { GetBetTypesQuery } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { ModeType } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
-import { CommonService } from '../../../../utility/services/common.service';
 import { GetLogsQuery } from '../../models/query.model';
-import { FilterAction, FilterDate } from './filter-logs.model';
 import { CheckValidateService } from '../../services/check-validate.service';
+import { FilterAction, FilterDate } from './filter-logs.model';
 
 @Component({
   selector: 'filter-logs',
@@ -28,10 +24,9 @@ export class FilterLogsComponent implements OnInit {
   @Output() searchEvent = new EventEmitter<GetLogsQuery>();
 
   constructor(
-    private readonly commonService: CommonService, 
     private readonly element: ElementRef,
     private readonly checkValidateService: CheckValidateService) {
-    this.tooltip.element = element;
+    this.tooltip.element = this.element;
   }
 
   ngOnInit() {

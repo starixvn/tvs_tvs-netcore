@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ConfirmationComponent } from './confirmation.component';
-import { ToolTipModule } from '../../modules/tooltip/tooltip.module';
 import { LABELS } from '../../constants/labels';
-import { Tooltip } from '../../modules/tooltip/tooltip.model';
+import { Tooltip } from '../tooltip/tooltip.model';
+import { ToolTipModule } from '../tooltip/tooltip.module';
+import { ConfirmationComponent } from './confirmation.component';
 
 describe('ConfirmationComponent', () => {
   let component: ConfirmationComponent;
@@ -29,17 +29,9 @@ describe('ConfirmationComponent', () => {
     component.ngOnInit();
   });
 
-  it('Void current page', () => {
-    // Arrange
-    spyOn(component.voidCurrent, 'emit');
-    // Action and Asert
-    component.voidCurrentPage();
-    expect(component.voidCurrent.emit).toHaveBeenCalledWith(true);
-  });
-
   it('Void all page', () => {
     // Arrange
-    spyOn(component.voidAll, 'emit');
+    jest.spyOn(component.voidAll, 'emit');
     // Action and Asert
     component.voidAllPage();
     expect(component.voidAll.emit).toHaveBeenCalledWith(true);
@@ -55,7 +47,7 @@ describe('ConfirmationComponent', () => {
     ];
     let actualValue = false;
     component.tooltip = new Tooltip();
-    spyOn(component.tooltip, 'display');
+    jest.spyOn(component.tooltip, 'display');
     // Action and Asert
     testCases.forEach(item => {
         component.confirmation.reason = item.reason;

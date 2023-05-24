@@ -1,6 +1,6 @@
 import { NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
-import { ModalType } from "../../../utility/modules/modal/modal";
-import { ModalService } from "../../../utility/modules/modal/modal.service";
+import { ModalType } from "../../../utility/components/modal/modal";
+import { ModalService } from "../../../utility/components/modal/modal.service";
 import { AppService } from "../app.service";
 import { RequestLastModifiedDate } from "../models/request-last-modified-date.model";
 import { CheckRequestService } from "./check-request.service";

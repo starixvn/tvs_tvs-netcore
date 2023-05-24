@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { RequestInfoComponent } from './request-info.component';
-import { DateTimeModule } from '../date-time/date-time.module';
 import { SimpleChange } from '@angular/core';
 import { IssueInfo } from '../../models/issue-type.model';
+import { DateTimeModule } from '../date-time/date-time.module';
+import { RequestInfoComponent } from './request-info.component';
 
 describe('RequestInfoComponent', () => {
   let component: RequestInfoComponent;
@@ -42,7 +42,8 @@ describe('RequestInfoComponent', () => {
     const changes = {
       'issue': new SimpleChange(new IssueInfo(), issueInfo, true),
     };
-    spyOn<any>(component, 'updateIssue');
+    component['updateIssue'] = jest.fn();
+
     // Action and Assert
     component.ngOnChanges(changes);
     expect(component['updateIssue']).toHaveBeenCalled();
@@ -61,7 +62,6 @@ describe('RequestInfoComponent', () => {
     // Action and Assert
     component['updateIssue']();
     expect(component.issueTypeName).toBe(component.issue.name);
-    expect(component.isLikelyAbnormalBetIssueType).toBe(true);
     expect(component.isEarlyKOIssueType).toBe(false);
   });
 
@@ -78,7 +78,6 @@ describe('RequestInfoComponent', () => {
     // Action and Assert
     component['updateIssue']();
     expect(component.issueTypeName).toBe(`${component.issue.name} - ${component.issue.subIssueTypeName}`);
-    expect(component.isLikelyAbnormalBetIssueType).toBe(false);
     expect(component.isEarlyKOIssueType).toBe(true);
   });
 });

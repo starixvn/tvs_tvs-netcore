@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AutoRefreshComponent AutoRefreshComponent should init match snapshot 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <auto-refresh>
     <div
       class="refresh-area"

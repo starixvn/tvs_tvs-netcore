@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
-import { AdvancedModeComponent } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.component';
-import { CheckedBetType } from '../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
-import { GroupBetTypesComponent } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.component';
-import { BetType, GroupBetType, GroupBetTypesModel } from '../../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
+import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
+import { CheckedBetType } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
+import { BetType, GroupBetType, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { LogInfoComponent } from '../log-info/log-info.component';
 import { FilterComponent } from './filter.component';
 
@@ -108,16 +108,12 @@ describe('DangerAcceptedFilterComponent', () => {
   it('#getBetTypeModels should emit search event with expected param', async () => {
     const { findComponent, instance } = await shallow.render();
     const groupBetTypesComponent = findComponent(GroupBetTypesComponent);
-    groupBetTypesComponent.validate = jest.fn().mockImplementation(() => false);
     const advancedModelComponent = findComponent(AdvancedModeComponent);
+    groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
     advancedModelComponent.validate = jest.fn().mockImplementation(() => false);
     instance.getBetTypeModels();
     expect(instance.search.emit).toHaveBeenCalled();
     expect(instance.search.emit).toHaveBeenCalledWith(null);
-
-    groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
-    advancedModelComponent.validate = jest.fn().mockImplementation(() => true);
-    advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => Helper.fakeCheckedBetTypeList);
     instance.groupBetTypes = Helper.getFakeGroupBetTypesModel();
     instance.groupBetTypes.getValueCheckedBetTypes = jest.fn();
     instance.getBetTypeModels();
@@ -138,7 +134,6 @@ describe('DangerAcceptedFilterComponent', () => {
     const { instance, findComponent } = await shallow.render();
     instance.changeBetTypes = jest.fn();
     const groupBetTypesComponent = findComponent(GroupBetTypesComponent);
-    groupBetTypesComponent.betTypesEvent.emit(Helper.fakeBettypeList);
 
     expect(instance.changeBetTypes).toHaveBeenCalledTimes(1);
     expect(instance.changeBetTypes).toHaveBeenCalledWith(Helper.fakeBettypeList);

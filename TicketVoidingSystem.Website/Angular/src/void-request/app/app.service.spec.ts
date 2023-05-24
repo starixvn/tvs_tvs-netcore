@@ -1,9 +1,6 @@
-import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { IssueInfo } from '../../utility/models/issue-type.model';
-import { MatchModel } from '../../utility/models/match.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
 import { VoidedReason } from '../../utility/models/reason.model';
 import { Result } from '../../utility/models/result';
-import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../../utility/modules/advanced-mode/group-bettypes/group-bettypes.model';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
 import { GetTicketsQuery } from './models/get-tickets.query';
@@ -68,7 +65,8 @@ describe('AppService', () => {
       redCardModels: [],
       request: requestDetailModel,
       wrongHdpModels: [],
-      wrongOuModels: []
+      wrongOuModels: [],
+      wrongOddsModels: []
     };
    mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
    
@@ -79,67 +77,6 @@ describe('AppService', () => {
    expect(actualData).toEqual(fakeRequestDetailViewModel);
   });
 
- it('#getMatch should return expected data', async() => {
-  // Arrange
-    const expectedData: MatchModel = {
-      matchId: 28321695,
-      homeId: 10935,
-      homeName: 'American League',
-      homeNameNewSimplified: '美国聯盟',
-      homeNameSimplified: '美国聯盟',
-      homeNameTraditional: '美國聯盟',
-      awayId: 16277,
-      awayName: 'National League',
-      awayNameNewSimplified: '国家联盟',
-      awayNameSimplified: '国家联盟',
-      awayNameTraditional: '國家聯盟',
-      matchCode: '*B0001',
-      eventDate: new Date(),
-      dateTime: new Date(),
-      leagueId: 12345,
-      leagueName: '',
-      leagueNameNewSimplified: '',
-      leagueNameSimplified: '',
-      leagueNameTraditional: '',
-      matchEvent: '',
-      matchEventSimplified: '',
-      matchEventNewSimplified: '',
-      kickOffTime: '',
-      sportType: 8,
-      sportTypeName: '',
-      sportTypeNameNewSimplified: '',
-      sportTypeNameSimplified: '',
-      sportTypeNameTraditional: '',
-      startTime: new Date(Helper.fakeDate),
-      endTime: new Date(Helper.fakeDate),
-      leagueGroupId: 0
-    };
-    mockHttpService.postJson.mockResolvedValue(expectedData);
-    
-    // Action
-    const actualData = await appService.getMatch(28321695);
-
-    // Assert
-    expect(actualData).toEqual(expectedData);
-  });
-
-  it('#getIssueInfo should return expected data', async() => {
-    // Arrange
-    const expectedData:  IssueInfo = {
-      name: 'Abnormal Bet',
-      subIssueTypeId: 27,
-      issueTypeId: 11,
-      subIssueTypeName: 'Abnormal',
-      subIssueTypeNameCS: '非正常'
-    };
-    mockHttpService.getJson.mockResolvedValue(expectedData);
-    
-    // Action
-    const actualData = await appService.getIssueInfo(17);
-
-    // Assert
-    expect(actualData).toEqual(expectedData);
-  });
 
   it('#getTickets should return expected data', async() => {
     // Arrange
@@ -174,7 +111,7 @@ describe('AppService', () => {
     const expectedData = new VoidedReason();
     expectedData.reasonEnglish = 'reason english';
     expectedData.reasonChineseSimplified = 'reason chinese simplified';
-    mockHttpService.getJson.mockResolvedValue(expectedData);
+    mockHttpService.postJson.mockResolvedValue(expectedData);
     
     // Action
     const actualData = await appService.getVoidedReason(27, 0);
@@ -203,7 +140,7 @@ describe('AppService', () => {
   it('#exportExcel should call #downloadFile with expected params', async() => {
     // Arrange
     const query = new GetTicketsQuery();
-    const url = `TicketVoidingSystem/VoidRequest/ExportExcel`;
+    const url = `api/VoidRequest/ExportExcel`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action
@@ -213,22 +150,6 @@ describe('AppService', () => {
     expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url);
   });
 
-  it('#getGroupBetTypes should return expected data', async () => {
-    // Arrange
-    const groupBettype: GroupBetType[] = [
-        new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
-        new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
-    ];
-    const expectedGroupBettypesModel = new GroupBetTypesModel(groupBettype, true);
-    mockHttpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
-
-    // Action
-    const result = await appService.getGroupBetTypes(new GetBetTypesQuery());
-
-    // Assert
-    expect(result.groupBetTypes.length).toBe(2);
-    expect(result.groupBetTypes[0].groupName).toBe('1H');
-  });
   
   it('#getLastModifiedDate should return expected data', async() => {
     // Arrange

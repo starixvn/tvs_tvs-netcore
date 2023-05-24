@@ -10,7 +10,6 @@ import { ModeType } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AppService } from '../../app.service';
 import { GetLogsQuery } from '../../models/query.model';
 import { FilterLogsComponent } from './filter-logs.component';
 import { FilterAction, FilterDate } from './filter-logs.model';
@@ -33,27 +32,24 @@ class Helper {
   }
 }
 
-@NgModule({
-  declarations: [FilterLogsComponent],
-  imports: [
-    ToolTipModule,
-    FormsModule,
-    NgbModule,
-    NgSelectModule
-  ],
-  providers: [
-    CommonService
-  ]
-})
-class ModuleTest { }
-
 describe('FilterLogsComponent', () => {
+  @NgModule({
+    declarations: [],
+    imports: [
+      ToolTipModule,
+      FormsModule,
+      NgbModule,
+      NgSelectModule
+    ],
+    providers: [
+    ]
+  })
+  class ModuleTest { }
   let shallow: Shallow<FilterLogsComponent>;
 
   beforeEach(() => {
     shallow = new Shallow(FilterLogsComponent, ModuleTest)
       .dontMock(NgbModule)
-      .mock(AppService, {})
       .mock(ElementRef, {});
   });
 
@@ -175,7 +171,7 @@ describe('FilterLogsComponent', () => {
 
     expect(instance.model.doneBy).toStrictEqual('starix02');
   });
-  
+
   it('#search should emit searchEvent', async () => {
     const { instance } = await shallow.render();
     instance.checkValidMatch = jest.fn();
@@ -187,7 +183,7 @@ describe('FilterLogsComponent', () => {
     expect(instance['getParams']).toBeCalledTimes(1);
     expect(instance.searchEvent.emit).toBeCalledTimes(1);
   });
-  
+
   it('#search should call #tooltip.display', async () => {
     const { instance } = await shallow.render();
     instance.checkValidMatch = jest.fn();
@@ -198,7 +194,7 @@ describe('FilterLogsComponent', () => {
 
     expect(instance.tooltip.display).toBeCalledTimes(1);
   });
-  
+
   it('#checkValidMatch should update isSuccessMatch to true and return', async () => {
     const { instance } = await shallow.render();
     instance.model.matchId = '29';
@@ -206,7 +202,7 @@ describe('FilterLogsComponent', () => {
 
     expect(instance.isSuccessMatch).toBeTruthy();
   });
-  
+
   it('#getParams should return correct model', async () => {
     const expected = new GetLogsQuery();
     expected.logActionIds = '';

@@ -396,6 +396,7 @@ exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match
       </div>
       <paging />
     </div>
+    <tooltip />
   </confirm-auto-unmark>
 </ng-component>
 `;
@@ -673,6 +674,7 @@ exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match
       </div>
       <paging />
     </div>
+    <tooltip />
   </confirm-auto-unmark>
 </ng-component>
 `;

@@ -3,16 +3,16 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../add-request/app/add-request/models/request.model';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
+import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { AffectedLicensee } from '../../../utility/models/affected-licensee.model';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
-import { PagingModel } from '../../../utility/modules/paging/paging/paging.model';
-import { TemplateMessageComponent } from '../../../utility/modules/template-message/template-message/template-message.component';
-import { TemplateValue } from '../../../utility/modules/template-message/template-message/template.model';
-import { Tooltip } from '../../../utility/modules/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
@@ -77,7 +77,8 @@ class Helper {
     dangerAcceptedModels: [],
     redCardModels: [],
     wrongHdpModels: [],
-    wrongOuModels: []
+    wrongOuModels: [],
+    wrongOddsModels: []
   };  
   static getFakeAffectedLicensee(): AffectedLicensee {
     return {
@@ -95,12 +96,12 @@ class Helper {
 
 describe('VoidDangerAcceptedComponent', () => {
   @NgModule({
-    declarations: [      
+    declarations: [
       LogInfoNewComponent,
       TicketsListComponent,
       TemplateMessageComponent
     ],
-    imports: [      
+    imports: [
       FormsModule,
       NgbModule,
       ToolTipModule,

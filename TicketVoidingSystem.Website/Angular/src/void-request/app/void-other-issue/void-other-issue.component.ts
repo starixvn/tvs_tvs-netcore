@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { GetLogInfoQuery } from '../../../add-request/app/add-request/models/add-request.query';
 import { RequestDetailViewModel } from '../../../add-request/app/add-request/models/request.model';

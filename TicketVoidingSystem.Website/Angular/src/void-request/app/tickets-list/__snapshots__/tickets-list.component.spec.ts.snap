@@ -14,7 +14,7 @@ exports[`TicketsListComponent Should display bettrade message 1`] = `
         <div
           class="title-tickets-list-label"
         >
-          Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)
+          Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0)
         </div>
         <div
           class="title-tickets-list-toolbox"
@@ -632,7 +632,7 @@ exports[`TicketsListComponent TicketsListComponent should display html and model
         <div
           class="title-tickets-list-label"
         >
-          Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)
+          Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0)
         </div>
         <div
           class="title-tickets-list-toolbox"
