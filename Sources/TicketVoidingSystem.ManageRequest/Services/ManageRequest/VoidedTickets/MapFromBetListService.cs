@@ -7,6 +7,7 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
 

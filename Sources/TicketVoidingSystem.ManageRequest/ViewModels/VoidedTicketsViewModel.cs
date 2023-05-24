@@ -1,6 +1,6 @@
 ﻿using TicketVoidingSystem.Models;
 
-namespace TicketVoidingSystem.ManageRequest.Models;
+namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class VoidedTicketsViewModel
 {
