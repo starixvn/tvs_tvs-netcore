@@ -1,9 +1,9 @@
 import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
+    AfterViewInit,
+    Component,
+    ElementRef,
+    OnInit,
+    ViewChild
 } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
