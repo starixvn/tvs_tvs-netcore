@@ -1,6 +1,7 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.Web;
 
@@ -40,11 +41,13 @@ public class ManageRequestController : ControllerBase
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]
     public async Task<IActionResult> GetVoidedTickets(GetVoidedTicketsRequest request) => Ok(await mediator.Send(request));
 
-    //public async Task<ActionResult> ExportVoidedTickets(ExportVoidedTicketsRequest request)
-    //{
-    //    var model = await mediator.Send(request);
-    //    return new ExcelResult(model.Content, model.FileName);
-    //}
+    [HttpPost]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]
+    public async Task<IActionResult> ExportVoidedTickets(ExportVoidedTicketsRequest request)
+    {
+        var model = await mediator.Send(request);
+        return this.ExcelFileResult(Response, model);
+    }
 
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]
