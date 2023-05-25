@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 public interface GetRequestsInArchivedTableService
 {
-    Task<IEnumerable<RequestModel>> GetRequestsInArchivedTable(SelectRequestsQuery query);
+    Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInArchivedTable(SelectRequestsQuery query);
 }
 
 public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableService
@@ -27,17 +27,17 @@ public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableSe
         this.betListService = betListService;
     }
 
-    public async Task<IEnumerable<RequestModel>> GetRequestsInArchivedTable(SelectRequestsQuery query)
+    public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInArchivedTable(SelectRequestsQuery query)
     {
         var criteriaArchived = mapper.Map<SelectArchivedRequestsCriteria>(query);
-        var models = await repository.FetchAsync<RequestModel>(criteriaArchived);
+        var (models, requestInfoGetCalcTime) = await repository.FetchMultipleAsync<RequestModel, string>(criteriaArchived);
         var bettypeForRequests = GetBettypeForAbnormalSingleRequestArchive(models);
         foreach (var model in models)
         {
             model.BettypeNames = GetListBettypeName(model.RequestId, bettypeForRequests);
         }
 
-        return models;
+        return (models, requestInfoGetCalcTime);
     }
 
     private IEnumerable<GetBettypeForRequestModel> GetBettypeForAbnormalSingleRequestArchive(IEnumerable<RequestModel> requests)
@@ -49,12 +49,10 @@ public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableSe
         {
             return new List<GetBettypeForRequestModel>();
         }
-        else
-        {
-            var criteria = new GetBettypeNamesArchiveCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
-            var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
-            return models;
-        }
+
+        var criteria = new GetBettypeNamesArchiveCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
+        var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
+        return models;
     }
 
     private IEnumerable<string> GetListBettypeName(int requestId, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)

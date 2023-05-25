@@ -35,7 +35,7 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
         }
 
         var viewModels = new List<RequestViewModel>();
-        var models = await getRequestsService.GetRequests(request);
+        var (models, _) = await getRequestsService.GetRequests(request);
 
         var groupRequestModels = models.GroupBy(b => b.RequestId).Select(group => new GroupRequestModel
         {

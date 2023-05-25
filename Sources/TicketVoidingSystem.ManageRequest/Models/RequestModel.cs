@@ -38,6 +38,8 @@ public class RequestModel
     public string WrongScores { get; set; }
     public string SettlementStatus { get; set; }
     public string RequestExtraInfo { get; set; }
+    public DateTime? CalcHalfTime { get; set; }
+    public DateTime? CalcFullTime { get; set; }
 
     public bool IsCheckedVar
     {
