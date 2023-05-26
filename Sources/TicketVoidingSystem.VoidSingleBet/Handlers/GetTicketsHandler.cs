@@ -52,7 +52,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         var tickets = pagingService.Paging(data, query.PageIndex, query.PageSize).ToList();
         if (!tickets.Any())
         {
-            new List<Group<GetTicketModel>>();
+            return new List<Group<GetTicketModel>>();
         }
         return GetValueGroupsGetTicketModel(tickets);
     }
