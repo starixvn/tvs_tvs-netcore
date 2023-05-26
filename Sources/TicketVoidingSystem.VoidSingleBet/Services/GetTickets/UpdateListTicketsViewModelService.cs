@@ -26,11 +26,22 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
 
     public void Update(ListTicketsViewModel model, IList<GetTicketModel> data)
     {
+        if (!data.Any())
+        {
+            return;
+        }
+
         model.TotalItems = data.Count;
-        var singleTickets = data.Where(item => !item.IsMixParlay);
-        model.SingleCount = singleTickets.Count();
-        var parlayTickets = data.Where(item => item.IsMixParlay);
-        model.ParlayCount = parlayTickets.Count();
+        model.SingleCount = data.Where(item => !item.IsMixParlay).Count();
+        model.ParlayCount = data.Where(item => item.IsMixParlay).Count();
+
+        UpdateLicenseesViewModel(model, data);
+        UpdateTimeViewModel(model, data);
+        UpdateBetTypeName(model, data);
+    }
+
+    private static void UpdateLicenseesViewModel(ListTicketsViewModel model, IList<GetTicketModel> data)
+    {
         var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
@@ -40,34 +51,23 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);
         Array.Sort(cashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
+        
         model.LicenseesName = string.Join(", ", licensees);
         model.InstantLicenseesName = string.Join(", ", instantLicensee);
         model.CashOutLicenseesName = string.Join(", ", cashOutLicensee);
         model.ChinaViewLicenseesName = string.Join(", ", chinaViewLicensee);
-        UpdateTimeViewModel(model, data);
-        UpdateBetTypeName(model, data);
     }
 
     private static void UpdateTimeViewModel(ListTicketsViewModel model, IList<GetTicketModel> data)
     {
-        if (!data.Any())
-        {
-            return;
-        }
         model.FromTransTime = data.Min(item => item.TransDate).ZoneManila();
         model.ToTransTime = data.Max(item => item.TransDate).ZoneManila();
-
         model.FromCheckTime = data.Min(item => item.CheckTime).ZoneManila();
         model.ToCheckTime = data.Max(item => item.CheckTime).ZoneManila();
     }
 
     private void UpdateBetTypeName(ListTicketsViewModel model, IList<GetTicketModel> data)
     {
-        if (!data.Any())
-        {
-            return;
-        }
-
         var ticket = data.First().IsMixParlay ? CreateSubTicketBetList(data.First()) : CreateTicketBetList(data.First());
         model.BetTypeNameReplaceMessage = new TemplateContentModel
         {

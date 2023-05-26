@@ -77,16 +77,20 @@ public class VoidTicketsServiceImp : VoidTicketsService
         return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers);
     }
 
-    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
+    private static VoidTicketValidation CreateVoidTicketValidation(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
     {
         var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
-        var validation = new VoidTicketValidation
+        return new VoidTicketValidation
         {
             ErrorCode = failedResult?.ErrorCode ?? 0,
             ErrorMsg = failedResult?.ErrorMsg ?? string.Empty,
             NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers))
         };
+    }
 
+    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
+    {
+        var validation = CreateVoidTicketValidation(tickets, validations);
         return new VoidTicketsModel
         {
             Tickets = tickets.ToList(),
