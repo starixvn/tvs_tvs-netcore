@@ -32,10 +32,8 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         }
 
         model.TotalItems = data.Count;
-        var singleTickets = data.Where(item => !item.IsMixParlay);
-        model.SingleCount = singleTickets.Count();
-        var parlayTickets = data.Where(item => item.IsMixParlay);
-        model.ParlayCount = parlayTickets.Count();
+        model.SingleCount = data.Count(item => !item.IsMixParlay);
+        model.ParlayCount = data.Count(item => item.IsMixParlay);
 
         UpdateLicenseesViewModel(model, data);
         UpdateTimeViewModel(model, data);
@@ -53,7 +51,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);
         Array.Sort(cashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
-
+        
         model.LicenseesName = string.Join(", ", licensees);
         model.InstantLicenseesName = string.Join(", ", instantLicensee);
         model.CashOutLicenseesName = string.Join(", ", cashOutLicensee);
