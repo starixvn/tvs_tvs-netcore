@@ -9,7 +9,7 @@ import { AdvancedModeComponent } from '../../../utility/components/advanced-mode
 import { CheckedBetType, GetPlayersQuery } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';

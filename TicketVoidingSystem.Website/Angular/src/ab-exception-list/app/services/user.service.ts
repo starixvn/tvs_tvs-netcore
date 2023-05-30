@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
 import { AppService } from '../app.service';
@@ -43,7 +43,7 @@ export class UserService {
         title: 'Add Result',
         message: TEXT.AB_WHITE_LIST_ADDED_SUCCESS,
         type: result.isSuccessful ? ModalType.Alert : ModalType.Error
-      },      
+      },
       async () => {
         window.location.reload();
       }
@@ -59,7 +59,7 @@ export class UserService {
         title: 'Remove',
         message: messageConfirmRemove,
         type: ModalType.Confirm
-      }, 
+      },
       async () => {
         await this.onYesConfirm(userIds, abWhiteListStore);
       },

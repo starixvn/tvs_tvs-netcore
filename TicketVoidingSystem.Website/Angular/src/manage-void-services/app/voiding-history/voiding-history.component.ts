@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { SiteDbGroupConstant } from 'src/utility/constants/config';
+import { SiteDbGroupConstant } from '../../../utility/constants/config';
 import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import * as moment from 'moment-timezone';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -37,7 +37,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
     private readonly modalService: ModalService,
     private readonly element: ElementRef,
     private readonly checkValidateService: CheckValidateService) {
-    this.tooltip.element = element;
+    this.tooltip.element = this.element;
   }
 
   async ngOnInit() {
@@ -58,7 +58,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   }
 
   async resetPagingAndSearchData() {
-    const isSuccessMatch = await this.checkValidateService.checkValidMatch(this.query.matchId, this.tooltip)
+    const isSuccessMatch = await this.checkValidateService.checkValidMatch(this.query.matchId, this.tooltip);
     if (isSuccessMatch) {
       this.paging = new PagingModel();
       this.paging.pageSize = PagingConstant.SIZE_ONE;
@@ -70,7 +70,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   }
 
   async getSportTypes() {
-    let sportTypes = await this.commonService.getSportsType();
+    const sportTypes = await this.commonService.getSportsType();
     this.sportOptions = [];
     this.mapObject(sportTypes);
   }
@@ -174,12 +174,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
     return result.errorMsg;
   }
 
-  getShowMatchId(matchId: string, childMatchId :string){
-    if(childMatchId){
-      return `${matchId}\n(${childMatchId})`
-    }
-    else{
-      return `${matchId}`
-    }
+  getMatchId(matchId: string, childMatchId :string){
+    return childMatchId ? `${matchId}\n(${childMatchId})` : `${matchId}`;
   }
 }

@@ -1,5 +1,5 @@
 import * as moment from 'moment-timezone';
-import { Message } from 'src/utility/components/template-message/messages/message';
+import { Message } from '../../../utility/components/template-message/messages/message';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { CommonTicketsModel } from '../../../utility/models/common.tickets.model';
 import { GroupModel } from './group-tickets.model';

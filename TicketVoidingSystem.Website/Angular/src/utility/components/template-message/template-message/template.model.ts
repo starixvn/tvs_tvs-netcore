@@ -1,4 +1,4 @@
-import { MatchModel } from "src/utility/models/match.model";
+import { MatchModel } from "../../../models/match.model";
 import { Message } from "../messages/message";
 
 export class TemplateContent {

@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { LABELS } from '../../../utility/constants/labels';

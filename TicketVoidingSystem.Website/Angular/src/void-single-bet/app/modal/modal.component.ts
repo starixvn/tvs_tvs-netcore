@@ -1,5 +1,5 @@
 ﻿import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Modal } from './modal';
+import { Modal } from './modal.model';
 
 @Component({
     selector: 'modal',

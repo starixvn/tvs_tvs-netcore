@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as moment from 'moment-timezone';
-import { Content, ModalType } from '../../../../utility/components/modal/modal';
+import { Content, ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { LogModel } from './logs-list.model';

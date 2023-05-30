@@ -1,5 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
@@ -26,7 +26,7 @@ export class LetstalkComponent {
     private readonly modalService: ModalService) {
     this.tooltip.element = this.element;
   }
- 
+
   public async search(): Promise<void> {
     this.resetOldResult();
     if (!this.isValidSearchQuery()) {
@@ -44,7 +44,7 @@ export class LetstalkComponent {
     this.broadcastSessionId = null;
   }
 
-  
+
   public confirmUpdateStatus(requestId: number, broadcastSessionId: string, statusIdSelected: number) {
     this.modalService.confirm({
       title: 'Confirm',
@@ -69,7 +69,7 @@ export class LetstalkComponent {
       this.tooltip.display('request-id', TEXT.REQUIRED_REQUEST_ID);
       return false;
     }
-    
+
     return true;
   }
 
@@ -81,7 +81,7 @@ export class LetstalkComponent {
       } as LetstalkViewModel;
     });
   }
-  
+
   private initUpdateQuery(requestId: number, broadcastSessionId: string, statusIdSelected: number) {
     return {
       requestId: requestId,

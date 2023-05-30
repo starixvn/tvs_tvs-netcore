@@ -1,15 +1,15 @@
 import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
-import { ModalType } from '../../utility/components/modal/modal';
+import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
