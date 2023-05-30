@@ -3,14 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
-import { GroupBetType, GroupBetTypesModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { GroupBetTypesModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { ModeType } from '../../../../utility/constants/config';
-import { LABELS } from '../../../../utility/constants/labels';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { GetLogsQuery } from '../../models/query.model';
+import { CheckValidateService } from '../../services/check-validate.service';
 import { FilterLogsComponent } from './filter-logs.component';
 import { FilterAction, FilterDate } from './filter-logs.model';
 
@@ -42,6 +41,7 @@ describe('FilterLogsComponent', () => {
       NgSelectModule
     ],
     providers: [
+      CheckValidateService
     ]
   })
   class ModuleTest { }
@@ -50,6 +50,7 @@ describe('FilterLogsComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(FilterLogsComponent, ModuleTest)
       .dontMock(NgbModule)
+      .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => Promise.resolve(true)) })
       .mock(ElementRef, {});
   });
 
@@ -94,73 +95,6 @@ describe('FilterLogsComponent', () => {
     expect(instance.isSuccessMatch).toBe(true);
   });
 
-  it('Should display tooltip with error from server when matchId input blur', async () => {
-    const model = new GroupBetTypesModel([], null);
-    model.result = { errorCode: 1, errorMsg: 'errorABC' };
-    const mockGetGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(model));
-    const mockTooltipDisplay = jest.fn();
-    const { instance, find, fixture } = await shallow
-      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
-      .render();
-
-    instance.tooltip.display = mockTooltipDisplay;
-    const matchId = find(Helper.matchIdSelector);
-    matchId.nativeElement.value = '113';
-    matchId.triggerEventHandler('input', { target: matchId.nativeElement });
-    matchId.triggerEventHandler('blur', {});
-
-    await fixture.whenStable();
-    expect(mockGetGroupBetTypes).toBeCalledTimes(1);
-    expect(mockGetGroupBetTypes).toBeCalledWith({ mode: ModeType.SPORT_BOOK, matchId: 113 });
-    expect(mockTooltipDisplay).toBeCalledTimes(1);
-    expect(mockTooltipDisplay).toBeCalledWith('match-id', model.result.errorMsg);
-    expect(instance.isSuccessMatch).toBe(false);
-  });
-
-  it('Should display tooltip with invalid match error when matchId input blur', async () => {
-    const model = new GroupBetTypesModel([], null);
-    model.groupBetTypes = [];
-    model.result = { errorCode: 0, errorMsg: '' };
-    const mockGetGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(model));
-    const mockTooltipDisplay = jest.fn();
-    const { instance, find, fixture } = await shallow
-      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
-      .render();
-
-    instance.tooltip.display = mockTooltipDisplay;
-    const matchId = find(Helper.matchIdSelector);
-    matchId.nativeElement.value = '222';
-    matchId.triggerEventHandler('input', { target: matchId.nativeElement });
-    matchId.triggerEventHandler('blur', {});
-
-    await fixture.whenStable();
-    expect(mockGetGroupBetTypes).toBeCalledTimes(1);
-    expect(mockGetGroupBetTypes).toBeCalledWith({ mode: ModeType.SPORT_BOOK, matchId: 222 });
-    expect(mockTooltipDisplay).toBeCalledTimes(1);
-    expect(mockTooltipDisplay).toBeCalledWith('match-id', LABELS.INVALID_MATCH);
-    expect(instance.isSuccessMatch).toBe(false);
-  });
-
-  it('Match id should be valid when matchId input blur', async () => {
-    const model = new GroupBetTypesModel([], null);
-    model.groupBetTypes = [{ groupName: 'acb' } as GroupBetType];
-    model.result = { errorCode: 0, errorMsg: '' };
-    const mockGetGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(model));
-    const { instance, find, fixture } = await shallow
-      .mock(CommonService, { getGroupBetTypes: mockGetGroupBetTypes })
-      .render();
-
-    const matchId = find(Helper.matchIdSelector);
-    matchId.nativeElement.value = '222';
-    matchId.triggerEventHandler('input', { target: matchId.nativeElement });
-    matchId.triggerEventHandler('blur', {});
-
-    await fixture.whenStable();
-    expect(mockGetGroupBetTypes).toBeCalledTimes(1);
-    expect(mockGetGroupBetTypes).toBeCalledWith({ mode: ModeType.SPORT_BOOK, matchId: 222 });
-    expect(instance.isSuccessMatch).toBe(true);
-  });
-
   it('Props model.doneBy should be changed when change Done by input', async () => {
     const { instance, find } = await shallow
       .render();
@@ -173,7 +107,9 @@ describe('FilterLogsComponent', () => {
   });
 
   it('#search should emit searchEvent', async () => {
-    const { instance } = await shallow.render();
+    const { instance } = await shallow
+    .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => true) })
+    .render();
     instance.checkValidMatch = jest.fn();
     instance['getParams'] = jest.fn();
     instance.searchEvent.emit = jest.fn();
@@ -185,7 +121,9 @@ describe('FilterLogsComponent', () => {
   });
 
   it('#search should call #tooltip.display', async () => {
-    const { instance } = await shallow.render();
+    const { instance } = await shallow
+    .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => false) })
+    .render();
     instance.checkValidMatch = jest.fn();
     instance.tooltip = new Tooltip();
     instance.tooltip.display = jest.fn();
@@ -196,7 +134,9 @@ describe('FilterLogsComponent', () => {
   });
 
   it('#checkValidMatch should update isSuccessMatch to true and return', async () => {
-    const { instance } = await shallow.render();
+    const { instance } = await shallow
+    .mock(CheckValidateService, { checkValidMatch: jest.fn().mockImplementation(() => Promise.resolve(true)) })
+    .render();
     instance.model.matchId = '29';
     await instance.checkValidMatch();
 

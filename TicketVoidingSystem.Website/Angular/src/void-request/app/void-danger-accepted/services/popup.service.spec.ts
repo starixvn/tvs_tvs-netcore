@@ -1,5 +1,5 @@
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ModalType } from '../../../../utility/components/modal/modal';
+import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';

@@ -48,6 +48,7 @@ describe('ConfirmationComponent', () => {
     let actualValue = false;
     component.tooltip = new Tooltip();
     jest.spyOn(component.tooltip, 'display');
+    component.tooltip.display = jest.fn();
     // Action and Asert
     testCases.forEach(item => {
         component.confirmation.reason = item.reason;

@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ConfirmAutoUnmarkComponent #onClickConfirm should show confirm modal when 1`] = `
+Object {
+  "message": "<div><div class=\\"confirm-auto-unmark-content\\">undefined (ID: undefined)</div>
+                      <span>Are you sure you want auto unmark for \\"undefined\\" bet type of this match?</span>
+                  </div>",
+  "title": "Auto Unmark",
+  "type": 3,
+}
+`;
+
 exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match snapshot with expected data 1`] = `
 <ng-component
   __ngContext__={[Function LRootView]}
@@ -196,7 +206,7 @@ exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match
                 <div>
                   Marked Tickets
                   <br />
-                  (33)
+                  (0)
                 </div>
               </th>
               <th
@@ -257,138 +267,15 @@ exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match
             />
           </colgroup>
           <tbody>
+          </tbody>
+        </table>
+        <table>
+          <tbody>
             <tr>
-              <td>
-                <div>
-                  1
-                </div>
-              </td>
-              <td>
-                <div>
-                  1999
-                </div>
-              </td>
-              <td>
-                <div>
-                  04/30/2020 07:00:00.000 PM
-                </div>
-              </td>
-              <td>
-                <div>
-                  sportname
-                </div>
-              </td>
-              <td>
-                <div>
-                  eventname
-                </div>
-              </td>
-              <td>
-                <div>
-                  1-1
-                </div>
-              </td>
-              <td>
-                <div>
-                  x
-                </div>
-              </td>
-              <td>
-                <div>
-                  sa
-                </div>
-              </td>
-              <td>
-                <div
-                  class="marked-ticket"
-                >
-                  11
-                </div>
-              </td>
-              <td>
-                <div>
-                  <b>
-                    hdp
-                  </b>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <button
-                    class="btn btn-secondary btn-sm button-confirm"
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div>
-                  2
-                </div>
-              </td>
-              <td>
-                <div>
-                  22229
-                </div>
-              </td>
-              <td>
-                <div>
-                  03/10/2020 07:00:00.000 PM
-                </div>
-              </td>
-              <td>
-                <div>
-                  sportname2
-                </div>
-              </td>
-              <td>
-                <div>
-                  eventname2
-                </div>
-              </td>
-              <td>
-                <div>
-                  2-2
-                </div>
-              </td>
-              <td>
-                <div>
-                  2
-                </div>
-              </td>
-              <td>
-                <div>
-                  sa22
-                </div>
-              </td>
-              <td>
-                <div
-                  class="marked-ticket"
-                >
-                  22
-                </div>
-              </td>
-              <td>
-                <div>
-                  <b>
-                    OU
-                  </b>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <div
-                    class="text-confirm"
-                  >
-                    <span>
-                      <b>
-                        Confirmed
-                      </b>
-                    </span>
-                  </div>
-                </div>
+              <td
+                class="no-data"
+              >
+                There is no data
               </td>
             </tr>
           </tbody>
@@ -677,14 +564,4 @@ exports[`ConfirmAutoUnmarkComponent ConfirmAutoUnmarkComponent init should match
     <tooltip />
   </confirm-auto-unmark>
 </ng-component>
-`;
-
-exports[`ConfirmAutoUnmarkComponent Should show confirm modal when click Confirm button 1`] = `
-Object {
-  "message": "<div><div class=\\"confirm-auto-unmark-content\\">eventname (ID: 1999)</div>
-                      <span>Are you sure you want auto unmark for \\"hdp\\" bet type of this match?</span>
-                  </div>",
-  "title": "Auto Unmark",
-  "type": 3,
-}
 `;

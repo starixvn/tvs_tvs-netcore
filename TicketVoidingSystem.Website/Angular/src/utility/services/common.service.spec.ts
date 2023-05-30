@@ -201,7 +201,7 @@ describe('CommonService', () => {
         new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
     ];
     const expectedGroupBettypesModel = new GroupBetTypesModel(groupBettype, true);
-    mockHttpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
+    mockHttpService.postJson = jest.fn().mockImplementation(() => Promise.resolve(expectedGroupBettypesModel));
     const mockCommonService = new CommonService(mockHttpService);
 
     // Action
@@ -247,7 +247,7 @@ describe('CommonService', () => {
       endTime: new Date(),
       leagueGroupId: 0
     };
-    mockHttpService.postJson.mockResolvedValue(expectedData);
+    mockHttpService.postJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     const mockCommonService = new CommonService(mockHttpService);
 
     // Action
@@ -266,7 +266,7 @@ describe('CommonService', () => {
       subIssueTypeName: 'Abnormal',
       subIssueTypeNameCS: '非正常'
     };
-    mockHttpService.getJson.mockResolvedValue(expectedData);
+    mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     const mockCommonService = new CommonService(mockHttpService);
 
     // Action

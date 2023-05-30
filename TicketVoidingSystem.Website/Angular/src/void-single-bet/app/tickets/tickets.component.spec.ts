@@ -59,7 +59,7 @@ class Helper {
     };
 
     static getFakeTicketsModel(): TicketsModel {
-      return JSON.parse(JSON.stringify(Helper.fakeTicketsModel))
+      return JSON.parse(JSON.stringify(Helper.fakeTicketsModel));
     }
 
     static getFakeNoTickets(): TicketsModel {
@@ -100,7 +100,7 @@ describe('TicketsComponent', () => {
       // Arrange
       const { find, fixture, instance } = await shallow.render(
         '<tickets [ticketsModel]="ticketsModel" [isShowTickets]="true"></tickets>',
-        { bind: 
+        { bind:
             { ticketsModel: Helper.getFakeTicketsModel() }
         }
       );
@@ -118,7 +118,7 @@ describe('TicketsComponent', () => {
       // Arrange
       const { find, fixture } = await shallow.render(
         '<tickets [ticketsModel]="ticketsModel" [isShowTickets]="true"></tickets>',
-        { bind: 
+        { bind:
             { ticketsModel: Helper.getFakeNoTickets() }
         }
       );
@@ -133,7 +133,7 @@ describe('TicketsComponent', () => {
       // Arrange
       const { find, fixture, instance } = await shallow.render(
         '<tickets [ticketsModel]="ticketsModel" [isShowTickets]="true"></tickets>',
-        { bind: 
+        { bind:
             { ticketsModel: Helper.getFakeTicketsModel() }
         }
       );
@@ -148,7 +148,7 @@ describe('TicketsComponent', () => {
     it('Should display <div class="list-check-groups" /> correctly after manipulate elements', async () => {
       const { find, fixture, instance } = await shallow.render(
         '<body><tickets [ticketsModel]="ticketsModel" [isShowTickets]="true"></tickets></body>',
-        { bind: 
+        { bind:
             { ticketsModel: Helper.renderTicketsModel() }
         }
       );
@@ -167,7 +167,7 @@ describe('TicketsComponent', () => {
       // Arrange
       const { find, fixture, instance } = await shallow.render(
         '<tickets [ticketsModel]="ticketsModel" [isShowTickets]="true"></tickets>',
-        { bind: 
+        { bind:
             { ticketsModel: Helper.getFakeTicketsModel() }
         }
       );
@@ -183,7 +183,7 @@ describe('TicketsComponent', () => {
       // Arrange
       const { find, fixture, instance } = await shallow.render(
         '<tickets [ticketsModel]="ticketsModel" [isShowTickets]="true"></tickets>',
-        { bind: 
+        { bind:
             { ticketsModel: Helper.getFakeTicketsModel() }
         }
       );
@@ -194,7 +194,7 @@ describe('TicketsComponent', () => {
       // Assert
       expect(instance.pagingSearchTicket.emit).toHaveBeenCalledWith(new PagingModel());
     });
-    
+
     it('#changeTickets should call #showWarningBetTradeTicket', async () => {
       // Arrange
       const { instance } = await shallow.render(
@@ -213,7 +213,7 @@ describe('TicketsComponent', () => {
       expect(instance.ticketsModel.getNumberOfCheckedTickets).toHaveBeenCalledTimes(1);
       expect(instance.showWarningBetTradeTicket).toHaveBeenCalledTimes(1);
     });
-    
+
     it('#showWarningBetTradeTicket should not update showMessageBetTrade ', async () => {
       // Arrange
       const { instance } = await shallow.render(
@@ -229,7 +229,7 @@ describe('TicketsComponent', () => {
       // Assert
       expect(instance.showMessageBetTrade).toBeFalsy();
     });
-    
+
     it('#showWarningBetTradeTicket should update showMessageBetTrade to true', async () => {
       // Arrange
       const { instance } = await shallow.render(

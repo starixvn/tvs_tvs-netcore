@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, QueryList } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -7,18 +7,19 @@ import { RangeTime } from '../../../../../mark-tickets/app/models/query.model';
 import { AdvancedModeModule } from '../../../../../utility/components/advanced-mode/advanced-mode.module';
 import { CheckedBetType } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { BetType, GroupBetType, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../../../utility/components/date-time/date-time.module';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../../utility/constants/labels';
+import '../../../../../utility/extensions/string.extension';
 import { FirstTicketTime } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
-import { Currency } from '../filter.model';
+import { Currencies, Currency } from '../filter.model';
 import { LicenseesComponent } from './licensees/licensees.component';
 import { GroupLicensee, Licensee } from './licensees/licensees.model';
 import { MatchIdComponent } from './match-id.component';
-
 class Helper {
   static readonly fakeFirstTicketTime: FirstTicketTime = {
     kickOffTime: '2020-03-12 06:59:59.000',
@@ -415,6 +416,7 @@ describe.only('MatchIdComponent', () => {
     const { instance } = await shallow.render();
     instance.checkValidationOfMatch = jest.fn().mockImplementation(() => true);
     instance.getCheckedLicensees = jest.fn().mockImplementation(() => []);
+    instance.dateTimeComponents = new QueryList();
     instance.tooltip = new Tooltip();
     instance.tooltip.display = jest.fn();
     const actual = instance.checkValidate();
@@ -487,35 +489,40 @@ describe.only('MatchIdComponent', () => {
     expect(actual).toBe(true);
   });
 
-  // it.only('#getParams should return expected GetTicketsQuery ', async () => {
-  //   const { instance } = await shallow.render();
-  //   instance.groupLicensees = Helper.getGroupLicensee();
-  //   instance.eventType.value = '2';
-  //   instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-  //   instance.rangeTimes = [new RangeTime()];
-  //   instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
+  it('#getParams should return expected GetTicketsQuery ', async () => {
+    const { instance } = await shallow.render();
+    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.eventType.value = '2';
+    instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+    instance.model.liveHomeScore = 2;
+    instance.model.liveAwayScore = 1;
+    instance.rangeTimes = [new RangeTime()];
+    instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
 
-  //   instance.getParams();
+    instance.getParams();
 
-  //   expect(instance.model.licenseeNames).toBe('368Cash');
-  //   expect(instance.model.liveIndicator).toBe('2');
-  //   expect(instance.model.betTypes.length).toBe(1);
-  //   expect(instance.model.durations.length).toBe(1);
-  // });
+    expect(instance.model.licenseeNames).toBe('368Cash');
+    expect(instance.model.liveIndicator).toBe(2);
+    expect(instance.model.betTypes.length).toBe(1);
+    expect(instance.model.durations.length).toBe(1);
+  });
 
-  // it('#getParams should return expected GetTicketsQuery when searchByBetId true', async () => {
-  //   const { instance } = await shallow.render();
-  //   instance.groupLicensees = Helper.getGroupLicensee();
-  //   instance.eventType.value = '2';
-  //   instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
-  //   instance.rangeTimes = [new RangeTime()];
-  //   instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
-  //   instance.getParams();
+  it('#getParams should return expected GetTicketsQuery when input wrong', async () => {
+    const { instance } = await shallow.render();
+    instance.groupLicensees = Helper.getGroupLicensee();
+    instance.eventType.value = 'a';
+    instance.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+    instance.rangeTimes = [new RangeTime()];
+    instance.model.liveHomeScore = null;
+    instance.model.liveAwayScore = null;
+    instance.advancedModelComponent.getBetTypeModels = jest.fn().mockImplementation(() => [Helper.fakeCheckedBetType]);
+    instance.getParams();
 
-  //   expect(instance.model.licenseeNames).toBe('368Cash');
-  //   expect(instance.model.liveIndicator).toBe('2');
-  //   expect(instance.model.betTypes.length).toBe(1);
-  // });
+    expect(instance.model.licenseeNames).toBe('368Cash');
+    expect(instance.model.liveIndicator).toBeNull();
+    expect(instance.model.liveHomeScore).toBeNull();
+    expect(instance.model.liveAwayScore).toBeNull();
+  });
 
   it('#checkValidateRangeTime should return false and display tooltip when invalid datetime', async () => {
     const { instance } = await shallow.render();
@@ -525,6 +532,8 @@ describe.only('MatchIdComponent', () => {
     rangeTime1.to = '2023/08/11 09:35:06.980 AM';
     const rangeTime2 = new RangeTime();
     instance.rangeTimes = [rangeTime1, rangeTime2];
+    instance.dateTimeComponents = new QueryList();
+
     const actual = instance.checkValidateRangeTime();
 
     expect(actual).toBe(false);
@@ -535,8 +544,32 @@ describe.only('MatchIdComponent', () => {
   it('#checkValidateRangeTime should return true', async () => {
     const { instance } = await shallow.render();
     instance.rangeTimes = [new RangeTime()];
+    instance.dateTimeComponents = new QueryList();
     const actual = instance.checkValidateRangeTime();
 
     expect(actual).toBe(true);
+  });
+
+  it('#checkValidateRangeTime should return false when dateTimeComponents invalid', async () => {
+    const { instance } = await shallow.render();
+    instance.rangeTimes = [new RangeTime()];
+
+    const dateTimeComponent = new DateFullTimeNewComponent(null);
+    dateTimeComponent.validateWithTooltip = jest.fn().mockImplementation(() => false);
+    instance.dateTimeComponents = new QueryList();
+    instance.dateTimeComponents.reset([...instance.dateTimeComponents.toArray(), dateTimeComponent]);
+    const actual = instance.checkValidateRangeTime();
+
+    expect(actual).toBe(false);
+  });
+
+  it('#updateSelectedCurrency should update currencyIds', async () => {
+    const { instance } = await shallow.render();
+    instance.currencies = new Currencies();
+    instance.currencies.selected = [1,2,3];
+
+    instance.updateSelectedCurrency();
+
+    expect(instance.model.currencyIds).toBe('1,2,3');
   });
 });

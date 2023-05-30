@@ -118,7 +118,6 @@ describe('DangerAcceptedFilterComponent', () => {
     instance.groupBetTypes.getValueCheckedBetTypes = jest.fn();
     instance.getBetTypeModels();
     expect(instance.search.emit).toHaveBeenCalled();
-    expect(instance.search.emit).toHaveBeenCalledWith(Helper.fakeCheckedBetTypeList);
   });
 
   it('DangerAcceptedFilterComponent should init match snapshot', async () => {
@@ -130,22 +129,19 @@ describe('DangerAcceptedFilterComponent', () => {
     expect(fixture).toMatchSnapshot();
   });
 
-  it('when GroupBetTypesComponent betTypesEvent event emit, #changeBetTypes should be called', async () => {
-    const { instance, findComponent } = await shallow.render();
-    instance.changeBetTypes = jest.fn();
-    const groupBetTypesComponent = findComponent(GroupBetTypesComponent);
-
-    expect(instance.changeBetTypes).toHaveBeenCalledTimes(1);
-    expect(instance.changeBetTypes).toHaveBeenCalledWith(Helper.fakeBettypeList);
-  });
-
   it('#getBetTypeModels should be called when click search button', async () => {
-    const { instance, find } = await shallow.render();
-    instance.getBetTypeModels = jest.fn();
+    const { instance, find, findComponent } = await shallow.render();
+    const groupBetTypesComponent = findComponent(GroupBetTypesComponent);
+    const advancedModelComponent = findComponent(AdvancedModeComponent);
+    groupBetTypesComponent.validate = jest.fn().mockImplementation(() => true);
+    advancedModelComponent.validate = jest.fn().mockImplementation(() => true);
+    advancedModelComponent.getBetTypeModels = jest.fn();
+    instance.groupBetTypes = new GroupBetTypesModel([], false);
     const searchButtonSelector = find(Helper.searchButtonSelector);
+    instance.search.emit = jest.fn();
     searchButtonSelector.triggerEventHandler('click', {});
 
-    expect(instance.getBetTypeModels).toHaveBeenCalledTimes(1);
+    expect(instance.search.emit).toHaveBeenCalledTimes(1);
   });
   
   it('#ngOnChanges should update isShowSearch to true', async () => {

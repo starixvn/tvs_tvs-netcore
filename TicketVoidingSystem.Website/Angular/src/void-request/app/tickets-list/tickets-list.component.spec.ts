@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
 import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { GroupModel } from './group-tickets.model';
 import { TicketsListComponent } from './tickets-list.component';
@@ -150,7 +151,7 @@ describe('TicketsListComponent', () => {
 
     // Assert
     expect(fixture).toMatchSnapshot();
-    expect(find(Helper.titleSelector).nativeElement.textContent).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)');
+    expect(find(Helper.titleSelector).nativeElement.textContent).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0)');
     expect(instance.model).toStrictEqual(Helper.getFakeTicketsModel());
     expect(find(Helper.nodataSelector)).toHaveFound(0);
   });
@@ -251,5 +252,20 @@ describe('TicketsListComponent', () => {
 
     // Assert
     expect(instance.pagingEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('#initTitle should set title when is DangerAccepted', async () => {
+    // Arrange
+    const { instance } = await shallow.render(
+      '<tickets-list [(model)]="ticketsModel"></tickets-list>',
+      { bind:
+          { ticketsModel: Helper.getFakeTicketsModel() }
+      }
+    );
+    instance.issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
+    instance.initTitle();
+
+    // Assert
+    expect(instance.title).toBe('Void Time: 12:51:48 PM - 12:51:55 PM (Single Count: 3, Parlay Count: 0, Cancel CO: 0)');
   });
 });

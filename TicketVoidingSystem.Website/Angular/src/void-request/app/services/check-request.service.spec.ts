@@ -1,5 +1,5 @@
 import { NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
-import { ModalType } from "../../../utility/components/modal/modal";
+import { ModalType } from "../../../utility/components/modal/modal.model";
 import { ModalService } from "../../../utility/components/modal/modal.service";
 import { AppService } from "../app.service";
 import { RequestLastModifiedDate } from "../models/request-last-modified-date.model";
@@ -27,7 +27,7 @@ describe('ValidationService', () => {
 
     expect(result).toBeTruthy();
   });
-  
+
   it('#isRequestModified should return false', async () => {
     const lastModifiedDate = new Date();
     const fakeRequestLastModifiedDate = new RequestLastModifiedDate();
@@ -41,7 +41,7 @@ describe('ValidationService', () => {
 
     expect(result).toBe(false);
   });
-  
+
   it('#showWarningPopupRequestModified should handle correctly', async () => {
     const mockOpen = jest.fn();
     const openModal = {

@@ -1,8 +1,8 @@
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from 'src/add-request/app/add-request/models/request.model';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../../add-request/app/add-request/models/event-wrong-score.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../add-request/app/add-request/models/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';

@@ -4,7 +4,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { ModalType } from '../../utility/components/modal/modal';
+import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { NotificationComponent } from '../../utility/components/notification/notification.component';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
@@ -63,7 +63,7 @@ class Helper {
     sportTypeName: '',
     sportTypeNameNewSimplified: '',
     sportTypeNameSimplified: '',
-    sportTypeNameTraditional: '',    
+    sportTypeNameTraditional: '',
     startTime: new Date(Helper.fakeDate),
     endTime: new Date(Helper.fakeDate),
     leagueGroupId: 0
@@ -197,7 +197,7 @@ describe('AppComponent', () => {
   let shallow: Shallow<AppComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)    
+    shallow = new Shallow(AppComponent, AppModuleTest)
     .mock(SignalRService, { initializeConnection: jest.fn()});
   });
 
@@ -256,7 +256,7 @@ describe('AppComponent', () => {
     expect(instance.isShowSummary).toBe(true);
     expect(instance.showSendColumn).toBe(true);
   });
-  
+
   it('#searchEvent should update isShowListBetTypeAffected to true', async() => {
     // Arrange
     const { instance, findComponent } = await shallow
@@ -289,7 +289,7 @@ describe('AppComponent', () => {
     filterEvent.match.sportType = SportType.SOCCER;
     filterEvent.query.isReSettled = true;
     filterEvent.query.groupBy = 1;
-    
+
     // Action
     await instance.searchEvent(filterEvent);
 
@@ -377,7 +377,7 @@ describe('AppComponent', () => {
       })
       .render();
     instance.ticketsModel = new TicketsModel();
-    instance.getTicketsDetailQuery = new GetTicketsDetailQuery(); 
+    instance.getTicketsDetailQuery = new GetTicketsDetailQuery();
 
     // Action
     await instance.getTicketsDetail();
@@ -474,7 +474,7 @@ describe('AppComponent', () => {
 
     expect(find(Helper.loadingSelector)).toHaveFoundOne();
   });
-  
+
   it('getSingleOrSubParlayParam should return default', async () => {
     const defaultSingleOrSubParlay = '111';
     const { instance } = await shallow.render();
@@ -483,7 +483,7 @@ describe('AppComponent', () => {
 
     expect(actual).toBe(defaultSingleOrSubParlay);
   });
-  
+
   it('sendExcelFileEvent should called expected', async () => {
     const confirmModal = { title: 'Send Data', message: TEXT.SEND_FILE + Helper.fakeSummaryItem.licenseeName + '?', type: ModalType.Confirm };
     const mockModalServiceConfirm = jest.fn();
@@ -502,7 +502,7 @@ describe('AppComponent', () => {
 
     mockModalServiceConfirm.mock.calls[0][2]();
   });
-  
+
   it('sendCreditToLetstalk should called expected', async () => {
     const mockSendCreditDataToLetstalk = jest.fn().mockImplementation(() => Promise.resolve(new Result()));
     const { instance } = await shallow
@@ -513,13 +513,13 @@ describe('AppComponent', () => {
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.open = jest.fn();
     instance.matchViewModel = Helper.fakeMatchModel;
-    
+
     await instance.sendCreditToLetstalk(Helper.fakeSummaryItem);
-    
+
     expect(mockSendCreditDataToLetstalk).toHaveBeenCalledTimes(1);
     expect(instance.messagesResponse.open).toHaveBeenCalledTimes(1);
   });
-  
+
   it('sendFile should called expected', async () => {
     const fakeResponse = _.cloneDeep(Helper.fakeAmendmentReponseError);
     fakeResponse.isChinaView = true;
@@ -539,16 +539,16 @@ describe('AppComponent', () => {
     .render();
     instance.matchViewModel = Helper.fakeMatchModel;
     instance.sendFileItems = [Helper.fakeSummaryItem, fakeSummaryItem];
-    
+
     [Product.SPORTS_BOOK, Product.BITCOIN].forEach(async x => {
       instance.commonQuery.product = x;
-      
+
       await instance.sendFile();
-      
+
       expect(mockSendDataToOic).toHaveBeenCalled();
     });
   });
-  
+
   it('sendCreditToLetstalk should called expected', async () => {
     const mockSendCreditDataToLetstalk = jest.fn().mockImplementation(() => Promise.resolve(new Result()));
     const { instance } = await shallow
@@ -562,12 +562,12 @@ describe('AppComponent', () => {
     ['29', '112'].forEach(async x => {
       Helper.fakeSummaryItem.betTypes = x;
       await instance.sendCreditToLetstalk(Helper.fakeSummaryItem);
-      
+
       expect(mockSendCreditDataToLetstalk).toHaveBeenCalled();
       expect(instance.messagesResponse.open).toHaveBeenCalled();
     });
   });
-  
+
   it('resendData should update correct data when resend successfully', async () => {
     const fakeAmendmentReponseSuccessfully = _.cloneDeep(Helper.fakeAmendmentReponseSuccessfully);
     fakeAmendmentReponseSuccessfully.code = 0;
@@ -581,12 +581,12 @@ describe('AppComponent', () => {
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.results = [Helper.fakeAmendmentReponseSuccessfully];
     instance.matchViewModel = Helper.fakeMatchModel;
-    
+
     await instance.resendData(false);
-    
+
     expect(mockSendDataToOic).toHaveBeenCalledTimes(1);
   });
-  
+
   it('resendData should update correct data when resend has error', async () => {
     const fakeAmendmentReponseSuccessfully = _.cloneDeep(Helper.fakeAmendmentReponseSuccessfully);
     fakeAmendmentReponseSuccessfully.code = 1;
@@ -602,13 +602,13 @@ describe('AppComponent', () => {
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.results = [Helper.fakeAmendmentReponseSuccessfully];
     instance.matchViewModel = Helper.fakeMatchModel;
-    
+
     await instance.resendData(false);
-    
+
     expect(mockSendDataToOic).toHaveBeenCalledTimes(1);
   });
-  
-  it('copyClipboard should call #clipboardService.copyFromContent', async () => {   
+
+  it('copyClipboard should call #clipboardService.copyFromContent', async () => {
     const mockCopyFromContent = jest.fn();
     const { instance } = await shallow
     .mock(ClipboardService, {
@@ -616,9 +616,9 @@ describe('AppComponent', () => {
     })
     .render();
     window.alert = jest.fn();
-    
+
     instance.copyClipboard('');
-    
+
     expect(mockCopyFromContent).toHaveBeenCalledTimes(1);
   });
 });

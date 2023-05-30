@@ -2,7 +2,7 @@ import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../utility/components/bet-ids/bet-ids.model';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { LABELS } from '../../../utility/constants/labels';
@@ -51,7 +51,7 @@ class Helper {
     type: ModalType.Alert
   };
 }
-describe('MarkUnmarkTicketComponent', () => { 
+describe('MarkUnmarkTicketComponent', () => {
   it('#copiedAffectLicenseees should call #window.alert', async () => {
     const component = new MarkUnmarkTicketComponent(null, null, null);
     window.alert = jest.fn();
@@ -60,7 +60,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(window.alert).toBeCalledTimes(1);
   });
-  
+
   it('#getMatchInfo should call #commonService.getMatch', async () => {
     const matchId = 99;
     const commonService = new CommonService(null);
@@ -75,7 +75,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(commonService.getMatch).toBeCalledTimes(1);
   });
-  
+
   it('#getMatchInfo should not call #commonService.getMatch', async () => {
     const matchId = 99;
     const commonService = new CommonService(null);
@@ -90,7 +90,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(commonService.getMatch).toBeCalledTimes(0);
   });
-  
+
   it('#getTickets should not call #updateMoved', async () => {
     const fakeTicketsModel = {
       invalidTransIds: '12312',
@@ -108,7 +108,7 @@ describe('MarkUnmarkTicketComponent', () => {
     component.filterTickets.betIdsComponent = new BetIdsComponent(null);
     component.filterTickets.betIdsComponent.groupNumber = new GroupNumber();
     component.filterTickets.betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-    component.filterTickets.betIdsComponent.groupNumber.updateMoved = jest.fn();    
+    component.filterTickets.betIdsComponent.groupNumber.updateMoved = jest.fn();
 
     await component.getTickets(query);
 
@@ -116,7 +116,7 @@ describe('MarkUnmarkTicketComponent', () => {
     expect(component.filterTickets.betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalled();
     expect(component.filterTickets.betIdsComponent.groupNumber.updateMoved).toHaveBeenCalled();
   });
-  
+
   it('#getTickets should update isShowTickets false when has exception', async () => {
     const fakeTicketsModel = {
       invalidTransIds: '12312',
@@ -127,25 +127,25 @@ describe('MarkUnmarkTicketComponent', () => {
     appService.getTickets = jest.fn().mockImplementation(() => Promise.resolve(fakeTicketsModel));
     const component = new MarkUnmarkTicketComponent(appService, null, null);
     const query = new GetTicketsQuery();
-    component.ticketsModel = null; 
+    component.ticketsModel = null;
 
     await component.getTickets(query);
 
     expect(appService.getTickets).toBeCalledTimes(1);
   });
-  
+
   it('#getAllMarkedTickets should call #appService.getAllMakerdTickets', async () => {
     const fakeTicketsModel = new AllMarkedTicketModel();
     const appService = new AppService(null);
     appService.getAllMakerdTickets = jest.fn().mockImplementation(() => Promise.resolve(fakeTicketsModel));
     const component = new MarkUnmarkTicketComponent(appService, null, null);
-    component.pagingOfAllMarked = new PagingModel();  
+    component.pagingOfAllMarked = new PagingModel();
 
     await component.getAllMarkedTickets(new GetTicketsQuery());
 
     expect(appService.getAllMakerdTickets).toBeCalledTimes(1);
   });
-  
+
   it('#searchEvent should call #getAllMarkedTickets', async () => {
     const query = {
       searchBy: FilterSearchBy.ALL_MARKED,
@@ -159,7 +159,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(component.getAllMarkedTickets).toBeCalledTimes(1);
   });
-  
+
   it('#searchEvent should call #getTickets', async () => {
     const query = {
       searchBy: FilterSearchBy.BETIDS,
@@ -175,7 +175,7 @@ describe('MarkUnmarkTicketComponent', () => {
     expect(component.getMatchInfo).toBeCalledTimes(1);
     expect(component.getTickets).toBeCalledTimes(1);
   });
-  
+
   it('#getDetailTickets should call #appService.getTicketsDetail', async () => {
     const ticketDetailId = {
       matchId: '1',
@@ -188,7 +188,7 @@ describe('MarkUnmarkTicketComponent', () => {
     appService.getTicketsDetail = jest.fn().mockImplementation(() => Promise.resolve(fakeTicketsModel));
     commonService.getMatch = jest.fn().mockImplementation(() => Promise.resolve(new MatchModel()));
     const component = new MarkUnmarkTicketComponent(appService, commonService, null);
-    component.pagingOfAllMarked = new PagingModel();  
+    component.pagingOfAllMarked = new PagingModel();
     component.ticketsModel.initData = jest.fn();
 
     await component.getDetailTickets(ticketDetailId);
@@ -196,7 +196,7 @@ describe('MarkUnmarkTicketComponent', () => {
     expect(appService.getTicketsDetail).toBeCalledTimes(1);
     expect(commonService.getMatch).toBeCalledTimes(1);
   });
-  
+
   it('#pagingEvent should call #getDetailTickets', async () => {
     const component = new MarkUnmarkTicketComponent(null, null, null);
     component.query.searchBy = FilterSearchBy.ALL_MARKED;
@@ -208,7 +208,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(component.getDetailTickets).toBeCalledTimes(1);
   });
-  
+
   it('#pagingEvent should call #getTickets', async () => {
     const component = new MarkUnmarkTicketComponent(null, null, null);
     component.query.searchBy = FilterSearchBy.BETIDS;
@@ -220,7 +220,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(component.getTickets).toBeCalledTimes(1);
   });
-  
+
   it('#pagingEventOfAllMarked should call #getAllMarkedTickets', async () => {
     const component = new MarkUnmarkTicketComponent(null, null, null);
     component.getAllMarkedTickets = jest.fn();
@@ -229,7 +229,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(component.getAllMarkedTickets).toBeCalledTimes(1);
   });
-  
+
   it('#refreshAllMarkedTickets should call #getAllMarkedTickets', async () => {
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = jest.fn();
@@ -240,7 +240,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(component.getAllMarkedTickets).toBeCalledTimes(1);
   });
-  
+
   it('#exportExcel should call #modalService.open', async () => {
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = jest.fn();
@@ -252,7 +252,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(modalService.open).toBeCalledTimes(1);
   });
-  
+
   it('#exportExcel should call #appService.exportExcelDetailTickets', async () => {
     const appService = new AppService(null);
     appService.exportExcelDetailTickets = jest.fn();
@@ -264,7 +264,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(appService.exportExcelDetailTickets).toBeCalledTimes(1);
   });
-  
+
   it('#exportExcel should call #appService.exportExcel', async () => {
     const appService = new AppService(null);
     appService.exportExcel = jest.fn();
@@ -277,7 +277,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(appService.exportExcel).toBeCalledTimes(1);
   });
-  
+
   it('#researchMarkedTickets should call #getAllMarkedTickets', async () => {
     const appService = new AppService(null);
     appService.exportExcel = jest.fn();
@@ -285,12 +285,12 @@ describe('MarkUnmarkTicketComponent', () => {
     component.query.searchBy = FilterSearchBy.ALL_MARKED;
     component.getAllMarkedTickets = jest.fn();
     component.getDetailTickets = jest.fn();
-    
+
     component.researchMarkedTickets(true);
 
     expect(component.getAllMarkedTickets).toBeCalledTimes(1);
   });
-  
+
   it('#researchMarkedTickets should call #getTickets', async () => {
     const appService = new AppService(null);
     appService.exportExcel = jest.fn();
@@ -299,14 +299,14 @@ describe('MarkUnmarkTicketComponent', () => {
     component.getTickets = jest.fn();
     component.filterTickets = new FilterTicketsComponent(null, null, null);
     component.filterTickets.clearBetId = jest.fn();
-    
+
     [true, false].forEach(x => {
       component.researchMarkedTickets(x);
 
       expect(component.getTickets).toBeCalled();
     });
   });
-  
+
   it('#updateMarkedTickets should call #modalService.open', async () => {
     const mockModalServiceconfirm = jest.fn();
     const mockModalServiceconfirmPermission = jest.fn();
@@ -337,7 +337,7 @@ describe('MarkUnmarkTicketComponent', () => {
     mockModalServiceconfirmPermission.mock.calls[0][3]();
     expect(component.researchMarkedTickets).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#updateMarkedTickets should call #modalService.open when status is 1', async () => {
     const checkingPermissionModal = Helper.checkingPermissionModal;
     checkingPermissionModal.action = false;
@@ -373,28 +373,28 @@ describe('MarkUnmarkTicketComponent', () => {
     mockModalServiceconfirmPermission.mock.calls[0][3]();
     expect(component.researchMarkedTickets).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#replaceErrorMessageLockMatch should return expected', async () => {
     const resultMarkTicketModel = new ResultMarkTicketModel();
     resultMarkTicketModel.errorCode = 101;
     resultMarkTicketModel.errorMsg = 'Failed';
     const component = new MarkUnmarkTicketComponent(null, null, null);
-    
+
     const actual = component['replaceErrorMessageLockMatch'](resultMarkTicketModel);
 
     expect(actual).toBe('Some tickets cannot be processed because: Failed');
   });
-  
+
   it('#getTicketsDetail should call #appService.getTicketsDetail', async () => {
     const appService = new AppService(null);
     appService.getTicketsDetail = jest.fn();
     const component = new MarkUnmarkTicketComponent(appService, null, null);
-    
+
     component.getTicketsDetail(null);
 
     expect(appService.getTicketsDetail).toBeCalledTimes(1);
   });
-  
+
   it('#confirmUpdateAllMarkedTickets should call #updateAllMarkedTickets', async () => {
     const confirmModal = {
       title: 'Mark/Unmark All Tickets',
@@ -413,26 +413,26 @@ describe('MarkUnmarkTicketComponent', () => {
     component['updateAllMarkedTickets'] = jest.fn();
 
     await component.confirmUpdateAllMarkedTickets(null);
-    
+
     expect(mockModalServiceconfirm.mock.calls[0][0]).toStrictEqual(confirmModal);
     mockModalServiceconfirm.mock.calls[0][1]();
     expect(component['updateAllMarkedTickets']).toBeCalledTimes(1);
   });
-  
+
   it('#changeSearchBy should call update #showLicensees false', async () => {
-    const component = new MarkUnmarkTicketComponent(null, null, null);    
+    const component = new MarkUnmarkTicketComponent(null, null, null);
     component.changeSearchBy();
 
     expect(component.showLicensees).toBeFalsy();
   });
-  
+
   it('#hideComponent should call update #isShowMatch  false', async () => {
-    const component = new MarkUnmarkTicketComponent(null, null, null);    
+    const component = new MarkUnmarkTicketComponent(null, null, null);
     component.hideComponent();
 
     expect(component.isShowMatch).toBeFalsy();
   });
-  
+
   it('#updateAllMarkedTickets should call #appService.updateAllMarkedTickets', async () => {
     const fakeResultUpdateMarkedTicket = _.cloneDeep(Helper.fakeResultUpdateMarkedTicket);
     fakeResultUpdateMarkedTicket.isSuccessful = true;
@@ -458,7 +458,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     expect(component.refreshAllMarkedTickets).toBeCalledTimes(1);
   });
-  
+
   it('#updateAllMarkedTickets should call #getDetailTickets', async () => {
     const allMarkedTicketModel = {
       matchId: '111',
@@ -492,7 +492,7 @@ describe('MarkUnmarkTicketComponent', () => {
     expect(mockModalServiceOpen.mock.calls[0][0]).toStrictEqual(openModal);
     mockModalServiceOpen.mock.calls[0][1]();
   });
-  
+
   it('#updateMarkedTicket should call #researchMarkedTickets', async () => {
     const fakeResultUpdateMarkedTicket = _.cloneDeep(Helper.fakeResultUpdateMarkedTicket);
     fakeResultUpdateMarkedTicket.isSuccessful = false;

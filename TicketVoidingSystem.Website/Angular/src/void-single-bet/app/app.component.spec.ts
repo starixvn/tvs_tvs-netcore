@@ -29,7 +29,6 @@ import { FilterParams, GetTicketsQuery } from './models/query.model';
 import { GroupModel } from './tickets/group.model';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
-import { group } from 'console';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
