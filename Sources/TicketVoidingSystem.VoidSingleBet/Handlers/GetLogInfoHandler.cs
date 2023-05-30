@@ -37,8 +37,10 @@ public class GetLogInfoHandler : IRequestHandler<GetLogInfoRequest, ListTicketsV
         }
 
         model.TotalItems = data.Count;
-        model.SingleCount = data.Where(item => !item.IsMixParlay).Count();
-        model.ParlayCount = data.Where(item => item.IsMixParlay).Count();
+        var singleTickets = data.Where(item => !item.IsMixParlay);
+        model.SingleCount = singleTickets.Count();
+        var parlayTickets = data.Where(item => item.IsMixParlay);
+        model.ParlayCount = parlayTickets.Count();
         UpdateTimeViewModel(model, data);
     }
 

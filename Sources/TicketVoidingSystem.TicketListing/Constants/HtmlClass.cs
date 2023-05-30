@@ -1,6 +1,6 @@
 namespace TicketVoidingSystem.TicketListing.Constants
 {
-    public class HtmlClass
+    public static class HtmlClass
     {
         public const string Lucky3 = "lucky3";
 

@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.Constants;
 
-public class SubIssueTypeConstant
+public static class SubIssueTypeConstant
 {
     public const int Handicap = 6;
     public const int FirstHalfHandicap = 119;

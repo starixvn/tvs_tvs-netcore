@@ -77,7 +77,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
         return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers);
     }
 
-    private static VoidTicketValidation CreateVoidTicketValidation(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
+    private static VoidTicketValidation CreateVoidTicketValidation(IList<VoidTicketValidation> validations)
     {
         var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
         return new VoidTicketValidation
@@ -90,7 +90,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
 
     private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
     {
-        var validation = CreateVoidTicketValidation(tickets, validations);
+        var validation = CreateVoidTicketValidation(validations);
         return new VoidTicketsModel
         {
             Tickets = tickets.ToList(),

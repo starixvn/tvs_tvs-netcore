@@ -23,11 +23,17 @@ public class CellServiceImp : CellService
 {
     public void AddMatch(ExcelWorksheet worksheet, Match match)
     {
+        const int matchRow = 5;
+        const int matchCodeColumn = 1;
+        const int leagueNameColumn = 2;
+        const int eventTimeColumn = 4;
+        const int matchEventColumn = 3;
+
         var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
-        worksheet.Cells[5, 1].Value = match.MatchCode;
-        worksheet.Cells[5, 2].Value = match.LeagueName;
-        worksheet.Cells[5, 4].Value = eventTime;
-        worksheet.Cells[5, 3].Value = match.MatchEvent;
+        worksheet.Cells[matchRow, matchCodeColumn].Value = match.MatchCode;
+        worksheet.Cells[matchRow, leagueNameColumn].Value = match.LeagueName;
+        worksheet.Cells[matchRow, eventTimeColumn].Value = eventTime;
+        worksheet.Cells[matchRow, matchEventColumn].Value = match.MatchEvent;
     }
 
     public string CreateTitle(int matchId)
@@ -37,6 +43,7 @@ public class CellServiceImp : CellService
 
     public void WriteGroupHeader(ExcelWorksheet worksheet, int rowNumber, Group<ExcelVoidedTicketModel> group)
     {
+        const int fontSize = 8;
         var headerRange = worksheet.Cells[$"A{rowNumber}:O{rowNumber}"];
         headerRange.Merge = true;
         headerRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -44,7 +51,7 @@ public class CellServiceImp : CellService
         headerRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
         headerRange.Style.Font.Bold = true;
         headerRange.Style.Font.Name = "Tahoma";
-        headerRange.Style.Font.Size = 8;
+        headerRange.Style.Font.Size = fontSize;
         headerRange.Value = $"{group.Name} ({group.Tickets.Count()})";
     }
 

@@ -41,13 +41,13 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         var choice = GetChoiceComboName(doc, html);
         switch (html)
         {
-            case string newHtml when newHtml.Contains(HtmlClass.Lucky3):
+            case var _ when html.Contains(HtmlClass.Lucky3):
                 return GetChoiceLucky3(doc);
 
-            case string newHtml when newHtml.Contains(HtmlClass.CombinationLink):
+            case var _ when html.Contains(HtmlClass.CombinationLink):
                 return GetChoiceSingleMatchParlay(doc, betId);
 
-            case string newHtml when newHtml.Contains(HtmlClass.BetTypeDescription):
+            case var _ when html.Contains(HtmlClass.BetTypeDescription):
                 return GetChoiceBetTypeDescription(doc, html, choice);
 
             default:
@@ -56,7 +56,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         }
     }
 
-    private string GetChoiceRefund(HtmlDocument doc, string html, string choice)
+    private static string GetChoiceRefund(HtmlDocument doc, string html, string choice)
     {
         var handicap = html.Contains(HtmlClass.Refund) ?
             doc.DocumentNode.SelectNodes("//div[@class='refund']").First().InnerText :
@@ -65,7 +65,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         return choice.AppendWithNewLine(excludingChoice).StripHtml();
     }
 
-    private string GetChoiceComboName(HtmlDocument doc, string html)
+    private static string GetChoiceComboName(HtmlDocument doc, string html)
     {
         if (!html.Contains(HtmlClass.ComboName))
         {
@@ -77,7 +77,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         return comboNames.Aggregate(choice, (current, item) => current.AppendWithNewLine(item.InnerText));
     }
 
-    private string GetChoiceBetTypeDescription(HtmlDocument doc, string html, string choice)
+    private static string GetChoiceBetTypeDescription(HtmlDocument doc, string html, string choice)
     {
         var betType = GetBetType(doc, html);
         return choice.AppendWithNewLine(betType).StripHtml();

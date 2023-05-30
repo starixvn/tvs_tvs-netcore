@@ -31,7 +31,10 @@ public class MapFromBetListServiceImp : MapFromBetListService
 
     public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
     {
-        if (item.BetType is >= 801 and <= 806)
+        const int minBetType = 801;
+        const int maxBetType = 806;
+
+        if (item.BetType is >= minBetType and <= maxBetType)
         {
             item.TransId = item.RefNo;
         }
@@ -49,8 +52,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
             BuildChoice(ticket, ticketHelper, item, issueTypeId);
 
         var choiceBlock = betListService.BuildChoiceBlock(ticket, ticketHelper, null, false);
-        viewModel.BettypeCombination = item.BetdaqId != 1 ? CombineBettype(item.IsLiveIndicator, viewModel.BetType, choiceBlock.betTeam) : string.Empty;
-        /////////
+        viewModel.BettypeCombination = item.BetdaqId != 1 ? CombineBetType(item.IsLiveIndicator, viewModel.BetType, choiceBlock.betTeam) : string.Empty;
 
         viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
@@ -150,7 +152,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         ticket.TransDesc = item.SubTransdesc;
     }
 
-    private static string CombineBettype(bool isLive, string betType, string betTeam)
+    private static string CombineBetType(bool isLive, string betType, string betTeam)
     {
         var trimBetTeam = betTeam.Replace("&nbsp;", " ").Trim();
         var liveIndicator = isLive ? "Live" : "Non-Live";
