@@ -168,12 +168,12 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   openRequestDetails(requestId: number, eventDate: Date, issueTypeId: number, createdDate: Date) {
     if (this.checkCanEdit(eventDate, issueTypeId, createdDate)) {
-      window.open(`TicketVoidingSystem/ManageRequest/Details/${requestId}`, '_blank');
+      window.open(`${document.body.getAttribute('old-site-root-url')}TicketVoidingSystem/ManageRequest/Details/${requestId}`, '_blank');
     }
   }
 
   openVoidRequest(requestId: number) {
-    window.open(`TicketVoidingSystem/VoidRequest/Index/${requestId}`, '_blank');
+    window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/VoidRequest/Index/${requestId}`, '_blank');
   }
 
   isShowOnlyTotalTickets(issueTypeId: number) {
