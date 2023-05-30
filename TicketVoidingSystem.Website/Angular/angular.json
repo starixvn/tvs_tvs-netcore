@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/void-request/index.html",
-            "main": "src/void-request/main.ts",
+            "index": "src/manage-request/index.html",
+            "main": "src/manage-request/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
@@ -42,7 +42,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "deployUrl": "dist/void-request/",
+              "deployUrl": "dist/manage-request/",
               "optimization": true,
               "outputHashing": "all",
               "namedChunks": false,

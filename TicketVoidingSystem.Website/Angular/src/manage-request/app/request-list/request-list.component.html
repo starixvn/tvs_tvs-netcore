@@ -1,0 +1,230 @@
+<div class="request-list">
+  <div class="title-request-list" *ngIf="paging.total > 0">
+    <div class="title-request-list-label">Manage Request</div>
+    <div class="title-request-list-toolbox">
+      <input type="button" class="title-request-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+    </div>
+  </div>
+  <div class="table-header">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
+          <th scope="col" class="col-tb-2">
+            <div>Request No</div>
+          </th>
+          <th scope="col" class="col-tb-3">
+            <div>Issue Type</div>
+          </th>
+          <th scope="col" class="col-tb-4">
+            <div>Match ID</div>
+          </th>
+          <th scope="col" class="col-tb-5">
+            <div>Description</div>
+          </th>
+          <th scope="col" class="col-tb-6">
+            <div>Action Type</div>
+          </th>
+          <th scope="col" class="col-tb-7">
+            <div>Created By</div>
+          </th>
+          <th scope="col" class="col-tb-8">
+            <div>Created Time</div>
+          </th>
+          <th scope="col" class="col-tb-9">
+            <div>Mistaken By</div>
+          </th>
+          <th scope="col" class="col-tb-10">
+            <div>Decided By</div>
+          </th>
+          <th scope="col" class="col-tb-11">
+            <div>Performed By</div>
+          </th>
+          <th scope="col" class="col-tb-12">
+            <div>Checked By</div>
+          </th>
+          <th scope="col" class="col-tb-13">
+            <div>No. of Tickets</div>
+          </th>
+          <th scope="col" class="col-tb-14">
+            <div>Action</div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-content">
+    <table>
+      <ng-container *ngFor="let item of displayedModels; index as i; trackBy: requestListTrackByFn">
+        <tbody>
+          <tr>
+            <td class="col-tb-1" [attr.rowspan]="item.details.length">
+              <div>{{i + 1}}</div>
+            </td>
+            <td class="col-tb-2" [attr.rowspan]="item.details.length">
+              <div class="d-flex align-items-center justify-content-center">
+                <span class="request-no" [ngClass]="{'link':checkCanEdit(item.eventDate, item.issueTypeId, item.createdDate)}"
+                  (click)="openRequestDetails(item.requestId, item.eventDate, item.issueTypeId, item.createdDate)">{{item.requestId}}
+                </span>
+              </div>
+              <div class="mb-1 mt-1" *ngIf="item.status" >
+                <span [ngClass]="{'failed-status': item.status === 'Failed', 'completed-status': item.status === 'Completed',
+                  'running-status': item.status === 'Running'}">{{item.status}}
+                </span>
+              </div>
+            </td>
+            <td class="col-tb-3">
+              <div>{{getIssueTypeName(item.details[0].subIssueTypeId)}}</div>
+            </td>
+            <td class="col-tb-4">
+              <div>{{item.details[0].matchId}}</div>
+              <div class="mb-1">
+                <span *ngIf="item.details[0].settlementStatus" [ngClass]="{'ht-settlement': isSettlementHT(item.details[0].settlementStatus) === true,
+                'ft-settlement': isSettlementHT(item.details[0].settlementStatus) === false}">{{item.details[0].settlementStatus}}
+                </span>
+              </div>
+            </td>
+            <td class="col-tb-5">
+              <i [hidden]="!checkCanCopyRequestInfo(item.issueTypeId)" class="fa fa-clipboard copy-request-info" (click)="copyRequestInfo(item.requestId, item.details[0].matchId)" aria-hidden="true"></i>
+              <div class="text-right" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
+            </td>
+            <td class="col-tb-6" [attr.rowspan]="item.details.length">
+              <div>{{getActionName(item.actionId)}}</div>
+            </td>
+            <td class="col-tb-7" [attr.rowspan]="item.details.length">
+              <div>{{item.createdBy}}</div>
+            </td>
+            <td class="col-tb-8" [attr.rowspan]="item.details.length">
+              <div>{{item.createdDate | date:'yyyy/MM/dd hh:mm:ss a'}}</div>
+            </td>
+            <td class="col-tb-9" [attr.rowspan]="item.details.length">
+              <div title="{{item.mistakenBy}}">{{item.mistakenBy}}</div>
+            </td>
+            <td class="col-tb-10" [attr.rowspan]="item.details.length">
+              <div title="{{item.decidedBy}}">{{item.decidedBy}}</div>
+            </td>
+            <td class="col-tb-11" [attr.rowspan]="item.details.length">
+              <div>{{item.lastPerformedBy}}</div>
+            </td>
+            <td class="col-tb-12 text-left" [attr.rowspan]="item.details.length">
+              <div>
+                <div *ngIf="permission.verifyRead && isVoidAction(item.actionId) && checkVoided(item.details)">
+                  <input type="checkbox" [(ngModel)]="item.isCheckedBy" (change)="confirmCheckBy(item)" />
+                  {{item.checkedBy}}
+                </div>
+              </div>
+            </td>
+            <td class="col-tb-13">
+              <div *ngIf="item.details[0].totalVoidedSingle + item.details[0].totalVoidedParlay + item.details[0].totalCancelCashOut > 0">
+                <ng-container *ngIf="isShowOnlyTotalTickets(item.issueTypeId); else templateNoTickets">
+                  <div class="link" (click)="showTickets(item.requestId, item.details[0].matchId)">{{item.details[0].totalVoidedSingle +
+                    item.details[0].totalVoidedParlay}}
+                  </div>
+                </ng-container>
+                <ng-template #templateNoTickets>
+                  <div class="link" (click)="showTickets(item.requestId, item.details[0].matchId)">{{item.details[0].totalVoidedSingle +
+                    item.details[0].totalVoidedParlay}}</div>
+                  <div [innerHTML]="getDetailTotalTickets(item.issueTypeId, item.details[0]) | sanitizeHtml"></div>
+                </ng-template>
+              </div>
+            </td>
+            <td class="col-tb-14" [attr.rowspan]="item.details.length">
+              <div><em *ngIf="checkCanVoid(item.actionId, item.eventDate, item.issueTypeId, item.createdDate)" class="icon-void"
+                  (click)="openVoidRequest(item.requestId)"></em></div>
+            </td>
+          </tr>
+          <ng-container *ngFor="let detail of item.details; let index = index">
+            <tr *ngIf="index>0">
+              <td *ngIf="index>0">{{getIssueTypeName(detail.subIssueTypeId)}}</td>
+              <td *ngIf="index>0">
+                <div>{{detail.matchId}}</div>
+                <div><span *ngIf="detail.settlementStatus" [ngClass]="{'ht-settlement': isSettlementHT(detail.settlementStatus) === true,
+                  'ft-settlement': isSettlementHT(detail.settlementStatus) === false}">{{detail.settlementStatus}}</span>
+                </div>
+              </td>
+              <td *ngIf="index>0" class="text-right">
+                <i *ngIf="checkCanCopyRequestInfo(item.issueTypeId)" class="fa fa-clipboard copy-request-info" (click)="copyRequestInfo(item.requestId, detail.matchId)" aria-hidden="true"></i>
+                <div [innerHtml]="detail.description | sanitizeHtml"></div>
+              </td>
+              <td *ngIf="index>0" class="col-tb-13">
+                <div *ngIf="detail.totalVoidedSingle + detail.totalVoidedParlay + detail.totalCancelCashOut > 0">
+                  <ng-container *ngIf="isShowOnlyTotalTickets(item.issueTypeId); else templateNoTickets">
+                    <div class="link" (click)="showTickets(item.requestId, detail.matchId)">{{detail.totalVoidedSingle + detail.totalVoidedParlay}}
+                    </div>
+                  </ng-container>
+                  <ng-template #templateNoTickets>
+                    <div class="link" (click)="showTickets(item.requestId, detail.matchId)">{{detail.totalVoidedSingle +
+                      detail.totalVoidedParlay}}</div>
+                    <div [innerHTML]="getDetailTotalTickets(item.issueTypeId, detail) | sanitizeHtml"></div>
+                  </ng-template>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </ng-container>
+    </table>
+
+    <table *ngIf="displayedModels.length == 0 || displayedModels == null">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-fitler">
+    <table>
+      <tbody>
+        <tr>
+          <td class="col-tb-1">
+            <div></div>
+          </td>
+          <td class="col-tb-2">
+            <div></div>
+          </td>
+          <td class="col-tb-3">
+            <div></div>
+          </td>
+          <td class="col-tb-4">
+            <div></div>
+          </td>
+          <td class="col-tb-5">
+            <div></div>
+          </td>
+          <td class="col-tb-6">
+            <div></div>
+          </td>
+          <td class="col-tb-7">
+            <div></div>
+          </td>
+          <td class="col-tb-8">
+            <div></div>
+          </td>
+          <td class="col-tb-9">
+            <div></div>
+          </td>
+          <td class="col-tb-10">
+            <div></div>
+          </td>
+          <td class="col-tb-11">
+            <div></div>
+          </td>
+          <td class="col-tb-12">
+            <div></div>
+          </td>
+          <td class="col-tb-13">
+            <div></div>
+          </td>
+          <td class="col-tb-14">
+            <div></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
+</div>
+<ticket-list [modal]="ticketListModal"></ticket-list>

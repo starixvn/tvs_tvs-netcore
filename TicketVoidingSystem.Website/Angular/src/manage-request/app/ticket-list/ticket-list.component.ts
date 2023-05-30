@@ -1,0 +1,221 @@
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import * as _ from 'lodash';
+import { RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
+import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { GeneralInfoViewModel } from '../../../utility/components/request-info/request-info.model';
+import { AbnormalFilterBy } from '../../../utility/constants/config';
+import { IssueInfo } from '../../../utility/models/issue-type.model';
+import { MatchModel } from '../../../utility/models/match.model';
+import { CommonService } from '../../../utility/services/common.service';
+import { StaticService } from '../../../utility/services/static.service';
+import { AppService } from '../app.service';
+import { GetGeneralInfoQuery } from '../models/get-general-info.query';
+import { TicketListModal } from './ticket-list.modal';
+import { TicketsModel } from './tickets/tickets.model';
+import { TicketsQuery } from './tickets/tickets.query';
+
+@Component({
+  selector: 'ticket-list',
+  templateUrl: './ticket-list.component.html',
+  styleUrls: ['./ticket-list.component.scss']
+})
+export class TicketListComponent implements OnInit, OnChanges {
+  @Input() modal: TicketListModal;
+  @Output() modalChange = new EventEmitter<TicketListModal>();
+
+  paging = new PagingModel();
+  match = new MatchModel();
+  requestDetail = new RequestDetailViewModel();
+  issue = new IssueInfo();
+  query = new TicketsQuery();
+  tickets = new TicketsModel();
+  generalInfoViewModel = new GeneralInfoViewModel();
+
+  isBlock: boolean;
+  blockBetList: boolean;
+
+  constructor(
+    private readonly commonService: CommonService,
+    private readonly appService: AppService
+  ) { }
+
+  ngOnInit() {
+    this.match = new MatchModel();
+  }
+
+  async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    if (this.modal.open) {
+      this.isBlock = true;
+      this.requestDetail = await this.commonService.getRequestById(this.modal.requestId);
+      if (this.isShowMatchInfo(this.requestDetail)) {
+        this.match = await this.commonService.getMatch(this.modal.matchId);
+      }
+      this.isBlock = false;
+      this.issue = await this.commonService.getIssueInfo(this.getSubIssueTypeId());
+      this.paging = new PagingModel();
+      this.paging.pageSize = 500;
+      await this.getGeneralInfo();
+      await this.getTickets();
+      this.updateGeneralInfoByTickets();
+    }
+  }
+
+  async getTickets() {
+    this.query = {
+      requestId: this.modal.requestId,
+      matchId: this.modal.matchId,
+      voidingHistoryIds: this.generalInfoViewModel.generalInfoModel.voidingHistoryIds,
+      issueTypeId: this.requestDetail.request.issueTypeId,
+      pageIndex: this.paging.page - 1,
+      pageSize: this.paging.pageSize
+    };
+    this.blockBetList = true;
+    this.tickets = await this.appService.getVoidedTickets(this.query);
+    this.blockBetList = false;
+    this.paging.total = this.tickets.totalVoidedTickets;
+  }
+
+  pagingEvent() {
+    this.getTickets();
+  }
+
+  async exportExcel() {
+    this.isBlock = true;
+    await this.appService.exportTickets(this.query);
+    this.isBlock = false;
+  }
+
+  private async getGeneralInfo(): Promise<void> {
+    const generalInfoQuery: GetGeneralInfoQuery = {
+      requestId: this.modal.requestId,
+      matchId: this.modal.matchId
+    };
+    this.generalInfoViewModel = await this.appService.getGeneralInfo(generalInfoQuery);
+  }
+
+  private updateGeneralInfoByTickets(): void {
+    if (this.generalInfoViewModel.generalInfoModel && this.tickets) {
+      this.generalInfoViewModel.generalInfoModel.licenseeNames = this.tickets.licenseeNames;
+      this.generalInfoViewModel.generalInfoModel.totalVoidedTickets = this.tickets.totalVoidedTickets;
+      this.generalInfoViewModel.generalInfoModel.totalCancelCashOut = this.tickets.totalCancelCashOut;
+      this.generalInfoViewModel.generalInfoModel.reason = this.issue.subIssueTypeName;
+      this.generalInfoViewModel.generalInfoModel.scoreResult = this.getScoreResult(this.requestDetail.event);
+      this.generalInfoViewModel.generalInfoModel.generalBetTypeCombinations = this.tickets.generalBetTypeCombinations;
+    }
+  }
+
+  private getScoreResult(model: RequestEventModel): string {
+    if (model) {
+      const htScore = (!_.isNil(model.htHomeScore) && !_.isNil(model.htAwayScore)) ? `${model.htHomeScore} - ${model.htAwayScore}` : 'N/A';
+      const ftScore = (!_.isNil(model.finalHomeScore) && !_.isNil(model.finalAwayScore)) ?
+        `${model.finalHomeScore} - ${model.finalAwayScore}` : 'N/A';
+      return `HT ${htScore}, FT ${ftScore}`;
+    }
+
+    return '';
+  }
+
+  isShowMatchInfo(requestDetail: RequestDetailViewModel) {
+    return !this.isAbnormalAccountIssueType(requestDetail)
+      && !(this.isAbnormalBetIssueType(requestDetail) && requestDetail.event.filterBy === AbnormalFilterBy.MIX_PARLAY)
+      && !this.isArchivedTicketIssueType();
+  }
+
+  isAbnormalAccountIssueType(requestDetail: RequestDetailViewModel): boolean {
+    if (requestDetail.request?.issueTypeId) {
+      return StaticService.isAbnormalAccount(requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  isLikelyAbnormalBetIssueType(requestDetail: RequestDetailViewModel): boolean {
+    return this.isAbnormalBetIssueType(requestDetail) || this.isAbnormalBetRealMemberIssueType(requestDetail);
+  }
+
+  isAbnormalBetIssueType(requestDetail: RequestDetailViewModel): boolean {
+    if (requestDetail.request?.issueTypeId) {
+      return StaticService.isAbnormalBet(requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  private isAbnormalBetRealMemberIssueType(requestDetail: RequestDetailViewModel): boolean {
+    if (requestDetail.request?.issueTypeId) {
+      return StaticService.isAbnormalBetRealMember(requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  private isDangerAcceptedIssueType(): boolean {
+    if (this.requestDetail.request?.issueTypeId) {
+      return StaticService.isDangerAccepted(this.requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  private isWrongScoreIssueType(): boolean {
+    if (this.requestDetail.request?.issueTypeId) {
+      return StaticService.isWrongScore(this.requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  private isRedCardIssueType(): boolean {
+    if (this.requestDetail.request?.issueTypeId) {
+      return StaticService.isRedCard(this.requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  private isWrongHDP(): boolean {
+    return this.requestDetail.request?.issueTypeId ? StaticService.isWrongHDP(this.requestDetail.request.issueTypeId.toString()) : false;
+  }
+
+  private isWrong1stHDP(): boolean {
+    return this.requestDetail.request?.issueTypeId ? StaticService.isWrong1stHDP(this.requestDetail.request.issueTypeId.toString()) : false;
+  }
+  
+  private isWrongOU(): boolean {
+    return this.requestDetail.request?.issueTypeId ? StaticService.isWrongOU(this.requestDetail.request.issueTypeId.toString()) : false;
+  }
+
+  private isWrong1stOU(): boolean {
+    return this.requestDetail.request?.issueTypeId ? StaticService.isWrong1stOU(this.requestDetail.request.issueTypeId.toString()) : false;
+  }
+
+  private isWrongOdds(): boolean {
+    return this.requestDetail.request?.issueTypeId ? StaticService.isWrongOdds(this.requestDetail.request.issueTypeId.toString()) : false;
+  }
+
+  private isArchivedTicketIssueType(): boolean {
+    if (this.requestDetail.request?.issueTypeId) {
+      return StaticService.isArchivedTicket(this.requestDetail.request.issueTypeId.toString());
+    }
+
+    return false;
+  }
+
+  private getSubIssueTypeId(): number {
+    if (this.isDangerAcceptedIssueType()) {
+      return this.requestDetail.dangerAcceptedModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
+    } else if (this.isRedCardIssueType()) {
+      return this.requestDetail.redCardModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
+    } else if (this.isWrongScoreIssueType()) {
+      return this.requestDetail.wrongScoreModels[0].subIssueTypeId;
+    } else if (this.isWrongHDP() || this.isWrong1stHDP()) {
+      return this.requestDetail.wrongHdpModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
+    } else if (this.isWrongOU() || this.isWrong1stOU()) {
+      return this.requestDetail.wrongOuModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
+    } else if (this.isWrongOdds()) {
+      return this.requestDetail.wrongOddsModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
+    } else {
+      return this.requestDetail.event.subIssueTypeId;
+    }
+  }
+}

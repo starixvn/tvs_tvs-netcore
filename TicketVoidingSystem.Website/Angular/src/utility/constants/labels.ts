@@ -5,7 +5,7 @@ export class CONFIG {
 
 export class LABELS {
   static readonly INVALID_MATCHID = 'Invalid MatchId.';
-
+  static readonly INVALID_REQUESTID = 'Invalid RequestId.';
   static readonly USERNAME_TITLE = 'Username';
   static readonly EVENT_TITLE = 'Event';
   static readonly INVALID_BETID = 'All BetID(s) must be valid.';
@@ -33,6 +33,7 @@ export class LABELS {
   static readonly REQUIRED_TICKET_STATUS = 'Ticket status is required.';
 
   static readonly INVALID_USERNAMES = 'All Username(s) must be valid.';
+  static readonly MAX_USERNAME_EXCEEDED = 'Max Username Exceeded.';
   static readonly INVALID_USERNAME = 'Invalid username';
 
   static readonly EMPTY_LICENSEE = 'At least one Licensee  must be selected.';
@@ -133,4 +134,5 @@ export class LABELS {
   static readonly SEN_DATA_RESULT_TITLE = 'Send Data Result';
   static readonly ALL_TICKETS_VOIDED = 'All tickets has been voided';
   static readonly INVALID_TEMPLATE_MESSAGE = 'Invalid template message.';
+  static readonly SELECTED_VAR_OPTIONS = 'Please select NO VAR/VAR.';
 }

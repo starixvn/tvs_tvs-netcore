@@ -5,23 +5,23 @@ import moment from 'moment';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 // import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
 // import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
-import { Tooltip } from '../components/tooltip/tooltip.model';
-import { DateTimeFormat } from '../constants/config';
-import { BalanceUp } from '../models/balance-up.model';
-import { CheckingPermissionModel } from '../models/checking-permission.model';
-import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
-import { Result, SqlResult } from '../models/result';
-import { Selection } from '../models/selection.model';
-import { HttpService } from './http.service';
-// import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
+import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
+import { Tooltip } from '../components/tooltip/tooltip.model';
+import { DateTimeFormat } from '../constants/config';
+import { BalanceUp } from '../models/balance-up.model';
+import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { SportInfo } from '../models/event.model';
+import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
+import { Result, SqlResult } from '../models/result';
+import { RequestDetailViewModel } from './../../edit-request/app/request.model';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,10 @@ export class CommonService {
     return this.httpService.getJson('api/SharedApi/GetNapUserInfo');
   }
 
+  async getBalanceUp(): Promise<BalanceUp> {
+    return this.httpService.getJson(`api/SharedApi/GetBalanceUp`);
+  }
+  
   async getBalanceUpZoneManila(): Promise<BalanceUp> {
     return this.httpService.getJson(`api/SharedApi/GetBalanceUpZoneManila`);
   }
@@ -55,28 +59,26 @@ export class CommonService {
     return this.httpService.getJson('api/SharedApi/GetSportsType');
   }
 
-
-  async getActions(): Promise<Selection[]> {
-    return this.httpService.getJson('TicketVoiding/GetActions');
-  }
+  // async getActions(): Promise<Selection[]> {
+  //   return this.httpService.getJson('TicketVoiding/GetActions');
+  // }
 
   async getMatch(matchId: number, isExcludeChildMatchCricket?: boolean): Promise<MatchModel> {
     return this.httpService.postJson({ matchId, isMatch3rd: false, isExcludeChildMatchCricket: isExcludeChildMatchCricket }, 'api/MatchInfo/GetInfo');
   }
 
-  // async getRequestById(id: number): Promise<RequestDetailViewModel> {
-  //   return this.httpService.getJson(`TicketVoidingSystem/ManageRequest/GetRequest/${id}`);
-  // }
+  async getRequestById(id: number): Promise<RequestDetailViewModel> {
+    return this.httpService.getJson(`api/ManageRequest/GetRequest/${id}`);
+  }
 
   async getIssueInfo(subId: number): Promise<IssueInfo> {
     return this.httpService.getJson(`api/ManageRequest/GetIssueTypeName/${subId}`);
   }
 
-  async getBalanceUp(): Promise<BalanceUp> {
-    return this.httpService.getJson(`TicketVoiding/GetBalanceUp`);
+  async getPermissionManageRequest(): Promise<PermissionManage> {
+    return this.httpService.getJson('api/ManageRequest/GetPermissionManage');
   }
 
-  
   async getFirstTimeAndKickOffTime(id: number): Promise<FirstTicketTime> {
     return this.httpService.getJson(`api/MatchInfo/GetFirstTimeAndKickOffTime/${id}`);
   }
@@ -123,9 +125,7 @@ export class CommonService {
     return this.httpService.getJson('api/SharedApi/GetIssueTypes');
   }
 
-  // async getPermissionManageRequest(): Promise<PermissionManage> {
-  //   return this.httpService.getJson('TicketVoidingSystem/ManageRequest/GetPermissionManage');
-  // }
+
 
   // async checkValidTransIdsForAbnormalBet(query: CheckValidTransIdsQuery): Promise<CheckValidTransIdsResult> {
   //   return this.httpService.postJson<CheckValidTransIdsQuery, CheckValidTransIdsResult>(query, 'TicketVoiding/CheckValidTransIdsRequest');

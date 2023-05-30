@@ -1,0 +1,24 @@
+<div *ngIf="modal.open">
+  <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+  <div role="dialog" class="fade modal show d-block">
+    <div role="document" class="modal-dialog-custom modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <strong>Delete Bet Check (Request ID: {{modal.requestId}})</strong>
+          </div>
+          <div class="modal-control">
+            <em class="fa fa-times pointer" (click)="modal.open = !modal.open"></em>
+          </div>
+        </div>
+        <div class="modal-body" [blockUi]="isBlock">
+          <match-info *ngIf="isShowMatchInfo(requestDetail)" [match]="match"></match-info>
+          <request-info [model]="requestDetail" [issue]="issue" [generalInfoViewModel]="generalInfoViewModel"
+             [isShowAbnormalAccountInfo]="false" [isShowGeneralInfo]="true"></request-info>
+          <tickets [model]="tickets" [(paging)]="paging" (pagingChange)="pagingEvent()" [isBlock]="blockBetList"
+            (exportExcelEvent)="exportExcel()"></tickets>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

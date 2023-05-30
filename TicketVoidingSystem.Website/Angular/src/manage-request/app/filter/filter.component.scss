@@ -1,0 +1,52 @@
+.form-check-input {
+  margin-left: 10px;
+  margin-top: 0px;
+  position: inherit;
+}
+
+.select-date, .input-request-id, .input-match-id, ng-select {
+  width: 140px;
+}
+
+.checkbox-exclude-test {
+  margin-bottom: 3px;
+  margin-right: 5px;
+}
+
+.mr-col {
+  max-width: 13%;
+}
+
+.min-width-1666 {
+  min-width: 1666px;
+}
+
+.padding-col {
+  padding-right: 50px;
+  padding-left: 10px;
+}
+
+.issue-type-dropdown {
+  width: 150px;
+}
+
+.sub-type-dropdown {
+  width: 182px;
+}
+
+.ng-value {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.button-area {
+  display: flex;
+  
+  .btn-sm {
+    height: 36px;
+  }
+}
+
+.filter-by-match {
+  row-gap: 5px;
+}

@@ -12,6 +12,7 @@ export class RequestSimpleInfo {
     lastPerformedBy: string;
     totalVoidedSingle: number;
     totalVoidedParlay: number;
+    totalCancelCashOut: number;
     matchId: number;
 }
 
