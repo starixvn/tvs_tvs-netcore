@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using HtmlAgilityPack;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Extensions.TN;
+using TicketVoidingSystem.TicketListing.Constants;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
 
@@ -37,38 +38,52 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
 
-        if (html.Contains("lucky3"))
+        var choice = GetChoiceComboName(doc, html);
+        switch (html)
         {
-            return ChoiceLucky3(doc);
-        }
+            case string newHtml when newHtml.Contains(HtmlClass.Lucky3):
+                return GetChoiceLucky3(doc);
 
-        if (html.Contains("combinationLink"))
-        {
-            return ChoiceSingleMatchParlay(doc, betId);
-        }
+            case string newHtml when newHtml.Contains(HtmlClass.CombinationLink):
+                return GetChoiceSingleMatchParlay(doc, betId);
 
-        var choice = string.Empty;
-        if (html.Contains("combo-name"))
-        {
-            var comboNames = doc.DocumentNode.SelectNodes("//span[@class='combo-name']").ToArray();
-            choice = comboNames.Aggregate(choice, (current, item) => current.AppendWithNewLine(item.InnerText));
-        }
+            case string newHtml when newHtml.Contains(HtmlClass.BetTypeDescription):
+                return GetChoiceBetTypeDescription(doc, html, choice);
 
-        if (html.Contains("bettype-description"))
-        {
-            var betType = BetType(doc, html);
-            return choice.AppendWithNewLine(betType).StripHtml();
-        }
+            default:
+                return GetChoiceRefund(doc, html, choice);
 
-        var handicap = html.Contains("refund") ?
+        }
+    }
+
+    private string GetChoiceRefund(HtmlDocument doc, string html, string choice)
+    {
+        var handicap = html.Contains(HtmlClass.Refund) ?
             doc.DocumentNode.SelectNodes("//div[@class='refund']").First().InnerText :
             doc.DocumentNode.SelectNodes("//div[@class='']").First().InnerText;
         var excludingChoice = handicap.Replace("Excluding", $"{Environment.NewLine}Excluding");
-
         return choice.AppendWithNewLine(excludingChoice).StripHtml();
     }
 
-    private static string ChoiceLucky3(HtmlDocument doc)
+    private string GetChoiceComboName(HtmlDocument doc, string html)
+    {
+        if (!html.Contains(HtmlClass.ComboName))
+        {
+            return string.Empty;
+        }
+
+        var choice = string.Empty;
+        var comboNames = doc.DocumentNode.SelectNodes("//span[@class='combo-name']").ToArray();
+        return comboNames.Aggregate(choice, (current, item) => current.AppendWithNewLine(item.InnerText));
+    }
+
+    private string GetChoiceBetTypeDescription(HtmlDocument doc, string html, string choice)
+    {
+        var betType = GetBetType(doc, html);
+        return choice.AppendWithNewLine(betType).StripHtml();
+    }
+
+    private static string GetChoiceLucky3(HtmlDocument doc)
     {
         var numbers = doc.DocumentNode.SelectNodes("//span[@class='lucky3']").First().FirstChild.InnerText;
         var handicap = doc.DocumentNode.SelectNodes("//span[@class='handicap']").First().FirstChild.InnerText;
@@ -78,15 +93,12 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
             .AppendWithNewLine(numOfBet);
     }
 
-    private string ChoiceSingleMatchParlay(HtmlDocument doc, string betId)
+    private string GetChoiceSingleMatchParlay(HtmlDocument doc, string betId)
     {
-        var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
         var result = new StringBuilder();
-        var criteria = new GetSelectionsSMPCriteria
-        {
-            TransId = long.Parse(betId)
-        };
-        var selections = repository.Fetch<SelectionSMP>(criteria).ToList();
+        var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
+        var selections = CreateSelectionsSMP(betId);
+
         foreach (var item in selections)
         {
             var selection = item.Result.IsRunningOrEmpty() ?
@@ -98,15 +110,22 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         return betType.AppendWithNewLine(result.ToString());
     }
 
-    private static string BetType(HtmlDocument doc, string html)
+    private IEnumerable<SelectionSMP> CreateSelectionsSMP(string betId)
+    {
+        var criteria = new GetSelectionsSMPCriteria
+        {
+            TransId = long.Parse(betId)
+        };
+
+        return repository.Fetch<SelectionSMP>(criteria).ToList();
+    }
+
+    private static string GetBetType(HtmlDocument doc, string html)
     {
         var choice = html.Handicap(doc);
         var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
-        var bettypeDescription = HtmlExtension.GetBettypeDescription(doc);
-        if (!string.IsNullOrWhiteSpace(bettypeDescription))
-        {
-            betType = betType.AppendWithNewLine(bettypeDescription);
-        }
+        var betTypeDescription = HtmlExtension.GetBetTypeDescription(doc);
+        betType = (!string.IsNullOrWhiteSpace(betTypeDescription)) ? betType.AppendWithNewLine(betTypeDescription) : betType;
 
         return choice.AppendWithNewLine(betType);
     }

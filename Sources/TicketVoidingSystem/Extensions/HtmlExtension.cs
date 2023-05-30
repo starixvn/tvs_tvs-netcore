@@ -171,7 +171,7 @@ public static class HtmlExtension
 
         var handicap = html.Handicap(doc);
         var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerHtml.StripHtml();
-        var bettypeDescription = GetBettypeDescription(doc);
+        var bettypeDescription = GetBetTypeDescription(doc);
         if (!string.IsNullOrWhiteSpace(bettypeDescription))
         {
             bettype = bettype.AppendWithNewLine(bettypeDescription);
@@ -211,13 +211,13 @@ public static class HtmlExtension
         {
             choice = HeaderParlay(doc);
         }
-        var bettypeDescription = GetBettypeDescription(doc);
+        var bettypeDescription = GetBetTypeDescription(doc);
         var handicap = html.Handicap(doc);
         return choice.AppendWithNewLine(handicap.StripHtml())
             .AppendWithNewLine(bettypeDescription);
     }
 
-    public static string GetBettypeDescription(HtmlDocument doc)
+    public static string GetBetTypeDescription(HtmlDocument doc)
     {
         var result = string.Empty;
         var descriptionList = doc.DocumentNode.SelectNodes("//div[@class='bettype-description']");

@@ -30,7 +30,7 @@ public class AffectTicketsFromSettlementHistoryServiceImp : AffectTicketsFromSet
         {
             MatchId = matchId
         };
-        var transIds = await repository.FetchAsync<BetId>(criteria);
-        return transIds.ToAffectTicketsXml();
+
+        return (await repository.FetchAsync<BetId>(criteria)).ToAffectTicketsXml();
     }
 }

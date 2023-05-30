@@ -25,21 +25,11 @@ public class CellServiceImp : CellService
         if (query.GroupBy == GroupByConstants.Licensees)
         {
             title += " - " + StringResource.Licensee + ": " + query.LicenseeName;
-            if (!query.IsGroup)
-            {
-                title += " - " + StringResource.Bettype + ": " + query.BetTypeName;
-            }
-        }
-        else
-        {
-            title += " - " + StringResource.Bettype + ": " + query.BetTypeName;
-            if (!query.IsGroup)
-            {
-                title += " - " + StringResource.Licensee + ": " + query.LicenseeName;
-            }
+            return (!query.IsGroup) ? title + " - " + StringResource.Bettype + ": " + query.BetTypeName : title;
         }
 
-        return title;
+        title += " - " + StringResource.Bettype + ": " + query.BetTypeName;
+        return (!query.IsGroup) ? title + " - " + StringResource.Licensee + ": " + query.LicenseeName : title;
     }
 
     public void AddMatch(ExcelWorksheet worksheet, ExportExcelQuery query)
@@ -61,6 +51,7 @@ public class CellServiceImp : CellService
             worksheet.Cells[matchRow, matchCodeColumn].Value = query.MatchCode;
             worksheet.Cells[matchRow, matchEventColumn].Value = query.MatchEvent;
         }
+
         worksheet.Cells[matchRow, eventTimeColumn].Value = eventDate;
     }
 
