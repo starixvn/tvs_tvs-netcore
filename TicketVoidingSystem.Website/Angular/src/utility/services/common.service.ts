@@ -8,6 +8,7 @@ import moment from 'moment';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
 import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
+import { Selection } from '../../utility/models/selection.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
@@ -22,7 +23,6 @@ import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models
 import { Result, SqlResult } from '../models/result';
 import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { HttpService } from './http.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -59,12 +59,13 @@ export class CommonService {
     return this.httpService.getJson('api/SharedApi/GetSportsType');
   }
 
-  // async getActions(): Promise<Selection[]> {
-  //   return this.httpService.getJson('TicketVoiding/GetActions');
-  // }
 
   async getMatch(matchId: number, isExcludeChildMatchCricket?: boolean): Promise<MatchModel> {
     return this.httpService.postJson({ matchId, isMatch3rd: false, isExcludeChildMatchCricket: isExcludeChildMatchCricket }, 'api/MatchInfo/GetInfo');
+  }
+
+  async getVoidActions(): Promise<Selection[]> {
+    return this.httpService.getJson('api/ManageRequest/GetVoidActions');
   }
 
   async getRequestById(id: number): Promise<RequestDetailViewModel> {
@@ -118,7 +119,7 @@ export class CommonService {
   }
 
   async getIssueTypePermissionList(): Promise<IssueType[]> {
-    return this.httpService.getJson('TicketVoiding/GetIssueTypePermissionList');
+    return this.httpService.getJson('api/SharedApi/GetIssueTypePermissionList');
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
@@ -140,7 +141,7 @@ export class CommonService {
   }
 
   async getMarkedTicketsCount(): Promise<number> {
-    return this.httpService.getJson('TicketVoidingSystem/ManageRequest/GetMarkedTicketsCount');
+    return this.httpService.getJson('api/ManageRequest/GetMarkedTicketsCount');
   }
 
   async getResultCache<T>(guid: string): Promise<Result<T>> {

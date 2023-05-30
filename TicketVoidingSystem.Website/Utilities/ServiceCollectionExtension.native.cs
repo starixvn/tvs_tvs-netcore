@@ -254,6 +254,6 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(MarkTicketsProfile));
         services.AddAutoMapper(typeof(TicketListingProfile));
         services.AddAutoMapper(typeof(VoidSingleBetProfile));
-        services.AddAutoMapper(typeof(MessageRequestProfile));
+        services.AddAutoMapper(typeof(ManageRequestProfile));
     }
 }

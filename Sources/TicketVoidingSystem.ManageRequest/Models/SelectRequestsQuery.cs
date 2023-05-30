@@ -2,8 +2,8 @@
 
 public class SelectRequestsQuery
 {
-    public string RequestId { get; set; }
-    public string RequestIdXml { get; set; }
+    public string? RequestId { get; set; }
+    public string? RequestIdXml { get; set; }
     public int? MatchId { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }

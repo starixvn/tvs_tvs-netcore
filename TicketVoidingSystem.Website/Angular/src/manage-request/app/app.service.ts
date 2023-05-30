@@ -19,32 +19,32 @@ export class AppService {
   ) { }
 
   async getRequests(query: GetRequestsQuery): Promise<RequestModel[]> {
-    return this.httpService.postJson(query, 'TicketVoidingSystem/ManageRequest/GetRequests');
+    return this.httpService.postJson(query, 'api/ManageRequest/GetRequests');
   }
 
   async exportRequest(query: GetRequestsQuery) {
-    const url = 'TicketVoidingSystem/ManageRequest/ExportRequest';
+    const url = 'api/ManageRequest/ExportRequest';
     return this.httpService.downloadFile(query, url);
   }
 
   async getVoidedTickets(query: TicketsQuery): Promise<TicketsModel> {
-    return this.httpService.postJson(query, 'TicketVoidingSystem/ManageRequest/GetVoidedTickets');
+    return this.httpService.postJson(query, 'api/ManageRequest/GetVoidedTickets');
   }
 
   async exportTickets(query: TicketsQuery) {
-    const url = 'TicketVoidingSystem/ManageRequest/ExportVoidedTickets';
+    const url = 'api/ManageRequest/ExportVoidedTickets';
     return this.httpService.downloadFile(query, url);
   }
 
   async checkBy(requestId: number, isCheck: boolean): Promise<Result<string>> {
-    return this.httpService.postJson({ requestId, isCheck }, 'TicketVoidingSystem/ManageRequest/CheckBy');
+    return this.httpService.postJson({ requestId, isCheck }, 'api/ManageRequest/CheckBy');
   }
 
   async getGeneralInfo(query: GetGeneralInfoQuery): Promise<GeneralInfoViewModel> {
-    return this.httpService.postJson(query, `TicketVoidingSystem/ManageRequest/GetGeneralInfo`);
+    return this.httpService.postJson(query, `api/ManageRequest/GetGeneralInfo`);
   }
 
   async copyRequestInfo(query: CopyRequestInfoQuery): Promise<string> {
-    return this.httpService.postJson(query, `TicketVoidingSystem/ManageRequest/CopyRequestInfo`);
+    return this.httpService.postJson(query, `api/ManageRequest/CopyRequestInfo`);
   }
 }

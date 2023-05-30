@@ -5,7 +5,7 @@ using MediatR;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.SharedApi.Handlers;
+namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
 public class GetVoidResultCacheRequest : IRequest<IList<Result>>
 {

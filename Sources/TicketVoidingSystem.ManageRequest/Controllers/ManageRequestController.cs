@@ -19,6 +19,9 @@ public class ManageRequestController : ControllerBase
     }
 
     [HttpGet]
+    public async Task<IActionResult> GetVoidActions() => Ok(await mediator.Send(new GetVoidActionsRequest()));
+
+    [HttpGet]
     [Route("{id}")]
     public async Task<IActionResult> GetIssueTypeName(int id) => Ok(await mediator.Send(new GetIssueNameRequest { SubId = id }));
 

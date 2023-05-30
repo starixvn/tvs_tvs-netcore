@@ -4,23 +4,23 @@ using MediatR;
 using TicketVoidingSystem.SharedApi.Models;
 using TicketVoidingSystem.SharedApi.Services;
 
-namespace TicketVoidingSystem.SharedApi.Handlers;
+namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class GetBalanceUpDayRequest : IRequest<BalanceUp>
+public class GetBalanceUpDayZoneManilaRequest : IRequest<BalanceUp>
 {
 }
 
-public class GetBalanceUpDayHandler : IRequestHandler<GetBalanceUpDayZoneManilaRequest, BalanceUp>
+public class GetBalanceUpDayZoneManilaHandler : IRequestHandler<GetBalanceUpDayZoneManilaRequest, BalanceUp>
 {
     private readonly BalanceUpService balanceUpService;
 
-    public GetBalanceUpDayHandler(BalanceUpService balanceUpService)
+    public GetBalanceUpDayZoneManilaHandler(BalanceUpService balanceUpService)
     {
         this.balanceUpService = balanceUpService;
     }
 
     public async Task<BalanceUp> Handle(GetBalanceUpDayZoneManilaRequest request, CancellationToken cancellationToken)
     {
-        return await balanceUpService.GetBalanceUpDay();
+        return await balanceUpService.GetBalanceUpDayZoneManila();
     }
 }

@@ -54,7 +54,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.requestStatusChangeEvent.subscribe((requestStatus: RequestStatus[]) => {
       this.updateRequestStatus(requestStatus, this.displayedModels);
     });
-    this.actions = await this.commonService.getActions();
+    this.actions = await this.commonService.getVoidActions();
     this.issueTypesModel = await this.commonService.getIssueTypes();
   }
 

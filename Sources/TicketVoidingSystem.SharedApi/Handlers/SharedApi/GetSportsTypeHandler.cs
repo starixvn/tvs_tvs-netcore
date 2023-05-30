@@ -7,7 +7,7 @@ using MediatR;
 using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.SharedApi.Models;
 
-namespace TicketVoidingSystem.SharedApi.Handlers;
+namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
 public class GetSportsTypeRequest : IRequest<IEnumerable<SportInfo>>
 {

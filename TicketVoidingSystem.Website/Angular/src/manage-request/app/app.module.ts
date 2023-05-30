@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ToastrModule } from 'ngx-toastr';
 import { ModalModule } from '../../utility/components/modal/modal.module';
 import { RequestInfoModule } from '../../utility/components/request-info/request-info.module';
 import { BlockUiModule } from './../../utility/components/block-ui/block-ui.module';
@@ -42,6 +43,7 @@ import { TicketsComponent } from './ticket-list/tickets/tickets.component';
     PipeModule,
     RequestInfoModule,
     ToolTipModule,
+    ToastrModule.forRoot(),
     UtilityModule
   ],
   entryComponents: [
