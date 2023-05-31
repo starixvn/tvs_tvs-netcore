@@ -54,6 +54,7 @@ public class AfterVoidServiceTests
     {
         // Arrange
         var criteria = new GetVoidBetAutomationInfoCriteria();
+        // Jacob Gọi 2 hàm này để làm gì vậy
         criteria.GetSettingKey();
         criteria.IsValid();
         var expected = new VoidBetAutomationModel();

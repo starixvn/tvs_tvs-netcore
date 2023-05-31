@@ -18,6 +18,7 @@ public class VoidingHistoryServiceTests
         var model = new VoidingHistoryModel();
         var models = new List<VoidingHistoryModel> { model };
         var criteria = new GetVoidingHistoryCriteria();
+        // Jacob Gọi 2 hàm này để làm gì vậy
         criteria.GetSettingKey();
         criteria.IsValid();
         var repository = Substitute.For<IDynamicRepository>();

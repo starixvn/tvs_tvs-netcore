@@ -18,6 +18,7 @@ public class AutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFixture>
         var model = new AutoVoidRequestQueueModel();
         var models = new List<AutoVoidRequestQueueModel> { model };
         var criteria = new GetAutoVoidRequestQueueCriteria();
+        // Jacob Gọi 2 hàm này để làm gì vậy
         criteria.IsValid();
         criteria.GetSettingKey();
         var repository = Substitute.For<IDynamicRepository>();

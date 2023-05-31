@@ -18,6 +18,7 @@ public class TicketVoidingQueueServiceTests
         var model = new TicketVoidingQueueModel();
         var models = new List<TicketVoidingQueueModel> { model };
         var criteria = new GetTicketVoidingQueueCriteria();
+        // Jacob Gọi 2 hàm này để làm gì vậy
         criteria.GetSettingKey();
         criteria.IsValid();
         var repository = Substitute.For<IDynamicRepository>();
