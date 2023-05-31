@@ -39,22 +39,33 @@ public class InsertQueueServiceImp : InsertQueueService
         var broadcastSessionId = Guid.NewGuid().ToString();
         foreach (var siteDbGroupId in siteGroupInCurrentSessionVoid)
         {
-            var singleTickets = CreateTicketModel(query.SingleTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
-            var parlayTickets = CreateTicketModel(query.ParlayTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
-            var cricketTickets = CreateTicketModel(query.CricketTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
-            var cancelCashOutTickets = CreateTicketModel(query.CancelCashOutTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
-            var singleTickets14 = Enumerable.Empty<RequestDetailTicketModel>();
-
-            if (IsIssueTypeNeedToCheckValidationTickets(query.IssueTypeId))
-            {
-                (singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets, singleTickets14)
-                    = await ReCheckTicketsStatus(siteDbGroupId, singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets);
-            }
-
+            var voidTicketModel = await GetTicketInsertQueue(query, siteDbGroupId);
             var voidingHistoryId = await insertVoidingHistoryService.InsertVoidingHistory(query, siteDbGroupId, broadcastSessionId);
 
-            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets, singleTickets14);
+            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, voidTicketModel);
         }
+    }
+
+    private async Task<TicketTypeModel> GetTicketInsertQueue(InsertQueueQuery query, int siteDbGroupId)
+    {
+        if (IsIssueTypeNeedToCheckValidationTickets(query.IssueTypeId))
+        {
+            return await ReCheckTicketsStatus(CreateTicketTypeModelByQuery(query, siteDbGroupId), siteDbGroupId);
+        }
+
+        return CreateTicketTypeModelByQuery(query, siteDbGroupId);
+    }
+
+    private static TicketTypeModel CreateTicketTypeModelByQuery(InsertQueueQuery query, int siteDbGroupId)
+    {
+        return new TicketTypeModel
+        {
+            ValidVoidSingleTickets = CreateTicketModel(query.SingleTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidVoidParlayTickets = CreateTicketModel(query.ParlayTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidVoidCricketTickets = CreateTicketModel(query.CricketTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidCancelCOTickets = CreateTicketModel(query.CancelCashOutTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidVoidSingleTickets14 = Enumerable.Empty<RequestDetailTicketModel>()
+        };
     }
 
     private static bool IsIssueTypeNeedToCheckValidationTickets(int issueTypeId)
@@ -62,20 +73,8 @@ public class InsertQueueServiceImp : InsertQueueService
         return new[] { IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore, IssueTypeConstant.AbnormalAccount }.Contains(issueTypeId);
     }
 
-    private async Task<(IEnumerable<RequestDetailTicketModel> SingleTickets, IEnumerable<RequestDetailTicketModel> ParlayTickets,
-            IEnumerable<RequestDetailTicketModel> CricketTickets, IEnumerable<RequestDetailTicketModel> CancelCashOutTickets, IEnumerable<RequestDetailTicketModel> SingleTickets14)>
-        ReCheckTicketsStatus(int siteDbGroupId, IEnumerable<RequestDetailTicketModel> singleTickets, IEnumerable<RequestDetailTicketModel> parlayTickets,
-        IEnumerable<RequestDetailTicketModel> cricketTickets, IEnumerable<RequestDetailTicketModel> cancelCashOutTickets)
+    private async Task<TicketTypeModel> ReCheckTicketsStatus(TicketTypeModel ticketTypeModel, int siteDbGroupId)
     {
-        var criteria = new CheckTicketsAllowToVoidCriteria
-        {
-            SiteDbGroupId = siteDbGroupId,
-            SingleTicketsJson = JsonSerializer.Serialize(singleTickets),
-            ParlayTicketsJson = JsonSerializer.Serialize(parlayTickets),
-            CricketTicketsJson = JsonSerializer.Serialize(cricketTickets),
-            CancelCashOutTicketsJson = JsonSerializer.Serialize(cancelCashOutTickets)
-        };
-
         var mappingTypes = new[] {
             typeof(RequestDetailTicketModel),
             typeof(RequestDetailTicketModel),
@@ -87,19 +86,38 @@ public class InsertQueueServiceImp : InsertQueueService
             typeof(RequestDetailTicketModel)
         };
 
-        var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var validVoidSingleTickets = result[0].Cast<RequestDetailTicketModel>();
-        var validVoidParlayTickets = result[2].Cast<RequestDetailTicketModel>();
-        var validVoidCricketTickets = result[4].Cast<RequestDetailTicketModel>();
-        var validCancelCashOutTickets = result[6].Cast<RequestDetailTicketModel>();
-        var validVoidSingleTickets14 = result[7].Cast<RequestDetailTicketModel>();
+        var results = await repository.FetchMultipleAsync(CreateCheckTicketsAllowToVoidCriteria(ticketTypeModel, siteDbGroupId), mappingTypes);
 
-        return (validVoidSingleTickets, validVoidParlayTickets, validVoidCricketTickets, validCancelCashOutTickets, validVoidSingleTickets14);
+        return CreateCheckTicketsAllowToVoidOutput(results);
     }
 
-    private static IEnumerable<RequestDetailTicketModel> CreateTicketModel(IEnumerable<BetId> tickets, int requestId, int issueTypeId)
+    private static CheckTicketsAllowToVoidCriteria CreateCheckTicketsAllowToVoidCriteria(TicketTypeModel ticketTypeModel, int siteDbGroupId)
     {
-        return tickets.Select(x => new RequestDetailTicketModel
+        return new CheckTicketsAllowToVoidCriteria
+        {
+            SiteDbGroupId = siteDbGroupId,
+            SingleTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidSingleTickets),
+            ParlayTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidParlayTickets),
+            CricketTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidCricketTickets),
+            CancelCashOutTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidCancelCOTickets)
+        };
+    }
+
+    private static TicketTypeModel CreateCheckTicketsAllowToVoidOutput(IReadOnlyList<IEnumerable<object>> results)
+    {
+        return new TicketTypeModel
+        {
+            ValidVoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
+            ValidVoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
+            ValidVoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
+            ValidCancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
+            ValidVoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>()
+        };
+    }
+
+    private static IEnumerable<RequestDetailTicketModel> CreateTicketModel(IEnumerable<BetId>? tickets, int requestId, int issueTypeId)
+    {
+        return tickets?.Select(x => new RequestDetailTicketModel
         {
             RequestId = requestId,
             TransId = long.Parse(x.TransId),
@@ -108,20 +126,18 @@ public class InsertQueueServiceImp : InsertQueueService
         });
     }
 
-    private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId,
-        IEnumerable<RequestDetailTicketModel> singleTickets, IEnumerable<RequestDetailTicketModel> parlayTickets,
-        IEnumerable<RequestDetailTicketModel> cricketTickets, IEnumerable<RequestDetailTicketModel> cancelCashOutTickets, IEnumerable<RequestDetailTicketModel> singleTickets14)
+    private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId, TicketTypeModel ticketTypeModel)
     {
         var criteria = new InsertTicketVoidingQueueCriteria
         {
             SiteDbGroupId = siteDbGroupId,
             RequestId = requestId,
             VoidingHistoryId = voidingHistoryId,
-            SingleTicketsJson = JsonSerializer.Serialize(singleTickets),
-            ParlayTicketsJson = JsonSerializer.Serialize(parlayTickets),
-            CricketTicketsJson = JsonSerializer.Serialize(cricketTickets),
-            CancelCashOutTicketsJson = JsonSerializer.Serialize(cancelCashOutTickets),
-            SingleTickets14Json = JsonSerializer.Serialize(singleTickets14),
+            SingleTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidSingleTickets),
+            ParlayTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidParlayTickets),
+            CricketTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidCricketTickets),
+            CancelCashOutTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidCancelCOTickets),
+            SingleTickets14Json = JsonSerializer.Serialize(ticketTypeModel.ValidVoidSingleTickets14),
             UserId = sessionService.UserId,
             IP = sessionService.GetClientIp(),
         };
@@ -130,16 +146,12 @@ public class InsertQueueServiceImp : InsertQueueService
 
     public async Task UpdateIsProcessed(InsertQueueQuery query)
     {
-        var singleTickets = CreateTicketModel(query.SingleTickets, query.RequestId, query.IssueTypeId);
-        var parlayTickets = CreateTicketModel(query.ParlayTickets, query.RequestId, query.IssueTypeId);
-        var cancelCashOutTickets = CreateTicketModel(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId);
-        var cricketTickets = CreateTicketModel(query.CricketTickets, query.RequestId, query.IssueTypeId);
         var criteria = new UpdateIsProcessedForRequestTicketsCriteria
         {
-            SingleTicketsJson = JsonSerializer.Serialize(singleTickets),
-            ParlayTicketsJson = JsonSerializer.Serialize(parlayTickets),
-            CricketTicketsJson = JsonSerializer.Serialize(cricketTickets),
-            CancelCashOutTicketsJson = JsonSerializer.Serialize(cancelCashOutTickets)
+            SingleTicketsJson = JsonSerializer.Serialize(CreateTicketModel(query.SingleTickets, query.RequestId, query.IssueTypeId)),
+            ParlayTicketsJson = JsonSerializer.Serialize(CreateTicketModel(query.ParlayTickets, query.RequestId, query.IssueTypeId)),
+            CricketTicketsJson = JsonSerializer.Serialize(CreateTicketModel(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId)),
+            CancelCashOutTicketsJson = JsonSerializer.Serialize(CreateTicketModel(query.CricketTickets, query.RequestId, query.IssueTypeId))
         };
 
         await repository.ExecuteAsync(criteria);
