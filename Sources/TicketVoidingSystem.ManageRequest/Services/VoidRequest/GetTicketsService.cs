@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.Models;
@@ -29,22 +30,61 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
-        if (query.RequestId == 0)
+        switch (query.IssueTypeId)
         {
-            var TransInfoJsonList = new List<string> { query.TransInfoJson };
+            case IssueTypeConstant.EarlyKickOffTime:
+            case IssueTypeConstant.WrongKickOffTime:
+                return await GetTicketsIssueTypeEarlyKickOffOrWrongKickOff(query);
 
-            return await GetBetTransTicket(query, TransInfoJsonList);
+            case IssueTypeConstant.ArchivedTicket:
+                return await GetTicketsIssueTypeArchivedTicket(query);
+
+            case IssueTypeConstant.AbnormalAccount:
+                return await GetTicketsIssueTypeAbnormalAccount(query);
+
+            default:
+                return await GetTicketsDefault(query);
+        }
+    }
+
+    private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeAbnormalAccount(GetTicketsQuery query)
+    {
+        var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
+        var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets);
+        var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
+        var void14Tickets = await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
+        var voidBetTransTickets = await GetBetTransTicket(query, transInfoJsonList);
+
+        return void14Tickets.Union(voidBetTransTickets);
+    }
+
+    private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeArchivedTicket(GetTicketsQuery query)
+    {
+        var (singleTickets, _, _) = await GetTicketsInRequest(query.RequestId);
+        var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets);
+
+        return await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
+    }
+
+    private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeEarlyKickOffOrWrongKickOff(GetTicketsQuery query)
+    {
+        if (query.RequestId == 0) // get tickets when add/edit request
+        {
+            var transInfoJson = new List<string> { query.TransInfoJson };
+            return await GetBetTransTicket(query, transInfoJson);
         }
 
         var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
-
-        if (query.IssueTypeId == IssueTypeConstant.ArchivedTicket)
-        {
-            var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets, parlayTickets);
-            return await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
-        }
-
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
+
+        return await GetBetTransTicket(query, transInfoJsonList);
+    }
+
+    private async Task<IEnumerable<GetTicketModel>> GetTicketsDefault(GetTicketsQuery query)
+    {
+        var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
+        var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
+
         return await GetBetTransTicket(query, transInfoJsonList);
     }
 

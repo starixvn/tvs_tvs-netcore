@@ -43,26 +43,27 @@ public class InsertQueueServiceImp : InsertQueueService
             var parlayTickets = CreateTicketModel(query.ParlayTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
             var cricketTickets = CreateTicketModel(query.CricketTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
             var cancelCashOutTickets = CreateTicketModel(query.CancelCashOutTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId);
+            var singleTickets14 = Enumerable.Empty<RequestDetailTicketModel>();
 
-            if (IsIssueTypeHaveCancelCoTickets(query.IssueTypeId))
+            if (IsIssueTypeNeedToCheckValidationTickets(query.IssueTypeId))
             {
-                (singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets)
+                (singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets, singleTickets14)
                     = await ReCheckTicketsStatus(siteDbGroupId, singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets);
             }
 
             var voidingHistoryId = await insertVoidingHistoryService.InsertVoidingHistory(query, siteDbGroupId, broadcastSessionId);
 
-            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets);
+            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets, singleTickets14);
         }
     }
 
-    private static bool IsIssueTypeHaveCancelCoTickets(int issueTypeId)
+    private static bool IsIssueTypeNeedToCheckValidationTickets(int issueTypeId)
     {
-        return new[] { IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore }.Contains(issueTypeId);
+        return new[] { IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore, IssueTypeConstant.AbnormalAccount }.Contains(issueTypeId);
     }
 
     private async Task<(IEnumerable<RequestDetailTicketModel> SingleTickets, IEnumerable<RequestDetailTicketModel> ParlayTickets,
-            IEnumerable<RequestDetailTicketModel> CricketTickets, IEnumerable<RequestDetailTicketModel> CancelCashOutTickets)>
+            IEnumerable<RequestDetailTicketModel> CricketTickets, IEnumerable<RequestDetailTicketModel> CancelCashOutTickets, IEnumerable<RequestDetailTicketModel> SingleTickets14)>
         ReCheckTicketsStatus(int siteDbGroupId, IEnumerable<RequestDetailTicketModel> singleTickets, IEnumerable<RequestDetailTicketModel> parlayTickets,
         IEnumerable<RequestDetailTicketModel> cricketTickets, IEnumerable<RequestDetailTicketModel> cancelCashOutTickets)
     {
@@ -75,16 +76,25 @@ public class InsertQueueServiceImp : InsertQueueService
             CancelCashOutTicketsJson = JsonSerializer.Serialize(cancelCashOutTickets)
         };
 
-        var mappingTypes = new[] { typeof(RequestDetailTicketModel), typeof(RequestDetailTicketModel), typeof(RequestDetailTicketModel),
-                typeof(RequestDetailTicketModel), typeof(RequestDetailTicketModel), typeof(RequestDetailTicketModel), typeof(RequestDetailTicketModel) };
+        var mappingTypes = new[] {
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel)
+        };
 
         var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
         var validVoidSingleTickets = result[0].Cast<RequestDetailTicketModel>();
         var validVoidParlayTickets = result[2].Cast<RequestDetailTicketModel>();
         var validVoidCricketTickets = result[4].Cast<RequestDetailTicketModel>();
         var validCancelCashOutTickets = result[6].Cast<RequestDetailTicketModel>();
+        var validVoidSingleTickets14 = result[7].Cast<RequestDetailTicketModel>();
 
-        return (validVoidSingleTickets, validVoidParlayTickets, validVoidCricketTickets, validCancelCashOutTickets);
+        return (validVoidSingleTickets, validVoidParlayTickets, validVoidCricketTickets, validCancelCashOutTickets, validVoidSingleTickets14);
     }
 
     private static IEnumerable<RequestDetailTicketModel> CreateTicketModel(IEnumerable<BetId> tickets, int requestId, int issueTypeId)
@@ -100,7 +110,7 @@ public class InsertQueueServiceImp : InsertQueueService
 
     private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId,
         IEnumerable<RequestDetailTicketModel> singleTickets, IEnumerable<RequestDetailTicketModel> parlayTickets,
-        IEnumerable<RequestDetailTicketModel> cricketTickets, IEnumerable<RequestDetailTicketModel> cancelCashOutTickets)
+        IEnumerable<RequestDetailTicketModel> cricketTickets, IEnumerable<RequestDetailTicketModel> cancelCashOutTickets, IEnumerable<RequestDetailTicketModel> singleTickets14)
     {
         var criteria = new InsertTicketVoidingQueueCriteria
         {
@@ -111,6 +121,7 @@ public class InsertQueueServiceImp : InsertQueueService
             ParlayTicketsJson = JsonSerializer.Serialize(parlayTickets),
             CricketTicketsJson = JsonSerializer.Serialize(cricketTickets),
             CancelCashOutTicketsJson = JsonSerializer.Serialize(cancelCashOutTickets),
+            SingleTickets14Json = JsonSerializer.Serialize(singleTickets14),
             UserId = sessionService.UserId,
             IP = sessionService.GetClientIp(),
         };

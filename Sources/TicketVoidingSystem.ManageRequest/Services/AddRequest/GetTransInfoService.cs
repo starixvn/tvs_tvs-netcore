@@ -15,7 +15,7 @@ public interface GetTransInfoService
 
     Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId);
 
-    Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets);
+    Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets);
 }
 
 public class GetTransInfoServiceImp : GetTransInfoService
@@ -124,19 +124,17 @@ public class GetTransInfoServiceImp : GetTransInfoService
         return transInfoJsonList;
     }
 
-    public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets)
+    public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets)
     {
         var transInfoJsonList = new List<string>();
         foreach (var item in SiteDbGroupConstant.ServerList)
         {
             var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == item.Id);
-            var parlayTicketsInSite = parlayTickets.Where(x => x.SiteDbGroupId == item.Id);
 
             var criteria = new GetTransInfoForVoid14Criteria
             {
                 SiteDbGroupId = item.Id,
                 SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite),
-                ParlayTransIds = Helper.JoinBetIdList(parlayTicketsInSite)
             };
 
             var transInfoJson = await repository.GetAsync<string>(criteria);

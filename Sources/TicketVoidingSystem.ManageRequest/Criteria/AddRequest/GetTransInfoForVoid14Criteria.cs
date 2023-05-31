@@ -7,7 +7,6 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 public class GetTransInfoForVoid14Criteria : CriteriaBase
 {
     public string SingleTransIds { get; set; }
-    public string ParlayTransIds { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
