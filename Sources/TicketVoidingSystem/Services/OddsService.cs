@@ -45,17 +45,11 @@ public class OddsServiceImp : OddsService
 
     public string GetOddsName(string oddsHtml)
     {
-        var valueNode = string.Empty;
         var xmlDoc = new XmlDocument();
         oddsHtml = "<div>" + oddsHtml + "</div>";
         xmlDoc.LoadXml(oddsHtml);
         var foundSpanNodes = xmlDoc.SelectNodes("//span");
 
-        if (foundSpanNodes != null && foundSpanNodes.Count == 2)
-        {
-            valueNode = foundSpanNodes[1].InnerText.Trim();
-        }
-
-        return valueNode;
+        return (foundSpanNodes != null && foundSpanNodes.Count == 2) ? foundSpanNodes[1].InnerText.Trim() : string.Empty;       
     }
 }

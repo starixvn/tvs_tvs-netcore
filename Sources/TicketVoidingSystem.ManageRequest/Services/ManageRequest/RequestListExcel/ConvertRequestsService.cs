@@ -82,20 +82,16 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var description = string.Empty;
+
         var nodesSingle = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-single']");
         if (nodesSingle != null)
         {
-            description = $"Single: {nodesSingle.First().InnerText}";
+            return $"Single: {nodesSingle.First().InnerText}";
         }
 
         var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
-        if (nodesParlay != null)
-        {
-            description = $"Mix Parlay: {nodesParlay.First().InnerText}";
-        }
 
-        return description;
+        return (nodesParlay != null) ? $"Mix Parlay: {nodesParlay.First().InnerText}" : string.Empty;
     }
 
     private static string BuildDescriptionDangerAccepted(string html)
@@ -163,12 +159,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='sport']");
-        if (nodes != null && nodes.Any())
-        {
-            return nodes.First().InnerText;
-        }
-
-        return string.Empty;
+        
+        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
     }
 
     public string GetEvent(string html)
@@ -176,12 +168,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='match']");
-        if (nodes != null && nodes.Any())
-        {
-            return nodes.First().InnerText;
-        }
 
-        return string.Empty;
+        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;      
     }
 
     public string GetLeague(string html)
@@ -189,12 +177,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='league text-uppercase']");
-        if (nodes != null && nodes.Any())
-        {
-            return nodes.First().InnerText;
-        }
-
-        return string.Empty;
+        
+        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
     }
 
     public string GetVarCheckValue(bool isCheckedVar)

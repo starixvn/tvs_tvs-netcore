@@ -53,12 +53,6 @@ public class MapTicketServiceImp : MapTicketService
         {
             var ticket = MapToTicketViewModel(item, permission);
             ticket.No = index++;
-            if (!permission.ViewUserName && item.GroupName == SpecialSiteConstant.Site789Y)
-            {
-                ticket.Member = "-";
-                ticket.Currency = "-";
-            }
-
             tickets.Add(ticket);
         }
 
@@ -69,15 +63,15 @@ public class MapTicketServiceImp : MapTicketService
     {
         var index = 1;
         var tickets = new List<ExcelTicketModel>();
-        var canViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read);
+
         foreach (var item in data)
         {
             var ticketDetail = MapToTicketViewModel(item);
             var ticket = mapper.Map<ExcelTicketModel>(ticketDetail);
             ticket.No = index++;
             ticket.BetId = ticketDetail.BetId.LineBreak();
-            ticket.Member = !canViewUserName && item.GroupName == SpecialSiteConstant.Site789Y ? "-".LineBreak() : ticketDetail.Member.LineBreak();
-            ticket.Currency = !canViewUserName && item.GroupName == SpecialSiteConstant.Site789Y ? "-".LineBreak() : ticketDetail.Currency.LineBreak();
+            ticket.Member = ticketDetail.Member.LineBreak();
+            ticket.Currency = ticketDetail.Currency.LineBreak();
             ticket.Odds = ticketDetail.Odds.DefaultText();
             ticket.Stake = ticketDetail.Stake.StakeText();
             ticket.Status = ticketDetail.Status.DefaultText();
@@ -96,13 +90,26 @@ public class MapTicketServiceImp : MapTicketService
         ticket.MainTransId = item.MainTransId.ToString();
         ticket.IsCricket = item.IsCricket;
         ticket.SiteDbGroupId = item.SiteDbGroupId;
+        if (!permission.ViewUserName && item.GroupName == SpecialSiteConstant.Site789Y)
+        {
+            ticket.Member = "-";
+            ticket.Currency = "-";
+        }
+
         return ticket;
     }
 
     private TicketViewModel MapToTicketViewModel(GetTicketModel item)
     {
+        var canViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read);
         var ticket = MapFromBetListToTicketViewModel(item);
         ticket.SiteDbGroupId = item.SiteDbGroupId;
+        if (!canViewUserName && item.GroupName == SpecialSiteConstant.Site789Y)
+        {
+            ticket.Member = "-";
+            ticket.Currency = "-";
+        }
+
         return ticket;
     }
 

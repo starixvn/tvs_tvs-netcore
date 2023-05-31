@@ -53,18 +53,22 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
         {
             var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay).ToList();
             var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-
-            var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay)
-                .OrderBy(ticket => ticket.TransId).ToList();
-            if (parlayTickets.Any())
-            {
-                groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
-            }
+            UpdateGroupsForParlay(tickets, groups);
 
             return groups;
         }
 
         return Enumerable.Empty<Group<GetTicketModel>>();
+    }
+
+    private void UpdateGroupsForParlay(IEnumerable<GetTicketModel> tickets, List<Group<GetTicketModel>> groups)
+    {
+        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay)
+                        .OrderBy(ticket => ticket.TransId).ToList();
+        if (parlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
+        }
     }
 
     private Group<ExcelTicketModel> TransformIntoGroupExcelTickets(Group<GetTicketModel> originalGroup, Match match, int startIndex, int issueTypeId)
@@ -94,12 +98,9 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
 
     private static string BuildChoice(GetTicketModel ticket, TicketViewModel ticketDetail, int issueTypeId)
     {
-        if (Convert.ToInt32(ticket.BetType).IsSingleMatchParlay() || (Convert.ToInt32(ticket.BetType).IsParlay() && issueTypeId.IsAbnormalAccountOrAbnormalBet()))
-        {
-            return ticketDetail.Choice;
-        }
-
-        return ticketDetail.Choice.ChoiceShortSubParlay(ticket.IsMixParlay);
+        return (Convert.ToInt32(ticket.BetType).IsSingleMatchParlay() || (Convert.ToInt32(ticket.BetType).IsParlay() && issueTypeId.IsAbnormalAccountOrAbnormalBet()))
+            ? ticketDetail.Choice
+            : ticketDetail.Choice.ChoiceShortSubParlay(ticket.IsMixParlay);
     }
 
     public async Task<IEnumerable<Group<ExcelTicketNoMatchModel>>> GetGroupsExcelTicketsRequestNoMatch(GetTicketsQuery query)

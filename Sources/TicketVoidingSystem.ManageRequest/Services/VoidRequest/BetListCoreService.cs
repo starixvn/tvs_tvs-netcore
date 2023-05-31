@@ -57,12 +57,7 @@ public class BetListCoreServiceImp : BetListCoreService
 
     private static bool IsGetPlainTextForExportExcel(int betTypeId, ChoiceType choiceType, bool isParlay, int issueTypeId)
     {
-        if (choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet())))
-        {
-            return true;
-        }
-
-        return false;
+        return (choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet())));
     }
 
     private Ticket SetTicket(GetTicketModel item, Match match)
@@ -101,19 +96,19 @@ public class BetListCoreServiceImp : BetListCoreService
     private string BuildChoice(ITicket ticket, TicketHelper ticketHelper, GetTicketModel item, int issueTypeId)
     {
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        if (item.IsMixParlay)
-        {
-            if (!issueTypeId.IsAbnormalAccountOrAbnormalBet())
-            {
-                SetValueSubTicket(ticket, item);
-                var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-                mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
-            }
+        return (item.IsMixParlay) ? BuildChoiceParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
+    }
 
-            return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";
+    private string BuildChoiceParlay(ITicket ticket, TicketHelper ticketHelper, GetTicketModel item, int issueTypeId, string mainChoice)
+    {
+        if (!issueTypeId.IsAbnormalAccountOrAbnormalBet())
+        {
+            SetValueSubTicket(ticket, item);
+            var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+            mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
         }
 
-        return mainChoice;
+        return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";
     }
 
     private static void SetValueSubTicket(ITicket ticket, GetTicketModel item)

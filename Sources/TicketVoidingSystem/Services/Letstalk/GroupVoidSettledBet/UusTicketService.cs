@@ -18,11 +18,9 @@ public class UusTicketServiceImp : UusTicketService
 
     public bool IsValidCashOut(TicketEmailModel ticket)
     {
-        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
-        {
-            return ticket.IsCashOut && ticket.Currency != Currency20;
-        }
-        return ticket.IsCashOut;
+        return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv) 
+            ? ticket.IsCashOut && ticket.Currency 
+            != Currency20 : ticket.IsCashOut;
     }
 
     public bool IsValidSettledSingleTicket(TicketEmailModel ticket)
@@ -30,21 +28,15 @@ public class UusTicketServiceImp : UusTicketService
         var result = !ticket.BetTypeId.IsParlayAndBetBuilder()
                      && !ticket.IsCashOut
                      && ticket.Status.IsSettled();
-        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
-        {
-            return result && ticket.Currency != Currency20;
-        }
-        return result;
+        return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
+            ? result && ticket.Currency != Currency20 : result;
     }
 
     public bool IsValidSettledParlayTicket(TicketEmailModel ticket, bool isCheckMainParlay)
     {
         var result = isCheckMainParlay ? ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsSettled()
             : ticket.IsMixParlay && ticket.SubStatus.IsSettled();
-        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
-        {
-            return result && ticket.Currency != Currency20;
-        }
-        return result;
+        return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
+            ? result && ticket.Currency != Currency20 : result;
     }
 }

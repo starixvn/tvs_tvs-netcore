@@ -23,12 +23,7 @@ public class DescriptionServiceImp : DescriptionService
     {
         if (item.IssueTypeId == IssueTypeConstant.AbnormalBet)
         {
-            if (item.FilterBy == AB_PARLAY)
-            {
-                return BuildAbnormalBetForParlayTicket(item);
-            }
-
-            return BuildAbnormalBetForSingleTicket(item);
+            return BuildAbnormalBet(item);
         }
 
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
@@ -51,6 +46,11 @@ public class DescriptionServiceImp : DescriptionService
         return function != null ? function.Invoke(item) : BuildDefault(item);
     }
 
+    private string BuildAbnormalBet(RequestDescription item)
+    {
+        return (item.FilterBy == AB_PARLAY) ? BuildAbnormalBetForParlayTicket(item) : BuildAbnormalBetForSingleTicket(item);
+    }
+    
     private string BuildEKO(RequestDescription item)
     {
         var koTime = elementService.BuildKoTime(item.KickOffTime);

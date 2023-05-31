@@ -37,23 +37,29 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
 
         foreach (var site in sites)
         {
-            var modelClone = mailLicenseesModel.DeepClone();
-            var siteName = site.Site;
-            var ticketsInSite = tickets.Where(t => t.EmailGroup.Equals(siteName, StringComparison.CurrentCultureIgnoreCase)).ToList();
-
-            if (modelClone.Match != null && modelClone.Match.LeagueGroupId.IsLeagueGroupIdSaBa() && site.IsChinaView)
-            {
-                ReplaceMessageChinaViewLicensee(modelClone);
-            }
-            if (ticketsInSite.Count > 0)
-            {
-                modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
-                modelClone.NegativeBalanceUsers = negativeBalanceUsers;
-                await Send(modelClone, site, ticketsInSite, results, isFromAfterVoidService);
-            }
+            await SendToSite(mailLicenseesModel, site, tickets, isFromAfterVoidService, results, negativeBalanceUsers);
         }
 
         return CreateCombineResults(results, isFromAfterVoidService);
+    }
+
+    private async Task SendToSite(MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService,
+        CombineMessageModel results, string negativeBalanceUsers)
+    {
+        var modelClone = mailLicenseesModel.DeepClone();
+        var siteName = site.Site;
+        var ticketsInSite = tickets.Where(t => t.EmailGroup.Equals(siteName, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+        if (modelClone.Match != null && modelClone.Match.LeagueGroupId.IsLeagueGroupIdSaBa() && site.IsChinaView)
+        {
+            ReplaceMessageChinaViewLicensee(modelClone);
+        }
+        if (ticketsInSite.Count > 0)
+        {
+            modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
+            modelClone.NegativeBalanceUsers = negativeBalanceUsers;
+            await Send(modelClone, site, ticketsInSite, results, isFromAfterVoidService);
+        }
     }
 
     private async Task Send(MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, CombineMessageModel results, bool isFromAfterVoidService)

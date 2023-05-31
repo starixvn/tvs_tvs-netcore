@@ -33,74 +33,80 @@ public class GetTransInfoServiceImp : GetTransInfoService
         var issueInfo = BuildIssueInfo(query);
         foreach (var item in SiteDbGroupConstant.ServerList)
         {
-            var criteria = new GetTicketSiteDbCriteria
-            {
-                SiteDbGroupId = item.Id,
-                IssueTypeId = query.IssueTypeId
-            };
-
-            switch (query.IssueTypeId)
-            {
-                case IssueTypeConstant.AbnormalBet:
-                case IssueTypeConstant.AbnormalBetRealMember:
-                    criteria.AbnormalBetTransIds = issueInfo;
-                    break;
-
-                case IssueTypeConstant.DangerAccepted:
-                    criteria.DangerAcceptedInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.RedCard:
-                    criteria.RedCardInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.WrongKickOffTime:
-                case IssueTypeConstant.EarlyKickOffTime:
-                    criteria.KickOffInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.WrongScore:
-                    criteria.WrongScoreInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.WrongHDP:
-                    criteria.WrongHdpInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.Wrong1stHDP:
-                    criteria.Wrong1stHdpInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.WrongOU:
-                    criteria.WrongOuInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.Wrong1stOU:
-                    criteria.Wrong1stOuInfo = issueInfo;
-                    break;
-
-                case IssueTypeConstant.AbnormalAccount:
-                    criteria.AbnormalAccounts = issueInfo;
-                    break;
-
-                case IssueTypeConstant.ArchivedTicket:
-                    criteria.ArchivedTransIds = issueInfo;
-                    break;
-
-                case IssueTypeConstant.WrongOdds:
-                    criteria.WrongOddsInfo = issueInfo;
-                    break;
-
-                default:
-                    criteria.IssueTypeId = query.IssueTypeId;
-                    break;
-            }
-
+            var criteria = CreateGetTicketSiteDbCriteria(item, issueInfo, query);
             var transInfoJson = await repository.GetAsync<string>(criteria);
             transInfoJsonList.Add(transInfoJson);
         }
 
         return transInfoJsonList;
+    }
+
+    private GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)
+    {
+        var criteria = new GetTicketSiteDbCriteria
+        {
+            SiteDbGroupId = item.Id,
+            IssueTypeId = query.IssueTypeId
+        };
+
+        switch (query.IssueTypeId)
+        {
+            case IssueTypeConstant.AbnormalBet:
+            case IssueTypeConstant.AbnormalBetRealMember:
+                criteria.AbnormalBetTransIds = issueInfo;
+                break;
+
+            case IssueTypeConstant.DangerAccepted:
+                criteria.DangerAcceptedInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.RedCard:
+                criteria.RedCardInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.WrongKickOffTime:
+            case IssueTypeConstant.EarlyKickOffTime:
+                criteria.KickOffInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.WrongScore:
+                criteria.WrongScoreInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.WrongHDP:
+                criteria.WrongHdpInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.Wrong1stHDP:
+                criteria.Wrong1stHdpInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.WrongOU:
+                criteria.WrongOuInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.Wrong1stOU:
+                criteria.Wrong1stOuInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.AbnormalAccount:
+                criteria.AbnormalAccounts = issueInfo;
+                break;
+
+            case IssueTypeConstant.ArchivedTicket:
+                criteria.ArchivedTransIds = issueInfo;
+                break;
+
+                case IssueTypeConstant.WrongOdds:
+                    criteria.WrongOddsInfo = issueInfo;
+                    break;
+
+            default:
+                criteria.IssueTypeId = query.IssueTypeId;
+                break;
+        }
+        
+        return criteria;
     }
 
     public async Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId)

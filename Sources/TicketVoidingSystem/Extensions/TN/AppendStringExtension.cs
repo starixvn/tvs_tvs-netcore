@@ -13,12 +13,7 @@ public static class AppendStringExtension
             return extend;
         }
 
-        if (string.IsNullOrWhiteSpace(extend))
-        {
-            return root;
-        }
-
-        return root + $"{Environment.NewLine}{extend}";
+        return (string.IsNullOrWhiteSpace(extend)) ? root : root + $"{Environment.NewLine}{extend}";
     }
 
     public static string Intersected(this string textWithComma, List<string> listString)
@@ -63,6 +58,7 @@ public static class AppendStringExtension
         var result = from x in rootItems
             where !eliminatedItems.Contains(x)
             select x;
+            
         return string.Join(",", result);
     }
 }

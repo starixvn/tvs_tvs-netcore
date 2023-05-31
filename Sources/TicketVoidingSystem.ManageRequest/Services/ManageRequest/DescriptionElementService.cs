@@ -80,20 +80,20 @@ public class DescriptionElementServiceImp : DescriptionElementService
 
         if (bettypeNames != null && bettypeNames.Any())
         {
-            const int numberOfBettypeShow = 3;
-
-            var expectedBettypeNames = bettypeNames.Take(numberOfBettypeShow);
-            var conjunctionBettypeName = string.Join(", ", expectedBettypeNames);
-
-            if (bettypeNames.Count() > numberOfBettypeShow)
-            {
-                conjunctionBettypeName = $"{conjunctionBettypeName}...";
-            }
-
+            var conjunctionBettypeName = GetConjunctionBettypeName(bettypeNames);
             sb.Append($" ({conjunctionBettypeName})");
         }
 
         return $"<div class=\"count-tickets\">{sb.ToString()}</div>";
+    }
+
+    private string GetConjunctionBettypeName(IEnumerable<string> bettypeNames)
+    {
+        const int numberOfBettypeShow = 3;
+        var expectedBettypeNames = bettypeNames.Take(numberOfBettypeShow);
+        var conjunctionBettypeName = string.Join(", ", expectedBettypeNames);
+
+        return (bettypeNames.Count() > numberOfBettypeShow) ? $"{conjunctionBettypeName}..." : conjunctionBettypeName;
     }
 
     public string BuildVoidTimeAbnormalAccount(DateTime fromDate, DateTime toDate)

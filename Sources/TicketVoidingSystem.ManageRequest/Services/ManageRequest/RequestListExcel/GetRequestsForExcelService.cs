@@ -75,15 +75,20 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         var data = new List<RequestModel>();
         foreach (var request in requests)
         {
-            if (calculateTimeSets.Select(model => model.RequestId).Contains(request.RequestId))
-            {
-                var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId);
-                request.CalcHalfTime = calcTime.CalcHalfTime;
-                request.CalcFullTime = calcTime.CalcFullTime;
-            }
+            SetCalcTimeForRequest(calculateTimeSets, request);
             data.Add(request);
         }
 
         return data;
+    }
+
+    private void SetCalcTimeForRequest(IEnumerable<GetCalculateTimeModel> calculateTimeSets, RequestModel request)
+    {
+        if (calculateTimeSets.Select(model => model.RequestId).Contains(request.RequestId))
+        {
+            var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId);
+            request.CalcHalfTime = calcTime.CalcHalfTime;
+            request.CalcFullTime = calcTime.CalcFullTime;
+        }
     }
 }

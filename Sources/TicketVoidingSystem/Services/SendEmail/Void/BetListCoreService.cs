@@ -84,16 +84,7 @@ public class BetListCoreServiceImp : BetListCoreService
     {
         if (item.IsMixParlay)
         {
-            var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-
-            if (IsMainParlay(item))
-            {
-                return mainChoice;
-            }
-
-            SetValueSubTicket(ticket, item);
-            var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-            return mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
+            return BuildChoiceParlay(ticket, ticketHelper, item);
         }
 
         var choice = betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
@@ -106,6 +97,21 @@ public class BetListCoreServiceImp : BetListCoreService
 
         return choice;
     }
+
+    private string BuildChoiceParlay(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)
+    {
+        var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+
+        if (IsMainParlay(item))
+        {
+            return mainChoice;
+        }
+
+        SetValueSubTicket(ticket, item);
+        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        return mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
+    }
+
 
     private static bool IsMainParlay(TicketEmailModel ticket)
     {

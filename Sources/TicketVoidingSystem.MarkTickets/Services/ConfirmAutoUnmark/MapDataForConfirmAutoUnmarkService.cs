@@ -62,11 +62,7 @@ public class MapDataForConfirmAutoUnmarkServiceImp : MapDataForConfirmAutoUnmark
     private static long? ParseBetId(string betId)
     {
         var isParseSuccess = long.TryParse(betId, out var betIdNumber);
-        if (isParseSuccess)
-        {
-            return betIdNumber;
-        }
+        return (isParseSuccess) ? betIdNumber : null;
 
-        return null;
     }
 }

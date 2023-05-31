@@ -6,8 +6,10 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Fanex.Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -27,16 +29,9 @@ public class LogActionFilterAttribute : ActionFilterAttribute
     public override async void OnActionExecuting(ActionExecutingContext context)
     {
         var httpContext = context.HttpContext;
-        if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
+        if (IsSkipAction(context.ActionDescriptor, httpContext))
         {
-            var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
-            var attrsInController =
-                descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
-
-            if (attrsInAction.Any() || attrsInController.Any() || IsExcluded(httpContext.Request.GetDisplayUrl()))
-            {
-                return;
-            }
+            return;
         }
 
         var requestMethod = httpContext.Request.Method;
@@ -52,10 +47,8 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         base.OnActionExecuting(context);
     }
 
-    public override async void OnActionExecuted(ActionExecutedContext context)
-    {
-        var httpContext = context.HttpContext;
-        if (context.ActionDescriptor is ControllerActionDescriptor descriptor)
+    private bool IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext){
+        if (actionDescriptor is ControllerActionDescriptor descriptor)
         {
             var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
             var attrsInController =
@@ -63,8 +56,18 @@ public class LogActionFilterAttribute : ActionFilterAttribute
 
             if (attrsInAction.Any() || attrsInController.Any() || IsExcluded(httpContext.Request.GetDisplayUrl()))
             {
-                return;
+                return true;
             }
+        }
+        return false;
+    }
+
+    public override async void OnActionExecuted(ActionExecutedContext context)
+    {
+        var httpContext = context.HttpContext;
+        if (IsSkipAction(context.ActionDescriptor, httpContext))
+        {
+            return;
         }
 
         var sw = httpContext.Items["timer"] as Stopwatch;
