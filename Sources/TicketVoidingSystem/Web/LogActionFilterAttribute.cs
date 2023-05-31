@@ -16,7 +16,7 @@ namespace TicketVoidingSystem.Web;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class LogActionFilterAttribute : ActionFilterAttribute
 {
-    private readonly List<string> excludePatterns = new() { "^.*/Auth.*$", "^.*/healthcheck.*$" };
+    private readonly List<string> excludePatterns = new() { "^.*/Auth.*$", "^.*/healthcheck.*$", "^.*recheckin.*$" };
     private readonly ILogger logger;
 
     public LogActionFilterAttribute(ILogger logger)
@@ -77,6 +77,12 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         stringBuilder.AppendLine($"Response: {responseData}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
         await logger.InfoAsync(stringBuilder.ToString());
+
+        if (sw?.ElapsedMilliseconds > 5000)
+        {
+            stringBuilder.AppendLine($"Long action");
+            await logger.ErrorAsync(stringBuilder.ToString());
+        }
 
         base.OnActionExecuted(context);
     }
