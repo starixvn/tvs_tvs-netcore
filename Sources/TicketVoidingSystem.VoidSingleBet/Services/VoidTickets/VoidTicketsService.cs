@@ -59,6 +59,8 @@ public class VoidTicketsServiceImp : VoidTicketsService
         var validationsInAllServers = new List<VoidTicketValidation>();
 
         var criteria = CreateVoidTicketsCriteria(query);
+
+        // Jacob Fuck tạp nhỉ
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);

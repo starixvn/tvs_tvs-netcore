@@ -25,6 +25,7 @@ public class UusTicketServiceImp : UusTicketService
 
     public bool IsValidSettledSingleTicket(TicketEmailModel ticket)
     {
+        // Jacob: hàm này logic cũng phức tạp, không thể nói là clean code được
         var result = !ticket.BetTypeId.IsParlayAndBetBuilder()
                      && !ticket.IsCashOut
                      && ticket.Status.IsSettled();
@@ -34,6 +35,7 @@ public class UusTicketServiceImp : UusTicketService
 
     public bool IsValidSettledParlayTicket(TicketEmailModel ticket, bool isCheckMainParlay)
     {
+        // Jacob: hàm này logic cũng phức tạp, không thể nói là clean code được
         var result = isCheckMainParlay ? ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsSettled()
             : ticket.IsMixParlay && ticket.SubStatus.IsSettled();
         return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)

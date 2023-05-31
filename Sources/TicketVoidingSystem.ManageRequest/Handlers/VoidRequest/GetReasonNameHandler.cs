@@ -24,6 +24,7 @@ public class GetReasonNameHandler : IRequestHandler<GetReasonNameRequest, Voided
         this.betListService = betListService;
     }
 
+    // Jacob: Tách làm 2 hàm đi
     public async Task<VoidedReason> Handle(GetReasonNameRequest request, CancellationToken cancellationToken)
     {
         var criteria = new GetReasonNameCriteria

@@ -37,6 +37,7 @@ public class GetVoidedTicketsServiceImp : GetVoidedTicketsService
         return voidedTickets.OrderBy(x => x.IsMixParlay).ToList();
     }
 
+    // Jacob xài Task.WhenAll và SelectMany
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets(GetVoidedTicketsQuery query)
     {
         var voidedTickets = new List<VoidedTicketModel>();
@@ -51,6 +52,7 @@ public class GetVoidedTicketsServiceImp : GetVoidedTicketsService
         return voidedTickets;
     }
 
+    // Jacob xài Task.WhenAll và SelectMany
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets14(GetVoidedTicketsQuery query)
     {
         var voidedTickets = new List<VoidedTicketModel>();

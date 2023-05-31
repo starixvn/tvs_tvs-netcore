@@ -72,6 +72,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         var match = await matchService.GetMatch(request.MatchId);
         var groupsGetTicket = GetGroupsGetTicketModel(getTicketsResult, request);
         var groups = new List<Group<TicketViewModel>>();
+        // Jacob, ko để linQ ngay trong foreach ntn
         foreach (var item in groupsGetTicket.Where(item => item.Tickets.Any()))
         {
             groups.Add(CreateGroupTicketViewModel(item, match));

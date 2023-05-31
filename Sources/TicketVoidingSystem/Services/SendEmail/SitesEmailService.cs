@@ -72,6 +72,7 @@ public class SitesEmailServiceImp : SitesEmailService
 
     private static void AddCCList(List<SiteEmail> sites, SiteEmail specialSite)
     {
+        // Jacob: Bỏ if ra ngoài for
         sites.ForEach(site =>
         {
             if (!string.IsNullOrWhiteSpace(specialSite.CcList))

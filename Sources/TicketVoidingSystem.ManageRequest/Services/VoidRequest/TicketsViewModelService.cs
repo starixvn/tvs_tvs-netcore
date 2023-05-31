@@ -22,6 +22,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         this.mapper = mapper;
     }
 
+    // Jacob Để vầy lọt chọt lắm, 1 mớ thì set model trực tiếp, 1 mớ thì gọi hàm VD: UpdateUncheckTickets
     public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, int subIssueTypeId, VoidPermission voidPermission)
     {
         var ticketsInRequest = GetTicketsInRequest(allTickets);

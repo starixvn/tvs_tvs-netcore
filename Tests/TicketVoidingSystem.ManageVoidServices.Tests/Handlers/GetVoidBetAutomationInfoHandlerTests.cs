@@ -10,6 +10,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers;
 
 public class GetVoidBetAutomationInfoHandlerTests
 {
+    // Có thể đổi tên test case cho rõ hơn. IsAutoVoid = false?
     [Fact]
     public async Task Handle_HasRequest_ReturnExpected()
     {

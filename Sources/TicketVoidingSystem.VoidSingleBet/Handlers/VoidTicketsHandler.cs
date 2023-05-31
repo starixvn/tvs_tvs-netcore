@@ -37,6 +37,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
         return await HandleWhenRequestValid(request);
     }
 
+    // Jacob. xài yield
     private async Task<IEnumerable<Result>> HandleWhenRequestValid(VoidTicketsQuery query)
     {
         var results = new List<Result>();

@@ -103,6 +103,7 @@ public class ABExceptionListControllerTests
         await mediator.Received(1).Send(Arg.Any<GetSubTypeRequest>());
     }
 
+    // Jacob, chú ý pattern AAA, cho dễ nhìn
     [Fact]
     public async Task GetSites_WhenCalled_ReturnJsonData()
     {

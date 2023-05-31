@@ -31,6 +31,8 @@ public class GetTicketsServiceImp : GetTicketsService
     {
         var ticketsInAllServers = new List<GetTicketModel>();
         var criteria = CreateGetTicketsCriteria(query);
+        
+        // Xài Task.WhenAll và SelectMany
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;
@@ -46,6 +48,9 @@ public class GetTicketsServiceImp : GetTicketsService
         var getTicketsResult = await GetTickets(query);
         var index = 1;
         var tickets = new List<ExcelTicketModel>();
+
+        // Suy nghĩ xài linq
+        // tham khảo link: https://stackoverflow.com/questions/269058/how-do-you-add-an-index-field-to-linq-results
         foreach (var item in getTicketsResult)
         {
             var excelTicket = mapTicketService.MapToTicketExcelModel(item, query.Match);

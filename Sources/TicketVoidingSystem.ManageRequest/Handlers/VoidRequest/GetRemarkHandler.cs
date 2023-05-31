@@ -19,6 +19,7 @@ public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, IEnumerable<st
         this.sessionService = sessionService;
     }
 
+    // Jacob, xài yield, gắn else if vào chung, bớt được 1 cái {
     public async Task<IEnumerable<string>> Handle(GetRemarkRequest request, CancellationToken cancellationToken)
     {
         var remarks = new List<string>();

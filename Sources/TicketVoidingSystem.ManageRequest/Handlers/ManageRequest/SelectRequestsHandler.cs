@@ -28,6 +28,7 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
     public async Task<IEnumerable<RequestViewModel>> Handle(SelectRequestsRequest request, CancellationToken cancellationToken)
     {
         if (await CheckValidRequest(request))
+        // Jacob Tách cái if ra 1 hàm nè, đọc vầy ko hiểu nổi
         {
             return new List<RequestViewModel>();
         }
@@ -35,11 +36,15 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
         var viewModels = new List<RequestViewModel>();
         var (models, _) = await getRequestsService.GetRequests(request);
 
-        var groupRequestModels = models.GroupBy(b => b.RequestId).Select(group => new GroupRequestModel
-        {
-            RequestId = group.Key,
-            RequestModels = group.ToList(),
-        });
+        var groupRequestModels = models
+            .GroupBy(b => b.RequestId)
+            .Select(group => new GroupRequestModel
+            {
+                RequestId = group.Key,
+                RequestModels = group.ToList(),
+            });
+        // Jacob: Xài LinQ đi
+        // var viewModels = groupRequestModels.Select(g => RenderViewModel(g));
         foreach (var groupRequest in groupRequestModels)
         {
             RenderViewModel(viewModels, groupRequest);

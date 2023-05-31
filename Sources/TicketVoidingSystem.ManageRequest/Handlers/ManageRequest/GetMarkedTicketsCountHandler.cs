@@ -29,6 +29,7 @@ public class GetMarkedTicketsCountHandler : IRequestHandler<GetMarkedTicketsCoun
         {
             MarkedBy = sessionService.UserId
         };
+        // Jacob: Nên xài Task.WaitAll để chạy song song
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;

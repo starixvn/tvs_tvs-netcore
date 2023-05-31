@@ -26,6 +26,7 @@ public class ExcelServiceImp<T> : ExcelService<T>
         using var excelPackage = new ExcelPackage(stream);
         var worksheet = excelPackage.Workbook.Worksheets[0];
         await workSheetService.BindingContent(worksheet, model);
+        // Jacob, sao chỗ này lại phải save file nhỉ
         await excelPackage.SaveAsync();
 
         return await excelPackage.GetAsByteArrayAsync();

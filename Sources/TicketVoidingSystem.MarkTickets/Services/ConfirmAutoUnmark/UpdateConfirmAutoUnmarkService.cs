@@ -68,7 +68,8 @@ public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
             BetId = query.BetId,
             UserId = sessionService.UserId
         };
-
+        
+        // Jacob Tương tự, xài Task.WhenAll và SelectMany
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             var ticketsInCurrentServer = abnormalBetTickets.Where(x => x.SiteDbGroupId == server.Id);

@@ -37,7 +37,8 @@ public class MarkTicketsServiceImp : MarkTicketsService
             Ip = session.GetClientIp(),
             LogActionId = query.Status == 0 ? 90500 : 90501
         };
-
+        // Jacob Tương tự, xài Task.WhenAll và SelectMany
+        // Có thể nghĩ tới chuyện tách cái loop này ra 1 hàm đi
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             var results = await ExecuteByServerId(criteria, query, server.Id);

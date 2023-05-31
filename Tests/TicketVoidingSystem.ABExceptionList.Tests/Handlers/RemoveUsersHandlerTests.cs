@@ -11,6 +11,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
 
 public class RemoveUsersHandlerTests
 {
+    // Jacob cái này cũng chỉ là happy case thôi hén. Nên đổi tên test case cho rõ hơn. ReturnResult không rõ gì cả
     [Fact()]
     public async Task Handler_RepositoryHasCalled_ReturnResult()
     {

@@ -19,6 +19,7 @@ public class GetUsersHandlerTests
         criteria.GetSettingKey();
         criteria.IsValid();
         var request = new GetUsersRequest { UserName = "aaa" };
+        // Jacob. Expect empty thì tốt hơn
         var expectedResult = new List<UserModel>();
         var getUsersService = Substitute.For<GetUsersService>();
         getUsersService.GetUsers(Arg.Any<GetUsersRequest>()).ReturnsForAnyArgs(expectedResult);

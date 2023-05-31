@@ -32,6 +32,7 @@ public class GetTemplateSettingHandler : IRequestHandler<GetTemplateSettingReque
         var templateModels = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria(), cancellationToken);
         var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria(), cancellationToken);
 
+        // Jacob Tách phần bên trong loop ra 1 hàm, và xài linQ
         foreach (var item in templateModels)
         {
             var viewModel = mapper.Map<MessageTemplateViewModel>(item);

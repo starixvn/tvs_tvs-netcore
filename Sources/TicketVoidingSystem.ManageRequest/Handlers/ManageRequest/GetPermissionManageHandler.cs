@@ -21,6 +21,8 @@ public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageReq
 
     public async Task<PermissionManage> Handle(GetPermissionManageRequest request, CancellationToken cancellationToken)
     {
+        // Jacob: Có phiên bản async đó. Xài kết hợp Task.WhenAll để gọi song song. 
+        // Kết hợp linq để code cho gọn
         return await Task.FromResult(new PermissionManage
         {
             ManageRequestHost = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Constant.Policy.Host),

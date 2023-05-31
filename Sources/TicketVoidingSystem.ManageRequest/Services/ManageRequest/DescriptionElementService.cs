@@ -69,6 +69,7 @@ public class DescriptionElementServiceImp : DescriptionElementService
         return $"<div class=\"event\"><span class=\"sport\">{sportTypeName} </span><span class=\"league text-uppercase\">{leagueName}</span></div>";
     }
 
+    // Jacob if nhiều quá
     public string BuildTotal(int single, int? parlay, IEnumerable<string> bettypeNames)
     {
         var sb = new StringBuilder($"Single: <span class=\"text-primary total-single\">{single}</span>");
@@ -78,6 +79,7 @@ public class DescriptionElementServiceImp : DescriptionElementService
             sb.Append($", Parlay: <span class=\"text-primary total-parlay\">{parlay}</span>");
         }
 
+        // Nếu chắc cú bettypeNames khác null thì có thể bỏ cái if này. bettypeNames empty thì cái này vẫn chạy đúng
         if (bettypeNames != null && bettypeNames.Any())
         {
             var conjunctionBettypeName = GetConjunctionBettypeName(bettypeNames);

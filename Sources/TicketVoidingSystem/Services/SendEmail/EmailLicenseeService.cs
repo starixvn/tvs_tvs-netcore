@@ -32,6 +32,8 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
 
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
+        // Jacob: Tách thành 2 hàm, 1 hàm tính toán ra 1 list data, 1 hàm send email dựa vào list data đó
+        // Hàm này làm nhiều việc quá
         var results = new CombineMessageModel();
         var negativeBalanceUsers = mailLicenseesModel.NegativeBalanceUsers;
 

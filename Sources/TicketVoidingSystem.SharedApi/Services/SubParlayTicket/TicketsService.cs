@@ -37,6 +37,7 @@ public class TicketsServiceImp : TicketsService
     public async Task<IList<TicketModel>> GetTickets(string refNo, CancellationToken cancellationToken)
     {
         var tickets = new List<TicketModel>();
+        // Jacob Tương tự, xài Task.WhenAll và SelectMany
         foreach (var item in SiteDbGroupConstant.ServerList)
         {
             var criteria = new GetParlaySubBetCriteria

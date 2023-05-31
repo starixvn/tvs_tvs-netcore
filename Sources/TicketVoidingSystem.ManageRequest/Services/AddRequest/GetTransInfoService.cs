@@ -31,6 +31,8 @@ public class GetTransInfoServiceImp : GetTransInfoService
     {
         var transInfoJsonList = new List<string>();
         var issueInfo = BuildIssueInfo(query);
+        // Jacob Tách cái switch ra 1 hàm
+        // Xài yield đi
         foreach (var item in SiteDbGroupConstant.ServerList)
         {
             var criteria = CreateGetTicketSiteDbCriteria(item, issueInfo, query);

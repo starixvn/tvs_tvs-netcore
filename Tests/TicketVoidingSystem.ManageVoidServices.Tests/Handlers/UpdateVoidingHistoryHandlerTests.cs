@@ -7,6 +7,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers;
 
+// Jacob vậy là thiếu case false?
 public class UpdateVoidingHistoryHandlerTests
 {
     [Fact]

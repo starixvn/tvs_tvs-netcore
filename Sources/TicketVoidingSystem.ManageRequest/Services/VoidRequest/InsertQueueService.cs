@@ -28,6 +28,10 @@ public class InsertQueueServiceImp : InsertQueueService
         this.insertVoidingHistoryService = insertVoidingHistoryService;
     }
 
+    // Jacob, hàm này phức tạp thiệt. Muốn sửa lại cho đẹp cũng mất công lắm. Lười thì để vầy cũng được
+    // Nếu muốn sửa thì tách cái phần bên trong loop ra 1 hàm, tách nguyên cái if IsIssueTypeHaveCancelCoTickets ra 1 hàm
+    // A cũng nghĩ tới việc xài groupby SiteDbGroupId mà thấy cũng mệt
+
     public async Task InsertTicketVoidingQueue(InsertQueueQuery query)
     {
         var siteGroupInCurrentSessionVoid = query.SingleTickets
@@ -125,7 +129,8 @@ public class InsertQueueServiceImp : InsertQueueService
             IssueTypeId = issueTypeId
         });
     }
-
+    
+	// Jacob thay ví truyền cả đống parameter thế này, gom vô cái criteria
     private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId, TicketTypeModel ticketTypeModel)
     {
         var criteria = new InsertTicketVoidingQueueCriteria

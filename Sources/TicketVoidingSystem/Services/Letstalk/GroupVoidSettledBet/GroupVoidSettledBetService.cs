@@ -33,6 +33,7 @@ public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
         var results = new List<Result>();
         try
         {
+            // Jacob: Chỗ này, nên để results là kết quả trả về, chứ không phải 1 biến input & output
             await Send(letstalkModel, ticketInfo, tickets, results);
         }
         catch (Exception exception)
@@ -62,6 +63,7 @@ public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
 
     private async Task SendMultipleMessage(LetstalkModel letstalkModel, IEnumerable<string> contents, ICollection<Result> results)
     {
+        // Jacob: create nhiều tasks rồi xài Tasi.WhenAll
         foreach (var item in contents)
         {
             letstalkModel.Content = item;

@@ -38,6 +38,8 @@ public class FanexMailApiServiceImp : FanexMailApiService
 
     public async Task WriteLog(EmailGroup group, Exception exception)
     {
+        // Jacob: Cái này làm 1 cái dictionary IDictionary<EmailGroup, string> titleMap
+        // là bỏ được cái switch
         switch (group)
         {
             case EmailGroup.Csd:

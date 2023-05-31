@@ -44,6 +44,7 @@ public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
             IsExcludeTest = query.IsExcludeTest
         };
 
+        // Jacob Tương tự, xài Task.WhenAll và SelectMany
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;

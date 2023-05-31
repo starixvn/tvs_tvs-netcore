@@ -48,6 +48,7 @@ public class AfterVoidServiceTests
             .ExecuteAsync(Arg.Compat.Is<UpdateVoidBetAutomationInfoCriteria>(x => x.RequestId == model.RequestId));
     }
 
+    // Jacob xem lại test case name
     [Fact]
     public async Task GetVoidBetAutomationServiceInfo_ExecuteSuccessful_ReturnExpected()
     {

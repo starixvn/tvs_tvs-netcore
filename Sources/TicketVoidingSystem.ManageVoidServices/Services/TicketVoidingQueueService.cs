@@ -31,6 +31,7 @@ public class TicketVoidingQueueServiceImp : TicketVoidingQueueService
             VoidingHistoryId = voidingHistoryId
         };
 
+        // Jacob xài Task.WhenAll và SelectMany
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;

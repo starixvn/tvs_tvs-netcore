@@ -54,6 +54,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         return await groupTicketListingService.SendMessage(letstalkModel, content, attachment);
     }
 
+    // Jacob: ko xài, sao ko xóa luôn
     public Task<Result> SendToGroupAbnormalBetRequest(LetstalkModel model, LetstalkAttachment attachment)
     {
         throw new NotImplementedException();

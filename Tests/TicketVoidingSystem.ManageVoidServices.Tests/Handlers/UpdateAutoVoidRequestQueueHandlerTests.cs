@@ -9,6 +9,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers;
 
 public class UpdateAutoVoidRequestQueueHandlerTests
 {
+    // Jacob good
     [Fact]
     public async Task Handle_HasRequest_ReturnTrue()
     {

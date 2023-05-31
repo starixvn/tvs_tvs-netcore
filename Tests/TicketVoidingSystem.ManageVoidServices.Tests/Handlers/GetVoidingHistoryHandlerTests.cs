@@ -11,6 +11,7 @@ namespace TicketVoidingSystem.ManageVoidServices.Tests.Handlers;
 
 public class GetVoidingHistoryHandlerTests
 {
+    // Jacob thấy expected là empty list thôi mà, sao ko đổi tên testcase lại, đổi lại chỗ Assert
     [Fact]
     public async Task Handle_HasRequest_ReturnExpected()
     {

@@ -12,6 +12,8 @@ namespace TicketVoidingSystem.ManageRequest;
 
 public class ManageRequestProfile : Profile
 {
+    // Jacob sao comment nhiều vậy. Có code nào bỏ đi thì xóa thẳng tay
+    // VD class này còn xài ko? EditRequestCommand
     public ManageRequestProfile()
     {
         //// CreateMap<AddRequestQuery, AddRequestCommand>();

@@ -24,8 +24,12 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         this.mapTicketsService = mapTicketsService;
     }
 
+    // Jacob, đọc hàm này thấy hơi mệt mệt nha
+    // Cần tách hàm ra nhỏ hơn
+    // Cần đo lại performance của hàm này, vì nó có 1 cái loop gọi 1 hàm khác, mà hàm khác cũng có loop nữa
     public async Task<VoidedTicketsViewModel> Handle(GetVoidedTicketsRequest request, CancellationToken cancellationToken)
     {
+        
         var voidedTickets = await getVoidedTicketsService.GetTickets(request);
         var viewModel = new VoidedTicketsViewModel
         {
@@ -37,6 +41,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         var match = request.MatchId != null && request.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(request.MatchId.Value) : null;
         var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, request);
         var index = (request.PageIndex * request.PageSize) + 1;
+        // Jacob đừng để Where trong foreach, đọc rối lắm, khai báo biến bên ngoài đi
         foreach (var item in groups.Where(item => item.Tickets.Any()))
         {
             var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(item, match, index, request.IssueTypeId);

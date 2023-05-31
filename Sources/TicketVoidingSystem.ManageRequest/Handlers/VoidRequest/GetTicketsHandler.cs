@@ -37,6 +37,8 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         var index = (request.PageIndex * request.PageSize) + 1;
         var voidPermission = checkPermissionOnRequestService.GetVoidPermission();
         var match = request.Match?.MatchId == 0 ? null : request.Match;
+        // Jacob, Đừng để linq groups.Where trong foreach, tách ra 1 biến
+        // Tách cái foreach này ra 1 hàm, input là groups, output là 1 List các currentGroup
         foreach (var item in groups.Where(item => item.Tickets.Any()))
         {
             var currentGroup = mapTicketsService.MapToGroupTicketViewModel(item, match, index, request.IssueTypeId, voidPermission);

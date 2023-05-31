@@ -49,6 +49,8 @@ public class GetTicketsServiceImp : GetTicketsService
         criteria.Duration = query.Durations.ToTransDateXml();
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
 
+        // Jacob Tương tự, xài Task.WhenAll và SelectMany
+        // Có thể nghĩ tới chuyện tách cái loop này ra 1 hàm đi
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;

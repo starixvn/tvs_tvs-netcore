@@ -28,6 +28,11 @@ public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, List<string>>
         return Task.FromResult(remarks);
     }
 
+    // Jacob. hàm này tách ra nhưng lại làm cho cái if else ko cân đối
+    // trong cái if thì gọi remarks.Add
+    // nhưng trong cái else thì gọi 1 hàm
+    // multi level of abstraction rồi
+    // => nên gộp hàm luôn if(xyx){}else if(abc){}
     private void AddRemarkForPermissionSettled(ICollection<string> remarks)
     {
         if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host))

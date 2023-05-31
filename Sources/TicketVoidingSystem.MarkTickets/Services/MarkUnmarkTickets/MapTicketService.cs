@@ -53,6 +53,7 @@ public class MapTicketServiceImp : MapTicketService
         {
             var ticket = MapToTicketViewModel(item, permission);
             ticket.No = index++;
+            // Jacob Tách cái if này ra 1 hàm
             tickets.Add(ticket);
         }
 
