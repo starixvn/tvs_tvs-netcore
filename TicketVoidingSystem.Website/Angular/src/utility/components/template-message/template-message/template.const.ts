@@ -163,14 +163,14 @@ export class TemplateContentConst {
 
   static readonly FIRST_HALF: TemplateContent = {
     msgEnglish: '1H ',
-    msgChineseTraditional: '上半場 ',
-    msgChineseSimplified: '上半场 ',
-    msgChineseNewSimplified: '上半场 '
+    msgChineseTraditional: '上半場',
+    msgChineseSimplified: '上半场',
+    msgChineseNewSimplified: '上半场'
   };
 
   static readonly OVER: TemplateContent = {
     msgEnglish: 'Over',
-    msgChineseTraditional: '大盘',
+    msgChineseTraditional: '大盤',
     msgChineseSimplified: '大盘',
     msgChineseNewSimplified: '大盘'
   };
@@ -180,5 +180,12 @@ export class TemplateContentConst {
     msgChineseTraditional: '小盤',
     msgChineseSimplified: '小盘',
     msgChineseNewSimplified: '小盘'
+  };
+
+  static readonly ODDS: TemplateContent = {
+    msgEnglish: 'Odds',
+    msgChineseTraditional: '賠率',
+    msgChineseSimplified: '赔率',
+    msgChineseNewSimplified: '赔率'
   };
 }

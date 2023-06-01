@@ -8,15 +8,15 @@
         <request-info [model]="requestDetail" [issue]="issue" [isShowGeneralInfo]="false"
             [isShowAbnormalAccountInfo]="isAbnormalAccount()" [isShowVar]="isShowVar"></request-info>
 
-        <log-info *ngIf="isRedCard() || isWrongScore() || isWrongOdds()" [logInfoDetails]="logInfoDetails"
-            [isWrongScore]="isWrongScore()" [filterBy]="filterBy" [actualScore]="actualScore">
+        <log-info *ngIf="isRedCard() || isWrongScore() || isWrongOdds()" [logInfoDetails]="logInfoDetails" [correctOdds]="correctOdds"
+            [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected">
         </log-info>
 
         <filter *ngIf="isRedCard() || isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"
             [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
         </filter>
     </div>
-    <div class="d-flex">            
+    <div class="d-flex">
         <tickets-list *ngIf="isShowTicket" [model]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
         (exportExcelEvent)="exportExcel()" [isBlock]="isBlockBetList" (ticketsChange)="ticketsChange()"
         [issueTypeId]="issue.issueTypeId">

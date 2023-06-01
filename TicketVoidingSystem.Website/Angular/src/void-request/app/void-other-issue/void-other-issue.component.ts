@@ -68,6 +68,7 @@ export class VoidOtherIssueComponent implements OnInit {
   filterBy: number;
   actualScore: string = null;
   correctOdds: string = null;
+  isPoolHouseAffected: boolean;
   isShowVar?: boolean;
 
   affectedLicensee = new AffectedLicensee();
@@ -282,7 +283,7 @@ export class VoidOtherIssueComponent implements OnInit {
 
   updateTemplateValueForWrongOdds() {
     if (this.isWrongOdds()) {
-      this.templateValue.checkAIOMessage = true;
+      this.templateValue.checkAIOMessage = this.ticketsModel.isHasAioMessage;
       this.templateValue.betTypeNameReplaceMessage = this.ticketsModel.betTypeNameReplaceMessage;
       this.templateValue.match = this.match;
       this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
@@ -570,6 +571,17 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   async getLogInfoModel(): Promise<void> {
+    const logInfoList = await this.commonService.getLogInfo(this.getLogInfoQuery());
+    logInfoList.getLogInfoModels.forEach(logInfo => {
+      this.logInfoDetails.push(logInfo.logInfoDetail);
+    });
+
+    if (this.isWrongOdds()) {
+      this.isPoolHouseAffected = logInfoList.getLogInfoModels[0].validation.isPoolHouseAffected;
+    }
+  }
+
+  getLogInfoQuery(): GetLogInfoQuery {
     const query: GetLogInfoQuery = {
       requestId: this.requestId,
       actionId: this.requestDetail.request.actionId,
@@ -577,7 +589,6 @@ export class VoidOtherIssueComponent implements OnInit {
       issueTypeId: this.requestDetail.request.issueTypeId,
       subIssueTypeId: StaticService.getSubIssueTypeId(this.requestDetail),
     };
-
     if (this.isRedCard()) {
       query.matchId = this.requestDetail.redCardModels[0].matchId;
       query.redCardModels = MappingModelStaticService.buidRedCardGetLogInfoModel(this.requestDetail.redCardModels);
@@ -589,6 +600,10 @@ export class VoidOtherIssueComponent implements OnInit {
       query.wrongOddsModels = MappingModelStaticService.buidWrongOddsGetLogInfoModel(this.requestDetail.wrongOddsModels);
     }
 
+    return query;
+  }
+
+  async callApiGetLogInfo(query: GetLogInfoQuery) {
     const logInfoList = await this.commonService.getLogInfo(query);
     logInfoList.getLogInfoModels.forEach(logInfo => {
       this.logInfoDetails.push(logInfo.logInfoDetail);

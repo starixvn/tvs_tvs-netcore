@@ -241,10 +241,10 @@ export class TemplateService {
   private replaceActualMarketSubTypeHdp(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
     const prfixSubType = this.getPrefixSubType(subIssueTypeId);
     const replacedContent: TemplateContent = {
-      msgEnglish: `${prfixSubType.msgEnglish}${this.getTeamName(templateValue)}@odds ${templateValue.correctOdds}`,
-      msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.getTeamNameTraditional(templateValue)}@odds ${templateValue.correctOdds}`,
-      msgChineseSimplified: `${prfixSubType.msgChineseSimplified}${this.getTeamNameSimplified(templateValue)}@odds ${templateValue.correctOdds}`,
-      msgChineseNewSimplified: `${prfixSubType.msgChineseNewSimplified}${this.getTeamNameNewSimplified(templateValue)}@odds ${templateValue.correctOdds}`
+      msgEnglish: `${prfixSubType.msgEnglish}${this.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOdds}`,
+      msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOdds}`,
+      msgChineseSimplified: `${prfixSubType.msgChineseSimplified}${this.getTeamNameSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOdds}`,
+      msgChineseNewSimplified: `${prfixSubType.msgChineseNewSimplified}${this.getTeamNameNewSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${templateValue.correctOdds}`
     };
 
     this.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);
@@ -253,10 +253,10 @@ export class TemplateService {
   private replaceActualMarketSubTypeOu(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
     const prefixSubType = this.getPrefixSubType(subIssueTypeId);
     const replacedContent: TemplateContent = {
-      msgEnglish: `${prefixSubType.msgEnglish}${this.getOuType(templateValue)}${templateValue.ouValue}@odds ${templateValue.correctOdds}`,
-      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${this.getOuTypeTraditional(templateValue)}${templateValue.ouValue}@odds ${templateValue.correctOdds}`,
-      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${this.getOuTypeSimplified(templateValue)}${templateValue.ouValue}@odds ${templateValue.correctOdds}`,
-      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${this.getOuTypeNewSimplified(templateValue)}${templateValue.ouValue}@odds ${templateValue.correctOdds}`
+      msgEnglish: `${prefixSubType.msgEnglish}${this.getOuType(templateValue)}-${templateValue.ouValue}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOdds}`,
+      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${this.getOuTypeTraditional(templateValue)}-${templateValue.ouValue}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOdds}`,
+      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${this.getOuTypeSimplified(templateValue)}${templateValue.ouValue}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOdds}`,
+      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${this.getOuTypeNewSimplified(templateValue)}-${templateValue.ouValue}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${templateValue.correctOdds}`
     };
 
     this.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);
@@ -265,7 +265,7 @@ export class TemplateService {
   private getPrefixSubType(subIssueTypeId: number): TemplateContent {
     const isSubTypeFirstHalf = subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER;
     const prfixSubType: TemplateContent = {
-      msgEnglish: TemplateContentConst.FIRST_HALF.msgEnglish,
+      msgEnglish: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgEnglish : ''}`,
       msgChineseTraditional: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseTraditional : ''}`,
       msgChineseSimplified: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseSimplified : ''}`,
       msgChineseNewSimplified: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseNewSimplified : ''}`,
@@ -296,14 +296,14 @@ export class TemplateService {
   }
 
   private getOuTypeTraditional(templateValue: TemplateValue): string {
-    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseTraditional : TemplateContentConst.UNDER.msgEnglish;
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseTraditional : TemplateContentConst.UNDER.msgChineseTraditional;
   }
 
   private getOuTypeSimplified(templateValue: TemplateValue): string {
-    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseSimplified : TemplateContentConst.UNDER.msgEnglish;
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseSimplified : TemplateContentConst.UNDER.msgChineseSimplified;
   }
 
   private getOuTypeNewSimplified(templateValue: TemplateValue): string {
-    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseNewSimplified : TemplateContentConst.UNDER.msgEnglish;
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseNewSimplified : TemplateContentConst.UNDER.msgChineseNewSimplified;
   }
 }

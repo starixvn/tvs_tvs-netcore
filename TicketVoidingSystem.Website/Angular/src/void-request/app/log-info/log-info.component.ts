@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
+import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
@@ -12,18 +13,21 @@ import { StaticService } from '../../../utility/services/static.service';
 })
 export class LogInfoComponent {
   @Input() logInfoDetails: LogInfoDetail[];
-  @Input() isWrongScore: boolean;
+  @Input() issueTypeId: number;
   @Input() actualScore: string;
   @Input() filterBy: number;
+  @Input() correctOdds: string;
+  @Input() isPoolHouseAffected: boolean;
+
   acceptTypeName = "";
 
-  displayScoreLabel(isWrongScore: boolean, filterBy: number): string {
-    return (isWrongScore && (filterBy === TVSRequestFilterBy.TRANS_TIME || filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME)) ?
+  displayScoreLabel(filterBy: number): string {
+    return (this.isWrongScore() && (filterBy === TVSRequestFilterBy.TRANS_TIME || filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME)) ?
       'Wrong Score: ' : 'Live Score: ';
   }
 
-  displayVoidTimeLabel(isWrongScore: boolean, filterBy: number): string {
-    if (isWrongScore) {
+  displayVoidTimeLabel(filterBy: number): string {
+    if (this.isWrongScore()) {
       if (filterBy === TVSRequestFilterBy.TRANS_TIME || filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME) {
         return 'Void Trans Time (GMT-4): ';
       } else if (filterBy === TVSRequestFilterBy.CHECK_TIME) {
@@ -73,5 +77,13 @@ export class LogInfoComponent {
     }
     return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}`:
     `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
+  }
+
+  isWrongScore(): boolean {
+    return this.issueTypeId === Number(IssueTypeConstant.WRONG_SCORE);
+  }
+
+  isWrongOdds(): boolean {
+    return this.issueTypeId === Number(IssueTypeConstant.WRONG_ODDS);
   }
 }
