@@ -1,5 +1,6 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Attributes;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
@@ -72,4 +73,8 @@ public class ManageRequestController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetPermissionManage() => Ok(await mediator.Send(new GetPermissionManageRequest()));
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> GetExcelVoidedTicketForSendLetstalk(GetExcelVoidedTicketForSendLetstalkRequest request) => Ok(await mediator.Send(request));
 }

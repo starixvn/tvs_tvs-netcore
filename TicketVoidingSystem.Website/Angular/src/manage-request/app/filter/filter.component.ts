@@ -105,7 +105,7 @@ export class FilterComponent implements OnInit {
   }
 
   openMarkTickets() {
-    window.open(`SportBook/MarkTickets/Index/1`, '_blank');
+    window.open(`${document.body.getAttribute('root-url')}SportBook/MarkTickets/Index/1`, '_blank');
   }
 
   updateModel() {
