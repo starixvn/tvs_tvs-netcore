@@ -365,7 +365,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateSpecialBetType() {
-    if (this.value.isCheckedSpecialBetType && (this.issueTypeUpdateSpecialBetTypeVoidSingleBet() || this.isWrongOdds())) {
+    if (this.value.isCheckedSpecialBetType && this.issueTypeUpdateSpecialBetTypeVoidSingleBet()) {
       this.templateService.replaceSpecialBetType(this.message, this.value.betTypeNameReplaceMessage);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.SPECIAL_BET_TYPE, '');
@@ -407,7 +407,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowCheckBoxSpecialBetType(): boolean {
-    return this.isShowMessages && (this.isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet() || this.isWrongOdds());
+    return this.isShowMessages && this.isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet();
   }
 
   isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet(): boolean {

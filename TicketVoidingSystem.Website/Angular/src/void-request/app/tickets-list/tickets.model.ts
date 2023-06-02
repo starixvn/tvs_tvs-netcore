@@ -1,5 +1,4 @@
 import * as moment from 'moment-timezone';
-import { Message } from '../../../utility/components/template-message/messages/message';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { CommonTicketsModel } from '../../../utility/models/common.tickets.model';
 import { GroupModel } from './group-tickets.model';
@@ -37,7 +36,6 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   isHasAioMessage: boolean;
   checkPermissionTickets: BetID[];
   allCancelCashOutTickets: BetID[];
-  betTypeNameReplaceMessage: Message;
 
   initData(data: TicketsModel) {
     this.total = data.total;
@@ -61,7 +59,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.betTypes = data.betTypes;
     this.checkPermissionTickets = data.checkPermissionTickets;
     this.allCancelCashOutTickets = data.allCancelCashOutTickets;
-    this.betTypeNameReplaceMessage = data.betTypeNameReplaceMessage;
+    this.isHasAioMessage = data.isHasAioMessage;
   }
 
   mapGroups(groups: Array<GroupModel>) {

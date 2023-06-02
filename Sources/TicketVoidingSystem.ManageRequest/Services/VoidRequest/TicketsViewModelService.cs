@@ -5,7 +5,6 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -16,12 +15,10 @@ public interface TicketsViewModelService
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
-    private readonly BetListService betListService;
     private readonly IMapper mapper;
 
-    public TicketsViewModelServiceImp(BetListService betListService, IMapper mapper)
+    public TicketsViewModelServiceImp(IMapper mapper)
     {
-        this.betListService = betListService;
         this.mapper = mapper;
     }
 
@@ -42,7 +39,6 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateLicenseeName(model, allTickets);
         UpdateBetTypes(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
-        UpdateBetTypeName(model, allTickets);
         UpdateCheckPermissionTickets(model, allTickets);
 
         model.Total = allTickets.Count();
@@ -181,23 +177,6 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         }
 
         return false;
-    }
-
-    private void UpdateBetTypeName(TicketsViewModel model, IEnumerable<GetTicketModel> data)
-    {
-        if (!data.Any())
-        {
-            return;
-        }
-
-        var ticket = data.First().IsMixParlay ? CreateSubTicketBetList(data.First()) : CreateTicketBetList(data.First());
-        model.BetTypeNameReplaceMessage = new TemplateContentModel
-        {
-            ContentEnglish = betListService.GetBetTypeName(ticket),
-            ContentChineseTraditional = betListService.GetBetTypeNameChineseTraditional(ticket),
-            ContentChineseSimplified = betListService.GetBetTypeNameChineseSimplified(ticket),
-            ContentNewChineseSimplified = betListService.GetBetTypeNameNewChineseSimplified(ticket),
-        };
     }
 
     private Ticket CreateTicketBetList(GetTicketModel item)

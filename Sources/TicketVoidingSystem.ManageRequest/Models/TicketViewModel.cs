@@ -35,7 +35,6 @@ public class TicketsViewModel
     public bool IsHasSettledTicket => IsHasSingleSettledTicket || IsHasParlaySettledTicket;
     public List<BetId> CheckPermissionTickets { get; set; }
     public List<BetId> AllCancelCashOutTickets { get; set; }
-    public TemplateContentModel BetTypeNameReplaceMessage { get; set; }
 }
 
 public class TicketViewModel
