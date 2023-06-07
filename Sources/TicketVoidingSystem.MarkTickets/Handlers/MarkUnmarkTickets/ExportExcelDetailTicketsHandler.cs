@@ -28,7 +28,7 @@ public class ExportExcelDetailTicketsHandler : IRequestHandler<ExportExcelDetail
         var fileName = $"{request.Match.MatchId}_Mark_Unmark_Tickets_{createDate}";
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets),
             FileName = fileName
         };
     }

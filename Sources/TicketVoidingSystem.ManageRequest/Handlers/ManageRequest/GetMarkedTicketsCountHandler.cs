@@ -24,19 +24,33 @@ public class GetMarkedTicketsCountHandler : IRequestHandler<GetMarkedTicketsCoun
 
     public async Task<int> Handle(GetMarkedTicketsCountRequest request, CancellationToken cancellationToken)
     {
-        var dataInAllServers = new List<AllMarkedTicketModel>();
+        var dataInAllServers = await GetAllMarkedTickets();
+        return dataInAllServers.Sum(x => x.Total);
+    }
+
+    private async Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets()
+    {
+        var fetchedData = await Task.WhenAll(FetchTasksInAllServer());
+        var dataInAllServers = fetchedData.SelectMany(data => data);
+
+        return dataInAllServers;
+    }
+
+    private IEnumerable<Task<IEnumerable<AllMarkedTicketModel>>> FetchTasksInAllServer()
+    {
         var criteria = new AllMarkedTicketsCriteria
         {
             MarkedBy = sessionService.UserId
         };
-        // Jacob: Nên xài Task.WaitAll để chạy song song
+        var fetchTasks = new List<Task<IEnumerable<AllMarkedTicketModel>>>();
+
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             criteria.SiteDbGroupId = server.Id;
-            var data = await repository.FetchAsync<AllMarkedTicketModel>(criteria, cancellationToken);
-            dataInAllServers.AddRange(data);
+            var fetchTask = repository.FetchAsync<AllMarkedTicketModel>(criteria);
+            fetchTasks.Add(fetchTask);
         }
 
-        return dataInAllServers.Sum(x => x.Total);
+        return fetchTasks;
     }
 }

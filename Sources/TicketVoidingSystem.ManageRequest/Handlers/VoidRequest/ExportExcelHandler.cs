@@ -26,7 +26,7 @@ public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileM
         var template = request.Match != null ? TemplateExcelPath.TicketVoiding_VoidTickets : TemplateExcelPath.TicketVoiding_VoidTickets_NoMatch;
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, template),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, template),
             FileName = fileName
         };
     }

@@ -45,7 +45,7 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
 
     private async Task<LetstalkAttachment> CreateAttachment(ExportExcelQuery query)
     {
-        var excelAttachments = await excelService.CreateFileAsByteArray(query, TemplateExcelPath.TicketListing);
+        var excelAttachments = await excelService.GenerateContentAsByteArray(query, TemplateExcelPath.TicketListing);
         return new LetstalkAttachment
         {
             FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",

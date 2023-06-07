@@ -21,7 +21,7 @@ public class ExportExcelDetailTicketsHandlerTests
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await excelService.Received().CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets);
+        await excelService.Received().GenerateContentAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets);
         Assert.NotNull(result);
     }
 }

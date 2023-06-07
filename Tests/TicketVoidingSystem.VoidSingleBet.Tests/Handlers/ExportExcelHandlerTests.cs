@@ -21,7 +21,7 @@ public class ExportExcelHandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await excelService.Received().CreateFileAsByteArray(request, TemplateExcelPath.VoidSingleBet);
+        await excelService.Received().GenerateContentAsByteArray(request, TemplateExcelPath.VoidSingleBet);
     }
 
     [Fact]

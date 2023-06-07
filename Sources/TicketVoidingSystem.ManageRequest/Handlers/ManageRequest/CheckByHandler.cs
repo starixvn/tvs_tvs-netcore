@@ -26,7 +26,6 @@ public class CheckByHandler : IRequestHandler<CheckByRequest, Result>
 
     public async Task<Result> Handle(CheckByRequest request, CancellationToken cancellationToken)
     {
-        // Jacob: Sao mấy Handler kia không có try catch mà cái này lại có
         var result = new Result();
         try
         {

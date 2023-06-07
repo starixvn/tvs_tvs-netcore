@@ -25,7 +25,7 @@ public class SendCreditDataToLetstalkHandlerTest
         var letstalkService = Substitute.For<NotificationLetstalkService>();
         var excelService = Substitute.For<ExcelService<ExportExcelQuery>>();
         letstalkService.SendToGroupTicketListing(default, default).ReturnsForAnyArgs(result);
-        excelService.CreateFileAsByteArray(default!, default).ReturnsForAnyArgs(new byte[] { });
+        excelService.GenerateContentAsByteArray(default!, default).ReturnsForAnyArgs(new byte[] { });
 
         var handler = new SendCreditDataToLetstalkHandler(excelService, letstalkService);
 
