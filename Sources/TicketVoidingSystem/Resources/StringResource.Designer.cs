@@ -19,7 +19,7 @@ namespace TicketVoidingSystem.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class StringResource {
@@ -761,7 +761,7 @@ namespace TicketVoidingSystem.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can void &quot;Instantly Settled&quot; tickets settled by Instant Settlement during live time..
+        ///   Looks up a localized string similar to You can void &quot;Instantly Settled&quot; tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets..
         /// </summary>
         public static string You_can_void_Instantly_Settled {
             get {

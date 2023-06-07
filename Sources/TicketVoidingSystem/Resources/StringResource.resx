@@ -356,7 +356,7 @@
     <value>You can only void "Unsettled" tickets of Normal Sportsbook, Outright, Mix Parlay (main), System Parlay (main), Number Game, Cash Out, Virtual Sports, Virtual Sports 2 (single and main Mix Parlay), Bet Builder, Saba Promotion and Bitcoin.</value>
   </data>
   <data name="You_can_void_Instantly_Settled" xml:space="preserve">
-    <value>You can void "Instantly Settled" tickets settled by Instant Settlement during live time.</value>
+    <value>You can void "Instantly Settled" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets.</value>
   </data>
   <data name="You_can_void_Settled_or_Unsettled_tickets" xml:space="preserve">
     <value>You can void "Settled" or "Unsettled" tickets.</value>
