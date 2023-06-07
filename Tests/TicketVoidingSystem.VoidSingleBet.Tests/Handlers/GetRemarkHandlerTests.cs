@@ -43,7 +43,7 @@ public class GetRemarkHandlerTests
         public List<string> Expected { get; set; }
     }
 
-    internal class RemarkTestCase : IEnumerable<object[]>
+    private class RemarkTestCase : IEnumerable<object[]>
     {
         private static readonly RemarkModelTest OnlySettled = new()
         {

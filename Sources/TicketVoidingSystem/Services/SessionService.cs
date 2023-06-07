@@ -1,4 +1,5 @@
-﻿using Fanex.NAP.Client.Configuration;
+﻿using System.Threading.Tasks;
+using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
 using Fanex.NAP.Core.Business;
@@ -12,7 +13,7 @@ public interface SessionService
 
     string UserName { get; }
 
-    bool HasPermission(string functionKey, Constant.Policy policy);
+    Task<bool> HasPermission(string functionKey, Constant.Policy policy);
 
     string GetClientIp();
 
@@ -38,9 +39,9 @@ public class SessionServiceImp : SessionService
 
     public string UserName => currentSession.UserName;
 
-    public bool HasPermission(string functionKey, Constant.Policy policy)
+    public async Task<bool> HasPermission(string functionKey, Constant.Policy policy)
     {
-        return userService.IsHavingPermission(currentSession.UserId, siteSettings.SiteId, functionKey, policy);
+        return await userService.IsHavingPermissionAsync(currentSession.UserId, siteSettings.SiteId, functionKey, policy);
     }
 
     public string GetClientIp()

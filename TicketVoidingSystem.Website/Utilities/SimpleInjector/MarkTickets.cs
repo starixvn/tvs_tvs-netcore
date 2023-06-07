@@ -26,5 +26,6 @@ public static class MarkTickets
         services.AddTransient<MarkAllTicketsService, MarkAllTicketsServiceImp>();
         services.AddTransient<MapUserLogsService, MapUserLogsServiceImp>();
         services.AddTransient<UserLogsService, UserLogsServiceImp>();
+        services.AddTransient<UserPermissionService, UserPermissionServiceImp>();
     }
 }

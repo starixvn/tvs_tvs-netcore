@@ -30,15 +30,14 @@ public class GetTicketsServiceImp : GetTicketsService
     private readonly IMapper mapper;
     private readonly MapTicketService mapTicketService;
     private readonly IDynamicRepository repository;
+    private readonly UserPermissionService userPermissionService;
 
-    public GetTicketsServiceImp(
-        IMapper mapper,
-        MapTicketService mapTicketService,
-        IDynamicRepository repository)
+    public GetTicketsServiceImp(IMapper mapper, MapTicketService mapTicketService, IDynamicRepository repository, UserPermissionService userPermissionService)
     {
         this.mapper = mapper;
         this.mapTicketService = mapTicketService;
         this.repository = repository;
+        this.userPermissionService = userPermissionService;
     }
 
     public async Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query)
@@ -75,8 +74,9 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(GetTicketsQuery query)
     {
+        var userPermission = await userPermissionService.GetUserPermission();
         var getTicketsResult = await GetTickets(query);
-        var tickets = mapTicketService.MapToExcelTicketModel(getTicketsResult.Tickets);
+        var tickets = mapTicketService.MapToExcelTicketModel(getTicketsResult.Tickets, userPermission);
 
         return tickets;
     }
@@ -97,8 +97,9 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<IEnumerable<ExcelTicketModel>> GetDetailTicketsForExportExcel(GetDetailTicketsQuery query)
     {
+        var userPermission = await userPermissionService.GetUserPermission();
         var data = await GetDetailTickets(query);
-        var tickets = mapTicketService.MapToExcelTicketModel(data);
+        var tickets = mapTicketService.MapToExcelTicketModel(data, userPermission);
 
         return tickets;
     }

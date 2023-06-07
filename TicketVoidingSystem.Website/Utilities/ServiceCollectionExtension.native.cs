@@ -21,7 +21,6 @@ using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
 using Fanex.RemotingRef;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
@@ -233,18 +232,18 @@ public static class ServiceCollectionExtension
 
     public static void RegisterMediatR(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(SharedApiController));
-        services.AddMediatR(typeof(BetTypesController));
-        services.AddMediatR(typeof(MatchInfoController));
-        services.AddMediatR(typeof(ABExceptionListController));
-        services.AddMediatR(typeof(ManageVoidServicesController));
-        services.AddMediatR(typeof(MarkTicketsController));
-        services.AddMediatR(typeof(TicketListingController));
-        services.AddMediatR(typeof(VoidSingleBetController));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SharedApiController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(BetTypesController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(MatchInfoController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ABExceptionListController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ManageVoidServicesController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(MarkTicketsController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(TicketListingController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidSingleBetController).Assembly));
 
-        services.AddMediatR(typeof(AddRequestController));
-        services.AddMediatR(typeof(ManageRequestController));
-        services.AddMediatR(typeof(VoidRequestController));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddRequestController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ManageRequestController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidRequestController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)

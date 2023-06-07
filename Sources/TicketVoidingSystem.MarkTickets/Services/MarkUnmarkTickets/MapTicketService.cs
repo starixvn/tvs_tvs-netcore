@@ -4,7 +4,6 @@ using System.Globalization;
 using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
-using Fanex.NAP.Core.Business;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.MarkTickets.Constants;
@@ -14,15 +13,14 @@ using TicketVoidingSystem.MarkTickets.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
-using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
 
 public interface MapTicketService
 {
-    Group<TicketViewModel> MapToGroupTicketViewModel(in Group<GetTicketModel> group);
+    Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, UserPermission userPermission);
 
-    IEnumerable<ExcelTicketModel> MapToExcelTicketModel(in IEnumerable<GetTicketModel> data);
+    IEnumerable<ExcelTicketModel> MapToExcelTicketModel(IEnumerable<GetTicketModel> data, UserPermission permission);
 }
 
 public class MapTicketServiceImp : MapTicketService
@@ -40,18 +38,13 @@ public class MapTicketServiceImp : MapTicketService
         this.checkBoxService = checkBoxService;
     }
 
-    public Group<TicketViewModel> MapToGroupTicketViewModel(in Group<GetTicketModel> group)
+    public Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, UserPermission userPermission)
     {
-        var permission = new UserPermission
-        {
-            MarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host),
-            ViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read)
-        };
         var tickets = new List<TicketViewModel>();
         var index = 1;
         foreach (var item in group.Tickets)
         {
-            var ticket = MapToTicketViewModel(item, permission);
+            var ticket = MapToTicketViewModel(item, userPermission);
             ticket.No = index++;
             // Jacob Tách cái if này ra 1 hàm
             tickets.Add(ticket);
@@ -60,14 +53,14 @@ public class MapTicketServiceImp : MapTicketService
         return new Group<TicketViewModel> { Name = group.Name, Tickets = tickets };
     }
 
-    public IEnumerable<ExcelTicketModel> MapToExcelTicketModel(in IEnumerable<GetTicketModel> data)
+    public IEnumerable<ExcelTicketModel> MapToExcelTicketModel(IEnumerable<GetTicketModel> data, UserPermission permission)
     {
         var index = 1;
         var tickets = new List<ExcelTicketModel>();
 
         foreach (var item in data)
         {
-            var ticketDetail = MapToTicketViewModel(item);
+            var ticketDetail = MapToTicketViewModelForExcel(item, permission);
             var ticket = mapper.Map<ExcelTicketModel>(ticketDetail);
             ticket.No = index++;
             ticket.BetId = ticketDetail.BetId.LineBreak();
@@ -91,7 +84,7 @@ public class MapTicketServiceImp : MapTicketService
         ticket.MainTransId = item.MainTransId.ToString();
         ticket.IsCricket = item.IsCricket;
         ticket.SiteDbGroupId = item.SiteDbGroupId;
-        if (!permission.ViewUserName && item.GroupName == SpecialSiteConstant.Site789Y)
+        if (IsGroupSite789Y(permission, item.GroupName))
         {
             ticket.Member = "-";
             ticket.Currency = "-";
@@ -100,18 +93,22 @@ public class MapTicketServiceImp : MapTicketService
         return ticket;
     }
 
-    private TicketViewModel MapToTicketViewModel(GetTicketModel item)
+    private TicketViewModel MapToTicketViewModelForExcel(GetTicketModel item, UserPermission permission)
     {
-        var canViewUserName = sessionService.HasPermission(SpecialDeleteFunctionKeys.ViewUsernameOfSpecialSiteOnBetList, Constant.Policy.Read);
         var ticket = MapFromBetListToTicketViewModel(item);
         ticket.SiteDbGroupId = item.SiteDbGroupId;
-        if (!canViewUserName && item.GroupName == SpecialSiteConstant.Site789Y)
+        if (IsGroupSite789Y(permission, item.GroupName))
         {
             ticket.Member = "-";
             ticket.Currency = "-";
         }
 
         return ticket;
+    }
+
+    private static bool IsGroupSite789Y(UserPermission permission, string groupName)
+    {
+        return !permission.ViewUserName && groupName == SpecialSiteConstant.Site789Y;
     }
 
     private TicketViewModel MapFromBetListToTicketViewModel(GetTicketModel item)

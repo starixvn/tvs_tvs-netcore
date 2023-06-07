@@ -22,15 +22,14 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     private readonly GetTicketsService getTicketsService;
     private readonly MapTicketService mapTicketService;
     private readonly PagingService pagingService;
+    private readonly UserPermissionService userPermissionService;
 
-    public GetTicketsHandler(
-        GetTicketsService getTicketsService,
-        MapTicketService mapTicketService,
-        PagingService pagingService)
+    public GetTicketsHandler(GetTicketsService getTicketsService, MapTicketService mapTicketService, PagingService pagingService, UserPermissionService userPermissionService)
     {
         this.getTicketsService = getTicketsService;
         this.mapTicketService = mapTicketService;
         this.pagingService = pagingService;
+        this.userPermissionService = userPermissionService;
     }
 
     public async Task<TicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
@@ -42,7 +41,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         viewModel.InvalidTransIds = getTicketsResult.Validation.InvalidTransIds;
         viewModel.MarkedTransIds = getTicketsResult.Validation.MarkedTransIds;
         viewModel.MovedTransIds = getTicketsResult.Validation.MovedTransIds;
-        viewModel.Groups = CreateGroupTicketsViewModel(getTicketsResult.Tickets, request);
+        viewModel.Groups = await CreateGroupTicketsViewModel(getTicketsResult.Tickets, request);
         viewModel.TotalItems = getTicketsResult.Tickets.Count();
         viewModel.ParlayCount = getTicketsResult.Tickets.Count(item => item.IsMixParlay);
         viewModel.SingleCount = getTicketsResult.Tickets.Count(item => !item.IsMixParlay);
@@ -61,14 +60,15 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         });
     }
 
-    private IEnumerable<Group<TicketViewModel>> CreateGroupTicketsViewModel(in IEnumerable<GetTicketModel> tickets, in GetTicketsRequest message)
+    private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> tickets, GetTicketsQuery message)
     {
         var pagingTickets = pagingService.Paging(tickets, message.PageIndex, message.PageSize);
-        return pagingTickets.Any() ? CreateGroupTicketsViewModel(pagingTickets) : Enumerable.Empty<Group<TicketViewModel>>();
+        return pagingTickets.Any() ? await CreateGroupTicketsViewModel(pagingTickets) : Enumerable.Empty<Group<TicketViewModel>>();
     }
 
-    private IEnumerable<Group<TicketViewModel>> CreateGroupTicketsViewModel(in IEnumerable<GetTicketModel> pagingTickets)
+    private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> pagingTickets)
     {
+        var userPermission = await userPermissionService.GetUserPermission();
         var singleTickets = pagingTickets.Where(ticket => !ticket.IsMixParlay);
         var parlayTickets = pagingTickets.Where(ticket => ticket.IsMixParlay)
             .OrderBy(ticket => ticket.TransId);
@@ -76,7 +76,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         groupsTickets.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
 
         return groupsTickets.Where(item => item.Tickets.Any())
-            .Select(item => mapTicketService.MapToGroupTicketViewModel(item));
+            .Select(item => mapTicketService.MapToGroupTicketViewModel(item, userPermission));
     }
 
     private static string GetLicenseesName(IEnumerable<GetTicketModel> tickets)

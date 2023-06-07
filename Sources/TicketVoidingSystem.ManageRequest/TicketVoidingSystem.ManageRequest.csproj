@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Epplus.Mapper" Version="6.0.0" />
-    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>
