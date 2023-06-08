@@ -1,58 +1,19 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using TicketVoidingSystem.MarkTickets.Controllers;
 using TicketVoidingSystem.MarkTickets.Handlers;
 using TicketVoidingSystem.MarkTickets.Handlers.ConfirmAutoUnmark;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
+using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Controllers;
 
 public class MarkTicketsControllerTests
 {
-    //[Fact]
-    //public async Task GetIndex_HasUserNameFromMediator_ReturnViewBagWithUserName()
-    //{
-    //    // Arrange
-    //    var fakeIndexViewModel = new IndexViewModel { UserName = "Test" };
-    //    var fakeResponse = Task.FromResult(fakeIndexViewModel);
-
-    //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(Arg.Any<IndexRequest>()).ReturnsForAnyArgs(fakeResponse);
-    //    var controller = new MarkTicketsController(mediator);
-    //    controller.Url = Substitute.ForPartsOf<UrlHelper>();
-    //    controller.Url.Content(Arg.Any<string>()).ReturnsForAnyArgs("~");
-
-    //    // Act
-    //    var view = await controller.Index() as ViewResult;
-    //    var model = (IndexViewModel)view.Model;
-
-    //    // Assert
-    //    Assert.AreEqual(fakeIndexViewModel.UserName, model.UserName);
-    //}
-
-    //[Fact]
-    //public async Task GetIndex_Successful_ReturnPathFileIndex()
-    //{
-    //    // Arrange
-    //    const string path = "~/dist/mark-tickets/index.cshtml";
-    //    var fakeIndexViewModel = new IndexViewModel { UserName = "Test" };
-    //    var fakeResponse = Task.FromResult(fakeIndexViewModel);
-
-    //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(Arg.Any<IndexRequest>()).ReturnsForAnyArgs(fakeResponse);
-    //    var controller = new MarkTicketsController(mediator);
-    //    controller.Url = Substitute.ForPartsOf<UrlHelper>();
-    //    controller.Url.Content(Arg.Any<string>()).ReturnsForAnyArgs("~");
-
-    //    // Act
-    //    var view = await controller.Index() as ViewResult;
-
-    //    // Assert
-    //    Assert.AreEqual(path, view.ViewName);
-    //}
-
     [Fact]
     public async Task GetTickets_HasRequest_CallMediatorRequest()
     {
@@ -98,43 +59,60 @@ public class MarkTicketsControllerTests
         await mediator.Received().Send(request);
     }
 
-    //[Fact]
-    //public async Task ExportExcel_HasRequest_CallMediatorRequest()
-    //{
-    //    // Arrange
-    //    var excelFileModel = new ExcelFileModel { FileName = "123465_Mark_Unmark_Tickets_" };
-    //    var response = Task.FromResult(excelFileModel);
-    //    var request = new ExportExcelRequest { MatchId = 123465 };
-    //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(request).ReturnsForAnyArgs(response);
-    //    var controller = new MarkTicketsController(mediator);
+    [Fact]
+    public async Task ExportExcel_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var controllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        var excelFileModel = new ExcelFileModel
+        {
+            FileName = "AA",
+            ContentAsByteArray = new byte[] { }
+        };
+        var request = new ExportExcelRequest();
+        var mediator = Substitute.For<IMediator>();
+        mediator.Send(Arg.Any<ExportExcelRequest>()).ReturnsForAnyArgs(excelFileModel);
+        var controller = new MarkTicketsController(mediator)
+        {
+            ControllerContext = controllerContext
+        };
+        // Act
+        await controller.ExportExcel(request);
 
-    //    // Act
-    //    await controller.ExportExcel(request);
+        // Assert
+        await mediator.Received().Send(request);
+    }
 
-    //    // Assert
-    //    await mediator.Received().Send(request);
-    //}
+    [Fact]
+    public async Task ExportExcelDetailTicket_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var controllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        var excelFileModel = new ExcelFileModel
+        {
+            FileName = "AA",
+            ContentAsByteArray = new byte[] { }
+        };
+        var request = new ExportExcelDetailTicketsRequest();
+        var mediator = Substitute.For<IMediator>();
+        mediator.Send(Arg.Any<ExportExcelDetailTicketsRequest>()).ReturnsForAnyArgs(excelFileModel);
+        var controller = new MarkTicketsController(mediator)
+        {
+            ControllerContext = controllerContext
+        };
 
-    //[Fact]
-    //public async Task ExportExcelDetailTicket_HasRequest_CallMediatorRequest()
-    //{
-    //    // Arrange
-    //    var context = new ControllerContext();
-    //    context.HttpContext = new DefaultHttpContext();
-    //    var excelFileModel = new ExcelFileModel { FileName = "123465_Mark_Unmark_Tickets_" };
-    //    var response = Task.FromResult(excelFileModel);
-    //    var request = new ExportExcelDetailTicketsRequest { MatchId = 123465 };
-    //    var mediator = Substitute.For<IMediator>();
-    //    mediator.Send(request).ReturnsForAnyArgs(response);
-    //    var controller = new MarkTicketsController(mediator);
+        // Act
+        await controller.ExportExcelDetailTicket(request);
 
-    //    // Act
-    //    await controller.ExportExcelDetailTicket(request);
-
-    //    // Assert
-    //    await mediator.Received().Send(request);
-    //}
+        // Assert
+        await mediator.Received().Send(request);
+    }
 
     [Fact]
     public async Task MarkTickets_HasRequest_CallMediatorRequest()

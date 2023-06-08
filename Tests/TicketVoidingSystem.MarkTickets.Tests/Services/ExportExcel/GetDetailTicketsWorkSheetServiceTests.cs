@@ -2,6 +2,7 @@
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.ExportExcel;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
+using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Services.ExportExcel;
@@ -15,8 +16,9 @@ public class GetDetailTicketsWorkSheetServiceTests
     {
         // Arrange
         var worksheet = TestSetup.CreateTestingSheet();
-        var model = new GetDetailTicketsQuery { MatchId = matchId };
+        var model = new GetDetailTicketsQuery { Match = new Match { MatchId = matchId} };
         var cellService = Substitute.For<CellService>();
+        cellService.CreateTitle(model.Match.MatchId).ReturnsForAnyArgs("");
         var getTicketsService = Substitute.For<GetTicketsService>();
         var service = new GetDetailTicketsWorkSheetService(cellService, getTicketsService);
 

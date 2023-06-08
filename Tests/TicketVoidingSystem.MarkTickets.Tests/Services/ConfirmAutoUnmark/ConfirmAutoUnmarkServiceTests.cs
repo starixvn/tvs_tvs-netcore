@@ -14,8 +14,8 @@ public class ConfirmAutoUnmarkServiceTests
     {
         // Arrange
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<TransInfoAutoUnmarkModel>(default)
-            .ReturnsForAnyArgs(new List<TransInfoAutoUnmarkModel>());
+        repository.GetAsync<string>(default)
+            .ReturnsForAnyArgs("");
         repository.FetchAsync<ConfirmAutoUnmarkModel>(default)
             .ReturnsForAnyArgs(new List<ConfirmAutoUnmarkModel>());
 
@@ -25,7 +25,8 @@ public class ConfirmAutoUnmarkServiceTests
         var actual = await service.GetDataForConfirmAutoUnmark(new GetDataForConfirmAutoUnmarkQuery());
 
         // Assert
-        await repository.Received().FetchAsync<TransInfoAutoUnmarkModel>(Arg.Any<GetTransInfoForAutoUnmarkCriteria>());
+        
+        await repository.Received().GetAsync<string>(Arg.Any<GetTransInfoForAutoUnmarkCriteria>());
         await repository.Received().FetchAsync<ConfirmAutoUnmarkModel>(Arg.Any<GetDataForConfirmAutoUnmarkCriteria>());
         Assert.NotNull(actual);
     }

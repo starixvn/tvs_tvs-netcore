@@ -53,7 +53,7 @@ public class ObjectToXmlExtensionsTests
     public void ToXml_HasListOfString_ReturnsEmpty()
     {
         // Arrange
-        const string expected = "<Tickets><Ticket Id='1'/>\n<Ticket Id='2'/>\n<Ticket Id='3'/></Tickets>";
+        const string expected = "<Tickets><Ticket Id='1'/>\r\n<Ticket Id='2'/>\r\n<Ticket Id='3'/></Tickets>";
         var transIds = new List<string> { "1", "2", "3" };
 
         // Act

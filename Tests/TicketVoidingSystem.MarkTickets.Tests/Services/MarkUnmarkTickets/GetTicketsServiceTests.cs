@@ -1,5 +1,6 @@
 ﻿using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
 using Xunit;
@@ -38,6 +39,27 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
     }
 
     [Fact]
+    public async Task GetTicketsForExportExcel_HasCriteria_CallGetTicketsByRepository()
+    {
+        // Arrange
+        var query = new GetTicketsQuery { MatchId = 132 };
+        var validation = new List<GetTicketValidationModel> { new() { ErrorCode = 0 } };
+        var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
+        var repository = Substitute.For<IDynamicRepository>();
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
+        var mapTicketService = Substitute.For<MapTicketService>();
+        var tickets = new List<ExcelTicketModel> { };
+        mapTicketService.MapToExcelTicketModel(default).ReturnsForAnyArgs(tickets);
+        var service = CreateService(repository);
+
+        // Act
+        var actual = await service.GetTicketsForExportExcel(query);
+
+        // Assert
+        Assert.NotNull(actual);
+    }
+
+    [Fact]
     public async Task GetDetailTickets_HasCriteria_CallGetTicketsByRepository()
     {
         // Arrange
@@ -52,6 +74,27 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
 
         // Assert
         Assert.NotNull(tickets);
+    }
+
+    [Fact]
+    public async Task GetDetailTicketsForExportExcel_HasCriteria_CallGetTicketsByRepository()
+    {
+        // Arrange
+        var query = new GetDetailTicketsQuery { MatchId = 132 };
+        var validation = new List<GetTicketValidationModel> { new() { ErrorCode = 0 } };
+        var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
+        var repository = Substitute.For<IDynamicRepository>();
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
+        var mapTicketService = Substitute.For<MapTicketService>();
+        var tickets = new List<ExcelTicketModel> { };
+        mapTicketService.MapToExcelTicketModel(default).ReturnsForAnyArgs(tickets);
+        var service = CreateService(repository);
+
+        // Act
+        var actual = await service.GetDetailTicketsForExportExcel(query);
+
+        // Assert
+        Assert.NotNull(actual);
     }
 
     [Fact]
