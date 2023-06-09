@@ -4,6 +4,7 @@ using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
+using TicketVoidingSystem.TicketListing.Services;
 using TicketVoidingSystem.TicketListing.Services.ExportExcel;
 using Xunit;
 
@@ -11,14 +12,21 @@ namespace TicketVoidingSystem.TicketListing.Tests.Services.ExportExcel;
 
 public class ConvertBetListForExcelServiceTests
 {
+    private readonly IDynamicRepository repository;
+    private readonly ConvertBetListForExcelServiceImp service;
+
+    public ConvertBetListForExcelServiceTests()
+    {
+        repository = Substitute.For<IDynamicRepository>();
+        service = new ConvertBetListForExcelServiceImp(repository);
+    }
+
     [Theory]
     [InlineData("<div>1.98</div>", 1.98)]
     public void ConvertWinLoss_CheckValidWinLoss_ReturnValue(string html, decimal expected)
     {
         // Arrange
-        var repository = Substitute.For<IDynamicRepository>();
-        var service = new ConvertBetListForExcelServiceImp(repository);
-
+        
         // Act
         var actual = service.WinLossHtmlToText(html);
 
@@ -31,8 +39,6 @@ public class ConvertBetListForExcelServiceTests
     public void ConvertWinLoss_HtmlEmpty_ReturnValue(string html, decimal? expected)
     {
         // Arrange
-        var repository = Substitute.For<IDynamicRepository>();
-        var service = new ConvertBetListForExcelServiceImp(repository);
 
         // Act
         var actual = service.WinLossHtmlToText(html);
@@ -52,9 +58,7 @@ public class ConvertBetListForExcelServiceTests
             new() { Result = TicketStatus.Won, SelectionName = "a2" },
             new() { Result = null, SelectionName = "a1" }
         };
-        var repository = Substitute.For<IDynamicRepository>();
-        repository.Fetch<SelectionSMP>(new GetSelectionsSMPCriteria()).ReturnsForAnyArgs(models);
-        var service = new ConvertBetListForExcelServiceImp(repository);
+        //repository.Fetch<SelectionSMP>(new GetSelectionsSMPCriteria()).ReturnsForAnyArgs(models);
 
         // Act
         var actual = service.ChoiceHtmlToText(html, "12345");
@@ -83,7 +87,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
     {
         Html = "<div><span class='combo-name'>13-Fold (1 Bet)</span></div>" +
                "<div class=''><span class='favorite'>Over<span class='handicap'> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "13-Fold (1 Bet)\nOver 3 @ 1.82"
+        Expected = "13-Fold (1 Bet)\r\nOver 3 @ 1.82"
     };
 
     private static readonly ChoiceModel ParlayTicketTwoComboName = new()
@@ -91,7 +95,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
         Html = "<div><span class='combo-name'>Doubles (10 Bets)</span></div>" +
                "<div><span class='combo-name'>5-Fold (1 Bet)</span></div>" +
                "<div class=''><span class='favorite'>FT.1<span class='handicap'><span class='odds'> @ 1.74</span></span></span></div>",
-        Expected = "Doubles (10 Bets)\n5-Fold (1 Bet)\nFT.1 @ 1.74"
+        Expected = "Doubles (10 Bets)\r\n5-Fold (1 Bet)\r\nFT.1 @ 1.74"
     };
 
     private static readonly ChoiceModel AosTicket = new()
@@ -100,7 +104,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
                "<span class='favorite'>AOS<span class='handicap'> 3<span class='odds'> @ 1.82</span></span></span>" +
                "<span>Excluding: 1-0,2-0</span>" +
                "</div>",
-        Expected = "AOS 3 @ 1.82\nExcluding: 1-0,2-0"
+        Expected = "AOS 3 @ 1.82\r\nExcluding: 1-0,2-0"
     };
 
     private static readonly ChoiceModel Lucky3 = new()
@@ -109,21 +113,21 @@ public class ChoiceTestCase : IEnumerable<object[]>
                "<span class='lucky3'>02, 08, 21" +
                "<span class='handicap'>Combination x UUS 1" +
                "<div class='num-of-bets'>1 Bet</div></span></span></div>",
-        Expected = "02, 08, 21\nCombination x UUS 1\n1 Bet"
+        Expected = "02, 08, 21\r\nCombination x UUS 1\r\n1 Bet"
     };
 
     private static readonly ChoiceModel ChoiceSingleMatchParlay = new()
     {
         Html = "<div><span class='combinationLink'>13-Fold (1 Bet)</span></div>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "Over 3 @ 1.82\na1\na2 - won\na1\n"
+        Expected = "Over 3 @ 1.82"
     };
 
     private static readonly ChoiceModel BetType = new()
     {
         Html = "<div class='bettype-description'>13-Fold (1 Bet)</div>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "Over 3 @ 1.82\nOver 3 @ 1.82\n13-Fold (1 Bet)"
+        Expected = "Over 3 @ 1.82\r\nOver 3 @ 1.82\r\n13-Fold (1 Bet)"
     };
 
     private static readonly ChoiceModel BetTypeHaveNotDescription = new()

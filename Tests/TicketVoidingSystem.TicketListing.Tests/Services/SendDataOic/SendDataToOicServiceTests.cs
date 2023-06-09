@@ -10,6 +10,19 @@ namespace TicketVoidingSystem.TicketListing.Tests.Services.SendDataOic;
 
 public class SendDataToOicServiceImpTest
 {
+    private readonly InsertToAmendmentTableStage insertToAmendmentTableStage;
+    private readonly CallApiAmendmentStage callApiAmendmentStage;
+    private readonly GetTicketsService getTicketsService;
+    private readonly SendDataToOicServiceImp service;
+
+    public SendDataToOicServiceImpTest()
+    {
+        insertToAmendmentTableStage = Substitute.For<InsertToAmendmentTableStage>();
+        callApiAmendmentStage = Substitute.For<CallApiAmendmentStage>();
+        getTicketsService = Substitute.For<GetTicketsService>();
+        service = new SendDataToOicServiceImp(getTicketsService, insertToAmendmentTableStage, callApiAmendmentStage);
+    }
+
     [Fact]
     public async Task SendData_ValidQuery_ReturnAmendmentResponse()
     {
@@ -23,14 +36,10 @@ public class SendDataToOicServiceImpTest
         {
             new() { LicenseeName = "", BetTypeName = "" }
         };
-        var insertToAmendmentTableStage = Substitute.For<InsertToAmendmentTableStage>();
-        var callApiAmendmentStage = Substitute.For<CallApiAmendmentStage>();
-        var getTicketsService = Substitute.For<GetTicketsService>();
         getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new List<ExcelOicModel>());
         insertToAmendmentTableStage.Execute(default!, default!, default!).ReturnsForAnyArgs(true);
         callApiAmendmentStage.Execute(default!, default!, default!).ReturnsForAnyArgs(expected);
         ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
-        var service = new SendDataToOicServiceImp(getTicketsService, insertToAmendmentTableStage, callApiAmendmentStage);
 
         // Act
         var actual = await service.Send(queries, "");
@@ -53,12 +62,8 @@ public class SendDataToOicServiceImpTest
         {
             new() { LicenseeName = "", BetTypeName = "" }
         };
-        var insertToAmendmentTableStage = Substitute.For<InsertToAmendmentTableStage>();
-        var getTicketsService = Substitute.For<GetTicketsService>();
         insertToAmendmentTableStage.Execute(default!, default!, default!).ReturnsForAnyArgs(false);
         ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
-
-        var service = new SendDataToOicServiceImp(getTicketsService, insertToAmendmentTableStage, null!);
 
         // Act
         var actual = await service.Send(queries, "");
