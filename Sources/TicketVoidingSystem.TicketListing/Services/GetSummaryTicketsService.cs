@@ -57,7 +57,7 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
     {
         foreach (var ticket in tickets)
         {
-            ticket.BetTypeName = betListService.GetBetTypeName(ticket.BetTypeId, ticket.RefNo);
+            ticket.BetTypeName = betListService.GetDisplayedBetTypeName(ticket.BetTypeId, ticket.RefNo);
         }
     }
 

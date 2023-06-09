@@ -24,6 +24,8 @@ public interface BetListService
 
     string GetBetType(object betTypeId, string language);
 
+    string GetDisplayedBetTypeName(int id, long refNo);
+
     string GetBetTypeName(ITicket ticket);
 
     string GetBetTypeNameChineseSimplified(ITicket ticket);
@@ -162,6 +164,20 @@ public class BetListServiceImp : BetListService
         }
 
         var betName = remotingRefWrapperService.GetBetType(betTypeId, refNo);
+        const int FistNextBet = 86;
+        const int SecondNextBet = 85;
+        return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
+    }
+
+    public string GetDisplayedBetTypeName(int id, long refNo)
+    {
+        var betTypeId = remotingRefWrapperService.GetParentIdByBetTypeId(id);
+        if (string.IsNullOrWhiteSpace(betTypeId))
+        {
+            betTypeId = id.ToString();
+        }
+
+        var betName = remotingRefWrapperService.GetDisplayedBetTypeName(betTypeId, refNo);
         const int FistNextBet = 86;
         const int SecondNextBet = 85;
         return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;

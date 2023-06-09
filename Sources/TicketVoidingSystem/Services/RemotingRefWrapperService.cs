@@ -8,6 +8,8 @@ public interface RemotingRefWrapperService
 {
     string GetBetType(object betTypeId, string language);
 
+    string GetDisplayedBetTypeName(object betTypeId, object refNo);
+
     string GetBetType(object betTypeId, object refNo);
 
     string GetParentIdByBetTypeId(object betTypeId);
@@ -39,6 +41,11 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
     public string GetBetType(object betTypeId, string language)
     {
         return remotingRefService.GetBetTypeName(betTypeId.ToString(), language);
+    }
+
+    public string GetDisplayedBetTypeName(object betTypeId, object refNo)
+    {
+        return remotingRefService.GetDisplayedBetTypeName(betTypeId.ToString(), string.Empty, Convert.ToInt64(refNo), LanguageCode.English, string.Empty);
     }
 
     public string GetBetType(object betTypeId, object refNo)
