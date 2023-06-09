@@ -228,6 +228,7 @@ public class LogInfoServiceImp : LogInfoService
             Wrong1stHdpModels = query.Wrong1stHdpModels,
             WrongOuModels = query.WrongOuModels,
             Wrong1stOuModels = query.Wrong1stOuModels,
+            WrongOddsModels = query.WrongOddsModels,
             MatchId = query.MatchId,
             KickOffTime = query.KickOffTime,
             IssueTypeId = query.IssueTypeId,

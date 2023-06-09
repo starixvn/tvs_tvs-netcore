@@ -87,6 +87,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
                     criteria.ArchivedTransIds = issueInfo;
                     break;
 
+                case IssueTypeConstant.WrongOdds:
+                    criteria.WrongOddsInfo = issueInfo;
+                    break;
+
                 default:
                     criteria.IssueTypeId = query.IssueTypeId;
                     break;
@@ -180,6 +184,9 @@ public class GetTransInfoServiceImp : GetTransInfoService
 
             case IssueTypeConstant.Wrong1stOU:
                 return query.Wrong1stOuModels.ToWrongOuInfoXml();
+
+            case IssueTypeConstant.WrongOdds:
+                return query.WrongOddsModels.ToWrongOddsInfoXml();
 
             default:
                 return "";
