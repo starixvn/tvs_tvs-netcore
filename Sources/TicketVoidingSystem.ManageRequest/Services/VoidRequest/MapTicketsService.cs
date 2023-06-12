@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface MapTicketsService
 {
-    Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, Match match, int startIndex, int issueTypeId, VoidPermission voidPermission);
+    Group<TicketViewModel> MapToGroupTicketViewModel(GroupTicketsMappingParameters parameters);
 
     TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
 }
@@ -23,24 +23,24 @@ public class MapTicketsServiceImp : MapTicketsService
     }
 
     // Jacob Hàm gì mà nhiều parameter thế
-    public Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, Match match, int startIndex, int issueTypeId, VoidPermission voidPermission)
+    public Group<TicketViewModel> MapToGroupTicketViewModel(GroupTicketsMappingParameters parameters)
     {
         var tickets = new List<TicketViewModel>();
-        var index = startIndex;
+        var index = parameters.StartIndex;
 
-        foreach (var item in group.Tickets)
+        foreach (var item in parameters.Group.Tickets)
         {
-            var ticket = MapFromGetTicketModelToTicketViewModel(item, match, ChoiceType.None, issueTypeId);
+            var ticket = MapFromGetTicketModelToTicketViewModel(item, parameters.Match, ChoiceType.None, parameters.IssueTypeId);
             ticket.No = index++;
-            ticket.IsDisable = item.IsDisable(voidPermission, issueTypeId);
+            ticket.IsDisable = item.IsDisable(parameters.VoidPermission, parameters.IssueTypeId);
             tickets.Add(ticket);
         }
 
         return new Group<TicketViewModel>
         {
-            Name = group.Name,
+            Name = parameters.Group.Name,
             Tickets = tickets,
-            DisplayTotalTickets = group.DisplayTotalTickets
+            DisplayTotalTickets = parameters.Group.DisplayTotalTickets
         };
     }
 

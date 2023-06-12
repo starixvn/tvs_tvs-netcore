@@ -42,23 +42,7 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<(GetTicketValidationModel Validation, IEnumerable<GetTicketModel> Tickets)> GetTickets(GetTicketsQuery query)
     {
-        var validationInAllServers = new List<GetTicketValidationModel>();
-        var ticketsInAllServers = new List<GetTicketModel>();
-        var criteria = mapper.Map<GetTicketsCriteria>(query);
-        criteria.Duration = query.Durations.ToTransDateXml();
-        criteria.BetTypes = query.BetTypes.ToBetTypeXml();
-
-        // Jacob Tương tự, xài Task.WhenAll và SelectMany
-        // Có thể nghĩ tới chuyện tách cái loop này ra 1 hàm đi
-        foreach (var server in SiteDbGroupConstant.ServerList)
-        {
-            criteria.SiteDbGroupId = server.Id;
-            var (validation, tickets) = await repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(criteria);
-
-            validationInAllServers.AddRange(validation);
-            ticketsInAllServers.AddRange(tickets);
-        }
-
+        var (validationInAllServers, ticketsInAllServers) = await GetTicketsInMultipleServer(query);
         var firstErrorResult = validationInAllServers.FirstOrDefault(x => !x.IsSuccessful);
         var combineValidation = new GetTicketValidationModel
         {
@@ -70,6 +54,24 @@ public class GetTicketsServiceImp : GetTicketsService
         };
 
         return (combineValidation, ticketsInAllServers.OrderBy(x => x.IsMixParlay));
+    }
+
+    private async Task<(IEnumerable<GetTicketValidationModel>, IEnumerable<GetTicketModel>)> GetTicketsInMultipleServer(GetTicketsQuery query)
+    {
+        var criteria = mapper.Map<GetTicketsCriteria>(query);
+        criteria.Duration = query.Durations.ToTransDateXml();
+        criteria.BetTypes = query.BetTypes.ToBetTypeXml();
+
+        var tasks = SiteDbGroupConstant.ServerList.Select(async server =>
+        {
+            criteria.SiteDbGroupId = server.Id;
+            return await repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(criteria);
+        });
+
+        (IEnumerable<GetTicketValidationModel> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.validation);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        return (validationInAllServers, ticketsInAllServers);
     }
 
     public async Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(GetTicketsQuery query)

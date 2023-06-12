@@ -29,22 +29,7 @@ public class MarkTicketsServiceImp : MarkTicketsService
 
     public async Task<Result> Execute(MarkTicketsQuery query)
     {
-        var resultInAllServers = new List<Result>();
-        var criteria = new MarkTicketsCommand
-        {
-            Status = query.Status,
-            UserId = session.UserId,
-            Ip = session.GetClientIp(),
-            LogActionId = query.Status == 0 ? 90500 : 90501
-        };
-        // Jacob Tương tự, xài Task.WhenAll và SelectMany
-        // Có thể nghĩ tới chuyện tách cái loop này ra 1 hàm đi
-        foreach (var server in SiteDbGroupConstant.ServerList)
-        {
-            var results = await ExecuteByServerId(criteria, query, server.Id);
-            resultInAllServers.AddRange(results);
-        }
-
+        var resultInAllServers = await ExecuteInMultipleServers(query);
         var firstErrorResult = resultInAllServers.FirstOrDefault(x => !x.IsSuccessful);
         var combineResult = new Result
         {
@@ -52,6 +37,22 @@ public class MarkTicketsServiceImp : MarkTicketsService
             ErrorMsg = firstErrorResult?.ErrorMsg ?? string.Empty
         };
         return combineResult;
+    }
+
+    private async Task<IEnumerable<Result>> ExecuteInMultipleServers(MarkTicketsQuery query)
+    {
+        var criteria = new MarkTicketsCommand
+        {
+            Status = query.Status,
+            UserId = session.UserId,
+            Ip = session.GetClientIp(),
+            LogActionId = query.Status == 0 ? 90500 : 90501
+        };
+
+        var tasks = SiteDbGroupConstant.ServerList.Select(server => ExecuteByServerId(criteria, query, server.Id));
+        var results = await Task.WhenAll(tasks);
+
+        return results.SelectMany(x => x);
     }
 
     private async Task<IEnumerable<Result>> ExecuteByServerId(MarkTicketsCommand criteria, MarkTicketsQuery query, int siteDbGroupId)

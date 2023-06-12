@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Fanex.BetList.Core.Entities;
-using TicketVoidingSystem.Constants;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -15,38 +13,41 @@ public interface TicketsViewModelService
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
-    private readonly IMapper mapper;
-
-    public TicketsViewModelServiceImp(IMapper mapper)
-    {
-        this.mapper = mapper;
-    }
-
-    // Jacob Để vầy lọt chọt lắm, 1 mớ thì set model trực tiếp, 1 mớ thì gọi hàm VD: UpdateUncheckTickets
     public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId, int subIssueTypeId, VoidPermission voidPermission)
     {
-        var ticketsInRequest = GetTicketsInRequest(allTickets);
-        var validTickets = GetValidTickets(ticketsInRequest.SingleTickets, ticketsInRequest.ParlayTickets,
-            ticketsInRequest.CricketTickets, ticketsInRequest.CancelCashOutTickets, voidPermission, issueTypeId);
-        var voidTickets = validTickets.ValidVoidSingleTickets.Union(validTickets.ValidVoidParlayTickets)
-            .Union(validTickets.ValidVoidCricketTickets);
+        var ticketsByGroup = GetTicketsByGroup(allTickets);
+        var validTickets = GetValidTickets(ticketsByGroup, voidPermission, issueTypeId);
+        var voidTickets = validTickets.SingleTickets.Union(validTickets.ParlayTickets)
+            .Union(validTickets.CricketTickets);
 
-        model.SingleTickets = validTickets.ValidVoidSingleTickets.Select(ConvertGetTicketModelToBetId).ToList();
-        model.ParlayTickets = validTickets.ValidVoidParlayTickets.Select(ConvertGetTicketModelToBetId).ToList();
-        model.CricketTickets = validTickets.ValidVoidCricketTickets.Select(ConvertGetTicketModelToBetId).ToList();
-        model.CancelCashOutTickets = validTickets.ValidCancelCashOutTickets.Select(ConvertGetTicketModelToBetId).ToList();
-
+        UpdateValidTickets(model, validTickets);
         UpdateUncheckTickets(model, allTickets);
         UpdateLicenseeName(model, allTickets);
         UpdateBetTypes(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
         UpdateCheckPermissionTickets(model, allTickets);
+        UpdateTotalCounts(model, allTickets, ticketsByGroup);
+        UpdateVariableForTemplateMessage(model, voidTickets, issueTypeId, subIssueTypeId);
+    }
 
+    private static void UpdateValidTickets(TicketsViewModel model, TicketsByGroupInRequest validTickets)
+    {
+        model.SingleTickets = validTickets.SingleTickets.Select(ConvertGetTicketModelToBetId).ToList();
+        model.ParlayTickets = validTickets.ParlayTickets.Select(ConvertGetTicketModelToBetId).ToList();
+        model.CricketTickets = validTickets.CricketTickets.Select(ConvertGetTicketModelToBetId).ToList();
+        model.CancelCashOutTickets = validTickets.CancelCashOutTickets.Select(ConvertGetTicketModelToBetId).ToList();
+    }
+
+    private static void UpdateTotalCounts(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, TicketsByGroupInRequest ticketsByGroup)
+    {
         model.Total = allTickets.Count();
-        model.TotalSingle = ticketsInRequest.SingleTickets.Union(ticketsInRequest.CricketTickets).Count();
-        model.TotalParlay = ticketsInRequest.ParlayTickets.Count();
-        model.TotalCancelCashOut = ticketsInRequest.CancelCashOutTickets.Count();
+        model.TotalSingle = ticketsByGroup.SingleTickets.Union(ticketsByGroup.CricketTickets).Count();
+        model.TotalParlay = ticketsByGroup.ParlayTickets.Count();
+        model.TotalCancelCashOut = ticketsByGroup.CancelCashOutTickets.Count();
+    }
 
+    private static void UpdateVariableForTemplateMessage(TicketsViewModel model, IEnumerable<GetTicketModel> voidTickets, int issueTypeId, int subIssueTypeId)
+    {
         model.IsAllLiveTickets = voidTickets.All(x => x.IsLiveIndicator);
         model.IsHasAioMessage = voidTickets.Any(x => IsValidTicketHaveAioMessage(issueTypeId, subIssueTypeId, x));
     }
@@ -67,36 +68,38 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         };
     }
 
-    private static (IEnumerable<GetTicketModel> SingleTickets, IEnumerable<GetTicketModel> ParlayTickets,
-        IEnumerable<GetTicketModel> CricketTickets, IEnumerable<GetTicketModel> CancelCashOutTickets)
-        GetTicketsInRequest(IEnumerable<GetTicketModel> data)
+    private static TicketsByGroupInRequest GetTicketsByGroup(IEnumerable<GetTicketModel> allTickets)
     {
-        var singleTickets = data.Where(item => !item.IsMixParlay && !item.IsCricket && !item.IsCancelCashOut);
-        var parlayTickets = data.Where(item => item.IsMixParlay && !item.IsCricket && !item.IsCancelCashOut);
-        var cricketTickets = data.Where(item => item.IsCricket);
-        var cancelCashOutTickets = data.Where(item => item.IsCancelCashOut);
-
-        return (singleTickets, parlayTickets, cricketTickets, cancelCashOutTickets);
+        return new TicketsByGroupInRequest
+        {
+            SingleTickets = allTickets.Where(item => !item.IsMixParlay && !item.IsCricket && !item.IsCancelCashOut),
+            ParlayTickets = allTickets.Where(item => item.IsMixParlay && !item.IsCricket && !item.IsCancelCashOut),
+            CricketTickets = allTickets.Where(item => item.IsCricket),
+            CancelCashOutTickets = allTickets.Where(item => item.IsCancelCashOut)
+        };
     }
 
-    private static (IEnumerable<GetTicketModel> ValidVoidSingleTickets, IEnumerable<GetTicketModel> ValidVoidParlayTickets,
-        IEnumerable<GetTicketModel> ValidVoidCricketTickets, IEnumerable<GetTicketModel> ValidCancelCashOutTickets)
-        GetValidTickets(IEnumerable<GetTicketModel> singleTickets, IEnumerable<GetTicketModel> parlayTickets,
-            IEnumerable<GetTicketModel> cricketTickets, IEnumerable<GetTicketModel> cancelCashOutTickets, VoidPermission permission, int issueTypeId)
+    private static TicketsByGroupInRequest GetValidTickets(TicketsByGroupInRequest ticketsInRequest, VoidPermission permission, int issueTypeId)
     {
-        var enableSingle = singleTickets.Where(x => !x.IsDisable(permission, issueTypeId));
-        var disableBonusSingle = singleTickets.Where(x => x.IsDisable(permission, issueTypeId) && x.WalletType > 0);
+        var enableSingle = ticketsInRequest.SingleTickets.Where(x => !x.IsDisable(permission, issueTypeId));
+        var disableBonusSingle = ticketsInRequest.SingleTickets.Where(x => x.IsDisable(permission, issueTypeId) && x.WalletType > 0);
         var validVoidSingleTickets = enableSingle.Concat(disableBonusSingle);
 
-        var validVoidParlayTickets = parlayTickets.Where(x => !x.IsDisable(permission, issueTypeId));
+        var validVoidParlayTickets = ticketsInRequest.ParlayTickets.Where(x => !x.IsDisable(permission, issueTypeId));
 
-        var enableCricket = cricketTickets.Where(x => !x.IsDisable(permission, issueTypeId));
-        var disableBonusCricket = cricketTickets.Where(x => x.IsDisable(permission, issueTypeId) && x.WalletType > 0);
+        var enableCricket = ticketsInRequest.CricketTickets.Where(x => !x.IsDisable(permission, issueTypeId));
+        var disableBonusCricket = ticketsInRequest.CricketTickets.Where(x => x.IsDisable(permission, issueTypeId) && x.WalletType > 0);
         var validVoidCricketTickets = enableCricket.Concat(disableBonusCricket);
 
-        var validCancelCashOutTickets = cancelCashOutTickets.Where(x => !x.IsDisable(permission, issueTypeId));
+        var validCancelCashOutTickets = ticketsInRequest.CancelCashOutTickets.Where(x => !x.IsDisable(permission, issueTypeId));
 
-        return (validVoidSingleTickets, validVoidParlayTickets, validVoidCricketTickets, validCancelCashOutTickets);
+        return new TicketsByGroupInRequest
+        {
+            SingleTickets = validVoidSingleTickets,
+            ParlayTickets = validVoidParlayTickets,
+            CricketTickets = validVoidCricketTickets,
+            CancelCashOutTickets = validCancelCashOutTickets
+        };
     }
 
     private static void UpdateLicenseeName(TicketsViewModel model, IEnumerable<GetTicketModel> data)
@@ -200,42 +203,18 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
                     ? ticket.SubBetType != BetTypeConstant.FirstHalfHandicap
                     : ticket.BetType != BetTypeConstant.FirstHalfHandicap;
     }
-    
+
     private static bool CheckAioMessageOverUnder(GetTicketModel ticket)
     {
         return ticket.IsMixParlay
                     ? ticket.SubBetType != BetTypeConstant.OverUnder
                     : ticket.BetType != BetTypeConstant.OverUnder;
     }
-    
+
     private static bool CheckAioMessageFirstHalfOverUnder(GetTicketModel ticket)
     {
         return ticket.IsMixParlay
                     ? ticket.SubBetType != BetTypeConstant.FirstHalfOverUnder
                     : ticket.BetType != BetTypeConstant.FirstHalfOverUnder;
-    }
-    
-    private Ticket CreateTicketBetList(GetTicketModel item)
-    {
-        var ticket = mapper.Map<Ticket>(item);
-        ticket.BetTypeId = item.BetType;
-        ticket.BetId = item.BetId;
-
-        return ticket;
-    }
-
-    private Ticket CreateSubTicketBetList(GetTicketModel item)
-    {
-        var ticket = mapper.Map<Ticket>(item);
-        ticket.BetId = default;
-        ticket.OddsType = string.Empty;
-        ticket.BetCheck = item.SubBetCheck;
-        ticket.BetTypeId = item.SubBetType;
-        ticket.BetTeam = item.SubBetTeam;
-        ticket.Handicap1 = item.SubHdp1;
-        ticket.Handicap2 = item.SubHdp2;
-        ticket.Odds = item.SubOdds;
-
-        return ticket;
     }
 }

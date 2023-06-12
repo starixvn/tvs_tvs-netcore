@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Fanex.BetList.Core.Entities;
@@ -36,18 +37,17 @@ public class TicketsServiceImp : TicketsService
 
     public async Task<IList<TicketModel>> GetTickets(string refNo, CancellationToken cancellationToken)
     {
-        var tickets = new List<TicketModel>();
-        // Jacob Tương tự, xài Task.WhenAll và SelectMany
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var criteria = new GetParlaySubBetCriteria
             {
-                SiteDbGroupId = item.Id,
+                SiteDbGroupId = server.Id,
                 RefNo = refNo
             };
-            var result = await repository.FetchAsync<TicketModel>(criteria, cancellationToken);
-            tickets.AddRange(result);
-        }
+            return repository.FetchAsync<TicketModel>(criteria, cancellationToken);
+        });
+        var results = await Task.WhenAll(tasks);
+        var tickets = results.SelectMany(result => result).ToList();
 
         return tickets;
     }

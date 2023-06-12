@@ -19,24 +19,25 @@ public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, IEnumerable<st
         this.sessionService = sessionService;
     }
 
-    // Jacob, xài yield, gắn else if vào chung, bớt được 1 cái {
     public async Task<IEnumerable<string>> Handle(GetRemarkRequest request, CancellationToken cancellationToken)
     {
-        var remarks = new List<string>();
+        return await Task.FromResult(GetRemarksForPermission().ToBlockingEnumerable(cancellationToken));
+    }
+
+    private async IAsyncEnumerable<string> GetRemarksForPermission()
+    {
         if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host))
         {
-            remarks.Add(StringResource.You_can_void_Settled_or_Unsettled_tickets);
+            yield return StringResource.You_can_void_Settled_or_Unsettled_tickets;
         }
         else if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host) ||
                  await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host))
         {
-            remarks.Add(StringResource.You_only_void_Unsettled_tickets);
+            yield return StringResource.You_only_void_Unsettled_tickets;
         }
         if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host))
         {
-            remarks.Add(StringResource.You_can_void_Instantly_Settled);
+            yield return StringResource.You_can_void_Instantly_Settled;
         }
-
-        return await Task.FromResult(remarks);
     }
 }

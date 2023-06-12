@@ -53,7 +53,6 @@ public class AfterVoidServiceImp : AfterVoidService
         return await ExecuteWhenHaveVoidTickets(query, voidResult, warningCricket);
     }
 
-    // Xài yield
     private async Task<IEnumerable<Result>> ExecuteWhenHaveVoidTickets(VoidTicketsQuery query, VoidTicketsModel voidResult, string warningCricket)
     {
         await cashOutApiService.VoidBetForCashOutBasketball(voidResult.Tickets);

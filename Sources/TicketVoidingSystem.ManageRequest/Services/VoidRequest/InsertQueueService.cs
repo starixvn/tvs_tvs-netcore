@@ -28,10 +28,6 @@ public class InsertQueueServiceImp : InsertQueueService
         this.insertVoidingHistoryService = insertVoidingHistoryService;
     }
 
-    // Jacob, hàm này phức tạp thiệt. Muốn sửa lại cho đẹp cũng mất công lắm. Lười thì để vầy cũng được
-    // Nếu muốn sửa thì tách cái phần bên trong loop ra 1 hàm, tách nguyên cái if IsIssueTypeHaveCancelCoTickets ra 1 hàm
-    // A cũng nghĩ tới việc xài groupby SiteDbGroupId mà thấy cũng mệt
-
     public async Task InsertTicketVoidingQueue(InsertQueueQuery query)
     {
         var siteGroupInCurrentSessionVoid = query.SingleTickets
@@ -92,7 +88,14 @@ public class InsertQueueServiceImp : InsertQueueService
 
         var results = await repository.FetchMultipleAsync(CreateCheckTicketsAllowToVoidCriteria(ticketTypeModel, siteDbGroupId), mappingTypes);
 
-        return CreateCheckTicketsAllowToVoidOutput(results);
+        return new TicketTypeModel
+        {
+            ValidVoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
+            ValidVoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
+            ValidVoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
+            ValidCancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
+            ValidVoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>()
+        };
     }
 
     private static CheckTicketsAllowToVoidCriteria CreateCheckTicketsAllowToVoidCriteria(TicketTypeModel ticketTypeModel, int siteDbGroupId)
@@ -107,18 +110,6 @@ public class InsertQueueServiceImp : InsertQueueService
         };
     }
 
-    private static TicketTypeModel CreateCheckTicketsAllowToVoidOutput(IReadOnlyList<IEnumerable<object>> results)
-    {
-        return new TicketTypeModel
-        {
-            ValidVoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
-            ValidVoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
-            ValidVoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
-            ValidCancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
-            ValidVoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>()
-        };
-    }
-
     private static IEnumerable<RequestDetailTicketModel> CreateTicketModel(IEnumerable<BetId>? tickets, int requestId, int issueTypeId)
     {
         return tickets?.Select(x => new RequestDetailTicketModel
@@ -129,8 +120,7 @@ public class InsertQueueServiceImp : InsertQueueService
             IssueTypeId = issueTypeId
         });
     }
-    
-	// Jacob thay ví truyền cả đống parameter thế này, gom vô cái criteria
+
     private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId, TicketTypeModel ticketTypeModel)
     {
         var criteria = new InsertTicketVoidingQueueCriteria

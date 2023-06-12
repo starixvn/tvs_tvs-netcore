@@ -12,19 +12,14 @@ namespace TicketVoidingSystem.ManageRequest;
 
 public class ManageRequestProfile : Profile
 {
-    // Jacob sao comment nhiều vậy. Có code nào bỏ đi thì xóa thẳng tay
-    // VD class này còn xài ko? EditRequestCommand
     public ManageRequestProfile()
     {
-        //// CreateMap<AddRequestQuery, AddRequestCommand>();
         CreateMap<RequestModel, RequestViewModel>();
         CreateMap<RequestModel, RequestEventViewModel>();
-        //// CreateMap<EditRequestQuery, EditRequestCommand>();
         CreateMap<SelectRequestsQuery, SelectArchivedRequestsCriteria>();
         CreateMap<SelectRequestsQuery, SelectActiveRequestsCriteria>();
         CreateMap<SelectRequestsQuery, GetActiveRequestInfoCriteria>();
         CreateMap<SelectRequestsQuery, GetArchivedRequestInfoCriteria>();
-        //// CreateMap<GetPoolHouseTicketQuery, GetPoolHouseTicketCriteria>();
 
         CreateMap<GetTicketsQuery, GetTicketsCriteria>();
         CreateMap<GetTicketsQuery, GetBetTrans14TicketsCriteria>();

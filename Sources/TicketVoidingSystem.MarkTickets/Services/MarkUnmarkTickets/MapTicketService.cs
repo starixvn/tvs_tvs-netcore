@@ -11,7 +11,6 @@ using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.ViewModels;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
@@ -26,14 +25,12 @@ public interface MapTicketService
 public class MapTicketServiceImp : MapTicketService
 {
     private readonly IMapper mapper;
-    private readonly SessionService sessionService;
     private readonly BetListService betListService;
     private readonly CheckBoxService checkBoxService;
 
-    public MapTicketServiceImp(IMapper mapper, SessionService sessionService, BetListService betListService, CheckBoxService checkBoxService)
+    public MapTicketServiceImp(IMapper mapper, BetListService betListService, CheckBoxService checkBoxService)
     {
         this.mapper = mapper;
-        this.sessionService = sessionService;
         this.betListService = betListService;
         this.checkBoxService = checkBoxService;
     }
@@ -46,7 +43,6 @@ public class MapTicketServiceImp : MapTicketService
         {
             var ticket = MapToTicketViewModel(item, userPermission);
             ticket.No = index++;
-            // Jacob Tách cái if này ra 1 hàm
             tickets.Add(ticket);
         }
 

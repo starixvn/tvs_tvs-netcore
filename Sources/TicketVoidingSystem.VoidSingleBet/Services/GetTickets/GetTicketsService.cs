@@ -29,16 +29,15 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<IList<GetTicketModel>> GetTickets(GetTicketsQuery query)
     {
-        var ticketsInAllServers = new List<GetTicketModel>();
         var criteria = CreateGetTicketsCriteria(query);
-        
-        // Xài Task.WhenAll và SelectMany
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
-            ticketsInAllServers.AddRange(tickets);
-        }
+            return repository.FetchAsync<GetTicketModel>(criteria);
+        });
+
+        var ticketsLists = await Task.WhenAll(tasks);
+        var ticketsInAllServers = ticketsLists.SelectMany(tickets => tickets).ToList();
 
         return ticketsInAllServers.OrderBy(x => x.IsMixParlay).ToList();
     }
@@ -46,17 +45,13 @@ public class GetTicketsServiceImp : GetTicketsService
     public async Task<IList<ExcelTicketModel>> GetTicketsForExportExcel(GetTicketsQuery query)
     {
         var getTicketsResult = await GetTickets(query);
-        var index = 1;
-        var tickets = new List<ExcelTicketModel>();
 
-        // Suy nghĩ xài linq
-        // tham khảo link: https://stackoverflow.com/questions/269058/how-do-you-add-an-index-field-to-linq-results
-        foreach (var item in getTicketsResult)
+        var tickets = getTicketsResult.Select((item, index) =>
         {
             var excelTicket = mapTicketService.MapToTicketExcelModel(item, query.Match);
-            excelTicket.No = index++;
-            tickets.Add(excelTicket);
-        }
+            excelTicket.No = index + 1;
+            return excelTicket;
+        }).ToList();
 
         return tickets;
     }

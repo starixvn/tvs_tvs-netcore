@@ -9,7 +9,7 @@ public class TicketsViewModel
         Groups = new List<Group<TicketViewModel>>();
     }
 
-    public IList<Group<TicketViewModel>> Groups { get; set; }
+    public IEnumerable<Group<TicketViewModel>> Groups { get; set; }
     public int Total { get; set; }
     public int TotalSingle { get; set; }
     public int TotalParlay { get; set; }

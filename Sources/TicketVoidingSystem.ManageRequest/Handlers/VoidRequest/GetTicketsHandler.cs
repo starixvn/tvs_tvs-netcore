@@ -33,18 +33,11 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     {
         var model = new TicketsViewModel();
         var data = await getTicketsService.GetTickets(request);
-        var groups = GenerateGroup(data.ToList(), request);
-        var index = (request.PageIndex * request.PageSize) + 1;
-        var voidPermission = await checkPermissionOnRequestService.GetVoidPermission();
+        var groups = GenerateGroup(data.ToList(), request).Where(item => item.Tickets.Any());
         var match = request.Match?.MatchId == 0 ? null : request.Match;
-        // Jacob, Đừng để linq groups.Where trong foreach, tách ra 1 biến
-        // Tách cái foreach này ra 1 hàm, input là groups, output là 1 List các currentGroup
-        foreach (var item in groups.Where(item => item.Tickets.Any()))
-        {
-            var currentGroup = mapTicketsService.MapToGroupTicketViewModel(item, match, index, request.IssueTypeId, voidPermission);
-            model.Groups.Add(currentGroup);
-            index += currentGroup.Tickets.Count();
-        }
+        var voidPermission = await checkPermissionOnRequestService.GetVoidPermission();
+
+        model.Groups = MapToGroupTicketViewModel(request, groups, match, voidPermission);
         ticketsViewModelService.UpdateViewModel(model, data, request.IssueTypeId, request.SubIssueTypeId, voidPermission);
 
         return model;
@@ -82,5 +75,26 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
                 .Tickets.Count();
             group.DisplayTotalTickets = total ?? 0;
         }
+    }
+
+    private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(GetTicketsRequest request, IEnumerable<Group<GetTicketModel>> groups, Match match, VoidPermission voidPermission)
+    {
+        var startIndex = (request.PageIndex * request.PageSize) + 1;
+        var currentGroups = new List<Group<TicketViewModel>>();
+        foreach (var item in groups)
+        {
+            var parameters = new GroupTicketsMappingParameters
+            {
+                Group = item,
+                Match = match,
+                StartIndex = startIndex,
+                IssueTypeId = request.IssueTypeId,
+                VoidPermission = voidPermission
+            };
+            var currentGroup = mapTicketsService.MapToGroupTicketViewModel(parameters);
+            currentGroups.Add(currentGroup);
+            startIndex += currentGroup.Tickets.Count();
+        }
+        return currentGroups;
     }
 }

@@ -24,34 +24,34 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         this.mapTicketsService = mapTicketsService;
     }
 
-    // Jacob, đọc hàm này thấy hơi mệt mệt nha
-    // Cần tách hàm ra nhỏ hơn
-    // Cần đo lại performance của hàm này, vì nó có 1 cái loop gọi 1 hàm khác, mà hàm khác cũng có loop nữa
     public async Task<VoidedTicketsViewModel> Handle(GetVoidedTicketsRequest request, CancellationToken cancellationToken)
     {
-        
         var voidedTickets = await getVoidedTicketsService.GetTickets(request);
         var viewModel = new VoidedTicketsViewModel
         {
             TotalVoidedTickets = voidedTickets.Count(x => !x.IsCancelCashOut),
             TotalCancelCashOut = voidedTickets.Count(x => x.IsCancelCashOut),
-            LicenseeNames = CombineLicensee(voidedTickets)
+            LicenseeNames = CombineLicensee(voidedTickets),
+            Groups = new List<Group<VoidedTicketViewModel>>()
         };
 
-        var match = request.MatchId != null && request.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(request.MatchId.Value) : null;
-        var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, request);
-        var index = (request.PageIndex * request.PageSize) + 1;
-        // Jacob đừng để Where trong foreach, đọc rối lắm, khai báo biến bên ngoài đi
-        foreach (var item in groups.Where(item => item.Tickets.Any()))
-        {
-            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(item, match, index, request.IssueTypeId);
-            viewModel.Groups.Add(currentGroup);
-            index += currentGroup.Tickets.Count();
-        }
-
+        await UpdateGroupTickets(viewModel, request, voidedTickets);
         UpdateGeneralBetType(request, viewModel);
 
         return viewModel;
+    }
+
+    private async Task UpdateGroupTickets(VoidedTicketsViewModel viewModel, GetVoidedTicketsQuery query, IEnumerable<VoidedTicketModel> voidedTickets)
+    {
+        var match = query.MatchId == 0 ? null : await getVoidedTicketsService.GetMatchInfo(query.MatchId);
+        var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, query).Where(item => item.Tickets.Any());
+        var index = (query.PageIndex * query.PageSize) + 1;
+        foreach (var group in groups)
+        {
+            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query.IssueTypeId);
+            viewModel.Groups.Add(currentGroup);
+            index += currentGroup.Tickets.Count();
+        }
     }
 
     private static string CombineLicensee(IEnumerable<VoidedTicketModel> tickets)

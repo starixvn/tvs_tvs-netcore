@@ -15,7 +15,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets
 
 public interface MapFromBetListService
 {
-    VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
+    VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
 }
 
 public class MapFromBetListServiceImp : MapFromBetListService
@@ -29,7 +29,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         this.betListService = betListService;
     }
 
-    public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
+    public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
     {
         const int minBetType = 801;
         const int maxBetType = 806;
@@ -81,7 +81,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         return Convert.ToInt32(item.BetType).IsSingleMatchParlay() ? betBuilderTicketHelper : generalTicketHelper;
     }
 
-    private Ticket MapToBetListTicket(VoidedTicketModel item, Match match)
+    private Ticket MapToBetListTicket(VoidedTicketModel item, Match? match)
     {
         var ticket = mapper.Map<Ticket>(item);
         ticket.TransId = item.IsMixParlay ? item.SubTransId : item.TransId;

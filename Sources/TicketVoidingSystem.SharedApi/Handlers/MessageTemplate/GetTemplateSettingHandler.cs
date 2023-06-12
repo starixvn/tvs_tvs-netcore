@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,24 +29,23 @@ public class GetTemplateSettingHandler : IRequestHandler<GetTemplateSettingReque
 
     public async Task<TemplateSettingViewModel> Handle(GetTemplateSettingRequest request, CancellationToken cancellationToken)
     {
-        var messageTemplates = new List<MessageTemplateViewModel>();
         var templateModels = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria(), cancellationToken);
         var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria(), cancellationToken);
-
-        // Jacob Tách phần bên trong loop ra 1 hàm, và xài linQ
-        foreach (var item in templateModels)
-        {
-            var viewModel = mapper.Map<MessageTemplateViewModel>(item);
-            viewModel.InputTexts = string.IsNullOrWhiteSpace(item.JsonValue) ?
-                new List<InputText>() : JsonSerializer.Deserialize<IEnumerable<InputText>>(item.JsonValue);
-
-            messageTemplates.Add(viewModel);
-        }
+        var messageTemplates = templateModels.Select(MapToMessageTemplateViewModels);
 
         return new TemplateSettingViewModel
         {
             MessageTemplates = messageTemplates,
             TemplateSettings = templateSettings
         };
+    }
+
+    private MessageTemplateViewModel MapToMessageTemplateViewModels(TemplateModel template)
+    {
+        var viewModel = mapper.Map<MessageTemplateViewModel>(template);
+        viewModel.InputTexts = string.IsNullOrWhiteSpace(template.JsonValue) ?
+            new List<InputText>() : JsonSerializer.Deserialize<IEnumerable<InputText>>(template.JsonValue);
+
+        return viewModel;
     }
 }

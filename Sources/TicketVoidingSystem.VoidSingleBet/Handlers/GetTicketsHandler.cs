@@ -70,10 +70,10 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupsTicketViewModel(GetTicketsRequest request, IEnumerable<GetTicketModel> getTicketsResult)
     {
         var match = await matchService.GetMatch(request.MatchId);
-        var groupsGetTicket = GetGroupsGetTicketModel(getTicketsResult, request);
+        var groupsGetTicket = GetGroupsGetTicketModel(getTicketsResult, request).Where(item => item.Tickets.Any());
         var groups = new List<Group<TicketViewModel>>();
-        // Jacob, ko để linQ ngay trong foreach ntn
-        foreach (var item in groupsGetTicket.Where(item => item.Tickets.Any()))
+
+        foreach (var item in groupsGetTicket)
         {
             groups.Add(await CreateGroupTicketViewModel(item, match));
         }

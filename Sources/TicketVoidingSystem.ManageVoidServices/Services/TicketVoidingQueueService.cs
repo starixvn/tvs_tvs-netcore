@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
@@ -25,21 +26,19 @@ public class TicketVoidingQueueServiceImp : TicketVoidingQueueService
 
     public async Task<IEnumerable<TicketVoidingQueueModel>> GetQueueInAllServers(int voidingHistoryId)
     {
-        var queueInAllServers = new List<TicketVoidingQueueModel>();
         var criteria = new GetTicketVoidingQueueCriteria
         {
             VoidingHistoryId = voidingHistoryId
         };
 
-        // Jacob xài Task.WhenAll và SelectMany
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            var queues = await repository.FetchAsync<TicketVoidingQueueModel>(criteria);
-            queueInAllServers.AddRange(queues);
-        }
+            return repository.FetchAsync<TicketVoidingQueueModel>(criteria);
+        });
 
-        return queueInAllServers;
+        var queuesInAllServers = await Task.WhenAll(tasks);
+        return queuesInAllServers.SelectMany(queues => queues);
     }
 
     public async Task UpdateQueueByBatch(int siteDbGroupId, string queueIds, int statusId)

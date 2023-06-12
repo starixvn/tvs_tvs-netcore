@@ -27,12 +27,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
         this.repository = repository;
     }
 
-    public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query) // NOSONAR
+    public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query)
     {
         var transInfoJsonList = new List<string>();
         var issueInfo = BuildIssueInfo(query);
-        // Jacob Tách cái switch ra 1 hàm
-        // Xài yield đi
         foreach (var item in SiteDbGroupConstant.ServerList)
         {
             var criteria = CreateGetTicketSiteDbCriteria(item, issueInfo, query);
@@ -43,7 +41,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
         return transInfoJsonList;
     }
 
-    private GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)
+    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)
     {
         var criteria = new GetTicketSiteDbCriteria
         {
@@ -99,15 +97,15 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.ArchivedTransIds = issueInfo;
                 break;
 
-                case IssueTypeConstant.WrongOdds:
-                    criteria.WrongOddsInfo = issueInfo;
-                    break;
+            case IssueTypeConstant.WrongOdds:
+                criteria.WrongOddsInfo = issueInfo;
+                break;
 
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
         }
-        
+
         return criteria;
     }
 

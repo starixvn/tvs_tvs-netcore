@@ -30,46 +30,45 @@ public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
 
     public async Task<IEnumerable<Result>> SendMessageWithTicketInfo(LetstalkModel letstalkModel, TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
     {
-        var results = new List<Result>();
         try
         {
-            // Jacob: Chỗ này, nên để results là kết quả trả về, chứ không phải 1 biến input & output
-            await Send(letstalkModel, ticketInfo, tickets, results);
+            return await Send(letstalkModel, ticketInfo, tickets);
         }
         catch (Exception exception)
         {
             await loggingService.ErrorAsync(nameof(GroupVoidSettledBetService), exception);
-            results.Add(new Result { ErrorCode = ErrorCode.SendLetstalkFail, ErrorMsg = exception.Message });
+            return new List<Result> { new() { ErrorCode = ErrorCode.SendLetstalkFail, ErrorMsg = exception.Message } };
         }
-
-        return results;
     }
 
-    private async Task Send(LetstalkModel letstalkModel, TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets, ICollection<Result> results)
+    private async Task<IEnumerable<Result>> Send(LetstalkModel letstalkModel, TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
     {
         if (!tickets.Any())
         {
-            return;
+            return Enumerable.Empty<Result>();
         }
 
         var contents = messageContentService.Create(ticketInfo, tickets);
         if (!contents.Any())
         {
-            return;
+            return Enumerable.Empty<Result>();
         }
 
-        await SendMultipleMessage(letstalkModel, contents, results);
+        return await SendMultipleMessage(letstalkModel, contents);
     }
 
-    private async Task SendMultipleMessage(LetstalkModel letstalkModel, IEnumerable<string> contents, ICollection<Result> results)
+    private async Task<IEnumerable<Result>> SendMultipleMessage(LetstalkModel letstalkModel, IEnumerable<string> contents)
     {
-        // Jacob: create nhiều tasks rồi xài Tasi.WhenAll
+        var tasks = new List<Task<Result>>();
         foreach (var item in contents)
         {
             letstalkModel.Content = item;
-            var result = await letstalkSingleMessageService.Send(letstalkModel, null);
-
-            results.Add(result);
+            var task = letstalkSingleMessageService.Send(letstalkModel, null);
+            tasks.Add(task);
         }
+
+        var taskResults = await Task.WhenAll(tasks);
+
+        return taskResults;
     }
 }

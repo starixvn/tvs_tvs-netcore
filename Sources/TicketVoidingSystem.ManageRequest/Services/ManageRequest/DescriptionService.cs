@@ -111,6 +111,6 @@ public class DescriptionServiceImp : DescriptionService
 
     private string BuildVoidArchivedTicket(RequestDescription item)
     {
-        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, null);
+        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, Enumerable.Empty<string>());
     }
 }
