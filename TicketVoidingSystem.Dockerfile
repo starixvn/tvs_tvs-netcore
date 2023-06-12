@@ -19,7 +19,7 @@ COPY ./TicketVoidingSystem.Website .
 
 RUN dotnet publish -r linux-x64 --self-contained false -c Release -o /app 
 
-FROM hub.nexdev.net/base/dotnet/core/aspnet:7.0 AS base
+FROM hub.nexdev.net/base/dotnet/core/aspnet:7.0-alpine AS base
 
 # Don’t run as root
 RUN adduser --disabled-password \
