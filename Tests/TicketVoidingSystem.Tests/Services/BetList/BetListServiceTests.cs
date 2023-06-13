@@ -13,6 +13,17 @@ namespace TicketVoidingSystem.Tests.Services.BetList;
 
 public class BetListServiceTests : IClassFixture<RemotingRefFixture>
 {
+    private readonly OddsService oddsService;
+    private readonly RemotingRefWrapperService remotingRefWrapperService;
+    private readonly BetListServiceImp service;
+
+    public BetListServiceTests()
+    {
+        oddsService = Substitute.For<OddsService>();
+        remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
+        service = new BetListServiceImp(remotingRefWrapperService, oddsService);
+    }
+
     [Fact]
     public void BuildChoiceBlock_ReturnChoice()
     {
@@ -78,25 +89,22 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         Assert.Equal(expected, actual);
     }
 
-    //[Theory]
-    //[InlineData(true)]
-    //[InlineData(false)]
-    //public void GetOdds_ReturnOdds(bool isParlay)
-    //{
-    //    // Arrange
-    //    GetCachePropertyById cache = id => "";
-    //    var ticket = Builder<Ticket>.CreateNew().Build();
-    //    var oddsService = Substitute.For<OddsService>();
-    //    oddsService.GetOdds(default, default, default).ReturnsForAnyArgs(1);
-    //    var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-    //    var service = new BetListServiceImp(remotingRefWrapperService, oddsService);
+    // [Theory]
+    // [InlineData(true)]
+    // [InlineData(false)]
+    // public void GetOdds_ReturnOdds(bool isParlay)
+    // {
+    //     // Arrange
+    //     GetCachePropertyById cache = id => "";
+    //     var ticket = Builder<Ticket>.CreateNew().Build();
+    //     oddsService.GetOddsName(default).ReturnsForAnyArgs("1");
 
-    //    // Act
-    //    var actual = service.GetOdds(ticket, isParlay);
+    //     // Act
+    //     var actual = service.GetOdds(ticket, isParlay);
 
-    //    // Assert
-    //    Assert.NotNull(actual);
-    //}
+    //     // Assert
+    //     Assert.NotNull(actual);
+    // }
 
     [Fact]
     public void GetBetType_ReturnName()
@@ -306,5 +314,123 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
 
         // Assert
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetDisplayedBetTypeName_ReturnsBetTypeName_FromRemotingRefWrapperService()
+    {
+        // Arrange
+        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
+        var oddsService = Substitute.For<OddsService>();
+        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
+        int id = 123;
+        long refNo = 456;
+        string expectedBetName = "Bet Type Name";
+
+        remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns("ParentId");
+        remotingRefWrapperService.GetDisplayedBetTypeName("ParentId", refNo).Returns(expectedBetName);
+
+        // Act
+        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+
+        // Assert
+        Assert.Equal(expectedBetName, result);
+    }
+
+    [Fact]
+    public void GetDisplayedBetTypeName_ReturnsIdAsString_WhenBetTypeIdIsNull()
+    {
+        // Arrange
+        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
+        var oddsService = Substitute.For<OddsService>();
+        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
+        int id = 123;
+        long refNo = 456;
+        string betName = "123";
+        var expected = "123";
+
+        remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns((string)null);
+        remotingRefWrapperService.GetDisplayedBetTypeName("123", refNo).Returns(betName);
+
+        // Act
+        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void GetDisplayedBetTypeName_ReturnsNextBetTypeNameForFistNextBet()
+    {
+        // Arrange
+        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
+        var oddsService = Substitute.For<OddsService>();
+        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
+        int id = 86;
+        long refNo = 456;
+        string expectedBetName = "Bet Type Name";
+
+        remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns("ParentId");
+        remotingRefWrapperService.GetDisplayedBetTypeName("ParentId", refNo).Returns(expectedBetName);
+
+        // Act
+        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+
+        // Assert
+        Assert.Equal("Next " + expectedBetName, result);
+    }
+
+    [Fact]
+    public void GetDisplayedBetTypeName_ReturnsNextBetTypeNameForSecondNextBet()
+    {
+        // Arrange
+        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
+        var oddsService = Substitute.For<OddsService>();
+        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
+        int id = 85;
+        long refNo = 456;
+        string expectedBetName = "Bet Type Name";
+
+        remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns("ParentId");
+        remotingRefWrapperService.GetDisplayedBetTypeName("ParentId", refNo).Returns(expectedBetName);
+
+        // Act
+        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+
+        // Assert
+        Assert.Equal("Next " + expectedBetName, result);
+    }
+
+    [Fact]
+    public void GetHandicap_ReturnsEmptyString_BetTypeIdIsHideHandicap()
+    {
+        // Arrange
+        ITicket ticket = Substitute.For<ITicket>();
+        ITicketHelper ticketHelper = Substitute.For<ITicketHelper>();
+        List<ITicketData> ticketData = new List<ITicketData>();
+        bool isShowScoreMap = true;
+        ticket.BetTypeId = 1605;
+
+        // Act
+        var result = service.GetHandicap(ticket, ticketHelper, ticketData, isShowScoreMap);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GetHandicap_ReturnsHandicapInnerText()
+    {
+        // Arrange
+        ITicket ticket = Substitute.For<ITicket>();
+        ITicketHelper ticketHelper = Substitute.For<ITicketHelper>();
+        List<ITicketData> ticketData = new List<ITicketData>();
+        bool isShowScoreMap = true;
+
+        // Act
+        var result = service.GetHandicap(ticket, ticketHelper, ticketData, isShowScoreMap);
+
+        // Assert
+        Assert.NotNull(result);
     }
 }

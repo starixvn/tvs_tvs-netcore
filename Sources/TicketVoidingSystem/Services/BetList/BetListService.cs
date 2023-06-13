@@ -20,7 +20,7 @@ public interface BetListService
 
     string BuildStake(ITicket ticket, ITicketHelper ticketHelper);
 
-    string GetOdds(ITicket ticket, bool isParlay);
+    string GetOdds(ITicket ticket, bool isParlay); //test
 
     string GetBetType(object betTypeId, string language);
 
