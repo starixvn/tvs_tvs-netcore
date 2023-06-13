@@ -1,7 +1,7 @@
 function ReCheckin() {
-    var urlRecheckIn = window.rootUrl + 'Auth/ReCheckIn';
-    var urlLogout = window.rootUrl + 'Auth/LogOut';
-    var urlOffline = window.rootUrl + 'Auth/Offline';
+    var urlRecheckIn = document.body.getAttribute('root-url') + 'Auth/ReCheckIn';
+    var urlLogout = document.body.getAttribute('root-url') + 'Auth/LogOut';
+    var urlOffline = document.body.getAttribute('root-url') + 'Auth/Offline';
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function () {
