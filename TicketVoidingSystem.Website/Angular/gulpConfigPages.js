@@ -89,14 +89,27 @@ const voidRequest = {
   indexEJSPath: './src/void-request/index.ejs'
 };
 
+const manageRequest = {
+  pageName: 'ManageRequest',
+  tsconfigFiles: [
+    'manage-request/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/ticket-voiding-system/manage-request/',
+  index: 'src/manage-request/index.cshtml',
+  main: 'src/manage-request/main.ts',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/manage-request',
+  indexEJSPath: './src/manage-request/index.ejs'
+};
 const configPages = [
-  // homePage,
-  // manageVoidServices,
-  // abExceptionList,
-  // markTickets,
-  // ticketListing,
-  // voidSingleBet,
-  voidRequest
+  //  homePage,
+  //  manageVoidServices,
+  //  abExceptionList,
+  //  markTickets,
+  //   ticketListing,
+  //   voidSingleBet,
+  //  voidRequest,
+   manageRequest
 ];
 
 module.exports = configPages;
