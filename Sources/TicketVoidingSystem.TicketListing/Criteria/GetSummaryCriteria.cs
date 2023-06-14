@@ -38,6 +38,8 @@ public class GetSummaryCriteria : CriteriaBase
 
     public string AffectTickets { get; set; }
 
+    public string SelectionSubParlays { get; set; }
+
     public override string GetSettingKey() => "NAP_SpecialDelete_TicketListing_Summary";
 
     public override bool IsValid() => MatchId > 0;
