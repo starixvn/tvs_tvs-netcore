@@ -407,11 +407,20 @@ export class FilterComponent implements OnInit {
     if (this.isShowFilterTime() && !this.disabledTransDate && !StaticService.isFromTimeSameOrBeforeToTime(this.fromDate, this.toDate, this.tooltip, 'from-date-time')) {
       return false;
     }
+    if (this.isSelectionNotValid()) {
+      this.tooltip.display('multiple-selection', TEXT.INVALID_SELECTION);
+      return false;    
+    }
     if (!this.isHideNormalAdvancedMode()) {
       return this.advancedModeComponent.validate();
     }
-
+  
     return true;
+  }
+
+  isSelectionNotValid(){
+    const selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay)
+    return this.singleOrSubParlay === "SubParlay" && selectionSubParlays === "";
   }
 
   validateBetTypes() {
@@ -437,7 +446,7 @@ export class FilterComponent implements OnInit {
     this.query.quarter = this.advancedModeBasketball.isShow ? this.advancedModeBasketball.getSelection() : 'All';
     this.query.singleOrSubParlay = this.singleOrSubParlay;
     this.query.isReSettled = this.isReSettled;
-    this.query.selectionSubParlays = this.getSelectionSubParlays(this.query.singleOrSubParlay, this.comboParlay);
+    this.query.selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay);
 
     if (this.query.product === Product.BET_BUILDER) {
       this.query.betTypes = '38';
