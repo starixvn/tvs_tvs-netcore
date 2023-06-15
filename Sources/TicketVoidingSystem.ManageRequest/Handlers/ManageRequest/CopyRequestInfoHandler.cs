@@ -9,11 +9,11 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<string>
+public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<CopyRequestInfoResponse>
 {
 }
 
-public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, string>
+public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
 {
     private readonly IDynamicRepository repository;
 
@@ -22,7 +22,7 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, st
         this.repository = repository;
     }
 
-    public async Task<string> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
+    public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
         var model = await repository.GetAsync<CopyRequestInfoModel>(request, cancellationToken);
         var match = new Match
@@ -46,6 +46,6 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, st
         stringBuilder.AppendLine($"VAR: {varCheckValue}");
         stringBuilder.AppendLine($"Start Void Time: {model.StartVoidTime:hh:mm:ss.fff tt} ({filterByValue})");
 
-        return stringBuilder.ToString();
+        return new CopyRequestInfoResponse { Info = stringBuilder.ToString() };
     }
 }

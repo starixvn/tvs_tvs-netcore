@@ -68,7 +68,6 @@ public class ManageRequestController : ControllerBase
     public async Task<IActionResult> CheckBy(CheckByRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest)]
     public async Task<IActionResult> CopyRequestInfo(CopyRequestInfoRequest request) => Ok(await mediator.Send(request));
 
     [HttpGet]

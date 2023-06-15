@@ -231,8 +231,8 @@ export class RequestListComponent implements OnInit, OnChanges {
       requestId: requestId,
       matchId: matchId
     };
-    const content = await this.appService.copyRequestInfo(query);
-    this.clipboardService.copyFromContent(content);
+    const requestInfo = await this.appService.copyRequestInfo(query);
+    this.clipboardService.copyFromContent(requestInfo.info);
     alert(`Request No.${requestId} has been copied to clipboard.`);
   }
 

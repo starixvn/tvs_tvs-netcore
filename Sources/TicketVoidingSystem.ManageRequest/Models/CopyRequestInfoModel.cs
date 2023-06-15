@@ -39,3 +39,8 @@ public class CopyRequestInfoModel
         }
     }
 }
+
+public class CopyRequestInfoResponse
+{
+    public string Info { get; set; }
+}
