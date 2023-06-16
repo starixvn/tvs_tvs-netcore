@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.MailDeliver.MailClient.API;
 using Fanex.MailDeliver.Model;
@@ -16,6 +17,15 @@ public interface FanexMailApiService
 public class FanexMailApiServiceImp : FanexMailApiService
 {
     private readonly LoggingService loggingService;
+
+    private static readonly IDictionary<EmailGroup, string> ErrorEmailMap = new Dictionary<EmailGroup, string>
+    {
+        { EmailGroup.Csd, ErrorSendEmail.Csd },
+        { EmailGroup.Recover, ErrorSendEmail.Recover },
+        { EmailGroup.CashOut, ErrorSendEmail.CashOut },
+        { EmailGroup.ItQa, ErrorSendEmail.It },
+        { EmailGroup.ItSupport, ErrorSendEmail.It },
+    };
 
     public FanexMailApiServiceImp(LoggingService loggingService)
     {
@@ -38,30 +48,13 @@ public class FanexMailApiServiceImp : FanexMailApiService
 
     public async Task WriteLog(EmailGroup group, Exception exception)
     {
-        // Jacob: Cái này làm 1 cái dictionary IDictionary<EmailGroup, string> titleMap
-        // là bỏ được cái switch
-        switch (group)
+        if (ErrorEmailMap.TryGetValue(group, out var errorMessage))
         {
-            case EmailGroup.Csd:
-                await loggingService.ErrorAsync(ErrorSendEmail.Csd, exception);
-                break;
-
-            case EmailGroup.Recover:
-                await loggingService.ErrorAsync(ErrorSendEmail.Recover, exception);
-                break;
-
-            case EmailGroup.CashOut:
-                await loggingService.ErrorAsync(ErrorSendEmail.CashOut, exception);
-                break;
-
-            case EmailGroup.ItQa:
-            case EmailGroup.ItSupport:
-                await loggingService.ErrorAsync(ErrorSendEmail.It, exception);
-                break;
-
-            default:
-                await loggingService.ErrorAsync(ErrorSendEmail.WrongGroup, exception);
-                break;
+            await loggingService.ErrorAsync(errorMessage, exception);
+        }
+        else
+        {
+            await loggingService.ErrorAsync(ErrorSendEmail.WrongGroup, exception);
         }
     }
 }

@@ -43,7 +43,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
 
     private async Task UpdateGroupTickets(VoidedTicketsViewModel viewModel, GetVoidedTicketsQuery query, IEnumerable<VoidedTicketModel> voidedTickets)
     {
-        var match = query.MatchId == 0 ? null : await getVoidedTicketsService.GetMatchInfo(query.MatchId);
+        var match = query.MatchId != null && query.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(query.MatchId.Value) : null;
         var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, query).Where(item => item.Tickets.Any());
         var index = (query.PageIndex * query.PageSize) + 1;
         foreach (var group in groups)

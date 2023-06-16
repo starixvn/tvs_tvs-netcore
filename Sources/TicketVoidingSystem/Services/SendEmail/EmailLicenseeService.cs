@@ -32,56 +32,49 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
 
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
-        // Jacob: Tách thành 2 hàm, 1 hàm tính toán ra 1 list data, 1 hàm send email dựa vào list data đó
-        // Hàm này làm nhiều việc quá
         var results = new CombineMessageModel();
-        var negativeBalanceUsers = mailLicenseesModel.NegativeBalanceUsers;
 
         foreach (var site in sites)
         {
-            await SendToSite(mailLicenseesModel, site, tickets, isFromAfterVoidService, results, negativeBalanceUsers);
+            var siteName = site.Site;
+            var ticketsInSite = GetTicketsInSite(tickets, siteName);
+
+            if (ticketsInSite.Any())
+            {
+                await SendToSite(results, mailLicenseesModel, site, ticketsInSite, isFromAfterVoidService);
+            }
         }
 
         return CreateCombineResults(results, isFromAfterVoidService);
     }
 
-    private async Task SendToSite(MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService,
-        CombineMessageModel results, string negativeBalanceUsers)
+    private async Task SendToSite(CombineMessageModel results, MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> ticketsInSite, bool isFromAfterVoidService)
     {
         var modelClone = mailLicenseesModel.DeepClone();
-        var siteName = site.Site;
-        var ticketsInSite = tickets.Where(t => t.EmailGroup.Equals(siteName, StringComparison.CurrentCultureIgnoreCase)).ToList();
+        modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
+        ReplaceMessageChinaViewLicensee(modelClone, site);
 
-        if (modelClone.Match != null && modelClone.Match.LeagueGroupId.IsLeagueGroupIdSaBa() && site.IsChinaView)
-        {
-            ReplaceMessageChinaViewLicensee(modelClone);
-        }
-        if (ticketsInSite.Count > 0)
-        {
-            modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
-            modelClone.NegativeBalanceUsers = negativeBalanceUsers;
-            await Send(modelClone, site, ticketsInSite, results, isFromAfterVoidService);
-        }
-    }
-
-    private async Task Send(MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, CombineMessageModel results, bool isFromAfterVoidService)
-    {
         if (!string.IsNullOrEmpty(site.ToList))
         {
-            await SendEmailToSite(mailLicenseesModel, site, tickets, results, isFromAfterVoidService);
+            await ProcessSiteWithMailingAsync(modelClone, site, ticketsInSite, results, isFromAfterVoidService);
         }
         else
         {
-            results.Results.Add(mailResultService.CreateFail(site.Site, isFromAfterVoidService));
-            results.FailedLicensees.Add(site.Site);
+            ProcessSiteWithoutMailing(site, results, isFromAfterVoidService);
         }
     }
 
-    private async Task SendEmailToSite(MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> tickets, CombineMessageModel results, bool isFromAfterVoidService)
+    private static IEnumerable<TicketEmailModel> GetTicketsInSite(IEnumerable<TicketEmailModel> tickets, string siteName)
+    {
+        return tickets.Where(t => t.EmailGroup.Equals(siteName, StringComparison.CurrentCultureIgnoreCase));
+    }
+
+    private async Task ProcessSiteWithMailingAsync(MailVoidViewModel mailLicenseesModel, SiteEmail site,
+        IEnumerable<TicketEmailModel> ticketsInSite, CombineMessageModel results, bool isFromAfterVoidService)
     {
         try
         {
-            var mailRecord = await voidEmailContentService.Create(mailLicenseesModel, site, tickets, EmailGroup.Csd, isFromAfterVoidService);
+            var mailRecord = await voidEmailContentService.Create(mailLicenseesModel, site, ticketsInSite, EmailGroup.Csd, isFromAfterVoidService);
             fanexMailApiService.SendEmail(mailRecord);
             var listEmail = site.ToList.Split(';').Distinct().ToArray();
             results.Results.Add(mailResultService.CreateSuccess(site.Site, listEmail, isFromAfterVoidService));
@@ -95,16 +88,30 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
         }
     }
 
-    private static void ReplaceMessageChinaViewLicensee(MailVoidViewModel mailModel)
+    private void ProcessSiteWithoutMailing(SiteEmail site, CombineMessageModel results, bool isFromAfterVoidService)
     {
-        var serializedContentChineseSimplified = JsonSerializer.Serialize(mailModel.Message.ContentChineseSimplified);
-        var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified.Replace("沙巴", ""));
-
-        mailModel.Message.ContentChineseSimplified = deSerializedContentChineseSimplified;
-        mailModel.Message.ContentEnglish = mailModel.Message.ContentEnglish.Replace("SABA ", "");
+        results.Results.Add(mailResultService.CreateFail(site.Site, isFromAfterVoidService));
+        results.FailedLicensees.Add(site.Site);
     }
 
-    private List<Result> CreateCombineResults(CombineMessageModel model, bool isFromAfterVoidService)
+    private static bool IsChinaViewAndSaBaLeague(MailVoidViewModel mailModel, SiteEmail site)
+    {
+        return mailModel.Match?.LeagueGroupId.IsLeagueGroupIdSaBa() == true && site.IsChinaView;
+    }
+
+    private static void ReplaceMessageChinaViewLicensee(MailVoidViewModel modelClone, SiteEmail site)
+    {
+        if (IsChinaViewAndSaBaLeague(modelClone, site))
+        {
+            var serializedContentChineseSimplified = JsonSerializer.Serialize(modelClone.Message.ContentChineseSimplified);
+            var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified.Replace("沙巴", ""));
+
+            modelClone.Message.ContentChineseSimplified = deSerializedContentChineseSimplified;
+            modelClone.Message.ContentEnglish = modelClone.Message.ContentEnglish.Replace("SABA ", "");
+        }
+    }
+
+    private IEnumerable<Result> CreateCombineResults(CombineMessageModel model, bool isFromAfterVoidService)
     {
         var results = model.Results;
         var successfulLicensees = string.Join(", ", model.SuccessfulLicensees);

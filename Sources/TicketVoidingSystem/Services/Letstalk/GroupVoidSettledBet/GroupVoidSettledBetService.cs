@@ -17,15 +17,18 @@ public interface GroupVoidSettledBetService
 
 public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
 {
-    private readonly MessageContentService messageContentService;
     private readonly LetstalkSingleMessageService letstalkSingleMessageService;
     private readonly LoggingService loggingService;
+    private readonly MessageContentSingleService messageContentSingleService;
+    private readonly MessageContentWithMemberTemplateService messageContentWithMemberTemplateService;
 
-    public GroupVoidSettledBetServiceImp(MessageContentService messageContentService, LetstalkSingleMessageService letstalkSingleMessageService, LoggingService loggingService)
+    public GroupVoidSettledBetServiceImp(LetstalkSingleMessageService letstalkSingleMessageService, LoggingService loggingService,
+        MessageContentSingleService messageContentSingleService, MessageContentWithMemberTemplateService messageContentWithMemberTemplateService)
     {
-        this.messageContentService = messageContentService;
         this.letstalkSingleMessageService = letstalkSingleMessageService;
         this.loggingService = loggingService;
+        this.messageContentSingleService = messageContentSingleService;
+        this.messageContentWithMemberTemplateService = messageContentWithMemberTemplateService;
     }
 
     public async Task<IEnumerable<Result>> SendMessageWithTicketInfo(LetstalkModel letstalkModel, TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
@@ -48,7 +51,8 @@ public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
             return Enumerable.Empty<Result>();
         }
 
-        var contents = messageContentService.Create(ticketInfo, tickets);
+        var contents = ticketInfo.IsMemberTemplate ?
+            messageContentWithMemberTemplateService.Create(ticketInfo, tickets) : new List<string> { messageContentSingleService.Create(ticketInfo, tickets) };
         if (!contents.Any())
         {
             return Enumerable.Empty<Result>();

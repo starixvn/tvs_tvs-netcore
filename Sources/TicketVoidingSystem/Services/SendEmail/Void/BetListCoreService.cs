@@ -69,7 +69,6 @@ public class BetListCoreServiceImp : BetListCoreService
 
     private static void UpdateTicketWithMatch(ITicket ticket, Match match)
     {
-        // Jacob: nên tránh null value 
         if (match != null)
         {
             ticket.HomeId = match.HomeId;
@@ -112,7 +111,6 @@ public class BetListCoreServiceImp : BetListCoreService
         var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         return mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
     }
-
 
     private static bool IsMainParlay(TicketEmailModel ticket)
     {

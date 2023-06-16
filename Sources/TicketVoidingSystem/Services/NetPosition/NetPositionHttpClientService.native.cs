@@ -17,9 +17,6 @@ public interface NetPositionHttpClientService
 
 public class NetPositionHttpClientServiceImp : NetPositionHttpClientService
 {
-    // Jacob: Sao phai truyền vào httpClient? Sao không new luôn. A ko nhớ đã đọc ở đâu, không được tạo nhiều httpclient
-    // Đọc phần recommended use ở đây: https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient-guidelines
-    //
     private readonly HttpClient httpClient;
     private readonly LoggingService loggingService;
 

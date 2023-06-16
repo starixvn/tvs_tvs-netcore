@@ -107,13 +107,16 @@ public class ABExceptionListControllerTests
     [Fact]
     public async Task GetSites_WhenCalled_ReturnJsonData()
     {
+        // Arrange
         var models = new List<GroupLicenseeSiteViewModel> { new() { GroupName = "credit" } };
-
         var mediator = Substitute.For<IMediator>();
         mediator.Send(Arg.Any<GetSitesRequest>()).ReturnsForAnyArgs(models);
         var controller = new ABExceptionListController(mediator);
 
+        // Act
         var okObjectResult = await controller.GetSites() as OkObjectResult;
+
+        // Assert
         var actual = okObjectResult?.Value as List<GroupLicenseeSiteViewModel>;
         await mediator.Received(1).Send(Arg.Any<GetSitesRequest>());
         Assert.Equal(models, actual);
