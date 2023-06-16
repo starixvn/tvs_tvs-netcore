@@ -4,7 +4,7 @@ public class GetVoidedTicketsQuery
 {
     public int RequestId { get; set; }
 
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public string VoidingHistoryIds { get; set; }
 

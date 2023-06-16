@@ -101,7 +101,7 @@ export class FilterComponent implements OnInit {
   }
 
   newRequest() {
-    window.open('TicketVoidingSystem/AddRequest/Index', '_blank');
+    window.open(`${document.body.getAttribute('old-site-root-url')}TicketVoidingSystem/AddRequest/Index`, '_blank');
   }
 
   openMarkTickets() {

@@ -6,6 +6,7 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
@@ -16,10 +17,12 @@ public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<CopyRequ
 public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
 {
     private readonly IDynamicRepository repository;
+    private readonly MatchService matchService;
 
-    public CopyRequestInfoHandler(IDynamicRepository repository)
+    public CopyRequestInfoHandler(IDynamicRepository repository, MatchService matchService)
     {
         this.repository = repository;
+        this.matchService = matchService;
     }
 
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
@@ -33,6 +36,7 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, Co
             LeagueId = model.LeagueId,
             IsNeutral = model.IsNeutral
         };
+        matchService.UpdateMatchInfoFromRemotingRef(match);
         var varCheckValue = model.IsCheckedVar ? "YES" : "NO";
         var filterByValue = model.FilterBy == FilterByConstant.AcceptTime ? "Accept time" : "Trans time";
 

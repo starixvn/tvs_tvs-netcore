@@ -34,7 +34,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
             LicenseeNames = CombineLicensee(voidedTickets)
         };
 
-        var match = request.MatchId == 0 ? null : await getVoidedTicketsService.GetMatchInfo(request.MatchId);
+        var match = request.MatchId != null && request.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(request.MatchId.Value) : null;
         var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, request);
         var index = (request.PageIndex * request.PageSize) + 1;
         foreach (var item in groups.Where(item => item.Tickets.Any()))
