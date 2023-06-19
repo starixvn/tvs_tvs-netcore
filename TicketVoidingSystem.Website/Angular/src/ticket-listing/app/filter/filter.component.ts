@@ -103,7 +103,7 @@ export class FilterComponent implements OnInit {
   resetCheckedComboParlay(){
     this.comboParlay.items.forEach(x => x.checked = true);
   }
-  
+
   setDateTime() {
     const date = new Date(
       momenttimezone()
@@ -166,6 +166,7 @@ export class FilterComponent implements OnInit {
     this.query.product = value;
     this.isMatch3rd = Product.IS_MATCH_3RD.indexOf(value) > -1;
     this.switchMatch3rd = this.switchMatch3rd !== this.isMatch3rd;
+    this.isReSettled = false;
     if (value !== Product.SPORTS_BOOK) {
       this.disabledTransDate = true;
       this.singleOrSubParlay = 'All';
