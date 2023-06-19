@@ -1,4 +1,5 @@
-﻿using Fanex.BetList.Core.Entities;
+﻿using AutoMapper;
+using Fanex.BetList.Core.Entities;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.MarkTickets.Constants;
@@ -32,13 +33,14 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var groupTickets = new Group<GetTicketModel>();
-        var sessionService = Substitute.For<SessionService>();
+        var mapper = Substitute.For<IMapper>();
         var betListService = Substitute.For<BetListService>();
         var checkBoxService = Substitute.For<CheckBoxService>();
-        var service = new MapTicketServiceImp(TestSetup.CreateMapper(), sessionService, betListService, checkBoxService);
+        var service = new MapTicketServiceImp(mapper, betListService, checkBoxService);
+        var userPermission = new UserPermission();
 
         // Act
-        service.MapToGroupTicketViewModel(groupTickets);
+        service.MapToGroupTicketViewModel(groupTickets, userPermission);
 
         // Assert
         betListService
@@ -58,10 +60,10 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
                 new() { TransId = transId }
             }
         };
-        var sessionService = Substitute.For<SessionService>();
+        var mapper = Substitute.For<IMapper>();
         var betListService = Substitute.For<BetListService>();
         var checkBoxService = Substitute.For<CheckBoxService>();
-        var service = new MapTicketServiceImp(TestSetup.CreateMapper(), sessionService, betListService, checkBoxService);
+        var service = new MapTicketServiceImp(mapper, betListService, checkBoxService);
 
         // Act
         service.MapToGroupTicketViewModel(groupTickets);

@@ -44,7 +44,7 @@ public static class IssueTypeExtension
         return false;
     }
 
-    public static bool IsAbnormalBet(this int id)
+    private static bool IsAbnormalBet(this int id)
     {
         if (id == IssueTypeConstant.AbnormalBet)
         {
@@ -64,7 +64,7 @@ public static class IssueTypeExtension
         return false;
     }
 
-    public static bool IsAbnormalBetRealMember(this int id)
+    private static bool IsAbnormalBetRealMember(this int id)
     {
         if (id == IssueTypeConstant.AbnormalBetRealMember)
         {

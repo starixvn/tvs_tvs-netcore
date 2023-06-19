@@ -32,9 +32,10 @@ public class GetTicketsHandlerTests
         var mapTicketService = Substitute.For<MapTicketService>();
         getTicketsService.GetTickets(request).ReturnsForAnyArgs((validation, data));
         var pagingService = Substitute.For<PagingService>();
+        var userPermissionService = Substitute.For<UserPermissionService>();
         pagingService.Paging(data, request.PageIndex, request.PageSize).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
         pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
-        var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService);
+        var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -73,9 +74,10 @@ public class GetTicketsHandlerTests
         var mapTicketService = Substitute.For<MapTicketService>();
         getTicketsService.GetTickets(request).ReturnsForAnyArgs((validation, data));
         var pagingService = Substitute.For<PagingService>();
+        var userPermissionService = Substitute.For<UserPermissionService>();
         pagingService.Paging(data, request.PageIndex, request.PageSize).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
         pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
-        var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService);
+        var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
 
         // Act
         var model = await handler.Handle(request, CancellationToken.None);
@@ -113,9 +115,10 @@ public class GetTicketsHandlerTests
         var mapTicketService = Substitute.For<MapTicketService>();
         getTicketsService.GetTickets(default).ReturnsForAnyArgs((validation, data));
         var pagingService = Substitute.For<PagingService>();
+        var userPermissionService = Substitute.For<UserPermissionService>();
         pagingService.Paging(data, request.PageIndex, request.PageSize).ReturnsForAnyArgs(new List<GetTicketModel>());
         pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
-        var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService);
+        var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
 
         // Act
         var model = await handler.Handle(request, CancellationToken.None);

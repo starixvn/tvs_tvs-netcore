@@ -19,19 +19,17 @@ public class SessionServiceTests
         var userService = Substitute.For<IUserService>();
         var currentSession = Substitute.For<INapSession>();
         var siteSettings = Substitute.For<INapSettings>();
-
-        userService.IsHavingPermission(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(),
+        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        userService.IsHavingPermissionAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(),
             Arg.Any<Constant.Policy>()).ReturnsForAnyArgs(true);
-        var service = new SessionServiceImp(currentSession, userService, siteSettings, null);
+        var service = new SessionServiceImp(currentSession, userService, siteSettings, httpContextAccessor);
 
         // Act
         var actual = service.HasPermission("", Constant.Policy.Host);
 
         // Assert
-        userService.Received(1).IsHavingPermission(Arg.Any<int>(), Arg.Any<int>(),
-            Arg.Any<string>(),
-            Arg.Any<Constant.Policy>());
-        Assert.True(actual);
+        userService.Received().IsHavingPermissionAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(), Arg.Any<Constant.Policy>());
+        Assert.True(actual.Result);
     }
 
     [Fact]

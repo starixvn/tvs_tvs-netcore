@@ -18,7 +18,7 @@ public class ExportExcelDetailTicketsHandlerTests
         var excelService = Substitute.For<ExcelService<GetDetailTicketsQuery>>();
         var handler = new ExportExcelDetailTicketsHandler(excelService);
         var contentAsByteArray = new byte[] { };
-        excelService.CreateFileAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets).ReturnsForAnyArgs(contentAsByteArray);
+        excelService.GenerateContentAsByteArray(request, TemplateExcelPath.MarkUnmarkTickets).ReturnsForAnyArgs(contentAsByteArray);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
