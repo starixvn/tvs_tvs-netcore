@@ -22,7 +22,7 @@ public class GetSummaryTicketsServiceTests
             new() {LicenseeName = "AA"},
             new() {LicenseeName = "AA"},
             new() {LicenseeName = "AA"},
-            new() {LicenseeName = "BB"},
+            new() {LicenseeName = "BB"}
         };
         var query = Builder<GetSummaryQuery>.CreateNew().With(x => x.LicenseeId = licenseeId).Build();
         var repository = Substitute.For<IDynamicRepository>();

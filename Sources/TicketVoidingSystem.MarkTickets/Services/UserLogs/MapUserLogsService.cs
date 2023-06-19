@@ -52,7 +52,7 @@ public class MapUserLogsServiceImp : MapUserLogsService
             UserLogConstant.AutoMark => UserLogConstant.AutoMarkText,
             UserLogConstant.AutoUnmark => UserLogConstant.AutoUnmarkText,
             UserLogConstant.UnmarkAll => UserLogConstant.UnmarkAllText,
-            _ => "",
+            _ => ""
         };
 
         return actionText;

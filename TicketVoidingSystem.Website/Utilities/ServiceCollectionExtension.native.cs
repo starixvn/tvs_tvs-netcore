@@ -195,7 +195,7 @@ public static class ServiceCollectionExtension
         services.AddRedisCache(configuration.GetSection("FanexCachingRedis"));
     }
 
-    public static void RegisterONEbookUM(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterOneBookUM(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton(new UMClientConfiguration().Initialize(configuration));
         services.AddSingleton<IUMCacheService, MemoryUMCacheService>();

@@ -38,7 +38,7 @@ public class ConfirmAutoUnmarkServiceImp : ConfirmAutoUnmarkService
         var dataInAllServers = new List<string>();
         var criteria = new GetTransInfoForAutoUnmarkCriteria
         {
-            MatchId = (query.MatchId != null) ? int.Parse(query.MatchId) : null,
+            MatchId = query.MatchId != null ? int.Parse(query.MatchId) : null,
             SportType = query.SportType,
             MarkedBy = query.MarkedBy,
             IsExcludeTest = query.IsExcludeTest

@@ -28,7 +28,7 @@ builder.Services.AddHttpClient<NetPositionHttpClientService, NetPositionHttpClie
 builder.Services.RegisterFanexData(builder.Configuration);
 builder.Services.RegisterFanexExceptionHandler();
 builder.Services.RegisterSentry();
-builder.Services.RegisterONEbookUM(builder.Configuration);
+builder.Services.RegisterOneBookUM(builder.Configuration);
 builder.Services.RegisterRemotingRef();
 builder.Services.RegisterLetstalk();
 builder.Services.RegisterCoreServices(builder.Configuration);

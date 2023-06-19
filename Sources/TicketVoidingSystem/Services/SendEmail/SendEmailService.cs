@@ -57,7 +57,7 @@ public class SendEmailServiceImp : SendEmailService
             NegativeBalanceUsers = model.NegativeBalanceUsers,
             IsLikelyAbnormalBet = model.IsLikelyAbnormalBet,
             IsAbnormalAccount = model.IsAbnormalAccount,
-            IsFilterByUserName = model.IsFilterByUsername,
+            IsFilterByUserName = model.IsFilterByUsername
         };
     }
 }

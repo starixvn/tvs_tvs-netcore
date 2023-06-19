@@ -14,7 +14,7 @@ public class GetSelectionTypesHandlerTests
         // Arrange
         var models = new List<SelectionTypeModel>
         {
-            new(),
+            new()
         };
         var repository = Substitute.For<IDynamicRepository>();
         repository.FetchAsync<SelectionTypeModel>(default, default).ReturnsForAnyArgs(models);

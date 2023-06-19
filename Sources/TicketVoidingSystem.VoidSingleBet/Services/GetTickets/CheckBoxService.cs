@@ -43,7 +43,7 @@ public class CheckBoxServiceImp : CheckBoxService
 
     private static bool IsDisableBetTypesSabaTicket(UserPermission permission)
     {
-        return !(permission.InstantlySettledTicket);
+        return !permission.InstantlySettledTicket;
     }
 
     private static bool DefaultEnable(string groupName, UserPermission permission)

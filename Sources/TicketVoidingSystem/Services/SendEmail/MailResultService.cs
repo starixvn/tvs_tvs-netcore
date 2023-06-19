@@ -23,7 +23,7 @@ public class MailResultServiceImp : MailResultService
         return new Result
         {
             ErrorCode = isFromAfterVoidService ? ErrorCode.SendEmailToLicenseeSuccess : 0,
-            ErrorMsg = string.Format(StringResource.VoidBetDetailsSendMailSuccess, siteName, string.Join("; ", listEmail)),
+            ErrorMsg = string.Format(StringResource.VoidBetDetailsSendMailSuccess, siteName, string.Join("; ", listEmail))
         };
     }
 
@@ -32,7 +32,7 @@ public class MailResultServiceImp : MailResultService
         return new Result
         {
             ErrorCode = isFromAfterVoidService ? ErrorCode.SendEmailToLicenseeFail : ErrorCode.SendMessageOrEmailFail,
-            ErrorMsg = string.Format(StringResource.VoidBetDetailsSendMailFail, siteName),
+            ErrorMsg = string.Format(StringResource.VoidBetDetailsSendMailFail, siteName)
         };
     }
 

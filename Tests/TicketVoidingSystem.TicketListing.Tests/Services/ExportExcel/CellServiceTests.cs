@@ -57,7 +57,7 @@ internal class TitleTestCase : IEnumerable<object[]>
         new object[] { GroupByIsEqualToZeroAndIsGroupHasNotValue.GroupBy, GroupByIsEqualToZeroAndIsGroupHasNotValue.IsGroup, GroupByIsEqualToZeroAndIsGroupHasNotValue.Expected },
         new object[] { GroupByIsNotEqualToZeroAndIsGroupHasValue.GroupBy, GroupByIsNotEqualToZeroAndIsGroupHasValue.IsGroup, GroupByIsNotEqualToZeroAndIsGroupHasValue.Expected },
         new object[] { GroupByIsNotEqualToZeroAndIsGroupHasNotValue.GroupBy, GroupByIsNotEqualToZeroAndIsGroupHasNotValue.IsGroup, GroupByIsNotEqualToZeroAndIsGroupHasNotValue.Expected },
-        new object[] { GroupByIsEqualToZeroAndIsGroupHasValue.GroupBy, GroupByIsEqualToZeroAndIsGroupHasValue.IsGroup, GroupByIsEqualToZeroAndIsGroupHasValue.Expected },
+        new object[] { GroupByIsEqualToZeroAndIsGroupHasValue.GroupBy, GroupByIsEqualToZeroAndIsGroupHasValue.IsGroup, GroupByIsEqualToZeroAndIsGroupHasValue.Expected }
     };
 
     public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();

@@ -34,7 +34,7 @@ public class GetFirstTimeAndKickOffTimeHandler : IRequestHandler<GetFirstTimeAnd
         return new FirstTicketTime
         {
             MinTransDate = ticketTime.MinTransDate.ZoneManila(),
-            KickOffTime = ticketTime.KickOffTime.ZoneManila(),
+            KickOffTime = ticketTime.KickOffTime.ZoneManila()
         };
     }
 

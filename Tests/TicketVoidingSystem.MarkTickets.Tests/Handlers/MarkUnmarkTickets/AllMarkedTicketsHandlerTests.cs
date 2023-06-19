@@ -1,11 +1,11 @@
-﻿using NSubstitute;
+﻿namespace TicketVoidingSystem.MarkTickets.Tests.Handlers.MarkUnmarkTickets;
+
+using NSubstitute;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
 using TicketVoidingSystem.Services;
 using Xunit;
-
-namespace SpecialDelete.UnitTests.MarkTickets.Handlers;
 
 public class AllMarkedTicketsHandlerTests
 {
