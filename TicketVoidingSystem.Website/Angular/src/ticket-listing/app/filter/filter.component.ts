@@ -100,6 +100,10 @@ export class FilterComponent implements OnInit {
     this.comboParlay.items = ComboParlayConstants.ComboParlay;
   }
 
+  resetCheckedComboParlay(){
+    this.comboParlay.items.forEach(x => x.checked = true);
+  }
+  
   setDateTime() {
     const date = new Date(
       momenttimezone()

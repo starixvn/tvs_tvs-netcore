@@ -61,7 +61,7 @@
           Single
         </label>
         <label>
-          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay">
+          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay" (change)="resetCheckedComboParlay()">
           Sub Parlay
         </label>
 
