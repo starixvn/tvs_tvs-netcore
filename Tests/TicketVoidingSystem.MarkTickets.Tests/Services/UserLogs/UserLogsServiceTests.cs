@@ -52,7 +52,7 @@ public class UserLogsServiceTests
         var userLogTicketInfo = new UserLogTicketInfo
         {
             SingleTickets = new List<TicketInfo> { new() { TransId = "100001" } },
-            ParlayTickets = new List<TicketInfo> { new() { TransId = "100002" }, new() { TransId = "100003" } },
+            ParlayTickets = new List<TicketInfo> { new() { TransId = "100002" }, new() { TransId = "100003" } }
         };
         var viewModel = new List<GetUserLogViewModel>
         {

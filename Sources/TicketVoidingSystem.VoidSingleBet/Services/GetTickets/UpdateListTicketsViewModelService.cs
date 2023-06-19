@@ -73,7 +73,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
             ContentEnglish = betListService.GetBetTypeName(ticket),
             ContentChineseTraditional = betListService.GetBetTypeNameChineseTraditional(ticket),
             ContentChineseSimplified = betListService.GetBetTypeNameChineseSimplified(ticket),
-            ContentNewChineseSimplified = betListService.GetBetTypeNameNewChineseSimplified(ticket),
+            ContentNewChineseSimplified = betListService.GetBetTypeNameNewChineseSimplified(ticket)
         };
     }
 

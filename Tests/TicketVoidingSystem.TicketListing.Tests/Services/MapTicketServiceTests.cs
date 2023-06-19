@@ -22,7 +22,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         {
             new() { TransDate  = new DateTime(2023, 02, 10), SecAcceptFlag = true, IsParlay = true, BetType = betTypeId, Status = TicketStatus.Running, WinLost = "1"},
             new() { TransDate  = new DateTime(2023, 02, 10), SecAcceptFlag = true, IsParlay = true, BetType = betTypeId, Status = TicketStatus.Won, WinLost = "-1" },
-            new() { TransDate  = new DateTime(2023, 02, 10), SecAcceptFlag = false, IsParlay = false, BetType = betTypeId, Status = TicketStatus.Won },
+            new() { TransDate  = new DateTime(2023, 02, 10), SecAcceptFlag = false, IsParlay = false, BetType = betTypeId, Status = TicketStatus.Won }
         };
         var betListService = Substitute.For<BetListService>();
         var convertBetListForExcelService = Substitute.For<ConvertBetListForExcelService>();
@@ -43,7 +43,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         var ticketViewModels = new List<TicketViewModel>
         {
             new() { SecondAcceptFlag = "1" },
-            new() { SecondAcceptFlag = "" },
+            new() { SecondAcceptFlag = "" }
         };
         var betListService = Substitute.For<BetListService>();
         var convertBetListForExcelService = Substitute.For<ConvertBetListForExcelService>();

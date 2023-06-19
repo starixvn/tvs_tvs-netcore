@@ -39,7 +39,7 @@ public class AfterVoidServiceImp : AfterVoidService
         var criteria = new GetVoidBetAutomationInfoCriteria
         {
             RequestId = model.RequestId,
-            VoidingHistoryId = model.VoidingHistoryId,
+            VoidingHistoryId = model.VoidingHistoryId
         };
 
         return await repository.GetAsync<VoidBetAutomationModel>(criteria);
@@ -52,7 +52,7 @@ public class AfterVoidServiceImp : AfterVoidService
             UpdateType = VoidBetAutomationServiceUpdateType.UpdateStatusByVoidingHistory,
             RequestId = requestId,
             VoidingHistoryId = voidingHistoryId,
-            StatusId = statusId,
+            StatusId = statusId
         };
 
         await repository.ExecuteAsync(criteria);

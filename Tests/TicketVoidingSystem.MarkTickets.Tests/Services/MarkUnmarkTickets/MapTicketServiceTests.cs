@@ -101,7 +101,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
             Tickets = new List<GetTicketModel>
             {
                 new() { IsMixParlay = true, GroupName = SpecialSiteConstant.Site789Y },
-                new() { IsMixParlay = true, GroupName = "" },
+                new() { IsMixParlay = true, GroupName = "" }
             }
         };
         var sessionService = Substitute.For<SessionService>();
@@ -127,7 +127,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         var ticketsList = new List<GetTicketModel>
         {
             new() { TransId = 100000021, GroupName = SpecialSiteConstant.Site789Y, IsLiveIndicator = true, FollowedUsername = null, FollowedId = 2, Status = TicketStatus.Running },
-            new() { TransId = 100000021, GroupName = SpecialSiteConstant.Site789Y, IsLiveIndicator = false, FollowedUsername = "A", FollowedId = 0, Status = TicketStatus.Won },
+            new() { TransId = 100000021, GroupName = SpecialSiteConstant.Site789Y, IsLiveIndicator = false, FollowedUsername = "A", FollowedId = 0, Status = TicketStatus.Won }
         };
         var sessionService = Substitute.For<SessionService>();
         var betListService = Substitute.For<BetListService>();

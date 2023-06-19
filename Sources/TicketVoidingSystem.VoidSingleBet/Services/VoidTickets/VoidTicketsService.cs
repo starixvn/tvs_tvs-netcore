@@ -84,7 +84,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
         {
             ErrorCode = failedResult?.ErrorCode ?? 0,
             ErrorMsg = failedResult?.ErrorMsg ?? string.Empty,
-            NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers)),
+            NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers))
         };
 
         return new VoidTicketsModel

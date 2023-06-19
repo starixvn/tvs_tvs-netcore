@@ -68,7 +68,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         }
 
         var sw = httpContext.Items["timer"] as Stopwatch;
-        var responseData = (context.Result is OkObjectResult objectResult) ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
+        var responseData = context.Result is OkObjectResult objectResult ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"RESPONSE URL: {httpContext.Request.GetDisplayUrl()}");
         stringBuilder.AppendLine($"Username: {httpContext?.User?.Identity?.Name}");

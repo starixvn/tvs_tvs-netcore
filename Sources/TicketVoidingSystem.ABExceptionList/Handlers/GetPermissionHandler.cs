@@ -25,7 +25,7 @@ public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, Permis
     {
         var permission = new PermissionABExceptionList
         {
-            ABExceptionListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host),
+            ABExceptionListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host)
         };
         return Task.FromResult(permission);
     }

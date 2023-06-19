@@ -60,7 +60,7 @@ public class GetTicketsHandlerTests
             new() { TransDate = new DateTime(2019, 4, 24, 4, 10, 10, 111), GroupName = string.Empty, IsMixParlay = true },
             new() { TransDate = new DateTime(2019, 3, 24, 6, 10, 10, 111), GroupName = string.Empty, IsMixParlay = true },
             new() { TransDate = new DateTime(2019, 2, 24, 2, 10, 10, 111), GroupName = string.Empty, IsMixParlay = true },
-            new() { TransDate = new DateTime(2019, 2, 24, 2, 10, 10, 111), GroupName = string.Empty, IsMixParlay = false },
+            new() { TransDate = new DateTime(2019, 2, 24, 2, 10, 10, 111), GroupName = string.Empty, IsMixParlay = false }
         };
         const string expectedFromTime = "02:10:10 PM";
         const string expectedToTime = "04:10:10 PM";

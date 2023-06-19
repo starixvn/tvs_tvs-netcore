@@ -50,7 +50,7 @@ public class ConvertBetListForExcelServiceTests
         {
             new() { Result = TicketStatus.Running, SelectionName = "a1" },
             new() { Result = TicketStatus.Won, SelectionName = "a2" },
-            new() { Result = null, SelectionName = "a1" },
+            new() { Result = null, SelectionName = "a1" }
         };
         var repository = Substitute.For<IDynamicRepository>();
         repository.Fetch<SelectionSMP>(new GetSelectionsSMPCriteria()).ReturnsForAnyArgs(models);

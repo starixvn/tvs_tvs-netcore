@@ -49,7 +49,7 @@ public class MapTicketServiceImp : MapTicketService
         var ticketHelper = new TicketHelper
         {
             IsShowOddsWithChoice = item.IsMixParlay,
-            ShowSystemParlayDetail = false,
+            ShowSystemParlayDetail = false
         };
         var ticketBetList = CreateTicketBetList(item, match);
         viewModel.Odds = betListService.GetOdds(ticketBetList, false);

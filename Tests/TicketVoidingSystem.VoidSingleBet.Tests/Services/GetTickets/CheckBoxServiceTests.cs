@@ -218,7 +218,7 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
         new object[] { EnableForCashOut },
         new object[] { EnableForCashOutTrue },
         new object[] { EnableForCashOutFalse },
-        new object[] { EnableForCashOutIsNotCashOut },
+        new object[] { EnableForCashOutIsNotCashOut }
     };
 
     public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();

@@ -16,7 +16,7 @@ public static class AppSettingService
                 CookieTimeOut = configuration.GetValue<int>($"{nameof(AuthSettings)}:{nameof(AuthSettings.CookieTimeOut)}"),
                 SessionTimeOut = configuration.GetValue<int>($"{nameof(AuthSettings)}:{nameof(AuthSettings.SessionTimeOut)}"),
                 LoginPath = configuration.GetValue<string>($"{nameof(AuthSettings)}:{nameof(AuthSettings.LoginPath)}"),
-                LogoutPath = configuration.GetValue<string>($"{nameof(AuthSettings)}:{nameof(AuthSettings.LogoutPath)}"),
+                LogoutPath = configuration.GetValue<string>($"{nameof(AuthSettings)}:{nameof(AuthSettings.LogoutPath)}")
             },
             RedisConfig = new RedisConfig
             {

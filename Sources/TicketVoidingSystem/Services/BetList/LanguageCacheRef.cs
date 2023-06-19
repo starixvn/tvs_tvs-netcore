@@ -14,7 +14,7 @@ internal class LanguageCacheRef : ICacheRef
     internal LanguageCacheRef(string language, IRemotingRefService remotingRefService = null)
     {
         this.remotingRefService = remotingRefService ?? new RemotingRefService();
-        this.CurrentLanguage = language;
+        CurrentLanguage = language;
     }
 
     public string GetBetType(string betTypeId, string resourceId, long refNo)
