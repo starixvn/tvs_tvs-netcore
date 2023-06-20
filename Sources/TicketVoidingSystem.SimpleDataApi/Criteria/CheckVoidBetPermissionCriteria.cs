@@ -36,7 +36,7 @@ public class CheckVoidBetPermissionVoidByBetIdCriteria : CheckVoidBetPermissionC
 
 public class CheckVoidBetPermissionVoidSingleBetCriteria : CheckVoidBetPermissionCriteria
 {
-    public override bool IsValid() => MatchId.HasValue && MatchId > 0;
+    public override bool IsValid() => MatchId is > 0;
 }
 
 public class CheckVoidBetPermissionVoidEarlyKickOffCriteria : CheckVoidBetPermissionCriteria

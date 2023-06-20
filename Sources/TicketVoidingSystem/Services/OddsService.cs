@@ -50,6 +50,6 @@ public class OddsServiceImp : OddsService
         xmlDoc.LoadXml(oddsHtml);
         var foundSpanNodes = xmlDoc.SelectNodes("//span");
 
-        return (foundSpanNodes != null && foundSpanNodes.Count == 2) ? foundSpanNodes[1].InnerText.Trim() : string.Empty;       
+        return foundSpanNodes is { Count: 2 } ? foundSpanNodes[1].InnerText.Trim() : string.Empty;
     }
 }

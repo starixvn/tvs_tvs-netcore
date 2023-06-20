@@ -22,7 +22,6 @@ public class MapTicketsServiceImp : MapTicketsService
         this.betListCoreService = betListCoreService;
     }
 
-    // Jacob Hàm gì mà nhiều parameter thế
     public Group<TicketViewModel> MapToGroupTicketViewModel(GroupTicketsMappingParameters parameters)
     {
         var tickets = new List<TicketViewModel>();
