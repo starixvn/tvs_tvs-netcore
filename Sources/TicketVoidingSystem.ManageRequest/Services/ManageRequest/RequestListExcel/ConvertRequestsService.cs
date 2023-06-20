@@ -67,6 +67,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.Wrong1stHDP, BuildDescriptionDangerAccepted},
                 {IssueTypeConstant.WrongOU, BuildDescriptionDangerAccepted},
                 {IssueTypeConstant.Wrong1stOU, BuildDescriptionDangerAccepted},
+                {IssueTypeConstant.WrongOdds, BuildDescriptionDangerAccepted},
                 {IssueTypeConstant.EarlyKickOffTime, BuildDescriptionEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildDescriptionEKO},
                 {IssueTypeConstant.WrongScore, BuildDescriptionWrongScore},
@@ -159,7 +160,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='sport']");
-        
+
         return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
     }
 
@@ -169,7 +170,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='match']");
 
-        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;      
+        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
     }
 
     public string GetLeague(string html)
@@ -177,7 +178,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='league text-uppercase']");
-        
+
         return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
     }
 

@@ -37,6 +37,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.Wrong1stHDP, BuildDangerAccepted},
                 {IssueTypeConstant.WrongOU, BuildDangerAccepted},
                 {IssueTypeConstant.Wrong1stOU, BuildDangerAccepted},
+                {IssueTypeConstant.WrongOdds, BuildDangerAccepted},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
@@ -50,7 +51,7 @@ public class DescriptionServiceImp : DescriptionService
     {
         return (item.FilterBy == AB_PARLAY) ? BuildAbnormalBetForParlayTicket(item) : BuildAbnormalBetForSingleTicket(item);
     }
-    
+
     private string BuildEKO(RequestDescription item)
     {
         var koTime = elementService.BuildKoTime(item.KickOffTime);
