@@ -3,8 +3,10 @@ using Fanex.BetList.Core.Entities;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.MarkTickets.Constants;
+using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
+using TicketVoidingSystem.MarkTickets.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
@@ -61,12 +63,15 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
             }
         };
         var mapper = Substitute.For<IMapper>();
+        var ticketExpected = new Ticket();
+        mapper.Map<Ticket>(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(ticketExpected);
         var betListService = Substitute.For<BetListService>();
         var checkBoxService = Substitute.For<CheckBoxService>();
         var service = new MapTicketServiceImp(mapper, betListService, checkBoxService);
+        var userPermission = new UserPermission();
 
         // Act
-        service.MapToGroupTicketViewModel(groupTickets);
+        service.MapToGroupTicketViewModel(groupTickets, userPermission);
 
         // Assert
         betListService
@@ -79,13 +84,14 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var groupTickets = new Group<GetTicketModel> { Name = "test" };
-        var sessionService = Substitute.For<SessionService>();
+        var mapper = Substitute.For<IMapper>();
         var betListService = Substitute.For<BetListService>();
         var checkBoxService = Substitute.For<CheckBoxService>();
-        var service = new MapTicketServiceImp(TestSetup.CreateMapper(), sessionService, betListService, checkBoxService);
+        var service = new MapTicketServiceImp(mapper, betListService, checkBoxService);
+        var userPermission = new UserPermission();
 
         // Act
-        var actual = service.MapToGroupTicketViewModel(groupTickets);
+        var actual = service.MapToGroupTicketViewModel(groupTickets, userPermission);
 
         // Assert
         Assert.Equal(groupTickets.Name, actual.Name);
@@ -106,15 +112,16 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
                 new() { IsMixParlay = true, GroupName = "" }
             }
         };
-        var sessionService = Substitute.For<SessionService>();
+        var mapper = Substitute.For<IMapper>();
         var betListService = Substitute.For<BetListService>();
         var checkBoxService = Substitute.For<CheckBoxService>();
-        sessionService.HasPermission(default, default).ReturnsForAnyArgs(hasPermission);
-
-        var service = new MapTicketServiceImp(TestSetup.CreateMapper(), sessionService, betListService, checkBoxService);
+        var ticketExpected = new Ticket();
+        mapper.Map<Ticket>(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(ticketExpected);
+        var userPermission = new UserPermission { MarkTickets = hasPermission };
+        var service = new MapTicketServiceImp(mapper, betListService, checkBoxService);
 
         // Act
-        var actual = service.MapToGroupTicketViewModel(groupTickets);
+        var actual = service.MapToGroupTicketViewModel(groupTickets, userPermission);
 
         // Assert
         Assert.Equal(groupTickets.Name, actual.Name);
@@ -125,20 +132,37 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
     [InlineData(false)]
     public void MapToExcelTicketModel_ReturnExcelTickets(bool hasPermission)
     {
-        // Arrange
-        var ticketsList = new List<GetTicketModel>
+        var ticketExpected = new Ticket();
+        var ticketModel = new GetTicketModel
         {
-            new() { TransId = 100000021, GroupName = SpecialSiteConstant.Site789Y, IsLiveIndicator = true, FollowedUsername = null, FollowedId = 2, Status = TicketStatus.Running },
-            new() { TransId = 100000021, GroupName = SpecialSiteConstant.Site789Y, IsLiveIndicator = false, FollowedUsername = "A", FollowedId = 0, Status = TicketStatus.Won }
+            TransId = 100000021,
+            GroupName = SpecialSiteConstant.Site789Y,
+            IsLiveIndicator = true,
+            FollowedUsername = null,
+            FollowedId = 2,
+            Status = TicketStatus.Running,
+            SubTransId = 1,
+            BetType = 1,
+            OddsType = 1,
+            Hdp1 = 1,
+            Hdp2 = 1,
+            RefNo = 1,
+            WalletType = 1,
+            IsMixParlay = false,
         };
-        var sessionService = Substitute.For<SessionService>();
+        // Arrange
+        var ticketsList = new List<GetTicketModel> { ticketModel, ticketModel };
+        var mapper = Substitute.For<IMapper>();
+        var ticket = new ExcelTicketModel();
+        mapper.Map<Ticket>(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(ticketExpected);
+        mapper.Map<ExcelTicketModel>(Arg.Any<TicketViewModel>()).ReturnsForAnyArgs(ticket);
         var betListService = Substitute.For<BetListService>();
-
-        sessionService.HasPermission(default, default).ReturnsForAnyArgs(hasPermission);
-        var service = new MapTicketServiceImp(TestSetup.CreateMapper(), sessionService, betListService, null);
+        var checkBoxService = Substitute.For<CheckBoxService>();
+        var userPermission = new UserPermission { MarkTickets = hasPermission };
+        var service = new MapTicketServiceImp(mapper, betListService, checkBoxService);
 
         // Act
-        var actual = service.MapToExcelTicketModel(ticketsList);
+        var actual = service.MapToExcelTicketModel(ticketsList, userPermission);
 
         // Assert
         Assert.NotNull(actual);

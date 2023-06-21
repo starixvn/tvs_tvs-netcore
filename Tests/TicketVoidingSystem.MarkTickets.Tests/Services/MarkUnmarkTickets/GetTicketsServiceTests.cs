@@ -1,23 +1,32 @@
-﻿using Fanex.Data.Repository;
+﻿using AutoMapper;
+using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
+using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
 namespace TicketVoidingSystem.MarkTickets.Tests.Services.MarkUnmarkTickets;
 
 public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
 {
-    private static GetTicketsServiceImp CreateService(IDynamicRepository repository)
-    {
-        var mapper = TestSetup.CreateMapper();
-        var mapTicketService = Substitute.For<MapTicketService>();
+    private readonly IMapper mapper;
+    private readonly MapTicketService mapTicketService;
+    private readonly IDynamicRepository repository;
+    private readonly UserPermissionService userPermissionService;
 
-        return new GetTicketsServiceImp(
-            mapper,
-            mapTicketService,
-            repository);
+    private readonly GetTicketsServiceImp service;
+
+    public GetTicketsServiceTests()
+    {
+        userPermissionService = Substitute.For<UserPermissionService>();
+        mapper = Substitute.For<IMapper>();
+        mapTicketService = Substitute.For<MapTicketService>();
+        repository = Substitute.For<IDynamicRepository>();
+        service = new GetTicketsServiceImp(mapper, mapTicketService, repository, userPermissionService);
     }
 
     [Fact]
@@ -27,9 +36,9 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
         var query = new GetTicketsQuery { MatchId = 132 };
         var validation = new List<GetTicketValidationModel> { new() { ErrorCode = 0 } };
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
-        var repository = Substitute.For<IDynamicRepository>();
+        var criteria = new GetTicketsCriteria();
+        mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
         repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
-        var service = CreateService(repository);
 
         // Act
         var actual = await service.GetTickets(query);
@@ -45,12 +54,14 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
         var query = new GetTicketsQuery { MatchId = 132 };
         var validation = new List<GetTicketValidationModel> { new() { ErrorCode = 0 } };
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
-        var repository = Substitute.For<IDynamicRepository>();
+        var userPermission = new UserPermission();
+        var criteria = new GetTicketsCriteria();
+        var ticketModels = new List<GetTicketModel> { new() { BetId = 123 } };
+        mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
+        userPermissionService.GetUserPermission().ReturnsForAnyArgs(userPermission);
         repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
-        var mapTicketService = Substitute.For<MapTicketService>();
         var tickets = new List<ExcelTicketModel> { };
-        mapTicketService.MapToExcelTicketModel(default).ReturnsForAnyArgs(tickets);
-        var service = CreateService(repository);
+        mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>()).ReturnsForAnyArgs(tickets);
 
         // Act
         var actual = await service.GetTicketsForExportExcel(query);
@@ -65,9 +76,9 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
         // Arrange
         var query = new GetDetailTicketsQuery { MatchId = 132 };
         var expected = new List<GetTicketModel> { new() { BetId = 123 } };
-        var repository = Substitute.For<IDynamicRepository>();
+        var criteria = new GetDetailTicketsCriteria();
+        mapper.Map<GetDetailTicketsCriteria>(Arg.Any<GetDetailTicketsQuery>()).ReturnsForAnyArgs(criteria);
         repository.FetchAsync<GetTicketModel>(default).ReturnsForAnyArgs(expected);
-        var service = CreateService(repository);
 
         // Act
         var tickets = await service.GetDetailTickets(query);
@@ -83,12 +94,16 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
         var query = new GetDetailTicketsQuery { MatchId = 132 };
         var validation = new List<GetTicketValidationModel> { new() { ErrorCode = 0 } };
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
-        var repository = Substitute.For<IDynamicRepository>();
+        var userPermission = new UserPermission();
+        var criteria = new GetDetailTicketsCriteria();
+        var ticketModels = new List<GetTicketModel> { new() { BetId = 123 } };
+        repository.FetchAsync<GetTicketModel>(Arg.Any<GetDetailTicketsCriteria>()).ReturnsForAnyArgs(ticketModels);
+        mapper.Map<GetDetailTicketsCriteria>(Arg.Any<GetDetailTicketsQuery>()).ReturnsForAnyArgs(criteria);
+        userPermissionService.GetUserPermission().ReturnsForAnyArgs(userPermission);
         repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
         var mapTicketService = Substitute.For<MapTicketService>();
         var tickets = new List<ExcelTicketModel> { };
-        mapTicketService.MapToExcelTicketModel(default).ReturnsForAnyArgs(tickets);
-        var service = CreateService(repository);
+        mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>()).ReturnsForAnyArgs(tickets);
 
         // Act
         var actual = await service.GetDetailTicketsForExportExcel(query);
@@ -102,10 +117,9 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
     {
         // Arrange
         var expected = new List<AllMarkedTicketModel> { new() { MatchId = 123 } };
-        var repository = Substitute.For<IDynamicRepository>();
+        var criteria = new AllMarkedTicketsCriteria();
         repository.FetchAsync<AllMarkedTicketModel>(default).ReturnsForAnyArgs(expected);
-        var service = CreateService(repository);
-
+        mapper.Map<AllMarkedTicketsCriteria>(Arg.Any<AllMarkedTicketsQuery>()).ReturnsForAnyArgs(criteria);
         // Act
         var tickets = await service.GetAllMarkedTickets(new AllMarkedTicketsQuery());
 

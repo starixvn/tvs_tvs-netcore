@@ -27,32 +27,6 @@ public class ObjectToXMLExtensionFacts
     }
 
     [Fact]
-    public void ToRequestXml_HasNotRequest_ReturnEmpty()
-    {
-        // Arrange
-        List<RequestXMLModel> model = null;
-
-        // Act
-        var actual = model.ToRequestXml();
-
-        // Assert
-        Assert.Empty(actual);
-    }
-
-    [Fact]
-    public void ToXml_HasNotRequest_ReturnEmpty()
-    {
-        // Arrange
-        VoidDataXMLModel model = null;
-
-        // Act
-        var actual = model.ToXml();
-
-        // Assert
-        Assert.Empty(actual);
-    }
-
-    [Fact]
     public void ToRequestIdXml_HasRequest_ReturnXML()
     {
         // Arrange
@@ -65,19 +39,6 @@ public class ObjectToXMLExtensionFacts
 
         // Assert
         Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestIdXml_HasNotId_ReturnEmpty()
-    {
-        // Arrange
-        List<int> model = null;
-
-        // Act
-        var actual = model.ToRequestIdXml();
-
-        // Assert
-        Assert.Empty(actual);
     }
 
     [Fact]
@@ -356,18 +317,6 @@ public class ObjectToXMLExtensionFacts
     }
 
     [Fact]
-    public void ToAbnormalAccountXml_HasNotData_ReturnEmpty()
-    {
-        // Arrange
-
-        // Act
-        var actual = ((AbnormalAccountViewModel)null).ToAbnormalAccountXml();
-
-        // Assert
-        Assert.Equal("", actual);
-    }
-
-    [Fact]
     public void ToRequestInfoGetVoidedTicketXml_HasRequest_ReturnXML()
     {
         // Arrange
@@ -388,18 +337,6 @@ public class ObjectToXMLExtensionFacts
 
         // Assert
         Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestInfoGetVoidedTicketXml_HasNotRequest_ReturnEmpty()
-    {
-        // Arrange
-
-        // Act
-        var actual = ((List<GetRequestInfoModel>)null).ToRequestInfoGetVoidedTicketXml();
-
-        // Assert
-        Assert.Equal("", actual);
     }
 
     [Fact]

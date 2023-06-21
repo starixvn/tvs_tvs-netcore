@@ -19,15 +19,13 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
     {
         private readonly RemotingRefWrapperService remotingRefService;
         private readonly IDynamicRepository repository;
-        private readonly WrongScoreInfoService wrongScoreInfoService;
         private readonly GetRequestServiceImp service;
 
         public GetRequestServiceTests()
         {
             remotingRefService = Substitute.For<RemotingRefWrapperService>();
             repository = Substitute.For<IDynamicRepository>();
-            wrongScoreInfoService = Substitute.For<WrongScoreInfoService>();
-            service = new GetRequestServiceImp(repository, remotingRefService, wrongScoreInfoService);
+            service = new GetRequestServiceImp(repository, remotingRefService);
         }
 
         [Fact]

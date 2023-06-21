@@ -1,4 +1,6 @@
-﻿using NSubstitute;
+﻿using AutoMapper;
+using Fanex.Data.Repository;
+using NSubstitute;
 using TicketVoidingSystem.MarkTickets.Handlers.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
@@ -10,6 +12,22 @@ namespace TicketVoidingSystem.MarkTickets.Tests.Handlers.MarkUnmarkTickets;
 
 public class GetDetailTicketsHandlerTests
 {
+    private readonly GetTicketsService getTicketsService;
+    private readonly MapTicketService mapTicketService;
+    private readonly PagingService pagingService;
+    private readonly UserPermissionService userPermissionService;
+
+    private readonly GetDetailTicketsHandler handler;
+
+    public GetDetailTicketsHandlerTests()
+    {
+        getTicketsService = Substitute.For<GetTicketsService>();
+        mapTicketService = Substitute.For<MapTicketService>();
+        pagingService = Substitute.For<PagingService>();
+        userPermissionService = Substitute.For<UserPermissionService>();
+        handler = new GetDetailTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
+    }
+
     [Fact]
     public async Task GetDetailTickets_HasTickets_ReturnTicketsDetail()
     {
@@ -32,14 +50,9 @@ public class GetDetailTicketsHandlerTests
             new() {Name = "Credit", Tickets = data }
         };
 
-        var getTicketsService = Substitute.For<GetTicketsService>();
-        var mapTicketService = Substitute.For<MapTicketService>();
-        var pagingService = Substitute.For<PagingService>();
         getTicketsService.GetDetailTickets(default).ReturnsForAnyArgs(data);
         pagingService.Groups(new List<GetTicketModel>(), ticket => ticket.GroupName).ReturnsForAnyArgs(groups);
         pagingService.Paging(new List<GetTicketModel>(), 500, 300).ReturnsForAnyArgs(data);
-
-        var handler = new GetDetailTicketsHandler(getTicketsService, mapTicketService, pagingService);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -69,14 +82,9 @@ public class GetDetailTicketsHandlerTests
             new() {Name = "Credit", Tickets = data }
         };
 
-        var getTicketsService = Substitute.For<GetTicketsService>();
-        var mapTicketService = Substitute.For<MapTicketService>();
-        var pagingService = Substitute.For<PagingService>();
         getTicketsService.GetDetailTickets(default).ReturnsForAnyArgs(data);
         pagingService.Groups(new List<GetTicketModel>(), ticket => ticket.GroupName).ReturnsForAnyArgs(groups);
         pagingService.Paging(new List<GetTicketModel>(), 500, 300).ReturnsForAnyArgs(data);
-
-        var handler = new GetDetailTicketsHandler(getTicketsService, mapTicketService, pagingService);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
