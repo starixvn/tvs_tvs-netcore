@@ -8,7 +8,7 @@ public static class SystemTimeExtension
 
     public static DateTime? ZoneCanada(this DateTime? dateTime)
     {
-        return dateTime.HasValue ? Convert.ToDateTime(dateTime).AddHours(-OffsetHour) : dateTime;
+        return dateTime.HasValue ? Convert.ToDateTime(dateTime).AddHours(-OffsetHour) : null;
     }
 
     public static DateTime ZoneCanada(this DateTime dateTime)
@@ -18,7 +18,7 @@ public static class SystemTimeExtension
 
     public static DateTime? ZoneManila(this DateTime? dateTime)
     {
-        return dateTime.HasValue ? Convert.ToDateTime(dateTime).AddHours(OffsetHour) : dateTime;
+        return dateTime.HasValue ? Convert.ToDateTime(dateTime).AddHours(OffsetHour) : null;
     }
 
     public static DateTime ZoneManila(this DateTime dateTime)
@@ -28,6 +28,6 @@ public static class SystemTimeExtension
 
     public static DateTime? AddDays(this DateTime? dateTime, int number)
     {
-        return dateTime.HasValue ? Convert.ToDateTime(dateTime).AddDays(number) : dateTime;
+        return dateTime.HasValue ? Convert.ToDateTime(dateTime).AddDays(number) : null;
     }
 }

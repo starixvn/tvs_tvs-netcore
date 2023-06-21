@@ -24,8 +24,8 @@ public class GetIssueNameHandler : IRequestHandler<GetIssueNameRequest, IssueInf
 
     public async Task<IssueInfo> Handle(GetIssueNameRequest request, CancellationToken cancellationToken)
     {
-        var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());
-        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria());
+        var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria(), cancellationToken);
+        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), cancellationToken);
         var sub = subIssueTypes.FirstOrDefault(x => x.SubIssueTypeId == request.SubId);
         var issue = issueTypes.FirstOrDefault(x => x.IssueTypeId == sub?.IssueTypeId);
         var result = mapper.Map<IssueInfo>(sub) ?? new IssueInfo();

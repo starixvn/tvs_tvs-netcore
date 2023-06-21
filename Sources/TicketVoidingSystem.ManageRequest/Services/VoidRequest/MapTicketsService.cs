@@ -10,7 +10,7 @@ public interface MapTicketsService
 {
     Group<TicketViewModel> MapToGroupTicketViewModel(GroupTicketsMappingParameters parameters);
 
-    TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
+    TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
 }
 
 public class MapTicketsServiceImp : MapTicketsService
@@ -43,7 +43,7 @@ public class MapTicketsServiceImp : MapTicketsService
         };
     }
 
-    public TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
+    public TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
     {
         var ticket = betListCoreService.GetTicket(item, match, choiceType, issueTypeId);
         ticket.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;

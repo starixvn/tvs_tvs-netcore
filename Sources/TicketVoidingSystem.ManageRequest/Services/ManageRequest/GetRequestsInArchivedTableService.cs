@@ -58,6 +58,6 @@ public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableSe
     private IEnumerable<string> GetListBettypeName(int requestId, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)
     {
         return bettypeForRequests.Where(x => x.RequestId == requestId)
-            .Select(x => betListService.GetBetTypeName(new Ticket { BetId = x.Betid, BetTypeId = x.Bettype }));
+            .Select(x => betListService.GetBetTypeName(new Ticket { BetId = x.BetId, BetTypeId = x.Bettype }));
     }
 }

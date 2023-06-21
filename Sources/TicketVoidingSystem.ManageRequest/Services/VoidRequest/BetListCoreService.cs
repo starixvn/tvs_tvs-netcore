@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface BetListCoreService
 {
-    TicketViewModel GetTicket(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
+    TicketViewModel GetTicket(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
 }
 
 public class BetListCoreServiceImp : BetListCoreService
@@ -27,7 +27,7 @@ public class BetListCoreServiceImp : BetListCoreService
         this.betListService = betListService;
     }
 
-    public TicketViewModel GetTicket(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
+    public TicketViewModel GetTicket(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
     {
         var viewModel = new TicketViewModel();
         var betBuilderTicketHelper = new TicketHelper();
@@ -60,7 +60,7 @@ public class BetListCoreServiceImp : BetListCoreService
         return (choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet())));
     }
 
-    private Ticket SetTicket(GetTicketModel item, Match match)
+    private Ticket SetTicket(GetTicketModel item, Match? match)
     {
         var ticket = mapper.Map<Ticket>(item);
         ticket.TransId = item.SubTransId;

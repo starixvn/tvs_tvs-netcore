@@ -13,7 +13,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetTickets_ValidCriteria_ReturnDataFromRepository()
     {
         // Arrange
-        var expected = new List<GetTicketModel> { new GetTicketModel { TransId = 1346 } };
+        var expected = new List<GetTicketModel> { new() { TransId = 1346 } };
         var query = new GetTicketsQuery { MatchId = 132 };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var mapTicketService = Substitute.For<MapTicketService>();
@@ -31,7 +31,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetTicketsForExportExcel_ValidCriteria_RepositoryHasCalled()
     {
         // Arrange
-        var expected = new List<GetTicketModel> { new GetTicketModel { TransId = 1346 } };
+        var expected = new List<GetTicketModel> { new() { TransId = 1346 } };
         var query = new GetTicketsQuery { MatchId = 132 };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var mapTicketService = Substitute.For<MapTicketService>();

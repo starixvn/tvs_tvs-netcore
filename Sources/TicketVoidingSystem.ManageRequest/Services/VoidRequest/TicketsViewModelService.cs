@@ -106,7 +106,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
-        var chinaViewLicensee = data.Where(item => item.IsChinaview).Select(item => item.LicenseeName).Distinct().ToArray();
+        var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
         var licensees = data.Where(item => item.IsDeposit && !chinaViewLicensee.Contains(item.LicenseeName)).Select(item => item.LicenseeName).Distinct().ToArray();
         Array.Sort(licensees, StringComparer.InvariantCulture);
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);

@@ -32,7 +32,7 @@ public class GetRemarkHandlerTests
         Assert.Equal(expected, results);
     }
 
-    public class RemarkModelTest
+    private class RemarkModelTest
     {
         public bool Settled { get; set; }
 

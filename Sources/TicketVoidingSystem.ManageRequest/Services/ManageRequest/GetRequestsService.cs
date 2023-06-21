@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
+
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 public interface GetRequestsService
@@ -43,11 +44,11 @@ public class GetRequestsServiceImp : GetRequestsService
             return await HandleForArchivedDataSearchByDate(query);
         }
 
-        var (activeRequests, activedInfoGetCalcTimes) = await HandleForActiveDataSearchByDate(query);
+        var (activeRequests, activeInfoGetCalcTimes) = await HandleForActiveDataSearchByDate(query);
         var (archivedRequests, archivedInfoGetCalcTimes) = await HandleForArchivedDataSearchByDate(query);
         var filteredArchivedRequests = archivedRequests.Where(x => !activeRequests.Contains(x));
         var requests = activeRequests.Union(filteredArchivedRequests);
-        var requestInfoGetCalcTimes = activedInfoGetCalcTimes.Union(archivedInfoGetCalcTimes);
+        var requestInfoGetCalcTimes = activeInfoGetCalcTimes.Union(archivedInfoGetCalcTimes);
 
         return (requests, requestInfoGetCalcTimes);
     }

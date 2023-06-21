@@ -11,7 +11,7 @@ public class MailRecordResult
 
     public string EmailBody { get; set; }
 
-    public MailRecord MailRecord => new MailRecord
+    public MailRecord MailRecord => new()
     {
         MailTo = SiteEmail.ToList,
         MailCc = SiteEmail.CcList,

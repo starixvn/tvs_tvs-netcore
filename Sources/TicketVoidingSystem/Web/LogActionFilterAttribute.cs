@@ -38,7 +38,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"REQUEST-{requestMethod} URL: {httpContext.Request.GetDisplayUrl()}");
         stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
-        stringBuilder.AppendLine($"Username: {httpContext?.User?.Identity?.Name}");
+        stringBuilder.AppendLine($"Username: {httpContext.User.Identity?.Name}");
         stringBuilder.AppendLine($"Server Time: {DateTime.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Params: {JsonSerializer.Serialize(context.ActionArguments)}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
@@ -75,7 +75,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         var responseData = context.Result is OkObjectResult objectResult ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"RESPONSE URL: {httpContext.Request.GetDisplayUrl()}");
-        stringBuilder.AppendLine($"Username: {httpContext?.User?.Identity?.Name}");
+        stringBuilder.AppendLine($"Username: {httpContext.User.Identity?.Name}");
         stringBuilder.AppendLine($"Server Time: {DateTime.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Execution Time: {sw?.ElapsedMilliseconds} ms");
         stringBuilder.AppendLine($"Response: {responseData}");

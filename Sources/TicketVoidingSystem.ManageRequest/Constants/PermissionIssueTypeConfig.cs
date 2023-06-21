@@ -11,20 +11,20 @@ public static class PermissionIssueTypeConfig
         {
             var permission = new List<PermissionIssueType>
                 {
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, IssueTypeId = IssueTypeConstant.EarlyKickOffTime },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, IssueTypeId = IssueTypeConstant.WrongKickOffTime },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.AbnormalBet, IssueTypeId = IssueTypeConstant.AbnormalBet },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.AbnormalBetRealMember, IssueTypeId = IssueTypeConstant.AbnormalBetRealMember },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.DangerAccepted, IssueTypeId = IssueTypeConstant.DangerAccepted },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.RedCard, IssueTypeId = IssueTypeConstant.RedCard },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.AbnormalAccount, IssueTypeId = IssueTypeConstant.AbnormalAccount },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.WrongScore, IssueTypeId = IssueTypeConstant.WrongScore },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.ArchivedTicket, IssueTypeId = IssueTypeConstant.ArchivedTicket },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.WrongHDP, IssueTypeId = IssueTypeConstant.WrongHDP },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.Wrong1stHDP, IssueTypeId = IssueTypeConstant.Wrong1stHDP },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.WrongOU, IssueTypeId = IssueTypeConstant.WrongOU },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.Wrong1stOU, IssueTypeId = IssueTypeConstant.Wrong1stOU },
-                    new PermissionIssueType { FunctionKey = SpecialDeleteFunctionKeys.WrongOdds, IssueTypeId = IssueTypeConstant.WrongOdds }
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, IssueTypeId = IssueTypeConstant.EarlyKickOffTime },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, IssueTypeId = IssueTypeConstant.WrongKickOffTime },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.AbnormalBet, IssueTypeId = IssueTypeConstant.AbnormalBet },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.AbnormalBetRealMember, IssueTypeId = IssueTypeConstant.AbnormalBetRealMember },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.DangerAccepted, IssueTypeId = IssueTypeConstant.DangerAccepted },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.RedCard, IssueTypeId = IssueTypeConstant.RedCard },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.AbnormalAccount, IssueTypeId = IssueTypeConstant.AbnormalAccount },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.WrongScore, IssueTypeId = IssueTypeConstant.WrongScore },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.ArchivedTicket, IssueTypeId = IssueTypeConstant.ArchivedTicket },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.WrongHDP, IssueTypeId = IssueTypeConstant.WrongHDP },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.Wrong1stHDP, IssueTypeId = IssueTypeConstant.Wrong1stHDP },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.WrongOU, IssueTypeId = IssueTypeConstant.WrongOU },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.Wrong1stOU, IssueTypeId = IssueTypeConstant.Wrong1stOU },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.WrongOdds, IssueTypeId = IssueTypeConstant.WrongOdds }
                 };
             return permission;
         }

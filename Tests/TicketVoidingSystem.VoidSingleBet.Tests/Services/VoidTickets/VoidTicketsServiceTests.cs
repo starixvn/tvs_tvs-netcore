@@ -25,8 +25,8 @@ public class VoidTicketsServiceTests
             Message = new Message(),
             Tickets = new List<BetId> { new() }
         };
-        var validations = new List<VoidTicketValidation> { new VoidTicketValidation { SiteDbGroupId = 0, NegativeBalanceUsers = "" } };
-        var tickets = new List<TicketEmailModel> { new TicketEmailModel { TransId = 1 } };
+        var validations = new List<VoidTicketValidation> { new() { SiteDbGroupId = 0, NegativeBalanceUsers = "" } };
+        var tickets = new List<TicketEmailModel> { new() { TransId = 1 } };
         var fakeData =
             new ValueTuple<IEnumerable<VoidTicketValidation>, IEnumerable<TicketEmailModel>>(validations, tickets);
 

@@ -40,7 +40,7 @@ public class CashOutHttpClientServiceImp : CashOutHttpClientService
     private static async Task<string> CreateLogResponse(string actionName, HttpResponseMessage response)
     {
         var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
-        var responseContent = response.Content != null ? await response.Content.ReadAsStringAsync() : string.Empty;
+        var responseContent = await response.Content.ReadAsStringAsync();
 
         return $"{AppSettingService.AppSetting.JackTimeCashOutUrl}{actionName}" +
                $"{Environment.NewLine}RequestContent:{Environment.NewLine}{requestContent}" +

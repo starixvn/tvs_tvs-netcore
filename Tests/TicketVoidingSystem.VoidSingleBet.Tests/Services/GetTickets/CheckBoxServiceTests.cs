@@ -57,105 +57,105 @@ public class CheckBoxModel
 
 internal class CheckBoxTestCase : IEnumerable<object[]>
 {
-    private static readonly CheckBoxModel DisableSubTicket = new CheckBoxModel
+    private static readonly CheckBoxModel DisableSubTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Sold", "Credit", 1000, 1001),
         Permission = CheckBoxServiceFactory.SetPermission(true, true, true),
         Expected = true
     };
 
-    private static readonly CheckBoxModel ReadOnlyPermission = new CheckBoxModel
+    private static readonly CheckBoxModel ReadOnlyPermission = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Running", "Credit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, false, false),
         Expected = true
     };
 
-    private static readonly CheckBoxModel UnsettledAndRunningTicket = new CheckBoxModel
+    private static readonly CheckBoxModel UnsettledAndRunningTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Running", "Credit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, false, true),
         Expected = false
     };
 
-    private static readonly CheckBoxModel UnsettledAndRefundedTicket = new CheckBoxModel
+    private static readonly CheckBoxModel UnsettledAndRefundedTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Refunded", "Credit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, false, true),
         Expected = false
     };
 
-    private static readonly CheckBoxModel UnsettledAndNormalSettledTicket = new CheckBoxModel
+    private static readonly CheckBoxModel UnsettledAndNormalSettledTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("WON", "Credit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, false, true),
         Expected = true
     };
 
-    private static readonly CheckBoxModel UnsettledAndInstantlySettledTicket = new CheckBoxModel
+    private static readonly CheckBoxModel UnsettledAndInstantlySettledTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("WON", "Credit (Instant Settlement)", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, false, true),
         Expected = true
     };
 
-    private static readonly CheckBoxModel InstantlySettledAndRunningTicket = new CheckBoxModel
+    private static readonly CheckBoxModel InstantlySettledAndRunningTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Running", "8RM", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, true, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel InstantlySettledAndRefundedTicket = new CheckBoxModel
+    private static readonly CheckBoxModel InstantlySettledAndRefundedTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Refunded", "8RM", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, true, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel InstantlySettledAndNormalSettledTicket = new CheckBoxModel
+    private static readonly CheckBoxModel InstantlySettledAndNormalSettledTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Lose", "8RM", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, true, false),
         Expected = true
     };
 
-    private static readonly CheckBoxModel InstantlySettledAndInstantlySettledTicket = new CheckBoxModel
+    private static readonly CheckBoxModel InstantlySettledAndInstantlySettledTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("lose", "8RM (Instant Settlement)", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(false, true, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel SettledAndRunningTicket = new CheckBoxModel
+    private static readonly CheckBoxModel SettledAndRunningTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Running", "Deposit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(true, false, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel SettledAndRefundedTicket = new CheckBoxModel
+    private static readonly CheckBoxModel SettledAndRefundedTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("Refunded", "Deposit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(true, false, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel SettledAndNormalSettledTicket = new CheckBoxModel
+    private static readonly CheckBoxModel SettledAndNormalSettledTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("draw", "Deposit", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(true, false, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel SettledAndInstantlySettledTicket = new CheckBoxModel
+    private static readonly CheckBoxModel SettledAndInstantlySettledTicket = new()
     {
         Ticket = CheckBoxServiceFactory.CreateTicket("DRAW", "Deposit (Instant Settlement)", 0, 0),
         Permission = CheckBoxServiceFactory.SetPermission(true, false, false),
         Expected = false
     };
 
-    private static readonly CheckBoxModel EnableForCashOut = new CheckBoxModel
+    private static readonly CheckBoxModel EnableForCashOut = new()
     {
         Ticket = new GetTicketModel
         {
@@ -166,7 +166,7 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
         Expected = false
     };
 
-    private static readonly CheckBoxModel EnableForCashOutTrue = new CheckBoxModel
+    private static readonly CheckBoxModel EnableForCashOutTrue = new()
     {
         Ticket = new GetTicketModel
         {
@@ -177,7 +177,7 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
         Expected = false
     };
 
-    private static readonly CheckBoxModel EnableForCashOutFalse = new CheckBoxModel
+    private static readonly CheckBoxModel EnableForCashOutFalse = new()
     {
         Ticket = new GetTicketModel
         {
@@ -188,7 +188,7 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
         Expected = false
     };
 
-    private static readonly CheckBoxModel EnableForCashOutIsNotCashOut = new CheckBoxModel
+    private static readonly CheckBoxModel EnableForCashOutIsNotCashOut = new()
     {
         Ticket = new GetTicketModel
         {

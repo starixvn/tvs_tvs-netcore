@@ -108,7 +108,7 @@ public class GetTicketModel
 
     public bool IsDeposit { get; set; }
 
-    public bool IsChinaview { get; set; }
+    public bool IsChinaView { get; set; }
 
     public bool IsInstantSettlement { get; set; }
 

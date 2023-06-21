@@ -12,72 +12,72 @@ public static class IssueTypeFunctionKeysConstant
         {
             var functionKeys = new List<IssueTypeFunctionKey>
                 {
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongKickOffTime, IssueTypeName = "Wrong Kick Off Time" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.EarlyKickOffTime, IssueTypeName = "Early Kick Off" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.AbnormalBet,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.AbnormalBet, IssueTypeName = "Abnormal Bet" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.AbnormalBetRealMember,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.AbnormalBetRealMember, IssueTypeName = "AB (Real Member)" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.DangerAccepted,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.DangerAccepted, IssueTypeName = "Danger Accepted" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.RedCard,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.RedCard, IssueTypeName = "Red Card" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.AbnormalAccount,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.AbnormalAccount, IssueTypeName = "Abnormal Account" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.WrongScore,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongScore, IssueTypeName = "Wrong Score" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.ArchivedTicket,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.ArchivedTicket, IssueTypeName = "Archived Ticket" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.WrongHDP,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongHDP, IssueTypeName = "Wrong HDP" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.Wrong1stHDP,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.Wrong1stHDP, IssueTypeName = "Wrong 1st HDP" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.WrongOU,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongOU, IssueTypeName = "Wrong OU" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.Wrong1stOU,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.Wrong1stOU, IssueTypeName = "Wrong 1st OU" }
                     },
-                    new IssueTypeFunctionKey
+                    new()
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.WrongOdds,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongOdds, IssueTypeName = "Wrong Odds" }

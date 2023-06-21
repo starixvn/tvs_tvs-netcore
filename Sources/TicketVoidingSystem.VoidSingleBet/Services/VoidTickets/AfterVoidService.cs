@@ -102,7 +102,7 @@ public class AfterVoidServiceImp : AfterVoidService
         var reasonId = await sendMessageService.InsertReason(query.Reason, query.ReasonSc);
         await sendMessageService.SendMessage(model.Tickets, messageId, 0, query.Message.CreatorId);
         await sendMessageService.InsertMessageIntoAdminSite(query.Message);
-        await sendMessageService.InsertVoidedTransaction(model.Tickets, messageId, reasonId, 0, 0, query.MatchId);
+        await sendMessageService.InsertVoidedTransaction(model.Tickets, messageId, reasonId, 0, 0);
     }
 
     private async Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, VoidTicketsModel model)

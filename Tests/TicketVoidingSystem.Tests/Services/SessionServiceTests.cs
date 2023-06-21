@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Client.Models;
 using Fanex.NAP.Client.Services;
 using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Http;

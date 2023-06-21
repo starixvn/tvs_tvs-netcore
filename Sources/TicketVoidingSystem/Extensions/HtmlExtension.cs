@@ -34,20 +34,24 @@ public static class HtmlExtension
         var rebateBonus = html.RebateBonus();
         var nphPromotion = html.NPHPromotion();
 
-        if (html.Contains(HtmlClass.OriginalStake)) {
+        if (html.Contains(HtmlClass.OriginalStake))
+        {
             return GetStakeOriginalStake(doc, rebateBonus, nphPromotion, stake);
         }
 
-        if (html.Contains(HtmlClass.LightBlue)) {
+        if (html.Contains(HtmlClass.LightBlue))
+        {
             return GetStakeLightBlue(doc, rebateBonus, nphPromotion, stake);
         }
 
-        if (!string.IsNullOrEmpty(rebateBonus) || !string.IsNullOrEmpty(nphPromotion)) {
+        if (!string.IsNullOrEmpty(rebateBonus) || !string.IsNullOrEmpty(nphPromotion))
+        {
             return GetStakeWithSpecialRemark(stake, rebateBonus, nphPromotion);
         }
 
-        if (html.Contains(HtmlClass.ReturnStake)) {
-            return GetStakeReturnStake(doc, rebateBonus, nphPromotion, stake);
+        if (html.Contains(HtmlClass.ReturnStake))
+        {
+            return GetStakeReturnStake(doc, stake);
         }
 
         return DefaultText(html);
@@ -69,13 +73,13 @@ public static class HtmlExtension
         return GetStakeWithSpecialRemark(stake, rebateBonus, nphPromotion);
     }
 
-    private static string GetStakeReturnStake(HtmlDocument doc, string rebateBonus, string nphPromotion, string stake)
+    private static string GetStakeReturnStake(HtmlDocument doc, string stake)
     {
         var returnStake = doc.DocumentNode.SelectNodes("//*[@class='return-stake']").First();
         stake = stake.AppendWithNewLine(returnStake.InnerText);
         var discount = doc.DocumentNode.SelectNodes("//*[@class='discount']").First();
         stake = stake.AppendWithNewLine(discount.InnerText);
-        
+
         return stake;
     }
 

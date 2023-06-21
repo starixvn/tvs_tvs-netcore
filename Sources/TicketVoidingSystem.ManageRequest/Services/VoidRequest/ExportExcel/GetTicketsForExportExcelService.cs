@@ -71,7 +71,7 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
         }
     }
 
-    private Group<ExcelTicketModel> TransformIntoGroupExcelTickets(Group<GetTicketModel> originalGroup, Match match, int startIndex, int issueTypeId)
+    private Group<ExcelTicketModel> TransformIntoGroupExcelTickets(Group<GetTicketModel> originalGroup, Match? match, int startIndex, int issueTypeId)
     {
         var excelTickets = new List<ExcelTicketModel>();
         var index = startIndex;
@@ -120,7 +120,7 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
         return groupsExcelTickets;
     }
 
-    private Group<ExcelTicketNoMatchModel> TransformIntoGroupExcelTicketsRequestNoMatch(Group<GetTicketModel> originalGroup, Match match, int startIndex, int issueTypeId)
+    private Group<ExcelTicketNoMatchModel> TransformIntoGroupExcelTicketsRequestNoMatch(Group<GetTicketModel> originalGroup, Match? match, int startIndex, int issueTypeId)
     {
         var excelTickets = new List<ExcelTicketNoMatchModel>();
         var index = startIndex;

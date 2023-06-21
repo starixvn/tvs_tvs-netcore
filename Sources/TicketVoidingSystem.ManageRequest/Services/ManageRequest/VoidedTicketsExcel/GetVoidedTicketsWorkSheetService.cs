@@ -38,10 +38,7 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
 
     private void AddMatchContent(ExcelWorksheet worksheet, Match match)
     {
-        if (match != null)
-        {
-            cellService.AddMatch(worksheet, match);
-        }
+        cellService.AddMatch(worksheet, match);
     }
 
     private async Task AddTicketsContent(ExcelWorksheet worksheet, GetVoidedTicketsQuery model, Match match)

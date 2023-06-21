@@ -58,7 +58,7 @@ public class BetTypesServiceImp : BetTypesService
         return await repository.GetBetTypes(criteria);
     }
 
-    public async Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query)
+    private async Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query)
     {
         return await repository.GetBetTypesHaveTickets(query);
     }

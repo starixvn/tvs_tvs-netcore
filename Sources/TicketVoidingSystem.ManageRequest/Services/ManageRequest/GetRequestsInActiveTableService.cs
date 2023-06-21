@@ -54,7 +54,7 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
         {
             return new List<GetBettypeForRequestModel>();
         }
-        
+
         var criteria = new GetBettypeNamesCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
         var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
         return models;
@@ -105,7 +105,7 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
     private IEnumerable<string> GetListBettypeName(int requestId, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)
     {
         return bettypeForRequests.Where(x => x.RequestId == requestId)
-            .Select(x => betListService.GetBetTypeName(new Ticket { BetId = x.Betid, BetTypeId = x.Bettype }));
+            .Select(x => betListService.GetBetTypeName(new Ticket { BetId = x.BetId, BetTypeId = x.Bettype }));
     }
 
     private static bool IsHaveChildMatch(int issueTypeId)
