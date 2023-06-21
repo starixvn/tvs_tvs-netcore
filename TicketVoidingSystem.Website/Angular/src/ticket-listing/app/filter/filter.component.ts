@@ -22,6 +22,8 @@ import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/adv
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
 import { FilterEvent, Item, Licensee, Type } from './filter.model';
+import { MultipleSelection } from 'src/utility/components/multiple-selection/multiple-selection';
+import { ComboParlayConstants } from 'src/utility/constants/combo-parlay.constant';
 
 @Component({
   selector: 'filter',
@@ -63,7 +65,8 @@ export class FilterComponent implements OnInit {
   switchMatch3rd: boolean;
   checkedIds: number[];
   allBetTypes: BetType[];
-  
+  comboParlay: MultipleSelection;
+
   private readonly sportTypeHaveNormalAdvancedMode = [
     SportTypeConst.CRICKET,
     SportTypeConst.E_SPORTS,
@@ -76,7 +79,7 @@ export class FilterComponent implements OnInit {
     private readonly appService: AppService,
     private readonly commonService: CommonService,
     private readonly blockUIService: BlockUiService
-    ) {
+  ) {
     this.tooltip.element = this.element;
   }
 
@@ -85,6 +88,20 @@ export class FilterComponent implements OnInit {
     this.setDateTime();
     this.groupBetTypes = new GroupBetTypesModel([], false);
     this.query.quarter = 'All';
+    this.renderComboParlay();
+  }
+
+  renderComboParlay() {
+    this.comboParlay = new MultipleSelection();
+    this.comboParlay.checkAllCheckBoxText = 'All';
+    this.comboParlay.allItemsCheckedText = 'All';
+    this.comboParlay.noneItemCheckedText = 'Select options';
+    this.comboParlay.maxWidth = '115px';
+    this.comboParlay.items = ComboParlayConstants.ComboParlay;
+  }
+
+  resetCheckedComboParlay(){
+    this.comboParlay.items.forEach(x => x.checked = true);
   }
 
   setDateTime() {
@@ -149,6 +166,7 @@ export class FilterComponent implements OnInit {
     this.query.product = value;
     this.isMatch3rd = Product.IS_MATCH_3RD.indexOf(value) > -1;
     this.switchMatch3rd = this.switchMatch3rd !== this.isMatch3rd;
+    this.isReSettled = false;
     if (value !== Product.SPORTS_BOOK) {
       this.disabledTransDate = true;
       this.singleOrSubParlay = 'All';
@@ -394,11 +412,20 @@ export class FilterComponent implements OnInit {
     if (this.isShowFilterTime() && !this.disabledTransDate && !StaticService.isFromTimeSameOrBeforeToTime(this.fromDate, this.toDate, this.tooltip, 'from-date-time')) {
       return false;
     }
+    if (this.isSelectionNotValid()) {
+      this.tooltip.display('multiple-selection', TEXT.INVALID_SELECTION);
+      return false;    
+    }
     if (!this.isHideNormalAdvancedMode()) {
       return this.advancedModeComponent.validate();
     }
-
+  
     return true;
+  }
+
+  isSelectionNotValid(){
+    const selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay)
+    return this.singleOrSubParlay === "SubParlay" && selectionSubParlays === "";
   }
 
   validateBetTypes() {
@@ -424,6 +451,7 @@ export class FilterComponent implements OnInit {
     this.query.quarter = this.advancedModeBasketball.isShow ? this.advancedModeBasketball.getSelection() : 'All';
     this.query.singleOrSubParlay = this.singleOrSubParlay;
     this.query.isReSettled = this.isReSettled;
+    this.query.selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay);
 
     if (this.query.product === Product.BET_BUILDER) {
       this.query.betTypes = '38';
@@ -438,6 +466,18 @@ export class FilterComponent implements OnInit {
       this.query.betTeams = betTeams;
     }
     return this.query;
+  }
+
+  getSelectionSubParlays(bet: string, comboParlay: MultipleSelection) {
+    if (bet !== "SubParlay") {
+      return "";
+    }
+    
+    const selectedItems = comboParlay.items
+      .filter(item => item.checked)
+      .map(item => item.value);
+
+    return selectedItems.join(",");
   }
 
   getCheckedBetTypes(): string {
@@ -480,7 +520,7 @@ export class FilterComponent implements OnInit {
     this.groupBetTypesComponent.isDisabledAllBetTypes = false;
     this.advancedModeBasketball.isDisabled = false;
     if (this.advancedModeBasketball.isBasketball() || this.advancedModeBasketball.isBadminton() || this.advancedModeBasketball.isPHAIO5()) {
-      this.advancedModeBasketball.isShow = true ;
+      this.advancedModeBasketball.isShow = true;
       this.advancedModeBasketball.isShowContent = true;
     }
   }
@@ -495,12 +535,13 @@ export class FilterComponent implements OnInit {
       });
       this.advancedModeBasketball.isDisabled = true;
       if (this.advancedModeBasketball.isBasketball() || this.advancedModeBasketball.isBadminton() || this.advancedModeBasketball.isPHAIO5()) {
-        this.advancedModeBasketball.isShow = true ;
+        this.advancedModeBasketball.isShow = true;
         this.advancedModeBasketball.isShowContent = false;
       }
     } else {
       this.enableBetTypesAndAdvancedMode();
     }
+
   }
 
   isHideNormalAdvancedMode(): boolean {
@@ -509,5 +550,9 @@ export class FilterComponent implements OnInit {
 
   isShowFilterTime(): boolean {
     return this.query.eventType && this.query.eventType.toString() === '1' && this.query.product === 0;
+  }
+
+  isShowSelectionSubParlay(): boolean {
+    return this.singleOrSubParlay === "SubParlay";
   }
 }

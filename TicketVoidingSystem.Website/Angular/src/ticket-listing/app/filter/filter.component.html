@@ -3,8 +3,8 @@
     <div class="line-1">
       <label class="match">
         Match ID
-        <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId" (change)="handleBetTypesAndAdvancedMode();unCheckAffectedTickets()"
-          (blur)="blurMatchId()" autofocus />
+        <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId"
+          (change)="handleBetTypesAndAdvancedMode();unCheckAffectedTickets()" (blur)="blurMatchId()" autofocus />
       </label>
       <label class="licensees">
         LicenseeId
@@ -61,8 +61,14 @@
           Single
         </label>
         <label>
-          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay">
+          <input class="mr-1" type="radio" name="singleOrSubParlay" [(ngModel)]="singleOrSubParlay" value="SubParlay" (change)="resetCheckedComboParlay()">
           Sub Parlay
+        </label>
+
+        <label class="group-bettypes-handler" *ngIf="isShowSelectionSubParlay()">
+          Selection
+          <multiple-select class="multiple-selection ml-1" style="border-color: black"
+            [multipleSelect]="comboParlay"></multiple-select>
         </label>
       </div>
     </div>
@@ -74,22 +80,20 @@
         <div class="optional-filters">
           <div class="score">
             <span class="bold d-flex align-items-center">Score:</span>
-            <label>Home<input type="text" class="form-control" only-number maxlength="3" [(ngModel)]="query.liveHomeScore" /></label>
-            <label>Away<input type="text" class="form-control" only-number maxlength="3" [(ngModel)]="query.liveAwayScore" /></label>
+            <label>Home<input type="text" class="form-control" only-number maxlength="3"
+                [(ngModel)]="query.liveHomeScore" /></label>
+            <label>Away<input type="text" class="form-control" only-number maxlength="3"
+                [(ngModel)]="query.liveAwayScore" /></label>
           </div>
           <label><span class="bold mr-1">Trans Date (GMT+ 8):</span> <input type="checkbox"
               (change)="setDateTime();disabledTransDate=!disabledTransDate" /></label>
           <div class="date-time">
             <label class="mg-right-10">From</label>
-            <date-full-time-new #fromDateTime
-              class="from-date-time mr-2"
-              [isDisabled]="disabledTransDate"
+            <date-full-time-new #fromDateTime class="from-date-time mr-2" [isDisabled]="disabledTransDate"
               [(dateTime)]="fromDate">
             </date-full-time-new>
             <label class="mg-10-20">To</label>
-            <date-full-time-new #fromDateTime
-              class="to-date-time mr-2"
-              [isDisabled]="disabledTransDate"
+            <date-full-time-new #fromDateTime class="to-date-time mr-2" [isDisabled]="disabledTransDate"
               [(dateTime)]="toDate">
             </date-full-time-new>
           </div>
@@ -117,16 +121,19 @@
     <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" [product]="query.product"
       (betTypesEvent)="changeBetTypes($event)"></group-bettypes>
     <div *ngIf="isShowCheckboxAffected()" class="mg-bottom-10 d-flex align-items-center">
-        <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled" (change)="handleBetTypesAndAdvancedMode()"/>
-        <label for="checkbox-resettle" class="ml-1">Get affected tickets of Result Amendment</label>
+      <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled"
+        (change)="handleBetTypesAndAdvancedMode()" />
+      <label for="checkbox-resettle" class="ml-1">Get affected tickets of Result Amendment</label>
     </div>
     <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
       [ballSequence]="ballSequences.value"></bettypes>
     <bettypes-virtualsport #betTypesVSComponent [groups]="groupsBetTypesVS" [sportType]="sportType"
       [product]="query.product"></bettypes-virtualsport>
-    <advanced-mode-basketball class="advanced-mode-basketball" #advancedModeBasetball [checkedIds]="checkedIds"></advanced-mode-basketball>
+    <advanced-mode-basketball class="advanced-mode-basketball" #advancedModeBasetball
+      [checkedIds]="checkedIds"></advanced-mode-basketball>
     <div [hidden]="isHideNormalAdvancedMode()">
-      <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true" [allBetTypes]="allBetTypes"></advanced-mode>
+      <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true"
+        [allBetTypes]="allBetTypes"></advanced-mode>
     </div>
     <div class="search mt-2">
       <input type="button" class="submit" value="Search" (click)="search()" />

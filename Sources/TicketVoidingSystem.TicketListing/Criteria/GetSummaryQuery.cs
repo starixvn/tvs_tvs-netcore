@@ -37,6 +37,9 @@ public class CommonQuery
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }
+    
+    public string SelectionSubParlays { get; set; }
+
 }
 
 public class GetSummaryQuery : CommonQuery

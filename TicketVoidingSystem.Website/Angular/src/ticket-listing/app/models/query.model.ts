@@ -19,6 +19,7 @@ export class CommonQuery {
   betTeams?: CheckedBetType[];
   singleOrSubParlay: string;
   isReSettled:  boolean;
+  selectionSubParlays: string;
 }
 
 export class GetSummaryQuery extends CommonQuery {

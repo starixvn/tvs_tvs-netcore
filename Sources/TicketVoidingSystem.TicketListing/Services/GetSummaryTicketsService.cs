@@ -39,6 +39,7 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
         criteria.Type = query.Product;
         criteria.BetTeams = query.BetTeams.ToBetTypeXml();
         criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
+        criteria.SelectionSubParlays = query.SelectionSubParlays;
         var model = await repository.FetchAsync<SummaryTicketModel>(criteria);
         var viewModel = new GetSummaryViewModel();
         if (model == null)

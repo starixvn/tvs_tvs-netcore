@@ -37,6 +37,8 @@ public class GetTicketsDetailCriteria : CriteriaBase
     public bool IsReSettled { get; set; }
 
     public string AffectTickets { get; set; }
+    
+    public string SelectionSubParlays { get; set; }
 
     public override string GetSettingKey() => "NAP_SpecialDelete_TicketListing_Detail";
 
