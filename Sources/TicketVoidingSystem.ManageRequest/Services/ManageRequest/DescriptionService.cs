@@ -38,6 +38,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.WrongOU, BuildDangerAccepted},
                 {IssueTypeConstant.Wrong1stOU, BuildDangerAccepted},
                 {IssueTypeConstant.WrongOdds, BuildDangerAccepted},
+                {IssueTypeConstant.ReducedOver, BuildDangerAccepted},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount}

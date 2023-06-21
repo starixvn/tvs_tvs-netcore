@@ -82,6 +82,9 @@ public class LogInfoServiceImp : LogInfoService
             case IssueTypeConstant.WrongOdds:
                 return GetLogInfoViewModelWrongOdds(query, validation, ticketRequest, logInfoDetail);
 
+            case IssueTypeConstant.ReducedOver:
+                return GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail);
+
             default:
                 return GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail);
         }
@@ -183,6 +186,18 @@ public class LogInfoServiceImp : LogInfoService
         });
     }
 
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelReducedOver(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+    {
+        return query.ReducedOverModels.Select(item => new GetLogInfoModel
+        {
+            MatchId = item.MatchId,
+            Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
+            TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+        });
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -212,6 +227,7 @@ public class LogInfoServiceImp : LogInfoService
         criteria.WrongOuInfo = query.WrongOuModels?.ToWrongOuInfoXml();
         criteria.Wrong1stOuInfo = query.Wrong1stOuModels?.ToWrongOuInfoXml();
         criteria.WrongOddsInfo = query.WrongOddsModels?.ToWrongOddsInfoXml();
+        criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;
@@ -234,6 +250,7 @@ public class LogInfoServiceImp : LogInfoService
             WrongOuModels = query.WrongOuModels,
             Wrong1stOuModels = query.Wrong1stOuModels,
             WrongOddsModels = query.WrongOddsModels,
+            ReducedOverModels = query.ReducedOverModels,
             MatchId = query.MatchId,
             KickOffTime = query.KickOffTime,
             IssueTypeId = query.IssueTypeId

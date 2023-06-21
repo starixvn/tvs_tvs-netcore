@@ -61,6 +61,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.WrongOddsModels = MapEventWrongOdds(secondResultSet);
                 break;
 
+            case IssueTypeConstant.ReducedOver:
+                viewModel.ReducedOverModels = MapEventReducedOver(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
                 break;
@@ -186,6 +190,22 @@ public class GetRequestServiceImp : GetRequestService
             BetTeam = model.BetTeam,
             OuValue = model.OuValue,
             FavoriteValue = model.FavoriteValue
+        });
+    }
+
+    public IEnumerable<ReducedOverViewModel> MapEventReducedOver(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        return requestEventModels.Select(model => new ReducedOverViewModel
+        {
+            EventDate = model.EventDate,
+            MatchId = model.MatchId,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTypeIds = model.BetTypeIds,
+            WicketOver = model.WicketOver,
+            PlayerIds = model.PlayerIds,
+            Runs = model.Runs,
+            Live = model.Live,
+            NonLive = model.NonLive
         });
     }
 

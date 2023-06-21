@@ -133,6 +133,8 @@ export class VoidOtherIssueComponent implements OnInit {
         this.isShowVar = this.requestDetail.redCardModels[0].isCheckedVar;
       } else if (this.isWrongOdds()) {
         this.match = await this.commonService.getMatch(this.requestDetail.wrongOddsModels[0].matchId);
+      } else if (this.isReducedOver()) {
+        this.match = await this.commonService.getMatch(this.requestDetail.reducedOverModels[0].matchId);
       } else {
         this.match = await this.commonService.getMatch(this.requestDetail.event.matchId);
       }
@@ -188,6 +190,10 @@ export class VoidOtherIssueComponent implements OnInit {
 
     if (this.isWrongOdds()) {
       return this.requestDetail.wrongOddsModels[0].eventDate.toString();
+    }
+
+    if (this.isReducedOver()) {
+      return this.requestDetail.reducedOverModels[0].eventDate.toString();
     }
 
     return this.requestDetail.event.kickOffTime?.toString();
@@ -277,6 +283,17 @@ export class VoidOtherIssueComponent implements OnInit {
     }
   }
 
+  updateTemplateValueForReducedOver() {
+    if (this.isReducedOver()) {
+      this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
+      if (!this.logInfoDetails[0].scoreNormalTicket) {
+        this.templateValue.isUpdateScoreHaveText = false;
+      } else {
+        this.templateValue.isUpdateScoreHaveText = this.logInfoDetails[0].scoreNormalTicket.split(',').length > 1 ? true : false;
+      }
+    }
+  }
+
   updateTemplateValueForAbnormalBet() {
     if (this.isAbnormalBet()) {
       this.templateValue.filterBy = this.requestDetail.event.filterBy;
@@ -307,6 +324,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.updateTemplateValueForRedCard();
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
+    this.updateTemplateValueForReducedOver();
     this.templateValue.totalTickets = this.ticketsModel.total;
   }
 
@@ -519,6 +537,10 @@ export class VoidOtherIssueComponent implements OnInit {
     return StaticService.isWrongOdds(this.requestDetail.request.issueTypeId.toString());
   }
 
+  isReducedOver() {
+    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId.toString());
+  }
+
   public isShowAffectedLicenseeArea(): boolean {
     return this.affectedLicensee.show && this.affectedLicensee.licenseesName.length > 0
       || this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName.length > 0
@@ -573,12 +595,16 @@ export class VoidOtherIssueComponent implements OnInit {
 
   async getLogInfoModel(): Promise<void> {
     const logInfoList = await this.commonService.getLogInfo(this.getLogInfoQuery());
-    logInfoList.getLogInfoModels.forEach(logInfo => {
-      this.logInfoDetails.push(logInfo.logInfoDetail);
-    });
+    if (this.isReducedOver()) {
+      this.logInfoDetails.push(logInfoList.getLogInfoModels[0].logInfoDetail);
+    } else {
+      logInfoList.getLogInfoModels.forEach(logInfo => {
+        this.logInfoDetails.push(logInfo.logInfoDetail);
+      });
 
-    if (this.isWrongOdds()) {
-      this.isPoolHouseAffected = logInfoList.getLogInfoModels[0].validation.isPoolHouseAffected;
+      if (this.isWrongOdds()) {
+        this.isPoolHouseAffected = logInfoList.getLogInfoModels[0].validation.isPoolHouseAffected;
+      }
     }
   }
 
@@ -599,6 +625,9 @@ export class VoidOtherIssueComponent implements OnInit {
     } else if (this.isWrongOdds()) {
       query.matchId = this.requestDetail.wrongOddsModels[0].matchId;
       query.wrongOddsModels = MappingModelStaticService.buidWrongOddsGetLogInfoModel(this.requestDetail.wrongOddsModels);
+    } else if (this.isReducedOver()) {
+      query.matchId = this.requestDetail.reducedOverModels[0].matchId;
+      query.reducedOverModels = MappingModelStaticService.buidReducedOverGetLogInfoModel(this.requestDetail.reducedOverModels);
     }
 
     return query;

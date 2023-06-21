@@ -86,4 +86,8 @@ export class LogInfoComponent {
   isWrongOdds(): boolean {
     return this.issueTypeId === Number(IssueTypeConstant.WRONG_ODDS);
   }
+
+  isReducedOver(): boolean {
+    return this.issueTypeId === Number(IssueTypeConstant.REDUCED_OVER);
+  }
 }

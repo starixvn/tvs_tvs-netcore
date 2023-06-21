@@ -81,6 +81,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.OTHER_ISSUES;
   }
 
+  static isReducedOver(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.REDUCED_OVER;
+  }
+
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);
@@ -101,6 +105,8 @@ export class StaticService {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
+    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.reducedOverModels[0].subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }

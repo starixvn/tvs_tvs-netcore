@@ -377,6 +377,31 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToReducedOverInfoXml(this IEnumerable<ReducedOverViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"BetTypeIds='{model.BetTypeIds}' "
+                       + $"WicketOver='{model.WicketOver}' "
+                       + $"PlayerIds='{model.PlayerIds}' "
+                       + $"Runs='{model.Runs}' "
+                       + $"NonLive='{model.NonLive}' "
+                       + $"Live='{model.Live}' /> ";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
     public static string GetAbnormalAccountInfoXml(string usernames, string productIds, string statusIds, DateTime? fromDate, DateTime? toDate)
     {
         return $"<root><r Usernames='{usernames}' "

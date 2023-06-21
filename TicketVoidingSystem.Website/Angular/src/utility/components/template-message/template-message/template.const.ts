@@ -35,6 +35,7 @@ export class IssueTypeId {
   static readonly ABNORMAL_BET_REAL_MEMBER = 15;
   static readonly WRONG_MARKET_OFFERED = 12;
   static readonly ABNORMAL_ACCOUNT = 13;
+  static readonly REDUCED_OVER = 19;
 }
 
 export class SubIssueTypeId {

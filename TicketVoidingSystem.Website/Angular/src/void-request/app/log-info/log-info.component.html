@@ -2,7 +2,7 @@
     <label class="col-form-label log-info-label">Log Info </label>
     <div class="col-sm-6 pd-top-8 remark-content">
       <div *ngFor="let item of logInfoDetails" class="log-info p-2 mb-3">
-        {{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.
+        <span *ngIf="!isReducedOver()">{{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.</span>
         {{displayVoidTimeLabel(filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
         <ng-container *ngIf="!isWrongOdds()">
           Affected Single Count: <strong>{{item.singleCount}}</strong>
@@ -10,7 +10,7 @@
           [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
           </span>,
           Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
-          <span><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
+          <span *ngIf="!isReducedOver()"><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
         </ng-container>
 
         <ng-container *ngIf="isWrongOdds()">

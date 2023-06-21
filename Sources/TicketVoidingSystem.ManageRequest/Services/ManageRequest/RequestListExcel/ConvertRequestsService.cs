@@ -89,6 +89,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.WrongOU, BuildDescriptionDangerAccepted},
                 {IssueTypeConstant.Wrong1stOU, BuildDescriptionDangerAccepted},
                 {IssueTypeConstant.WrongOdds, BuildDescriptionDangerAccepted},
+                {IssueTypeConstant.ReducedOver, BuildDescriptionDangerAccepted},
                 {IssueTypeConstant.EarlyKickOffTime, BuildDescriptionEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildDescriptionEKO},
                 {IssueTypeConstant.WrongScore, BuildDescriptionWrongScore},

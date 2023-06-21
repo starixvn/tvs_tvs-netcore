@@ -330,6 +330,60 @@ public class RequestEventModel
         }
     }
 
+    public string BetTypeIds
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.BetTypeIds;
+        }
+    }
+
+    public string WicketOver
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.WicketOver;
+        }
+    }
+
+    public string PlayerIds
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.PlayerIds;
+        }
+    }
+
+    public string Runs
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.Runs;
+        }
+    }
+
+    public bool Live
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.Live;
+        }
+    }
+
+    public bool NonLive
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.NonLive;
+        }
+    }
+
     public string RequestExtraInfo { get; set; }
 
     public string Usernames { get; set; }
