@@ -14,6 +14,8 @@ import { Result, SqlResult } from '../models/result';
 import { Selection } from '../models/selection.model';
 import { HttpService } from './http.service';
 // import { RequestDetailViewModel } from './../../edit-request/app/request.model';
+import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
+import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
@@ -67,7 +69,7 @@ export class CommonService {
   // }
 
   async getIssueInfo(subId: number): Promise<IssueInfo> {
-    return this.httpService.getJson(`TicketVoiding/GetIssueTypeName?subId=${subId}`);
+    return this.httpService.getJson(`api/ManageRequest/GetIssueTypeName/${subId}`);
   }
 
   async getBalanceUp(): Promise<BalanceUp> {
@@ -133,9 +135,9 @@ export class CommonService {
   //   return this.httpService.postJson<CheckValidUsernamesQuery, CheckValidUsernamesResult>(query, 'TicketVoiding/CheckValidUsernames');
   // }
 
-  // async getLogInfo(query: GetLogInfoQuery): Promise<GetLogInfoModel[]> {
-  //   return this.httpService.postJson<GetLogInfoQuery, GetLogInfoModel[]>(query, 'TicketVoiding/GetLogInfo');
-  // }
+  async getLogInfo(query: GetLogInfoQuery): Promise<GetLogInfoViewModel> {
+    return this.httpService.postJson<GetLogInfoQuery, GetLogInfoViewModel>(query, 'api/AddRequest/GetLogInfo');
+  }
 
   async getMarkedTicketsCount(): Promise<number> {
     return this.httpService.getJson('TicketVoidingSystem/ManageRequest/GetMarkedTicketsCount');

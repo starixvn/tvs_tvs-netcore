@@ -9,7 +9,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 // import { BetIdsComponent } from './components/bet-ids/bet-ids.component';
 // import { BetTypesVirtualSportComponent } from './components/bettypes-virtualsports/bettypes-virtualsports.component';
 // import { BetTypesComponent } from './components/bettypes/bettypes.component';
-// import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+ import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 // import { MatchDetailComponent } from './components/match-detail/match-detail.component';
 // import { MessagesResultComponent } from './components/messages-result/messages-result.component';
 // import { NotificationComponent } from './components/notification/notification.component';
@@ -33,6 +33,7 @@ import { MessagesResultComponent } from './components/messages-result/messages-r
 import { ModalModule } from './components/modal/modal.module';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PagingModule } from './components/paging/paging.module';
+import { RequestInfoModule } from './components/request-info/request-info.module';
 import { ToolTipModule } from './components/tooltip/tooltip.module';
 import { OnlyNumberDirective } from './directives/number.directive';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
@@ -42,7 +43,6 @@ import { HttpService } from './services/http.service';
 
 @NgModule({
   imports: [
-
     CommonModule,
     FormsModule,
     HttpClientModule,
@@ -56,7 +56,8 @@ import { HttpService } from './services/http.service';
     AdvancedModeModule,
     DateTimeModule,
     BlockUiModule,
-    BlockFullUiModule
+    BlockFullUiModule,
+    RequestInfoModule
   ],
   declarations: [
     UsernamesComponent,
@@ -65,7 +66,7 @@ import { HttpService } from './services/http.service';
     BaseTicketsListComponent,
     BetTypesComponent,
     BetTypesVirtualSportComponent,
-    // ConfirmationComponent,
+    ConfirmationComponent,
     MatchDetailComponent,
     MessagesResultComponent,
     NotificationComponent,
@@ -78,7 +79,7 @@ import { HttpService } from './services/http.service';
     BaseTicketsListComponent,
     BetTypesComponent,
     BetTypesVirtualSportComponent,
-    // ConfirmationComponent,
+    ConfirmationComponent,
     MatchDetailComponent,
     MessagesResultComponent,
     NotificationComponent,

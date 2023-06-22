@@ -3,8 +3,8 @@ import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import * as _ from 'lodash';
 import { CheckingPermissionModel } from '../../models/checking-permission.model';
 import { CommonService } from '../../services/common.service';
-import { IModal, ModalType } from './modal';
 import { ModalContentComponent } from './modal-content/modal-content.component';
+import { IModal, ModalType } from './modal.model';
 
 
 @Injectable({

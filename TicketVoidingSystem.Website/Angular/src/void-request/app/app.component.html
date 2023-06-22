@@ -1,0 +1,20 @@
+<menu-bar></menu-bar>
+
+<div class="title">
+  Home / Manage Request / Void Request - {{requestId}}
+</div>
+<div class="body" [blockUi]="isBlockUI">
+  <ng-container *ngIf="isValidRequest()">
+    <div class="remark">
+      <span *ngFor="let item of remark">
+          <em class="fa fa-exclamation-circle"></em>{{item}}
+      </span>
+  </div>
+  
+    <void-danger-accepted *ngIf="isApplyVoidNewDesign()" [requestDetail]="requestDetail"></void-danger-accepted>
+    <void-other-issue *ngIf="!isApplyVoidNewDesign()" [requestId]="requestId" [requestDetail]="requestDetail"></void-other-issue>
+  </ng-container>
+  <div *ngIf="!isValidRequest()" class="mg-10 no-data">
+    Loading...
+  </div>
+</div>

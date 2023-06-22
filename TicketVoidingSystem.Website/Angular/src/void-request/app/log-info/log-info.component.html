@@ -1,0 +1,41 @@
+  <div class="row no-gutters mt-2">
+    <label class="col-form-label log-info-label">Log Info </label>
+    <div class="col-sm-6 pd-top-8 remark-content">
+      <div *ngFor="let item of logInfoDetails" class="log-info p-2 mb-3">
+        {{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.
+        {{displayVoidTimeLabel(filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
+        <ng-container *ngIf="!isWrongOdds()">
+          Affected Single Count: <strong>{{item.singleCount}}</strong>
+          <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
+          [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+          </span>,
+          Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
+          <span><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
+        </ng-container>
+
+        <ng-container *ngIf="isWrongOdds()">
+          LG/Early - Single Count: <strong>{{item.liveGameEarlySingleCount}}</strong>
+          <span *ngIf="isShowCountInfo(item.liveGameEarlyCashOutCount, item.liveGameEarlySettleCount, item.liveGameEarlyInstantlySettleCount)" class="text-red"
+          [innerHTML]="countInfoContent(item.liveGameEarlyCashOutCount, item.liveGameEarlySettleCount, item.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
+          </span><br />
+          <div *ngIf="isPoolHouseAffected">
+            PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
+            <span *ngIf="isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)" class="text-red"
+            [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
+            </span>,
+            Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
+          </div>
+          <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="isWrongScore()" class="d-flex">
+        <label class="col-form-label mr-3">Actual Score</label>
+        <div><input class="input-actual-score form-control form-control-sm" type="text" [(ngModel)]="actualScore" disabled/></div>
+      </div>
+      <div *ngIf="isWrongOdds()" class="d-flex">
+        <label class="col-form-label mr-3">Correct Odds</label>
+        <div><input class="input-actual-score form-control form-control-sm" type="text" [(ngModel)]="correctOdds" disabled/></div>
+      </div>
+    </div>
+  </div>

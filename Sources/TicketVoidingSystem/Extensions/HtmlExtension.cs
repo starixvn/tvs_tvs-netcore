@@ -197,6 +197,26 @@ public static class HtmlExtension
         return choice;
     }
 
+    public static string ChoiceShortSubParlay(this string html, bool isParlay)
+    {
+        if (string.IsNullOrEmpty(html))
+        {
+            return string.Empty;
+        }
+
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var choice = string.Empty;
+        if (isParlay)
+        {
+            choice = HeaderParlay(doc);
+        }
+        var bettypeDescription = GetBettypeDescription(doc);
+        var handicap = html.Handicap(doc);
+        return choice.AppendWithNewLine(handicap.StripHtml())
+            .AppendWithNewLine(bettypeDescription);
+    }
+
     public static string GetBettypeDescription(HtmlDocument doc)
     {
         var result = string.Empty;

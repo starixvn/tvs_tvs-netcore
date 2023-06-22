@@ -68,22 +68,26 @@ export class TicketStatus {
     { value: TicketStatus.RUNNING.toString(), name: 'Running', group: 'All' }
   ];
 
-  static readonly SELECTION_ITEMS:  Selection[] = [
+  static readonly SELECTION_ITEMS: Selection[] = [
     {
       name: 'Running',
-      value: TicketStatus.RUNNING.toString() + ',' + TicketStatus.WAITING.toString()
+      value: TicketStatus.RUNNING.toString() + ',' + TicketStatus.WAITING.toString(),
+      group: 'All'
     },
     {
       name: 'Won',
-      value: TicketStatus.WON.toString()
+      value: TicketStatus.WON.toString(),
+      group: 'All'
     },
     {
       name: 'Lose',
-      value: TicketStatus.LOSE.toString()
+      value: TicketStatus.LOSE.toString(),
+      group: 'All'
     },
     {
       name: 'Draw',
-      value: TicketStatus.DRAW.toString()
+      value: TicketStatus.DRAW.toString(),
+      group: 'All'
     }
   ];
 }
@@ -220,17 +224,52 @@ export class SubIssueTypeGroup {
   ];
 
   static readonly SUBTYPE_NO_ONWARDS: number[] = [
-    SubIssueTypeConstant.NO_INDICATION_AWAY_SCORE_NO_ONWARDS,
-    SubIssueTypeConstant.NO_INDICATION_HOME_SCORE_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_NO_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_NO_ONWARDS
   ];
 
   static readonly SUBTYPE_ONWARDS: number[] = [
+    SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_GOAL_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SCORE_ONWARDS,
-    SubIssueTypeConstant.NO_INDICATION_AWAY_SCORE_ONWARDS,
-    SubIssueTypeConstant.NO_INDICATION_HOME_SCORE_ONWARDS,
     SubIssueTypeConstant.WRONG_INDICATION_SWAP_TEAM_SCORE_ONWARDS,
+  ];
+
+  static readonly SUBTYPE_VAR: number[] = [
+    SubIssueTypeConstant.GOAL,
+    SubIssueTypeConstant.GOAL_AWAY,
+    SubIssueTypeConstant.GOAL_HOME,
+    SubIssueTypeConstant.PEN_GOAL_VAR_PEN_GOAL,
+    SubIssueTypeConstant.PEN_GOAL_VAR_PEN_GOAL_HOME,
+    SubIssueTypeConstant.PEN_GOAL_VAR_PEN_GOAL_AWAY,
+    SubIssueTypeConstant.BET_FC_PEN_GOAL_GOAL,
+    SubIssueTypeConstant.BET_FC_PEN_GOAL_GOAL_HOME,
+    SubIssueTypeConstant.BET_FC_PEN_GOAL_GOAL_AWAY,
+    SubIssueTypeConstant.RED_CARD_VAR_HOME,
+    SubIssueTypeConstant.RED_CARD_VAR_AWAY,
+    SubIssueTypeConstant._2YC_HOME,
+    SubIssueTypeConstant._2YC_AWAY,
+    SubIssueTypeConstant.BETRADAR_FC_RED_CARD_HOME,
+    SubIssueTypeConstant.BETRADAR_FC_RED_CARD_AWAY,
+    SubIssueTypeConstant.MAIN_BOOKING_HOME,
+    SubIssueTypeConstant.MAIN_BOOKING_AWAY,
+    SubIssueTypeConstant.GOAL_PEN_1ST_2ND_MARK,
+    SubIssueTypeConstant.GOAL_PEN_1ST_2ND_MARK_HOME,
+    SubIssueTypeConstant.GOAL_PEN_1ST_2ND_MARK_AWAY,
+    SubIssueTypeConstant.NO_INDICATION_HOME_RC,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_RC,
+    SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
+    SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_ONWARDS,
+    SubIssueTypeConstant.WRONG_INDICATION_SCORE_NO_ONWARDS,
+    SubIssueTypeConstant.WRONG_INDICATION_SCORE_ONWARDS
   ];
 }
 
@@ -239,6 +278,11 @@ export class FunctionConst {
   static readonly EARLY_KICK_OFF = 1;
   static readonly TVS_VOID_PAGE = 2;
   static readonly MARK_TICKETS = 3;
+}
+
+export class PoolHouseTicketValue {
+  static readonly SELECT_ALL_BETTYPE = 'All';
+  static readonly NOT_AFFECTED = '-1';
 }
 
 export class SiteDbGroupConstant {

@@ -1,5 +1,5 @@
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ModalType } from '../../../utility/components/modal/modal';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
@@ -19,7 +19,7 @@ class Helper {
     addedDate: new Date('2020-11-06 00:00:00.000'),
     addedBy: 'zane',
     isChecked: true,
-    custId: 123,    
+    custId: 123,
     subTypeName: '',
     isAllowVoidVIP: ''
   };
@@ -60,7 +60,7 @@ describe('UserService', () => {
     // Assert
     expect(result).toEqual(Helper.fakeGetUserModel);
   });
-  
+
   it('#getUsers should call #appService.getUsers when has username', async () => {
     // Arrange
     const filterModel = new FilterModel();
@@ -74,7 +74,7 @@ describe('UserService', () => {
     // Assert
     expect(result).toEqual(Helper.fakeGetUserModel);
   });
-  
+
   it('#addUsers should call #appService.addUsers when addUsers successfully', async () => {
     // Arrange
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
@@ -101,7 +101,7 @@ describe('UserService', () => {
     spyModalServiceConfirm.mock.calls[0][1]();
     expect(window.location.reload).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#addUsers should call #appService.addUsers when addUsers error', async () => {
     // Arrange
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});
@@ -128,7 +128,7 @@ describe('UserService', () => {
     spyModalServiceConfirm.mock.calls[0][1]();
     expect(window.location.reload).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#removeUsers should call #onYesConfirm', async () => {
     // Arrange
     const mockAppStore = new AppStore();
@@ -162,9 +162,9 @@ describe('UserService', () => {
 
     spyModalServiceConfirm.mock.calls[0][2]();
   });
-  
+
   it('#onYesConfirm should call #appService.removeUsers', async () => {
-    // Arrange    
+    // Arrange
     const mockAppStore = new AppStore();
     mockAppStore.changeBlockingUiStatus = jest.fn();
     const spyModalServiceConfirm = jest.spyOn(modalService, 'open').mockImplementation(() => {});

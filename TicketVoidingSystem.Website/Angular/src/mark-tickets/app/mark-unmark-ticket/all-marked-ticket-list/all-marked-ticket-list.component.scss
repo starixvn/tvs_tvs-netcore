@@ -22,17 +22,17 @@
     border-left: solid 1px #c5c5c5;
 
     .icon-checkbox-none {
-        @include setIconCheckBox('../images/checkBox.png');
+        @include setIconCheckBox('../images/check-box.png');
         background-position: 0px -17px;
     }
 
     .icon-checkbox-any {
-        @include setIconCheckBox('../images/checkBox.png');
+        @include setIconCheckBox('../images/check-box.png');
         background-position: 0px -34px;
     }
 
     .icon-checkbox-all {
-        @include setIconCheckBox('../images/checkBox.png');
+        @include setIconCheckBox('../images/check-box.png');
         background-position: 0px 0px;
     }
 
@@ -51,8 +51,8 @@
     table {
         table-layout: fixed;
     }
-    
-   
+
+
     .ticket-header {
         table {
             @include setTable();

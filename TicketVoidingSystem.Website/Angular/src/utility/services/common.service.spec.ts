@@ -1,3 +1,4 @@
+import { BetType, GetBetTypesQuery, GroupBetType, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { IssueInfo, IssueTypesModel } from '../models/issue-type.model';
@@ -32,7 +33,7 @@ describe('CommonService', () => {
     mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.getIssueTypes();
+    const actual = await commonService.getIssueTypes();
     expect(actual).toEqual(expectedData);
   });
 
@@ -45,7 +46,7 @@ describe('CommonService', () => {
     mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.getActions();
+    const actual = await commonService.getActions();
     expect(actual).toEqual(expectedData);
   });
 
@@ -87,7 +88,7 @@ describe('CommonService', () => {
     mockHttpService.postJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.getMatch(28321695);
+    const actual = await commonService.getMatch(28321695);
     expect(actual).toEqual(expectedData);
   });
 
@@ -149,7 +150,7 @@ describe('CommonService', () => {
     mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.getIssueInfo(27);
+    const actual = await commonService.getIssueInfo(27);
     expect(actual).toEqual(expectedData);
   });
 
@@ -162,7 +163,7 @@ describe('CommonService', () => {
     mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.getBalanceUp();
+    const actual = await commonService.getBalanceUp();
     expect(actual).toEqual(expectedData);
   });
 
@@ -175,7 +176,7 @@ describe('CommonService', () => {
     mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.getFirstTimeAndKickOffTime(28321695);
+    const actual = await commonService.getFirstTimeAndKickOffTime(28321695);
     expect(actual).toEqual(expectedData);
   });
 
@@ -189,7 +190,89 @@ describe('CommonService', () => {
     mockHttpService.postJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    var actual = await commonService.checkVoidBetPermission(new CheckingPermissionModel());
+    const actual = await commonService.checkVoidBetPermission(new CheckingPermissionModel());
     expect(actual).toEqual(expectedData);
+  });
+
+  it('#getGroupBetTypes should return expected data', async () => {
+    // Arrange
+    const groupBettype: GroupBetType[] = [
+        new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
+        new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
+    ];
+    const expectedGroupBettypesModel = new GroupBetTypesModel(groupBettype, true);
+    mockHttpService.postJson = jest.fn().mockImplementation(() => Promise.resolve(expectedGroupBettypesModel));
+    const mockCommonService = new CommonService(mockHttpService);
+
+    // Action
+    const result = await mockCommonService.getGroupBetTypes(new GetBetTypesQuery());
+
+    // Assert
+    expect(result.groupBetTypes.length).toBe(2);
+    expect(result.groupBetTypes[0].groupName).toBe('1H');
+  });
+
+ it('#getMatch should return expected data', async() => {
+  // Arrange
+    const expectedData: MatchModel = {
+      matchId: 28321695,
+      homeId: 10935,
+      homeName: 'American League',
+      homeNameNewSimplified: '美国聯盟',
+      homeNameSimplified: '美国聯盟',
+      homeNameTraditional: '美國聯盟',
+      awayId: 16277,
+      awayName: 'National League',
+      awayNameNewSimplified: '国家联盟',
+      awayNameSimplified: '国家联盟',
+      awayNameTraditional: '國家聯盟',
+      matchCode: '*B0001',
+      eventDate: new Date(),
+      dateTime: new Date(),
+      leagueId: 12345,
+      leagueName: '',
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEvent: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      sportType: 8,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: '',
+      startTime: new Date(),
+      endTime: new Date(),
+      leagueGroupId: 0
+    };
+    mockHttpService.postJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
+    const mockCommonService = new CommonService(mockHttpService);
+
+    // Action
+    const actualData = await mockCommonService.getMatch(28321695);
+
+    // Assert
+    expect(actualData).toEqual(expectedData);
+  });
+
+  it('#getIssueInfo should return expected data', async() => {
+    // Arrange
+    const expectedData:  IssueInfo = {
+      name: 'Abnormal Bet',
+      subIssueTypeId: 27,
+      issueTypeId: 11,
+      subIssueTypeName: 'Abnormal',
+      subIssueTypeNameCS: '非正常'
+    };
+    mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
+    const mockCommonService = new CommonService(mockHttpService);
+
+    // Action
+    const actualData = await mockCommonService.getIssueInfo(17);
+
+    // Assert
+    expect(actualData).toEqual(expectedData);
   });
 });

@@ -1,0 +1,15 @@
+@import '../../assets/styles/mixin.scss';
+
+body {
+  @include scroll-style();
+}
+
+.remark {
+  margin: 0 10px;
+  padding: 5px 0px 3px;
+  color: #ed1c24;
+
+  span {
+    display: block;
+  }
+}

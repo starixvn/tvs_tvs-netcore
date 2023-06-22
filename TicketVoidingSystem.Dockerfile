@@ -9,6 +9,7 @@ COPY ./Sources/TicketVoidingSystem.MarkTickets ./Sources/TicketVoidingSystem.Mar
 COPY ./Sources/TicketVoidingSystem.TicketListing ./Sources/TicketVoidingSystem.TicketListing
 COPY ./Sources/TicketVoidingSystem.SimpleDataApi ./Sources/TicketVoidingSystem.SimpleDataApi
 COPY ./Sources/TicketVoidingSystem.VoidSingleBet ./Sources/TicketVoidingSystem.VoidSingleBet
+COPY ./Sources/TicketVoidingSystem.ManageRequest ./Sources/TicketVoidingSystem.ManageRequest
 COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
 WORKDIR /src/TicketVoidingSystem.Website

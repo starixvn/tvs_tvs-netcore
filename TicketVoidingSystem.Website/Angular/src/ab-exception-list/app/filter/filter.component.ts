@@ -28,16 +28,16 @@ export class FilterComponent implements OnInit {
   multipleSelection = new MultipleSelection();
   levels = ABExceptionListLevel.MULTIPLE_OPTIONS;
   groupSites: GroupSiteModel[];
-  subTypeSelectionFilter: Selection[];  
+  subTypeSelectionFilter: Selection[];
   selectedSubType: string[];
   voidVIPSelection = ABExceptionListVoidVIP.MULTIPLE_OPTIONS;
   selectedVoidVIP: string[];
   tooltip = new Tooltip();
 
   constructor(
-    readonly element: ElementRef,
     private readonly abExceptionListStore: AppStore,
-    private readonly filterService: FilterService
+    private readonly filterService: FilterService,
+    private readonly element: ElementRef,
   ) {
     this.tooltip.element = this.element;
   }

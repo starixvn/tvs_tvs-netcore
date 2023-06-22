@@ -37,12 +37,18 @@ using ONEbook.UM.Transport;
 using SharpRaven;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
+using TicketVoidingSystem.ManageRequest;
+using TicketVoidingSystem.ManageRequest.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
+using TicketVoidingSystem.MarkTickets;
 using TicketVoidingSystem.MarkTickets.Controllers;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.SharedApi;
 using TicketVoidingSystem.SharedApi.Controllers;
 using TicketVoidingSystem.SignalR;
+using TicketVoidingSystem.TicketListing;
 using TicketVoidingSystem.TicketListing.Controllers;
+using TicketVoidingSystem.VoidSingleBet;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
 using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
@@ -220,6 +226,9 @@ public static class ServiceCollectionExtension
         services.RegisterMarkTicketsServices();
         services.RegisterTicketListingServices();
         services.RegisterVoidSingleBetServices();
+        services.RegisterAddRequestServices();
+        services.RegisterManageRequestServices();
+        services.RegisterVoidRequestServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -232,14 +241,19 @@ public static class ServiceCollectionExtension
         services.AddMediatR(typeof(MarkTicketsController));
         services.AddMediatR(typeof(TicketListingController));
         services.AddMediatR(typeof(VoidSingleBetController));
+
+        services.AddMediatR(typeof(AddRequestController));
+        services.AddMediatR(typeof(ManageRequestController));
+        services.AddMediatR(typeof(VoidRequestController));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(TicketVoidingSystemProfile));
-        services.AddAutoMapper(typeof(SharedApiController));
-        services.AddAutoMapper(typeof(MarkTicketsController));
-        services.AddAutoMapper(typeof(TicketListingController));
-        services.AddAutoMapper(typeof(VoidSingleBetController));
+        services.AddAutoMapper(typeof(SharedApiProfile));
+        services.AddAutoMapper(typeof(MarkTicketsProfile));
+        services.AddAutoMapper(typeof(TicketListingProfile));
+        services.AddAutoMapper(typeof(VoidSingleBetProfile));
+        services.AddAutoMapper(typeof(MessageRequestProfile));
     }
 }

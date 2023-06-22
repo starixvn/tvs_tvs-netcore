@@ -53,27 +53,27 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
         }
     }
 
-    private async Task<bool> InsertToBackupDb(IEnumerable<ExcelOicModel> tickets, SendFileQuery sendFileQuery, string sessionId)
-    {
-        try
-        {
-            var criteria = new SendDataOicBackupCriteria
-            {
-                SessionID = sessionId,
-                EventDate = sendFileQuery.EventDate,
-                MatchId = sendFileQuery.MatchId,
-                SiteName = sendFileQuery.LicenseeName,
-                ResultAmendmentXml = tickets.ToResultAmendmentXML()
-            };
+    ////private async Task<bool> InsertToBackupDb(IEnumerable<ExcelOicModel> tickets, SendFileQuery sendFileQuery, string sessionId)
+    ////{
+    ////    try
+    ////    {
+    ////        var criteria = new SendDataOicBackupCriteria
+    ////        {
+    ////            SessionID = sessionId,
+    ////            EventDate = sendFileQuery.EventDate,
+    ////            MatchId = sendFileQuery.MatchId,
+    ////            SiteName = sendFileQuery.LicenseeName,
+    ////            ResultAmendmentXml = tickets.ToResultAmendmentXML()
+    ////        };
 
-            await repository.ExecuteAsync(criteria);
+    ////        await repository.ExecuteAsync(criteria);
 
-            return true;
-        }
-        catch (Exception e)
-        {
-            await loggingService.ErrorAsync($"SessionId: {sessionId}", e);
-            return false;
-        }
-    }
+    ////        return true;
+    ////    }
+    ////    catch (Exception e)
+    ////    {
+    ////        await loggingService.ErrorAsync($"SessionId: {sessionId}", e);
+    ////        return false;
+    ////    }
+    ////}
 }

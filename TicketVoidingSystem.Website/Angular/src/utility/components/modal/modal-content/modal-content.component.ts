@@ -1,6 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { IModal } from '../modal';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { IModal } from '../modal.model';
 
 @Component({
   selector: 'modal-content',

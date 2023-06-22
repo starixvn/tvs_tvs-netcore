@@ -1,5 +1,4 @@
 ﻿using TicketVoidingSystem.Models;
-using TicketVoidingSystem.VoidSingleBet.Models;
 
 namespace TicketVoidingSystem.VoidSingleBet.ViewModels;
 

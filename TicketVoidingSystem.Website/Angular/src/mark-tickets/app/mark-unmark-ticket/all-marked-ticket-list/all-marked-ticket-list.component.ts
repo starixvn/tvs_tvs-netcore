@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../utility/constants/labels';
@@ -135,7 +135,7 @@ export class AllMarkedTicketListComponent implements OnInit {
     this.refreshData.emit();
     this.iconCheckBox = IconCheckBox.all;
   }
-  
+
   getShowMatchId(matchId: string, childMatchId :string){
     if(childMatchId){
       return `${matchId}\n(${childMatchId})`

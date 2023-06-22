@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ConfirmationComponent ConfirmationComponent should init match snapshot 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <confirmation-single>
     <fieldset
       class="confirm-delete"

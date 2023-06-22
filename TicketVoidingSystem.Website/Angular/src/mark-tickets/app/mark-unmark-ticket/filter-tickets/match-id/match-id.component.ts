@@ -4,7 +4,7 @@ import {
   OnInit, Output, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GetPlayersQuery } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
@@ -190,9 +190,9 @@ export class MatchIdComponent implements OnInit {
 
   getParams(): GetTicketsQuery {
     this.model.licenseeNames = this.getCheckedLicensees().join(',');
-    this.model.liveIndicator = this.eventType.value.isNumber() ?  Number(this.eventType.value) : null;
-    this.model.liveAwayScore =  `${this.model.liveAwayScore}`.isNumber() ?  Number(this.model.liveAwayScore) : null;
-    this.model.liveHomeScore = `${this.model.liveHomeScore}`.isNumber() ?  Number(this.model.liveHomeScore) : null;
+    this.model.liveIndicator = this.eventType.value.isNumber() ? Number(this.eventType.value) : null;
+    this.model.liveAwayScore =  `${this.model.liveAwayScore}`.isNumber() ? Number(this.model.liveAwayScore) : null;
+    this.model.liveHomeScore = `${this.model.liveHomeScore}`.isNumber() ? Number(this.model.liveHomeScore) : null;
 
     const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
     this.model.betTypes = this.advancedModelComponent.getBetTypeModels(checkedBetTypes);

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogInfoNewComponent LogInfoNewComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <log-info-new>
+    <div>
+      <span>
+        <strong>
+          Log Info
+        </strong>
+      </span>
+      <br />
+      <span>
+        Live Score: 
+      </span>
+      <strong>
+        0 - 0
+      </strong>
+      . Void time (GMT-4): 
+      <strong>
+        2020/11/06 12:00:00.000 AM - 2020/11/06 12:00:00.000 AM
+      </strong>
+      <br />
+       Affected Single Count: 
+      <strong>
+        1
+      </strong>
+      <span
+        class="text-red"
+      />
+      , Parlay Count: 
+      <strong>
+        1
+      </strong>
+      <br />
+    </div>
+  </log-info-new>
+</ng-component>
+`;

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { EventType } from '../../../../utility/constants/sport.constant';
+import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { Message } from './../messages/message';
 import { Format, MessageTemplateId, TemplateContentConst, TemplateReplace } from './template.const';
@@ -217,7 +218,7 @@ export class TemplateService {
 
     this.replaceEachLanguage(message, TemplateReplace.AOI_MESSAGE, replacedContent);
   }
-  
+
   replaceSpecialBetType(message: Message, betTypeNameReplaceMessage: Message) {
     const replacedContent: TemplateContent = {
       msgEnglish: `"${betTypeNameReplaceMessage.contentEnglish}" `,
@@ -227,5 +228,82 @@ export class TemplateService {
     };
 
     this.replaceEachLanguage(message, TemplateReplace.SPECIAL_BET_TYPE, replacedContent);
+  }
+
+  replaceActualMarketTvsWrongOdds(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
+    if (subIssueTypeId === SubIssueTypeConstant.HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP) {
+      this.replaceActualMarketSubTypeHdp(message, subIssueTypeId, templateValue);
+    } else if (subIssueTypeId === SubIssueTypeConstant.OVER_UNDER || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER) {
+      this.replaceActualMarketSubTypeOu(message, subIssueTypeId, templateValue);
+    }
+  }
+
+  private replaceActualMarketSubTypeHdp(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
+    const prfixSubType = this.getPrefixSubType(subIssueTypeId);
+    const replacedContent: TemplateContent = {
+      msgEnglish: `${prfixSubType.msgEnglish}${this.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOdds}`,
+      msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOdds}`,
+      msgChineseSimplified: `${prfixSubType.msgChineseSimplified}${this.getTeamNameSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOdds}`,
+      msgChineseNewSimplified: `${prfixSubType.msgChineseNewSimplified}${this.getTeamNameNewSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${templateValue.correctOdds}`
+    };
+
+    this.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);
+  }
+
+  private replaceActualMarketSubTypeOu(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
+    const prefixSubType = this.getPrefixSubType(subIssueTypeId);
+    const replacedContent: TemplateContent = {
+      msgEnglish: `${prefixSubType.msgEnglish}${this.getOuType(templateValue)}-${templateValue.ouValue}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOdds}`,
+      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${this.getOuTypeTraditional(templateValue)}-${templateValue.ouValue}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOdds}`,
+      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${this.getOuTypeSimplified(templateValue)}${templateValue.ouValue}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOdds}`,
+      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${this.getOuTypeNewSimplified(templateValue)}-${templateValue.ouValue}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${templateValue.correctOdds}`
+    };
+
+    this.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);
+  }
+
+  private getPrefixSubType(subIssueTypeId: number): TemplateContent {
+    const isSubTypeFirstHalf = subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER;
+    const prfixSubType: TemplateContent = {
+      msgEnglish: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgEnglish : ''}`,
+      msgChineseTraditional: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseTraditional : ''}`,
+      msgChineseSimplified: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseSimplified : ''}`,
+      msgChineseNewSimplified: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseNewSimplified : ''}`,
+    }
+
+    return prfixSubType;
+  }
+
+  private getTeamName(templateValue: TemplateValue): string {
+    return templateValue.betTeam === 'h' ? templateValue.match?.homeName : templateValue.match?.awayName;
+  }
+
+  private getTeamNameTraditional(templateValue: TemplateValue): string {
+    return templateValue.betTeam === 'h' ? templateValue.match?.homeNameTraditional : templateValue.match?.awayNameTraditional;
+  }
+
+  private getTeamNameSimplified(templateValue: TemplateValue): string {
+    return templateValue.betTeam === 'h' ? templateValue.match?.homeNameSimplified : templateValue.match?.awayNameSimplified;
+  }
+
+  private getTeamNameNewSimplified(templateValue: TemplateValue): string {
+    return templateValue.betTeam === 'h' ? templateValue.match?.homeNameNewSimplified : templateValue.match?.awayNameNewSimplified;
+  }
+
+
+  private getOuType(templateValue: TemplateValue): string {
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgEnglish : TemplateContentConst.UNDER.msgEnglish;
+  }
+
+  private getOuTypeTraditional(templateValue: TemplateValue): string {
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseTraditional : TemplateContentConst.UNDER.msgChineseTraditional;
+  }
+
+  private getOuTypeSimplified(templateValue: TemplateValue): string {
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseSimplified : TemplateContentConst.UNDER.msgChineseSimplified;
+  }
+
+  private getOuTypeNewSimplified(templateValue: TemplateValue): string {
+    return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgChineseNewSimplified : TemplateContentConst.UNDER.msgChineseNewSimplified;
   }
 }

@@ -1,3 +1,4 @@
+import { MatchModel } from "../../../models/match.model";
 import { Message } from "../messages/message";
 
 export class TemplateContent {
@@ -51,6 +52,13 @@ export class TemplateValue {
   isCheckedEarlyEvent?: boolean;
   isCheckedSpecialBetType?: boolean;
   betTypeNameReplaceMessage?: Message;
+  match?: MatchModel;
+  betTeam?: string;
+  correctOdds?: string;
+  filterOuType?: string;
+  ouValue?: string;
+
   isCheckedVar?: boolean;
   playerName?: TemplateContent;
+  numberOfCorner?: number;
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.VoidSingleBet.ViewModels;
