@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
 
 public class GetSitesHandlerTests
 {
-    [Fact()]
+    [Fact]
     public async Task Handler_MediatorSendRequest_ReturnResult()
     {
         // Arrange
@@ -21,7 +21,7 @@ public class GetSitesHandlerTests
         criteria.GetSettingKey();
         criteria.IsValid();
         var sites = new List<LicenseeSite> { new() { SiteName = "188", GroupName = "Deposit", SiteId = "W" } };
-        var model = new GroupLicenseeSiteViewModel() { GroupName = "Deposit", Sites = sites };
+        var model = new GroupLicenseeSiteViewModel { GroupName = "Deposit", Sites = sites };
         var models = new List<GroupLicenseeSiteViewModel> { model };
         var repository = Substitute.For<IDynamicRepository>();
         repository.FetchAsync<LicenseeSite>(Arg.Any<GetSitesCriteria>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(sites);

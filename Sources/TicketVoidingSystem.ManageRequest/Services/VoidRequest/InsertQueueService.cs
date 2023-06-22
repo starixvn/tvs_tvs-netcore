@@ -134,7 +134,7 @@ public class InsertQueueServiceImp : InsertQueueService
             CancelCashOutTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidCancelCOTickets),
             SingleTickets14Json = JsonSerializer.Serialize(ticketTypeModel.ValidVoidSingleTickets14),
             UserId = sessionService.UserId,
-            IP = sessionService.GetClientIp(),
+            IP = sessionService.GetClientIp()
         };
         await repository.ExecuteAsync(criteria);
     }

@@ -39,7 +39,7 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
             .Select(group => new GroupRequestModel
             {
                 RequestId = group.Key,
-                RequestModels = group.ToList(),
+                RequestModels = group.ToList()
             });
         var viewModels = groupRequestModels.Select(g => renderService.Render(g));
 
@@ -49,7 +49,7 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
     private async Task<bool> IsFilterSearchRequestsValid(SelectRequestsQuery query)
     {
         const string NA_OPTION = "-1";
-        return (query.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(query.SubIssueType)
-        || (!string.IsNullOrWhiteSpace(query.RequestId) && !await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(query.RequestId))));
+        return query.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(query.SubIssueType)
+                                                   || (!string.IsNullOrWhiteSpace(query.RequestId) && !await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(query.RequestId)));
     }
 }

@@ -90,7 +90,7 @@ public static class HtmlExtension
             return stake.AppendWithNewLine(rebateBonus);
         }
 
-        return (!string.IsNullOrEmpty(nphPromotion)) ? stake.AppendWithNewLine(nphPromotion) : stake;
+        return !string.IsNullOrEmpty(nphPromotion) ? stake.AppendWithNewLine(nphPromotion) : stake;
     }
 
     private static string RebateBonus(this string html)
@@ -173,7 +173,7 @@ public static class HtmlExtension
 
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var choice = (isParlay) ? HeaderParlay(doc) : string.Empty;
+        var choice = isParlay ? HeaderParlay(doc) : string.Empty;
         var handicap = html.Handicap(doc);
         var bettype = GetBetType(doc);
         var match = doc.DocumentNode.SelectNodes("//div[@class='match']").First();
@@ -189,7 +189,7 @@ public static class HtmlExtension
     {
         var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerHtml.StripHtml();
         var bettypeDescription = GetBetTypeDescription(doc);
-        return (string.IsNullOrWhiteSpace(bettypeDescription)) ? bettype : bettype.AppendWithNewLine(bettypeDescription);
+        return string.IsNullOrWhiteSpace(bettypeDescription) ? bettype : bettype.AppendWithNewLine(bettypeDescription);
     }
 
     private static string HeaderParlay(HtmlDocument doc)
@@ -214,7 +214,7 @@ public static class HtmlExtension
 
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var choice = (isParlay) ? HeaderParlay(doc) : string.Empty;
+        var choice = isParlay ? HeaderParlay(doc) : string.Empty;
         var bettypeDescription = GetBetTypeDescription(doc);
         var handicap = html.Handicap(doc);
         return choice.AppendWithNewLine(handicap.StripHtml())

@@ -25,11 +25,11 @@ public class CellServiceImp : CellService
         if (query.GroupBy == GroupByConstants.Licensees)
         {
             title += " - " + StringResource.Licensee + ": " + query.LicenseeName;
-            return (!query.IsGroup) ? title + " - " + StringResource.Bettype + ": " + query.BetTypeName : title;
+            return !query.IsGroup ? title + " - " + StringResource.Bettype + ": " + query.BetTypeName : title;
         }
 
         title += " - " + StringResource.Bettype + ": " + query.BetTypeName;
-        return (!query.IsGroup) ? title + " - " + StringResource.Licensee + ": " + query.LicenseeName : title;
+        return !query.IsGroup ? title + " - " + StringResource.Licensee + ": " + query.LicenseeName : title;
     }
 
     public void AddMatch(ExcelWorksheet worksheet, ExportExcelQuery query)

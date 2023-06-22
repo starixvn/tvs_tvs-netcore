@@ -120,7 +120,7 @@ public class AfterVoidServiceTests
         };
         var voidResult = new VoidTicketsModel
         {
-            Tickets = new List<TicketEmailModel> { },
+            Tickets = new List<TicketEmailModel>(),
             Validation = new VoidTicketValidation()
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();
@@ -145,7 +145,7 @@ public class AfterVoidServiceTests
         // Arrange
         var voidResult = new VoidTicketsModel
         {
-            Tickets = new List<TicketEmailModel> { },
+            Tickets = new List<TicketEmailModel>(),
             Validation = new VoidTicketValidation()
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();

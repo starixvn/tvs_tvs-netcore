@@ -17,7 +17,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
     public async Task Execute_RepositoryHasCalled(byte statusId, int errorCode)
     {
         // Arrange
-        var query = new MarkTicketsQuery()
+        var query = new MarkTicketsQuery
         {
             Status = statusId,
             Tickets = new List<BetId>

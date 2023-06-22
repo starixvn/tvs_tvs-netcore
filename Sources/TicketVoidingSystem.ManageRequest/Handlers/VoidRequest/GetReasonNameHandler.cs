@@ -32,8 +32,8 @@ public class GetReasonNameHandler : IRequestHandler<GetReasonNameRequest, Voided
             return new VoidedReason();
         }
 
-        var sportEn = (request.SportTypeId > 0) ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.English)} - " : "";
-        var sportCs = (request.SportTypeId > 0) ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.ChineseSimplified)} - " : "";
+        var sportEn = request.SportTypeId > 0 ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.English)} - " : "";
+        var sportCs = request.SportTypeId > 0 ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.ChineseSimplified)} - " : "";
         voidedReason.ReasonEnglish = $"{sportEn}{voidedReason.ReasonEnglish}";
         voidedReason.ReasonChineseSimplified = $"{sportCs}{voidedReason.ReasonChineseSimplified}";
 

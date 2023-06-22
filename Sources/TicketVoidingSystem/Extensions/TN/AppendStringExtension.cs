@@ -13,7 +13,7 @@ public static class AppendStringExtension
             return extend;
         }
 
-        return (string.IsNullOrWhiteSpace(extend)) ? root : root + $"{Environment.NewLine}{extend}";
+        return string.IsNullOrWhiteSpace(extend) ? root : root + $"{Environment.NewLine}{extend}";
     }
 
     public static string Intersected(this string textWithComma, List<string> listString)

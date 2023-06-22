@@ -45,7 +45,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
     {
         var match = query.MatchId != null && query.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(query.MatchId.Value) : null;
         var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, query).Where(item => item.Tickets.Any());
-        var index = (query.PageIndex * query.PageSize) + 1;
+        var index = query.PageIndex * query.PageSize + 1;
         foreach (var group in groups)
         {
             var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query.IssueTypeId);

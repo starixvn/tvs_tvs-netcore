@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.SharedApi.Tests.Controllers;
 
 public class SharedApiControllerTests
 {
-    [Fact()]
+    [Fact]
     public void GetPermission_HasRequest_ReturnIActionResult()
     {
         // Arrange

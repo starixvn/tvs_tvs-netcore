@@ -93,7 +93,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.WrongKickOffTime, BuildDescriptionEKO},
                 {IssueTypeConstant.WrongScore, BuildDescriptionWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildDescriptionArchivedTicket},
-                {IssueTypeConstant.AbnormalAccount, BuildDescriptionAbnormalAccount},
+                {IssueTypeConstant.AbnormalAccount, BuildDescriptionAbnormalAccount}
             };
 
         matchingFunctions.TryGetValue(issueId, out var function);
@@ -113,7 +113,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
 
         var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
 
-        return (nodesParlay != null) ? $"Mix Parlay: {nodesParlay.First().InnerText}" : string.Empty;
+        return nodesParlay != null ? $"Mix Parlay: {nodesParlay.First().InnerText}" : string.Empty;
     }
 
     private static string BuildDescriptionDangerAccepted(string html)
@@ -181,7 +181,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='sport']");
 
-        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
+        return nodes != null && nodes.Any() ? nodes.First().InnerText : string.Empty;
     }
 
     public string GetEvent(string html)
@@ -190,7 +190,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='match']");
 
-        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
+        return nodes != null && nodes.Any() ? nodes.First().InnerText : string.Empty;
     }
 
     public string GetLeague(string html)
@@ -199,7 +199,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='league text-uppercase']");
 
-        return (nodes != null && nodes.Any()) ? nodes.First().InnerText : string.Empty;
+        return nodes != null && nodes.Any() ? nodes.First().InnerText : string.Empty;
     }
 
     public string GetVarCheckValue(bool isCheckedVar)

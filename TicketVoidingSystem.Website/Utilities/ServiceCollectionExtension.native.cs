@@ -114,7 +114,7 @@ public static class ServiceCollectionExtension
                     Name = "TicketVoidingSystem.Cookie",
                     SecurePolicy = CookieSecurePolicy.SameAsRequest
                 };
-                options.Events.OnRedirectToLogin = (context) =>
+                options.Events.OnRedirectToLogin = context =>
                 {
                     context.Response.Redirect(AppSettingService.AppSetting.AuthSettings.LoginPath);
                     return Task.CompletedTask;

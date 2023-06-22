@@ -79,7 +79,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
 
     private IEnumerable<Group<TicketViewModel>> MapToGroupTicketViewModel(GetTicketsRequest request, IEnumerable<Group<GetTicketModel>> groups, Match match, VoidPermission voidPermission)
     {
-        var startIndex = (request.PageIndex * request.PageSize) + 1;
+        var startIndex = request.PageIndex * request.PageSize + 1;
         var currentGroups = new List<Group<TicketViewModel>>();
         foreach (var item in groups)
         {

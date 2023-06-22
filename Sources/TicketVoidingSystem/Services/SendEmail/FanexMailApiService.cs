@@ -24,7 +24,7 @@ public class FanexMailApiServiceImp : FanexMailApiService
         { EmailGroup.Recover, ErrorSendEmail.Recover },
         { EmailGroup.CashOut, ErrorSendEmail.CashOut },
         { EmailGroup.ItQa, ErrorSendEmail.It },
-        { EmailGroup.ItSupport, ErrorSendEmail.It },
+        { EmailGroup.ItSupport, ErrorSendEmail.It }
     };
 
     public FanexMailApiServiceImp(LoggingService loggingService)

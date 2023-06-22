@@ -42,7 +42,7 @@ public class GetFirstTimeAndKickOffTimeHandler : IRequestHandler<GetFirstTimeAnd
     private static DateTime GetMinTransDate(FirstTicketTime ticketTime)
     {
         const int yearPrefix = 2000;
-        return (ticketTime.MinTransDate == default)
+        return ticketTime.MinTransDate == default
             ? new DateTime(ticketTime.MinTransDate.Year + yearPrefix, ticketTime.MinTransDate.Month, ticketTime.MinTransDate.Day)
             : ticketTime.MinTransDate;
     }

@@ -92,7 +92,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         ticket.RefNo = item.RefNo.ToString(CultureInfo.InvariantCulture);
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
-        ticket.SettlementStatus = item.IsMixParlay ? default(byte) : item.SettlementStatus;
+        ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
         ticket.IsLive = item.IsLiveIndicator;
 
         if (match != null)
@@ -113,13 +113,13 @@ public class MapFromBetListServiceImp : MapFromBetListService
 
     private static bool IsGetPlainTextForExportExcel(int betTypeId, ChoiceType choiceType, bool isParlay, int issueTypeId)
     {
-        return (choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet())));
+        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet()));
     }
 
     private string BuildChoice(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId)
     {
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        return (item.IsMixParlay) ? GetChoiceForTicketParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
+        return item.IsMixParlay ? GetChoiceForTicketParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
     }
 
     private string GetChoiceForTicketParlay(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId, string mainChoice)

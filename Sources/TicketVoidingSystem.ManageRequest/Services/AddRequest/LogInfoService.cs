@@ -95,7 +95,7 @@ public class LogInfoServiceImp : LogInfoService
             ScoreId = item.ScoreId,
             Validation = validation.FirstOrDefault(x => x.ScoreId == item.ScoreId),
             TicketRequest = ticketRequest.Where(x => x.ScoreId == item.ScoreId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.ScoreId == item.ScoreId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.ScoreId == item.ScoreId)
         });
     }
 
@@ -107,7 +107,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -119,7 +119,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -131,7 +131,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -143,7 +143,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -155,7 +155,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -167,7 +167,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -179,7 +179,7 @@ public class LogInfoServiceImp : LogInfoService
             MatchId = item.MatchId,
             Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
             TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId)
         });
     }
 
@@ -192,7 +192,7 @@ public class LogInfoServiceImp : LogInfoService
                 {
                     Validation = validation.FirstOrDefault(),
                     TicketRequest = ticketRequest,
-                    LogInfoDetail = logInfoDetail.FirstOrDefault(),
+                    LogInfoDetail = logInfoDetail.FirstOrDefault()
                 }
             };
     }
@@ -202,7 +202,7 @@ public class LogInfoServiceImp : LogInfoService
         var transInfoJsonList = await GetTransInfoJson(query);
         var criteria = mapper.Map<GetLogInfoCriteria>(query);
         criteria.UserId = session.UserId;
-        criteria.KickOffInfo = (query.IssueTypeId == IssueTypeConstant.EarlyKickOffTime || query.IssueTypeId == IssueTypeConstant.WrongKickOffTime)
+        criteria.KickOffInfo = query.IssueTypeId == IssueTypeConstant.EarlyKickOffTime || query.IssueTypeId == IssueTypeConstant.WrongKickOffTime
             ? ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
         criteria.WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml();
         criteria.DangerAcceptedInfo = query.DangerAcceptedModels?.ToDangerAcceptedInfoXml();
@@ -231,7 +231,7 @@ public class LogInfoServiceImp : LogInfoService
             WrongOddsModels = query.WrongOddsModels,
             MatchId = query.MatchId,
             KickOffTime = query.KickOffTime,
-            IssueTypeId = query.IssueTypeId,
+            IssueTypeId = query.IssueTypeId
         };
 
         return await getTransInfoService.GetTransInfoJson(getTransInfoQuery);

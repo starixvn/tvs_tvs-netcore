@@ -21,7 +21,7 @@ public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageReq
 
     public async Task<PermissionManage> Handle(GetPermissionManageRequest request, CancellationToken cancellationToken)
     {
-        var permissionTasks = new List<Task<bool>>()
+        var permissionTasks = new List<Task<bool>>
         {
             sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Constant.Policy.Host),
             sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Read),

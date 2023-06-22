@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Services;
 
 public class GetUsersServiceImpTests
 {
-    [Fact()]
+    [Fact]
     // Jacob OK
     public async Task GetUsers_ShouldReturnExpectedData()
     {

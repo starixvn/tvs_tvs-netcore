@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
 
 public class GetSubTypeHandlerTests
 {
-    [Fact()]
+    [Fact]
     public async Task Handler_RepositoryHasCalled_ReturnTrue()
     {
         // Arrange

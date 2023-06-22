@@ -144,7 +144,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             var criteria = new GetTransInfoForVoid14Criteria
             {
                 SiteDbGroupId = item.Id,
-                SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite),
+                SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite)
             };
 
             var transInfoJson = await repository.GetAsync<string>(criteria);

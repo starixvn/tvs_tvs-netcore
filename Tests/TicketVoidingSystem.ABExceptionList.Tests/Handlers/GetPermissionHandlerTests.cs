@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
 
 public class GetPermissionHandlerTests
 {
-    [Fact()]
+    [Fact]
     public async Task Handler_RepositoryHasCalled_ReturnTrue()
     {
         // Arrange

@@ -87,7 +87,7 @@ public class DescriptionElementServiceImp : DescriptionElementService
         var expectedBettypeNames = bettypeNames.Take(numberOfBettypeShow);
         var conjunctionBettypeName = string.Join(", ", expectedBettypeNames);
 
-        return (bettypeNames.Count() > numberOfBettypeShow) ? $"{conjunctionBettypeName}..." : conjunctionBettypeName;
+        return bettypeNames.Count() > numberOfBettypeShow ? $"{conjunctionBettypeName}..." : conjunctionBettypeName;
     }
 
     public string BuildVoidTimeAbnormalAccount(DateTime fromDate, DateTime toDate)

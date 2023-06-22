@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.ABExceptionList.Tests.Handlers;
 
 public class CheckUsernamesHandlerTests
 {
-    [Fact()]
+    [Fact]
     public async Task Handler_RepositoryHasCalled_ReturnResult()
     {
         // Arrange
@@ -19,7 +19,7 @@ public class CheckUsernamesHandlerTests
         criteria.GetSettingKey();
         criteria.IsValid();
         var request = new CheckUsernamesRequest { Usernames = "maria" };
-        var expectedResult = new CheckUsernamesModel() { ExistedUsernames = "ex", InvalidUsernames = "in" };
+        var expectedResult = new CheckUsernamesModel { ExistedUsernames = "ex", InvalidUsernames = "in" };
         var repository = Substitute.For<IDynamicRepository>();
         repository.GetAsync<CheckUsernamesModel>(Arg.Any<CheckUsernamesCriteria>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(expectedResult);
         var handler = new CheckUsernamesHandler(repository);
