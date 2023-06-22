@@ -128,12 +128,27 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)
     {
-        if (data.Any())
+        var voidTickets = data.Where(item => !item.IsCancelCashOut);
+        var cancelCashOutTickets = data.Where(item => item.IsCancelCashOut);
+
+        if (voidTickets.Any())
         {
-            model.FromTime = data.Min(item => item.TransDate).ZoneManila();
-            model.FromDate = data.Min(item => item.WinLostDate).ZoneManila();
-            model.ToTime = data.Max(item => item.TransDate).ZoneManila();
-            model.ToDate = data.Max(item => item.WinLostDate).ZoneManila();
+            model.FromTime = voidTickets.Min(item => item.TransDate).ZoneManila();
+            model.FromDate = voidTickets.Min(item => item.WinLostDate).ZoneManila();
+            model.ToDate = voidTickets.Select(item => item.WinLostDate)
+                .Union(cancelCashOutTickets.Select(item => item.CheckTimeCancelCashOut)).Max().ZoneManila();
+            model.ToTime = voidTickets.Select(item => item.TransDate)
+                .Union(cancelCashOutTickets.Select(item => item.CheckTimeCancelCashOut)).Max().ZoneManila();
+        }
+        else
+        {
+            if (cancelCashOutTickets.Any())
+            {
+                model.FromDate = cancelCashOutTickets.Min(item => item.CheckTimeCancelCashOut).ZoneManila();
+                model.ToDate = cancelCashOutTickets.Max(item => item.CheckTimeCancelCashOut).ZoneManila();
+                model.FromTime = cancelCashOutTickets.Min(item => item.CheckTimeCancelCashOut).ZoneManila();
+                model.ToTime = cancelCashOutTickets.Max(item => item.CheckTimeCancelCashOut).ZoneManila();
+            }
         }
     }
 

@@ -117,5 +117,8 @@ public class GetTicketModel
     public int MatchId { get; set; }
 
     public bool IsSettled { get; set; }
+
     public int? StatusWinLost { get; set; }
+
+    public DateTime CheckTimeCancelCashOut { get; set; }
 }
