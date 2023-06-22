@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Models.Parameters;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
 
 public interface GetRequestsForExcelService
 {
-    Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery model);
+    Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery query);
 }
 
 public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
@@ -27,68 +28,89 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         this.convertRequestsService = convertRequestsService;
     }
 
-    public async Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery model)
+    public async Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery query)
     {
-        var (request, requestInfoGetCalcTimes) = await getRequestsService.GetRequests(model);
-        var models = (await RenderDataRequest(request, requestInfoGetCalcTimes)).OrderByDescending(x => x.RequestId);
+        var models = await GetRawRequestsData(query);
         var viewModels = models.Select(renderService.RenderExportExcel);
-        var tickets = new List<ExcelRequestModel>();
-        int? index = 1;
+        var issueTypes = await convertRequestsService.GetAllIssueTypes();
+        var subIssueTypes = await convertRequestsService.GetAllSubIssueTypes();
+        var voidActions = await convertRequestsService.GetAllVoidActions();
+        var outputRequests = new List<ExcelRequestModel>();
+        int? index = 0;
+
         foreach (var item in viewModels)
         {
-            int? numberOfRequestDetail = viewModels.Count(x => x.RequestId == item.RequestId);
-            if (tickets.Any(x => x.RequestId == item.RequestId))
+            int? numberOfRequestDetail = null;
+            int? currentIndex = null;
+            var isCurrentRequestNotExistedInOutputRequests = outputRequests.All(x => x.RequestId != item.RequestId);
+            if (isCurrentRequestNotExistedInOutputRequests)
             {
-                numberOfRequestDetail = null;
-                index--;
+                numberOfRequestDetail = viewModels.Count(x => x.RequestId == item.RequestId);
+                index++;
+                currentIndex = index;
             }
 
-            var ticket = mapper.Map<ExcelRequestModel>(item);
-            ticket.MatchId = item.Details[0].MatchId.ToString();
-            ticket.CalculatedScore = item.Details[0].SettlementStatus;
-            ticket.Description = convertRequestsService.GetDescription(item.IssueTypeId, item.Details[0].Description);
-            ticket.CreatedTime = item.CreatedDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-            ticket.IssueType = await convertRequestsService.GetIssueTypeName(item.IssueTypeId);
-            ticket.SubIssueType = await convertRequestsService.GetSubIssueTypeName(item.SubIssueTypeId);
-            ticket.Sport = convertRequestsService.GetSportName(item.Details[0].Description);
-            ticket.Event = convertRequestsService.GetEvent(item.Details[0].Description);
-            ticket.League = convertRequestsService.GetLeague(item.Details[0].Description);
-            ticket.VarCheck = convertRequestsService.GetVarCheckValue(item.IsCheckedVar);
-            ticket.BetType = string.Join(", ", item.BettypeNames);
-            ticket.Action = await convertRequestsService.GetActionName(item.ActionId);
-            ticket.PerformedBy = item.LastPerformedBy;
-            ticket.NoOfTickets = convertRequestsService.GetNoOfTickets(item.Details[0].TotalVoidedSingle, item.Details[0].TotalVoidedParlay);
-            ticket.NumberOfRequestDetails = numberOfRequestDetail;
-            ticket.CalcFullTime = item.CalcFullTime != null ? item.CalcFullTime.ToString() : string.Empty;
-            ticket.CalcHalfTime = item.CalcHalfTime != null ? item.CalcHalfTime.ToString() : string.Empty;
-            ticket.Index = tickets.Any(x => x.RequestId == item.RequestId) ? null : index;
-            tickets.Add(ticket);
-            index++;
+            var mappingParam = new ExcelRequestsMappingParameter
+            {
+                CurrentViewModel = item,
+                CurrentIndex = currentIndex,
+                NumberOfRequestDetail = numberOfRequestDetail,
+                IssueTypes = issueTypes,
+                SubIssueTypes = subIssueTypes,
+                VoidActions = voidActions
+            };
+            var outputRequest = MapToExcelRequestModel(mappingParam);
+            outputRequests.Add(outputRequest);
         }
 
-        return tickets;
+        return outputRequests;
     }
 
-    private async Task<IEnumerable<RequestModel>> RenderDataRequest(IEnumerable<RequestModel> requests, IEnumerable<string> query)
+    private async Task<IEnumerable<RequestModel>> GetRawRequestsData(SelectRequestsQuery query)
     {
-        var calculateTimeSets = await calculateTimeService.GetCalculateTime(query);
-        var data = new List<RequestModel>();
-        foreach (var request in requests)
-        {
-            SetCalcTimeForRequest(calculateTimeSets, request);
-            data.Add(request);
-        }
-
-        return data;
+        var (requests, requestInfoGetCalcTimes) = await getRequestsService.GetRequests(query);
+        var calculateTimeSets = await calculateTimeService.GetCalculateTime(requestInfoGetCalcTimes);
+        var outputRequests = AssignCalcTime(requests, calculateTimeSets);
+        return outputRequests.OrderByDescending(x => x.RequestId);
     }
 
-    private void SetCalcTimeForRequest(IEnumerable<GetCalculateTimeModel> calculateTimeSets, RequestModel request)
+    private static IEnumerable<RequestModel> AssignCalcTime(IEnumerable<RequestModel> inputRequests, IEnumerable<GetCalculateTimeModel> calculateTimeSets)
     {
-        if (calculateTimeSets.Select(model => model.RequestId).Contains(request.RequestId))
+        var requestIds = calculateTimeSets.Select(model => model.RequestId);
+        foreach (var request in inputRequests)
         {
-            var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId);
-            request.CalcHalfTime = calcTime.CalcHalfTime;
-            request.CalcFullTime = calcTime.CalcFullTime;
+            if (requestIds.Contains(request.RequestId))
+            {
+                var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId);
+                request.CalcHalfTime = calcTime.CalcHalfTime;
+                request.CalcFullTime = calcTime.CalcFullTime;
+            }
+
+            yield return request;
         }
+    }
+
+    private ExcelRequestModel MapToExcelRequestModel(ExcelRequestsMappingParameter param)
+    {
+        var outputRequest = mapper.Map<ExcelRequestModel>(param.CurrentViewModel);
+        outputRequest.MatchId = param.CurrentViewModel.Details[0].MatchId?.ToString();
+        outputRequest.CalculatedScore = param.CurrentViewModel.Details[0].SettlementStatus;
+        outputRequest.Description = convertRequestsService.GetDescription(param.CurrentViewModel.IssueTypeId, param.CurrentViewModel.Details[0].Description);
+        outputRequest.CreatedTime = param.CurrentViewModel.CreatedDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
+        outputRequest.IssueType = convertRequestsService.GetIssueTypeName(param.CurrentViewModel.IssueTypeId, param.IssueTypes);
+        outputRequest.SubIssueType = convertRequestsService.GetSubIssueTypeName(param.CurrentViewModel.SubIssueTypeId, param.SubIssueTypes);
+        outputRequest.Sport = convertRequestsService.GetSportName(param.CurrentViewModel.Details[0].Description);
+        outputRequest.Event = convertRequestsService.GetEvent(param.CurrentViewModel.Details[0].Description);
+        outputRequest.League = convertRequestsService.GetLeague(param.CurrentViewModel.Details[0].Description);
+        outputRequest.VarCheck = convertRequestsService.GetVarCheckValue(param.CurrentViewModel.IsCheckedVar);
+        outputRequest.BetType = string.Join(", ", param.CurrentViewModel.BettypeNames);
+        outputRequest.Action = convertRequestsService.GetVoidActionName(param.CurrentViewModel.ActionId, param.VoidActions);
+        outputRequest.PerformedBy = param.CurrentViewModel.LastPerformedBy;
+        outputRequest.NoOfTickets = convertRequestsService.GetNoOfTickets(param.CurrentViewModel.Details[0].TotalVoidedSingle, param.CurrentViewModel.Details[0].TotalVoidedParlay);
+        outputRequest.NumberOfRequestDetails = param.NumberOfRequestDetail;
+        outputRequest.CalcFullTime = param.CurrentViewModel.CalcFullTime != null ? param.CurrentViewModel.CalcFullTime.ToString() : string.Empty;
+        outputRequest.CalcHalfTime = param.CurrentViewModel.CalcHalfTime != null ? param.CurrentViewModel.CalcHalfTime.ToString() : string.Empty;
+        outputRequest.Index = param.CurrentIndex;
+        return outputRequest;
     }
 }

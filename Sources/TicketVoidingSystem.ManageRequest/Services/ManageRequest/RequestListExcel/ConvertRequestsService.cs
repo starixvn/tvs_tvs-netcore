@@ -11,13 +11,19 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListEx
 
 public interface ConvertRequestsService
 {
-    Task<string> GetIssueTypeName(int issueId);
+    Task<IEnumerable<IssueType>> GetAllIssueTypes();
 
-    Task<string> GetSubIssueTypeName(int subIssueId);
+    Task<IEnumerable<SubIssueType>> GetAllSubIssueTypes();
+
+    Task<IEnumerable<VoidAction>> GetAllVoidActions();
+
+    string GetIssueTypeName(int issueId, IEnumerable<IssueType> issueTypes);
+
+    string GetSubIssueTypeName(int subIssueId, IEnumerable<SubIssueType> subIssueTypes);
 
     string GetDescription(int issueId, string html);
 
-    Task<string> GetActionName(int id);
+    string GetVoidActionName(int id, IEnumerable<VoidAction> voidActions);
 
     string GetNoOfTickets(int single, int parlay);
 
@@ -39,20 +45,35 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         this.repository = repository;
     }
 
-    public async Task<string> GetIssueTypeName(int issueId)
+    public async Task<IEnumerable<IssueType>> GetAllIssueTypes()
     {
-        var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());
+        return await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());
+    }
+
+    public async Task<IEnumerable<SubIssueType>> GetAllSubIssueTypes()
+    {
+        return await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria());
+    }
+
+    public async Task<IEnumerable<VoidAction>> GetAllVoidActions()
+    {
+        return await repository.FetchAsync<VoidAction>(new GetActionsCriteria());
+    }
+
+    public string GetIssueTypeName(int issueId, IEnumerable<IssueType> issueTypes)
+    {
         var issue = issueTypes.FirstOrDefault(x => x.IssueTypeId == issueId);
 
         return issue?.IssueTypeName;
     }
 
-    public async Task<string> GetSubIssueTypeName(int subIssueId)
+    public string GetSubIssueTypeName(int subIssueId, IEnumerable<SubIssueType> subIssueTypes)
     {
-        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria());
-        var subIssue = subIssueTypes.FirstOrDefault(x => x.SubIssueTypeId == subIssueId);
+        var subIssueName = subIssueTypes
+            .Where(x => x.SubIssueTypeId == subIssueId).Select(x => x.SubIssueTypeName)
+            .FirstOrDefault();
 
-        return subIssue?.SubIssueTypeName;
+        return subIssueName;
     }
 
     public string GetDescription(int issueId, string html)
@@ -144,10 +165,9 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return description;
     }
 
-    public async Task<string> GetActionName(int id)
+    public string GetVoidActionName(int id, IEnumerable<VoidAction> voidActions)
     {
-        var actions = await repository.FetchAsync<VoidAction>(new GetActionsCriteria());
-        return actions.FirstOrDefault(x => x.ActionId == id.ToString())?.ActionName;
+        return voidActions.FirstOrDefault(x => x.ActionId == id.ToString())?.ActionName;
     }
 
     public string GetNoOfTickets(int single, int parlay)

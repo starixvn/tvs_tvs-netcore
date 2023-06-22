@@ -96,7 +96,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
-    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET) {
+    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT) {
       return this.permission.manageRequestHost && this.isCreatedDateLessThanToday(createdDate);
     } else {
       return this.permission.manageRequestHost && new Date(eventDate) > new Date(this.moveBetDay);
@@ -106,7 +106,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   checkCanVoid(actionId: number, eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
     const isHasPermission = this.permission.voidRead && StaticService.isVoidAction(actionId);
 
-    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET) {
+    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT) {
       return isHasPermission && this.isCreatedDateLessThanToday(createdDate);
     } else {
       return isHasPermission && new Date(eventDate) > new Date(this.moveBetDay);
