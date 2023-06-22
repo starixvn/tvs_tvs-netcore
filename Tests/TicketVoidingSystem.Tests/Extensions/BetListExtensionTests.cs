@@ -1,7 +1,7 @@
 using TicketVoidingSystem.Extensions;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions.TN;
+namespace TicketVoidingSystem.Tests.Extensions;
 
 public class BetListExtensionTests
 {

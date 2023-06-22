@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading;
-using Extensions;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Extensions;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;

@@ -1,11 +1,4 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TicketVoidingSystem.Models;
-using Xunit;
-using NSubstitute;
-
-
-namespace TicketVoidingSystem.Extensions.Tests
+namespace TicketVoidingSystem.Tests.Extensions
 {
     public class ControllerExtensionTests
     {

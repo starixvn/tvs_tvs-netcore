@@ -5,7 +5,7 @@ using TicketVoidingSystem.ManageRequest.Controllers;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Controller;
+namespace TicketVoidingSystem.Tests.ManageRequest.Controllers;
 
 public class VoidRequestControllerTests
 {

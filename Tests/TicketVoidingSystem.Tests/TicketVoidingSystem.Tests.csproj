@@ -23,6 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
+    <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ManageVoidServices\TicketVoidingSystem.ManageVoidServices.csproj" />
+    <ProjectReference Include="..\..\Sources\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />
+    <ProjectReference Include="..\..\Sources\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
+    <ProjectReference Include="..\..\Sources\TicketVoidingSystem.TicketListing\TicketVoidingSystem.TicketListing.csproj" />
+    <ProjectReference Include="..\..\Sources\TicketVoidingSystem.VoidSingleBet\TicketVoidingSystem.VoidSingleBet.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ManageRequest\TicketVoidingSystem.ManageRequest.csproj" />
   </ItemGroup>

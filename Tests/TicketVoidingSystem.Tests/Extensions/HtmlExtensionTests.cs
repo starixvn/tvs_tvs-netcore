@@ -1,9 +1,7 @@
-using System;
+using TicketVoidingSystem.Extensions;
 using Xunit;
-using NSubstitute;
-using HtmlAgilityPack;
 
-namespace TicketVoidingSystem.Extensions.Tests;
+namespace TicketVoidingSystem.Tests.Extensions;
 
 public class HtmlExtensionTests
 {

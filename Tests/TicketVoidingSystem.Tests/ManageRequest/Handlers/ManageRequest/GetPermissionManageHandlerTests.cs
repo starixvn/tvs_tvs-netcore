@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Extensions;
 using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;

@@ -6,7 +6,7 @@ using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Controller;
+namespace TicketVoidingSystem.Tests.ManageRequest.Controllers;
 
 public class ManageRequestControllerTests
 {

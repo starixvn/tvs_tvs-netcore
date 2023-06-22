@@ -1,20 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
-using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models.SendMessage;
-using TicketVoidingSystem.Services;
 using Xunit;
-using AutoMapper;
 
-namespace TicketVoidingSystem.Facts.ManageRequest.Services.ManageRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
 {
     public class GetRequestsServiceTests
     {

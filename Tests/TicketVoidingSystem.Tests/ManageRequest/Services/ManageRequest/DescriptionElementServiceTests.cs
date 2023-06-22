@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
 {
     public class DescriptionElementServiceTests
     {

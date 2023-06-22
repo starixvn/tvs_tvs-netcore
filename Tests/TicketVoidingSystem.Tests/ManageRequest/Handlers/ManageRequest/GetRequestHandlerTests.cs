@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Extensions;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;

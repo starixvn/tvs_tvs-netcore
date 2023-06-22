@@ -4,7 +4,8 @@ using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using Xunit;
-namespace TicketVoidingSystem.Facts.ManageRequest.Extension;
+
+namespace TicketVoidingSystem.Tests.ManageRequest.Extension;
 
 public class ObjectToXMLExtensionFacts
 {

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Xunit;
 using NSubstitute;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
+using Xunit;
 
-namespace TicketVoidingSystem.Extensions.Tests;
+namespace TicketVoidingSystem.Tests.Extensions;
 
 public class EmailExtensionTests
 {

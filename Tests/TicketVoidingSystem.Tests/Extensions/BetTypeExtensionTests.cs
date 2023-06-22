@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using Xunit;
 
-namespace TicketVoidingSystem.Extensions.Tests
+namespace TicketVoidingSystem.Tests.Extensions
 {
     public class BetTypeExtensionTests
     {
