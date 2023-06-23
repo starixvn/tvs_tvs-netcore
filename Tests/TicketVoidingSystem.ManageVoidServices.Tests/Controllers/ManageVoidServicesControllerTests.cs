@@ -128,4 +128,34 @@ public class ManageVoidServicesControllerTests
         // Assert
         await mediator.Received(1).Send(request);
     }
+
+    [Fact]
+    public async Task GetLetstalk_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var request = new GetLetstalkRequest();
+        var mediator = Substitute.For<IMediator>();
+        var controller = new ManageVoidServicesController(mediator);
+
+        // Act
+        await controller.GetLetstalk(request);
+
+        // Assert
+        await mediator.Received(1).Send(request);
+    }
+
+    [Fact]
+    public async Task UpdateLetstalk_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        var request = new UpdateLetstalkRequest();
+        var mediator = Substitute.For<IMediator>();
+        var controller = new ManageVoidServicesController(mediator);
+
+        // Act
+        await controller.UpdateLetstalk(request);
+
+        // Assert
+        await mediator.Received(1).Send(request);
+    }
 }

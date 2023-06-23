@@ -118,6 +118,8 @@ public class ABExceptionListControllerTests
 
         // Assert
         var actual = okObjectResult?.Value as List<GroupLicenseeSiteViewModel>;
+
+        // Assert
         await mediator.Received(1).Send(Arg.Any<GetSitesRequest>());
         Assert.Equal(models, actual);
     }
