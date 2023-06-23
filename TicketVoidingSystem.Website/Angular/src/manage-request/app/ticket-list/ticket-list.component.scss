@@ -10,9 +10,13 @@
   color: #fff;
   background: #6a6a6a;
   height: 34px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
 
-  .modal-title {
-    line-height: 5px;
+  .close {
+    color: #fff;
+    text-shadow: 0 1px 0 #000;
   }
 }
 
