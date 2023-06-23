@@ -10,14 +10,13 @@ namespace TicketVoidingSystem.Tests.SharedApi.Controllers;
 
 public class SharedApiControllerTests
 {
-    [Fact]
+    private readonly IMediator mediator;
     private readonly IHttpContextAccessor httpContextAccessor;
     private readonly SharedApiController controller;
 
     public SharedApiControllerTests()
     {
         mediator = Substitute.For<IMediator>();
-
         httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         controller = new SharedApiController(mediator, httpContextAccessor);
     }
