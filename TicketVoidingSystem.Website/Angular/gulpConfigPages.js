@@ -108,8 +108,8 @@ const configPages = [
   //  markTickets,
   //   ticketListing,
   //   voidSingleBet,
-  //  voidRequest,
-   manageRequest
+    voidRequest,
+  // manageRequest
 ];
 
 module.exports = configPages;
