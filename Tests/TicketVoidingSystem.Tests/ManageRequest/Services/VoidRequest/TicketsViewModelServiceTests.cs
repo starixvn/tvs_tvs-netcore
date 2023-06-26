@@ -191,7 +191,20 @@ public class TicketsViewModelServiceTests
                 SiteDbGroupId = 1,
                 BetType = 1,
                 SubBetType = 11,
-                TransDate = new DateTime(2022, 12, 1)
+                TransDate = new DateTime(2022, 12, 3),
+                WinLostDate = new DateTime(2022, 12, 2),
+            },
+            new()
+            {
+                TransId = 1,
+                IsMixParlay = true,
+                GroupName = "123",
+                MatchId = 1,
+                SiteDbGroupId = 1,
+                BetType = 1,
+                SubBetType = 11,
+                CheckTimeCancelCashOut = new DateTime(2022, 12, 4),
+                IsCancelCashOut = true
             },
         };
         var model = new TicketsViewModel();
@@ -199,13 +212,68 @@ public class TicketsViewModelServiceTests
         {
             Settled = true
         };
-        var expectedFromTime = new DateTime(2022, 12, 1).ZoneManila();
+        var FromTime = new DateTime(2022, 12, 3).ZoneManila();
+        var FromDate = new DateTime(2022, 12, 2).ZoneManila();
+        var ToTime = new DateTime(2022, 12, 4).ZoneManila();
+        var ToDate = new DateTime(2022, 12, 4).ZoneManila();
+        // Act
+        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+
+        // Assert
+        Assert.Equal(FromTime, model.FromTime);
+        Assert.Equal(FromDate, model.FromDate);
+        Assert.Equal(ToTime, model.ToTime);
+        Assert.Equal(ToDate, model.ToDate);
+    }
+
+    [Fact]
+    public void UpdateViewModel_HasOnlyCCOTicketNotAny_UpdateTimeFormCCOTicket()
+    {
+        // Arrange
+        var allTickets = new List<GetTicketModel>
+        {
+            new()
+            {
+                TransId = 1,
+                IsMixParlay = true,
+                GroupName = "123",
+                MatchId = 1,
+                SiteDbGroupId = 1,
+                BetType = 1,
+                SubBetType = 11,
+                CheckTimeCancelCashOut = new DateTime(2022, 12, 1),
+                IsCancelCashOut = true
+            },
+            new()
+            {
+                TransId = 1,
+                IsMixParlay = true,
+                GroupName = "123",
+                MatchId = 1,
+                SiteDbGroupId = 1,
+                BetType = 1,
+                SubBetType = 11,
+                CheckTimeCancelCashOut = new DateTime(2022, 12, 5),
+                IsCancelCashOut = true
+            },
+        };
+        var model = new TicketsViewModel();
+        var permission = new VoidPermission
+        {
+            Settled = true
+        };
+        var MinTime = new DateTime(2022, 12, 1).ZoneManila();
+        var MaxTime = new DateTime(2022, 12, 5).ZoneManila();
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, 0, permission);
 
         // Assert
-        Assert.Equal(expectedFromTime, model.FromTime);
+        Assert.Equal(MinTime, model.FromTime);
+        Assert.Equal(MaxTime, model.ToTime);
+        Assert.Equal(MinTime, model.FromDate);
+        Assert.Equal(MaxTime, model.ToDate);
+
     }
 
     [Fact]
@@ -249,7 +317,6 @@ public class TicketsViewModelServiceTests
         // Assert
         Assert.Single(model.AllCancelCashOutTickets);
         Assert.Single(model.CheckPermissionTickets);
-
     }
 
     [Fact]
@@ -294,8 +361,6 @@ public class TicketsViewModelServiceTests
         Assert.Equal(1, model.TotalSingle);
         Assert.Equal(1, model.TotalParlay);
         Assert.Equal(0, model.TotalCancelCashOut);
-
-
     }
 
     [Theory]
@@ -303,8 +368,7 @@ public class TicketsViewModelServiceTests
     [InlineData(119)]//FirstHalfHandicap
     [InlineData(120)]//OverUnder
     [InlineData(121)]//FirstHalfOverUnder
-
-    public void UpdateViewModel_UpdateVariableForTemplateMessagesWrongOdds_ReturnCorrect(int subIssueTypeId)
+    public void UpdateViewModel_UpdateVariableForTemplateMessagesWrongOdds_ReturnTrue(int subIssueTypeId)
     {
         // Arrange
         var allTickets = new List<GetTicketModel>
@@ -335,5 +399,38 @@ public class TicketsViewModelServiceTests
         // Assert
         Assert.True(model.IsAllLiveTickets);
         Assert.True(model.IsHasAioMessage);
+    }
+
+    [Fact]
+    public void UpdateViewModel_CheckAioMessageWrongOdds_ReturnFalse()
+    {
+        // Arrange
+        var allTickets = new List<GetTicketModel>
+        {
+            new()
+            {
+                TransId = 1,
+                IsMixParlay = false,
+                IsCricket = false,
+                IsCancelCashOut = false,
+                GroupName = "(instant settlement)",
+                MatchId = 1,
+                SiteDbGroupId = 1,
+                IsLiveIndicator = true,
+                BetType = 2,
+                SubBetType = 2
+            }
+        };
+        var model = new TicketsViewModel();
+        var permission = new VoidPermission
+        {
+            Settled = true
+        };
+
+        // Act
+        service.UpdateViewModel(model, allTickets, 2, 1, permission);
+
+        // Assert
+        Assert.False(model.IsHasAioMessage);
     }
 }

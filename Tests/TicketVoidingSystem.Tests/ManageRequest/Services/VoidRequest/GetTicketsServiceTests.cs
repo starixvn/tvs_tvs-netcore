@@ -1,26 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
-using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models.SendMessage;
-using TicketVoidingSystem.Services;
 using Xunit;
 using AutoMapper;
 using TicketVoidingSystem.Models;
-using Fanex.BetList.Core.Templates;
-using TicketVoidingSystem.Services.BetList;
-using Fanex.BetList.Core.Entities;
-using Fanex.BetList.Core.TicketHelper;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
@@ -47,7 +35,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
         [InlineData(IssueTypeConstant.ArchivedTicket)]
         [InlineData(IssueTypeConstant.AbnormalAccount)]
         [InlineData(0)]
-        public async Task GetTickets_HasRequestIdNot0_HasCallGetTicket(int issueTypeId)
+        public async Task GetTickets_HasRequestIdNot0_HasCreateGetTicketInRequestCriteria(int issueTypeId)
         {
             // Arrange
             var query = new GetTicketsQuery { IssueTypeId = issueTypeId, RequestId = 2 };
@@ -59,9 +47,9 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
                 .ReturnsForAnyArgs(new List<string> { "1"});
             mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
             repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
-            getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>()).Returns(new List<string> { "1" });
+            getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>()).Returns(new List<string> { "2" });
             repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
-
+            mapper.Map<GetBetTrans14TicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetBetTrans14TicketsCriteria());
             // Act
             var result = service.GetTickets(query);
 

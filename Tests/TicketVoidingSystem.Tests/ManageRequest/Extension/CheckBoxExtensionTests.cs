@@ -1,6 +1,9 @@
 using TicketVoidingSystem.ManageRequest.Models;
 using Xunit;
 using TicketVoidingSystem.ManageRequest.Extension;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Constants;
+
 namespace TicketVoidingSystem.Tests.ManageRequest.Extension;
 
 public class CheckBoxExtensionTests
@@ -30,6 +33,8 @@ public class CheckBoxExtensionTests
     [InlineData(false, true, true, null, false)]
     [InlineData(false, false, true, 1, false)]
     [InlineData(false, false, true, null, true)]
+    [InlineData(false, false, false, null, true)]
+    [InlineData(false, false, false, 1, true)]
     public void IsDisable_ReturnsExpected_WithCheckCancelCashOutTicket
     (bool unSettled, bool instantlySettled, bool settled, int? statusWinLost, bool expected)
     {
@@ -45,34 +50,45 @@ public class CheckBoxExtensionTests
     }
 
     [Theory]
-    [InlineData("(instant settlement)")]
-    [InlineData("(instant)")]
-    public void IsDisable_ReturnsFalse_WithCheckDefaultEnable(string groupName)
+    [InlineData("(instant settlement)", true, false, false)]
+    [InlineData("(instant settlement)", false, true, false)]
+    [InlineData("(instant settlement)", false, false, true)]
+    [InlineData("(instant settlement)", true, true, false)]
+    [InlineData("(instant)", true, true, false)]
+    public void IsDisable_ReturnsFalse_WithCheckDefaultEnable(string groupName, bool instantlySettled, bool settled, bool expected)
     {
         // Arrange
         var item = new GetTicketModel { GroupName = groupName };
-        var permission = new VoidPermission { InstantlySettled = false, Settled = true, UnSettled = true };
+        var permission = new VoidPermission { InstantlySettled = instantlySettled, Settled = settled};
         item.Status = "settled";
 
         // Act
         var result = item.IsDisable(permission, 0);
 
         // Assert
-        Assert.False(result);
+        Assert.Equal(expected, result);
     }
 
-    [Fact]
-    public void IsDisable_ReturnsFalse_WithCheckCashOutTicketAsUnSettled()
+    [Theory]
+    [InlineData(true, IssueTypeConstant.AbnormalAccount, false, false, true)]
+    [InlineData(true, IssueTypeConstant.AbnormalBet, false, false, true)]
+    [InlineData(true, IssueTypeConstant.AbnormalBetRealMember, false, false, true)]
+    [InlineData(true, IssueTypeConstant.ArchivedTicket, false, false, true)]
+    [InlineData(false, IssueTypeConstant.ArchivedTicket, false, false, true)]
+    [InlineData(true, IssueTypeConstant.DangerAccepted, false, false, true)]
+    [InlineData(true, IssueTypeConstant.DangerAccepted, true, false, false)]
+    [InlineData(true, IssueTypeConstant.DangerAccepted, false, true, false)]
+    public void IsDisable_ReturnsFalse_WithCheckCashOutTicketAsUnSettled(bool isCashOut, int issueTypeId, bool unSettled, bool instantlySettled, bool expected)
     {
         // Arrange
-        var item = new GetTicketModel { GroupName = "1", IsCashOut = true };
-        var permission = new VoidPermission { InstantlySettled = false, Settled = false, UnSettled = true };
+        var item = new GetTicketModel { GroupName = "1", IsCashOut = isCashOut };
+        var permission = new VoidPermission { InstantlySettled = instantlySettled, Settled = false, UnSettled = unSettled };
 
         // Act
-        var result = item.IsDisable(permission, 2);
+        var result = item.IsDisable(permission, issueTypeId);
 
         // Assert
-        Assert.False(result);
+        Assert.Equal(expected, result);
     }
 
     [Theory]

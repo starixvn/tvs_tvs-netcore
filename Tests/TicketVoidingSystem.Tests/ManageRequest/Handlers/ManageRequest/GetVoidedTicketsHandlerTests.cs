@@ -56,10 +56,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
             var mapTicketsService = Substitute.For<MapTicketsService>();
             var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
-            var voidedTickets = new List<VoidedTicketModel>(); // Add appropriate voided tickets data
+            var voidedTickets = new List<VoidedTicketModel> { new VoidedTicketModel { IsCancelCashOut  = true, GroupName = "Deposit" }, 
+                new VoidedTicketModel { IsCancelCashOut = false, GroupName = "11 Deposit" } }; 
             getVoidedTicketsService.GetTickets(request).Returns(voidedTickets);
             var groups = new List<Group<VoidedTicketModel>> { new Group<VoidedTicketModel> { Tickets = new List<VoidedTicketModel> { new VoidedTicketModel() } } };
-            mapTicketsService.MapToGroupVoidedTickets(voidedTickets, request).ReturnsForAnyArgs(groups);
+            mapTicketsService.MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groups);
             var groupViewModel = new Group<VoidedTicketViewModel> { };
             mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default, request.IssueTypeId).ReturnsForAnyArgs(groupViewModel);
             // Act

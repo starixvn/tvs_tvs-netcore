@@ -1,39 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fanex.Data.Repository;
-using NSubstitute;
-using OfficeOpenXml;
-using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
+﻿using System.Collections.Generic;
+using OfficeOpenXml.Style;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
+using TicketVoidingSystem.Tests.VoidSingleBet;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.RequestListExcel
 {
-    public class CellServiceTests
-    {
-        //[Fact]
-        //public void SetStyle_SetsCorrectStylesOnWorksheet()
-        //{
-        //    // Arrange
-        //    var worksheet = new ExcelWorksheet();
-        //    var service = new CellServiceImp();
+	public class CellServiceTests
+	{
+		private CellServiceImp cellService;
 
-        //    // Act
-        //    service.SetStyle(worksheet);
+		public CellServiceTests()
+		{
+			cellService = new CellServiceImp();
+		}
 
-        //    // Assert
-        //    Assert.Equal(8, worksheet.Cells.Style.Font.Size);
-        //    Assert.Equal("Tahoma", worksheet.Cells.Style.Font.Name);
-        //    Assert.True(worksheet.Cells.Style.WrapText);
-        //    Assert.Equal(ExcelBorderStyle.Thin, worksheet.Cells[2, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column].Style.Border.Top.Style);
-        //    Assert.Equal(ExcelBorderStyle.Thin, worksheet.Cells[2, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column].Style.Border.Left.Style);
-        //    Assert.Equal(ExcelBorderStyle.Thin, worksheet.Cells[2, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column].Style.Border.Right.Style);
-        //    Assert.Equal(ExcelBorderStyle.Thin, worksheet.Cells[2, 1, worksheet.Dimension.End.Row, worksheet.Dimension.End.Column].Style.Border.Bottom.Style);
-        //    Assert.Equal(ExcelHorizontalAlignment.Right, worksheet.Cells[2, 7, worksheet.Dimension.End.Row, 8].Style.HorizontalAlignment);
-        //    Assert.Equal(Color.Red.ToArgb(), worksheet.Cells[$"R2:R{worksheet.Dimension.End.Row}"].Style.Font.Color.Rgb);
-        //}
-    }
+		[Fact]
+		public void SetStyle_SetsWorksheetStyleCorrectly()
+		{
+			// Arrange
+			var worksheet = TestSetup.CreateTestingSheet();
+			worksheet.Cells[10, 5].Value = "1";
+
+			// Act
+			cellService.SetStyle(worksheet);
+
+			// Assert
+			Assert.Equal(8, worksheet.Cells[1, 1].Style.Font.Size);
+			Assert.Equal("Tahoma", worksheet.Cells[1, 1].Style.Font.Name);
+		}
+
+		[Fact]
+		public void RenderDataWorksheet_HasRequests_SetDataCorrectly()
+		{
+			// Arrange
+			var worksheet = TestSetup.CreateTestingSheet();
+			var lastRow = 10;
+			var lasCol = 5;
+			worksheet.Cells[lastRow, lasCol].Value = "1";
+			var requests = new List<ExcelRequestModel>
+			{
+				new()
+				{
+					RequestId = 1,
+					NumberOfRequestDetails = 2,
+					Index = 1
+				}
+			};
+
+			// Act
+			cellService.RenderDataWorksheet(worksheet, requests);
+
+			// Assert
+			Assert.Equal(1, worksheet.Cells[2, 1].GetValue<int>());
+			Assert.True(worksheet.Cells[$"A{2}:A{3}"].Merge);
+			Assert.Equal(ExcelFillStyle.Solid, worksheet.Cells[$"A{2}:U{3}"].Style.Fill.PatternType = ExcelFillStyle.Solid);
+		}
+	}
 }

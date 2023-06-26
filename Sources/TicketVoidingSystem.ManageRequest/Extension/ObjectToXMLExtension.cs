@@ -73,9 +73,9 @@ public static class ObjectToXMLExtension
         {
             var liveHomeScore = "";
             var liveAwayScore = "";
-            if (model.FilterBy != FILTER_BY_CHECK_TIME)
+            if (model.FilterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
             {
-                var scores = model.WrongScore?.Split('-');
+                var scores = model.WrongScore.Split('-');
                 liveHomeScore = scores[0].Trim();
                 liveAwayScore = scores[1].Trim();
             }
@@ -242,9 +242,9 @@ public static class ObjectToXMLExtension
         {
             var liveAwayScore = "";
             var liveHomeScore = "";
-            if (model.FilterBy != FILTER_BY_CHECK_TIME)
+            if (model.FilterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
             {
-                var scores = model.WrongScore?.Split('-');
+                var scores = model.WrongScore.Split('-');
                 liveHomeScore = scores[0].Trim();
                 liveAwayScore = scores[1].Trim();
             }

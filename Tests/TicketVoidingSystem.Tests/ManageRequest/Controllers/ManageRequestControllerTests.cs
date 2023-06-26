@@ -1,167 +1,211 @@
+using System.Net.Http;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Controllers;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Controllers;
 
 public class ManageRequestControllerTests
 {
-    private readonly IMediator mediator;
-    private readonly ManageRequestController controller;
+	private readonly IMediator mediator;
+	private ManageRequestController controller;
 
-    public ManageRequestControllerTests()
-    {
-        mediator = Substitute.For<IMediator>();
-        controller = new ManageRequestController(mediator);
-    }
+	public ManageRequestControllerTests()
+	{
+		mediator = Substitute.For<IMediator>();
+		controller = new ManageRequestController(mediator);
+	}
 
-    [Fact]
-    public async Task GetVoidActions_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
+	[Fact]
+	public async Task GetVoidActions_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
 
-        // Act
-        await controller.GetVoidActions();
+		// Act
+		await controller.GetVoidActions();
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetVoidActionsRequest>());
-    }
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetVoidActionsRequest>());
+	}
 
-    [Fact]
-    public async Task GetIssueTypeName_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = 1;
+	[Fact]
+	public async Task GetIssueTypeName_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = 1;
 
-        // Act
-        await controller.GetIssueTypeName(request);
+		// Act
+		await controller.GetIssueTypeName(request);
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetIssueNameRequest>());
-    }
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetIssueNameRequest>());
+	}
 
-    [Fact]
-    public async Task GetRequest_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = 1;
+	[Fact]
+	public async Task GetRequest_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = 1;
 
-        // Act
-        await controller.GetRequest(request);
+		// Act
+		await controller.GetRequest(request);
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetRequestRequest>());
-    }
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetRequestRequest>());
+	}
 
-    [Fact]
-    public async Task GetRequests_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = new SelectRequestsRequest();
+	[Fact]
+	public async Task GetRequests_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new SelectRequestsRequest();
 
-        // Act
-        await controller.GetRequests(request);
+		// Act
+		await controller.GetRequests(request);
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<SelectRequestsRequest>());
-    }
+		// Assert
+		await mediator.Received().Send(Arg.Any<SelectRequestsRequest>());
+	}
 
-    // [Fact]
-    // public async Task ExportRequest_HasRequest_CallMediatorRequest()
-    // {
-    //     // Arrange
-    //     var request = new ExportExcelRequest { RequestId = "12345" };
-    //     var fakeModel = new ExcelFileModel { FileName = "Manage_Request_TVS_" };
-    //     var fakeRespone = Task.FromResult(fakeModel);
-    //     mediator.Send(request).ReturnsForAnyArgs(fakeRespone);
+	[Fact]
+	public async Task GetVoidedTickets_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new GetVoidedTicketsRequest();
 
-    //     // Act
-    //     await controller.ExportRequest(request);
+		// Act
+		await controller.GetVoidedTickets(request);
 
-    //     // Assert
-    //     await mediator.Received().Send(Arg.Any<ExportExcelRequest>());
-    // }
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetVoidedTicketsRequest>());
+	}
 
-    [Fact]
-    public async Task GetGeneralInfo_WhenCalled_ReturnExpectedResult()
-    {
-        // Arrange
-        var models = new GeneralInfoViewModel();
-        var request = new GetGeneralInfoRequest { RequestId = 123 };
-        mediator.Send(Arg.Compat.Any<GetGeneralInfoRequest>()).ReturnsForAnyArgs(models);
+	[Fact]
+	public async Task ExportRequest_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new ExportExcelRequest { RequestId = "12345" };
+		var fakeModel = new ExcelFileModel { FileName = "Manage_Request_TVS_", ContentAsByteArray = new byte[10] };
+		var fakeRespone = Task.FromResult(fakeModel);
+		mediator.Send(request).ReturnsForAnyArgs(fakeRespone);
+		var httpContext = new DefaultHttpContext();
 
-        // Act
-        await controller.GetGeneralInfo(request);
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = httpContext
+		};
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetGeneralInfoRequest>());
-    }
+		// Act
+		await controller.ExportRequest(request);
 
-    [Fact]
-    public async Task GetMarkedTicketsCount_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
+		// Assert
+		await mediator.Received().Send(Arg.Any<ExportExcelRequest>());
+	}
 
-        // Act
-        await controller.GetMarkedTicketsCount();
+	[Fact]
+	public async Task ExportVoidedTickets_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new ExportVoidedTicketsRequest { RequestId = 1 };
+		var fakeModel = new ExcelFileModel { FileName = "Manage_Request_TVS_", ContentAsByteArray = new byte[10] };
+		var fakeRespone = Task.FromResult(fakeModel);
+		mediator.Send(request).ReturnsForAnyArgs(fakeRespone);
+		var httpContext = new DefaultHttpContext();
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetMarkedTicketsCountRequest>());
-    }
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = httpContext
+		};
 
-    [Fact]
-    public async Task CheckBy_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = new CheckByRequest();
+		// Act
+		await controller.ExportVoidedTickets(request);
 
-        // Act
-        await controller.CheckBy(request);
+		// Assert
+		await mediator.Received().Send(Arg.Any<ExportVoidedTicketsRequest>());
+	}
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<CheckByRequest>());
-    }
+	[Fact]
+	public async Task GetGeneralInfo_WhenCalled_ReturnExpectedResult()
+	{
+		// Arrange
+		var models = new GeneralInfoViewModel();
+		var request = new GetGeneralInfoRequest { RequestId = 123 };
+		mediator.Send(Arg.Compat.Any<GetGeneralInfoRequest>()).ReturnsForAnyArgs(models);
 
-    [Fact]
-    public async Task CopyRequestInfo_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = new CopyRequestInfoRequest();
+		// Act
+		await controller.GetGeneralInfo(request);
 
-        // Act
-        await controller.CopyRequestInfo(request);
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetGeneralInfoRequest>());
+	}
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<CopyRequestInfoRequest>());
-    }
+	[Fact]
+	public async Task GetMarkedTicketsCount_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
 
-    [Fact]
-    public async Task GetPermissionManage_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
+		// Act
+		await controller.GetMarkedTicketsCount();
 
-        // Act
-        await controller.GetPermissionManage();
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetMarkedTicketsCountRequest>());
+	}
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetPermissionManageRequest>());
-    }
+	[Fact]
+	public async Task CheckBy_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new CheckByRequest();
 
-    [Fact]
-    public async Task GetExcelVoidedTicketForSendLetstalk_HasRequest_CallMediatorRequest()
-    {
-        // Arrange
-        var request = new GetExcelVoidedTicketForSendLetstalkRequest();
+		// Act
+		await controller.CheckBy(request);
 
-        // Act
-        await controller.GetExcelVoidedTicketForSendLetstalk(request);
+		// Assert
+		await mediator.Received().Send(Arg.Any<CheckByRequest>());
+	}
 
-        // Assert
-        await mediator.Received().Send(Arg.Any<GetExcelVoidedTicketForSendLetstalkRequest>());
-    }
+	[Fact]
+	public async Task CopyRequestInfo_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new CopyRequestInfoRequest();
 
+		// Act
+		await controller.CopyRequestInfo(request);
+
+		// Assert
+		await mediator.Received().Send(Arg.Any<CopyRequestInfoRequest>());
+	}
+
+	[Fact]
+	public async Task GetPermissionManage_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+
+		// Act
+		await controller.GetPermissionManage();
+
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetPermissionManageRequest>());
+	}
+
+	[Fact]
+	public async Task GetExcelVoidedTicketForSendLetstalk_HasRequest_CallMediatorRequest()
+	{
+		// Arrange
+		var request = new GetExcelVoidedTicketForSendLetstalkRequest();
+
+		// Act
+		await controller.GetExcelVoidedTicketForSendLetstalk(request);
+
+		// Assert
+		await mediator.Received().Send(Arg.Any<GetExcelVoidedTicketForSendLetstalkRequest>());
+	}
 }
