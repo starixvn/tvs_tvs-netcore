@@ -35,7 +35,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
 		public void AddMatch_ShouldSetMatchInfoInWorksheetCells()
 		{
 			// Arrange
-			var worksheet = TestSetup.CreateTestingSheet();
+			var worksheet = SetupTestingSheet.CreateTestingSheet();
 			var match = new Match
 			{
 				MatchCode = "ABC123",
@@ -77,7 +77,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
 		public void WriteGroupHeader_SetsStylePropertiesCorrectly()
 		{
 			// Arrange
-			var worksheet = TestSetup.CreateTestingSheet();
+			var worksheet = SetupTestingSheet.CreateTestingSheet();
 			var rowNumber = 1;
 			var group = new Group<ExcelVoidedTicketModel>();
 

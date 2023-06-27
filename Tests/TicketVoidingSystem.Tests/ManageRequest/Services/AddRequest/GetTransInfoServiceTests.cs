@@ -13,7 +13,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
 {
-    public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>
+    public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
     {
         private readonly IDynamicRepository repository;
         private readonly GetTransInfoServiceImp service;

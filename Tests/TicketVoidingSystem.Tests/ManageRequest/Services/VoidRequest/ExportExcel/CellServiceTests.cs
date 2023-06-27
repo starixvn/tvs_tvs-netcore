@@ -32,7 +32,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
         public void AddMatch_HasMatchValue_UpdateWorksheet()
         {
             // Arrange
-            var worksheet = TestSetup.CreateTestingSheet();
+            var worksheet = SetupTestingSheet.CreateTestingSheet();
             var match = new Match
             {
                 MatchCode = "1",
@@ -56,7 +56,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
         public void SetStyle_CheckIsNumberGame_HighLightFontRightColumn(bool isNumberGame)
         {
             // Arrange
-            var worksheet = TestSetup.CreateTestingSheet();
+            var worksheet = SetupTestingSheet.CreateTestingSheet();
             worksheet.Cells["H8"].Value = -200;
             worksheet.Cells["G8"].Value = -200;
 
@@ -71,7 +71,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
         public void WriteGroupHeader_SetsStylePropertiesCorrectly()
         {
             // Arrange
-            var worksheet = TestSetup.CreateTestingSheet();
+            var worksheet = SetupTestingSheet.CreateTestingSheet();
             var rowNumber = 1;
 
             // Act

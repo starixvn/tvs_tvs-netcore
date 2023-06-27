@@ -200,6 +200,26 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
         Expected = false
     };
 
+    private static readonly CheckBoxModel EnableForSabaTrue = new()
+    {
+        Ticket = new GetTicketModel
+        {
+            BetType = 228,
+        },
+        Permission = CheckBoxServiceFactory.SetPermission(false, false, false),
+        Expected = true
+    };
+
+    private static readonly CheckBoxModel EnableForSabaFalse = new()
+    {
+        Ticket = new GetTicketModel
+        {
+            BetType = 229
+        },
+        Permission = CheckBoxServiceFactory.SetPermission(false, true, false),
+        Expected = false
+    };
+
     private readonly IEnumerable<object[]> testCase = new List<object[]>
     {
         new object[] { DisableSubTicket },
@@ -219,7 +239,9 @@ internal class CheckBoxTestCase : IEnumerable<object[]>
         new object[] { EnableForCashOut },
         new object[] { EnableForCashOutTrue },
         new object[] { EnableForCashOutFalse },
-        new object[] { EnableForCashOutIsNotCashOut }
+        new object[] { EnableForCashOutIsNotCashOut },
+        new object[] { EnableForSabaTrue },
+        new object[] { EnableForSabaFalse }
     };
 
     public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();

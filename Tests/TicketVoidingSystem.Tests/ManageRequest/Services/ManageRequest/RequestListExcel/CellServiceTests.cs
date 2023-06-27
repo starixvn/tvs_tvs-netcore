@@ -20,7 +20,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Request
 		public void SetStyle_SetsWorksheetStyleCorrectly()
 		{
 			// Arrange
-			var worksheet = TestSetup.CreateTestingSheet();
+			var worksheet = SetupTestingSheet.CreateTestingSheet();
 			worksheet.Cells[10, 5].Value = "1";
 
 			// Act
@@ -35,7 +35,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Request
 		public void RenderDataWorksheet_HasRequests_SetDataCorrectly()
 		{
 			// Arrange
-			var worksheet = TestSetup.CreateTestingSheet();
+			var worksheet = SetupTestingSheet.CreateTestingSheet();
 			var lastRow = 10;
 			var lasCol = 5;
 			worksheet.Cells[lastRow, lasCol].Value = "1";

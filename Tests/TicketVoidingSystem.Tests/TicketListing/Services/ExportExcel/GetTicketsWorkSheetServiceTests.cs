@@ -13,7 +13,7 @@ public class GetTicketsWorkSheetServiceTests
     public async Task BindingContent_Always_SetStyle()
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
         var model = new ExportExcelQuery { MatchId = 132 };
         var cellService = Substitute.For<CellService>();
         var getTicketsService = Substitute.For<GetTicketsService>();

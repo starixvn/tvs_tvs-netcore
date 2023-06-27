@@ -16,10 +16,10 @@ public class GetDetailTicketsWorkSheetServiceTests
     public async Task BindingContent_Always_CreateTitle(int matchId)
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
-        var model = new GetDetailTicketsQuery { Match = new Match { MatchId = matchId} };
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
+        var model = new GetDetailTicketsQuery { Match = new Match { MatchId = matchId}, MatchId = matchId };
         var cellService = Substitute.For<CellService>();
-        cellService.CreateTitle(model.Match.MatchId).ReturnsForAnyArgs("");
+        cellService.CreateTitle(default).ReturnsForAnyArgs(matchId.ToString());
         var getTicketsService = Substitute.For<GetTicketsService>();
         var service = new GetDetailTicketsWorkSheetService(cellService, getTicketsService);
 

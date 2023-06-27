@@ -10,7 +10,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services.BetTypes;
 
-public class BetTypesRepositoryTests
+public class BetTypesRepositoryTests: AppSettingFixture, IClassFixture<RemotingRefFixture>
 {
     private readonly IDynamicRepository repository;
     private readonly BetTypesRepositoryImp service;
@@ -46,4 +46,46 @@ public class BetTypesRepositoryTests
         Assert.NotNull(result);
         AssertExtension.Equal(expected, result.Result);
     }
+
+    [Fact]
+    public async Task GetBetTypesHaveTickets_MultipleServersExist_ReturnDistinctBetTypes()
+    {
+        // Arrange
+        var query = new BetTypeQueryModel
+        {
+            MatchId = 123,
+            Mode = 1
+        };
+        repository.FetchAsync<int>(Arg.Is<GetBetTypesHaveTicketsCriteria>(c => c.SiteDbGroupId == 1))
+            .Returns(new List<int> { 1, 2, 3 });
+        repository.FetchAsync<int>(Arg.Is<GetBetTypesHaveTicketsCriteria>(c => c.SiteDbGroupId == 2))
+            .Returns(new List<int> { 3, 4, 5 });
+
+        // Act
+        var result = await service.GetBetTypesHaveTickets(query);
+
+        // Assert
+        Assert.Equal(new List<int> { 1, 2, 3, 4, 5 }, result);
+    }
+
+    [Fact]
+    public async Task GetBetTypesHaveTickets_SingleServerExists_ReturnDistinctBetTypes()
+    {
+        // Arrange
+        var query = new BetTypeQueryModel
+        {
+            MatchId = 456,
+            Mode = 1
+        };
+
+        repository.FetchAsync<int>(Arg.Is<GetBetTypesHaveTicketsCriteria>(c => c.SiteDbGroupId == 1))
+            .Returns(new List<int> { 1, 2, 3 });
+
+        // Act
+        var result = await service.GetBetTypesHaveTickets(query);
+
+        // Assert
+        Assert.Equal(new List<int> { 1, 2, 3 }, result);
+    }
+
 }

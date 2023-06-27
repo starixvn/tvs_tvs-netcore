@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Services.ConfirmAutoUnmark;
 
-public class ConfirmAutoUnmarkServiceTests
+public class ConfirmAutoUnmarkServiceTests: IClassFixture<RemotingRefFixture>
 {
     [Fact]
     public async Task GetDataForConfirmAutoUnmark_RepositoryHasCalled()

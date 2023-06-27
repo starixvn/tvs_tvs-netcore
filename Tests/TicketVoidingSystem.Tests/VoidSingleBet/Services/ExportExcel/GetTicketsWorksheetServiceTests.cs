@@ -15,7 +15,7 @@ public class GetTicketsWorksheetServiceTests
     public async Task BindingAsync_Always_SetStyle()
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
         var model = new GetTicketsQuery { MatchId = 111 };
         var cellService = Substitute.For<CellService>();
         var getTicketsService = Substitute.For<GetTicketsService>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
 using TicketVoidingSystem.TicketListing.Services.ExportExcel;
 using Xunit;
@@ -57,7 +58,7 @@ public class ConvertBetListForExcelServiceTests
             new() { Result = TicketStatus.Won, SelectionName = "a2" },
             new() { Result = null, SelectionName = "a1" }
         };
-        //repository.Fetch<SelectionSMP>(new GetSelectionsSMPCriteria()).ReturnsForAnyArgs(models);
+        repository.Fetch<SelectionSMP>(Arg.Any<GetSelectionsSMPCriteria>()).ReturnsForAnyArgs(models);
 
         // Act
         var actual = service.ChoiceHtmlToText(html, "12345");
@@ -119,7 +120,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
     {
         Html = "<div><span class='combinationLink'>13-Fold (1 Bet)</span></div>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "Over 3 @ 1.82"
+        Expected = "Over 3 @ 1.82\r\na1\r\na2 - won\r\na1\r\n"
     };
 
     private static readonly ChoiceModel BetType = new()

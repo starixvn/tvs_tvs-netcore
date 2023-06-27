@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
 {
-    public class GetMarkedTicketsCountHandlerTests : IClassFixture<AppSettingFixture>
+    public class GetMarkedTicketsCountHandlerTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
     {
         [Fact]
         public async Task Handler_HasRequest_ReturnResults()

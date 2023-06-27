@@ -10,7 +10,7 @@ using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTickets;
-public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>
+public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
     private GetVoidedTicketsServiceImp service;
 

@@ -16,15 +16,15 @@ public class GetSummaryTicketsServiceTests
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
-    public async Task GetSummaryTickets_ReturnViewModel(int licenseeId)
+    public async Task GetSummoparyTickets_ReturnViewModel(int licenseeId)
     {
         // Arrange
         var summaryTicketModels = new List<SummaryTicketModel>
         {
-            new() {LicenseeName = "AA"},
-            new() {LicenseeName = "AA"},
-            new() {LicenseeName = "AA"},
-            new() {LicenseeName = "BB"}
+            new() {LicenseeName = "AA", TotalTrans = 1, BetTypeId = 1, BetTypeName = "1"},
+            new() {LicenseeName = "AA", TotalTrans = 2, BetTypeId = 1, BetTypeName = "1"},
+            new() {LicenseeName = "AA", TotalTrans = 1, BetTypeId = 1, BetTypeName = "1"},
+            new() {LicenseeName = "BB", TotalTrans = 2, BetTypeId = 1, BetTypeName = "1"}
         };
         var query = Builder<GetSummaryQuery>.CreateNew().With(x => x.LicenseeId = licenseeId).Build();
         var repository = Substitute.For<IDynamicRepository>();

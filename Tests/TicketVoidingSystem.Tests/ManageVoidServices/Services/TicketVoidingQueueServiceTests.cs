@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageVoidServices.Services;
 
-public class TicketVoidingQueueServiceTests
+public class TicketVoidingQueueServiceTests: IClassFixture<RemotingRefFixture>
 {
     [Fact]
     public async Task GetQueueInAllServers_ExecuteSuccessful_ReturnExpected()

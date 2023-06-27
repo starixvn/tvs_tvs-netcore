@@ -3,7 +3,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.Utilities;
 
-public class HelperTests : IClassFixture<AppSettingFixture>
+public class HelperTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
     [Fact]
     public void GetSettingKeyBySiteDbGroupId_HasSPName_ReturnSettingKey()

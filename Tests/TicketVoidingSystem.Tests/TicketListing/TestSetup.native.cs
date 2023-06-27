@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using OfficeOpenXml;
 using TicketVoidingSystem.TicketListing;
 
 namespace TicketVoidingSystem.Tests.TicketListing;
@@ -14,12 +13,5 @@ internal static class TestSetup
         });
 
         return mockMapper.CreateMapper();
-    }
-
-    internal static ExcelWorksheet CreateTestingSheet()
-    {
-        var package = new ExcelPackage();
-        var sheet = package.Workbook.Worksheets.Add("Template");
-        return sheet;
     }
 }

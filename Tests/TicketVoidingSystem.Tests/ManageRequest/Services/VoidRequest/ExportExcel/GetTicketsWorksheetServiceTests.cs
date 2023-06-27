@@ -26,7 +26,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
         public async Task BindingContent_WithMatchNotNull_HasGetGroupsExcelTickets()
         {
             // Arrange
-            var worksheet = TestSetup.CreateTestingSheet();
+            var worksheet = SetupTestingSheet.CreateTestingSheet();
             var model = new GetTicketsQuery
             {
                 Match = new Match { MatchId = 1 }
@@ -60,7 +60,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
         public async Task BindingContent_WithMatchNull_HasGetGroupsExcelTicketsRequestNoMatch()
         {
             // Arrange
-            var worksheet = TestSetup.CreateTestingSheet();
+            var worksheet = SetupTestingSheet.CreateTestingSheet();
             var model = new GetTicketsQuery { };
             var groupsExcelTickets = new List<Group<ExcelTicketNoMatchModel>>
             {

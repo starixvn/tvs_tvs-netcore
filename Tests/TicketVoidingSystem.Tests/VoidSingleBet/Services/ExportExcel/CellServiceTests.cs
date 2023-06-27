@@ -26,7 +26,7 @@ public class CellServiceTests
     public void AddMatch_ValidMatchCodeFromMatch_ReturnValueInA5Cells()
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
         var match = new Match { MatchCode = "Match Code" };
         var service = new CellServiceImp();
 
@@ -41,7 +41,7 @@ public class CellServiceTests
     public void AddMatch_ValidMatchEventFromMatch_ReturnValueInB5Cells()
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
         var match = new Match();
         var service = new CellServiceImp();
 
@@ -56,7 +56,7 @@ public class CellServiceTests
     public void AddMatch_ValidEventDateFromMatch_ReturnValueInD5Cells()
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
         var match = new Match { EventDate = new DateTime(2017, 5, 25, 9, 20, 40) };
         const string expected = "05/25/2017";
         var service = new CellServiceImp();
@@ -72,7 +72,7 @@ public class CellServiceTests
     public void SetStyle_WrapText_ReturnTrue()
     {
         // Arrange
-        var sheet = TestSetup.CreateTestingSheet();
+        var sheet = SetupTestingSheet.CreateTestingSheet();
         sheet.Cells["A8"].Value = 1;
         var service = new CellServiceImp();
 

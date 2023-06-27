@@ -9,14 +9,14 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidSingleBet.Services.GetTickets;
 
-public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
+public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
     [Fact]
-    public async Task GetTickets_ValidCriteria_ReturnDataFromRepository()
+    public async Task GetTickets_ValidCriteria_RepositoryHasCalled()
     {
         // Arrange
         var expected = new List<GetTicketModel> { new() { TransId = 1346 } };
-        var query = new GetTicketsQuery { MatchId = 132 };
+        var query = new GetTicketsQuery { MatchId = 132, OddsType = "123" };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var mapTicketService = Substitute.For<MapTicketService>();
         dynamicRepository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).ReturnsForAnyArgs(expected);
@@ -26,7 +26,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
         var actual = await repository.GetTickets(query);
 
         // Assert
-        Assert.NotNull(actual);
+        dynamicRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
     }
 
     [Fact]
@@ -46,6 +46,5 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>
 
         // Assert
         await dynamicRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
-        Assert.NotNull(actual);
     }
 }

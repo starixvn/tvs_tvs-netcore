@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Services.MarkUnmarkTickets;
 
-public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
+public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
     [Theory]
     [InlineData(0, 0)]

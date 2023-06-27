@@ -13,8 +13,8 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
 {
-	public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixture>
-	{
+	public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
+    {
 		private readonly IDynamicRepository repository;
 		private readonly IMapper mapper;
 		private readonly BetListService betListService;

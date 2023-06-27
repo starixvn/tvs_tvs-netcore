@@ -36,7 +36,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
 	public async Task BindingContent_SetsTitleAndInvokesMethods()
 	{
 		// Arrange
-		var worksheet = TestSetup.CreateTestingSheet();
+		var worksheet = SetupTestingSheet.CreateTestingSheet();
 
 		var mockModel = new GetVoidedTicketsQuery
 		{
@@ -62,7 +62,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
 	public async Task BindingContent_AddTicketContentAndInvokesMethods()
 	{
 		// Arrange
-		var worksheet = TestSetup.CreateTestingSheet();
+		var worksheet = SetupTestingSheet.CreateTestingSheet();
 
 		var mockModel = new GetVoidedTicketsQuery
 		{

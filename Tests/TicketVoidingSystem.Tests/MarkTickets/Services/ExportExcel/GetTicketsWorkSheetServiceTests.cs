@@ -15,7 +15,7 @@ public class GetTicketsWorkSheetServiceTests
     public async Task BindingContent_Always_CreateTitle(int matchId)
     {
         // Arrange
-        var worksheet = TestSetup.CreateTestingSheet();
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
         var model = new GetTicketsQuery { MatchId = matchId };
         var cellService = Substitute.For<CellService>();
         var getTicketsService = Substitute.For<GetTicketsService>();

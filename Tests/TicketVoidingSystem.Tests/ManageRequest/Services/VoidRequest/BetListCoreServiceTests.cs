@@ -11,7 +11,7 @@ using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
 {
-    public class BetListCoreServiceTests
+    public class BetListCoreServiceTests: IClassFixture<RemotingRefFixture>
     {
         private readonly BetListService betListService;
         private readonly IMapper mapper;
