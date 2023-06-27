@@ -641,6 +641,6 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   public isHasLogInfo(): boolean {
-    return this.isRedCard() || this.isWrongScore() || this.isWrongOdds();
+    return this.isRedCard() || this.isWrongScore() || this.isWrongOdds() || this.isReducedOver();
   }
 }
