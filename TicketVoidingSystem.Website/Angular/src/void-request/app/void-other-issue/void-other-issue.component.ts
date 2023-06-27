@@ -108,7 +108,9 @@ export class VoidOtherIssueComponent implements OnInit {
     if (this.isAbnormalAccount()) {
       this.usernames = this.requestDetail.event.usernames.split(',').join(', ');
     }
-    await this.getLogInfoModel();
+    if (this.isHasLogInfo()) {
+      await this.getLogInfoModel();
+    }
     this.initDataForDisplayLogInfo();
     this.initLiveScore();
     await this.getMatchInfo();
@@ -607,5 +609,9 @@ export class VoidOtherIssueComponent implements OnInit {
     logInfoList.getLogInfoModels.forEach(logInfo => {
       this.logInfoDetails.push(logInfo.logInfoDetail);
     });
+  }
+
+  public isHasLogInfo(): boolean {
+    return this.isRedCard() || this.isWrongScore() || this.isWrongOdds();
   }
 }
