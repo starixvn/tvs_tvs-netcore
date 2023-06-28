@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TicketListComponent TicketListComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <ticket-list>
+    <div>
+      <div
+        aria-hidden="true"
+        class="modal-backdrop fade show"
+        style="z-index: 1050;"
+      />
+      <div
+        class="fade modal show d-block"
+        role="dialog"
+      >
+        <div
+          class="modal-dialog-custom modal-dialog-centered modal-dialog-scrollable"
+          role="document"
+        >
+          <div
+            class="modal-content"
+          >
+            <div
+              class="modal-header"
+            >
+              <div
+                class="modal-title"
+              >
+                <strong>
+                  Delete Bet Check (Request ID: 52000)
+                </strong>
+              </div>
+              <div
+                class="modal-control"
+              >
+                <em
+                  class="fa fa-times pointer"
+                />
+              </div>
+            </div>
+            <div
+              class="modal-body"
+            >
+              <match-info />
+              <request-info />
+              <tickets />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ticket-list>
+</ng-component>
+`;

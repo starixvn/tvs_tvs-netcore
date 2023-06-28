@@ -110,12 +110,7 @@ public class GetTicketsServiceImp : GetTicketsService
 
     private static int? GetMatchIdForQueryTransInfoJson(GetTicketsQuery query)
     {
-        if (query.Match?.MatchId > 0)
-        {
-            return query.Match.MatchId;
-        }
-
-        return null;
+        return (query.Match?.MatchId > 0) ? query.Match.MatchId : null;
     }
 
     private async Task<(IEnumerable<BetId> SingleTickets, IEnumerable<BetId> ParlayTickets, IEnumerable<BetId> CancelCashOutTickets)> GetTicketsInRequest(int requestId)

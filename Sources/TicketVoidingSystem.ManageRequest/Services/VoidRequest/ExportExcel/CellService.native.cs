@@ -27,7 +27,7 @@ public class CellServiceImp : CellService
 
     public void AddMatch(ExcelWorksheet worksheet, Match match)
     {
-        var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
+        var eventTime = match.EventDate == DateTime.MinValue ? string.Empty : match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
         worksheet.Cells[5, 1].Value = match.MatchCode;
         worksheet.Cells[5, 2].Value = match.LeagueName;
         worksheet.Cells[5, 3].Value = match.MatchEvent;

@@ -18,6 +18,8 @@ public class RequestViewModel
     public string Status { get; set; }
     public List<RequestEventViewModel> Details { get; set; }
     public IEnumerable<string> BettypeNames { get; set; }
+    public DateTime? CalcHalfTime { get; set; }
+    public DateTime? CalcFullTime { get; set; }
 }
 
 public class RequestEventViewModel

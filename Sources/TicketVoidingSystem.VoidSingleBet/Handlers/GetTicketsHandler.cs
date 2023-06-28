@@ -36,13 +36,10 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
 
     public async Task<ListTicketsViewModel> Handle(GetTicketsRequest request, CancellationToken cancellationToken)
     {
-        var match = await matchService.GetMatch(request.MatchId);
         var getTicketsResult = await getTicketsService.GetTickets(request);
-        var groups = CreateGroupGetTicketModel(getTicketsResult, request);
-
         var model = new ListTicketsViewModel
         {
-            Groups = CreateGroupTicketViewModel(groups, match)
+            Groups = await CreateGroupsTicketViewModel(request, getTicketsResult)
         };
 
         updateListTicketsViewModelService.Update(model, getTicketsResult);
@@ -50,13 +47,18 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         return model;
     }
 
-    private IEnumerable<Group<GetTicketModel>> CreateGroupGetTicketModel(IEnumerable<GetTicketModel> data, GetTicketsQuery query)
+    private IEnumerable<Group<GetTicketModel>> GetGroupsGetTicketModel(IEnumerable<GetTicketModel> data, GetTicketsQuery query)
     {
         var tickets = pagingService.Paging(data, query.PageIndex, query.PageSize).ToList();
         if (!tickets.Any())
         {
             return new List<Group<GetTicketModel>>();
         }
+        return GetValueGroupsGetTicketModel(tickets);
+    }
+
+    private IEnumerable<Group<GetTicketModel>> GetValueGroupsGetTicketModel(IEnumerable<GetTicketModel> tickets)
+    {
         var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay).OrderBy(ticket => ticket.TransId);
         var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
@@ -65,8 +67,10 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         return groups;
     }
 
-    private IEnumerable<Group<TicketViewModel>> CreateGroupTicketViewModel(IEnumerable<Group<GetTicketModel>> groupsGetTicket, Match match)
+    private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupsTicketViewModel(GetTicketsRequest request, IEnumerable<GetTicketModel> getTicketsResult)
     {
+        var match = await matchService.GetMatch(request.MatchId);
+        var groupsGetTicket = GetGroupsGetTicketModel(getTicketsResult, request);
         var groups = new List<Group<TicketViewModel>>();
         foreach (var item in groupsGetTicket.Where(item => item.Tickets.Any()))
         {
@@ -78,12 +82,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
 
     private Group<TicketViewModel> CreateGroupTicketViewModel(Group<GetTicketModel> group, Match match)
     {
-        var permission = new UserPermission
-        {
-            SettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host),
-            UnSettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host),
-            InstantlySettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host)
-        };
+        var permission = GetUserPermission();
         var tickets = new List<TicketViewModel>();
         var index = 1;
         foreach (var item in group.Tickets)
@@ -94,5 +93,15 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         }
 
         return new Group<TicketViewModel> { Name = group.Name, Tickets = tickets };
+    }
+
+    private UserPermission GetUserPermission()
+    {
+        return new UserPermission
+        {
+            SettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host),
+            UnSettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host),
+            InstantlySettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host)
+        };
     }
 }

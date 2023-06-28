@@ -38,15 +38,25 @@ public class MapTicketServiceImp : MapTicketService
         foreach (var item in ticketsModel)
         {
             var ticket = MapToTicketViewModel(item);
-            ticket.BetId = item.TransId.ToString();
-            ticket.Currency = item.CurrencyName;
-            ticket.Member = item.UserName;
-            ticket.BallSequence = item.BallSequence;
-            ticket.IsMarked = item.IsMarked;
             tickets.Add(ticket);
         }
 
         return tickets;
+    }
+
+    private TicketViewModel MapToTicketViewModel(DetailTicketModel item)
+    {
+        var ticket = MapFromBetListToTicketViewModel(item);
+        ticket.SecondAcceptFlag = item.SecAcceptFlag ? "<span class='icon-tick'></span>" : string.Empty;
+        ticket.WinLoss = CreateWinLossHtml(item.Status, item.WinLost);
+        ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
+        ticket.BetId = item.TransId.ToString();
+        ticket.Currency = item.CurrencyName;
+        ticket.Member = item.UserName;
+        ticket.BallSequence = item.BallSequence;
+        ticket.IsMarked = item.IsMarked;
+
+        return ticket;
     }
 
     public IEnumerable<ExcelTicketModel> MapToListExcelTicketsModel(IEnumerable<TicketViewModel> ticketsViewModel)
@@ -73,16 +83,6 @@ public class MapTicketServiceImp : MapTicketService
         }
 
         return excelTickets;
-    }
-
-    private TicketViewModel MapToTicketViewModel(DetailTicketModel item)
-    {
-        var ticket = MapFromBetListToTicketViewModel(item);
-        ticket.SecondAcceptFlag = item.SecAcceptFlag ? "<span class='icon-tick'></span>" : string.Empty;
-        ticket.WinLoss = CreateWinLossHtml(item.Status, item.WinLost);
-        ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-
-        return ticket;
     }
 
     private static string CreateWinLossHtml(string status, string winLost)
@@ -114,18 +114,22 @@ public class MapTicketServiceImp : MapTicketService
         ticketHtml.Stake = betListService.BuildStake(ticket, ticketHelper);
         ticketHtml.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
         ticketHtml.BetType = betListService.GetBetTypeName(ticket);
+        ticketHtml.Choice = GetChoice(ticket, item, ticketHelper);
+
+        return ticketHtml;
+    }
+
+    private string GetChoice(Ticket ticket, DetailTicketModel item, TicketHelper ticketHelper)
+    {
         if (item.IsParlay)
         {
             var comboParlayNames = betListService.GetComboParlayName(ticket);
             ticket = SetSubTicket(item);
-            ticketHtml.Choice = comboParlayNames + betListService.BuildChoice(ticket, ticketHelper, null, false);
-        }
-        else
-        {
-            ticketHtml.Choice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+            return comboParlayNames + betListService.BuildChoice(ticket, ticketHelper, null, false);
         }
 
-        return ticketHtml;
+        return betListService.BuildChoice(ticket, ticketHelper, null, false);
+
     }
 
     private Ticket SetMainTicket(DetailTicketModel item)

@@ -1,0 +1,12 @@
+<menu-bar></menu-bar>
+
+<div class="title">
+  Home / Manage Request
+</div>
+
+<div class="body mg-10" [blockUi]="isBlock">
+  <filter #filterComponent [(model)]="filter" [minDate]="minNgbDate" [permission]="permission" (search)="search(false)"
+  [autoRefreshMode]="autoRefreshMode"></filter>
+  <request-list [models]="requests" [moveBetDay]="moveBetDay" [permission]="permission"
+    (exportExcelEvent)="exportExcel()" (reload)="search(true)" [requestStatusChangeEvent]="signalRService.requestStatusChange"></request-list>
+</div>

@@ -58,7 +58,6 @@ public class MapTicketServiceImp : MapTicketService
         viewModel.Choice = BuildChoice(ticketBetList, ticketHelper, item);
         viewModel.Status = betListService.GetStatus(ticketBetList, ticketHelper, null, false);
         viewModel.Handicap = betListService.GetHandicap(ticketBetList, ticketHelper, null, false);
-
         viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "<span class='icon-tick'></span>" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
@@ -118,6 +117,12 @@ public class MapTicketServiceImp : MapTicketService
         {
             return mainChoice;
         }
+
+        return SetValueChoice(ticket, ticketHelper, item, mainChoice);
+    }
+
+    private string SetValueChoice(ITicket ticket, ITicketHelper ticketHelper, GetTicketModel item, string mainChoice)
+    {
         SetValueSubTicket(ticket, item);
         var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         var choice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");

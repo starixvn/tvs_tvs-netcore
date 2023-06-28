@@ -182,15 +182,21 @@ public class ExcelRequestModel
     public string CreatedTime { get; set; }
 
     [Cell("P2")]
-    public string MistakenBy { get; set; }
+    public string CalcHalfTime { get; set; }
 
     [Cell("Q2")]
-    public string DecidedBy { get; set; }
+    public string CalcFullTime { get; set; }
 
     [Cell("R2")]
-    public string PerformedBy { get; set; }
+    public string MistakenBy { get; set; }
 
     [Cell("S2")]
+    public string DecidedBy { get; set; }
+
+    [Cell("T2")]
+    public string PerformedBy { get; set; }
+
+    [Cell("U2")]
     public string CheckedBy { get; set; }
 
     public int? NumberOfRequestDetails { get; set; }

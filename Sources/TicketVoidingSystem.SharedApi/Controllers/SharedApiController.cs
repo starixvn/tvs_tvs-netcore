@@ -3,7 +3,6 @@ using Fanex.NAP.Client.AspNetCore.Session;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketVoidingSystem.SharedApi.Handlers;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
@@ -49,4 +48,7 @@ public class SharedApiController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetIssueTypes() => Ok(await mediator.Send(new GetIssueTypesRequest()));
+
+    [HttpGet]
+    public async Task<IActionResult> GetIssueTypePermissionList() => Ok(await mediator.Send(new GetIssueTypePermissionListRequest()));
 }

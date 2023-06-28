@@ -20,7 +20,7 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
         this.repository = repository;
     }
 
-    public IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel)
+    private (IEnumerable<BetId>, IEnumerable<BetId>) GetTicketForCheckPermission(Dictionary<string, object> queryModel)
     {
         var tickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["tickets"].ToString());
         IEnumerable<BetId> cancelCashOutTickets = new List<BetId>();
@@ -28,12 +28,19 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
         {
             cancelCashOutTickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["cancelCashOutTickets"].ToString());
         }
+
+        return (tickets, cancelCashOutTickets);
+    }
+
+    public IEnumerable<string> GetTransInfoForCheckPermission(Dictionary<string, object> queryModel)
+    {
+        var (tickets, cancelCashOutTickets) = GetTicketForCheckPermission(queryModel);
         var transInfoJsonList = new List<string>();
         foreach (var server in SiteDbGroupConstant.ServerList)
         {
             var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any())
+            if (!ticketsInSiteDb.Any() && !cancelCashOutTicketsInSiteDb.Any())
             {
                 continue;
             }

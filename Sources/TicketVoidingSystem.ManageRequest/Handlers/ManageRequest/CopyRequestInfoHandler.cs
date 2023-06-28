@@ -1,0 +1,55 @@
+﻿using System.Text;
+using Fanex.Data.Repository;
+using MediatR;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.ManageRequest.Constants;
+using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
+using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
+
+namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
+
+public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<CopyRequestInfoResponse>
+{
+}
+
+public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
+{
+    private readonly IDynamicRepository repository;
+    private readonly MatchService matchService;
+
+    public CopyRequestInfoHandler(IDynamicRepository repository, MatchService matchService)
+    {
+        this.repository = repository;
+        this.matchService = matchService;
+    }
+
+    public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
+    {
+        var model = await repository.GetAsync<CopyRequestInfoModel>(request, cancellationToken);
+        var match = new Match
+        {
+            MatchId = request.MatchId,
+            HomeId = model.HomeId,
+            AwayId = model.AwayId,
+            LeagueId = model.LeagueId,
+            IsNeutral = model.IsNeutral
+        };
+        matchService.UpdateMatchInfoFromRemotingRef(match);
+        var varCheckValue = model.IsCheckedVar ? "YES" : "NO";
+        var filterByValue = model.FilterBy == FilterByConstant.AcceptTime ? "Accept time" : "Trans time";
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"K.O Time: {model.KickOffTime.ZoneManila():hh:mm tt}");
+        stringBuilder.AppendLine($"League: {match.LeagueName}");
+        stringBuilder.AppendLine($"Match: {match.MatchEvent}");
+        stringBuilder.AppendLine($"Match ID: {model.MatchId}");
+        stringBuilder.AppendLine($"Request No: {model.RequestId}");
+        stringBuilder.AppendLine($"Issue Type: {model.IssueTypeName} - {model.SubIssueTypeName}");
+        stringBuilder.AppendLine($"VAR: {varCheckValue}");
+        stringBuilder.AppendLine($"Start Void Time: {model.StartVoidTime:hh:mm:ss.fff tt} ({filterByValue})");
+
+        return new CopyRequestInfoResponse { Info = stringBuilder.ToString() };
+    }
+}

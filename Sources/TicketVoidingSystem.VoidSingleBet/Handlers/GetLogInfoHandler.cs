@@ -24,7 +24,6 @@ public class GetLogInfoHandler : IRequestHandler<GetLogInfoRequest, ListTicketsV
     {
         var model = new ListTicketsViewModel();
         var data = await getTicketsService.GetTickets(request);
-
         UpdateViewModel(model, data);
 
         return model;
@@ -32,6 +31,11 @@ public class GetLogInfoHandler : IRequestHandler<GetLogInfoRequest, ListTicketsV
 
     private static void UpdateViewModel(ListTicketsViewModel model, ICollection<GetTicketModel> data)
     {
+        if (!data.Any())
+        {
+            return;
+        }
+
         model.TotalItems = data.Count;
         var singleTickets = data.Where(item => !item.IsMixParlay);
         model.SingleCount = singleTickets.Count();
@@ -42,11 +46,6 @@ public class GetLogInfoHandler : IRequestHandler<GetLogInfoRequest, ListTicketsV
 
     private static void UpdateTimeViewModel(ListTicketsViewModel model, ICollection<GetTicketModel> data)
     {
-        if (!data.Any())
-        {
-            return;
-        }
-
         model.FromTransTime = data.Min(item => item.TransDate).ZoneManila();
         model.FromCheckTime = data.Min(item => item.CheckTime).ZoneManila();
         model.ToTransTime = data.Max(item => item.TransDate).ZoneManila();

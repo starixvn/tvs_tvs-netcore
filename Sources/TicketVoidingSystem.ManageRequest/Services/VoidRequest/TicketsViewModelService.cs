@@ -175,18 +175,10 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         {
             return subIssueTypeId switch
             {
-                SubIssueTypeConstant.Handicap => ticket.IsMixParlay
-                    ? ticket.SubBetType != BetTypeConstant.Handicap
-                    : ticket.BetType != BetTypeConstant.Handicap,
-                SubIssueTypeConstant.FirstHalfHandicap => ticket.IsMixParlay
-                    ? ticket.SubBetType != BetTypeConstant.FirstHalfHandicap
-                    : ticket.BetType != BetTypeConstant.FirstHalfHandicap,
-                SubIssueTypeConstant.OverUnder => ticket.IsMixParlay
-                    ? ticket.SubBetType != BetTypeConstant.OverUnder
-                    : ticket.BetType != BetTypeConstant.OverUnder,
-                SubIssueTypeConstant.FirstHalfOverUnder => ticket.IsMixParlay
-                    ? ticket.SubBetType != BetTypeConstant.FirstHalfOverUnder
-                    : ticket.BetType != BetTypeConstant.FirstHalfOverUnder,
+                SubIssueTypeConstant.Handicap => CheckAioMessageHandicap(ticket),
+                SubIssueTypeConstant.FirstHalfHandicap => CheckAioMessageFirstHalfHandicap(ticket),
+                SubIssueTypeConstant.OverUnder => CheckAioMessageOverUnder(ticket),
+                SubIssueTypeConstant.FirstHalfOverUnder => CheckAioMessageFirstHalfOverUnder(ticket),
                 _ => false
             };
         }
@@ -194,6 +186,34 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         return false;
     }
 
+    private static bool CheckAioMessageHandicap(GetTicketModel ticket)
+    {
+        return ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.Handicap
+                    : ticket.BetType != BetTypeConstant.Handicap;
+    }
+
+    private static bool CheckAioMessageFirstHalfHandicap(GetTicketModel ticket)
+    {
+        return ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.FirstHalfHandicap
+                    : ticket.BetType != BetTypeConstant.FirstHalfHandicap;
+    }
+    
+    private static bool CheckAioMessageOverUnder(GetTicketModel ticket)
+    {
+        return ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.OverUnder
+                    : ticket.BetType != BetTypeConstant.OverUnder;
+    }
+    
+    private static bool CheckAioMessageFirstHalfOverUnder(GetTicketModel ticket)
+    {
+        return ticket.IsMixParlay
+                    ? ticket.SubBetType != BetTypeConstant.FirstHalfOverUnder
+                    : ticket.BetType != BetTypeConstant.FirstHalfOverUnder;
+    }
+    
     private Ticket CreateTicketBetList(GetTicketModel item)
     {
         var ticket = mapper.Map<Ticket>(item);

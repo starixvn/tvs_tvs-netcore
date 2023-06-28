@@ -164,6 +164,9 @@
     <Content Update="Views\EmailTemplate\English\RecoverVirtualSports.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\nap-auth\re-checkin.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

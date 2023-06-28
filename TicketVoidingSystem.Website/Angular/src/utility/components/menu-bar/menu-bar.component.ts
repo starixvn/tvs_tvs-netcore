@@ -56,6 +56,7 @@ export class MenuBarComponent implements OnInit {
     return menuName === MenuName.AB_EXCEPTION_LIST 
     || menuName === MenuName.MARK_UNMARK_TICKETS
     || menuName === MenuName.TICKET_LISTING
-    || menuName === MenuName.VOID_SINGLE_BET;
+    || menuName === MenuName.VOID_SINGLE_BET
+    || menuName === MenuName.MANAGE_REQUEST;
   }
 }

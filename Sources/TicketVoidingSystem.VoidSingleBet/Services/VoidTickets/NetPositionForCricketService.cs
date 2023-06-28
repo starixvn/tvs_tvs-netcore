@@ -25,8 +25,8 @@ public class NetPositionForCricketServiceImp : NetPositionForCricketService
 
     public async Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> Update(VoidTicketsQuery query)
     {
-        var isSuccessfullyUpdateNetPosition = await netPositionService.UpdateNetPosition(query.TransIdCrickets, NetPositionConstant.ActionVoid);
-        if (!isSuccessfullyUpdateNetPosition)
+        var isSuccessfully = await netPositionService.UpdateNetPosition(query.TransIdCrickets, NetPositionConstant.ActionVoid);
+        if (!isSuccessfully)
         {
             var warningCricket = Helper.MessageFailApiCricket(query.TransIdCrickets, NetPositionConstant.ActionVoid);
             var ticketsAfterRemoveCricket = query.Tickets.Where(x => !query.TransIdCrickets.Split(',').Contains(x.TransId));

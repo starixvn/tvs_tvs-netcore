@@ -23,12 +23,7 @@ public class DescriptionServiceImp : DescriptionService
     {
         if (item.IssueTypeId == IssueTypeConstant.AbnormalBet)
         {
-            if (item.FilterBy == AB_PARLAY)
-            {
-                return BuildAbnormalBetForParlayTicket(item);
-            }
-
-            return BuildAbnormalBetForSingleTicket(item);
+            return BuildAbnormalBet(item);
         }
 
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
@@ -42,6 +37,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.Wrong1stHDP, BuildDangerAccepted},
                 {IssueTypeConstant.WrongOU, BuildDangerAccepted},
                 {IssueTypeConstant.Wrong1stOU, BuildDangerAccepted},
+                {IssueTypeConstant.WrongOdds, BuildDangerAccepted},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
@@ -49,6 +45,11 @@ public class DescriptionServiceImp : DescriptionService
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);
         return function != null ? function.Invoke(item) : BuildDefault(item);
+    }
+
+    private string BuildAbnormalBet(RequestDescription item)
+    {
+        return (item.FilterBy == AB_PARLAY) ? BuildAbnormalBetForParlayTicket(item) : BuildAbnormalBetForSingleTicket(item);
     }
 
     private string BuildEKO(RequestDescription item)

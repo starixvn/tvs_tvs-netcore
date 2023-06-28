@@ -31,6 +31,24 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
 
     public async Task<GetSummaryViewModel> GetSummaryTickets(GetSummaryQuery query)
     {
+        var criteria = await CreateGetSummaryCriteria(query);
+        criteria.SelectionSubParlays = query.SelectionSubParlays;
+        var model = await repository.FetchAsync<SummaryTicketModel>(criteria);
+        if (model == null)
+        {
+            return new GetSummaryViewModel();
+        }
+
+        var viewModel = new GetSummaryViewModel();
+        UpdateBetTypeName(model);
+        viewModel.GroupByBetTypes = GroupTicketsByBetTypes(model, query);
+        viewModel.GroupByLicensees = GroupTicketsByLicensees(model, query);
+
+        return viewModel;
+    }
+
+    private async Task<GetSummaryCriteria> CreateGetSummaryCriteria(GetSummaryQuery query)
+    {
         var criteria = mapper.Map<GetSummaryCriteria>(query);
         criteria.FromTransDate = query.FromTransDate.ZoneCanada();
         criteria.ToTransDate = query.ToTransDate.ZoneCanada();
@@ -39,19 +57,8 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
         criteria.Type = query.Product;
         criteria.BetTeams = query.BetTeams.ToBetTypeXml();
         criteria.AffectTickets = await affectTicketsFromSettlementHistoryService.GetTickets(query.IsReSettled, query.MatchId);
-        criteria.SelectionSubParlays = query.SelectionSubParlays;
-        var model = await repository.FetchAsync<SummaryTicketModel>(criteria);
-        var viewModel = new GetSummaryViewModel();
-        if (model == null)
-        {
-            return viewModel;
-        }
-
-        UpdateBetTypeName(model);
-        viewModel.GroupByBetTypes = GroupTicketsByBetTypes(model, query);
-        viewModel.GroupByLicensees = GroupTicketsByLicensees(model, query);
-
-        return viewModel;
+        
+        return criteria;
     }
 
     private void UpdateBetTypeName(IEnumerable<SummaryTicketModel> tickets)

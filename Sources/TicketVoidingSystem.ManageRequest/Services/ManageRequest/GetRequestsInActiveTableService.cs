@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 public interface GetRequestsInActiveTableService
 {
-    Task<IEnumerable<RequestModel>> GetRequestsInActiveTable(SelectRequestsQuery query);
+    Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInActiveTable(SelectRequestsQuery query);
 }
 
 public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableService
@@ -28,10 +28,10 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
         this.betListService = betListService;
     }
 
-    public async Task<IEnumerable<RequestModel>> GetRequestsInActiveTable(SelectRequestsQuery query)
+    public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInActiveTable(SelectRequestsQuery query)
     {
         var criteriaActive = mapper.Map<SelectActiveRequestsCriteria>(query);
-        var (requests, requestInfo) = await repository.FetchMultipleAsync<RequestModel, GetRequestInfoModel>(criteriaActive);
+        var (requests, requestInfo, requestInfoGetCalcTime) = await repository.FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(criteriaActive);
         var totalVoidedTicketModels = GetTotalVoidedTickets(requestInfo);
         var betTypeForRequests = GetBettypeForAbnormalSingleRequest(requests);
         foreach (var request in requests)
@@ -42,7 +42,7 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
             request.BettypeNames = GetListBettypeName(request.RequestId, betTypeForRequests);
         }
 
-        return requests;
+        return (requests, requestInfoGetCalcTime);
     }
 
     private IEnumerable<GetBettypeForRequestModel> GetBettypeForAbnormalSingleRequest(IEnumerable<RequestModel> requests)
@@ -54,12 +54,10 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
         {
             return new List<GetBettypeForRequestModel>();
         }
-        else
-        {
-            var criteria = new GetBettypeNamesCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
-            var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
-            return models;
-        }
+        
+        var criteria = new GetBettypeNamesCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
+        var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
+        return models;
     }
 
     private IEnumerable<GetRequestInfoModel> GetTotalVoidedTickets(IEnumerable<GetRequestInfoModel> requestInfo)

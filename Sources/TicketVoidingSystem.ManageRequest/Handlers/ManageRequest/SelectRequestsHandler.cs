@@ -27,15 +27,13 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
 
     public async Task<IEnumerable<RequestViewModel>> Handle(SelectRequestsRequest request, CancellationToken cancellationToken)
     {
-        const string NA_OPTION = "-1";
-        if (request.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(request.SubIssueType)
-        || (!string.IsNullOrWhiteSpace(request.RequestId) && !await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(request.RequestId))))
+        if (await CheckValidRequest(request))
         {
             return new List<RequestViewModel>();
         }
 
         var viewModels = new List<RequestViewModel>();
-        var models = await getRequestsService.GetRequests(request);
+        var (models, _) = await getRequestsService.GetRequests(request);
 
         var groupRequestModels = models.GroupBy(b => b.RequestId).Select(group => new GroupRequestModel
         {
@@ -45,9 +43,17 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
         foreach (var groupRequest in groupRequestModels)
         {
             RenderViewModel(viewModels, groupRequest);
+            
         }
 
         return viewModels;
+    }
+
+    private async Task<bool> CheckValidRequest(SelectRequestsRequest request)
+    {
+        const string NA_OPTION = "-1";
+        return (request.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(request.SubIssueType)
+        || (!string.IsNullOrWhiteSpace(request.RequestId) && ! await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(request.RequestId))));
     }
 
     private void RenderViewModel(IList<RequestViewModel> viewModels, GroupRequestModel groupRequest)

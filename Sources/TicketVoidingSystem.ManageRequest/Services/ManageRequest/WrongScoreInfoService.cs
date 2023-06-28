@@ -20,8 +20,6 @@ public class WrongScoreInfoServiceImp : WrongScoreInfoService
 
     public async Task<IEnumerable<WrongScoreInfoViewModel>> GetWrongScoreInfo(GetWrongScoreInfoCriteria criteria)
     {
-        var data = await repository.FetchAsync<WrongScoreInfoViewModel>(criteria);
-
-        return data;
+        return await repository.FetchAsync<WrongScoreInfoViewModel>(criteria);
     }
 }
