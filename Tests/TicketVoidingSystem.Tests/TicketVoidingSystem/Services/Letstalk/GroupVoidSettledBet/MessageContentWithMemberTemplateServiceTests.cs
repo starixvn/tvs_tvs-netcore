@@ -154,7 +154,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
             var result = service.Create(model, tickets);
 
             // Assert
-            Assert.True(result.Count() > 0);
+            Assert.Equal(2, result.Count());
         }
     }
 }

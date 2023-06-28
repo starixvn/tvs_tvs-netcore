@@ -1,23 +1,14 @@
 ﻿using Xunit;
-using NSubstitute;
 using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
-using System.Collections.Generic;
-using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
-using System;
-using TicketVoidingSystem.Models;
-using System.Linq;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Services;
 using BetListNPOI.SS.Formula.Functions;
-using Microsoft.Extensions.Configuration;
-using Fanex.MailDeliver.MailClient;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet
 {
     public class UusTicketServiceTests : AppSettingFixture
     {
-        private const int Currency20 = 20;
         private readonly UusTicketServiceImp uusTicketService;
         public UusTicketServiceTests()
         {
@@ -38,6 +29,27 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 
             // Assert
             Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(true, 21, true)]
+        [InlineData(false, 21, false)]
+        [InlineData(true, 20, false)]
+        public void IsValidCashOut_ProdEnvIsTrue_ReturnExpected(bool isCashOut, int currency, bool expected)
+        {
+            // Arrange
+            var ticket = new TicketEmailModel
+            {
+                IsCashOut = isCashOut,
+                Currency = currency
+            };
+            AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
+
+            // Act
+            var result = uusTicketService.IsValidCashOut(ticket);
+
+            // Assert
+            Assert.Equal(expected, result);
         }
 
         [Fact]
@@ -100,15 +112,16 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
         }
 
         [Theory]
-        [InlineData(29)]
-        [InlineData(38)]
-        public void IsValidSettledParlayTicket_HasCheckMainParlayIsTrue_ReturnTrue(int betTypeId)
+        [InlineData(29, TicketStatus.Draw, true)]
+        [InlineData(38, TicketStatus.Waiting, false)]
+        [InlineData(1, TicketStatus.Draw, false)]
+        public void IsValidSettledParlayTicket_HasCheckMainParlayIsTrue_ReturnFollowSettled(int betTypeId, string settled, bool expected)
         {
             // Arrange
             var ticket = new TicketEmailModel
             {
                 BetTypeId = betTypeId,
-                Status = TicketStatus.Draw
+                Status = settled
             };
 
             var uusTicketService = new UusTicketServiceImp();
@@ -117,8 +130,50 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
             var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
 
             // Assert
-            Assert.True(result);
+            Assert.Equal(expected, result);
         }
 
+        [Theory]
+        [InlineData(TicketStatus.Draw, true, true)]
+        [InlineData(TicketStatus.Draw, false, false)]
+        public void IsValidSettledParlayTicket_HasCheckMixParlayTicket_ReturnFollowCheckMixParlayTicket(string settled, bool isMixParlay, bool expected)
+        {
+            // Arrange
+            var ticket = new TicketEmailModel
+            {
+                SubStatus = settled,
+                IsMixParlay = isMixParlay
+            };
+
+            var uusTicketService = new UusTicketServiceImp();
+
+            // Act
+            var result = uusTicketService.IsValidSettledParlayTicket(ticket, false);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(29, 21, true)]
+        [InlineData(1, 21, false)]
+        [InlineData(29, 20, false)]
+        public void IsValidSettledParlayTicket_ProdEnvIsTrue_ReturnExpected(int betTypeId, int currency, bool expected)
+        {
+            // Arrange
+            var ticket = new TicketEmailModel
+            {
+                Currency = currency,
+                BetTypeId = betTypeId,
+                Status = TicketStatus.Draw
+            };
+            AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
+
+            // Act
+            var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
+
+            // Assert
+            Assert.Equal(expected, result);
+        }
     }
 }
