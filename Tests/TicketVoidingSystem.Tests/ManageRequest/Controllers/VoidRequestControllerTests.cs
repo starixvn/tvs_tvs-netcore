@@ -100,7 +100,7 @@ public class VoidRequestControllerTests
 		await controller.ExportExcel(request);
 
 		// Assert
-		await mediator.Received().Send(Arg.Any<TicketVoidingSystem.ManageRequest.Handlers.VoidRequest.ExportExcelRequest>());
+		await mediator.Received().Send(Arg.Any<ExportExcelRequest>());
 	}
 
 	[Fact]
