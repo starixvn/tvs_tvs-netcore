@@ -47,7 +47,8 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         base.OnActionExecuting(context);
     }
 
-    private bool IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext){
+    private bool IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext)
+    {
         if (actionDescriptor is ControllerActionDescriptor descriptor)
         {
             var attrsInAction = descriptor.MethodInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
@@ -80,12 +81,6 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         stringBuilder.AppendLine($"Response: {responseData}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
         await logger.InfoAsync(stringBuilder.ToString());
-
-        if (sw?.ElapsedMilliseconds > 5000)
-        {
-            stringBuilder.AppendLine($"Long action");
-            await logger.ErrorAsync(stringBuilder.ToString());
-        }
 
         base.OnActionExecuted(context);
     }
