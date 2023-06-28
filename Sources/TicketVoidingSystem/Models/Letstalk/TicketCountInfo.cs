@@ -4,6 +4,10 @@ namespace TicketVoidingSystem.Models.Letstalk;
 
 public class TicketCountInfo
 {
+    public TicketCountInfo() 
+    {
+        Members = new HashSet<string> ();
+    }
     public int SingleCount { get; set; }
     public int InstantOUCount { get; set; }
     public int CashOutCount { get; set; }
@@ -11,5 +15,5 @@ public class TicketCountInfo
 
     public int OutstandingSingleCount { get; set; }
     public int OutstandingParlayCount { get; set; }
-    public HashSet<string> Members { get; set; }
+    public HashSet<string> Members { get; set; } 
 }

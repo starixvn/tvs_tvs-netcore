@@ -1,15 +1,11 @@
-﻿using Fanex.BetList.Core.Entities;
-using NSubstitute;
-using System;
+﻿using NSubstitute;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Fanex.BetList.Core.Builder;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
@@ -88,23 +89,38 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         // Assert
         Assert.Equal(expected, actual);
     }
+    
+    [Fact]
+    public void GetOdds_IsParlayIsTrue_EmptyOddName()
+    {
+        // Arrange
+        var ticket = new Ticket { };
+        bool isParlay = true;
 
-    // [Theory]
-    // [InlineData(true)]
-    // [InlineData(false)]
-    // public void GetOdds_ReturnOdds(bool isParlay)
-    // {
-    //     // Arrange
-    //     GetCachePropertyById cache = id => "";
-    //     var ticket = Builder<Ticket>.CreateNew().Build();
-    //     oddsService.GetOddsName(default).ReturnsForAnyArgs("1");
+        var service = new BetListServiceImp(remotingRefWrapperService, oddsService);
 
-    //     // Act
-    //     var actual = service.GetOdds(ticket, isParlay);
+        // Act
+        string result = service.GetOdds(ticket, isParlay);
 
-    //     // Assert
-    //     Assert.NotNull(actual);
-    // }
+        // Assert
+        Assert.Equal("<span class=\"underdog\">-</span> <span class=\"oddstype\"></span>", result);
+    }
+
+    [Fact]
+    public void GetOdds_OddNameIsNotNullOrWhiteSpace_ReturnOddHtmlWithReplacedBrTagsAndClosingBracket()
+    {
+        // Arrange
+        var ticket = new Ticket { };
+        bool isParlay = false;
+        var oddName = "OddName";
+        oddsService.GetOddsName(Arg.Any<string>()).Returns(oddName);
+
+        // Act
+        string result = service.GetOdds(ticket, isParlay);
+
+        // Assert
+        Assert.Equal("<span class=\"underdog\">-</span> (<span class=\"oddstype\"></span>)", result);
+    }
 
     [Fact]
     public void GetBetType_ReturnName()

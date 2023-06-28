@@ -2,21 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
-using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
 using TicketVoidingSystem.Services;
 using NSubstitute;
-using System.Runtime.InteropServices.Marshalling;
 using TicketVoidingSystem.ManageRequest.Models;
 using Xunit;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
 

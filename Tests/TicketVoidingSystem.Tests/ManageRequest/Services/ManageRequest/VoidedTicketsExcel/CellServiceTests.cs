@@ -1,24 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fanex.Data.Repository;
-using NSubstitute;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
-using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Services;
 using Xunit;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
-using TicketVoidingSystem.Tests.VoidSingleBet;
 using TicketVoidingSystem.Models;
 using OfficeOpenXml.Style;
 using OfficeOpenXml;
-using System.Drawing;
-using Epplus.Mapper.Extensions;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTicketsExcel
 {

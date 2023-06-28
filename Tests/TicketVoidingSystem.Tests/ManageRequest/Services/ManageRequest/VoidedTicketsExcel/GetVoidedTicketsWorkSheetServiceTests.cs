@@ -2,12 +2,9 @@
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
-using OfficeOpenXml;
 using System.Threading.Tasks;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Services.Excel;
 using Xunit;
-using TicketVoidingSystem.Tests.VoidSingleBet;
 using TicketVoidingSystem.Models;
 using System.Collections.Generic;
 

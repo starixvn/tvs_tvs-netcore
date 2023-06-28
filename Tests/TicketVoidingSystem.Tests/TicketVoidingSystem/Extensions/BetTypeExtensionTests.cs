@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using Xunit;
@@ -74,6 +75,182 @@ namespace TicketVoidingSystem.Tests.Extensions
 
             // Assert
             Assert.Equal(expectedXml, result);
+        }
+
+        [Fact]
+        public void IsBitCoin_IdMatchesBitCoinOverUnder_ReturnTrue()
+        {
+            // Arrange
+            int id = BetTypeConstant.BitCoinOverUnder;
+
+            // Act
+            bool result = id.IsBitCoin();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsBitCoin_IdDoesNotMatchBitCoinOverUnder_ReturnFalse()
+        {
+            // Arrange
+            int id = 123;
+
+            // Act
+            bool result = id.IsBitCoin();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(17000)]
+        [InlineData(17003)]
+        public void IsSabaPromotion_IdMatchesSabaPromotion_ReturnTrue(int id)
+        {
+            // Arrange
+
+            // Act
+            bool result = id.IsSabaPromotion();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsSabaPromotion_IdDoesNotMatchSabaPromotion_ReturnFalse()
+        {
+            // Arrange
+            int id = 123;
+
+            // Act
+            bool result = id.IsSabaPromotion();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsOutright_IdIsOutright_ReturnTrue()
+        {
+            // Arrange
+            int id = BetTypeConstant.Outright;
+
+            // Act
+            bool result = id.IsOutright();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsOutright_IdIsNotOutright_ReturnTrue()
+        {
+            // Arrange
+            int id = 123;
+
+            // Act
+            bool result = id.IsOutright();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(BetTypeConstant.FirstVirtualSport)]
+        [InlineData(2702)]
+        [InlineData(BetTypeConstant.SecondVirtualSport)]
+        [InlineData(BetTypeConstant.MinVirtualSportBetType)]
+        [InlineData(1208)]
+        [InlineData(BetTypeConstant.MaxVirtualSportBetType)]
+        public void IsVirtualSportBetType_IdIsVirtualSportBetType_ReturnTrue(int id)
+        {
+            // Arrange
+
+            // Act
+            bool result = id.IsVirtualSportBetType();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsVirtualSportBetType_IdIsNotVirtualSportBetType_ReturnFalse()
+        {
+            // Arrange
+            int id = 123;
+
+            // Act
+            bool result = id.IsVirtualSportBetType();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(29)]
+        [InlineData(38)]
+        [InlineData(BetTypeConstant.FirstNumberGame)]
+        [InlineData(BetTypeConstant.SecondNumberGame)]
+        [InlineData(115)]
+        [InlineData(BetTypeConstant.FirstLucky3)]
+        [InlineData(BetTypeConstant.SecondLucky3)]
+        [InlineData(1605)]
+        public void HideScore_IdIsHideScore_ReturnTrue(int id)
+        {
+            // Arrange
+
+            // Act
+            bool result = id.HideScore();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void HideScore_IdIsNotHideScore_ReturnFalse()
+        {
+            // Arrange
+            int id = 11;
+
+            // Act
+            bool result = id.HideScore();
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Theory]
+        [InlineData(29)]
+        [InlineData(38)]
+        [InlineData(BetTypeConstant.FirstNumberGame)]
+        [InlineData(BetTypeConstant.SecondNumberGame)]
+        [InlineData(115)]
+        [InlineData(BetTypeConstant.FirstLucky3)]
+        [InlineData(BetTypeConstant.SecondLucky3)]
+        [InlineData(1605)]
+        public void IsHideHandicap_IdIsIsHideHandicap_ReturnTrue(int id)
+        {
+            // Arrange
+
+            // Act
+            bool result = id.IsHideHandicap();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsHideHandicap_IdIsNotIsHideHandicap_ReturnFalse()
+        {
+            // Arrange
+            int id = 11;
+
+            // Act
+            bool result = id.IsHideHandicap();
+
+            // Assert
+            Assert.False(result);
         }
     }
 }

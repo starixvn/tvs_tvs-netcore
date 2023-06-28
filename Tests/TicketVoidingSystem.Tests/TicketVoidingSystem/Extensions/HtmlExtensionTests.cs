@@ -1,3 +1,5 @@
+using HtmlAgilityPack;
+using NSubstitute;
 using TicketVoidingSystem.Extensions;
 using Xunit;
 
@@ -6,7 +8,7 @@ namespace TicketVoidingSystem.Tests.Extensions;
 public class HtmlExtensionTests
 {
     [Fact]
-    public void DefaultText_ReturnsEmptyString_WhenHtmlIsNull()
+    public void DefaultText_HtmlIsNull_ReturnsEmptyString()
     {
         // Arrange
         string html = null;
@@ -19,7 +21,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void DefaultText_ReturnsEmptyString_WhenHtmlIsEmpty()
+    public void DefaultText_HtmlIsEmpty_ReturnsEmptyString()
     {
         // Arrange
         string html = string.Empty;
@@ -32,7 +34,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void DefaultText_ReturnsInnerText_WhenHtmlIsNotEmpty()
+    public void DefaultText_HtmlIsNotEmpty_ReturnsInnerText()
     {
         // Arrange
         string html = "<div>This is the <strong>inner text</strong> of the HTML.</div>";
@@ -48,7 +50,7 @@ public class HtmlExtensionTests
     // Add more test cases for the DefaultText method
 
     [Fact]
-    public void StakeText_ReturnsEmptyString_WhenHtmlIsNull()
+    public void StakeText_HtmlIsNull_ReturnsEmptyString()
     {
         // Arrange
         string html = null;
@@ -61,7 +63,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsEmptyString_WhenHtmlIsEmpty()
+    public void StakeText_HtmlIsEmpty_ReturnsEmptyString()
     {
         // Arrange
         string html = string.Empty;
@@ -74,7 +76,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsInnerTextOfStake_WhenHtmlHasStakeClass()
+    public void StakeText_HtmlHasStakeClass_ReturnsInnerTextOfStake()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div>";
@@ -87,7 +89,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsStakeOriginalStake_WhenHtmlContainsOriginalStake()
+    public void StakeText_HtmlContainsOriginalStake_ReturnsStakeOriginalStake()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><div class='originalStake'>(+5.00)</div>";
@@ -100,7 +102,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsStakeLightBlue_WhenHtmlContainsLightBlue()
+    public void StakeText_HtmlContainsLightBlue_ReturnsStakeLightBlue()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><div class='light-blue'>(+5.00)</div>";
@@ -113,7 +115,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsStakeWithRebateBonus_WhenHtmlContainsRebateBonusClass()
+    public void StakeText_HtmlContainsRebateBonusClass_ReturnsStakeWithRebateBonus()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><div class='rebate-bonus'>+5.00</div>";
@@ -126,7 +128,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsStakeWithNPHPromotion_WhenHtmlContainsNPHPromotionClass()
+    public void StakeText_HtmlContainsNPHPromotionClass_ReturnsStakeWithNPHPromotion()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><div class='nph-promotion'>(+2.50)</div>";
@@ -139,7 +141,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void StakeText_ReturnsStakeReturnStake_WhenHtmlContainsReturnStake()
+    public void StakeText_HtmlContainsReturnStake_ReturnsStakeReturnStake()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><div class='return-stake'>(+5.00)</div><div class='discount'>7.00</div>";
@@ -153,7 +155,7 @@ public class HtmlExtensionTests
 
 
     [Fact]
-    public void LineBreak_ReturnsEmptyString_WhenHtmlIsNull()
+    public void LineBreak_HtmlIsNull_ReturnsEmptyString()
     {
         // Arrange
         string html = null;
@@ -166,7 +168,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void LineBreak_ReturnsEmptyString_WhenHtmlIsEmpty()
+    public void LineBreak_HtmlIsEmpty_ReturnsEmptyString()
     {
         // Arrange
         string html = string.Empty;
@@ -179,7 +181,7 @@ public class HtmlExtensionTests
     }
 
     [Fact]
-    public void LineBreak_ReturnsExpected_WhenHtmlNotNull()
+    public void LineBreak_HtmlNotNull_ReturnsExpected()
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><br><div class='return-stake'>(+5.00)";
@@ -191,97 +193,136 @@ public class HtmlExtensionTests
         Assert.Equal(expected, result);
     }
 
-    // [Fact]
-    // public void Handicap_ReturnsEmptyString_WhenHtmlIsNull()
-    // {
-    //     // Arrange
-    //     string html = null;
+    [Fact]
+    public void Handicap_HtmlIsNull_ReturnEmptyString()
+    {
+        // Arrange
+        string html = null;
+        var doc = Substitute.For<HtmlDocument>();
 
-    //     // Act
-    //     var result = html.Handicap(new HtmlDocument());
+        // Act
+        string result = html.Handicap(doc);
 
-    //     // Assert
-    //     Assert.Equal(string.Empty, result);
-    // }
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
 
-    // [Fact]
-    // public void Handicap_ReturnsEmptyString_WhenHtmlIsEmpty()
-    // {
-    //     // Arrange
-    //     string html = string.Empty;
-    //     var doc = new HtmlDocument();
-    //     doc.LoadHtml(html);
+    [Fact]
+    public void Handicap_HtmlIsEmpty_ReturnsEmptyString()
+    {
+        // Arrange
+        string html = string.Empty;
+        var doc = Substitute.For<HtmlDocument>();
+        doc.LoadHtml(html);
 
-    //     // Act
-    //     var result = html.Handicap(doc);
+        // Act
+        var result = html.Handicap(doc);
 
-    //     // Assert
-    //     Assert.Equal(string.Empty, result);
-    // }
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
 
-    // [Fact]
-    // public void ChoiceSubParlay_ReturnsEmptyString_WhenHtmlIsNull()
-    // {
-    //     // Arrange
-    //     string html = null;
-    //     bool isParlay = true;
+    [Fact]
+    public void ChoiceSubParlay_HtmlIsNull_ReturnsEmptyString()
+    {
+        // Arrange
+        string html = null;
+        bool isParlay = true;
 
-    //     // Act
-    //     string result = html.ChoiceSubParlay(isParlay);
+        // Act
+        string result = html.ChoiceSubParlay(isParlay);
 
-    //     // Assert
-    //     Assert.Equal(string.Empty, result);
-    // }
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
 
-    // [Fact]
-    // public void ChoiceSubParlay_ReturnsEmptyString_WhenHtmlIsEmpty()
-    // {
-    //     // Arrange
-    //     string html = string.Empty;
-    //     bool isParlay = true;
+    [Fact]
+    public void ChoiceSubParlay_HtmlIsEmpty_ReturnsEmptyString()
+    {
+        // Arrange
+        string html = string.Empty;
+        bool isParlay = true;
 
-    //     // Act
-    //     string result = html.ChoiceSubParlay(isParlay);
+        // Act
+        string result = html.ChoiceSubParlay(isParlay);
 
-    //     // Assert
-    //     Assert.Equal(string.Empty, result);
-    // }
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
 
-    // [Fact]
-    // public void GetBetTypeDescription_ReturnsEmptyString_WhenDescriptionListIsNull()
-    // {
-    //     // Arrange
-    //     var doc = Substitute.For<HtmlDocument>();
-    //     doc.DocumentNode.SelectNodes("//div[@class='bettype-description']").Returns((HtmlNodeCollection)null);
+    [Fact]
+    public void ChoiceSubParlay_HtmlHasFferNameIsNull_ReturnsChoice()
+    {
+        // Arrange
+        string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><br><div class='bettype'><a>Choice 1</a><br>><span>Handicap 1</span>(+5.00)</ div >";
+        bool isParlay = true;
+        var exxpected = "Choice 1\nHandicap 1\nChoice 1>Handicap 1(+5.00)\n10.00\n(+5.00)Choice 1>Handicap 1(+5.00)";
 
-    //     // Act
-    //     string result = HtmlExtension.GetBetTypeDescription(doc);
+        // Act
+        string result = html.ChoiceSubParlay(isParlay);
 
-    //     // Assert
-    //     Assert.Equal(string.Empty, result);
-    // }
+        // Assert
+        Assert.Equal(exxpected, result);
+    }
 
-    // [Fact]
-    // public void GetBetTypeDescription_ReturnsConcatenatedDescriptions_WhenDescriptionListIsNotEmpty()
-    // {
-    //     // Arrange
-    //     var doc = Substitute.For<HtmlDocument>();
+    [Fact]
+    public void ChoiceSubParlay_HtmlHasFferNameIsNotNull_ReturnsOfferNameList()
+    {
+        // Arrange
+        string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><br><div class='offer-name-list'><div class='bettype'><a>Choice 1</a><br>><span>Handicap 1</span>(+5.00)</ div ></ div >";
+        bool isParlay = true;
+        var exxpected = "Choice 1\nChoice 1>Handicap 1(+5.00)\nHandicap 1\nChoice 1>Handicap 1(+5.00)\n10.00\n(+5.00)Choice 1>Handicap 1(+5.00)";
 
-    //     // Configure the HtmlDocument to return the desired description nodes
-    //     var descriptionNode1 = Substitute.For<HtmlNode>();
-    //     descriptionNode1.InnerHtml.Returns("<p>Description 1</p>");
-    //     var descriptionNode2 = Substitute.For<HtmlNode>();
-    //     descriptionNode2.InnerHtml.Returns("<p>Description 2</p>");
-    //     var descriptionNode3 = Substitute.For<HtmlNode>();
-    //     descriptionNode3.InnerHtml.Returns("<p>Description 3</p>");
-    //     doc.DocumentNode.SelectNodes("//div[@class='bettype-description']")
-    //         .Returns(new HtmlNodeCollection(doc) { descriptionNode1, descriptionNode2, descriptionNode3 });
+        // Act
+        string result = html.ChoiceSubParlay(isParlay);
 
-    //     // Act
-    //     string result = HtmlExtension.GetBetTypeDescription(doc);
+        // Assert
+        Assert.Equal(exxpected, result);
+    }
 
-    //     // Assert
-    //     Assert.Equal("Description 1\r\nDescription 2\r\nDescription 3", result);
-    // }
+    [Fact]
+    public void ChoiceSubParlay_HtmlContainsExcludingChoices_ReturnsHasSecondLine()
+    {
+        // Arrange
+        string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='bettype'>Bettype 1</ div ><br><div class='offer-name-list'><div class='excluding-choices'><a>Choice 1</a><br>><span>Handicap 1<br>Handicap 2</span></ div ></ div >";
+        bool isParlay = false;
+        var exxpected = "Handicap 1\nChoice 1>Handicap 1Handicap 2\nBettype 1Choice 1>Handicap 1Handicap 2\n10.00\n(+5.00)Bettype 1Choice 1>Handicap 1Handicap 2";
+
+        // Act
+        string result = html.ChoiceSubParlay(isParlay);
+
+        // Assert
+        Assert.Equal(exxpected, result);
+    }
+
+    [Fact]
+    public void ChoiceSubParlay_HtmlContainsCashOutFromNo_ReturnsHasSecondLine()
+    {
+        // Arrange
+        string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='bettype'><div class='bettype-description'>Bettype 1</ div ></ div ><br><div class='offer-name-list'><div class='Cash Out from No'><a>Choice 1</a><br>><span>Handicap 1<br>Handicap 2</span></ div ></ div >";
+        bool isParlay = false;
+        var exxpected = "Handicap 1\nHandicap 2\nBettype 1Choice 1>Handicap 1Handicap 2\nBettype 1Choice 1>Handicap 1Handicap 2\n10.00\n(+5.00)Bettype 1Choice 1>Handicap 1Handicap 2";
+
+        // Act
+        string result = html.ChoiceSubParlay(isParlay);
+
+        // Assert
+        Assert.Equal(exxpected, result);
+    }
+
+    [Fact]
+    public void ChoiceShortSubParlay_HtmlIsEmpty_ReturnsEmptyString()
+    {
+        // Arrange
+        string html = string.Empty;
+
+        // Act
+        string result = html.ChoiceShortSubParlay(true);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    
 }
 

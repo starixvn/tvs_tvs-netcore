@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using AutoMapper.Execution;
-using Fanex.BetList.Core.Constants;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
