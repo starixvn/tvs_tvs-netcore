@@ -199,5 +199,24 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
       issueTypeId === IssueTypeConstant.RED_CARD ||
       issueTypeId === IssueTypeConstant.WRONG_SCORE;
-}
+  }
+
+  static isStringHasLength(value: string): boolean {
+    return value && value.length > 0;
+  }
+
+  static convertStringToBetId8xxx(text: string): string {
+    if (!this.isStringHasLength(text)) {
+      return null;
+    }
+
+    const LENGTH_OF_OVER = 3;
+    const PREFIX = '8';
+    let value = text;
+    if (value.length < LENGTH_OF_OVER && value.length > 0) {
+      value = value.padStart(LENGTH_OF_OVER, '0');
+    }
+
+    return `${PREFIX}${value}`;
+  }
 }

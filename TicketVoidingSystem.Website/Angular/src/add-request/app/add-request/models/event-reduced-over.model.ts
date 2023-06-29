@@ -7,6 +7,7 @@ export class ReducedOverModel {
   logInfoDetail: LogInfoDetail;
   betTypeIds: string;
   wicketOver: string;
+  filterWicketOver: string;
   playerIds: string;
   runs: string;
   live: boolean;

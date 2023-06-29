@@ -3,6 +3,7 @@ export class ReducedOverGetLogInfoQuery {
   subIssueTypeId: number;
   betTypeIds: string;
   wicketOver: string;
+  filterWicketOver: string;
   playerIds: string;
   runs: string;
   live: boolean;

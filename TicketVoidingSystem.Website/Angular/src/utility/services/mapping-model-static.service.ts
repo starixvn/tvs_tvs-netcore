@@ -10,6 +10,7 @@ import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wr
 import { WrongOddsModel } from "../../add-request/app/add-request/models/event-wrong-odds.model";
 import { WrongOuModel } from "../../add-request/app/add-request/models/event-wrong-ou.model";
 import { WrongScoreModel } from "../../add-request/app/add-request/models/event-wrong-score.model";
+import { StaticService } from "./static.service";
 
 export class MappingModelStaticService {
   static buidRedCardGetLogInfoModel(redCardModels: RedCardModel[]): RedCardGetLogInfoQuery[] {
@@ -114,6 +115,7 @@ export class MappingModelStaticService {
       subIssueTypeId: x.subIssueTypeId,
       betTypeIds: x.betTypeIds,
       wicketOver: x.wicketOver,
+      filterWicketOver: StaticService.convertStringToBetId8xxx(x.wicketOver),
       playerIds: x.playerIds,
       runs: x.runs,
       live: x.live,
