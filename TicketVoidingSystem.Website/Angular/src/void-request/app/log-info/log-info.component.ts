@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
 

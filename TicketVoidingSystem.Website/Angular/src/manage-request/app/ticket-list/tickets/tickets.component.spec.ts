@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../utility/modules/block-ui/block-ui.module';
-import { PagingComponent } from '../../../../utility/modules/paging/paging/paging.component';
-import { PagingModel } from '../../../../utility/modules/paging/paging/paging.model';
-import { PipeModule } from '../../../../utility/modules/pipes/pipe.module';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { PagingComponent } from '../../../../utility/components/paging/paging/paging.component';
+import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { TicketsComponent } from './tickets.component';
 import { TicketModel, TicketsModel } from './tickets.model';
 

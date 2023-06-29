@@ -78,8 +78,9 @@ class Helper {
     redCardModels: [],
     wrongHdpModels: [],
     wrongOuModels: [],
-    wrongOddsModels: []
-  };  
+    wrongOddsModels: [],
+    reducedOverModels: []
+  };
   static getFakeAffectedLicensee(): AffectedLicensee {
     return {
       licenseesName: 'abc',
@@ -160,7 +161,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(mockLoadUnderneathVoidMatchesData).toHaveBeenCalled();
     expect(instance.isLoadedBasicData).toBeTruthy();
   });
-  
+
   it('#onClickShowVoidTickets should return when isShowTicketFull & isRequestModified are incorrect', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -181,14 +182,14 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProperty = new PrimitiveProperty();
-    
+
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
 
     // Assert
     expect(mockIsRequestModified).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickShowVoidTickets should return when isShowTicketFull is incorrect but isRequestModified is incorrect', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -204,14 +205,14 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProperty = new PrimitiveProperty();
-    
+
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
 
     // Assert
     expect(mockIsRequestModified).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickShowVoidTickets should call #mockLoadVoidTicketsFullOnFirstTime when isShowTicketFull is correct & isLoadedTicketFull is incorrect', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -232,7 +233,7 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProperty = new PrimitiveProperty();
-    
+
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
 
@@ -240,7 +241,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(mockToggleTicketsArea).toHaveBeenCalledTimes(1);
     expect(mockLoadVoidTicketsFullOnFirstTime).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickShowVoidTickets should not call #mockLoadVoidTicketsFullOnFirstTime when isShowTicketFull & isLoadedTicketFull are correct', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -258,7 +259,7 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProperty = new PrimitiveProperty();
-    
+
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
 
@@ -266,7 +267,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(mockToggleTicketsArea).toHaveBeenCalledTimes(1);
     expect(mockLoadVoidTicketsFullOnFirstTime).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#onPagingTicketsChange should call #loadVoidTicketsFullOnPagingChange', async () => {
     // Arrange
     const mockLoadVoidTicketsFullOnPagingChange = jest.fn();
@@ -279,14 +280,14 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    
+
     // Action
     await instance.onPagingTicketsChange(null);
 
     // Assert
     expect(mockLoadVoidTicketsFullOnPagingChange).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#exportTickets should call #showWarningExportExcel when PagingItemsCount greater than 100000', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -302,7 +303,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    
+
     // Action
     await instance.exportTickets(voidMatch);
 
@@ -325,14 +326,14 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    
+
     // Action
     await instance.exportTickets(voidMatch);
 
     // Assert
     expect(mockExportTicketsAsExcelFile).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickShowTemplateMessage should call #exportTicketsAsExcelFile when isRequestModified is correct', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -348,14 +349,14 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProperty = new PrimitiveProperty();
-    
+
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
 
     // Assert
     expect(mockIsRequestModified).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickShowTemplateMessage should call #exportTicketsAsExcelFile when isRequestModified is incorrect', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -371,14 +372,14 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance.primitiveProperty = new PrimitiveProperty();
-    
+
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
 
     // Assert
     expect(mockIsRequestModified).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickShowTemplateMessage should unsubscribe #afterLoadUnderneathDataSubscription when isShowTemplateMessage is correct', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -392,14 +393,14 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
-    
+
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
 
     // Assert
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickCopyLicenseesToClipboard should call #checkLoadedFullDataBeforeShowMessageTemplate', async () => {
     // Arrange
     const selectionObject = {
@@ -427,7 +428,7 @@ describe('VoidDangerAcceptedComponent', () => {
     // Assert
     expect(window.alert).toHaveBeenCalledWith('The Licensee list has been copied to clipboard.');
   });
-  
+
   it('#onClickVoidAllMatches call #tooTip.display when have not userPassword', async () => {
     // Arrange
     const { instance } = await shallow
@@ -440,14 +441,14 @@ describe('VoidDangerAcceptedComponent', () => {
     instance.primitiveProperty.userPassword = null;
     instance.tooltip = new Tooltip();
     instance.tooltip.display = jest.fn();
-    
+
     // Action
     instance.onClickVoidAllMatches();
 
     // Assert
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickVoidAllMatches should unsubscribe #afterLoadUnderneathDataSubscription', async () => {
     // Arrange
     const afterLoadUnderneathDataSubscription = new Subscription();
@@ -461,14 +462,14 @@ describe('VoidDangerAcceptedComponent', () => {
     instance.primitiveProperty = new PrimitiveProperty();
     instance.primitiveProperty.userPassword = '123123';
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
-    
+
     // Action
     instance.onClickVoidAllMatches();
 
     // Assert
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickVoidAllMatches should not unsubscribe #afterLoadUnderneathDataSubscription', async () => {
     // Arrange
     const { instance } = await shallow
@@ -480,11 +481,11 @@ describe('VoidDangerAcceptedComponent', () => {
     instance.primitiveProperty = new PrimitiveProperty();
     instance.primitiveProperty.userPassword = '123123';
     instance['afterLoadUnderneathDataSubscription'] = null;
-    
+
     // Action
     instance.onClickVoidAllMatches();
   });
-  
+
   it('#checkLoadedFullDataBeforeShowMessageTemplate should return when #isRunningSubscriptionCallback is incorrect', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -500,14 +501,14 @@ describe('VoidDangerAcceptedComponent', () => {
         }
       });
     instance['isRunningSubscriptionCallback'] = true;
-    
+
     // Action
     await instance.checkLoadedFullDataBeforeShowMessageTemplate(voidMatch);
 
     // Assert
     expect(mockToggleTemplateMessageArea).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#checkLoadedFullDataBeforeShowMessageTemplate should return when #isRunningSubscriptionCallback is incorrect and isLoadedUnderneathData is correct', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -528,7 +529,7 @@ describe('VoidDangerAcceptedComponent', () => {
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
-    
+
     // Action
     await instance.checkLoadedFullDataBeforeShowMessageTemplate(voidMatch);
 
@@ -536,7 +537,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(1);
     expect(mockToggleTemplateMessageArea).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#checkLoadedFullDataBeforeShowMessageTemplate should return when isRunningSubscriptionCallback & isLoadedUnderneathData are correct', async () => {
     // Arrange
     const voidMatch = new VoidMatch();
@@ -554,14 +555,14 @@ describe('VoidDangerAcceptedComponent', () => {
     instance.primitiveProperty = new PrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = false;
-    
+
     // Action
     await instance.checkLoadedFullDataBeforeShowMessageTemplate(voidMatch);
 
     // Assert
     expect(mockToggleTemplateMessageArea).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#checkLoadedFullDataBeforeVoid should return when isRunningSubscriptionCallback is correct', async () => {
     // Arrange
     const mockVoidAllMatches = jest.fn();
@@ -576,14 +577,14 @@ describe('VoidDangerAcceptedComponent', () => {
       });
     instance.primitiveProperty = new PrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = true;
-    
+
     // Action
     await instance.checkLoadedFullDataBeforeVoid();
 
     // Assert
     expect(mockVoidAllMatches).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#checkLoadedFullDataBeforeVoid should return when isRunningSubscriptionCallback is correct & isLoadedUnderneathData is incorrect', async () => {
     // Arrange
     const mockVoidAllMatches = jest.fn();
@@ -606,7 +607,7 @@ describe('VoidDangerAcceptedComponent', () => {
     // Assert
     expect(mockVoidAllMatches).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#checkLoadedFullDataBeforeVoid should call #voidAllMatches', async () => {
     // Arrange
     const mockVoidAllMatches = jest.fn();
@@ -637,7 +638,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(1);
     expect(mockVoidAllMatches).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#checkLoadedFullDataBeforeVoid should not call #voidAllMatches', async () => {
     // Arrange
     const mockVoidAllMatches = jest.fn();
@@ -695,7 +696,7 @@ describe('VoidDangerAcceptedComponent', () => {
       expect(actual).toBe(x.expected);
     });
   });
-  
+
   it('#ChangeCheckBoxEarlyEvent should update correctly templateValue', async () => {
     // Arrange
     const { instance } = await shallow
@@ -713,7 +714,7 @@ describe('VoidDangerAcceptedComponent', () => {
     // Assert
     expect(voidMatch.templateValue.isCheckedEarlyEvent).toBe(voidMatch.isCheckedEarlyEvent);
   });
-  
+
   it('#isWrongHdp should return false', async () => {
     // Arrange
     const { instance } = await shallow
@@ -735,7 +736,7 @@ describe('VoidDangerAcceptedComponent', () => {
       expect(actual).toBeFalsy();
     });
   });
-  
+
   it('#isWrong1stHdp should return true', async () => {
     // Arrange
     const { instance } = await shallow
@@ -757,7 +758,7 @@ describe('VoidDangerAcceptedComponent', () => {
       expect(actual).toBeFalsy();
     });
   });
-  
+
   it('#isWrongOu should return true', async () => {
     // Arrange
     const { instance } = await shallow
@@ -779,7 +780,7 @@ describe('VoidDangerAcceptedComponent', () => {
       expect(actual).toBeFalsy();
     });
   });
-  
+
   it('#isWrong1stOu should return true', async () => {
     // Arrange
     const { instance } = await shallow
@@ -801,7 +802,7 @@ describe('VoidDangerAcceptedComponent', () => {
       expect(actual).toBeFalsy();
     });
   });
-  
+
   it('#isSubTypeWrongHdpOrWrong1stHdp should return false', async () => {
     // Arrange
     const { instance } = await shallow

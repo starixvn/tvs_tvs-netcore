@@ -19,11 +19,14 @@ exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
         <div
           class="log-info p-2 mb-3"
         >
-           Live Score: 
-          <strong>
-            0 - 0
-          </strong>
-          . Void time (GMT-4): 
+          <span>
+            Live Score: 
+            <strong>
+              0 - 0
+            </strong>
+            .
+          </span>
+           Void time (GMT-4): 
           <strong>
             2020/11/06 12:00:00.000 AM - 2020/11/06 12:00:00.000 AM
           </strong>

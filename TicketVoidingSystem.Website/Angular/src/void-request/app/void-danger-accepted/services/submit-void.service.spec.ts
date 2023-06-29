@@ -79,7 +79,8 @@ class Helper {
     redCardModels: [],
     wrongHdpModels: [],
     wrongOuModels: [],
-    wrongOddsModels: []
+    wrongOddsModels: [],
+    reducedOverModels: []
   };
 }
 

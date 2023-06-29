@@ -10,7 +10,9 @@ import { GroupBetTypeVirtualSport } from '../../../utility/components/bettypes-v
 import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
 import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
 import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { DateTimeFormat, ModeType, Product, SportTypeConst } from '../../../utility/constants/config';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
@@ -22,8 +24,6 @@ import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/adv
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
 import { FilterEvent, Item, Licensee, Type } from './filter.model';
-import { MultipleSelection } from 'src/utility/components/multiple-selection/multiple-selection';
-import { ComboParlayConstants } from 'src/utility/constants/combo-parlay.constant';
 
 @Component({
   selector: 'filter',

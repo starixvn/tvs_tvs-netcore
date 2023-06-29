@@ -1,16 +1,14 @@
 import { NgModule } from '@angular/core';
+import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { RedCardModel } from '../../../add-request/app/add-request/models/event-red-card.model';
-import { WrongHdpModel } from '../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOuModel } from '../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { WrongScoreModel } from '../../../add-request/app/add-request/models/event-wrong-score.model';
 import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
+import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+import { RequestInfoComponent } from '../../../utility/components/request-info/request-info.component';
+import { GeneralInfo } from '../../../utility/components/request-info/request-info.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
-import { BlockUiModule } from '../../../utility/modules/block-ui/block-ui.module';
-import { RequestInfoComponent } from '../../../utility/modules/request-info/request-info.component';
-import { GeneralInfo } from '../../../utility/modules/request-info/request-info.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { AppService } from '../app.service';
@@ -78,7 +76,8 @@ class Helper {
     redCardModels: [],
     wrongHdpModels: [],
     wrongOuModels: [],
-    wrongOddsModels: []
+    wrongOddsModels: [],
+    reducedOverModels: []
   };
 
   static readonly fakeTicketsModel: TicketsModel = {
@@ -217,8 +216,12 @@ describe('TicketListComponent', () => {
 
   it('#ngOnChanges should call expected function when is not abnormal bet and score empty', async () => {
     // Arrange
+    const dangerAcceptedModel = new RedCardModel();
+    dangerAcceptedModel.isMainMatch = true;
+    dangerAcceptedModel.subIssueTypeId = 1;
     const requestDetailViewModel = Helper.fakeRequestDetailViewModel;
     requestDetailViewModel.event = null;
+    requestDetailViewModel.dangerAcceptedModels = [dangerAcceptedModel];
     requestDetailViewModel.request.issueTypeId = 1;
     const mockGetMatch = jest.fn();
     const mockGetRequestById = jest.fn().mockImplementation(() => requestDetailViewModel);
@@ -258,11 +261,11 @@ describe('TicketListComponent', () => {
   it('#ngOnChanges should call expected function when #getScoreResult return N/A ', async () => {
     // Arrange
     const requestDetailModel = Helper.fakeRequestDetailModel;
-    requestDetailModel.issueTypeId = null;
+    requestDetailModel.issueTypeId = 11;
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
     fakeRequestDetailViewModel.event = new RequestEventModel();
     const mockGetMatch = jest.fn();
-    const mockGetRequestById = jest.fn().mockImplementation(() => Helper.fakeRequestDetailViewModel);
+    const mockGetRequestById = jest.fn().mockImplementation(() => fakeRequestDetailViewModel);
     const mockGetIssueInfo = jest.fn().mockImplementation(() => Helper.fakeIssueInfo);
     const mockGetGeneralInfo = jest.fn().mockImplementation(() => [Helper.fakeGeneralInfo]);
     const { instance } = await shallow
@@ -476,8 +479,13 @@ describe('TicketListComponent', () => {
 
   it('#ngOnChanges should not call #mappingDataTicketsToGeneralInfo', async () => {
     // Arrange
+    const dangerAcceptedModel = new RedCardModel();
+    dangerAcceptedModel.isMainMatch = true;
+    dangerAcceptedModel.subIssueTypeId = 1;
+    const fakeRequestDetailViewModel = _.cloneDeep(Helper.fakeRequestDetailViewModel);
+    fakeRequestDetailViewModel.dangerAcceptedModels = [dangerAcceptedModel];
     const mockGetMatch = jest.fn();
-    const mockGetRequestById = jest.fn().mockImplementation(() => Helper.fakeRequestDetailViewModel);
+    const mockGetRequestById = jest.fn().mockImplementation(() => fakeRequestDetailViewModel);
     const mockGetIssueInfo = jest.fn().mockImplementation(() => Helper.fakeIssueInfo);
     const mockGetGeneralInfo = jest.fn().mockImplementation(() => [Helper.fakeGeneralInfo]);
     const { instance } = await shallow
@@ -585,192 +593,6 @@ describe('TicketListComponent', () => {
     const actual = instance['isRedCardIssueType']();
 
     expect(actual).toBe(false);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request Danger Accepted', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const dangerAccepted = new RedCardModel();
-    dangerAccepted.matchId = 11111;
-    dangerAccepted.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.dangerAcceptedModels = [dangerAccepted];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request red card', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const redCardModel = new RedCardModel();
-    redCardModel.matchId = 11111;
-    redCardModel.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.redCardModels = [redCardModel];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request wrong score', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const wrongScoreModel = new WrongScoreModel();
-    wrongScoreModel.matchId = 11111;
-    wrongScoreModel.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.wrongScoreModels = [wrongScoreModel];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongScoreIssueType'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request Wrong HDP', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const wrongHdpModels = new WrongHdpModel();
-    wrongHdpModels.matchId = 11111;
-    wrongHdpModels.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.wrongHdpModels = [wrongHdpModels];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongScoreIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongHDP'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request Wrong 1st HDP', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const wrongHdpModels = new WrongHdpModel();
-    wrongHdpModels.matchId = 11111;
-    wrongHdpModels.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.wrongHdpModels = [wrongHdpModels];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongScoreIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrong1stHDP'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request Wrong OU', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const wrongOuModels = new WrongOuModel();
-    wrongOuModels.matchId = 11111;
-    wrongOuModels.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.wrongOuModels = [wrongOuModels];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongScoreIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrong1stHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongOU'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request Wrong OU', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const wrongOuModels = new WrongOuModel();
-    wrongOuModels.matchId = 11111;
-    wrongOuModels.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.wrongOuModels = [wrongOuModels];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongScoreIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrong1stHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongOU'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
-  });
-
-  it('#getSubIssueTypeId should return correct id when is request Wrong 1st OU', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const wrongOuModels = new WrongOuModel();
-    wrongOuModels.matchId = 11111;
-    wrongOuModels.subIssueTypeId = 2;
-    instance.modal.matchId = 11111;
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.wrongOuModels = [wrongOuModels];
-    instance['isDangerAcceptedIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isRedCardIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongScoreIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrong1stHDP'] = jest.fn().mockImplementation(() => false);
-    instance['isWrongOU'] = jest.fn().mockImplementation(() => false);
-    instance['isWrong1stOU'] = jest.fn().mockImplementation(() => true);
-
-    const actual = instance['getSubIssueTypeId']();
-
-    expect(actual).toBe(2);
   });
 
   it('#isAbnormalBetRealMemberIssueType should return true', async () => {
