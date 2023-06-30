@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using NSubstitute;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.TicketListing.Models;
@@ -22,7 +23,7 @@ public class CallApiAmendmentStageTests
         };
         var licensee = new List<LicenseeFile>
         {
-            new() { Name = "1", SessionID = "2" }
+            new LicenseeFile{ LicenseeName = "LicenseeName", SessionID = "SessionID"}
         };
         var loggingService = Substitute.For<LoggingService>();
         var apiService = Substitute.For<AmendmentOicHttpClientService>();

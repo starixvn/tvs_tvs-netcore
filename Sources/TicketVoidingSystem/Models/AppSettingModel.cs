@@ -53,7 +53,7 @@ public class LetstalkConfig
     public string TicketListingAlert { get; init; }
     public string AbnormalBetRequest { get; init; }
     public string LetstalkServiceApi { get; init; }
-    public bool IsProdEnv { get; init; }
+    public bool IsProdEnv { get; set; }
 }
 
 public class FanexMailService

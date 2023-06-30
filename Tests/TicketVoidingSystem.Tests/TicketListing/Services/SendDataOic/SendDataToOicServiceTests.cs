@@ -38,8 +38,8 @@ public class SendDataToOicServiceImpTest
         {
             new() { LicenseeName = "", BetTypeName = "" }
         };
-        getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new List<ExcelOicModel>());
-        insertToAmendmentTableStage.Execute(default!, default!, default!).ReturnsForAnyArgs(true);
+        getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new ExcelOicModel());
+        insertToAmendmentTableStage.Execute(default!, default!).ReturnsForAnyArgs(new List<LicenseeFile>());
         callApiAmendmentStage.Execute(default!, default!, default!).ReturnsForAnyArgs(expected);
         ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
 
@@ -49,31 +49,5 @@ public class SendDataToOicServiceImpTest
         // Assert
         await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Any<SendFileQuery>(), Arg.Any<string>());
         Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public async Task SendData_InsertToAmendmentTableFail_ReturnAmendmentResponse()
-    {
-        // Arrange
-        var expected = new AmendmentResponse
-        {
-            Code = 1,
-            Message = "Error when insert to Amendment table."
-        };
-        var queries = new List<SendFileQuery>
-        {
-            new() { LicenseeName = "", BetTypeName = "" }
-        };
-        insertToAmendmentTableStage.Execute(default!, default!, default!).ReturnsForAnyArgs(false);
-        ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
-
-        // Act
-        var actual = await service.Send(queries, "");
-
-        // Assert
-        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Any<SendFileQuery>(), Arg.Any<string>());
-        Assert.Equal(expected.Code, actual.Code);
-        Assert.Equal(expected.Message, actual.Message);
-        Assert.Equal(expected.IsChinaView, actual.IsChinaView);
     }
 }

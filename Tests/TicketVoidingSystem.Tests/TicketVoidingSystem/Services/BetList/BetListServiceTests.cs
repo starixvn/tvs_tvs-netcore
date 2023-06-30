@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Fanex.BetList.Core.Builder;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;

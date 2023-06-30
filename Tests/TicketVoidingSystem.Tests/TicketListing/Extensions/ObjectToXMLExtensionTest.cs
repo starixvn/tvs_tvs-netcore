@@ -9,23 +9,6 @@ namespace TicketVoidingSystem.Tests.TicketListing.Extensions;
 public class ObjectToXMLExtensionTest
 {
     [Fact]
-    public void ToResultAmendmentXML_ReturnXML()
-    {
-        // Arrange
-        const string expected = "<root><r TransId='1' CustId='2' /></root>";
-        var tickets = new List<ExcelOicModel>
-        {
-            new() { TransId = 1, CustId = 2 }
-        };
-
-        // Act
-        var actual = tickets.ToResultAmendmentXML();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
     public void ToAffectTicketsXml_ReturnXML()
     {
         // Arrange
