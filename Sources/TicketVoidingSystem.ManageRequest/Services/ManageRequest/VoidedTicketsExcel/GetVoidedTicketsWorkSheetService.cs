@@ -36,7 +36,7 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
         cellService.SetStyle(worksheet);
     }
 
-    private void AddMatchContent(ExcelWorksheet worksheet, Match match)
+    private void AddMatchContent(ExcelWorksheet worksheet, Match? match)
     {
         cellService.AddMatch(worksheet, match);
     }
