@@ -14,7 +14,7 @@ public interface GetTicketsService
 
     Task<IEnumerable<ExcelTicketModel>> GetTicketsForExportExcel(ExportExcelQuery query);
 
-    Task<IEnumerable<ExcelOicModel>> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets);
+    Task<ExcelOicModel> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets);
 }
 
 public class GetTicketsServiceImp : GetTicketsService
@@ -56,14 +56,14 @@ public class GetTicketsServiceImp : GetTicketsService
         return excelTickets;
     }
 
-    public async Task<IEnumerable<ExcelOicModel>> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets)
+    public async Task<ExcelOicModel> GetTicketsForSendDataOic(SendFileQuery query, string affectedTickets)
     {
         var ticketDetailCriteria = CreateCriteria(query);
         var criteria = mapper.Map<GetTicketExcelOicCriteria>(ticketDetailCriteria);
         criteria.AffectTickets = affectedTickets;
-        var tickets = await repository.FetchAsync<ExcelOicModel>(criteria);
+        var ticketsJson = await repository.GetAsync<ExcelOicModel>(criteria);
 
-        return tickets;
+        return ticketsJson;
     }
 
     private GetTicketsDetailCriteria CreateCriteria(GetDetailQuery query)

@@ -30,7 +30,7 @@ public class CallApiAmendmentStageImp : CallApiAmendmentStage
 
     private static AmendmentOicQuery CreateQuery(IEnumerable<LicenseeFile> licensees, string title, DateTime eventDate)
     {
-        var details = licensees.ToDictionary(item => item.Name, item => item.SessionID);
+        var details = licensees.ToDictionary(item => item.LicenseeName, item => item.SessionID);
 
         return new AmendmentOicQuery
         {

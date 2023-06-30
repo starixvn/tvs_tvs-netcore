@@ -2,6 +2,11 @@
 
 public class ExcelOicModel
 {
+    public string TransInfoSendOICJson { get; set; }
+}
+
+public class DetailTicketModel : ExcelOicModel
+{
     public long TransId { get; set; }
 
     public string UserName { get; set; }
@@ -9,10 +14,7 @@ public class ExcelOicModel
     public string UserName2 { get; set; }
 
     public int CustId { get; set; }
-}
 
-public class DetailTicketModel : ExcelOicModel
-{
     public int BetType { get; set; }
 
     public string ExtraInfo { get; set; }

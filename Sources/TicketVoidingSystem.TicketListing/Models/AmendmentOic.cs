@@ -31,7 +31,7 @@ public class AmendmentResponse
 
 public class LicenseeFile
 {
-    public string Name { get; set; }
+    public string LicenseeName { get; set; }
 
     public string SessionID { get; set; }
 }

@@ -225,17 +225,21 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.modalService.confirm(
       { title: 'Send Data', message: TEXT.SEND_FILE + this.licenseesName + '?', type: ModalType.Confirm },
       async () => this.sendFile(),
-      () => {}
+      () => { }
     );
   }
 
   public async sendCreditToLetstalk(item: SummaryItem): Promise<void> {
-    const result = await this.appService.sendCreditDataToLetstalk(this.getQueryExportExcel(item));
-    const amendmentReponse = new AmendmentReponse();
-    amendmentReponse.code = result.errorCode;
-    amendmentReponse.message = result.errorMsg;
+    if (item.total > CONFIG.TICKET_LISTING_LIMITED) {
+      this.notification.open('Ticket Listing Result', TEXT.TICKET_LISTING_LIMITED);
+    } else {
+      const result = await this.appService.sendCreditDataToLetstalk(this.getQueryExportExcel(item));
+      const amendmentReponse = new AmendmentReponse();
+      amendmentReponse.code = result.errorCode;
+      amendmentReponse.message = result.errorMsg;
 
-    this.messagesResponse.open('Send Data Result', [amendmentReponse]);
+      this.messagesResponse.open('Send Data Result', [amendmentReponse]);
+    }
   }
 
   async sendFile() {
@@ -285,7 +289,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (x.code === 0) {
         const licenseesName = this.sendFileQueries.filter(y => y.isChinaView === x.isChinaView).map(t => t.licenseeName).join(', ');
         const message = 'Data of ' + licenseesName + ' are sent successfully!';
-        results.push({ code: 0, message: message, isSuccessful: true, isChinaView: x.isChinaView , isCanReSend: false });
+        results.push({ code: 0, message: message, isSuccessful: true, isChinaView: x.isChinaView, isCanReSend: false });
       } else {
         const prefix = x.isChinaView ? 'China View Licensee: ' : 'Normal Licensee: ';
         const message = x.message === null ? prefix + 'Failed to send data.' : prefix + x.message;
