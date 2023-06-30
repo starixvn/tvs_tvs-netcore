@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />
+    <ProjectReference Include="..\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
     <ProjectReference Include="..\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
 

@@ -20,4 +20,28 @@ public class AddRequestController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> GetLogInfo(GetLogInfoRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetWrongScoreInfo(GetWrongScoreInfoRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetLastTimeScore(GetLastTimeScoreRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetChildMatches(GetChildMatchesRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetSubIssueTypeLinkMatch(GetSubIssueTypeLinkMatchRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> CheckTickets14(CheckTickets14Request request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> CheckValidTransIdsRequest(CheckValidTransIdsRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetLinkedLog(GetLinkedLogRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetPoolHouseTickets(GetPoolHouseTicketRequest request) => Ok(await mediator.Send(request));
 }
