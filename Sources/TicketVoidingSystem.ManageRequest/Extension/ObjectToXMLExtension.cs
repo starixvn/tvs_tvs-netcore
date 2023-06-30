@@ -391,6 +391,7 @@ public static class ObjectToXMLExtension
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"BetTypeIds='{model.BetTypeIds}' "
                        + $"WicketOver='{model.WicketOver}' "
+                       + $"FilterWicketOver='{model.FilterWicketOver}' "
                        + $"PlayerIds='{model.PlayerIds}' "
                        + $"Runs='{model.Runs}' "
                        + $"NonLive='{model.NonLive}' "
