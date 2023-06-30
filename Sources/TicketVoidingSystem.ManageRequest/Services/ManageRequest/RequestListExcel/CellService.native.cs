@@ -20,15 +20,17 @@ public class CellServiceImp : CellService
         var lastRow = worksheet.Dimension.End.Row;
         var lasCol = worksheet.Dimension.End.Column;
 
-        worksheet.Cells.Style.Font.Size = 8;
-        worksheet.Cells.Style.Font.Name = "Tahoma";
-        worksheet.Cells.Style.WrapText = true;
         worksheet.Cells[2, 1, lastRow, lasCol].Style.Border.Top.Style = ExcelBorderStyle.Thin;
         worksheet.Cells[2, 1, lastRow, lasCol].Style.Border.Left.Style = ExcelBorderStyle.Thin;
         worksheet.Cells[2, 1, lastRow, lasCol].Style.Border.Right.Style = ExcelBorderStyle.Thin;
         worksheet.Cells[2, 1, lastRow, lasCol].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
         worksheet.Cells[2, 7, lastRow, 8].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
         worksheet.HighlightFont($"R2:R{lastRow}", "LEFT(L2,1)=\"-\"", Color.Red);
+        worksheet.Cells.Style.Font.Size = 8;
+        worksheet.Cells.Style.Font.Name = "Tahoma";
+        worksheet.Cells.Style.WrapText = true;
+        worksheet.Cells[2, 17, lastRow, 18].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        worksheet.Cells[2, 17, lastRow, 18].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
     }
 
     public void RenderDataWorksheet(ExcelWorksheet worksheet, IEnumerable<ExcelRequestModel> requests)
