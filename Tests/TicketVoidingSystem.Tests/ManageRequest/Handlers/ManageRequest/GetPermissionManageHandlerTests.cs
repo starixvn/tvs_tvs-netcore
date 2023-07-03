@@ -16,7 +16,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
     public class GetPermissionManageHandlerTests
     {
         [Fact]
-        public void Handler_RepositoryExecute_CallSessionHasPermission()
+        public async Task Handler_RepositoryExecute_CallSessionHasPermission()
         {
             // Arrange
             var expected = new PermissionManage
@@ -39,17 +39,17 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var handler = new GetPermissionManageHandler(session);
 
             // Act
-            var actual = handler.Handle(request, CancellationToken.None);
+            var actual = await handler.Handle(request, CancellationToken.None);
 
             // Assert
             session.Received(4).HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Host);
             session.Received(3).HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Read);
-            AssertExtension.Equal(expected.ManageRequestHost, actual.Result.ManageRequestHost);
-            AssertExtension.Equal(expected.VerifyHost, actual.Result.VerifyHost);
-            AssertExtension.Equal(expected.VerifyRead, actual.Result.VerifyRead);
-            AssertExtension.Equal(expected.VoidRead, actual.Result.VoidRead);
-            AssertExtension.Equal(expected.ManageRequestSettledTicketsHost, actual.Result.ManageRequestSettledTicketsHost);
-            AssertExtension.Equal(expected.ManageRequestUnsettledTicketsHost, actual.Result.ManageRequestUnsettledTicketsHost);
+            AssertExtension.Equal(expected.ManageRequestHost, actual.ManageRequestHost);
+            AssertExtension.Equal(expected.VerifyHost, actual.VerifyHost);
+            AssertExtension.Equal(expected.VerifyRead, actual.VerifyRead);
+            AssertExtension.Equal(expected.VoidRead, actual.VoidRead);
+            AssertExtension.Equal(expected.ManageRequestSettledTicketsHost, actual.ManageRequestSettledTicketsHost);
+            AssertExtension.Equal(expected.ManageRequestUnsettledTicketsHost, actual.ManageRequestUnsettledTicketsHost);
         }
     }
 }

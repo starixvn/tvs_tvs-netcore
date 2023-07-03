@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
+using Fanex.NAP.Client.Models;
 using Fanex.NAP.Client.Services;
 using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Http;
@@ -12,35 +14,44 @@ namespace TicketVoidingSystem.Tests.Services;
 
 public class SessionServiceTests
 {
+    private readonly INapSession currentSession;
+    private readonly IUserService userService;
+    private readonly INapSettings siteSettings;
+    private readonly IHttpContextAccessor httpContextAccessor;
+    private SessionServiceImp service;
+
+    public SessionServiceTests()
+    {
+        userService = Substitute.For<IUserService>();
+        currentSession = Substitute.For<INapSession>();
+        siteSettings = Substitute.For<INapSettings>();
+        httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        service = new SessionServiceImp(currentSession, userService, siteSettings, httpContextAccessor);
+    }
+
     [Fact]
-    public void HasPermission_HavePermission_ReturnTrue()
+    public async Task HasPermission_HavePermission_ReturnTrue()
     {
         // Arrange
-        var userService = Substitute.For<IUserService>();
-        var currentSession = Substitute.For<INapSession>();
-        var siteSettings = Substitute.For<INapSettings>();
-        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         userService.IsHavingPermissionAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(),
             Arg.Any<Constant.Policy>()).ReturnsForAnyArgs(true);
-        var service = new SessionServiceImp(currentSession, userService, siteSettings, httpContextAccessor);
 
         // Act
-        var actual = service.HasPermission("", Constant.Policy.Host);
+        var actual = await service.HasPermission("", Constant.Policy.Host);
 
         // Assert
-        userService.Received().IsHavingPermissionAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(), Arg.Any<Constant.Policy>());
-        Assert.True(actual.Result);
+        await userService.Received().IsHavingPermissionAsync(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<string>(), Arg.Any<Constant.Policy>());
+        Assert.True(actual);
     }
 
     [Fact]
     public void GetClientIp_HaveIPAddress_ReturnIPLocal()
     {
         // Arrange
-        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         httpContextAccessor.HttpContext.Connection.RemoteIpAddress = IPAddress.Parse("127.0.0.1");
         httpContextAccessor.HttpContext.Connection.LocalIpAddress = IPAddress.Parse("127.0.0.1");
 
-        var service = new SessionServiceImp(null, null, null, httpContextAccessor);
+        service = new SessionServiceImp(null, null, null, httpContextAccessor);
 
         // Act
         var actual = service.GetClientIp();
@@ -55,11 +66,10 @@ public class SessionServiceTests
         // Arrange
         var ipLocal = IPAddress.Parse("127.0.0.1");
         var ipRemote = IPAddress.Parse("127.0.0.2");
-        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         httpContextAccessor.HttpContext.Connection.RemoteIpAddress = ipRemote;
         httpContextAccessor.HttpContext.Connection.LocalIpAddress = ipLocal;
 
-        var service = new SessionServiceImp(null, null, null, httpContextAccessor);
+        service = new SessionServiceImp(null, null, null, httpContextAccessor);
 
         // Act
         var actual = service.GetClientIp();
@@ -72,14 +82,27 @@ public class SessionServiceTests
     public void UserName_HasName_ReturnExpected()
     {
         // Arrange
-        var currentSession = Substitute.For<INapSession>();
         currentSession.UserName = "AAA";
-        var service = new SessionServiceImp(currentSession, null, null, null);
+        service = new SessionServiceImp(currentSession, null, null, null);
 
         // Act
         var actual = service.UserName;
 
         // Assert
         Assert.Equal(currentSession.UserName, actual);
+    }
+
+    [Fact]
+    public void CheckPassword_DataValid_RetrurnTrue()
+    {
+        // Arrange
+        currentSession.UserId = 1;
+        userService.Get(1).ReturnsForAnyArgs(new User{ Password = "1"});
+
+        // Act
+        var actual = service.CheckPassword("1");
+
+        // Assert
+        Assert.True(actual);
     }
 }

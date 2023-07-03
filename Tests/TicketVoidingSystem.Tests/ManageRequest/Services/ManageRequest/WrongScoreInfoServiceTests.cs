@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
@@ -20,7 +21,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
         }
 
         [Fact]
-        public void GetWrongScoreInfo_WhenCalled_ReturnListWrongScoreInfoViewModel()
+        public async Task GetWrongScoreInfo_WhenCalled_ReturnListWrongScoreInfoViewModel()
         {
             // Arrange
             var criteria = new GetWrongScoreInfoCriteria();
@@ -28,10 +29,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
             repository.FetchAsync<WrongScoreInfoViewModel>(Arg.Any<GetWrongScoreInfoCriteria>()).ReturnsForAnyArgs(expected);
 
             // Act
-            var actual = service.GetWrongScoreInfo(criteria);
+            var actual = await service.GetWrongScoreInfo(criteria);
 
             // Assert
-            AssertExtension.Equal(expected, actual.Result);
+            AssertExtension.Equal(expected, actual);
         }
     }
 }

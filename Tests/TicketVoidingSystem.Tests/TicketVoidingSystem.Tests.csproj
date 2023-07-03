@@ -33,4 +33,8 @@
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ManageRequest\TicketVoidingSystem.ManageRequest.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TicketVoidingSystem\Web\" />
+  </ItemGroup>
+
 </Project>

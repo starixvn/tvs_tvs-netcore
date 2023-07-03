@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Handlers.MarkUnmarkTickets;
 
-public class GetDetailTicketsHandlerTests
+public class GetDetailTicketsHandlerTests: RemotingRefFixture
 {
     private readonly GetTicketsService getTicketsService;
     private readonly MapTicketService mapTicketService;

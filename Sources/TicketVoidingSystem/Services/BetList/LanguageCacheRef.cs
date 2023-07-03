@@ -4,14 +4,14 @@ using Fanex.RemotingRef;
 
 namespace TicketVoidingSystem.Services.BetList;
 
-internal class LanguageCacheRef : ICacheRef
+public class LanguageCacheRef : ICacheRef
 {
     private readonly string CurrentLanguage;
     private static readonly string DefaultValue = string.Empty;
 
     private readonly IRemotingRefService remotingRefService;
 
-    internal LanguageCacheRef(string language, IRemotingRefService remotingRefService = null)
+    public LanguageCacheRef(string language, IRemotingRefService remotingRefService = null)
     {
         this.remotingRefService = remotingRefService ?? new RemotingRefService();
         CurrentLanguage = language;

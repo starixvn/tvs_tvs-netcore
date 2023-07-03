@@ -20,7 +20,6 @@ public class VoidTicketsServiceTests
     public async Task VoidBet_ValidQuery_RepositoryHasCalled()
     {
         // Arrange
-        var expectedException = new Exception("Void bet was error!");
         var query = new VoidTicketsQuery
         {
             MatchId = 123,
@@ -33,10 +32,6 @@ public class VoidTicketsServiceTests
         var fakeData =
             new ValueTuple<IEnumerable<VoidTicketValidation>, IEnumerable<TicketEmailModel>>(validations, tickets);
 
-        var expected = new VoidTicketsModel
-        {
-            Tickets = fakeData.Item2
-        };
         var repository = Substitute.For<IDynamicRepository>();
         repository
             .FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(Arg.Compat.Any<VoidTicketsCriteria>())
