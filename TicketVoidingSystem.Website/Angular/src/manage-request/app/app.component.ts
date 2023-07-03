@@ -102,7 +102,7 @@ export class AppComponent implements OnInit {
     }
     return {
       requestId: this.filter.requestId?.toString(),
-      matchId: this.filter.matchId,
+      matchId: this.filter.matchId ? this.filter.matchId : null,
       fromDate: this.isFilterById() ? null : this.getDateStringFromNgbDate(this.filter.ngbFromDate),
       toDate: this.isFilterById() ? null : this.getDateStringFromNgbDate(this.filter.ngbToDate),
       issueTypeId: this.filter.issueTypeId,
