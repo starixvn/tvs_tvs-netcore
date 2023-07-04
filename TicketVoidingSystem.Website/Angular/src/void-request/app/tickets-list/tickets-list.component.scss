@@ -8,17 +8,23 @@
 
     .icon-checkbox-none {
         @include setIconCheckBox('../images/check-box.png');
-        background-position: 0px -17px;
+        background-position: -3px -19px;
+        width: 13px;
+        height: 13px;
     }
 
     .icon-checkbox-any {
         @include setIconCheckBox('../images/check-box.png');
         background-position: 0px -34px;
+        width: 13px;
+        height: 13px;
     }
 
     .icon-checkbox-all {
         @include setIconCheckBox('../images/check-box.png');
-        background-position: 0px 0px;
+        background-position: -3px -2px;
+        width: 13px;
+        height: 13px;
     }
 
     .li-checked {
@@ -27,6 +33,7 @@
 
     .icon-arrow-white-down {
         @include icon-arrow-white-down('../../../assets/images/arrow-down.png');
+        margin-top: -9px;
     }
 
     .title-tickets-list {
@@ -188,7 +195,7 @@
     color: red;
 }
 
-.checkbox-dropdown-list-disabled {
+.checkbox-dropdown-list {
     display: flex;
     justify-content: center;
     align-items: center;

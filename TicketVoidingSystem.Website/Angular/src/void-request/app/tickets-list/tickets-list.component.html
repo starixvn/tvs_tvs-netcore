@@ -11,15 +11,17 @@
         <tr>
           <th scope="col" class="list-check-groups-input col-tb-1">
             <div *ngIf="!isDisableCheckbox">
-              <span [ngClass]="{'checkbox-dropdown-list': true,
-                                  'icon-checkbox-none':model.iconCheckBox == 0,
-                                  'icon-checkbox-any':model.iconCheckBox == 1,
-                                  'icon-checkbox-all':model.iconCheckBox == 2}"
-                (click)="model.checkGroups();changeTickets()">
-              </span>
+              <div class="checkbox-dropdown-list">
+                <span [ngClass]="{
+                                    'icon-checkbox-none':model.iconCheckBox == 0,
+                                    'icon-checkbox-any':model.iconCheckBox == 1,
+                                    'icon-checkbox-all':model.iconCheckBox == 2}"
+                  (click)="model.checkGroups();changeTickets()">
+                </span>
+              </div>
               <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
             </div>
-            <div *ngIf="isDisableCheckbox" class="checkbox-dropdown-list-disabled">
+            <div *ngIf="isDisableCheckbox" class="checkbox-dropdown-list">
               <input type="checkbox" disabled [checked]="model.iconCheckBox == 2">
             </div>
           </th>
