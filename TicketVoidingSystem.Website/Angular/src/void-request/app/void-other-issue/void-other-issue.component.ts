@@ -283,17 +283,6 @@ export class VoidOtherIssueComponent implements OnInit {
     }
   }
 
-  updateTemplateValueForReducedOver() {
-    if (this.isReducedOver()) {
-      this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
-      if (!this.logInfoDetails[0].scoreNormalTicket) {
-        this.templateValue.isUpdateScoreHaveText = false;
-      } else {
-        this.templateValue.isUpdateScoreHaveText = this.logInfoDetails[0].scoreNormalTicket.split(',').length > 1 ? true : false;
-      }
-    }
-  }
-
   updateTemplateValueForAbnormalBet() {
     if (this.isAbnormalBet()) {
       this.templateValue.filterBy = this.requestDetail.event.filterBy;
@@ -324,7 +313,6 @@ export class VoidOtherIssueComponent implements OnInit {
     this.updateTemplateValueForRedCard();
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
-    this.updateTemplateValueForReducedOver();
     this.templateValue.totalTickets = this.ticketsModel.total;
   }
 
