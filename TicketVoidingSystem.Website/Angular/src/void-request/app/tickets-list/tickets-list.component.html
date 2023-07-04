@@ -19,6 +19,9 @@
               </span>
               <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
             </div>
+            <div *ngIf="isDisableCheckbox" class="checkbox-dropdown-list-disabled">
+              <input type="checkbox" disabled [checked]="model.iconCheckBox == 2">
+            </div>
           </th>
           <th scope="col" class="col-tb-2">
             <div>No</div>

@@ -28,17 +28,17 @@ public class DescriptionServiceImp : DescriptionService
 
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
             {
-                {IssueTypeConstant.AbnormalBetRealMember, BuildAbnormalBetForSingleTicket},
+                {IssueTypeConstant.AbnormalBetRealMember, BuildMatchLeagueTotal},
                 {IssueTypeConstant.EarlyKickOffTime, BuildEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildEKO},
-                {IssueTypeConstant.DangerAccepted, BuildDangerAccepted},
-                {IssueTypeConstant.RedCard, BuildDangerAccepted},
-                {IssueTypeConstant.WrongHDP, BuildDangerAccepted},
-                {IssueTypeConstant.Wrong1stHDP, BuildDangerAccepted},
-                {IssueTypeConstant.WrongOU, BuildDangerAccepted},
-                {IssueTypeConstant.Wrong1stOU, BuildDangerAccepted},
-                {IssueTypeConstant.WrongOdds, BuildDangerAccepted},
-                {IssueTypeConstant.ReducedOver, BuildDangerAccepted},
+                {IssueTypeConstant.DangerAccepted, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.RedCard, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.WrongHDP, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.Wrong1stHDP, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.WrongOU, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.Wrong1stOU, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.WrongOdds, BuildVoidTimeMatchLeague},
+                {IssueTypeConstant.ReducedOver, BuildMatchLeague},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount}
@@ -50,7 +50,7 @@ public class DescriptionServiceImp : DescriptionService
 
     private string BuildAbnormalBet(RequestDescription item)
     {
-        return item.FilterBy == AB_PARLAY ? BuildAbnormalBetForParlayTicket(item) : BuildAbnormalBetForSingleTicket(item);
+        return item.FilterBy == AB_PARLAY ? BuildAbnormalBetForParlayTicket(item) : BuildMatchLeagueTotal(item);
     }
 
     private string BuildEKO(RequestDescription item)
@@ -70,7 +70,7 @@ public class DescriptionServiceImp : DescriptionService
         return $"{logID}{match}{league}{total}";
     }
 
-    private string BuildAbnormalBetForSingleTicket(RequestDescription item)
+    private string BuildMatchLeagueTotal(RequestDescription item)
     {
         var match = elementService.BuildMatch(item.MatchEvent);
         var league = elementService.BuildLeague(item.SportTypeName, item.LeagueName);
@@ -79,12 +79,20 @@ public class DescriptionServiceImp : DescriptionService
         return $"{match}{league}{total}";
     }
 
+    private string BuildMatchLeague(RequestDescription item)
+    {
+        var match = elementService.BuildMatch(item.MatchEvent);
+        var league = elementService.BuildLeague(item.SportTypeName, item.LeagueName);
+
+        return $"{match}{league}";
+    }
+
     private string BuildAbnormalBetForParlayTicket(RequestDescription item)
     {
         return elementService.BuildMixParlay(item.TotalSingle);
     }
 
-    private string BuildDangerAccepted(RequestDescription item)
+    private string BuildVoidTimeMatchLeague(RequestDescription item)
     {
         var voidTime = elementService.BuildVoidTime(item.FilterBy, item.VoidFromTime, item.VoidToTime);
         var match = elementService.BuildWithVarCheck(item.MatchEvent, item.IsCheckedVar);

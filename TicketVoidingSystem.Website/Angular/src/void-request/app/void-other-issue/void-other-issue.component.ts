@@ -374,7 +374,7 @@ export class VoidOtherIssueComponent implements OnInit {
       && this.voidQuery.parlayTickets.length === 0
       && this.voidQuery.cancelCashOutTickets.length === 0
       && this.voidQuery.cricketTickets.length === 0) {
-      this.tooltip.display('list-check-groups-input', LABELS.EMPTY_TICKET);
+      this.tooltip.display('checkbox-dropdown-list-disabled', LABELS.EMPTY_TICKET);
       return false;
     }
     if (!this.isArchivedTickets() && !this.messagesComponent.checkValidation()) {

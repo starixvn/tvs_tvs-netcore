@@ -187,3 +187,12 @@
     padding-left: 10px;
     color: red;
 }
+
+.checkbox-dropdown-list-disabled {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    input {
+        cursor: not-allowed;
+    }
+}
