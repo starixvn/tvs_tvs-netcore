@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.ManageRequest.Models;
+﻿using TicketVoidingSystem.Models;
+
+namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class PoolHouseLinkedLogRequest
 {
@@ -41,6 +43,12 @@ public class LinkedLogDataViewModel
 {
     public IEnumerable<PoolHouseLinkedLogData> PoolHouseLinkedLogsData { get; set; }
     public Result Result { get; set; }
+    public bool IsLinkGroup1X2 { get; set; }
+    public bool IsLinkGroupAIO { get; set; }
+}
+
+public class LinkGroupBettypeValidation
+{
     public bool IsLinkGroup1X2 { get; set; }
     public bool IsLinkGroupAIO { get; set; }
 }

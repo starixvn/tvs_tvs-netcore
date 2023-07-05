@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
@@ -19,6 +19,14 @@ public class GetLinkedLogHandler : IRequestHandler<GetLinkedLogRequest, LinkedLo
 
     public async Task<LinkedLogDataViewModel> Handle(GetLinkedLogRequest request, CancellationToken cancellationToken)
     {
-        return await getLinkedLogService.GetLinkedLog(request);
+        var defaultLogData = getLinkedLogService.GetDefaultLogData(request);
+        try
+        {
+            return await getLinkedLogService.GetLinkedLogWhenSuccess(request, defaultLogData);
+        }
+        catch (Exception exception)
+        {
+            return await getLinkedLogService.GetLinkedLogWhenError(exception, defaultLogData);
+        }
     }
 }

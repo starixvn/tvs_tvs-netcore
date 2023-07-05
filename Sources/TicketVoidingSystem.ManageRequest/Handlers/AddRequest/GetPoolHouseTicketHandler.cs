@@ -6,6 +6,7 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
@@ -66,36 +67,24 @@ public class GetPoolHouseTicketHandler : IRequestHandler<GetPoolHouseTicketReque
 
     private static bool CheckAffectedToGroup1X2(GetPoolHouseTicketQuery query)
     {
-        switch (query.IssueTypeId)
+        return query.IssueTypeId switch
         {
-            case IssueTypeConstant.WrongHDP:
-            case IssueTypeConstant.WrongOU:
-                return true;
-
-            case IssueTypeConstant.WrongOdds:
-                return query.SubIssueTypeId == SubIssueTypeConstant.Handicap ||
-                       query.SubIssueTypeId == SubIssueTypeConstant.OverUnder;
-
-            default:
-                return false;
-        }
+            IssueTypeConstant.WrongHDP => true,
+            IssueTypeConstant.WrongOU => true,
+            IssueTypeConstant.WrongOdds => query.SubIssueTypeId is SubIssueTypeConstant.Handicap or SubIssueTypeConstant.OverUnder,
+            _ => false
+        };
     }
 
     private static bool CheckAffectedToGroup1H1X2(GetPoolHouseTicketQuery query)
     {
-        switch (query.IssueTypeId)
+        return query.IssueTypeId switch
         {
-            case IssueTypeConstant.Wrong1stHDP:
-            case IssueTypeConstant.Wrong1stOU:
-                return true;
-
-            case IssueTypeConstant.WrongOdds:
-                return query.SubIssueTypeId == SubIssueTypeConstant.Wrong1stHDP ||
-                       query.SubIssueTypeId == SubIssueTypeConstant.FirstHalfOverUnder;
-
-            default:
-                return false;
-        }
+            IssueTypeConstant.Wrong1stHDP => true,
+            IssueTypeConstant.Wrong1stOU => true,
+            IssueTypeConstant.WrongOdds => query.SubIssueTypeId is SubIssueTypeConstant.Wrong1stHDP or SubIssueTypeConstant.FirstHalfOverUnder,
+            _ => false
+        };
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(GetPoolHouseTicketQuery query)

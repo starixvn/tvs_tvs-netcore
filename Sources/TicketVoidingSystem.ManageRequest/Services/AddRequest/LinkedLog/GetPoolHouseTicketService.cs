@@ -5,11 +5,11 @@ using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface GetPoolHouseTicketService
 {
-    TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> data, GetPoolHouseTicketRequest request);
+    TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request);
 }
 
 public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
@@ -23,47 +23,47 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
         this.pagingService = pagingService;
     }
 
-    public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> data, GetPoolHouseTicketRequest request)
+    public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
     {
         var startIndex = request.PageIndex * request.PageSize + 1;
-        var groups = GenerateGroup(data, request)
+        var groups = GenerateGroup(originTickets, request)
             .Where(item => item.Tickets.Any())
             .Select((item, index) => MapToGroupTicketViewModel(item, index + startIndex, request.IssueTypeId));
 
         var viewModel = new TicketsViewModel
         {
-            TotalSingle = data.Count(x => !x.IsMixParlay),
-            TotalParlay = data.Count(x => x.IsMixParlay),
+            TotalSingle = originTickets.Count(x => !x.IsMixParlay),
+            TotalParlay = originTickets.Count(x => x.IsMixParlay),
             Groups = groups
         };
 
         return viewModel;
     }
 
-    private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> data, GetPoolHouseTicketRequest request)
+    private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
     {
-        if (!data.Any())
+        if (!originTickets.Any())
         {
             return Enumerable.Empty<Group<GetTicketModel>>();
         }
 
-        var tickets = pagingService.Paging(data, request.PageIndex, request.PageSize);
-        if (!tickets.Any())
-        {
-            return Enumerable.Empty<Group<GetTicketModel>>();
-        }
+        var afterPagingTickets = pagingService.Paging(originTickets, request.PageIndex, request.PageSize);
+        return !afterPagingTickets.Any() ? Enumerable.Empty<Group<GetTicketModel>>() : GenerateGroupWhenHaveTicket(originTickets, afterPagingTickets);
+    }
 
-        var parlayTicketsPoolHouse = tickets.Where(ticket => ticket.IsMixParlay && ticket.GroupName == "Parlay")
+    private IEnumerable<Group<GetTicketModel>> GenerateGroupWhenHaveTicket(IEnumerable<GetTicketModel> originTickets, IEnumerable<GetTicketModel> afterPagingTickets)
+    {
+        var parlayTicketsPoolHouse = afterPagingTickets.Where(ticket => ticket.IsMixParlay && ticket.GroupName == "Parlay")
             .OrderBy(ticket => ticket.TransId).ToList();
-        var othersTickets = tickets.Where(ticket => ticket.GroupName == "Others")
+        var othersTickets = afterPagingTickets.Where(ticket => ticket.GroupName == "Others")
             .OrderBy(ticket => ticket.TransId).ToList();
-        var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay && ticket.GroupName != "Others").ToList();
+        var singleTickets = afterPagingTickets.Where(ticket => !ticket.IsMixParlay && ticket.GroupName != "Others").ToList();
 
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
         groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTicketsPoolHouse });
         groups.Add(new Group<GetTicketModel> { Name = "Others", Tickets = othersTickets });
 
-        CountAllTicketsForGroup(data, groups);
+        CountAllTicketsForGroup(originTickets, groups);
 
         return groups;
     }
