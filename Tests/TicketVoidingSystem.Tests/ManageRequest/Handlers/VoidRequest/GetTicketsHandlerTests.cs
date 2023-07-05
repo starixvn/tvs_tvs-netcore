@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -8,78 +9,116 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest;
+
+public class GetTicketsHandlerTests
 {
-    public class GetTicketsHandlerTests
+    private readonly CheckPermissionOnRequestService checkPermissionOnRequestService;
+    private readonly GetTicketsService getTicketsService;
+    private readonly GetTicketsHandler handler;
+    private readonly MapTicketsService mapTicketsService;
+    private readonly PagingService pagingService;
+    private readonly TicketsViewModelService ticketsViewModelService;
+
+    public GetTicketsHandlerTests()
     {
-        private readonly GetTicketsService getTicketsService;
-        private readonly MapTicketsService mapTicketsService;
-        private readonly PagingService pagingService;
-        private readonly TicketsViewModelService ticketsViewModelService;
-        private readonly CheckPermissionOnRequestService checkPermissionOnRequestService;
-        private readonly GetTicketsHandler handler;
+        getTicketsService = Substitute.For<GetTicketsService>();
+        mapTicketsService = Substitute.For<MapTicketsService>();
+        pagingService = Substitute.For<PagingService>();
+        ticketsViewModelService = Substitute.For<TicketsViewModelService>();
+        checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
+        handler = new GetTicketsHandler(getTicketsService, mapTicketsService, pagingService, ticketsViewModelService,
+            checkPermissionOnRequestService);
+    }
 
-        public GetTicketsHandlerTests()
+    [Theory]
+    [InlineData(0, "Parlay")]
+    [InlineData(1, "1")]
+    public async Task GetTickets_HaveTicketsDisplay_ReturnTicketsViewModel(int matchId, string groupName)
+    {
+        // Arrange
+        var request = new GetTicketsRequest { Match = new Match { MatchId = matchId } };
+        var listGroup = new List<Group<GetTicketModel>>
         {
-            getTicketsService = Substitute.For<GetTicketsService>();
-            mapTicketsService = Substitute.For<MapTicketsService>();
-            pagingService = Substitute.For<PagingService>();
-            ticketsViewModelService = Substitute.For<TicketsViewModelService>();
-            checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
-            handler = new GetTicketsHandler(getTicketsService, mapTicketsService, pagingService, ticketsViewModelService, checkPermissionOnRequestService);
-        }
-
-        [Fact]
-        public void GetTickets_HaveTicketsDisplay_AssignDataTicket()
+            new()
+            {   Name = groupName,
+                Tickets = new List<GetTicketModel> { new() }
+            }
+        };
+        var data = new List<GetTicketModel>();
+        checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
+        mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
+            .ReturnsForAnyArgs(new Group<TicketViewModel>());
+        pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
+        pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
+        var expected = new TicketsViewModel
         {
-            // Arrange
-            var request = new GetTicketsRequest{ Match = new Match{ MatchId = 1} };
-            var listGroup = new List<Group<GetTicketModel>>
-             {
-                 new Group<GetTicketModel>
-                 {
-                     Tickets = new List<GetTicketModel> { new GetTicketModel() }
-                 }
-             };
-            var data = new List<GetTicketModel>();
-            var voidPermission = checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
-            getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
-            mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>()).ReturnsForAnyArgs(new Group<TicketViewModel>());
-            pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel> { new GetTicketModel() });
-            pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
+            Groups = new List<Group<TicketViewModel>> { new() }
+        };
 
-            // Act
-            var actual = handler.Handle(request, CancellationToken.None);
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            Assert.NotNull(actual);
-        }
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
 
-        [Fact]
-        public void GetTickets_GenerateGroup_ReturnEmpty()
+    [Fact]
+    public async Task GetTickets_HaveMatchIsNull_ReturnTicketsViewModel()
+    {
+        // Arrange
+        var request = new GetTicketsRequest();
+        var listGroup = new List<Group<GetTicketModel>>
         {
-            // Arrange
-            var request = new GetTicketsRequest { Match = new Match { MatchId = 0 } };
-            var listGroup = new List<Group<GetTicketModel>>
+            new()
             {
-                new Group<GetTicketModel>
-                {
-                    Tickets = new List<GetTicketModel> { new GetTicketModel() }
-                }
-            };
-            var data = new List<GetTicketModel>();
-            var voidPermission = checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
-            getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
-            mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>()).ReturnsForAnyArgs(new Group<TicketViewModel>());
-            pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel> ());
-            pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
+                Tickets = new List<GetTicketModel> { new() }
+            }
+        };
+        var data = new List<GetTicketModel>();
+        checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
+        mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
+            .ReturnsForAnyArgs(new Group<TicketViewModel>());
+        pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
+        pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
+        var expected = new TicketsViewModel
+        {
+            Groups = new List<Group<TicketViewModel>> { new() }
+        };
 
-            // Act
-            var actual = handler.Handle(request, CancellationToken.None);
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            Assert.NotNull(actual);
-        }
-        
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetTickets_GenerateGroup_ReturnEmpty()
+    {
+        // Arrange
+        var request = new GetTicketsRequest();
+        var listGroup = new List<Group<GetTicketModel>>
+        {
+            new()
+            {
+                Tickets = new List<GetTicketModel> { new() }
+            }
+        };
+        var data = new List<GetTicketModel>();
+        checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
+        mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
+            .ReturnsForAnyArgs(new Group<TicketViewModel>());
+        pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel>());
+        pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
+
+        // Act
+        var actual = handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(actual);
     }
 }

@@ -82,5 +82,20 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk
             // Assert
             AssertExtension.Equal(new Models.Result(), result);
         }
+
+        [Fact]
+        public async Task Send_LetstalkAttachmentHasNotFileName_ReturnHasLetstalkAttachments()
+        {
+            // Arrange
+            var model = new LetstalkModel();
+            var attachment = new LetstalkAttachment { Bytes = new byte[1] };
+            letstalkService.SendMessage(Arg.Any<LetstalkModel>()).Returns(true);
+
+            // Act
+            var result = await service.Send(model, attachment);
+
+            // Assert
+            AssertExtension.Equal(new Models.Result(), result);
+        }
     }
 }

@@ -16,7 +16,7 @@ public class GetTicketsWorksheetServiceTests
     {
         // Arrange
         var worksheet = SetupTestingSheet.CreateTestingSheet();
-        var model = new GetTicketsQuery { MatchId = 111 };
+        var model = new GetTicketsQuery { MatchId = 111, OddsValue = "1"};
         var cellService = Substitute.For<CellService>();
         var getTicketsService = Substitute.For<GetTicketsService>();
         getTicketsService.GetTicketsForExportExcel(model).ReturnsForAnyArgs(new List<ExcelTicketModel>());

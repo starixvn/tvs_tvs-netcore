@@ -1,13 +1,7 @@
-using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using Fanex.NAP.Core.Business;
 using NSubstitute;
-using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
-using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 using Xunit;

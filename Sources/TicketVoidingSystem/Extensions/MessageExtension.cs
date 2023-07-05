@@ -19,7 +19,7 @@ public static class MessageExtension
         const string Replacement = " @@ ";
         var regex = new Regex(Pattern);
         var result = regex.Replace(text, Replacement);
-        return string.IsNullOrEmpty(result) ? string.Empty : result.Trim();
+        return result.Trim();
     }
 
     public static XElement CreateItem(this MessageItem messageItem)

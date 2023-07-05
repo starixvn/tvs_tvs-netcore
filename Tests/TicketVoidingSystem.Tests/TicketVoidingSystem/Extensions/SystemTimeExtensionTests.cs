@@ -32,4 +32,15 @@ public class SystemTimeExtensionTests
         // Assert
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public void AddDays_HasDateTimeIsNull_ReturnNull()
+    {
+        // Arrange
+        // Act
+        var actual = ((DateTime?)null).AddDays(2);
+
+        // Assert
+        Assert.Null(actual);
+    }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using NSubstitute;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
@@ -17,10 +15,9 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void InsertSpace_InputTextIsNull_ReturnEmptyString()
         {
             // Arrange
-            string text = null;
 
             // Act
-            string result = text.InsertSpace();
+            var result = ((string)null).InsertSpace();
 
             // Assert
             Assert.Equal(string.Empty, result);
@@ -30,10 +27,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void InsertSpace_InputTextIsEmpty_ReturnEmptyString()
         {
             // Arrange
-            string text = string.Empty;
+            var text = string.Empty;
 
             // Act
-            string result = text.InsertSpace();
+            var result = text.InsertSpace();
 
             // Assert
             Assert.Equal(string.Empty, result);
@@ -43,10 +40,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void InsertSpace_InputTextContainsAtSymbol_InsertSpaceAroundAtSymbol()
         {
             // Arrange
-            string text = "Hello@@World";
+            const string text = "Hello@@World";
 
             // Act
-            string result = text.InsertSpace();
+            var result = text.InsertSpace();
 
             // Assert
             Assert.Equal("Hello @@ World", result);
@@ -56,10 +53,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
         public void InsertSpace_InputTextContainsMultipleSpacesAroundAtSymbol_TrimResultString_()
         {
             // Arrange
-            string text = "  Hello   @@   World  ";
+            const string text = "  Hello   @@   World  ";
 
             // Act
-            string result = text.InsertSpace();
+            var result = text.InsertSpace();
 
             // Assert
             Assert.Equal("Hello @@ World", result);
@@ -78,7 +75,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
             };
 
             // Act
-            XElement element = messageItem.CreateItem();
+            var element = messageItem.CreateItem();
 
             // Assert
             Assert.Equal("Item", element.Name.LocalName);
@@ -94,23 +91,21 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
             // Arrange
             var emailTickets = new List<TicketEmailModel>
     {
-        new TicketEmailModel { TransId = 1, CustId = 100, MatchId = 500 },
-        new TicketEmailModel { TransId = 2, CustId = 200, MatchId = 600 }
+        new() { TransId = 1, CustId = 100, MatchId = 500 },
+        new() { TransId = 2, CustId = 200, MatchId = 600 }
     };
 
             // Act
-            string xmlString = emailTickets.CreateTicketsXml();
+            var xmlString = emailTickets.CreateTicketsXml();
 
             // Assert
-            XElement rootElement = XElement.Parse(xmlString);
+            var rootElement = XElement.Parse(xmlString);
             Assert.Equal("root", rootElement.Name.LocalName);
             Assert.Equal(2, rootElement.Elements("r").Count());
-
             var elements = rootElement.Elements("r").ToList();
             Assert.Equal("1", elements[0].Attribute("TransId").Value);
             Assert.Equal("100", elements[0].Attribute("CustId").Value);
             Assert.Equal("500", elements[0].Attribute("MatchId").Value);
-
             Assert.Equal("2", elements[1].Attribute("TransId").Value);
             Assert.Equal("200", elements[1].Attribute("CustId").Value);
             Assert.Equal("600", elements[1].Attribute("MatchId").Value);

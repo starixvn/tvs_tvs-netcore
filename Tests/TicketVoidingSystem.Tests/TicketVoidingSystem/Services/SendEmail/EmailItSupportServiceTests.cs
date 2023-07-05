@@ -30,31 +30,37 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail
             var sites = new List<SiteEmail> { };
             var tickets = new List<TicketEmailModel>
                 {
-                    new TicketEmailModel
+                    new()
                     {
                         IsITSupportCreatedRequest = true,
                         IsItSupport = true,
                         Currency = 1
                     },
-                    new TicketEmailModel
+                    new()
+                    {
+                        IsITSupportCreatedRequest = true,
+                        IsItSupport = false,
+                        Currency = 1
+                    },
+                    new()
                     {
                         IsITSupportCreatedRequest = true,
                         IsItSupport = true,
                         Currency = 20
                     },
-                    new TicketEmailModel
-                        {
+                    new()
+                    {
                             IsITSupportCreatedRequest = false,
                             IsItSupport = true,
                             Currency = 1
                         },
-                    new TicketEmailModel
+                    new()
                     {
                         IsITSupportCreatedRequest = false,
                         IsItSupport = true,
                         Currency = 20
                     },
-                    new TicketEmailModel
+                    new()
                     {
                         IsITSupportCreatedRequest = false,
                         IsItSupport = false,

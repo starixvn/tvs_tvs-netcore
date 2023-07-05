@@ -107,5 +107,29 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             // Assert
             AssertExtension.Equal("ChoiceExcel", actual.Choice);
         }
+
+        [Fact]
+        public void BuildTicket_HasMatchIsNull_ReturnChoiceExcel()
+        {
+            // Arrange
+            var item = new TicketEmailModel { IsMixParlay = false, BetTypeId = 29 };
+            var site = new SiteEmail { IsChinaView = true };
+            var isFromAfterVoidService = true;
+
+            mapper.Map<Ticket>(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(new Ticket());
+            betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");
+            betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("Stake");
+            betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
+            betListService.GetBetTypeNameChineseSimplified(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetTypeSimplified");
+            betListService.GetStatus(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Status");
+            betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Handicap");
+            betListService.BuildChoice(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Choice");
+            betListService.BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("ChoiceExcel");
+            // Act
+            var actual = service.BuildTicket(item, null, site, isFromAfterVoidService);
+
+            // Assert
+            AssertExtension.Equal("ChoiceExcel", actual.Choice);
+        }
     }
 }

@@ -45,7 +45,7 @@ public class ObjectToXMLExtensionFacts
 	public void ToRequestIdXml_ModelHasMoreItem_ReturnXmlString()
 	{
 		// Arrange
-		var expected = $"<RequestId Id='1' />\r\n<RequestId Id='2' />";
+		var expected = "<RequestId Id='1' />\r\n<RequestId Id='2' />";
 
 		var model = new List<int> { 1, 2 };
 
@@ -60,7 +60,7 @@ public class ObjectToXMLExtensionFacts
     public void ToRequestIdXml_ModelHasOneItem_ReturnXmlString()
     {
         // Arrange
-        var expected = $"<RequestId Id='1' />";
+        const string expected = "<RequestId Id='1' />";
 
         var model = new List<int> { 1 };
 

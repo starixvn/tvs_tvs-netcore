@@ -65,10 +65,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 
             var tickets = new List<TicketEmailModel>
     {
-        new TicketEmailModel { IsMixParlay = false, IsInstantSettlementTicket = true },
-        new TicketEmailModel { IsMixParlay = false, IsInstantSettlementTicket = false },
-        new TicketEmailModel { IsMixParlay = true, IsInstantSettlementTicket = true },
-        new TicketEmailModel { IsMixParlay = true, IsInstantSettlementTicket = false }
+        new() { IsMixParlay = false, IsInstantSettlementTicket = true },
+        new() { IsMixParlay = false, IsInstantSettlementTicket = false },
+        new() { IsMixParlay = true, IsInstantSettlementTicket = true },
+        new() { IsMixParlay = true, IsInstantSettlementTicket = false }
     };
             var expected = $"Match ID: {model.Match.MatchId}{Environment.NewLine}"
                + $"Event Date: {model.Match.EventDate:dd MMMM yyyy}{Environment.NewLine}"
@@ -110,7 +110,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
                 VoidFromTime = new DateTime(2022, 1, 1, 1, 1, 3).ToString("dd MMMM yyyy"),
                 VoidToTime = new DateTime(2022, 1, 1, 1, 1, 4).ToString()
             };
-            var matchEvent = "Team A";
+            const string matchEvent = "Team A";
             var countInfo = new TicketCountInfo
             {
                 SingleCount = 0,
@@ -121,7 +121,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 
             var tickets = new List<TicketEmailModel>
     {
-        new TicketEmailModel { IsMixParlay = true, IsInstantSettlementTicket = true }
+        new() { IsMixParlay = true, IsInstantSettlementTicket = true }
     };
             var expected = $"Match ID: {model.Match.MatchId}{Environment.NewLine}"
                + $"Event Date: {model.Match.EventDate:dd MMMM yyyy}{Environment.NewLine}"
@@ -162,7 +162,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
                 VoidFromTime = new DateTime(2022, 1, 1, 1, 1, 3).ToString("dd MMMM yyyy"),
                 VoidToTime = new DateTime(2022, 1, 1, 1, 1, 4).ToString()
             };
-            var matchEvent = "Team A";
+            const string matchEvent = "Team A";
             var countInfo = new TicketCountInfo
             {
                 SingleCount = 0,
