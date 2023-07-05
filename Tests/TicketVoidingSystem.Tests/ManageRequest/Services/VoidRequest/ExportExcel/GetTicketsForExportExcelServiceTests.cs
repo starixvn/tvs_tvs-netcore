@@ -38,11 +38,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
             var expected = new List<Group<ExcelTicketModel>>();
 
             // Act
-            var result = service.GetGroupsExcelTickets(query);
+            var result = await service.GetGroupsExcelTickets(query);
 
             // Assert
 
-            AssertExtension.Equal(expected, result.Result);
+            AssertExtension.Equal(expected, result);
         }
 
         [Fact]
@@ -124,11 +124,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
             var expected = new List<Group<ExcelTicketNoMatchModel>>();
 
             // Act
-            var result = service.GetGroupsExcelTicketsRequestNoMatch(query);
+            var result = await service.GetGroupsExcelTicketsRequestNoMatch(query);
 
             // Assert
 
-            AssertExtension.Equal(expected, result.Result);
+            AssertExtension.Equal(expected, result);
         }
     }
 }

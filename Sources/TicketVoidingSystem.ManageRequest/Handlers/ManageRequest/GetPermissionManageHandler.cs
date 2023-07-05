@@ -21,39 +21,36 @@ public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageReq
 
     public async Task<PermissionManage> Handle(GetPermissionManageRequest request, CancellationToken cancellationToken)
     {
+        var manageRequestHost =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Constant.Policy.Host);
+        var verifyRead =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Read);
+        var verifyHost =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Host);
+        var voidRead =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Constant.Policy.Read);
+        var manageRequestUnsettledTicketsHost =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.UnsettledTickets, Constant.Policy.Host);
+        var manageRequestSettledTicketsHost =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.SettledTickets, Constant.Policy.Host);
+        var isReadMarkTickets =
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read);
         var permissionTasks = new List<Task<bool>>
         {
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Constant.Policy.Host),
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Read),
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Host),
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Constant.Policy.Read),
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.UnsettledTickets, Constant.Policy.Host),
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.SettledTickets, Constant.Policy.Host),
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read)
+            manageRequestHost, verifyRead, verifyHost, voidRead, manageRequestUnsettledTicketsHost, manageRequestSettledTicketsHost, isReadMarkTickets
         };
 
         await Task.WhenAll(permissionTasks);
 
         return new PermissionManage
         {
-            ManageRequestHost = await permissionTasks[PermissionTasks.ManageRequestHost],
-            VerifyRead = await permissionTasks[PermissionTasks.VerifyRead],
-            VerifyHost = await permissionTasks[PermissionTasks.VerifyHost],
-            VoidRead = await permissionTasks[PermissionTasks.VoidRead],
-            ManageRequestUnsettledTicketsHost = await permissionTasks[PermissionTasks.ManageRequestUnsettledTicketsHost],
-            ManageRequestSettledTicketsHost = await permissionTasks[PermissionTasks.ManageRequestSettledTicketsHost],
-            IsReadMarkTickets = await permissionTasks[PermissionTasks.IsReadMarkTickets]
+            ManageRequestHost = await manageRequestHost,
+            VerifyRead = await verifyRead,
+            VerifyHost = await verifyHost,
+            VoidRead = await voidRead,
+            ManageRequestUnsettledTicketsHost = await manageRequestUnsettledTicketsHost,
+            ManageRequestSettledTicketsHost = await manageRequestSettledTicketsHost,
+            IsReadMarkTickets = await isReadMarkTickets
         };
-    }
-
-    public static class PermissionTasks
-    {
-        public const int ManageRequestHost = 0;
-        public const int VerifyRead = 1;
-        public const int VerifyHost = 2;
-        public const int VoidRead = 3;
-        public const int ManageRequestUnsettledTicketsHost = 4;
-        public const int ManageRequestSettledTicketsHost = 5;
-        public const int IsReadMarkTickets = 5;
     }
 }

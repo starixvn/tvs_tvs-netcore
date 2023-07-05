@@ -46,7 +46,7 @@ public class GetComboParlayHandler : IRequestHandler<GetComboParlayRequest, ILis
         var count = comboName?.Length ?? 0;
         for (var i = 0; i < count; i++)
         {
-            var comboNameHtml = $"<span class='combo-name'>{comboName?[i]} x </span>";
+            var comboNameHtml = $"<span class='combo-name'>{comboName[i]} x </span>";
             var stake = $"<span class='combo-stake'>{tickets[i].Stake:G29}</span>";
             result.Append($"<div>{comboNameHtml}{stake}</div>");
         }

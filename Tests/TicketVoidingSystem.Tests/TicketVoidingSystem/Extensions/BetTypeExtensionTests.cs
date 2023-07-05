@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
@@ -66,9 +67,9 @@ namespace TicketVoidingSystem.Tests.Extensions
             };
 
             var expectedXml = "<BetTypes>" +
-                              "\r\n<BetType Id=\"1\" BetTeam=\"TeamA\" Set=\"1\" Game=\"2\" Value=\"3\" ValueHdp1=\"4\" ValueHdp2=\"5\" Goal=\"6\" BetOption=\"OptionA\" OddsSpread=\"7\" OddsId=\"8\" Transdesc=\"Description\" />" +
-                              "\r\n<BetType Id=\"2\" BetTeam=\"TeamB\" Set=\"1\" Game=\"2\" Value=\"3\" ValueHdp1=\"4\" ValueHdp2=\"5\" Goal=\"6\" BetOption=\"OptionB\" OddsSpread=\"7\" OddsId=\"8\" Transdesc=\"Description\" />" +
-                              "\r\n</BetTypes>";
+                              $"{Environment.NewLine}<BetType Id=\"1\" BetTeam=\"TeamA\" Set=\"1\" Game=\"2\" Value=\"3\" ValueHdp1=\"4\" ValueHdp2=\"5\" Goal=\"6\" BetOption=\"OptionA\" OddsSpread=\"7\" OddsId=\"8\" Transdesc=\"Description\" />" +
+                              $"{Environment.NewLine}<BetType Id=\"2\" BetTeam=\"TeamB\" Set=\"1\" Game=\"2\" Value=\"3\" ValueHdp1=\"4\" ValueHdp2=\"5\" Goal=\"6\" BetOption=\"OptionB\" OddsSpread=\"7\" OddsId=\"8\" Transdesc=\"Description\" />" +
+                              $"{Environment.NewLine}</BetTypes>";
 
             // Act
             var result = betTypes.ToXml();
@@ -81,10 +82,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsBitCoin_IdMatchesBitCoinOverUnder_ReturnTrue()
         {
             // Arrange
-            int id = BetTypeConstant.BitCoinOverUnder;
+            const int id = BetTypeConstant.BitCoinOverUnder;
 
             // Act
-            bool result = id.IsBitCoin();
+            var result = id.IsBitCoin();
 
             // Assert
             Assert.True(result);
@@ -94,10 +95,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsBitCoin_IdDoesNotMatchBitCoinOverUnder_ReturnFalse()
         {
             // Arrange
-            int id = 123;
+            const int id = 123;
 
             // Act
-            bool result = id.IsBitCoin();
+            var result = id.IsBitCoin();
 
             // Assert
             Assert.False(result);
@@ -111,7 +112,7 @@ namespace TicketVoidingSystem.Tests.Extensions
             // Arrange
 
             // Act
-            bool result = id.IsSabaPromotion();
+            var result = id.IsSabaPromotion();
 
             // Assert
             Assert.True(result);
@@ -121,10 +122,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsSabaPromotion_IdDoesNotMatchSabaPromotion_ReturnFalse()
         {
             // Arrange
-            int id = 123;
+            const int id = 123;
 
             // Act
-            bool result = id.IsSabaPromotion();
+            var result = id.IsSabaPromotion();
 
             // Assert
             Assert.False(result);
@@ -134,10 +135,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsOutright_IdIsOutright_ReturnTrue()
         {
             // Arrange
-            int id = BetTypeConstant.Outright;
+            const int id = BetTypeConstant.Outright;
 
             // Act
-            bool result = id.IsOutright();
+            var result = id.IsOutright();
 
             // Assert
             Assert.True(result);
@@ -147,10 +148,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsOutright_IdIsNotOutright_ReturnTrue()
         {
             // Arrange
-            int id = 123;
+            const int id = 123;
 
             // Act
-            bool result = id.IsOutright();
+            var result = id.IsOutright();
 
             // Assert
             Assert.False(result);
@@ -168,7 +169,7 @@ namespace TicketVoidingSystem.Tests.Extensions
             // Arrange
 
             // Act
-            bool result = id.IsVirtualSportBetType();
+            var result = id.IsVirtualSportBetType();
 
             // Assert
             Assert.True(result);
@@ -178,10 +179,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsVirtualSportBetType_IdIsNotVirtualSportBetType_ReturnFalse()
         {
             // Arrange
-            int id = 123;
+            const int id = 123;
 
             // Act
-            bool result = id.IsVirtualSportBetType();
+            var result = id.IsVirtualSportBetType();
 
             // Assert
             Assert.False(result);
@@ -201,7 +202,7 @@ namespace TicketVoidingSystem.Tests.Extensions
             // Arrange
 
             // Act
-            bool result = id.HideScore();
+            var result = id.HideScore();
 
             // Assert
             Assert.True(result);
@@ -211,10 +212,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void HideScore_IdIsNotHideScore_ReturnFalse()
         {
             // Arrange
-            int id = 11;
+            const int id = 11;
 
             // Act
-            bool result = id.HideScore();
+            var result = id.HideScore();
 
             // Assert
             Assert.False(result);
@@ -234,7 +235,7 @@ namespace TicketVoidingSystem.Tests.Extensions
             // Arrange
 
             // Act
-            bool result = id.IsHideHandicap();
+            var result = id.IsHideHandicap();
 
             // Assert
             Assert.True(result);
@@ -244,10 +245,10 @@ namespace TicketVoidingSystem.Tests.Extensions
         public void IsHideHandicap_IdIsNotIsHideHandicap_ReturnFalse()
         {
             // Arrange
-            int id = 11;
+            const int id = 11;
 
             // Act
-            bool result = id.IsHideHandicap();
+            var result = id.IsHideHandicap();
 
             // Assert
             Assert.False(result);

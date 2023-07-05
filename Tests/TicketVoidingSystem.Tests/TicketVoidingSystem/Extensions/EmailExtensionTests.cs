@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using NSubstitute;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
@@ -16,7 +17,7 @@ public class EmailExtensionTests
         IEnumerable<int> agentIds = null;
 
         // Act
-        string result = agentIds.ToOperatorsXml();
+        var result = agentIds.ToOperatorsXml();
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -29,7 +30,7 @@ public class EmailExtensionTests
         IEnumerable<int> agentIds = new List<int>();
 
         // Act
-        string result = agentIds.ToOperatorsXml();
+        var result = agentIds.ToOperatorsXml();
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -40,25 +41,30 @@ public class EmailExtensionTests
     {
         // Arrange
         IEnumerable<int> agentIds = new List<int> { 1, 2, 3 };
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("<Operator AgentId='1' />");
+        stringBuilder.AppendLine("<Operator AgentId='2' />");
+        stringBuilder.AppendLine("<Operator AgentId='3' />");
+        var expected = $"<Operators>{stringBuilder.ToString().Trim()}</Operators>";
 
         // Act
-        string result = agentIds.ToOperatorsXml();
+        var result = agentIds.ToOperatorsXml();
 
         // Assert
-        Assert.Equal("<Operators><Operator AgentId='1' />\r\n<Operator AgentId='2' />\r\n<Operator AgentId='3' /></Operators>", result);
+        Assert.Equal(expected, result);
     }
 
     [Fact]
     public void GetNegativeBalanceUsers_ReturnsEmptyString_WhenGroupIsCashOut()
     {
         // Arrange
-        IEnumerable<TicketEmailModel> tickets = Substitute.For<IEnumerable<TicketEmailModel>>();
-        EmailGroup group = EmailGroup.CashOut;
-        Func<TicketEmailModel, string> filter = Substitute.For<Func<TicketEmailModel, string>>();
-        string negativeBalanceUsers = "User1,User2,User3";
+        var tickets = Substitute.For<IEnumerable<TicketEmailModel>>();
+        const EmailGroup group = EmailGroup.CashOut;
+        var filter = Substitute.For<Func<TicketEmailModel, string>>();
+        const string negativeBalanceUsers = "User1,User2,User3";
 
         // Act
-        string result = tickets.GetNegativeBalanceUsers(group, filter, negativeBalanceUsers);
+        var result = tickets.GetNegativeBalanceUsers(group, filter, negativeBalanceUsers);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -70,16 +76,16 @@ public class EmailExtensionTests
         // Arrange
         IEnumerable<TicketEmailModel> tickets = new List<TicketEmailModel>
         {
-            new TicketEmailModel { UserName = "User1" },
-            new TicketEmailModel { UserName = "User2" },
-            new TicketEmailModel { UserName = "User3" }
+            new() { UserName = "User1" },
+            new() { UserName = "User2" },
+            new() { UserName = "User3" }
         };
-        EmailGroup group = EmailGroup.ItSupport;
+        const EmailGroup group = EmailGroup.ItSupport;
         Func<TicketEmailModel, string> filter = ticket => ticket.UserName;
-        string negativeBalanceUsers = "User2,User4";
+        const string negativeBalanceUsers = "User2,User4";
 
         // Act
-        string result = tickets.GetNegativeBalanceUsers(group, filter, negativeBalanceUsers);
+        var result = tickets.GetNegativeBalanceUsers(group, filter, negativeBalanceUsers);
 
         // Assert
         Assert.Equal("User2", result);
@@ -90,10 +96,10 @@ public class EmailExtensionTests
     {
         // Arrange
         IEnumerable<TicketEmailModel> tickets = new List<TicketEmailModel>();
-        SiteEmail site = new SiteEmail { ToList = string.Empty };
+        var site = new SiteEmail { ToList = string.Empty };
 
         // Act
-        bool result = tickets.Valid(site);
+        var result = tickets.Valid(site);
 
         // Assert
         Assert.False(result);
@@ -103,11 +109,11 @@ public class EmailExtensionTests
     public void Valid_ReturnsTrue_WhenTicketsIsNotEmpty_AndSiteToListIsNotNullOrEmpty()
     {
         // Arrange
-        IEnumerable<TicketEmailModel> tickets = new List<TicketEmailModel> { new TicketEmailModel() };
-        SiteEmail site = new SiteEmail { ToList = "test@example.com" };
+        IEnumerable<TicketEmailModel> tickets = new List<TicketEmailModel> { new() };
+        var site = new SiteEmail { ToList = "test@example.com" };
 
         // Act
-        bool result = tickets.Valid(site);
+        var result = tickets.Valid(site);
 
         // Assert
         Assert.True(result);
@@ -118,10 +124,10 @@ public class EmailExtensionTests
     {
         // Arrange
         IEnumerable<string> tickets = new List<string>();
-        Func<string, string> filter = Substitute.For<Func<string, string>>();
+        var filter = Substitute.For<Func<string, string>>();
 
         // Act
-        string result = tickets.JoinSites(filter);
+        var result = tickets.JoinSites(filter);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -135,7 +141,7 @@ public class EmailExtensionTests
         Func<string, string> filter = site => site;
 
         // Act
-        string result = tickets.JoinSites(filter);
+        var result = tickets.JoinSites(filter);
 
         // Assert
         Assert.Equal("Site1, Site2, Site3", result);

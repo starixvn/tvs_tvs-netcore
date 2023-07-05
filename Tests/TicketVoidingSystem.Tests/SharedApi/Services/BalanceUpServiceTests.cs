@@ -28,11 +28,11 @@ private readonly IDynamicRepository repository;
         repository.GetAsync<BalanceUp>(criteria).ReturnsForAnyArgs(expected);
 
         // Act
-        var result = service.GetBalanceUpDay();
+        var result = await service.GetBalanceUpDay();
 
         // Assert
         Assert.NotNull(result);
-        AssertExtension.Equal(expected, result.Result);
+        AssertExtension.Equal(expected, result);
     }
 
     [Fact]
@@ -49,10 +49,10 @@ private readonly IDynamicRepository repository;
         repository.GetAsync<BalanceUp>(criteria).ReturnsForAnyArgs(buDay);
 
         // Act
-        var result = service.GetBalanceUpDayZoneManila();
+        var result = await service.GetBalanceUpDayZoneManila();
 
         // Assert
         Assert.NotNull(result);
-        AssertExtension.Equal(expected, result.Result);
+        AssertExtension.Equal(expected, result);
     }
 }

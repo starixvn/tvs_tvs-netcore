@@ -40,11 +40,11 @@ public class BetTypesRepositoryTests: AppSettingFixture, IClassFixture<RemotingR
         repository.FetchAsync<BetTypeModel>(default).ReturnsForAnyArgs(betTypes);
 
         // Act
-        var result = service.GetBetTypes(criteria);
+        var result = await service.GetBetTypes(criteria);
 
         // Assert
         Assert.NotNull(result);
-        AssertExtension.Equal(expected, result.Result);
+        AssertExtension.Equal(expected, result);
     }
 
     [Fact]

@@ -106,9 +106,9 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
 
         return new UserPermission
         {
-            SettledTicket = settledTicketPermissionTask.Result,
-            UnSettledTicket = unSettledTicketPermissionTask.Result,
-            InstantlySettledTicket = instantlySettledTicketPermissionTask.Result
+            SettledTicket = await settledTicketPermissionTask,
+            UnSettledTicket = await unSettledTicketPermissionTask,
+            InstantlySettledTicket = await instantlySettledTicketPermissionTask
         };
     }
 }

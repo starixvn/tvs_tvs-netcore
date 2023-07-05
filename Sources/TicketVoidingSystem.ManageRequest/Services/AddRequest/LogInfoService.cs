@@ -217,8 +217,7 @@ public class LogInfoServiceImp : LogInfoService
         var transInfoJsonList = await GetTransInfoJson(query);
         var criteria = mapper.Map<GetLogInfoCriteria>(query);
         criteria.UserId = session.UserId;
-        criteria.KickOffInfo = IsKickOffTimeIssueType(query.IssueTypeId)
-            ? ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
+        criteria.KickOffInfo = GetKickOffInfo(query);
         criteria.WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml();
         criteria.DangerAcceptedInfo = query.DangerAcceptedModels?.ToDangerAcceptedInfoXml();
         criteria.RedCardInfo = query.RedCardModels?.ToDangerAcceptedInfoXml();
@@ -233,9 +232,10 @@ public class LogInfoServiceImp : LogInfoService
         return criteria;
     }
 
-    private static bool IsKickOffTimeIssueType(int issueTypeId)
+    private static string GetKickOffInfo(GetLogInfoQuery query)
     {
-        return issueTypeId is IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime;
+        return(query.IssueTypeId is IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime) ?
+            ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null; 
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query)

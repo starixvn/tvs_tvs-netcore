@@ -1,3 +1,4 @@
+using System;
 using HtmlAgilityPack;
 using NSubstitute;
 using TicketVoidingSystem.Extensions;
@@ -98,7 +99,7 @@ public class HtmlExtensionTests
         string result = html.StakeText();
 
         // Assert
-        Assert.Equal("(+5.00)\r\n10.00", result);
+        Assert.Equal($"(+5.00){Environment.NewLine}10.00", result);
     }
 
     [Fact]
@@ -111,7 +112,7 @@ public class HtmlExtensionTests
         string result = html.StakeText();
 
         // Assert
-        Assert.Equal("10.00\r\n(+5.00)", result);
+        Assert.Equal($"10.00{Environment.NewLine}(+5.00)", result);
     }
 
     [Fact]
@@ -124,7 +125,7 @@ public class HtmlExtensionTests
         string result = html.StakeText();
 
         // Assert
-        Assert.Equal("10.00\r\n(+5.00)", result);
+        Assert.Equal($"10.00{Environment.NewLine}(+5.00)", result);
     }
 
     [Fact]
@@ -137,7 +138,7 @@ public class HtmlExtensionTests
         string result = html.StakeText();
 
         // Assert
-        Assert.Equal("10.00\r\n((+2.50))", result);
+        Assert.Equal($"10.00{Environment.NewLine}((+2.50))", result);
     }
 
     [Fact]
@@ -150,7 +151,7 @@ public class HtmlExtensionTests
         string result = html.StakeText();
 
         // Assert
-        Assert.Equal("10.00\r\n(+5.00)\r\n7.00", result);
+        Assert.Equal($"10.00{Environment.NewLine}(+5.00){Environment.NewLine}7.00", result);
     }
 
 
@@ -185,7 +186,7 @@ public class HtmlExtensionTests
     {
         // Arrange
         string html = "<div class='stake'>10.00</div><br><div class='return-stake'>(+5.00)";
-        string expected = "10.00\r\n(+5.00)";
+        string expected = $"10.00{Environment.NewLine}(+5.00)";
         // Act
         string result = html.LineBreak();
 

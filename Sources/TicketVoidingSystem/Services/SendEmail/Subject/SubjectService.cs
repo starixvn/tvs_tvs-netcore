@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
@@ -33,14 +34,14 @@ public class SubjectServiceImp : SubjectService
     {
         var siteName = site.Site;
         var dateTime = mailViewModel.DateTime;
-        return string.Format(format, siteName.ToUpperInvariant(), dateTime);
+        return string.Format(CultureInfo.InvariantCulture, format, siteName.ToUpperInvariant(), dateTime);
     }
 
     private static string SubjectCashOut(MailViewModel mailViewModel, string format)
     {
         var siteName = StringResource.CashOut;
         var dateTime = mailViewModel.DateTime;
-        return string.Format(format, siteName, dateTime);
+        return string.Format(CultureInfo.InvariantCulture, format, siteName, dateTime);
     }
 
     private static string SubjectItQa(MailViewModel mailViewModel, IEnumerable<TicketEmailModel> tickets, string format)
@@ -58,7 +59,7 @@ public class SubjectServiceImp : SubjectService
     {
         var sites = tickets.JoinSites(s => s.Site);
         var dateTime = mailViewModel.DateTime;
-        return string.Format(format, prefix, sites.ToUpperInvariant(), dateTime);
+        return string.Format(CultureInfo.InvariantCulture, format, prefix, sites.ToUpperInvariant(), dateTime);
     }
 
     public string CreateRecover(MailViewModel mailViewModel, EmailGroup group, RecoverType type)
@@ -68,13 +69,13 @@ public class SubjectServiceImp : SubjectService
         {
             case EmailGroup.Recover:
             case EmailGroup.CashOut:
-                return string.Format(labels.Licensee(), mailViewModel.DateTime);
+                return string.Format(CultureInfo.InvariantCulture, labels.Licensee(), mailViewModel.DateTime);
 
             case EmailGroup.ItQa:
-                return string.Format(labels.It(), StringResource.TestCurrency, mailViewModel.DateTime);
+                return string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.TestCurrency, mailViewModel.DateTime);
 
             case EmailGroup.ItSupport:
-                return string.Format(labels.It(), StringResource.RealCurrency, mailViewModel.DateTime);
+                return string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.RealCurrency, mailViewModel.DateTime);
 
             default:
                 return ExceptionGroup.WrongGroup;

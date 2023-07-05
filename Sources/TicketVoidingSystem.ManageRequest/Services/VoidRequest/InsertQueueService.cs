@@ -90,17 +90,12 @@ public class InsertQueueServiceImp : InsertQueueService
 
         return new TicketTypeModel
         {
-            ValidVoidSingleTickets = GetTicketModelsFromResults(results, 0),
-            ValidVoidParlayTickets = GetTicketModelsFromResults(results, 2),
-            ValidVoidCricketTickets = GetTicketModelsFromResults(results, 4),
-            ValidCancelCOTickets = GetTicketModelsFromResults(results, 6),
-            ValidVoidSingleTickets14 = GetTicketModelsFromResults(results, 7)
+            ValidVoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
+            ValidVoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
+            ValidVoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
+            ValidCancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
+            ValidVoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>()
         };
-    }
-
-    private static IEnumerable<RequestDetailTicketModel> GetTicketModelsFromResults(IEnumerable<object>[] results, int index)
-    {
-        return results[index].Cast<RequestDetailTicketModel>();
     }
 
     private static CheckTicketsAllowToVoidCriteria CreateCheckTicketsAllowToVoidCriteria(TicketTypeModel ticketTypeModel, int siteDbGroupId)

@@ -38,11 +38,11 @@ public class TicketsServiceTests : AppSettingFixture, IClassFixture<RemotingRefF
         repository.FetchAsync<TicketModel>(Arg.Any<GetParlaySubBetCriteria>(), CancellationToken.None).ReturnsForAnyArgs(ticketModels);
 
         // Act
-        var result = service.GetTickets("123", CancellationToken.None);
+        var result = await service.GetTickets("123", CancellationToken.None);
 
         // Assert
         Assert.NotNull(result);
-        AssertExtension.Equal(expected, result.Result);
+        AssertExtension.Equal(expected, result);
     }
 
 
