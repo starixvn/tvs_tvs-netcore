@@ -71,37 +71,42 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var liveHomeScore = "";
-            var liveAwayScore = "";
-            if (model.FilterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
-            {
-                var scores = model.WrongScore.Split('-');
-                liveHomeScore = scores[0].Trim();
-                liveAwayScore = scores[1].Trim();
-            }
+            var scores = GetLiveScore(model.FilterBy, model);
+            var liveHomeScore = scores[0].Trim();
+            var liveAwayScore = scores[1].Trim();
             var line = $"<r LiveHomeScore='{liveHomeScore}' "
-                + $"LiveAwayScore='{liveAwayScore}' "
-                + $"ScoreId='{model.ScoreId}' "
-                + $"AATime='{model.AATime}' "
-                + $"PATime='{model.PATime}' "
-                + $"SATime='{model.SATime}' "
-                + $"LiveScores='{model.LogInfoDetail?.LiveScores}' "
-                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"MatchId='{model.LogInfoDetail?.MatchId}' "
-                + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
-                + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
-                + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
-                + $"FilterBy='{model.FilterBy}' "
-                + $"IsCheckedVar='{model.IsCheckedVar}' />";
+                       + $"LiveAwayScore='{liveAwayScore}' "
+                       + $"ScoreId='{model.ScoreId}' "
+                       + $"AATime='{model.AATime}' "
+                       + $"PATime='{model.PATime}' "
+                       + $"SATime='{model.SATime}' "
+                       + $"LiveScores='{model.LogInfoDetail?.LiveScores}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"MatchId='{model.LogInfoDetail?.MatchId}' "
+                       + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
+                       + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
+                       + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
+                       + $"FilterBy='{model.FilterBy}' "
+                       + $"IsCheckedVar='{model.IsCheckedVar}' />";
 
             stringBuilder.AppendLine(line);
         }
 
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    private static string[] GetLiveScore(int? filterBy, WrongScoreInfoViewModel model)
+    {
+        if (filterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
+        {
+            return model.WrongScore.Split('-');
+        }
+
+        return new[] { string.Empty, string.Empty };
     }
 
     public static string ToEventDangerAcceptedXml(this IEnumerable<DangerAcceptedViewModel> models)
@@ -240,14 +245,9 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var liveAwayScore = "";
-            var liveHomeScore = "";
-            if (model.FilterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
-            {
-                var scores = model.WrongScore.Split('-');
-                liveHomeScore = scores[0].Trim();
-                liveAwayScore = scores[1].Trim();
-            }
+            var scores = GetLiveScore(model.FilterBy, model);
+            var liveHomeScore = scores[0].Trim();
+            var liveAwayScore = scores[1].Trim();
             var line = $"<r LiveHomeScore='{liveHomeScore}' "
                 + $"LiveAwayScore='{liveAwayScore}' "
                 + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "

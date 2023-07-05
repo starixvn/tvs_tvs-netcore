@@ -44,7 +44,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var actual = await handler.Handle(null, CancellationToken.None);
 
             // Assert
-            Assert.Equal(actual.ErrorCode, 1);
+            Assert.Equal(1, actual.ErrorCode);
         }
     }
 }

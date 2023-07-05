@@ -20,7 +20,7 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
         this.repository = repository;
     }
 
-    private (IEnumerable<BetId>, IEnumerable<BetId>) GetTicketForCheckPermission(Dictionary<string, object> queryModel)
+    private static (IEnumerable<BetId>, IEnumerable<BetId>) GetTicketForCheckPermission(Dictionary<string, object> queryModel)
     {
         var tickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["tickets"].ToString());
         IEnumerable<BetId> cancelCashOutTickets = new List<BetId>();

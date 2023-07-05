@@ -30,10 +30,13 @@ public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, IEnumerable<st
         {
             yield return StringResource.You_can_void_Settled_or_Unsettled_tickets;
         }
-        else if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host) ||
-                 await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host))
+        else
         {
-            yield return StringResource.You_only_void_Unsettled_tickets;
+            if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host) ||
+                await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host))
+            {
+                yield return StringResource.You_only_void_Unsettled_tickets;
+            }
         }
         if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host))
         {

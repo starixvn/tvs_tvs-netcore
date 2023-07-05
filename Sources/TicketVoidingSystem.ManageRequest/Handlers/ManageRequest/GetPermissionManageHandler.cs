@@ -36,13 +36,13 @@ public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageReq
 
         return new PermissionManage
         {
-            ManageRequestHost = permissionTasks[0].Result,
-            VerifyRead = permissionTasks[1].Result,
-            VerifyHost = permissionTasks[2].Result,
-            VoidRead = permissionTasks[3].Result,
-            ManageRequestUnsettledTicketsHost = permissionTasks[4].Result,
-            ManageRequestSettledTicketsHost = permissionTasks[5].Result,
-            IsReadMarkTickets = permissionTasks[6].Result
+            ManageRequestHost = await permissionTasks[0],
+            VerifyRead = await permissionTasks[1],
+            VerifyHost = await permissionTasks[2],
+            VoidRead = await permissionTasks[3],
+            ManageRequestUnsettledTicketsHost = await permissionTasks[4],
+            ManageRequestSettledTicketsHost = await permissionTasks[5],
+            IsReadMarkTickets = await permissionTasks[6]
         };
     }
 }

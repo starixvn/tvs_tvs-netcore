@@ -14,16 +14,18 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
         [Fact]
         public async Task Handle_ValidRequest_HasCallCreateFileAsByteArray()
         {
+            // Arrange
             var request = new GetExcelVoidedTicketForSendLetstalkRequest { RequestId = 12345 };
             var excelService = Substitute.For<ExcelService<GetVoidedTicketsQuery>>();
             var handler = new GetExcelVoidedTicketForSendLetstalkHandler(excelService);
-            byte[] expected = {};
+            var expected = System.Array.Empty<byte>();
             excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketVoiding_VoidedTickets).ReturnsForAnyArgs(expected);
+
             // Act
-            var model = await handler.Handle(request, CancellationToken.None);
+            await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            Assert.Equal(request.IsCreditOnly, true);
+            Assert.True(request.IsCreditOnly);
             await excelService.Received().GenerateContentAsByteArray(Arg.Any<GetExcelVoidedTicketForSendLetstalkRequest>(), TemplateExcelPath.TicketVoiding_VoidedTickets);
         }
     }
