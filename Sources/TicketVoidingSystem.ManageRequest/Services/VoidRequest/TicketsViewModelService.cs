@@ -48,6 +48,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
     private static void UpdateVariableForTemplateMessage(TicketsViewModel model, IEnumerable<GetTicketModel> voidTickets, int issueTypeId, int subIssueTypeId)
     {
+        model.IsHasSettledTicket = voidTickets.Any(x => x.IsSettledTicket());
         model.IsAllLiveTickets = voidTickets.All(x => x.IsLiveIndicator);
         model.IsHasAioMessage = voidTickets.Any(x => IsValidTicketHaveAioMessage(issueTypeId, subIssueTypeId, x));
     }
