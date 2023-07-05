@@ -9,65 +9,71 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;
+
+public class GetVoidedTicketsHandlerTests
 {
-    public class GetVoidedTicketsHandlerTests
+    [Fact]
+    public async Task Handle_ReturnsVoidedTicketsViewModel()
     {
-        [Fact]
-        public async Task Handle_ReturnsVoidedTicketsViewModel()
+        // Arrange
+        var request = new GetVoidedTicketsRequest();
+        var cancellationToken = CancellationToken.None;
+        var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
+        var mapTicketsService = Substitute.For<MapTicketsService>();
+        var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
+
+        // Act
+        var result = await handler.Handle(request, cancellationToken);
+
+        // Assert
+        Assert.IsType<VoidedTicketsViewModel>(result);
+    }
+
+    [Fact]
+    public async Task Handle_CallsGetTicketsInGetVoidedTicketsService()
+    {
+        // Arrange
+        var request = new GetVoidedTicketsRequest();
+        var cancellationToken = CancellationToken.None;
+        var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
+        var mapTicketsService = Substitute.For<MapTicketsService>();
+        var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
+
+        // Act
+        await handler.Handle(request, cancellationToken);
+
+        // Assert
+        await getVoidedTicketsService.Received(1).GetTickets(request);
+    }
+
+    [Fact]
+    public async Task Handle_CallsMapToGroupVoidedTicketsInMapTicketsServiceForEachGroup()
+    {
+        // Arrange
+        var request = new GetVoidedTicketsRequest { IssueTypeId = 11 };
+        var cancellationToken = CancellationToken.None;
+        var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
+        var mapTicketsService = Substitute.For<MapTicketsService>();
+        var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
+        var voidedTickets = new List<VoidedTicketModel>
         {
-            // Arrange
-            var request = new GetVoidedTicketsRequest();
-            var cancellationToken = CancellationToken.None;
-            var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
-            var mapTicketsService = Substitute.For<MapTicketsService>();
-            var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
+            new() { IsCancelCashOut = true, GroupName = "Deposit" },
+            new() { IsCancelCashOut = false, GroupName = "11 Deposit" }
+        };
+        getVoidedTicketsService.GetTickets(request).Returns(voidedTickets);
+        var groups = new List<Group<VoidedTicketModel>> { new() { Tickets = new List<VoidedTicketModel> { new() } } };
+        mapTicketsService.MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsQuery>())
+            .ReturnsForAnyArgs(groups);
+        var groupViewModel = new Group<VoidedTicketViewModel>();
+        mapTicketsService
+            .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
+                request.IssueTypeId).ReturnsForAnyArgs(groupViewModel);
+        // Act
+        await handler.Handle(request, cancellationToken);
 
-            // Act
-            var result = await handler.Handle(request, cancellationToken);
-
-            // Assert
-            Assert.IsType<VoidedTicketsViewModel>(result);
-        }
-
-        [Fact]
-        public async Task Handle_CallsGetTicketsInGetVoidedTicketsService()
-        {
-            // Arrange
-            var request = new GetVoidedTicketsRequest();
-            var cancellationToken = CancellationToken.None;
-            var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
-            var mapTicketsService = Substitute.For<MapTicketsService>();
-            var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
-
-            // Act
-            await handler.Handle(request, cancellationToken);
-
-            // Assert
-            await getVoidedTicketsService.Received(1).GetTickets(request);
-        }
-
-        [Fact]
-        public async Task Handle_CallsMapToGroupVoidedTicketsInMapTicketsServiceForEachGroup()
-        {
-            // Arrange
-            var request = new GetVoidedTicketsRequest { IssueTypeId = 11 };
-            var cancellationToken = CancellationToken.None;
-            var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
-            var mapTicketsService = Substitute.For<MapTicketsService>();
-            var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
-            var voidedTickets = new List<VoidedTicketModel> { new VoidedTicketModel { IsCancelCashOut  = true, GroupName = "Deposit" }, 
-                new VoidedTicketModel { IsCancelCashOut = false, GroupName = "11 Deposit" } }; 
-            getVoidedTicketsService.GetTickets(request).Returns(voidedTickets);
-            var groups = new List<Group<VoidedTicketModel>> { new Group<VoidedTicketModel> { Tickets = new List<VoidedTicketModel> { new VoidedTicketModel() } } };
-            mapTicketsService.MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groups);
-            var groupViewModel = new Group<VoidedTicketViewModel> { };
-            mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default, request.IssueTypeId).ReturnsForAnyArgs(groupViewModel);
-            // Act
-            await handler.Handle(request, cancellationToken);
-
-            // Assert
-            mapTicketsService.Received().MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsRequest>());
-        }
+        // Assert
+        mapTicketsService.Received()
+            .MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsRequest>());
     }
 }

@@ -11,55 +11,55 @@ using TicketVoidingSystem.SharedApi.Models.MessageTemplate;
 using TicketVoidingSystem.SharedApi.ViewModels.MessageTemplate;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.SharedApi.Handlers.MessageTemplate
+namespace TicketVoidingSystem.Tests.SharedApi.Handlers.MessageTemplate;
+
+public class GetTemplateSettingHandlerTests
 {
-    public class GetTemplateSettingHandlerTests
+    private readonly GetTemplateSettingHandler handler;
+    private readonly IMapper mapper;
+    private readonly IDynamicRepository repository;
+
+    public GetTemplateSettingHandlerTests()
     {
-        private readonly IDynamicRepository repository;
-        private readonly IMapper mapper;
-        private readonly GetTemplateSettingHandler handler;
+        repository = Substitute.For<IDynamicRepository>();
+        mapper = Substitute.For<IMapper>();
+        handler = new GetTemplateSettingHandler(repository, mapper);
+    }
 
-        public GetTemplateSettingHandlerTests()
+    [Fact]
+    public async Task Handle_Returns_TemplateSettingViewModel()
+    {
+        // Arrange
+        var request = new GetTemplateSettingRequest();
+        var templateModels = new List<TemplateModel> { new() };
+        var templateSettings = new List<TemplateSetting> { new() };
+        var expectedViewModel = new TemplateSettingViewModel
         {
-            repository = Substitute.For<IDynamicRepository>();
-            mapper = Substitute.For<IMapper>();
-            handler = new GetTemplateSettingHandler(repository, mapper);
-        }
-
-        [Fact]
-        public async Task Handle_Returns_TemplateSettingViewModel()
-        {
-            // Arrange
-            var request = new GetTemplateSettingRequest();
-            var templateModels = new List<TemplateModel> { new TemplateModel() };
-            var templateSettings = new List<TemplateSetting> { new TemplateSetting() };
-            var expectedViewModel = new TemplateSettingViewModel
+            MessageTemplates = new List<MessageTemplateViewModel>
             {
-                MessageTemplates = new List<MessageTemplateViewModel> {
-                    new MessageTemplateViewModel
-                    {
-                        InputTexts = new List<InputText>()
-                    }
-                },
-                TemplateSettings = templateSettings
-            };
+                new()
+                {
+                    InputTexts = new List<InputText>()
+                }
+            },
+            TemplateSettings = templateSettings
+        };
 
-            repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>(), Arg.Any<CancellationToken>())
-                .Returns(templateModels);
+        repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>(), Arg.Any<CancellationToken>())
+            .Returns(templateModels);
 
-            repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>(), Arg.Any<CancellationToken>())
-                .Returns(templateSettings);
+        repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>(), Arg.Any<CancellationToken>())
+            .Returns(templateSettings);
 
-            mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>())
-                .Returns(new MessageTemplateViewModel());
+        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>())
+            .Returns(new MessageTemplateViewModel());
 
-            // Act
-            var result = await handler.Handle(request, CancellationToken.None);
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
 
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(expectedViewModel.MessageTemplates.ToList().Count(), result.MessageTemplates.ToList().Count());
-            Assert.Equal(expectedViewModel.TemplateSettings.ToList().Count(), result.TemplateSettings.ToList().Count());
-        }
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(expectedViewModel.MessageTemplates.ToList().Count, result.MessageTemplates.ToList().Count);
+        Assert.Equal(expectedViewModel.TemplateSettings.ToList().Count, result.TemplateSettings.ToList().Count);
     }
 }

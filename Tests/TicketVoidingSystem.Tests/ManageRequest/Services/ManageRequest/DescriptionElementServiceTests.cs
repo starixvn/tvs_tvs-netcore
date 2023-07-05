@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
         public void BuildKOTime_WhenCalled_ReturnString()
         {
             // Arrange
-            const string expectedResult = $"<div class=\"ko-time\">KO Time: <span class=\"text-success\">0001/01/01 12:00:00 PM</span></div>";
+            const string expectedResult = "<div class=\"ko-time\">KO Time: <span class=\"text-success\">0001/01/01 12:00:00 PM</span></div>";
             var time = new DateTime();
             var descriptionService = new DescriptionElementServiceImp();
 
@@ -44,7 +44,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
         public void BuildVoidTime_FilterByCheckTime_ReturnString()
         {
             // Arrange
-            const string expectedResult = $"<div class=\"void-time\"><span class=\"text-primary\">Void Accept Time: 12:00:00.000 PM - 12:00:00.000 PM</span></div>";
+            const string expectedResult = "<div class=\"void-time\"><span class=\"text-primary\">Void Accept Time: 12:00:00.000 PM - 12:00:00.000 PM</span></div>";
             var time = new DateTime();
             var descriptionService = new DescriptionElementServiceImp();
 
@@ -61,7 +61,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
             // Arrange
             const int fromId = 1;
             const int told = 1;
-            const string expectedResult = $"<div class\"log-id\">LogID: <span class=\"text-danger\">1</span></div>";
+            const string expectedResult = "<div class\"log-id\">LogID: <span class=\"text-danger\">1</span></div>";
             var descriptionService = new DescriptionElementServiceImp();
 
             // Act
@@ -77,7 +77,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
             // Arrange
             const int fromId = 1;
             const int told = 2;
-            const string expectedResult = $"<div class\"log-id\">LogID: <span class=\"text-danger\">1-2</span></div>";
+            const string expectedResult = "<div class\"log-id\">LogID: <span class=\"text-danger\">1-2</span></div>";
             var descriptionService = new DescriptionElementServiceImp();
 
             // Act
@@ -91,7 +91,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
         public void BuildMatch_WhenCalled_ReturnString()
         {
             // Arrange
-            const string expectedResult = $"<div class=\"match\">abc</div>";
+            const string expectedResult = "<div class=\"match\">abc</div>";
             var descriptionService = new DescriptionElementServiceImp();
 
             // Act
@@ -155,10 +155,9 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
             // Arrange
             const int single = 1;
             const int parlay = 1;
-            var bettypeNames = new List<string>();
-            bettypeNames.Add("abc");
+            var bettypeNames = new List<string> { "abc" };
             var expectedResult = $"<div class=\"count-tickets\">Single: <span class=\"text-primary total-single\">"
-                + $"{single}</span>, Parlay: <span class=\"text-primary total-parlay\">{parlay}</span> (abc)</div>";
+                                 + $"{single}</span>, Parlay: <span class=\"text-primary total-parlay\">{parlay}</span> (abc)</div>";
             var descriptionService = new DescriptionElementServiceImp();
 
             // Act

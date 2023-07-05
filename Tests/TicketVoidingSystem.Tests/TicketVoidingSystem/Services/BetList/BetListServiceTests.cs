@@ -9,13 +9,13 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Services.BetList;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.BetList;
 
 public class BetListServiceTests : IClassFixture<RemotingRefFixture>
 {
     private readonly OddsService oddsService;
     private readonly RemotingRefWrapperService remotingRefWrapperService;
-    private readonly BetListServiceImp service;
+    private BetListServiceImp service;
 
     public BetListServiceTests()
     {
@@ -34,7 +34,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             "</span><div class=\"bettype\"> </div><div class=\"match\"><span></span>" +
             "<span>&nbsp;-&nbsp;vs&nbsp;-&nbsp;</span><span></span></div><div class=\"league\"><span class=\"sport\">" +
             "</span><span class=\"leagueName\">&nbsp;</span></div></div>";
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.BuildChoiceBlock(new Ticket(), new TicketHelper(), new List<ITicketData>(), true);
@@ -52,7 +52,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             "<div class='scoremapIcon'></div></a></span><span class=\"underdog\"><span class='handicap'> 0</span></span>" +
             "<div class=\"bettype\"> </div><div class=\"match\"><span></span><span>&nbsp;-&nbsp;vs&nbsp;-&nbsp;</span>" +
             "<span></span></div><div class=\"league\"><span class=\"sport\"></span><span class=\"leagueName\">&nbsp;</span></div></div>";
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.BuildChoice(new Ticket(), new TicketHelper(), new List<ITicketData>(), true);
@@ -66,7 +66,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = " 0- vs -";
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.BuildChoiceExcel(new Ticket(), new TicketHelper(), new List<ITicketData>(), true);
@@ -80,7 +80,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = "<div class=\"stake\">0</div>";
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.BuildStake(new Ticket(), new TicketHelper());
@@ -88,18 +88,17 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         // Assert
         Assert.Equal(expected, actual);
     }
-    
+
     [Fact]
     public void GetOdds_IsParlayIsTrue_EmptyOddName()
     {
         // Arrange
-        var ticket = new Ticket { };
-        bool isParlay = true;
+        var ticket = new Ticket();
 
-        var service = new BetListServiceImp(remotingRefWrapperService, oddsService);
+        service = new BetListServiceImp(remotingRefWrapperService, oddsService);
 
         // Act
-        string result = service.GetOdds(ticket, isParlay);
+        var result = service.GetOdds(ticket, true);
 
         // Assert
         Assert.Equal("<span class=\"underdog\">-</span> <span class=\"oddstype\"></span>", result);
@@ -109,13 +108,12 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetOdds_OddNameIsNotNullOrWhiteSpace_ReturnOddHtmlWithReplacedBrTagsAndClosingBracket()
     {
         // Arrange
-        var ticket = new Ticket { };
-        bool isParlay = false;
-        var oddName = "OddName";
+        var ticket = new Ticket();
+        const string oddName = "OddName";
         oddsService.GetOddsName(Arg.Any<string>()).Returns(oddName);
 
         // Act
-        string result = service.GetOdds(ticket, isParlay);
+        var result = service.GetOdds(ticket, false);
 
         // Assert
         Assert.Equal("<span class=\"underdog\">-</span> (<span class=\"oddstype\"></span>)", result);
@@ -126,9 +124,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = "handicap";
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         remotingRefWrapperService.GetBetType(default, default).ReturnsForAnyArgs(expected);
-        var service = new BetListServiceImp(remotingRefWrapperService, null);
+        service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
         var actual = service.GetBetType(226, LanguageCode.English);
@@ -146,7 +143,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             BetId = 224,
             BetTeam = "h"
         };
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetBetTypeName(ticket);
@@ -164,7 +161,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             BetId = 224,
             BetTeam = "h"
         };
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetBetTypeNameChineseSimplified(ticket);
@@ -182,7 +179,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             BetId = 224,
             BetTeam = "h"
         };
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetBetTypeNameChineseTraditional(ticket);
@@ -200,7 +197,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             BetId = 224,
             BetTeam = "h"
         };
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetBetTypeNameNewChineseSimplified(ticket);
@@ -217,9 +214,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetBetTypeName_HasRefNo_ReturnName(int betId, string betTypeIdByRef)
     {
         // Arrange
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         remotingRefWrapperService.GetParentIdByBetTypeId(default).ReturnsForAnyArgs(betTypeIdByRef);
-        var service = new BetListServiceImp(remotingRefWrapperService, null);
+        service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
         var actual = service.GetBetTypeName(betId, 1000);
@@ -234,7 +230,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         // Arrange
         const string expected =
             "<div class=''><span class=\"{betTeamClassName}\">{betTeam}</span><div class=\"event-date\">{eventDate}</div></div>";
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetBetTeam(new Choice_Template());
@@ -255,7 +251,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
             IsShowOddsWithChoice = true,
             HideStatusCashOutHistory = true
         };
-        var service = new BetListServiceImp(null, null);
+        service = new BetListServiceImp(null, null);
 
         // Act
         var actual = service.GetStatus(ticket, ticketHelper, null, false);
@@ -272,9 +268,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         // Arrange
         var comboNames = new[] { "1", "2" };
         var ticket = Builder<Ticket>.CreateNew().With(x => x.BetCheck = betCheck).Build();
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         remotingRefWrapperService.GetComboParlayName(default, default, default, default).ReturnsForAnyArgs(comboNames);
-        var service = new BetListServiceImp(remotingRefWrapperService, null);
+        service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
         var actual = service.GetComboParlayName(ticket);
@@ -288,9 +283,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var comboNames = new[] { "1", "2" };
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         remotingRefWrapperService.GetComboParlayName(default, default, default, default).ReturnsForAnyArgs(comboNames);
-        var service = new BetListServiceImp(remotingRefWrapperService, null);
+        service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
         var actual = service.GetComboName(null, null, 1, 1);
@@ -304,9 +298,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = "AAA";
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         remotingRefWrapperService.GetMatchCodeBetRadar(default).ReturnsForAnyArgs(expected);
-        var service = new BetListServiceImp(remotingRefWrapperService, null);
+        service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
         var actual = service.GetMatchCodeBetradar(null);
@@ -320,9 +313,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = "AAA";
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs(expected);
-        var service = new BetListServiceImp(remotingRefWrapperService, null);
+        service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
         var actual = service.GetSportTypeName(1, null);
@@ -335,18 +327,15 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetDisplayedBetTypeName_ReturnsBetTypeName_FromRemotingRefWrapperService()
     {
         // Arrange
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-        var oddsService = Substitute.For<OddsService>();
-        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
-        int id = 123;
-        long refNo = 456;
-        string expectedBetName = "Bet Type Name";
+        const int id = 123;
+        const long refNo = 456;
+        const string expectedBetName = "Bet Type Name";
 
         remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns("ParentId");
         remotingRefWrapperService.GetDisplayedBetTypeName("ParentId", refNo).Returns(expectedBetName);
 
         // Act
-        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+        var result = service.GetDisplayedBetTypeName(id, refNo);
 
         // Assert
         Assert.Equal(expectedBetName, result);
@@ -356,19 +345,16 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetDisplayedBetTypeName_ReturnsIdAsString_WhenBetTypeIdIsNull()
     {
         // Arrange
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-        var oddsService = Substitute.For<OddsService>();
-        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
-        int id = 123;
-        long refNo = 456;
-        string betName = "123";
-        var expected = "123";
+        const int id = 123;
+        const long refNo = 456;
+        const string betName = "123";
+        const string expected = "123";
 
         remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns((string)null);
         remotingRefWrapperService.GetDisplayedBetTypeName("123", refNo).Returns(betName);
 
         // Act
-        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+        var result = service.GetDisplayedBetTypeName(id, refNo);
 
         // Assert
         Assert.Equal(expected, result);
@@ -378,18 +364,15 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetDisplayedBetTypeName_ReturnsNextBetTypeNameForFistNextBet()
     {
         // Arrange
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-        var oddsService = Substitute.For<OddsService>();
-        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
-        int id = 86;
-        long refNo = 456;
-        string expectedBetName = "Bet Type Name";
+        const int id = 86;
+        const long refNo = 456;
+        const string expectedBetName = "Bet Type Name";
 
         remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns("ParentId");
         remotingRefWrapperService.GetDisplayedBetTypeName("ParentId", refNo).Returns(expectedBetName);
 
         // Act
-        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+        var result = service.GetDisplayedBetTypeName(id, refNo);
 
         // Assert
         Assert.Equal("Next " + expectedBetName, result);
@@ -399,18 +382,15 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetDisplayedBetTypeName_ReturnsNextBetTypeNameForSecondNextBet()
     {
         // Arrange
-        var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-        var oddsService = Substitute.For<OddsService>();
-        var betListService = new BetListServiceImp(remotingRefWrapperService, oddsService);
-        int id = 85;
-        long refNo = 456;
-        string expectedBetName = "Bet Type Name";
+        const int id = 85;
+        const long refNo = 456;
+        const string expectedBetName = "Bet Type Name";
 
         remotingRefWrapperService.GetParentIdByBetTypeId(id).Returns("ParentId");
         remotingRefWrapperService.GetDisplayedBetTypeName("ParentId", refNo).Returns(expectedBetName);
 
         // Act
-        var result = betListService.GetDisplayedBetTypeName(id, refNo);
+        var result = service.GetDisplayedBetTypeName(id, refNo);
 
         // Assert
         Assert.Equal("Next " + expectedBetName, result);
@@ -420,14 +400,13 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetHandicap_ReturnsEmptyString_BetTypeIdIsHideHandicap()
     {
         // Arrange
-        ITicket ticket = Substitute.For<ITicket>();
-        ITicketHelper ticketHelper = Substitute.For<ITicketHelper>();
-        List<ITicketData> ticketData = new List<ITicketData>();
-        bool isShowScoreMap = true;
+        var ticket = Substitute.For<ITicket>();
+        var ticketHelper = Substitute.For<ITicketHelper>();
+        var ticketData = new List<ITicketData>();
         ticket.BetTypeId = 1605;
 
-        // Act
-        var result = service.GetHandicap(ticket, ticketHelper, ticketData, isShowScoreMap);
+        // tr
+        var result = service.GetHandicap(ticket, ticketHelper, ticketData, true);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -437,13 +416,12 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetHandicap_ReturnsHandicapInnerText()
     {
         // Arrange
-        ITicket ticket = Substitute.For<ITicket>();
-        ITicketHelper ticketHelper = Substitute.For<ITicketHelper>();
-        List<ITicketData> ticketData = new List<ITicketData>();
-        bool isShowScoreMap = true;
+        var ticket = Substitute.For<ITicket>();
+        var ticketHelper = Substitute.For<ITicketHelper>();
+        var ticketData = new List<ITicketData>();
 
         // Act
-        var result = service.GetHandicap(ticket, ticketHelper, ticketData, isShowScoreMap);
+        var result = service.GetHandicap(ticket, ticketHelper, ticketData, true);
 
         // Assert
         Assert.NotNull(result);

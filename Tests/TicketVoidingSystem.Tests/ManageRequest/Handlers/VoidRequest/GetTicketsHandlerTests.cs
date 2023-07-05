@@ -18,14 +18,13 @@ public class GetTicketsHandlerTests
     private readonly GetTicketsHandler handler;
     private readonly MapTicketsService mapTicketsService;
     private readonly PagingService pagingService;
-    private readonly TicketsViewModelService ticketsViewModelService;
 
     public GetTicketsHandlerTests()
     {
         getTicketsService = Substitute.For<GetTicketsService>();
         mapTicketsService = Substitute.For<MapTicketsService>();
         pagingService = Substitute.For<PagingService>();
-        ticketsViewModelService = Substitute.For<TicketsViewModelService>();
+        var ticketsViewModelService = Substitute.For<TicketsViewModelService>();
         checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
         handler = new GetTicketsHandler(getTicketsService, mapTicketsService, pagingService, ticketsViewModelService,
             checkPermissionOnRequestService);

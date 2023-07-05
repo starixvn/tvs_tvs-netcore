@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TicketVoidingSystem.Extensions.TN;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions.TN
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions.TN
 {
     public class AppendStringExtensionTests
     {
@@ -11,7 +11,6 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void AppendWithNewLine_WithNullRoot_ReturnsExtend()
         {
             // Arrange
-            
             // Act
             var result = ((string)null).AppendWithNewLine("Extend");
 
@@ -78,7 +77,6 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void Eliminate_WithNullOrWhiteSpaceRoot_ReturnsEmptyString()
         {
             // Arrange
-
             // Act
             var result = ((string)null).Eliminate("User1,User2");
 

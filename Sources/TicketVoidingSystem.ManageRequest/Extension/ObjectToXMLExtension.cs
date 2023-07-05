@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Globalization;
+using System.Security;
 using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -213,8 +214,8 @@ public static class ObjectToXMLExtension
         var stringBuilder = $"<r Usernames='{model.Usernames}' "
                             + $"ProductIds='{model.ProductIds}' "
                             + $"StatusIds='{model.StatusIds}' "
-                            + $"FromDate='{model.FromDate}' "
-                            + $"ToDate='{model.ToDate}' />";
+                            + $"FromDate='{model.FromDate?.ToString(CultureInfo.InvariantCulture)}' "
+                            + $"ToDate='{model.ToDate?.ToString(CultureInfo.InvariantCulture)}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }
@@ -415,6 +416,6 @@ public static class ObjectToXMLExtension
 
     public static string GetKickOffInfoXml(int matchId, DateTime? kickOffTime)
     {
-        return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime}'/></root>";
+        return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime?.ToString(CultureInfo.InvariantCulture)}'/></root>";
     }
 }

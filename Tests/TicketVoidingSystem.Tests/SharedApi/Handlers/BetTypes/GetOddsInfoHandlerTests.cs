@@ -25,9 +25,9 @@ public class GetOddsInfoHandlerTests
     {
         // Arrange
         var request = new GetOddsInfoRequest();
-        
+
         // Act
-        var result = await handler.Handle(request, CancellationToken.None);
+        _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         await repository.Received().FetchAsync<OddsInfoViewModel>(Arg.Any<GetOddsInfoCriteria>(), CancellationToken.None);

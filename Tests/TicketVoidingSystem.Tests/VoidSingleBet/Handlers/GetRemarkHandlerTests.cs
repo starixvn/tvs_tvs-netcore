@@ -33,7 +33,7 @@ public class GetRemarkHandlerTests
         var results = await handler.Handle(new GetRemarkRequest(), CancellationToken.None);
 
         // Assert
-        Assert.Equal(expected.Count(), results.Count());
+        Assert.Equal(expected.Count, results.Count());
     }
 
     private class RemarkModelTest

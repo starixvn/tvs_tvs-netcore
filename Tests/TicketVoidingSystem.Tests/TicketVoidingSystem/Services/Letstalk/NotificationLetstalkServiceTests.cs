@@ -27,7 +27,7 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
     }
 
     [Fact]
-    public async Task SendToGroupVoidSettledBets_ValidRequest_AlwayCalledSendMessageWithTicketInfo()
+    public async Task SendToGroupVoidSettledBets_ValidRequest_CalledSendMessageWithTicketInfo()
     {
         // Arrange
         var ticketInfo = new TicketInfoForLetstalk();

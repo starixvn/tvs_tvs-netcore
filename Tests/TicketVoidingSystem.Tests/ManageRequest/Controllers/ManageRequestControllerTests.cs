@@ -1,4 +1,3 @@
-using System.Net.Http;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +14,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Controllers;
 public class ManageRequestControllerTests
 {
 	private readonly IMediator mediator;
-	private ManageRequestController controller;
+	private readonly ManageRequestController controller;
 
 	public ManageRequestControllerTests()
 	{
@@ -39,10 +38,9 @@ public class ManageRequestControllerTests
 	public async Task GetIssueTypeName_HasRequest_CallMediatorRequest()
 	{
 		// Arrange
-		var request = 1;
 
 		// Act
-		await controller.GetIssueTypeName(request);
+		await controller.GetIssueTypeName(1);
 
 		// Assert
 		await mediator.Received().Send(Arg.Any<GetIssueNameRequest>());
@@ -52,10 +50,9 @@ public class ManageRequestControllerTests
 	public async Task GetRequest_HasRequest_CallMediatorRequest()
 	{
 		// Arrange
-		var request = 1;
 
 		// Act
-		await controller.GetRequest(request);
+		await controller.GetRequest(1);
 
 		// Assert
 		await mediator.Received().Send(Arg.Any<GetRequestRequest>());
@@ -93,8 +90,7 @@ public class ManageRequestControllerTests
 		// Arrange
 		var request = new ExportExcelRequest { RequestId = "12345" };
 		var fakeModel = new ExcelFileModel { FileName = "Manage_Request_TVS_", ContentAsByteArray = new byte[10] };
-		var fakeRespone = Task.FromResult(fakeModel);
-		mediator.Send(request).ReturnsForAnyArgs(fakeRespone);
+		mediator.Send(request).ReturnsForAnyArgs(Task.FromResult(fakeModel));
 		var httpContext = new DefaultHttpContext();
 
 		controller.ControllerContext = new ControllerContext
@@ -115,8 +111,7 @@ public class ManageRequestControllerTests
 		// Arrange
 		var request = new ExportVoidedTicketsRequest { RequestId = 1 };
 		var fakeModel = new ExcelFileModel { FileName = "Manage_Request_TVS_", ContentAsByteArray = new byte[10] };
-		var fakeRespone = Task.FromResult(fakeModel);
-		mediator.Send(request).ReturnsForAnyArgs(fakeRespone);
+		mediator.Send(request).ReturnsForAnyArgs(Task.FromResult(fakeModel));
 		var httpContext = new DefaultHttpContext();
 
 		controller.ControllerContext = new ControllerContext
@@ -188,8 +183,7 @@ public class ManageRequestControllerTests
 	public async Task GetPermissionManage_HasRequest_CallMediatorRequest()
 	{
 		// Arrange
-
-		// Act
+        // Act
 		await controller.GetPermissionManage();
 
 		// Assert

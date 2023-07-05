@@ -1,17 +1,15 @@
 using TicketVoidingSystem.Extensions.TN;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions.TN;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions.TN;
 public class InternalStringExtensionTests
 {
 [Fact]
         public void DistinctWithComma_WithNullOrEmptyText_ReturnsEmptyString()
         {
             // Arrange
-            string text = null;
-
             // Act
-            var result = text.DistinctWithComma();
+            var result = ((string)null).DistinctWithComma();
 
             // Assert
             Assert.Equal(string.Empty, result);
@@ -21,8 +19,8 @@ public class InternalStringExtensionTests
         public void DistinctWithComma_WithValidText_ReturnsDistinctStringWithComma()
         {
             // Arrange
-            string text = "User1,User2,User1,User3,User2";
-            string expected = "User1,User2,User3";
+            const string text = "User1,User2,User1,User3,User2";
+            const string expected = "User1,User2,User3";
 
             // Act
             var result = text.DistinctWithComma();
@@ -35,8 +33,8 @@ public class InternalStringExtensionTests
         public void DistinctWithComma_WithTextContainingEmptySpaces_ReturnsDistinctStringWithComma()
         {
             // Arrange
-            string text = "User1,User2,,User3";
-            string expected = "User1,User2,User3";
+            const string text = "User1,User2,,User3";
+            const string expected = "User1,User2,User3";
 
             // Act
             var result = text.DistinctWithComma();
@@ -49,7 +47,7 @@ public class InternalStringExtensionTests
         public void StripHtml_WithEmptyHtmlText_ReturnsEmptyString()
         {
             // Arrange
-            string htmlText = "";
+            const string htmlText = "";
 
             // Act
             var result = htmlText.StripHtml();
@@ -62,8 +60,8 @@ public class InternalStringExtensionTests
         public void StripHtml_WithHtmlText_ReturnsStrippedText()
         {
             // Arrange
-            string htmlText = "<p>This is <strong>bold</strong> text.</p>";
-            string expected = "This is bold text.";
+            const string htmlText = "<p>This is <strong>bold</strong> text.</p>";
+            const string expected = "This is bold text.";
 
             // Act
             var result = htmlText.StripHtml();
@@ -76,8 +74,8 @@ public class InternalStringExtensionTests
         public void StripHtml_WithHtmlTextContainingEntities_ReturnsDecodedText()
         {
             // Arrange
-            string htmlText = "This is &lt;strong&gt;bold&lt;/strong&gt; text.";
-            string expected = "This is <strong>bold</strong> text.";
+            const string htmlText = "This is &lt;strong&gt;bold&lt;/strong&gt; text.";
+            const string expected = "This is <strong>bold</strong> text.";
 
             // Act
             var result = htmlText.StripHtml();

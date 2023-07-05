@@ -36,7 +36,7 @@ public class UpdateVoidBetAutomationHandlerTests
         var afterVoidService = Substitute.For<AfterVoidService>();
         var loggingService = Substitute.For<LoggingService>();
         afterVoidService.When(x => x.UpdateVoidBetAutomationServiceInfo(Arg.Any<VoidBetAutomationModel>()))
-            .Do(x => throw new Exception());
+            .Do(_ => throw new Exception());
         var handler = new UpdateVoidBetAutomationHandler(afterVoidService, loggingService);
 
         // Act

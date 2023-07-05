@@ -16,10 +16,10 @@ public class SubjectServiceTests
     }
 
     [Theory]
-    [InlineData(EmailGroup.Csd, "Voided Cash Out Transaction Report for 1 (2/2/2022 2:02:02 AM)")]
-    [InlineData(EmailGroup.CashOut, "Voided Cash Out Transaction Report for Cash Out (2/2/2022 2:02:02 AM)")]
-    [InlineData(EmailGroup.ItQa, "Test Currency - Voided Cash Out Transaction Report for  (2/2/2022 2:02:02 AM)")]
-    [InlineData(EmailGroup.ItSupport, "Real Currency - Voided Cash Out Transaction Report for  (2/2/2022 2:02:02 AM)")]
+    [InlineData(EmailGroup.Csd, "Voided Cash Out Transaction Report for 1 (02/02/2022 02:02:02)")]
+    [InlineData(EmailGroup.CashOut, "Voided Cash Out Transaction Report for Cash Out (02/02/2022 02:02:02)")]
+    [InlineData(EmailGroup.ItQa, "Test Currency - Voided Cash Out Transaction Report for  (02/02/2022 02:02:02)")]
+    [InlineData(EmailGroup.ItSupport, "Real Currency - Voided Cash Out Transaction Report for  (02/02/2022 02:02:02)")]
     [InlineData(EmailGroup.Recover, "Exception Subject")]
     public void CreateVoid_ReturnChoice(EmailGroup group, string expected)
     {
@@ -37,10 +37,10 @@ public class SubjectServiceTests
     }
 
     [Theory]
-    [InlineData(EmailGroup.Recover, "Recovered Cash Out Transaction Report (2/2/2022 2:02:02 AM)")]
-    [InlineData(EmailGroup.CashOut, "Recovered Cash Out Transaction Report (2/2/2022 2:02:02 AM)")]
-    [InlineData(EmailGroup.ItQa, "Test Currency - Recovered Cash Out Transaction Report (2/2/2022 2:02:02 AM)")]
-    [InlineData(EmailGroup.ItSupport, "Real Currency - Recovered Cash Out Transaction Report (2/2/2022 2:02:02 AM)")]
+    [InlineData(EmailGroup.Recover, "Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
+    [InlineData(EmailGroup.CashOut, "Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
+    [InlineData(EmailGroup.ItQa, "Test Currency - Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
+    [InlineData(EmailGroup.ItSupport, "Real Currency - Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
     [InlineData(EmailGroup.None, "Exception Subject")]
     public void CreateRecover_ReturnRecover(EmailGroup group, string expected)
     {

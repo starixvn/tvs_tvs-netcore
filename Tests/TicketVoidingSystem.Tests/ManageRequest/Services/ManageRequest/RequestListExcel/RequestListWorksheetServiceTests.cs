@@ -1,17 +1,18 @@
-﻿using NSubstitute;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using OfficeOpenXml;
-using System.Collections.Generic;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.RequestListExcel;
+
 public class RequestListWorksheetServiceTests
 {
-    private readonly GetRequestsForExcelService getRequestsForExcelService;
     private readonly CellService cellService;
+    private readonly GetRequestsForExcelService getRequestsForExcelService;
 
-    private RequestListWorksheetService service;
+    private readonly RequestListWorksheetService service;
 
     public RequestListWorksheetServiceTests()
     {
@@ -31,9 +32,9 @@ public class RequestListWorksheetServiceTests
         var query = new SelectRequestsQuery();
         var requests = new List<ExcelRequestModel>
         {
-            new ExcelRequestModel { RequestId = 1 },
-            new ExcelRequestModel { RequestId = 2 },
-            new ExcelRequestModel { RequestId = 3 }
+            new() { RequestId = 1 },
+            new() { RequestId = 2 },
+            new() { RequestId = 3 }
         };
 
         getRequestsForExcelService.GetRequestsExcel(query).Returns(requests);
@@ -42,7 +43,7 @@ public class RequestListWorksheetServiceTests
         await service.BindingContent(sheet, query);
 
         // Assert
-        getRequestsForExcelService.Received(1).GetRequestsExcel(query);
+        await getRequestsForExcelService.Received(1).GetRequestsExcel(query);
         cellService.Received(1).RenderDataWorksheet(sheet, requests);
         cellService.Received(1).SetStyle(sheet);
     }

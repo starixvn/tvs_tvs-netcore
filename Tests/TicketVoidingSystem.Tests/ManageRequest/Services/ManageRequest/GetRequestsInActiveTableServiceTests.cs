@@ -11,48 +11,51 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest;
+
+public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
-	public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
+    private readonly BetListService betListService;
+    private readonly IMapper mapper;
+    private readonly IDynamicRepository repository;
+    private readonly GetRequestsInActiveTableServiceImp service;
+
+    public GetRequestsInActiveTableServiceTests()
     {
-		private readonly IDynamicRepository repository;
-		private readonly IMapper mapper;
-		private readonly BetListService betListService;
-		private readonly GetRequestsInActiveTableServiceImp service;
+        betListService = Substitute.For<BetListService>();
+        repository = Substitute.For<IDynamicRepository>();
+        mapper = Substitute.For<IMapper>();
+        service = new GetRequestsInActiveTableServiceImp(repository, mapper, betListService);
+    }
 
-		public GetRequestsInActiveTableServiceTests()
-		{
-			betListService = Substitute.For<BetListService>();
-			repository = Substitute.For<IDynamicRepository>();
-			mapper = Substitute.For<IMapper>();
-			service = new GetRequestsInActiveTableServiceImp(repository, mapper, betListService);
-		}
+    [Theory]
+    [InlineData(IssueTypeConstant.DangerAccepted)]
+    [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
+    [InlineData(IssueTypeConstant.AbnormalBet)]
+    [InlineData(0)]
+    public async Task GetRequestsInActiveTable_ValidData_ReturnListRequestModel(int issueTypeId)
+    {
+        // Arrange
+        var query = new SelectRequestsQuery();
+        var criteriaActive = new SelectActiveRequestsCriteria();
+        mapper.Map<SelectActiveRequestsCriteria>(Arg.Any<SelectRequestsQuery>())
+            .ReturnsForAnyArgs(criteriaActive);
+        var requests = new List<RequestModel>
+            { new() { IssueTypeId = issueTypeId, FilterBy = null, RequestId = 2, MatchId = 1, TotalVoidedSingle = 1 } };
+        var requestInfo = new List<GetRequestInfoModel> { new() };
+        var requestInfoGetCalcTime = new List<string> { "" };
+        repository
+            .FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(Arg.Any<SelectActiveRequestsCriteria>())
+            .ReturnsForAnyArgs((requests, requestInfo, requestInfoGetCalcTime));
+        repository.Fetch<GetRequestInfoModel>(Arg.Any<GetTotalVoidedTicketCriteria>())
+            .Returns(new List<GetRequestInfoModel> { new() { RequestId = 2, MatchId = 1 } });
+        repository.Fetch<GetBettypeForRequestModel>(Arg.Any<GetBettypeNamesCriteria>())
+            .Returns(new List<GetBettypeForRequestModel> { new() });
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("aa");
+        // Act
+        var actual = await service.GetRequestsInActiveTable(query);
 
-		[Theory]
-		[InlineData(IssueTypeConstant.DangerAccepted)]
-		[InlineData(IssueTypeConstant.AbnormalBetRealMember)]
-		[InlineData(IssueTypeConstant.AbnormalBet)]
-		[InlineData(0)]
-		public async Task GetRequestsInActiveTable_ValidData_ReturnListRequestModel(int issueTypeId)
-		{
-			// Arrange
-			var query = new SelectRequestsQuery();
-			var criteriaActive = new SelectActiveRequestsCriteria();
-			mapper.Map<SelectActiveRequestsCriteria>(Arg.Any<SelectRequestsQuery>())
-				.ReturnsForAnyArgs(criteriaActive);
-			var requests = new List<RequestModel> { new RequestModel { IssueTypeId = issueTypeId, FilterBy = null, RequestId = 2, MatchId = 1, TotalVoidedSingle = 1 } };
-			var requestInfo = new List<GetRequestInfoModel> { new GetRequestInfoModel() };
-			var requestInfoGetCalcTime = new List<string> { "" };
-			repository.FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(Arg.Any<SelectActiveRequestsCriteria>())
-				.ReturnsForAnyArgs((requests, requestInfo, requestInfoGetCalcTime));
-			repository.Fetch<GetRequestInfoModel>(Arg.Any<GetTotalVoidedTicketCriteria>()).Returns(new List<GetRequestInfoModel> { new GetRequestInfoModel { RequestId = 2, MatchId = 1 } });
-			repository.Fetch<GetBettypeForRequestModel>(Arg.Any<GetBettypeNamesCriteria>()).Returns(new List<GetBettypeForRequestModel> { new GetBettypeForRequestModel() });
-			betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("aa");
-			// Act
-			var actual = await service.GetRequestsInActiveTable(query);
-
-			// Assert
-			Assert.NotNull(actual.Item1);
-		}
-	}
+        // Assert
+        Assert.NotNull(actual.Item1);
+    }
 }

@@ -12,14 +12,13 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition
     public class NetPositionServiceTests
     {
         private readonly NetPositionHttpClientService netPositionHttpClientService;
-        private readonly SessionService sessionService;
         private readonly IDynamicRepository repository;
         private readonly NetPositionServiceImp service;
 
         public NetPositionServiceTests()
         {
             netPositionHttpClientService = Substitute.For<NetPositionHttpClientService>();
-            sessionService = Substitute.For<SessionService>();
+            var sessionService = Substitute.For<SessionService>();
             repository = Substitute.For<IDynamicRepository>();
             service = new NetPositionServiceImp(netPositionHttpClientService, sessionService, repository);
         }
@@ -30,8 +29,8 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition
         public async Task UpdateNetPosition_HasTransIds_HasCalledPostRequest(int errorCode)
         {
             // Arrange
-            string transIds = "12345";
-            string action = "update";
+            const string transIds = "12345";
+            const string action = "update";
             
             netPositionHttpClientService.PostRequest(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(new Result{ ErrorCode = errorCode, ErrorMsg = "123" });
 
@@ -46,8 +45,8 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition
         public async Task UpdateNetPosition_WithEmptyTransIds_ReturnsTrue()
         {
             // Arrange
-            string transIds = "";
-            string action = "update";
+            const string transIds = "";
+            const string action = "update";
 
             // Act
             var result = await service.UpdateNetPosition(transIds, action);
@@ -60,9 +59,9 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition
         public async Task RollBackNetPosition_WithValidTransIds_CallsRepositoryExecuteAsync()
         {
             // Arrange
-            string transIds = "12345";
-            string action = "rollback";
-            string message = "Rollback message";
+            const string transIds = "12345";
+            const string action = "rollback";
+            const string message = "Rollback message";
             
             // Act
             await service.RollBackNetPosition(transIds, action, message);

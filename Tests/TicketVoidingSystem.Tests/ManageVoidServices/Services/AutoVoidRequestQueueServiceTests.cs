@@ -15,7 +15,7 @@ public class AutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetQueueInAllServers_ExecuteSuccessful_ReturnExpected()
     {
         // Arrange
-        var models = new List<AutoVoidRequestQueueModel> { new AutoVoidRequestQueueModel() };
+        var models = new List<AutoVoidRequestQueueModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();
         repository.FetchAsync<AutoVoidRequestQueueModel>(Arg.Any<GetAutoVoidRequestQueueCriteria>())
             .ReturnsForAnyArgs(models);

@@ -4,45 +4,42 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
+
+public class ResultsExtensionTests
 {
-    public class ResultsExtensionTests
+    [Fact]
+    public void InsertNegativeBalanceWarning_NegativeBalanceUsersIsNotEmpty_InsertWarningResult()
     {
-        [Fact]
-        public void InsertNegativeBalanceWarning_NegativeBalanceUsersIsNotEmpty_InsertWarningResult()
+        // Arrange
+        IList<Result> results = new List<Result>
         {
-            // Arrange
-            IList<Result> results = new List<Result>
-            {
-                new Result { ErrorCode = 0, ErrorMsg = "Success" }
-            };
-            string negativeBalanceUsers = "User1, User2";
+            new() { ErrorCode = 0, ErrorMsg = "Success" }
+        };
+        const string negativeBalanceUsers = "User1, User2";
 
-            // Act
-            results.InsertNegativeBalanceWarning(negativeBalanceUsers);
+        // Act
+        results.InsertNegativeBalanceWarning(negativeBalanceUsers);
 
-            // Assert
-            Assert.Equal(2, results.Count);
-            Assert.Equal(1, results[1].ErrorCode);
-            Assert.Equal(string.Format(StringResource.WarningNegativeBalance, negativeBalanceUsers), results[1].ErrorMsg);
-        }
+        // Assert
+        Assert.Equal(2, results.Count);
+        Assert.Equal(1, results[1].ErrorCode);
+        Assert.Equal(string.Format(StringResource.WarningNegativeBalance, negativeBalanceUsers), results[1].ErrorMsg);
+    }
 
-        [Fact]
-        public void InsertNegativeBalanceWarning_NegativeBalanceUsersIsNullOrEmpty_NotInsertWarningResult()
+    [Fact]
+    public void InsertNegativeBalanceWarning_NegativeBalanceUsersIsNullOrEmpty_NotInsertWarningResult()
+    {
+        // Arrange
+        IList<Result> results = new List<Result>
         {
-            // Arrange
-            IList<Result> results = new List<Result>
-            {
-                new Result { ErrorCode = 0, ErrorMsg = "Success" }
-            };
-            string negativeBalanceUsers = "";
+            new() { ErrorCode = 0, ErrorMsg = "Success" }
+        };
 
-            // Act
-            results.InsertNegativeBalanceWarning(negativeBalanceUsers);
+        // Act
+        results.InsertNegativeBalanceWarning("");
 
-            // Assert
-            Assert.Single(results);
-        }
-
+        // Assert
+        Assert.Single(results);
     }
 }

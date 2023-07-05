@@ -11,8 +11,8 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SubParlayTicket;
 
 public class GetSelectionsSMPHandlerTests
 {
-    private readonly IDynamicRepository repository;
     private readonly GetSelectionsSMPHandler handler;
+    private readonly IDynamicRepository repository;
 
     public GetSelectionsSMPHandlerTests()
     {
@@ -25,15 +25,15 @@ public class GetSelectionsSMPHandlerTests
     {
         // Arrange
         var request = new GetSelectionsSMPRequest();
-        var selections = new List<SelectionsSMP> { };
+        var selections = new List<SelectionsSMP>();
         repository.FetchAsync<SelectionsSMP>(request, CancellationToken.None).ReturnsForAnyArgs(selections);
-        var expected = $"<div class=\"smp-group-selections\"></div>";
+        const string expected = "<div class=\"smp-group-selections\"></div>";
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(expected,  actual);
+        Assert.Equal(expected, actual);
     }
 
     [Fact]
@@ -41,10 +41,11 @@ public class GetSelectionsSMPHandlerTests
     {
         // Arrange
         var request = new GetSelectionsSMPRequest();
-        var selections = new List<SelectionsSMP> { new SelectionsSMP { Result = "", SelectionName = "11"}, new SelectionsSMP { Result = "1", SelectionName = "11" } };
+        var selections = new List<SelectionsSMP>
+            { new() { Result = "", SelectionName = "11" }, new() { Result = "1", SelectionName = "11" } };
         repository.FetchAsync<SelectionsSMP>(request, CancellationToken.None).ReturnsForAnyArgs(selections);
-        var result = "<div><span class=\"selection-smp\">11</span></div><div><span class=\"selection-smp\">11</span> - <span class=\"selection-result\">1</span></div>";
-        var expected = $"<div class=\"smp-group-selections\">{result}</div>";
+        const string result = "<div><span class=\"selection-smp\">11</span></div><div><span class=\"selection-smp\">11</span> - <span class=\"selection-result\">1</span></div>";
+        const string expected = $"<div class=\"smp-group-selections\">{result}</div>";
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

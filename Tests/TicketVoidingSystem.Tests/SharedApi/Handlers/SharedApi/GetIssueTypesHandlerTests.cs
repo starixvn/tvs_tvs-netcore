@@ -14,8 +14,8 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 
 public class GetIssueTypesHandlerTests
 {
-    private readonly IDynamicRepository repository;
     private readonly GetIssueTypesHandler handler;
+    private readonly IDynamicRepository repository;
 
     public GetIssueTypesHandlerTests()
     {
@@ -28,10 +28,12 @@ public class GetIssueTypesHandlerTests
     {
         // Arrange
         var request = new GetIssueTypesRequest();
-        var issueTypes = new List<IssueType> { };
-        var subIssueTypes = new List<SubIssueType> { };
-        repository.FetchAsync<IssueType>(new GetIssueTypeCriteria(), CancellationToken.None).ReturnsForAnyArgs(issueTypes);
-        repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), CancellationToken.None).ReturnsForAnyArgs(subIssueTypes);
+        var issueTypes = new List<IssueType>();
+        var subIssueTypes = new List<SubIssueType>();
+        repository.FetchAsync<IssueType>(new GetIssueTypeCriteria(), CancellationToken.None)
+            .ReturnsForAnyArgs(issueTypes);
+        repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), CancellationToken.None)
+            .ReturnsForAnyArgs(subIssueTypes);
         var expected = new IssueTypesViewModel
         {
             IssueTypes = issueTypes,
@@ -42,8 +44,7 @@ public class GetIssueTypesHandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(expected.IssueTypes.ToList().Count(), actual.IssueTypes.ToList().Count());
-        Assert.Equal(expected.SubIssueTypes.ToList().Count(), actual.SubIssueTypes.ToList().Count());
-
+        Assert.Equal(expected.IssueTypes.ToList().Count, actual.IssueTypes.ToList().Count);
+        Assert.Equal(expected.SubIssueTypes.ToList().Count, actual.SubIssueTypes.ToList().Count);
     }
 }

@@ -9,12 +9,11 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.BetTypes;
 
 public class GetBetTeamsHandlerTests
 {
-    private readonly BetTeamsService betTeamsService;
     private readonly GetBetTeamsHandler handler;
 
     public GetBetTeamsHandlerTests()
     {
-        betTeamsService = Substitute.For<BetTeamsService>();
+        var betTeamsService = Substitute.For<BetTeamsService>();
         handler = new GetBetTeamsHandler(betTeamsService);
     }
 

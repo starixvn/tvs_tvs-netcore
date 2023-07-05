@@ -1,8 +1,7 @@
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using Xunit;
-using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Constants;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Extension;
 
@@ -36,11 +35,12 @@ public class CheckBoxExtensionTests
     [InlineData(false, false, false, null, true)]
     [InlineData(false, false, false, 1, true)]
     public void IsDisable_ReturnsExpected_WithCheckCancelCashOutTicket
-    (bool unSettled, bool instantlySettled, bool settled, int? statusWinLost, bool expected)
+        (bool unSettled, bool instantlySettled, bool settled, int? statusWinLost, bool expected)
     {
         // Arrange
         var item = new GetTicketModel { IsCancelCashOut = true, StatusWinLost = statusWinLost };
-        var permission = new VoidPermission { UnSettled = unSettled, InstantlySettled = instantlySettled, Settled = settled };
+        var permission = new VoidPermission
+            { UnSettled = unSettled, InstantlySettled = instantlySettled, Settled = settled };
 
         // Act
         var result = item.IsDisable(permission, 0);
@@ -55,11 +55,12 @@ public class CheckBoxExtensionTests
     [InlineData("(instant settlement)", false, false, true)]
     [InlineData("(instant settlement)", true, true, false)]
     [InlineData("(instant)", true, true, false)]
-    public void IsDisable_ReturnsFalse_WithCheckDefaultEnable(string groupName, bool instantlySettled, bool settled, bool expected)
+    public void IsDisable_ReturnsFalse_WithCheckDefaultEnable(string groupName, bool instantlySettled, bool settled,
+        bool expected)
     {
         // Arrange
         var item = new GetTicketModel { GroupName = groupName };
-        var permission = new VoidPermission { InstantlySettled = instantlySettled, Settled = settled};
+        var permission = new VoidPermission { InstantlySettled = instantlySettled, Settled = settled };
         item.Status = "settled";
 
         // Act
@@ -78,11 +79,13 @@ public class CheckBoxExtensionTests
     [InlineData(true, IssueTypeConstant.DangerAccepted, false, false, true)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, true, false, false)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, false, true, false)]
-    public void IsDisable_ReturnsFalse_WithCheckCashOutTicketAsUnSettled(bool isCashOut, int issueTypeId, bool unSettled, bool instantlySettled, bool expected)
+    public void IsDisable_ReturnsFalse_WithCheckCashOutTicketAsUnSettled(bool isCashOut, int issueTypeId,
+        bool unSettled, bool instantlySettled, bool expected)
     {
         // Arrange
         var item = new GetTicketModel { GroupName = "1", IsCashOut = isCashOut };
-        var permission = new VoidPermission { InstantlySettled = instantlySettled, Settled = false, UnSettled = unSettled };
+        var permission = new VoidPermission
+            { InstantlySettled = instantlySettled, Settled = false, UnSettled = unSettled };
 
         // Act
         var result = item.IsDisable(permission, issueTypeId);
@@ -97,7 +100,8 @@ public class CheckBoxExtensionTests
     public void IsDisable_ReturnsFalse_WithCheckStatus(bool isMixParlay)
     {
         // Arrange
-        var item = new GetTicketModel { IsMixParlay = isMixParlay, SubStatus = "123", Status = "123", GroupName = "1", IsCashOut = false };
+        var item = new GetTicketModel
+            { IsMixParlay = isMixParlay, SubStatus = "123", Status = "123", GroupName = "1", IsCashOut = false };
         var permission = new VoidPermission { InstantlySettled = false, Settled = false, UnSettled = true };
 
         // Act
@@ -124,8 +128,10 @@ public class CheckBoxExtensionTests
     public void IsSettledTicket_ReturnsTrue_WhenCheckStatusConditionMet()
     {
         // Arrange
-        var item = new GetTicketModel();
-        item.Status = "won";
+        var item = new GetTicketModel
+        {
+            Status = "won"
+        };
 
         // Act
         var result = item.IsSettledTicket();

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
@@ -11,140 +12,145 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTickets
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTickets;
+
+public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
 {
-    public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
+    private readonly BetListService betListService;
+    private readonly IMapper mapper;
+    private readonly MapFromBetListServiceImp service;
+
+    public MapFromBetListServiceTests()
     {
-        private readonly IMapper mapper;
-        private readonly BetListService betListService;
-        private readonly MapFromBetListServiceImp service;
+        mapper = Substitute.For<IMapper>();
+        betListService = Substitute.For<BetListService>();
+        service = new MapFromBetListServiceImp(mapper, betListService);
+    }
 
-        public MapFromBetListServiceTests()
+    [Fact]
+    public void MapToVoidedTicketViewModel_ShouldMapProperties_WhenBetTypeInRange()
+    {
+        // Arrange
+        var item = new VoidedTicketModel
         {
-            mapper = Substitute.For<IMapper>();
-            betListService = Substitute.For<BetListService>();
-            service = new MapFromBetListServiceImp(mapper, betListService);
-        }
+            BetType = 803,
+            RefNo = 123456,
+            UserName = "testUser",
+            WinLost = "100.50",
+            CurrencyName = "CurrencyName",
+            Creator = "Creator",
+            IsCashOut = true,
+            IsMixParlay = false,
+            OddsType = 1,
+            WalletType = 1,
+            BetdaqId = 2,
+            Status = "running",
+            TransDate = new DateTime(2022, 2, 2, 2, 2, 2),
+            VoidedTime = new DateTime(2022, 2, 2, 2, 2, 2)
+        };
+        var match = new Match();
+        const ChoiceType choiceType = ChoiceType.Excel;
+        const int issueTypeId = 1;
 
-        [Fact]
-        public void MapToVoidedTicketViewModel_ShouldMapProperties_WhenBetTypeInRange()
+        var ticket = new Ticket
         {
-            // Arrange
-            var item = new VoidedTicketModel
-            {
-                BetType = 803,
-                RefNo = 123456,
-                UserName = "testuser",
-                WinLost = "100.50",
-                CurrencyName = "CurrencyName",
-                Creator = "Creator",
-                IsCashOut = true,
-                IsMixParlay = false,
-                OddsType = 1,
-                WalletType = 1,
-                BetdaqId = 2,
-                Status = "running",
-                TransDate = new System.DateTime(2022, 2, 2,2,2,2),
-                VoidedTime = new System.DateTime(2022, 2, 2, 2, 2, 2),
-            };
-            var match = new Match
-            {
-            };
-            var choiceType = ChoiceType.Excel;
-            var issueTypeId = 1;
-            
-            var ticket = new Ticket
-            {
-                UserName = "testuser",
-                TransDate = new System.DateTime(2022, 2, 2, 2, 2, 2),
-            };
+            UserName = "testUser",
+            TransDate = new DateTime(2022, 2, 2, 2, 2, 2)
+        };
 
-            var expected = new VoidedTicketViewModel
-            {
-                Odds = "Odds",
-                Handicap = "Handicap",
-                Stake = "Stake",
-                BetType = "BetType",
-                Status = "Status",
-                Creator = "Creator",
-                Currency = "CurrencyName",
-                WinLoss = "-",
-                BetId ="123456",
-                TransDate = new System.DateTime(2022, 2, 2, 2, 2, 2).ToString(FormatKey.LongDateFormatTimeWithSlash),
-                Member = "testuser",
-                Score = "",
-                Choice = "",
-                VoidTime = new System.DateTime(2022, 2, 2, 2, 2, 2).ToString(FormatKey.LongDateFormatTimeWithSlash),
-                BettypeCombination = "Non-Live BetType (betTeam)",
-                IsCashOut = true
-            }; 
-
-            betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");
-            betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Handicap"); 
-            betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("Stake");
-            betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
-            betListService.GetStatus(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Status");
-            betListService.BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Choice");
-            betListService.BuildChoiceBlock(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs(new Choice_Template { betTeam  = "betTeam" });
-
-            mapper.Map<Ticket>(Arg.Any<VoidedTicketModel>()).ReturnsForAnyArgs(ticket);
-
-            // Act
-            var result = service.MapToVoidedTicketViewModel(item, match, choiceType, issueTypeId);
-
-            // Assert           
-            AssertExtension.Equal(expected, result);
-        }
-
-        [Theory]
-        [InlineData(IssueTypeConstant.AbnormalAccount, "<div id=1><div id='divEvent_11'></div>")]
-        [InlineData(IssueTypeConstant.AbnormalBet, "<div id=1><div id='divEvent_11'></div>")]
-        [InlineData(IssueTypeConstant.DangerAccepted, "<div id='dvFavorite_11'><div id=1></div><div id=1><div id='divEvent_11'></div>")]
-        public void MapToVoidedTicketViewModel_HasGetChoiceForTicketParlay(int issueTypeId, string choice)
+        var expected = new VoidedTicketViewModel
         {
-            // Arrange
-            var item = new VoidedTicketModel
-            {
-                BetType = 38,
-                RefNo = 123456,
-                UserName = "testuser",
-                WinLost = "100.50",
-                CurrencyName = "CurrencyName",
-                Creator = "Creator",
-                IsCashOut = false,
-                IsMixParlay = true,
-                OddsType = 1,
-                WalletType = 1,
-                BetdaqId = 2,
-                Status = "running",
-                TransDate = new System.DateTime(2022, 2, 2, 2, 2, 2),
-                VoidedTime = new System.DateTime(2022, 2, 2, 2, 2, 2),
-                SubTransId = 11
-            };
-            
-            var choiceType = ChoiceType.Email;
+            Odds = "Odds",
+            Handicap = "Handicap",
+            Stake = "Stake",
+            BetType = "BetType",
+            Status = "Status",
+            Creator = "Creator",
+            Currency = "CurrencyName",
+            WinLoss = "-",
+            BetId = "123456",
+            TransDate = new DateTime(2022, 2, 2, 2, 2, 2).ToString(FormatKey.LongDateFormatTimeWithSlash),
+            Member = "testUser",
+            Score = "",
+            Choice = "",
+            VoidTime = new DateTime(2022, 2, 2, 2, 2, 2).ToString(FormatKey.LongDateFormatTimeWithSlash),
+            BettypeCombination = "Non-Live BetType (betTeam)",
+            IsCashOut = true
+        };
 
-            var ticket = new Ticket
-            {
-                UserName = "testuser",
-                TransDate = new System.DateTime(2022, 2, 2, 2, 2, 2),
-            };
-        
-            betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");
-            betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Handicap");
-            betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("Stake");
-            betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
-            betListService.GetStatus(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Status");
-            betListService.BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("choice");
-            betListService.BuildChoiceBlock(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs(new Choice_Template { betTeam = "betTeam" });
-            betListService.BuildChoice(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("<div id=1>");
-            mapper.Map<Ticket>(Arg.Any<VoidedTicketModel>()).ReturnsForAnyArgs(ticket);
+        betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");
+        betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs("Handicap");
+        betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("Stake");
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
+        betListService.GetStatus(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Status");
+        betListService.BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs("Choice");
+        betListService.BuildChoiceBlock(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs(new Choice_Template { betTeam = "betTeam" });
 
-            // Act
-            var result = service.MapToVoidedTicketViewModel(item, null, choiceType, issueTypeId);
+        mapper.Map<Ticket>(Arg.Any<VoidedTicketModel>()).ReturnsForAnyArgs(ticket);
 
-            // Assert           
-            AssertExtension.Equal(choice, result.Choice);
-        }
+        // Act
+        var result = service.MapToVoidedTicketViewModel(item, match, choiceType, issueTypeId);
+
+        // Assert           
+        AssertExtension.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(IssueTypeConstant.AbnormalAccount, "<div id=1><div id='divEvent_11'></div>")]
+    [InlineData(IssueTypeConstant.AbnormalBet, "<div id=1><div id='divEvent_11'></div>")]
+    [InlineData(IssueTypeConstant.DangerAccepted,
+        "<div id='dvFavorite_11'><div id=1></div><div id=1><div id='divEvent_11'></div>")]
+    public void MapToVoidedTicketViewModel_HasGetChoiceForTicketParlay(int issueTypeId, string choice)
+    {
+        // Arrange
+        var item = new VoidedTicketModel
+        {
+            BetType = 38,
+            RefNo = 123456,
+            UserName = "testUser",
+            WinLost = "100.50",
+            CurrencyName = "CurrencyName",
+            Creator = "Creator",
+            IsCashOut = false,
+            IsMixParlay = true,
+            OddsType = 1,
+            WalletType = 1,
+            BetdaqId = 2,
+            Status = "running",
+            TransDate = new DateTime(2022, 2, 2, 2, 2, 2),
+            VoidedTime = new DateTime(2022, 2, 2, 2, 2, 2),
+            SubTransId = 11
+        };
+
+        const ChoiceType choiceType = ChoiceType.Email;
+
+        var ticket = new Ticket
+        {
+            UserName = "testUser",
+            TransDate = new DateTime(2022, 2, 2, 2, 2, 2)
+        };
+
+        betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");
+        betListService.GetHandicap(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs("Handicap");
+        betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("Stake");
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("BetType");
+        betListService.GetStatus(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("Status");
+        betListService.BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs("choice");
+        betListService.BuildChoiceBlock(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs(new Choice_Template { betTeam = "betTeam" });
+        betListService.BuildChoice(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false)
+            .ReturnsForAnyArgs("<div id=1>");
+        mapper.Map<Ticket>(Arg.Any<VoidedTicketModel>()).ReturnsForAnyArgs(ticket);
+
+        // Act
+        var result = service.MapToVoidedTicketViewModel(item, null, choiceType, issueTypeId);
+
+        // Assert           
+        AssertExtension.Equal(choice, result.Choice);
     }
 }

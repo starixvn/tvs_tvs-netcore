@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
-using System.Collections.Generic;
-using System.Linq;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
@@ -10,12 +10,13 @@ using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTickets;
+
 public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
-    private GetVoidedTicketsServiceImp service;
+    private readonly IMapper mapper;
 
     private readonly IDynamicRepository repository;
-    private readonly IMapper mapper;
+    private readonly GetVoidedTicketsServiceImp service;
 
     public GetVoidedTicketsServiceTests()
     {
@@ -30,7 +31,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         // Arrange
         var query = new GetVoidedTicketsQuery();
         mapper.Map<GetVoidedTicketsCriteria>(Arg.Any<GetVoidedTicketsQuery>()).Returns(new GetVoidedTicketsCriteria());
-        repository.FetchAsync<VoidedTicketModel>(Arg.Is<GetVoidedTicketsCriteria>(new GetVoidedTicketsCriteria
+        repository.FetchAsync<VoidedTicketModel>(Arg.Is(new GetVoidedTicketsCriteria
         {
             SiteDbGroupId = 1
         })).ReturnsForAnyArgs(new List<VoidedTicketModel>
@@ -57,8 +58,9 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         {
             IssueTypeId = 17
         };
-        mapper.Map<GetVoidedTickets14Criteria>(Arg.Any<GetVoidedTicketsQuery>()).Returns(new GetVoidedTickets14Criteria());
-        repository.FetchAsync<VoidedTicketModel>(Arg.Is<GetVoidedTickets14Criteria>(new GetVoidedTickets14Criteria
+        mapper.Map<GetVoidedTickets14Criteria>(Arg.Any<GetVoidedTicketsQuery>())
+            .Returns(new GetVoidedTickets14Criteria());
+        repository.FetchAsync<VoidedTicketModel>(Arg.Is(new GetVoidedTickets14Criteria
         {
             SiteDbGroupId = 1
         })).ReturnsForAnyArgs(new List<VoidedTicketModel>
@@ -87,11 +89,9 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
             IsCreditOnly = true
         };
         mapper.Map<GetVoidedTicketsCriteria>(Arg.Any<GetVoidedTicketsQuery>()).Returns(new GetVoidedTicketsCriteria());
-        repository.FetchAsync<VoidedTicketModel>(Arg.Is<GetVoidedTicketsCriteria>(new GetVoidedTicketsCriteria
+        repository.FetchAsync<VoidedTicketModel>(Arg.Is(new GetVoidedTicketsCriteria
         {
-            SiteDbGroupId = 1,
-
-
+            SiteDbGroupId = 1
         })).ReturnsForAnyArgs(new List<VoidedTicketModel>
         {
             new()
@@ -128,5 +128,3 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         Assert.Equal(123, result.MatchId);
     }
 }
-
-

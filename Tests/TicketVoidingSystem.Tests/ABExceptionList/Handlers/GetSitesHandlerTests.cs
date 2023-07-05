@@ -32,7 +32,8 @@ public class GetSitesHandlerTests
 
         // Assert
         await repository.Received(1).FetchAsync<LicenseeSite>(Arg.Any<GetSitesCriteria>(), Arg.Any<CancellationToken>());
-        Assert.Equal(models[0].GroupName, actual.FirstOrDefault().GroupName);
-        Assert.Equal(models[0].Sites.Count(), actual.FirstOrDefault().Sites.Count());
+        var groupLicenseeSiteViewModels = actual.ToList();
+        Assert.Equal(models[0].GroupName, groupLicenseeSiteViewModels.ToList().FirstOrDefault().GroupName);
+        Assert.Equal(models[0].Sites.Count(), groupLicenseeSiteViewModels.FirstOrDefault().Sites.Count());
     }
 }

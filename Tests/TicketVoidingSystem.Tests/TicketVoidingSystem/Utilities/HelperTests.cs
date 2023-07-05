@@ -1,7 +1,7 @@
 ﻿using TicketVoidingSystem.Utilities;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Utilities;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Utilities;
 
 public class HelperTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {

@@ -16,7 +16,7 @@ public class GetSummaryTicketsServiceTests
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
-    public async Task GetSummoparyTickets_ReturnViewModel(int licenseeId)
+    public async Task GetSummaryTickets_ReturnViewModel(int licenseeId)
     {
         // Arrange
         var summaryTicketModels = new List<SummaryTicketModel>
@@ -47,13 +47,12 @@ public class GetSummaryTicketsServiceTests
     public async Task GetSummaryTickets_HaveNotAny_ReturnNewViewModel()
     {
         // Arrange
-        List<SummaryTicketModel>? summaryTicketModels = null;
         var query = Builder<GetSummaryQuery>.CreateNew().Build();
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var betListService = Substitute.For<BetListService>();
         betListService.GetBetTypeName(default, default).ReturnsForAnyArgs("HHH");
-        repository.FetchAsync<SummaryTicketModel>(default).ReturnsForAnyArgs(summaryTicketModels);
+        repository.FetchAsync<SummaryTicketModel>(default).ReturnsForAnyArgs((List<SummaryTicketModel>)null);
         var service = new GetSummaryTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, betListService);
 
         // Act

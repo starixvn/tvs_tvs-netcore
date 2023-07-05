@@ -13,8 +13,8 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SubParlayTicket;
 
 public class GetNormalParlayHandlerTests
 {
-    private readonly TicketsService ticketsService;
     private readonly GetNormalParlayHandler handler;
+    private readonly TicketsService ticketsService;
 
     public GetNormalParlayHandlerTests()
     {
@@ -27,15 +27,15 @@ public class GetNormalParlayHandlerTests
     {
         // Arrange
         var request = new GetNormalParlayRequest();
-        var expected = new List<TicketViewModel> { };
-        var tickets = new List<TicketModel> { };
+        var expected = new List<TicketViewModel>();
+        var tickets = new List<TicketModel>();
         ticketsService.GetTickets(request.RefNo, CancellationToken.None).ReturnsForAnyArgs(tickets);
         ticketsService.GetTickets(tickets).ReturnsForAnyArgs(expected);
-        
+
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(expected.ToList().Count(), actual.ToList().Count());
+        Assert.Equal(expected.ToList().Count, actual.ToList().Count);
     }
 }

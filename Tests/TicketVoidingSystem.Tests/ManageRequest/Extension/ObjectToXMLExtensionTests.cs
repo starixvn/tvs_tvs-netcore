@@ -575,7 +575,7 @@ public class ObjectToXMLExtensionFacts
     }
 
     [Fact]
-    public void ToAbnormalAccountXml_HasData_ReturnXML()
+    public void ToAbnormalAccountXml_HasData_ReturnXMLExpected()
     {
         // Arrange
         var model = new AbnormalAccountViewModel
@@ -589,8 +589,33 @@ public class ObjectToXMLExtensionFacts
         const string expected = "<root><r Usernames='a' "
                                 + "ProductIds='p1' "
                                 + "StatusIds='1' "
-                                + "FromDate='10/30/2018 4:20:20 PM' "
-                                + "ToDate='10/30/2018 4:20:20 PM' /></root>";
+                                + "FromDate='10/30/2018 16:20:20' "
+                                + "ToDate='10/30/2018 16:20:20' /></root>";
+
+        // Act
+        var actual = model.ToAbnormalAccountXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToAbnormalAccountXml_HasDateIsNull_ReturnXMLExpected()
+    {
+        // Arrange
+        var model = new AbnormalAccountViewModel
+        {
+            Usernames = "a",
+            ProductIds = "p1",
+            StatusIds = "1",
+            FromDate = null,
+            ToDate = null
+        };
+        const string expected = "<root><r Usernames='a' "
+                                + "ProductIds='p1' "
+                                + "StatusIds='1' "
+                                + "FromDate='' "
+                                + "ToDate='' /></root>";
 
         // Act
         var actual = model.ToAbnormalAccountXml();
@@ -639,10 +664,23 @@ public class ObjectToXMLExtensionFacts
     public void GetKickOffInfoXml_HasRequest_ReturnExpected()
     {
         // Arrange
-        const string expected = "<root><r MatchId='1' KickOffTime='10/30/2018 4:20:20 PM'/></root>";
+        const string expected = "<root><r MatchId='1' KickOffTime='10/30/2018 16:20:20'/></root>";
 
         // Act
         var actual = ObjectToXMLExtension.GetKickOffInfoXml(1, new DateTime(2018, 10, 30, 16, 20, 20));
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetKickOffInfoXml_NoHasKickOffTime_ReturnExpected()
+    {
+        // Arrange
+        const string expected = "<root><r MatchId='1' KickOffTime=''/></root>";
+
+        // Act
+        var actual = ObjectToXMLExtension.GetKickOffInfoXml(1, null);
 
         // Assert
         Assert.Equal(expected, actual);
@@ -818,6 +856,34 @@ public class ObjectToXMLExtensionFacts
 
         // Act
         var actual = models.ToWrongScoreInfoXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToReducedOverInfoXml_HasReducedOverViewModelIsArrayEmpty_ReturnStringEmpty()
+    {
+        // Arrange
+         var models = new List<ReducedOverViewModel>();
+
+        // Act
+        var actual = models.ToReducedOverInfoXml();
+
+        // Assert
+        Assert.Equal(string.Empty, actual);
+    }
+
+    [Fact]
+    public void ToReducedOverInfoXml_ReducedOverViewModelHasData_ReturnStringExpected()
+    {
+        // Arrange
+        var models = new List<ReducedOverViewModel>{ new ()};
+        const string expected = "<root><r MatchId='0' SubIssueTypeId='0' BetTypeIds='' WicketOver='' FilterWicketOver='' " +
+                                "PlayerIds='' Runs='' NonLive='False' Live='False' /></root>";
+
+        // Act
+        var actual = models.ToReducedOverInfoXml();
 
         // Assert
         Assert.Equal(expected, actual);

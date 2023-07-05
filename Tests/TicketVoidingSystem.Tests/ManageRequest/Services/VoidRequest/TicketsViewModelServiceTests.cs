@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
@@ -94,7 +93,7 @@ public class TicketsViewModelServiceTests
                 MatchId = 1,
                 SiteDbGroupId = 1,
                 Status = TicketStatus.Draw
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -108,7 +107,6 @@ public class TicketsViewModelServiceTests
 
         // Assert
         Assert.Equal(uncheckedTransIds.Count, model.UncheckedTransIds.Count);
-
     }
 
 
@@ -132,7 +130,7 @@ public class TicketsViewModelServiceTests
                 IsDeposit = true,
                 IsCashOut = true,
                 Status = TicketStatus.Draw
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -146,7 +144,6 @@ public class TicketsViewModelServiceTests
         // Assert
         Assert.Equal("AB", model.LicenseesName);
         Assert.Equal("AB", model.CashOutLicenseesName);
-
     }
 
     [Fact]
@@ -165,7 +162,7 @@ public class TicketsViewModelServiceTests
                 BetType = 1,
                 SubBetType = 11,
                 SubStatus = TicketStatus.Draw
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -211,7 +208,7 @@ public class TicketsViewModelServiceTests
                 CheckTimeCancelCashOut = new DateTime(2022, 12, 4),
                 IsCancelCashOut = true,
                 SubStatus = TicketStatus.Draw
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -262,7 +259,7 @@ public class TicketsViewModelServiceTests
                 SubBetType = 11,
                 CheckTimeCancelCashOut = new DateTime(2022, 12, 5),
                 IsCancelCashOut = true
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -280,7 +277,6 @@ public class TicketsViewModelServiceTests
         Assert.Equal(MaxTime, model.ToTime);
         Assert.Equal(MinTime, model.FromDate);
         Assert.Equal(MaxTime, model.ToDate);
-
     }
 
     [Fact]
@@ -312,7 +308,7 @@ public class TicketsViewModelServiceTests
                 SubBetType = 11,
                 IsCancelCashOut = false,
                 SubStatus = TicketStatus.Draw
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -375,9 +371,9 @@ public class TicketsViewModelServiceTests
 
     [Theory]
     [InlineData(6)] //Handicap
-    [InlineData(119)]//FirstHalfHandicap
-    [InlineData(120)]//OverUnder
-    [InlineData(121)]//FirstHalfOverUnder
+    [InlineData(119)] //FirstHalfHandicap
+    [InlineData(120)] //OverUnder
+    [InlineData(121)] //FirstHalfOverUnder
     public void UpdateViewModel_UpdateVariableForTemplateMessagesWrongOdds_ReturnTrue(int subIssueTypeId)
     {
         // Arrange

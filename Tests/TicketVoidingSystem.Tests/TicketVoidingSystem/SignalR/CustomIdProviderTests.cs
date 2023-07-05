@@ -5,7 +5,7 @@ using NSubstitute;
 using TicketVoidingSystem.SignalR;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.SignalR;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.SignalR;
 
 public class CustomIdProviderTests
 {

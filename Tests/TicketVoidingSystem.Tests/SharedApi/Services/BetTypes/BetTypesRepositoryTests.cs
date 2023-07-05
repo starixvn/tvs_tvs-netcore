@@ -10,7 +10,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services.BetTypes;
 
-public class BetTypesRepositoryTests: AppSettingFixture, IClassFixture<RemotingRefFixture>
+public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<RemotingRefFixture>
 {
     private readonly IDynamicRepository repository;
     private readonly BetTypesRepositoryImp service;
@@ -25,7 +25,7 @@ public class BetTypesRepositoryTests: AppSettingFixture, IClassFixture<RemotingR
     public async Task Get_Return_ListBetTeamNotNull()
     {
         // Arrange
-        var betTypes = new List<BetTypeModel> { };
+        var betTypes = new List<BetTypeModel>();
         var criteria = new GetBetTypesCriteria();
         var expected = new BetTypesViewModel
         {
@@ -87,5 +87,4 @@ public class BetTypesRepositoryTests: AppSettingFixture, IClassFixture<RemotingR
         // Assert
         Assert.Equal(new List<int> { 1, 2, 3 }, result);
     }
-
 }

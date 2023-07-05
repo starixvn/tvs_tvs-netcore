@@ -11,13 +11,12 @@ namespace TicketVoidingSystem.Tests.SharedApi.Controllers;
 public class SharedApiControllerTests
 {
     private readonly IMediator mediator;
-    private readonly IHttpContextAccessor httpContextAccessor;
     private readonly SharedApiController controller;
 
     public SharedApiControllerTests()
     {
         mediator = Substitute.For<IMediator>();
-        httpContextAccessor = Substitute.For<IHttpContextAccessor>();
+        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         controller = new SharedApiController(mediator, httpContextAccessor);
     }
 
@@ -25,10 +24,6 @@ public class SharedApiControllerTests
     public void GetNapUserInfo_HasRequest_ReturnIActionResult()
     {
         // Arrange
-        var mediator = Substitute.For<IMediator>();
-        var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
-        var controller = new SharedApiController(mediator, httpContextAccessor);
-
         // Act
         var actual = controller.GetNapUserInfo();
 
@@ -40,40 +35,37 @@ public class SharedApiControllerTests
     public async Task GetBalanceUp_HasRequest_CallMediatorRequest()
     {
         // Arrange
-
         // Act
         await controller.GetBalanceUp();
 
         // Assert
-        await mediator.Received().Send(Arg.Any<GetBalanceUpDayRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetBalanceUpDayRequest>());
     }
 
     [Fact]
     public async Task GetBalanceUpZoneManila_HasRequest_CallMediatorRequest()
     {
         // Arrange
-
         // Act
         await controller.GetBalanceUpZoneManila();
 
         // Assert
-        await mediator.Received().Send(Arg.Any<GetBalanceUpDayZoneManilaRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetBalanceUpDayZoneManilaRequest>());
     }
 
     [Fact]
     public async Task GetSportsType_HasRequest_CallMediatorRequest()
     {
         // Arrange
-
         // Act
         await controller.GetSportsType();
 
         // Assert
-        await mediator.Received().Send(Arg.Any<GetSportsTypeRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetSportsTypeRequest>());
     }
 
     [Fact]
-    public async Task d_HasRequest_CallMediatorRequest()
+    public async Task GetVoidResultCache_HasRequest_CallMediatorRequest()
     {
         // Arrange
         var request = new GetVoidResultCacheRequest();
@@ -82,18 +74,28 @@ public class SharedApiControllerTests
         await controller.GetVoidResultCache(request);
 
         // Assert
-        await mediator.Received().Send(request);
+        await mediator.Received(1).Send(request);
     }
 
     [Fact]
     public async Task GetIssueTypes_HasRequest_CallMediatorRequest()
     {
         // Arrange
-
         // Act
         await controller.GetIssueTypes();
 
         // Assert
-        await mediator.Received().Send(Arg.Any<GetIssueTypesRequest>());
+        await mediator.Received(1).Send(Arg.Any<GetIssueTypesRequest>());
+    }
+
+    [Fact]
+    public async Task GetIssueTypePermissionList_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetIssueTypePermissionList();
+
+        // Assert
+        await mediator.Received(1).Send(Arg.Any<GetIssueTypePermissionListRequest>());
     }
 }

@@ -1,98 +1,98 @@
-﻿using System.Threading.Tasks;
-using Xunit;
-using NSubstitute;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Fanex.LetstalkService.Core.Models;
-using TicketVoidingSystem.Services.Letstalk;
-using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
-using TicketVoidingSystem.Services;
-using System.Collections.Generic;
+using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
-using System.Linq;
-using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Letstalk;
+using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+
+public class GroupVoidSettledBetServiceTests
 {
-    public class GroupVoidSettledBetServiceTests
+    private readonly LetstalkSingleMessageService letstalkSingleMessageService;
+    private readonly MessageContentSingleService messageContentSingleService;
+    private readonly MessageContentWithMemberTemplateService messageContentWithMemberTemplateService;
+    private readonly GroupVoidSettledBetServiceImp service;
+
+    public GroupVoidSettledBetServiceTests()
     {
-        private readonly LetstalkSingleMessageService letstalkSingleMessageService;
-        private readonly LoggingService loggingService;
-        private readonly MessageContentSingleService messageContentSingleService;
-        private readonly MessageContentWithMemberTemplateService messageContentWithMemberTemplateService;
-        private readonly GroupVoidSettledBetServiceImp service;
+        letstalkSingleMessageService = Substitute.For<LetstalkSingleMessageService>();
+        var loggingService = Substitute.For<LoggingService>();
+        messageContentSingleService = Substitute.For<MessageContentSingleService>();
+        messageContentWithMemberTemplateService = Substitute.For<MessageContentWithMemberTemplateService>();
+        service = new GroupVoidSettledBetServiceImp(letstalkSingleMessageService, loggingService,
+            messageContentSingleService, messageContentWithMemberTemplateService);
+    }
 
-        public GroupVoidSettledBetServiceTests()
-        {
-            letstalkSingleMessageService = Substitute.For<LetstalkSingleMessageService>();
-            loggingService = Substitute.For<LoggingService>();
-            messageContentSingleService = Substitute.For<MessageContentSingleService>();
-            messageContentWithMemberTemplateService = Substitute.For<MessageContentWithMemberTemplateService>();
-            service = new GroupVoidSettledBetServiceImp(letstalkSingleMessageService, loggingService, messageContentSingleService, messageContentWithMemberTemplateService);
-        }
+    [Fact]
+    public async Task SendMessageWithTicketInfo_HasNotTicket_ReturnEmptyResult()
+    {
+        // Arrange
+        var letstalkModel = new LetstalkModel();
+        var ticketInfo = new TicketInfoForLetstalk();
+        var tickets = new List<TicketEmailModel>();
 
-        [Fact]
-        public async Task SendMessageWithTicketInfo_HasNotTicket_ReturnEmptyResult()
-        {
-            // Arrange
-            var letstalkModel = new LetstalkModel(); 
-            var ticketInfo = new TicketInfoForLetstalk(); 
-            var tickets = new List<TicketEmailModel> { };             
+        // Act
+        var results = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
 
-            // Act
-            var results = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
+        // Assert
+        Assert.Empty(results);
+    }
 
-            // Assert
-            Assert.Empty(results); 
-        }
+    [Fact]
+    public async Task SendMessageWithTicketInfo_HasNotContents_ReturnEmptyResult()
+    {
+        // Arrange
+        var letstalkModel = new LetstalkModel();
+        var ticketInfo = new TicketInfoForLetstalk { IsMemberTemplate = true };
+        var tickets = new List<TicketEmailModel> { new() };
+        messageContentWithMemberTemplateService
+            .Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
+            .Returns(new List<string>());
 
-        [Fact]
-        public async Task SendMessageWithTicketInfo_HasNotContents_ReturnEmptyResult()
-        {
-            // Arrange
-            var letstalkModel = new LetstalkModel();
-            var ticketInfo = new TicketInfoForLetstalk { IsMemberTemplate  = true };
-            var tickets = new List<TicketEmailModel> { new TicketEmailModel { } };            
-            messageContentWithMemberTemplateService.Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
-                .Returns(new List<string> { });
+        // Act
+        var results = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
 
-            // Act
-            var results = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
+        // Assert
+        Assert.Empty(results);
+    }
 
-            // Assert
-            Assert.Empty(results);
-        }
+    [Fact]
+    public async Task SendMessageWithTicketInfo_HasSingleMessageContent_HasOneSendLetstalk()
+    {
+        // Arrange
+        var letstalkModel = new LetstalkModel();
+        var ticketInfo = new TicketInfoForLetstalk();
+        var tickets = new List<TicketEmailModel> { new() };
 
-        [Fact]
-        public async Task SendMessageWithTicketInfo_HasSingleMessageContent_HasOneSendLetstalk()
-        {
-            // Arrange
-            var letstalkModel = new LetstalkModel();
-            var ticketInfo = new TicketInfoForLetstalk();
-            var tickets = new List<TicketEmailModel> { new TicketEmailModel { } };
+        messageContentSingleService.Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
+            .Returns("Single Message Content");
 
-            messageContentSingleService.Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
-                .Returns("Single Message Content");
+        // Act
+        _ = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
 
-            // Act
-            _ = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, tickets);
+        // Assert
+        _ = letstalkSingleMessageService.Received(1).Send(Arg.Any<LetstalkModel>(), null);
+    }
 
-            // Assert
-            _ = letstalkSingleMessageService.Received(1).Send(Arg.Any<LetstalkModel>(), null);
-        }
+    [Fact]
+    public async Task SendMessageWithTicketInfo_LetstalkModelIsNull_HasError()
+    {
+        // Arrange
+        var ticketInfo = new TicketInfoForLetstalk();
+        var tickets = new List<TicketEmailModel> { new(), new() };
 
-        [Fact]
-        public async Task SendMessageWithTicketInfo_LetstalkModelIsNull_HasError()
-        {
-            // Arrange
-            var ticketInfo = new TicketInfoForLetstalk();
-            var tickets = new List<TicketEmailModel> { new TicketEmailModel(), new TicketEmailModel() };
-            
-            // Act
-            var results = await service.SendMessageWithTicketInfo(null, ticketInfo, tickets);
-            var result = results.ToList()[0];
+        // Act
+        var results = await service.SendMessageWithTicketInfo(null, ticketInfo, tickets);
+        var result = results.ToList()[0];
 
-            // Assert          
-            Assert.Equal(ErrorCode.SendLetstalkFail, result.ErrorCode);
-        }
+        // Assert          
+        Assert.Equal(ErrorCode.SendLetstalkFail, result.ErrorCode);
     }
 }

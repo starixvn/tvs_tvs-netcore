@@ -1,179 +1,170 @@
-﻿using Xunit;
-using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
-using TicketVoidingSystem.Constants;
-using BetListNPOI.SS.Formula.Functions;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+
+public class UusTicketServiceTests : AppSettingFixture
 {
-    public class UusTicketServiceTests : AppSettingFixture
+    private readonly UusTicketServiceImp uusTicketService;
+
+    public UusTicketServiceTests()
     {
-        private readonly UusTicketServiceImp uusTicketService;
-        public UusTicketServiceTests()
+        uusTicketService = new UusTicketServiceImp();
+    }
+
+    [Fact]
+    public void IsValidCashOut_TicketIsNotCashOut_ReturnFalse()
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            uusTicketService = new UusTicketServiceImp();
-        }
+            IsCashOut = false
+        };
 
-        [Fact]
-        public void IsValidCashOut_TicketIsNotCashOut_ReturnFalse()
+        // Act
+        var result = uusTicketService.IsValidCashOut(ticket);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData(true, 21, true)]
+    [InlineData(false, 21, false)]
+    [InlineData(true, 20, false)]
+    public void IsValidCashOut_ProdEnvIsTrue_ReturnExpected(bool isCashOut, int currency, bool expected)
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                IsCashOut = false
-            };
+            IsCashOut = isCashOut,
+            Currency = currency
+        };
+        AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
 
-            // Act
-            var result = uusTicketService.IsValidCashOut(ticket);
+        // Act
+        var result = uusTicketService.IsValidCashOut(ticket);
 
-            // Assert
-            Assert.False(result);
-        }
+        // Assert
+        Assert.Equal(expected, result);
+    }
 
-        [Theory]
-        [InlineData(true, 21, true)]
-        [InlineData(false, 21, false)]
-        [InlineData(true, 20, false)]
-        public void IsValidCashOut_ProdEnvIsTrue_ReturnExpected(bool isCashOut, int currency, bool expected)
+    [Fact]
+    public void IsValidSettledSingleTicket_HasBetTypeIdIsParlayAndBetBuilder_ReturnFalse()
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                IsCashOut = isCashOut,
-                Currency = currency
-            };
-            AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
+            BetTypeId = 1,
+            IsCashOut = true
+        };
 
-            // Act
-            var result = uusTicketService.IsValidCashOut(ticket);
+        // Act
+        var result = uusTicketService.IsValidSettledSingleTicket(ticket);
 
-            // Assert
-            Assert.Equal(expected, result);
-        }
+        // Assert
+        Assert.False(result);
+    }
 
-        [Fact]
-        public void IsValidSettledSingleTicket_HasBetTypeIdIsParlayAndBetBuilder_ReturnFalse()
+    [Fact]
+    public void IsValidSettledSingleTicket_HasTicketIsNotSettled_ReturnFalse()
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                BetTypeId = 1,
-                IsCashOut = true
-            };
+            BetTypeId = 1,
+            IsCashOut = false,
+            Status = TicketStatus.Running
+        };
 
-            var uusTicketService = new UusTicketServiceImp();
+        // Act
+        var result = uusTicketService.IsValidSettledSingleTicket(ticket);
 
-            // Act
-            var result = uusTicketService.IsValidSettledSingleTicket(ticket);
+        // Assert
+        Assert.False(result);
+    }
 
-            // Assert
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void IsValidSettledSingleTicket_HasTicketIsNotSettled_ReturnFalse()
+    [Theory]
+    [InlineData(29)]
+    [InlineData(38)]
+    public void IsValidSettledSingleTicket_HasTicketIsCashOut_ReturnFalse(int betTypeId)
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                BetTypeId = 1,
-                IsCashOut = false,
-                Status = TicketStatus.Running
-            };
+            BetTypeId = betTypeId
+        };
 
-            var uusTicketService = new UusTicketServiceImp();
+        // Act
+        var result = uusTicketService.IsValidSettledSingleTicket(ticket);
 
-            // Act
-            var result = uusTicketService.IsValidSettledSingleTicket(ticket);
+        // Assert
+        Assert.False(result);
+    }
 
-            // Assert
-            Assert.False(result);
-        }
-
-        [Theory]
-        [InlineData(29)]
-        [InlineData(38)]
-        public void IsValidSettledSingleTicket_HasTicketIsCashOut_ReturnFalse(int betTypeId)
+    [Theory]
+    [InlineData(29, TicketStatus.Draw, true)]
+    [InlineData(38, TicketStatus.Waiting, false)]
+    [InlineData(1, TicketStatus.Draw, false)]
+    public void IsValidSettledParlayTicket_HasCheckMainParlayIsTrue_ReturnFollowSettled(int betTypeId, string settled,
+        bool expected)
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                BetTypeId = betTypeId
-            };
+            BetTypeId = betTypeId,
+            Status = settled
+        };
 
-            var uusTicketService = new UusTicketServiceImp();
+        // Act
+        var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
 
-            // Act
-            var result = uusTicketService.IsValidSettledSingleTicket(ticket);
+        // Assert
+        Assert.Equal(expected, result);
+    }
 
-            // Assert
-            Assert.False(result);
-        }
-
-        [Theory]
-        [InlineData(29, TicketStatus.Draw, true)]
-        [InlineData(38, TicketStatus.Waiting, false)]
-        [InlineData(1, TicketStatus.Draw, false)]
-        public void IsValidSettledParlayTicket_HasCheckMainParlayIsTrue_ReturnFollowSettled(int betTypeId, string settled, bool expected)
+    [Theory]
+    [InlineData(TicketStatus.Draw, true, true)]
+    [InlineData(TicketStatus.Draw, false, false)]
+    public void IsValidSettledParlayTicket_HasCheckMixParlayTicket_ReturnFollowCheckMixParlayTicket(string settled,
+        bool isMixParlay, bool expected)
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                BetTypeId = betTypeId,
-                Status = settled
-            };
+            SubStatus = settled,
+            IsMixParlay = isMixParlay
+        };
 
-            var uusTicketService = new UusTicketServiceImp();
+        // Act
+        var result = uusTicketService.IsValidSettledParlayTicket(ticket, false);
 
-            // Act
-            var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
+        // Assert
+        Assert.Equal(expected, result);
+    }
 
-            // Assert
-            Assert.Equal(expected, result);
-        }
-
-        [Theory]
-        [InlineData(TicketStatus.Draw, true, true)]
-        [InlineData(TicketStatus.Draw, false, false)]
-        public void IsValidSettledParlayTicket_HasCheckMixParlayTicket_ReturnFollowCheckMixParlayTicket(string settled, bool isMixParlay, bool expected)
+    [Theory]
+    [InlineData(29, 21, true)]
+    [InlineData(1, 21, false)]
+    [InlineData(29, 20, false)]
+    public void IsValidSettledParlayTicket_ProdEnvIsTrue_ReturnExpected(int betTypeId, int currency, bool expected)
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
         {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                SubStatus = settled,
-                IsMixParlay = isMixParlay
-            };
+            Currency = currency,
+            BetTypeId = betTypeId,
+            Status = TicketStatus.Draw
+        };
+        AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
 
-            var uusTicketService = new UusTicketServiceImp();
+        // Act
+        var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
 
-            // Act
-            var result = uusTicketService.IsValidSettledParlayTicket(ticket, false);
-
-            // Assert
-            Assert.Equal(expected, result);
-        }
-
-        [Theory]
-        [InlineData(29, 21, true)]
-        [InlineData(1, 21, false)]
-        [InlineData(29, 20, false)]
-        public void IsValidSettledParlayTicket_ProdEnvIsTrue_ReturnExpected(int betTypeId, int currency, bool expected)
-        {
-            // Arrange
-            var ticket = new TicketEmailModel
-            {
-                Currency = currency,
-                BetTypeId = betTypeId,
-                Status = TicketStatus.Draw
-            };
-            AppSettingService.AppSetting.LetstalkConfig.IsProdEnv = true;
-
-            // Act
-            var result = uusTicketService.IsValidSettledParlayTicket(ticket, true);
-
-            // Assert
-            Assert.Equal(expected, result);
-        }
+        // Assert
+        Assert.Equal(expected, result);
     }
 }

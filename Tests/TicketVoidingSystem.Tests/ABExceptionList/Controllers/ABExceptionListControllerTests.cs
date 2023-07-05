@@ -74,7 +74,8 @@ public class ABExceptionListControllerTests
 
     [Fact]
     public async Task GetPermission_HasRequest_CallMediatorRequest()
-    {            // Arrange
+    {            
+        // Arrange
         var permission = new PermissionABExceptionList();
         var mediator = Substitute.For<IMediator>();
         mediator.Send(Arg.Any<GetPermissionRequest>()).ReturnsForAnyArgs(permission);
@@ -103,7 +104,6 @@ public class ABExceptionListControllerTests
         await mediator.Received(1).Send(Arg.Any<GetSubTypeRequest>());
     }
 
-    // Jacob, chú ý pattern AAA, cho dễ nhìn
     [Fact]
     public async Task GetSites_WhenCalled_ReturnJsonData()
     {
@@ -115,8 +115,6 @@ public class ABExceptionListControllerTests
 
         // Act
         var okObjectResult = await controller.GetSites() as OkObjectResult;
-
-        // Assert
         var actual = okObjectResult.Value as List<GroupLicenseeSiteViewModel>;
 
         // Assert

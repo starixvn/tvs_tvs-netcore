@@ -65,7 +65,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             var validCancelCOTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
             var validVoidSingleTickets14 = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel };
 
-            var expectedTicketTypeModel = new[] {validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
+            IEnumerable<object>[] expectedTicketTypeModel = {validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
                 validVoidCricketTickets,validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14 };
 
             insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);

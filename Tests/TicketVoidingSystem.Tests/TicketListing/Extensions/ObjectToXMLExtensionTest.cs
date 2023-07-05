@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.TicketListing.Extensions;
-using TicketVoidingSystem.TicketListing.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketListing.Extensions;
@@ -15,7 +14,7 @@ public class ObjectToXMLExtensionTest
         const string expected = "<root><r tid='1' /></root>";
         var betIds = new List<BetId>
         {
-            new() { TransId = "1", SiteDbGroupId = 0}
+            new() { TransId = "1", SiteDbGroupId = 0 }
         };
 
         // Act

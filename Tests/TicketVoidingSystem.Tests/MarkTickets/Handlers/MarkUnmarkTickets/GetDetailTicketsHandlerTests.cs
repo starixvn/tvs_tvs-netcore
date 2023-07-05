@@ -14,18 +14,16 @@ namespace TicketVoidingSystem.Tests.MarkTickets.Handlers.MarkUnmarkTickets;
 public class GetDetailTicketsHandlerTests: RemotingRefFixture
 {
     private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketService mapTicketService;
     private readonly PagingService pagingService;
-    private readonly UserPermissionService userPermissionService;
 
     private readonly GetDetailTicketsHandler handler;
 
     public GetDetailTicketsHandlerTests()
     {
         getTicketsService = Substitute.For<GetTicketsService>();
-        mapTicketService = Substitute.For<MapTicketService>();
+        var mapTicketService = Substitute.For<MapTicketService>();
         pagingService = Substitute.For<PagingService>();
-        userPermissionService = Substitute.For<UserPermissionService>();
+        var userPermissionService = Substitute.For<UserPermissionService>();
         handler = new GetDetailTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
     }
 

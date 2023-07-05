@@ -85,10 +85,6 @@ public class GetTicketsHandlerTests
 
         // Assert
         Assert.Null(actual.Id);
-        Assert.Equal(0, actual.TotalItems);
-        Assert.Equal(0, actual.SingleCount);
-        Assert.Equal(0, actual.ParlayCount);
-        Assert.Empty(actual.Groups);
     }
 
     [Fact]

@@ -6,7 +6,7 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
 
 public class EmailExtensionTests
 {
@@ -14,10 +14,8 @@ public class EmailExtensionTests
     public void ToOperatorsXml_ReturnsEmptyString_WhenAgentIdsIsNull()
     {
         // Arrange
-        IEnumerable<int> agentIds = null;
-
         // Act
-        var result = agentIds.ToOperatorsXml();
+        var result = ((IEnumerable<int>)null).ToOperatorsXml();
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -81,11 +79,10 @@ public class EmailExtensionTests
             new() { UserName = "User3" }
         };
         const EmailGroup group = EmailGroup.ItSupport;
-        Func<TicketEmailModel, string> filter = ticket => ticket.UserName;
         const string negativeBalanceUsers = "User2,User4";
 
         // Act
-        var result = tickets.GetNegativeBalanceUsers(group, filter, negativeBalanceUsers);
+        var result = tickets.GetNegativeBalanceUsers(group, ticket => ticket.UserName, negativeBalanceUsers);
 
         // Assert
         Assert.Equal("User2", result);
@@ -138,10 +135,9 @@ public class EmailExtensionTests
     {
         // Arrange
         IEnumerable<string> tickets = new List<string> { "Site1", "Site2", "Site1", "Site3" };
-        Func<string, string> filter = site => site;
 
         // Act
-        var result = tickets.JoinSites(filter);
+        var result = tickets.JoinSites(site => site);
 
         // Assert
         Assert.Equal("Site1, Site2, Site3", result);

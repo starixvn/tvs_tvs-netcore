@@ -14,519 +14,544 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
+
+public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
 {
-    public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
+    private readonly GetTransInfoService getTransInfoService;
+    private readonly IMapper mapper;
+    private readonly IDynamicRepository repository;
+    private readonly LogInfoServiceImp service;
+    private readonly SessionService session;
+
+    public LogInfoServiceTests()
     {
-        private readonly IMapper mapper;
-        private readonly IDynamicRepository repository;
-        private readonly SessionService session;
-        private readonly GetTransInfoService getTransInfoService;
-        private readonly LogInfoServiceImp service;
+        mapper = Substitute.For<IMapper>();
+        repository = Substitute.For<IDynamicRepository>();
+        session = Substitute.For<SessionService>();
+        getTransInfoService = Substitute.For<GetTransInfoService>();
+        service = new LogInfoServiceImp(mapper, repository, session, getTransInfoService);
+    }
 
-        public LogInfoServiceTests()
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsWrongScore_ReturnWrongScoreInfoViewModel()
+    {
+        // Arrange
+        var issueTypeId = IssueTypeConstant.WrongScore;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
         {
-            mapper = Substitute.For<IMapper>();
-            repository = Substitute.For<IDynamicRepository>();
-            session = Substitute.For<SessionService>();
-            getTransInfoService = Substitute.For<GetTransInfoService>();
-            service = new LogInfoServiceImp(mapper, repository, session, getTransInfoService);
-        }
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
 
-        
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsWrongScore_ReturnWrongScoreInfoViewModel()
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var viewModel = new WrongScoreInfoViewModel
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.WrongScore;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
-
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
-
-            var viewModel = new WrongScoreInfoViewModel
-            {
-                ActualScore = "1-1",
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-                ScoreId = scoreId,
-                WrongScore = "0-1"
-            };
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                WrongScoreModels = new List<WrongScoreInfoViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsDangerAccepted_ReturnDangerAcceptedInfoViewModel()
+            ActualScore = "1-1",
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7,
+            ScoreId = scoreId,
+            WrongScore = "0-1"
+        };
+        var request = new GetLogInfoRequest
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.DangerAccepted;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            IssueTypeId = issueTypeId,
+            WrongScoreModels = new List<WrongScoreInfoViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
-            var viewModel = new DangerAcceptedViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                DangerAcceptedModels = new List<DangerAcceptedViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
 
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsRedCard_ReturnRedCardInfoViewModel()
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsDangerAccepted_ReturnDangerAcceptedInfoViewModel()
+    {
+        // Arrange
+        var issueTypeId = IssueTypeConstant.DangerAccepted;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.RedCard;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
 
-            var viewModel = new DangerAcceptedViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
-
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                RedCardModels = new List<DangerAcceptedViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsWrongHdp_ReturnWrongHdpInfoViewModel()
+        var viewModel = new DangerAcceptedViewModel
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.WrongHDP;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
-
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
-
-            var viewModel = new WrongHdpViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
-
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                WrongHdpModels = new List<WrongHdpViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsWrong1stHDP_ReturnWrong1stHDPInfoViewModel()
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
+        var request = new GetLogInfoRequest
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.Wrong1stHDP;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            IssueTypeId = issueTypeId,
+            DangerAcceptedModels = new List<DangerAcceptedViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
-            var viewModel = new WrongHdpViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
 
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                Wrong1stHdpModels = new List<WrongHdpViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsWrong1stOu_ReturnWrong1stOUInfoViewModel()
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsRedCard_ReturnRedCardInfoViewModel()
+    {
+        // Arrange
+        var issueTypeId = IssueTypeConstant.RedCard;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.Wrong1stOU;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
 
-            var viewModel = new WrongOuViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
-
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                Wrong1stOuModels = new List<WrongOuViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsWrongOu_ReturnWrongOuInfoViewModel()
+        var viewModel = new DangerAcceptedViewModel
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.WrongOU;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
-
-            var viewModel = new WrongOuViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
-
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                WrongOuModels = new List<WrongOuViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeIsWrongOdds_ReturnWrongOddsInfoViewModel()
+        var request = new GetLogInfoRequest
         {
-            // Arrange
-            var issueTypeId = IssueTypeConstant.WrongOdds;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            IssueTypeId = issueTypeId,
+            RedCardModels = new List<DangerAcceptedViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
 
-            var viewModel = new WrongOddsViewModel
-            {
-                EventDate = new DateTime(2020, 06, 16),
-                FilterFromTransTime = new DateTime(2020, 06, 15),
-                FilterToTransTime = new DateTime(2020, 06, 17),
-                MatchId = matchId,
-                SubIssueTypeId = 7,
-            };
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
 
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                WrongOddsModels = new List<WrongOddsViewModel> { viewModel },
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
-
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
-
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
-
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
-
-        [Fact]
-        public async Task GetLogInfo_IssueTypeConstantNotContainIssueTypeInput_ReturnLogInfoViewModelDefault()
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsWrongHdp_ReturnWrongHdpInfoViewModel()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.WrongHDP;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
         {
-            // Arrange
-            var issueTypeId = 0;
-            const int userId = 1234;
-            const int scoreId = 62122;
-            const int matchId = 996063;
-            var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
-            var validations = new List<Validation> { validation };
-            var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
-            var ticketRequests = new List<TicketRequest> { ticketRequest };
-            var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
-            var logInfos = new List<LogInfoDetail> { logInfo };
-            var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-                 {new TransInfoAddRequestModel {MarkTransIds = "1232"}};
-            var transInfoModels = new List<string> { { "123" } };
-            var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
 
-            IEnumerable<object>[] fakeData =
-                {validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels};
-           
-            var request = new GetLogInfoRequest
-            {
-                IssueTypeId = issueTypeId,
-                MatchId = matchId,
-                KickOffTime = DateTime.Now,
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
 
-            };
-            repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
-            session.UserId.ReturnsForAnyArgs(userId);
-            mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
-            var transInfoJson = new List<string> { issueTypeId.ToString() };
-            getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+        var viewModel = new WrongHdpViewModel
+        {
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
 
-            // Act
-            var actual = await service.GetLogInfo(request);
-            var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            WrongHdpModels = new List<WrongHdpViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
 
-            // Assert
-            Assert.Single(actual.GetLogInfoModels);
-            Assert.Equal(validation, logInfoModel.Validation);
-            Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
-            Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
-        }
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
+
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsWrong1stHDP_ReturnWrong1stHDPInfoViewModel()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.Wrong1stHDP;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
+        {
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
+
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var viewModel = new WrongHdpViewModel
+        {
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            Wrong1stHdpModels = new List<WrongHdpViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
+
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsWrong1stOu_ReturnWrong1stOUInfoViewModel()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.Wrong1stOU;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
+        {
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
+
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var viewModel = new WrongOuViewModel
+        {
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            Wrong1stOuModels = new List<WrongOuViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
+
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsWrongOu_ReturnWrongOuInfoViewModel()
+    {
+        // Arrange
+        var issueTypeId = IssueTypeConstant.WrongOU;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
+        {
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
+
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var viewModel = new WrongOuViewModel
+        {
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            WrongOuModels = new List<WrongOuViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
+
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsWrongOdds_ReturnWrongOddsInfoViewModel()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.WrongOdds;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
+        {
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
+
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var viewModel = new WrongOddsViewModel
+        {
+            EventDate = new DateTime(2020, 06, 16),
+            FilterFromTransTime = new DateTime(2020, 06, 15),
+            FilterToTransTime = new DateTime(2020, 06, 17),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            WrongOddsModels = new List<WrongOddsViewModel> { viewModel },
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
+
+    [Fact]
+    public async Task GetLogInfo_IssueTypeConstantNotContainIssueTypeInput_ReturnLogInfoViewModelDefault()
+    {
+        // Arrange
+        const int issueTypeId = 0;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
+        {
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
+
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
     }
 }

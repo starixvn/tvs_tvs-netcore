@@ -23,7 +23,22 @@ public class GetComboParlayHandlerTests
     }
 
     [Fact]
-    public async Task Handle_HasNotComboName_TemplateSettingViewModel()
+    public async Task Handle_HasComboNameIsNull_TemplateSettingViewModel()
+    {
+        // Arrange
+        var request = new GetComboParlayRequest();
+        var expected = new List<TicketViewModel> { new() { Choice = "", SubTransId = "" } };
+        ticketsService.GetComboName(Arg.Any<QueryComboParlay>()).ReturnsForAnyArgs((string[])null);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task Handle_ComboNameIsArrayEmpty_TemplateSettingViewModel()
     {
         // Arrange
         var request = new GetComboParlayRequest();
