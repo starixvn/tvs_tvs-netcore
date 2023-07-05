@@ -95,6 +95,6 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
 
     private static string ToString(object item)
     {
-        return (item is not null && item != DBNull.Value) ? item.ToString() : string.Empty;
+        return item is not null && item != DBNull.Value ? item.ToString() : string.Empty;
     }
 }

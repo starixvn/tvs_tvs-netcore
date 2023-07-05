@@ -72,13 +72,13 @@ public class SitesEmailServiceImp : SitesEmailService
 
     private static void AddCCList(List<SiteEmail> sites, SiteEmail specialSite)
     {
-        sites.ForEach(site =>
+        if (!string.IsNullOrWhiteSpace(specialSite.CcList))
         {
-            if (!string.IsNullOrWhiteSpace(specialSite.CcList))
+            sites.ForEach(site =>
             {
                 site.CcList = string.IsNullOrWhiteSpace(site.CcList) ? specialSite.CcList : $"{site.CcList};{specialSite.CcList}";
-            }
-        });
+            });
+        }
     }
 
     public SiteEmail GetSiteByName(IEnumerable<SiteEmail> sites, string name)

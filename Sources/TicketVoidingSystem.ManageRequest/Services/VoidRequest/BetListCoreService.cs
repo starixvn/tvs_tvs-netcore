@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
 public interface BetListCoreService
 {
-    TicketViewModel GetTicket(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
+    TicketViewModel GetTicket(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
 }
 
 public class BetListCoreServiceImp : BetListCoreService
@@ -27,7 +27,7 @@ public class BetListCoreServiceImp : BetListCoreService
         this.betListService = betListService;
     }
 
-    public TicketViewModel GetTicket(GetTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
+    public TicketViewModel GetTicket(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
     {
         var viewModel = new TicketViewModel();
         var betBuilderTicketHelper = new TicketHelper();
@@ -57,10 +57,10 @@ public class BetListCoreServiceImp : BetListCoreService
 
     private static bool IsGetPlainTextForExportExcel(int betTypeId, ChoiceType choiceType, bool isParlay, int issueTypeId)
     {
-        return (choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet())));
+        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet()));
     }
 
-    private Ticket SetTicket(GetTicketModel item, Match match)
+    private Ticket SetTicket(GetTicketModel item, Match? match)
     {
         var ticket = mapper.Map<Ticket>(item);
         ticket.TransId = item.SubTransId;
@@ -87,7 +87,7 @@ public class BetListCoreServiceImp : BetListCoreService
         }
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
-        ticket.SettlementStatus = item.IsMixParlay ? default(byte) : item.SettlementStatus;
+        ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
         ticket.IsLive = item.IsLiveIndicator;
 
         return ticket;
@@ -96,7 +96,7 @@ public class BetListCoreServiceImp : BetListCoreService
     private string BuildChoice(ITicket ticket, TicketHelper ticketHelper, GetTicketModel item, int issueTypeId)
     {
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        return (item.IsMixParlay) ? BuildChoiceParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
+        return item.IsMixParlay ? BuildChoiceParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
     }
 
     private string BuildChoiceParlay(ITicket ticket, TicketHelper ticketHelper, GetTicketModel item, int issueTypeId, string mainChoice)

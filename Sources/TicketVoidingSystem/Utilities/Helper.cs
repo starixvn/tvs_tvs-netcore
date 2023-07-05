@@ -130,7 +130,7 @@ public static class Helper
         return IsAbnormalBet(issueTypeId) || IsAbnormalBetRealMember(issueTypeId);
     }
 
-    public static bool IsAbnormalBet(int issueTypeId)
+    private static bool IsAbnormalBet(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalBet == issueTypeId;
     }

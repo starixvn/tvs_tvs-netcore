@@ -27,7 +27,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
         this.repository = repository;
     }
 
-    public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query) // NOSONAR
+    public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query)
     {
         var transInfoJsonList = new List<string>();
         var issueInfo = BuildIssueInfo(query);
@@ -41,7 +41,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
         return transInfoJsonList;
     }
 
-    private GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)
+    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)
     {
         var criteria = new GetTicketSiteDbCriteria
         {
@@ -97,15 +97,15 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.ArchivedTransIds = issueInfo;
                 break;
 
-                case IssueTypeConstant.WrongOdds:
-                    criteria.WrongOddsInfo = issueInfo;
-                    break;
+            case IssueTypeConstant.WrongOdds:
+                criteria.WrongOddsInfo = issueInfo;
+                break;
 
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
         }
-        
+
         return criteria;
     }
 
@@ -144,7 +144,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             var criteria = new GetTransInfoForVoid14Criteria
             {
                 SiteDbGroupId = item.Id,
-                SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite),
+                SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite)
             };
 
             var transInfoJson = await repository.GetAsync<string>(criteria);

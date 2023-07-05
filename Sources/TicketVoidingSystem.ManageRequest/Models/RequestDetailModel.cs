@@ -93,7 +93,7 @@ public class RequestEventModel
     {
         get
         {
-            var root = RequestExtraInfo?.ParseXmlToObject<RequestExtraInfoXml>();
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
             if (root == null || string.IsNullOrWhiteSpace(root.AATime))
             {
                 return null;
@@ -106,7 +106,7 @@ public class RequestEventModel
     {
         get
         {
-            var root = RequestExtraInfo?.ParseXmlToObject<RequestExtraInfoXml>();
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
             if (root == null || string.IsNullOrWhiteSpace(root.PATime))
             {
                 return null;
@@ -119,7 +119,7 @@ public class RequestEventModel
     {
         get
         {
-            var root = RequestExtraInfo?.ParseXmlToObject<RequestExtraInfoXml>();
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
             if (root == null || string.IsNullOrWhiteSpace(root.SATime))
             {
                 return null;
@@ -132,7 +132,7 @@ public class RequestEventModel
     {
         get
         {
-            var root = RequestExtraInfo?.ParseXmlToObject<RequestExtraInfoXml>();
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
             if (root == null || string.IsNullOrWhiteSpace(root.ScoreId))
             {
                 return 0;

@@ -6,6 +6,6 @@ public class CustomIdProvider : IUserIdProvider
 {
     public string GetUserId(HubConnectionContext connection)
     {
-        return connection.User?.Identity?.Name;
+        return connection.User.Identity?.Name;
     }
 }

@@ -73,27 +73,21 @@ public class DescriptionElementServiceImp : DescriptionElementService
     {
         var sb = new StringBuilder($"Single: <span class=\"text-primary total-single\">{single}</span>");
 
-        if (parlay.HasValue)
-        {
-            sb.Append($", Parlay: <span class=\"text-primary total-parlay\">{parlay}</span>");
-        }
+        sb.Append(parlay.HasValue ? $", Parlay: <span class=\"text-primary total-parlay\">{parlay}</span>" : string.Empty);
 
-        if (bettypeNames != null && bettypeNames.Any())
-        {
-            var conjunctionBettypeName = GetConjunctionBettypeName(bettypeNames);
-            sb.Append($" ({conjunctionBettypeName})");
-        }
+        var conjunctionBettypeName = GetConjunctionBettypeName(bettypeNames);
+        sb.Append(bettypeNames.Any() ? $" ({conjunctionBettypeName})" : string.Empty);
 
-        return $"<div class=\"count-tickets\">{sb.ToString()}</div>";
+        return $"<div class=\"count-tickets\">{sb}</div>";
     }
 
-    private string GetConjunctionBettypeName(IEnumerable<string> bettypeNames)
+    private static string GetConjunctionBettypeName(IEnumerable<string> bettypeNames)
     {
         const int numberOfBettypeShow = 3;
         var expectedBettypeNames = bettypeNames.Take(numberOfBettypeShow);
         var conjunctionBettypeName = string.Join(", ", expectedBettypeNames);
 
-        return (bettypeNames.Count() > numberOfBettypeShow) ? $"{conjunctionBettypeName}..." : conjunctionBettypeName;
+        return bettypeNames.Count() > numberOfBettypeShow ? $"{conjunctionBettypeName}..." : conjunctionBettypeName;
     }
 
     public string BuildVoidTimeAbnormalAccount(DateTime fromDate, DateTime toDate)

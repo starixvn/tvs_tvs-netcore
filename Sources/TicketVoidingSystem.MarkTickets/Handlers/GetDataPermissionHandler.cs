@@ -23,10 +23,10 @@ public class GetDataPermissionHandler : IRequestHandler<GetDataPermissionRequest
 
     public async Task<DataPermission> Handle(GetDataPermissionRequest request, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new DataPermission
+        return new DataPermission
         {
-            IsReadMarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read),
-            IsHostMarkTickets = sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host)
-        });
+            IsReadMarkTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read),
+            IsHostMarkTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host)
+        };
     }
 }

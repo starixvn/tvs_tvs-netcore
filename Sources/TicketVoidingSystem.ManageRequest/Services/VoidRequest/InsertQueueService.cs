@@ -88,7 +88,14 @@ public class InsertQueueServiceImp : InsertQueueService
 
         var results = await repository.FetchMultipleAsync(CreateCheckTicketsAllowToVoidCriteria(ticketTypeModel, siteDbGroupId), mappingTypes);
 
-        return CreateCheckTicketsAllowToVoidOutput(results);
+        return new TicketTypeModel
+        {
+            ValidVoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
+            ValidVoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
+            ValidVoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
+            ValidCancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
+            ValidVoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>()
+        };
     }
 
     private static CheckTicketsAllowToVoidCriteria CreateCheckTicketsAllowToVoidCriteria(TicketTypeModel ticketTypeModel, int siteDbGroupId)
@@ -100,18 +107,6 @@ public class InsertQueueServiceImp : InsertQueueService
             ParlayTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidParlayTickets),
             CricketTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidVoidCricketTickets),
             CancelCashOutTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidCancelCOTickets)
-        };
-    }
-
-    private static TicketTypeModel CreateCheckTicketsAllowToVoidOutput(IReadOnlyList<IEnumerable<object>> results)
-    {
-        return new TicketTypeModel
-        {
-            ValidVoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
-            ValidVoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
-            ValidVoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
-            ValidCancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
-            ValidVoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>()
         };
     }
 
@@ -139,7 +134,7 @@ public class InsertQueueServiceImp : InsertQueueService
             CancelCashOutTicketsJson = JsonSerializer.Serialize(ticketTypeModel.ValidCancelCOTickets),
             SingleTickets14Json = JsonSerializer.Serialize(ticketTypeModel.ValidVoidSingleTickets14),
             UserId = sessionService.UserId,
-            IP = sessionService.GetClientIp(),
+            IP = sessionService.GetClientIp()
         };
         await repository.ExecuteAsync(criteria);
     }

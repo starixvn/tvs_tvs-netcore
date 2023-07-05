@@ -25,7 +25,7 @@ public class ExportVoidedTicketsHandler : IRequestHandler<ExportVoidedTicketsReq
         var fileName = $"Req.{request.RequestId}_TVS_DeleteBet_{createDate}";
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketVoiding_VoidedTickets),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketVoiding_VoidedTickets),
             FileName = fileName
         };
     }

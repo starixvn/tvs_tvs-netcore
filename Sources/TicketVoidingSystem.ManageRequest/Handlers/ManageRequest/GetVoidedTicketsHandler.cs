@@ -31,22 +31,27 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         {
             TotalVoidedTickets = voidedTickets.Count(x => !x.IsCancelCashOut),
             TotalCancelCashOut = voidedTickets.Count(x => x.IsCancelCashOut),
-            LicenseeNames = CombineLicensee(voidedTickets)
+            LicenseeNames = CombineLicensee(voidedTickets),
+            Groups = new List<Group<VoidedTicketViewModel>>()
         };
 
-        var match = request.MatchId != null && request.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(request.MatchId.Value) : null;
-        var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, request);
-        var index = (request.PageIndex * request.PageSize) + 1;
-        foreach (var item in groups.Where(item => item.Tickets.Any()))
-        {
-            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(item, match, index, request.IssueTypeId);
-            viewModel.Groups.Add(currentGroup);
-            index += currentGroup.Tickets.Count();
-        }
-
+        await UpdateGroupTickets(viewModel, request, voidedTickets);
         UpdateGeneralBetType(request, viewModel);
 
         return viewModel;
+    }
+
+    private async Task UpdateGroupTickets(VoidedTicketsViewModel viewModel, GetVoidedTicketsQuery query, IEnumerable<VoidedTicketModel> voidedTickets)
+    {
+        var match = query.MatchId != null && query.MatchId != 0 ? await getVoidedTicketsService.GetMatchInfo(query.MatchId.Value) : null;
+        var groups = mapTicketsService.MapToGroupVoidedTickets(voidedTickets, query).Where(item => item.Tickets.Any());
+        var index = query.PageIndex * query.PageSize + 1;
+        foreach (var group in groups)
+        {
+            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query.IssueTypeId);
+            viewModel.Groups.Add(currentGroup);
+            index += currentGroup.Tickets.Count();
+        }
     }
 
     private static string CombineLicensee(IEnumerable<VoidedTicketModel> tickets)

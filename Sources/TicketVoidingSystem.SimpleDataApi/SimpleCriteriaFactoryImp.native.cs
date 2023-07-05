@@ -36,8 +36,8 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionVoidByBetIdCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledTickets, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledTickets, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledTickets, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledTickets, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -45,9 +45,9 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionVoidSingleBetCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -55,7 +55,7 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionVoidEarlyKickOffCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidEarlyKickOffBet, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidEarlyKickOffBet, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -63,8 +63,8 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionVoidParlayBetCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledParlayBet, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledParlayBet, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledParlayBet, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledParlayBet, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -72,8 +72,8 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionVoidByCurrencyCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledCurrencyBet, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledCurrencyBet, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledCurrencyBet, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledCurrencyBet, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -81,8 +81,8 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionVoidCashOutTransactionCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelSettledCashOut, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelUnSettledCashOut, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelSettledCashOut, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelUnSettledCashOut, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -90,9 +90,9 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckVoidBetPermissionTicketVoidingCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host));
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidSettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidInstantlySettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host).Result);
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host).Result);
 
             return base.CreateNonQueryCommand(commandType, queryModel);
         }
@@ -100,7 +100,7 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
         if (commandType == typeof(CheckPermissionMarkTicketsCriteria))
         {
             AddTransInfoJson(queryModel);
-            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host));
+            queryModel.SafeAdd("IsHostVoidUnsettledTickets", sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host).Result);
         }
 
         return base.CreateNonQueryCommand(commandType, queryModel);

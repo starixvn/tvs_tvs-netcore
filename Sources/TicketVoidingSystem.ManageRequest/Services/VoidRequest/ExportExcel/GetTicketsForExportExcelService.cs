@@ -71,7 +71,7 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
         }
     }
 
-    private Group<ExcelTicketModel> TransformIntoGroupExcelTickets(Group<GetTicketModel> originalGroup, Match match, int startIndex, int issueTypeId)
+    private Group<ExcelTicketModel> TransformIntoGroupExcelTickets(Group<GetTicketModel> originalGroup, Match? match, int startIndex, int issueTypeId)
     {
         var excelTickets = new List<ExcelTicketModel>();
         var index = startIndex;
@@ -98,7 +98,7 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
 
     private static string BuildChoice(GetTicketModel ticket, TicketViewModel ticketDetail, int issueTypeId)
     {
-        return (Convert.ToInt32(ticket.BetType).IsSingleMatchParlay() || (Convert.ToInt32(ticket.BetType).IsParlay() && issueTypeId.IsAbnormalAccountOrAbnormalBet()))
+        return Convert.ToInt32(ticket.BetType).IsSingleMatchParlay() || (Convert.ToInt32(ticket.BetType).IsParlay() && issueTypeId.IsAbnormalAccountOrAbnormalBet())
             ? ticketDetail.Choice
             : ticketDetail.Choice.ChoiceShortSubParlay(ticket.IsMixParlay);
     }
@@ -120,7 +120,7 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
         return groupsExcelTickets;
     }
 
-    private Group<ExcelTicketNoMatchModel> TransformIntoGroupExcelTicketsRequestNoMatch(Group<GetTicketModel> originalGroup, Match match, int startIndex, int issueTypeId)
+    private Group<ExcelTicketNoMatchModel> TransformIntoGroupExcelTicketsRequestNoMatch(Group<GetTicketModel> originalGroup, Match? match, int startIndex, int issueTypeId)
     {
         var excelTickets = new List<ExcelTicketNoMatchModel>();
         var index = startIndex;

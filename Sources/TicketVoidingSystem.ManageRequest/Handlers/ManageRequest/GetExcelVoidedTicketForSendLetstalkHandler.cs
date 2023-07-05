@@ -22,6 +22,6 @@ public class GetExcelVoidedTicketForSendLetstalkHandler : IRequestHandler<GetExc
     {
         request.IsCreditOnly = true;
 
-        return await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketVoiding_VoidedTickets);
+        return await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketVoiding_VoidedTickets);
     }
 }

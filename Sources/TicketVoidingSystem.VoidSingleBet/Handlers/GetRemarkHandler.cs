@@ -6,11 +6,11 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-public class GetRemarkRequest : IRequest<List<string>>
+public class GetRemarkRequest : IRequest<IEnumerable<string>>
 {
 }
 
-public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, List<string>>
+public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, IEnumerable<string>>
 {
     private readonly SessionService sessionService;
 
@@ -19,41 +19,26 @@ public class GetRemarkHandler : IRequestHandler<GetRemarkRequest, List<string>>
         this.sessionService = sessionService;
     }
 
-    public Task<List<string>> Handle(GetRemarkRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<string>> Handle(GetRemarkRequest request, CancellationToken cancellationToken)
     {
-        var remarks = new List<string>();
-        AddRemarkForPermissionSettled(remarks);
-        AddRemarkForPermissionInstant(remarks);
-
-        return Task.FromResult(remarks);
+        return await Task.FromResult(GetRemarksForPermission().ToBlockingEnumerable(cancellationToken));
     }
 
-    private void AddRemarkForPermissionSettled(ICollection<string> remarks)
+    private async IAsyncEnumerable<string> GetRemarksForPermission()
     {
-        if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host))
+        if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host))
         {
-            remarks.Add(StringResource.You_can_void_Settled_or_Unsettled_tickets);
+            yield return StringResource.You_can_void_Settled_or_Unsettled_tickets;
         }
-        else
+        else if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host) ||
+                 await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host))
         {
-            AddRemarkForPermissionUnsettled(remarks);
+            yield return StringResource.You_only_void_Unsettled_tickets;
         }
-    }
 
-    private void AddRemarkForPermissionUnsettled(ICollection<string> remarks)
-    {
-        if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host) ||
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host))
+        if (await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host))
         {
-            remarks.Add(StringResource.You_only_void_Unsettled_tickets);
-        }
-    }
-
-    private void AddRemarkForPermissionInstant(ICollection<string> remarks)
-    {
-        if (sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host))
-        {
-            remarks.Add(StringResource.You_can_void_Instantly_Settled);
+            yield return StringResource.You_can_void_Instantly_Settled;
         }
     }
 }

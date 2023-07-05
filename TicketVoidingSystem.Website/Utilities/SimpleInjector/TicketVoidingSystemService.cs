@@ -38,7 +38,8 @@ public static class TicketVoidingSystemService
         services.AddSingleton<LetstalkSingleMessageService, LetstalkSingleMessageServiceImp>();
         services.AddSingleton<NotificationLetstalkService, NotificationLetstalkServiceImp>();
         services.AddSingleton<UusTicketService, UusTicketServiceImp>();
-        services.AddSingleton<MessageContentService, MessageContentServiceImp>();
+        services.AddSingleton<MessageContentSingleService, MessageContentSingleServiceImp>();
+        services.AddSingleton<MessageContentWithMemberTemplateService, MessageContentWithMemberTemplateServiceImp>();
         services.AddSingleton<GroupVoidSettledBetService, GroupVoidSettledBetServiceImp>();
         services.AddSingleton<GroupTicketListingService, GroupTicketListingServiceImp>();
         services.AddSingleton<GroupAbnormalBetRequestService, GroupAbnormalBetRequestServiceImp>();

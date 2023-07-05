@@ -2,7 +2,7 @@
 
 namespace TicketVoidingSystem.ManageVoidServices.Criteria;
 
-internal class GetLetstalkCriteria : CriteriaBase
+public class GetLetstalkCriteria : CriteriaBase
 {
     public string BroadcastSessionId { get; set; }
 

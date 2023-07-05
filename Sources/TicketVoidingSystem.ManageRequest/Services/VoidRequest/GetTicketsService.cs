@@ -3,7 +3,6 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.Models;
@@ -110,7 +109,7 @@ public class GetTicketsServiceImp : GetTicketsService
 
     private static int? GetMatchIdForQueryTransInfoJson(GetTicketsQuery query)
     {
-        return (query.Match?.MatchId > 0) ? query.Match.MatchId : null;
+        return query.Match?.MatchId > 0 ? query.Match.MatchId : null;
     }
 
     private async Task<(IEnumerable<BetId> SingleTickets, IEnumerable<BetId> ParlayTickets, IEnumerable<BetId> CancelCashOutTickets)> GetTicketsInRequest(int requestId)

@@ -20,7 +20,7 @@ public interface SendMessageService
 
     Task InsertMessageIntoAdminSite(Message message);
 
-    Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId, int matchId);
+    Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId);
 }
 
 public class SendMessageServiceImp : SendMessageService
@@ -127,7 +127,7 @@ public class SendMessageServiceImp : SendMessageService
         await repository.ExecuteAsync(command);
     }
 
-    public async Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId, int matchId)
+    public async Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId)
     {
         var criteria = new InsertVoidedTransactionCommand
         {

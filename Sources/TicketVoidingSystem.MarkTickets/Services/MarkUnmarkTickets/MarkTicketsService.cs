@@ -29,7 +29,18 @@ public class MarkTicketsServiceImp : MarkTicketsService
 
     public async Task<Result> Execute(MarkTicketsQuery query)
     {
-        var resultInAllServers = new List<Result>();
+        var resultInAllServers = await ExecuteInMultipleServers(query);
+        var firstErrorResult = resultInAllServers.FirstOrDefault(x => !x.IsSuccessful);
+        var combineResult = new Result
+        {
+            ErrorCode = firstErrorResult?.ErrorCode ?? 0,
+            ErrorMsg = firstErrorResult?.ErrorMsg ?? string.Empty
+        };
+        return combineResult;
+    }
+
+    private async Task<IEnumerable<Result>> ExecuteInMultipleServers(MarkTicketsQuery query)
+    {
         var criteria = new MarkTicketsCommand
         {
             Status = query.Status,
@@ -38,19 +49,10 @@ public class MarkTicketsServiceImp : MarkTicketsService
             LogActionId = query.Status == 0 ? 90500 : 90501
         };
 
-        foreach (var server in SiteDbGroupConstant.ServerList)
-        {
-            var results = await ExecuteByServerId(criteria, query, server.Id);
-            resultInAllServers.AddRange(results);
-        }
+        var tasks = SiteDbGroupConstant.ServerList.Select(server => ExecuteByServerId(criteria, query, server.Id));
+        var results = await Task.WhenAll(tasks);
 
-        var firstErrorResult = resultInAllServers.FirstOrDefault(x => !x.IsSuccessful);
-        var combineResult = new Result
-        {
-            ErrorCode = firstErrorResult?.ErrorCode ?? 0,
-            ErrorMsg = firstErrorResult?.ErrorMsg ?? string.Empty
-        };
-        return combineResult;
+        return results.SelectMany(x => x);
     }
 
     private async Task<IEnumerable<Result>> ExecuteByServerId(MarkTicketsCommand criteria, MarkTicketsQuery query, int siteDbGroupId)

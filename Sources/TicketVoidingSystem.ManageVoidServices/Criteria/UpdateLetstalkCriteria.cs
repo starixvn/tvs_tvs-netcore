@@ -2,7 +2,7 @@
 
 namespace TicketVoidingSystem.ManageVoidServices.Criteria;
 
-internal class UpdateLetstalkCriteria : NonQueryCommand
+public class UpdateLetstalkCriteria : NonQueryCommand
 {
     public string BroadcastSessionId { get; set; }
 

@@ -39,28 +39,34 @@ public class GetVoidedTicketsServiceImp : GetVoidedTicketsService
 
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets(GetVoidedTicketsQuery query)
     {
-        var voidedTickets = new List<VoidedTicketModel>();
         var criteria = mapper.Map<GetVoidedTicketsCriteria>(query);
-        foreach (var item in SiteDbGroupConstant.ServerList)
-        {
-            criteria.SiteDbGroupId = item.Id;
-            var response = await repository.FetchAsync<VoidedTicketModel>(criteria);
-            voidedTickets.AddRange(response);
-        }
+
+        var tasks = SiteDbGroupConstant.ServerList
+            .Select(item =>
+            {
+                criteria.SiteDbGroupId = item.Id;
+                return repository.FetchAsync<VoidedTicketModel>(criteria);
+            });
+
+        var responses = await Task.WhenAll(tasks);
+        var voidedTickets = responses.SelectMany(response => response);
 
         return voidedTickets;
     }
 
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets14(GetVoidedTicketsQuery query)
     {
-        var voidedTickets = new List<VoidedTicketModel>();
         var criteria14 = mapper.Map<GetVoidedTickets14Criteria>(query);
-        foreach (var item in SiteDbGroupConstant.ServerList)
-        {
-            criteria14.SiteDbGroupId = item.Id;
-            var response = await repository.FetchAsync<VoidedTicketModel>(criteria14);
-            voidedTickets.AddRange(response);
-        }
+
+        var tasks = SiteDbGroupConstant.ServerList
+            .Select(async item =>
+            {
+                criteria14.SiteDbGroupId = item.Id;
+                return await repository.FetchAsync<VoidedTicketModel>(criteria14);
+            });
+
+        var responses = await Task.WhenAll(tasks);
+        var voidedTickets = responses.SelectMany(response => response);
 
         return voidedTickets;
     }

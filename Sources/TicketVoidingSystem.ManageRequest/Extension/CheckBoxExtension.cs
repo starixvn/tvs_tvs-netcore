@@ -5,8 +5,7 @@ namespace TicketVoidingSystem.ManageRequest.Extension;
 
 public static class CheckBoxExtension
 {
-    private static readonly List<string> SpecialGroup = new List<string>
-            { "phone betting" };
+    private static readonly List<string> SpecialGroup = new() { "phone betting" };
 
     public static bool IsDisable(this GetTicketModel item, VoidPermission permission, int issueTypeId)
     {

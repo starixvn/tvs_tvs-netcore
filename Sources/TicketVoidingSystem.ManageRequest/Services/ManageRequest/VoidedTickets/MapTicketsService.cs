@@ -10,7 +10,7 @@ public interface MapTicketsService
 {
     IEnumerable<Group<VoidedTicketModel>> MapToGroupVoidedTickets(IEnumerable<VoidedTicketModel> originalTickets, GetVoidedTicketsQuery query);
 
-    Group<VoidedTicketViewModel> MapToGroupVoidedTicketsViewModel(Group<VoidedTicketModel> group, Match match, int startIndex, int issueTypeId);
+    Group<VoidedTicketViewModel> MapToGroupVoidedTicketsViewModel(Group<VoidedTicketModel> group, Match? match, int startIndex, int issueTypeId);
 }
 
 public class MapTicketsServiceImp : MapTicketsService
@@ -41,7 +41,7 @@ public class MapTicketsServiceImp : MapTicketsService
         return Enumerable.Empty<Group<VoidedTicketModel>>();
     }
 
-    public Group<VoidedTicketViewModel> MapToGroupVoidedTicketsViewModel(Group<VoidedTicketModel> group, Match match, int startIndex, int issueTypeId)
+    public Group<VoidedTicketViewModel> MapToGroupVoidedTicketsViewModel(Group<VoidedTicketModel> group, Match? match, int startIndex, int issueTypeId)
     {
         var tickets = new List<VoidedTicketViewModel>();
         var index = startIndex;

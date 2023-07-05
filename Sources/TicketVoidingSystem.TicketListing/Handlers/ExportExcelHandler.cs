@@ -26,7 +26,7 @@ public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileM
         var fileName = string.Format(StringResource.FileNameExportExcel, betTypeName, request.LicenseeName).Replace(' ', '_');
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketListing),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing),
             FileName = fileName
         };
     }

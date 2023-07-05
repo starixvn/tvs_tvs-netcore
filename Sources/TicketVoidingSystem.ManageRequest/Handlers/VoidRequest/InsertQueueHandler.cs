@@ -72,7 +72,7 @@ public class InsertQueueHandler : IRequestHandler<InsertQueueRequest, Result>
     {
         var requestStatus = new List<RequestStatus>
             {
-                new RequestStatus
+                new()
                 {
                     RequestId = requestId,
                     Status = "Running"

@@ -20,12 +20,12 @@ public static class BetTypeExtension
         return id.IsParlay() || id.IsSingleMatchParlay();
     }
 
-    public static bool IsNumberGame(this int id)
+    private static bool IsNumberGame(this int id)
     {
         return id is >= BetTypeConstant.FirstNumberGame and <= BetTypeConstant.SecondNumberGame;
     }
 
-    public static bool IsLucky3(this int id)
+    private static bool IsLucky3(this int id)
     {
         return id is >= BetTypeConstant.FirstLucky3 and <= BetTypeConstant.SecondLucky3;
     }

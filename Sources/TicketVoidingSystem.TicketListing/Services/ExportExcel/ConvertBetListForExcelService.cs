@@ -125,7 +125,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         var choice = html.Handicap(doc);
         var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
         var betTypeDescription = HtmlExtension.GetBetTypeDescription(doc);
-        betType = (!string.IsNullOrWhiteSpace(betTypeDescription)) ? betType.AppendWithNewLine(betTypeDescription) : betType;
+        betType = !string.IsNullOrWhiteSpace(betTypeDescription) ? betType.AppendWithNewLine(betTypeDescription) : betType;
 
         return choice.AppendWithNewLine(betType);
     }

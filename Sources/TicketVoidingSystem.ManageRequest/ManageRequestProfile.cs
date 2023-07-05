@@ -14,15 +14,12 @@ public class ManageRequestProfile : Profile
 {
     public ManageRequestProfile()
     {
-        //// CreateMap<AddRequestQuery, AddRequestCommand>();
         CreateMap<RequestModel, RequestViewModel>();
         CreateMap<RequestModel, RequestEventViewModel>();
-        //// CreateMap<EditRequestQuery, EditRequestCommand>();
         CreateMap<SelectRequestsQuery, SelectArchivedRequestsCriteria>();
         CreateMap<SelectRequestsQuery, SelectActiveRequestsCriteria>();
         CreateMap<SelectRequestsQuery, GetActiveRequestInfoCriteria>();
         CreateMap<SelectRequestsQuery, GetArchivedRequestInfoCriteria>();
-        //// CreateMap<GetPoolHouseTicketQuery, GetPoolHouseTicketCriteria>();
 
         CreateMap<GetTicketsQuery, GetTicketsCriteria>();
         CreateMap<GetTicketsQuery, GetBetTrans14TicketsCriteria>();

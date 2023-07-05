@@ -12,7 +12,7 @@ public interface CheckPermissionOnRequestService
 {
     Task<bool> IsHasPermissionOnRequest(int requestId);
 
-    VoidPermission GetVoidPermission();
+    Task<VoidPermission> GetVoidPermission();
 }
 
 public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestService
@@ -38,19 +38,25 @@ public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestServic
             var issueTypeId = request.IssueTypeId;
             var permissionConfig = PermissionIssueTypeConfig.MappingList.FirstOrDefault(x => x.IssueTypeId == issueTypeId);
 
-            return sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
+            return await sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
         }
 
         return false;
     }
 
-    public VoidPermission GetVoidPermission()
+    public async Task<VoidPermission> GetVoidPermission()
     {
+        var settledPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host);
+        var unSettledPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host);
+        var instantlySettledPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host);
+
+        await Task.WhenAll(settledPermissionTask, unSettledPermissionTask, instantlySettledPermissionTask);
+
         return new VoidPermission
         {
-            Settled = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host),
-            UnSettled = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host),
-            InstantlySettled = sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host)
+            Settled = settledPermissionTask.Result,
+            UnSettled = unSettledPermissionTask.Result,
+            InstantlySettled = instantlySettledPermissionTask.Result
         };
     }
 }

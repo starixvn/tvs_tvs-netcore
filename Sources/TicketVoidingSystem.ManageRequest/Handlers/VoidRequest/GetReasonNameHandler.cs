@@ -26,23 +26,28 @@ public class GetReasonNameHandler : IRequestHandler<GetReasonNameRequest, Voided
 
     public async Task<VoidedReason> Handle(GetReasonNameRequest request, CancellationToken cancellationToken)
     {
+        var voidedReason = await GetVoidedReason(request);
+        if (voidedReason == null)
+        {
+            return new VoidedReason();
+        }
+
+        var sportEn = request.SportTypeId > 0 ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.English)} - " : "";
+        var sportCs = request.SportTypeId > 0 ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.ChineseSimplified)} - " : "";
+        voidedReason.ReasonEnglish = $"{sportEn}{voidedReason.ReasonEnglish}";
+        voidedReason.ReasonChineseSimplified = $"{sportCs}{voidedReason.ReasonChineseSimplified}";
+
+        return voidedReason;
+    }
+
+    private async Task<VoidedReason?> GetVoidedReason(GetReasonNameRequest request)
+    {
         var criteria = new GetReasonNameCriteria
         {
             SubIssueTypeId = request.SubId,
             SportType = request.SportTypeId
         };
-        var reason = await repository.GetAsync<VoidedReason>(criteria, cancellationToken);
 
-        if (reason == null)
-        {
-            return new VoidedReason();
-        }
-
-        var sportEn = (request.SportTypeId > 0) ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.English)} - " : "";
-        var sportCs = (request.SportTypeId > 0) ? $"{betListService.GetSportTypeName(request.SportTypeId, LanguageCode.ChineseSimplified)} - " : "";
-        reason.ReasonEnglish = $"{sportEn}{reason.ReasonEnglish}";
-        reason.ReasonChineseSimplified = $"{sportCs}{reason.ReasonChineseSimplified}";
-        
-        return reason;
+        return await repository.GetAsync<VoidedReason>(criteria);
     }
 }

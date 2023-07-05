@@ -25,7 +25,7 @@ public class TemplateEmailServiceImp : TemplateEmailService
         };
     }
 
-    protected virtual string GetEmailBody(string path, MailVoidViewModel model)
+    private static string GetEmailBody(string path, MailVoidViewModel model)
     {
         var fullPath = Helper.GetFilePath(path);
         var template = File.ReadAllText(fullPath);

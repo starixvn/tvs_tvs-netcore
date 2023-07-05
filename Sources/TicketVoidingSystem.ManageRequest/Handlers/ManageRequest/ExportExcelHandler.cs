@@ -25,7 +25,7 @@ public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileM
         var fileName = $"Manage_Request_TVS_{createDate}";
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.CreateFileAsByteArray(request, TemplateExcelPath.TicketVoiding_ManageRequest),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketVoiding_ManageRequest),
             FileName = fileName
         };
     }

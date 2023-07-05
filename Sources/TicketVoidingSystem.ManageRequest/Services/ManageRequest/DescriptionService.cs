@@ -40,7 +40,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.WrongOdds, BuildDangerAccepted},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
-                {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
+                {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);
@@ -49,7 +49,7 @@ public class DescriptionServiceImp : DescriptionService
 
     private string BuildAbnormalBet(RequestDescription item)
     {
-        return (item.FilterBy == AB_PARLAY) ? BuildAbnormalBetForParlayTicket(item) : BuildAbnormalBetForSingleTicket(item);
+        return item.FilterBy == AB_PARLAY ? BuildAbnormalBetForParlayTicket(item) : BuildAbnormalBetForSingleTicket(item);
     }
 
     private string BuildEKO(RequestDescription item)
@@ -111,6 +111,6 @@ public class DescriptionServiceImp : DescriptionService
 
     private string BuildVoidArchivedTicket(RequestDescription item)
     {
-        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, null);
+        return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, Enumerable.Empty<string>());
     }
 }

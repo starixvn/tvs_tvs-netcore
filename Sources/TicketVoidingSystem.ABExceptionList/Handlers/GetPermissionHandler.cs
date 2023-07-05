@@ -21,12 +21,12 @@ public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, Permis
         this.session = session;
     }
 
-    public Task<PermissionABExceptionList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
+    public async Task<PermissionABExceptionList> Handle(GetPermissionRequest request, CancellationToken cancellationToken)
     {
         var permission = new PermissionABExceptionList
         {
-            ABExceptionListHost = session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host)
+            ABExceptionListHost = await session.HasPermission(SpecialDeleteFunctionKeys.ABExceptionList, Constant.Policy.Host)
         };
-        return Task.FromResult(permission);
+        return permission;
     }
 }

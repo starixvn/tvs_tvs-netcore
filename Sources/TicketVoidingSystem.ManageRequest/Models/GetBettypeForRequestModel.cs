@@ -2,7 +2,7 @@
 
 public class GetBettypeForRequestModel
 {
-    public long Betid { get; set; }
+    public long BetId { get; set; }
 
     public int Bettype { get; set; }
 

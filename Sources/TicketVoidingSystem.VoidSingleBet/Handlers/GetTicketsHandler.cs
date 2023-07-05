@@ -70,19 +70,20 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupsTicketViewModel(GetTicketsRequest request, IEnumerable<GetTicketModel> getTicketsResult)
     {
         var match = await matchService.GetMatch(request.MatchId);
-        var groupsGetTicket = GetGroupsGetTicketModel(getTicketsResult, request);
+        var groupsGetTicket = GetGroupsGetTicketModel(getTicketsResult, request).Where(item => item.Tickets.Any());
         var groups = new List<Group<TicketViewModel>>();
-        foreach (var item in groupsGetTicket.Where(item => item.Tickets.Any()))
+
+        foreach (var item in groupsGetTicket)
         {
-            groups.Add(CreateGroupTicketViewModel(item, match));
+            groups.Add(await CreateGroupTicketViewModel(item, match));
         }
 
         return groups;
     }
 
-    private Group<TicketViewModel> CreateGroupTicketViewModel(Group<GetTicketModel> group, Match match)
+    private async Task<Group<TicketViewModel>> CreateGroupTicketViewModel(Group<GetTicketModel> group, Match match)
     {
-        var permission = GetUserPermission();
+        var permission = await GetUserPermission();
         var tickets = new List<TicketViewModel>();
         var index = 1;
         foreach (var item in group.Tickets)
@@ -95,13 +96,19 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, ListTicketsV
         return new Group<TicketViewModel> { Name = group.Name, Tickets = tickets };
     }
 
-    private UserPermission GetUserPermission()
+    private async Task<UserPermission> GetUserPermission()
     {
+        var settledTicketPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host);
+        var unSettledTicketPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host);
+        var instantlySettledTicketPermissionTask = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host);
+
+        await Task.WhenAll(settledTicketPermissionTask, unSettledTicketPermissionTask, instantlySettledTicketPermissionTask);
+
         return new UserPermission
         {
-            SettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host),
-            UnSettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host),
-            InstantlySettledTicket = sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host)
+            SettledTicket = settledTicketPermissionTask.Result,
+            UnSettledTicket = unSettledTicketPermissionTask.Result,
+            InstantlySettledTicket = instantlySettledTicketPermissionTask.Result
         };
     }
 }

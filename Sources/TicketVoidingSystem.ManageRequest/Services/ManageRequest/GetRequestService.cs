@@ -18,7 +18,7 @@ public class GetRequestServiceImp : GetRequestService
     private readonly IDynamicRepository repository;
     private readonly RemotingRefWrapperService remotingRefService;
 
-    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, WrongScoreInfoService wrongScoreInfoService)
+    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService)
     {
         this.repository = repository;
         this.remotingRefService = remotingRefService;
@@ -161,7 +161,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    public IEnumerable<WrongOddsViewModel> MapEventWrongOdds(IEnumerable<RequestEventModel> requestEventModels)
+    private static IEnumerable<WrongOddsViewModel> MapEventWrongOdds(IEnumerable<RequestEventModel> requestEventModels)
     {
         return requestEventModels.Select(model => new WrongOddsViewModel
         {

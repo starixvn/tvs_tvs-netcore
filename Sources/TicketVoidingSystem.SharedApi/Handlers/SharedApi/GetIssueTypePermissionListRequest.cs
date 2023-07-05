@@ -28,12 +28,12 @@ public class GetIssueTypePermissionListHandler : IRequestHandler<GetIssueTypePer
 
         foreach (var item in IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList)
         {
-            if (sessionService.HasPermission(item.FunctionKey, Constant.Policy.Read))
+            if (await sessionService.HasPermission(item.FunctionKey, Constant.Policy.Read))
             {
                 issueTypePermissionList.Add(item.IssueType);
             }
         }
 
-        return await Task.FromResult(issueTypePermissionList);
+        return issueTypePermissionList;
     }
 }

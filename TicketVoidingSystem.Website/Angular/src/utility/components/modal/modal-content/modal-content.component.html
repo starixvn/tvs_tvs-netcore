@@ -11,7 +11,7 @@
   <div *ngIf="data.copyContent">
     <ng-container *ngFor="let item of data.content">
       <p class="m-0"><b>{{item.title}}</b></p>
-      <p class="m-0 cursor-pointer" ngxClipboard [cbContent]="item.message" (cbOnSuccess)="copiedContent()">{{item.message}}</p>
+      <p class="m-0 cursor-pointer" ngxClipboard [cbContent]="item.message" (click)="copiedContent()">{{item.message}}</p>
     </ng-container>
   </div>
 </div>

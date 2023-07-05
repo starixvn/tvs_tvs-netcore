@@ -27,38 +27,29 @@ public class SelectRequestsHandler : IRequestHandler<SelectRequestsRequest, IEnu
 
     public async Task<IEnumerable<RequestViewModel>> Handle(SelectRequestsRequest request, CancellationToken cancellationToken)
     {
-        if (await CheckValidRequest(request))
+        if (await IsFilterSearchRequestsValid(request))
         {
             return new List<RequestViewModel>();
         }
 
-        var viewModels = new List<RequestViewModel>();
         var (models, _) = await getRequestsService.GetRequests(request);
 
-        var groupRequestModels = models.GroupBy(b => b.RequestId).Select(group => new GroupRequestModel
-        {
-            RequestId = group.Key,
-            RequestModels = group.ToList(),
-        });
-        foreach (var groupRequest in groupRequestModels)
-        {
-            RenderViewModel(viewModels, groupRequest);
-            
-        }
+        var groupRequestModels = models
+            .GroupBy(b => b.RequestId)
+            .Select(group => new GroupRequestModel
+            {
+                RequestId = group.Key,
+                RequestModels = group.ToList()
+            });
+        var viewModels = groupRequestModels.Select(g => renderService.Render(g));
 
         return viewModels;
     }
 
-    private async Task<bool> CheckValidRequest(SelectRequestsRequest request)
+    private async Task<bool> IsFilterSearchRequestsValid(SelectRequestsQuery query)
     {
         const string NA_OPTION = "-1";
-        return (request.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(request.SubIssueType)
-        || (!string.IsNullOrWhiteSpace(request.RequestId) && ! await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(request.RequestId))));
-    }
-
-    private void RenderViewModel(IList<RequestViewModel> viewModels, GroupRequestModel groupRequest)
-    {
-        var viewModel = renderService.Render(groupRequest);
-        viewModels.Add(viewModel);
+        return query.IssueTypeId.Equals(NA_OPTION) || string.IsNullOrEmpty(query.SubIssueType)
+                                                   || (!string.IsNullOrWhiteSpace(query.RequestId) && !await checkPermissionOnRequestService.IsHasPermissionOnRequest(int.Parse(query.RequestId)));
     }
 }

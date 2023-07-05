@@ -59,7 +59,6 @@ public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
 
     public async Task<UpdateConfirmAutoUnmarkValidation> UpdateConfirmAutoUnmark(UpdateConfirmAutoUnmarkQuery query, IEnumerable<BetId> abnormalBetTickets)
     {
-        var validationInAllServers = new List<UpdateConfirmAutoUnmarkValidation>();
         var criteria = new UpdateConfirmAutoUnmarkCriteria
         {
             MatchId = query.ChildMatchId ?? query.MatchId,
@@ -69,16 +68,15 @@ public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
             UserId = sessionService.UserId
         };
 
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(async server =>
         {
             var ticketsInCurrentServer = abnormalBetTickets.Where(x => x.SiteDbGroupId == server.Id);
             criteria.SiteDbGroupId = server.Id;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInCurrentServer);
-            var validation = await repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(criteria);
+            return await repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(criteria);
+        });
 
-            validationInAllServers.AddRange(validation);
-        }
-
-        return combineValidationService.CombineUpdateResult(validationInAllServers);
+        var validationInAllServers = await Task.WhenAll(tasks);
+        return combineValidationService.CombineUpdateResult(validationInAllServers.SelectMany(x => x));
     }
 }

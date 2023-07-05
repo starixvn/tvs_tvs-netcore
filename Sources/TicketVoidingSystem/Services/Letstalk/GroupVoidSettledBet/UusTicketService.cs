@@ -18,25 +18,50 @@ public class UusTicketServiceImp : UusTicketService
 
     public bool IsValidCashOut(TicketEmailModel ticket)
     {
-        return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv) 
-            ? ticket.IsCashOut && ticket.Currency 
-            != Currency20 : ticket.IsCashOut;
+        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
+        {
+            return ticket.IsCashOut && ticket.Currency != Currency20;
+        }
+        return ticket.IsCashOut;
     }
 
     public bool IsValidSettledSingleTicket(TicketEmailModel ticket)
     {
-        var result = !ticket.BetTypeId.IsParlayAndBetBuilder()
-                     && !ticket.IsCashOut
-                     && ticket.Status.IsSettled();
-        return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
-            ? result && ticket.Currency != Currency20 : result;
+        var result = IsSingleTicketValid(ticket);
+        return ApplyCurrencyValidation(result, ticket);
     }
 
     public bool IsValidSettledParlayTicket(TicketEmailModel ticket, bool isCheckMainParlay)
     {
-        var result = isCheckMainParlay ? ticket.BetTypeId.IsParlayAndBetBuilder() && ticket.Status.IsSettled()
-            : ticket.IsMixParlay && ticket.SubStatus.IsSettled();
-        return (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
-            ? result && ticket.Currency != Currency20 : result;
+        var result = isCheckMainParlay ? IsMainParlayTicketValid(ticket) : IsMixParlayTicketValid(ticket);
+        return ApplyCurrencyValidation(result, ticket);
+    }
+
+    private static bool IsSingleTicketValid(TicketEmailModel ticket)
+    {
+        return !ticket.BetTypeId.IsParlayAndBetBuilder()
+               && !ticket.IsCashOut
+               && ticket.Status.IsSettled();
+    }
+
+    private static bool ApplyCurrencyValidation(bool result, TicketEmailModel ticket)
+    {
+        if (AppSettingService.AppSetting.LetstalkConfig.IsProdEnv)
+        {
+            return result && ticket.Currency != Currency20;
+        }
+        return result;
+    }
+
+    private static bool IsMainParlayTicketValid(TicketEmailModel ticket)
+    {
+        return ticket.BetTypeId.IsParlayAndBetBuilder()
+               && ticket.Status.IsSettled();
+    }
+
+    private static bool IsMixParlayTicketValid(TicketEmailModel ticket)
+    {
+        return ticket.IsMixParlay
+               && ticket.SubStatus.IsSettled();
     }
 }

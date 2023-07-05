@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using ONEbook.UM.AspNetCore.Filters;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;

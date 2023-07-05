@@ -112,7 +112,6 @@ public class BetListCoreServiceImp : BetListCoreService
         return mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
     }
 
-
     private static bool IsMainParlay(TicketEmailModel ticket)
     {
         return ticket.IsMixParlay && ticket.BetTypeId.IsParlay();

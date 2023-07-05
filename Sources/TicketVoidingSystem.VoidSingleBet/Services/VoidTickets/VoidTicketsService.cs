@@ -57,17 +57,16 @@ public class VoidTicketsServiceImp : VoidTicketsService
     {
         var ticketsInAllServers = new List<TicketEmailModel>();
         var validationsInAllServers = new List<VoidTicketValidation>();
-
         var criteria = CreateVoidTicketsCriteria(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
-        {
-            var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any())
-            {
-                continue;
-            }
 
-            criteria.SiteDbGroupId = server.Id;
+        var serversWithTickets = query.Tickets.GroupBy(x => x.SiteDbGroupId);
+
+        foreach (var serverGroup in serversWithTickets)
+        {
+            var serverId = serverGroup.Key;
+            var ticketsInSiteDb = serverGroup.ToList();
+
+            criteria.SiteDbGroupId = serverId;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
             var (validation, emailTicketsSiteDb) = await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
             ticketsInAllServers.AddRange(emailTicketsSiteDb);

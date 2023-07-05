@@ -15,7 +15,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets
 
 public interface MapFromBetListService
 {
-    VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match match, ChoiceType choiceType, int issueTypeId);
+    VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
 }
 
 public class MapFromBetListServiceImp : MapFromBetListService
@@ -29,7 +29,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         this.betListService = betListService;
     }
 
-    public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match match, ChoiceType choiceType, int issueTypeId)
+    public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
     {
         const int minBetType = 801;
         const int maxBetType = 806;
@@ -81,7 +81,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         return Convert.ToInt32(item.BetType).IsSingleMatchParlay() ? betBuilderTicketHelper : generalTicketHelper;
     }
 
-    private Ticket MapToBetListTicket(VoidedTicketModel item, Match match)
+    private Ticket MapToBetListTicket(VoidedTicketModel item, Match? match)
     {
         var ticket = mapper.Map<Ticket>(item);
         ticket.TransId = item.IsMixParlay ? item.SubTransId : item.TransId;
@@ -92,7 +92,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         ticket.RefNo = item.RefNo.ToString(CultureInfo.InvariantCulture);
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
-        ticket.SettlementStatus = item.IsMixParlay ? default(byte) : item.SettlementStatus;
+        ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
         ticket.IsLive = item.IsLiveIndicator;
 
         if (match != null)
@@ -113,13 +113,13 @@ public class MapFromBetListServiceImp : MapFromBetListService
 
     private static bool IsGetPlainTextForExportExcel(int betTypeId, ChoiceType choiceType, bool isParlay, int issueTypeId)
     {
-        return (choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet())));
+        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet()));
     }
 
     private string BuildChoice(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId)
     {
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        return (item.IsMixParlay) ? GetChoiceForTicketParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
+        return item.IsMixParlay ? GetChoiceForTicketParlay(ticket, ticketHelper, item, issueTypeId, mainChoice) : mainChoice;
     }
 
     private string GetChoiceForTicketParlay(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId, string mainChoice)

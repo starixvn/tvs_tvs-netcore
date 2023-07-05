@@ -148,7 +148,7 @@ public class MapTicketServiceImp : MapTicketService
         ticket.Currency = item.CurrencyName;
         ticket.WalletType = item.WalletType.SetWalletType(item.RefCode);
         ticket.RefCode = 0;
-        ticket.SettlementStatus = item.IsParlay ? default(byte) : item.SettlementStatus;
+        ticket.SettlementStatus = item.IsParlay ? default : item.SettlementStatus;
 
         return ticket;
     }
