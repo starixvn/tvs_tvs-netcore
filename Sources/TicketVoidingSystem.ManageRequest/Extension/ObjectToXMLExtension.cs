@@ -56,7 +56,8 @@ public static class ObjectToXMLExtension
                           + $" CreatorId='{voidData.CreatorId}' CreatorName='{voidData.CreatorName}' HistoryStatusId='{voidData.HistoryStatusId}'"
                           + $" DecidedBy='{SecurityElement.Escape(voidData.DecidedBy)}'"
                           + $" VoidFromTime='{voidData.VoidFromTime}' VoidToTime='{voidData.VoidToTime}'"
-                          + $" VoidFromDate='{voidData.VoidFromDate}' VoidToDate='{voidData.VoidToDate}' />";
+                          + $" VoidFromDate='{voidData.VoidFromDate}' VoidToDate='{voidData.VoidToDate}'"
+                          + $" IsRunManualAfterVoid='{true}' />";
 
         return voidDataXml;
     }
