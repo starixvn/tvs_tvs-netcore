@@ -1,6 +1,10 @@
-﻿using MediatR;
+﻿using Fanex.NAP.Client.AspNetCore.Attributes;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
+using TicketVoidingSystem.Utilities;
+using TicketVoidingSystem.Web;
+using static Fanex.NAP.Core.Business.Constant;
 
 namespace TicketVoidingSystem.ManageRequest.Controllers;
 
@@ -44,4 +48,14 @@ public class AddRequestController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> GetPoolHouseTickets(GetPoolHouseTicketRequest request) => Ok(await mediator.Send(request));
+
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Policy.Host)]
+    [HttpPost]
+    public async Task<JsonResult> AddRequest()
+    {
+        var request = Helper.GetModelFromJsonRequest<AddRequest>(HttpContext.Request);
+        var result = await mediator.Send(request);
+
+        return this.JsonNet(result);
+    }
 }

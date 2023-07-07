@@ -10,11 +10,13 @@ public class MarkTicketsCommand : CriteriaBase
 
     public string Ip { get; set; }
 
+    public int LogActionId { get; set; }
+
     public byte Status { get; set; }
 
     public string TransIds { get; set; }
 
-    public int LogActionId { get; set; }
+    public int IssueTypeId { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
