@@ -53,7 +53,7 @@ public class GroupVoidSettledBetServiceImp : GroupVoidSettledBetService
 
         var contents = ticketInfo.IsMemberTemplate ?
             messageContentWithMemberTemplateService.Create(ticketInfo, tickets) : new List<string> { messageContentSingleService.Create(ticketInfo, tickets) };
-        if (!contents.Any())
+        if (!contents.Any() || contents.All(string.IsNullOrWhiteSpace))
         {
             return Enumerable.Empty<Result>();
         }
