@@ -98,4 +98,18 @@ public class LetstalkSingleMessageServiceTests
         // Assert
         AssertExtension.Equal(new Result(), result);
     }
+
+    [Fact]
+    public async Task Send_LetstalkAttachmentIsNull_ReturnHasLetstalkAttachments()
+    {
+        // Arrange
+        var model = new LetstalkModel();
+        letstalkService.SendMessage(Arg.Any<LetstalkModel>()).Returns(true);
+
+        // Act
+        var result = await service.Send(model, null);
+
+        // Assert
+        AssertExtension.Equal(new Result(), result);
+    }
 }

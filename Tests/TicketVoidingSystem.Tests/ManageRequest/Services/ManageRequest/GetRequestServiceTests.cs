@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -466,5 +467,37 @@ public class GetRequestServiceTests
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
+    }
+
+    [Theory]
+    [InlineData(true, "12345 - TeamName (N) - vs - TeamName")]
+    [InlineData(false, "12345 - TeamName - vs - TeamName")]
+    public async Task GetMatchName_HasRequestEventModelValid_ReturnStringName(bool isNeutral, string expected)
+    {
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData =
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+                new List<RequestDetailModel>
+                {
+                    new()
+                    {
+                        IssueTypeId = IssueTypeConstant.DangerAccepted, SportType = 1,
+                        OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                    }
+                },
+                new List<RequestEventModel> { new() { MatchId = 12345, IsNeutral = isNeutral } },
+                new List<Message> { new() }
+            );
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+            .ReturnsForAnyArgs(fakeData);
+        remotingRefService.GetTeamName(Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+        var dangerAcceptedModel = actualResult.DangerAcceptedModels.ToList()[0];
+
+        // Assert
+
+        Assert.Equal(expected, dangerAcceptedModel.Name);
     }
 }

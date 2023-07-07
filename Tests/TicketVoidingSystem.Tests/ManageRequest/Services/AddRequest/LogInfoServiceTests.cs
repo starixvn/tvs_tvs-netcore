@@ -37,7 +37,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetLogInfo_IssueTypeIsWrongScore_ReturnWrongScoreInfoViewModel()
     {
         // Arrange
-        var issueTypeId = IssueTypeConstant.WrongScore;
+        const int issueTypeId = IssueTypeConstant.WrongScore;
         const int userId = 1234;
         const int scoreId = 62122;
         const int matchId = 996063;
@@ -47,8 +47,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var ticketRequests = new List<TicketRequest> { ticketRequest };
         var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
         var logInfos = new List<LogInfoDetail> { logInfo };
-        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
-            { new() { MarkTransIds = "1232" } };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
         var transInfoModels = new List<string> { "123" };
         var mappingTypes = new[]
         {
@@ -98,7 +97,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetLogInfo_IssueTypeIsDangerAccepted_ReturnDangerAcceptedInfoViewModel()
     {
         // Arrange
-        var issueTypeId = IssueTypeConstant.DangerAccepted;
+        const int issueTypeId = IssueTypeConstant.DangerAccepted;
         const int userId = 1234;
         const int scoreId = 62122;
         const int matchId = 996063;
@@ -156,7 +155,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetLogInfo_IssueTypeIsRedCard_ReturnRedCardInfoViewModel()
     {
         // Arrange
-        var issueTypeId = IssueTypeConstant.RedCard;
+        const int issueTypeId = IssueTypeConstant.RedCard;
         const int userId = 1234;
         const int scoreId = 62122;
         const int matchId = 996063;
@@ -210,6 +209,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
         Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
     }
+    
 
     [Fact]
     public async Task GetLogInfo_IssueTypeIsWrongHdp_ReturnWrongHdpInfoViewModel()
@@ -392,7 +392,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetLogInfo_IssueTypeIsWrongOu_ReturnWrongOuInfoViewModel()
     {
         // Arrange
-        var issueTypeId = IssueTypeConstant.WrongOU;
+        const int issueTypeId = IssueTypeConstant.WrongOU;
         const int userId = 1234;
         const int scoreId = 62122;
         const int matchId = 996063;
@@ -510,7 +510,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
     public async Task GetLogInfo_IssueTypeConstantNotContainIssueTypeInput_ReturnLogInfoViewModelDefault()
     {
         // Arrange
-        const int issueTypeId = 0;
+        const int issueTypeId = IssueTypeConstant.EarlyKickOffTime;
         const int userId = 1234;
         const int scoreId = 62122;
         const int matchId = 996063;
@@ -535,6 +535,62 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var request = new GetLogInfoRequest
         {
             IssueTypeId = issueTypeId,
+            MatchId = matchId,
+            KickOffTime = DateTime.Now
+        };
+        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        session.UserId.ReturnsForAnyArgs(userId);
+        mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        var transInfoJson = new List<string> { issueTypeId.ToString() };
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(transInfoJson);
+
+        // Act
+        var actual = await service.GetLogInfo(request);
+        var logInfoModel = actual.GetLogInfoModels.ToList()[0];
+
+        // Assert
+        Assert.Single(actual.GetLogInfoModels);
+        Assert.Equal(validation, logInfoModel.Validation);
+        Assert.Equal(ticketRequests, logInfoModel.TicketRequest);
+        Assert.Equal(logInfo, logInfoModel.LogInfoDetail);
+    }
+
+    [Fact]
+    public async Task GetLogInfo_IssueTypeIsReducedOver_ReturnReducedOverInfoViewModel()
+    {
+        // Arrange
+        const int issueTypeId = IssueTypeConstant.ReducedOver;
+        const int userId = 1234;
+        const int scoreId = 62122;
+        const int matchId = 996063;
+        var validation = new Validation { ScoreId = scoreId, MatchId = matchId };
+        var validations = new List<Validation> { validation };
+        var ticketRequest = new TicketRequest { ScoreId = scoreId, RequestId = 3333, MatchId = matchId };
+        var ticketRequests = new List<TicketRequest> { ticketRequest };
+        var logInfo = new LogInfoDetail { ScoreId = scoreId, MatchId = matchId };
+        var logInfos = new List<LogInfoDetail> { logInfo };
+        var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
+            { new() { MarkTransIds = "1232" } };
+        var transInfoModels = new List<string> { "123" };
+        var mappingTypes = new[]
+        {
+            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
+            typeof(string)
+        };
+
+        IEnumerable<object>[] fakeData =
+            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
+
+        var viewModel = new ReducedOverViewModel()
+        {
+            EventDate = new DateTime(2020, 06, 16),
+            MatchId = matchId,
+            SubIssueTypeId = 7
+        };
+        var request = new GetLogInfoRequest
+        {
+            IssueTypeId = issueTypeId,
+            ReducedOverModels = new List<ReducedOverViewModel> { viewModel },
             MatchId = matchId,
             KickOffTime = DateTime.Now
         };

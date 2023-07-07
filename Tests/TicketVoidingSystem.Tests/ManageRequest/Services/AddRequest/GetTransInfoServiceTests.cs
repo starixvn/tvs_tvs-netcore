@@ -39,6 +39,7 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
     [InlineData(IssueTypeConstant.Wrong1stOU)]
     [InlineData(IssueTypeConstant.ArchivedTicket)]
     [InlineData(IssueTypeConstant.WrongOdds)]
+    [InlineData(IssueTypeConstant.ReducedOver)]
     [InlineData(null)]
     [InlineData(99999)]
     public async Task GetTransInfoJson_ReturnsListOfTransInfoJson(int issueTypeId)
@@ -55,6 +56,7 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
             DangerAcceptedModels = new List<DangerAcceptedViewModel>(),
             WrongScoreModels = new List<WrongScoreInfoViewModel>(),
             WrongOddsModels = new List<WrongOddsViewModel>(),
+            ReducedOverModels = new List<ReducedOverViewModel>(),
             MatchId = 1,
             KickOffTime = DateTime.Now,
             Usernames = "a",

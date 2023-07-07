@@ -62,7 +62,7 @@ public class LetstalkSingleMessageServiceImp : LetstalkSingleMessageService
             Group = model.Group
         };
 
-        if (!string.IsNullOrWhiteSpace(attachment.FileName) && attachment.Bytes != null)
+        if (!string.IsNullOrWhiteSpace(attachment?.FileName) && attachment.Bytes != null)
         {
             finalModel.LetstalkAttachments = new List<LetstalkAttachment>
                 {

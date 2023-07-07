@@ -46,6 +46,21 @@ public class GroupVoidSettledBetServiceTests
     }
 
     [Fact]
+    public async Task SendMessageWithTicketInfo_HasTicketsIsNull__HasError()
+    {
+        // Arrange
+        var letstalkModel = new LetstalkModel();
+        var ticketInfo = new TicketInfoForLetstalk();
+        
+        // Act
+        var results = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, null);
+        var result = results.ToList()[0];
+
+        // Assert
+        Assert.Equal(ErrorCode.SendLetstalkFail, result.ErrorCode);
+    }
+
+    [Fact]
     public async Task SendMessageWithTicketInfo_HasNotContents_ReturnEmptyResult()
     {
         // Arrange
@@ -70,7 +85,6 @@ public class GroupVoidSettledBetServiceTests
         var letstalkModel = new LetstalkModel();
         var ticketInfo = new TicketInfoForLetstalk();
         var tickets = new List<TicketEmailModel> { new() };
-
         messageContentSingleService.Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
             .Returns("Single Message Content");
 
@@ -87,6 +101,8 @@ public class GroupVoidSettledBetServiceTests
         // Arrange
         var ticketInfo = new TicketInfoForLetstalk();
         var tickets = new List<TicketEmailModel> { new(), new() };
+        messageContentSingleService.Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
+            .Returns("Single Message Content");
 
         // Act
         var results = await service.SendMessageWithTicketInfo(null, ticketInfo, tickets);

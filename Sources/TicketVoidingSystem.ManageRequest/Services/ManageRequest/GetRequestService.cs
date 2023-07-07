@@ -209,7 +209,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    private string GetMatchName(RequestEventModel requestEventModel)
+    public string GetMatchName(RequestEventModel requestEventModel)
     {
         var homeName = requestEventModel.IsNeutral ?
                  remotingRefService.GetTeamName(requestEventModel.HomeId, LanguageCode.English) + " (N)" : remotingRefService.GetTeamName(requestEventModel.HomeId, LanguageCode.English);
