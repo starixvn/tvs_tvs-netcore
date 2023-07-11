@@ -109,7 +109,7 @@ const configPages = [
   // ticketListing,
   // voidSingleBet,
   voidRequest,
-  // manageRequest
+  manageRequest
 ];
 
 module.exports = configPages;
