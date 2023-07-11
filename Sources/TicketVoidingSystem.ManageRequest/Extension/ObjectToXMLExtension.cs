@@ -4,6 +4,7 @@ using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.ManageRequest.Extension;
 
@@ -203,6 +204,82 @@ public static class ObjectToXMLExtension
                 + $"VoidFromTime='{model.LogInfoDetail?.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"ActualMarket='{SecurityElement.Escape(model.ActualMarket)}' "
                 + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' />";
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToEventWrongOddsXml(this IEnumerable<WrongOddsViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"LiveScores='{model.LogInfoDetail.LiveScores}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
+                       + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' "
+                       + $"LiveGameEarlySingleCount ='{model.LogInfoDetail.LiveGameEarlySingleCount}' "
+                       + $"LiveGameEarlyCashOutCount='{model.LogInfoDetail.LiveGameEarlyCashOutCount}' "
+                       + $"LiveGameEarlySettleCount='{model.LogInfoDetail.LiveGameEarlySettleCount}' "
+                       + $"LiveGameEarlyInstantlySettleCount='{model.LogInfoDetail.LiveGameEarlyInstantlySettleCount}' "
+                       + $"PoolHouseSingleCount='{model.LogInfoDetail.PoolHouseSingleCount}' "
+                       + $"PoolHouseCashOutCount='{model.LogInfoDetail.PoolHouseCashOutCount}' "
+                       + $"PoolHouseMainParlayCount='{model.LogInfoDetail.PoolHouseMainParlayCount}' "
+                       + $"PoolHouseInstantlySettleCount='{model.LogInfoDetail.PoolHouseInstantlySettleCount}' "
+                       + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
+                       + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"LiveIndicator='{model.LiveIndicator}' "
+                       + $"FilterOddsType='{SecurityElement.Escape(model.FilterOddsType)}' "
+                       + $"FilterFavoriteType='{SecurityElement.Escape(model.FilterFavoriteType)}' "
+                       + $"FilterOuType='{SecurityElement.Escape(model.FilterOuType)}' "
+                       + $"OddsValue='{SecurityElement.Escape(model.OddsValue)}' "
+                       + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
+                       + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
+                       + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
+                       + $"BetTeam='{SecurityElement.Escape(model.BetTeam)}' "
+                       + $"OuValue='{SecurityElement.Escape(model.OuValue)}' "
+                       + $"FavoriteValue='{SecurityElement.Escape(model.FavoriteValue)}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToEventReducedOverXml(this IEnumerable<ReducedOverViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"BetTypeIds='{model.BetTypeIds}' "
+                       + $"WicketOver='{SecurityElement.Escape(model.WicketOver)}' "
+                       + $"FilterWicketOver='{SecurityElement.Escape(model.FilterWicketOver)}' "
+                       + $"PlayerIds='{model.PlayerIds}' "
+                       + $"Runs='{SecurityElement.Escape(model.Runs)}' "
+                       + $"Live='{model.Live}' "
+                       + $"NonLive='{model.NonLive}' "
+                       + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+                       + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                       + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' />";
+
             stringBuilder.AppendLine(line);
         }
 
@@ -417,5 +494,20 @@ public static class ObjectToXMLExtension
     public static string GetKickOffInfoXml(int matchId, DateTime? kickOffTime)
     {
         return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime?.ToString(CultureInfo.InvariantCulture)}'/></root>";
+    }
+
+    public static string OperatorToXml(this List<OperatorQuery> operators)
+    {
+        if (operators.Count <= 0)
+        {
+            return string.Empty;
+        }
+        var result = new StringBuilder();
+        foreach (var item in operators)
+        {
+            result.AppendFormat(StringResource.OperatorXml, item.OperatorId, item.OperatorType);
+        }
+
+        return $"{result}";
     }
 }

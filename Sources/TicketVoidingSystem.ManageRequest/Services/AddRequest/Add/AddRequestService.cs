@@ -23,7 +23,7 @@ public class AddRequestServiceImp : AddRequestService
     private readonly LoggingService loggingService;
     private readonly MarkTicketsService markTicketsService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
-    private readonly NotificationRequestToLetstalkService notificationRequestToLetstalkService;
+    private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
 
     public AddRequestServiceImp(IMapper mapper,
         IDynamicRepository repository,
@@ -31,7 +31,7 @@ public class AddRequestServiceImp : AddRequestService
         LoggingService loggingService,
         MarkTicketsService markTicketsService,
         InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
-        NotificationRequestToLetstalkService notificationRequestToLetstalkService)
+        SendLetstalkAfterAddService sendLetstalkAfterAddService)
     {
         this.mapper = mapper;
         this.repository = repository;
@@ -39,7 +39,7 @@ public class AddRequestServiceImp : AddRequestService
         this.loggingService = loggingService;
         this.markTicketsService = markTicketsService;
         this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
-        this.notificationRequestToLetstalkService = notificationRequestToLetstalkService;
+        this.sendLetstalkAfterAddService = sendLetstalkAfterAddService;
     }
 
     public async Task<Result> Execute(AddRequestQuery query)
@@ -71,7 +71,7 @@ public class AddRequestServiceImp : AddRequestService
         {
             var requestId = await ExecuteAddRequest(query);
             await insertAutoVoidRequestQueueService.Execute(query, requestId);
-            await notificationRequestToLetstalkService.Send(query, requestId);
+            await sendLetstalkAfterAddService.Execute(query, requestId);
             return new Result
             {
                 Data = new AddRequestResultData
@@ -109,7 +109,7 @@ public class AddRequestServiceImp : AddRequestService
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff()
-            ? Utility.Extensions.ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
+            ? ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
 
         await repository.ExecuteAsync(command);
         return command.RequestId;

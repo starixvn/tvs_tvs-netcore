@@ -18,6 +18,9 @@ public class WrongOuViewModel
     public DateTime? VoidToTime { get; set; }
     public string? ActualMarket { get; set; }
     public string? WrongMarket { get; set; }
-
+    public int LiveIndicator { get; set; }
+    public string PoolHouseCheckedBetTypes { get; set; }
+    public bool IsLinkGroup1X2 { get; set; }
+    public bool IsLinkGroupAIO { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
 }

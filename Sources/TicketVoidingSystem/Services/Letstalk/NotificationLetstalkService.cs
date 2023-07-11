@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Core.Models;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
 using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
 using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 using Result = TicketVoidingSystem.Models.Result;
@@ -16,18 +16,21 @@ public interface NotificationLetstalkService
 
     Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment);
 
-    Task<Result> SendToGroupAbnormalBetRequest(LetstalkModel model, LetstalkAttachment attachment);
+    Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, LetstalkAttachment attachment);
 }
 
 public class NotificationLetstalkServiceImp : NotificationLetstalkService
 {
     private readonly GroupVoidSettledBetService groupVoidSettledBetService;
     private readonly GroupTicketListingService groupTicketListingService;
+    private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
 
-    public NotificationLetstalkServiceImp(GroupVoidSettledBetService groupVoidSettledBetService, GroupTicketListingService groupTicketListingService)
+    public NotificationLetstalkServiceImp(GroupVoidSettledBetService groupVoidSettledBetService,
+        GroupTicketListingService groupTicketListingService, GroupAbnormalBetRequestService groupAbnormalBetRequestService)
     {
         this.groupVoidSettledBetService = groupVoidSettledBetService;
         this.groupTicketListingService = groupTicketListingService;
+        this.groupAbnormalBetRequestService = groupAbnormalBetRequestService;
     }
 
     public async Task<IEnumerable<Result>> SendToGroupVoidSettledBets(TicketInfoForLetstalk ticketInfo, IEnumerable<TicketEmailModel> tickets)
@@ -48,14 +51,23 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         {
             TargetName = "Ticket-Voiding-System",
             Subject = "Result Amendment Notification - Credit",
-            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert
+            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert,
+            Content = content
         };
 
-        return await groupTicketListingService.SendMessage(letstalkModel, content, attachment);
+        return await groupTicketListingService.SendMessage(letstalkModel, attachment);
     }
 
-    public Task<Result> SendToGroupAbnormalBetRequest(LetstalkModel model, LetstalkAttachment attachment)
+    public async Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, LetstalkAttachment attachment)
     {
-        throw new NotImplementedException();
+        var letstalkModel = new LetstalkModel
+        {
+            TargetName = "Ticket-Voiding-System",
+            Subject = subject,
+            Group = AppSettingService.AppSetting.LetstalkConfig.AbnormalBetRequest,
+            Content = content
+        };
+
+        return await groupAbnormalBetRequestService.SendMessage(letstalkModel, attachment);
     }
 }

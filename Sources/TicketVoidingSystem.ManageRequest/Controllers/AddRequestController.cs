@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.Web;
 using static Fanex.NAP.Core.Business.Constant;
 
@@ -51,11 +50,5 @@ public class AddRequestController : ControllerBase
 
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Policy.Host)]
     [HttpPost]
-    public async Task<JsonResult> AddRequest()
-    {
-        var request = Helper.GetModelFromJsonRequest<AddRequest>(HttpContext.Request);
-        var result = await mediator.Send(request);
-
-        return this.JsonNet(result);
-    }
+    public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
 }

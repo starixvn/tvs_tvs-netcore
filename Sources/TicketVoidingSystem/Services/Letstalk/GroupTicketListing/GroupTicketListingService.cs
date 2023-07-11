@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
 
 public interface GroupTicketListingService
 {
-    Task<Result> SendMessage(LetstalkModel letstalkModel, string content, LetstalkAttachment attachment);
+    Task<Result> SendMessage(LetstalkModel letstalkModel, LetstalkAttachment attachment);
 }
 
 public class GroupTicketListingServiceImp : GroupTicketListingService
@@ -18,9 +18,8 @@ public class GroupTicketListingServiceImp : GroupTicketListingService
         this.letstalkSingleMessageService = letstalkSingleMessageService;
     }
 
-    public async Task<Result> SendMessage(LetstalkModel letstalkModel, string content, LetstalkAttachment attachment)
+    public async Task<Result> SendMessage(LetstalkModel letstalkModel, LetstalkAttachment attachment)
     {
-        letstalkModel.Content = content;
         return await letstalkSingleMessageService.Send(letstalkModel, attachment);
     }
 }
