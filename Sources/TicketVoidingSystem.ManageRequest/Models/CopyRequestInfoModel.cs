@@ -38,6 +38,7 @@ public class CopyRequestInfoModel
             return root.IsCheckedVar;
         }
     }
+    public string Provider { get; set; }
 }
 
 public class CopyRequestInfoResponse

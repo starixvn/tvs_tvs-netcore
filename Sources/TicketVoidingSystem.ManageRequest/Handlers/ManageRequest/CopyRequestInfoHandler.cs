@@ -48,6 +48,7 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, Co
         stringBuilder.AppendLine($"Request No: {model.RequestId}");
         stringBuilder.AppendLine($"Issue Type: {model.IssueTypeName} - {model.SubIssueTypeName}");
         stringBuilder.AppendLine($"VAR: {varCheckValue}");
+        stringBuilder.AppendLine($"Provider: {model.Provider}");
         stringBuilder.AppendLine($"Start Void Time: {model.StartVoidTime:hh:mm:ss.fff tt} ({filterByValue})");
 
         return new CopyRequestInfoResponse { Info = stringBuilder.ToString() };
