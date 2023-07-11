@@ -16,6 +16,8 @@ describe('PasswordService', () => {
     { parameter: "TwentyChars123456789", expected: "372896207662076C5E857A38A47986" },
     { parameter: "ThirtyChars1234567890123456789", expected: "468843718746882ABD743627E7CC73" },
     { parameter: "FourtyChars12345678901234567890123456789", expected: "27B82C2680424797A389A517488A8A" },
+    { parameter: "Dora123", expected: "DB08BD548BA51753DD87165709C" },
+    { parameter: "Neil123", expected: "C928090B875028C1758C6AD835A" }
   ].forEach((dataSet) => {
   it('Cfs EnCode return expected result', () => {
     // Action

@@ -34,7 +34,7 @@ export class PasswordService {
   }
 
   private toHexString(seed: number): string {
-    const seedString = seed.toPrecision(15).toString().toUpperCase();
+    const seedString = Number(seed.toPrecision(15)).toString().toUpperCase();
     let hexString = ``;
     for (let i = 1; i <= seedString.length; i++) {
       let length = (seedString.length - i < 2) ? seedString.length - i + 1 : 3;
