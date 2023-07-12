@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Fanex.BetList.Core.Entities;
@@ -192,7 +193,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
         {
             No = 2,
             Status = "",
-            BetId = "100000021\r\n(Follow: 2)",
+            BetId = $"100000021{Environment.NewLine}(Follow: 2)",
             Member = "",
             Odds = "",
             Stake = "",
