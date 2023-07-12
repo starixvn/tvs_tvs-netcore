@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <filter-time-with-allowance>
+    <div
+      class="d-flex flex-wrap"
+    >
+      <div
+        class="d-flex flex-wrap mr-2"
+      >
+        <div
+          class="full-time from-date-time"
+        >
+          <label
+            class="col-form-label mr-2"
+          >
+            From
+          </label>
+          <div
+            class="input-group mr-2"
+          >
+            <input
+              class="bg-white form-control form-control-sm input-date ng-untouched ng-pristine ng-valid"
+              ngbdatepicker=""
+              placeholder="yyyy-mm-dd"
+              readonly=""
+            />
+            <div
+              class="input-group-append pointer"
+            >
+              <span
+                class="input-group-text"
+              >
+                <em
+                  class="fa fa-calendar"
+                />
+              </span>
+            </div>
+          </div>
+          <div
+            class="time-filter"
+          >
+            <input
+              class="form-control form-control-sm from-time ng-untouched ng-pristine ng-valid"
+              placeholder="HH:mm:ss.SSS AM/PM"
+              type="text"
+            />
+          </div>
+        </div>
+        <div
+          class="full-time to-date-time"
+        >
+          <label
+            class="col-form-label mr-2"
+          >
+            To
+          </label>
+          <div
+            class="input-group input-group-to-date mr-2"
+          >
+            <input
+              class="bg-white form-control form-control-sm input-date ng-untouched ng-pristine ng-valid"
+              ngbdatepicker=""
+              placeholder="yyyy-mm-dd"
+              readonly=""
+            />
+            <div
+              class="input-group-append pointer"
+            >
+              <span
+                class="input-group-text"
+              >
+                <em
+                  class="fa fa-calendar"
+                />
+              </span>
+            </div>
+          </div>
+          <div
+            class="time-filter"
+          >
+            <input
+              class="form-control form-control-sm to-time ng-untouched ng-pristine ng-valid"
+              placeholder="HH:mm:ss.SSS AM/PM"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="mr-3 align-items-center d-flex"
+      >
+         (Duration:  
+        <span
+          class="bold"
+        >
+          46080m0s
+        </span>
+        ) 
+      </div>
+      <div
+        class="d-flex flex-wrap"
+      >
+        <div
+          class="d-flex setting-void-time mr-2"
+        >
+          <div
+            class="d-flex"
+          >
+            <label
+              class="col-form-label mr-2 label-width-60"
+            >
+              AA/PA/SA
+            </label>
+            <div
+              class="d-flex"
+            >
+              <div
+                class="d-flex"
+              >
+                <input
+                  class="form-control form-control-sm mr-1 aa-time ng-untouched ng-pristine"
+                  disabled=""
+                  maxlength="2"
+                  only-number=""
+                  type="text"
+                />
+                <label
+                  class="col-form-label mr-1"
+                >
+                  /
+                </label>
+                <input
+                  class="form-control form-control-sm mr-1 pa-time ng-untouched ng-pristine"
+                  disabled=""
+                  maxlength="2"
+                  only-number=""
+                  type="text"
+                />
+                <label
+                  class="col-form-label mr-1"
+                >
+                  /
+                </label>
+                <input
+                  class="form-control form-control-sm mr-1 sa-time ng-untouched ng-pristine"
+                  disabled=""
+                  maxlength="2"
+                  only-number=""
+                  type="text"
+                />
+              </div>
+            </div>
+            <label
+              class="col-form-label"
+            >
+              (s)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </filter-time-with-allowance>
+</ng-component>
+`;

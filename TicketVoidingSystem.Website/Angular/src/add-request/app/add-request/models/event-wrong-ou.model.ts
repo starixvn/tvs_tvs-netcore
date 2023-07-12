@@ -9,10 +9,16 @@ export class WrongOuModel {
   isMainMatch: boolean;
   eventDate?: Date;
   filterFromTransTime: string;
-  filterToTransTime: string;  
+  filterToTransTime: string;
   voidFromTime?: string;
   voidToTime?: string;
   actualMarket: string;
   wrongMarket: string;
   logInfoDetail: LogInfoDetail;
+  
+  poolHouseCheckedBetTypes : string;
+  isPoolHouseAffected: boolean;
+  isLinkGroup1X2: boolean;
+  isLinkGroupAIO: boolean;
+  liveIndicator: number;
 }

@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProductFilterComponent #ProductFilterComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <product-filter>
+    <div
+      class="row product-filter"
+    >
+      <label
+        class="col-sm-1 col-form-label text-right"
+      >
+        Product
+      </label>
+      <div
+        class="d-flex dropdown-area"
+      >
+        <div
+          class="multi-select"
+        >
+          <ng-select
+            bindlabel="name"
+            bindvalue="value"
+            class="product ng-untouched ng-pristine ng-valid"
+            groupby="group"
+            placeholder="Select products"
+          >
+          </ng-select>
+        </div>
+        <label
+          class="col-form-label ticket-status-label"
+        >
+          Ticket Status
+        </label>
+        <div
+          class="multi-select"
+        >
+          <ng-select
+            bindlabel="name"
+            bindvalue="value"
+            class="ticket-status ng-untouched ng-pristine ng-valid"
+            groupby="group"
+            placeholder="Select status"
+          >
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </product-filter>
+</ng-component>
+`;

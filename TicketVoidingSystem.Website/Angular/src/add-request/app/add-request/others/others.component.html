@@ -1,0 +1,68 @@
+<div class="event">
+  <div class="list-group">
+    <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
+      (click)="isCollapse=!isCollapse">
+      <em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+      <strong>&nbsp;Others</strong>
+    </div>
+    <div class="list-group-item flex-column align-items-start" [hidden]="isCollapse">
+      <div class="other-container d-flex flex-wrap row">
+        <div class="col-6 col-sm-6 col-md-4">
+          <label class="col-form-label">Mistaken By</label>
+          <div class="input-area">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.mistakenBy"
+              (change)="updateModel()" maxlength="200">
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-6 col-md-4">
+          <label class="col-form-label">Decided By</label>
+          <div class="input-area">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" (change)="updateModel()"
+              maxlength="200">
+          </div>
+        </div>
+           
+        <div class="col-6 col-sm-6 col-md-4" *ngFor="let group of groupOperators">
+          <label class="col-form-label">{{group.name}}</label>
+          <div class="operator-list">
+            <ng-select [items]="group.items" [multiple]="true" [closeOnSelect]="false" bindLabel="userName"
+              [(ngModel)]="group.selected" (change)="onSelectOperator()" [clearable]="false">
+              <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of items | slice: 0:2">
+                  <span class="ng-value-label">{{ item.userName }}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                </div>
+                <div class="ng-value" *ngIf="items.length > 2">
+                  <span class="ng-value-label">{{ items.length - 2 }} more...</span>
+                </div>
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-6 col-md-4">
+          <label class="col-form-label">Provider</label>
+          <div class="input-area">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.provider" (change)="updateModel()">
+          </div>
+        </div>
+  
+        <div class="col-6 col-sm-6 col-md-4">
+          <label class="col-form-label">Source</label>
+          <div class="input-area">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.source" (change)="updateModel()">
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label class="col-form-label">Remark</label>
+          <div>
+            <textarea [(ngModel)]="model.remark" class="remark form-control form-control-sm"
+              placeholder='Enter text here...' rows="3" (ngModelChange)="updateModel()"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

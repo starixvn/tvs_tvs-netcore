@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <filter>
+    <div
+      class="filter"
+    >
+      <div
+        class="d-flex flex-wrap"
+      >
+        <div
+          class="filter-issue-type mr-4"
+        >
+          <label
+            class="col-form-label"
+          >
+            Issue Type
+          </label>
+          <div
+            class="input-issue-type"
+          >
+            <ng-select
+              bindlabel="issueTypeName"
+              bindvalue="issueTypeId"
+              class="custom-sm ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="filter-action mr-4"
+        >
+          <label
+            class="col-form-label"
+          >
+            Action
+          </label>
+          <div
+            class="input-action"
+          >
+            <ng-select
+              bindlabel="name"
+              bindvalue="value"
+              class="custom-sm ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="filter-sport mr-4"
+        >
+          <label
+            class="col-form-label"
+          >
+            Sport
+          </label>
+          <div
+            class="input-sport"
+          >
+            <ng-select
+              bindlabel="sportName"
+              bindvalue="sportType"
+              class="custom-sm ng-untouched ng-pristine ng-valid"
+            />
+          </div>
+        </div>
+        <div
+          class="d-flex"
+        >
+          <div
+            class="filter-event-date mr-4"
+          >
+            <label
+              class="col-form-label"
+            >
+              Event Date
+            </label>
+            <div
+              class="input-event-date"
+            >
+              <div
+                class="input-group"
+              >
+                <input
+                  class="bg-white form-control form-control-sm ng-untouched ng-pristine ng-valid"
+                  name="dp"
+                  ngbdatepicker=""
+                  placeholder="yyyy-mm-dd"
+                  readonly=""
+                />
+                <div
+                  class="input-group-append pointer"
+                >
+                  <span
+                    class="input-group-text"
+                  >
+                    <em
+                      class="fa fa-calendar"
+                    />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="filter-checkbox-test mr-4"
+          >
+            <div
+              class="checkbox-test line-height d-flex align-items-center"
+            >
+              <input
+                aria-label="Checkbox for following text input"
+                class="mr-1 ng-untouched ng-pristine ng-valid"
+                id="chk-is-test"
+                type="checkbox"
+              />
+              <label
+                class="col-form-label"
+                for="chk-is-test"
+              >
+                is Test
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <sub-issue-type-dialog />
+  </filter>
+</ng-component>
+`;

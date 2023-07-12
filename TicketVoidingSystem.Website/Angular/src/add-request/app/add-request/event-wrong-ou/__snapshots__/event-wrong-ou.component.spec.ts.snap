@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventWrongOuComponent EventWrongOuComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <event-wrong-ou>
+    <div
+      class="mb-4"
+    >
+      <div
+        class="mb-3"
+      >
+        <league-event-red-card />
+      </div>
+    </div>
+    <add-child-match />
+    <tooltip />
+  </event-wrong-ou>
+</ng-component>
+`;

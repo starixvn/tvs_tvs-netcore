@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeagueEventRedCardComponent LeagueEventRedCardComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <league-event-red-card>
+    <div
+      class="d-flex flex-wrap event-leage horizontal-style"
+    >
+      <div
+        class="event col-md-6 col-sm-6 col-12"
+      >
+        <label
+          class="col-form-label"
+        >
+          Event
+        </label>
+        <div>
+          <ng-select
+            bindlabel="name"
+            bindvalue="matchId"
+            class="custom-sm match-id ng-untouched ng-pristine ng-valid"
+            placeholder="Input MatchID"
+          >
+          </ng-select>
+        </div>
+      </div>
+      <div
+        class="league col-md-6 col-sm-6 col-12"
+      >
+        <label
+          class="col-form-label"
+        >
+          League
+        </label>
+        <div>
+          <ng-select
+            bindlabel="leagueName"
+            bindvalue="leagueId"
+            class="custom-sm ng-untouched ng-pristine"
+          />
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </league-event-red-card>
+</ng-component>
+`;

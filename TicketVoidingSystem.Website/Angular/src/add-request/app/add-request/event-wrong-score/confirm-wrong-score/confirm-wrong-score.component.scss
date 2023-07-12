@@ -1,0 +1,62 @@
+.primary {
+  background: #6a6a6a;
+  color: #fff;
+}
+
+.modal-dialog-custom {
+  max-width: 500px;
+  margin: 1.75rem auto;
+}
+
+.modal-header {
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  height: 34px;
+  line-height: 5px;
+
+  .modal-title {
+    line-height: 5px;
+    cursor: unset;
+  }
+
+  button.close {
+    line-height: 0px;
+    height: 32px;
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+.modal-body {
+  font-family: Tahoma, sans-serif;
+  font-size: 12px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.modal-footer {
+  padding: 5px;
+
+  .btn {
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+
+    width: 60px;
+    height: 24px;
+    line-height: 12px;
+    color: #fff;
+  }
+
+  .confirm {
+    background: #0074da;
+  }
+
+  .cancel {
+    background: #6a6a6a;
+  }
+}
+
+.text-red {
+  color: red;
+}

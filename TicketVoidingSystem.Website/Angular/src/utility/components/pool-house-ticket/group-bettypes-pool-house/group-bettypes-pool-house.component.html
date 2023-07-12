@@ -1,0 +1,44 @@
+<div *ngFor="let model of displayGroupBetTypesModel; index as i">
+  <div *ngIf="isShowGroupBetTypes(model)" class="group-bettypes mb-1">
+    <div class="group-bettype-header" (click)="model.isCollapsed = !model.isCollapsed"
+      [attr.aria-expanded]="!model.isCollapsed">
+      <strong>
+        {{model.name}}
+      </strong>
+    </div>
+    <div class="group-bettype-body" #collapse="ngbCollapse" [(ngbCollapse)]="model.isCollapsed">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" colspan="2">
+              <div>
+                <label>
+                  <input type="checkbox" class="group-bettypes-all-checkbox" [(ngModel)]="model.isChecked" [disabled]="model.isDisable"
+                    (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
+                  All
+                </label>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="collapse">
+          <tr *ngFor="let group of model.groupBetTypes">
+            <td *ngIf="group.isShow">
+              <div class="display-flex">
+                <div class="bet-type" *ngFor="let betType of group.betTypes">
+                  <label>
+                    <input type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="betType.isDisable"
+                    (ngModelChange)="group.changeCheckedBetTypeToGroup();
+                                      model.changeCheckedGroupToModel(); changedBetTypes()" />
+                    {{betType.name}}
+                  </label>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

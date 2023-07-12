@@ -1,0 +1,37 @@
+
+@media only screen and (min-width: 1134px) {
+  .related-event-log-info {
+    width: 1065px;
+  }
+}
+
+.related-event-log-info {
+  button {
+    white-space: nowrap;
+  }
+
+  .input-related-match-id-area {
+    flex-grow: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .btn-success,
+  .btn-danger {
+    height: 31px;
+  }
+}
+
+.input-related-match-id::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+@supports (-moz-appearance: none) {
+  .button-area {
+    margin-bottom: 16px;
+  }
+
+  .input-related-match-id::-moz-placeholder {
+    font-style: italic;
+  }
+}

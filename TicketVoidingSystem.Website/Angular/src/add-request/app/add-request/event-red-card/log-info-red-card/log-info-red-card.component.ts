@@ -1,0 +1,158 @@
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import * as _ from 'lodash';
+import * as moment from 'moment-timezone';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
+import { SubIssueType } from '../../../../../utility/models/issue-type.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterModel } from '../../filter/filter.model';
+import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';
+import { PrimitiveProperty } from '../event-red-card.model';
+import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/filter-time-with-allowance.component';
+import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoService } from '../services/log-info.service';
+import { LogInfoRedCard } from './log-info-red-card.model';
+
+@Component({
+  selector: 'log-info-red-card',
+  templateUrl: './log-info-red-card.component.html',
+  styleUrls: ['./log-info-red-card.component.scss']
+})
+export class LogInfoRedCardComponent {
+  @Input() isEdit: boolean;
+  @Input() requestId: number;
+  @Input() isMainMatch: boolean;
+  @Input() isDisabled: boolean;
+  @Input() filter: FilterModel;
+  @Input() primitiveProps: PrimitiveProperty;
+  @Input() subIssueTypes: SubIssueType[] = [];
+  @Input() logInfo: LogInfoRedCard;
+  @Input() defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
+
+  @Output() deleteEvent = new EventEmitter<number>();
+  @ViewChild('filterTimeWithAllowance') filterTimeWithAllowanceComponent: FilterTimeWithAllowanceComponent;
+
+  isBlock = false;
+  isCollapse: boolean;
+  isShowValidation = true;
+  subIssueTypeDialogModel = new SubIssueTypeDialogModel();
+  tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
+  acceptTypeName = "";
+
+  constructor(
+    private readonly modalService: ModalService,
+    private readonly logInfoService: LogInfoService,
+  ) {}
+
+  async refreshLogInfo(): Promise<void> {
+    this.isBlock = true;
+    this.hideValidationDetail();
+    this.clearDataValidation();
+
+    if (this.filterTimeWithAllowanceComponent.isValid()) {
+      await this.logInfoService.getLogInfo([this.logInfo], this.primitiveProps, this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
+      this.filterTimeWithAllowanceComponent.updateData();
+      this.showValidationDetail();
+    }
+
+    this.isBlock = false;
+  }
+
+  private clearDataValidation(): void {
+    this.logInfo.logInfoDetail = null;
+    this.logInfo.messageValidationLogInfo = null;
+  }
+
+  hideValidationDetail() {
+    this.isShowValidation = false;
+  }
+
+  showValidationDetail() {
+    this.isShowValidation = true;
+  }
+
+  isLogInfoHasError(): boolean {
+    return this.logInfo.messageValidationLogInfo.some(x => x.isError);
+  }
+
+  updateDataAfterClosed(subIssueTypeId: number): void {
+    this.logInfo.subIssueTypeId = subIssueTypeId;
+    this.logInfo.isCheckedVar = null;
+    this.logInfo.isHighLightVarCheck = null;
+    this.logInfo.voidTimeArea.aaTime = this.subIssueTypeDialogModel.allowanceTime.aaTime;
+    this.logInfo.voidTimeArea.paTime = this.subIssueTypeDialogModel.allowanceTime.paTime;
+    this.logInfo.voidTimeArea.saTime = this.subIssueTypeDialogModel.allowanceTime.saTime;
+    this.hideValidationDetail();
+  }
+
+  openDialog(): void {
+    this.subIssueTypeDialogModel.isOpen = true;
+    this.subIssueTypeDialogModel.issueTypeId = this.filter.issueTypeId;
+    this.subIssueTypeDialogModel = _.clone(this.subIssueTypeDialogModel);
+  }
+
+  handleDeleteEvent(matchId: number) {
+    this.deleteEvent.emit(matchId);
+  }
+
+  getSubIssueTypeName(): string {
+    const defaultText = 'Select Sub Type';
+    if (this.logInfo.subIssueTypeId) {
+      return this.subIssueTypes.find(x => x.subIssueTypeId === this.logInfo.subIssueTypeId)?.subIssueTypeName;
+    }
+
+    return defaultText;
+  }
+
+  getHighlightMinTimeClass(minTime?: Date): string {
+    if (minTime && this.logInfo.logInfoDetail.highlightAcceptType) {
+      switch (this.logInfo.logInfoDetail.highlightAcceptType) {
+        case AcceptType.AUTO_ACCEPT: {
+          this.acceptTypeName = "AA";
+          return 'highlight-min-aa';
+        }
+        case AcceptType.SECOND_ACCEPT: {
+          this.acceptTypeName = "SA";
+          return 'highlight-min-sa';
+        }
+        case AcceptType.PENDING_ACCEPT: {
+          this.acceptTypeName = "PA";
+          return 'highlight-min-pa';
+        }
+      }
+    }
+
+    return '';
+  }
+
+  openPopupTransIds(requestId: number, transIds: string): void {
+    StaticService.openPopupTransIds(requestId, transIds, this.modalService);
+  }
+
+  isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+    return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
+    return StaticService.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  displayMinTime(minTime?: Date): string {
+    if (_.isNull(minTime)) {
+      return '-';
+    }
+    return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}` :
+      `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)}`;
+  }
+
+  isShowVarCheck() {
+    return this.logInfo.subIssueTypeId && StaticService.isShowVarCheck(this.logInfo.subIssueTypeId) && !this.logInfo.isMainMatch;
+  }
+
+  changeVarCheckValue(isVarChecked: boolean): void {
+    this.logInfo.isCheckedVar = isVarChecked;
+    this.logInfo.isHighLightVarCheck = false;
+  }
+
+}

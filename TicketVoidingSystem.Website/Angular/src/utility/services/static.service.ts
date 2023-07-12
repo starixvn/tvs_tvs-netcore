@@ -1,6 +1,10 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment-timezone';
-import { RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
+import { GetLogInfoModel, ValidationMessage } from 'src/add-request/app/add-request/models/get-log-info.model';
+import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { DateFullTimeNewComponent } from '../components/date-time/date-full-time-new/date-full-time-new.component';
+import { ModalType } from '../components/modal/modal.model';
+import { ModalService } from '../components/modal/modal.service';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
@@ -125,7 +129,9 @@ export class StaticService {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
     } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOddsModels[0].eventDate;
-    } else {
+    }  else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.reducedOverModels[0].eventDate;
+    }else {
       return requestDetail.event.eventDate;
     }
   }
@@ -176,10 +182,6 @@ export class StaticService {
     return ` (${info.join(', ')})`;
   }
 
-  static isCorrectFormatMultipleDecimal(value: string): boolean {
-    return RegexConstant.MULTIPLE_DECIMAL.test(value);
-  }
-
   static isFromTimeSameOrBeforeToTime(fromDateTime: string, toDateTime: string, tooltip: Tooltip, fromDateTimeClass: string): boolean {
     const momentFromDateTime = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const momentToDateTime = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
@@ -200,6 +202,62 @@ export class StaticService {
       issueTypeId === IssueTypeConstant.RED_CARD ||
       issueTypeId === IssueTypeConstant.WRONG_SCORE;
   }
+  
+  static getDurationTime(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, filterFromTransTime: string, filterToTransTime: string): string {
+    if (!fromTimeComponent?.isTimeValid() || !toTimeComponent?.isTimeValid()) {
+      return '-';
+    }
+
+    const fromTime = moment(filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const durations = toTime.diff(fromTime);
+    const minutes = Math.floor(durations / 60000);
+    const seconds = ((durations % 60000) / 1000).toFixed(0);
+
+    return `${minutes}m${seconds}s`;
+  }
+
+  static isCorrectFormatMultipleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {
+    if (!StaticService.isCorrectRegexMultipleDecimal(value)) {
+      tooltip.display(element, errorText);
+      return false;
+    }
+    tooltip.hide();
+
+    return true;
+  }
+
+  static isCorrectFormatSingleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {
+    if (!StaticService.isCorrectRegexSingleDecimal(value)) {
+      tooltip.display(element, errorText);
+      return false;
+    }
+    tooltip.hide();
+
+    return true;
+  }
+
+  static isCorrectFormatOnlyNumber(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {
+    if (!StaticService.isCorrectRegexOnlyNumber(value)) {
+      tooltip.display(element, errorText);
+      return false;
+    }
+    tooltip.hide();
+
+    return true;
+  }
+
+  static isCorrectRegexSingleDecimal(value: string): boolean {
+    return RegexConstant.SINGLE_DECIMAL.test(value);
+  }
+
+  static isCorrectRegexMultipleDecimal(value: string): boolean {
+    return RegexConstant.MULTIPLE_DECIMAL.test(value);
+  }
+
+  static isCorrectRegexOnlyNumber(value: string): boolean {
+    return RegexConstant.ONLY_NUMBER.test(value);
+  }
 
   static isStringHasLength(value: string): boolean {
     return value && value.length > 0;
@@ -218,5 +276,45 @@ export class StaticService {
     }
 
     return `${PREFIX}${value}`;
+  }
+
+  static openPopupTransIds(requestId: number, transIds: string, modalService: ModalService): void {
+    modalService.open(
+      {
+        title: `List tickets existed in Request: ${requestId} (Click on the list to copy)`,
+        type: ModalType.Alert,
+        copyContent: true,
+        content: [{ title: 'Tickets:', message: transIds }]
+      });
+  }
+
+  static getValidationMessageList(logInfoModel: GetLogInfoModel): ValidationMessage[] {
+    const messageList: ValidationMessage[] = [];
+    if (logInfoModel.validation.isInvalidTotalTickets) {
+      messageList.push({
+        isError: true,
+        reason: LABELS.NO_VALID_TICKETS_IN_RANGE
+      });
+    }
+    if (logInfoModel.validation.isExistedInOtherRequest) {
+      logInfoModel.ticketRequest.forEach(request => {
+        const message: ValidationMessage = {
+          isError: false,
+          reason: `Tickets ${request.transIds} existed in Request: ${request.requestId}`
+        };
+
+        const transIds = request.transIds.split(",");
+        if (transIds.length > 8) {
+          message.isShowPopup = true;
+          message.reason = `Tickets ${transIds.slice(0, 8).join(",")},... existed in Request: ${request.requestId}`;
+          message.requestId = request.requestId;
+          message.transIds = request.transIds;
+        }
+
+        messageList.push(message);
+      });
+    }
+
+    return messageList;
   }
 }

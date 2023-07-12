@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddChildMatchComponent #AddChildMatchComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <add-child-match>
+    <div>
+      <div
+        aria-hidden="true"
+        class="modal-backdrop fade show"
+        style="z-index: 1050;"
+      />
+      <div
+        class="fade modal show d-block wrapper-tooltip"
+        role="dialog"
+      >
+        <div
+          class="modal-dialog-custom modal-dialog-centered modal-dialog-scrollable"
+          role="document"
+        >
+          <div
+            class="modal-content"
+          >
+            <div
+              class="modal-header"
+            >
+              <div
+                class="modal-title"
+              >
+                <strong>
+                  Add Related Event
+                </strong>
+              </div>
+              <button
+                class="close"
+              >
+                <span
+                  aria-hidden="true"
+                >
+                  ×
+                </span>
+              </button>
+            </div>
+            <div
+              class="modal-body"
+            >
+              <div
+                class="modal-body-content"
+              >
+                <div
+                  class="related-event-list"
+                >
+                  <div
+                    class="event-header"
+                  >
+                    <table>
+                      <thead>
+                        <tr>
+                          <th
+                            class="col-tb-1"
+                            scope="col"
+                          >
+                            <div>
+                              Match ID
+                            </div>
+                          </th>
+                          <th
+                            class="col-tb-2"
+                            scope="col"
+                          >
+                            <div>
+                              Event
+                            </div>
+                          </th>
+                          <th
+                            class="col-tb-3"
+                            scope="col"
+                          >
+                            <div
+                              class="col-check-box"
+                            >
+                              <div
+                                class="mr-1"
+                              >
+                                Related
+                              </div>
+                              <input
+                                class="mt-1 ng-untouched ng-pristine ng-valid"
+                                type="checkbox"
+                              />
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <div
+                    class="event-content scroller-firefox"
+                  >
+                    <table>
+                    </table>
+                    <table
+                      class="empty-table"
+                    >
+                      <tbody>
+                        <tr
+                          class="text-center"
+                        >
+                          <div
+                            class="no-data"
+                          >
+                            There is no data
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mg-top-10 text-right button-area"
+              >
+                <button
+                  class="btn btn-primary btn-sm mg-right-10"
+                  type="button"
+                >
+                  Save
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  type="button"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </add-child-match>
+</ng-component>
+`;

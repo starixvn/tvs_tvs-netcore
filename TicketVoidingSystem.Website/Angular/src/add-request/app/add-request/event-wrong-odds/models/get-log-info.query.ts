@@ -1,4 +1,3 @@
-
 export class WrongOddsGetLogInfoQuery {
   matchId: number;
   subIssueTypeId: number;

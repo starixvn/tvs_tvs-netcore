@@ -1,0 +1,39 @@
+.ng-select-tree-view {
+  .ng-select-tree-view-item {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    cursor: pointer;
+
+    i {
+      width: 15px;
+      cursor: pointer;
+    }
+
+    i:hover {
+      font-weight: 600;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+      height: 28px;
+    }
+  }
+
+  .ng-select-tree-view-item:hover {
+    background-color: #f5faff;
+    color: #333;
+  }
+
+  .item-selected {
+    color: #333;
+    font-weight: 600;
+    background-color: #ebf5ff;
+  }
+
+  .cursor-not-allowed {
+    cursor: not-allowed !important;
+  }
+}

@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogInfoRedCardComponent LogInfoRedCardComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <log-info-red-card>
+    <div
+      class="log-info"
+    >
+      <div
+        class="list-group"
+      >
+        <div
+          class="list-group-item list-group-item-header header-log-info-child"
+        >
+          <div
+            class="d-flex pointer p-0 col-sm-5"
+          >
+            <div
+              class="mr-1"
+            >
+              <em
+                class="fa fa-angle-up"
+              />
+            </div>
+            <div>
+              <div>
+                AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS
+              </div>
+              <div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="justify-content-center col-sm-2"
+          >
+            <div
+              class="d-flex justify-content-center"
+            >
+              <div
+                class="var-check-selection"
+              >
+                <label
+                  class="border-radius-left bg-not-choose"
+                >
+                  NO VAR 
+                </label>
+                <label
+                  class="border-radius-right bg-not-choose"
+                >
+                  VAR 
+                </label>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-sm-5 p-0"
+          >
+            <div
+              class="float-right d-flex"
+            >
+              <span
+                class="mr-1 nowrap"
+              >
+                Sub Type:
+              </span>
+              <div
+                class="d-flex align-items-center"
+              >
+                <button
+                  class="btn-select-sub-type btn btn-secondary mr-2"
+                  id="btn-select-sub-type"
+                >
+                   Goal 
+                </button>
+                <i
+                  aria-hidden="true"
+                  class="fa fa-trash-o delete-event-icon"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-child"
+        >
+          <div
+            class="log"
+          >
+            <filter-time-with-allowance />
+            <div
+              class="mb-2"
+            >
+              <hr
+                class="mt-2 mb-2"
+              />
+              <span>
+                Live Score: 
+              </span>
+              <strong>
+                0 - 0
+              </strong>
+              . Affected Single Count: 
+              <strong>
+                1
+              </strong>
+              <span
+                class="text-red"
+              />
+              , Parlay Count: 
+              <strong>
+                1
+              </strong>
+              , Min Time: 
+              <strong>
+                09:44:46.361 PM
+              </strong>
+              <br />
+               Cancel Cash Out: 
+              <strong>
+                1
+              </strong>
+            </div>
+          </div>
+          <div
+            class="message mt-2"
+          >
+            <span>
+              <div
+                class="warning-text"
+              >
+                <i
+                  aria-hidden="true"
+                  class="fa fa-exclamation-triangle icon-warning-message"
+                />
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <sub-issue-type-dialog />
+  </log-info-red-card>
+</ng-component>
+`;

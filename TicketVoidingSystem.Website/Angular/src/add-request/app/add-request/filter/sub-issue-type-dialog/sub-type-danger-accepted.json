@@ -1,0 +1,614 @@
+[
+  {
+    "categoryName": "Main Match",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "name": "Goal",
+        "iconClass": "group-goal",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 55,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 56,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 1,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "5",
+        "description": [
+          "TV Goal time. Provider Goal Time"
+        ]
+      },
+      {
+        "name": "Pen Goal/VAR Pen Goal",
+        "iconClass": "group-pen-goal-var-pen-goal",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 57,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 58,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 59,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "PEN GOAL, VAR PEN GOAL count foul time void",
+          "No TV: PPEN, PEN (Count PPEN, PEN time)",
+          "*Fantasy Match follows main match. (Pen foul, Goal 3-3-9)",
+          "<span class='text-danger'>*Pen Goal: Use for all providers not include BET/FC<br></span>",
+          "*VAR Pen Goal: Use for all providers include BET/FC"
+        ]
+      },
+      {
+        "name": "BET/FC Pen Goal/Goal",
+        "iconClass": "group-bet-fc-pen-goal-goal",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 60,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 61,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 62,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "11",
+        "description": [
+          "Only use for BET/FC: TV + No TV",
+          "*BETSTOP > Possible Goal (count Betstop time)",
+          "*BETSTOP > Possible Penalty (count Betstop time)"
+        ]
+      },
+      {
+        "name": "Red Card/VAR Red Card",
+        "iconClass": "group-red-card-var-red-card",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 4,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 5,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Red Card, (Count RC time)",
+          "*Foul > YC > NO VAR > Change YC to RC (Counted 1YC time)",
+          "*VAR/Advantage: All follow foul time",
+          "*Fantasy Match follows main match (Red card 3-3-9)",
+          "<span class='text-danger'>*Red Card: Use for all providers not include BET/FC</span>",
+          "*VAR Red Card: Use for all providers include BET/FC",
+          "*Corner product, Goal kick product void for red card use subtype + allowance same main match"
+        ]
+      },
+      {
+        "name": "2YC (Red card)",
+        "iconClass": "group-2yc-red-card",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 63,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 64,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "13",
+        "pa": "13",
+        "sa": "13",
+        "description": [
+          "*2nd Yellow Card",
+          "*Foul > 2YC > RC Not change judge (Counted YC time)",
+          "*VAR: VAR 2YC/RC or VAR YC change RC, Use #4 counted foul time +9 void",
+          "*2YC (Red card): Use for all providers include BET/FC",
+          "<span class='text-danger'>*Allowance setting not use for Corner, Goal kick, fantasy match product</span>"
+        ]
+      },
+      {
+        "name": "Betradar/FC Red card",
+        "iconClass": "group-betradar-fc-red-card",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 65,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 66,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "11",
+        "description": [
+          "Only use for BET/FC: TV + No TV",
+          "*BETSTOP – Red Card (Count RC time)",
+          "<span class='text-danger'>*Allowance setting not use for Corner, Goal kick, fantasy match product</span>"
+        ]
+      },
+      {
+        "name": "HT/FT (Real Soccer)",
+        "iconClass": "group-htft-real-soccer",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Half Time",
+            "subIssueTypeId": 86,
+            "btnClass": "btn-half-time"
+          },
+          {
+            "name": "Full Time",
+            "subIssueTypeId": 67,
+            "btnClass": "btn-full-time"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "5",
+        "description": [
+          "For all products, Real Soccer",
+          "*1st half Stop (Void 1st half. 2nd half, Full time ticket valid)",
+          "*2nd half Stop (Void 2nd half and Full time)"
+        ]
+      },
+      {
+        "name": "Next Goal",
+        "iconClass": "group-next-goal",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 89,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 90,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 91,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "5",
+        "description": [
+          "Goal: Select Subtype Next Goal, Message-Match completed",
+          "<span class='text-danger'>*Red Card, 2YC (Select Subtype same main match, use Message-Danger accept)</span>"
+        ]
+      },
+      {
+        "name": "Penalty Shootout",
+        "iconClass": "group-penalty-shootout",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 92,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "0",
+        "pa": "0",
+        "sa": "0",
+        "description": [
+          "*Real Soccer: Only use for Penalty Shootout close market delay. PEN (HDP), PEN (OU).",
+          "*Without TV: We start VOID according to provider GOAL time 03:35:34 Goal, 03:35:34 Start Void, 03:35:33 Take note",
+          "*With TV: Start VOID when the player places the ball on the penalty spot gets up and back up before kicking the ball. (Here, can follow according to the situation on pitch to determine making different decisions)",
+          "<span class='text-danger'>Home/Away Next PEN shootout (1st, 2nd, 3rd, 4th, 5th etc) not use this sub type. Please use Danger accept > Goal to request.</span>"
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "Corner Product",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "name": "Main Corner",
+        "iconClass": "group-main-corner",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 68,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 69,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 2,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Possible Corner",
+          "*Ball out the end line",
+          "<span class='text-danger'>*Not use for Red Card, 2YC (Select Subtype same main match #4, use Message-Danger accept)</span>"
+        ]
+      },
+      {
+        "name": "Next Corner",
+        "iconClass": "group-next-corner",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 70,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 71,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 26,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Possible Corner (Select Subtype Next Corner, use Message-Match completed)",
+          "*Ball out the end line (Select Subtype Next Corner, use Message-Match completed)",
+          "<span class='text-danger'>*Not use for Red Card, 2YC (Select Subtype same main match #4, use Message-Danger accept)</span>"
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "Booking Product",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "name": "Main Booking",
+        "iconClass": "group-main-booking",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 3,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 111,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Provider show YC/RC",
+          "*Referee judge YC/RC (Follow booking time)",
+          "*Foul > VAR > YC/RC (Follow foul time)"          
+        ]
+      },
+      {
+        "name": "Next Booking",
+        "iconClass": "group-next-booking",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 72,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "All Subtypes use Next Booking, Message-Match completed:",
+          "*Provider show YC/RC",
+          "*Referee judge YC/RC (Follow booking time)",
+          "*Foul > VAR > YC/RC (Follow foul time)"
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "Goal Kick Product",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "name": "Main Goal Kick",
+        "iconClass": "group-main-goal-kick",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 73,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Goal Kick",
+          "*Ball out the end line",
+          "<span class='text-danger'>*Not use for Red Card, 2YC (Select Subtype same main match #4, use Message-Danger accept)</span>"
+        ]
+      },
+      {
+        "name": "Next Goal Kick",
+        "iconClass": "group-next-goal-kick",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 74,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "9",
+        "description": [
+          "*Goal Kick (Select Subtype Next Goal Kick, use Message-Match completed)",
+          "*Ball out the end line (Select Subtype Next Goal Kick, use Message-Match completed)",
+          "<span class='text-danger'>*Not use for Red Card, 2YC (Select Subtype same main match #4, use Message-Danger accept)</span>"
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "Futsal (Real)",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "name": "Goal/PEN (1st & 2nd mark)",
+        "iconClass": "group-goal-pen-1st-2nd-mark",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 75,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 76,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 77,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "7",
+        "pa": "7",
+        "sa": "7",
+        "description": [
+          "For all products, (Futsal)",
+          "Use Second Accept A 10s, Use setting AA:4-PA:4-SA:4",
+          "Use Second Accept A 20s, Use setting AA:7-PA:7-SA:7",
+          "*Goal/PEN (1st & 2nd mark)"
+        ]
+      },
+      {
+        "name": "HT/FT (Futsal)",
+        "iconClass": "group-htft-futsal",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Half Time",
+            "subIssueTypeId": 87,
+            "btnClass": "btn-half-time"
+          },
+          {
+            "name": "Full Time",
+            "subIssueTypeId": 78,
+            "btnClass": "btn-full-time"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "7",
+        "pa": "7",
+        "sa": "7",
+        "description": [
+          "For all products, (Futsal)",
+          "Second Accept A 10s, Use setting AA:4-PA:4-SA:4",
+          "Second Accept A 20s, Use setting AA:7-PA:7-SA:7",
+          "*1st half Stop (Void 1st half. 2nd half, Full time  ticket valid)",
+          "*2nd half Stop (Void 2nd half and Full time)"
+        ]
+      }
+    ]
+  },
+  {
+    "categoryName": "Esoccer Virtual SABA",
+    "isShowCategoryName": true,
+    "isCollapse": false,
+    "groups": [
+      {
+        "name": "* Goal/PEN Foul (OBS)",
+        "iconClass": "group-goal-pen-foul-obs",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 79,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 80,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 81,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "8",
+        "pa": "8",
+        "sa": "8",
+        "description": [
+          "For OBS use Sscracker accept.",
+          "*Goal/PEN Foul",
+          "<span class='text-danger'>*Red Card issue take note.</span>",
+          "Manual follow Game CP, Use setting AA:5-PA:5-SA:5"
+        ]
+      },
+      {
+        "name": "* Goal/PEN Foul (Admin TV)",
+        "iconClass": "group-goal-pen-foul-not-allowance",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Home",
+            "subIssueTypeId": 82,
+            "btnClass": "btn-home"
+          },
+          {
+            "name": "Away",
+            "subIssueTypeId": 83,
+            "btnClass": "btn-away"
+          }
+        ],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 84,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "3",
+        "description": [
+          "For Glive, Inhouse use Sscracker accept.",
+          "*Goal/PEN Foul",
+          "<span class='text-danger'>*Red Card issue take note.</span>"
+        ]
+      },
+      {
+        "name": "HT/FT (Virtual)",
+        "iconClass": "group-htft-virtual",
+        "buttonSelectHomeAway": [
+          {
+            "name": "Half Time",
+            "subIssueTypeId": 88,
+            "btnClass": "btn-half-time"
+          },
+          {
+            "name": "Full Time",
+            "subIssueTypeId": 85,
+            "btnClass": "btn-full-time"
+          }
+        ],
+        "buttonSelectAll": [],
+        "aa": "3",
+        "pa": "3",
+        "sa": "3",
+        "description": [
+          "For all products, (Virtual)",
+          "For Glive, Inhouse use Sscracker accept. Use default setting AA:3-PA:3-SA:3",
+          "*1st half Stop (Void 1st half.  2nd half, Full time  ticket valid)",
+          "*2nd half Stop (Void 2nd half and Full time)",
+          "For OBS use Sscracker accept. Use default setting AA:8-PA:8-SA:8",
+          "Manual follow Game CP, Use setting AA:5-PA:5-SA:5"
+        ]
+      },
+      {
+        "name": "Penalty Shootout (Virtual)",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+          "name": "All Tickets",
+          "subIssueTypeId": 116,
+          "btnClass": "btn-all"
+          }
+        ],
+        "aa": "3",
+        "pa": "3",
+        "sa": "3",
+        "description": [
+          "For all products, (Virtual)",
+          "*Only use for Penalty Shootout close market delay.",
+          "PEN (HDP), PEN (OU).",
+          "*For Glive, Inhouse Goal +3. AA:3-PA:3-SA:3",
+          "*For OBS Goal +8. AA:8-PA:8-SA:8"
+        ]
+      }
+    ]
+  }
+]

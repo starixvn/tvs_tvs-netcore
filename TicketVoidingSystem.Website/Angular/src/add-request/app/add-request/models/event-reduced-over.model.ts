@@ -1,4 +1,4 @@
-import { LogInfoDetail } from "src/utility/models/log-info-detail.model";
+import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
 
 export class ReducedOverModel {
   matchId: number;

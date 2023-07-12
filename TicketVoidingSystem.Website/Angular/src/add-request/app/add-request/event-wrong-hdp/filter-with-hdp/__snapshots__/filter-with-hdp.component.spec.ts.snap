@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterWithHdpComponent FilterWithHdpComponent init should match snapshot 1`] = `
+FilterWithHdpComponent {
+  "changeFilterEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "element": null,
+  "filterWithHdpModel": Object {
+    "actualMarket": "1",
+    "awayFavorite": "",
+    "filterFromTransTime": "2020-10-08 09:44:46.361 PM",
+    "filterToTransTime": "2020-10-09 09:44:46.361 PM",
+    "hdpValue": "",
+    "homeFavorite": "2",
+    "liveIndicator": 0,
+  },
+  "refreshEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "searchTicketEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "validationService": null,
+}
+`;

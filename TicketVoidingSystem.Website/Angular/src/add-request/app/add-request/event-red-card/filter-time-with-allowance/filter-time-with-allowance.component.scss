@@ -1,0 +1,90 @@
+.full-time {
+  display: flex;
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+
+  .time-filter input {
+      width: 130px;
+  }
+
+  .disabled {
+      background-color: #eee;
+      cursor: not-allowed;
+  }
+
+  .input-group-to-date {
+      width: auto;
+  }
+
+  .input-group-append {
+      height: 31px;
+  }
+
+  label {
+      width: 30px;
+  }
+}
+
+.input-date {
+  width: 90px;
+}
+
+.setting-void-time {
+
+  input {
+      width: 40px;
+      border-radius: 0;
+      z-index: 0;
+      text-align: center;
+      justify-content: center;
+  }
+
+  .label-width-60 {
+      width: 60px;
+  }
+
+  .aa-time {
+      background-color: #FFDF00;
+  }
+  .pa-time {
+      background-color: #00d943;
+  }
+  .sa-time {
+      background-color: #6699FF;
+  }
+
+  .aa-time:disabled {
+      background-color: #fff299;
+      cursor: not-allowed;
+  }
+  .pa-time:disabled {
+      background-color: #b4fcca;
+      cursor: not-allowed;
+  }
+  .sa-time:disabled {
+      background-color: #c1d6ff;
+      cursor: not-allowed;
+  }
+}
+
+.btn-reload {
+  button {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 3px;
+      margin-left: 5px;
+      background: #4e71bb;
+      padding: 0;
+      background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+      background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+      color: #fff;
+  }
+}
+
+.blank-area {
+  width: 35px;
+}

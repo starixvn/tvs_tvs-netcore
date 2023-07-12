@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeagueEventComponent LeagueEventComponent should init match snapshot 1`] = `
+<ng-component>
+  <league-event>
+    <div
+      class="d-flex flex-wrap event-leage horizontal-style"
+    >
+      <div
+        class="event col-md-6 col-sm-6 col-12"
+      >
+        <label
+          class="col-form-label"
+        >
+          Event
+        </label>
+        <div>
+          <ng-select
+            bindlabel="name"
+            bindvalue="matchId"
+            class="custom-sm match-id ng-untouched ng-pristine ng-valid"
+            notfoundtext="No event found"
+            placeholder="Input MatchID"
+          />
+        </div>
+      </div>
+      <div
+        class="league col-md-6 col-sm-6 col-12"
+      >
+        <label
+          class="col-form-label"
+        >
+          League
+        </label>
+        <div>
+          <ng-select
+            bindlabel="leagueName"
+            bindvalue="leagueId"
+            class="custom-sm ng-untouched ng-pristine"
+          />
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </league-event>
+</ng-component>
+`;

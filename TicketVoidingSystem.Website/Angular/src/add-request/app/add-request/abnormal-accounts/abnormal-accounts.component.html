@@ -1,0 +1,27 @@
+<ngb-alert class="warning-msg" type="warning" [dismissible]="false" *ngIf="primitiveProps.isShowError">
+    <div class="message">
+        <div class="error-text" *ngIf="primitiveProps.isInvalidTotalTicket">
+            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+            There is no ticket in this request
+        </div>
+        <div class="error-text" *ngIf="primitiveProps.isBeingMoveBetDate">
+            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+            The system is running the Movebet process, please wait and try again.
+        </div>
+    </div>
+</ngb-alert>
+
+<div [blockUi]="primitiveProps.isBlockUsernames">
+    <user-names #usernames [(model)]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="1050"
+        (focusOutUsernames)="focusOutUsernames()" [userNameComponentCss]="'row'" [widthCss]="'col-8 col-sm-8'">
+    </user-names>
+</div>
+
+<product-filter #products [(abnormalAccountModel)]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"></product-filter>
+
+<event-date-filter #eventDate [(abnormalAccountModel)]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit">
+</event-date-filter>
+
+<confirm-abnormal-account [(model)]="confirmAbnormalAccount" (close)="triggerCloseEvent()"
+  (save)="onYesConfirmWarningModal()">
+</confirm-abnormal-account>

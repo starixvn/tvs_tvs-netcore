@@ -1,0 +1,35 @@
+<label class="col-form-label mt-2">Filter</label>
+
+<div class="filter mb-2">
+    <div class="d-flex">
+        <div class="mr-4">
+            <label class="check-time mr-2">
+                <input type="radio"
+                    [disabled]="isVoided"
+                    [(ngModel)]="filterBy"
+                    [value]="2" (ngModelChange)="emitAfterChangeFilterEvent()"
+                />
+                Accept Time
+            </label>
+            <label class="trans-time">
+                <input type="radio"
+                    [disabled]="isVoided"
+                    [(ngModel)]="filterBy"
+                    [value]="1"
+                    (ngModelChange)="emitAfterChangeFilterEvent()"
+                />
+                Trans Time
+            </label>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap">
+        <filter-time-with-allowance #filterTimeWithAllowance
+            [(filterTimeWithAllowanceModel)]="filterTimeWithAllowanceModel" 
+            [isEdit]="isEdit"
+            [isDisabled]="isDisabled"
+            [isUseInLogInfo]="false"
+            (changeFilterTimeEvent)="emitAfterChangeFilterEvent()">
+        </filter-time-with-allowance>
+    </div>
+</div>

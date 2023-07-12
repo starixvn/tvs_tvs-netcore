@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventWrongScoreComponent #EventWrongScoreComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <event-wrong-score>
+    <div
+      class="mb-4"
+    >
+      <league-event-red-card />
+      <div>
+        <div
+          class="var-check-selection mt-2"
+        >
+          <label
+            class="border-radius-left bg-not-choose"
+          >
+            NO VAR 
+          </label>
+          <label
+            class="border-radius-right bg-not-choose"
+          >
+            VAR 
+          </label>
+        </div>
+      </div>
+      <div
+        class="mb-3 mt-3 d-flex"
+      >
+        <button
+          class="btn btn-primary btn-sm"
+          type="submit"
+        >
+           Search 
+        </button>
+      </div>
+      <div>
+      </div>
+    </div>
+    <tooltip />
+    <confirm-wrong-score />
+  </event-wrong-score>
+</ng-component>
+`;

@@ -1,77 +1,60 @@
-import { Message } from '../../../../utility/components/template-message/messages/message';
-import { RedCardModel } from '../models/event-red-card.model';
-import { WrongHdpModel } from '../models/event-wrong-hdp.model';
-import { WrongOuModel } from '../models/event-wrong-ou.model';
-import { WrongScoreModel } from '../models/event-wrong-score.model';
-import { OperatorInfo } from '../others/others.model';
+import { FilterModel } from '../filter/filter.model';
+import { OthersModel } from '../others/others.model';
+import { AbnormalAccountModel } from './abnormal-account.model';
+import { AbnormalBetModel } from './abnormal-bet.model';
+import { EventDetailModel } from './event-detail.model';
+import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
+import { EventTicket14Model } from './event-ticket-14.model';
+import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
-
-export class RequestDetailModel {
-  sportType: number;
-  issueTypeId: number;
-  actionId: number;
-  mistakenBy: string;
-  decidedBy: string;
-  operators: OperatorInfo[];
-  provider: string;
-  source: string;
-  remark: string;
-  isTest: boolean;
-  isVoided: boolean;
-  requestedBy: string;
-  userId: number;
-  voidedBy: string;
-}
-
-export class RequestEventModel {
-  matchId: number;
-  subIssueTypeId: number;
-  eventDate: Date;
-  parentId: number;
-  leagueId: number;
-  homeId: number;
-  awayId: number;
-  kickOffTime: Date;
-  transIds: string;
-  htHomeScore?: number;
-  htAwayScore?: number;
-  finalHomeScore?: number;
-  finalAwayScore?: number;
-  liveScores?: string;
-  globalShowTime: Date;
-  filterFromTransTime?: Date;
-  filterToTransTime?: Date;
-  aaTime?: number;
-  paTime? : number;
-  saTime? : number;
-  filterBy?: number;
-  singleCount?: number;
-  mainParlayCount?: number;
-  minSingleTransId?: number;
-  maxSingleTransId?: number;
-  minMainParlayTransId?: number;
-  maxMainParlayTransId?: number;
-  voidFromTime: Date;
-  voidToTime: Date;
-  usernames?: string;
-  productIds?: string;
-  statusIds?: string;
-  fromDate?: string;
-  toDate?: string;
-}
-
-export class RequestDetailViewModel {
-  requestId: number;
-  lastModifiedDate: Date;
-  request: RequestDetailModel;
-  event: RequestEventModel;
+import { WrongOuModel } from './event-wrong-ou.model';
+import { WrongScoreModel } from './event-wrong-score.model';
+export class RequestModel { // Rename AddRequestModel or remove this
+  filter: FilterModel;
+  eventDetail: EventDetailModel;
+  abnormalBetModel: AbnormalBetModel;
+  abnormalAccountModel: AbnormalAccountModel;
+  redCardModel: RedCardModel[];
   wrongScoreModels: WrongScoreModel[];
   dangerAcceptedModels: RedCardModel[];
-  redCardModels: RedCardModel[];
-  wrongHdpModels: WrongHdpModel[];
+  eventTicket14Model: EventTicket14Model;
+  wrongHdpModels : WrongHdpModel[];
   wrongOuModels: WrongOuModel[];
   wrongOddsModels: WrongOddsModel[];
   reducedOverModels: ReducedOverModel[];
-  messages: Message[];
+  others: OthersModel;
+
+  constructor() {
+    this.filter = new FilterModel();
+    this.eventDetail = new EventDetailModel();
+    this.abnormalBetModel = new AbnormalBetModel();
+    this.abnormalAccountModel = new AbnormalAccountModel();
+    this.eventTicket14Model = new EventTicket14Model();
+    this.wrongScoreModels = [];
+    this.dangerAcceptedModels = [];
+    this.wrongHdpModels = [];
+    this.wrongOuModels = [];
+    this.wrongOddsModels = [];
+    this.reducedOverModels = [];
+    this.others = new OthersModel();
+  }
 }
+
+export interface InitializedRequestModel {
+  issueTypeId: string;
+  subIssueTypeId: string;
+  actionId: string;
+  isTest: boolean;
+  transIds: string[];
+}
+
+export class CheckValidTransIdModel {
+  isValidTransId: boolean;
+}
+
+export class AddRequestResultModel {
+  matchId: string;
+  requestId: number;
+}
+

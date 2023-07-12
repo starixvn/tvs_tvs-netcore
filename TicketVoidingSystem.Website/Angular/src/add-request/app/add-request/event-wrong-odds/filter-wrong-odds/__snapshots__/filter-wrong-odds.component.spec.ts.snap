@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterWrongOddsComponent FilterWithHdpComponent init should match snapshot 1`] = `
+FilterWrongOddsComponent {
+  "changeFilterEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "element": null,
+  "filterFavoriteType": FilterFavoriteType {
+    "items": Array [
+      Object {
+        "name": "Home Favorite",
+        "value": "h",
+      },
+      Object {
+        "name": "Away Favorite",
+        "value": "a",
+      },
+    ],
+  },
+  "filterOddsType": FilterOddsType {
+    "items": Array [
+      Object {
+        "name": "Odds Value",
+        "value": "value",
+      },
+      Object {
+        "name": "Odds Range",
+        "value": "range",
+      },
+    ],
+  },
+  "filterOuType": FilterOuType {
+    "items": Array [
+      Object {
+        "name": "Over",
+        "value": "h",
+      },
+      Object {
+        "name": "Under",
+        "value": "a",
+      },
+    ],
+  },
+  "filterWrongOddsModel": Object {
+    "betTeam": "h",
+    "correctOdds": "1",
+    "favoriteValue": "1",
+    "filterFavoriteType": "h",
+    "filterFromTransTime": "2021-12-18 12:08:49.737",
+    "filterOddsType": "value",
+    "filterOuType": "h",
+    "filterToTransTime": "2021-12-21 12:08:49.737",
+    "fromOdds": "1",
+    "liveIndicator": 1,
+    "oddsValue": "1",
+    "ouValue": "1",
+    "toOdds": "1",
+  },
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "validationService": null,
+}
+`;

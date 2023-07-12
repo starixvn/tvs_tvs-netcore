@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogInfoWrongOuComponent LogInfoWrongOuComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <log-info-wrong-ou>
+    <div
+      class="log-info"
+    >
+      <div
+        class="list-group"
+      >
+        <div
+          class="list-group-item list-group-item-header pointer header-log-info-child"
+        >
+          <div
+            class="mr-1 d-flex"
+          >
+            <div
+              class="mr-1"
+            >
+              <em
+                class="fa fa-angle-up"
+              />
+            </div>
+            <div>
+              <div>
+              </div>
+              <div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="float-right d-flex"
+          >
+            <i
+              aria-hidden="true"
+              class="fa fa-trash-o delete-event-icon"
+            />
+          </div>
+        </div>
+        <div
+          class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-child"
+        >
+          <div
+            class="log"
+          >
+            <filter-wrong-ou />
+            <div>
+              <hr
+                class="mt-2 mb-2"
+              />
+              <span>
+                Live Score: 
+              </span>
+              <strong>
+                0 - 0
+              </strong>
+              . Void time: 
+              <strong>
+                2020/10/08 09:44:46.361 PM - 2020/10/09 09:44:46.361 PM
+              </strong>
+              <br />
+               LG/Early - Single Count: 
+              <strong>
+              </strong>
+              <br />
+            </div>
+          </div>
+          <div
+            class="message mt-2"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
+    <pool-house-tickets />
+  </log-info-wrong-ou>
+</ng-component>
+`;

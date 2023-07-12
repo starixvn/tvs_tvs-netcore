@@ -1,0 +1,13 @@
+@{
+Layout = "~/Views/Shared/_LayoutAngular.cshtml";
+ViewBag.Title = "Add Request Ticket Voiding";
+}
+@section Head {
+<% files.css.forEach(function(css){ %>
+<link href="<%= css%>" rel="stylesheet" />
+<% }) %>
+}
+<app-root></app-root>
+<% files.js.forEach(function(js){ %>
+<script src="<%= js%>"></script>
+<% }) %>
