@@ -48,6 +48,9 @@ public class AddRequestController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetPoolHouseTickets(GetPoolHouseTicketRequest request) => Ok(await mediator.Send(request));
 
+    [HttpPost]
+    public async Task<IActionResult> GetReducedOverBetTypes(GetReducedOverBetTypesRequest request) => Ok(await mediator.Send(request));
+
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Policy.Host)]
     [HttpPost]
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
