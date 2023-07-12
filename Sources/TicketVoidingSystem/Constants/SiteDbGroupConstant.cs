@@ -10,6 +10,7 @@ public static class SiteDbGroupConstant
     public const int CentralDb = 0;
     private const int SiteDb1 = 1;
     private const int SiteDb2 = 2;
+    private const int SiteDb3 = 3;
 
     static SiteDbGroupConstant()
     {
@@ -29,6 +30,11 @@ public static class SiteDbGroupConstant
             {
                 Id = SiteDb2,
                 ServerName = "DBSIG2"
+            },
+            new()
+            {
+                Id = SiteDb3,
+                ServerName = "DBSIG3"
             }
         };
 
