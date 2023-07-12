@@ -1,8 +1,8 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
-import { BlockUiModule } from '../../../../utility/modules/block-ui/block-ui.module';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';

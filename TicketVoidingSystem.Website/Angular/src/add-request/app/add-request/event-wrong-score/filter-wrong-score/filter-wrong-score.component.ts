@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { DateFullTimeNewComponent } from '../../../../../utility/modules/date-time/date-full-time-new/date-full-time-new.component';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
 import { AllowanceTimeComponent } from '../allowance-time/allowance-time.component';
 import { FilterWrongScoreModel } from '../models/filter-wrong-score.model';

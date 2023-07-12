@@ -2,8 +2,8 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
+import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { TooltipComponent } from '../../../../../utility/modules/tooltip/tooltip.component';
 import { AllowanceTimeComponent } from './allowance-time.component';
 
 @NgModule({

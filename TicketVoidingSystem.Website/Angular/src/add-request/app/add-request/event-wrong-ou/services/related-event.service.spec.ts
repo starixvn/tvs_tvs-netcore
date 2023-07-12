@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { ChildMatchModel } from '../../models/related-event.model';

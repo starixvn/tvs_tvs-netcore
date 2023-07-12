@@ -2,9 +2,9 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCh
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LeagueInfo, MatchInfo } from '../../../../utility/models/event.model';
-import { Tooltip } from '../../../../utility/modules/tooltip/tooltip.model';
 import { LeagueEventService } from './league-event.service';
 
 @Component({

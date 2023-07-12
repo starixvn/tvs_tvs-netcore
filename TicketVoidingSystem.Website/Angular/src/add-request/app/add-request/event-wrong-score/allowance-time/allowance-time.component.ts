@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 
 @Component({
   selector: 'allowance-time',

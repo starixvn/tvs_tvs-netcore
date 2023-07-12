@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
-import { DateFullTimeNewComponent } from '../../../../../utility/modules/date-time/date-full-time-new/date-full-time-new.component';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';

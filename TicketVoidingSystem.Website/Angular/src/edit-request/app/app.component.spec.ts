@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
-import { BlockFullUiModule } from '../../utility/modules/block-full-ui/block-full-ui.module';
+import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { HttpService } from './../../utility/services/http.service';
 import { AppComponent } from './app.component';

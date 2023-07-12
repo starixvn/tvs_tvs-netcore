@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { OddsInfo } from '../../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
+import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';

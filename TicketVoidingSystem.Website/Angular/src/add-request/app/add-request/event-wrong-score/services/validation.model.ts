@@ -1,4 +1,4 @@
-import { Tooltip } from "../../../../../utility/modules/tooltip/tooltip.model";
+import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
 import { LeagueEventRedCardComponent } from "../../event-red-card/league-event-red-card/league-event-red-card.component";
 import { FilterModel } from "../../filter/filter.model";

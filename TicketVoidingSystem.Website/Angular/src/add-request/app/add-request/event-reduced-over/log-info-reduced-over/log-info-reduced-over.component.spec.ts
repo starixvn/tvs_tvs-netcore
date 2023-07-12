@@ -2,8 +2,8 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { ModalService } from '../../../../../utility/modules/modal/modal.service';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { LogInfoReducedOverComponent } from './log-info-reduced-over.component';
 

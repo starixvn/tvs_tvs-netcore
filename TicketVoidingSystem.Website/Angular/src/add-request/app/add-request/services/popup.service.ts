@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ModalType } from '../../../../utility/components/modal/modal';
+import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { LABELS } from '../../../../utility/constants/labels';
-import { ModalType } from '../../../../utility/modules/modal/modal';
-import { ModalService } from '../../../../utility/modules/modal/modal.service';
 
 @Injectable({
   providedIn: 'root'

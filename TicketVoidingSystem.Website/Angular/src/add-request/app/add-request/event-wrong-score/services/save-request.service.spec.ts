@@ -1,5 +1,5 @@
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { MatchInfo } from '../../../../../utility/models/event.model';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from "../../add-request.store";
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';

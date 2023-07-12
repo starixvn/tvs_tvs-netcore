@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment-timezone';
+import { TimeModel } from '../../../../utility/components/date-time/date-time/time.model';
+import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
-import { TimeModel } from '../../../../utility/modules/date-time/date-time/time.model';
-import { PagingConstant, PagingModel } from '../../../../utility/modules/paging/paging/paging.model';
 import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';

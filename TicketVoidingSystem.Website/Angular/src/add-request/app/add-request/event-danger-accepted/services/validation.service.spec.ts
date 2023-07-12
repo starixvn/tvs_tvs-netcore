@@ -1,6 +1,6 @@
 import { QueryList } from '@angular/core';
 import * as _ from 'lodash';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowanceComponent } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.component';

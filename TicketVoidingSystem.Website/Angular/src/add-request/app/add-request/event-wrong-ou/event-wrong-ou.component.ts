@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, PoolHouseTicketValue } from '../../../../utility/constants/config';
-import { Tooltip } from '../../../../utility/modules/tooltip/tooltip.model';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';

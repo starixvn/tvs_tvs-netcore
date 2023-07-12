@@ -234,8 +234,8 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  onChangeInputMultipleDecimal(betTypeId: string, value: string, className: string) {
-    if (!this.validateInputMultipleDecimal(Number.parseInt(betTypeId), value, className)) {
+  onChangeInputMultipleDecimal(betTypeId: number, value: string, className: string) {
+    if (!this.validateInputMultipleDecimal(betTypeId, value, className)) {
       return false;
     }
     this.tooltip.hide();
@@ -245,14 +245,13 @@ export class AdvancedModeComponent implements OnChanges {
 
   validateInputMultipleDecimal(betTypeId: number, value: string, className: string): boolean {
     const errorText = betTypeId === 228 ? LABELS.INVALID_VALUE : LABELS.INVALID_HDP;
-    if (value && !StaticService.isCorrectFormatMultipleDecimal(value)) {
+    if (value && !StaticService.isCorrectRegexMultipleDecimal(value)) {
       this.tooltip.display(className, errorText);
       return false;
     }
 
     return true;
   }
-
   checkMultiSelectionData(betTeam: BetTeam): boolean {
     return (
       betTeam.multiSelection !== undefined &&

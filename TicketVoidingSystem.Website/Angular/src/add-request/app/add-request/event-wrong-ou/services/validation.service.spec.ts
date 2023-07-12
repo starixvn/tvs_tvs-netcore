@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOuModel } from '../../models/event-wrong-ou.model';

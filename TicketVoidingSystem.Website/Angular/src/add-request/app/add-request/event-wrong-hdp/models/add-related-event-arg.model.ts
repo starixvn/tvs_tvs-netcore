@@ -1,4 +1,4 @@
-import { Tooltip } from "../../../../../utility/modules/tooltip/tooltip.model";
+import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
 import { FilterModel } from "../../filter/filter.model";
 import { ChildMatchModel } from "../../models/related-event.model";

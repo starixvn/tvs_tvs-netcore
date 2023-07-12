@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { TEXT } from '../../../../../utility/constants/text';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';

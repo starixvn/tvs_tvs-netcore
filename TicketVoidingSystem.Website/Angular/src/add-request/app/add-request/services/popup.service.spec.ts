@@ -1,5 +1,5 @@
 import { NgbModalConfig } from "@ng-bootstrap/ng-bootstrap";
-import { ModalService } from "../../../../utility/modules/modal/modal.service";
+import { ModalService } from "../../../../utility/components/modal/modal.service";
 import { PopupService } from "./popup.service";
 
 describe('PopupService', () => {

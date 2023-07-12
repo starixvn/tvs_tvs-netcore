@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment-timezone';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TeamFavorite, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { TEXT } from '../../../../../utility/constants/text';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';

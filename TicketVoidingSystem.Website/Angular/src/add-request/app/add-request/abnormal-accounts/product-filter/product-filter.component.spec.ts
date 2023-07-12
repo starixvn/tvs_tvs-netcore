@@ -3,10 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
-import { ToolTipModule } from '../../../../../utility/modules/tooltip/tooltip.module';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
-import { EventDetailModel } from '../../models/event-detail.model';
 import { ProductFilterComponent } from './product-filter.component';
 
 describe('ProductFilterComponent', () => { 

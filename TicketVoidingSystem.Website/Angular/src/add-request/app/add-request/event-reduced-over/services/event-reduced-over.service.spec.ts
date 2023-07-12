@@ -1,6 +1,6 @@
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { NgSelectMixtureModel } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { MultipleSelection } from '../../../../../utility/modules/multiple-selection/multiple-selection';
-import { NgSelectMixtureModel } from '../../../../../utility/modules/ng-select-mixture/ng-select-mixture.model';
 import { ReducedOverModel } from '../../models/event-reduced-over.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';

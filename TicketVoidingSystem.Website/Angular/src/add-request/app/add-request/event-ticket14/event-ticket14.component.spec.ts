@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { BlockUiModule } from '../../../../utility/modules/block-ui/block-ui.module';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { EventTicket14Model } from '../models/event-ticket-14.model';

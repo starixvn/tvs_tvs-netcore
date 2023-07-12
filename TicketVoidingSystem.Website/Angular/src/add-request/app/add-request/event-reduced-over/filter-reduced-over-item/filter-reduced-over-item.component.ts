@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import { OddsInfo } from '../../../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
+import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { FilterReducedOverService } from '../services/filter-reduced-over.service';

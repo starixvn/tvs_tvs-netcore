@@ -2,9 +2,9 @@ import { NgModule, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { LeagueInfo, MatchInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
-import { ToolTipModule } from '../../../../../utility/modules/tooltip/tooltip.module';
 import { LeagueEventService } from '../../league-event/league-event.service';
 import { LeagueEventRedCardComponent } from './league-event-red-card.component';
 

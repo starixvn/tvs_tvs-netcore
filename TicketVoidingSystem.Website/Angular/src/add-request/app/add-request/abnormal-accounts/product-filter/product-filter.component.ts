@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ProductFilter, TicketStatus } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
 @Component({

@@ -1,14 +1,14 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { PipeModule } from '../../../../../utility/components/pipes/pipe.module';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { AcceptType } from '../../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { SubIssueType } from '../../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { BlockUiModule } from '../../../../../utility/modules/block-ui/block-ui.module';
-import { ModalService } from '../../../../../utility/modules/modal/modal.service';
-import { PipeModule } from '../../../../../utility/modules/pipes/pipe.module';
-import { ToolTipModule } from '../../../../../utility/modules/tooltip/tooltip.module';
 import { FilterModel } from '../../filter/filter.model';
 import { SubIssueTypeDialogComponent } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from '../../filter/sub-issue-type-dialog/sub-issue-type-dialog.model';

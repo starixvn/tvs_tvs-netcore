@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { OddsInfo } from '../../../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
-import { ItemsSelect } from '../../../../../utility/modules/multiple-selection/items-select';
-import { MultipleSelection } from '../../../../../utility/modules/multiple-selection/multiple-selection';
-import { NgSelectMixtureItem } from '../../../../../utility/modules/ng-select-mixture/ng-select-mixture-item.model';
-import { NgSelectMixtureModel } from '../../../../../utility/modules/ng-select-mixture/ng-select-mixture.model';
+import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { NgSelectMixtureItem } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture-item.model';
+import { NgSelectMixtureModel } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { GroupReducedOverConstant } from '../constants/bet-type-reduced-over.constant';

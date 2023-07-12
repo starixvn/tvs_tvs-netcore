@@ -1,9 +1,9 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment-timezone';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';

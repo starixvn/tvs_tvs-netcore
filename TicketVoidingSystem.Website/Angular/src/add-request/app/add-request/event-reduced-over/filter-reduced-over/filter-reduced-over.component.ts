@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
-import { OddsInfo } from '../../../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
+import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { FilterReducedOverItemComponent } from '../filter-reduced-over-item/filter-reduced-over-item.component';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';

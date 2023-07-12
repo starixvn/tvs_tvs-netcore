@@ -1,4 +1,4 @@
-import { OddsInfo } from '../../../../../utility/modules/advanced-mode/advanced-mode/advanced-mode.model';
+import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';

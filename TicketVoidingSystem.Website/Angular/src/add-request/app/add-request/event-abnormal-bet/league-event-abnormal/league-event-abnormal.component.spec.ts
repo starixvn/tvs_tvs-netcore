@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LeagueInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
-import { ToolTipModule } from '../../../../../utility/modules/tooltip/tooltip.module';
 import { LeagueEventService } from '../../league-event/league-event.service';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal.component';
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LeagueInfo, MatchInfo } from '../../../../../utility/models/event.model';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { LeagueEventService } from '../../league-event/league-event.service';
 
 @Component({

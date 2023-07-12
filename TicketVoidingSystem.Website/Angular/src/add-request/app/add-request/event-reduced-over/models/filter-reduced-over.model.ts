@@ -1,5 +1,5 @@
-import { MultipleSelection } from "../../../../../utility/modules/multiple-selection/multiple-selection";
-import { NgSelectMixtureModel } from "../../../../../utility/modules/ng-select-mixture/ng-select-mixture.model";
+import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection";
+import { NgSelectMixtureModel } from "../../../../../utility/components/ng-select-mixture/ng-select-mixture.model";
 
 export class FilterReducedOverModel {
   betTypeIds: string[];

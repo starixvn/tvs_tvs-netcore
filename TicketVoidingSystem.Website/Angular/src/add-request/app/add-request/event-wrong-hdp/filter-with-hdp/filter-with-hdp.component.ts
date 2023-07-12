@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TeamFavorite } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
-import { DateFullTimeNewComponent } from '../../../../../utility/modules/date-time/date-full-time-new/date-full-time-new.component';
-import { Tooltip } from '../../../../../utility/modules/tooltip/tooltip.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { ValidationService } from '../services/validation.service';

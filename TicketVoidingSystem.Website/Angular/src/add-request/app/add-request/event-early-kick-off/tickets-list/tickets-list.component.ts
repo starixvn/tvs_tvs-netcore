@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { TableTicketsModel } from './table-tickets.model';
-import { PagingModel } from '../../../../../utility/modules/paging/paging/paging.model';
 
 @Component({
   selector: 'tickets-list',
