@@ -1,5 +1,5 @@
 ﻿<div class="multiple-selection" [style.width]="multipleSelect.maxWidth">
-    <button type="button" readonly class="pl-2" (click)="dropdownToggle = !dropdownToggle" [disabled]="isDisabled">
+    <button type="button" readonly (click)="dropdownToggle = !dropdownToggle" [disabled]="isDisabled">
         <span>{{multipleSelect.selectionTitle }}</span>
         <span class="i-down"></span>
     </button>

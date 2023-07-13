@@ -114,7 +114,6 @@ export class BetTeam {
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
       if (item.isMultiple) {
-        const x = selections;
         this.renderMultipleSelect(item);
       } else {
         if (this.isHaveMultipleMapRound) {
@@ -179,7 +178,7 @@ export class BetTeam {
     this.multiSelection.multipleSelect.items = [];
     multi.items.forEach(item => {
       const temp = [];
-      if (item.items !== null && item.items !== undefined) {          
+      if (item.items !== null && item.items !== undefined) {
         item.items.forEach(itemSelect => {
           temp.push(new ItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
         });
@@ -529,7 +528,7 @@ export class BetTeam {
     if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_BALL_DELIVERY_AND_OVER.split(',').includes(betTypeId)) {
       let overValue = this.inputs.find(x => x.name === 'Over:').value;
       let ballValue = this.inputs.find(x => x.name === 'Ball/Delivery:').value;
-      
+
       if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
         overValue = overValue.padStart(LENGTH_OF_OVER, '0');
       }
@@ -548,14 +547,14 @@ export class BetTeam {
       }
     }
   }
-  
+
   private updateBetTypesCricketOverXBallYExactRuns(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXXYY
     const LENGTH_OF_OVER = 3;
     const LENGTH_OF_BALL = 2;
     if (AdvancedModeConstants.BETTYPES_OVER_X_BALL_Y_EXACT_RUNS.split(',').includes(betTypeId)) {
       let overValue = this.inputs.find(x => x.name === 'Over:').value;
       let ballValue = this.inputs.find(x => x.name === 'Ball:').value;
-      
+
       if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
         overValue = overValue.padStart(LENGTH_OF_OVER, '0');
       }
@@ -688,7 +687,7 @@ export class Player {
 }
 
 export class OddsInfo {
-  betTypeId: number;
+  betTypeId: string;
   oddsId: string;
   playerId: string;
   playerName: string;

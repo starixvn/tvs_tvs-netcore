@@ -27,6 +27,14 @@ export class ItemsSelect {
       this.countChilds = this.getCountChilds();
   }
 
+  checkBySelectedItem(selectedItems: string[]): void {
+    this.checked = selectedItems.includes(this.value);
+    this.items.forEach(item => {
+      item.checked = selectedItems.includes(item.value);
+      item.checkBySelectedItem(selectedItems);
+    });
+  }
+
   expandedAllItems() {
       this.expanded = true;
       this.items.forEach(item => {

@@ -13,7 +13,6 @@ export class LogInfoDetail {
     highlightAcceptType?: number;
     scoreNormalTicket: string;
     scoreOfMatch: string;
-    // Wrong HDP/1stHDP
     liveGameEarlySingleCount?: number;
     liveGameEarlyCashOutCount?: number;
     liveGameEarlySettleCount?: number;

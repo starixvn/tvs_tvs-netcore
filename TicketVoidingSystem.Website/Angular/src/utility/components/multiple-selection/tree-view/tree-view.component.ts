@@ -9,6 +9,7 @@ import { ItemsSelect } from '../items-select';
 
 export class TreeViewComponent {
   @Input() items: Array<ItemsSelect>;
+  @Input() isDisabled: boolean;
   lastItem: ItemsSelect;
   isShiftKey: boolean;
   

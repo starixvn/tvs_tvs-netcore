@@ -1,5 +1,4 @@
-import { OrdinalNumber } from "../models/ordinal-number.model";
-
+import { OrdinalNumber } from '../models/ordinal-number.model';
 export class OrdinalNumberConstant {
   static readonly ORDINAL_NUMBER: OrdinalNumber[] = [
     { value: '1', englishValue: '1st', chineseTraditionalValue: '一', chineseSimplifiedValue: '一' },

@@ -15,11 +15,10 @@ export class MultipleSelection {
     characterText: string = DefaultSetting.CHARACTER_TEXT;
     showHeader: boolean = DefaultSetting.SHOW_HEADER;
     items: ItemsSelect[] = [];
-    isCheckAll: boolean;
-
-    // constructor() {
-    //     this.items = [];
-    // }
+    isCheckAll = false;
+    buttonHeight: string = DefaultSetting.BUTTON_HEIGHT;
+    isShowPlaceHolder = false;
+    isDefaultSelectAll = true;
 
     getValueItems() {
         let value = '';
@@ -33,7 +32,7 @@ export class MultipleSelection {
 
         return value.toString().replace(/,/g, this.characterValue);
     }
-    
+
     getValueCheckedItemsList() {
         return this.items.filter(x => x.checked).map(y => y.value);
     }
@@ -48,17 +47,25 @@ export class MultipleSelection {
             countChecked += item.countChildsChecked();
             count += item.countChilds;
             const textItems = item.getTextChildsChecked();
+
             if (textItems !== '') {
                 text = text === '' ?
                     textItems : text + ',' + textItems;
             }
         });
+
         text = text.replace(/,/g, this.characterText);
-        const textDisplay =
+        let textDisplay =
             count === countChecked ? this.allItemsCheckedText :
                 countChecked === 0 ? this.noneItemCheckedText :
                     countChecked > maxNumberItems ? `${countChecked}` + this.subfixNumberItemsCheckedText :
                         text;
+        if (count === 0 && !this.isDefaultSelectAll) {
+            textDisplay = this.noneItemCheckedText;
+        }
+        this.isShowPlaceHolder = textDisplay === this.noneItemCheckedText;
+
+
 
         return textDisplay;
     }
@@ -70,4 +77,5 @@ export class MultipleSelection {
         });
         this.selectionTitle = this.getDisplayedItems();
     }
+
 }

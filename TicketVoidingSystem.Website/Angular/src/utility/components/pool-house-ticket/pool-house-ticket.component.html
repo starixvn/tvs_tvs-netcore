@@ -17,7 +17,6 @@
             <group-bettypes-pool-house
               [affectedGroupBetTypesModel]="affectedGroupBetTypesModel"
               [othersGroupBetTypesModel]="othersGroupBetTypesModel"
-              [uncheckBetTypes]="model.uncheckBetTypes"
               (changedBetTypesEvent)="changedBetTypes($event)">
             </group-bettypes-pool-house>
             <tickets [model]="tickets" [(paging)]="paging" [isBlock]="blockBetList" (pagingChange)="pagingEvent()"></tickets>

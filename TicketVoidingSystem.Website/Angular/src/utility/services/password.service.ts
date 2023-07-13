@@ -28,7 +28,7 @@ export class PasswordService {
     for (let i = 1; i <= this.SuggestedLength; i++) {
       const result = password.charCodeAt(i - 1);
       const temp: number = this.SuggestedLength + result * i;
-      seed *= temp;;
+      seed *= temp;
     }
     return seed;
   }
@@ -37,7 +37,7 @@ export class PasswordService {
     const seedString = Number(seed.toPrecision(15)).toString().toUpperCase();
     let hexString = ``;
     for (let i = 1; i <= seedString.length; i++) {
-      let length = (seedString.length - i < 2) ? seedString.length - i + 1 : 3;
+      const length = (seedString.length - i < 2) ? seedString.length - i + 1 : 3;
       hexString += this.getHexString(seedString.substring(i - 1, i - 1 + length));
     }
     return hexString;
@@ -54,7 +54,7 @@ export class PasswordService {
   private getHexString(value: string): string {
     let number = ``;
     for (let i = 1; i <= value.length; i++) {
-      number += value.charCodeAt(i - 1);;
+      number = `${number}${value.charCodeAt(i - 1)}`;
     }
     return parseInt(number).toString(16).toUpperCase();
   }

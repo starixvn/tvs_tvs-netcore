@@ -11,7 +11,6 @@ import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
 export class GroupBettypesPoolHouseComponent implements OnInit {
   @Input() affectedGroupBetTypesModel: GroupBetTypesModel;
   @Input() othersGroupBetTypesModel: GroupBetTypesModel;
-  @Input() checkedBetTypes: string;
   @Output() changedBetTypesEvent = new EventEmitter<number[]>();
 
   tooltip = new Tooltip;
@@ -21,11 +20,6 @@ export class GroupBettypesPoolHouseComponent implements OnInit {
 
   public ngOnInit(): void {
     this.renderDisplayGroupBetTypes();
-    if (this.checkedBetTypes?.length > 0) {
-      const betTypes = this.checkedBetTypes.split(',').map(i => Number(i));
-      this.affectedGroupBetTypesModel.checkBetType(betTypes);
-      this.changedBetTypesEvent.emit(betTypes);
-    }
   }
 
   public isShowGroupBetTypes(group: GroupBetTypesModel): boolean {

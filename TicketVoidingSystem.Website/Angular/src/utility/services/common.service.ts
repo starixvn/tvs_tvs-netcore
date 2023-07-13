@@ -5,10 +5,11 @@ import moment from 'moment';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 // import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
 // import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
+import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
-import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
 import { Selection } from '../../utility/models/selection.model';
+import { GetOddsInfoQuery, OddsInfo } from '../components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
@@ -146,6 +147,11 @@ export class CommonService {
 
   async getResultCache<T>(guid: string): Promise<Result<T>> {
     return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `Utility/GetResultCache`);
+  }
+
+  async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
+    const url = 'api/BetTypes/GetOddsInfoSpecialBetTypes';
+    return this.httpService.postJson(query, url);
   }
 }
 

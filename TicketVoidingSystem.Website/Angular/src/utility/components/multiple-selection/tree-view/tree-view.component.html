@@ -1,20 +1,18 @@
 <ul class="multiple-select">
   <li *ngFor="let item of items">
-    <div class="multiple-select-item" [ngClass]="{'margin-left-13': item.items.length === 0}">
-      <div class="multiple-select-item-action" (click)="item.expanded = !item.expanded">
-        <i *ngIf="item.items.length > 0" class="fa-solid fa-xs mr-2"
-          [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}">
-        </i>
+      <div class="multiple-select-item"
+        [ngClass]="{'margin-left-13': item.items.length === 0, 'item-selected': item.checked, 'cursor-not-allowed': isDisabled }">
+          <i *ngIf="item.items.length > 0" class="fa" [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}"
+             (click)="item.expanded = !item.expanded"></i>
+          <label [ngClass]="{'cursor-not-allowed': isDisabled}">
+              <input type="checkbox" [(ngModel)]="item.checked" class="mr-1" [ngClass]="{'cursor-not-allowed': isDisabled}"
+                     (ngModelChange)="item.checkChilds();handleClick(item)" 
+                     [disabled]="!item.enable || isDisabled" (keyup.shift)="keyUpEvent()" (keydown.shift)="keyDownEvent()" />
+              {{ item.text }}
+          </label>
       </div>
-      <label class="d-flex align-items-center options">
-        <input class="mr-1" type="checkbox" [(ngModel)]="item.checked" class="mr-1"
-          (ngModelChange)="item.checkChilds();handleClick(item)" [disabled]="!item.enable" (keyup.shift)="keyUpEvent()"
-          (keydown.shift)="keyDownEvent()" />
-        {{item.text}}
-      </label>
-    </div>
-    <div class="tree-view-list" *ngIf="item.expanded">
-      <tree-view [items]="item.items"></tree-view>
-    </div>
+      <div *ngIf="item.expanded">
+          <tree-view [items]="item.items"></tree-view>
+      </div>
   </li>
 </ul>

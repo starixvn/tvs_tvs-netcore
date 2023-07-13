@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnChanges, SimpleChange, ViewEncapsulatio
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
+import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
@@ -37,6 +38,7 @@ export class AdvancedModeComponent implements OnChanges {
 
   constructor(
     private readonly service: AdvancedModeService,
+    private readonly commonService: CommonService,
     private readonly element: ElementRef
     ) {
     this.tooltip.element = this.element;
@@ -92,7 +94,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
   
   public async getSpecialBetTeamCricket(matchId: string): Promise<void> {
-    const data = await this.service.GetOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
+    const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
     this.updatePlayerCricket(data);
     this.oddsInfo = data;
   }

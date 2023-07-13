@@ -12,7 +12,6 @@ export class HttpService {
       const response = await this.http.get(url).toPromise();
       return response as T;
     } catch (error) {
-      console.error(error);
       return null;
     }
   }
@@ -26,7 +25,6 @@ export class HttpService {
       const result = await this.http.post(url, body, options).toPromise();
       return result as TResult;
     } catch (error) {
-      console.error(error);
       return null;
     }
   }

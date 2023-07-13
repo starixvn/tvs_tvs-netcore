@@ -1,73 +1,48 @@
 :host {
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 0 !important;
-  }
-
-  li {
-    user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    line-height: 1;
-    margin-top: 5px;
-  }
-
-  .margin-left-13 {
-    margin-left: 15px;
-    display: contents;
-    max-width: 100%;
-  }
-
-  .tree-view-list {
-    margin-left: 15px;
-  }
-
-  .multiple-select-item {
-    display: flex;
-    line-height: 1.5;
-    align-items: center;
-
-    input {
-      cursor: pointer;
+    ul {
+        margin: 0 0 0 10px;
+        list-style-type: none;
+        padding: 0;
     }
 
-    .multiple-select-item-action {
-      cursor: pointer;
-      margin-left: -5px;
-      padding-left: 5px;
+    li {
+        user-select: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        line-height: 1;
+        margin-top: 5px;
     }
 
-    .options {
-      margin-bottom: 0;
-      cursor: pointer;
+    .margin-left-13 {
+        margin-left: 13px;
+        display: contents;
+        max-width: 100%;
     }
 
-    .i-expanded {
-      color: #999;
-      cursor: pointer;
-      width: 0;
-      height: 0;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      border-top: 4px dashed;
-      border-right: 4px solid transparent;
-      border-left: 4px solid transparent;
+    .multiple-select-item {
+        display: flex;
+        line-height: 1.5;
+        align-items: center;
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        i {
+            width: 15px;
+            cursor: pointer;
+        }
     }
 
-    .i-collapsed {
-      color: #999;
-      cursor: pointer;
-      width: 0;
-      height: 0;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 9px;
-      border-left: 4px dashed;
-      border-top: 4px solid transparent;
-      border-bottom: 4px solid transparent;
+    .item-selected {
+        color: #333;
+        font-weight: 600;
     }
-  }
+
+    .cursor-not-allowed {
+        cursor: not-allowed !important;
+    }
 }
