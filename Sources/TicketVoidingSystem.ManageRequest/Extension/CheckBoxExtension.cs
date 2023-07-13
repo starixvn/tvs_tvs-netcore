@@ -9,9 +9,15 @@ public static class CheckBoxExtension
 
     public static bool IsDisable(this GetTicketModel item, VoidPermission permission, int issueTypeId)
     {
+        var betTypesSaba = new List<int> { 228, 229 };
         if (DefaultDisable(item, permission))
         {
             return true;
+        }
+
+        if (betTypesSaba.Contains(item.BetType))
+        {
+            return IsDisableBetTypesSabaTicket(permission);
         }
 
         if (item.IsCancelCashOut)
@@ -35,6 +41,11 @@ public static class CheckBoxExtension
         }
 
         return !(permission.Settled && item.StatusWinLost != null);
+    }
+
+    private static bool IsDisableBetTypesSabaTicket(VoidPermission permission)
+    {
+        return !permission.InstantlySettled;
     }
 
     private static bool DefaultDisable(GetTicketModel item, VoidPermission permission)

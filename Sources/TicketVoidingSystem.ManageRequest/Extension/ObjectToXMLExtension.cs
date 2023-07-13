@@ -94,7 +94,9 @@ public static class ObjectToXMLExtension
                        + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
                        + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
                        + $"FilterBy='{model.FilterBy}' "
-                       + $"IsCheckedVar='{model.IsCheckedVar}' />";
+                       + $"IsCheckedVar='{model.IsCheckedVar}' "
+                       + $"MinTime='{model.LogInfoDetail.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"MinType='{model.LogInfoDetail.HighlightAcceptType}' />";
 
             stringBuilder.AppendLine(line);
         }
@@ -135,7 +137,9 @@ public static class ObjectToXMLExtension
                 + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
                 + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
-                + $"IsCheckedVar='{model.IsCheckedVar}' />";
+                + $"IsCheckedVar='{model.IsCheckedVar}' "
+                + $"MinTime='{model.LogInfoDetail?.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' />";
             stringBuilder.AppendLine(line);
         }
 
@@ -198,10 +202,20 @@ public static class ObjectToXMLExtension
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                 + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
-                + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
+                + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "
+                + $"IsLinkGroupAIO ='{model.IsLinkGroupAIO}' "
+                + $"LiveGameEarlySingleCount ='{model.LogInfoDetail?.LiveGameEarlySingleCount}' "
+                + $"LiveGameEarlyCashOutCount='{model.LogInfoDetail?.LiveGameEarlyCashOutCount}' "
+                + $"LiveGameEarlySettleCount='{model.LogInfoDetail?.LiveGameEarlySettleCount}' "
+                + $"LiveGameEarlyInstantlySettleCount='{model.LogInfoDetail?.LiveGameEarlyInstantlySettleCount}' "
+                + $"PoolHouseSingleCount='{model.LogInfoDetail?.PoolHouseSingleCount}' "
+                + $"PoolHouseCashOutCount='{model.LogInfoDetail?.PoolHouseCashOutCount}' "
+                + $"PoolHouseMainParlayCount='{model.LogInfoDetail?.PoolHouseMainParlayCount}' "
+                + $"PoolHouseInstantlySettleCount='{model.LogInfoDetail?.PoolHouseInstantlySettleCount}' "
+                + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
                 + $"VoidToTime='{model.LogInfoDetail?.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"VoidFromTime='{model.LogInfoDetail?.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"LiveIndicator='{model.LiveIndicator}' "
                 + $"ActualMarket='{SecurityElement.Escape(model.ActualMarket)}' "
                 + $"WrongMarket='{SecurityElement.Escape(model.WrongMarket)}' />";
             stringBuilder.AppendLine(line);
