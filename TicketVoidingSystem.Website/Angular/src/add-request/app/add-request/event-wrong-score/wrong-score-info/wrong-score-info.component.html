@@ -47,7 +47,7 @@
           </label>
         </div>
         <div class="btn-reload" [ngClass]="{'btn-reload-index-0':isShowLabel()}" *ngIf="wrongScoreModel.isChecked">
-          <button type="button" class="btn btn-default btn-sm" (click)="refreshLogInfo(true)" [disabled]="isVoided">
+          <button type="button" class="btn btn-default btn-sm" (click)="refreshLogInfo()" [disabled]="isVoided">
               <span><i class="fa fa-refresh" aria-hidden="true" ></i></span>
           </button>
         </div>

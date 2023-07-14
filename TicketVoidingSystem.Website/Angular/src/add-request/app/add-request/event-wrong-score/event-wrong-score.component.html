@@ -17,7 +17,7 @@
 	<filter-wrong-score #filterWrongScore
 		[isVoided]="isVoided"
 		*ngIf="primitiveProps.filterBy === 2"
-		[(filterWrongScoreModel)]="filterWrongScoreModel"
+		[filterWrongScoreModel]="filterWrongScoreModel"
 		(changeFilterEvent)="resetData()">
 	</filter-wrong-score>
 	<div class="mb-3 mt-3 d-flex">
@@ -79,5 +79,5 @@
 </div>
 
 <tooltip [tooltip]="tooltip"></tooltip>
-<confirm-wrong-score [(model)]="confirmWrongScoreModel" (close)="triggerCloseEvent()" (save)="onYesConfirmAddRequest()">
+<confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()" (save)="onYesConfirmAddRequest()">
 </confirm-wrong-score>

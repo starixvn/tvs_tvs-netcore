@@ -27,7 +27,7 @@
         [isEdit]="isEdit"
         [isVoided]="filter.isVoided"
         [(filterBy)]="primitiveProps.filterBy"
-        [(filterTimeWithAllowanceModel)]="defaultFilterTimeWithAllowance"
+        [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"
         (changeFilterEvent)="handleChangeDefaultFilterArea()">
     </filter-time-area>
 
@@ -46,8 +46,8 @@
             [isDisabled]="filter.isVoided"
             [subIssueTypes]="issueTypes.subIssueTypes"
             [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-            [(logInfo)]="mainEvent"
-            [(filter)]="filter">
+            [logInfo]="mainEvent"
+            [filter]="filter">
         </log-info-red-card>
     </div>
 

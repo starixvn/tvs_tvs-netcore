@@ -165,7 +165,7 @@ export class FilterComponent implements OnInit, OnChanges {
   async initSelections() {
     this.sports = await this.filterService.getSportsType();
     this.model.sportType = this.isEdit ? this.model.sportType : SportType.SOCCER;
-    this.originActions = await this.commonService.getActions();
+    this.originActions = await this.commonService.getVoidActions();
     this.updateCurrentAction();
 
     if (this.isEdit) {

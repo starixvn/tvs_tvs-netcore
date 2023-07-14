@@ -51,7 +51,7 @@
 
       <div class="log" [blockUi]="isBlock">
         <filter-time-with-allowance #filterTimeWithAllowance [isEdit]="isEdit" [isDisabled]="isDisabled"
-          [isUseInLogInfo]="true" [(filterTimeWithAllowanceModel)]="logInfo.voidTimeArea"
+          [isUseInLogInfo]="true" [filterTimeWithAllowanceModel]="logInfo.voidTimeArea"
           (refreshLogInfoEvent)="refreshLogInfo()" (changeAllowanceSettingTimeEvent)="hideValidationDetail()">
         </filter-time-with-allowance>
         <div class="mb-2" *ngIf="isShowValidation && logInfo.logInfoDetail"><hr class="mt-2 mb-2">
@@ -79,6 +79,6 @@
     </div>
   </div>
 </div>
-<sub-issue-type-dialog [(model)]="subIssueTypeDialogModel" (updateSubTypeEvent)="updateDataAfterClosed($event)">
+<sub-issue-type-dialog [model]="subIssueTypeDialogModel" (updateSubTypeEvent)="updateDataAfterClosed($event)">
 </sub-issue-type-dialog>
 

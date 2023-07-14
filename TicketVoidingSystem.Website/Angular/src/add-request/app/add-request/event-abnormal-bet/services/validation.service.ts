@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { PermissionManage } from '../../../../../utility/models/permission-manage.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';

@@ -1,5 +1,5 @@
+import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { PermissionManage } from '../../../../../utility/models/permission-manage.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';

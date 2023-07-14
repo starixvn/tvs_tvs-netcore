@@ -17,9 +17,8 @@
         <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse">
           <event-early-kick-off #eventEarlyKickOff
             *ngIf="isEarlyOrWrongKO()"
-            [userId]="userId"
             [filter]="model.filter"
-            [(eventDetailModel)]="model.eventDetail"
+            [eventDetailModel]="model.eventDetail"
             [isVoided]="model.filter.isVoided"
             [isEdit]="isEdit"
             [requestId]="requestId"
@@ -34,7 +33,7 @@
             [requestId]="requestId"
             [filter]="model.filter"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [(abnormalBetModel)]="model.abnormalBetModel"
+            [abnormalBetModel]="model.abnormalBetModel"
             [others]="model.others"
             (updateMatchId)="updateMatchId($event)">
           </event-abnormal-bet>
@@ -75,7 +74,7 @@
             [requestId]="requestId"
             [filter]="model.filter"
             [issueTypeId]="model.filter.issueTypeId"
-            [(wrongHdpModels)]="model.wrongHdpModels"
+            [wrongHdpModels]="model.wrongHdpModels"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-hdp>
 
@@ -88,7 +87,7 @@
             [requestId]="requestId"
             [filter]="model.filter"
             [issueTypeId]="model.filter.issueTypeId"
-            [(wrongOuModels)]="model.wrongOuModels"
+            [wrongOuModels]="model.wrongOuModels"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-ou>
   
@@ -99,7 +98,7 @@
             [filter]="model.filter"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
             [others]="model.others"
-            [(abnormalAccountModel)]="model.abnormalAccountModel"
+            [abnormalAccountModel]="model.abnormalAccountModel"
             [isVoided]="model.filter.isVoided"
             [isEdit]="isEdit"
             [requestId]="requestId">
@@ -112,7 +111,7 @@
             [filter]="model.filter"
             [isVoided]="model.filter.isVoided"
             [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
-            [(wrongScoreModels)]="model.wrongScoreModels"
+            [wrongScoreModels]="model.wrongScoreModels"
             [isEdit]="isEdit"
             [requestId]="requestId"
             [others]="model.others"
@@ -125,7 +124,7 @@
             [isEdit]="isEdit"
             [requestId]="requestId"
             [filter]="model.filter"
-            [(eventTicket14Model)]="model.eventTicket14Model"
+            [eventTicket14Model]="model.eventTicket14Model"
             [others]="model.others">
           </event-ticket14>
 
@@ -139,7 +138,7 @@
             [requestId]="requestId"
             [filter]="model.filter"
             [issueTypeId]="model.filter.issueTypeId"
-            [(wrongOddsModels)]="model.wrongOddsModels"
+            [wrongOddsModels]="model.wrongOddsModels"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-odds>
 
@@ -153,7 +152,7 @@
             [requestId]="requestId"
             [filter]="model.filter"
             [issueTypeId]="model.filter.issueTypeId"
-            [(reducedOverModels)]="model.reducedOverModels"
+            [reducedOverModels]="model.reducedOverModels"
             (updateMatchId)="updateMatchId($event)">
           </event-reduced-over>
         </div>
@@ -169,15 +168,15 @@
     </others>
     <abnormal-accounts-other *ngIf="isAbnormalAccount()"
       [isEdit]="isEdit"
-      [(model)]="model.others">
+      [model]="model.others">
     </abnormal-accounts-other>
     <others-abnormal-mix-parlay *ngIf="isAbnormalBetMixParlay() || isArchivedTicketIssueType()"
       [isEdit]="isEdit"
-      [(model)]="model.others">
+      [model]="model.others">
     </others-abnormal-mix-parlay>
     <others-wrong-hdp *ngIf="isShowOthersSimpleFields()"
       [isEdit]="isEdit"
-      [(model)]="model.others">
+      [model]="model.others">
     </others-wrong-hdp>
 
     <div class="search mg-top-10">

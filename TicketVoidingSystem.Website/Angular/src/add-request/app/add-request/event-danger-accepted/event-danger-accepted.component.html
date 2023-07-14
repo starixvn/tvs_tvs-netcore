@@ -27,7 +27,7 @@
     [isEdit]="isEdit"
     [isVoided]="filter.isVoided"
     [(filterBy)]="primitiveProps.filterBy"
-    [(filterTimeWithAllowanceModel)]="defaultFilterTimeWithAllowance"
+    [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"
     (changeFilterEvent)="resetLogInfoAndHideAllEvents()">
   </filter-time-area>
 
@@ -46,8 +46,8 @@
       [isDisabled]="filter.isVoided"
       [subIssueTypes]="issueTypes.subIssueTypes"
       [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-      [(logInfo)]="mainEvent"
-      [(filter)]="filter">
+      [logInfo]="mainEvent"
+      [filter]="filter">
     </log-info-red-card>
   </div>
 
@@ -82,8 +82,8 @@
           [isDisabled]="filter.isVoided"
           [subIssueTypes]="issueTypes.subIssueTypes"
           [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
-          [(logInfo)]="allSelectedEvents[i]"
-          [(filter)]="filter"
+          [logInfo]="allSelectedEvents[i]"
+          [filter]="filter"
           (deleteEvent)="handleDeleteEvent($event)">
         </log-info-red-card>
       </div>
@@ -94,7 +94,7 @@
 <add-child-match
   [relatedEvents]="relatedEvents"
   (selectedEventsChange)="saveRelatedEvent($event)"
-  [(model)]="addChildMatchModel">
+  [model]="addChildMatchModel">
 </add-child-match>
 
 <confirm-danger-accepted [model]="confirmDangerAccepted" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-danger-accepted>

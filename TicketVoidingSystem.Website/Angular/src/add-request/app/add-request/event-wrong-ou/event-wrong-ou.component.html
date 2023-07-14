@@ -17,8 +17,8 @@
       [requestId]="requestId"
       [isDisabled]="filter.isVoided"
       [primitiveProps]="primitiveProps"
-      [(logInfo)]="mainEvent"
-      [(filter)]="filter">
+      [logInfo]="mainEvent"
+      [filter]="filter">
     </log-info-wrong-ou>
   </div>
   
@@ -48,11 +48,11 @@
           [isMainMatch]="false"
           [isEdit]="isEdit"
           [requestId]="requestId"
-          [(logInfo)]="allSelectedEvents[i]"
+          [logInfo]="allSelectedEvents[i]"
           [isDisabled]="filter.isVoided"
           [primitiveProps]="primitiveProps"
           (deleteEvent)="handleDeleteEvent($event)"
-          [(filter)]="filter">
+          [filter]="filter">
         </log-info-wrong-ou>  
       </div>
     </div>
@@ -62,6 +62,6 @@
 <add-child-match
   [relatedEvents]="relatedEvents"
   (selectedEventsChange)="saveRelatedEvent($event)"
-  [(model)]="addChildMatchModel">
+  [model]="addChildMatchModel">
 </add-child-match>
 <tooltip [tooltip]="tooltip"></tooltip>

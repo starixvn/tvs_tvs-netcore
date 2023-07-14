@@ -63,7 +63,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     private readonly addRequestStore: AddRequestStore,
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
-    private readonly wrongScoreService: WrongScoreService,
+    public readonly wrongScoreService: WrongScoreService,
     private readonly logInfoService: LogInfoService,
     private readonly modalService: ModalService,
   ) {

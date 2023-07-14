@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
+import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
-import { PermissionManage } from '../../../../utility/models/permission-manage.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestStore } from '../add-request.store';
