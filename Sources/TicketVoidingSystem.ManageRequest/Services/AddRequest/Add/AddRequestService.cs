@@ -2,6 +2,7 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -49,7 +50,7 @@ public class AddRequestServiceImp : AddRequestService
             var markTicketResults = Enumerable.Empty<Result>();
             if (!query.IssueTypeId.IsArchivedTicket() && !string.IsNullOrWhiteSpace(query.MarkTransIds))
             {
-                markTicketResults = await markTicketsService.MarkTickets(query.MarkTransIds, query.IssueTypeId);
+                markTicketResults = await markTicketsService.MarkTicketsInTVS(query.MarkTransIds, query.IssueTypeId, MarkTypeConstant.ExecuteMarkTickets);
             }
 
             return markTicketResults.All(x => x.IsSuccessful) ? await ExecuteAddAfterMarkTickets(query) : markTicketResults.First(x => !x.IsSuccessful);
@@ -70,7 +71,7 @@ public class AddRequestServiceImp : AddRequestService
         try
         {
             var requestId = await ExecuteAddRequest(query);
-            await insertAutoVoidRequestQueueService.Execute(query, requestId);
+            await insertAutoVoidRequestQueueService.Execute(requestId, query.IssueTypeId, query.MatchId, query.ActionId);
             await sendLetstalkAfterAddService.Execute(query, requestId);
             return new Result
             {

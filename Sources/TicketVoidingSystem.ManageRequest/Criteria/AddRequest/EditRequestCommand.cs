@@ -31,6 +31,7 @@ public class EditRequestCommand : NonQueryCommand
     public string WrongOuInfo { get; set; }
     public string Wrong1stOuInfo { get; set; }
     public string WrongOddsInfo { get; set; }
+    public string ReducedOverInfo { get; set; }
     public string AbnormalAccountInfo { get; set; }
     public string KickOffInfo { get; set; }
     public string TransInfoJson { get; set; }

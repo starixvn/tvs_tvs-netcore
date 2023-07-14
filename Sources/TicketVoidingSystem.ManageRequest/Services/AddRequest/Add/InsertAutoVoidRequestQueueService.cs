@@ -2,13 +2,12 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(AddRequestQuery query, int requestId);
+    Task Execute(int requestId, int issueTypeId, int matchId, int actionId);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -20,16 +19,16 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(AddRequestQuery query, int requestId)
+    public async Task Execute(int requestId, int issueTypeId, int matchId, int actionId)
     {
-        if (CheckCanInsertAutoVoidRequestQueue(query.ActionId))
+        if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
             var command = new InsertAutoVoidRequestQueueCommand
             {
                 RequestIds = requestId.ToString(),
-                IssueTypeId = query.IssueTypeId,
-                MatchId = query.MatchId,
-                ActionId = query.ActionId,
+                IssueTypeId = issueTypeId,
+                MatchId = matchId,
+                ActionId = actionId,
                 BroadcastSessionId = Guid.NewGuid().ToString()
             };
 

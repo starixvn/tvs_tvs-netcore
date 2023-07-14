@@ -1,4 +1,5 @@
 ﻿using Fanex.NAP.Client.AspNetCore.Attributes;
+using Fanex.NAP.Core.Business;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -76,4 +77,8 @@ public class ManageRequestController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> GetExcelVoidedTicketForSendLetstalk(GetExcelVoidedTicketForSendLetstalkRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
+    public async Task<IActionResult> UpdateRequest(EditRequest request) => Ok(await mediator.Send(request));
 }

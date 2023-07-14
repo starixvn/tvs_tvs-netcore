@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface MarkTicketsService
 {
-    Task<IEnumerable<Result>> MarkTickets(string markTransIds, int issueTypeId);
+    Task<IEnumerable<Result>> MarkTicketsInTVS(string markTransIds, int issueTypeId, byte markTypeId);
 }
 
 public class MarkTicketsServiceImp : MarkTicketsService
@@ -24,11 +24,11 @@ public class MarkTicketsServiceImp : MarkTicketsService
         this.loggingService = loggingService;
     }
 
-    public async Task<IEnumerable<Result>> MarkTickets(string markTransIds, int issueTypeId)
+    public async Task<IEnumerable<Result>> MarkTicketsInTVS(string markTransIds, int issueTypeId, byte markTypeId)
     {
         try
         {
-            return await MarkTicketsInAllSiteDb(markTransIds, issueTypeId);
+            return await MarkTicketsInAllSiteDb(markTransIds, issueTypeId, markTypeId);
         }
         catch (Exception e)
         {
@@ -37,9 +37,8 @@ public class MarkTicketsServiceImp : MarkTicketsService
         }
     }
 
-    private async Task<IEnumerable<Result>> MarkTicketsInAllSiteDb(string markTransIds, int issueTypeId)
+    private async Task<IEnumerable<Result>> MarkTicketsInAllSiteDb(string markTransIds, int issueTypeId, byte markTypeId)
     {
-        const int markTypeId = 0;
         var markTicketsCommand = new MarkTicketsCommand
         {
             TransIds = markTransIds,

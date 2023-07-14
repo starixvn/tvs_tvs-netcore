@@ -6,142 +6,72 @@ public static class IssueTypeExtension
 {
     public static bool IsAbnormalAccount(this int id)
     {
-        if (id == IssueTypeConstant.AbnormalAccount)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.AbnormalAccount;
     }
 
     public static bool IsRedCard(this int id)
     {
-        if (id == IssueTypeConstant.RedCard)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.RedCard;
     }
 
     public static bool IsDangerAccepted(this int id)
     {
-        if (id == IssueTypeConstant.DangerAccepted)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.DangerAccepted;
     }
 
     public static bool IsLikelyAbnormalBet(this int id)
     {
-        if (id.IsAbnormalBet() || id.IsAbnormalBetRealMember())
-        {
-            return true;
-        }
-
-        return false;
+        return id.IsAbnormalBet() || id.IsAbnormalBetRealMember();
     }
 
-    private static bool IsAbnormalBet(this int id)
+    public static bool IsAbnormalBet(this int id)
     {
-        if (id == IssueTypeConstant.AbnormalBet)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.AbnormalBet;
     }
 
     public static bool IsArchivedTicket(this int id)
     {
-        if (id == IssueTypeConstant.ArchivedTicket)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.ArchivedTicket;
     }
 
-    private static bool IsAbnormalBetRealMember(this int id)
+    public static bool IsAbnormalBetRealMember(this int id)
     {
-        if (id == IssueTypeConstant.AbnormalBetRealMember)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.AbnormalBetRealMember;
     }
 
     public static bool IsWrongKickOffTime(this int id)
     {
-        if (id == IssueTypeConstant.WrongKickOffTime)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.WrongKickOffTime;
     }
 
     public static bool IsEarlyKickOffTime(this int id)
     {
-        if (id == IssueTypeConstant.EarlyKickOffTime)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.EarlyKickOffTime;
     }
 
     public static bool IsWrongScore(this int id)
     {
-        if (id == IssueTypeConstant.WrongScore)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.WrongScore;
     }
 
     public static bool IsWrong1stHDP(this int id)
     {
-        if (id == IssueTypeConstant.Wrong1stHDP)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.Wrong1stHDP;
     }
 
     public static bool IsWrongHDP(this int id)
     {
-        if (id == IssueTypeConstant.WrongHDP)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.WrongHDP;
     }
 
     public static bool IsWrong1stOU(this int id)
     {
-        if (id == IssueTypeConstant.Wrong1stOU)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.Wrong1stOU;
     }
 
     public static bool IsWrongOU(this int id)
     {
-        if (id == IssueTypeConstant.WrongOU)
-        {
-            return true;
-        }
-
-        return false;
+        return id == IssueTypeConstant.WrongOU;
     }
 
     public static bool IsAbnormalAccountOrAbnormalBet(this int id)
