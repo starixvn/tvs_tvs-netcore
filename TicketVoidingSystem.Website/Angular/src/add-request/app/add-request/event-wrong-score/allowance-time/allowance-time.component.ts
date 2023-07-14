@@ -10,7 +10,7 @@ import { AllowanceTime } from '../../../../../utility/models/allowance-time.mode
 })
 export class AllowanceTimeComponent {
   @Input() allowanceTime = new AllowanceTime();
-  @Input() isDisabled: AllowanceTime;
+  @Input() isDisabled: boolean;
 
   @Output() changeModel = new EventEmitter<AllowanceTime>();
 

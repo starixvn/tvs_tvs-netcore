@@ -26,6 +26,6 @@
   [eventDate]="filter.eventDate" [initMatchId]="abnormalBetModel.matchId" [actionId]="filter.action">
 </league-event-abnormal>
 
-<confirm-abnormal-bet #confirmAbnormalBetComponent [(model)]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
+<confirm-abnormal-bet #confirmAbnormalBetComponent [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()" [isEdit]="isEdit">
 </confirm-abnormal-bet>

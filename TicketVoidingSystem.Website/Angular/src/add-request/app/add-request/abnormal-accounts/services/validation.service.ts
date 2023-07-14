@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { CommonService } from '../../../../../utility/services/common.service';
+import { AddRequestApiService } from '../../add-request-api.service';
 import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery, ValidationAbnormalAccount } from '../models/check-username.model';
@@ -13,7 +13,7 @@ import { ProductFilterComponent } from '../product-filter/product-filter.compone
   providedIn: 'root'
 })
 export class ValidationService {
-  constructor(private readonly commonService: CommonService) { }
+  constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   public isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();
@@ -42,7 +42,6 @@ export class ValidationService {
       if (invalidUsernames) {
         return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames) } as ValidationBusinessRuleOutput;
       }
-      args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
       if (viewModel.validation.isExceededTotalUsernames) {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }
@@ -81,7 +80,7 @@ export class ValidationService {
       fromDate: moment(args.abnormalAccountModel.fromDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
     };
-    const results = await this.commonService.checkValidUsernames(query);
+    const results = await this.addRequestApiService.checkValidUsernames(query);
     
     return results;
   }

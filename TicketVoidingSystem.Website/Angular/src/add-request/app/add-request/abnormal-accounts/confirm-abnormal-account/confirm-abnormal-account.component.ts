@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ConfirmAbnormalBetModel } from '../../event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.model';
+import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account.model';
 
 @Component({
   selector: 'confirm-abnormal-account',
@@ -7,7 +7,7 @@ import { ConfirmAbnormalBetModel } from '../../event-abnormal-bet/confirm-abnorm
   styleUrls: ['./confirm-abnormal-account.component.scss']
 })
 export class ConfirmAbnormalAccountComponent {
-  @Input() model = new ConfirmAbnormalBetModel();
+  @Input() model = new ConfirmAbnormalAccountModel();
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter();
   

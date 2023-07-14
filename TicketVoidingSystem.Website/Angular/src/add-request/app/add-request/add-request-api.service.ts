@@ -9,6 +9,7 @@ import { LastTimeScore, LastTimeScoreQuery } from '../add-request/models/last-ti
 import { ChildMatchModel } from '../add-request/models/related-event.model';
 import { AddRequestResultModel } from '../add-request/models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-request/models/sub-type-link-match.model';
+import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
@@ -62,6 +63,11 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async checkValidTransIdsForAbnormalBet(query: CheckTransIdsQuery): Promise<CheckTransIdsViewModel> {
     return this.httpService.postJson<CheckTransIdsQuery, CheckTransIdsViewModel>(query, 'TicketVoiding/CheckValidTransIdsRequest');
+  }
+
+  /* istanbul ignore next */
+  async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckUsernamesViewModel> {
+    return this.httpService.postJson<CheckValidUsernamesQuery, CheckUsernamesViewModel>(query, 'TicketVoiding/CheckValidUsernames');
   }
 
    /* istanbul ignore next */

@@ -14,7 +14,7 @@
                   (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" [ngClass]="{'cursor-not-allowed': isDisabled}"/>
               {{multipleSelect.checkAllCheckBoxText}}
           </label>
-          <i class="fa" [ngClass]="{'fa-angle-up': expanded, 'fa-angle-down': !expanded}" (click)="toggle()"></i>
+          <i class="fa" [ngClass]="{'fa-angle-up': isExpanded, 'fa-angle-down': !isExpanded}" (click)="toggle()"></i>
       </div>
       <div class="tree-view-content" [style.max-height]="multipleSelect.maxHeight">
           <tree-view [items]="multipleSelect.items" (change)="changeItems()" [isDisabled]="isDisabled"></tree-view>

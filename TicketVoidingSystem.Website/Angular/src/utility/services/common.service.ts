@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
 // import { CheckValidTransIdsQuery } from '../..//add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
-// import { CheckValidUsernamesQuery, CheckValidUsernamesResult } from '../../add-request/app/add-request/abnormal-accounts/abnormal-accounts.model';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 // import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
 // import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
@@ -126,16 +125,6 @@ export class CommonService {
   async getIssueTypes(): Promise<IssueTypesModel> {
     return this.httpService.getJson('api/SharedApi/GetIssueTypes');
   }
-
-
-
-  // async checkValidTransIdsForAbnormalBet(query: CheckValidTransIdsQuery): Promise<CheckValidTransIdsResult> {
-  //   return this.httpService.postJson<CheckValidTransIdsQuery, CheckValidTransIdsResult>(query, 'TicketVoiding/CheckValidTransIdsRequest');
-  // }
-
-  // async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckValidUsernamesResult> {
-  //   return this.httpService.postJson<CheckValidUsernamesQuery, CheckValidUsernamesResult>(query, 'TicketVoiding/CheckValidUsernames');
-  // }
 
   async getLogInfo(query: GetLogInfoQuery): Promise<GetLogInfoViewModel> {
     return this.httpService.postJson<GetLogInfoQuery, GetLogInfoViewModel>(query, 'api/AddRequest/GetLogInfo');

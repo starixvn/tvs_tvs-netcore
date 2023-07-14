@@ -30,7 +30,7 @@
               [(ngModel)]="group.selected" (change)="onSelectOperator()" [clearable]="false">
               <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
                 <div class="ng-value" *ngFor="let item of items | slice: 0:2">
-                  <span class="ng-value-label">{{ item.userName }}</span>
+                  <span class="ng-value-label">{{ item['userName'] }}</span>
                   <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
                 </div>
                 <div class="ng-value" *ngIf="items.length > 2">

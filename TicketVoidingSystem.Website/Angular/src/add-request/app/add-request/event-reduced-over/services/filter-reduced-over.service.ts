@@ -96,7 +96,7 @@ export class FilterReducedOverService {
   }
 
   public async getPlayers(matchId: number, betTypes: string): Promise<OddsInfo[]> {
-    return this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId, betTypes: betTypes});
+    return this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId?.toString(), betTypes: betTypes});
   }
 
   public renderPlayer(oddsInfoList: OddsInfo[]): ItemsSelect[] {

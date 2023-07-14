@@ -209,9 +209,9 @@ export class AdvancedModeComponent implements OnChanges {
     this.allBetTypes.filter(x => x.isChecked && (x.id === 228 || x.id === 229 || this.betTypesMoreHDP.includes(x.id.toString()))).forEach(y => {
       const betTeam = this.betTeams.find(x => x.checkedBetTypes.some(t => t.split(',').includes(y.id.toString())));
       if (betTeam) {
-        if (this.isBetTypeSabaTimeMachine(y.id) && !this.validateInputMultipleDecimal(y.id, betTeam.inputs[0].value, 'bet-type-saba' + y.id.toString())) {
+        if (this.isBetTypeSabaTimeMachine(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.inputs[0].value, 'bet-type-saba' + y.id.toString())) {
           isValidOddsSpread = false;
-        } else if (this.isBetTypeMoreHDP(y.id) && !this.validateInputMultipleDecimal(y.id, betTeam.items[0].value, 'bet-type-more-hdp')) {
+        } else if (this.isBetTypeMoreHDP(y.id) && !this.validateInputMultipleDecimal(y.id.toString(), betTeam.items[0].value, 'bet-type-more-hdp')) {
           isValidHDP = false;
         }
       }
@@ -236,7 +236,7 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  onChangeInputMultipleDecimal(betTypeId: number, value: string, className: string) {
+  onChangeInputMultipleDecimal(betTypeId: string, value: string, className: string) {
     if (!this.validateInputMultipleDecimal(betTypeId, value, className)) {
       return false;
     }
@@ -245,8 +245,8 @@ export class AdvancedModeComponent implements OnChanges {
     return true;
   }
 
-  validateInputMultipleDecimal(betTypeId: number, value: string, className: string): boolean {
-    const errorText = betTypeId === 228 ? LABELS.INVALID_VALUE : LABELS.INVALID_HDP;
+  validateInputMultipleDecimal(betTypeId: string, value: string, className: string): boolean {
+    const errorText = betTypeId === '228' ? LABELS.INVALID_VALUE : LABELS.INVALID_HDP;
     if (value && !StaticService.isCorrectRegexMultipleDecimal(value)) {
       this.tooltip.display(className, errorText);
       return false;

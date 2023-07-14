@@ -12,7 +12,7 @@
 </ngb-alert>
 
 <div [blockUi]="primitiveProps.isBlockUsernames">
-    <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="1050"
+    <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided"
         (focusOutUsernames)="focusOutUsernames()" [userNameComponentCss]="'row'" [widthCss]="'col-8 col-sm-8'">
     </user-names>
 </div>
