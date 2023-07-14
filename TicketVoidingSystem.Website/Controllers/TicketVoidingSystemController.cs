@@ -52,6 +52,21 @@ public class TicketVoidingSystemController : Controller
     [HttpGet]
     [Route("[action]")]
     [Route("[action]/Index")]
+    public ActionResult AddRequest()
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("[action]/Index/{id}")]
+    public ActionResult EditRequest(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/edit-request/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AfterVoidHistory, Policy = Constant.Policy.Read)]
     public IActionResult ManageVoidServices()
     {

@@ -11,10 +11,10 @@ export class OthersService {
   ) { }
 
   async getOperators(matchIds: string): Promise<OperatorInfo[]> {
-    return this.httpService.postJson({ matchIds }, 'TicketVoiding/GetOperators');
+    return this.httpService.postJson({ matchIds }, 'api/AddRequest/GetOperators');
   }
 
   async getProvider(matchId: string): Promise<Provider> {
-    return this.httpService.postJson({ matchId }, 'TicketVoiding/GetProvider');
+    return this.httpService.postJson({ matchId }, 'api/AddRequest/GetProvider');
   }
 }

@@ -26,62 +26,61 @@ export class AddRequestApiService {
 
   /* istanbul ignore next */
   async addRequest(query: AddRequestQuery): Promise<Result<AddRequestResultModel>> {
-    return this.httpService.postJson<AddRequestQuery, Result<AddRequestResultModel>>(query,
-        'TicketVoidingSystem/AddRequest/AddRequest');
+    return this.httpService.postJson<AddRequestQuery, Result<AddRequestResultModel>>(query, 'api/AddRequest/AddRequest');
   }
 
   /* istanbul ignore next */
   async editRequest(query: AddRequestQuery): Promise<Result<AddRequestResultModel>> {
-      return this.httpService.postJson<AddRequestQuery, Result<AddRequestResultModel>>(query, 'TicketVoidingSystem/ManageRequest/UpdateRequest');
+    return this.httpService.postJson<AddRequestQuery, Result<AddRequestResultModel>>(query, 'api/ManageRequest/UpdateRequest');
   }
 
   /* istanbul ignore next */
   async getWrongScores(matchId: number): Promise<WrongScoreModel[]> {
-    return this.httpService.postJson<{ matchId: number }, WrongScoreModel[]>({ matchId: matchId }, 'TicketVoiding/GetWrongScoreInfo');
+    return this.httpService.postJson<{ matchId: number }, WrongScoreModel[]>({ matchId: matchId }, 'api/AddRequest/GetWrongScoreInfo');
   }
 
   /* istanbul ignore next */
   async getLastTimeScore(query: LastTimeScoreQuery): Promise<LastTimeScore> {
-    return this.httpService.postJson<LastTimeScoreQuery, LastTimeScore>(query, 'TicketVoiding/GetLastTimeScore');
+    return this.httpService.postJson<LastTimeScoreQuery, LastTimeScore>(query, 'api/AddRequest/GetLastTimeScore');
   }
 
   /* istanbul ignore next */
   async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
-    return this.httpService.postJson<GetChildMatchQuery, ChildMatchModel[]>(query, 'TicketVoiding/GetChildMatches');
+    return this.httpService.postJson<GetChildMatchQuery, ChildMatchModel[]>(query, 'api/AddRequest/GetChildMatches');
   }
 
   /* istanbul ignore next */
   async getSubIssueTypeLinkMatch(query: SubIssueTypeLinkMatchQuery): Promise<SubIssueTypeLinkMatch[]> {
-    return this.httpService.postJson<SubIssueTypeLinkMatchQuery, SubIssueTypeLinkMatch[]>(query, 'TicketVoiding/GetSubIssueTypeLinkMatch');
+    return this.httpService.postJson<SubIssueTypeLinkMatchQuery, SubIssueTypeLinkMatch[]>(query, 'api/AddRequest/GetSubIssueTypeLinkMatch');
   }
 
   /* istanbul ignore next */
   async checkTickets14(query: CheckTicket14Query): Promise<CheckTickets14Result> {
-    return this.httpService.postJson<CheckTicket14Query, CheckTickets14Result>(query, 'TicketVoiding/CheckTickets14');
+    return this.httpService.postJson<CheckTicket14Query, CheckTickets14Result>(query, 'api/AddRequest/CheckTickets14');
   }
 
   /* istanbul ignore next */
   async checkValidTransIdsForAbnormalBet(query: CheckTransIdsQuery): Promise<CheckTransIdsViewModel> {
-    return this.httpService.postJson<CheckTransIdsQuery, CheckTransIdsViewModel>(query, 'TicketVoiding/CheckValidTransIdsRequest');
+    return this.httpService.postJson<CheckTransIdsQuery, CheckTransIdsViewModel>(query, 'api/AddRequest/CheckValidTransIdsRequest');
   }
 
   /* istanbul ignore next */
   async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckUsernamesViewModel> {
-    return this.httpService.postJson<CheckValidUsernamesQuery, CheckUsernamesViewModel>(query, 'TicketVoiding/CheckValidUsernames');
+    return this.httpService.postJson<CheckValidUsernamesQuery, CheckUsernamesViewModel>(query, 'api/AddRequest/CheckValidUsernames');
   }
 
-   /* istanbul ignore next */
-   async getPoolHouseTickets(query: GetPoolHouseTicketQuery): Promise<PoolHouseTicketViewModel> {
-    return this.httpService.postJson<GetPoolHouseTicketQuery, PoolHouseTicketViewModel>(query, 'TicketVoiding/GetPoolHouseTickets');
+  /* istanbul ignore next */
+  async getPoolHouseTickets(query: GetPoolHouseTicketQuery): Promise<PoolHouseTicketViewModel> {
+    return this.httpService.postJson<GetPoolHouseTicketQuery, PoolHouseTicketViewModel>(query, 'api/AddRequest/GetPoolHouseTickets');
   }
 
   /* istanbul ignore next */
   async getLinkedLogs(query: GetLinkedLogQuery): Promise<LinkedLogsViewModel> {
-    return this.httpService.postJson<GetLinkedLogQuery, LinkedLogsViewModel>(query, 'TicketVoiding/GetLinkedLog');
+    return this.httpService.postJson<GetLinkedLogQuery, LinkedLogsViewModel>(query, 'api/AddRequest/GetLinkedLog');
   }
 
   /* istanbul ignore next */
   async getReducedOverBetTypes(matchId: number): Promise<ReducedOverBetType[]> {
-    return this.httpService.postJson<{matchId: number}, ReducedOverBetType[]>({matchId: matchId}, 'TicketVoiding/GetReducedOverBetTypes');
+    return this.httpService.postJson<{ matchId: number }, ReducedOverBetType[]>({ matchId: matchId }, 'api/AddRequest/GetReducedOverBetTypes');
   }
 }
