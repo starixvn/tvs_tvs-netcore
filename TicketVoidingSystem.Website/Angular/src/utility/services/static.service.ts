@@ -89,6 +89,9 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.REDUCED_OVER;
   }
 
+  static isDuplicateTickets(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.DUPLICATE_TICKETS;
+  }
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);

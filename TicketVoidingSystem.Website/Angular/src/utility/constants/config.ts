@@ -420,4 +420,9 @@ export class ActionVoidByIssueTypeConst {
   static readonly ARCHIVED_TICKET: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID
   ];
+  static readonly DUPLICATE_TICKETS: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
 }

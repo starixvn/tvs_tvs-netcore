@@ -427,7 +427,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isShowOthersFullFields(): boolean {
-    return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType()
+    return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTicketsMixParlay()
       && !this.isWrongHDP() && !this.isWrong1stHDP() && !this.isWrongOU() && !this.isWrong1stOU() && !this.isWrongOdds() && !this.isReducedOver();
   }
 
@@ -503,5 +503,13 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isReducedOver(): boolean {
     return StaticService.isReducedOver(this.model.filter.issueTypeId);
+  }
+
+  isDuplicateTickets(): boolean {
+    return StaticService.isDuplicateTickets(this.model.filter.issueTypeId);
+  }
+
+  isDuplicateTicketsMixParlay(): boolean {
+    return StaticService.isDuplicateTickets(this.model.filter.issueTypeId) && this.abnormalFilterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 }

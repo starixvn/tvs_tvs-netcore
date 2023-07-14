@@ -224,7 +224,8 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_SCORE]: { issueType: 180, subIssueType: 380, action: 150, sport: 150 },
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
-      [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 170, sport: 150 }
+      [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 170, sport: 150 },
+      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170, sport: 150 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -250,7 +251,8 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.RED_CARD]: ActionVoidByIssueTypeConst.RED_CARD,
       [IssueTypeConstant.ABNORMAL_ACCOUNT]: ActionVoidByIssueTypeConst.ABNORMAL_ACCOUNT,
       [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: ActionVoidByIssueTypeConst.ABNORMAL_BET_REAL_MEMBER,
-      [IssueTypeConstant.ARCHIVED_TICKET]: ActionVoidByIssueTypeConst.ARCHIVED_TICKET
+      [IssueTypeConstant.ARCHIVED_TICKET]: ActionVoidByIssueTypeConst.ARCHIVED_TICKET,
+      [IssueTypeConstant.DUPLICATE_TICKETS]: ActionVoidByIssueTypeConst.DUPLICATE_TICKETS,
     };
 
     if (this.issueTypes.issueId in issueActionMapping) {
@@ -398,6 +400,10 @@ export class FilterComponent implements OnInit, OnChanges {
     return StaticService.isReducedOver(this.issueTypes.issueId?.toString());
   }
 
+  isDuplicateTickets(): boolean {
+    return StaticService.isDuplicateTickets(this.issueTypes.issueId?.toString());
+  }
+
   haveAbnormalBetFromPermission(): boolean {
     return _.findIndex(this.issueTypesPermission, function (o) {
       return StaticService.isAbnormalBet(o.issueTypeId.toString());
@@ -467,10 +473,10 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   public isShowSportType(): boolean {
-    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket();
+    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets();
   }
 
   public isShowEventDate(): boolean {
-    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket();
+    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets();
   }
 }

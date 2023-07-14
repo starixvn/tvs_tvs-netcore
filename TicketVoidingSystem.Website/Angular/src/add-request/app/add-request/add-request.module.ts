@@ -29,6 +29,7 @@ import { LeagueEventAbnormalComponent } from './event-abnormal-bet/league-event-
 import { OthersAbnormalMixParlayComponent } from './event-abnormal-bet/others-abnormal-mix-parlay/others-abnormal-mix-parlay.component';
 import { ConfirmDangerAcceptedComponent } from './event-danger-accepted/confirm-danger-accepted/confirm-danger-accepted.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
+import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { TicketsListComponent } from './event-early-kick-off/tickets-list/tickets-list.component';
 import { ConfirmRedCardComponent } from './event-red-card/confirm-red-card/confirm-red-card.component';
@@ -111,6 +112,7 @@ import { OthersService } from './others/others.service';
     FilterReducedOverComponent,
     FilterReducedOverItemComponent,
     LogInfoReducedOverComponent,
+    EventDuplicateTicketsComponent,
   ],
   exports: [
     AddRequestComponent

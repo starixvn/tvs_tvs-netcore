@@ -93,4 +93,5 @@ public static class SpecialDeleteFunctionKeys
     public const string WrongScore = "WrongScore";
     public const string WrongOdds = "WrongOdds";
     public const string ReducedOver = "ReducedOver";
+    public const string DuplicateTickets = "DuplicateTickets";
 }

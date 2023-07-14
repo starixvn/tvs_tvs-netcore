@@ -130,7 +130,7 @@ describe('OthersComponent', () => {
     expect(traderSelectorBefore.items.length).toBe(1);
     expect(suspenderSelectorBefore.items.length).toBe(1);
 
-    instance.matchId = '54321';
+    instance.matchId = 54321;
     const changes = {
       'matchId': new SimpleChange('12345', '54321', true),
     };

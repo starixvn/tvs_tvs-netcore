@@ -1,0 +1,13 @@
+::ng-deep bet-ids label {
+  margin-bottom: 0;
+}
+
+:host::ng-deep league-event .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: #e9ecef !important;
+}
+
+.header-bet-id {
+  height: 31px;
+  display: flex;
+  align-items: center;
+}

@@ -86,6 +86,11 @@ public static class IssueTypeFunctionKeysConstant
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.ReducedOver,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.ReducedOver, IssueTypeName = "Reduced Over" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.DuplicateTickets,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.DuplicateTickets, IssueTypeName = "Duplicate Tickets" }
                     }
                 };
 
