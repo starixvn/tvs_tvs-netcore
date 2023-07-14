@@ -16,6 +16,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 public class GroupVoidSettledBetServiceTests
 {
     private readonly LetstalkSingleMessageService letstalkSingleMessageService;
+    private readonly LoggingService loggingService;
     private readonly MessageContentSingleService messageContentSingleService;
     private readonly MessageContentWithMemberTemplateService messageContentWithMemberTemplateService;
     private readonly GroupVoidSettledBetServiceImp service;
@@ -23,7 +24,7 @@ public class GroupVoidSettledBetServiceTests
     public GroupVoidSettledBetServiceTests()
     {
         letstalkSingleMessageService = Substitute.For<LetstalkSingleMessageService>();
-        var loggingService = Substitute.For<LoggingService>();
+        loggingService = Substitute.For<LoggingService>();
         messageContentSingleService = Substitute.For<MessageContentSingleService>();
         messageContentWithMemberTemplateService = Substitute.For<MessageContentWithMemberTemplateService>();
         service = new GroupVoidSettledBetServiceImp(letstalkSingleMessageService, loggingService,
@@ -96,19 +97,19 @@ public class GroupVoidSettledBetServiceTests
     }
 
     [Fact]
-    public async Task SendMessageWithTicketInfo_LetstalkModelIsNull_HasError()
+    public async Task SendMessageWithTicketInfo_HasException_HasError()
     {
         // Arrange
-        var ticketInfo = new TicketInfoForLetstalk();
+        var ticketInfo = new TicketInfoForLetstalk{ IsMemberTemplate = true};
         var tickets = new List<TicketEmailModel> { new(), new() };
-        messageContentSingleService.Create(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
-            .Returns("Single Message Content");
+        service = new GroupVoidSettledBetServiceImp(letstalkSingleMessageService, loggingService,
+            messageContentSingleService, null);
 
         // Act
         var results = await service.SendMessageWithTicketInfo(null, ticketInfo, tickets);
         var result = results.ToList()[0];
 
-        // Assert          
+        // Assert
         Assert.Equal(ErrorCode.SendLetstalkFail, result.ErrorCode);
     }
 }

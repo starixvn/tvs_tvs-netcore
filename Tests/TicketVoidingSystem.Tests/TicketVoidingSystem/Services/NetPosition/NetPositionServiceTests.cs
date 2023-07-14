@@ -2,8 +2,6 @@
 using NSubstitute;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Criteria;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.NetPosition;
 using Xunit;
 
@@ -11,64 +9,82 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition
 {
     public class NetPositionServiceTests
     {
-        private readonly NetPositionHttpClientService netPositionHttpClientService;
         private readonly IDynamicRepository repository;
-        private readonly NetPositionServiceImp service;
+        private NetPositionServiceImp service;
 
         public NetPositionServiceTests()
         {
-            netPositionHttpClientService = Substitute.For<NetPositionHttpClientService>();
-            var sessionService = Substitute.For<SessionService>();
             repository = Substitute.For<IDynamicRepository>();
-            service = new NetPositionServiceImp(netPositionHttpClientService, sessionService, repository);
+            service = new NetPositionServiceImp(repository);
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public async Task UpdateNetPosition_HasTransIds_HasCalledPostRequest(int errorCode)
+        [Fact]
+        public async Task UpdateNetPosition_HasTransIds_HasCalledPostRequest()
         {
             // Arrange
-            const string transIds = "12345";
-            const string action = "update";
-            
-            netPositionHttpClientService.PostRequest(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(new Result{ ErrorCode = errorCode, ErrorMsg = "123" });
-
             // Act
-            _ = await service.UpdateNetPosition(transIds, action);
+            var result = await service.UpdateNetPosition("123", "VOID");
 
             // Assert
-            await netPositionHttpClientService.Received(1).PostRequest(Arg.Any<string>(), Arg.Any<string>());         
+            await repository.Received(1).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
+            Assert.True(result);
         }
 
         [Fact]
         public async Task UpdateNetPosition_WithEmptyTransIds_ReturnsTrue()
         {
             // Arrange
-            const string transIds = "";
-            const string action = "update";
-
             // Act
-            var result = await service.UpdateNetPosition(transIds, action);
+            var result = await service.UpdateNetPosition("", "VOID");
 
             // Assert
             Assert.True(result);
         }
 
         [Fact]
-        public async Task RollBackNetPosition_WithValidTransIds_CallsRepositoryExecuteAsync()
+        public async Task UpdateNetPosition_WithNullTransIds_ReturnsTrue()
         {
             // Arrange
-            const string transIds = "12345";
-            const string action = "rollback";
-            const string message = "Rollback message";
-            
             // Act
-            await service.RollBackNetPosition(transIds, action, message);
+            var result = await service.UpdateNetPosition(null, "VOID");
 
             // Assert
-            await repository.Received(1).ExecuteAsync(Arg.Any<RollBackNetPositionCriteria>());
+            Assert.True(result);
         }
 
+        [Fact]
+        public async Task UpdateNetPosition_HasException_ReturnsFalse()
+        {
+            // Arrange
+            service = new NetPositionServiceImp(null);
+
+            // Act
+            var result = await service.UpdateNetPosition("1234", "VOID");
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task RollBackNetPosition_WithInValidTransIds_NotCalledRepositoryExecuteAsync()
+        {
+            // Arrange
+            // Act
+            await service.RollBackNetPosition("");
+
+            // Assert
+            await repository.Received(0).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
+        }
+
+        [Fact]
+        public async Task RollBackNetPosition_WithValidTransIds_CalledRepositoryExecuteAsync()
+        {
+            // Arrange
+            // Act
+            await service.RollBackNetPosition("1234");
+
+            // Assert
+            await repository.Received(1).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
+        }
     }
 }
