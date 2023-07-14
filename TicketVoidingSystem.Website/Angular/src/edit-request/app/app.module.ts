@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ToastrModule } from 'ngx-toastr';
 import { AddRequestModule } from '../../add-request/app/add-request/add-request.module';
 import { DateTimeModule } from '../../utility/components/date-time/date-time.module';
 import { BlockFullUiModule } from './../../utility/components/block-full-ui/block-full-ui.module';
@@ -29,7 +30,8 @@ import { AppComponent } from './app.component';
     NgbModule,
     ToolTipModule,
     UtilityModule,
-    BlockFullUiModule
+    BlockFullUiModule,
+    ToastrModule.forRoot()
   ],
   providers: [
   ],

@@ -75,4 +75,11 @@ public class Match
     public DateTime GlobalShowTime { get; set; }
 
     public int? NumberOfCorner { get; set; }
+
+    /// <summary>
+    ///  For Add Request
+    /// </summary>
+    public int MatchType { get; set; }
+
+    public int ParentId { get; set; }
 }

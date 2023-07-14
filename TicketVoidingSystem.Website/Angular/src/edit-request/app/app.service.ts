@@ -12,6 +12,6 @@ export class AppService {
   ) { }
 
   async getRequestById(id: number): Promise<RequestDetailViewModel> {
-    return this.httpService.getJson(`TicketVoidingSystem/ManageRequest/GetRequest/${id}`);
+    return this.httpService.getJson(`api/ManageRequest/GetRequest/${id}`);
   }
 }

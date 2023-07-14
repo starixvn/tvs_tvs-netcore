@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AppService } from '../../app.service';

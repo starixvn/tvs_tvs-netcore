@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment-timezone';
+import { CommonService } from 'src/utility/services/common.service';
+import { HttpService } from 'src/utility/services/http.service';
 import { TimeModel } from '../../../../utility/components/date-time/date-time/time.model';
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
-import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { LeagueEventComponent } from '../league-event/league-event.component';
 import { GetLogInfoQuery } from '../models/add-request.query';
 import { EventDetailModel } from '../models/event-detail.model';
-import { GetLogInfoViewModel } from '../models/get-log-info.model';
 import { GetTicketsQuery } from '../models/get-tickets.query';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { TableTicketsModel } from './tickets-list/table-tickets.model';
@@ -44,7 +44,8 @@ export class EventEarlyKickOffComponent implements OnInit {
   transInfoAddRequestModel: TransInfoAddRequestModel;
   constructor(
     private readonly httpService: HttpService,
-    private readonly addRequestStore: AddRequestStore,
+    private readonly commonService: CommonService,
+    private readonly addRequestStore: AddRequestStore
     ) { }
 
   async ngOnInit(): Promise<void> {
@@ -76,7 +77,8 @@ export class EventEarlyKickOffComponent implements OnInit {
     this.isShowTicket = false;
     this.warningMessageList = [];
     if (this.eventDetailModel.matchId) {
-      this.selectedMatch = await this.httpService.postJson({ matchId: this.eventDetailModel.matchId, isMatch3rd: false }, 'Match/GetInfo');
+      
+      this.selectedMatch = await this.commonService.getMatch(this.eventDetailModel.matchId, false);
     }
     await this.getKickOffTime();
   }
@@ -96,7 +98,7 @@ export class EventEarlyKickOffComponent implements OnInit {
   async getTickets() {
     this.isShowTicket = true;
     this.isBlockBetList = true;
-    const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(this.query, 'TicketVoidingSystem/VoidRequest/GetTickets');
+    const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(this.query, 'api/VoidRequest/GetTickets');
     this.isBlockBetList = false;
     this.tableTicketsModel.initData(data);
     this.paging.total = data.total;
@@ -132,7 +134,7 @@ export class EventEarlyKickOffComponent implements OnInit {
         kickOffTime: moment(this.eventDetailModel.kickOffTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
     };
     this.addRequestStore.changeBlockingUiStatus(true);
-    const viewModel = await this.httpService.postJson<GetLogInfoQuery, GetLogInfoViewModel>(getLogInfoQuery, 'TicketVoiding/GetLogInfo');
+    const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
     const logInfo = viewModel.getLogInfoModels[0];
     this.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
     this.warningMessageList = [];

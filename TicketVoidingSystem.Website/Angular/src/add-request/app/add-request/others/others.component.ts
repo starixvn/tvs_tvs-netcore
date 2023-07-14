@@ -13,8 +13,8 @@ import { OthersService } from './others.service';
 })
 export class OthersComponent implements OnChanges, OnInit {
   @Input() isEdit: boolean;
-  @Input() matchId: string;
-  @Input() parentMatchId: string = null;
+  @Input() matchId: number;
+  @Input() parentMatchId: number = null;
   @Input() issueTypeId: string;
   @Input() model = new OthersModel();
   @Output() modelChange = new EventEmitter<OthersModel>();
@@ -38,8 +38,8 @@ export class OthersComponent implements OnChanges, OnInit {
     if (changes['matchId']) {
       if (this.matchId) {
         this.addRequestStore.changeBlockingUiStatus(true);
-        this.operators = await this.othersService.getOperators(this.matchId);
-        await this.initProvider(this.isEdit, this.matchId, this.parentMatchId);
+        this.operators = await this.othersService.getOperators(this.matchId?.toString());
+        await this.initProvider(this.isEdit, this.matchId?.toString(), this.parentMatchId?.toString());
         this.addRequestStore.changeBlockingUiStatus(false);
       } else {
         this.ngOnInit();

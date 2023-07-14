@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { GetLogInfoQuery } from '../../../add-request/app/add-request/models/add-request.query';
-import { RequestDetailViewModel } from '../../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { CheckedBetType, GetPlayersQuery } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';

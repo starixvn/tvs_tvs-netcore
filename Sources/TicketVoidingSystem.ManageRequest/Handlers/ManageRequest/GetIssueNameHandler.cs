@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 

@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
 public interface ReCalculateTicketsService
 {
-    Task<IEnumerable<Result>> ReCalculateTickets(int matchId, string transIds);
+    Task<IEnumerable<Result>> Execute(int matchId, string transIds);
 }
 
 public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
@@ -24,25 +24,12 @@ public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
         this.loggingService = loggingService;
     }
 
-    public async Task<IEnumerable<Result>> ReCalculateTickets(int matchId, string transIds)
+    public async Task<IEnumerable<Result>> Execute(int matchId, string transIds)
     {
         var results = new List<Result>();
         try
         {
-            var command = new ReCalculateTicketCommand
-            {
-                MatchId = matchId,
-                TransIds = transIds,
-                UserId = sessionService.UserId,
-                Ip = sessionService.GetClientIp()
-            };
-
-            foreach (var item in SiteDbGroupConstant.ServerList)
-            {
-                command.SiteDbGroupId = item.Id;
-                await repository.ExecuteAsync(command);
-                results.Add(new Result { ErrorCode = command.ErrCode, ErrorMsg = command.ErrMsg });
-            }
+            results = (await ExecuteParallel(matchId, transIds)).ToList();
         }
         catch (Exception e)
         {
@@ -51,5 +38,25 @@ public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
         }
 
         return results;
+    }
+
+    private async Task<IEnumerable<Result>> ExecuteParallel(int matchId, string transIds)
+    {
+        var command = new ReCalculateTicketCommand
+        {
+            MatchId = matchId,
+            TransIds = transIds,
+            UserId = sessionService.UserId,
+            Ip = sessionService.GetClientIp()
+        };
+
+        var tasks = SiteDbGroupConstant.ServerList.Select(async item =>
+        {
+            command.SiteDbGroupId = item.Id;
+            await repository.ExecuteAsync(command);
+            return new Result { ErrorCode = command.ErrCode, ErrorMsg = command.ErrMsg };
+        });
+
+        return await Task.WhenAll(tasks);
     }
 }

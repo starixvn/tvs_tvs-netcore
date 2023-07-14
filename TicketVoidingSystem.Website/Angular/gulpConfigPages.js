@@ -101,15 +101,43 @@ const manageRequest = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/manage-request',
   indexEJSPath: './src/manage-request/index.ejs'
 };
+
+const addRequest = {
+  pageName: 'AddRequest',
+  tsconfigFiles: [
+    'add-request/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/ticket-voiding-system/add-request/',
+  index: 'src/add-request/index.cshtml',
+  main: 'src/add-request/main.ts',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/add-request',
+  indexEJSPath: './src/add-request/index.ejs'
+};
+
+const editRequest = {
+  pageName: 'EditRequest',
+  tsconfigFiles: [
+    'edit-request/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/ticket-voiding-system/edit-request/',
+  index: 'src/edit-request/index.cshtml',
+  main: 'src/edit-request/main.ts',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/edit-request',
+  indexEJSPath: './src/edit-request/index.ejs'
+};
 const configPages = [
-  homePage,
-  manageVoidServices,
-  abExceptionList,
-  markTickets,
-  ticketListing,
-  voidSingleBet,
-  voidRequest,
-  manageRequest
+  // homePage,
+  // manageVoidServices,
+  // abExceptionList,
+  // markTickets,
+  // ticketListing,
+  // voidSingleBet,
+   voidRequest,
+  // manageRequest,
+  addRequest,
+  //editRequest
 ];
 
 module.exports = configPages;

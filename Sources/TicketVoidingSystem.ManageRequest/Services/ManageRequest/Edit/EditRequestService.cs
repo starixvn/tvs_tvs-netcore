@@ -61,7 +61,7 @@ public class EditRequestServiceImp : EditRequestService
         if (!string.IsNullOrWhiteSpace(query.RemoveTransIds) && query.IsConfirmCalculator &&
             (query.IssueTypeId.IsAbnormalBet() || query.IssueTypeId.IsAbnormalBetRealMember()))
         {
-            reCalcTicketsAbnormalResults = await reCalculateTicketsService.ReCalculateTickets(query.MatchId, query.RemoveTransIds);
+            reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(query.MatchId, query.RemoveTransIds);
         }
 
         return reCalcTicketsAbnormalResults.All(x => x.IsSuccessful)

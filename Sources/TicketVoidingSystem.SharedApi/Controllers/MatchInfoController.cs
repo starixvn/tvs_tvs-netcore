@@ -19,6 +19,9 @@ public class MatchInfoController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetInfo(GetMatchInfoRequest request) => Ok(await mediator.Send(request));
 
+    [HttpPost]
+    public async Task<IActionResult> GetInfoForAddRequest(GetMatchInfoForAddRequest request) => Ok(await mediator.Send(request));
+
     [HttpGet]
     [Route("{matchId:int}")]
     public async Task<IActionResult> GetFirstTimeAndKickOffTime(int matchId) => Ok(await mediator.Send(new GetFirstTimeAndKickOffTimeRequest { MatchId = matchId }));

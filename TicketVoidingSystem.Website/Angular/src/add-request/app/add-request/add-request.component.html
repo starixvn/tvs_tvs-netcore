@@ -162,8 +162,8 @@
     <others *ngIf="isShowOthersFullFields()"
       [isEdit]="isEdit"
       [(model)]="model.others"
-      [matchId]="'{{matchId}}'"
-      [parentMatchId]="'{{parentMatchId}}'"
+      [matchId]="matchId"
+      [parentMatchId]="parentMatchId"
       [issueTypeId]="model.filter.issueTypeId">
     </others>
     <abnormal-accounts-other *ngIf="isAbnormalAccount()"

@@ -18,9 +18,6 @@ public class AddRequestController : ControllerBase
         this.mediator = mediator;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetIssueTypes() => Ok(await mediator.Send(new GetIssueTypesRequest()));
-
     [HttpPost]
     public async Task<IActionResult> GetLogInfo(GetLogInfoRequest request) => Ok(await mediator.Send(request));
 
