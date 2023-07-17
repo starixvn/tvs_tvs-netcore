@@ -79,6 +79,8 @@ public class Match
     /// <summary>
     ///  For Add Request
     /// </summary>
+    public string Name { get; set; }
+
     public int MatchType { get; set; }
 
     public int ParentId { get; set; }
