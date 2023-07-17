@@ -70,4 +70,5 @@ public class Match
     public string SportTypeNameNewSimplified { get; set; }
 
     public string SportTypeNameTraditional { get; set; }
+    public int? NumberOfCorner { get; set; }
 }
