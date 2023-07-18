@@ -113,8 +113,8 @@ export class EventAbnormalBetComponent implements OnInit {
     this.isCancelAfterFocusOutBetIdsEvent = false;
 
     const validation = await this.checkValidBusinessRule(false);
-    this.confirmAbnormalBetModel = validation.warningModel;
     if (validation.isValid) {
+      this.confirmAbnormalBetModel = validation.warningModel;
       await this.checkIfRequestHasWarning(validation.warningModel);
     } else {
       this.addRequestStore.changeSavingRequestStatus(false);
