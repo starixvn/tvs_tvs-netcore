@@ -289,10 +289,12 @@ export class SiteDbGroupConstant {
   static readonly CentralDb = 0;
   static readonly SiteDb1 = 1;
   static readonly SiteDb2 = 2;
+  static readonly SiteDb3 = 3;
 
   static readonly ServerList: SiteDbGroupModel[] = [
     { id: SiteDbGroupConstant.CentralDb, serverName: 'CentralDb' },
     { id: SiteDbGroupConstant.SiteDb1, serverName: 'SiteDb1' },
     { id: SiteDbGroupConstant.SiteDb2, serverName: 'SiteDb2' },
+    { id: SiteDbGroupConstant.SiteDb3, serverName: 'SiteDb3' }
   ];
 }
