@@ -6,6 +6,7 @@ import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-ty
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
+import { OrdinalNumberConstant } from './../../../constants/ordinal-number.constant';
 import { MessagesComponent } from './../messages/messages.component';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
 import { Format, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace } from './template.const';
@@ -123,6 +124,7 @@ export class TemplateMessageComponent implements OnChanges {
       templateId = this.findTemplateId(this.subIssueTypeId, this.value.sportTypeId, this.value.isCheckedVar);
     }
     this.selectedTemplated = this.templates.find(x => x.templateId === templateId);
+    this.updateInputsNextCorner();
     this.updateMessage();
   }
 
@@ -243,6 +245,18 @@ export class TemplateMessageComponent implements OnChanges {
           };
           this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
         });
+      }
+    }
+  }
+
+  updateInputsNextCorner() {
+    for(const element of this.selectedTemplated.inputTexts){
+      if (this.issueTypeId === IssueTypeId.DANGER_ACCEPTED && this.value.numberOfCorner && element.msgEnglish === "Next Corner"){
+        const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === this.value.numberOfCorner.toString());
+        element.msgEnglishValue = nextCorner.englishValue;
+        element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;
+        element.msgChineseSimplifiedValue = `第${nextCorner.chineseSimplifiedValue}`;
+        element.msgChineseNewSimplifiedValue = `第${nextCorner.chineseSimplifiedValue}`;
       }
     }
   }
