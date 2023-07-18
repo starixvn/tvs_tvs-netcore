@@ -41,7 +41,7 @@ public class NetPositionForCricketServiceImp : NetPositionForCricketService
     {
         if (voidResult.IsNeedToRollBackNetPosition)
         {
-            await netPositionService.RollBackNetPosition(transIdCrickets, NetPositionConstant.ActionVoid, voidResult.Validation.ErrorMsg);
+            await netPositionService.RollBackNetPosition(transIdCrickets);
         }
     }
 }
