@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
@@ -30,7 +31,8 @@ public class TicketsViewModelServiceTests
                 IsCancelCashOut = false,
                 GroupName = "(instant settlement)",
                 MatchId = 1,
-                SiteDbGroupId = 1
+                SiteDbGroupId = 1,
+                Status = TicketStatus.Draw
             },
             new()
             {
@@ -40,8 +42,8 @@ public class TicketsViewModelServiceTests
                 IsCancelCashOut = false,
                 GroupName = "(instant settlement)",
                 MatchId = 2,
-                SiteDbGroupId = 2
-
+                SiteDbGroupId = 2,
+                SubStatus = TicketStatus.Draw
             },
             new()
             {
@@ -49,8 +51,8 @@ public class TicketsViewModelServiceTests
                 IsCricket = true,
                 GroupName = "(instant settlement)",
                 MatchId = 2,
-                SiteDbGroupId = 2
-
+                SiteDbGroupId = 2,
+                Status = TicketStatus.Draw
             },
             new()
             {
@@ -58,8 +60,8 @@ public class TicketsViewModelServiceTests
                 IsCancelCashOut = true,
                 GroupName = "(instant settlement)",
                 MatchId = 2,
-                SiteDbGroupId = 2
-
+                SiteDbGroupId = 2,
+                Status = TicketStatus.Draw
             }
         };
         var model = new TicketsViewModel();
@@ -89,8 +91,9 @@ public class TicketsViewModelServiceTests
                 IsCancelCashOut = false,
                 GroupName = "phone betting",
                 MatchId = 1,
-                SiteDbGroupId = 1
-            },
+                SiteDbGroupId = 1,
+                Status = TicketStatus.Draw
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -104,7 +107,6 @@ public class TicketsViewModelServiceTests
 
         // Assert
         Assert.Equal(uncheckedTransIds.Count, model.UncheckedTransIds.Count);
-
     }
 
 
@@ -126,23 +128,22 @@ public class TicketsViewModelServiceTests
                 LicenseeName = "AB",
                 IsInstantSettlement = true,
                 IsDeposit = true,
-                IsCashOut = true
-            },
+                IsCashOut = true,
+                Status = TicketStatus.Draw
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
         {
             Settled = true
         };
-        var expectedLicenseeName = "AB";
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, 0, permission);
 
         // Assert
-        Assert.Equal(expectedLicenseeName, model.LicenseesName);
-        Assert.Equal(expectedLicenseeName, model.CashOutLicenseesName);
-
+        Assert.Equal("AB", model.LicenseesName);
+        Assert.Equal("AB", model.CashOutLicenseesName);
     }
 
     [Fact]
@@ -159,21 +160,21 @@ public class TicketsViewModelServiceTests
                 MatchId = 1,
                 SiteDbGroupId = 1,
                 BetType = 1,
-                SubBetType = 11
-            },
+                SubBetType = 11,
+                SubStatus = TicketStatus.Draw
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
         {
             Settled = true
         };
-        var expectedBetTypes = "11";
 
         // Act
         service.UpdateViewModel(model, allTickets, 0, 0, permission);
 
         // Assert
-        Assert.Equal(expectedBetTypes, model.BetTypes);
+        Assert.Equal("11", model.BetTypes);
     }
 
     [Fact]
@@ -193,6 +194,7 @@ public class TicketsViewModelServiceTests
                 SubBetType = 11,
                 TransDate = new DateTime(2022, 12, 3),
                 WinLostDate = new DateTime(2022, 12, 2),
+                SubStatus = TicketStatus.Draw
             },
             new()
             {
@@ -204,8 +206,9 @@ public class TicketsViewModelServiceTests
                 BetType = 1,
                 SubBetType = 11,
                 CheckTimeCancelCashOut = new DateTime(2022, 12, 4),
-                IsCancelCashOut = true
-            },
+                IsCancelCashOut = true,
+                SubStatus = TicketStatus.Draw
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -216,6 +219,7 @@ public class TicketsViewModelServiceTests
         var FromDate = new DateTime(2022, 12, 2).ZoneManila();
         var ToTime = new DateTime(2022, 12, 4).ZoneManila();
         var ToDate = new DateTime(2022, 12, 4).ZoneManila();
+
         // Act
         service.UpdateViewModel(model, allTickets, 0, 0, permission);
 
@@ -255,7 +259,7 @@ public class TicketsViewModelServiceTests
                 SubBetType = 11,
                 CheckTimeCancelCashOut = new DateTime(2022, 12, 5),
                 IsCancelCashOut = true
-            },
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -273,7 +277,6 @@ public class TicketsViewModelServiceTests
         Assert.Equal(MaxTime, model.ToTime);
         Assert.Equal(MinTime, model.FromDate);
         Assert.Equal(MaxTime, model.ToDate);
-
     }
 
     [Fact]
@@ -291,7 +294,8 @@ public class TicketsViewModelServiceTests
                 SiteDbGroupId = 1,
                 BetType = 1,
                 SubBetType = 11,
-                IsCancelCashOut = true
+                IsCancelCashOut = true,
+                SubStatus = TicketStatus.Won
             },
             new()
             {
@@ -302,8 +306,9 @@ public class TicketsViewModelServiceTests
                 SiteDbGroupId = 1,
                 BetType = 1,
                 SubBetType = 11,
-                IsCancelCashOut = false
-            },
+                IsCancelCashOut = false,
+                SubStatus = TicketStatus.Draw
+            }
         };
         var model = new TicketsViewModel();
         var permission = new VoidPermission
@@ -333,7 +338,8 @@ public class TicketsViewModelServiceTests
                 IsCancelCashOut = false,
                 GroupName = "(instant settlement)",
                 MatchId = 1,
-                SiteDbGroupId = 1
+                SiteDbGroupId = 1,
+                Status = TicketStatus.Won
             },
             new()
             {
@@ -343,8 +349,8 @@ public class TicketsViewModelServiceTests
                 IsCancelCashOut = false,
                 GroupName = "(instant settlement)",
                 MatchId = 2,
-                SiteDbGroupId = 2
-
+                SiteDbGroupId = 2,
+                Status = TicketStatus.Won
             }
         };
         var model = new TicketsViewModel();
@@ -365,9 +371,9 @@ public class TicketsViewModelServiceTests
 
     [Theory]
     [InlineData(6)] //Handicap
-    [InlineData(119)]//FirstHalfHandicap
-    [InlineData(120)]//OverUnder
-    [InlineData(121)]//FirstHalfOverUnder
+    [InlineData(119)] //FirstHalfHandicap
+    [InlineData(120)] //OverUnder
+    [InlineData(121)] //FirstHalfOverUnder
     public void UpdateViewModel_UpdateVariableForTemplateMessagesWrongOdds_ReturnTrue(int subIssueTypeId)
     {
         // Arrange
@@ -384,7 +390,8 @@ public class TicketsViewModelServiceTests
                 SiteDbGroupId = 1,
                 IsLiveIndicator = true,
                 BetType = 2,
-                SubBetType = 2
+                SubBetType = 2,
+                Status = TicketStatus.Won
             }
         };
         var model = new TicketsViewModel();
@@ -418,7 +425,8 @@ public class TicketsViewModelServiceTests
                 SiteDbGroupId = 1,
                 IsLiveIndicator = true,
                 BetType = 2,
-                SubBetType = 2
+                SubBetType = 2,
+                Status = TicketStatus.Draw
             }
         };
         var model = new TicketsViewModel();

@@ -51,7 +51,7 @@ export class TicketListComponent implements OnInit, OnChanges {
         this.match = await this.commonService.getMatch(this.modal.matchId);
       }
       this.isBlock = false;
-      this.issue = await this.commonService.getIssueInfo(this.getSubIssueTypeId());
+      this.issue = await this.commonService.getIssueInfo(StaticService.getSubIssueTypeId(this.requestDetail));
       this.paging = new PagingModel();
       this.paging.pageSize = 500;
       await this.getGeneralInfo();
@@ -190,7 +190,11 @@ export class TicketListComponent implements OnInit, OnChanges {
   }
 
   private isWrongOdds(): boolean {
-    return this.requestDetail.request?.issueTypeId ? StaticService.isWrongOdds(this.requestDetail.request.issueTypeId.toString()) : false;
+    return StaticService.isWrongOdds(this.requestDetail.request.issueTypeId?.toString());
+  }
+
+  private isReducedOver(): boolean {
+    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId?.toString());
   }
 
   private isArchivedTicketIssueType(): boolean {
@@ -199,23 +203,5 @@ export class TicketListComponent implements OnInit, OnChanges {
     }
 
     return false;
-  }
-
-  private getSubIssueTypeId(): number {
-    if (this.isDangerAcceptedIssueType()) {
-      return this.requestDetail.dangerAcceptedModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
-    } else if (this.isRedCardIssueType()) {
-      return this.requestDetail.redCardModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
-    } else if (this.isWrongScoreIssueType()) {
-      return this.requestDetail.wrongScoreModels[0].subIssueTypeId;
-    } else if (this.isWrongHDP() || this.isWrong1stHDP()) {
-      return this.requestDetail.wrongHdpModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
-    } else if (this.isWrongOU() || this.isWrong1stOU()) {
-      return this.requestDetail.wrongOuModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
-    } else if (this.isWrongOdds()) {
-      return this.requestDetail.wrongOddsModels.find(x => x.matchId === this.modal.matchId).subIssueTypeId;
-    } else {
-      return this.requestDetail.event.subIssueTypeId;
-    }
   }
 }

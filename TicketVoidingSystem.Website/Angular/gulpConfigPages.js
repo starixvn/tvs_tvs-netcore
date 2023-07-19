@@ -102,13 +102,13 @@ const manageRequest = {
   indexEJSPath: './src/manage-request/index.ejs'
 };
 const configPages = [
-  //  homePage,
-  //  manageVoidServices,
-  //  abExceptionList,
-    markTickets,
-  //   ticketListing,
-  //   voidSingleBet,
-  //  voidRequest,
+  // homePage,
+  // manageVoidServices,
+  // abExceptionList,
+  // markTickets,
+  // ticketListing,
+  // voidSingleBet,
+  voidRequest,
   // manageRequest
 ];
 

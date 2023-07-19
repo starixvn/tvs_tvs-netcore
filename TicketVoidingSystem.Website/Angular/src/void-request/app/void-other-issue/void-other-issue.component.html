@@ -19,7 +19,7 @@
     <div class="d-flex">
         <tickets-list *ngIf="isShowTicket" [model]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
         (exportExcelEvent)="exportExcel()" [isBlock]="isBlockBetList" (ticketsChange)="ticketsChange()"
-        [issueTypeId]="issue.issueTypeId">
+        [issueTypeId]="issue.issueTypeId" [isDisableCheckbox]="isReducedOver()">
         </tickets-list>
 
         <div class="affected-licensees" *ngIf="isShowAffectedLicenseeArea()">

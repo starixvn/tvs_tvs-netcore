@@ -12,9 +12,8 @@ namespace TicketVoidingSystem.Tests.ManageVoidServices.Handlers;
 
 public class GetTicketVoidingQueueHandlerTests
 {
-    // Jacob thấy expectedCount là 1 thôi mà, sao ko đổi tên testcase lại
     [Fact]
-    public async Task Handle_HasRequest_ReturnExpected()
+    public async Task Handle_HasRequest_TicketVoidingQueueServiceHasCalledGetQueueInAllServers()
     {
         // Arrange
         var model = new TicketVoidingQueueModel();

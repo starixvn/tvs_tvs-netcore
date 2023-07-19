@@ -25,7 +25,7 @@ public class BetTypesServiceTests
     {
         // Arrange
         var criteria = new GetBetTypesCriteria();
-        var expected = new BetTypesViewModel { };
+        var expected = new BetTypesViewModel();
 
         repository.GetBetTypes(criteria).ReturnsForAnyArgs(expected);
 
@@ -38,14 +38,14 @@ public class BetTypesServiceTests
     }
 
     [Fact]
-    public async Task GetGroupBetTypes_Return_ExpectedValue()
+    public async Task GetGroupBetTypes_BetTypesIsEmpty_ExpectedValue()
     {
         // Arrange
         var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "" };
-        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new BetTypeModel() } };
+        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() } };
         var expectedResult = new GroupBetTypesViewModel
         {
-            GroupBetTypes = new List<GroupBetTypeModel> { new GroupBetTypeModel { BetTypes = new List<BetTypeModel> { new BetTypeModel() } } }
+            GroupBetTypes = new List<GroupBetTypeModel> { new() { BetTypes = new List<BetTypeModel> { new() } } }
         };
 
         repository.GetBetTypes(Arg.Any<GetBetTypesCriteria>())
@@ -55,20 +55,28 @@ public class BetTypesServiceTests
         var result = await service.GetGroupBetTypes(query);
 
         // Assert
-        Assert.NotNull(result);
         AssertExtension.Equal(expectedResult.GroupBetTypes, result.GroupBetTypes);
     }
 
-    // [Fact]
-    // public async Task GetVirtualSports_Return_ExpectedValue()
-    // {
-    //     // Arrange            
+    [Fact]
+    public async Task GetGroupBetTypes_BetTypesNotNullOrEmpty_ExpectedValue()
+    {
+        // Arrange
+        var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "1" };
+        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() } };
+        var expectedResult = new GroupBetTypesViewModel
+        {
+            GroupBetTypes = new List<GroupBetTypeModel> { new() { BetTypes = new List<BetTypeModel> { new() } } }
+        };
 
-    //     // Act
-    //     var result = service.GetVirtualSports();
+        repository.GetBetTypes(Arg.Any<GetBetTypesCriteria>())
+            .ReturnsForAnyArgs(betTypes);
+        repository.GetBetTypesHaveTickets(Arg.Any<BetTypeQueryModel>()).ReturnsForAnyArgs(new List<int> { 1 });
+        
+        // Act
+        var result = await service.GetGroupBetTypes(query);
 
-    //     // Assert
-    //     Assert.NotNull(result);
-    //     //AssertExtension.Equal(expectedResult.GroupBetTypes, result.GroupBetTypes);
-    // }
+        // Assert
+        AssertExtension.Equal(expectedResult.GroupBetTypes, result.GroupBetTypes);
+    }
 }

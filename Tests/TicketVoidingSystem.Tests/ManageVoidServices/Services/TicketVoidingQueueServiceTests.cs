@@ -9,13 +9,13 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageVoidServices.Services;
 
-public class TicketVoidingQueueServiceTests: IClassFixture<RemotingRefFixture>
+public class TicketVoidingQueueServiceTests : IClassFixture<RemotingRefFixture>
 {
     [Fact]
     public async Task GetQueueInAllServers_ExecuteSuccessful_ReturnExpected()
     {
         // Arrange
-        var models = new List<TicketVoidingQueueModel> { new TicketVoidingQueueModel() };
+        var models = new List<TicketVoidingQueueModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();
         repository.FetchAsync<TicketVoidingQueueModel>(Arg.Any<GetTicketVoidingQueueCriteria>())
             .ReturnsForAnyArgs(models);

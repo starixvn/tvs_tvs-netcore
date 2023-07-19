@@ -16,7 +16,6 @@ public class GetFirstTimeAndKickOffTimeHandlerTests
     private readonly IDynamicRepository repository;
     private readonly GetFirstTimeAndKickOffTimeHandler handler;
     private readonly GetFirstTimeAndKickOffTimeRequest request;
-    private readonly FirstTicketTime ticketTime;
 
     public GetFirstTimeAndKickOffTimeHandlerTests()
     {

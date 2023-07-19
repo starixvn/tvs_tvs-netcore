@@ -25,7 +25,7 @@ public class GetBetTypesHandlerTests
         var request = new GetBetTypesRequest();
         
         // Act
-        var result = await handler.Handle(request, CancellationToken.None);
+        _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         await betTypeService.Received().GetBetTypes(request);

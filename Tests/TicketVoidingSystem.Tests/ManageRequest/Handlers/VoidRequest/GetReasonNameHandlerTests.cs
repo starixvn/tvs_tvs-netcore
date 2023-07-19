@@ -33,7 +33,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
         public async Task Handler_HasSportTypeIdPositive_ReturnExpected()
         {
             // Arrange
-            var voidedReason = new VoidedReason();
             var request = new GetReasonNameRequest { SubId = 123, SportTypeId = 1 };
             var repository = Substitute.For<IDynamicRepository>();
             var betListService = Substitute.For<BetListService>();
@@ -54,7 +53,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
         public async Task Handler_HasSportTypeIdMinus_ReturnExpected()
         {
             // Arrange
-            var voidedReason = new VoidedReason();
             var request = new GetReasonNameRequest { SubId = 123, SportTypeId = -1 };
             var repository = Substitute.For<IDynamicRepository>();
             var betListService = Substitute.For<BetListService>();

@@ -45,7 +45,8 @@ class Helper {
     redCardModels: [],
     wrongHdpModels: [],
     wrongOuModels: [],
-    wrongOddsModels: []
+    wrongOddsModels: [],
+    reducedOverModels: []
   };
 }
 
@@ -67,7 +68,7 @@ describe('AppComponent', () => {
   let shallow: Shallow<AppComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(AppComponent, AppModuleTest)    
+    shallow = new Shallow(AppComponent, AppModuleTest)
     .mock(SignalRService, { initializeConnection: jest.fn()});
   });
 
@@ -77,7 +78,7 @@ describe('AppComponent', () => {
 
     expect(fixture).toMatchSnapshot();
   });
-  
+
   it('ngOnInit should called expected', async () => {
     const mockGetRemark = jest.fn();
     const mockGetRequestById = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeRequestDetailViewModel));
@@ -102,7 +103,7 @@ describe('AppComponent', () => {
     expect(mockGetLastModifiedDate).toHaveBeenCalled();
     expect(mockInitializeConnection).toHaveBeenCalled();
   });
-  
+
   it('isApplyVoidNewDesign should be return false', async () => {
     const { instance } = await shallow.render();
     instance.requestDetail = Helper.fakeRequestDetailViewModel;
@@ -112,7 +113,7 @@ describe('AppComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('isApplyVoidNewDesign should be return false', async () => {
     const { instance } = await shallow.render();
     instance.requestDetail = Helper.fakeRequestDetailViewModel;

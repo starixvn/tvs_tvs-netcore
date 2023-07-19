@@ -32,13 +32,18 @@ exports[`TicketListComponent TicketListComponent should init match snapshot 1`] 
                   Delete Bet Check (Request ID: 52000)
                 </strong>
               </div>
-              <div
-                class="modal-control"
+              <button
+                aria-label="Close"
+                class="close"
+                data-dismiss="modal"
+                type="button"
               >
-                <em
-                  class="fa fa-times pointer"
-                />
-              </div>
+                <span
+                  aria-hidden="true"
+                >
+                  ×
+                </span>
+              </button>
             </div>
             <div
               class="modal-body"

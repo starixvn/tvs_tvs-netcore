@@ -57,9 +57,8 @@ public class MapTicketsServiceTests
         var result = mapTicketsService.MapToGroupVoidedTickets(originalTickets, query);
 
         // Assert
-        // Assert
-        Assert.NotEmpty(result);
-        Assert.Equal(1, result.Count());
+        var iEnumerable = result.ToList();
+        Assert.Single(iEnumerable);
     }
 
     [Fact]

@@ -1,3 +1,4 @@
+import { ReducedOverGetLogInfoQuery } from '../event-reduced-over/models/get-log-info.query';
 import { WrongHdpGetLogInfoQuery } from '../event-wrong-hdp/models/get-log-info.query';
 import { WrongOddsGetLogInfoQuery } from '../event-wrong-odds/models/get-log-info.query';
 import { WrongOuGetLogInfoQuery } from '../event-wrong-ou/models/get-log-info.query';
@@ -73,4 +74,5 @@ export class GetLogInfoQuery {
   wrongOuModels?: WrongOuGetLogInfoQuery[];
   wrong1stOuModels?: WrongOuGetLogInfoQuery[];
   wrongOddsModels?: WrongOddsGetLogInfoQuery[];
+  reducedOverModels?: ReducedOverGetLogInfoQuery[];
 }

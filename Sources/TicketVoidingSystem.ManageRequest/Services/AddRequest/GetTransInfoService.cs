@@ -101,6 +101,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.WrongOddsInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.ReducedOver:
+                criteria.ReducedOverInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
@@ -193,6 +197,9 @@ public class GetTransInfoServiceImp : GetTransInfoService
 
             case IssueTypeConstant.WrongOdds:
                 return query.WrongOddsModels.ToWrongOddsInfoXml();
+
+            case IssueTypeConstant.ReducedOver:
+                return query.ReducedOverModels.ToReducedOverInfoXml();
 
             default:
                 return "";

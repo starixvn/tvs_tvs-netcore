@@ -23,10 +23,10 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var repository = new GetTicketsServiceImp(dynamicRepository, TestSetup.CreateMapper(), mapTicketService);
 
         // Act
-        var actual = await repository.GetTickets(query);
+        await repository.GetTickets(query);
 
         // Assert
-        dynamicRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
+        await dynamicRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var repository = new GetTicketsServiceImp(dynamicRepository, TestSetup.CreateMapper(), mapTicketService);
 
         // Act
-        var actual = await repository.GetTicketsForExportExcel(query);
+        await repository.GetTicketsForExportExcel(query);
 
         // Assert
         await dynamicRepository.Received().FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>());

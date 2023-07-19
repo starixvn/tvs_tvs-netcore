@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -87,7 +88,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
     {
         Html = "<div><span class='combo-name'>13-Fold (1 Bet)</span></div>" +
                "<div class=''><span class='favorite'>Over<span class='handicap'> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "13-Fold (1 Bet)\r\nOver 3 @ 1.82"
+        Expected = $"13-Fold (1 Bet){Environment.NewLine}Over 3 @ 1.82"
     };
 
     private static readonly ChoiceModel ParlayTicketTwoComboName = new()
@@ -95,7 +96,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
         Html = "<div><span class='combo-name'>Doubles (10 Bets)</span></div>" +
                "<div><span class='combo-name'>5-Fold (1 Bet)</span></div>" +
                "<div class=''><span class='favorite'>FT.1<span class='handicap'><span class='odds'> @ 1.74</span></span></span></div>",
-        Expected = "Doubles (10 Bets)\r\n5-Fold (1 Bet)\r\nFT.1 @ 1.74"
+        Expected = $"Doubles (10 Bets){Environment.NewLine}5-Fold (1 Bet){Environment.NewLine}FT.1 @ 1.74"
     };
 
     private static readonly ChoiceModel AosTicket = new()
@@ -104,7 +105,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
                "<span class='favorite'>AOS<span class='handicap'> 3<span class='odds'> @ 1.82</span></span></span>" +
                "<span>Excluding: 1-0,2-0</span>" +
                "</div>",
-        Expected = "AOS 3 @ 1.82\r\nExcluding: 1-0,2-0"
+        Expected = $"AOS 3 @ 1.82{Environment.NewLine}Excluding: 1-0,2-0"
     };
 
     private static readonly ChoiceModel Lucky3 = new()
@@ -113,21 +114,21 @@ public class ChoiceTestCase : IEnumerable<object[]>
                "<span class='lucky3'>02, 08, 21" +
                "<span class='handicap'>Combination x UUS 1" +
                "<div class='num-of-bets'>1 Bet</div></span></span></div>",
-        Expected = "02, 08, 21\r\nCombination x UUS 1\r\n1 Bet"
+        Expected = $"02, 08, 21{Environment.NewLine}Combination x UUS 1{Environment.NewLine}1 Bet"
     };
 
     private static readonly ChoiceModel ChoiceSingleMatchParlay = new()
     {
         Html = "<div><span class='combinationLink'>13-Fold (1 Bet)</span></div>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "Over 3 @ 1.82\r\na1\r\na2 - won\r\na1\r\n"
+        Expected = $"Over 3 @ 1.82{Environment.NewLine}a1{Environment.NewLine}a2 - won{Environment.NewLine}a1{Environment.NewLine}"
     };
 
     private static readonly ChoiceModel BetType = new()
     {
         Html = "<div class='bettype-description'>13-Fold (1 Bet)</div>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "Over 3 @ 1.82\r\nOver 3 @ 1.82\r\n13-Fold (1 Bet)"
+        Expected = $"Over 3 @ 1.82{Environment.NewLine}Over 3 @ 1.82{Environment.NewLine}13-Fold (1 Bet)"
     };
 
     private static readonly ChoiceModel BetTypeHaveNotDescription = new()

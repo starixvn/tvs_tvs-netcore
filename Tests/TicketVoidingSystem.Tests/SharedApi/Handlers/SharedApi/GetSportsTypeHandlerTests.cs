@@ -12,8 +12,8 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 
 public class GetSportsTypeHandlerTests
 {
-    private readonly IDynamicRepository repository;
     private readonly GetSportsTypeHandler handler;
+    private readonly IDynamicRepository repository;
 
     public GetSportsTypeHandlerTests()
     {
@@ -26,8 +26,9 @@ public class GetSportsTypeHandlerTests
     {
         // Arrange
         var request = new GetSportsTypeRequest();
-        var expected = new List<SportInfo> { };
-        repository.FetchAsync<SportInfo>(new GetSportsTypeCriteria(), CancellationToken.None).ReturnsForAnyArgs(expected);
+        var expected = new List<SportInfo>();
+        repository.FetchAsync<SportInfo>(new GetSportsTypeCriteria(), CancellationToken.None)
+            .ReturnsForAnyArgs(expected);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

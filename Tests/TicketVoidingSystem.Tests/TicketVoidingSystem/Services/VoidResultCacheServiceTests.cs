@@ -5,59 +5,57 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
+
+public class VoidResultCacheServiceTests
 {
-    public class VoidResultCacheServiceTests
+    private readonly ICache cacheService;
+    private readonly VoidResultCacheServiceImp service;
+
+    public VoidResultCacheServiceTests()
     {
-        private readonly ICache cacheService;
-        private readonly VoidResultCacheServiceImp service;
+        cacheService = Substitute.For<ICache>();
+        service = new VoidResultCacheServiceImp(cacheService);
+    }
 
-        public VoidResultCacheServiceTests()
-        {
-            cacheService = Substitute.For<ICache>();
-            service = new VoidResultCacheServiceImp(cacheService);
-        }
+    [Fact]
+    public void InsertMessage_ValidData_CacheServiceCalledContainAsync()
+    {
+        // Arrange
 
-        [Fact]
-        public void InsertMessage_ValidData_CacheServiceCalledContainAsync()
-        {
-            // Arrange
-            
-            // Act
-            _ = service.IsExistVoidResult("key");
+        // Act
+        _ = service.IsExistVoidResult("key");
 
-            // Assert
-            cacheService.Received(1).ContainAsync("key");
-        }
+        // Assert
+        cacheService.Received(1).ContainAsync("key");
+    }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void GetVoidResultCache_ValidData_CacheServiceCalledTryGetAsync(bool isFound)
-        {
-            // Arrange
-            var results = new List<Result> { new Result() };
-            cacheService.TryGetAsync<IList<Result>>("key").ReturnsForAnyArgs((isFound, results));
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void GetVoidResultCache_ValidData_CacheServiceCalledTryGetAsync(bool isFound)
+    {
+        // Arrange
+        var results = new List<Result> { new() };
+        cacheService.TryGetAsync<IList<Result>>("key").ReturnsForAnyArgs((isFound, results));
 
-            // Act
-            _ = service.GetVoidResultCache("key");
+        // Act
+        _ = service.GetVoidResultCache("key");
 
-            // Assert
-            cacheService.Received(1).TryGetAsync<IList<Result>>("key");
-        }
+        // Assert
+        cacheService.Received(1).TryGetAsync<IList<Result>>("key");
+    }
 
-        [Fact]
-        public void SetVoidResultCache_ValidData_CacheServiceCalledSetAsync()
-        {
-            // Arrange
-            var results = new List<Result>();
+    [Fact]
+    public void SetVoidResultCache_ValidData_CacheServiceCalledSetAsync()
+    {
+        // Arrange
+        var results = new List<Result>();
 
-            // Act
-            _ = service.SetVoidResultCache("key", results);
+        // Act
+        _ = service.SetVoidResultCache("key", results);
 
-            // Assert
-            cacheService.Received(1).SetAsync("key", results, Arg.Any<CacheItemOptions>());
-        }
-
+        // Assert
+        cacheService.Received(1).SetAsync("key", results, Arg.Any<CacheItemOptions>());
     }
 }

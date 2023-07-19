@@ -35,10 +35,9 @@ public class MatchInfoControllerTests
     public async Task GetFirstTimeAndKickOffTime_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        var request = 123456;;
         
         // Act
-        await controller.GetFirstTimeAndKickOffTime(request);
+        await controller.GetFirstTimeAndKickOffTime(123456);
 
         // Assert
         await mediator.Received().Send(Arg.Any<GetFirstTimeAndKickOffTimeRequest>());

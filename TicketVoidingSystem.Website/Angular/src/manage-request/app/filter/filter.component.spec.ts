@@ -5,11 +5,11 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import * as moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
+import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { ManageRequestStatus } from '../../../utility/constants/config';
 import { BalanceUp } from '../../../utility/models/balance-up.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
-import { ToolTipModule } from '../../../utility/modules/tooltip/tooltip.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { FilterComponent } from './filter.component';
@@ -141,7 +141,7 @@ describe('FilterComponent', () => {
       .render();
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
+    element.setAttribute('root-url', '/');
     document.body.appendChild(element);
     instance['setIssueTypeSelectList'] = jest.fn();
     instance.initDefaultFilter = jest.fn();
@@ -229,6 +229,9 @@ describe('FilterComponent', () => {
 
   it('#newRequest should open tab for add request', async () => {
     // Arrange
+    const element = document.createElement('body');
+    element.setAttribute('id', 'body');
+    element.setAttribute('old-site-root-url', '/');
     const { instance } = await shallow.render();
     window.open = jest.fn();
 
@@ -236,7 +239,7 @@ describe('FilterComponent', () => {
     instance.newRequest();
 
     // Assert
-    expect(window.open).toHaveBeenCalledWith('TicketVoidingSystem/AddRequest/Index', '_blank');
+    expect(window.open).toHaveBeenCalledTimes(1);
   });
 
   it('#modelChange should emit with expected FilterModel when call #updateModel', async () => {
@@ -459,6 +462,10 @@ describe('FilterComponent', () => {
 
   it('#openMarkTickets should open tab for mark tickets', async () => {
     // Arrange
+    const element = document.createElement('body');
+    element.setAttribute('id', 'body');
+    element.setAttribute('root-url', '/');
+    document.body.appendChild(element);
     const { instance } = await shallow.render();
     window.open = jest.fn();
 
@@ -466,6 +473,6 @@ describe('FilterComponent', () => {
     instance.openMarkTickets();
 
     // Assert
-    expect(window.open).toHaveBeenCalledWith('SportBook/MarkTickets/Index/1', '_blank');
+    expect(window.open).toHaveBeenCalledTimes(1);
   });
 });

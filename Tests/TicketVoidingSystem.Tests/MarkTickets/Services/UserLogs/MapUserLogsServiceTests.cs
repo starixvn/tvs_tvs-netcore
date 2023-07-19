@@ -50,7 +50,7 @@ public class MapUserLogsServiceTests
             ParlayTickets = new List<string> { "100002", "100003", "100006" }
         };
 
-        var remotingRefService = NSubstitute.Substitute.For<RemotingRefWrapperService>();
+        var remotingRefService = Substitute.For<RemotingRefWrapperService>();
         remotingRefService.GetTeamName(default, default).ReturnsForAnyArgs("");
         var service = new MapUserLogsServiceImp(remotingRefService);
 

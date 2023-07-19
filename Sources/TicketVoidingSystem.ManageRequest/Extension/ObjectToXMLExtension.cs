@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Globalization;
+using System.Security;
 using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -56,7 +57,8 @@ public static class ObjectToXMLExtension
                           + $" CreatorId='{voidData.CreatorId}' CreatorName='{voidData.CreatorName}' HistoryStatusId='{voidData.HistoryStatusId}'"
                           + $" DecidedBy='{SecurityElement.Escape(voidData.DecidedBy)}'"
                           + $" VoidFromTime='{voidData.VoidFromTime}' VoidToTime='{voidData.VoidToTime}'"
-                          + $" VoidFromDate='{voidData.VoidFromDate}' VoidToDate='{voidData.VoidToDate}' />";
+                          + $" VoidFromDate='{voidData.VoidFromDate}' VoidToDate='{voidData.VoidToDate}'"
+                          + $" IsRunAutoAfterVoid='{false}' />";
 
         return voidDataXml;
     }
@@ -71,37 +73,42 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var liveHomeScore = "";
-            var liveAwayScore = "";
-            if (model.FilterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
-            {
-                var scores = model.WrongScore.Split('-');
-                liveHomeScore = scores[0].Trim();
-                liveAwayScore = scores[1].Trim();
-            }
+            var scores = GetLiveScore(model.FilterBy, model);
+            var liveHomeScore = scores[0].Trim();
+            var liveAwayScore = scores[1].Trim();
             var line = $"<r LiveHomeScore='{liveHomeScore}' "
-                + $"LiveAwayScore='{liveAwayScore}' "
-                + $"ScoreId='{model.ScoreId}' "
-                + $"AATime='{model.AATime}' "
-                + $"PATime='{model.PATime}' "
-                + $"SATime='{model.SATime}' "
-                + $"LiveScores='{model.LogInfoDetail?.LiveScores}' "
-                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                + $"MatchId='{model.LogInfoDetail?.MatchId}' "
-                + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
-                + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
-                + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
-                + $"FilterBy='{model.FilterBy}' "
-                + $"IsCheckedVar='{model.IsCheckedVar}' />";
+                       + $"LiveAwayScore='{liveAwayScore}' "
+                       + $"ScoreId='{model.ScoreId}' "
+                       + $"AATime='{model.AATime}' "
+                       + $"PATime='{model.PATime}' "
+                       + $"SATime='{model.SATime}' "
+                       + $"LiveScores='{model.LogInfoDetail?.LiveScores}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"FilterToTransTime='{model.FilterToTransTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"MatchId='{model.LogInfoDetail?.MatchId}' "
+                       + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
+                       + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
+                       + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
+                       + $"FilterBy='{model.FilterBy}' "
+                       + $"IsCheckedVar='{model.IsCheckedVar}' />";
 
             stringBuilder.AppendLine(line);
         }
 
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    private static string[] GetLiveScore(int? filterBy, WrongScoreInfoViewModel model)
+    {
+        if (filterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
+        {
+            return model.WrongScore.Split('-');
+        }
+
+        return new[] { string.Empty, string.Empty };
     }
 
     public static string ToEventDangerAcceptedXml(this IEnumerable<DangerAcceptedViewModel> models)
@@ -207,8 +214,8 @@ public static class ObjectToXMLExtension
         var stringBuilder = $"<r Usernames='{model.Usernames}' "
                             + $"ProductIds='{model.ProductIds}' "
                             + $"StatusIds='{model.StatusIds}' "
-                            + $"FromDate='{model.FromDate}' "
-                            + $"ToDate='{model.ToDate}' />";
+                            + $"FromDate='{model.FromDate?.ToString(CultureInfo.InvariantCulture)}' "
+                            + $"ToDate='{model.ToDate?.ToString(CultureInfo.InvariantCulture)}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }
@@ -240,14 +247,9 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var liveAwayScore = "";
-            var liveHomeScore = "";
-            if (model.FilterBy != FILTER_BY_CHECK_TIME && model.WrongScore != null)
-            {
-                var scores = model.WrongScore.Split('-');
-                liveHomeScore = scores[0].Trim();
-                liveAwayScore = scores[1].Trim();
-            }
+            var scores = GetLiveScore(model.FilterBy, model);
+            var liveHomeScore = scores[0].Trim();
+            var liveAwayScore = scores[1].Trim();
             var line = $"<r LiveHomeScore='{liveHomeScore}' "
                 + $"LiveAwayScore='{liveAwayScore}' "
                 + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
@@ -377,6 +379,32 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToReducedOverInfoXml(this IEnumerable<ReducedOverViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"BetTypeIds='{model.BetTypeIds}' "
+                       + $"WicketOver='{model.WicketOver}' "
+                       + $"FilterWicketOver='{model.FilterWicketOver}' "
+                       + $"PlayerIds='{model.PlayerIds}' "
+                       + $"Runs='{model.Runs}' "
+                       + $"NonLive='{model.NonLive}' "
+                       + $"Live='{model.Live}' /> ";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
     public static string GetAbnormalAccountInfoXml(string usernames, string productIds, string statusIds, DateTime? fromDate, DateTime? toDate)
     {
         return $"<root><r Usernames='{usernames}' "
@@ -388,6 +416,6 @@ public static class ObjectToXMLExtension
 
     public static string GetKickOffInfoXml(int matchId, DateTime? kickOffTime)
     {
-        return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime}'/></root>";
+        return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime?.ToString(CultureInfo.InvariantCulture)}'/></root>";
     }
 }

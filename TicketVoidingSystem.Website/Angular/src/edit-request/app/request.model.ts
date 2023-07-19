@@ -1,3 +1,4 @@
+import { ReducedOverModel } from 'src/add-request/app/add-request/models/event-reduced-over.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOddsModel } from '../../add-request/app/add-request/models/event-wrong-odds.model';
@@ -71,5 +72,6 @@ export class RequestDetailViewModel {
   wrongHdpModels: WrongHdpModel[];
   wrongOuModels: WrongOuModel[];
   wrongOddsModels: WrongOddsModel[];
+  reducedOverModels: ReducedOverModel[];
   messages: Message[];
 }

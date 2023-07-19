@@ -16,9 +16,9 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
     private readonly IMapper mapper;
     private readonly MapTicketService mapTicketService;
     private readonly IDynamicRepository repository;
-    private readonly UserPermissionService userPermissionService;
 
     private readonly GetTicketsServiceImp service;
+    private readonly UserPermissionService userPermissionService;
 
     public GetTicketsServiceTests()
     {
@@ -29,16 +29,59 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         service = new GetTicketsServiceImp(mapper, mapTicketService, repository, userPermissionService);
     }
 
-    [Fact]
-    public async Task GetTickets_HasCriteria_CallGetTicketsByRepository()
+    [Theory]
+    [InlineData(0, "errorMsg")]
+    [InlineData(1, "errorMsg")]
+    [InlineData(null, null)]
+    public async Task GetTickets_HasCriteria_ReturnExpected(int errorCode, string errorMsg)
     {
         // Arrange
         var query = new GetTicketsQuery { MatchId = 132 };
-        var validation = new List<GetTicketValidationModel> { new() { ErrorCode = 0 } };
+        var validation = new List<GetTicketValidationModel> { new() { ErrorCode = errorCode, ErrorMsg = errorMsg } };
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
         var criteria = new GetTicketsCriteria();
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+            .ReturnsForAnyArgs((validation, ticketList));
+        var expectedTickets = new List<GetTicketModel> { new() { BetId = 123 }, new() { BetId = 123 }, new() { BetId = 123 } };
+
+        // Act
+        var (_, ticketsActual) = await service.GetTickets(query);
+
+        // Assert
+        AssertExtension.Equal(expectedTickets, ticketsActual);
+    }
+
+    [Fact]
+    public async Task GetTickets_ValidationHasErrorIsNull_CallGetTicketsByRepository()
+    {
+        // Arrange
+        var query = new GetTicketsQuery { MatchId = 132 };
+        var validation = new List<GetTicketValidationModel> { new() };
+        var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
+        var criteria = new GetTicketsCriteria();
+        mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+            .ReturnsForAnyArgs((validation, ticketList));
+
+        // Act
+        var actual = await service.GetTickets(query);
+
+        // Assert
+        Assert.NotNull(actual.Tickets);
+    }
+
+    [Fact]
+    public async Task GetTickets_ValidationHasEmpty_CallGetTicketsByRepository()
+    {
+        // Arrange
+        var query = new GetTicketsQuery { MatchId = 132 };
+        var validation = new List<GetTicketValidationModel> ();
+        var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
+        var criteria = new GetTicketsCriteria();
+        mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+            .ReturnsForAnyArgs((validation, ticketList));
 
         // Act
         var actual = await service.GetTickets(query);
@@ -56,12 +99,13 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
         var userPermission = new UserPermission();
         var criteria = new GetTicketsCriteria();
-        var ticketModels = new List<GetTicketModel> { new() { BetId = 123 } };
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
         userPermissionService.GetUserPermission().ReturnsForAnyArgs(userPermission);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
-        var tickets = new List<ExcelTicketModel> { };
-        mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>()).ReturnsForAnyArgs(tickets);
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+            .ReturnsForAnyArgs((validation, ticketList));
+        var tickets = new List<ExcelTicketModel>();
+        mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>())
+            .ReturnsForAnyArgs(tickets);
 
         // Act
         var actual = await service.GetTicketsForExportExcel(query);
@@ -100,10 +144,11 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetDetailTicketsCriteria>()).ReturnsForAnyArgs(ticketModels);
         mapper.Map<GetDetailTicketsCriteria>(Arg.Any<GetDetailTicketsQuery>()).ReturnsForAnyArgs(criteria);
         userPermissionService.GetUserPermission().ReturnsForAnyArgs(userPermission);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default).ReturnsForAnyArgs((validation, ticketList));
-        var mapTicketService = Substitute.For<MapTicketService>();
-        var tickets = new List<ExcelTicketModel> { };
-        mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>()).ReturnsForAnyArgs(tickets);
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+            .ReturnsForAnyArgs((validation, ticketList));
+        var tickets = new List<ExcelTicketModel>();
+        mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>())
+            .ReturnsForAnyArgs(tickets);
 
         // Act
         var actual = await service.GetDetailTicketsForExportExcel(query);

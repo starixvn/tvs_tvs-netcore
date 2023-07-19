@@ -9,19 +9,17 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.BetTypes;
 
 public class GetBetTypesVirtualSportsHandlerTests
 {
-    private readonly BetTypesService betTypesService;
     private readonly GetBetTypesVirtualSportsHandler handler;
 
     public GetBetTypesVirtualSportsHandlerTests()
     {
-        betTypesService = Substitute.For<BetTypesService>();
+        var betTypesService = Substitute.For<BetTypesService>();
         handler = new GetBetTypesVirtualSportsHandler(betTypesService);
     }
 
     [Fact]
     public async Task Handle_HasRequest_ReturnListGroupBetTypeVirtualSport()
     {
-
         // Arrange
         var request = new GetBetTypesVirtualSportRequest();
         

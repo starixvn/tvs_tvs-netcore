@@ -42,11 +42,15 @@ public class GetComboParlayHandler : IRequestHandler<GetComboParlayRequest, ILis
     {
         var tickets = data.Where(m => m.Stake > 0).ToList();
         var comboName = ticketsService.GetComboName(query);
-        var result = new StringBuilder();
-        var count = comboName?.Length ?? 0;
-        for (var i = 0; i < count; i++)
+        if (comboName == null || !comboName.Any())
         {
-            var comboNameHtml = $"<span class='combo-name'>{comboName?[i]} x </span>";
+            return string.Empty;
+        }
+
+        var result = new StringBuilder();
+        for (var i = 0; i < comboName.Length; i++)
+        {
+            var comboNameHtml = $"<span class='combo-name'>{comboName[i]} x </span>";
             var stake = $"<span class='combo-stake'>{tickets[i].Stake:G29}</span>";
             result.Append($"<div>{comboNameHtml}{stake}</div>");
         }

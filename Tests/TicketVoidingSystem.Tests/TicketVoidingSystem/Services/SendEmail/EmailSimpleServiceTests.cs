@@ -8,54 +8,54 @@ using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
+
+public class EmailSimpleServiceTests
 {
-    public class EmailSimpleServiceTests
+    private readonly FanexMailApiService fanexMailApiService;
+    private readonly VoidEmailContentService voidEmailContentService;
+    private EmailSimpleServiceImp service;
+
+    public EmailSimpleServiceTests()
     {
-        private readonly VoidEmailContentService voidEmailContentService;
-        private readonly FanexMailApiService fanexMailApiService;
-        private EmailSimpleServiceImp service;
+        voidEmailContentService = Substitute.For<VoidEmailContentService>();
+        fanexMailApiService = Substitute.For<FanexMailApiService>();
+        service = new EmailSimpleServiceImp(voidEmailContentService, fanexMailApiService);
+    }
 
-        public EmailSimpleServiceTests()
-        {
-            voidEmailContentService = Substitute.For<VoidEmailContentService>();
-            fanexMailApiService = Substitute.For<FanexMailApiService>();
-            service = new EmailSimpleServiceImp(voidEmailContentService, fanexMailApiService);
-        }
+    [Fact]
+    public void Send_HasServiceIsValid_HasCalledSendEmail()
+    {
+        // Arrange
+        var mailVoidViewModel = new MailVoidViewModel();
+        var site = new SiteEmail();
+        var tickets = new List<TicketEmailModel>
+            { new() { Currency = CurrencyConstant.UusId }, new() { Currency = CurrencyConstant.UusId } };
+        voidEmailContentService.Create(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
+                Arg.Any<IEnumerable<TicketEmailModel>>(), Arg.Any<EmailGroup>(), true)
+            .ReturnsForAnyArgs(new MailRecord());
 
-        [Fact]
-        public void Send_HasServiceIsValid_HasCallesSendEmail()
-        {
-            // Arrange
-            var mailVoidViewModel = new MailVoidViewModel { };
-            var site = new SiteEmail();
-            var tickets = new List<TicketEmailModel>
-                { new TicketEmailModel { Currency = CurrencyConstant.UusId }, new TicketEmailModel { Currency = CurrencyConstant.UusId } };
-            voidEmailContentService.Create(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(), Arg.Any<IEnumerable<TicketEmailModel>>(), Arg.Any<EmailGroup>(), true)
-                .ReturnsForAnyArgs(new MailRecord());
+        // Act
+        _ = service.Send(mailVoidViewModel, site, tickets, new EmailGroup(), true);
 
-            // Act
-            _ = service.Send(mailVoidViewModel, site, tickets, new EmailGroup(),true);
+        // Assert
+        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>());
+    }
 
-            // Assert
-            fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>());
-        }
+    [Fact]
+    public void Send_HasServiceIsNotValid_HasWriteLog()
+    {
+        // Arrange
+        var mailVoidViewModel = new MailVoidViewModel();
+        var site = new SiteEmail();
+        var tickets = new List<TicketEmailModel>
+            { new() { Currency = CurrencyConstant.UusId }, new() { Currency = CurrencyConstant.UusId } };
+        service = new EmailSimpleServiceImp(null, fanexMailApiService);
 
-        [Fact]
-        public void Send_HasServiceIsNotValid_HasWriteLog()
-        {
-            // Arrange
-            var mailVoidViewModel = new MailVoidViewModel { };
-            var site = new SiteEmail();
-            var tickets = new List<TicketEmailModel>
-                { new TicketEmailModel { Currency = CurrencyConstant.UusId }, new TicketEmailModel { Currency = CurrencyConstant.UusId } };
-            service = new EmailSimpleServiceImp(null, fanexMailApiService);
+        // Act
+        _ = service.Send(mailVoidViewModel, site, tickets, new EmailGroup(), true);
 
-            // Act
-            _ = service.Send(mailVoidViewModel, site, tickets, new EmailGroup(), true);
-
-            // Assert
-            fanexMailApiService.Received(1).WriteLog(Arg.Any<EmailGroup>(), Arg.Any<Exception>());
-        }
+        // Assert
+        fanexMailApiService.Received(1).WriteLog(Arg.Any<EmailGroup>(), Arg.Any<Exception>());
     }
 }

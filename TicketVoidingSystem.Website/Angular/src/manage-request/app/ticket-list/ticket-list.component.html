@@ -7,9 +7,12 @@
           <div class="modal-title">
             <strong>Delete Bet Check (Request ID: {{modal.requestId}})</strong>
           </div>
-          <div class="modal-control">
+          <!-- <div class="modal-control">
             <em class="fa fa-times pointer" (click)="modal.open = !modal.open"></em>
-          </div>
+          </div> -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.open = !modal.open">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div class="modal-body" [blockUi]="isBlock">
           <match-info *ngIf="isShowMatchInfo(requestDetail)" [match]="match"></match-info>

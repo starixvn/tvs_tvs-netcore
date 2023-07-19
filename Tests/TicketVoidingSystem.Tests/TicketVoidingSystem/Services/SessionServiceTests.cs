@@ -10,13 +10,12 @@ using NSubstitute;
 using TicketVoidingSystem.Services;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Services;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
 
 public class SessionServiceTests
 {
     private readonly INapSession currentSession;
     private readonly IUserService userService;
-    private readonly INapSettings siteSettings;
     private readonly IHttpContextAccessor httpContextAccessor;
     private SessionServiceImp service;
 
@@ -24,7 +23,7 @@ public class SessionServiceTests
     {
         userService = Substitute.For<IUserService>();
         currentSession = Substitute.For<INapSession>();
-        siteSettings = Substitute.For<INapSettings>();
+        var siteSettings = Substitute.For<INapSettings>();
         httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         service = new SessionServiceImp(currentSession, userService, siteSettings, httpContextAccessor);
     }
@@ -93,7 +92,7 @@ public class SessionServiceTests
     }
 
     [Fact]
-    public void CheckPassword_DataValid_RetrurnTrue()
+    public void CheckPassword_DataValid_ReturnTrue()
     {
         // Arrange
         currentSession.UserId = 1;

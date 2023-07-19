@@ -102,7 +102,7 @@ public class BetListCoreServiceImp : BetListCoreService
     {
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
 
-        if (IsMainParlay(item))
+        if (item.BetTypeId.IsParlay())
         {
             return mainChoice;
         }
@@ -110,11 +110,6 @@ public class BetListCoreServiceImp : BetListCoreService
         SetValueSubTicket(ticket, item);
         var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         return mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
-    }
-
-    private static bool IsMainParlay(TicketEmailModel ticket)
-    {
-        return ticket.IsMixParlay && ticket.BetTypeId.IsParlay();
     }
 
     private static void SetValueSubTicket(ITicket ticket, TicketEmailModel item)

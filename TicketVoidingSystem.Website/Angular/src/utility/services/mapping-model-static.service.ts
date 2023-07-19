@@ -1,4 +1,6 @@
 import * as _ from "lodash";
+import { ReducedOverGetLogInfoQuery } from "src/add-request/app/add-request/event-reduced-over/models/get-log-info.query";
+import { ReducedOverModel } from "src/add-request/app/add-request/models/event-reduced-over.model";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
 import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query";
@@ -8,6 +10,7 @@ import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wr
 import { WrongOddsModel } from "../../add-request/app/add-request/models/event-wrong-odds.model";
 import { WrongOuModel } from "../../add-request/app/add-request/models/event-wrong-ou.model";
 import { WrongScoreModel } from "../../add-request/app/add-request/models/event-wrong-score.model";
+import { StaticService } from "./static.service";
 
 export class MappingModelStaticService {
   static buidRedCardGetLogInfoModel(redCardModels: RedCardModel[]): RedCardGetLogInfoQuery[] {
@@ -100,5 +103,23 @@ export class MappingModelStaticService {
       ouValue: x.ouValue,
       favoriteValue: x.favoriteValue
     } as WrongOddsGetLogInfoQuery));
+  }
+
+  static buidReducedOverGetLogInfoModel(reducedOverModels: ReducedOverModel[]): ReducedOverGetLogInfoQuery[] {
+    if (_.isNull(reducedOverModels) || _.isUndefined(reducedOverModels)) {
+      return null;
+    }
+
+    return reducedOverModels.map(x => ({
+      matchId: x.matchId,
+      subIssueTypeId: x.subIssueTypeId,
+      betTypeIds: x.betTypeIds,
+      wicketOver: x.wicketOver,
+      filterWicketOver: StaticService.convertStringToBetId8xxx(x.wicketOver),
+      playerIds: x.playerIds,
+      runs: x.runs,
+      live: x.live,
+      nonLive: x.nonLive
+    } as ReducedOverGetLogInfoQuery));
   }
 }

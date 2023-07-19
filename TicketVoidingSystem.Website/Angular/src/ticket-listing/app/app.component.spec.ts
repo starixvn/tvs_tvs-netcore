@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import { EventEmitter, NgModule } from '@angular/core';
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
@@ -86,7 +87,8 @@ class Helper {
     toTransDate: '',
     groupBy: 0,
     singleOrSubParlay: 'Single',
-    isReSettled: true
+    isReSettled: true,
+    selectionSubParlays: ''
   };
   static readonly fakeCommonQueryGroupByBettype: CommonQuery = {
     matchId: 12345,
@@ -102,7 +104,8 @@ class Helper {
     toTransDate: '',
     groupBy: 1,
     singleOrSubParlay: 'Single',
-    isReSettled: true
+    isReSettled: true,
+    selectionSubParlays: ''
   };
   static readonly fakeGetTicketsDetailModel: GetTicketsDetailModel = {
     totalItems: 1,
@@ -201,6 +204,21 @@ describe('AppComponent', () => {
     .mock(SignalRService, { initializeConnection: jest.fn()});
   });
 
+  it('#ngAfterViewInit should call #blockUnBlockUI', async() => {
+    // Arrange
+    const service = new BlockUiService();
+    service.blockUIEvent = new EventEmitter<boolean>();
+    const component = new AppComponent (null, service, null, null, null, null);
+    component['blockUnBlockUI'] = jest.fn();
+
+    // Action
+    component.ngAfterViewInit();
+    service.blockUIEvent.next(true);
+
+    // Assert
+    expect(component['blockUnBlockUI']).toHaveBeenCalledTimes(1);
+  });
+
   it('#hideContent should hide components for match, tickets', async () => {
     // Arrange
     const { instance } = await shallow.render();
@@ -236,7 +254,8 @@ describe('AppComponent', () => {
       groupBy: 0,
       singleOrSubParlay: 'Single',
       isReSettled: true,
-      licenseeId: 1
+      licenseeId: 1,
+      selectionSubParlays: ''
     };
     const filterEvent: FilterEvent = {
       query: getSummaryQuery,
@@ -279,7 +298,8 @@ describe('AppComponent', () => {
       groupBy: 0,
       singleOrSubParlay: 'Single',
       isReSettled: true,
-      licenseeId: 1
+      licenseeId: 1,
+      selectionSubParlays: ''
     };
     const filterEvent: FilterEvent = {
       query: getSummaryQuery,
@@ -569,6 +589,12 @@ describe('AppComponent', () => {
   });
 
   it('resendData should update correct data when resend successfully', async () => {
+    const normalQuery = new SendFileQuery();
+    normalQuery.isChinaView = false;
+    normalQuery.licenseeName = '';
+    const chinaViewQuery = new SendFileQuery();
+    chinaViewQuery.isChinaView = true;
+    normalQuery.licenseeName = '';
     const fakeAmendmentReponseSuccessfully = _.cloneDeep(Helper.fakeAmendmentReponseSuccessfully);
     fakeAmendmentReponseSuccessfully.code = 0;
     const mockSendDataToOic = jest.fn().mockImplementation(() => Promise.resolve([fakeAmendmentReponseSuccessfully]));
@@ -577,7 +603,7 @@ describe('AppComponent', () => {
       sendDataToOic: mockSendDataToOic
     })
     .render();
-    instance.sendFileQueries = [new SendFileQuery()];
+    instance.sendFileQueries = [normalQuery, chinaViewQuery];
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.results = [Helper.fakeAmendmentReponseSuccessfully];
     instance.matchViewModel = Helper.fakeMatchModel;

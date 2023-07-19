@@ -46,7 +46,7 @@ describe('CommonService', () => {
     mockHttpService.getJson = jest.fn().mockImplementation(() => Promise.resolve(expectedData));
     commonService = new CommonService(mockHttpService);
     // Action and Assert
-    const actual = await commonService.getActions();
+    const actual = await commonService.getVoidActions();
     expect(actual).toEqual(expectedData);
   });
 

@@ -182,12 +182,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.BetList
         public void GetKenoBetTypeName_RemotingRefServiceHasCalledGetKenoBetType()
         {
             // Arrange
-            const string kenoBetTypeId = "1";
-
             // Act
-            _ = languageCacheRef.GetKenoBetTypeName(kenoBetTypeId);
+            _ = languageCacheRef.GetKenoBetTypeName("1");
             // Assert
-            remotingRefService.Received(1).GetKenoBetType(kenoBetTypeId, CurrentLanguage); 
+            remotingRefService.Received(1).GetKenoBetType("1", CurrentLanguage); 
         }
 
         [Fact]
@@ -294,26 +292,22 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.BetList
         public void GetTableGamesBetChoiceName_RemotingRefServiceHasCalledGetTableGamesBetChoice()
         {
             // Arrange
-            const string tableGamesBetChoiceId = "1";
-            
             // Act
-            _ = languageCacheRef.GetTableGamesBetChoiceName(tableGamesBetChoiceId, out tableGamesBetTypeId);
+            _ = languageCacheRef.GetTableGamesBetChoiceName("1", out tableGamesBetTypeId);
 
             // Assert
-            remotingRefService.Received(1).GetTableGamesBetChoice(tableGamesBetChoiceId, CurrentLanguage, out tableGamesBetTypeId);
+            remotingRefService.Received(1).GetTableGamesBetChoice("1", CurrentLanguage, out tableGamesBetTypeId);
         }
 
         [Fact]
         public void GetTableGamesBetTypeName_RemotingRefServiceHasCalledGetTableGamesBetType()
         {
             // Arrange
-            const string tableGamesBetTypeId = "1";
-
             // Act
-            _ = languageCacheRef.GetTableGamesBetTypeName(tableGamesBetTypeId);
+            _ = languageCacheRef.GetTableGamesBetTypeName("1");
 
             // Assert
-            remotingRefService.Received(1).GetTableGamesBetType(tableGamesBetTypeId, CurrentLanguage);
+            remotingRefService.Received(1).GetTableGamesBetType("1", CurrentLanguage);
         }
     }
 }

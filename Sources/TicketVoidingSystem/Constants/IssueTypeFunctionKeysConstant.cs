@@ -81,6 +81,11 @@ public static class IssueTypeFunctionKeysConstant
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.WrongOdds,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongOdds, IssueTypeName = "Wrong Odds" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.ReducedOver,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.ReducedOver, IssueTypeName = "Reduced Over" }
                     }
                 };
 

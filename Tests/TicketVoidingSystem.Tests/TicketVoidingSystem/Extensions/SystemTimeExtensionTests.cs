@@ -2,7 +2,7 @@
 using TicketVoidingSystem.Extensions;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
 
 public class SystemTimeExtensionTests
 {
@@ -10,10 +10,8 @@ public class SystemTimeExtensionTests
     public void ZoneManila_DateTimeIsNull_ReturnExpected()
     {
         // Arrange
-        DateTime? dateTime = null;
-
         // Act
-        var actual = dateTime.ZoneManila();
+        var actual = ((DateTime?)null).ZoneManila();
 
         // Assert
         Assert.Null(actual);
@@ -31,5 +29,16 @@ public class SystemTimeExtensionTests
 
         // Assert
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void AddDays_HasDateTimeIsNull_ReturnNull()
+    {
+        // Arrange
+        // Act
+        var actual = ((DateTime?)null).AddDays(2);
+
+        // Assert
+        Assert.Null(actual);
     }
 }

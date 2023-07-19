@@ -13,10 +13,9 @@ public class ObjectToXmlExtensionsTests
     public void ToXml_NullListOfMarkedMatchXmlModel_ReturnsEmpty()
     {
         // Arrange
-        List<MarkedMatchXmlModel>? nullList = null;
 
         // Act
-        var actual = nullList.ToMarkedMatchXml();
+        var actual = ((List<MarkedMatchXmlModel>)null).ToMarkedMatchXml();
 
         // Assert
         Assert.Equal(string.Empty, actual);
@@ -42,10 +41,9 @@ public class ObjectToXmlExtensionsTests
     public void ToXml_NullListOfString_ReturnsEmpty()
     {
         // Arrange
-        List<string>? nullList = null;
 
         // Act
-        var actual = nullList.ToTransIdsXml();
+        var actual = ((List<string>)null).ToTransIdsXml();
 
         // Assert
         Assert.Equal(string.Empty, actual);
@@ -55,7 +53,7 @@ public class ObjectToXmlExtensionsTests
     public void ToXml_HasListOfString_ReturnsEmpty()
     {
         // Arrange
-        const string expected = "<Tickets><Ticket Id='1'/>\r\n<Ticket Id='2'/>\r\n<Ticket Id='3'/></Tickets>";
+        var expected = $"<Tickets><Ticket Id='1'/>{Environment.NewLine}<Ticket Id='2'/>{Environment.NewLine}<Ticket Id='3'/></Tickets>";
         var transIds = new List<string> { "1", "2", "3" };
 
         // Act
@@ -69,10 +67,9 @@ public class ObjectToXmlExtensionsTests
     public void ToXml_TransInfoAutoUnmarkModelIsNull_ReturnsExpected()
     {
         // Arrange
-        List<TransInfoAutoUnmarkModel>? models = null;
 
         // Act
-        var actual = models.ToTransInfoXml();
+        var actual = ((List<TransInfoAutoUnmarkModel>)null).ToTransInfoXml();
 
         // Assert
         Assert.Equal(string.Empty, actual);

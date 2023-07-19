@@ -27,11 +27,12 @@ public class CellServiceImp : CellService
 
     public void AddMatch(ExcelWorksheet worksheet, Match match)
     {
+        const int RowMatchInfo = 5;
         var eventTime = match.EventDate == DateTime.MinValue ? string.Empty : match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
-        worksheet.Cells[5, 1].Value = match.MatchCode;
-        worksheet.Cells[5, 2].Value = match.LeagueName;
-        worksheet.Cells[5, 3].Value = match.MatchEvent;
-        worksheet.Cells[5, 4].Value = eventTime;
+        worksheet.Cells[RowMatchInfo, 1].Value = match.MatchCode;
+        worksheet.Cells[RowMatchInfo, 2].Value = match.LeagueName;
+        worksheet.Cells[RowMatchInfo, 3].Value = match.MatchEvent;
+        worksheet.Cells[RowMatchInfo, 4].Value = eventTime;
     }
 
     public void WriteGroupHeader(ExcelWorksheet worksheet, int rowNumber, string groupName, int numberOfTickets)

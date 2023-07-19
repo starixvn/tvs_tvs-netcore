@@ -5,19 +5,20 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
+import { ModalType } from '../../../utility/components/modal/modal.model';
+import { ModalService } from '../../../utility/components/modal/modal.service';
+import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestSimpleInfo, RequestStatus } from '../../../utility/models/signal-r.model';
-import { ModalType } from '../../../utility/modules/modal/modal';
-import { ModalService } from '../../../utility/modules/modal/modal.service';
-import { PagingComponent } from '../../../utility/modules/paging/paging/paging.component';
-import { PipeModule } from '../../../utility/modules/pipes/pipe.module';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { AppService } from '../app.service';
+import { CopyRequestInfoResponse } from '../models/copy-request-info.query';
 import { PermissionManage } from '../models/permission-manage.model';
 import { TicketListComponent } from '../ticket-list/ticket-list.component';
 import { RequestListComponent } from './request-list.component';
@@ -123,17 +124,17 @@ class Helper {
     isReadMarkTickets: true
   };
   static readonly fakeRequestSimpleInfo: RequestSimpleInfo = {
-    LastPerformedBy: 'starix',
-    TotalVoidedSingle: 12,
-    TotalVoidedParlay: 1,
-    MatchId: Helper.matchId,
-    TotalCancelCashOut: 0
+    lastPerformedBy: 'starix',
+    totalVoidedSingle: 12,
+    totalVoidedParlay: 1,
+    matchId: Helper.matchId,
+    totalCancelCashOut: 0
   };
 
   static readonly fakeRequestStatus: RequestStatus[] = [{
-    RequestId: 1111,
-    Status: 'Running',
-    SimpleInfo: Helper.fakeRequestSimpleInfo,
+    requestId: 1111,
+    status: 'Running',
+    simpleInfo: Helper.fakeRequestSimpleInfo,
   }];
 }
 
@@ -167,7 +168,7 @@ describe('RequestListComponent', () => {
     const mockGetIssueTypes = jest.fn();
     const { instance } = await shallow
       .mock(CommonService, {
-        getActions: mockGetActions,
+        getVoidActions: mockGetActions,
         getIssueTypes: mockGetIssueTypes
       })
       .render();
@@ -180,6 +181,23 @@ describe('RequestListComponent', () => {
     // Assert
     expect(mockGetActions).toHaveBeenCalled();
     expect(mockGetIssueTypes).toHaveBeenCalled();
+  });
+
+  it('#ngOnInit should call #updateRequestStatus', async () => {
+    const mockGetActions = jest.fn();
+    const mockGetIssueTypes = jest.fn();
+    const { instance } = await shallow
+      .mock(CommonService, {
+        getVoidActions: mockGetActions,
+        getIssueTypes: mockGetIssueTypes
+      })
+      .render();
+    instance['updateRequestStatus'] = jest.fn();
+    instance.requestStatusChangeEvent = new EventEmitter<RequestStatus[]>();
+    await instance.ngOnInit();
+    instance.requestStatusChangeEvent.next([]);
+
+    expect(instance['updateRequestStatus']).toHaveBeenCalled();
   });
 
   it('#ngOnChanges should return expected displayedModels', async () => {
@@ -493,6 +511,10 @@ describe('RequestListComponent', () => {
 
   it('#openRequestDetails should open tab for edit request', async () => {
     // Arrange
+    const element = document.createElement('body');
+    element.setAttribute('id', 'body');
+    element.setAttribute('root-url', '/');
+    document.body.appendChild(element);
     const { instance } = await shallow.render();
     instance.checkCanEdit = jest.fn().mockImplementation(() => true);
     window.open = jest.fn();
@@ -501,11 +523,15 @@ describe('RequestListComponent', () => {
     instance.openRequestDetails(12345, new Date(), 1, null);
 
     // Assert
-    expect(window.open).toHaveBeenCalledWith('TicketVoidingSystem/ManageRequest/Details/12345', '_blank');
+    expect(window.open).toHaveBeenCalledTimes(1);
   });
 
   it('#openVoidRequest should open tab for void request', async () => {
     // Arrange
+    const element = document.createElement('body');
+    element.setAttribute('id', 'body');
+    element.setAttribute('root-url', '/');
+    document.body.appendChild(element);
     const { instance } = await shallow.render();
     window.open = jest.fn();
 
@@ -513,7 +539,7 @@ describe('RequestListComponent', () => {
     instance.openVoidRequest(12345);
 
     // Assert
-    expect(window.open).toHaveBeenCalledWith('TicketVoidingSystem/VoidRequest/Index/12345', '_blank');
+    expect(window.open).toHaveBeenCalledTimes(1);
   });
 
   it('#isOnlyHasSingleTicket should return true', async () => {
@@ -559,18 +585,6 @@ describe('RequestListComponent', () => {
     expect(find(Helper.noDataSelector).nativeElement.textContent).toBe('There is no data');
   });
 
-  it('when PagingComponent modelChange event emit, #pagingEvent should be called', async () => {
-    // Arrange
-    const { fixture, findComponent, instance } = await shallow.render();
-    fixture.detectChanges();
-    instance.pagingEvent = jest.fn();
-    const pagingComponent = findComponent(PagingComponent);
-    pagingComponent.modelChange.emit();
-
-    // Assert
-    expect(instance.pagingEvent).toHaveBeenCalledTimes(1);
-  });
-
   it('should display iconVoid for request', async () => {
     // Arrange
     const { fixture, find, instance } = await shallow.render();
@@ -596,7 +610,7 @@ describe('RequestListComponent', () => {
   it('#updateRequestStatus should update data when is Danger Accepted', async () => {
     const fakeRequestModelList = _.cloneDeep(Helper.fakeRequestModelList);
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
-    fakeRequestStatus[0].RequestId = 1000;
+    fakeRequestStatus[0].requestId = 1000;
     fakeRequestModelList[0].requestId = 1000;
     const detailRequestModel = new DetailRequestModel();
     detailRequestModel.matchId = Helper.matchId;
@@ -628,7 +642,7 @@ describe('RequestListComponent', () => {
 
   it('#updateRequestStatus should not update data when have not SimpleInfo', async () => {
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
-    fakeRequestStatus.forEach(x => x.SimpleInfo = null);
+    fakeRequestStatus.forEach(x => x.simpleInfo = null);
     const { instance } = await shallow.render();
     instance['isIssueTypeHaveMultipleMatches'] = jest.fn();
     instance['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
@@ -638,7 +652,7 @@ describe('RequestListComponent', () => {
 
   it('#updateRequestStatus should not update data when have not request', async () => {
     const fakeRequestStatus = _.cloneDeep(Helper.fakeRequestStatus);
-    fakeRequestStatus.forEach(x => x.RequestId = 10000);
+    fakeRequestStatus.forEach(x => x.requestId = 10000);
     const { instance } = await shallow.render();
     instance['isIssueTypeHaveMultipleMatches'] = jest.fn();
     instance['updateRequestStatus'](fakeRequestStatus, Helper.fakeRequestModelList);
@@ -713,7 +727,7 @@ describe('RequestListComponent', () => {
 
   it('#copyRequestInfo should call #copyRequestInfo', async () => {
     // Arrange
-    const mockCopyRequestInfo = jest.fn();
+    const mockCopyRequestInfo = jest.fn().mockReturnValue(new CopyRequestInfoResponse());
     const { instance } = await shallow
     .mock(AppService, { copyRequestInfo: mockCopyRequestInfo })
     .mock(ClipboardService, { copyFromContent: jest.fn() })

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Microsoft.Extensions.Configuration;
@@ -44,5 +43,4 @@ public class InsertToAmendmentTableStageTests
         // Assert
         await repository.Received(1).FetchAsync<LicenseeFile>(Arg.Any<SendDataOicCriteria>());
     }
-
 }

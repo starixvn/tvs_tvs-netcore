@@ -11,19 +11,15 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail
     public class SendEmailServiceTests
     {
         private readonly SitesEmailService sitesEmailService;
-        private readonly EmailLicenseeService emailLicenseeService;
-        private readonly EmailCashOutService emailCashOutService;
-        private readonly EmailItQaService emailItQaService;
-        private readonly EmailItSupportService emailItSupportService;
         private readonly SendEmailServiceImp service;
 
         public SendEmailServiceTests()
         {
             sitesEmailService = Substitute.For<SitesEmailService>();
-            emailLicenseeService = Substitute.For<EmailLicenseeService>();
-            emailCashOutService = Substitute.For<EmailCashOutService>();
-            emailItQaService = Substitute.For<EmailItQaService>();
-            emailItSupportService = Substitute.For<EmailItSupportService>();
+            var emailLicenseeService = Substitute.For<EmailLicenseeService>();
+            var emailCashOutService = Substitute.For<EmailCashOutService>();
+            var emailItQaService = Substitute.For<EmailItQaService>();
+            var emailItSupportService = Substitute.For<EmailItSupportService>();
 
             service = new SendEmailServiceImp(
                 sitesEmailService,

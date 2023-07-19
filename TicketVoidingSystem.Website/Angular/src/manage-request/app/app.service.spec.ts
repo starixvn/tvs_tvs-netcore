@@ -1,3 +1,4 @@
+import { GeneralInfo, GeneralInfoViewModel } from '../../utility/components/request-info/request-info.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
@@ -7,7 +8,6 @@ import { GetRequestsQuery } from './models/get-requests.query';
 import { RequestModel } from './request-list/request.model';
 import { TicketsModel } from './ticket-list/tickets/tickets.model';
 import { TicketsQuery } from './ticket-list/tickets/tickets.query';
-import { GeneralInfo, GeneralInfoViewModel } from '../../utility/modules/request-info/request-info.model';
 
 jest.mock('../../utility/services/http.service');
 
@@ -70,7 +70,7 @@ describe('AppService', () => {
   it('#exportRequest should call #downloadFile with expected params', async() => {
     // Arrange
     const query = new GetRequestsQuery();
-    const url = `TicketVoidingSystem/ManageRequest/ExportRequest`;
+    const url = `api/ManageRequest/ExportRequest`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action
@@ -108,7 +108,7 @@ describe('AppService', () => {
   it('#exportTickets should call #downloadFile with expected params', async() => {
     // Arrange
     const query = new TicketsQuery();
-    const url = `TicketVoidingSystem/ManageRequest/ExportVoidedTickets`;
+    const url = `api/ManageRequest/ExportVoidedTickets`;
     mockHttpService.downloadFile = jest.fn();
 
     // Action

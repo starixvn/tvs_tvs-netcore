@@ -225,7 +225,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrong1stOU(issueTypeId.toString()) ||
       StaticService.isWrong1stHDP(issueTypeId.toString());
   }
-  
+
   public async copyRequestInfo(requestId: number, matchId: number): Promise<void> {
     const query: CopyRequestInfoQuery = {
       requestId: requestId,
@@ -242,7 +242,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       || StaticService.isWrongScore(issueTypeId.toString());
   }
 
-  
+
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];
     info.push(`S:${detail.totalVoidedSingle}`);

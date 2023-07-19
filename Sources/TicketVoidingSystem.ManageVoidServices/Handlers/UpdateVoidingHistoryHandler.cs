@@ -23,7 +23,6 @@ public class UpdateVoidingHistoryHandler : IRequestHandler<UpdateVoidingHistoryR
     public async Task<bool> Handle(UpdateVoidingHistoryRequest request, CancellationToken cancellationToken)
     {
         await voidingHistoryService.UpdateVoidingHistory(request.VoidingHistoryId, request.StatusId);
-
         return true;
     }
 }

@@ -1,7 +1,7 @@
 using TicketVoidingSystem.Extensions;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
 
 public class BetListExtensionTests
 {
@@ -12,7 +12,6 @@ public class BetListExtensionTests
     public void SetWalletType_ReturnsExpectedValue(byte walletType, long? refCode, byte expected)
     {
         // Arrange
-
         // Act
         var result = walletType.SetWalletType(refCode);
 

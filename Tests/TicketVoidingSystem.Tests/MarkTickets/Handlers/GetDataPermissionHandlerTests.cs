@@ -25,7 +25,7 @@ public class GetDataPermissionHandlerTests
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        sessionService.Received(1).HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read);
+        await sessionService.Received(1).HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read);
 
         Assert.True(result.IsReadMarkTickets);
     }

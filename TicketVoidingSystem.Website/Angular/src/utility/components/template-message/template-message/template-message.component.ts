@@ -209,6 +209,7 @@ export class TemplateMessageComponent implements OnChanges {
 
   checkCanUpdateEventTypeToBlank(): boolean {
     const issueTypes = [
+      IssueTypeId.REDUCED_OVER,
       IssueTypeId.WRONG_ODDS,
       IssueTypeId.WRONG_HDP,
       IssueTypeId.WRONG_1ST_HDP,

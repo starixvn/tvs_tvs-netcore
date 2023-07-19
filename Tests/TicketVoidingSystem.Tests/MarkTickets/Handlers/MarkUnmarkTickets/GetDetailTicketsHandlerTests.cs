@@ -14,18 +14,16 @@ namespace TicketVoidingSystem.Tests.MarkTickets.Handlers.MarkUnmarkTickets;
 public class GetDetailTicketsHandlerTests: RemotingRefFixture
 {
     private readonly GetTicketsService getTicketsService;
-    private readonly MapTicketService mapTicketService;
     private readonly PagingService pagingService;
-    private readonly UserPermissionService userPermissionService;
 
     private readonly GetDetailTicketsHandler handler;
 
     public GetDetailTicketsHandlerTests()
     {
         getTicketsService = Substitute.For<GetTicketsService>();
-        mapTicketService = Substitute.For<MapTicketService>();
+        var mapTicketService = Substitute.For<MapTicketService>();
         pagingService = Substitute.For<PagingService>();
-        userPermissionService = Substitute.For<UserPermissionService>();
+        var userPermissionService = Substitute.For<UserPermissionService>();
         handler = new GetDetailTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
     }
 
@@ -40,11 +38,11 @@ public class GetDetailTicketsHandlerTests: RemotingRefFixture
             PageIndex = 500
         };
         var data = new List<GetTicketModel> {
-            new() { TransId = 12345, IsMixParlay = true, IsDeposit = true, LicenseeName = "CN88"},
-            new() { TransId = 12346, IsMixParlay = true, IsDeposit = true, LicenseeName = "CN89"},
-            new() { TransId = 12347, IsMixParlay = true, IsDeposit = true, LicenseeName = "CN90"},
-            new() { TransId = 12348, IsMixParlay = false, IsDeposit = false, LicenseeName = "CN91"},
-            new() { TransId = 12349, IsMixParlay = true, IsDeposit = false, LicenseeName = "CN91"}
+            new() { TransId = 12345, SubTransId = 1, IsMixParlay = true, IsDeposit = true, LicenseeName = "CN88"},
+            new() { TransId = 12346, SubTransId = 1,  IsMixParlay = true, IsDeposit = true, LicenseeName = "CN89"},
+            new() { TransId = 12347, SubTransId = 1,  IsMixParlay = true, IsDeposit = true, LicenseeName = "CN90"},
+            new() { TransId = 12348, SubTransId = 1,  IsMixParlay = false, IsDeposit = false, LicenseeName = "CN91"},
+            new() { TransId = 12349, SubTransId = 1,  IsMixParlay = true, IsDeposit = false, LicenseeName = "CN91"}
         };
         var groups = new List<Group<GetTicketModel>>
         {

@@ -79,4 +79,22 @@ public class RequestExtraInfoXml
 
     [XmlAttribute(AttributeName = "FavoriteValue")]
     public string FavoriteValue { get; set; }
+
+    [XmlAttribute(AttributeName = "BetTypeIds")]
+    public string BetTypeIds { get; set; }
+
+    [XmlAttribute(AttributeName = "WicketOver")]
+    public string WicketOver { get; set; }
+
+    [XmlAttribute(AttributeName = "PlayerIds")]
+    public string PlayerIds { get; set; }
+
+    [XmlAttribute(AttributeName = "Runs")]
+    public string Runs { get; set; }
+
+    [XmlAttribute(AttributeName = "Live")]
+    public bool Live { get; set; }
+
+    [XmlAttribute(AttributeName = "NonLive")]
+    public bool NonLive { get; set; }
 }

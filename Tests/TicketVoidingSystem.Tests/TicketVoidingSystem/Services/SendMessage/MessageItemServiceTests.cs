@@ -3,38 +3,37 @@ using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services.SendMessage;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendMessage
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendMessage;
+
+public class MessageItemServiceTests
 {
-    public class MessageItemServiceTests
+    private readonly MessageItemServiceImp service;
+
+    public MessageItemServiceTests()
     {
-        private readonly MessageItemServiceImp service;
+        service = new MessageItemServiceImp();
+    }
 
-        public MessageItemServiceTests()
+    [Fact]
+    public void InsertMessage_ValidData_CacheServiceCalledContainAsync()
+    {
+        // Arrange
+        const string expected =
+            "<Messages><Item MessageId=\"1\" TargetId=\"101\" TargetName=\"Name\" BetTransId=\"1\" /><Item MessageId=\"1\" TargetId=\"101\" " +
+            "TargetName=\"Name\" BetTransId=\"1\" /><Item MessageId=\"1\" TargetId=\"101\" TargetName=\"Name\" BetTransId=\"1\" /><Item MessageId=\"1\" " +
+            "TargetId=\"101\" TargetName=\"Name\" BetTransId=\"1\" /></Messages>";
+        var receivedUsers = new List<ReceivedUser>
         {
-            service = new MessageItemServiceImp();
-        }
+            new() { CustId = 101, CustUserName = "Name", TransId = 1 },
+            new() { Recommend = 101, AgUserName = "Name", TransId = 1 },
+            new() { Mrecommend = 101, MagUserName = "Name", TransId = 1 },
+            new() { Srecommend = 101, SagUserName = "Name", TransId = 1 }
+        };
 
-        [Fact]
-        public void InsertMessage_ValidData_CacheServiceCalledContainAsync()
-        {
-            // Arrange
-            var expected = "<Messages><Item MessageId=\"1\" TargetId=\"101\" TargetName=\"Name\" BetTransId=\"1\" /><Item MessageId=\"1\" TargetId=\"101\" " +
-                           "TargetName=\"Name\" BetTransId=\"1\" /><Item MessageId=\"1\" TargetId=\"101\" TargetName=\"Name\" BetTransId=\"1\" /><Item MessageId=\"1\" " +
-                           "TargetId=\"101\" TargetName=\"Name\" BetTransId=\"1\" /></Messages>";
-            var receivedUsers = new List<ReceivedUser>
-            {
-                new ReceivedUser { CustId = 101, CustUserName = "Name", TransId  = 1},
-                new ReceivedUser { Recommend = 101, AgUserName = "Name", TransId  = 1},
-                new ReceivedUser { Mrecommend = 101, MagUserName = "Name", TransId  = 1},
-                new ReceivedUser { Srecommend = 101, SagUserName = "Name", TransId  = 1}
-            };
-            int messageId = 1;
+        // Act
+        var actual = service.CreateMessageItems(receivedUsers, 1);
 
-            // Act
-            var actual = service.CreateMessageItems(receivedUsers, messageId);
-
-            // Assert
-            Assert.Equal(expected,actual);
-        }
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

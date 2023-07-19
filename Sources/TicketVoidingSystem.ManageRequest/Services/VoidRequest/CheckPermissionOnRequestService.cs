@@ -54,9 +54,9 @@ public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestServic
 
         return new VoidPermission
         {
-            Settled = settledPermissionTask.Result,
-            UnSettled = unSettledPermissionTask.Result,
-            InstantlySettled = instantlySettledPermissionTask.Result
+            Settled = await settledPermissionTask,
+            UnSettled = await unSettledPermissionTask,
+            InstantlySettled = await instantlySettledPermissionTask
         };
     }
 }

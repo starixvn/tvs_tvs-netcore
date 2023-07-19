@@ -64,11 +64,12 @@ describe('LogInfoComponent', () => {
         logInfoDetails: [Helper.fakeLogInfoDetail],
       }
     });
+    instance.isWrongScore = jest.fn().mockReturnValue(true);
     [
       TVSRequestFilterBy.TRANS_TIME,
       TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME
     ].forEach(x => {
-      const actual = instance.displayScoreLabel(true, x);
+      const actual = instance.displayScoreLabel(x);
 
       expect(actual).toBe('Wrong Score: ');
     });
@@ -81,7 +82,7 @@ describe('LogInfoComponent', () => {
       }
     });
 
-    const actual = instance.displayScoreLabel(true, TVSRequestFilterBy.CHECK_TIME);
+    const actual = instance.displayScoreLabel(TVSRequestFilterBy.CHECK_TIME);
 
     expect(actual).toBe('Live Score: ');
   });
@@ -92,11 +93,12 @@ describe('LogInfoComponent', () => {
         logInfoDetails: [Helper.fakeLogInfoDetail],
       }
     });
+    instance.isWrongScore = jest.fn().mockReturnValue(true);
     [
       TVSRequestFilterBy.TRANS_TIME,
       TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME
     ].forEach(x => {
-      const actual = instance.displayVoidTimeLabel(true, x);
+      const actual = instance.displayVoidTimeLabel(x);
 
       expect(actual).toBe('Void Trans Time (GMT-4): ');
     });
@@ -108,8 +110,8 @@ describe('LogInfoComponent', () => {
         logInfoDetails: [Helper.fakeLogInfoDetail],
       }
     });
-
-    const actual = instance.displayVoidTimeLabel(true, TVSRequestFilterBy.CHECK_TIME);
+    instance.isWrongScore = jest.fn().mockReturnValue(true);
+    const actual = instance.displayVoidTimeLabel(TVSRequestFilterBy.CHECK_TIME);
 
     expect(actual).toBe('Void Accept Time (GMT-4): ');
   });
@@ -120,8 +122,9 @@ describe('LogInfoComponent', () => {
         logInfoDetails: [Helper.fakeLogInfoDetail],
       }
     });
+    instance.isWrongScore = jest.fn().mockReturnValue(false);
 
-    const actual = instance.displayVoidTimeLabel(false, TVSRequestFilterBy.CHECK_TIME);
+    const actual = instance.displayVoidTimeLabel(TVSRequestFilterBy.CHECK_TIME);
 
     expect(actual).toBe('Void time (GMT-4): ');
   });

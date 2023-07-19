@@ -66,10 +66,11 @@ describe('AppService', () => {
       request: requestDetailModel,
       wrongHdpModels: [],
       wrongOuModels: [],
-      wrongOddsModels: []
+      wrongOddsModels: [],
+      reducedOverModels: []
     };
    mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
-   
+
    // Action
    const actualData = await appService.getRequestById(47760);
 
@@ -84,7 +85,7 @@ describe('AppService', () => {
     expectedData.total = 1;
     expectedData.licenseesName = '12Bet';
     mockHttpService.postJson.mockResolvedValue(expectedData);
-    
+
     // Action
     const actualData = await appService.getTickets(new GetTicketsQuery());
 
@@ -98,7 +99,7 @@ describe('AppService', () => {
     expectedData.total = 1;
     expectedData.licenseesName = '12Bet';
     mockHttpService.postJson.mockResolvedValue(expectedData);
-    
+
     // Action
     const actualData = await appService.getTicketsMini(new GetTicketsQuery());
 
@@ -112,10 +113,10 @@ describe('AppService', () => {
     expectedData.reasonEnglish = 'reason english';
     expectedData.reasonChineseSimplified = 'reason chinese simplified';
     mockHttpService.postJson.mockResolvedValue(expectedData);
-    
+
     // Action
     const actualData = await appService.getVoidedReason(27, 0);
-    
+
     // Assert
     expect(actualData).toEqual(expectedData);
   });
@@ -129,7 +130,7 @@ describe('AppService', () => {
       data: { historyId: 1 }
     };
     mockHttpService.postJson.mockResolvedValue(expectedData);
-    
+
     // Action
     const actualData = await appService.insertQueue(new VoidTicketsQuery());
 
@@ -150,13 +151,13 @@ describe('AppService', () => {
     expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url);
   });
 
-  
+
   it('#getLastModifiedDate should return expected data', async() => {
     // Arrange
     const expectedData = new RequestLastModifiedDate();
     expectedData.lastModifiedDate = new Date(Helper.fakeDate);
     mockHttpService.postJson.mockResolvedValue(expectedData);
-    
+
     // Action
     const actualData = await appService.getLastModifiedDate(1);
 

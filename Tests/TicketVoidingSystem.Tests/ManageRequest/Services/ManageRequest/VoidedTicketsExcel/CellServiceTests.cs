@@ -11,7 +11,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
 {
 	public class CellServiceTests
 	{
-		private CellServiceImp cellService;
+		private readonly CellServiceImp cellService;
 
 		public CellServiceTests()
 		{
@@ -51,10 +51,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
 		public void CreateTitle_ShouldReturnCorrectTitleString()
 		{
 			// Arrange
-			int matchId = 123;
+			const int matchId = 123;
 
 			// Act
-			string title = cellService.CreateTitle(matchId);
+			var title = cellService.CreateTitle(matchId);
 
 			// Assert
 			Assert.Equal($"Void Bet - MatchId: {matchId}", title);
@@ -65,7 +65,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
 		{
 			// Arrange
 			var worksheet = SetupTestingSheet.CreateTestingSheet();
-			var rowNumber = 1;
+			const int rowNumber = 1;
 			var group = new Group<ExcelVoidedTicketModel>();
 
 			// Act

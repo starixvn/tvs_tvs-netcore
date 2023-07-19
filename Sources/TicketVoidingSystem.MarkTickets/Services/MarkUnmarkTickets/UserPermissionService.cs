@@ -29,8 +29,8 @@ public class UserPermissionServiceImp : UserPermissionService
 
         return new UserPermission
         {
-            MarkTickets = markTicketsPermissionTask.Result,
-            ViewUserName = viewUserNamePermissionTask.Result
+            MarkTickets = await markTicketsPermissionTask,
+            ViewUserName = await viewUserNamePermissionTask
         };
     }
 }

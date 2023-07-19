@@ -4,6 +4,7 @@ import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { WrongOuModel } from '../models/event-wrong-ou.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { OperatorInfo } from '../others/others.model';
+import { ReducedOverModel } from './event-reduced-over.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
 
 export class RequestDetailModel {
@@ -71,6 +72,6 @@ export class RequestDetailViewModel {
   wrongHdpModels: WrongHdpModel[];
   wrongOuModels: WrongOuModel[];
   wrongOddsModels: WrongOddsModel[];
-
+  reducedOverModels: ReducedOverModel[];
   messages: Message[];
 }

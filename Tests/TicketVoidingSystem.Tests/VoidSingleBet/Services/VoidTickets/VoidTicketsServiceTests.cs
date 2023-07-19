@@ -64,7 +64,7 @@ public class VoidTicketsServiceTests
         var repository = Substitute.For<IDynamicRepository>();
         repository.When(x =>
                 x.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(Arg.Compat.Any<VoidTicketsCriteria>()))
-            .Do(x => throw expectedException);
+            .Do(_ => throw expectedException);
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService);

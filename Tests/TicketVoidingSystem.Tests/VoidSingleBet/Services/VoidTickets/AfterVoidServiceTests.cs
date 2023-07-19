@@ -47,8 +47,9 @@ public class AfterVoidServiceTests
         var actual = await service.ExecuteWhenVoidSuccess(query, voidResult, "");
 
         // Assert
-        Assert.True(actual.First().IsSuccessful);
-        Assert.Equal("", actual.First().ErrorMsg);
+        var iEnumerable = actual.ToList();
+        Assert.True(iEnumerable.First().IsSuccessful);
+        Assert.Equal("", iEnumerable.First().ErrorMsg);
     }
 
     [Fact]
@@ -78,8 +79,9 @@ public class AfterVoidServiceTests
         var actual = await service.ExecuteWhenVoidSuccess(query, voidResult, "Failed NP");
 
         // Assert
-        Assert.False(actual.First().IsSuccessful);
-        Assert.Equal("Failed NP", actual.First().ErrorMsg);
+        var iEnumerable = actual.ToList();
+        Assert.False(iEnumerable.First().IsSuccessful);
+        Assert.Equal("Failed NP", iEnumerable.First().ErrorMsg);
     }
 
     [Fact]
@@ -189,9 +191,10 @@ public class AfterVoidServiceTests
         var actual = service.ExecuteWhenVoidFailed(voidResult);
 
         // Assert
-        Assert.True(actual.Any());
-        Assert.False(actual.First().IsSuccessful);
-        Assert.Equal(1, actual.First().ErrorCode);
-        Assert.Equal("Failed", actual.First().ErrorMsg);
+        var iEnumerable = actual.ToList();
+        Assert.True(iEnumerable.Any());
+        Assert.False(iEnumerable.First().IsSuccessful);
+        Assert.Equal(1, iEnumerable.First().ErrorCode);
+        Assert.Equal("Failed", iEnumerable.First().ErrorMsg);
     }
 }

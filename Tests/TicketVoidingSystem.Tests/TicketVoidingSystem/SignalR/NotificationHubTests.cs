@@ -4,7 +4,7 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SignalR;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.SignalR;
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.SignalR;
 
 public class NotificationHubTests
 {
@@ -31,6 +31,7 @@ public class NotificationHubTests
         clientEvent.updateRequestStatus(requestStatus);
         clientEvent.showErrorMessage("");
 
+        // Assert
         clientEvent.Received(1).showVoidResult(results);
         clientEvent.Received(1).updateRequestStatus(requestStatus);
         clientEvent.Received(1).showErrorMessage("");

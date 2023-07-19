@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using TicketVoidingSystem.Extensions.TN;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.Extensions.TN
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions.TN
 {
     public class AppendStringExtensionTests
     {
@@ -10,25 +11,21 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void AppendWithNewLine_WithNullRoot_ReturnsExtend()
         {
             // Arrange
-            string root = null;
-            string extend = "Extend";
-
             // Act
-            var result = root.AppendWithNewLine(extend);
+            var result = ((string)null).AppendWithNewLine("Extend");
 
             // Assert
-            Assert.Equal(extend, result);
+            Assert.Equal("Extend", result);
         }
 
         [Fact]
         public void AppendWithNewLine_WithNullOrWhiteSpaceExtend_ReturnsRoot()
         {
             // Arrange
-            string root = "Root";
-            string extend = null;
+            const string root = "Root";
 
             // Act
-            var result = root.AppendWithNewLine(extend);
+            var result = root.AppendWithNewLine(null);
 
             // Assert
             Assert.Equal(root, result);
@@ -38,12 +35,11 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void AppendWithNewLine_WithValidRootAndExtend_ReturnsAppendedString()
         {
             // Arrange
-            string root = "Root";
-            string extend = "Extend";
-            string expected = "Root\r\nExtend";
+            const string root = "Root";
+            var expected = $"Root{Environment.NewLine}Extend";
 
             // Act
-            var result = root.AppendWithNewLine(extend);
+            var result = root.AppendWithNewLine("Extend");
 
             // Assert
             Assert.Equal(expected, result);
@@ -53,11 +49,10 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void Intersected_WithNullOrEmptyTextWithComma_ReturnsEmptyString()
         {
             // Arrange
-            string textWithComma = null;
             var listString = new List<string> { "User1", "User2" };
 
             // Act
-            var result = textWithComma.Intersected(listString);
+            var result = ((string)null).Intersected(listString);
 
             // Assert
             Assert.Equal(string.Empty, result);
@@ -67,9 +62,9 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void Intersected_WithValidTextWithCommaAndDistinctListString_ReturnsIntersectedString()
         {
             // Arrange
-            string textWithComma = "User1,User2,User3";
+            const string textWithComma = "User1,User2,User3";
             var listString = new List<string> { "User2", "User3", "User4" };
-            string expected = "User2, User3";
+            const string expected = "User2, User3";
 
             // Act
             var result = textWithComma.Intersected(listString);
@@ -82,11 +77,8 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void Eliminate_WithNullOrWhiteSpaceRoot_ReturnsEmptyString()
         {
             // Arrange
-            string root = null;
-            string elimination = "User1,User2";
-
             // Act
-            var result = root.Eliminate(elimination);
+            var result = ((string)null).Eliminate("User1,User2");
 
             // Assert
             Assert.Equal(string.Empty, result);
@@ -96,11 +88,10 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void Eliminate_WithNullOrWhiteSpaceElimination_ReturnsRoot()
         {
             // Arrange
-            string root = "User1,User2,User3";
-            string elimination = null;
+            const string root = "User1,User2,User3";
 
             // Act
-            var result = root.Eliminate(elimination);
+            var result = root.Eliminate(null);
 
             // Assert
             Assert.Equal(root, result);
@@ -110,16 +101,13 @@ namespace TicketVoidingSystem.Tests.Extensions.TN
         public void Eliminate_WithValidRootAndElimination_ReturnsEliminatedString()
         {
             // Arrange
-            string root = "User1,User2,User3,User4";
-            string elimination = "User2,User4";
-            string expected = "User1,User3";
+            const string root = "User1,User2,User3,User4";
 
             // Act
-            var result = root.Eliminate(elimination);
+            var result = root.Eliminate("User2,User4");
 
             // Assert
-            Assert.Equal(expected, result);
+            Assert.Equal("User1,User3", result);
         }
-
     }
 }

@@ -31,7 +31,7 @@ public class UserLogsServiceTests
         var actual = await service.GetUserLogs(query);
 
         // Assert
-        Assert.Equal(expected.FirstOrDefault()?.TransIds, actual.FirstOrDefault()?.TransIds);
+        Assert.Equal(expected.FirstOrDefault().TransIds, actual.FirstOrDefault().TransIds);
     }
 
     [Theory]
@@ -79,7 +79,7 @@ public class UserLogsServiceTests
 
         // Assert
         var userLog = actual.FirstOrDefault();
-        Assert.Equal(9000001, userLog?.MatchId);
-        Assert.Equal("TPS Turky - vs - TPS Turky", userLog?.Event);
+        Assert.Equal(9000001, userLog.MatchId);
+        Assert.Equal("TPS Turky - vs - TPS Turky", userLog.Event);
     }
 }

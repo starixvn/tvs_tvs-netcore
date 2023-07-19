@@ -100,7 +100,7 @@ class Helper {
 })
 class ModuleTest { }
 
-describe.only('MatchIdComponent', () => {
+describe('MatchIdComponent', () => {
   let shallow: Shallow<MatchIdComponent>;
 
   beforeEach(() => {

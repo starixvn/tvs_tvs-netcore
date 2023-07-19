@@ -89,7 +89,8 @@ class Helper {
     redCardModels: [],
     wrongHdpModels: [],
     wrongOuModels: [],
-    wrongOddsModels: []
+    wrongOddsModels: [],
+    reducedOverModels: []
   };
   
   static readonly fakeIssueTypeList: IssueType[] = [

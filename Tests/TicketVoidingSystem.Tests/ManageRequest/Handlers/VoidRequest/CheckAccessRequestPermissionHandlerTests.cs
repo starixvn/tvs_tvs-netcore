@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
     public class CheckAccessRequestPermissionHandlerTests
     {
         [Fact]
-        public async Task Handle_ValideRequest_ReturnTrue()
+        public async Task Handle_ValidRequest_ReturnTrue()
         {
             // Arrange
             var request = new CheckAccessRequestPermissionRequest();
@@ -23,7 +23,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
             var actual = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            Assert.Equal(true, actual);
+            Assert.True(actual);
         }
     }
 }

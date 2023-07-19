@@ -11,9 +11,8 @@ namespace TicketVoidingSystem.Tests.ManageVoidServices.Handlers;
 
 public class GetVoidingHistoryHandlerTests
 {
-    // Jacob thấy expected là empty list thôi mà, sao ko đổi tên testcase lại, đổi lại chỗ Assert
     [Fact]
-    public async Task Handle_HasRequest_ReturnExpected()
+    public async Task Handle_HasRequest_VoidingHistoryServiceHasCalledGetByRequestId()
     {
         // Arrange
         var expected = new List<VoidingHistoryModel>();
@@ -23,10 +22,9 @@ public class GetVoidingHistoryHandlerTests
         var handler = new GetVoidingHistoryHandler(voidingHistoryService);
 
         // Act
-        var actual = await handler.Handle(request, CancellationToken.None);
+        _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         await voidingHistoryService.Received(1).GetByRequestId(Arg.Compat.Is<int>(x => x == request.RequestId));
-        Assert.Equal(expected, actual);
     }
 }

@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.LetstalkService.Core.Models;
 using NSubstitute;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
@@ -11,8 +9,8 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 
 public class GetVoidResultCacheHandlerTests
 {
-    private readonly VoidResultCacheService voidResultCacheService;
     private readonly GetVoidResultCacheHandler handler;
+    private readonly VoidResultCacheService voidResultCacheService;
 
     public GetVoidResultCacheHandlerTests()
     {
@@ -25,12 +23,11 @@ public class GetVoidResultCacheHandlerTests
     {
         // Arrange
         var request = new GetVoidResultCacheRequest();
-        var expected = new List<Result> { };
 
         // Act
-        var actual = await handler.Handle(request, CancellationToken.None);
+        _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await voidResultCacheService.Received().GetVoidResultCache(request.Guid);
+        await voidResultCacheService.Received(1).GetVoidResultCache(request.Guid);
     }
 }

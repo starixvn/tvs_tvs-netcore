@@ -81,6 +81,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.OTHER_ISSUES;
   }
 
+  static isReducedOver(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.REDUCED_OVER;
+  }
+
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);
@@ -101,6 +105,8 @@ export class StaticService {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
+    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.reducedOverModels[0].subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -193,5 +199,24 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
       issueTypeId === IssueTypeConstant.RED_CARD ||
       issueTypeId === IssueTypeConstant.WRONG_SCORE;
-}
+  }
+
+  static isStringHasLength(value: string): boolean {
+    return value && value.length > 0;
+  }
+
+  static convertStringToBetId8xxx(text: string): string {
+    if (!this.isStringHasLength(text)) {
+      return null;
+    }
+
+    const LENGTH_OF_OVER = 3;
+    const PREFIX = '8';
+    let value = text;
+    if (value.length < LENGTH_OF_OVER && value.length > 0) {
+      value = value.padStart(LENGTH_OF_OVER, '0');
+    }
+
+    return `${PREFIX}${value}`;
+  }
 }
