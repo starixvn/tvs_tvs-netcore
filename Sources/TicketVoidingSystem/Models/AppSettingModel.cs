@@ -24,8 +24,6 @@ public class AppSettingModel
     public string IgnoreSiteDb { get; init; }
     public string JackTimeCashOutUrl { get; init; }
 
-    public string NetPositionUrl { get; set; }
-
     public FanexMailService FanexMailService { get; init; }
 
     public string TicketVoidingSystemUrl { get; init; }
