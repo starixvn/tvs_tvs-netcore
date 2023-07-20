@@ -30,7 +30,7 @@ export class GetTicketsQuery extends FilterParams {
 
 export class VoidTicketsQuery extends FilterParams {
     tickets: BetID[];
-    transIdCrickets: string;
+    transIdCrickets: BetID[];
     message: Message;
     userName: string;
     userPassword: string;

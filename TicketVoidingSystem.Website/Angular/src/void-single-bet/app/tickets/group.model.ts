@@ -120,16 +120,13 @@ export class GroupModel {
         });
     }
 
-    getTicketCricket(): string {
-        let result = '';
-        this.tickets.forEach(ticket => {
-            result = ticket.isChecked && ticket.isCricket ?
-                result !== '' ?
-                    result + ',' + ticket.value : ticket.value
-                : result;
+    getTicketCricket(): BetID[] {
+        return this.tickets.filter(ticket => ticket.isChecked && ticket.isCricket).map(ticket => {
+            return {
+                transId: ticket.value,
+                siteDbGroupId: ticket.siteDbGroupId
+            } as BetID;
         });
-
-        return result;
     }
 
     getTicketSold(): string {
