@@ -101,11 +101,12 @@ public static class Helper
         return await JsonSerializer.DeserializeAsync<T>(responseStream, options);
     }
 
-    public static string MessageFailApiCricket(string transIdCrickets, string actionType)
+    public static string MessageFailApiCricket(IEnumerable<BetId> transIdCrickets, string actionType)
     {
+        var transIds = string.Join(", ", transIdCrickets.Select(x => x.TransId));
         var result = actionType == NetPositionConstant.ActionVoid ?
-            string.Format(StringResource.FailAPIVoidCricket, transIdCrickets.Replace(",", ", ")) :
-            string.Format(StringResource.FailAPIRecoverCricket, transIdCrickets.Replace(",", ", "));
+            string.Format(StringResource.FailAPIVoidCricket, transIds) :
+            string.Format(StringResource.FailAPIRecoverCricket, transIds);
 
         return result;
     }
