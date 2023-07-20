@@ -225,6 +225,10 @@
         <Setting Key="DBSIG2.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
+        <Setting Key="DBCTG.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+
         <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_SportsType_Select" SpName="TicketVoiding_SportsType_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_Action_Select" SpName="TicketVoiding_Action_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />

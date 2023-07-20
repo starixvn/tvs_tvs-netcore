@@ -26,7 +26,7 @@
     (ngModelChange)="changeFilter();isValidSingleDecimalRuns($event, 'runs-input')"
     [disabled]="primitivePropertyItem.isDisabledRuns || isVoided">
   <div class="live-indicator{{index}} mr-2">
-    <div class="form-check mr-2">
+    <div class="form-check form-check-inline mr-2">
       <input class="form-check-input" type="checkbox" name="radio-bet-team" id="none-live{{index}}"
         [disabled]="primitivePropertyItem.isDisabledNonLive || isVoided"
         [(ngModel)]="model.nonLive" (ngModelChange)="changeFilter()">
@@ -34,7 +34,7 @@
         Non-Live
       </label>
     </div>
-    <div class="form-check">
+    <div class="form-check form-check-inline">
       <input class="form-check-input" type="checkbox" name="radio-bet-team" id="live{{index}}"
         [disabled]="primitivePropertyItem.isDisabledLive || isVoided"
         [(ngModel)]="model.live" (ngModelChange)="changeFilter()">

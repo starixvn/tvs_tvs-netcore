@@ -1,10 +1,15 @@
 div[class*='live-indicator'] {
   padding: 0 5px;
   border: 1px solid #ced4da;
+  box-sizing: border-box;
   border-radius: 4px;
   align-items: center;
   display: flex;
   white-space: nowrap;
+
+  .form-check {
+    height: 29px !important;
+  }
 }
 
 ng-select-mixture[class*='bet-type-dropdown'] {
@@ -28,12 +33,12 @@ multiple-selection[class*='player-dropdown'] {
 }
 
 .fa-icon-remove {
-  font-size: 15px;
+  font-size: 13px;
   color: gray;
 }
 
 .fa-icon-add {
-  font-size: 15px;
+  font-size: 13px;
   color: #007bff;
 }
 

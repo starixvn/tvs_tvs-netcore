@@ -28,9 +28,7 @@ public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
 
     public async Task Execute(AddRequestQuery query, int requestId)
     {
-        if (!query.IsHasUusTickets
-                && query.IssueTypeId == IssueTypeConstant.AbnormalBet
-                && query.SubIssueTypeId is SubIssueTypeConstant.FixGame or SubIssueTypeConstant.SystemFormulaBet)
+        if (query is { IsHasUusTickets: false, IssueTypeId: IssueTypeConstant.AbnormalBet, SubIssueTypeId: SubIssueTypeConstant.FixGame or SubIssueTypeConstant.SystemFormulaBet })
         {
             var subject = CreateSubject(query);
             var content = await CreateContent(query, requestId);
@@ -47,7 +45,7 @@ public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
 
     private async Task<string> CreateContent(AddRequestQuery query, int requestId)
     {
-        var matchInfo = await GetMatch(query.MatchId);
+        var matchInfo = await GetMatch(query.MatchId ?? 0);
         var content = new StringBuilder();
         content.AppendLine($"Request ID: {requestId}");
         content.AppendLine($"Sub Issue Type: {query.SubIssueTypeName}");

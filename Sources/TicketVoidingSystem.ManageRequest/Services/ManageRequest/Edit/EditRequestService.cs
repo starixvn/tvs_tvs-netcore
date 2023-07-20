@@ -58,7 +58,7 @@ public class EditRequestServiceImp : EditRequestService
     private async Task<Result> ExecuteReCalculateAndUpdateRequest(EditRequestQuery query)
     {
         var reCalcTicketsAbnormalResults = Enumerable.Empty<Result>();
-        if (!string.IsNullOrWhiteSpace(query.RemoveTransIds) && query.IsConfirmCalculator &&
+        if (!string.IsNullOrWhiteSpace(query.RemoveTransIds) && query.IsConfirmCalculator == true &&
             (query.IssueTypeId.IsAbnormalBet() || query.IssueTypeId.IsAbnormalBetRealMember()))
         {
             reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(query.MatchId, query.RemoveTransIds);

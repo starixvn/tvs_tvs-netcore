@@ -79,8 +79,8 @@ export class ValidationService {
       filterBy: filterBy,
       issueTypeId: Number(args.issueTypeId),
       subIssueTypeId: Number(args.subIssueTypeId),
-      isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? confirmAbnormalBetComponent.isRemoveCustomerClass201 : null,
-      isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? confirmAbnormalBetComponent.isRemoveCustomerClass4K : null,
+      isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
+      isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
     };
 
     return this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);

@@ -7,7 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int issueTypeId, int matchId, int actionId);
+    Task Execute(int requestId, int issueTypeId, int? matchId, int actionId);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -19,7 +19,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int issueTypeId, int matchId, int actionId)
+    public async Task Execute(int requestId, int issueTypeId, int? matchId, int actionId)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {

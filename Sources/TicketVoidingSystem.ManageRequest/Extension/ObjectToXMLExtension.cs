@@ -505,7 +505,7 @@ public static class ObjectToXMLExtension
                 + $"ToDate='{toDate}'/></root>";
     }
 
-    public static string GetKickOffInfoXml(int matchId, DateTime? kickOffTime)
+    public static string GetKickOffInfoXml(int? matchId, DateTime? kickOffTime)
     {
         return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime?.ToString(CultureInfo.InvariantCulture)}'/></root>";
     }

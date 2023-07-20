@@ -10,7 +10,7 @@ public class ReCalculateTicketCommand : NonQueryCommand
 
     public string ErrMsg { get; set; }
 
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public string TransIds { get; set; }
 

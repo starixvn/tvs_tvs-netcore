@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
 public interface ReCalculateTicketsService
 {
-    Task<IEnumerable<Result>> Execute(int matchId, string transIds);
+    Task<IEnumerable<Result>> Execute(int? matchId, string transIds);
 }
 
 public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
@@ -24,7 +24,7 @@ public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
         this.loggingService = loggingService;
     }
 
-    public async Task<IEnumerable<Result>> Execute(int matchId, string transIds)
+    public async Task<IEnumerable<Result>> Execute(int? matchId, string transIds)
     {
         var results = new List<Result>();
         try
@@ -40,7 +40,7 @@ public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
         return results;
     }
 
-    private async Task<IEnumerable<Result>> ExecuteParallel(int matchId, string transIds)
+    private async Task<IEnumerable<Result>> ExecuteParallel(int? matchId, string transIds)
     {
         var command = new ReCalculateTicketCommand
         {

@@ -1,7 +1,7 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.Utilities;
 
@@ -48,7 +48,7 @@ public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
 
     private async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTickets(int matchId)
     {
-        var criteria = new GetBetTypesHaveTicketsCriteria
+        var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
         {
             MatchId = matchId
         };
@@ -62,7 +62,7 @@ public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
         return betTypesAllServers;
     }
 
-    private async Task<IEnumerable<BetTypeModel>> FetchDataAsync(int siteDbGroupId, GetBetTypesHaveTicketsCriteria criteria)
+    private async Task<IEnumerable<BetTypeModel>> FetchDataAsync(int siteDbGroupId, TicketVoidingGetBetTypesHaveTicketsCriteria criteria)
     {
         criteria.SiteDbGroupId = siteDbGroupId;
         return await repository.FetchAsync<BetTypeModel>(criteria);
