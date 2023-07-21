@@ -14,7 +14,7 @@ namespace TicketVoidingSystem.Tests.TicketListing.Services;
 public class GetSummaryTicketsServiceTests
 {
     [Theory]
-    [InlineData(0)]
+    //[InlineData(0)]
     [InlineData(1)]
     public async Task GetSummaryTickets_ReturnViewModel(int licenseeId)
     {

@@ -38,10 +38,10 @@ public class NetPositionServiceTests
     }
 
     [Fact]
-    public async Task UpdateNetPosition_WithEmptyTransIds_ReturnsTrue()
+    public async Task UpdateNetPosition_TicketCricketsIsAny_ReturnsTrue()
     {
         // Arrange
-        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
+        var ticketCrickets = new List<BetId>();
 
         // Act
         var result = await service.UpdateNetPosition(ticketCrickets, "VOID");
@@ -76,13 +76,25 @@ public class NetPositionServiceTests
     }
 
     [Fact]
-    public async Task RollBackNetPosition_WithInValidTransIds_NotCalledRepositoryExecuteAsync()
+    public async Task RollBackNetPosition_WithTransIdsIsAny_NotCalledRepositoryExecuteAsync()
     {
         // Arrange
         var ticketCrickets = new List<BetId>();
 
         // Act
         await service.RollBackNetPosition(ticketCrickets);
+
+        // Assert
+        await repository.Received(0).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
+    }
+
+    [Fact]
+    public async Task RollBackNetPosition_WithTransIdsIsNull_NotCalledRepositoryExecuteAsync()
+    {
+        // Arrange
+
+        // Act
+        await service.RollBackNetPosition(null);
 
         // Assert
         await repository.Received(0).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());

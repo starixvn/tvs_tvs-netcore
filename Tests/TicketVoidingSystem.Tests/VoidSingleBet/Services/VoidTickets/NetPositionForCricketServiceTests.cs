@@ -60,41 +60,21 @@ public class NetPositionForCricketServiceTests
     }
 
     [Fact]
-    public async Task Rollback_IsNeedToRollBackNetPositionTrue_RollBackNetPositionHasCalled()
+    public async Task Rollback_HasCalledRollBackNetPosition()
     {
         // Arrange
         var voidResult = new VoidTicketsModel
         {
-            IsNeedToRollBackNetPosition = true,
             Validation = new VoidTicketValidation()
         };
-        var ticketCrickets = new List<BetId>();
         netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
 
         // Act
-        await service.Rollback(ticketCrickets, voidResult);
+        await service.Rollback(voidResult);
 
         // Assert
         await netPositionService.Received(1)
             .RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
     }
-
-    [Fact]
-    public async Task Rollback_IsNeedToRollBackNetPositionFalse_RollBackNetPositionHasCalled()
-    {
-        // Arrange
-        var voidResult = new VoidTicketsModel
-        {
-            IsNeedToRollBackNetPosition = false
-        };
-        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
-        var ticketCrickets = new List<BetId>();
-
-        // Act
-        await service.Rollback(ticketCrickets, voidResult);
-
-        // Assert
-        await netPositionService.Received(0)
-            .RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
-    }
+    
 }

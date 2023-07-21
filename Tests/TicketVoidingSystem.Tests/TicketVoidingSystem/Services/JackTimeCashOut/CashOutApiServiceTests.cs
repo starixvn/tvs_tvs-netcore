@@ -57,7 +57,10 @@ public class CashOutApiServiceTests
         var tickets = new List<TicketEmailModel>
         {
             new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 1, CustId = 1 },
-            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 }
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
+            new() { IsCashOut = false, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2 },
+            new() { IsCashOut = false, SportTypeId = SportTypeConstant.CashOut	, TransId = 2, CustId = 2 },
         };
 
         // Act
@@ -65,6 +68,24 @@ public class CashOutApiServiceTests
 
         // Assert
         await cashOutHttpClientService.Received(1).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
+    }
+
+    [Fact]
+    public async Task VoidBetForCashOutBasketball_NoHasBasketballCashOutTickets_NoHasCalledPostRequest()
+    {
+        // Arrange
+        var tickets = new List<TicketEmailModel>
+        {
+            new() { IsCashOut = false, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
+            new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2 },
+            new() { IsCashOut = false, SportTypeId = SportTypeConstant.CashOut  , TransId = 2, CustId = 2 },
+        };
+
+        // Act
+        await service.VoidBetForCashOutBasketball(tickets);
+
+        // Assert
+        await cashOutHttpClientService.Received(0).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
     }
 
     [Fact]

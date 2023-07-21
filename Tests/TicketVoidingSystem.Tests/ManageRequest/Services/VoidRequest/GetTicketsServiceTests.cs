@@ -60,11 +60,13 @@ public class GetTicketsServiceTests
         await repository.Received().FetchMultipleAsync<BetId, BetId, BetId>(Arg.Any<GetTicketInRequestCriteria>());
     }
 
-    [Fact]
-    public async Task GetTickets_HasRequestIdIs0_HasGetBetTransTicket()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public async Task GetTickets_HasRequestIdIs0_HasGetBetTransTicket(int matchId)
     {
         // Arrange
-        var query = new GetTicketsQuery { IssueTypeId = 8, RequestId = 0 };
+        var query = new GetTicketsQuery { IssueTypeId = 8, RequestId = 0, Match = new Match { MatchId = matchId } };
         var tickets = new List<BetId> { new(), new() };
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
         repository.FetchMultipleAsync<BetId, BetId, BetId>(Arg.Any<GetTicketInRequestCriteria>())

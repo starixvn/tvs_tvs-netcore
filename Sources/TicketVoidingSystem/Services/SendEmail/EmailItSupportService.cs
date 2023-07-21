@@ -29,9 +29,11 @@ public class EmailItSupportServiceImp : EmailItSupportService
     {
         var viewModel = mailVoidViewModel.DeepClone();
         var site = sitesEmailService.GetSiteByName(sites, StringResource.ItSupport);
-        var uusTickets = isFromAfterVoidService
-            ? tickets.Where(s => s.IsITSupportCreatedRequest && s.IsItSupport && s.Currency != CurrencyConstant.UusId)
-            : tickets.Where(s => s.IsItSupport && s.Currency != CurrencyConstant.UusId);
+        var uusTickets = tickets.Where(s => s.IsItSupport && s.Currency != CurrencyConstant.UusId);
+        if (isFromAfterVoidService)
+        {
+            uusTickets = uusTickets.Where(s => s.IsITSupportCreatedRequest);
+        }
 
         await emailSimpleService.Send(viewModel, site, uusTickets, EmailGroup.ItSupport, isFromAfterVoidService);
     }

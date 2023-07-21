@@ -261,12 +261,12 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     }
 
     [Theory]
-    [InlineData("")]
-    [InlineData("86")]
-    public void GetComboParlayName_ReturnName(string betCheck)
+    [InlineData("", "")]
+    [InlineData("86", " <div><span class='combo-name'>1</span></div>")]
+    public void GetComboParlayName_ReturnName(string betCheck, string html)
     {
         // Arrange
-        var comboNames = new[] { "1", "2" };
+        var comboNames = new[] { "1", "" };
         var ticket = Builder<Ticket>.CreateNew().With(x => x.BetCheck = betCheck).Build();
         remotingRefWrapperService.GetComboParlayName(default, default, default, default).ReturnsForAnyArgs(comboNames);
         service = new BetListServiceImp(remotingRefWrapperService, null);
@@ -275,14 +275,14 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.GetComboParlayName(ticket);
 
         // Assert
-        Assert.NotNull(actual);
+        Assert.Equal(html, actual);
     }
 
     [Fact]
     public void GetComboName_ReturnName()
     {
         // Arrange
-        var comboNames = new[] { "1", "2" };
+        var comboNames = new[] { "1", "" };
         remotingRefWrapperService.GetComboParlayName(default, default, default, default).ReturnsForAnyArgs(comboNames);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 

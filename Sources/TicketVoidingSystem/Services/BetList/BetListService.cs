@@ -218,8 +218,8 @@ public class BetListServiceImp : BetListService
         var count = comboNames?.Length ?? 0;
         for (var i = 0; i < count; i++)
         {
-            html = comboNames?[i] == string.Empty ?
-                html : html + $" <div><span class='combo-name'>{comboNames?[i]}</span></div>";
+            html = comboNames[i] == string.Empty ?
+                html : html + $" <div><span class='combo-name'>{comboNames[i]}</span></div>";
         }
 
         return html;

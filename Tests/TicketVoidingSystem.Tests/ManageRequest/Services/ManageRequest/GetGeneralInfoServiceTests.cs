@@ -112,4 +112,73 @@ public class GetGeneralInfoServiceTests
         // Assert
         AssertExtension.Equal(expected, actual);
     }
+
+    [Fact]
+    public async Task GetGeneralInfoViewModel_NoHasGeneralInfo_ReturnValidViewModel()
+    {
+        // Arrange
+        var item1 = new List<GeneralInfoModel>();
+        var item2 = new List<UserVoidMessage>
+        {
+            new()
+            {
+                VoidedBy = "aa",
+                ContentEnglish = "@@",
+                ContentChineseSimplified = "@@"
+            }
+        };
+        var item3 = new List<EmailResultModel>
+        {
+            new()
+            {
+                Message = "@@",
+                Type = 235
+            },
+            new()
+            {
+                Message = "gg",
+                Type = 135
+            }
+        };
+        var succeedEmails = new List<string> { "@@" };
+        var failEmails = new List<string> { "gg" };
+        var request = new GetGeneralInfoCriteria
+        {
+            RequestId = 123,
+            MatchId = 123
+        };
+        repository.FetchMultipleAsync<GeneralInfoModel, UserVoidMessage, EmailResultModel>(request)
+            .ReturnsForAnyArgs((item1, item2, item3));
+
+        remotingRefService.GetLeagueName(1, "").ReturnsForAnyArgs("Champion League");
+        remotingRefService.GetTeamName(12, LanguageCode.English).Returns("Chen");
+        remotingRefService.GetTeamName(13, LanguageCode.English).Returns("Bat");
+
+        var expected = new GeneralInfoViewModel
+        {
+            GeneralInfoModel = new GeneralInfoModel
+            {
+                VoidedTimeString = new DateTime().ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt"),
+                KickOffTimeString = new DateTime().ToString("hh:mm tt"),
+                KickOffTime = new DateTime(),
+                LeagueName = "Champion League"
+            },
+            UserVoidMessages = new List<GroupUserVoidMessage>
+            {
+                new()
+                {
+                    Messages = item2,
+                    VoidedBy = "aa"
+                }
+            },
+            SucceedEmails = succeedEmails,
+            FailedEmails = failEmails
+        };
+
+        // Act
+        var actual = await service.GetGeneralInfoViewModel(request);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
 }
