@@ -29,7 +29,7 @@ public class NetPositionServiceImp : NetPositionService
 
     public async Task<bool> UpdateNetPosition(IEnumerable<BetId> transIds, string action)
     {
-        if (!transIds.Any())
+        if (transIds == null || !transIds.Any())
         {
             return true;
         }

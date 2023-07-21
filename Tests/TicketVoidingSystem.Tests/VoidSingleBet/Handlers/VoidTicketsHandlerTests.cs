@@ -17,11 +17,11 @@ public class VoidTicketsHandlerTests
     public async Task Handler_HaveNotTicketCanBeVoid_CreateMessageFailApiCricket()
     {
         // Arrange
-        const string expectedTransIdsCricket = "123456";
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
         var request = new VoidTicketsRequest
         {
             Tickets = new List<BetId> { new() },
-            TransIdCrickets = expectedTransIdsCricket,
+            TransIdCrickets = ticketCrickets,
             UserPassword = string.Empty
         };
         var voidTicketsService = Substitute.For<VoidTicketsService>();
@@ -47,11 +47,11 @@ public class VoidTicketsHandlerTests
     public async Task Handler_HaveTicketCanBeVoid_CreateMessageFailApiCricket()
     {
         // Arrange
-        const string expectedTransIdsCricket = "123456";
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
         var request = new VoidTicketsRequest
         {
             Tickets = new List<BetId> { new() },
-            TransIdCrickets = expectedTransIdsCricket,
+            TransIdCrickets = ticketCrickets,
             UserPassword = string.Empty
         };
         var voidTicketsService = Substitute.For<VoidTicketsService>();
@@ -77,11 +77,11 @@ public class VoidTicketsHandlerTests
     public async Task Handler_IsExistVoidResult_NotCallSetVoidResultCache()
     {
         // Arrange
-        const string expectedTransIdsCricket = "123456";
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
         var request = new VoidTicketsRequest
         {
             Tickets = new List<BetId> { new() },
-            TransIdCrickets = expectedTransIdsCricket,
+            TransIdCrickets = ticketCrickets,
             UserPassword = string.Empty
         };
         var voidResultCacheService = Substitute.For<VoidResultCacheService>();

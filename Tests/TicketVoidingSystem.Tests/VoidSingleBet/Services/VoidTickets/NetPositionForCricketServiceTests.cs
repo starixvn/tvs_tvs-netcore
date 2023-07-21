@@ -41,13 +41,14 @@ public class NetPositionForCricketServiceTests
     public async Task Update_CallUpdateNetPositionFailed_ReturnWarningCricket()
     {
         // Arrange
-        var tickets = new List<BetId> { new(){ TransId  = "1"}, new() { TransId = "2" } };
+        var tickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2" } };
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
         var query = new VoidTicketsQuery
         {
-            TransIdCrickets = "1",
-            Tickets = tickets,
+            TransIdCrickets = ticketCrickets,
+            Tickets = tickets
         };
-        var expectedTickets = new List<BetId> { new() { TransId = "2" } };
+        var expectedTickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2" } };
         netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
 
         // Act
@@ -67,15 +68,15 @@ public class NetPositionForCricketServiceTests
             IsNeedToRollBackNetPosition = true,
             Validation = new VoidTicketValidation()
         };
-
+        var ticketCrickets = new List<BetId>();
         netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
 
         // Act
-        await service.Rollback("", voidResult);
+        await service.Rollback(ticketCrickets, voidResult);
 
         // Assert
         await netPositionService.Received(1)
-            .RollBackNetPosition(Arg.Any<string>());
+            .RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
     }
 
     [Fact]
@@ -87,12 +88,13 @@ public class NetPositionForCricketServiceTests
             IsNeedToRollBackNetPosition = false
         };
         netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
+        var ticketCrickets = new List<BetId>();
 
         // Act
-        await service.Rollback("", voidResult);
+        await service.Rollback(ticketCrickets, voidResult);
 
         // Assert
         await netPositionService.Received(0)
-            .RollBackNetPosition(Arg.Any<string>());
+            .RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
     }
 }

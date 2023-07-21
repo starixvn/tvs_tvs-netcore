@@ -94,7 +94,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
         {
             Tickets = tickets.ToList(),
             Validation = validation,
-            IsNeedToRollBackNetPosition = validations.Any(x => !x.IsSuccessful && x.SiteDbGroupId == SiteDbGroupConstant.CentralDb)
+            IsNeedToRollBackNetPosition = validations.Any(x => !x.IsSuccessful)
         };
     }
 

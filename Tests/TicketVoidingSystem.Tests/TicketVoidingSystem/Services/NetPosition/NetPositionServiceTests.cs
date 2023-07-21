@@ -1,90 +1,103 @@
-﻿using Fanex.Data.Repository;
-using NSubstitute;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using NSubstitute;
 using TicketVoidingSystem.Criteria;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.NetPosition;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition
+namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.NetPosition;
+
+public class NetPositionServiceTests
 {
-    public class NetPositionServiceTests
+    private readonly LoggingService loggingService;
+    private readonly IDynamicRepository repository;
+    private NetPositionServiceImp service;
+
+    public NetPositionServiceTests()
     {
-        private readonly IDynamicRepository repository;
-        private NetPositionServiceImp service;
+        repository = Substitute.For<IDynamicRepository>();
+        loggingService = Substitute.For<LoggingService>();
+        service = new NetPositionServiceImp(loggingService, repository);
+    }
 
-        public NetPositionServiceTests()
-        {
-            repository = Substitute.For<IDynamicRepository>();
-            service = new NetPositionServiceImp(repository);
-        }
+    [Fact]
+    public async Task UpdateNetPosition_HasTransIds_HasCalledPostRequest()
+    {
+        // Arrange
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
 
-        [Fact]
-        public async Task UpdateNetPosition_HasTransIds_HasCalledPostRequest()
-        {
-            // Arrange
-            // Act
-            var result = await service.UpdateNetPosition("123", "VOID");
+        // Act
+        var result = await service.UpdateNetPosition(ticketCrickets, "VOID");
 
-            // Assert
-            await repository.Received(1).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
-            Assert.True(result);
-        }
+        // Assert
+        await repository.Received(1).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
+        Assert.True(result);
+    }
 
-        [Fact]
-        public async Task UpdateNetPosition_WithEmptyTransIds_ReturnsTrue()
-        {
-            // Arrange
-            // Act
-            var result = await service.UpdateNetPosition("", "VOID");
+    [Fact]
+    public async Task UpdateNetPosition_WithEmptyTransIds_ReturnsTrue()
+    {
+        // Arrange
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
 
-            // Assert
-            Assert.True(result);
-        }
+        // Act
+        var result = await service.UpdateNetPosition(ticketCrickets, "VOID");
 
-        [Fact]
-        public async Task UpdateNetPosition_WithNullTransIds_ReturnsTrue()
-        {
-            // Arrange
-            // Act
-            var result = await service.UpdateNetPosition(null, "VOID");
+        // Assert
+        Assert.True(result);
+    }
 
-            // Assert
-            Assert.True(result);
-        }
+    [Fact]
+    public async Task UpdateNetPosition_WithNullTransIds_ReturnsTrue()
+    {
+        // Arrange
+        // Act
+        var result = await service.UpdateNetPosition(null, "VOID");
 
-        [Fact]
-        public async Task UpdateNetPosition_HasException_ReturnsFalse()
-        {
-            // Arrange
-            service = new NetPositionServiceImp(null);
+        // Assert
+        Assert.True(result);
+    }
 
-            // Act
-            var result = await service.UpdateNetPosition("1234", "VOID");
+    [Fact]
+    public async Task UpdateNetPosition_HasException_ReturnsFalse()
+    {
+        // Arrange
+        service = new NetPositionServiceImp(loggingService, null);
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
 
-            // Assert
-            Assert.False(result);
-        }
+        // Act
+        var result = await service.UpdateNetPosition(ticketCrickets, "VOID");
 
-        [Fact]
-        public async Task RollBackNetPosition_WithInValidTransIds_NotCalledRepositoryExecuteAsync()
-        {
-            // Arrange
-            // Act
-            await service.RollBackNetPosition("");
+        // Assert
+        Assert.False(result);
+    }
 
-            // Assert
-            await repository.Received(0).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
-        }
+    [Fact]
+    public async Task RollBackNetPosition_WithInValidTransIds_NotCalledRepositoryExecuteAsync()
+    {
+        // Arrange
+        var ticketCrickets = new List<BetId>();
 
-        [Fact]
-        public async Task RollBackNetPosition_WithValidTransIds_CalledRepositoryExecuteAsync()
-        {
-            // Arrange
-            // Act
-            await service.RollBackNetPosition("1234");
+        // Act
+        await service.RollBackNetPosition(ticketCrickets);
 
-            // Assert
-            await repository.Received(1).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
-        }
+        // Assert
+        await repository.Received(0).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
+    }
+
+    [Fact]
+    public async Task RollBackNetPosition_WithValidTransIds_CalledRepositoryExecuteAsync()
+    {
+        // Arrange
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
+
+        // Act
+        await service.RollBackNetPosition(ticketCrickets);
+
+        // Assert
+        await repository.Received(1).ExecuteAsync(Arg.Any<TicketVoidingNetPositionCriteria>());
     }
 }

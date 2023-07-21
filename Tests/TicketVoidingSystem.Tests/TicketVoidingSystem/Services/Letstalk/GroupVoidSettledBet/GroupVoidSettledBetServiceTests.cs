@@ -19,7 +19,7 @@ public class GroupVoidSettledBetServiceTests
     private readonly LoggingService loggingService;
     private readonly MessageContentSingleService messageContentSingleService;
     private readonly MessageContentWithMemberTemplateService messageContentWithMemberTemplateService;
-    private readonly GroupVoidSettledBetServiceImp service;
+    private GroupVoidSettledBetServiceImp service;
 
     public GroupVoidSettledBetServiceTests()
     {
