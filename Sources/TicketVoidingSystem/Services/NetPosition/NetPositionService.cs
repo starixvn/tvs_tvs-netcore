@@ -67,7 +67,7 @@ public class NetPositionServiceImp : NetPositionService
 
     public async Task RollBackNetPosition(IEnumerable<BetId> transIds)
     {
-        if (transIds.Any())
+        if (transIds != null && transIds.Any())
         {
             await Task.WhenAll(RollBackNetPositionTasks(transIds));
         }

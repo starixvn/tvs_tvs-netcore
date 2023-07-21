@@ -1,4 +1,5 @@
-﻿using TicketVoidingSystem.Models.SendEmail;
+﻿using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.SendEmail;
 
 namespace TicketVoidingSystem.VoidSingleBet.Models;
 
@@ -8,5 +9,5 @@ public class VoidTicketsModel
 
     public VoidTicketValidation Validation { get; set; }
 
-    public bool IsNeedToRollBackNetPosition { get; set; }
+    public IEnumerable<BetId> TicketsRollbackNetPosition { get; set; }
 }

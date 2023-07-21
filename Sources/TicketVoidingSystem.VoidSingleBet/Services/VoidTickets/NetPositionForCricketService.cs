@@ -11,7 +11,7 @@ public interface NetPositionForCricketService
 {
     Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> Update(VoidTicketsQuery query);
 
-    Task Rollback(IEnumerable<BetId> transIdCrickets, VoidTicketsModel voidResult);
+    Task Rollback(VoidTicketsModel voidResult);
 }
 
 public class NetPositionForCricketServiceImp : NetPositionForCricketService
@@ -37,11 +37,8 @@ public class NetPositionForCricketServiceImp : NetPositionForCricketService
         return (string.Empty, query.Tickets);
     }
 
-    public async Task Rollback(IEnumerable<BetId> transIdCrickets, VoidTicketsModel voidResult)
+    public async Task Rollback(VoidTicketsModel voidResult)
     {
-        if (voidResult.IsNeedToRollBackNetPosition)
-        {
-            await netPositionService.RollBackNetPosition(transIdCrickets);
-        }
+        await netPositionService.RollBackNetPosition(voidResult.TicketsRollbackNetPosition);
     }
 }

@@ -73,7 +73,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
             validationsInAllServers.AddRange(validation);
         }
 
-        return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers);
+        return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers, query);
     }
 
     private static VoidTicketValidation CreateVoidTicketValidation(IList<VoidTicketValidation> validations)
@@ -87,14 +87,16 @@ public class VoidTicketsServiceImp : VoidTicketsService
         };
     }
 
-    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations)
+    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<TicketEmailModel> tickets, IList<VoidTicketValidation> validations, VoidTicketsQuery query)
     {
-        var validation = CreateVoidTicketValidation(validations);
+        var combineValidation = CreateVoidTicketValidation(validations);
+        var siteDbHasError = validations.Where(x => !x.IsSuccessful).Select(x => x.SiteDbGroupId);
+        var ticketsRollbackNetPosition = query.TransIdCrickets.Where(x => siteDbHasError.Any(siteId => siteId == x.SiteDbGroupId));
         return new VoidTicketsModel
         {
             Tickets = tickets.ToList(),
-            Validation = validation,
-            IsNeedToRollBackNetPosition = validations.Any(x => !x.IsSuccessful)
+            Validation = combineValidation,
+            TicketsRollbackNetPosition = ticketsRollbackNetPosition
         };
     }
 

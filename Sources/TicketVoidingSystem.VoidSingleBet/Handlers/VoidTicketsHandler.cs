@@ -53,7 +53,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
             var voidResult = await voidTicketsService.VoidBet(query);
             results.AddRange(await afterVoidService.ExecuteWhenVoidSuccess(query, voidResult, updateNpResult.WarningCricket));
             results.AddRange(afterVoidService.ExecuteWhenVoidFailed(voidResult));
-            await netPositionForCricketService.Rollback(query.TransIdCrickets, voidResult);
+            await netPositionForCricketService.Rollback(voidResult);
         }
 
         await voidResultCacheService.SetVoidResultCache(query.Guid, results);
