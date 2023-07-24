@@ -143,14 +143,12 @@ export class FilterComponent implements OnInit, OnChanges {
       await this.initSelections();
       await this.getIssueTypes();
       if (!this.isEdit) {
-        const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE
-          + document.getElementById('body').getAttribute('user-id'));
-        if (previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)) {
-          this.issueTypes.issueId = Number(previousSelectedIssueType);
-          this.updateSubByIssue();
-          this.updateCurrentAction();
-          this.updateModel();
-        }
+        const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'));
+        this.issueTypes.issueId = previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
+          ? Number(previousSelectedIssueType) : this.issueTypes.issueId;
+        this.updateSubByIssue();
+        this.updateCurrentAction();
+        this.updateModel();
       }
     }
   }
