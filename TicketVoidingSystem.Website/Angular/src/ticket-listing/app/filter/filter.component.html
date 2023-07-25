@@ -127,7 +127,7 @@
     </div>
     <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
       [ballSequence]="ballSequences.value"></bettypes>
-    <bettypes-virtualsport #betTypesVSComponent [groups]="groupsBetTypesVS" [sportType]="sportType"
+    <bettypes-virtualsport *ngIf="validBetTypesVirtualSport()" #betTypesVSComponent [groups]="groupsBetTypesVS" [sportType]="sportType"
       [product]="query.product"></bettypes-virtualsport>
     <advanced-mode-basketball class="advanced-mode-basketball" #advancedModeBasetball
       [checkedIds]="checkedIds"></advanced-mode-basketball>

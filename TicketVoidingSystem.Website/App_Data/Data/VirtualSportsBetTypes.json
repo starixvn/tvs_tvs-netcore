@@ -89,6 +89,27 @@
           "Name": "Mix Parlay"
         }
       ]
+    },
+    {
+      "SportTypes": [ 178 ],
+      "BetTypes": [
+        {
+          "Id": 5302,
+          "Name": "FT.1X2"
+        },
+        {
+          "Id": 5303,
+          "Name": "1H 1X2"
+        },
+        {
+          "Id": 5304,
+          "Name": "1H Over/Under"
+        },
+        {
+          "Id": 5305,
+          "Name": "Correct Score"
+        }
+      ]
     }
   ]
 }

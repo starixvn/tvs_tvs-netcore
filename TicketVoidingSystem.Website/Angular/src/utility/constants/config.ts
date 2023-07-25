@@ -32,6 +32,7 @@ export class Product {
   static readonly NUMBER_GAME = 1;
   static readonly VIRTUAL_SPORTS = 2;
   static readonly VIRTUAL_SPORTS_2 = 5;
+  static readonly VIRTUAL_SPORTS_3 = 7;
   static readonly BET_BUILDER = 8;
   static readonly BITCOIN = 9;
 
@@ -40,6 +41,7 @@ export class Product {
     'Number Game': 1,
     'Virtual Sports': 2,
     'Virtual Sports 2': 5,
+    'Virtual Sports 3': 7,
     'Bet Builder': 8,
     'Bitcoin': 9
   };
