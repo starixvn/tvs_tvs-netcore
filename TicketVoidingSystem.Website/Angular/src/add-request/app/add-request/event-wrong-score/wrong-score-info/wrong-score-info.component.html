@@ -11,12 +11,12 @@
         <div class="mr-5">
           <label *ngIf="isShowLabel()" class="col-form-label">Wrong Score</label>
           <ng-template #tipContent>Wrong score</ng-template>
-          <div class="score d-flex align-items-center position-relative" placement="bottom" [ngbTooltip]="!wrongScoreModel.isActive ? tipContent : ''">
+          <div class="score d-flex align-items-center position-relative form-control form-control-sm" placement="bottom" [ngbTooltip]="!wrongScoreModel.isActive ? tipContent : ''">
             <div class="score-value position-absolute d-flex justify-content-center" [ngClass]="{'text-red':!wrongScoreModel.isActive}">
               <span>{{wrongScoreModel.wrongScore}}</span>
             </div>
             <div class="position-absolute" *ngIf="wrongScoreModel.isChecked" >
-              <em class="fa float-right mr-2" (click)="isCollapse=!isCollapse" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+              <em class="fa float-right mr-3" (click)="isCollapse=!isCollapse" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
             </div>
           </div>
         </div>

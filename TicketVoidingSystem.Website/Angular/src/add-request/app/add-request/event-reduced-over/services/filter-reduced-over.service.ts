@@ -131,7 +131,7 @@ export class FilterReducedOverService {
     model.noneItemCheckedText = 'Select player';
     model.maxWidth = '200px';
     model.numberItemsDisplay = 1;
-    model.buttonHeight = '31px';
+    model.buttonHeight = '29.5px';
     model.isDefaultSelectAll = false;
   }
 }

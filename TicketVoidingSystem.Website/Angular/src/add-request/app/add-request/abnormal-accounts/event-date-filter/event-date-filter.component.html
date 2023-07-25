@@ -1,5 +1,5 @@
 <div class="row text-right event-date-filter">
-    <label class="col-sm-1 col-form-label">Event Date</label>
+    <label class="col-sm-1 col-form-label col-form-label-sm">Event Date</label>
     <div class="col-sm-7 d-flex">
         <div class="input-group">
             <input class="from-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" name="ngbFromDate"
@@ -9,7 +9,7 @@
                 <span class="input-group-text" (click)="fd.toggle()"><em class="fa fa-calendar"></em></span>
             </div>
         </div>
-        <label class="col-form-label to-time-label">To</label>
+        <label class="col-form-label col-form-label-sm to-time-label">To</label>
         <div class="input-group">
             <input class="to-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" name="ngbToDate"
                 [(ngModel)]="toDate" placeholder="yyyy-mm-dd" ngbDatepicker #td="ngbDatepicker"

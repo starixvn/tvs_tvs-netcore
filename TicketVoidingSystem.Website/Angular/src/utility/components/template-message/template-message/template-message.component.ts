@@ -7,7 +7,6 @@ import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-ty
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
-import { OrdinalNumberConstant } from './../../../constants/ordinal-number.constant';
 import { MessagesComponent } from './../messages/messages.component';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
 import { Format, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace } from './template.const';

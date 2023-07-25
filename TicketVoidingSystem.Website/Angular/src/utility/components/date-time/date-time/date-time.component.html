@@ -6,7 +6,7 @@
       <span class="input-group-text" (click)="d.toggle()"><em class="fa fa-calendar"></em></span>
     </div>
   </div>
-  <div class="time" [ngClass]="{'disabled':disabled}">
+  <div class="time-input" [ngClass]="{'disabled':disabled}">
     <input type="text" maxlength="2" min="0" max="23" class="hour" [(ngModel)]="model.hour" time-control
       (keydown)="model.eventHour($event);updateModel()" [disabled]="disabled" />
     <span>:</span>

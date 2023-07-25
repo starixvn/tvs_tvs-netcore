@@ -3,7 +3,6 @@
 }
 
 .score {
-    height: 31px;
     background-color: #e9ecef !important;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -94,7 +93,7 @@
         text-decoration: underline;
         cursor: pointer;
     }
-} 
+}
 
 .error-text {
     color: #ed1c24;
@@ -125,7 +124,6 @@
 }
 
 .time-last-ticket-label {
-    height: 31px;
     width: 300px;
     display: flex;
     align-items: center;

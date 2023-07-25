@@ -1,8 +1,8 @@
 <div>
   <div class="row no-gutters">
     <div class="mr-3">
-      <label class="col-form-label mr-2">Issue Type</label>
-      <label class="col-form-label">
+      <label class="col-form-label col-form-label-sm mr-2">Issue Type</label>
+      <label class="col-form-label col-form-label-sm">
         <strong>
           <span class="padding-2-10 alert alert-dark">{{issueTypeName}}</span>
           <span *ngIf="isShowVar" class="alert padding-2-10 mg-left-5 text-white bg-danger">VAR</span>
@@ -11,10 +11,10 @@
     </div>
 
     <div *ngIf="isEarlyKOIssueType" class="nowrap d-flex mr-3">
-      <label class="col-form-label text-right mg-right-10">KO Time</label>
+      <label class="col-form-label col-form-label-sm text-right mg-right-10">KO Time</label>
       <div class="d-flex">
         <date-time [model]="kickOffTime" [disabled]="true" class="mr-1"></date-time>
-        <label class="col-form-label">(GMT+8)</label>
+        <label class="col-form-label col-form-label-sm">(GMT+8)</label>
       </div>
     </div>
 

@@ -6,10 +6,6 @@ div[class*='live-indicator'] {
   align-items: center;
   display: flex;
   white-space: nowrap;
-
-  .form-check {
-    height: 29px !important;
-  }
 }
 
 ng-select-mixture[class*='bet-type-dropdown'] {
@@ -44,7 +40,6 @@ multiple-selection[class*='player-dropdown'] {
 
 .invalid-field {
   width: 200px;
-  height: 31px;
   background-color: #e9ecef;
   opacity: 1;
   border-radius: 0.2rem;

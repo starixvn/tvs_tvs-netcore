@@ -1,5 +1,5 @@
 <div class="row product-filter">
-    <label class="col-sm-1 col-form-label text-right">Product</label>
+    <label class="col-sm-1 col-form-label col-form-label-sm text-right">Product</label>
     <div class="d-flex dropdown-area">
         <div class="multi-select">
             <ng-select class="product" [items]="products" [multiple]="true" bindLabel="name" groupBy="group" [selectableGroup]="true"
@@ -24,7 +24,7 @@
             </ng-select>
         </div>
 
-        <label class="col-form-label ticket-status-label">Ticket Status</label>
+        <label class="col-form-label col-form-label-sm ticket-status-label">Ticket Status</label>
 
         <div class="multi-select">
             <ng-select class="ticket-status" [items]="ticketStatus" [multiple]="true" bindLabel="name" groupBy="group" [selectableGroup]="true"

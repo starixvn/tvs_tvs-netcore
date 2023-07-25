@@ -1,7 +1,7 @@
 <div class="d-flex flex-wrap">
   <div class="d-flex flex-wrap mr-2">
       <div class="full-time from-date-time">
-          <label class="col-form-label mr-2">From</label>
+          <label class="col-form-label col-form-label-sm mr-2">From</label>
           <div class="input-group mr-2">
               <input *ngIf="isShowInputFromDate"
                   class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}"
@@ -31,7 +31,7 @@
       </div>
 
       <div class="full-time to-date-time">
-          <label class="col-form-label mr-2">To</label>
+          <label class="col-form-label col-form-label-sm mr-2">To</label>
           <div class="input-group input-group-to-date mr-2">
               <input *ngIf="isShowInputToDate"
                   class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}" 
@@ -68,7 +68,7 @@
   <div class="d-flex flex-wrap">
       <div class="d-flex setting-void-time mr-2">
           <div class="d-flex">
-              <label class="col-form-label mr-2 label-width-60">AA/PA/SA</label>
+              <label class="col-form-label col-form-label-sm mr-2 label-width-60">AA/PA/SA</label>
                   <div class="d-flex">
                       <div class="d-flex">
                           <input type="text" class="form-control form-control-sm mr-1 aa-time"
@@ -78,7 +78,7 @@
                               maxlength="2"
                               only-number
                           />
-                          <label class="col-form-label mr-1">/</label>
+                          <label class="col-form-label col-form-label-sm mr-1">/</label>
                           <input type="text" class="form-control form-control-sm mr-1 pa-time"
                               [(ngModel)]="filterTimeWithAllowanceModel.paTime"
                               (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
@@ -86,7 +86,7 @@
                               maxlength="2"
                               only-number
                           />
-                          <label class="col-form-label mr-1">/</label>
+                          <label class="col-form-label col-form-label-sm mr-1">/</label>
                           <input type="text" class="form-control form-control-sm mr-1 sa-time" 
                               [(ngModel)]="filterTimeWithAllowanceModel.saTime"
                               (ngModelChange)="emitChangeAllowanceSettingTimeEvent()"
@@ -96,12 +96,12 @@
                           />
                       </div>                             
                   </div>
-              <label class="col-form-label">(s)</label>
+              <label class="col-form-label col-form-label-sm">(s)</label>
           </div>
       </div>
   
       <div *ngIf="isUseInLogInfo"  class="d-flex flex-wrap">
-          <div class="btn-reload">
+          <div class="btn-reload ml-2">
               <button type="button" class="btn btn-default btn-sm" [disabled]="isDisabled" (click)="refreshLogInfo()">
                   <span><i class="fa fa-refresh" aria-hidden="true" ></i></span>
               </button>

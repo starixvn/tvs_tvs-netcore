@@ -23,12 +23,6 @@ $minWidth: 150px;
     width: 150px;
 }
 
-.filter-event-date {
-    input {
-        height: 36px;
-    }
-}
-
 .filter-checkbox-test .checkbox-test,
 .filter-checkbox-abnormal .checkbox-abnormal {
     margin-top: 34px;
@@ -40,8 +34,7 @@ $minWidth: 150px;
     background-color: #d6d6d6 !important;
     border-color: #b3b3b3 #ccc #d9d9d9 !important;
     width: 100%;
-    text-align: left;   
-    height: 36px;
+    text-align: left;
     display: flex;
     align-items: center;
 }

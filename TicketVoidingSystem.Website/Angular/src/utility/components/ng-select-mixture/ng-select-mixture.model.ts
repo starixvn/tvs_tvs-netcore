@@ -7,7 +7,7 @@ export class DefaultValue {
   static readonly numberItemsDisplay = 1;
   static readonly allItemsCheckedText = '';
   static readonly noneItemCheckedText = 'none ';
-  static readonly buttonHeight = '31px';
+  static readonly buttonHeight = '29.5px';
 }
 
 export class NgSelectMixtureModel {

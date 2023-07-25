@@ -34,7 +34,7 @@
       <div *ngIf="isShowButtonSelectSubType()">
         <button 
           (click)="openDialog()"
-          class="btn-select-sub-type btn btn-secondary"
+          class="btn-select-sub-type btn btn-sm btn-secondary"
           id="btn-select-sub-type"
           [disabled]="model.isVoided"
           [ngClass]="{'hint-text': !issueTypes.subIssueId, 'highlight': isHighlightSubType}">
@@ -96,22 +96,30 @@
         </div>
       </div>
     
-      <div class="filter-checkbox-test mr-4">
-        <div class="checkbox-test line-height d-flex align-items-center">
-          <input type="checkbox" [(ngModel)]="model.isTest" aria-label="Checkbox for following text input" id="chk-is-test" class="mr-1">
-          <label class="col-form-label" for="chk-is-test">is Test</label>
+      <div class="d-flex align-items-end">
+        <div class="form-check form-check-inline form-control-sm checkbox-test">
+          <input class="form-check-input"
+            type="checkbox"
+            name="checkbox-test"
+            [(ngModel)]="model.isTest"
+            aria-label="Checkbox for following text input"
+            id="chk-is-test"
+            class="mr-1">
+          <label class="form-check-label" for="chk-is-test">is Test</label>
         </div>
       </div>
 
-      <div *ngIf="isArchivedTicket()" class="filter-checkbox-abnormal mr-4">
-        <div class="checkbox-abnormal line-height d-flex align-items-center">
-          <input type="checkbox"
+      <div *ngIf="isArchivedTicket()" class="d-flex align-items-end">
+        <div class="form-check form-check-inline form-control-sm checkbox-abnormal">
+          <input class="form-check-input"
+            type="checkbox"
+            name="checkbox-abnormal"
             [(ngModel)]="model.isAbnormal"
             aria-label="Checkbox for following text input"
             id="chk-is-abnormal"
             class="mr-1"
-            [disabled]="model.isVoided" />
-          <label class="col-form-label" for="chk-is-abnormal">is Abnormal</label>
+            [disabled]="model.isVoided">
+          <label class="form-check-label" for="chk-is-abnormal">is Abnormal</label>
         </div>
       </div>
     </div>
