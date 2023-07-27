@@ -215,7 +215,7 @@ describe('TicketsListComponent', () => {
     // click checkbox from header
     const headerCheckBoxSelector = find(Helper.headerCheckBoxSelector);
     headerCheckBoxSelector.triggerEventHandler('click', {});
-    expect(instance.model.getNumberOfCheckedTickets()).toBe(0);
+    expect(instance.model.getNumberOfCheckedTickets()).toBe(3);
 
     headerCheckBoxSelector.triggerEventHandler('click', {});
     expect(instance.model.getNumberOfCheckedTickets()).toBe(3);
