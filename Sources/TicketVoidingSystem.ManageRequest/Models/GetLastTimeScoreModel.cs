@@ -10,7 +10,5 @@ public class GetLastTimeScoreModel
 
     public int FilterBy { get; set; }
 
-    public string WrongScore { get; set; }
-
     public DateTime FilterFromTransTime { get; set; }
 }

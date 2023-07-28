@@ -5,7 +5,7 @@ namespace TicketVoidingSystem.Criteria;
 
 public class GetMatchInfoAddRequestCriteria : CriteriaBase
 {
-    public DateTime EventDate { get; set; }
+    public DateTime? EventDate { get; set; }
     public int SportType { get; set; }
     public int? MatchId { get; set; }
     public bool IsUpdRequest { get; set; }
