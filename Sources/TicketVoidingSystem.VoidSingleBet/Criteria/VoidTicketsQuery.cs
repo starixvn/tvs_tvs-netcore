@@ -13,7 +13,7 @@ public class VoidTicketsQuery : CommonQuery
 
     public IEnumerable<BetId> Tickets { get; set; }
 
-    public string TransIdCrickets { get; set; }
+    public IEnumerable<BetId> TransIdCrickets { get; set; }
 
     public string Reason { get; set; }
 

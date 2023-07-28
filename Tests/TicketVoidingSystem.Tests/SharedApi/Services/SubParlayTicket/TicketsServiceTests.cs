@@ -33,7 +33,7 @@ public class TicketsServiceTests : AppSettingFixture, IClassFixture<RemotingRefF
     public async Task GetTickets_Return_ExpectedValue()
     {
         // Arrange
-        var expected = new List<TicketModel> { new(), new(), new() };
+        var expected = new List<TicketModel> { new(), new(), new(), new() };
         var ticketModels = new List<TicketModel> { new() };
         repository.FetchAsync<TicketModel>(Arg.Any<GetParlaySubBetCriteria>(), CancellationToken.None)
             .ReturnsForAnyArgs(ticketModels);

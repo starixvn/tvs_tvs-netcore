@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
@@ -27,7 +28,7 @@ public class ConvertRequestsServiceTests
     {
         // Arrange
         repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>()).Returns(new List<IssueType> { new() });
-        
+
         // Act
         var result = await convertRequestsServiceImp.GetAllIssueTypes();
 
@@ -41,7 +42,7 @@ public class ConvertRequestsServiceTests
         // Arrange
         repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>())
             .Returns(new List<SubIssueType> { new() });
-        
+
         // Act
         var result = await convertRequestsServiceImp.GetAllSubIssueTypes();
 
@@ -54,7 +55,7 @@ public class ConvertRequestsServiceTests
     {
         // Arrange
         repository.FetchAsync<VoidAction>(Arg.Any<GetActionsCriteria>()).Returns(new List<VoidAction> { new() });
-        
+
         // Act
         var result = await convertRequestsServiceImp.GetAllVoidActions();
 
@@ -99,37 +100,39 @@ public class ConvertRequestsServiceTests
     }
 
     [Theory]
-    [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-single'>abc</div>")]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary total-parlay'>abc</div>")]
-    [InlineData(IssueTypeConstant.DangerAccepted, "<div class='void-time'>abc</div>")]
-    [InlineData(IssueTypeConstant.EarlyKickOffTime, "<div class='ko-time'>abc</div>")]
-    [InlineData(IssueTypeConstant.WrongScore, "<div class='void-wrong-score'>abc</div>")]
+    [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-single'>abc</div>", "Single: abc")]
+    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary total-parlay'>abc</div>", "Mix Parlay: abc")]
+    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary'>abc</div>", "")]
+    [InlineData(IssueTypeConstant.DangerAccepted, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.EarlyKickOffTime, "<div class='ko-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.WrongScore, "<div class='void-wrong-score'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.ArchivedTicket,
-        "<div class='text-primary total-single'>abc</div><div class='text-primary total-parlay'>abc</div>")]
+        "<div class='text-primary total-single'>abc</div><div class='text-primary total-parlay'>abc</div>", "Single: abc, Parlay: abc")]
     [InlineData(IssueTypeConstant.AbnormalAccount,
-        "<div class='void-time'>abc</div><div class='text-primary total-account'>abc</div>")]
-    public void GetDescription_ReturnsExpectedDescription(int issueId, string html)
+        "<div class='void-time'>abc</div><div class='text-primary total-account'>abc</div>", "abc\r\nNo. of Account: abc")]
+    [InlineData(IssueTypeConstant.ReducedOver, "<div class='text-primary total-single'>abc</div>", "")]
+    public void GetDescription_ReturnsExpectedDescription(int issueId, string html, string description)
     {
         // Arrange
         // Act
-        var description = convertRequestsServiceImp.GetDescription(issueId, html);
+        var actrue = convertRequestsServiceImp.GetDescription(issueId, html);
 
         // Assert
-        Assert.NotNull(description);
+        Assert.Equal(description, actrue);
     }
 
     [Fact]
     public void GetDescription_ReturnsEmptyStringForUnknownIssue()
     {
         // Arrange
-        const int issueId = 999; 
+        const int issueId = 999;
         const string html = "Some HTML";
 
         // Act
-        var description = convertRequestsServiceImp.GetDescription(issueId, html);
+        var actrue = convertRequestsServiceImp.GetDescription(issueId, html);
 
         // Assert
-        Assert.Equal(string.Empty, description);
+        Assert.Equal(string.Empty, actrue);
     }
 
     [Fact]
@@ -208,7 +211,7 @@ public class ConvertRequestsServiceTests
     public void GetNoOfTickets_ReturnsEmptyStringWhenNoTickets()
     {
         // Arrange
-        
+
         // Act
         var result = convertRequestsServiceImp.GetNoOfTickets(0, 0);
 
@@ -294,6 +297,19 @@ public class ConvertRequestsServiceTests
 
         // Assert
         Assert.Equal("Premier League", result);
+    }
+
+    [Fact]
+    public void GetLeague_HtmlHasNotNodes_ReturnStringEmpty()
+    {
+        // Arrange
+        const string html = "<div><p class='league'>Premier League</p>";
+
+        // Act
+        var result = convertRequestsServiceImp.GetLeague(html);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
     }
 
     [Fact]

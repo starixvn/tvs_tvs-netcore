@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -58,7 +59,6 @@ public class GetTemplateSettingHandlerTests
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.NotNull(result);
         Assert.Equal(expectedViewModel.MessageTemplates.ToList().Count, result.MessageTemplates.ToList().Count);
         Assert.Equal(expectedViewModel.TemplateSettings.ToList().Count, result.TemplateSettings.ToList().Count);
     }

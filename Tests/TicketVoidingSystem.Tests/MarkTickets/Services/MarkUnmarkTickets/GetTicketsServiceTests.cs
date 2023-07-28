@@ -43,7 +43,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
         repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
             .ReturnsForAnyArgs((validation, ticketList));
-        var expectedTickets = new List<GetTicketModel> { new() { BetId = 123 }, new() { BetId = 123 }, new() { BetId = 123 } };
+        var expectedTickets = new List<GetTicketModel> { new() { BetId = 123 }, new() { BetId = 123 }, new() { BetId = 123 }, new() { BetId = 123 } };
 
         // Act
         var (_, ticketsActual) = await service.GetTickets(query);

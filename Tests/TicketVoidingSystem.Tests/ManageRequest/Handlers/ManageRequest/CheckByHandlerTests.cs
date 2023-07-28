@@ -11,11 +11,13 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
 {
     public class CheckByHandlerTests
     {
-        [Fact]
-        public async Task Handle_ValidQuery_ExecuteRepository()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task Handle_ValidQuery_ExecuteRepository(bool isCheck)
         {
             // Arrange
-            var request = new CheckByRequest { RequestId = 1, IsCheck = true };
+            var request = new CheckByRequest { RequestId = 1, IsCheck = isCheck };
             var sessionService = Substitute.For<SessionService>();
             var repository = Substitute.For<IDynamicRepository>();
             repository.ExecuteAsync(Arg.Any<EditRequestCommand>()).ReturnsForAnyArgs(1);

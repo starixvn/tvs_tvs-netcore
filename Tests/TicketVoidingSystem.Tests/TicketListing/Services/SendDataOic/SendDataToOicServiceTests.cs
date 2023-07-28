@@ -26,7 +26,7 @@ public class SendDataToOicServiceImpTest
     }
 
     [Fact]
-    public async Task SendData_ValidQuery_ReturnAmendmentResponse()
+    public async Task SendData_HasSendFileQuery_ReturnAmendmentResponse()
     {
         // Arrange
         var expected = new AmendmentResponse
@@ -38,6 +38,29 @@ public class SendDataToOicServiceImpTest
         {
             new() { LicenseeName = "", BetTypeName = "" }
         };
+        getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new ExcelOicModel());
+        insertToAmendmentTableStage.Execute(default!, default!).ReturnsForAnyArgs(new List<LicenseeFile>());
+        callApiAmendmentStage.Execute(default!, default!, default!).ReturnsForAnyArgs(expected);
+        ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
+
+        // Act
+        var actual = await service.Send(queries, "");
+
+        // Assert
+        await getTicketsService.Received(1).GetTicketsForSendDataOic(Arg.Any<SendFileQuery>(), Arg.Any<string>());
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task SendData_NoHasSendFileQuery_ReturnAmendmentResponse()
+    {
+        // Arrange
+        var expected = new AmendmentResponse
+        {
+            Code = 1,
+            Message = ""
+        };
+        var queries = new List<SendFileQuery>();
         getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new ExcelOicModel());
         insertToAmendmentTableStage.Execute(default!, default!).ReturnsForAnyArgs(new List<LicenseeFile>());
         callApiAmendmentStage.Execute(default!, default!, default!).ReturnsForAnyArgs(expected);

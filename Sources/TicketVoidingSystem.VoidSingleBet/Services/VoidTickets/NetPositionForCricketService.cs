@@ -11,7 +11,7 @@ public interface NetPositionForCricketService
 {
     Task<(string WarningCricket, IEnumerable<BetId> TicketsAfterUpdateNp)> Update(VoidTicketsQuery query);
 
-    Task Rollback(string transIdCrickets, VoidTicketsModel voidResult);
+    Task Rollback(VoidTicketsModel voidResult);
 }
 
 public class NetPositionForCricketServiceImp : NetPositionForCricketService
@@ -29,7 +29,7 @@ public class NetPositionForCricketServiceImp : NetPositionForCricketService
         if (!isSuccessfully)
         {
             var warningCricket = Helper.MessageFailApiCricket(query.TransIdCrickets, NetPositionConstant.ActionVoid);
-            var ticketsAfterRemoveCricket = query.Tickets.Where(x => !query.TransIdCrickets.Split(',').Contains(x.TransId));
+            var ticketsAfterRemoveCricket = query.Tickets.Where(x => query.TransIdCrickets.All(y => y.TransId != x.TransId));
 
             return (warningCricket, ticketsAfterRemoveCricket);
         }
@@ -37,11 +37,8 @@ public class NetPositionForCricketServiceImp : NetPositionForCricketService
         return (string.Empty, query.Tickets);
     }
 
-    public async Task Rollback(string transIdCrickets, VoidTicketsModel voidResult)
+    public async Task Rollback(VoidTicketsModel voidResult)
     {
-        if (voidResult.IsNeedToRollBackNetPosition)
-        {
-            await netPositionService.RollBackNetPosition(transIdCrickets, NetPositionConstant.ActionVoid, voidResult.Validation.ErrorMsg);
-        }
+        await netPositionService.RollBackNetPosition(voidResult.TicketsRollbackNetPosition);
     }
 }

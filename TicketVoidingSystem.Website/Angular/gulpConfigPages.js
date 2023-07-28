@@ -103,12 +103,12 @@ const manageRequest = {
 };
 const configPages = [
   // homePage,
-  // manageVoidServices,
+   manageVoidServices,
   // abExceptionList,
   // markTickets,
   // ticketListing,
   // voidSingleBet,
-  voidRequest,
+  // voidRequest,
   // manageRequest
 ];
 

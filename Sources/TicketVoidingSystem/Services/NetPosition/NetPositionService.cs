@@ -1,85 +1,94 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
+using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.Services.NetPosition;
 
 public interface NetPositionService
 {
-    Task<bool> UpdateNetPosition(string transIds, string action);
+    Task<bool> UpdateNetPosition(IEnumerable<BetId> transIds, string action);
 
-    Task RollBackNetPosition(string transIds, string action, string message);
+    Task RollBackNetPosition(IEnumerable<BetId> transIds);
 }
 
 public class NetPositionServiceImp : NetPositionService
 {
-    private readonly NetPositionHttpClientService netPositionHttpClientService;
-    private readonly SessionService sessionService;
+    private readonly LoggingService loggingService;
     private readonly IDynamicRepository repository;
 
-    public NetPositionServiceImp(
-        NetPositionHttpClientService netPositionHttpClientService,
-        SessionService sessionService,
-        IDynamicRepository repository)
+    public NetPositionServiceImp(LoggingService loggingService, IDynamicRepository repository)
     {
-        this.netPositionHttpClientService = netPositionHttpClientService;
-        this.sessionService = sessionService;
+        this.loggingService = loggingService;
         this.repository = repository;
     }
 
-    public async Task<bool> UpdateNetPosition(string transIds, string action)
+    public async Task<bool> UpdateNetPosition(IEnumerable<BetId> transIds, string action)
     {
-        if (!string.IsNullOrEmpty(transIds))
+        if (transIds == null || !transIds.Any())
         {
-            var param = new UpdateNetPositionLogCriteria
-            {
-                AdminId = sessionService.UserId,
-                ServiceType = ServiceApiType.Cricket,
-                TransIds = transIds,
-                Action = action
-            };
-
-            return await IsNetPosition(param);
+            return true;
         }
 
-        return true;
+        try
+        {
+            await Task.WhenAll(UpdateNetPositionTasks(transIds, action));
+            return true;
+        }
+        catch (Exception ex)
+        {
+            await loggingService.ErrorAsync(ex);
+            return false;
+        }
     }
 
-    private async Task<bool> IsNetPosition(UpdateNetPositionLogCriteria command)
+    private IEnumerable<Task<int>> UpdateNetPositionTasks(IEnumerable<BetId> transIds, string action)
     {
-        command.StartTime = DateTime.Now;
-        var result = await netPositionHttpClientService.PostRequest(command.TransIds, command.Action);
-        command.EndTime = DateTime.Now;
-
-        if (result.IsSuccessful)
+        foreach (var server in SiteDbGroupConstant.ServerList)
         {
-            command.ServiceStatus = ServiceApiStatus.Finished;
-        }
-        else
-        {
-            command.ServiceStatus = ServiceApiStatus.Failed;
-            command.Reason = result.ErrorMsg;
-        }
+            var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId);
+            if (transIdsInServer.Any())
+            {
+                var command = new TicketVoidingNetPositionCriteria
+                {
+                    StrTransIds = string.Join(",", transIdsInServer),
+                    Action = action,
+                    SiteDbGroupId = server.Id
+                };
 
-        await repository.ExecuteAsync(command);
-
-        return result.IsSuccessful;
+                yield return repository.ExecuteAsync(command);
+            }
+        }
     }
 
-    public async Task RollBackNetPosition(string transIds, string action, string message)
+    public async Task RollBackNetPosition(IEnumerable<BetId> transIds)
     {
-        if (!string.IsNullOrWhiteSpace(transIds))
+        if (transIds != null && transIds.Any())
         {
-            var command = new RollBackNetPositionCriteria
+            await Task.WhenAll(RollBackNetPositionTasks(transIds));
+        }
+    }
+
+    private IEnumerable<Task<int>> RollBackNetPositionTasks(IEnumerable<BetId> transIds)
+    {
+        foreach (var server in SiteDbGroupConstant.ServerList)
+        {
+            var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId);
+            if (transIdsInServer.Any())
             {
-                CricketIds = transIds,
-                Action = action,
-                AdminId = sessionService.UserId,
-                Reason = message
-            };
-            await repository.ExecuteAsync(command);
+                var command = new TicketVoidingNetPositionCriteria
+                {
+                    StrTransIds = string.Join(",", transIdsInServer),
+                    Action = NetPositionConstant.ActionRecover,
+                    SiteDbGroupId = server.Id
+                };
+
+                yield return repository.ExecuteAsync(command);
+            }
         }
     }
 }

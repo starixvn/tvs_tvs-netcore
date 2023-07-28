@@ -4,6 +4,7 @@ using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
+using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
@@ -124,7 +125,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
         public void Build_WhenCalled_ReturnStringOfAbnormalBetRealMember()
         {
             // Arrange
-            var expectedResult = "234";
             var request = new RequestDescription { IssueTypeId = IssueTypeConstant.AbnormalBetRealMember };
             elementService.BuildMatch(Arg.Compat.Any<string>()).ReturnsForAnyArgs("2");
             elementService.BuildLeague(Arg.Compat.Any<string>(), Arg.Compat.Any<string>()).ReturnsForAnyArgs("3");
@@ -134,14 +134,13 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
             var actual = descriptionService.Build(request);
 
             // Assert
-            Assert.Equal(expectedResult, actual);
+            Assert.Equal("234", actual);
         }
 
         [Fact]
         public void Build_WhenCalled_ReturnStringOfWrongScore()
         {
             // Arrange
-            const string expectedResult = "234";
             var request = new RequestDescription { IssueTypeId = IssueTypeConstant.WrongScore, FilterBy = 1 };
             elementService.BuildWrongScores(Arg.Compat.Any<int>(), Arg.Compat.Any<string>()).ReturnsForAnyArgs("2");
             elementService.BuildWithVarCheck(Arg.Compat.Any<string>(), Arg.Compat.Any<bool>()).ReturnsForAnyArgs("3");
@@ -151,16 +150,31 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest
             var actual = descriptionService.Build(request);
 
             // Assert
-            Assert.Equal(expectedResult, actual);
+            Assert.Equal("234", actual);
         }
 
         [Fact]
         public void Build_WhenCalled_ReturnStringOfArchivedTicket()
         {
             // Arrange
-            var expectedResult = "4";
             var request = new RequestDescription { IssueTypeId = IssueTypeConstant.ArchivedTicket };
             elementService.BuildTotal(Arg.Compat.Any<int>(), Arg.Compat.Any<int>(), null).ReturnsForAnyArgs("4");
+
+            // Act
+            var actual = descriptionService.Build(request);
+
+            // Assert
+            Assert.Equal("4", actual);
+        }
+
+        [Fact]
+        public void Build_WhenCalled_ReturnStringOfReducedOver()
+        {
+            // Arrange
+            const string expectedResult = "1league";
+            var request = new RequestDescription { IssueTypeId = IssueTypeConstant.ReducedOver };
+            elementService.BuildMatch(Arg.Any<string>()).ReturnsForAnyArgs("1");
+            elementService.BuildLeague(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs("league");
 
             // Act
             var actual = descriptionService.Build(request);

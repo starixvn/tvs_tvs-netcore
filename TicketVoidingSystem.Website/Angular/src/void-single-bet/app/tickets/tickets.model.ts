@@ -59,13 +59,11 @@ export class TicketsModel {
         return result;
     }
 
-    getTicketCricket(): string {
-        let result = '';
+    getTicketCricket(): BetID[] {
+        const result = [];
         this.groups.forEach(group => {
             const ticketInGroup = group.getTicketCricket();
-            result = ticketInGroup !== '' ?
-                result !== '' ? result + ',' + ticketInGroup : ticketInGroup
-                : result;
+            result.push(...ticketInGroup);
         });
 
         return result;

@@ -40,7 +40,6 @@ public static class AppSettingService
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),
             EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
             JackTimeCashOutUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeCashOutUrl)),
-            NetPositionUrl = configuration.GetValue<string>(nameof(AppSettingModel.NetPositionUrl)),
             FanexMailService = new FanexMailService
             {
                 MailingList = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.MailingList)}"),

@@ -12,79 +12,69 @@ namespace TicketVoidingSystem.Tests.VoidSingleBet.Services.VoidTickets;
 
 public class NetPositionForCricketServiceTests
 {
-    [Fact]
-    public async Task Update_CallApiSuccessful_ReturnEmptyWarningCricket()
+    private readonly NetPositionService netPositionService;
+    private readonly NetPositionForCricketServiceImp service;
+
+    public NetPositionForCricketServiceTests()
     {
-        // Arrange
-        var netPositionService = Substitute.For<NetPositionService>();
-        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(true);
-        var service = new NetPositionForCricketServiceImp(netPositionService);
-
-        // Act
-        var actual = await service.Update(new VoidTicketsQuery());
-
-        // Assert
-        Assert.Empty(actual.WarningCricket);
+        netPositionService = Substitute.For<NetPositionService>();
+        service = new NetPositionForCricketServiceImp(netPositionService);
     }
 
     [Fact]
-    public async Task Update_CallApiFailed_ReturnWarningCricket()
+    public async Task Update_CallUpdateNetPositionSuccessful_ReturnEmptyWarningCricket()
     {
         // Arrange
+        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(true);
+        var tickets = new List<BetId> { new() { TransId = "1" } };
+        var query = new VoidTicketsQuery { Tickets = tickets };
+
+        // Act
+        var (WarningCricket, TicketsAfterUpdateNp) = await service.Update(query);
+
+        // Assert
+        Assert.Empty(WarningCricket);
+        AssertExtension.Equal(tickets, TicketsAfterUpdateNp);
+    }
+
+    [Fact]
+    public async Task Update_CallUpdateNetPositionFailed_ReturnWarningCricket()
+    {
+        // Arrange
+        var tickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2" } };
+        var ticketCrickets = new List<BetId> { new() { TransId = "123", SiteDbGroupId = 0 } };
         var query = new VoidTicketsQuery
         {
-            TransIdCrickets = "1",
-            Tickets = new List<BetId> { new() }
+            TransIdCrickets = ticketCrickets,
+            Tickets = tickets
         };
-        var netPositionService = Substitute.For<NetPositionService>();
+        var expectedTickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2" } };
         netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
-        var service = new NetPositionForCricketServiceImp(netPositionService);
 
         // Act
-        var actual = await service.Update(query);
+        var (WarningCricket, TicketsAfterUpdateNp) = await service.Update(query);
 
         // Assert
-        Assert.NotEmpty(actual.WarningCricket);
+        Assert.NotEmpty(WarningCricket);
+        AssertExtension.Equal(expectedTickets, TicketsAfterUpdateNp);
     }
 
     [Fact]
-    public async Task Rollback_IsNeedToRollBackNetPositionTrue_RollBackNetPositionHasCalled()
+    public async Task Rollback_HasCalledRollBackNetPosition()
     {
         // Arrange
         var voidResult = new VoidTicketsModel
         {
-            IsNeedToRollBackNetPosition = true,
             Validation = new VoidTicketValidation()
         };
-        var netPositionService = Substitute.For<NetPositionService>();
         netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
-        var service = new NetPositionForCricketServiceImp(netPositionService);
 
         // Act
-        await service.Rollback("", voidResult);
+        await service.Rollback(voidResult);
 
         // Assert
         await netPositionService.Received(1)
-            .RollBackNetPosition(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            .RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
     }
-
-    [Fact]
-    public async Task Rollback_IsNeedToRollBackNetPositionFalse_RollBackNetPositionHasCalled()
-    {
-        // Arrange
-        var voidResult = new VoidTicketsModel
-        {
-            IsNeedToRollBackNetPosition = false
-        };
-        var netPositionService = Substitute.For<NetPositionService>();
-        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
-        var service = new NetPositionForCricketServiceImp(netPositionService);
-
-        // Act
-        await service.Rollback("", voidResult);
-
-        // Assert
-        await netPositionService.Received(0)
-            .RollBackNetPosition(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
-    }
+    
 }

@@ -47,7 +47,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(3, result.Count());
+        Assert.Equal(4, result.Count());
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         // Assert
 
         Assert.NotNull(result);
-        Assert.Equal(3, result.Count());
+        Assert.Equal(4, result.Count());
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(3, result.Count());
+        Assert.Equal(4, result.Count());
     }
 
 

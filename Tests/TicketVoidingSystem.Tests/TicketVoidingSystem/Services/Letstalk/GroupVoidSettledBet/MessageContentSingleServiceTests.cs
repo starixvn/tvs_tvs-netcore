@@ -104,7 +104,6 @@ public class MessageContentSingleServiceTests
                 LeagueName = "Premier League",
                 HomeName = "Team A",
                 AwayName = "Team B",
-                AwayId = 0
             },
             UserName = "John Doe",
             VoidFromTime = new DateTime(2022, 1, 1, 1, 1, 3).ToString("dd MM yyyy"),
@@ -156,7 +155,7 @@ public class MessageContentSingleServiceTests
                 LeagueName = "Premier League",
                 HomeName = "Team A",
                 AwayName = "Team B",
-                AwayId = 0
+                AwayId = -456
             },
             UserName = "John Doe",
             VoidFromTime = new DateTime(2022, 1, 1, 1, 1, 3).ToString("dd MM yyyy"),
