@@ -20,7 +20,13 @@ export class BetTypesVirtualSportComponent implements OnChanges {
         this.tooltip.element = this.element;
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+        if (changes['sportType'] || changes['product']) {
+            this.changeDisplay();
+        }
+    }
+
+    changeDisplay() {
         this.display = false;
         if (this.groups !== undefined && this.sportType !== undefined) {
             this.groups.forEach(group => {
@@ -29,7 +35,7 @@ export class BetTypesVirtualSportComponent implements OnChanges {
                 }
                 group.changeDisplay(this.sportType);
             });
-        }        
+        }
     }
 
     validate(): boolean {
@@ -52,7 +58,7 @@ export class BetTypesVirtualSportComponent implements OnChanges {
         return value;
     }
 
-    isShowCheckedBetTypes() : boolean {
-        return (this.product === 5 || this.product === 7) && this.groups != undefined && this.display ;
+    isShowCheckedBetTypes(): boolean {
+        return (this.product === 5 || this.product === 7) && this.groups != undefined && this.display;
     }
 }
