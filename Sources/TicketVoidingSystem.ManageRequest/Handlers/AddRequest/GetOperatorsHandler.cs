@@ -6,11 +6,11 @@ using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetOperatorsRequest : GetOperatorsInfoCriteria, IRequest<IEnumerable<OperatorInfo>>
+public class GetOperatorsRequest : GetOperatorsInfoCriteria, IRequest<IEnumerable<OperatorInfo?>>
 {
 }
 
-public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumerable<OperatorInfo>>
+public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumerable<OperatorInfo?>>
 {
     private readonly IDynamicRepository repository;
 
@@ -19,13 +19,13 @@ public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumera
         this.repository = repository;
     }
 
-    public async Task<IEnumerable<OperatorInfo>> Handle(GetOperatorsRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OperatorInfo?>> Handle(GetOperatorsRequest request, CancellationToken cancellationToken)
     {
-        var operators = new List<OperatorInfo>();
+        var operators = new List<OperatorInfo?>();
         if (!string.IsNullOrWhiteSpace(request.MatchIds))
         {
             var data = await repository.FetchAsync<OperatorInfoModel>(request, cancellationToken);
-            operators = UpdateViewModel(data);
+            operators = UpdateViewModel(data).ToList();
         }
 
         operators.Insert(0, OperatorConstant.SuspenderNA);
@@ -33,32 +33,44 @@ public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumera
         return operators;
     }
 
-    private static List<OperatorInfo> UpdateViewModel(IEnumerable<OperatorInfoModel> data)
+    private IEnumerable<OperatorInfo?> UpdateViewModel(IEnumerable<OperatorInfoModel> data)
     {
         if (!data.Any())
         {
-            return new List<OperatorInfo>();
+            return new List<OperatorInfo?>();
         }
 
-        var result = new List<OperatorInfo>();
-        foreach (var item in data)
+        return data.SelectMany(item => new[] { BuildTraderInfo(item), BuildSuspenderInfo(item) })
+            .Where(operatorInfo => operatorInfo != null);
+    }
+
+    private static OperatorInfo? BuildTraderInfo(OperatorInfoModel item)
+    {
+        if (item.TraderID > 0)
         {
-            result.Add(new OperatorInfo
+            return new OperatorInfo
             {
                 MatchId = item.MatchId,
                 OperatorId = item.TraderID,
                 OperatorType = OperatorConstant.TraderType,
                 UserName = item.TraderName
-            });
+            };
+        }
+        return null;
+    }
 
-            result.Add(new OperatorInfo
+    private static OperatorInfo? BuildSuspenderInfo(OperatorInfoModel item)
+    {
+        if (item.SuspenderID > 0)
+        {
+            return new OperatorInfo
             {
                 MatchId = item.MatchId,
                 OperatorId = item.SuspenderID,
                 OperatorType = OperatorConstant.SuspenderType,
                 UserName = item.SuspenderName
-            });
+            };
         }
-        return result;
+        return null;
     }
 }
