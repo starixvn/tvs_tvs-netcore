@@ -14,13 +14,13 @@ public class GetPoolHouseTicketCriteria : CriteriaBase
 
     public int SubIssueTypeId { get; set; }
 
-    public string HomeFavorite { get; set; }
+    public string? HomeFavorite { get; set; }
 
-    public string AwayFavorite { get; set; }
+    public string? AwayFavorite { get; set; }
 
-    public string HdpValue { get; set; }
+    public string? HdpValue { get; set; }
 
-    public string WrongMarket { get; set; }
+    public string? WrongMarket { get; set; }
 
     public bool IsLinkGroup1X2 { get; set; }
 
@@ -32,9 +32,9 @@ public class GetPoolHouseTicketCriteria : CriteriaBase
 
     public int LiveIndicator { get; set; }
 
-    public string TransInfoJson { get; set; }
+    public string? TransInfoJson { get; set; }
 
-    public string WrongOddsInfo { get; set; }
+    public string? WrongOddsInfo { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_PoolHouseTicket_Select";
 

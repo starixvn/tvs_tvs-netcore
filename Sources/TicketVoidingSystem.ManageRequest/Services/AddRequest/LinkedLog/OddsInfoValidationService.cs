@@ -32,7 +32,7 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
             : IsContainsValue(getLinkedLogModel.HomeFavorite, linkedOddsInfo.Hdp1);
     }
 
-    public bool IsContainsValue(string parent, decimal? child)
+    public bool IsContainsValue(string? parent, decimal? child)
     {
         return !string.IsNullOrWhiteSpace(parent) && parent.Split('&').Select(x => (decimal?)decimal.Parse(x)).Contains(child);
     }

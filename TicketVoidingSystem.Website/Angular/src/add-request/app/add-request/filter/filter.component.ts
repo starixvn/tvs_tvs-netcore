@@ -189,11 +189,10 @@ export class FilterComponent implements OnInit, OnChanges {
 
   onChangeIssueType(): void {
     this.addRequestStore.changeSavingRequestStatus(false);
-    if (this.isLikelyDangerAccepted() || this.isWrongOdds()) {
-      this.model.sportType = SportType.SOCCER;
-    }
     if (this.isReducedOver()) {
       this.model.sportType = SportType.CRICKET;
+    } else {
+      this.model.sportType = SportType.SOCCER;
     }
     this.updateSubByIssue();
     this.updateCurrentAction();

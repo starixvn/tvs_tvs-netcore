@@ -14,13 +14,13 @@ public class GetPoolHouseTicketQuery
 
     public int SubIssueTypeId { get; set; }
 
-    public string HomeFavorite { get; set; }
+    public string? HomeFavorite { get; set; }
 
-    public string AwayFavorite { get; set; }
+    public string? AwayFavorite { get; set; }
 
-    public string HdpValue { get; set; }
+    public string? HdpValue { get; set; }
 
-    public string WrongMarket { get; set; }
+    public string? WrongMarket { get; set; }
 
     public bool IsLinkGroup1X2 { get; set; }
 
@@ -36,5 +36,5 @@ public class GetPoolHouseTicketQuery
 
     public int PageSize { get; set; }
 
-    public IEnumerable<WrongOddsViewModel> WrongOddsInfo { get; set; }
+    public IEnumerable<WrongOddsViewModel>? WrongOddsInfo { get; set; }
 }

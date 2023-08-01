@@ -40,6 +40,9 @@ public class AddRequestController : ControllerBase
     public async Task<IActionResult> CheckValidTransIdsRequest(CheckValidTransIdsRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    public async Task<IActionResult> CheckValidUsernames(CheckValidUsernamesRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
     public async Task<IActionResult> GetLinkedLog(GetLinkedLogRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]

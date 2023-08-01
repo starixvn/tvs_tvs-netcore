@@ -52,7 +52,7 @@ public class GetPoolHouseTicketHandler : IRequestHandler<GetPoolHouseTicketReque
         var transInfoJsonList = await GetTransInfoJson(message);
         var criteria = mapper.Map<GetPoolHouseTicketCriteria>(message);
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
-        criteria.WrongOddsInfo = message.WrongOddsInfo.ToWrongOddsInfoXml();
+        criteria.WrongOddsInfo = message.WrongOddsInfo?.ToWrongOddsInfoXml();
 
         return criteria;
     }
