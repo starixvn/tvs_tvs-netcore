@@ -110,7 +110,7 @@ public class AddRequestServiceImp : AddRequestService
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff()
-            ? ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
+            ? LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
 
         await repository.ExecuteAsync(command);
         return command.RequestId;

@@ -234,8 +234,8 @@ public class LogInfoServiceImp : LogInfoService
 
     private static string GetKickOffInfo(GetLogInfoQuery query)
     {
-        return(query.IssueTypeId is IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime) ?
-            ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null; 
+        return (query.IssueTypeId is IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime) ?
+            LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query)

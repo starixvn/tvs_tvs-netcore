@@ -40,5 +40,5 @@ public class EditRequestQuery
     public IEnumerable<WrongOuViewModel>? Wrong1stOuInfo { get; set; }
     public IEnumerable<WrongOddsViewModel>? WrongOddsInfo { get; set; }
     public IEnumerable<ReducedOverViewModel>? ReducedOverInfo { get; set; }
-    public string TransInfoJson { get; set; }
+    public string? TransInfoJson { get; set; }
 }

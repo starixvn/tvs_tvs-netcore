@@ -42,8 +42,6 @@ public class WrongHdpViewModel
 
     public bool IsLinkGroupAIO { get; set; }
 
-    public bool IsShowPHOnly { get; set; }
-
     public int LiveIndicator { get; set; }
 
     public LogInfoDetail? LogInfoDetail { get; set; }

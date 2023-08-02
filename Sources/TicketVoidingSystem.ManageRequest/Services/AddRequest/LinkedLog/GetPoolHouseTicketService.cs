@@ -25,16 +25,17 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
 
     public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
     {
+        var groupsHaveTickets = GenerateGroup(originTickets, request)
+            .Where(item => item.Tickets.Any());
+
         var startIndex = request.PageIndex * request.PageSize + 1;
-        var groups = GenerateGroup(originTickets, request)
-            .Where(item => item.Tickets.Any())
-            .Select((item, index) => MapToGroupTicketViewModel(item, index + startIndex, request.IssueTypeId));
+        var groupViewModels = groupsHaveTickets.Select(group => MapToGroupTicketViewModel(group, ref startIndex, request.IssueTypeId)).ToList();
 
         var viewModel = new TicketsViewModel
         {
             TotalSingle = originTickets.Count(x => !x.IsMixParlay),
             TotalParlay = originTickets.Count(x => x.IsMixParlay),
-            Groups = groups
+            Groups = groupViewModels
         };
 
         return viewModel;
@@ -77,16 +78,15 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
         }
     }
 
-    private Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, int startIndex, int issueTypeId)
+    private Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, ref int startIndex, int issueTypeId)
     {
         var tickets = new List<TicketViewModel>();
-        var index = startIndex;
 
         foreach (var item in group.Tickets)
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
-            ticket.No = index++;
+            ticket.No = startIndex++;
             tickets.Add(ticket);
         }
 

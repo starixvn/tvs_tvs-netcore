@@ -62,7 +62,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)
     {
         var command = mapper.Map<EditRequestCommand>(query);
-        command.Operators = query.OperatorsList.OperatorToXml();
+        command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
         command.IP = sessionService.GetClientIp();
         command.TransInfoJson = query.TransInfoJson;
@@ -77,7 +77,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff() ?
-            ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
+            LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
 
         return command;
     }
