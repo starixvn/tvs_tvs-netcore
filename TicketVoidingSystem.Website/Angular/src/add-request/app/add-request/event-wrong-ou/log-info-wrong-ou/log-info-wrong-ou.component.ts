@@ -34,7 +34,7 @@ export class LogInfoWrongOuComponent implements OnInit {
 
   isCollapse: boolean;
   isBlock = false;
-  isShowValidation = true;
+  isShowValidation = false;
   poolHouseTicketsModel = new PoolHouseTicketsModel();
 
   constructor(
@@ -46,6 +46,9 @@ export class LogInfoWrongOuComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    if (this.isEdit) {
+      this.isShowValidation = true;
+    }
   }
 
   public async refreshLogInfoBySearchEvent(): Promise<void> {
@@ -62,14 +65,15 @@ export class LogInfoWrongOuComponent implements OnInit {
 
   public async refreshLogInfo(): Promise<void> {
     this.isBlock = true;
-    this.isShowValidation = false;
     this.clearDataValidation();
+    this.hideValidationDetail();
 
     if (this.filterWrongOuComponent.isValid()) {
       await this.logInfoWrongOuService.getLogInfo([this.logInfo], this.isEdit, this.requestId, this.filter, this.primitiveProps);
       this.isShowValidation =  true;
     }
 
+    this.showValidationDetail();
     this.isBlock = false;
   }
   public async getPoolHouseData(query: GetPoolHouseTicketQuery): Promise<void> {
@@ -134,6 +138,10 @@ export class LogInfoWrongOuComponent implements OnInit {
   public clearDataValidation(): void {
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
+  }
+
+  public hideValidationDetail() {
+    this.isShowValidation = false;
   }
 
   public showValidationDetail() {

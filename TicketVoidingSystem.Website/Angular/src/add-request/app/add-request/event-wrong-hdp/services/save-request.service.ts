@@ -26,6 +26,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
+    arg.logInfoComponents.forEach(x => x.hideValidationDetail());
 
     if (!this.validationService.validateCommonData(arg.leagueEventWrongHdpComponent, arg.logInfoComponents)) {
       return false;
@@ -33,9 +34,7 @@ export class SaveRequestService {
 
     arg.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
-    arg.logInfoComponents.forEach(x => {
-      x.showValidationDetail();
-    });
+    arg.logInfoComponents.forEach(x => x.showValidationDetail());
     arg.primitiveProps.isShowRelatedEvents = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
@@ -83,7 +82,7 @@ export class SaveRequestService {
     }
 
     if (arg.isEdit && arg.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${arg.requestId} is confirmed by ${arg.requestedBy}.</div>`; 
+      message = `${message}<div style="color:red">Please remind this request ${arg.requestId} is confirmed by ${arg.requestedBy}.</div>`;
     }
 
     return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;

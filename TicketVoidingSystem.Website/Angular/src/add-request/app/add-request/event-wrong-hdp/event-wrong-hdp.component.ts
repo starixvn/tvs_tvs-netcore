@@ -86,8 +86,9 @@ export class EventWrongHdpComponent implements OnInit {
   public async handleSearchEvent(): Promise<void> {
     this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoService.resetLogInfoOfEvent([this.mainEvent]);
-
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
+    mainLogInfo.hideValidationDetail();
+
     if (!this.validationService.validateCommonData(this.leagueEventWrongHdpComponent, [mainLogInfo])) {
       return;
     }
@@ -145,6 +146,7 @@ export class EventWrongHdpComponent implements OnInit {
   
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
+    this.logInfoComponents.forEach(x => x.hideValidationDetail());
     this.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.mainEvent, this.filter);
     this.addRequestStore.changeBlockingUiStatus(false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());

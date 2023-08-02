@@ -38,13 +38,13 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(argWrongOdds: SaveRequestArg): Promise<boolean> {
     argWrongOdds.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOddsService.resetLogInfoOfEvent(argWrongOdds.logInfoEvent);
+    argWrongOdds.primitiveProps.isShowValidation = false;
 
     if (!this.validationService.validateCommonData(argWrongOdds.leagueEventWrongOddsComponent, argWrongOdds.filterWrongOddsComponent)) {
       return false;
     }
 
     argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
-    argWrongOdds.primitiveProps.isShowValidation = false;
     await this.logInfoWrongOddsService.getLogInfo(argWrongOdds.logInfoEvent, argWrongOdds.isEdit, argWrongOdds.requestId, argWrongOdds.filter, argWrongOdds.primitiveProps);
     argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
     argWrongOdds.primitiveProps.isShowValidation = true;

@@ -37,6 +37,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOuService.resetLogInfoOfEvent(arg.allEvents);
+    arg.logInfoComponents.forEach(x => x.hideValidationDetail());
 
     if (!this.validationService.validateCommonData(arg.leagueEventWrongOuComponent, arg.logInfoComponents)) {
       return false;

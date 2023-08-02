@@ -32,7 +32,7 @@ export class LogInfoWrongOddsComponent implements OnInit {
     private readonly addRequestApiService: AddRequestApiService
     ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (this.isEdit) {
       this.primitiveProps.isShowValidation = true;
     }

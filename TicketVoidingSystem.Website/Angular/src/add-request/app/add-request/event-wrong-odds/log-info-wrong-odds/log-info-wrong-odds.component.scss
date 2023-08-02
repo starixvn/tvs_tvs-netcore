@@ -47,33 +47,25 @@
   background-color: #fffef4 !important;
 }
 
-span {
-  .icon-warning-message {
-      color: #cfb107;
-  }
+.icon-warning-message {
+  color: #cfb107;
+}
 
-  .warning-text {
-      color: #856404;
-  }
+.warning-text {
+  color: #856404;
+}
 
-  .warning-text-shorten {
-      color: #856404;
+.warning-text-shorten {
+  color: #856404;
 
-      &:hover {
-          text-decoration: underline;
-          cursor: pointer;
-      }
+  &:hover {
+      text-decoration: underline;
+      cursor: pointer;
   }
+}
 
-  .error-text {
-      color: #ed1c24;
-  }
-
-  .icon-warning-message,
-  .icon-error-message {
-      padding-top: 1px;
-      width: 19px;
-  }
+.error-text {
+  color: #ed1c24;
 }
 
 .pool-house-info {

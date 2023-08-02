@@ -77,6 +77,7 @@ export class EventWrongOddsComponent implements OnInit {
 
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
+    this.primitiveProps.isShowValidation = false;
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);

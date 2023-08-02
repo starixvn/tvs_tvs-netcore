@@ -18,7 +18,7 @@ export class LogInfoService {
     private readonly commonService: CommonService,
     private readonly eventWrongHdpService: EventWrongHdpService) {
   }
-  
+
   async getLogInfo(allEvents: LogInfoWrongHdp[], isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
     const getLogInfoQuery = this.initGetLogInfoWrongHdpQuery(isEdit, requestId, filter, allEvents);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
@@ -59,6 +59,7 @@ export class LogInfoService {
 
   resetLogInfoOfEvent(events: LogInfoWrongHdp[]): void {
     events.forEach(event => {
+      event.isPoolHouseAffected
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
     });

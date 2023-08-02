@@ -86,8 +86,9 @@ export class EventWrongOuComponent implements OnInit {
   public async handleSearchEvent(): Promise<void> {
     this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoWrongOuService.resetLogInfoOfEvent([this.mainEvent]);
-
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
+    mainLogInfo.hideValidationDetail();
+
     if (!this.validationService.validateCommonData(this.leagueEventWrongOuComponent, [mainLogInfo])) {
       return;
     }
@@ -141,11 +142,12 @@ export class EventWrongOuComponent implements OnInit {
   
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
+    this.logInfoComponents.forEach(x => x.hideValidationDetail());
     this.mainEvent.linkedLogsViewModel = await this.eventWrongOuService.getLinkedLog(this.mainEvent, this.filter);
     this.addRequestStore.changeBlockingUiStatus(false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
-  
+
   public async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
   }

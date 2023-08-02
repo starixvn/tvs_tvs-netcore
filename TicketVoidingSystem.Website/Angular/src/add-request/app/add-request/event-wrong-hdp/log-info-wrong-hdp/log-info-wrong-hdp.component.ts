@@ -47,6 +47,12 @@ export class LogInfoWrongHdpComponent {
     private readonly eventWrongHdpService: EventWrongHdpService
   ) { }
 
+  public ngOnInit(): void {
+    if (this.isEdit) {
+      this.isShowValidation = true;
+    }
+  }
+
   public async refreshLogInfoBySearchEvent(): Promise<void> {
     await this.refreshLogInfo();
   }
@@ -57,14 +63,13 @@ export class LogInfoWrongHdpComponent {
 
   private async refreshLogInfo(): Promise<void> {
     this.isBlock = true;
-    this.isShowValidation = false;
     this.clearDataValidation();
+    this.hideValidationDetail();
 
     if (this.filterWithHdpComponent.isValid()) {
       await this.logInfoService.getLogInfo([this.logInfo], this.isEdit, this.requestId, this.filter, this.primitiveProps);
-      this.isShowValidation =  true;
     }
-
+    this.showValidationDetail();
     this.isBlock = false;
   }
 
@@ -136,6 +141,10 @@ export class LogInfoWrongHdpComponent {
   public clearDataValidation(): void {
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
+  }
+
+  public hideValidationDetail() {
+    this.isShowValidation = false;
   }
 
   public showValidationDetail() {
