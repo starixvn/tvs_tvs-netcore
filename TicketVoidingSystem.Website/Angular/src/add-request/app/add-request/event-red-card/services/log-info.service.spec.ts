@@ -14,7 +14,7 @@ import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 import { LogInfoService } from './log-info.service';
-import { ValidationService } from './validation-service';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1001;
@@ -137,9 +137,7 @@ describe('LogInfoService', () => {
     mockValidationService.isEventMatchValid = jest.fn();
     mockValidationService.isHasAllowanceTime = jest.fn();
     mockValidationService.validateCommonData = jest.fn();
-
     mockAddRequestApiService = new AddRequestApiService(null);
-
     mockCommonService = new CommonService(null);
   });
 
@@ -185,6 +183,27 @@ describe('LogInfoService', () => {
     expect(logInfoService['assignResultLogInfoToEvents']).toHaveBeenCalledTimes(1);
   });
 
+  it('#getLogInfo should update expected model when isHasAllowanceTime is false', async () => {
+    // Arrange
+    const firstEvent = _.clone(Helper.fakeLogInfoRedCard);
+    const secondEvent = _.clone(Helper.fakeLogInfoRedCard);
+    firstEvent.matchId = Helper.fakeFirstMatchId;
+    secondEvent.matchId = Helper.fakeSecondMatchId;
+    const allEvents = [...[firstEvent], ...[secondEvent]];
+    const validationService = new ValidationService();
+    validationService.isHasAllowanceTime = jest.fn().mockImplementation(() => false);
+    mockCommonService.getLogInfo = jest.fn().mockImplementation(() => new GetLogInfoViewModel());
+    logInfoService = new LogInfoService(validationService, mockCommonService);
+    logInfoService['assignResultLogInfoToEvents'] = jest.fn();
+    logInfoService['getTransInfo'] = jest.fn();
+
+    // Action
+    await logInfoService.getLogInfo(allEvents, {filterBy: 1} as PrimitiveProperty, true, 1, Helper.fakeFilterModel, Helper.fakeFilterTimeWithAllowance);
+
+    // Assert
+    expect(logInfoService['assignResultLogInfoToEvents']).toHaveBeenCalledTimes(1);
+  });
+
   it('#initGetLogInfoRedCardQuery should be return expected model when edit request red card', async () => {
     // Arrange
     const fakeFilterModel = Helper.fakeFilterModel;
@@ -195,7 +214,7 @@ describe('LogInfoService', () => {
     logInfoService['getTransInfo'] = jest.fn();
 
     // Action
-    const result = await logInfoService['initGetLogInfoRedCardQuery'](1, true, Helper.fakeRequestId,
+    const result = logInfoService['initGetLogInfoRedCardQuery'](1, true, Helper.fakeRequestId,
       fakeFilterModel, [Helper.fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
 
     // Assert
@@ -214,7 +233,7 @@ describe('LogInfoService', () => {
     logInfoService['getTransInfo'] = jest.fn();
 
     // Action
-    const result = await logInfoService['initGetLogInfoRedCardQuery'](1, false, Helper.fakeRequestId,
+    const result = logInfoService['initGetLogInfoRedCardQuery'](1, false, Helper.fakeRequestId,
       fakeFilterModel, [Helper.fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
 
     // Assert
@@ -231,8 +250,8 @@ describe('LogInfoService', () => {
     logInfoService['getTransInfo'] = jest.fn();
 
     // Action
-    const result = await logInfoService['initGetLogInfoRedCardQuery'](1, false, Helper.fakeRequestId,
-       Helper.fakeFilterModel, [Helper.fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
+    const result = logInfoService['initGetLogInfoRedCardQuery'](1, false, Helper.fakeRequestId,
+      Helper.fakeFilterModel, [Helper.fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
 
     // Assert
     expect(result.requestId).toBeNull();
@@ -315,7 +334,7 @@ describe('LogInfoService', () => {
     logInfoService = new LogInfoService(mockValidationService, null);
 
     // Action
-    logInfoService['resetLogInfoOfEvent'](fakeLogInfoRedCard);
+    logInfoService['resetLogInfoOfEvent']([fakeLogInfoRedCard]);
 
     // Assert
     expect(fakeLogInfoRedCard.logInfoDetail).toBeNull();
@@ -328,7 +347,7 @@ describe('LogInfoService', () => {
     logInfoService = new LogInfoService(mockValidationService, null);
 
     // Action
-    logInfoService['resetSubIssueTypeOfEvent'](fakeLogInfoRedCard, 17);
+    logInfoService['resetSubIssueTypeOfEvent']([fakeLogInfoRedCard], 17);
 
     // Assert
     expect(fakeLogInfoRedCard.subIssueTypeId).toEqual(17);
@@ -340,7 +359,7 @@ describe('LogInfoService', () => {
     logInfoService = new LogInfoService(mockValidationService, null);
 
     // Action
-    logInfoService['resetVoidTimeArea'](fakeLogInfoRedCard, Helper.fakeFilterTimeWithAllowance);
+    logInfoService['resetVoidTimeArea']([fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
 
     // Assert
     expect(fakeLogInfoRedCard.voidTimeArea.aaTime).toEqual(Helper.fakeFilterTimeWithAllowance.aaTime);
@@ -356,25 +375,24 @@ describe('LogInfoService', () => {
     logInfoService = new LogInfoService(null, null);
 
     // Action
-    logInfoService['resetIsCheckedVar'](fakeLogInfoRedCard);
+    logInfoService['resetIsCheckedVar']([fakeLogInfoRedCard]);
 
     // Assert
     expect(fakeLogInfoRedCard.isCheckedVar).toBeNull();
     expect(fakeLogInfoRedCard.isHighLightVarCheck).toBeNull();
   });
 
-  it('#getRedCardModel should be update data', async () => {
+  it('#updateIsCheckedVar should updateIsCheckedVar is expected', async () => {
     // Arrange
     const fakeLogInfoRedCard = _.clone(Helper.fakeLogInfoRedCard);
-    const validationService = new ValidationService();
-    validationService.isHasAllowanceTime = jest.fn().mockImplementation(() => false);
-    const mockLogInfoService = new LogInfoService(validationService, null);
+    logInfoService = new LogInfoService(null, null);
 
     // Action
-    const actual = mockLogInfoService['getRedCardModel'](1, [fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
+    logInfoService['updateIsCheckedVar']([fakeLogInfoRedCard], true);
 
     // Assert
-    expect(actual[0].filterFromTransTime).toBe(Helper.fakeFilterTimeWithAllowance.fromDateTime);
-    expect(actual[0].filterToTransTime).toBe(Helper.fakeFilterTimeWithAllowance.toDateTime);
+    expect(fakeLogInfoRedCard.isCheckedVar).toBeTruthy();
+    expect(fakeLogInfoRedCard.isHighLightVarCheck).toBeFalsy();
   });
+  
 });

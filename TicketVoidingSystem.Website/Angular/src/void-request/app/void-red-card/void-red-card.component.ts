@@ -1,3 +1,4 @@
+import { CommonService } from '../../../utility/services/common.service';
 import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
@@ -11,7 +12,6 @@ import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { VoidPageService } from './services/void-page.service';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { CommonService } from 'src/utility/services/common.service';
 import { TicketsService } from './services/tickets.service';
 import { PopupService } from '../services/popup.service';
 import { SubmitVoidService } from './services/submit-void.service';

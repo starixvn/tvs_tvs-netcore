@@ -9,6 +9,7 @@
     "build:manual": "ng build --configuration production",
     "test": "npx jest",
     "test:watch": "npx jest --watch",
+    "test-coverage": "jest --ci -u --coverage",
     "lint": "ng lint"
   },
   "private": true,

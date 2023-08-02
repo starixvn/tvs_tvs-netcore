@@ -1,3 +1,4 @@
+import { SubIssueType } from './../../../../../utility/models/issue-type.model';
 import * as _ from 'lodash';
 import { AbnormalFilterBy } from '../../../../../utility/constants/config';
 import { AddRequestService } from '../../add-request.service';
@@ -12,6 +13,7 @@ import { PrimitiveProperty } from '../event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestArg } from './save-request.model';
 import { SaveRequestService } from './save-request.service';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -83,9 +85,18 @@ describe('SaveRequestService', () => {
   it('#initAddRequestQuery should return expected model', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = false;
+    args.filter.subIssueTypeId = '1';
+    const mockSubIssueType: SubIssueType = {
+      subIssueTypeId: 1,
+      issueTypeId: 0,
+      subIssueTypeName: '123',
+      subIssueTypeNameCS: ''
+    };
+    args.filter.subIssueTypes = [mockSubIssueType];
     args.abnormalBetModel = new AbnormalBetModel();
     args.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
     args.confirmAbnormalBetComponent = new ConfirmAbnormalBetComponent();
+    args.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     mockSaveRequestService = new SaveRequestService(null);
     const result = mockSaveRequestService['initAddRequestQuery'](args);
 
@@ -101,11 +112,14 @@ describe('SaveRequestService', () => {
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = false;
     args.filter.issueTypeId = '11';
+    args.filter.subIssueTypeId = '1';
     args.filterBy = AbnormalFilterBy.MIX_PARLAY;
     args.abnormalBetModel = new AbnormalBetModel();
     args.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
     args.confirmAbnormalBetComponent = new ConfirmAbnormalBetComponent();
+    args.primitiveProps.transInfoAddRequestModel = null;
     mockSaveRequestService = new SaveRequestService(null);
+    args.filter.subIssueTypes = null;
     const result = mockSaveRequestService['initAddRequestQuery'](args);
 
     expect(result.issueTypeId).toEqual(args.filter.issueTypeId);

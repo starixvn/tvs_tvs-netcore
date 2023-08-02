@@ -99,7 +99,7 @@ export class LogInfoRedCardComponent {
   getSubIssueTypeName(): string {
     const defaultText = 'Select Sub Type';
     if (this.logInfo.subIssueTypeId) {
-      return this.subIssueTypes.find(x => x.subIssueTypeId === this.logInfo.subIssueTypeId)?.subIssueTypeName;
+      return this.subIssueTypes.find(x => x.subIssueTypeId === this.logInfo.subIssueTypeId).subIssueTypeName;
     }
 
     return defaultText;

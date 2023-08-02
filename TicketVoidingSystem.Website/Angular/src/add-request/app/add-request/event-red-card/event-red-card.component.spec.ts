@@ -1,3 +1,4 @@
+import { AddChildMatchComponent } from './../../../../utility/components/add-child-match/add-child-match.component';
 import { ElementRef, NgModule, QueryList, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -6,11 +7,10 @@ import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { MatchType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
 import { ValidationMessage } from '../models/get-log-info.model';
@@ -18,14 +18,19 @@ import { ConfirmRedCardComponent } from './confirm-red-card/confirm-red-card.com
 import { EventRedCardComponent } from './event-red-card.component';
 import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
-import { FilterTimeWithAllowanceComponent } from './filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { LeagueEventRedCardComponent } from './league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation-service';
+import { ValidationService } from './services/validation.service';
+import { AddRequestStore } from '../add-request.store';
+import { RelatedEventService } from './services/related-event.service';
+import { EventRedCardService } from './services/event-red-card.service';
+import { ChildMatchModel } from '../models/related-event.model';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { FilterTimeWithAllowanceComponent } from './filter-time-with-allowance/filter-time-with-allowance.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -71,24 +76,35 @@ class Helper {
     leagueName: ''
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreOfMatch: '',
-    scoreNormalTicket: '',
-    cancelCashOutCount: 1
-  };
+    {
+      matchId: 12345,
+      liveScores: '0 - 0',
+      voidFromTime: new Date(Helper.fakeFromDateTime),
+      voidToTime: new Date(Helper.fakeToDateTime),
+      singleCount: 1,
+      mainParlayCount: 1,
+      cashOutCount: 3,
+      settleCount: 1,
+      instantlySettleCount: 2,
+      scoreOfMatch: '',
+      scoreNormalTicket: '',
+      cancelCashOutCount: 1
+    };
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,
       reason: '',
+    }
+  ];
+  static readonly fakeChildMatches: ChildMatchModel[] = [
+    {
+      matchId: 123,
+      matchCode: '111',
+      matchEvent: 'Test A vs Test B',
+      isChecked: true,
+      matchType: 1,
+      leagueName: '',
+      name: ''
     }
   ];
   static readonly fakeLogInfoRedCard: LogInfoRedCard = {
@@ -97,10 +113,29 @@ class Helper {
     leagueName: '',
     eventName: '',
     subIssueTypeId: 7,
+    matchCode: "1111",
     voidTimeArea: Helper.fakeFilterTimeWithAllowance,
     logInfoDetail: Helper.fakeLogInfoDetail,
-    messageValidationLogInfo: Helper.fakeValidationMessage
+    messageValidationLogInfo: Helper.fakeValidationMessage,
   };
+  static readonly fakeChildMatchModel: ChildMatchModel = {
+    matchId: 1111,
+    matchCode: '222',
+    matchEvent: 'TestC - vs - Real Madrid (V)',
+    isChecked: true,
+    matchType: MatchType.LINK,
+    leagueName: '',
+    name: ''
+  };
+
+  static readonly fakeSelectedMatch: MatchInfo = {
+    matchId: 1,
+    matchCode: '1',
+    leagueName: 'leagueName',
+    leagueId: 1,
+    name: 'name',
+  };
+
 }
 
 describe('EventRedCardComponent', () => {
@@ -109,7 +144,8 @@ describe('EventRedCardComponent', () => {
       LeagueEventRedCardComponent,
       ConfirmRedCardComponent,
       FilterTimeAreaComponent,
-      LogInfoRedCardComponent
+      LogInfoRedCardComponent,
+      AddChildMatchComponent
     ],
     imports: [
       NgbModule,
@@ -118,10 +154,13 @@ describe('EventRedCardComponent', () => {
       BlockUiModule,
     ],
     providers: [
+      ElementRef,
       LogInfoService,
       ValidationService,
       SaveRequestService,
-      AddRequestStore
+      AddRequestStore,
+      RelatedEventService,
+      EventRedCardService,
     ]
   })
   class AppModuleTest { }
@@ -136,52 +175,85 @@ describe('EventRedCardComponent', () => {
 
   it('#EventRedCardComponent init should match snapshot', async () => {
     // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeAllowanceTime = jest.fn();
     const { fixture, instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeAllowanceTime: mockChangeAllowanceTime,
-      })
       .mock(LogInfoService, {
-        resetAllEventBeforeSearch: jest.fn(),
-        getLogInfo: jest.fn(),
-        resetIsCheckedVar : jest.fn()
-
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,
           redCardModels: [Helper.fakeRedCardModel],
-          isEdit: true,
+          isEdit: false,
         }
       });
-    instance.ngOnInit = jest.fn();
 
     // Action
+    instance.ngOnInit = jest.fn();
+
+    // Assert
     expect(fixture).toMatchSnapshot();
   });
 
-  it('#handleSearchEvent should be call #getLogInfo when have filterTimeWithAllowanceComponent', async () => {
+  it('#ngOnInit has isEdit is true init Have Been Called Expected', async () => {
     // Arrange
-    const mockResetAllEventBeforeSearch = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
-    const mockGetLogInfo = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeBlockingUiStatus = jest.fn();
+    const addRequestStore = new AddRequestStore();
+    const eventRedCardService = new EventRedCardService();
+    const relatedEventService = new RelatedEventService(null, null, null, null);
+    eventRedCardService.assignModelsToEvents = jest.fn();
+    eventRedCardService.updateDefaultFilterTime = jest.fn();
+    relatedEventService.getChildMatches = jest.fn();
+
+    const component = new EventRedCardComponent(null, null, null, null, addRequestStore, relatedEventService, eventRedCardService);
+    component.isEdit = true;
+    const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
+    mainEvent.isMainMatch = true;
+    component.allSelectedEvents = [mainEvent];
+    
+    // Action
+    await component.ngOnInit();
+
+    // Assert
+    expect(eventRedCardService.assignModelsToEvents).toHaveBeenCalledTimes(1);
+    expect(eventRedCardService.updateDefaultFilterTime).toHaveBeenCalledTimes(1);
+    expect(relatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnInit has isEdit is false init Have Been Called Expected', async () => {
+    // Arrange
+    const addRequestStore = new AddRequestStore();
+    const eventRedCardService = new EventRedCardService();
+    const relatedEventService = new RelatedEventService(null, null, null, null);
+    addRequestStore.getAllowanceTimeSubject.subscribe = jest.fn();
+    eventRedCardService.initDefaultMainEvent = jest.fn();
+    eventRedCardService.initDefaultFilterTime = jest.fn();
+    relatedEventService.getChildMatches = jest.fn();
+
+    const component = new EventRedCardComponent(null, null, null, null, addRequestStore, relatedEventService, eventRedCardService);
+    component.isEdit = false;
+    const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
+    mainEvent.isMainMatch = true;
+    component.allSelectedEvents = [mainEvent];
+
+    // Action
+    await component.ngOnInit();
+
+    // Assert
+    expect(eventRedCardService.initDefaultMainEvent).toHaveBeenCalledTimes(1);
+    expect(eventRedCardService.initDefaultFilterTime).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnChanges should call expected function', async () => {
+    // Arrange
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mockResetVoidTimeArea = jest.fn();
     const mockResetIsCheckedVar = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
       .mock(LogInfoService, {
-        resetAllEventBeforeSearch: mockResetAllEventBeforeSearch,
-        getLogInfo: mockGetLogInfo,
-        resetIsCheckedVar: mockResetIsCheckedVar
-      })
-      .mock(ValidationService, {
-        validateCommonData: mockValidateCommonData
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        resetVoidTimeArea: mockResetVoidTimeArea,
+        resetIsCheckedVar: mockResetIsCheckedVar,
       })
       .render({
         bind: {
@@ -189,6 +261,195 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
+    instance.mainEvent = Helper.fakeLogInfoRedCard;
+    instance.filter.isChangeSubTypeManual = true;
+    instance.resetLogInfoAndHideAllEvents = jest.fn();
+    const changes = {
+      'filter': new SimpleChange({}, {}, true)
+    };
+
+    // Action
+    instance.ngOnChanges(changes);
+
+    // Assert
+    expect(mockResetVoidTimeArea).toHaveBeenCalledTimes(1);
+    expect(mockResetIsCheckedVar).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnDestroy should call #unsubscribe', async () => {
+    // Arrange
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          redCardModels: [Helper.fakeRedCardModel],
+          isEdit: false,
+        }
+      });
+
+    instance.getAllowanceTimeSubscription = new Subscription();
+    instance.getAllowanceTimeSubscription.unsubscribe = jest.fn();
+
+    // Action
+    instance.ngOnDestroy();
+
+    // Assert
+    expect(instance.getAllowanceTimeSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+  });
+
+  it('#handleSearchEvent should be return when inValidateCommonData', async () => {
+    // Arrange
+    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .mock(ValidationService, {
+        validateCommonData: mockValidateCommonData
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          redCardModels: [Helper.fakeRedCardModel],
+          isEdit: false,
+        }
+      });
+
+    // Action
+    await instance.handleSearchEvent();
+
+    // Assert
+    expect(instance.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
+    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
+  });
+
+  it('#handleSearchEvent should be return when isCheckedVar is null and IsShowVarCheck', async () => {
+    // Arrange
+    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .mock(ValidationService, {
+        validateCommonData: mockValidateCommonData
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          redCardModels: [Helper.fakeRedCardModel],
+          isEdit: false,
+        }
+      });
+
+    instance.mainEvent.isCheckedVar = null;
+    instance.mainEvent.subIssueTypeId = 1;
+
+    // Action
+    await instance.handleSearchEvent();
+
+    // Assert
+    expect(instance.mainEvent.isHighLightVarCheck).toBeTruthy();
+  });
+
+  it('#handleSearchEvent should be call #getLogInfo when have not filterTimeWithAllowanceComponent', async () => {
+    // Arrange
+    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockChangeSavingRequestStatus = jest.fn();
+    const mockGetChildMatches = jest.fn();
+    const mockGetDataWhenSearch = jest.fn();
+    const mockUpdateIsCheckedVar = jest.fn();
+
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+        updateIsCheckedVar: mockUpdateIsCheckedVar,
+      })
+      .mock(AddRequestStore, {
+        changeBlockingUiStatus: mockChangeBlockingUiStatus,
+        changeSavingRequestStatus: mockChangeSavingRequestStatus
+      })
+      .mock(ValidationService, {
+        validateCommonData: mockValidateCommonData
+      })
+      .mock(RelatedEventService, {
+        getChildMatches: mockGetChildMatches,
+        getDataWhenSearch: mockGetDataWhenSearch,
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
+    logInfoRedCardComponent.filterTimeWithAllowanceComponent = null;
+    logInfoRedCardComponent.showValidationDetail = jest.fn();
+    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    instance.mainEvent.isCheckedVar = false;
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
+
+    // Action
+    await instance.handleSearchEvent();
+
+    // Assert
+    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
+    expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
+    expect(mockGetDataWhenSearch).toHaveBeenCalledTimes(1);
+    expect(mockUpdateIsCheckedVar).toHaveBeenCalledTimes(1);
+    expect(instance.primitiveProps.isShowLogInfoMainMatch).toBeTruthy();
+    expect(instance.primitiveProps.isShowRelatedEvents).toBeTruthy();
+
+  });
+
+  it('#handleSearchEvent should be call #getLogInfo when have filterTimeWithAllowanceComponent', async () => {
+    // Arrange
+    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockChangeSavingRequestStatus = jest.fn();
+    const mockGetChildMatches = jest.fn();
+    const mockGetDataWhenSearch = jest.fn();
+    const mockUpdateIsCheckedVar = jest.fn();
+
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+        updateIsCheckedVar: mockUpdateIsCheckedVar,
+      })
+      .mock(AddRequestStore, {
+        changeBlockingUiStatus: mockChangeBlockingUiStatus,
+        changeSavingRequestStatus: mockChangeSavingRequestStatus
+      })
+      .mock(ValidationService, {
+        validateCommonData: mockValidateCommonData
+      })
+      .mock(RelatedEventService, {
+        getChildMatches: mockGetChildMatches,
+        getDataWhenSearch: mockGetDataWhenSearch,
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+
     const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
     logInfoRedCardComponent.filterTimeWithAllowanceComponent = new FilterTimeWithAllowanceComponent(null);
     logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData = jest.fn();
@@ -201,71 +462,18 @@ describe('EventRedCardComponent', () => {
     await instance.handleSearchEvent();
 
     // Assert
-    expect(mockResetAllEventBeforeSearch).toHaveBeenCalled();
-    expect(mockValidateCommonData).toHaveBeenCalled();
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+    expect(logInfoRedCardComponent.filterTimeWithAllowanceComponent.updateData).toHaveBeenCalledTimes(1);
   });
 
-  it('#handleSearchEvent should be call #getLogInfo when have not filterTimeWithAllowanceComponent', async () => {
+  it('#changeMatchEvent should be call #resetLogInfoOfEvent & emit updateMatchId when have selectedMatch', async () => {
     // Arrange
-    const mockResetAllEventBeforeSearch = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
-    const mockGetLogInfo = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeBlockingUiStatus = jest.fn();
-    const mockResetIsCheckedVar = jest.fn();
-
+    const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-        changeBlockingUiStatus: mockChangeBlockingUiStatus
-      })
+
       .mock(LogInfoService, {
-        resetAllEventBeforeSearch: mockResetAllEventBeforeSearch,
-        getLogInfo: mockGetLogInfo,
-        resetIsCheckedVar: mockResetIsCheckedVar
-      })
-      .mock(ValidationService, {
-        validateCommonData: mockValidateCommonData
-      })
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    const logInfoRedCardComponent = new LogInfoRedCardComponent(null, null);
-    logInfoRedCardComponent.filterTimeWithAllowanceComponent = null;
-    logInfoRedCardComponent.showValidationDetail = jest.fn();
-    const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
-    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
-    instance.mainEvent.isCheckedVar = false;
-
-    // Action
-    await instance.handleSearchEvent();
-
-    // Assert
-    expect(mockResetAllEventBeforeSearch).toHaveBeenCalled();
-    expect(mockValidateCommonData).toHaveBeenCalled();
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
-  });
-
-  it('#handleSearchEvent should return when not valid', async () => {
-    // Arrange
-    const mockResetAllEventBeforeSearch = jest.fn();
-    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const mockGetLogInfo = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      })
-      .mock(LogInfoService, {
-        resetAllEventBeforeSearch: mockResetAllEventBeforeSearch,
-        getLogInfo: mockGetLogInfo
-      })
-      .mock(ValidationService, {
-        validateCommonData: mockValidateCommonData
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
@@ -274,54 +482,30 @@ describe('EventRedCardComponent', () => {
         }
       });
 
-    // Action
-    await instance.handleSearchEvent();
-
-    // Assert
-    expect(mockResetAllEventBeforeSearch).toHaveBeenCalledTimes(1);
-    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
-    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
-  });
-
-  it('#changeMatchEvent should be call #resetAllEventBeforeSearch & emit updateMatchId', async () => {
-    // Arrange
-    const mockResetAllEventBeforeSearch = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      })
-      .mock(LogInfoService, {
-        resetAllEventBeforeSearch: mockResetAllEventBeforeSearch,
-      })
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.mainEvent =  new LogInfoRedCard();
-    instance.leagueEventRedCardComponent.selectedMatch = new MatchInfo();
+    instance.mainEvent = Helper.fakeLogInfoRedCard;
+    instance.leagueEventRedCardComponent.selectedMatch = Helper.fakeSelectedMatch;
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
 
     // Action
     instance.changeMatchEvent();
 
     // Assert
-    expect(mockResetAllEventBeforeSearch).toHaveBeenCalledTimes(1);
+    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    expect(instance.mainEvent.matchId).toBe(Helper.fakeSelectedMatch.matchId);
+    expect(instance.mainEvent.eventName).toBe(Helper.fakeSelectedMatch.name);
+    expect(instance.mainEvent.leagueName).toBe(Helper.fakeSelectedMatch.leagueName);
+    expect(instance.mainEvent.matchCode).toBe(Helper.fakeSelectedMatch.matchCode);
   });
 
-  it('#changeMatchEvent should be call #resetAllEventBeforeSearch & emit updateMatchId when have not match', async () => {
+  it('#changeMatchEvent should be call #resetLogInfoOfEvent & emit updateMatchId when have not selectedMatch', async () => {
     // Arrange
-    const mockResetAllEventBeforeSearch = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
+    const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      })
       .mock(LogInfoService, {
-        resetAllEventBeforeSearch: mockResetAllEventBeforeSearch,
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
@@ -329,24 +513,29 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-    instance.primitiveProps = new PrimitiveProperty();
-    instance.mainEvent =  new LogInfoRedCard();
+
+    instance.mainEvent = Helper.fakeLogInfoRedCard;
     instance.leagueEventRedCardComponent = null;
 
     // Action
     instance.changeMatchEvent();
 
     // Assert
-    expect(mockResetAllEventBeforeSearch).toHaveBeenCalledTimes(1);
+    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
+    expect(instance.mainEvent.matchId).toBe(Helper.fakeLogInfoRedCard.matchId);
+    expect(instance.mainEvent.eventName).toBe(Helper.fakeLogInfoRedCard.eventName);
+    expect(instance.mainEvent.leagueName).toBe(Helper.fakeLogInfoRedCard.leagueName);
+    expect(instance.mainEvent.matchCode).toBe(Helper.fakeLogInfoRedCard.matchCode);
   });
 
   it('#isExistMatchEvent should be return false', async () => {
     // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
@@ -354,8 +543,8 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    instance.mainEvent =  new LogInfoRedCard();
+
+    instance.mainEvent = new LogInfoRedCard();
     instance.mainEvent.matchId = undefined;
 
     // Action
@@ -367,10 +556,11 @@ describe('EventRedCardComponent', () => {
 
   it('#isExistMatchEvent should be return true', async () => {
     // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
@@ -378,8 +568,8 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    instance.mainEvent =  new LogInfoRedCard();
+
+    instance.mainEvent = new LogInfoRedCard();
     instance.mainEvent.matchId = 11;
 
     // Action
@@ -389,36 +579,38 @@ describe('EventRedCardComponent', () => {
     expect(actual).toBeTruthy();
   });
 
-  it('#handleChangeDefaultFilterArea should be call #resetAllEventBeforeSearch', async () => {
-    // Arrange
-    const mockChangeSavingRequestStatus = jest.fn();
+  it('#resetLogInfoAndHideAllEvents should call #resetLogInfoOfEvent', async () => {
+    const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,
-          isEdit: false
+          isEdit: true
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    instance.primitiveProps = new PrimitiveProperty();
 
     // Action
-    instance.handleChangeDefaultFilterArea();
+    instance.resetLogInfoAndHideAllEvents();
 
     // Assert
-    expect(instance.primitiveProps.isShowLogInfoMainMatch).toBe(false);
+    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+    expect(instance.primitiveProps.isShowLogInfoMainMatch).toBeFalsy();
+    expect(instance.primitiveProps.isShowRelatedEvents).toBeFalsy();
   });
 
   it('#saveRequest should be call #saveRequestService.saveRequest', async () => {
     // Arrange
     const mockSaveRequest = jest.fn();
-    const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .mock(SaveRequestService, {
         saveRequest: mockSaveRequest,
@@ -429,7 +621,6 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
 
     // Action
     await instance.saveRequest();
@@ -442,6 +633,11 @@ describe('EventRedCardComponent', () => {
     // Arrange
     const mockOnClickConfirmSave = jest.fn();
     const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
       .mock(SaveRequestService, {
         onClickConfirmSave: mockOnClickConfirmSave,
       })
@@ -451,7 +647,6 @@ describe('EventRedCardComponent', () => {
           isEdit: false
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
 
     // Action
     await instance.onClickConfirmSaveRequest();
@@ -463,10 +658,11 @@ describe('EventRedCardComponent', () => {
   it('#onClickCancelSaveRequest should be call #addRequestStore.changeSavingRequestStatus', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-    const mockChangeAllowanceTime = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeAllowanceTime: mockChangeAllowanceTime,
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .mock(AddRequestStore, {
         changeSavingRequestStatus: mockChangeSavingRequestStatus,
@@ -485,16 +681,363 @@ describe('EventRedCardComponent', () => {
     expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
   });
 
-  it('#initSaveRequestInput should be update expected data', async () => {
+  it('#saveRelatedEvent should be call expected function when have not new matches diff match id', async () => {
     // Arrange
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mockResetVoidTimeArea = jest.fn();
+    const mockUpdateSubIssueTypeAndAllowanceTime = jest.fn();
+    const mockGetLogInfo = jest.fn();
+    const mockUpdateIsCheckedVar = jest.fn();
+    const mockAssignChildMatchToLogInfoModel = jest.fn().mockImplementation(() => []);
+
     const { instance } = await shallow
+      .mock(RelatedEventService, {
+        assignChildMatchToLogInfoModel: mockAssignChildMatchToLogInfoModel
+      })
+      .mock(EventRedCardService, {
+        updateSubIssueTypeAndAllowanceTime: mockUpdateSubIssueTypeAndAllowanceTime
+      })
+      .mock(LogInfoService, {
+        getLogInfo: mockGetLogInfo,
+        resetVoidTimeArea: mockResetVoidTimeArea,
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        updateIsCheckedVar: mockUpdateIsCheckedVar,
+        resetIsCheckedVar: jest.fn(),
+      })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,
           isEdit: false
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRedCard()];
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.addChildMatchModel.matchType = 1;
+    const childMatchModel: ChildMatchModel = {
+      matchEvent: '',
+      name: '',
+      isChecked: false,
+      matchType: 3,
+      matchId: 1111,
+      leagueName: '',
+      matchCode: "1111",
+    }
+
+    instance.relatedEvents = [childMatchModel];
+
+    // Action
+    await instance.saveRelatedEvent(Helper.fakeChildMatches);
+
+    // Assert
+    expect(mockUpdateIsCheckedVar).toHaveBeenCalledTimes(1);
+    expect(mockAssignChildMatchToLogInfoModel).toHaveBeenCalledTimes(1);
+    expect(mockUpdateSubIssueTypeAndAllowanceTime).toHaveBeenCalledTimes(1);
+    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+  });
+
+  it('#handleClickAddRelatedEvent should be call #relatedEventService.addRelatedEventByInput', async () => {
+    // Arrange
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mockAddRelatedEventByInput = jest.fn();
+    const { instance } = await shallow
+      .mock(RelatedEventService, {
+        addRelatedEventByInput: mockAddRelatedEventByInput
+      })
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance['initAddRelatedEventArgs'] = jest.fn();
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard, new LogInfoRedCard()];
+
+    // Action
+    await instance.handleClickAddRelatedEvent();
+
+    // Assert
+    expect(mockAddRelatedEventByInput).toHaveBeenCalledTimes(1);
+    expect(instance['initAddRelatedEventArgs']).toHaveBeenCalledTimes(1);
+  });
+
+  it('#handleDeleteEvent should be update model', async () => {
+    // Arrange
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mainEvent = new LogInfoRedCard();
+    mainEvent.isMainMatch = true;
+    mainEvent.matchId = 999;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
+    instance.allSelectedEvents.push(mainEvent);
+
+    // Action
+    instance.handleDeleteEvent(999);
+
+    // Assert
+    expect(instance.allSelectedEvents.length).toBe(2);
+  });
+
+  it('#showAddChildMatchModal should be update model', async () => {
+    // Arrange
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    instance.addChildMatchModel = new AddChildMatchModel();
+    instance.allSelectedEvents = [Helper.fakeLogInfoRedCard];
+
+    // Action
+    instance.showAddChildMatchModal(1);
+
+    // Assert
+    expect(instance.addChildMatchModel.matchType).toBe(1);
+    expect(instance.addChildMatchModel.isOpen).toBeTruthy();
+  });
+
+  it('#countChildMatches should return number of link matches', async () => {
+    // Arrange
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.CHILD;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.relatedEvents = fakeChildMatches;
+
+    // Action
+    const actual = instance.countChildMatches();
+
+    // Assert
+    expect(actual).toBe(1);
+  });
+
+  it('#isDisabledChildMatches should return true when request voided', async () => {
+    // Arrange
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = true;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    // Action
+    const actual = instance.isDisabledChildMatches();
+
+    // Assert
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledChildMatches should return true when have not any link matches', async () => {
+    // Arrange
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.NORMAL;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      }).render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.relatedEvents = fakeChildMatches;
+
+    // Action
+    const actual = instance.isDisabledChildMatches();
+
+    // Assert
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledChildMatches should return false', async () => {
+    // Arrange
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.CHILD;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.relatedEvents = fakeChildMatches;
+
+    // Action
+    const actual = instance.isDisabledChildMatches();
+
+    // Assert
+    expect(actual).toBe(false);
+  });
+
+  it('#countLinkMatches should return number of link matches', async () => {
+    // Arrange
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.LINK;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.relatedEvents = fakeChildMatches;
+
+    // Action
+    const actual = instance.countLinkMatches();
+
+    // Assert
+    expect(actual).toBe(1);
+  });
+
+  it('#isDisabledLinkMatches should return true when request voided', async () => {
+    // Arrange
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = true;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    // Action
+    const actual = instance.isDisabledLinkMatches();
+
+    // Assert
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledLinkMatches should return true when have not any link matches', async () => {
+    // Arrange
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.NORMAL;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.relatedEvents = fakeChildMatches;
+
+    // Action
+    const actual = instance.isDisabledLinkMatches();
+
+    // Assert
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledLinkMatches should return false', async () => {
+    // Arrange
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.LINK;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.relatedEvents = fakeChildMatches;
+
+    // Action
+    const actual = instance.isDisabledLinkMatches();
+
+    // Assert
+    expect(actual).toBe(false);
+  });
+
+  it('#initSaveRequestInput should be update expected data', async () => {
+    // Arrange
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.requestId = Helper.fakeRequestId;
 
     // Action
@@ -506,166 +1049,114 @@ describe('EventRedCardComponent', () => {
     expect(actual.filter).toEqual(Helper.fakeFilterModel);
   });
 
-  it('#updateDefaultFilterTime should be update expected data', async () => {
+  it('#initAddRelatedEventArgs should be update expected data', async () => {
     // Arrange
     const { instance } = await shallow
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance.requestId = Helper.fakeRequestId;
-    const filterAllowanceTime = Helper.fakeFilterTimeWithAllowance;
-    const redCardModels = [Helper.fakeRedCardModel];
-    const filterModel = Helper.fakeFilterModel;
-
-    // Action
-    instance['updateDefaultFilterTime'](filterAllowanceTime, redCardModels, filterModel);
-
-    // Assert
-    expect(filterAllowanceTime.fromDateTime).toEqual(Helper.fakeRedCardModel.filterFromTransTime);
-    expect(filterAllowanceTime.toDateTime).toEqual(Helper.fakeRedCardModel.filterToTransTime);
-  });
-
-  it('#updateDefaultFilterTime should be update expected data when allowance time is null', async () => {
-    // Arrange
-    const { instance } = await shallow
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    instance.requestId = Helper.fakeRequestId;
-    const filterAllowanceTime = Helper.fakeFilterTimeWithAllowance;
-    const redCardModels = [Helper.fakeRedCardModel];
-    const filterModel = _.clone(Helper.fakeFilterModel);
-
-    // Action
-    instance['updateDefaultFilterTime'](filterAllowanceTime, redCardModels, filterModel);
-
-    // Assert
-    expect(filterAllowanceTime.fromDateTime).toEqual(Helper.fakeRedCardModel.filterFromTransTime);
-    expect(filterAllowanceTime.toDateTime).toEqual(Helper.fakeRedCardModel.filterToTransTime);
-  });
-
-  it('#updateMainEvent should be update expected data', async () => {
-    // Arrange
-    const mockChangeAllowanceTime = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeAllowanceTime: mockChangeAllowanceTime,
-      })
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          isEdit: false
-        }
-      });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    const fakeLogInfoRedCard = Helper.fakeLogInfoRedCard;
-    const redCardModels = [Helper.fakeRedCardModel];
-
-    // Action
-    instance['updateMainEvent'](fakeLogInfoRedCard, redCardModels);
-
-    // Assert
-    expect(fakeLogInfoRedCard.matchId).toEqual(Helper.fakeRedCardModel.matchId);
-    expect(fakeLogInfoRedCard.subIssueTypeId).toEqual(Helper.fakeRedCardModel.subIssueTypeId);
-    expect(fakeLogInfoRedCard.isMainMatch).toBeTruthy();
-    expect(fakeLogInfoRedCard.eventName).toEqual(Helper.fakeRedCardModel.name);
-    expect(fakeLogInfoRedCard.logInfoDetail).toEqual(Helper.fakeRedCardModel.logInfoDetail);
-  });
-
-  it('#ngOnInit should be call #updateDefaultFilterTime', async () => {
-    // Arrange
-    const mockChangeAllowanceTime = jest.fn();
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeAllowanceTime: mockChangeAllowanceTime,
-      })
-      .render({
-        bind: {
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-          redCardModels: [Helper.fakeRedCardModel]
-        }
-      });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    instance['updateDefaultFilterTime'] = jest.fn();
-    instance['updateMainEvent'] = jest.fn();
-
-    // Action
-    instance.ngOnInit();
-
-    // Assert
-    expect(instance['updateDefaultFilterTime']).toHaveBeenCalled();
-    expect(instance['updateMainEvent']).toHaveBeenCalled();
-    expect(mockChangeAllowanceTime).toHaveBeenCalledTimes(1);
-  });
-
-  it('#ngOnChanges should call expected function', async() => {
-    // Arrange
-    const mockChangeAllowanceTime = jest.fn();
-    const mockGetLogInfo = jest.fn();
-    const mockResetAllEventBeforeSearch = jest.fn();
-    const mockResetIsCheckedVar = jest.fn();
-
-    const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeAllowanceTime: mockChangeAllowanceTime,
-      })
       .mock(LogInfoService, {
-        resetAllEventBeforeSearch: mockResetAllEventBeforeSearch,
-        getLogInfo: mockGetLogInfo,
-        resetIsCheckedVar: mockResetIsCheckedVar
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
       })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,
-          redCardModels: [Helper.fakeRedCardModel],
-          isEdit: true,
+          isEdit: false
         }
       });
-    instance.handleChangeDefaultFilterArea = jest.fn();
-    instance.mainEvent = Helper.fakeLogInfoRedCard;
-    instance.filter.isChangeSubTypeManual = true;
-    const changes = {
-      'filter': new SimpleChange({}, {}, true)
-    };
+    instance.requestId = Helper.fakeRequestId;
 
     // Action
-    instance.ngOnChanges(changes);
+    const actual = instance['initAddRelatedEventArgs']();
 
     // Assert
-    expect(instance.handleChangeDefaultFilterArea).toHaveBeenCalledTimes(1);
-    expect(instance.filter.isChangeSubTypeManual).toBe(false);
-    expect(mockResetIsCheckedVar).toBeCalled();
+    expect(actual.isEdit).toEqual(false);
+    expect(actual.filter).toEqual(Helper.fakeFilterModel);
   });
 
-  it('#ngOnDestroy should call #unsubscribe', async () => {
-    // Arrange
-    const mockChangeAllowanceTime = jest.fn();
+  it('#changeVarCheckValue should update value isCheckedVar = true', async () => {
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeAllowanceTime: mockChangeAllowanceTime,
-    })
-    .render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        redCardModels: [Helper.fakeRedCardModel],
-        isEdit: true,
-      }
-    });
-    instance.getAllowanceTimeSubscription = new Subscription();
-    instance.getAllowanceTimeSubscription.unsubscribe = jest.fn();
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
 
     // Action
-    instance.ngOnDestroy();
+    instance.changeVarCheckValue(true);
 
     // Assert
-    expect(instance.getAllowanceTimeSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+    expect(instance.mainEvent.isCheckedVar).toEqual(true);
+  });
+
+  it('#changeVarCheckValue should update value isCheckedVar = false', async () => {
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    // Action
+    instance.changeVarCheckValue(false);
+
+    // Assert
+    expect(instance.mainEvent.isCheckedVar).toEqual(false);
+  });
+
+  it('#isShowVarCheck should return false when subIssueTypeId = null', async () => {
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.mainEvent.subIssueTypeId = null;
+
+    // Action
+    const actual = instance.isShowVarCheck();
+
+    // Assert
+    expect(actual).toBeFalsy();
+  });
+
+  it('#isShowVarCheck should return true', async () => {
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: jest.fn(),
+        resetVoidTimeArea: jest.fn(),
+        resetIsCheckedVar: jest.fn(),
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    // Action
+    // Assert
+    SubIssueTypeGroup.SUBTYPE_VAR.forEach(element => {
+      instance.mainEvent.subIssueTypeId = element;
+      const actual = instance.isShowVarCheck();
+      expect(actual).toBeTruthy();
+    });
   });
 });

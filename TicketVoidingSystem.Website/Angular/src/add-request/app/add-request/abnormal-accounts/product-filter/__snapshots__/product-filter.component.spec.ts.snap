@@ -9,7 +9,7 @@ exports[`ProductFilterComponent #ProductFilterComponent init should match snapsh
       class="row product-filter"
     >
       <label
-        class="col-sm-1 col-form-label text-right"
+        class="col-sm-1 col-form-label col-form-label-sm text-right"
       >
         Product
       </label>
@@ -29,7 +29,7 @@ exports[`ProductFilterComponent #ProductFilterComponent init should match snapsh
           </ng-select>
         </div>
         <label
-          class="col-form-label ticket-status-label"
+          class="col-form-label col-form-label-sm ticket-status-label"
         >
           Ticket Status
         </label>

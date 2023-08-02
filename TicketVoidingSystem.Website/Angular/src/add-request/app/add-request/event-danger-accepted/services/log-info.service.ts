@@ -37,9 +37,7 @@ export class LogInfoService {
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
     query.issueTypeId = Number(filter.issueTypeId);
-    if (StaticService.isRedCard(filter.issueTypeId.toString())) {
-      query.redCardModels = getLogInfoQuery;
-    } else if (StaticService.isDangerAccepted(filter.issueTypeId.toString())) {
+    if (StaticService.isDangerAccepted(filter.issueTypeId.toString())) {
       query.dangerAcceptedModels = getLogInfoQuery;
     }
 

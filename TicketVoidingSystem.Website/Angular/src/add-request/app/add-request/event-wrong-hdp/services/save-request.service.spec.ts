@@ -1,3 +1,4 @@
+import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from 'src/utility/components/pool-house-ticket/pool-house-ticket.model';
 import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
@@ -28,10 +29,10 @@ class Helper {
     filterWithHdp: new FilterWithHdpModel(),
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
-    isPoolHouseAffected:false,
+    isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: ''
-  };  
+  };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
     subIssueTypeId: 12,
@@ -49,36 +50,54 @@ class Helper {
     liveIndicator: 0,
     poolHouseCheckedBetTypes: ''
   };
+
+  static readonly fakeSaveRequestArg: SaveRequestArg = {
+    requestId: 1,
+    requestedBy: '',
+    userId: 0,
+    isEdit: false,
+    actionIdOfFirstTimeAccess: '',
+    filter: new FilterModel,
+    others: new OthersModel,
+    primitiveProps: new PrimitiveProperty,
+    allEvents: [],
+    leagueEventWrongHdpComponent: undefined,
+    logInfoComponents: [],
+    addRequestStore: new AddRequestStore
+  }
 }
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
+  let validationService: ValidationService;
+  let logInfoService: LogInfoService;
+  let popupService: PopupService;
+  let addRequestService: AddRequestService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null);
+    validationService = new ValidationService();
+    logInfoService = new LogInfoService(null, null);
+    popupService = new PopupService(null);
+    addRequestService = new AddRequestService(null, null, null);
+    service = new SaveRequestService(validationService, logInfoService, popupService, addRequestService);
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
-    const saveRequestArg = new SaveRequestArg();
-    saveRequestArg.addRequestStore = new AddRequestStore();
-    saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
-    const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
+    let logInfoComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    logInfoComponent.hideValidationDetail = jest.fn().mockReturnValue(true);
+    let arg = Helper.fakeSaveRequestArg;
+    arg.logInfoComponents = [logInfoComponent];
+    validationService.validateCommonData = jest.fn().mockReturnValue(false);
+    arg.addRequestStore = new AddRequestStore();
+    arg.addRequestStore.changeBlockingUiStatus = jest.fn();
+    const actual = await service.recheckLogInfoBeforeSaveRequest(arg);
 
-    const validationService = new ValidationService();
-    validationService.validateCommonData = jest.fn().mockImplementation(() => false);
-
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
-
-    const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
-
-    expect(saveRequestArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledTimes(1);
     expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
   });
-  
+
   it('#recheckLogInfoBeforeSaveRequest should return false when have event invalid', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.primitiveProps = new PrimitiveProperty();
@@ -107,7 +126,7 @@ describe('SaveRequestService', () => {
     expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
   });
-  
+
   it('#recheckLogInfoBeforeSaveRequest should return true', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.primitiveProps = new PrimitiveProperty();
@@ -180,7 +199,7 @@ describe('SaveRequestService', () => {
     validationService.checkCanShowConfirmation = jest.fn().mockImplementation(() => true);
 
     const popupService = new PopupService(null);
-    const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
+    const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => { });
 
     const saveRequestService = new SaveRequestService(validationService, null, popupService, null);
     saveRequestService['getMessageConfirmation'] = jest.fn().mockImplementation(() => 'aaa');
@@ -219,9 +238,9 @@ describe('SaveRequestService', () => {
 
   it('#getMessageConfirmation should return expected msg', async () => {
     const expected = '<div>There are some warnings in this request.'
-    + '</div><div>Ticket(s) on request will be unmarked.</div>'
-    + '<div style=\"color:red\">Please remind this request undefined is confirmed by undefined.</div><div class=\'mg-top-10\'>'
-    + '<i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
+      + '</div><div>Ticket(s) on request will be unmarked.</div>'
+      + '<div style=\"color:red\">Please remind this request undefined is confirmed by undefined.</div><div class=\'mg-top-10\'>'
+      + '<i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.userId = 11111;
     saveRequestArg.isEdit = true;
@@ -230,7 +249,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.actionIdOfFirstTimeAccess = '5';
     saveRequestArg.allEvents = [Helper.fakeLogInfoWrongHdp];
     saveRequestArg.allEvents[0].logInfoDetail.settleCount = 1;
-    saveRequestArg.allEvents[0].messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
+    saveRequestArg.allEvents[0].messageValidationLogInfo.push({ isError: false, reason: 'aaa' });
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
@@ -270,7 +289,7 @@ describe('SaveRequestService', () => {
     arg.addRequestStore.changeBlockingUiStatus = jest.fn();
 
     const popupService = new PopupService(null);
-    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
+    const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => { });
 
     const saveRequestService = new SaveRequestService(null, null, popupService, null);
     saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));

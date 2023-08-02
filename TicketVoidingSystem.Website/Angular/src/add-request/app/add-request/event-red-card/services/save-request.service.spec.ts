@@ -23,7 +23,7 @@ import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { SaveRequestService } from './save-request.service';
-import { ValidationService } from './validation-service';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -110,7 +110,9 @@ class Helper {
     userId: 0,
     requestId: 1,
     requestedBy: '',
-    isHasWarningSettledTicket: false
+    isHasWarningSettledTicket: false,
+    isHasWarningEvent: false,
+    warningRelatedEvents: []
   };
   static fakeIssueType: IssueType[] = [{
     issueTypeId: 11,
@@ -138,7 +140,7 @@ class Helper {
     others: new OthersModel(),
     primitiveProps: new PrimitiveProperty(),
     defaultFilterTimeWithAllowance: new FilterTimeWithAllowance(),
-    mainEvent: new LogInfoRedCard(),
+    allEvents: [new LogInfoRedCard()],
     leagueEventRedCardComponent: null,
     filterTimeAreaComponent: null,
     logInfoComponents: null,
@@ -324,6 +326,7 @@ describe('SaveRequestService', () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
+    args.allEvents = [Helper.fakeLogInfoRedCard];
     const validationService = new ValidationService();
     const spyIsEditingByAnotherUser = jest.spyOn(validationService, 'isEditingByAnotherUser').mockImplementation(() => false);
 
@@ -346,11 +349,14 @@ describe('SaveRequestService', () => {
     args.issueTypes.issueTypes[0].issueTypeId = issueTypeId;
     args.issueTypes.selectedSubIssueTypes = Helper.fakeSubIssueType;
     args.issueTypes.selectedSubIssueTypes[0].subIssueTypeId = subIssueTypeId;
-    args.mainEvent.messageValidationLogInfo = [Helper.fakeValidationMessageError];
     args.filter.issueTypeId = issueTypeId.toString();
     args.filter.subIssueTypeId = subIssueTypeId.toString();
     args.filter.action = TVSRequestActionType.TAKE_NOTE_ID.toString();
     args.actionIdOfFirstTimeAccess = TVSRequestActionType.MANUAL_VOID;
+    let fackLogInfoRedCard = new LogInfoRedCard();
+    fackLogInfoRedCard.logInfoDetail = null;
+    fackLogInfoRedCard.messageValidationLogInfo = null;
+    args.allEvents = [fackLogInfoRedCard];
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
@@ -415,7 +421,7 @@ describe('SaveRequestService', () => {
     // Arrange
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = false;
-    args.mainEvent = Helper.fakeLogInfoRedCard;
+    args.allEvents = [Helper.fakeLogInfoRedCard];
     args.primitiveProps = new PrimitiveProperty();
     args.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     mockSaveRequestService = new SaveRequestService(null, null, null, null);
@@ -437,7 +443,9 @@ describe('SaveRequestService', () => {
     // Arrange
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = true;
-    args.mainEvent = Helper.fakeLogInfoRedCard;
+    args.allEvents =[Helper.fakeLogInfoRedCard];
+    args.primitiveProps = new PrimitiveProperty();
+    args.primitiveProps.transInfoAddRequestModel = null;
     mockSaveRequestService = new SaveRequestService(null, null, null, null);
 
     // Action
@@ -458,7 +466,7 @@ describe('SaveRequestService', () => {
     mockSaveRequestService = new SaveRequestService(null, null, null, null);
     [null, undefined].forEach(x => {
       logInfo.isCheckedVar = x;
-      const actual = mockSaveRequestService['validateVarCheck'](logInfo);
+      const actual = mockSaveRequestService['validateVarCheck']([logInfo]);
 
       expect(actual).toBeFalsy();
       expect(logInfo.isHighLightVarCheck).toBeTruthy();

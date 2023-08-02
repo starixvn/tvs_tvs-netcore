@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`LeagueEventComponent LeagueEventComponent should init match snapshot 1`] = `
-<ng-component>
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
   <league-event>
     <div
       class="d-flex flex-wrap event-leage horizontal-style"
@@ -19,7 +21,6 @@ exports[`LeagueEventComponent LeagueEventComponent should init match snapshot 1`
             bindlabel="name"
             bindvalue="matchId"
             class="custom-sm match-id ng-untouched ng-pristine ng-valid"
-            notfoundtext="No event found"
             placeholder="Input MatchID"
           />
         </div>

@@ -3,9 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { PipeModule } from '../../../../../utility/components/pipes/pipe.module';
 import { GroupOperator, OperatorInfo, OthersModel } from '../../others/others.model';
 import { OthersWrongHdpComponent } from './others-wrong-hdp.component';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 
 class Helper {
   static readonly inputsSelector = '.form-control';

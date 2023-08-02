@@ -124,7 +124,7 @@ describe('RelatedEventService', () => {
     expect(addRequestApiService.getChildMatches).toHaveBeenCalledTimes(1);
   });
 
-  it('#updateEvents should return expected model', async () => {
+  it('#assignChildMatchToLogInfoModel should return expected model', async () => {
     // Arrange
     const addRequestApiService = new AddRequestApiService(null);
     addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));

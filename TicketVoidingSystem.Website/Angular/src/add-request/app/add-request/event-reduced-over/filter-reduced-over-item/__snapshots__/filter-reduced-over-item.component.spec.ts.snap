@@ -26,7 +26,7 @@ FilterReducedOverItemComponent {
     "betTypeIds": Array [],
     "betTypeNgSelectMixtureModel": NgSelectMixtureModel {
       "allItemsCheckedText": "",
-      "buttonHeight": "31px",
+      "buttonHeight": "29.5px",
       "items": Array [],
       "maxHeight": "350px",
       "maxWidth": "200px",

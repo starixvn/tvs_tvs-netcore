@@ -34,17 +34,8 @@ exports[`EventRedCardComponent #EventRedCardComponent init should match snapshot
           Search
         </button>
       </div>
-      <div
-        class="main-match-log-info mb-3"
-      >
-        <label>
-          <strong>
-            Main Event - Log Info
-          </strong>
-        </label>
-        <log-info-red-card />
-      </div>
     </div>
+    <add-child-match />
     <confirm-red-card />
     <tooltip />
   </event-red-card>

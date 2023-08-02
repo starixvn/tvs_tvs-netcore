@@ -44,7 +44,7 @@ exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent should init match
               </div>
             </div>
             <div
-              class="time"
+              class="time-input"
             >
               <input
                 class="hour ng-untouched ng-pristine ng-valid"
@@ -79,7 +79,9 @@ exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent should init match
             </div>
           </div>
         </date-time>
-        <label>
+        <label
+          class="col-form-label col-form-label-sm"
+        >
           (GMT+8)
         </label>
       </div>
