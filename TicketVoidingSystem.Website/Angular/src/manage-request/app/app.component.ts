@@ -53,9 +53,9 @@ export class AppComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.signalRService.initializeConnection();
     this.initDate();
     this.permission = await this.commonService.getPermissionManageRequest();
+    await this.signalRService.initializeConnection();
   }
 
   private initDate() {

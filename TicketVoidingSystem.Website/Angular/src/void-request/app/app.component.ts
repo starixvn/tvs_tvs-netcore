@@ -24,7 +24,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     this.isBlockUI = true;
-    this.signalRService.initializeConnection();
     this.remark = await this.appService.getRemark();
     const url = window.location.href;
     const params = url.split('/');
@@ -34,6 +33,7 @@ export class AppComponent implements OnInit {
     this.requestDetail.lastModifiedDate = (await this.appService.getLastModifiedDate(this.requestId)).lastModifiedDate;
     this.isReadyRender = true;
     this.isBlockUI = false;
+    await this.signalRService.initializeConnection();
   }
 
   isApplyVoidNewDesign(): boolean {

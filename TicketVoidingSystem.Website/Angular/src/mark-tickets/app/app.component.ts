@@ -20,12 +20,12 @@ export class AppComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.signalRService.initializeConnection();
     const paramIsExternalUrl = new URLSearchParams(window.location.search).get('isExternalUrl');
     if (paramIsExternalUrl === '1') {
       this.isExternalUrl = true;
     }
     this.dataPermission = await this.appService.getDataPermission(); 
+    await this.signalRService.initializeConnection();
   }
 
   changeTab(tab: string) {

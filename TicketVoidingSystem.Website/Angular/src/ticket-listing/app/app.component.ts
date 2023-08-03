@@ -1,9 +1,9 @@
 import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
@@ -75,9 +75,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     private readonly signalRService: SignalRService
   ) { }
 
-  public ngOnInit() {
-    this.signalRService.initializeConnection();
+  public async ngOnInit() {
+
     this.tooltip.element = this.element;
+    await this.signalRService.initializeConnection();
   }
 
   ngAfterViewInit() {

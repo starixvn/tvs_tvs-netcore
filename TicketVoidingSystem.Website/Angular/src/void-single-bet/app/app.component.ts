@@ -85,8 +85,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) { }
 
   public async ngOnInit() {
-    await this.signalRService.initializeConnection();
     this.tooltip.element = this.element;
+    await this.signalRService.initializeConnection();
   }
 
   ngAfterViewInit() {
