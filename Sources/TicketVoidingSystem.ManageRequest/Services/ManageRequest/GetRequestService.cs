@@ -29,11 +29,11 @@ public class GetRequestServiceImp : GetRequestService
         var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request);
         var viewModel = new RequestDetailViewModel
         {
-            Request = firstResultSet.FirstOrDefault(),
+            Request = firstResultSet.First(),
             Messages = thirdResultSet
         };
 
-        switch (firstResultSet.FirstOrDefault().IssueTypeId)
+        switch (firstResultSet.First().IssueTypeId)
         {
             case IssueTypeConstant.WrongScore:
                 viewModel.WrongScoreModels = MapEventWrongScores(secondResultSet);

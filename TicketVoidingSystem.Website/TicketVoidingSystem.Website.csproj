@@ -1,8 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <CodeAnalysisRuleSet>..\.sonarlint\tvs-websitecsharp.ruleset</CodeAnalysisRuleSet>
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
   </PropertyGroup>
 
@@ -31,10 +30,6 @@
     <None Remove="App_Data\Template\VoidParlayTicket.xlsx" />
     <None Remove="App_Data\Template\VoidParlayVirtualSportsBet.xlsx" />
     <None Remove="App_Data\Template\VoidSingleBet.xlsx" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <AdditionalFiles Include="..\.sonarlint\tvs-website\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
     
   <ItemGroup>

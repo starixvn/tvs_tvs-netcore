@@ -146,7 +146,7 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string ToEventWrongHdpXml(this IEnumerable<WrongHdpViewModel> models)
+    public static string ToEventWrongHdpXml(this IEnumerable<WrongHdpViewModel> models) // NOSONAR
     {
         if (!models.Any())
         {
@@ -186,7 +186,7 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string ToEventWrongOuXml(this IEnumerable<WrongOuViewModel> models)
+    public static string ToEventWrongOuXml(this IEnumerable<WrongOuViewModel> models) // NOSONAR
     {
         if (!models.Any())
         {

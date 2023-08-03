@@ -29,7 +29,7 @@ public class RenderRequestServiceImp : RenderRequestService
 
     public RequestViewModel Render(GroupRequestModel groupRequest)
     {
-        var requestModel = groupRequest.RequestModels.FirstOrDefault();
+        var requestModel = groupRequest.RequestModels.First();
         var viewModel = mapper.Map<RequestViewModel>(requestModel);
         viewModel.CreatedDate = requestModel.CreatedDate.ZoneManila();
         viewModel.Details = new List<RequestEventViewModel>();
