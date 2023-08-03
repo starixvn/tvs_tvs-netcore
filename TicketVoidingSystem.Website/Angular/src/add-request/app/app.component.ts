@@ -14,8 +14,7 @@ export class AppComponent implements OnInit {
 
   constructor(private readonly signalRService: SignalRService) { }
 
-  ngOnInit() {
-    this.signalRService.initializeConnection();
+ async ngOnInit() {
     const element = document.getElementById('addrequest-init-data');
     if (!_.isNil(element)) {
       const requestData = (element as HTMLInputElement).value;
@@ -23,6 +22,8 @@ export class AppComponent implements OnInit {
       this.mapModel(initializedRequestModel);
       this.isExternalUrl = true;
     }
+
+    await this.signalRService.initializeConnection();
   }
 
   private mapModel(requestModel: InitializedRequestModel) {

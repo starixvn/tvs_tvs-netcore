@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    this.signalRService.initializeConnection();
     const url = window.location.href;
     const params = url.split('/');
     const requestId = parseInt(params[params.length - 1], 10);
@@ -34,5 +33,6 @@ export class AppComponent implements OnInit {
     this.primitiveProperty = this.objectService.getPrimitiveProperty(this.detailViewModel, requestId);
     await this.logInfoService.getLogInfo(this.primitiveProperty, this.detailViewModel);
     this.objectService.mapRequestModel(this.requestModel, this.detailViewModel, this.primitiveProperty);
+    this.signalRService.initializeConnection();
   }
 }
