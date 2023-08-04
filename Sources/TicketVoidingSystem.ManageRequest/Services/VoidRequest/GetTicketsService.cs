@@ -67,7 +67,7 @@ public class GetTicketsServiceImp : GetTicketsService
 
     private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeEarlyKickOffOrWrongKickOff(GetTicketsQuery query)
     {
-        if (query.RequestId == 0) // get tickets when add/edit request
+        if (query.RequestId is null or 0) // get tickets when add/edit request
         {
             var transInfoJson = new List<string> { query.TransInfoJson };
             return await GetBetTransTicket(query, transInfoJson);
@@ -112,11 +112,11 @@ public class GetTicketsServiceImp : GetTicketsService
         return query.Match?.MatchId > 0 ? query.Match.MatchId : null;
     }
 
-    private async Task<(IEnumerable<BetId> SingleTickets, IEnumerable<BetId> ParlayTickets, IEnumerable<BetId> CancelCashOutTickets)> GetTicketsInRequest(int requestId)
+    private async Task<(IEnumerable<BetId> SingleTickets, IEnumerable<BetId> ParlayTickets, IEnumerable<BetId> CancelCashOutTickets)> GetTicketsInRequest(int? requestId)
     {
         var criteria = new GetTicketInRequestCriteria
         {
-            RequestId = requestId
+            RequestId = requestId ?? 0
         };
 
         return await repository.FetchMultipleAsync<BetId, BetId, BetId>(criteria);
