@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { DateTimeFormat, TVSRequestFilterBy, TimeZone } from '../../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { AddRequestApiService } from '../../add-request-api.service';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
-import * as moment from 'moment';
+import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';

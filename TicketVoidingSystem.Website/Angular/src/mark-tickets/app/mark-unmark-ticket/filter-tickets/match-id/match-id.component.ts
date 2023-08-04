@@ -4,7 +4,6 @@ import {
   OnInit, Output, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GetPlayersQuery } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
@@ -20,6 +19,7 @@ import { EventType } from '../filter.model';
 import { Duration } from './../../../models/query.model';
 import { Currencies } from './../filter.model';
 import { GroupLicensee } from './licensees/licensees.model';
+import moment from 'moment';
 
 @Component({
   selector: 'match-id',

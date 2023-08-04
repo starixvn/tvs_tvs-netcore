@@ -1,7 +1,7 @@
 import { LABELS } from './../../../../utility/constants/labels';
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { Result } from '../../../../utility/models/result';

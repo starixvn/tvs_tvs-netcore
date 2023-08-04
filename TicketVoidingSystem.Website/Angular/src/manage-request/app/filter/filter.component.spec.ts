@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';

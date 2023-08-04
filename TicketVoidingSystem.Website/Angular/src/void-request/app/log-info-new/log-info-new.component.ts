@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';

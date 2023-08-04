@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ManageRequestStatus } from '../../../utility/constants/config';

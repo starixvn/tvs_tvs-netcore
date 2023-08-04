@@ -1,5 +1,5 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { GetLogInfoModel, ValidationMessage } from 'src/add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { DateFullTimeNewComponent } from '../components/date-time/date-full-time-new/date-full-time-new.component';

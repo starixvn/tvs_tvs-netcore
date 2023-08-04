@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AddRequestApiService } from '../../add-request-api.service';

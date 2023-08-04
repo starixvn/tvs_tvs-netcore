@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as moment from "moment";
+import moment from "moment";
 import { ClipboardService } from 'ngx-clipboard';
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';

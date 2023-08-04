@@ -1,7 +1,7 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { DateTimeFormat } from '../../../../../utility/constants/config';

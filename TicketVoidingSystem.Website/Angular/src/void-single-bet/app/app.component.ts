@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { MessagesResult } from '../../utility/components/messages-result/messages-result';
 import { ModalType } from '../../utility/components/modal/modal.model';

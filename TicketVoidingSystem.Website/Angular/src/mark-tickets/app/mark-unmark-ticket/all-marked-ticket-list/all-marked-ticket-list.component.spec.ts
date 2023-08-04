@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';

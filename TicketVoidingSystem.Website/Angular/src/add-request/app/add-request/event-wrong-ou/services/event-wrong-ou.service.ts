@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from "../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model";
 import { DateTimeFormat, PoolHouseTicketValue } from "../../../../../utility/constants/config";
 import { AddRequestApiService } from "../../add-request-api.service";
