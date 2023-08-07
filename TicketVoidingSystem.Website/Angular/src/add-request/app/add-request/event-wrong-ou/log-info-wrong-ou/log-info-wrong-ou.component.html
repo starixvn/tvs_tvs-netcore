@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="float-right d-flex" *ngIf="!isMainMatch">
-        <i class="fa fa-trash-o delete-event-icon" [ngClass]="{'delete-event-icon-disabled': isDisabled}"
+        <i class="fa-solid fa-trash-can fa-sm delete-event-icon" [ngClass]="{'delete-event-icon-disabled': isDisabled}"
           aria-hidden="true" (click)="handleDeleteEvent(logInfo.matchId)">
         </i>
       </div>
