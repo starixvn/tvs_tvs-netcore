@@ -48,8 +48,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.isBlockingUi = status;
     });
 
-    await this.signalRService.initializeConnection();
     this.permission = await this.appService.getPermissionABExceptionList();
+    await this.signalRService.initializeConnection();
   }
 
   ngOnDestroy(): void {
