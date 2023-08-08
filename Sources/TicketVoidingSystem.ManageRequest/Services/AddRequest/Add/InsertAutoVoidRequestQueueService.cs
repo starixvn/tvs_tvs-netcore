@@ -27,7 +27,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             {
                 RequestIds = requestId.ToString(),
                 IssueTypeId = issueTypeId,
-                MatchId = matchId,
+                MatchId = matchId ?? 0,
                 ActionId = actionId,
                 BroadcastSessionId = Guid.NewGuid().ToString()
             };

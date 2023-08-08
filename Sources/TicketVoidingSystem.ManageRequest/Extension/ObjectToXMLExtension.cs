@@ -328,9 +328,9 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string OperatorToXml(this List<OperatorQuery> operators)
+    public static string OperatorToXml(this List<OperatorQuery>? operators)
     {
-        if (operators.Count <= 0)
+        if (operators is null || operators.Count <= 0)
         {
             return string.Empty;
         }

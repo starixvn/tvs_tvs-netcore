@@ -10,7 +10,7 @@ public class InsertAutoVoidRequestQueueCommand : NonQueryCommand
 
     public string RequestIds { get; set; }
 
-    public int? MatchId { get; set; }
+    public int MatchId { get; set; }
 
     public int ActionId { get; set; }
 

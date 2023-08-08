@@ -116,7 +116,7 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
             IssueTypeConstant.WrongHDP,
             IssueTypeConstant.Wrong1stHDP,
             IssueTypeConstant.WrongOU,
-            IssueTypeConstant.WrongOU
+            IssueTypeConstant.Wrong1stOU
         };
 
         return issueTypesHaveChildMatch.Contains(issueTypeId);

@@ -68,28 +68,17 @@ public class AddRequestServiceImp : AddRequestService
 
     private async Task<Result> ExecuteAddAfterMarkTickets(AddRequestQuery query)
     {
-        try
+        var requestId = await ExecuteAddRequest(query);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.IssueTypeId, query.MatchId, query.ActionId);
+        await sendLetstalkAfterAddService.Execute(query, requestId);
+        return new Result
         {
-            var requestId = await ExecuteAddRequest(query);
-            await insertAutoVoidRequestQueueService.Execute(requestId, query.IssueTypeId, query.MatchId, query.ActionId);
-            await sendLetstalkAfterAddService.Execute(query, requestId);
-            return new Result
+            Data = new AddRequestResultData
             {
-                Data = new AddRequestResultData
-                {
-                    RequestId = requestId,
-                    MatchId = GetMatchIdAfterAddRequest(query)
-                }
-            };
-        }
-        catch (Exception e)
-        {
-            return new Result
-            {
-                ErrorCode = 1,
-                ErrorMsg = e.Message
-            };
-        }
+                RequestId = requestId,
+                MatchId = GetMatchIdAfterAddRequest(query)
+            }
+        };
     }
 
     private async Task<int> ExecuteAddRequest(AddRequestQuery query)

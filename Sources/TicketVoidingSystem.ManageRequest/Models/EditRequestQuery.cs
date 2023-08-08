@@ -41,4 +41,5 @@ public class EditRequestQuery
     public IEnumerable<WrongOddsViewModel>? WrongOddsInfo { get; set; }
     public IEnumerable<ReducedOverViewModel>? ReducedOverInfo { get; set; }
     public string? TransInfoJson { get; set; }
+    public int? FilterBy { get; set; }
 }
