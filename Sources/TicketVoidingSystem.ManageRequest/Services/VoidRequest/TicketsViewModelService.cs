@@ -138,7 +138,8 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
         if (voidTickets.Any())
         {
-            model.FromTime = voidTickets.Min(item => item.TransDate).ZoneManila();
+            model.FromTime = voidTickets.Select(item => item.TransDate)
+                .Union(cancelCashOutTickets.Select(item => item.CheckTimeCancelCashOut)).Min().ZoneManila();
             model.FromDate = voidTickets.Min(item => item.WinLostDate).ZoneManila();
             model.ToDate = voidTickets.Select(item => item.WinLostDate)
                 .Union(cancelCashOutTickets.Select(item => item.CheckTimeCancelCashOut)).Max().ZoneManila();
