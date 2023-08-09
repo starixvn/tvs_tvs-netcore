@@ -195,6 +195,12 @@
   <data name="LicenseTypeXml" xml:space="preserve">
     <value>&lt;LicenseType Id="{0}" LicenseName ="{1}" Value="{2}" /&gt;</value>
   </data>
+  <data name="ListOfCancelledCashOutTickets" xml:space="preserve">
+    <value>實時兌現被取消註單 - List of cancelled cash out tickets</value>
+  </data>
+  <data name="ListOfVoidedTickets" xml:space="preserve">
+    <value>作废清单 - List of voided tickets</value>
+  </data>
   <data name="MessageTemplateItemXml" xml:space="preserve">
     <value>&lt;Item InputType="{0}" Name="{1}" OrderBy="{2}" JsonValue="{3}"/&gt;</value>
   </data>
@@ -234,6 +240,12 @@
   </data>
   <data name="SMP_Selection_Result" xml:space="preserve">
     <value>&lt;div&gt;&lt;span class="selection-smp"&gt;{0}&lt;/span&gt; - &lt;span class="selection-result"&gt;{1}&lt;/span&gt;&lt;/div&gt;</value>
+  </data>
+  <data name="Subject_DuplicateTicketVoidedFor" xml:space="preserve">
+    <value>[{0}] - 复制注单作废 ({1}) | Duplicate Ticket Voided ({2})</value>
+  </data>
+  <data name="Subject_DuplicateTicketVoidedForIt" xml:space="preserve">
+    <value>{0}[{1}] - 复制注单作废 ({2}) | Duplicate Ticket Voided ({3})</value>
   </data>
   <data name="Subject_RecoveredBetReport" xml:space="preserve">
     <value>Recovered Bet Report ({0})</value>

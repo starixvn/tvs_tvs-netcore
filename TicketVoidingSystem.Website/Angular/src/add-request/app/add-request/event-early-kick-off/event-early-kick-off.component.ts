@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as moment from 'moment-timezone';
-import { CommonService } from 'src/utility/services/common.service';
-import { HttpService } from 'src/utility/services/http.service';
 import { TimeModel } from '../../../../utility/components/date-time/date-time/time.model';
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
+import { CommonService } from '../../../../utility/services/common.service';
+import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { LeagueEventComponent } from '../league-event/league-event.component';

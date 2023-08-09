@@ -1,3 +1,5 @@
+import { StaticService } from "../../services/static.service";
+
 export class CSSCLASS {
     public static get VALID(): string { return 'item-number-valid'; }
     public static get INVALID(): string { return 'item-number-invalid'; }
@@ -15,22 +17,25 @@ export class GroupNumber {
     }
 
     getAllNumberItems(): Array<NumberItem> {
-        return this.items.filter(item => item.isNumber());   
+        return this.items.filter(item => item.isNumber());
     }
 
     getAllNotNumberItems(): Array<NumberItem> {
-        return this.items.filter(item => !item.isNumber());   
+        return this.items.filter(item => !item.isNumber());
     }
 
     getAllNotNumberItemsAsString(): string {
         const values = this.getAllNotNumberItems().map(item => item.value);
-
-        return values.join(',');   
+        return values.join(',');
     }
 
     getAllNumberItemsAsString(): string {
         const values = this.getAllNumberItems().map(item => item.value);
+        return values.join(',');
+    }
 
+    getInvalidItemsAsString(): string {
+        const values = this.items.filter(item => item.isInvalidItem()).map(item => item.value);
         return values.join(',');
     }
 
@@ -62,7 +67,7 @@ export class GroupNumber {
     }
 
     updateInvalidItems(text: string, tooltipText?: string) {
-        if (text !== null) {
+        if (StaticService.isStringHasLength(text)) {
             const invalidItems = text.split(',');
             this.items.forEach(item => {
                 this.setItemInvalid(invalidItems, item, CSSCLASS.INVALID, tooltipText);
@@ -71,7 +76,7 @@ export class GroupNumber {
     }
 
     updateMoved(text: string) {
-        if (text !== null) {
+        if (StaticService.isStringHasLength(text)) {
             const movedItems = text.split(',');
             this.items.forEach(item => {
                 this.setItemInvalid(movedItems, item, CSSCLASS.MOVED);
@@ -80,7 +85,7 @@ export class GroupNumber {
     }
 
     updateDifferent(text: string) {
-        if (text !== null) {
+        if (StaticService.isStringHasLength(text)) {
             const differentItems = text.split(',');
             this.items.forEach(item => {
                 this.setItemInvalid(differentItems, item, CSSCLASS.DIFFERENT);
@@ -171,6 +176,10 @@ export class NumberItem {
 
     isNumber(): boolean {
         return /^\+?(0|[1-9]\d*)$/.test(this.value);
+    }
+
+    isInvalidItem(): boolean {
+        return this.cssClass === CSSCLASS.INVALID;
     }
 
     changeSelectStatus(isSelected: boolean) {

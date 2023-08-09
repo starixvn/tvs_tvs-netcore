@@ -15,4 +15,5 @@ public class RequestDetailViewModel
     public IEnumerable<WrongOuViewModel> WrongOuModels { get; set; }
     public IEnumerable<WrongOddsViewModel> WrongOddsModels { get; set; }
     public IEnumerable<ReducedOverViewModel> ReducedOverModels { get; set; }
+    public DuplicateTicketsViewModel DuplicateTicketsModel { get; set; }
 }

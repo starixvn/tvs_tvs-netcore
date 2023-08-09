@@ -38,7 +38,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         {
             var command = CreateEditRequestCommand(query);
             await repository.ExecuteAsync(command);
-            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.IssueTypeId, query.MatchId, query.ActionId);
+            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId);
 
             return new Result
             {
@@ -76,6 +76,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
+        command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff() ?
             LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
 

@@ -1,5 +1,7 @@
-export class EventDuplicateTicketsModel {
+export class DuplicateTicketsModel {
   matchId: number;
   transIds: string;
-  filterBy: number;
+  orgTransIds: string;
+  filterBy?: number;
+  subIssueTypeId: number;
 }

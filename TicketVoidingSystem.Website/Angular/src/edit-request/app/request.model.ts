@@ -1,3 +1,4 @@
+import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
@@ -8,6 +9,7 @@ import { OperatorInfo } from '../../add-request/app/add-request/others/others.mo
 import { Message } from '../../utility/components/template-message/messages/message';
 
 export class RequestDetailModel {
+  requestId: number;
   sportType: number;
   issueTypeId: number;
   actionId: number;
@@ -73,5 +75,6 @@ export class RequestDetailViewModel {
   wrongOuModels: WrongOuModel[];
   wrongOddsModels: WrongOddsModel[];
   reducedOverModels: ReducedOverModel[];
+  duplicateTicketsModel: DuplicateTicketsModel;
   messages: Message[];
 }

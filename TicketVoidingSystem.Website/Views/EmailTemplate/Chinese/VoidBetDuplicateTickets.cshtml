@@ -1,0 +1,84 @@
+﻿@using RazorEngine.Text
+
+<head>
+    <style type="text/css">
+        .auto-style1 {
+            height: 23px;
+        }
+
+        .auto-style2 {
+            width: 120px;
+        }
+    </style>
+</head>
+<table cellspacing="0" style="border: 1px solid; border-collapse: collapse; font-size: 12pt; font-family: 'Segoe UI',Tahoma,Arial,sans-serif; background-color: #E7F1F3">
+    <tr height="70">
+        <th style="background-color: #404C5A; color: #ffffff; text-transform: uppercase; padding-left: 10px; font-size: 20px; text-align: left; margin: auto;">
+            复制注单作废 | Duplicate Ticket Voided
+        </th>
+    </tr>
+    <tr>
+        <td style="padding: 0 0 10px 10px; border-bottom: 1 solid #CBCBCB;">
+            <br />
+            简体中文<br />
+            <strong>亲爱的客户,</strong><br />
+            请注意, 本公司发现您旗下会员有重单. 我们保留第 @(Model.TotalOrgTransIds) 张注单为有效, 然而已经将第二张注单作废. 请查看以下信息:<br />
+            <strong>信息:</strong><br />
+            @if (!string.IsNullOrWhiteSpace(@Model.ChineseSimplified))
+            {
+                <span style="width: 1350px;">@Model.ChineseSimplified</span><br />
+            }
+            <strong style="color: red">以下是受影响的会员和注单.</strong><br />
+            非常抱歉造成您的不便. 谢谢!<br />
+            <br />
+            English<br />
+            <strong>Dear Valued Customer,</strong><br />
+            Kindly to be informed duplicated tickets found for below match. Those affected tickets,
+            we retained @(Model.TotalOrgTransIds) ticket as valid and had proceed to void the duplicate(s). Please
+            refer to the below message:<br>
+            <strong>Message:</strong><br />
+            @if (!string.IsNullOrWhiteSpace(@Model.English))
+            {
+                <span style="width: 1350px;">@Model.English</span><br />
+            }
+            <strong style="color: red">Kindly refer to below on the affected members & tickets.</strong><br />
+            Sorry for the inconvenience caused and thank you for your kind attention!
+        </td>
+    </tr>
+    <tr style="border-bottom: 1px solid #CBCBCB; margin-top: 10px; margin-bottom: 10px;">
+        <td class="auto-style1"></td>
+    </tr>
+    <tr>
+        <td style="padding: 10px 0 0 10px;">
+            <br />
+            <table cellspacing="1" style="background-color: #CBCBCB; font-size: 12pt;">
+                @foreach (var group in Model.DuplicateTickets)
+                {
+                    var backgroundColor = @group.Id % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                    <tr valign="Middle" style="background-color: @backgroundColor; height: 25px;">
+                        <td align="Center" style="padding: 10px;">
+                            @group.Id
+                        </td>
+                        <td style="padding: 5px;">
+                            <strong>System ID | 系统账号: @(new RawString(group.Usernames))</strong><br />
+                            Ref No: @(new RawString(group.OrgTransIds)) [REMAIN | 保留]<br />
+                            Ref No: @(new RawString(group.VoidedTransIds)) [VOIDED | 作废]<br />
+                        </td>
+                    </tr>
+                }
+            </table>
+            <br />
+            <strong>Best Regards,</strong>
+            <br /><br />
+            <strong>CS ONEONONE-SOLUTIONS</strong>
+            <br /><br />
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left: 10px; background-color: #404C5A; color: #ffffff;" height="20">
+            <em>此邮件为系统自动发出，请勿直接回复该邮件地址. 如需要進一步協助，請聯繫我方客服信箱: <span style="color: #19a2e8; text-decoration: underline">cs@oneonone-solutions.com</span></em>
+            <br />
+            <em>This is system auto generated email, please do not reply to this email directly. For further communication, please contact us via the email address: <span style="color: #19a2e8; text-decoration: underline">cs@oneonone-solutions.com</span></em>
+        </td>
+    </tr>
+</table>

@@ -7,12 +7,14 @@
   <ng-container *ngIf="isValidRequest()">
     <div class="remark">
       <span *ngFor="let item of remark">
-          <em class="fa fa-exclamation-circle"></em>{{item}}
+          <em class="fa fa-exclamation-circle mr-1"></em>{{item}}
       </span>
   </div>
-  
-    <void-danger-accepted *ngIf="isApplyVoidNewDesign()" [requestDetail]="requestDetail"></void-danger-accepted>
-    <void-other-issue *ngIf="!isApplyVoidNewDesign()" [requestId]="requestId" [requestDetail]="requestDetail"></void-other-issue>
+
+    <void-danger-accepted *ngIf="isApplyVoidNewDesign() && !isDuplicateTickets()" [requestDetail]="requestDetail"></void-danger-accepted>
+    <void-other-issue *ngIf="!isApplyVoidNewDesign() && !isDuplicateTickets()" [requestId]="requestId" [requestDetail]="requestDetail"></void-other-issue>
+    <void-duplicate-tickets *ngIf="isDuplicateTickets()" [requestDetail]="requestDetail"></void-duplicate-tickets>
+
   </ng-container>
   <div *ngIf="!isValidRequest()" class="mg-10 no-data">
     Loading...

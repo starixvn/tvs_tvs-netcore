@@ -4,6 +4,6 @@ export class PrimitiveProperty {
   isBlockBetIds = false;
   isShowButtonRemoveInvalid = false;
   invalidTransIds: string;
-  isHasUusTickets: boolean;
+  //isHasUusTickets: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
 }

@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventAbnormalBetComponent #EventDuplicateTicketsComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <event-duplicate-tickets>
+    <div>
+      <div
+        class="d-flex mb-2 header-bet-id"
+        style="max-width: 1065px;"
+      >
+        <div
+          class="mr-4"
+        >
+          Bet ID(s)
+        </div>
+        <div
+          class="form-check form-check-inline"
+        >
+          <input
+            class="form-check-input"
+            disabled=""
+            id="inlineRadio-"
+            name="inlineRadioOptions"
+            type="radio"
+          />
+          <label
+            class="form-check-label"
+            for="inlineRadio-"
+          >
+            Single ticket
+          </label>
+        </div>
+        <div
+          class="form-check form-check-inline"
+        >
+          <input
+            class="form-check-input"
+            disabled=""
+            id="inlineRadio-1"
+            name="inlineRadioOptions"
+            type="radio"
+            value="1"
+          />
+          <label
+            class="form-check-label"
+            for="inlineRadio-1"
+          >
+            Mix Parlay ticket
+          </label>
+        </div>
+        <div
+          class="flex-grow-1"
+        />
+      </div>
+      <bet-ids />
+    </div>
+    <league-event-abnormal />
+  </event-duplicate-tickets>
+</ng-component>
+`;

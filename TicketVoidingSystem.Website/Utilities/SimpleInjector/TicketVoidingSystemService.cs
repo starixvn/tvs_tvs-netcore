@@ -12,6 +12,7 @@ using TicketVoidingSystem.Services.NetPosition;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using TicketVoidingSystem.Services.SendEmail.Void;
+using TicketVoidingSystem.Services.SendEmail.VoidDuplicateTickets;
 using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.Web;
@@ -53,6 +54,7 @@ public static class TicketVoidingSystemService
         //Send Email
         services.AddSingleton<SubjectLabelsService, SubjectVoidImp>();
         services.AddSingleton<SubjectService, SubjectServiceImp>();
+        services.AddSingleton<DuplicateTicketsSubjectService, DuplicateTicketsSubjectServiceImp>();
         services.AddSingleton<BetListCoreService, BetListCoreServiceImp>();
         services.AddSingleton<TicketService, TicketServiceImp>();
         services.AddScoped<VoidEmailContentService, VoidEmailContentServiceImp>();
@@ -66,6 +68,12 @@ public static class TicketVoidingSystemService
         services.AddScoped<SendEmailService, SendEmailServiceImp>();
         services.AddScoped<SitesEmailService, SitesEmailServiceImp>();
         services.AddSingleton<TemplateEmailService, TemplateEmailServiceImp>();
+        services.AddScoped<ChinaViewMessageService, ChinaViewMessageServiceImp>();
+        services.AddScoped<SendEmailDuplicateTicketsService, SendEmailDuplicateTicketsServiceImp>();
+        services.AddScoped<DuplicateTicketsEmailLicenseeService, DuplicateTicketsEmailLicenseeServiceImp>();
+        services.AddScoped<DuplicateTicketsEmailItQaService, DuplicateTicketsEmailItQaServiceImp>();
+        services.AddScoped<DuplicateTicketsEmailItSupportService, DuplicateTicketsEmailItSupportServiceImp>();
+        services.AddScoped<DuplicateTicketsEmailContentService, DuplicateTicketsEmailContentServiceImp>();
 
         //Send Message
         services.AddSingleton<MessageItemService, MessageItemServiceImp>();

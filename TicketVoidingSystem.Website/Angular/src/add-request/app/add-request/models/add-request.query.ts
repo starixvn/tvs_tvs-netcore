@@ -5,6 +5,7 @@ import { WrongOuGetLogInfoQuery } from '../event-wrong-ou/models/get-log-info.qu
 import { WrongScoreGetLogInfoQuery } from '../event-wrong-score/event-wrong-score.model';
 import { OperatorInfo } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
+import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
 import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
@@ -45,6 +46,7 @@ export class AddRequestQuery {
   wrongOddsInfo: WrongOddsModel[];
   reducedOverInfo: ReducedOverModel[];
   abnormalAccountInfo: AbnormalAccountModel;
+  duplicateTicketsInfo: DuplicateTicketsModel;
 
   transInfoJson: string;
   unMarkTransIds: string;

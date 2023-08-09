@@ -29,10 +29,28 @@ public class MailVoidViewModel : MailViewModel
 
     public string English => string.IsNullOrWhiteSpace(Message.ContentEnglish) ? null : Message.ContentEnglish.Replace("@@", "");
 
-    public bool IsLikelyAbnormalBet { get; set; }
-    public bool IsAbnormalAccount { get; set; }
+    public int IssueTypeId { get; set; }
 
     public bool IsFilterByUserName { get; set; }
 
-    public IEnumerable<TicketEmailViewModel> Tickets { get; set; }
+    public IList<Group<TicketEmailViewModel>> GroupTickets { get; set; }
+}
+
+public class DuplicateTicketsMailVoidViewModel
+{
+    public TemplateContentModel SportType { get; set; }
+
+    public string TemplatePath { get; set; }
+
+    public Match Match { get; set; }
+
+    public Message Message { get; set; }
+
+    public string ChineseSimplified => string.IsNullOrWhiteSpace(Message.ContentChineseSimplified) ? null : Message.ContentChineseSimplified.Replace("@@", "");
+
+    public string English => string.IsNullOrWhiteSpace(Message.ContentEnglish) ? null : Message.ContentEnglish.Replace("@@", "");
+
+    public int TotalOrgTransIds { get; set; }
+
+    public IList<DuplicateTicketsRequestInfo> DuplicateTickets { get; set; }
 }

@@ -3,6 +3,7 @@ import { OthersModel } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { AbnormalBetModel } from './abnormal-bet.model';
 import { EventDetailModel } from './event-detail.model';
+import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
 import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { EventTicket14Model } from './event-ticket-14.model';
@@ -15,6 +16,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   eventDetail: EventDetailModel;
   abnormalBetModel: AbnormalBetModel;
   abnormalAccountModel: AbnormalAccountModel;
+  duplicateTicketsModel: DuplicateTicketsModel;
   redCardModel: RedCardModel[];
   wrongScoreModels: WrongScoreModel[];
   dangerAcceptedModels: RedCardModel[];
@@ -31,11 +33,13 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.abnormalBetModel = new AbnormalBetModel();
     this.abnormalAccountModel = new AbnormalAccountModel();
     this.eventTicket14Model = new EventTicket14Model();
+    this.duplicateTicketsModel = new DuplicateTicketsModel();
     this.wrongScoreModels = [];
     this.dangerAcceptedModels = [];
     this.wrongHdpModels = [];
     this.wrongOuModels = [];
     this.wrongOddsModels = [];
+    this.reducedOverModels = [];
     this.reducedOverModels = [];
     this.others = new OthersModel();
   }

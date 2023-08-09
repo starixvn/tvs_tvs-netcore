@@ -33,7 +33,7 @@ public class SendEmailServiceImp : SendEmailService
 
     public async Task<IEnumerable<Result>> SendEmail(EmailVoidModel model, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService = false)
     {
-        var sites = await sitesEmailService.GetSitesByCategory(model.IsLikelyAbnormalBet);
+        var sites = await sitesEmailService.GetSitesByCategory(model.IssueTypeId);
         var viewModel = CreateMailViewModel(model);
 
         var results = await emailLicenseeService.Send(viewModel, sites, tickets, isFromAfterVoidService);
@@ -55,8 +55,7 @@ public class SendEmailServiceImp : SendEmailService
             VoidReasonSC = model.ReasonSC,
             Message = model.Message,
             NegativeBalanceUsers = model.NegativeBalanceUsers,
-            IsLikelyAbnormalBet = model.IsLikelyAbnormalBet,
-            IsAbnormalAccount = model.IsAbnormalAccount,
+            IssueTypeId = model.IssueTypeId,
             IsFilterByUserName = model.IsFilterByUsername
         };
     }

@@ -3,7 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../utility/constants/config';
+import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
@@ -16,6 +16,7 @@ import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
+import { ActionVoidService } from './services/action-void.service';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { Category } from './sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-issue-type-dialog/sub-type-danger-accepted.json';
@@ -60,7 +61,8 @@ export class FilterComponent implements OnInit, OnChanges {
   constructor(
     private readonly filterService: FilterService,
     private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore
+    private readonly addRequestStore: AddRequestStore,
+    private readonly actionVoidService: ActionVoidService,
   ) {
   }
 
@@ -225,7 +227,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
       [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 170, sport: 150 },
-      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170, sport: 150 }
+      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 150, action: 170, sport: 150 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -237,37 +239,36 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   private updateCurrentAction(): void {
-    const issueActionMapping: { [key: string]: number[] } = {
-      [IssueTypeConstant.REDUCED_OVER]: ActionVoidByIssueTypeConst.REDUCED_OVER,
-      [IssueTypeConstant.WRONG_ODDS]: ActionVoidByIssueTypeConst.WRONG_ODDS,
-      [IssueTypeConstant.DANGER_ACCEPTED]: ActionVoidByIssueTypeConst.DANGER_ACCEPTED,
-      [IssueTypeConstant.WRONG_SCORE]: ActionVoidByIssueTypeConst.WRONG_SCORE,
-      [IssueTypeConstant.WRONG_HDP]: ActionVoidByIssueTypeConst.WRONG_HDP,
-      [IssueTypeConstant.WRONG_1ST_HDP]: ActionVoidByIssueTypeConst.WRONG_1ST_HDP,
-      [IssueTypeConstant.WRONG_OU]: ActionVoidByIssueTypeConst.WRONG_OU,
-      [IssueTypeConstant.WRONG_1ST_OU]: ActionVoidByIssueTypeConst.WRONG_1ST_OU,
-      [IssueTypeConstant.EARLY_KICK_OFF]: ActionVoidByIssueTypeConst.EARLY_KICK_OFF,
-      [IssueTypeConstant.WRONG_KICK_OFF]: ActionVoidByIssueTypeConst.WRONG_KICK_OFF,
-      [IssueTypeConstant.RED_CARD]: ActionVoidByIssueTypeConst.RED_CARD,
-      [IssueTypeConstant.ABNORMAL_ACCOUNT]: ActionVoidByIssueTypeConst.ABNORMAL_ACCOUNT,
-      [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: ActionVoidByIssueTypeConst.ABNORMAL_BET_REAL_MEMBER,
-      [IssueTypeConstant.ARCHIVED_TICKET]: ActionVoidByIssueTypeConst.ARCHIVED_TICKET,
-      [IssueTypeConstant.DUPLICATE_TICKETS]: ActionVoidByIssueTypeConst.DUPLICATE_TICKETS,
+    const actionMapping: { [key: string]: () => number[] } = {
+      [IssueTypeConstant.REDUCED_OVER]: () => this.actionVoidService.getActionVoidReducedOver(),
+      [IssueTypeConstant.WRONG_ODDS]: () => this.actionVoidService.getActionVoidWrongOdds(),
+      [IssueTypeConstant.DANGER_ACCEPTED]: () => this.actionVoidService.getActionVoidDangerAccepted(),
+      [IssueTypeConstant.WRONG_SCORE]: () => this.actionVoidService.getActionVoidWrongScore(),
+      [IssueTypeConstant.WRONG_HDP]: () => this.actionVoidService.getActionVoidWrongHdp(),
+      [IssueTypeConstant.WRONG_1ST_HDP]: () => this.actionVoidService.getActionVoidWrong1stHdp(),
+      [IssueTypeConstant.WRONG_OU]: () => this.actionVoidService.getActionVoidWrongOu(),
+      [IssueTypeConstant.WRONG_1ST_OU]: () => this.actionVoidService.getActionVoidWrong1stOu(),
+      [IssueTypeConstant.EARLY_KICK_OFF]: () => this.actionVoidService.getActionVoidEarlyKickOff(),
+      [IssueTypeConstant.WRONG_KICK_OFF]: () => this.actionVoidService.getActionVoidWrongKickOff(),
+      [IssueTypeConstant.RED_CARD]: () => this.actionVoidService.getActionVoidRedCard(),
+      [IssueTypeConstant.ABNORMAL_ACCOUNT]: () => this.actionVoidService.getActionVoidAbnormalAccount(),
+      [IssueTypeConstant.ABNORMAL_BET]: () => this.actionVoidService.getActionAbnormalBet(this.abnormalFilterBy),
+      [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: () => this.actionVoidService.getActionVoidAbnormalBetRealMember(),
+      [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
+      [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
     };
 
-    if (this.issueTypes.issueId in issueActionMapping) {
-      this.updateCurrentActionByIssue(issueActionMapping[this.issueTypes.issueId]);
-    } else if (this.issueTypes.issueId === Number(IssueTypeConstant.ABNORMAL_BET)) {
-      const actionType = this.abnormalFilterBy === AbnormalFilterBy.SINGLE
-        ? ActionVoidByIssueTypeConst.ABNORMAL_BET_SINGLE
-        : ActionVoidByIssueTypeConst.ABNORMAL_BET_MIX_PARLAY;
-      this.updateCurrentActionByIssue(actionType);
+    const actionFunction = actionMapping[this.issueTypes.issueId];
+    if (actionFunction) {
+      const selectedActionVoid = actionFunction();
+      this.updateCurrentActionByIssue(selectedActionVoid);
     } else {
       this.actions = this.originActions;
     }
-
     this.model.action = this.isEditOrExternalUrl() ? this.model.action : this.actions[0].value;
   }
+
+
 
   private updateCurrentActionByIssue(actionIds: number[]): void {
     this.actions = actionIds.map((id: number) => {
@@ -478,5 +479,13 @@ export class FilterComponent implements OnInit, OnChanges {
 
   public isShowEventDate(): boolean {
     return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets();
+  }
+
+  public isDisableActionVoid(): boolean {
+    if (this.model.issueTypeId === IssueTypeConstant.DUPLICATE_TICKETS && this.model.action === TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString()) {
+      return true;
+    }
+
+     return this.model.isVoided;
   }
 }

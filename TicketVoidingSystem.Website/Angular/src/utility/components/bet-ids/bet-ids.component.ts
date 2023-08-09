@@ -47,6 +47,10 @@ export class BetIdsComponent implements OnInit {
     }
   }
 
+  getInvalidItems(): string {
+    return this.groupNumber.getInvalidItemsAsString();
+  }
+
   getAllBetIds(): string {
     return this.groupNumber.getAllNumberItemsAsString();
   }

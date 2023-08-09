@@ -156,8 +156,14 @@
             (updateMatchId)="updateMatchId($event)">
           </event-reduced-over>
           <event-duplicate-tickets #eventDuplicateTickets
-            *ngIf="isDuplicateTickets()">
-
+            *ngIf="isDuplicateTickets()"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [duplicateTicketsModel]="model.duplicateTicketsModel"
+            [others]="model.others"
+            (updateMatchId)="updateMatchId($event)">>
           </event-duplicate-tickets>
 
         </div>
@@ -175,7 +181,7 @@
       [isEdit]="isEdit"
       [model]="model.others">
     </abnormal-accounts-other>
-    <others-abnormal-mix-parlay *ngIf="isAbnormalBetMixParlay() || isArchivedTicketIssueType() || isDuplicateTicketsMixParlay()"
+    <others-abnormal-mix-parlay *ngIf="isAbnormalBetMixParlay() || isArchivedTicketIssueType() || isDuplicateTickets()"
       [isEdit]="isEdit"
       [model]="model.others">
     </others-abnormal-mix-parlay>

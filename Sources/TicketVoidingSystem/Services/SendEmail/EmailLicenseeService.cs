@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
@@ -22,12 +20,15 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     private readonly VoidEmailContentService voidEmailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
+    private readonly ChinaViewMessageService chinaViewMessageService;
 
-    public EmailLicenseeServiceImp(VoidEmailContentService voidEmailContentService, FanexMailApiService fanexMailApiService, MailResultService mailResultService)
+    public EmailLicenseeServiceImp(VoidEmailContentService voidEmailContentService, FanexMailApiService fanexMailApiService,
+        MailResultService mailResultService, ChinaViewMessageService chinaViewMessageService)
     {
         this.voidEmailContentService = voidEmailContentService;
         this.fanexMailApiService = fanexMailApiService;
         this.mailResultService = mailResultService;
+        this.chinaViewMessageService = chinaViewMessageService;
     }
 
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
@@ -45,14 +46,14 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
             }
         }
 
-        return CreateCombineResults(results, isFromAfterVoidService);
+        return mailResultService.CreateCombineResults(results, isFromAfterVoidService);
     }
 
     private async Task SendToSite(CombineMessageModel results, MailVoidViewModel mailLicenseesModel, SiteEmail site, IEnumerable<TicketEmailModel> ticketsInSite, bool isFromAfterVoidService)
     {
         var modelClone = mailLicenseesModel.DeepClone();
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
-        ReplaceMessageChinaViewLicensee(modelClone, site);
+        chinaViewMessageService.ReplaceMessageChinaViewLicensee(modelClone.Match, modelClone.Message, site);
 
         if (!string.IsNullOrEmpty(site.ToList))
         {
@@ -92,31 +93,5 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     {
         results.Results.Add(mailResultService.CreateFail(site.Site, isFromAfterVoidService));
         results.FailedLicensees.Add(site.Site);
-    }
-
-    private static bool IsChinaViewAndSaBaLeague(MailVoidViewModel mailModel, SiteEmail site)
-    {
-        return mailModel.Match?.LeagueGroupId.IsLeagueGroupIdSaBa() == true && site.IsChinaView;
-    }
-
-    private static void ReplaceMessageChinaViewLicensee(MailVoidViewModel modelClone, SiteEmail site)
-    {
-        if (IsChinaViewAndSaBaLeague(modelClone, site))
-        {
-            var serializedContentChineseSimplified = JsonSerializer.Serialize(modelClone.Message.ContentChineseSimplified);
-            var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified.Replace("沙巴", ""));
-
-            modelClone.Message.ContentChineseSimplified = deSerializedContentChineseSimplified;
-            modelClone.Message.ContentEnglish = modelClone.Message.ContentEnglish.Replace("SABA ", "");
-        }
-    }
-
-    private IEnumerable<Result> CreateCombineResults(CombineMessageModel model, bool isFromAfterVoidService)
-    {
-        var results = model.Results;
-        var successfulLicensees = string.Join(", ", model.SuccessfulLicensees);
-        var failedLicensees = string.Join(", ", model.FailedLicensees);
-        return isFromAfterVoidService ? mailResultService.InsertCombineLicenseesNameForAfterVoidService(results, successfulLicensees, failedLicensees)
-            : mailResultService.InsertCombineLicenseesName(results, successfulLicensees, failedLicensees);
     }
 }

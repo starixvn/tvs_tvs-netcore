@@ -26,6 +26,7 @@ public static class PermissionIssueTypeConfig
                     new() { FunctionKey = SpecialDeleteFunctionKeys.Wrong1stOU, IssueTypeId = IssueTypeConstant.Wrong1stOU },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.WrongOdds, IssueTypeId = IssueTypeConstant.WrongOdds },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.ReducedOver, IssueTypeId = IssueTypeConstant.ReducedOver },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.DuplicateTickets, IssueTypeId = IssueTypeConstant.DuplicateTickets }
                 };
             return permission;
         }

@@ -80,28 +80,29 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var matchingFunctions = new Dictionary<int, Func<string, string>>
             {
-                {IssueTypeConstant.AbnormalBet, BuildDescriptionAbnormalBet},
-                {IssueTypeConstant.AbnormalBetRealMember, BuildDescriptionAbnormalBet},
-                {IssueTypeConstant.DangerAccepted, BuildDescriptionDangerAccepted},
-                {IssueTypeConstant.RedCard, BuildDescriptionDangerAccepted},
-                {IssueTypeConstant.WrongHDP, BuildDescriptionDangerAccepted},
-                {IssueTypeConstant.Wrong1stHDP, BuildDescriptionDangerAccepted},
-                {IssueTypeConstant.WrongOU, BuildDescriptionDangerAccepted},
-                {IssueTypeConstant.Wrong1stOU, BuildDescriptionDangerAccepted},
-                {IssueTypeConstant.WrongOdds, BuildDescriptionDangerAccepted},
+                {IssueTypeConstant.AbnormalBet, BuildTotalSingleOrMixParlay},
+                {IssueTypeConstant.AbnormalBetRealMember, BuildTotalSingleOrMixParlay},
+                {IssueTypeConstant.DangerAccepted, BuildVoidTime},
+                {IssueTypeConstant.RedCard, BuildVoidTime},
+                {IssueTypeConstant.WrongHDP, BuildVoidTime},
+                {IssueTypeConstant.Wrong1stHDP, BuildVoidTime},
+                {IssueTypeConstant.WrongOU, BuildVoidTime},
+                {IssueTypeConstant.Wrong1stOU, BuildVoidTime},
+                {IssueTypeConstant.WrongOdds, BuildVoidTime},
                 {IssueTypeConstant.ReducedOver, _ => string.Empty},
-                {IssueTypeConstant.EarlyKickOffTime, BuildDescriptionEKO},
-                {IssueTypeConstant.WrongKickOffTime, BuildDescriptionEKO},
-                {IssueTypeConstant.WrongScore, BuildDescriptionWrongScore},
-                {IssueTypeConstant.ArchivedTicket, BuildDescriptionArchivedTicket},
-                {IssueTypeConstant.AbnormalAccount, BuildDescriptionAbnormalAccount}
+                {IssueTypeConstant.EarlyKickOffTime, BuildKickOffTime},
+                {IssueTypeConstant.WrongKickOffTime, BuildKickOffTime},
+                {IssueTypeConstant.WrongScore, BuildVoidWrongScore},
+                {IssueTypeConstant.ArchivedTicket, BuildTotalSingleAndParlay},
+                {IssueTypeConstant.AbnormalAccount, BuildVoidTimeAndTotalAccount},
+                {IssueTypeConstant.DuplicateTickets, BuildTotalSingleOrParlay}
             };
 
         matchingFunctions.TryGetValue(issueId, out var function);
         return function != null ? function.Invoke(html) : string.Empty;
     }
 
-    private static string BuildDescriptionAbnormalBet(string html)
+    private static string BuildTotalSingleOrMixParlay(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -117,7 +118,23 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return nodesParlay != null ? $"Mix Parlay: {nodesParlay.First().InnerText}" : string.Empty;
     }
 
-    private static string BuildDescriptionDangerAccepted(string html)
+    private static string BuildTotalSingleOrParlay(string html)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        var nodesSingle = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-single']");
+        if (nodesSingle != null)
+        {
+            return $"Single: {nodesSingle.First().InnerText}";
+        }
+
+        var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
+
+        return nodesParlay != null ? $"Parlay: {nodesParlay.First().InnerText}" : string.Empty;
+    }
+
+    private static string BuildVoidTime(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -126,7 +143,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return description;
     }
 
-    private static string BuildDescriptionEKO(string html)
+    private static string BuildKickOffTime(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -135,7 +152,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return description;
     }
 
-    private static string BuildDescriptionWrongScore(string html)
+    private static string BuildVoidWrongScore(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -144,7 +161,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return description;
     }
 
-    private static string BuildDescriptionArchivedTicket(string html)
+    private static string BuildTotalSingleAndParlay(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -155,7 +172,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return description;
     }
 
-    private static string BuildDescriptionAbnormalAccount(string html)
+    private static string BuildVoidTimeAndTotalAccount(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);

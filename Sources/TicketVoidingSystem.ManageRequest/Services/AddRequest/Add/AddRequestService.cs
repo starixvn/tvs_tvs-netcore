@@ -69,7 +69,7 @@ public class AddRequestServiceImp : AddRequestService
     private async Task<Result> ExecuteAddAfterMarkTickets(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
-        await insertAutoVoidRequestQueueService.Execute(requestId, query.IssueTypeId, query.MatchId, query.ActionId);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId);
         await sendLetstalkAfterAddService.Execute(query, requestId);
         return new Result
         {
@@ -84,7 +84,7 @@ public class AddRequestServiceImp : AddRequestService
     private async Task<int> ExecuteAddRequest(AddRequestQuery query)
     {
         var command = mapper.Map<AddRequestCommand>(query);
-        command.Operators = query.OperatorsList.OperatorToXml();
+        command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
         command.IP = sessionService.GetClientIp();
         command.TransInfoJson = query.TransInfoJson;
@@ -98,6 +98,7 @@ public class AddRequestServiceImp : AddRequestService
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
+        command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff()
             ? LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
 
@@ -122,6 +123,7 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.WrongKickOffTime => query.MatchId.ToString(),
             IssueTypeConstant.AbnormalBetRealMember => query.MatchId.ToString(),
             IssueTypeConstant.AbnormalBet => query.MatchId.ToString(),
+            IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),
             _ => string.Empty
         };
     }

@@ -187,6 +187,11 @@ export class AbnormalFilterBy {
     { name: 'Single ticket', value: AbnormalFilterBy.SINGLE },
     { name: 'Mix Parlay ticket', value: AbnormalFilterBy.MIX_PARLAY }
   ];
+
+  duplicateTicketsFilterItems: Item[] = [
+    { name: 'Single ticket', value: AbnormalFilterBy.SINGLE },
+    { name: 'Parlay ticket', value: AbnormalFilterBy.MIX_PARLAY }
+  ];
 }
 
 export class MatchType {
@@ -420,9 +425,13 @@ export class ActionVoidByIssueTypeConst {
   static readonly ARCHIVED_TICKET: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID
   ];
-  static readonly DUPLICATE_TICKETS: number[] = [
+  static readonly DUPLICATE_TICKETS_AUTO_ADD_REQUEST: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly DUPLICATE_TICKETS_ADD_REQUEST: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
 }

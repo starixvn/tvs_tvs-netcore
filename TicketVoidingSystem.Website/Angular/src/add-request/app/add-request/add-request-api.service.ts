@@ -12,6 +12,7 @@ import { AddRequestResultModel } from '../add-request/models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-request/models/sub-type-link-match.model';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
+import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
@@ -63,6 +64,11 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async checkValidTransIdsForAbnormalBet(query: CheckTransIdsQuery): Promise<CheckTransIdsViewModel> {
     return this.httpService.postJson<CheckTransIdsQuery, CheckTransIdsViewModel>(query, 'api/AddRequest/CheckValidTransIdsRequest');
+  }
+
+  /* istanbul ignore next */
+  async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
+    return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
   }
 
   /* istanbul ignore next */

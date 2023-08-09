@@ -94,11 +94,15 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   public isShowMatchInfo(): boolean {
-    return !this.isAbnormalAccountIssueType() && !this.isAbnormalBetMixParlay() && !this.isArchivedTicket();
+    return !this.isAbnormalAccountIssueType() && !this.isAbnormalBetMixParlay() && !this.isArchivedTicket() && !this.isDuplicateTicketsMixParlay();
   }
 
   public isAbnormalBetMixParlay(): boolean {
     return this.isAbnormalBetIssueType() && this.model.event?.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  }
+
+  public isDuplicateTicketsMixParlay(): boolean {
+    return StaticService.isDuplicateTickets(this.issue.issueTypeId?.toString()) && this.model.duplicateTicketsModel.filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 
   public isArchivedTicket(): boolean {

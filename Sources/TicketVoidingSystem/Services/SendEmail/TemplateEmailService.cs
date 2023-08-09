@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using RazorEngine;
 using RazorEngine.Templating;
 using TicketVoidingSystem.Models.SendEmail;
@@ -9,14 +8,13 @@ namespace TicketVoidingSystem.Services.SendEmail;
 
 public interface TemplateEmailService
 {
-    MailRecordResult Create(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailViewModel> tickets, SiteEmail site, string subject);
+    MailRecordResult Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, string subject);
 }
 
 public class TemplateEmailServiceImp : TemplateEmailService
 {
-    public MailRecordResult Create(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailViewModel> tickets, SiteEmail site, string subject)
+    public MailRecordResult Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, string subject)
     {
-        mailVoidViewModel.Tickets = tickets;
         return new MailRecordResult
         {
             SiteEmail = site,

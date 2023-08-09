@@ -27,21 +27,12 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
             return null;
         }
 
+        matchInfo.LeagueName = remotingRefService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English);
         matchInfo.HomeName = matchInfo.IsNeutral ?
             remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English) + " (N)" : remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English);
-
         matchInfo.AwayName = remotingRefService.GetTeamName(matchInfo.AwayId, LanguageCode.English);
-
-        matchInfo.MatchEvent = matchInfo.SportType switch
-        {
-            161 => $"Number Game No.{matchInfo.MatchCode}",
-            160 => $"Lucky 3 Game No.{matchInfo.MatchCode}",
-            207 => $"{remotingRefService.GetBFName(matchInfo.HomeId)} - vs - {remotingRefService.GetBFName(matchInfo.AwayId)}",
-            _ => $"{matchInfo.HomeName} - vs - {matchInfo.AwayName}"
-        };
-
+        matchInfo.MatchEvent = GetMatchEvent(matchInfo);
         matchInfo.Name = $"{matchInfo.MatchId} - {matchInfo.MatchEvent}";
-        matchInfo.LeagueName = remotingRefService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English);
 
         return matchInfo;
     }
@@ -49,5 +40,17 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
     public IEnumerable<MatchInfoAddRequest> UpdateDataFromRemotingRef(IEnumerable<MatchInfoAddRequest> matches)
     {
         return matches.Select(UpdateDataFromRemotingRef);
+    }
+
+    private string GetMatchEvent(MatchInfoAddRequest match)
+    {
+        return match.SportType switch
+        {
+            160 => $"Lucky 3 Game No.{match.MatchCode}",
+            161 => $"Number Game No.{match.MatchCode}",
+            164 => $"Happy 5 No .{match.MatchCode}",
+            207 => $"{remotingRefService.GetBFName(match.HomeId)} - vs - {remotingRefService.GetBFName(match.AwayId)}",
+            _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
+        };
     }
 }

@@ -16,4 +16,5 @@ public class MatchInfoAddRequest
     public string LeagueName { get; set; }
     public int MatchType { get; set; }
     public int ParentId { get; set; }
+    public bool IsOutright { get; set; }
 }

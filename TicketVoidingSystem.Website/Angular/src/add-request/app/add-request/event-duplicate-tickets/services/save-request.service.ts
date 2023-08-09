@@ -1,70 +1,112 @@
 import { Injectable } from '@angular/core';
-import { AbnormalFilterBy } from '../../../../../utility/constants/config';
-import { StaticService } from '../../../../../utility/services/static.service';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
+import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SaveRequestService {
-
   constructor(
-    private readonly addRequestService: AddRequestService,
+    private readonly addRequestApiService: AddRequestService,
+    private readonly popupService: PopupService,
+    private readonly validationService: ValidationService,
   ) { }
 
-  async executeSave(args: SaveRequestArg): Promise<void> {
-    const query = this.initAddRequestQuery(args);
-    await this.addRequestService.executeSaveRequest(args.isEdit, args.requestId, query, args.addRequestStore);
+  private readonly ORG_TRANS_ID_CLASS = 'org-transId';
+
+  async saveRequest(arg: SaveRequestArg): Promise<void> {
+    arg.addRequestStore.changeSavingRequestStatus(true);
+    const isDataValid = arg.filter.isVoided || arg.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString()
+      ? true : await this.recheckBeforeSaveRequest(arg);
+    if (isDataValid) {
+      this.proceedSaveRequest(arg);
+    } else {
+      arg.addRequestStore.changeSavingRequestStatus(false);
+    }
+  }
+
+  private async recheckBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
+    arg.addRequestStore.changeBlockingUiStatus(true);
+    const result = await this.checkValidBusinessRuleBeforeSave(arg);
+    arg.addRequestStore.changeBlockingUiStatus(false);
+
+    return result;
+  }
+
+  private async checkValidBusinessRuleBeforeSave(arg: SaveRequestArg): Promise<boolean> {
+    if (!arg.duplicateTicketsModel.orgTransIds) {
+      arg.tooltip.display(this.ORG_TRANS_ID_CLASS, TEXT.REQUIRED_FIELD)
+      return false;
+    }
+    return this.validationService.checkValidBusinessRule(arg);
+  }
+
+  private proceedSaveRequest(arg: SaveRequestArg) {
+    if (this.validationService.checkCanShowConfirmation(arg)) {
+      this.popupService.showConfirm(
+        this.getMessageConfirmation(arg),
+        async () => {
+          await this.onClickConfirmSave(arg);
+        },
+        () => {
+          arg.addRequestStore.changeSavingRequestStatus(false);
+        });
+    } else {
+      this.executeSaveRequestApi(arg);
+    }
+  }
+
+  private async onClickConfirmSave(arg: SaveRequestArg) {
+    // validate again for make sure
+    const isDataValidAgain = arg.filter.isVoided ? true : await this.recheckBeforeSaveRequest(arg);
+    if (isDataValidAgain) {
+      await this.executeSaveRequestApi(arg);
+    } else {
+      this.popupService.showError(TEXT.INVALID_DATA_IN_REQUEST);
+    }
+  }
+
+  private async executeSaveRequestApi(arg: SaveRequestArg): Promise<void> {
+    arg.addRequestStore.changeBlockingUiStatus(true);
+    const query = this.initAddRequestQuery(arg);
+    await this.addRequestApiService.executeSaveRequest(arg.isEdit, arg.requestId, query, arg.addRequestStore);
+    arg.addRequestStore.changeBlockingUiStatus(false);
   }
 
   private initAddRequestQuery(args: SaveRequestArg): AddRequestQuery {
     const query: AddRequestQuery = new AddRequestQuery();
+    query.issueTypeId = args.filter.issueTypeId;
     query.unMarkTransIds = args.primitiveProps.transInfoAddRequestModel?.unMarkTransIds;
     query.markTransIds = args.primitiveProps.transInfoAddRequestModel?.markTransIds;
     query.removeTransIds = args.primitiveProps.transInfoAddRequestModel?.removeTransIds;
-    query.isHasUusTickets = args.primitiveProps.isHasUusTickets;
-    //query.transIds = this.getTransIdsForSaveRequest(args.confirmAbnormalBetModel, args.confirmAbnormalBetComponent, args.transIds);
-    query.issueTypeId = args.filter.issueTypeId;
-    query.subIssueTypeId = args.filter.subIssueTypeId;
-    query.subIssueTypeName = args.filter.subIssueTypes ? args.filter.subIssueTypes.find(x => x.subIssueTypeId.toString() === query.subIssueTypeId).subIssueTypeName : null;
-
-
     query.actionId = args.filter.action;
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
-    query.filterBy = args.filterBy;
-    query.sportType = this.isAbnormalBetMixParlay(args) ? null : args.leagueEventAbnormalComponent.selectedSportTypeId;
-    query.matchId = this.isAbnormalBetMixParlay(args) ? 29 : args.leagueEventAbnormalComponent.selectedMatchId;
-    //query.isConfirmCalculator = args.confirmAbnormalBetComponent.isConfirmCalculator;
-
-    query.mistakenBy = this.isAbnormalBetMixParlay(args) ? null : args.others.mistakenBy;
-    query.operatorsList = this.isAbnormalBetMixParlay(args) ? null : args.others.operatorsList;
-    query.provider = this.isAbnormalBetMixParlay(args) ? null : args.others.provider;
-    query.source = this.isAbnormalBetMixParlay(args) ? null : args.others.source;
+    query.sportType = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.leagueEventComponent.selectedSportTypeId;
+    query.mistakenBy = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.mistakenBy;
+    query.operatorsList = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.operatorsList;
+    query.provider = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.provider;
+    query.source = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.source;
     query.decidedBy = args.others.decidedBy;
     query.remark = args.others.remark;
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
-
-    // query.listBetteam = args.confirmAbnormalBetModel.listBetteam;
-    // query.listBettype = args.confirmAbnormalBetModel.listBettype;
+    query.duplicateTicketsInfo = args.duplicateTicketsModel;
 
     return query;
   }
 
-  // private getTransIdsForSaveRequest(confirmAbnormalBetModel: ConfirmAbnormalBetModel, confirmAbnormalBetComponent: ConfirmAbnormalBetComponent, transIds: string): string {
-  //   let transIdsList = transIds.split(',');
-  //   if (confirmAbnormalBetModel.ticketsOfCustomerClass4K && confirmAbnormalBetComponent.isRemoveCustomerClass4K) {
-  //     transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCustomerClass4K).split(',').includes(x));
-  //   }
-  //   if (confirmAbnormalBetModel.ticketsOfCustomerClass201 && confirmAbnormalBetComponent.isRemoveCustomerClass201) {
-  //     transIdsList = transIdsList.filter(x => !(confirmAbnormalBetModel.ticketsOfCustomerClass201).split(',').includes(x));
-  //   }
-  //   return transIdsList.join(',');
-  // }
+  private getMessageConfirmation(arg: SaveRequestArg): string {
+    let message = '';
 
-  private isAbnormalBetMixParlay(args: SaveRequestArg): boolean {
-    return StaticService.isAbnormalBet(args.filter.issueTypeId) && args.filterBy === AbnormalFilterBy.MIX_PARLAY;
+    if (arg.isEdit && arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) {
+      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
+    }
+
+    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
 }

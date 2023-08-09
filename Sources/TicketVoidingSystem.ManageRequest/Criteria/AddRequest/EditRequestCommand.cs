@@ -34,6 +34,7 @@ public class EditRequestCommand : NonQueryCommand
     public string? ReducedOverInfo { get; set; }
     public string? AbnormalAccountInfo { get; set; }
     public string? KickOffInfo { get; set; }
+    public string? DuplicateTicketsInfo { get; set; }
     public string? TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_Update";

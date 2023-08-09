@@ -21,13 +21,9 @@ public class DescriptionServiceImp : DescriptionService
 
     public string Build(RequestDescription item)
     {
-        if (item.IssueTypeId == IssueTypeConstant.AbnormalBet)
-        {
-            return BuildAbnormalBet(item);
-        }
-
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
             {
+                {IssueTypeConstant.AbnormalBet, BuildSingleOrMixParlay},
                 {IssueTypeConstant.AbnormalBetRealMember, BuildMatchLeagueTotal},
                 {IssueTypeConstant.EarlyKickOffTime, BuildEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildEKO},
@@ -41,16 +37,22 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.ReducedOver, BuildMatchLeague},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
-                {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount}
+                {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
+                {IssueTypeConstant.DuplicateTickets, BuildSingleOrParlay}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);
         return function != null ? function.Invoke(item) : BuildDefault(item);
     }
 
-    private string BuildAbnormalBet(RequestDescription item)
+    private string BuildSingleOrMixParlay(RequestDescription item)
     {
-        return item.FilterBy == AB_PARLAY ? BuildAbnormalBetForParlayTicket(item) : BuildMatchLeagueTotal(item);
+        return item.FilterBy == AB_PARLAY ? elementService.BuildMixParlay(item.TotalSingle) : BuildMatchLeagueTotal(item);
+    }
+
+    private string BuildSingleOrParlay(RequestDescription item)
+    {
+        return item.FilterBy == AB_PARLAY ? elementService.BuildParlay(item.TotalSingle) : BuildMatchLeagueTotal(item);
     }
 
     private string BuildEKO(RequestDescription item)
@@ -85,11 +87,6 @@ public class DescriptionServiceImp : DescriptionService
         var league = elementService.BuildLeague(item.SportTypeName, item.LeagueName);
 
         return $"{match}{league}";
-    }
-
-    private string BuildAbnormalBetForParlayTicket(RequestDescription item)
-    {
-        return elementService.BuildMixParlay(item.TotalSingle);
     }
 
     private string BuildVoidTimeMatchLeague(RequestDescription item)

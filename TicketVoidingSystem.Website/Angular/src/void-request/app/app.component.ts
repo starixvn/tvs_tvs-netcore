@@ -51,4 +51,8 @@ export class AppComponent implements OnInit {
   isValidRequest(): boolean {
     return this.isReadyRender && StaticService.isVoidAction(this.requestDetail.request.actionId);
   }
+
+  isDuplicateTickets(): boolean {
+    return StaticService.isDuplicateTickets(this.requestDetail.request?.issueTypeId.toString());
+  }
 }

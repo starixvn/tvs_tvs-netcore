@@ -77,4 +77,9 @@ export class ValidationService {
   public isReducedOver(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isReducedOver(detailViewModel.request.issueTypeId.toString());
   }
+
+  /* istanbul ignore next */
+  public isDuplicateTickets(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isDuplicateTickets(detailViewModel.request.issueTypeId.toString());
+  }
 }

@@ -7,7 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int issueTypeId, int? matchId, int actionId);
+    Task Execute(int requestId, int actionId);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -19,16 +19,15 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int issueTypeId, int? matchId, int actionId)
+    public async Task Execute(int requestId, int actionId)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
             var command = new InsertAutoVoidRequestQueueCommand
             {
                 RequestIds = requestId.ToString(),
-                IssueTypeId = issueTypeId,
-                MatchId = matchId ?? 0,
-                ActionId = actionId,
+                StatusId = ExecuteStatus.New,
+                Action = ActionVoidRequestConstant.QueueAutoVoidList.First(x => x.Id == actionId).Name,
                 BroadcastSessionId = Guid.NewGuid().ToString()
             };
 
@@ -51,10 +50,10 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
     {
         var actionAutoVoidInstants = new List<int>
         {
-            ActionVoidRequestConstant.AutoVoidAllInstant,
-            ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOff,
-            ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOff,
-            ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicy
+            ActionVoidRequestConstant.AutoVoidAllInstantId,
+            ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicyId,
+            ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOffId,
+            ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId
         };
 
         return actionAutoVoidInstants.Contains(actionId);
