@@ -29,9 +29,9 @@ public class AddRequestHandler : IRequestHandler<AddRequest, Result>
         }
 
         var result = new Result();
-        await resultCacheService.SetResultCache(request.Guid, result);
+        await resultCacheService.SetSimpleResultCache(request.Guid, result);
         result = await addRequestService.Execute(request);
-        await resultCacheService.SetResultCache(request.Guid, result);
+        await resultCacheService.SetSimpleResultCache(request.Guid, result);
 
         return result;
     }

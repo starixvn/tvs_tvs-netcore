@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Caching;
 using TicketVoidingSystem.Models;
@@ -9,9 +11,13 @@ public interface ResultCacheService
 {
     Task<bool> IsExistResult(string key);
 
-    Task<Result> GetResultCache(string key);
+    Task<Result> GetSimpleResultCache(string key);
 
-    Task SetResultCache(string key, Result result);
+    Task SetSimpleResultCache(string key, Result result);
+
+    Task<IList<Result>> GetVoidResultsCache(string key);
+
+    Task SetVoidResultsCache(string key, IList<Result> results);
 }
 
 public class ResultCacheServiceImp : ResultCacheService
@@ -28,15 +34,31 @@ public class ResultCacheServiceImp : ResultCacheService
         return await cacheService.ContainAsync(key);
     }
 
-    public async Task<Result> GetResultCache(string key)
+    public async Task<Result> GetSimpleResultCache(string key)
     {
         var (isFound, result) = await cacheService.TryGetAsync<Result>(key);
         return isFound ? result : null;
     }
 
-    public async Task SetResultCache(string key, Result result)
+    public async Task SetSimpleResultCache(string key, Result result)
+    {
+        await SetResultsCache(key, result);
+    }
+
+    public async Task<IList<Result>> GetVoidResultsCache(string key)
+    {
+        var (isFound, results) = await cacheService.TryGetAsync<IList<Result>>(key);
+        return isFound ? results.ToList() : null;
+    }
+
+    public async Task SetVoidResultsCache(string key, IList<Result> results)
+    {
+        await SetResultsCache(key, results);
+    }
+
+    private async Task SetResultsCache(string key, object results)
     {
         var cachePolicy = new CacheItemOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
-        await cacheService.SetAsync(key, result, cachePolicy);
+        await cacheService.SetAsync(key, results, cachePolicy);
     }
 }

@@ -135,7 +135,7 @@ export class CommonService {
   }
 
   async getResultCache<T>(guid: string): Promise<Result<T>> {
-    return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `Utility/GetResultCache`);
+    return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `api/SharedApi/GetSimpleResultCache`);
   }
 
   async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {

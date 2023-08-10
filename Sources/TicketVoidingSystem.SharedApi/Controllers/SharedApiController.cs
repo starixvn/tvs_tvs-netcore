@@ -46,6 +46,9 @@ public class SharedApiController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetVoidResultCache(GetVoidResultCacheRequest request) => Ok(await mediator.Send(request));
 
+    [HttpPost]
+    public async Task<IActionResult> GetSimpleResultCache(GetSimpleResultCacheRequest request) => Ok(await mediator.Send(request));
+
     [HttpGet]
     public async Task<IActionResult> GetIssueTypes() => Ok(await mediator.Send(new GetIssueTypesRequest()));
 

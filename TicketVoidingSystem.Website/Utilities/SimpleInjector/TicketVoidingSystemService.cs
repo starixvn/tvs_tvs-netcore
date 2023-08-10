@@ -31,7 +31,6 @@ public static class TicketVoidingSystemService
         services.AddSingleton<OddsService, OddsServiceImp>();
         services.AddTransient<MatchService, MatchServiceImp>();
         services.AddSingleton<LogActionFilterAttribute>();
-        services.AddSingleton<VoidResultCacheService, VoidResultCacheServiceImp>();
         services.AddSingleton<ResultCacheService, ResultCacheServiceImp>();
 
         //Letstalk

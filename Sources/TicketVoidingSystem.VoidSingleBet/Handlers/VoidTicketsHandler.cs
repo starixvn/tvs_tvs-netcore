@@ -13,15 +13,15 @@ public class VoidTicketsRequest : VoidTicketsQuery, IRequest<IEnumerable<Result>
 
 public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>?>
 {
-    private readonly VoidResultCacheService voidResultCacheService;
+    private readonly ResultCacheService resultCacheService;
     private readonly NetPositionForCricketService netPositionForCricketService;
     private readonly VoidTicketsService voidTicketsService;
     private readonly AfterVoidService afterVoidService;
 
-    public VoidTicketsHandler(VoidResultCacheService voidResultCacheService, NetPositionForCricketService netPositionForCricketService,
+    public VoidTicketsHandler(ResultCacheService resultCacheService, NetPositionForCricketService netPositionForCricketService,
         VoidTicketsService voidTicketsService, AfterVoidService afterVoidService)
     {
-        this.voidResultCacheService = voidResultCacheService;
+        this.resultCacheService = resultCacheService;
         this.netPositionForCricketService = netPositionForCricketService;
         this.voidTicketsService = voidTicketsService;
         this.afterVoidService = afterVoidService;
@@ -29,7 +29,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
 
     public async Task<IEnumerable<Result>?> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
     {
-        if (await voidResultCacheService.IsExistVoidResult(request.Guid))
+        if (await resultCacheService.IsExistResult(request.Guid))
         {
             return null;
         }
@@ -40,7 +40,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
     private async Task<IEnumerable<Result>> HandleWhenRequestValid(VoidTicketsQuery query)
     {
         var results = new List<Result>();
-        await voidResultCacheService.SetVoidResultCache(query.Guid, results);
+        await resultCacheService.SetVoidResultsCache(query.Guid, results);
 
         var updateNpResult = await netPositionForCricketService.Update(query);
         if (!updateNpResult.TicketsAfterUpdateNp.Any())
@@ -56,7 +56,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, IEnumerabl
             await netPositionForCricketService.Rollback(voidResult);
         }
 
-        await voidResultCacheService.SetVoidResultCache(query.Guid, results);
+        await resultCacheService.SetVoidResultsCache(query.Guid, results);
 
         return results;
     }
