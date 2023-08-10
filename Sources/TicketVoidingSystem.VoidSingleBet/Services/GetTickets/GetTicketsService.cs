@@ -61,8 +61,8 @@ public class GetTicketsServiceImp : GetTicketsService
         var criteria = mapper.Map<GetTicketsCriteria>(query);
         criteria.SecondAcceptFlag = query.TicketType;
         criteria.LiveIndicator = query.EventType;
-        criteria.FromTransDate = query.FromTransDate.ZoneCanada();
-        criteria.ToTransDate = query.ToTransDate.ZoneCanada();
+        criteria.FromTransDate = query.FromTransDate?.ZoneCanada();
+        criteria.ToTransDate = query.ToTransDate?.ZoneCanada();
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
 
         return criteria;

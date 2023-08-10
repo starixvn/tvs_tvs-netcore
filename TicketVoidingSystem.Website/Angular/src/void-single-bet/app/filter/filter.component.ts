@@ -26,6 +26,8 @@ import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { AffectedLicensee } from './../models/affected-licensee.model';
 import { Bet, Item, Type } from './filter.model';
+import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
+
 @Component({
   selector: 'filter',
   templateUrl: './filter.component.html',
@@ -81,7 +83,8 @@ export class FilterComponent implements OnInit {
   getPlayerQuery: GetPlayersQuery;
   timeType = 0;
   playerNamesSelected: TemplateContent;
-
+  comboParlay: MultipleSelection;
+  isCheckTime = true;
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   constructor(
     private readonly element: ElementRef,
@@ -96,18 +99,31 @@ export class FilterComponent implements OnInit {
     await this.initFilter();
   }
 
+  renderComboParlay() {
+    this.comboParlay = new MultipleSelection();
+    this.comboParlay.checkAllCheckBoxText = 'All';
+    this.comboParlay.allItemsCheckedText = 'All';
+    this.comboParlay.noneItemCheckedText = 'Select options';
+    this.comboParlay.maxWidth = '115px';
+    this.comboParlay.items = ComboParlayConstants.ComboParlay;
+  }
+
+  resetCheckedComboParlay() {
+    this.comboParlay.items.forEach(x => x.checked = true);
+  }
+
   setDateTime() {
     const date = new Date();
     this.fromDateTime = moment(date).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     this.toDateTime = moment(date).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-
   }
 
   async initFilter() {
     this.setDateTime();
+    this.renderComboParlay();
+    this.initBet();
     await this.getRemark();
     await this.getIssueTypes();
-    this.initBet();
     this.renderTicketType();
     this.renderEventType();
     this.renderOddsType();
@@ -222,6 +238,7 @@ export class FilterComponent implements OnInit {
       this.searchParlay = true;
       this.ticketType.value = '0';
       this.settledType.value = 'All';
+      this.resetCheckedComboParlay();
     } else {
       this.searchParlay = false;
     }
@@ -465,6 +482,11 @@ export class FilterComponent implements OnInit {
       && StaticService.isFromTimeSameOrBeforeToTime(this.fromDateTime, this.toDateTime, this.tooltip, this.FROM_DATE_TIME_CLASS);
   }
 
+  isSelectionNotValid() {
+    const selectionSubParlays = this.getSelectionSubParlays(this.bet.value, this.comboParlay)
+    return this.bet.value === "Sub Parlay" && selectionSubParlays === "";
+  }
+
   checkFilterParams(): boolean {
     if (!this.matchId) {
       this.tooltip.display('match-id', TEXT.REQUIRED_MATCHID);
@@ -480,8 +502,23 @@ export class FilterComponent implements OnInit {
     if (!this.isTransDateValidity()) {
       return false;
     }
-
+    if (this.isSelectionNotValid()) {
+      this.tooltip.display('multiple-selection', TEXT.INVALID_SELECTION);
+      return false;
+    }
     return this.groupBetTypesComponent.validate() && this.advancedModeComponent.validate();
+  }
+
+  getSelectionSubParlays(bet: string, comboParlay: MultipleSelection) {
+    if (bet !== "Sub Parlay") {
+      return "";
+    }
+
+    const selectedItems = comboParlay.items
+      .filter(item => item.checked)
+      .map(item => item.value);
+
+    return selectedItems.join(",");
   }
 
   getParams(): GetTicketsQuery {
@@ -494,8 +531,8 @@ export class FilterComponent implements OnInit {
       eventType: this.eventType.value,
       liveAwayScore: this.liveAwayScore,
       liveHomeScore: this.liveHomeScore,
-      fromTransDate: this.fromDateTime,
-      toTransDate: this.toDateTime,
+      fromTransDate: this.isCheckTime ? this.fromDateTime : null,
+      toTransDate: this.isCheckTime ? this.toDateTime : null,
       oddsType: this.oddsType.value,
       oddsValue: this.oddsValue,
       ticketType: this.ticketType.value,
@@ -506,7 +543,9 @@ export class FilterComponent implements OnInit {
       pageIndex: PagingConstant.INDEX_ZERO,
       pageSize: PagingConstant.SIZE_DEFAULT,
       invalidTransDate: invalidTransDate,
-      timeType: this.timeType
+      timeType: this.timeType,
+      selectionSubParlays: this.getSelectionSubParlays(this.bet.value, this.comboParlay),
+      isCheckTime: this.isCheckTime
     };
 
   }
@@ -547,5 +586,9 @@ export class FilterComponent implements OnInit {
     }
 
     return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, 'Invalid Odds!');
+  }
+
+  isShowSelectionSubParlay(): boolean {
+    return this.bet.value === "Sub Parlay";
   }
 }

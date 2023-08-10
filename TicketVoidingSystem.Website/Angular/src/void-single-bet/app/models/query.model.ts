@@ -12,14 +12,16 @@ export class FilterParams {
     oddsValue: string;
     liveHomeScore: string;
     liveAwayScore: string;
-    fromTransDate: string;
-    toTransDate: string;
+    fromTransDate?: string;
+    toTransDate?: string;
     settledType: string;
     betTypes: CheckedBetType[];
     bet: string;
     timeType: number;
     voidFromTime?: string;
     voidToTime?: string;
+    selectionSubParlays: string;
+    isCheckTime: boolean;
 }
 
 export class GetTicketsQuery extends FilterParams {
