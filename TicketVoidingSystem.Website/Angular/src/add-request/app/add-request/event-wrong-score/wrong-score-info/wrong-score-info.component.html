@@ -37,7 +37,7 @@
             (changeEvent)="clearDataValidation();setNullAllowanceTime()"
             [isDisabled]="isVoided || !wrongScoreModel.isChecked">      
           </date-full-time-new>
-          <div *ngIf="!wrongScoreModel.filterToTransTime" class="time-last-ticket-label">
+          <div *ngIf="!wrongScoreModel.filterToTransTime" class="time-last-ticket-label form-control form-control-sm">
             Time of Last Ticket
           </div>
         </div>

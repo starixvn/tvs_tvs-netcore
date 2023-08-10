@@ -77,7 +77,6 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.primitiveProps.isHighLightVarCheck = null;
       this.resetData();
       this.filter.isChangeSubTypeManual = false;
-      this.addRequestStore.changeSavingRequestStatus(true);
     }
   }
 
@@ -121,7 +120,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     }
 
     this.primitiveProps.isShowActualScore = true;
-    this.addRequestStore.changeSavingRequestStatus(false);
+    this.updateStatusButtonSaveRequest();
   }
 
   public async updateWrongScoreModels(): Promise<void> {
