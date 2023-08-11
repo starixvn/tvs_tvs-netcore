@@ -1,0 +1,56 @@
+<div *ngIf="model.isOpenDialog">
+    <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+    <div role="dialog" class="fade modal show d-block wrapper-tooltip">
+        <div role="document" class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header primary">
+                    <div class="modal-title">
+                        <strong>Confirm</strong>
+                    </div>
+                    <button type="button" class="close" aria-label="Close" (click)="closeClick()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ng-container *ngIf="model.isHasWarningForAbnormalBet">
+                        <div><i class="fa fa-exclamation-triangle pt-2 text-warn"></i> HAVE TICKET(S) ON REQUEST AS
+                            BELOW:</div>
+                        <div *ngIf="cn88Tickets" class="mg-left-17 mg-top-20">- CN88: <b>{{cn88Tickets}}</b></div>
+                        <div *ngIf="ticketsOfVIPCustomer" class="mg-left-17 mg-top-10">- VIP:
+                            <b>{{ticketsOfVIPCustomer}}</b></div>
+                        <div *ngIf="settledTickets" class="mg-left-17 mg-top-10">- SETTLED: <b>{{settledTickets}}</b>
+                        </div>
+                        <div *ngIf="ticketsOfCustomerClass201">
+                            <div class="mg-left-17 mg-top-10">- CUSTOMER CLASS=201: <b>{{ticketsOfCustomerClass201}}</b>
+                            </div>
+                            <div class="mg-left-17 mg-top-10">
+                                <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCC201" [(ngModel)]="isRemoveCustomerClass201" (change)="checkRemoveCC201()"/> Remove ticket(s) of Customer Class = 201</label><br/>
+                            </div>
+                        </div>
+                        <div *ngIf="ticketsOfCustomerClass4K">
+                          <div class="mg-left-17 mg-top-10">- CUSTOMER CLASS=4000: <b>{{ticketsOfCustomerClass4K}}</b>
+                          </div>
+                          <div class="mg-left-17 mg-top-10">
+                              <label><input type="checkbox" [disabled]="isCanNotSelectedRemoveTicketCC4K" [(ngModel)]="isRemoveCustomerClass4K" (change)="checkRemoveCC4K()"/> Remove ticket(s) of Customer Class = 4000</label><br/>
+                          </div>
+                      </div>
+                      <span *ngIf="isShowErrorCannotRemoveAllTickets" class="text-error">Cannot remove all tickets from request</span>
+                    </ng-container>
+                    <ng-container *ngIf="model.isHasWarningEditTakeNoteRequest || model.isHasWarningRemovedTickets">
+                        <div>Take note or removed ticket(s) will be unmarked</div>
+                        <div class="mg-left-17 mg-top-10" *ngIf="isEdit">
+                            <label><input type="checkbox" [(ngModel)]="isConfirmCalculator"/> Auto calculate ticket(s) if possible</label>
+                        </div>
+                    </ng-container>
+                    <div class="text-red" *ngIf="model.isEditingByAnotherUser">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.</div>
+                    <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO
+                        PROCESS WITH ABOVE INFO?</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn confirm" (click)="saveClick()">OK</button>
+                    <button type="button" class="btn cancel" (click)="closeClick()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

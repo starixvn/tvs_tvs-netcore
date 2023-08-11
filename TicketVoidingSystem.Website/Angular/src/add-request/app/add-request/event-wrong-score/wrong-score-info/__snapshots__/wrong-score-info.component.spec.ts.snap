@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventRedCardComponent WrongScoreInfoComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <wrong-score-info>
+    <div
+      class="d-flex mt-3 wrong-score-container"
+    >
+      <div
+        class="mr-4 d-flex chk-score-container"
+      >
+        <input
+          class="chk-score ng-untouched ng-pristine ng-valid"
+          type="checkbox"
+        />
+      </div>
+      <div>
+        <div
+          class="d-flex"
+        >
+          <div
+            class="mr-5"
+          >
+            <div
+              class="score d-flex align-items-center position-relative"
+              placement="bottom"
+            >
+              <div
+                class="score-value position-absolute d-flex justify-content-center text-red"
+              >
+                <span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mr-4"
+          >
+            <date-full-time-new
+              class="from-date-time"
+            />
+          </div>
+          <div
+            class="mr-2"
+          >
+            <div
+              class="time-last-ticket-label"
+            >
+               Time of Last Ticket 
+            </div>
+          </div>
+        </div>
+        <div
+          class="log-info p-2 mt-2"
+          hidden=""
+        >
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </wrong-score-info>
+</ng-component>
+`;

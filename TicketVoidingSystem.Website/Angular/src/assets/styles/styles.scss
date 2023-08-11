@@ -13,7 +13,7 @@ label,
 }
 
 body::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #F5F5F5;
   border-radius: 6px;
 }
@@ -87,13 +87,15 @@ body::-webkit-scrollbar-thumb {
 }
 
 .custom-toastr {
-  padding: 15px !important; 
+  padding: 15px !important;
   background-image: none !important;
 }
 
 .void-bet-notification {
   .failed-msg {
-    .icon, .msg {
+
+    .icon,
+    .msg {
       color: #ff0000;
     }
   }
@@ -251,19 +253,24 @@ fieldset {
 }
 
 .ng-select .ng-dropdown-panel .ng-dropdown-panel-items {
+
   .ng-optgroup,
   .ng-option {
     padding: 6px 10px;
   }
 }
 
-.ng-select .ng-select-container,
-.form-control,
-.form-check,
-.btn,
-.col-form-label {
-  min-height: auto;
-  height: 31px !important;
+.ng-select {
+
+  .ng-select-container,
+  .ng-option {
+    min-height: auto;
+    height: calc(1.5em + 0.5rem + 2px) !important;
+  }
+}
+
+.input-group .input-group-text {
+  font-size: 13px !important;
 }
 
 .ng-select .ng-value {
@@ -277,9 +284,6 @@ input[type=radio],
 }
 
 .col-form-label {
-  padding: 6px 0;
-  line-height: 1.5;
-  border-radius: 0.2rem;
   white-space: nowrap;
 }
 
@@ -291,6 +295,11 @@ input[type=radio],
   background: #4e71bb;
   background: -webkit-linear-gradient(#4e71bb, #4e71bb)
 }
+
 .text-green {
   color: #28a745;
+}
+
+.bold {
+  font-weight: bold !important;
 }

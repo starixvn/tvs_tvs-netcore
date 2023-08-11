@@ -1,0 +1,82 @@
+<div class="d-flex mt-3 wrong-score-container" [blockUi]="isBlock">
+    <div class="mr-4 d-flex chk-score-container">
+      <input class="chk-score" type="checkbox"
+        [ngClass]="{'chk-score-index-0':isShowLabel()}"
+        [(ngModel)]="wrongScoreModel.isChecked"
+        [disabled]="isVoided"
+        (ngModelChange)="onchangeCheckbox(wrongScoreModel.isChecked)"/>
+    </div>
+    <div>
+      <div class="d-flex">
+        <div class="mr-5">
+          <label *ngIf="isShowLabel()" class="col-form-label">Wrong Score</label>
+          <ng-template #tipContent>Wrong score</ng-template>
+          <div class="score d-flex align-items-center position-relative form-control form-control-sm" placement="bottom" [ngbTooltip]="!wrongScoreModel.isActive ? tipContent : ''">
+            <div class="score-value position-absolute d-flex justify-content-center" [ngClass]="{'text-red':!wrongScoreModel.isActive}">
+              <span>{{wrongScoreModel.wrongScore}}</span>
+            </div>
+            <div class="position-absolute" *ngIf="wrongScoreModel.isChecked" >
+              <em class="fa float-right mr-3" (click)="isCollapse=!isCollapse" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+            </div>
+          </div>
+        </div>
+        <div class="mr-4">
+          <label *ngIf="isShowLabel()" class="col-form-label">From Time</label>      
+          <date-full-time-new #fromTimeComponent class="from-date-time"
+              [(dateTime)]="wrongScoreModel.filterFromTransTime"
+              [maxDate]="maxDate"
+              (changeEvent)="clearDataValidation();setNullAllowanceTime()"
+              [isDisabled]="isVoided || !wrongScoreModel.isChecked">      
+            </date-full-time-new>
+        </div>
+        <div class="mr-2">
+          <label *ngIf="isShowLabel()" class="col-form-label">To Time</label>
+          <date-full-time-new #toTimeComponent class="to-date-time" *ngIf="wrongScoreModel.filterToTransTime"
+            [(dateTime)]="wrongScoreModel.filterToTransTime"
+            [maxDate]="maxDate"
+            (changeEvent)="clearDataValidation();setNullAllowanceTime()"
+            [isDisabled]="isVoided || !wrongScoreModel.isChecked">      
+          </date-full-time-new>
+          <div *ngIf="!wrongScoreModel.filterToTransTime" class="time-last-ticket-label form-control form-control-sm">
+            Time of Last Ticket
+          </div>
+        </div>
+        <div class="mr-3" *ngIf="wrongScoreModel.isChecked">
+          <label class="duration" [ngClass]="{'duration-index-0':isShowLabel()}">
+            (Duration:&nbsp;<span class="bold">{{getDurationTime()}}</span>)
+          </label>
+        </div>
+        <div class="btn-reload" [ngClass]="{'btn-reload-index-0':isShowLabel()}" *ngIf="wrongScoreModel.isChecked">
+          <button type="button" class="btn btn-default btn-sm" (click)="refreshLogInfo()" [disabled]="isVoided">
+              <span><i class="fa fa-refresh" aria-hidden="true" ></i></span>
+          </button>
+        </div>
+      </div>
+      <div [hidden]="isCollapse" *ngIf="isShowLogInfo()" class="log-info p-2 mt-2">
+        <div *ngIf="wrongScoreModel.logInfoDetail" class="mt-2">
+          Void Trans Time: <strong>{{displayFullDateTimeFormat(wrongScoreModel.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(wrongScoreModel.logInfoDetail.voidToTime)}}</strong>
+          <span *ngIf="isShowWarningSpecialBetType()" class="text-red"> (The first ticket is a special type)</span><br />
+          Affected Single Count: <strong>{{wrongScoreModel.logInfoDetail.singleCount}}</strong>
+          <span *ngIf="isShowCountInfo(wrongScoreModel.logInfoDetail.cashOutCount, wrongScoreModel.logInfoDetail.settleCount, wrongScoreModel.logInfoDetail.instantlySettleCount)" class="text-red" 
+          [innerHTML]="countInfoContent(wrongScoreModel.logInfoDetail.cashOutCount, wrongScoreModel.logInfoDetail.settleCount, wrongScoreModel.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
+          Parlay Count: <strong>{{wrongScoreModel.logInfoDetail.mainParlayCount}}</strong><br />
+          Cancel Cash Out: <strong>{{wrongScoreModel.logInfoDetail.cancelCashOutCount}}</strong>
+        </div>
+        
+        <div *ngIf="wrongScoreModel.messageValidationLogInfo" class="message">
+          <span *ngFor="let msg of wrongScoreModel.messageValidationLogInfo">
+            <div *ngIf="msg.isError" class="error-text">
+                <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
+            </div>
+            <div *ngIf="!msg.isError" [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'" (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">   
+              <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}     
+            </div>
+          </span>
+        </div>
+        <div *ngIf="wrongScoreModel.isActive" class="warning-text"> 
+          <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>This score is not a "Wrong Score".
+        </div>
+      </div>
+    </div>
+  </div>
+  <tooltip [tooltip]="tooltip"></tooltip>

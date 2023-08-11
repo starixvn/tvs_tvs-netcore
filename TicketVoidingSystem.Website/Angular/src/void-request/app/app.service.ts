@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { VoidedReason } from '../../utility/models/reason.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';

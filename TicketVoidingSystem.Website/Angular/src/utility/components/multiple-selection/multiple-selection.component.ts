@@ -11,7 +11,8 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
 })
 
 export class MultipleSelectionComponent implements OnInit, OnChanges {
-  @Input() multipleSelect: MultipleSelection;
+  @Input() selectedItems: string[];
+  @Input() multipleSelect = new MultipleSelection();
   @Input() isDisabled: boolean;
   @Output() loseFocus = new EventEmitter();
   @Output() checkedItems = new EventEmitter<string[]>();
@@ -37,8 +38,13 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.isExpanded = true;
+    this.checkBySelectedItem();
     this.getTitle();
     this.clickToBody();
+  }
+
+  private checkBySelectedItem(): void {
+    this.multipleSelect.items.forEach(x => x.checkBySelectedItem(this.selectedItems));
   }
 
   getTitle() {

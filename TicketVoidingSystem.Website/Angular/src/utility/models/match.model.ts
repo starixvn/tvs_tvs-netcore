@@ -38,7 +38,6 @@ export class MatchModel {
   numberOfCorner?: number;
 }
 
-
 export class CheckMatchWithRefNoQuery {
   matchId: number;
   fromRefNo: number;

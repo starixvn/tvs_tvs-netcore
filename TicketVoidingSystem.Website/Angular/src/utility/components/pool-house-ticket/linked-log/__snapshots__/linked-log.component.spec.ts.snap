@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LinkedLogComponent  LinkedLogComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <linked-log>
+    <div
+      class="container"
+    >
+      <div
+        class="warning-text d-flex align-items-center mb-2"
+      >
+        <i
+          aria-hidden="true"
+          class="fa fa-exclamation-triangle icon-warning-message mr-1"
+        />
+      </div>
+    </div>
+  </linked-log>
+</ng-component>
+`;

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
 // import { CheckValidTransIdsQuery } from '../..//add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
-// import { CheckValidUsernamesQuery, CheckValidUsernamesResult } from '../../add-request/app/add-request/abnormal-accounts/abnormal-accounts.model';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 // import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
 // import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
+import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
-import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
 import { Selection } from '../../utility/models/selection.model';
+import { GetOddsInfoQuery, OddsInfo } from '../components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
@@ -126,16 +126,6 @@ export class CommonService {
     return this.httpService.getJson('api/SharedApi/GetIssueTypes');
   }
 
-
-
-  // async checkValidTransIdsForAbnormalBet(query: CheckValidTransIdsQuery): Promise<CheckValidTransIdsResult> {
-  //   return this.httpService.postJson<CheckValidTransIdsQuery, CheckValidTransIdsResult>(query, 'TicketVoiding/CheckValidTransIdsRequest');
-  // }
-
-  // async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckValidUsernamesResult> {
-  //   return this.httpService.postJson<CheckValidUsernamesQuery, CheckValidUsernamesResult>(query, 'TicketVoiding/CheckValidUsernames');
-  // }
-
   async getLogInfo(query: GetLogInfoQuery): Promise<GetLogInfoViewModel> {
     return this.httpService.postJson<GetLogInfoQuery, GetLogInfoViewModel>(query, 'api/AddRequest/GetLogInfo');
   }
@@ -145,7 +135,12 @@ export class CommonService {
   }
 
   async getResultCache<T>(guid: string): Promise<Result<T>> {
-    return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `Utility/GetResultCache`);
+    return this.httpService.postJson<{ guid: string }, Result<T>>({ guid: guid }, `api/SharedApi/GetSimpleResultCache`);
+  }
+
+  async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
+    const url = 'api/BetTypes/GetOddsInfoSpecialBetTypes';
+    return this.httpService.postJson(query, url);
   }
 }
 

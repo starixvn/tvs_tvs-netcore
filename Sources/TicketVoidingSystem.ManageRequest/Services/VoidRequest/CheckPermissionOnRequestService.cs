@@ -36,7 +36,7 @@ public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestServic
         if (request != null)
         {
             var issueTypeId = request.IssueTypeId;
-            var permissionConfig = PermissionIssueTypeConfig.MappingList.FirstOrDefault(x => x.IssueTypeId == issueTypeId);
+            var permissionConfig = PermissionIssueTypeConfig.MappingList.First(x => x.IssueTypeId == issueTypeId);
 
             return await sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
         }

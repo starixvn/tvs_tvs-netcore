@@ -143,7 +143,7 @@ export class VoidComponent implements OnInit {
 
   private isValidSearchQuery(): boolean {
     if (!this.inputVoidingHistoryId || this.inputVoidingHistoryId <= 0 || isNaN(Number(this.inputVoidingHistoryId))) {
-      this.tooltip.display('voiding-history-id', TEXT.REQUIRED_INPUT);
+      this.tooltip.display('voiding-history-id', TEXT.REQUIRED_FIELD);
       return false;
     }
 

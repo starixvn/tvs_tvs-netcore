@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import * as moment from 'moment-timezone';
 import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
+import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
-import { OrdinalNumberConstant } from './../../../constants/ordinal-number.constant';
 import { MessagesComponent } from './../messages/messages.component';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
 import { Format, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace } from './template.const';

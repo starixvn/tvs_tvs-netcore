@@ -7,9 +7,9 @@ import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { ServiceStatusConstant } from '../app.model';
 import {
-    AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel,
-    GetAutoVoidRequestQueueModel,
-    UpdateAutoVoidRequestQueueModel
+  AutoVoidRequestQueueModel, AutoVoidRequestQueueViewModel,
+  GetAutoVoidRequestQueueModel,
+  UpdateAutoVoidRequestQueueModel
 } from './scanning-auto-void.model';
 
 @Component({
@@ -106,7 +106,7 @@ export class ScanningAutoVoidComponent implements OnInit {
 
   private isValidSearchQuery(): boolean {
     if (this.filterBy === 0 && (!this.filterBroadcastSessionIdValue || this.filterBroadcastSessionIdValue.trim() === '')) {
-      this.tooltip.display('broadcast-session-id', TEXT.REQUIRED_INPUT);
+      this.tooltip.display('broadcast-session-id', TEXT.REQUIRED_FIELD);
       return false;
     }
 

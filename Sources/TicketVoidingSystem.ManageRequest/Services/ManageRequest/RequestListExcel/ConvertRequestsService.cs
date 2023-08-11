@@ -2,10 +2,10 @@
 using HtmlAgilityPack;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions.TN;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
 

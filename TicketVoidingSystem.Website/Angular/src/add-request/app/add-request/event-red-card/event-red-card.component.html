@@ -1,0 +1,56 @@
+<div [blockUi]="primitiveProps.isBlock">
+    <league-event-red-card #leagueEvent
+        [isEdit]="isEdit"
+        [initSportType]="filter.sportType"
+        [eventDate]="filter.eventDate"
+        [initMatchId]="mainEvent.matchId"
+        (changeEvent)="changeMatchEvent()">
+    </league-event-red-card>
+
+    <div *ngIf="isShowVarCheck()">
+      <div class="var-check-selection mt-2" [ngClass]="{'highlight': mainEvent.isHighLightVarCheck}">
+        <label class="border-radius-left" (click)="!filter.isVoided && changeVarCheckValue(false)"
+        [ngClass]="{'bg-success':mainEvent.isCheckedVar === false, 'bg-not-choose':mainEvent.isCheckedVar !== false}">NO VAR
+        </label>
+        <label class="border-radius-right" (click)="!filter.isVoided && changeVarCheckValue(true)"
+        [ngClass]="{'bg-danger':mainEvent.isCheckedVar === true, 'bg-not-choose':mainEvent.isCheckedVar !== true}">VAR
+        </label>
+      </div>
+      <div class="tooltip-var-check" *ngIf="mainEvent.isHighLightVarCheck">
+        <em></em>
+        <span>{{tooltipVarMessage}}</span>
+      </div>
+    </div>
+
+    <filter-time-area #filterTimeArea
+        [isDisabled]="!isExistMatchEvent() || filter.isVoided"
+        [isEdit]="isEdit"
+        [isVoided]="filter.isVoided"
+        [(filterBy)]="primitiveProps.filterBy"
+        [filterTimeWithAllowanceModel]="defaultFilterTimeWithAllowance"
+        (changeFilterEvent)="handleChangeDefaultFilterArea()">
+    </filter-time-area>
+
+    <div class="mb-3">
+        <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+        (click)="handleSearchEvent()">Search</button>
+    </div>
+
+    <div *ngIf="primitiveProps.isShowLogInfoMainMatch" class="main-match-log-info mb-3">
+        <label><strong>Main Event - Log Info</strong></label>
+        <log-info-red-card #logInfo
+            [isMainMatch]="true"
+            [isEdit]="isEdit"
+            [primitiveProps]="primitiveProps"
+            [requestId]="requestId"
+            [isDisabled]="filter.isVoided"
+            [subIssueTypes]="issueTypes.subIssueTypes"
+            [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance"
+            [logInfo]="mainEvent"
+            [filter]="filter">
+        </log-info-red-card>
+    </div>
+
+</div>
+<confirm-red-card [model]="confirmRedCard" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-red-card>
+<tooltip [tooltip]="tooltip"></tooltip>

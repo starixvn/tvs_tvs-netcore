@@ -168,11 +168,11 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 return query.TransIds;
 
             case IssueTypeConstant.AbnormalAccount:
-                return ObjectToXMLExtension.GetAbnormalAccountInfoXml(query.Usernames, query.ProductIds, query.StatusIds, query.FromDate, query.ToDate);
+                return LogInfoExtension.GetAbnormalAccountInfoXml(query.Usernames, query.ProductIds, query.StatusIds, query.FromDate, query.ToDate);
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                return ObjectToXMLExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada());
+                return LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada());
 
             case IssueTypeConstant.WrongScore:
                 return query.WrongScoreModels.ToWrongScoreInfoXml();

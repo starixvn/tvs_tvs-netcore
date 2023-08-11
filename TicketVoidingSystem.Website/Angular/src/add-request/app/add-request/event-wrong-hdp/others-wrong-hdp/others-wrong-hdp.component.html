@@ -1,0 +1,36 @@
+<div class="event">
+  <div class="list-group">
+    <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
+      (click)="isCollapse=!isCollapse">
+      <em class="fa" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+      <strong>&nbsp;Others</strong>
+    </div>
+    <div class="list-group-item flex-column align-items-start" [hidden]="isCollapse">
+      <div class="other-container d-flex flex-wrap">
+        <div class="col-6 col-sm-6 col-md-4">         
+          <label class="col-form-label text-right">Mistaken By</label>
+          <div>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.mistakenBy"
+              maxlength="200">
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="col-6 col-sm-6 col-md-4">         
+          <label class="col-form-label text-right">Decided By</label>
+          <div>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy"
+              maxlength="200">
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="col-12">
+          <label class="col-form-label text-right pd-right-25">Remark</label>
+          <div>
+            <textarea [(ngModel)]="model.remark" class="remark form-control form-control-sm"
+              placeholder='Enter text here...' rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

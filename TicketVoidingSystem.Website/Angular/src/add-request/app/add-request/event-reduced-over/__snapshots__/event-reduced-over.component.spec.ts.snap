@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventReducedOverComponent EventReducedOverComponent init should match snapshot 1`] = `
+EventReducedOverComponent {
+  "addRequestStore": null,
+  "eventReducedOverService": null,
+  "filterService": null,
+  "logInfoEvent": LogInfoReducedOver {
+    "filterReducedOvers": Array [],
+    "logInfoDetail": LogInfoDetail {},
+  },
+  "logInfoService": null,
+  "others": OthersModel {},
+  "primitivePropertyEvent": PrimitivePropertyEvent {},
+  "reducedOverModels": Array [
+    Object {
+      "betTypeIds": "1,2",
+      "filterWicketOver": "1",
+      "live": true,
+      "logInfoDetail": LogInfoDetail {},
+      "matchId": 1,
+      "nonLive": true,
+      "playerIds": "1",
+      "runs": "1",
+      "subIssueTypeId": 1,
+      "wicketOver": "1",
+    },
+  ],
+  "saveRequestService": null,
+  "updateMatchId": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "validationService": null,
+}
+`;

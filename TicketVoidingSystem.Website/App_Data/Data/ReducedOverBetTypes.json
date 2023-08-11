@@ -1,0 +1,1088 @@
+﻿{
+  "ReducedOverBetTypes": [
+    {
+      "BetTypeId": 9404,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9405,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9406,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9407,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9408,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9409,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9410,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9411,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9412,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9413,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9414,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9415,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9428,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9429,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9430,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9431,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9432,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9433,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9446,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9447,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9448,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9449,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9450,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9451,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9452,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9453,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9454,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9455,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9456,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9457,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9458,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9459,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9460,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9461,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9462,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9463,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9464,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9465,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9541,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9542,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9543,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9544,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9545,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9546,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9547,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9548,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9549,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9550,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9551,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9552,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9559,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9560,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9561,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9562,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9563,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9564,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9566,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9567,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9569,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9570,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9572,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9573,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9574,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9575,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9576,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9577,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9578,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9579,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9580,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9581,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9582,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9583,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9584,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9585,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9607,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9608,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9609,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9610,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9611,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9612,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9676,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9678,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9680,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9682,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9684,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9686,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9688,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9690,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9692,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9694,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9696,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9697,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9698,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9699,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9702,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9703,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9704,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9705,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9708,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9709,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9712,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9713,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9714,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9715,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9716,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9717,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9718,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9719,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9720,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9721,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9722,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9723,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9724,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9725,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9726,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9727,
+      "IsHasOverWicket": true,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9728,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9729,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9730,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9731,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9732,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9733,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9734,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9735,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9736,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9737,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9738,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "BetTypeId": 9739,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": true,
+      "IsHasRuns": true
+    },
+    {
+      "betTypeId": 9496,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9498,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9500,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9502,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9504,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9506,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9514,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9516,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9518,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9532,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9534,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9536,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9618,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9620,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9622,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9677,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9679,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9681,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9683,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+    {
+      "betTypeId": 9685,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -1
+    },
+
+    {
+      "betTypeId": 9497,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9499,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9501,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9503,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9505,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9507,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9515,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9517,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9519,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9527,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -3
+    },
+    {
+      "betTypeId": 9528,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -3
+    },
+    {
+      "betTypeId": 9529,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -3
+    },
+    {
+      "betTypeId": 9530,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -3
+    },
+    {
+      "betTypeId": 9531,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -3
+    },
+    {
+      "betTypeId": 9533,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9535,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9537,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9619,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9621,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9623,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9687,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9689,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9691,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9693,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    },
+    {
+      "betTypeId": 9695,
+      "IsHasOverWicket": false,
+      "IsHasPlayer": false,
+      "IsHasRuns": false,
+      "ParentId": -2
+    }
+  ]
+}

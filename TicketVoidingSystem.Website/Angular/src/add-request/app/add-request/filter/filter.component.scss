@@ -1,0 +1,48 @@
+$minWidth: 150px;
+
+.filter {
+    margin-bottom: 10px;
+    .line-height {
+        line-height: 2.5;
+    }
+}
+
+.max-width-450 {
+    max-width: 450px;
+}
+
+.filter-issue-type, .filter-sub-issue-type, .filter-action, .filter-sport, .filter-event-date {
+    min-width: $minWidth;
+}
+
+.filter-issue-type {
+    width: 180px;
+}
+
+.filter-event-date {
+    width: 150px;
+}
+
+.filter-checkbox-test .checkbox-test,
+.filter-checkbox-abnormal .checkbox-abnormal {
+    margin-top: 34px;
+    min-width: 52px;
+}
+
+.btn-select-sub-type {
+    color: #333;
+    background-color: #d6d6d6 !important;
+    border-color: #b3b3b3 #ccc #d9d9d9 !important;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.hint-text {
+    opacity: 0.65;
+}
+
+.highlight {
+    outline: 2px solid red;
+}

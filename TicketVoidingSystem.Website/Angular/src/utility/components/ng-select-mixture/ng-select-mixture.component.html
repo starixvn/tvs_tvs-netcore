@@ -1,0 +1,28 @@
+<div class="ng-select-mixture" [style.width]="model.maxWidth">
+  <button type="button" readonly (click)="clickButton()" readonly
+    [ngClass]="{'disabled-button': isDisabled, 'style-button-collapse': isCollapse}"
+    [style.height]="model.buttonHeight">
+    <span class="button-value" [ngClass]="{'place-holder': model.isShowPlaceHolder, 'disabled-button': isDisabled}">{{model.title}}</span>
+    <i class="fa button-arrow" [ngClass]="{'fa-caret-up': isCollapse, 'fa-caret-down': !isCollapse}" aria-hidden="true"></i>
+  </button>
+  <div
+    *ngIf="model.items?.length > 0 && isCollapse"
+    [ngClass]="{'style-container-collapse': isCollapse}"
+    class="ng-select-mixture-containter">
+    <ng-container>
+      <div class="tree-view-content" [style.max-height]="model.maxHeight">
+        <ng-select-tree-view
+          [isDisabled]="isDisabled"
+          [items]="model.items"
+          (emitchildEvent)="emitchildEvent()"
+          (emitSingleEvent)="emitSingleEvent($event)">
+        </ng-select-tree-view>
+      </div>
+    </ng-container>
+  </div>
+  <div *ngIf="model.items?.length === 0 && isCollapse"
+    [ngClass]="{'style-container-collapse': isCollapse}"
+    class="ng-select-mixture-containter">
+    <div class="no-item-found">No items found</div>
+  </div>
+</div>

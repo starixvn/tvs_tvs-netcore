@@ -1,0 +1,22 @@
+<div class="d-flex flex-wrap event-leage horizontal-style">
+  <div class="event col-md-6 col-sm-6 col-12">
+      <label class="col-form-label">Event</label>
+      <div>
+          <ng-select class="custom-sm match-id" [disabled]="true" [items]="matches" bindLabel="name"
+              bindValue="matchId" [(ngModel)]="selectedMatchId" [clearable]="false"
+              notFoundText="No event found" [loading]="isBlock">
+          </ng-select>
+      </div>
+  </div>
+
+  <div class="league col-md-6 col-sm-6 col-12">        
+      <label class="col-form-label">League</label>
+      <div>
+          <ng-select class="custom-sm" [disabled]="true" [items]="leagues" bindLabel="leagueName" bindValue="leagueId"
+              [(ngModel)]="leagueId" [clearable]="false" [loading]="isBlock">
+          </ng-select>
+      </div>
+  </div>
+</div>
+
+<tooltip [tooltip]="tooltip"></tooltip>

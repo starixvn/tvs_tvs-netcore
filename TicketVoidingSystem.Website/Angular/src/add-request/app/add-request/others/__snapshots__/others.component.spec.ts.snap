@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OthersComponent OthersComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <others>
+    <div
+      class="event"
+    >
+      <div
+        class="list-group"
+      >
+        <div
+          class="list-group-item list-group-item-primary flex-column align-items-start pointer"
+        >
+          <em
+            class="fa fa-angle-up"
+          />
+          <strong>
+             Others
+          </strong>
+        </div>
+        <div
+          class="list-group-item flex-column align-items-start"
+        >
+          <div
+            class="other-container d-flex flex-wrap row"
+          >
+            <div
+              class="col-6 col-sm-6 col-md-4"
+            >
+              <label
+                class="col-form-label"
+              >
+                Mistaken By
+              </label>
+              <div
+                class="input-area"
+              >
+                <input
+                  class="form-control form-control-sm ng-untouched ng-pristine ng-valid"
+                  maxlength="200"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div
+              class="col-6 col-sm-6 col-md-4"
+            >
+              <label
+                class="col-form-label"
+              >
+                Decided By
+              </label>
+              <div
+                class="input-area"
+              >
+                <input
+                  class="form-control form-control-sm ng-untouched ng-pristine ng-valid"
+                  maxlength="200"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div
+              class="col-6 col-sm-6 col-md-4"
+            >
+              <label
+                class="col-form-label"
+              >
+                Trader
+              </label>
+              <div
+                class="operator-list"
+              >
+                <ng-select
+                  bindlabel="userName"
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </ng-select>
+              </div>
+            </div>
+            <div
+              class="col-6 col-sm-6 col-md-4"
+            >
+              <label
+                class="col-form-label"
+              >
+                Suspender
+              </label>
+              <div
+                class="operator-list"
+              >
+                <ng-select
+                  bindlabel="userName"
+                  class="ng-untouched ng-pristine ng-valid"
+                >
+                </ng-select>
+              </div>
+            </div>
+            <div
+              class="col-6 col-sm-6 col-md-4"
+            >
+              <label
+                class="col-form-label"
+              >
+                Provider
+              </label>
+              <div
+                class="input-area"
+              >
+                <input
+                  class="form-control form-control-sm ng-untouched ng-pristine ng-valid"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div
+              class="col-6 col-sm-6 col-md-4"
+            >
+              <label
+                class="col-form-label"
+              >
+                Source
+              </label>
+              <div
+                class="input-area"
+              >
+                <input
+                  class="form-control form-control-sm ng-untouched ng-pristine ng-valid"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div
+              class="col-12"
+            >
+              <label
+                class="col-form-label"
+              >
+                Remark
+              </label>
+              <div>
+                <textarea
+                  class="remark form-control form-control-sm ng-untouched ng-pristine ng-valid"
+                  placeholder="Enter text here..."
+                  rows="3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </others>
+</ng-component>
+`;

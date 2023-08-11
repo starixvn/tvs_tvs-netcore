@@ -70,5 +70,18 @@ public class Match
     public string SportTypeNameNewSimplified { get; set; }
 
     public string SportTypeNameTraditional { get; set; }
+
+    [JsonConverter(typeof(GMT8DateTimeJsonConverter))]
+    public DateTime GlobalShowTime { get; set; }
+
     public int? NumberOfCorner { get; set; }
+
+    /// <summary>
+    ///  For Add Request
+    /// </summary>
+    public string Name { get; set; }
+
+    public int MatchType { get; set; }
+
+    public int ParentId { get; set; }
 }

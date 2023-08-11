@@ -1,0 +1,145 @@
+@import "../../../assets/styles/mixin.scss";
+
+.modal-dialog-custom {
+  max-width: 50%;
+  height: 85%;
+  margin: 1.75rem auto;
+}
+
+.modal-header {
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+  background: #28a745;
+  height: 34px;
+
+  .modal-title {
+    line-height: 5px;
+  }
+
+  button.close {
+    line-height: 0px;
+    height: 32px;
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+.modal-body {
+  padding: 10px;
+  overflow: hidden;
+}
+
+.modal-body-content {
+  border: 1px solid #ccc;
+  height: calc(100% - 40px);
+  width: 100%;
+  overflow: auto;
+  @include scroll-style();
+}
+
+.modal-control {
+  margin-top: -10px;
+}
+
+.related-event-list {
+  min-width: 600px;
+}
+
+.related-event-list {
+  border: 1px solid #ccc;
+  height: 100%;
+  .col-tb-1 {
+    width: 100px;
+  }
+
+  .col-tb-2 {
+    flex-grow: 1;
+  }
+
+  .col-tb-3 {
+    width: 100px;
+  }
+
+  .col-check-box {
+    display: flex;
+    justify-content: center;
+  }
+
+  .empty-table {
+    width: 100%;
+
+    td {
+      background: #fff !important;
+      color: red;
+      font-weight: bold;
+      text-align: center !important;
+    }
+  }
+}
+
+::ng-deep .ng-tooltip {
+  z-index: 1200 !important;
+}
+
+
+table {
+  text-align: center;
+}
+
+.event-header {
+  border: solid #888888;
+  border-width: 1px 1px 0 1px;
+
+  table {
+    @include setTable();
+    border: solid #888888;
+    border-width: 1px 1px 0 1px;
+    tr {
+      th {
+        background: #4e71bb;
+        background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+        background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+        color: #fff;
+        border: solid #888888;
+        border-width: 1px 1px 0 1px;
+        padding: 3px 0px !important;
+      }
+  
+      .col-1 {
+        background: white;
+        width: 46px;
+        border: solid 2px #4e71bb;
+      }
+    }
+  }
+}
+
+.event-content {
+  border: 1px solid #888888;
+  table {
+    @include setTable();
+    border: 1px solid #888888;
+
+    tbody:nth-child(odd) {
+      background-color: #dde2ed;
+    }
+
+    tbody:hover, tr:hover td {
+      background: #aebad4; 
+    }
+    
+    tbody {
+      td {
+        border-color: #888888;
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        line-height: 18px;
+        overflow: hidden;
+        white-space: normal;
+        padding: 5px;
+      }
+    }
+  }
+}

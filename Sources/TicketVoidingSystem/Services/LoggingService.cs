@@ -51,7 +51,7 @@ public class LoggingServiceImp : LoggingService
             .AddSection("Request Info", GetRequestInfo(context))
             .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
             .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
-            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException))
+            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException ?? exception))
             .ToString();
         await LogService.ErrorAsync(logMessage);
     }
@@ -61,7 +61,7 @@ public class LoggingServiceImp : LoggingService
         var logMessage = new LogMessage(exception.Message)
             .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
             .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
-            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException))
+            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException ?? exception))
             .ToString();
         await LogService.ErrorAsync(logMessage);
     }

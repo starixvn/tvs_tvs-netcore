@@ -9,7 +9,7 @@ export class WrongHdpModel {
   isMainMatch: boolean;
   eventDate?: Date;
   filterFromTransTime: string;
-  filterToTransTime: string;  
+  filterToTransTime: string;
   voidFromTime?: string;
   voidToTime?: string;
   homeFavorite: string;
@@ -18,9 +18,8 @@ export class WrongHdpModel {
   hdpValue: string;
   poolHouseCheckedBetTypes : string;
   isPoolHouseAffected: boolean;
-  logInfoDetail: LogInfoDetail;  
+  logInfoDetail: LogInfoDetail;
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
-  isFetchNewPHData: boolean;
   liveIndicator: number;
 }

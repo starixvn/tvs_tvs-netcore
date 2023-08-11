@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventDateFilterComponent #EventDateFilterComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <event-date-filter>
+    <div
+      class="row text-right event-date-filter"
+    >
+      <label
+        class="col-sm-1 col-form-label"
+      >
+        Event Date
+      </label>
+      <div
+        class="col-sm-7 d-flex"
+      >
+        <div
+          class="input-group"
+        >
+          <input
+            class="bg-white form-control form-control-sm from-date ng-untouched ng-pristine ng-valid"
+            name="ngbFromDate"
+            ngbdatepicker=""
+            placeholder="yyyy-mm-dd"
+            readonly=""
+          />
+          <div
+            class="input-group-append pointer"
+          >
+            <span
+              class="input-group-text"
+            >
+              <em
+                class="fa fa-calendar"
+              />
+            </span>
+          </div>
+        </div>
+        <label
+          class="col-form-label to-time-label"
+        >
+          To
+        </label>
+        <div
+          class="input-group"
+        >
+          <input
+            class="bg-white form-control form-control-sm to-date ng-untouched ng-pristine ng-valid"
+            name="ngbToDate"
+            ngbdatepicker=""
+            placeholder="yyyy-mm-dd"
+          />
+          <div
+            class="input-group-append pointer"
+          >
+            <span
+              class="input-group-text"
+            >
+              <em
+                class="fa fa-calendar"
+              />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <tooltip />
+  </event-date-filter>
+</ng-component>
+`;

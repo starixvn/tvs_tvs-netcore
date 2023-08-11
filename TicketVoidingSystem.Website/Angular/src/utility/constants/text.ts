@@ -5,6 +5,11 @@
 
 export class TEXT {
     static readonly INVALID_MATCHID = 'Invalid MatchId.';
+    static readonly INVALID_HDP = 'Invalid HDP!';
+    static readonly INVALID_OU = 'Invalid OU!';
+    static readonly INVALID_ODDS = 'Invalid Odds!';
+    static readonly INVALID_RUNS = 'Invalid Runs!';
+    static readonly INVALID_WICKET_OVER = 'Invalid Wicket/Over!';
 
     static readonly INVALID_FROMBETID = 'Invalid From BetID.';
     static readonly INVALID_TOBETID = 'Invalid To BetID.';
@@ -18,8 +23,7 @@ export class TEXT {
     static readonly REQUIRED_SITE = 'Site is required.';
     static readonly REQUIRED_SUB_TYPE = 'Sub Type is required.';
     static readonly REQUIRED_VOID_VIP = 'Void VIP is required.';
-    static readonly REQUIRED_INPUT = 'Please input valid value!';
-
+    static readonly REQUIRED_FIELD = 'Required field.';
 
     static readonly EMPTY_LICENSEE = 'At least one Licensee  must be selected.';
     static readonly EMPTY_CURRENCY = 'At least one Currency  must be selected.';

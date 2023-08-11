@@ -17,7 +17,7 @@ export class MappingModelStaticService {
     if (_.isNull(redCardModels) || _.isUndefined(redCardModels)) {
       return null;
     }
-    
+
     return redCardModels.map(x => ({
       matchId: x.matchId,
       filterBy: x.filterBy,
@@ -52,7 +52,7 @@ export class MappingModelStaticService {
       matchId: x.matchId,
       subIssueTypeId: x.subIssueTypeId,
       filterFromTransTime: x.voidFromTime,
-      filterToTransTime: x.voidToTime,      
+      filterToTransTime: x.voidToTime,
       homeFavorite: x.homeFavorite,
       awayFavorite: x.awayFavorite,
       hdpValue: x.hdpValue,
@@ -63,7 +63,7 @@ export class MappingModelStaticService {
       liveIndicator: x.liveIndicator
     } as WrongHdpGetLogInfoQuery));
   }
-  
+
   static buidWrongOuGetLogInfoModel(wrongOuModels: WrongOuModel[]): WrongOuGetLogInfoQuery[] {
     if (_.isNull(wrongOuModels) || _.isUndefined(wrongOuModels)) {
       return null;
@@ -74,7 +74,12 @@ export class MappingModelStaticService {
       subIssueTypeId: x.subIssueTypeId,
       filterFromTransTime: x.voidFromTime,
       filterToTransTime: x.voidToTime,
-      wrongMarket: x.wrongMarket
+      wrongMarket: x.wrongMarket,
+      poolHouseCheckedBetTypes: x.poolHouseCheckedBetTypes,
+      isLinkGroup1X2: x.isLinkGroup1X2,
+      isLinkGroupAIO: x.isLinkGroupAIO,
+      isMainMatch: x.isMainMatch,
+      liveIndicator: x.liveIndicator
     } as WrongOuGetLogInfoQuery));
   }
 

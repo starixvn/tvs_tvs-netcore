@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AllowanceTimeComponent AllowanceTimeComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <allowance-time>
+    <div
+      class="d-flex"
+    >
+      <label
+        class="col-form-label mr-2 label-width-60"
+      >
+        AA/PA/SA
+      </label>
+      <div
+        class="d-flex allowance-time"
+      >
+        <input
+          class="form-control form-control-sm mr-1 aa-time ng-untouched ng-pristine ng-valid"
+          maxlength="2"
+          only-number=""
+          type="text"
+        />
+        <label
+          class="col-form-label mr-1"
+        >
+          /
+        </label>
+        <input
+          class="form-control form-control-sm mr-1 pa-time ng-untouched ng-pristine ng-valid"
+          maxlength="2"
+          only-number=""
+          type="text"
+        />
+        <label
+          class="col-form-label mr-1"
+        >
+          /
+        </label>
+        <input
+          class="form-control form-control-sm mr-1 sa-time ng-untouched ng-pristine ng-valid"
+          maxlength="2"
+          only-number=""
+          type="text"
+        />
+      </div>
+      <label
+        class="col-form-label"
+      >
+        (s)
+      </label>
+    </div>
+    <tooltip />
+  </allowance-time>
+</ng-component>
+`;

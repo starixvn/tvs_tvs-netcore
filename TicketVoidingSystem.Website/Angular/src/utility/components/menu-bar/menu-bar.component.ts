@@ -57,6 +57,7 @@ export class MenuBarComponent implements OnInit {
     || menuName === MenuName.MARK_UNMARK_TICKETS
     || menuName === MenuName.TICKET_LISTING
     || menuName === MenuName.VOID_SINGLE_BET
-    || menuName === MenuName.MANAGE_REQUEST;
+    || menuName === MenuName.MANAGE_REQUEST
+    || menuName === MenuName.ADD_REQUEST;
   }
 }

@@ -5,7 +5,7 @@ namespace TicketVoidingSystem.ManageRequest.Constants;
 public static class OperatorConstant
 {
     public const byte TraderType = 1;
-    private const byte SuspenderType = 2;
+    public const byte SuspenderType = 2;
     public const string TraderName = "Trader";
     public const string SuspenderName = "Suspender";
 

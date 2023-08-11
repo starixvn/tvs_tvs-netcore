@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
-import { RequestDetailViewModel } from '../../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';

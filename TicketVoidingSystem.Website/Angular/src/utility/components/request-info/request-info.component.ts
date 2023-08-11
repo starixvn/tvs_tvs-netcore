@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { RequestDetailViewModel } from '../../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TimeModel } from '../../../utility/components/date-time/date-time/time.model';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueInfo } from '../../../utility/models/issue-type.model';

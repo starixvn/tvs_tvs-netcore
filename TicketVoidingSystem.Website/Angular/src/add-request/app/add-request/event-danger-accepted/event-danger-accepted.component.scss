@@ -1,0 +1,107 @@
+@import '../../../../assets/styles/mixin.scss';
+
+::ng-deep div label {
+  text-align: right;
+}
+
+span {
+  display: block;
+
+  .icon-warning-message {
+    color: #cfb107;
+  }
+
+  .error-text {
+    color: #ed1c24;
+  }
+
+  .icon-warning-message,
+  .icon-error-message {
+    padding-top: 1px;
+    width: 19px;
+  }
+}
+
+div.remark-content {
+  border: 1px solid #ed1c24;
+}
+
+.pd-top-6 {
+  padding-top: 6px;
+}
+
+.input-match-id::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+@supports (-moz-appearance: none) {
+  .button-area {
+    margin-bottom: 16px;
+  }
+
+  .input-match-id::-moz-placeholder {
+    font-style: italic;
+  }
+}
+
+input.input-match-id {
+  width: 150px;
+}
+
+@media only screen and (min-width: 1134px) {
+  .related-event-log-info {
+    width: 1065px;
+  }
+}
+
+.related-event-log-info {
+  button {
+    white-space: nowrap;
+  }
+
+  .input-related-match-id-area {
+    flex-grow: 1;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.btn-add-event {
+  z-index: 2;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn-open-modal-related-event:disabled {
+  cursor: not-allowed;
+}
+
+.input-related-match-id::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+@supports (-moz-appearance: none) {
+  .button-area {
+    margin-bottom: 16px;
+  }
+
+  .input-related-match-id::-moz-placeholder {
+    font-style: italic;
+  }
+}
+
+.var-check-selection {
+  display: inline-block;
+  @include var-check-selection();
+}
+
+.highlight {
+  outline: 2px solid red;
+}
+
+.tooltip-var-check {
+  @include tooltip-var-check();
+}
+
+
+

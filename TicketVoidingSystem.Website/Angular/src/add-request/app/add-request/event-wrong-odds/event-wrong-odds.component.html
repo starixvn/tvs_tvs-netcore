@@ -1,0 +1,32 @@
+<div class="mb-3">
+  <league-event-red-card #leagueEvent
+    [isEdit]="isEdit"
+    [initSportType]="filter.sportType"
+    [eventDate]="filter.eventDate"
+    [initMatchId]="logInfoEvent.matchId"
+    (changeEvent)="changeMatchEvent()">
+  </league-event-red-card>
+</div>
+
+<filter-wrong-odds #filterWrongOdds
+  [isEdit]="isEdit"
+  [isDisabled]="filter.isVoided"
+  [subIssueTypeId]="filter.subIssueTypeId"
+  (changeFilterEvent)="resetLogInfoOfEvent()"
+  [filterWrongOddsModel]="logInfoEvent.filterWrongOdds">
+</filter-wrong-odds>
+<div class="mb-3 d-flex">
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+    (click)="clickSearch()">
+    Search
+  </button>
+</div>
+<log-info-wrong-odds
+  [isEdit]="isEdit"
+  [logInfo]="logInfoEvent"
+  [filter]="filter"
+  [requestId]="requestId"
+  (searchEvent)="handleSearchEvent()"
+  [primitiveProps]="primitiveProps">
+</log-info-wrong-odds>
+

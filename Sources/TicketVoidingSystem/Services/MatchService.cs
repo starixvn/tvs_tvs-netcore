@@ -4,11 +4,14 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.ViewModels;
 
 namespace TicketVoidingSystem.Services;
 
 public interface MatchService
 {
+    Task<MatchInfoAddRequestViewModel> GetMatchAddRequest(GetMatchInfoAddRequestCriteria criteria);
+
     Task<Match> GetMatch(GetMatchInfoCriteria criteria);
 
     Task<Match> GetMatch(int matchId);
@@ -29,6 +32,18 @@ public class MatchServiceImp : MatchService
     {
         this.repository = repository;
         this.remotingRefWrapperService = remotingRefWrapperService;
+    }
+
+    public async Task<MatchInfoAddRequestViewModel> GetMatchAddRequest(GetMatchInfoAddRequestCriteria criteria)
+    {
+        var match = await repository.GetAsync<Match>(criteria);
+
+        return new MatchInfoAddRequestViewModel
+        {
+            Match = match,
+            ErrorCode = criteria.ErrorCode,
+            ErrorMsg = criteria.ErrorMsg
+        };
     }
 
     public async Task<Match> GetMatch(GetMatchInfoCriteria criteria)
@@ -76,6 +91,7 @@ public class MatchServiceImp : MatchService
         match.SportTypeNameSimplified = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.ChineseSimplified);
         match.SportTypeNameNewSimplified = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.NewChineseSimplified);
         match.SportTypeNameTraditional = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.ChineseTraditional);
+        match.Name = $"{match.MatchId} - {match.MatchEvent}";
 
         return match;
     }

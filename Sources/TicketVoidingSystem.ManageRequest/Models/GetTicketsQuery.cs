@@ -21,7 +21,7 @@ public class GetTicketsQuery
 
     public int PageSize { get; set; }
 
-    public int RequestId { get; set; }
+    public int? RequestId { get; set; }
 
     public int IssueTypeId { get; set; }
 

@@ -23,7 +23,7 @@
                 [disabled]="item.isAllLiveTickets || item.voidTicketsMini?.total === 0"
                 [(ngModel)]="item.isCheckedEarlyEvent"
                 (change)="changeCheckBoxEarlyEvent(item)"/>
-              <label class="col-form-label" for="chk-early-event-{{id}}">Early Event</label>
+              <label class="col-form-label col-form-label-sm" for="chk-early-event-{{id}}">Early Event</label>
             </span>
           </div>
         </div>
@@ -34,20 +34,20 @@
         </div>
         <div class="ml-3" *ngIf="isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu()">
           <div class="wrong-market d-flex mb-3" *ngIf="item.wrongMarket">
-            <div><label class="col-form-label mr-2">Wrong Market</label></div>
+            <div><label class="col-form-label col-form-label-sm mr-2">Wrong Market</label></div>
             <input
               [ngModel]="item.wrongMarket"
               disabled
               type="text" class="wrong-market-input form-control form-control-sm"/>
           </div>
           <div class="actual-market d-flex" *ngIf="item.actualMarket">
-            <div><label class="col-form-label mr-2">Actual Market</label></div>
+            <div><label class="col-form-label col-form-label-sm mr-2">Actual Market</label></div>
             <input [ngModel]="item.actualMarket"
               disabled
               type="text" class="actual-market-input form-control form-control-sm"/>
           </div>
           <div class="hdp-value d-flex" *ngIf="item.hdpValue">
-            <div><label class="col-form-label mr-2">HDP Value</label></div>
+            <div><label class="col-form-label col-form-label-sm mr-2">HDP Value</label></div>
             <input [ngModel]="item.hdpValue"
               disabled
               type="text" class="hdp-value-input form-control form-control-sm"/>

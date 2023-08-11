@@ -29,11 +29,11 @@ public class GetRequestServiceImp : GetRequestService
         var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request);
         var viewModel = new RequestDetailViewModel
         {
-            Request = firstResultSet.FirstOrDefault(),
+            Request = firstResultSet.First(),
             Messages = thirdResultSet
         };
 
-        switch (firstResultSet.FirstOrDefault().IssueTypeId)
+        switch (firstResultSet.First().IssueTypeId)
         {
             case IssueTypeConstant.WrongScore:
                 viewModel.WrongScoreModels = MapEventWrongScores(secondResultSet);
@@ -151,6 +151,9 @@ public class GetRequestServiceImp : GetRequestService
         {
             MatchId = model.MatchId,
             MatchCode = model.MatchCode,
+            PoolHouseCheckedBetTypes = model.PoolHouseCheckedBetTypes,
+            IsLinkGroup1X2 = model.IsLinkGroup1X2,
+            IsLinkGroupAIO = model.IsLinkGroupAIO,
             Name = GetMatchName(model),
             LeagueName = remotingRefService.GetLeagueName(model.LeagueId, LanguageCode.English),
             IsMainMatch = model.IsMainMatch,
@@ -161,7 +164,8 @@ public class GetRequestServiceImp : GetRequestService
             VoidFromTime = model.VoidFromTime,
             VoidToTime = model.VoidToTime,
             ActualMarket = model.ActualMarket,
-            WrongMarket = model.WrongMarket
+            WrongMarket = model.WrongMarket,
+            LiveIndicator = model.LiveIndicator
         });
     }
 
@@ -193,7 +197,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    public IEnumerable<ReducedOverViewModel> MapEventReducedOver(IEnumerable<RequestEventModel> requestEventModels)
+    private IEnumerable<ReducedOverViewModel> MapEventReducedOver(IEnumerable<RequestEventModel> requestEventModels)
     {
         return requestEventModels.Select(model => new ReducedOverViewModel
         {
@@ -209,7 +213,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    public string GetMatchName(RequestEventModel requestEventModel)
+    private string GetMatchName(RequestEventModel requestEventModel)
     {
         var homeName = requestEventModel.IsNeutral ?
                  remotingRefService.GetTeamName(requestEventModel.HomeId, LanguageCode.English) + " (N)" : remotingRefService.GetTeamName(requestEventModel.HomeId, LanguageCode.English);

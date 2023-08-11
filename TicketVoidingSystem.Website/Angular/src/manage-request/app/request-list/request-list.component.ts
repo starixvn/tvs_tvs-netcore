@@ -168,7 +168,7 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   openRequestDetails(requestId: number, eventDate: Date, issueTypeId: number, createdDate: Date) {
     if (this.checkCanEdit(eventDate, issueTypeId, createdDate)) {
-      window.open(`${document.body.getAttribute('old-site-root-url')}TicketVoidingSystem/ManageRequest/Details/${requestId}`, '_blank');
+      window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/EditRequest/Index/${requestId}`, '_blank');
     }
   }
 

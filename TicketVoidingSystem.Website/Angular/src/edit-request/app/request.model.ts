@@ -1,5 +1,5 @@
-import { ReducedOverModel } from 'src/add-request/app/add-request/models/event-reduced-over.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
+import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOddsModel } from '../../add-request/app/add-request/models/event-wrong-odds.model';
 import { WrongOuModel } from '../../add-request/app/add-request/models/event-wrong-ou.model';

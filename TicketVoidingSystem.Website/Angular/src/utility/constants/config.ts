@@ -52,9 +52,34 @@ export class Product {
 
 export class SportTypeConst {
   static readonly E_SPORTS = 43;
-  static readonly CRICKET = 50;  
+  static readonly CRICKET = 50;
   static readonly VOLEYBALL = 6;
   static readonly TENNIS = 5;
+}
+
+export class ProductFilter {
+  static readonly SELECTION_ITEMS: Selection[] = [
+    {
+      name: 'Sportsbook',
+      value: '1',
+      group: 'All'
+    },
+    {
+      name: 'Parlay',
+      value: '2',
+      group: 'All'
+    },
+    {
+      name: 'Outright',
+      value: '4',
+      group: 'All'
+    },
+    {
+      name: 'Saba',
+      value: '5',
+      group: 'All'
+    }
+  ];
 }
 
 export class TicketStatus {
@@ -169,7 +194,7 @@ export class MatchType {
 
 export class TVSLeagueEventDisplayType {
   static readonly VERTICAL = 1;
-  static readonly HORIZONTAL  = 2;
+  static readonly HORIZONTAL = 2;
 }
 
 export class AcceptType {
@@ -262,8 +287,8 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.GOAL_PEN_1ST_2ND_MARK,
     SubIssueTypeConstant.GOAL_PEN_1ST_2ND_MARK_HOME,
     SubIssueTypeConstant.GOAL_PEN_1ST_2ND_MARK_AWAY,
-    SubIssueTypeConstant.NO_INDICATION_HOME_RC,
-    SubIssueTypeConstant.NO_INDICATION_AWAY_RC,
+    SubIssueTypeConstant.WRONG_INDICATION_HOME_RC,
+    SubIssueTypeConstant.WRONG_INDICATION_AWAY_RC,
     SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_NO_ONWARDS,
     SubIssueTypeConstant.NO_INDICATION_HOME_BOOKING_ONWARDS,
     SubIssueTypeConstant.NO_INDICATION_AWAY_BOOKING_NO_ONWARDS,
@@ -296,5 +321,99 @@ export class SiteDbGroupConstant {
     { id: SiteDbGroupConstant.SiteDb1, serverName: 'SiteDb1' },
     { id: SiteDbGroupConstant.SiteDb2, serverName: 'SiteDb2' },
     { id: SiteDbGroupConstant.SiteDb3, serverName: 'SiteDb3' }
+  ];
+}
+
+export class ActionVoidByIssueTypeConst {
+  static readonly REDUCED_OVER: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly WRONG_ODDS: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly DANGER_ACCEPTED: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly WRONG_SCORE: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly WRONG_HDP: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly WRONG_1ST_HDP: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly WRONG_OU: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly WRONG_1ST_OU: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly EARLY_KICK_OFF: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly WRONG_KICK_OFF: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly RED_CARD: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly ABNORMAL_BET_SINGLE: number[] = [
+    TVSRequestActionType.AUTO_VOID_WINNING_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY,
+    TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID,
+    TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID,
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly ABNORMAL_BET_MIX_PARLAY: number[] = [
+    TVSRequestActionType.AUTO_VOID_WINNING_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly ABNORMAL_ACCOUNT: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly ABNORMAL_BET_REAL_MEMBER: number[] = [
+    TVSRequestActionType.AUTO_VOID_WINNING_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY,
+    TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID,
+    TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID,
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID,
+    TVSRequestActionType.WAITING_ID
+  ];
+  static readonly ARCHIVED_TICKET: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID
   ];
 }

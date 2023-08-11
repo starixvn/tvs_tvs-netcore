@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
+import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
 import { AppService } from './app.service';

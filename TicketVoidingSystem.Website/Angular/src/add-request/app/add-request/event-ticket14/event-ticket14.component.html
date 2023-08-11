@@ -1,0 +1,11 @@
+<div [blockUi]="primitiveProps.isBlockBetIds">
+  <bet-ids #betIds [leftBetIdCss]="'col-form-label'"
+    [rightBetIdCss]="'col-sm-8'"
+    [betIdInputCss]="{'max-width.px': 1065}"
+    [hideInvalid]="false"
+    [hideWarningMove]="true"
+    [disabled]="filter.isVoided"
+    [initBetIds]="eventTicket14Model.transIds"
+    (afterFocusOutBetIds)="afterFocusOutBetIds()">
+  </bet-ids>
+</div>

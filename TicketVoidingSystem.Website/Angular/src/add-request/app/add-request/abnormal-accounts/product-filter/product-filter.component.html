@@ -1,0 +1,54 @@
+<div class="row product-filter">
+    <label class="col-sm-1 col-form-label col-form-label-sm text-right">Product</label>
+    <div class="d-flex dropdown-area">
+        <div class="multi-select">
+            <ng-select class="product" [items]="products" [multiple]="true" bindLabel="name" groupBy="group" [selectableGroup]="true"
+              [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value" [(ngModel)]="selectedProducts"
+              placeholder="Select products" [clearable]="false" [searchable]="false" [disabled]="isDisabled">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                    <input id="item-{{index}}" type="checkbox"
+                    [ngModel] ="item$.selected"/> {{products.length === selectedProducts.length ? 'Unselect All' : 'Select All'}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                    <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.name}}
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:4">
+                        {{item['name']}}
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    </div>
+                    <div class="number-of-more" *ngIf="items.length > 4">
+                        <span class="ng-value-label">+{{items.length - 4}}</span>
+                    </div>
+                </ng-template>
+            </ng-select>
+        </div>
+
+        <label class="col-form-label col-form-label-sm ticket-status-label">Ticket Status</label>
+
+        <div class="multi-select">
+            <ng-select class="ticket-status" [items]="ticketStatus" [multiple]="true" bindLabel="name" groupBy="group" [selectableGroup]="true"
+              [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value" [(ngModel)]="selectedTicketStatus"
+              placeholder="Select status" [clearable]="false" [searchable]="false" [disabled]="isDisabled">
+                <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+                    <input id="item-{{index}}" type="checkbox"
+                    [ngModel] ="item$.selected"/> {{ticketStatus.length === selectedTicketStatus.length ? 'Unselect All' : 'Select All'}}
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                    <input class="mr-1" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>{{item.name}}
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+                    <div class="ng-value displayed-name" *ngFor="let item of items | slice:0:4">
+                        {{item['name']}}
+                        <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    </div>
+                    <div class="ng-value number-of-more" *ngIf="items.length > 4">
+                        <span class="ng-value-label">+{{items.length - 4}}</span>
+                    </div>
+                </ng-template>
+            </ng-select>
+        </div>
+    </div>
+</div>
+
+<tooltip [tooltip]="tooltip"></tooltip>

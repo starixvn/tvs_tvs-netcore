@@ -49,6 +49,6 @@ export class SubIssueTypeConstant {
   static readonly _2YC_AWAY = 64;
   static readonly BETRADAR_FC_RED_CARD_HOME = 65;
   static readonly BETRADAR_FC_RED_CARD_AWAY = 66;
-  static readonly NO_INDICATION_HOME_RC = 15;
-  static readonly NO_INDICATION_AWAY_RC = 16;
+  static readonly WRONG_INDICATION_HOME_RC = 17;
+  static readonly WRONG_INDICATION_AWAY_RC = 18;
 }

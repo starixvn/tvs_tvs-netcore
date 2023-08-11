@@ -1,0 +1,15 @@
+<div class="d-flex">
+  <label class="col-form-label mr-2 label-width-60">AA/PA/SA</label>
+  <div class="d-flex allowance-time">
+    <input type="text" class="form-control form-control-sm mr-1 aa-time" [(ngModel)]="allowanceTime.aaTime"
+      (ngModelChange)="emitModelChange()" [disabled]="isDisabled" maxlength="2" only-number />
+    <label class="col-form-label mr-1">/</label>
+    <input type="text" class="form-control form-control-sm mr-1 pa-time" [(ngModel)]="allowanceTime.paTime"
+      (ngModelChange)="emitModelChange()" [disabled]="isDisabled" maxlength="2" only-number />
+    <label class="col-form-label mr-1">/</label>
+    <input type="text" class="form-control form-control-sm mr-1 sa-time" [(ngModel)]="allowanceTime.saTime"
+      (ngModelChange)="emitModelChange()" [disabled]="isDisabled" maxlength="2" only-number />
+  </div>
+  <label class="col-form-label">(s)</label>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

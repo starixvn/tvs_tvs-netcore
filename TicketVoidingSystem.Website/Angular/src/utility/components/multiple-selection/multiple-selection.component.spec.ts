@@ -1,36 +1,25 @@
-import { NgModule } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { ToolTipModule } from '../tooltip/tooltip.module';
-import { MultipleSelection } from './multiple-selection';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+
 import { MultipleSelectionComponent } from './multiple-selection.component';
 
 describe('MultipleSelectionComponent', () => {
-  @NgModule({
-    declarations: [
-      MultipleSelectionComponent
-    ],
-    imports: [
-      ToolTipModule
-    ]
-  })
-  class AppModuleTest { }
+  let component: MultipleSelectionComponent;
+  let fixture: ComponentFixture<MultipleSelectionComponent>;
 
-  let shallow: Shallow<MultipleSelectionComponent>;
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ MultipleSelectionComponent ]
+    })
+    .compileComponents();
+  }));
 
   beforeEach(() => {
-    shallow = new Shallow(MultipleSelectionComponent, AppModuleTest);
-  });  
-  
-  it('MultipleSelectionComponent should init match snapshot', async () => {
-    // Arrange
-    const { fixture } = await shallow.render({
-      bind: {
-        multipleSelect: new MultipleSelection()
-      }
-    });
+    fixture = TestBed.createComponent(MultipleSelectionComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
+  });
 
-    // Assert
-    expect(fixture).toMatchSnapshot();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

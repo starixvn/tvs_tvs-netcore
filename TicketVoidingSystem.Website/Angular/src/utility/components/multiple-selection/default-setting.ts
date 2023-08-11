@@ -33,4 +33,7 @@ export class DefaultSetting {
   public static get SHOW_HEADER(): boolean {
     return true;
   }
+  public static get BUTTON_HEIGHT(): string {
+    return '36px';
+  }
 }
