@@ -174,6 +174,9 @@ export class FilterComponent implements OnInit, OnChanges {
 
 
   updateDataAfterClosed(subIssueTypeId: number): void {
+    if (this.isWrongScore()) {
+      this.addRequestStore.changeSavingRequestStatus(true);
+    }
     this.addRequestStore.changeAllowanceTime(this.subIssueTypeDialogModel.allowanceTime);
     this.issueTypes.subIssueId = subIssueTypeId;
     this.model.isChangeSubTypeManual = true;
