@@ -83,13 +83,21 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
               <div
                 class="time-type d-flex"
               >
-                <label
-                  class="col-form-label font-weight-bold mr-1"
+                <div
+                  class="d-flex align-items-center"
                 >
-                  (GMT + 8)
-                </label>
+                  <label
+                    class="col-form-label col-form-label-sm font-weight-bold"
+                  >
+                    <input
+                      class="checkbox-exclude-test mr-1 ng-untouched ng-pristine ng-valid"
+                      type="checkbox"
+                    />
+                    (GMT + 8) 
+                  </label>
+                </div>
                 <label
-                  class="col-form-label font-weight-bold trans-time d-flex"
+                  class="col-form-label font-weight-bold col-form-label-sm trans-time d-flex"
                 >
                   <input
                     class="mr-1 ng-untouched ng-pristine ng-valid"
@@ -98,7 +106,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
                    Trans Time 
                 </label>
                 <label
-                  class="col-form-label check-time font-weight-bold d-flex"
+                  class="col-form-label col-form-label-sm check-time font-weight-bold d-flex"
                 >
                   <input
                     class="mr-1 ng-untouched ng-pristine ng-valid"
@@ -168,6 +176,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
                  Ticket Type 
                 <select
                   class="ng-untouched ng-pristine ng-valid"
+                  disabled=""
                 >
                 </select>
               </label>
@@ -186,6 +195,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
                  Settled Type 
                 <select
                   class="ng-untouched ng-pristine ng-valid"
+                  disabled=""
                 >
                 </select>
               </label>

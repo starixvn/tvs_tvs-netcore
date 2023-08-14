@@ -42,6 +42,10 @@ public class VoidTicketsCriteria : CriteriaBase
 
     public string OddsFilter { get; set; }
 
+    public string SelectionSubParlays { get; set; }
+
+    public bool IsCheckTime { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 
