@@ -250,14 +250,14 @@ export class FilterComponent implements OnInit {
 
   validateProduct(): boolean {
     const product = this.query.product;
-    if (this.isInvalidProduct0And4(product, this.sportType)
+    if (this.isInvalidProduct0(product, this.sportType)
       || this.isInvalidProduct1(product, this.sportType)
       || this.isInvalidProduct2(product, this.sportType)
       || this.isInvalidProduct5(product, this.sportType)
-      || this.isInvalidProduct6(product, this.sportType)
-      || this.isInvalidProduct7(product, this.sportType)
       || this.isInvalidProduct9(product, this.sportType)
-      || this.isInvalidOtherProducts(this.sportType)) {
+      || this.isInvalidProduct7(product, this.sportType)
+      || this.isInvalidOtherProducts(this.sportType))
+      {
       this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
       return false;
     }
@@ -265,8 +265,13 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  private isInvalidProduct0And4(product: number, sportType: number): boolean {
-    return ((product === 0 || product === 4) && sportType > 99 && sportType !== 154);
+  validBetTypesVirtualSport(){
+    return !(this.isInvalidProduct5(this.query.product, this.sportType)
+    || this.isInvalidProduct7(this.query.product, this.sportType))
+  }
+
+  private isInvalidProduct0(product: number, sportType: number): boolean {
+    return ((product === 0 ) && sportType > 99 && sportType !== 154);
   }
 
   private isInvalidProduct1(product: number, sportType: number): boolean {
@@ -281,16 +286,12 @@ export class FilterComponent implements OnInit {
     return (product === 5 && (sportType < 190 || sportType > 199));
   }
 
-  private isInvalidProduct6(product: number, sportType: number): boolean {
-    return (product === 6 && sportType !== 160);
+  private isInvalidProduct9(product: number, sportType: number): boolean {
+    return (product === 9 && sportType !== 175);
   }
 
   private isInvalidProduct7(product: number, sportType: number): boolean {
-    return (product === 7 && sportType !== 207);
-  }
-
-  private isInvalidProduct9(product: number, sportType: number): boolean {
-    return (product === 9 && sportType !== 175);
+    return (product === 7 && sportType !== 178);
   }
 
   private isInvalidOtherProducts(sportType: number): boolean {
@@ -307,14 +308,13 @@ export class FilterComponent implements OnInit {
       sportType !== 161 &&
       sportType !== 164 &&
       (sportType < 180 || sportType > 186) &&
-      (sportType < 190 || sportType > 199)
+      (sportType < 190 || sportType > 199) &&
+      sportType !== 178
     );
   }
 
   private isInvalidSecondGroupOtherProducts(sportType: number): boolean {
     return (
-      sportType !== 160 &&
-      sportType !== 207 &&
       sportType !== 175
     );
   }
@@ -436,7 +436,7 @@ export class FilterComponent implements OnInit {
         this.tooltip.display('match-id', this.checkMatch);
         return false;
       }
-    } else if (this.query.product === Product.VIRTUAL_SPORTS_2) {
+    } else if (this.query.product === Product.VIRTUAL_SPORTS_2 || this.query.product === Product.VIRTUAL_SPORTS_3) {
       return this.betTypesVSComponent.validate();
     } else {
       return this.betTypesComponent.validate();
@@ -483,7 +483,7 @@ export class FilterComponent implements OnInit {
   getCheckedBetTypes(): string {
     if (this.query.product === Product.SPORTS_BOOK) {
       return this.groupBetTypes.getValueCheckedBetTypes();
-    } else if (this.query.product === Product.VIRTUAL_SPORTS_2) {
+    } else if (this.query.product === Product.VIRTUAL_SPORTS_2 || this.query.product === Product.VIRTUAL_SPORTS_3) {
       return this.betTypesVSComponent.getCheckedBetTypes();
     } else {
       return this.betTypes.getCheckedBetTypes().join(',');

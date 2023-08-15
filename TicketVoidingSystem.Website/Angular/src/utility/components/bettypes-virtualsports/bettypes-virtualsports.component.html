@@ -1,4 +1,4 @@
-﻿<div class="bettypes" *ngIf="product === 5 && groups != undefined && display">
+﻿<div class="bettypes" *ngIf="isShowCheckedBetTypes()">
     <div *ngFor="let group of groups">
         <div class="header" *ngIf="group.display">
             <label>

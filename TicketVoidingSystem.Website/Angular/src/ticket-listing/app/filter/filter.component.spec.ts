@@ -172,7 +172,7 @@ describe('FilterComponent', () => {
     instance.renderProduct();
 
     // Assert
-    expect(instance.product.items.length).toBe(6);
+    expect(instance.product.items.length).toBe(7);
  });
 
  it('#renderEventType should return expected list eventtType', async() => {
@@ -423,13 +423,11 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     const testCases = [
       { productId: 0, sportType: 100, expected: false },
-      { productId: 4, sportType: 100, expected: false },
       { productId: 1, sportType: 1, expected: false },
       { productId: 2, sportType: 1, expected: false },
       { productId: 2, sportType: 187, expected: false },
       { productId: 5, sportType: 1, expected: false },
       { productId: 5, sportType: 200, expected: false },
-      { productId: 6, sportType: 1, expected: false },
       { productId: 7, sportType: 1, expected: false },
       { productId: 9, sportType: 1, expected: false },
       { productId: 111, sportType: 200, expected: false },
@@ -447,19 +445,18 @@ describe('FilterComponent', () => {
     }
   });
 
-  it('Is invalid product 0 and 4', async () => {
+  it('Is invalid product 0', async () => {
     // Arrange
     let actualResult = false;
     const testCases = [
       { product: 0, sportType: 100, expectResult: true },
-      { product: 4, sportType: 100, expectResult: true },
       { product: 0, sportType: 154, expectResult: false },
     ];
     const { instance } = await shallow.render();
 
     // Action and Assert
     for (const item of testCases) {
-      actualResult = instance['isInvalidProduct0And4'](item.product, item.sportType);
+      actualResult = instance['isInvalidProduct0'](item.product, item.sportType);
       expect(actualResult).toBe(item.expectResult);
     }
   });
@@ -515,28 +512,12 @@ describe('FilterComponent', () => {
     }
   });
 
-  it('Is invalid product 6', async () => {
-    // Arrange
-    let actualResult = false;
-    const testCases = [
-      { product: 6, sportType: 180, expectResult: true },
-      { product: 6, sportType: 160, expectResult: false },
-    ];
-    const { instance } = await shallow.render();
-
-    // Action and Assert
-    for (const item of testCases) {
-      actualResult = instance['isInvalidProduct6'](item.product, item.sportType);
-      expect(actualResult).toBe(item.expectResult);
-    }
-  });
-
   it('Is invalid product 7', async () => {
     // Arrange
     let actualResult = false;
     const testCases = [
       { product: 7, sportType: 180, expectResult: true },
-      { product: 7, sportType: 207, expectResult: false },
+      { product: 7, sportType: 178, expectResult: false },
     ];
     const { instance } = await shallow.render();
 
@@ -554,6 +535,7 @@ describe('FilterComponent', () => {
       { sportType: 170, expectResult: true },
       { sportType: 200, expectResult: true },
       { sportType: 154, expectResult: false },
+      { sportType: 178, expectResult: false },
     ];
     const { instance } = await shallow.render();
 

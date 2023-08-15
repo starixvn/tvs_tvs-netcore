@@ -1,6 +1,4 @@
 ﻿import { Component, ElementRef, Input, OnChanges, SimpleChange } from '@angular/core';
-
-import { Product } from '../../../utility/constants/config';
 import { TEXT } from '../../constants/text';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupBetTypeVirtualSport } from './bettypes-virtualsports.model';
@@ -14,7 +12,7 @@ import { GroupBetTypeVirtualSport } from './bettypes-virtualsports.model';
 export class BetTypesVirtualSportComponent implements OnChanges {
     @Input() groups: Array<GroupBetTypeVirtualSport>;
     @Input() sportType: number;
-    @Input() product: number = Product.VIRTUAL_SPORTS_2;
+    @Input() product: number;
     display: boolean;
     tooltip = new Tooltip();
 
@@ -23,7 +21,7 @@ export class BetTypesVirtualSportComponent implements OnChanges {
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        if (changes['sportType']) {
+        if (changes['sportType'] || changes['product']) {
             this.changeDisplay();
         }
     }
@@ -58,5 +56,9 @@ export class BetTypesVirtualSportComponent implements OnChanges {
         });
 
         return value;
+    }
+
+    isShowCheckedBetTypes(): boolean {
+        return (this.product === 5 || this.product === 7) && this.groups != undefined && this.display;
     }
 }

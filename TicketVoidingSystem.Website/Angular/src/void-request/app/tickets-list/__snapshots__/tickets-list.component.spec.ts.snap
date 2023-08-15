@@ -37,9 +37,11 @@ exports[`TicketsListComponent Should display bettrade message 1`] = `
                 scope="col"
               >
                 <div>
-                  <span
+                  <div
                     class="checkbox-dropdown-list"
-                  />
+                  >
+                    <span />
+                  </div>
                   <span
                     class="icon-arrow-white-down"
                   />
@@ -479,9 +481,11 @@ exports[`TicketsListComponent TicketsComponent should display no-data 1`] = `
                 scope="col"
               >
                 <div>
-                  <span
+                  <div
                     class="checkbox-dropdown-list"
-                  />
+                  >
+                    <span />
+                  </div>
                   <span
                     class="icon-arrow-white-down"
                   />
@@ -655,9 +659,11 @@ exports[`TicketsListComponent TicketsListComponent should display html and model
                 scope="col"
               >
                 <div>
-                  <span
+                  <div
                     class="checkbox-dropdown-list"
-                  />
+                  >
+                    <span />
+                  </div>
                   <span
                     class="icon-arrow-white-down"
                   />
