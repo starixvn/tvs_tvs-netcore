@@ -1,8 +1,8 @@
+import { CopyRequestInfoQuery } from 'src/utility/models/copy-request-info.query';
 import { GeneralInfo, GeneralInfoViewModel } from '../../utility/components/request-info/request-info.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
-import { CopyRequestInfoQuery } from './models/copy-request-info.query';
 import { GetGeneralInfoQuery } from './models/get-general-info.query';
 import { GetRequestsQuery } from './models/get-requests.query';
 import { RequestModel } from './request-list/request.model';

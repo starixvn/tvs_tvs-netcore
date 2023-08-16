@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GeneralInfoViewModel } from '../../utility/components/request-info/request-info.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
-import { CopyRequestInfoQuery, CopyRequestInfoResponse } from './models/copy-request-info.query';
 import { GetGeneralInfoQuery } from './models/get-general-info.query';
 import { GetRequestsQuery } from './models/get-requests.query';
 import { RequestModel } from './request-list/request.model';
@@ -42,9 +41,5 @@ export class AppService {
 
   async getGeneralInfo(query: GetGeneralInfoQuery): Promise<GeneralInfoViewModel> {
     return this.httpService.postJson(query, `api/ManageRequest/GetGeneralInfo`);
-  }
-
-  async copyRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
-    return this.httpService.postJson(query, `api/ManageRequest/CopyRequestInfo`);
   }
 }

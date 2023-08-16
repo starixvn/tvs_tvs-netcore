@@ -16,9 +16,11 @@ public class CopyRequestInfoModel
 
     public int LeagueId { get; set; }
 
-    public DateTime KickOffTime { get; set; }
+    public string MatchEvent { get; set; }
 
-    public bool IsVar { get; set; }
+    public string LeagueName { get; set; }
+
+    public DateTime GlobalShowTime { get; set; }
 
     public int FilterBy { get; set; }
 
@@ -38,7 +40,29 @@ public class CopyRequestInfoModel
             return root.IsCheckedVar;
         }
     }
+
+    public string OperatorInfo { get; set; }
+
+    public List<OperatorInfo> Operators
+    {
+        get
+        {
+            var root = OperatorInfo.ParseXmlToObject<RootOperators>();
+            var operators = root.OperatorXmls;
+            var result = operators.Count > 0 ? operators.Select(x =>
+                new OperatorInfo { OperatorId = x.OperatorId, OperatorType = x.TypeId }
+            ).ToList() : new List<OperatorInfo>();
+            return result;
+        }
+    }
+
     public string Provider { get; set; }
+
+    public string RequestedBy { get; set; }
+
+    public bool IsHasSettledTicket { get; set; }
+
+    public string Remark { get; set; }
 }
 
 public class CopyRequestInfoResponse

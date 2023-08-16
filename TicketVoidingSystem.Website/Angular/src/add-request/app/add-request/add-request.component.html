@@ -179,24 +179,30 @@
       [model]="model.others">
     </others-wrong-hdp>
 
-    <div class="search mg-top-10">
-      <button type="submit" class="btn btn-primary btn-sm mg-right-10"
-        (mousedown)="$event.preventDefault()"
-        [disabled]="isDisabledSaveButton"
-        (click)="!isDisabledSaveButton && saveRequest(false)">
-        Save
-      </button>
-      <button type="submit"class="btn btn-success btn-sm mg-right-10"
-        *ngIf="isShowSaveAndVoidButton()"
-        [disabled]="isDisabledSaveButton"
-        (mousedown)="$event.preventDefault()"
-        (click)="!isDisabledSaveButton && saveRequest(true)">
-        Save & Void
-      </button>
-      <button type="submit" class="btn btn-danger btn-sm"
-        [disabled]="isDisabledSaveButton"
-        (click)="backToManagePage()">Back
-      </button>
+    <div class="search mg-top-10 d-flex justify-content-between">
+      <div class="d-flex">
+        <button type="submit" class="btn btn-primary btn-sm mg-right-10"
+          (mousedown)="$event.preventDefault()"
+          [disabled]="isDisabledSaveButton"
+          (click)="!isDisabledSaveButton && saveRequest(false)">
+          Save
+        </button>
+        <button type="submit"class="btn btn-success btn-sm mg-right-10"
+          *ngIf="isShowSaveAndVoidButton()"
+          [disabled]="isDisabledSaveButton"
+          (mousedown)="$event.preventDefault()"
+          (click)="!isDisabledSaveButton && saveRequest(true)">
+          Save & Void
+        </button>
+        <button type="submit" class="btn btn-danger btn-sm"
+          [disabled]="isDisabledSaveButton"
+          (click)="backToManagePage()">Back
+        </button>
+      </div>
+      <div class="d-flex align-content-end" *ngIf="isShowCopyInfoButton()">
+        <div class="icon-letstalk icon-copy-info" (click)="copyLetstalkRequestInfo()"></div>
+        <div class="icon-mail icon-copy-info" (click)="copyEmailRequestInfo()"></div>
+      </div>
     </div>
   </div>
 </div>

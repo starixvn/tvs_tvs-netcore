@@ -24,7 +24,7 @@ public class InsertQueueQuery
     public string? SubIssueTypeName { get; set; }
     public string? SubIssueTypeNameCS { get; set; }
     public int IssueTypeId { get; set; }
-
+    public bool IsHasSettledTicket { get; set; }
     public string UserName { get; set; }
     public string UserPassword { get; set; }
 }

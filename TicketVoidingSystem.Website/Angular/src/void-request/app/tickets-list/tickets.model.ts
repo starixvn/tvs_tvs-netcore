@@ -60,6 +60,8 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.checkPermissionTickets = data.checkPermissionTickets;
     this.allCancelCashOutTickets = data.allCancelCashOutTickets;
     this.isHasAioMessage = data.isHasAioMessage;
+    this.isHasSettledTicket = data.isHasSettledTicket;
+    this.isAllLiveTickets = data.isAllLiveTickets;
   }
 
   mapGroups(groups: Array<GroupModel>) {

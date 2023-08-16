@@ -1,8 +1,10 @@
 ﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
-public class VoidDataXMLModel
+public class VoidDataXmlModel
 {
     public int IssueTypeId { get; set; }
+
+    public int VoidingHistoryId { get; set; }
 
     public int SubIssueTypeId { get; set; }
 
@@ -47,4 +49,10 @@ public class VoidDataXMLModel
     public string VoidFromDate { get; set; }
 
     public string VoidToDate { get; set; }
+
+    public bool IsHasSettledTicket { get; set; }
+
+    public int TotalTicket { get; set; }
+
+    public int IsRunAutoAfterVoid { get; set; }
 }

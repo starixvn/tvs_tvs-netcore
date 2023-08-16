@@ -17,6 +17,7 @@ import { Tooltip } from '../components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../constants/config';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
+import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../models/copy-request-info.query';
 import { SportInfo } from '../models/event.model';
 import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
@@ -141,6 +142,10 @@ export class CommonService {
   async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<OddsInfo[]> {
     const url = 'api/BetTypes/GetOddsInfoSpecialBetTypes';
     return this.httpService.postJson(query, url);
+  }
+
+  async copyRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
+    return this.httpService.postJson(query, `api/ManageRequest/CopyRequestInfo`);
   }
 }
 

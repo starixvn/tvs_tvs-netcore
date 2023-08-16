@@ -21,7 +21,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
         public async Task Handler_ServiceExecute_ReturnSuccessfulResult(int filterBy, string filterByValue)
         {
             // Arrange
-            var copyRequestInfoModel = new CopyRequestInfoModel{ KickOffTime = new DateTime(2022,2,2,2,2,2),
+            var copyRequestInfoModel = new CopyRequestInfoModel{ GlobalShowTime = new DateTime(2022,2,2,2,2,2),
                 MatchId = 123,
                 RequestId = "456",
                 IssueTypeName = "IssueTypeName",

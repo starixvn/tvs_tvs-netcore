@@ -400,6 +400,7 @@ export class VoidOtherIssueComponent implements OnInit {
       subIssueTypeName: this.issue.subIssueTypeName,
       subIssueTypeNameCS: this.issue.subIssueTypeNameCS,
       issueTypeId: this.requestDetail.request.issueTypeId,
+      isHasSettledTicket: this.ticketsModel.isHasSettledTicket,
       voidFromTime: moment(new Date(this.ticketsModel.fromTime)).format('hh:mm:ss A'),
       voidToTime: moment(new Date(this.ticketsModel.toTime)).format('hh:mm:ss A'),
       voidFromDate: moment(new Date(this.ticketsModel.fromDate)).format('MM/DD/YYYY'),

@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -270,4 +271,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.mainEvent.isHighLightVarCheck = false;
   }
 
+  public getLogInfoDetail(): LogInfoDetail[] {
+    return [this.mainEvent.logInfoDetail];
+  }
 }

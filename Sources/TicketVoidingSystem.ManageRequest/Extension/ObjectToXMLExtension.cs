@@ -46,7 +46,7 @@ public static class ObjectToXMLExtension
         return $"{stringBuilder.ToString().Trim()}";
     }
 
-    public static string ToXml(this VoidDataXMLModel voidData)
+    public static string ToXml(this VoidDataXmlModel voidData)
     {
         var voidDataXml = $"<VoidData Reason='{SecurityElement.Escape(voidData.Reason)}' ReasonSC='{SecurityElement.Escape(voidData.ReasonSC)}'"
                           + $" ContentChineseTraditional='{SecurityElement.Escape(voidData.ContentChineseTraditional)}'"
@@ -59,6 +59,7 @@ public static class ObjectToXMLExtension
                           + $" DecidedBy='{SecurityElement.Escape(voidData.DecidedBy)}'"
                           + $" VoidFromTime='{voidData.VoidFromTime}' VoidToTime='{voidData.VoidToTime}'"
                           + $" VoidFromDate='{voidData.VoidFromDate}' VoidToDate='{voidData.VoidToDate}'"
+                          + $" IsHasSettledTicket='{voidData.IsHasSettledTicket}'"
                           + $" IsRunAutoAfterVoid='{false}' />";
 
         return voidDataXml;

@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
@@ -221,5 +222,9 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   changeVarCheckValue(isVarChecked: boolean): void {
     this.mainEvent.isCheckedVar = isVarChecked;
     this.mainEvent.isHighLightVarCheck = false;
+  }
+
+  public getLogInfoDetail(): LogInfoDetail[] {
+    return [this.mainEvent.logInfoDetail];
   }
 }
