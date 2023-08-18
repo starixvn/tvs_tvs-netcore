@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;

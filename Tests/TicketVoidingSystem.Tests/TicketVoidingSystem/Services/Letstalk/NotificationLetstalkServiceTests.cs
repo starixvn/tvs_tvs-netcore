@@ -1,15 +1,16 @@
-﻿using Xunit;
-using NSubstitute;
-using TicketVoidingSystem.Services.Letstalk;
-using Fanex.LetstalkService.Core.Models;
-using System.Threading.Tasks;
-using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
-using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.LetstalkService.Core.Models;
+using NSubstitute;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services.Letstalk;
+using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
+using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
+using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
+using Xunit;
 using LetstalkModel = Fanex.LetstalkService.Core.Models.LetstalkModel;
-using System;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk;
 
@@ -17,13 +18,15 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
 {
     private readonly GroupVoidSettledBetService groupVoidSettledBetService;
     private readonly GroupTicketListingService groupTicketListingService;
+    private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
     private readonly NotificationLetstalkServiceImp service;
 
     public NotificationLetstalkServiceTests()
     {
         groupVoidSettledBetService = Substitute.For<GroupVoidSettledBetService>();
         groupTicketListingService = Substitute.For<GroupTicketListingService>();
-        service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService);
+        groupAbnormalBetRequestService = Substitute.For<GroupAbnormalBetRequestService>();
+        service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService, groupAbnormalBetRequestService);
     }
 
     [Fact]
@@ -55,14 +58,13 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
         _ = await service.SendToGroupTicketListing(content, attachment);
 
         // Assert
-        await groupTicketListingService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), content, attachment);
+        await groupTicketListingService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), attachment);
     }
 
     [Fact]
     public async Task SendToGroupAbnormalBetRequest_ValidRequest_ReturnNotImplementedException()
     {
         // Arrange
-        var model = new LetstalkModel();
         var attachment = new LetstalkAttachment();
         var expected = new NotImplementedException();
 
@@ -70,7 +72,7 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
         // Assert
         try
         {
-            _ = await service.SendToGroupAbnormalBetRequest(model, attachment);
+            _ = await service.SendToGroupAbnormalBetRequest("", "", attachment);
         }
         catch (Exception e)
         {

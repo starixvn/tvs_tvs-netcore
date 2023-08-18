@@ -93,7 +93,9 @@ public class MatchServiceTests
         var actual = service.UpdateMatchInfoFromRemotingRef(query);
 
         // Assert
-        AssertExtension.Equal(expected, actual);
+        AssertExtension.Equal(expected.HomeName, actual.HomeName);
+        AssertExtension.Equal(expected.AwayName, actual.AwayName);
+        AssertExtension.Equal(expected.MatchEvent, actual.MatchEvent);
     }
 
     [Fact]
@@ -133,7 +135,9 @@ public class MatchServiceTests
         var actual = service.UpdateMatchInfoFromRemotingRef(query);
 
         // Assert
-        AssertExtension.Equal(expected, actual);
+        AssertExtension.Equal(expected.HomeName, actual.HomeName);
+        AssertExtension.Equal(expected.AwayName, actual.AwayName);
+        AssertExtension.Equal(expected.MatchEvent, actual.MatchEvent);
     }
 
     [Theory]

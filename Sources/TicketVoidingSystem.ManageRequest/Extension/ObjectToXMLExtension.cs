@@ -95,8 +95,8 @@ public static class ObjectToXMLExtension
                        + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
                        + $"FilterBy='{model.FilterBy}' "
                        + $"IsCheckedVar='{model.IsCheckedVar}' "
-                       + $"MinTime='{model.LogInfoDetail.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
-                       + $"MinType='{model.LogInfoDetail.HighlightAcceptType}' />";
+                       + $"MinTime='{model.LogInfoDetail?.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' />";
 
             stringBuilder.AppendLine(line);
         }

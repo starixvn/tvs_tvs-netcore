@@ -10,11 +10,11 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 public class GetVoidResultCacheHandlerTests
 {
     private readonly GetVoidResultCacheHandler handler;
-    private readonly VoidResultCacheService voidResultCacheService;
+    private readonly ResultCacheService voidResultCacheService;
 
     public GetVoidResultCacheHandlerTests()
     {
-        voidResultCacheService = Substitute.For<VoidResultCacheService>();
+        voidResultCacheService = Substitute.For<ResultCacheService>();
         handler = new GetVoidResultCacheHandler(voidResultCacheService);
     }
 
@@ -28,6 +28,6 @@ public class GetVoidResultCacheHandlerTests
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await voidResultCacheService.Received(1).GetVoidResultCache(request.Guid);
+        await voidResultCacheService.Received(1).GetVoidResultsCache(request.Guid);
     }
 }

@@ -105,13 +105,13 @@ public class ObjectToXMLExtensionFacts
             "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' "
             + "LiveScores='1-1' SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' "
             + "FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' MatchId='123' SingleCount='1' "
-            + "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' /></root>";
+            + "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTime='' MinType='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
@@ -120,15 +120,15 @@ public class ObjectToXMLExtensionFacts
         var model = new WrongScoreInfoViewModel
         {
             WrongScore = "1-1",
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             ActualScore = "2-2",
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             ScoreId = 3,
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<WrongScoreInfoViewModel> { model };
@@ -148,13 +148,13 @@ public class ObjectToXMLExtensionFacts
             "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' "
             + "LiveScores='1-1' SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' "
             + "FilterToTransTime='' VoidFromTime='' VoidToTime='' MatchId='123' SingleCount='1' "
-            + "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' /></root>";
+            + "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTime='' MinType='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
@@ -163,12 +163,12 @@ public class ObjectToXMLExtensionFacts
         var model = new WrongScoreInfoViewModel
         {
             WrongScore = "1-1",
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             FilterToTransTime = null,
             LogInfoDetail = logInfoDetail,
             ActualScore = "2-2",
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             ScoreId = 3
         };
 
@@ -189,29 +189,29 @@ public class ObjectToXMLExtensionFacts
             "<root><r LiveHomeScore='' LiveAwayScore='' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' "
             + "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' "
             + "VoidFromTime='' VoidToTime='' MatchId='123' SingleCount='1' MainParlayCount='1' ActualScore='2-2' FilterBy='2' "
-            + "IsCheckedVar='' /></root>";
+            + "IsCheckedVar='' MinTime='2018-10-30 16:20:20.222' MinType='1' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
             MainParlayCount = 1,
-            HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             HighlightAcceptType = 1
         };
         var model = new WrongScoreInfoViewModel
         {
             WrongScore = "1-1",
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             ActualScore = "2-2",
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             ScoreId = 3,
             FilterBy = 2
         };
@@ -233,29 +233,29 @@ public class ObjectToXMLExtensionFacts
             "<root><r LiveHomeScore='' LiveAwayScore='' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' "
             + "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' "
             + "VoidFromTime='' VoidToTime='' MatchId='123' SingleCount='1' MainParlayCount='1' ActualScore='2-2' FilterBy='' "
-            + "IsCheckedVar='' /></root>";
+            + "IsCheckedVar='' MinTime='2018-10-30 16:20:20.222' MinType='1' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
             MainParlayCount = 1,
-            HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             HighlightAcceptType = 1
         };
         var model = new WrongScoreInfoViewModel
         {
             WrongScore = null,
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             ActualScore = "2-2",
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             ScoreId = 3
         };
 
@@ -276,16 +276,16 @@ public class ObjectToXMLExtensionFacts
             "<root><r LiveHomeScore='' LiveAwayScore='' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='' "
             + "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' "
             + "VoidFromTime='' VoidToTime='' MatchId='' SingleCount='' MainParlayCount='' ActualScore='2-2' FilterBy='2' "
-            + "IsCheckedVar='' /></root>";
+            + "IsCheckedVar='' MinTime='' MinType='' /></root>";
 
         var model = new WrongScoreInfoViewModel
         {
             WrongScore = "1-1",
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             ActualScore = "2-2",
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             ScoreId = 3,
             FilterBy = 2
         };
@@ -307,13 +307,13 @@ public class ObjectToXMLExtensionFacts
             "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' "
             + "SubIssueTypeId='0' LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' "
             + "FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' "
-            + "MainParlayCount='1' IsCheckedVar='' /></root>";
+            + "MainParlayCount='1' IsCheckedVar='' MinTime='' MinType='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
@@ -321,13 +321,13 @@ public class ObjectToXMLExtensionFacts
         };
         var model = new DangerAcceptedViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<DangerAcceptedViewModel> { model };
@@ -347,13 +347,13 @@ public class ObjectToXMLExtensionFacts
             "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' "
             + "SubIssueTypeId='0' LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' "
             + "FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='' VoidToTime='' SingleCount='1' "
-            + "MainParlayCount='1' IsCheckedVar='' /></root>";
+            + "MainParlayCount='1' IsCheckedVar='' MinTime='' MinType='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
@@ -361,11 +361,11 @@ public class ObjectToXMLExtensionFacts
         };
         var model = new DangerAcceptedViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<DangerAcceptedViewModel> { model };
@@ -385,15 +385,15 @@ public class ObjectToXMLExtensionFacts
             "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' "
             + "SubIssueTypeId='0' LiveScores='' FilterFromTransTime='2018-10-30 16:20:20.222' "
             + "FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='' VoidToTime='' SingleCount='' "
-            + "MainParlayCount='' IsCheckedVar='' /></root>";
+            + "MainParlayCount='' IsCheckedVar='' MinTime='' MinType='' /></root>";
 
         var model = new DangerAcceptedViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = null,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<DangerAcceptedViewModel> { model };
@@ -458,8 +458,8 @@ public class ObjectToXMLExtensionFacts
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
@@ -467,11 +467,11 @@ public class ObjectToXMLExtensionFacts
         };
         var model = new WrongHdpViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<WrongHdpViewModel> { model };
@@ -496,11 +496,11 @@ public class ObjectToXMLExtensionFacts
 
         var model = new WrongHdpViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = null,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<WrongHdpViewModel> { model };
@@ -516,15 +516,19 @@ public class ObjectToXMLExtensionFacts
     public void ToEventWrongOuXml_HasData_ReturnXML()
     {
         // Arrange
-        const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' "
-                                + "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' SingleCount='1' "
-                                + "MainParlayCount='1' VoidToTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' ActualMarket='' WrongMarket='' /></root>";
+        const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' " +
+                                "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' " +
+                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' LiveGameEarlySingleCount ='0' LiveGameEarlyCashOutCount='0' " +
+                                "LiveGameEarlySettleCount='0' LiveGameEarlyInstantlySettleCount='0' PoolHouseSingleCount='0' " +
+                                "PoolHouseCashOutCount='0' PoolHouseMainParlayCount='0' PoolHouseInstantlySettleCount='0' " +
+                                "PoolHouseCheckedBetTypes='' VoidToTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' " +
+                                "LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
             LiveScores = "1-1",
-            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            VoidFromTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            VoidToTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             SingleCount = 1,
             CashOutCount = 1,
             InstantlySettleCount = 1,
@@ -532,11 +536,11 @@ public class ObjectToXMLExtensionFacts
         };
         var model = new WrongOuViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = logInfoDetail,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<WrongOuViewModel> { model };
@@ -552,17 +556,22 @@ public class ObjectToXMLExtensionFacts
     public void ToEventWrongOuXml_HasLogInfoDetailIsNull_ReturnExpected()
     {
         // Arrange
-        const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' "
-                                + "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' SingleCount='' "
-                                + "MainParlayCount='' VoidToTime='' VoidFromTime='' ActualMarket='' WrongMarket='' /></root>";
+        const string expected =
+            "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' " +
+            "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' " +
+            "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' LiveGameEarlySingleCount ='' LiveGameEarlyCashOutCount='' " +
+            "LiveGameEarlySettleCount='' LiveGameEarlyInstantlySettleCount='' PoolHouseSingleCount='' " +
+            "PoolHouseCashOutCount='' PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' " +
+            "PoolHouseCheckedBetTypes='' VoidToTime='' VoidFromTime='' LiveIndicator='0' ActualMarket='' " +
+            "WrongMarket='' /></root>";
 
         var model = new WrongOuViewModel
         {
-            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
-            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222),
+            FilterFromTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            FilterToTransTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
             LogInfoDetail = null,
             MatchId = 123,
-            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222)
+            EventDate = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
 
         var models = new List<WrongOuViewModel> { model };
@@ -583,8 +592,8 @@ public class ObjectToXMLExtensionFacts
             Usernames = "a",
             ProductIds = "p1",
             StatusIds = "1",
-            FromDate = new DateTime(2018, 10, 30, 16, 20, 20),
-            ToDate = new DateTime(2018, 10, 30, 16, 20, 20)
+            FromDate = new DateTime(2018, 10, 30, 16, 20, 20, DateTimeKind.Local),
+            ToDate = new DateTime(2018, 10, 30, 16, 20, 20, DateTimeKind.Local)
         };
         const string expected = "<root><r Usernames='a' "
                                 + "ProductIds='p1' "
@@ -661,32 +670,6 @@ public class ObjectToXMLExtensionFacts
     }
 
     [Fact]
-    public void GetKickOffInfoXml_HasRequest_ReturnExpected()
-    {
-        // Arrange
-        const string expected = "<root><r MatchId='1' KickOffTime='10/30/2018 16:20:20'/></root>";
-
-        // Act
-        var actual = ObjectToXMLExtension.GetKickOffInfoXml(1, new DateTime(2018, 10, 30, 16, 20, 20));
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void GetKickOffInfoXml_NoHasKickOffTime_ReturnExpected()
-    {
-        // Arrange
-        const string expected = "<root><r MatchId='1' KickOffTime=''/></root>";
-
-        // Act
-        var actual = ObjectToXMLExtension.GetKickOffInfoXml(1, null);
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
     public void ToWrongOddsInfoXml_HasNotRequest_ReturnEmpty()
     {
         // Arrange
@@ -734,8 +717,9 @@ public class ObjectToXMLExtensionFacts
         // Arrange
         var models = new List<WrongOuViewModel> { new() { MatchId = 1 } };
         const string expected =
-            "<root><r MatchId='1' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' "
-            + "SubIssueTypeId='0' WrongMarket='' /></root>";
+            "<root><r MatchId='1' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
+            "SubIssueTypeId='0' IsMainMatch='False' LiveIndicator='0' PoolHouseCheckedBetTypes='' IsLinkGroup1X2='False' " +
+            "IsLinkGroupAIO ='False' WrongMarket='' /></root>";
 
         // Act
         var actual = models.ToWrongOuInfoXml();
@@ -762,10 +746,9 @@ public class ObjectToXMLExtensionFacts
         // Arrange
         var models = new List<WrongHdpViewModel> { new() { MatchId = 1 } };
         const string expected =
-                "<root><r MatchId='1' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' "
-                + "IsMainMatch='False' PoolHouseCheckedBetTypes='' SubIssueTypeId='0' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' "
-                + "IsShowPHOnly ='False' LiveIndicator='0' HomeFavorite='' AwayFavorite='' HdpValue='' /></root>"
-            ;
+                "<root><r MatchId='1' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
+                "IsMainMatch='False' PoolHouseCheckedBetTypes='' SubIssueTypeId='0' IsLinkGroup1X2='False' " +
+                "IsLinkGroupAIO ='False' LiveIndicator='0' HomeFavorite='' AwayFavorite='' HdpValue='' /></root>";
 
         // Act
         var actual = models.ToWrongHdpInfoXml();
@@ -865,7 +848,7 @@ public class ObjectToXMLExtensionFacts
     public void ToReducedOverInfoXml_HasReducedOverViewModelIsArrayEmpty_ReturnStringEmpty()
     {
         // Arrange
-         var models = new List<ReducedOverViewModel>();
+        var models = new List<ReducedOverViewModel>();
 
         // Act
         var actual = models.ToReducedOverInfoXml();
@@ -878,7 +861,7 @@ public class ObjectToXMLExtensionFacts
     public void ToReducedOverInfoXml_ReducedOverViewModelHasData_ReturnStringExpected()
     {
         // Arrange
-        var models = new List<ReducedOverViewModel>{ new ()};
+        var models = new List<ReducedOverViewModel> { new() };
         const string expected = "<root><r MatchId='0' SubIssueTypeId='0' BetTypeIds='' WicketOver='' FilterWicketOver='' " +
                                 "PlayerIds='' Runs='' NonLive='False' Live='False' /></root>";
 

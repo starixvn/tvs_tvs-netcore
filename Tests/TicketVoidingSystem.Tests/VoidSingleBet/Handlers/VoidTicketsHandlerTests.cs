@@ -27,8 +27,8 @@ public class VoidTicketsHandlerTests
         var voidTicketsService = Substitute.For<VoidTicketsService>();
         var netPositionForCricketService = Substitute.For<NetPositionForCricketService>();
         var afterVoidService = Substitute.For<AfterVoidService>();
-        var voidResultCacheService = Substitute.For<VoidResultCacheService>();
-        voidResultCacheService.IsExistVoidResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(false);
+        var voidResultCacheService = Substitute.For<ResultCacheService>();
+        voidResultCacheService.IsExistResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(false);
         netPositionForCricketService.Update(default!).ReturnsForAnyArgs(("", new List<BetId>()));
         var handler = new VoidTicketsHandler(
             voidResultCacheService,
@@ -57,8 +57,8 @@ public class VoidTicketsHandlerTests
         var voidTicketsService = Substitute.For<VoidTicketsService>();
         var netPositionForCricketService = Substitute.For<NetPositionForCricketService>();
         var afterVoidService = Substitute.For<AfterVoidService>();
-        var voidResultCacheService = Substitute.For<VoidResultCacheService>();
-        voidResultCacheService.IsExistVoidResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(false);
+        var voidResultCacheService = Substitute.For<ResultCacheService>();
+        voidResultCacheService.IsExistResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(false);
         netPositionForCricketService.Update(default!).ReturnsForAnyArgs(("", new List<BetId> { new() }));
         var handler = new VoidTicketsHandler(
             voidResultCacheService,
@@ -84,14 +84,14 @@ public class VoidTicketsHandlerTests
             TransIdCrickets = ticketCrickets,
             UserPassword = string.Empty
         };
-        var voidResultCacheService = Substitute.For<VoidResultCacheService>();
-        voidResultCacheService.IsExistVoidResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(true);
+        var voidResultCacheService = Substitute.For<ResultCacheService>();
+        voidResultCacheService.IsExistResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(true);
         var handler = new VoidTicketsHandler(voidResultCacheService, null!, null!, null!);
 
         // Act
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await voidResultCacheService.Received(0).SetVoidResultCache(Arg.Any<string>(), Arg.Any<List<Result>>());
+        await voidResultCacheService.Received(0).SetVoidResultsCache(Arg.Any<string>(), Arg.Any<List<Result>>());
     }
 }

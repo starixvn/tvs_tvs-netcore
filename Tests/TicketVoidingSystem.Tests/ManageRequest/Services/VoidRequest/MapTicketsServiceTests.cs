@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Models.Parameters;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using Xunit;
@@ -17,7 +18,7 @@ public class MapTicketsServiceTests
     public MapTicketsServiceTests()
     {
         betListCoreService = Substitute.For<BetListCoreService>();
-        service = new MapTicketsServiceImp(betListCoreService);
+        service = new(betListCoreService);
     }
 
     [Fact]
@@ -26,7 +27,7 @@ public class MapTicketsServiceTests
         // Arrange
         var ticket1 = new GetTicketModel
         {
-            TransDate = new DateTime(2022, 9, 5, 1, 1, 1),
+            TransDate = new(2022, 9, 5, 1, 1, 1),
             Status = "done",
             MainTransId = 1,
             SubTransId = 1,
@@ -39,7 +40,7 @@ public class MapTicketsServiceTests
             FollowedId = 1,
             Status = TicketStatus.Running,
             IsMixParlay = true,
-            TransDate = new DateTime(2022, 9, 5, 1, 1, 1),
+            TransDate = new(2022, 9, 5, 1, 1, 1),
             MainTransId = 2,
             SubTransId = 1,
             TransId = 1
@@ -52,12 +53,14 @@ public class MapTicketsServiceTests
         };
         var query = new GroupTicketsMappingParameters
         {
-            Group = group, VoidPermission = new VoidPermission(),
-            Match = new Match(), IssueTypeId = 1
+            Group = group,
+            VoidPermission = new(),
+            Match = new(),
+            IssueTypeId = 1
         };
 
-        var model1 = new TicketViewModel{ MainTransId = "1" };
-        var model2 = new TicketViewModel { MainTransId = "2"};
+        var model1 = new TicketViewModel { MainTransId = "1" };
+        var model2 = new TicketViewModel { MainTransId = "2" };
         betListCoreService.GetTicket(ticket1, Arg.Any<Match>(), Arg.Any<ChoiceType>(), 1)
             .Returns(model1);
         betListCoreService.GetTicket(ticket2, Arg.Any<Match>(), Arg.Any<ChoiceType>(), 1)
@@ -76,7 +79,6 @@ public class MapTicketsServiceTests
                 BetId = "1<br>(Follow: 1)", Value = "1", MainTransId = "2", WinLoss = "-", Score = "0 - 0", IsDisable = true,
                 Member = "<br>(Follow: 123)",
             }
-
         };
 
         var expected = new Group<TicketViewModel>

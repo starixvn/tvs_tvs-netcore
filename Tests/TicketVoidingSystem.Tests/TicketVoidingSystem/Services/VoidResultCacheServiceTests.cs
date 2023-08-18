@@ -10,12 +10,12 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
 public class VoidResultCacheServiceTests
 {
     private readonly ICache cacheService;
-    private readonly VoidResultCacheServiceImp service;
+    private readonly ResultCacheServiceImp service;
 
     public VoidResultCacheServiceTests()
     {
         cacheService = Substitute.For<ICache>();
-        service = new VoidResultCacheServiceImp(cacheService);
+        service = new ResultCacheServiceImp(cacheService);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class VoidResultCacheServiceTests
         // Arrange
 
         // Act
-        _ = service.IsExistVoidResult("key");
+        _ = service.IsExistResult("key");
 
         // Assert
         cacheService.Received(1).ContainAsync("key");
@@ -40,7 +40,7 @@ public class VoidResultCacheServiceTests
         cacheService.TryGetAsync<IList<Result>>("key").ReturnsForAnyArgs((isFound, results));
 
         // Act
-        _ = service.GetVoidResultCache("key");
+        _ = service.GetVoidResultsCache("key");
 
         // Assert
         cacheService.Received(1).TryGetAsync<IList<Result>>("key");
@@ -53,7 +53,7 @@ public class VoidResultCacheServiceTests
         var results = new List<Result>();
 
         // Act
-        _ = service.SetVoidResultCache("key", results);
+        _ = service.SetVoidResultsCache("key", results);
 
         // Assert
         cacheService.Received(1).SetAsync("key", results, Arg.Any<CacheItemOptions>());
