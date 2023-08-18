@@ -103,15 +103,15 @@ public class VoidTicketsServiceImp : VoidTicketsService
     private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
     {
         var criteria = mapper.Map<VoidTicketsCriteria>(query);
-        criteria.FromTransDate = query.FromTransDate.ZoneCanada();
-        criteria.ToTransDate = query.ToTransDate.ZoneCanada();
+        criteria.FromTransDate = query.FromTransDate?.ZoneCanada();
+        criteria.ToTransDate = query.ToTransDate?.ZoneCanada();
         criteria.Ip = sessionService.GetClientIp();
         criteria.LiveIndicator = query.EventType;
         criteria.SecondAcceptFlag = query.TicketType;
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
         criteria.UserPassword = query.UserPassword;
         criteria.UserId = sessionService.UserId;
-
+        
         return criteria;
     }
 }

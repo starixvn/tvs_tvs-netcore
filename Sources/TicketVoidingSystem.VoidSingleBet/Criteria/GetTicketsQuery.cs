@@ -36,6 +36,10 @@ public class CommonQuery
     public string? VoidFromTime { get; set; }
 
     public string? VoidToTime { get; set; }
+
+    public string SelectionSubParlays { get; set; }
+
+    public bool IsCheckTime { get; set; }
 }
 
 public class GetTicketsQuery : CommonQuery

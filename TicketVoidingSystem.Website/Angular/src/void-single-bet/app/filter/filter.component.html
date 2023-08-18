@@ -34,8 +34,12 @@
         </div>
         <div class="line-2 mt-2">
           <div class="time-type d-flex">
-            <label class="col-form-label col-form-label-sm font-weight-bold mr-1">(GMT + 8)</label>
-            <label class="col-form-label col-form-label-sm font-weight-bold trans-time d-flex">
+            <div class="d-flex align-items-center">
+              <label class="col-form-label col-form-label-sm font-weight-bold">
+                <input class="checkbox-exclude-test mr-1" type="checkbox" [(ngModel)]="isCheckTime" />(GMT + 8)
+              </label>
+            </div>
+            <label class="col-form-label font-weight-bold col-form-label-sm trans-time d-flex">
               <input class="mr-1" type="radio" [(ngModel)]="timeType" [value]="0" />
               Trans Time
             </label>
@@ -47,10 +51,10 @@
           </div>
           <div class="date-time">
             <span class="from-date-time-text mr-1">From</span>
-            <date-full-time-new #fromTimeComponent class="from-date-time mr-2" [(dateTime)]="fromDateTime">
+            <date-full-time-new #fromTimeComponent class="from-date-time mr-2" [(dateTime)]="fromDateTime" [isDisabled]="!isCheckTime">
             </date-full-time-new>
             <span class="to-date-time-text mr-1">To</span>
-            <date-full-time-new #toTimeComponent class="to-date-time mr-2" [(dateTime)]="toDateTime">
+            <date-full-time-new #toTimeComponent class="to-date-time mr-2" [(dateTime)]="toDateTime" [isDisabled]="!isCheckTime">
             </date-full-time-new>
           </div>
           <div class="control-bet">
@@ -59,6 +63,11 @@
               <input type="radio" name="bet" [attr.value]="item" [attr.disabled]="null" [checked]="item === bet.value"
                 (change)="changeControlBet(item)" />
               {{item}}
+            </label>
+            <label class="group-bettypes-handler" *ngIf="isShowSelectionSubParlay()">
+              Selection
+              <multiple-select class="multiple-selection ml-1" style="border-color: black"
+                [multipleSelect]="comboParlay"></multiple-select>
             </label>
           </div>
         </div>

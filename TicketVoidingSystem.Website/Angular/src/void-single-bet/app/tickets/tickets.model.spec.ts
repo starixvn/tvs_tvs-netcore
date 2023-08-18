@@ -1,6 +1,8 @@
 ﻿import { GroupModel } from './group.model';
 import { TicketModel } from './ticket.model';
 import { TicketsModel } from './tickets.model';
+import { BetID } from '../../../utility/models/bet-id.model';
+import { SiteDbGroupModel } from '../../../utility/models/site-db-group.model';
 
 describe('Tickets - TicketsModel', () => {
     enum IconCheckBox {
@@ -40,17 +42,21 @@ describe('Tickets - TicketsModel', () => {
 
     it('Get ticket cricket', () => {
         // Arrange
-        const expectedResult = '1000';
-        // Action and Assert
+        // Action
         const actualResult = ticketsModel.getTicketCricket();
-        expect(actualResult).toBe(expectedResult);
+
+        //Assert
+        expect(actualResult[0].transId).toBe('1000');
     });
 
     it('Get ticket sold', () => {
         // Arrange
         const expectedResult = '1000,1009';
-        // Action and Assert
+        
+        // Action 
         const actualResult = ticketsModel.getTicketSold();
+
+        //Assert
         expect(actualResult).toBe(expectedResult);
     });
 
