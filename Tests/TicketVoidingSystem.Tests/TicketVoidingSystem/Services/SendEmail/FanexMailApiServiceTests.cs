@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using BetListNPOI.XWPF.UserModel;
+using Fanex.MailDeliver.Model;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;

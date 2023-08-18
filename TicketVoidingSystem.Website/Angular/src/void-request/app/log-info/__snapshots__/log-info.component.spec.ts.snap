@@ -9,7 +9,7 @@ exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
       class="row no-gutters mt-2"
     >
       <label
-        class="col-form-label log-info-label"
+        class="col-form-label col-form-label-sm log-info-label"
       >
         Log Info 
       </label>

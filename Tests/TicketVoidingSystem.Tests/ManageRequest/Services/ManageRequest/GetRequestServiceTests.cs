@@ -424,7 +424,6 @@ public class GetRequestServiceTests
         Assert.Null(actualResult.Event);
     }
 
-
     [Fact]
     public async Task GetRequest_IsReducedOver_ReturnExpectedViewModel()
     {
@@ -499,5 +498,49 @@ public class GetRequestServiceTests
         // Assert
 
         Assert.Equal(expected, dangerAcceptedModel.Name);
+    }
+
+    [Fact]
+    public async Task GetRequest_DuplicateTickets_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData =
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+                new List<RequestDetailModel>
+                {
+                    new()
+                    {
+                        IssueTypeId = IssueTypeConstant.DuplicateTickets, SportType = 1,
+                        OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                    }
+                },
+                new List<RequestEventModel> { new() { MatchId = 12345 } },
+                new List<Message> { new() }
+            );
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.DuplicateTickets,
+                SportType = 1,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+            },
+            Event = null,
+            Messages = new List<Message> { new() },
+            DuplicateTicketsModel = new DuplicateTicketsViewModel()
+        };
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+            .ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1)
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+                Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
+        Assert.Null(actualResult.Event);
     }
 }

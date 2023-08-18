@@ -11,11 +11,6 @@ exports[`EventAbnormalBetComponent #EventDuplicateTicketsComponent init should m
         style="max-width: 1065px;"
       >
         <div
-          class="mr-4"
-        >
-          Bet ID(s)
-        </div>
-        <div
           class="form-check form-check-inline"
         >
           <input
@@ -47,16 +42,39 @@ exports[`EventAbnormalBetComponent #EventDuplicateTicketsComponent init should m
             class="form-check-label"
             for="inlineRadio-1"
           >
-            Mix Parlay ticket
+            Parlay ticket
           </label>
         </div>
         <div
           class="flex-grow-1"
         />
       </div>
-      <bet-ids />
+      <div
+        class="mb-3"
+      >
+        <div
+          class="mr-4 mb-1"
+        >
+          Original BetID(s)
+        </div>
+        <textarea
+          class="form-control form-control-sm org-transId ng-untouched ng-pristine ng-valid"
+          rows="3"
+          style="max-width: 1065px;"
+        >
+        </textarea>
+      </div>
+      <div>
+        <div
+          class="mr-4 mb-1"
+        >
+          Duplicated BetID(s)
+        </div>
+        <bet-ids />
+      </div>
     </div>
     <league-event-abnormal />
+    <tooltip />
   </event-duplicate-tickets>
 </ng-component>
 `;

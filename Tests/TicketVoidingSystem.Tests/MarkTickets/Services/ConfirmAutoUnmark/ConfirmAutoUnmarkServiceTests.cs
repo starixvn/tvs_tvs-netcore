@@ -9,12 +9,15 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Services.ConfirmAutoUnmark;
 
-public class ConfirmAutoUnmarkServiceTests: IClassFixture<RemotingRefFixture>
+public class ConfirmAutoUnmarkServiceTests : IClassFixture<RemotingRefFixture>, IClassFixture<AppSettingFixture>
 {
-    [Fact]
-    public async Task GetDataForConfirmAutoUnmark_RepositoryHasCalled()
+    [Theory]
+    [InlineData("1")]
+    [InlineData(null)]
+    public async Task GetDataForConfirmAutoUnmark_RepositoryHasCalled(string matchId)
     {
         // Arrange
+        var query = new GetDataForConfirmAutoUnmarkQuery { MatchId = matchId };
         var repository = Substitute.For<IDynamicRepository>();
         repository.GetAsync<string>(default)
             .ReturnsForAnyArgs("");
@@ -24,10 +27,10 @@ public class ConfirmAutoUnmarkServiceTests: IClassFixture<RemotingRefFixture>
         var service = new ConfirmAutoUnmarkServiceImp(repository);
 
         // Act
-        var actual = await service.GetDataForConfirmAutoUnmark(new GetDataForConfirmAutoUnmarkQuery());
+        var actual = await service.GetDataForConfirmAutoUnmark(query);
 
         // Assert
-        
+
         await repository.Received().GetAsync<string>(Arg.Any<GetTransInfoForAutoUnmarkCriteria>());
         await repository.Received().FetchAsync<ConfirmAutoUnmarkModel>(Arg.Any<GetDataForConfirmAutoUnmarkCriteria>());
         Assert.NotNull(actual);

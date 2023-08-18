@@ -100,24 +100,29 @@ public class ConvertRequestsServiceTests
 
     [Theory]
     [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-single'>abc</div>", "Single: abc")]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary total-parlay'>abc</div>", "Mix Parlay: abc")]
+    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary total-parlay'>abc</div>",
+        "Mix Parlay: abc")]
     [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary'>abc</div>", "")]
     [InlineData(IssueTypeConstant.DangerAccepted, "<div class='void-time'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.EarlyKickOffTime, "<div class='ko-time'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.WrongScore, "<div class='void-wrong-score'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.ArchivedTicket,
-        "<div class='text-primary total-single'>abc</div><div class='text-primary total-parlay'>abc</div>", "Single: abc, Parlay: abc")]
+        "<div class='text-primary total-single'>abc</div><div class='text-primary total-parlay'>abc</div>",
+        "Single: abc, Parlay: abc")]
     [InlineData(IssueTypeConstant.AbnormalAccount,
-        "<div class='void-time'>abc</div><div class='text-primary total-account'>abc</div>", "abc\r\nNo. of Account: abc")]
+        "<div class='void-time'></div><div class='text-primary total-account'>abc</div>", "No. of Account: abc")]
     [InlineData(IssueTypeConstant.ReducedOver, "<div class='text-primary total-single'>abc</div>", "")]
+    [InlineData(IssueTypeConstant.DuplicateTickets, "<div class='text-primary total-single'>abc</div>", "Single: abc")]
+    [InlineData(IssueTypeConstant.DuplicateTickets, "<div class='text-primary total-parlay'>abc</div>", "Parlay: abc")]
+    [InlineData(IssueTypeConstant.DuplicateTickets, "<div>abc</div>", "")]
     public void GetDescription_ReturnsExpectedDescription(int issueId, string html, string description)
     {
         // Arrange
         // Act
-        var actrue = convertRequestsServiceImp.GetDescription(issueId, html);
+        var result = convertRequestsServiceImp.GetDescription(issueId, html);
 
         // Assert
-        Assert.Equal(description, actrue);
+        Assert.Equal(description, result);
     }
 
     [Fact]
@@ -128,10 +133,10 @@ public class ConvertRequestsServiceTests
         const string html = "Some HTML";
 
         // Act
-        var actrue = convertRequestsServiceImp.GetDescription(issueId, html);
+        var result = convertRequestsServiceImp.GetDescription(issueId, html);
 
         // Assert
-        Assert.Equal(string.Empty, actrue);
+        Assert.Equal(string.Empty, result);
     }
 
     [Fact]
@@ -289,7 +294,8 @@ public class ConvertRequestsServiceTests
     public void GetLeague_ValidHtml_ReturnsFirstLeague()
     {
         // Arrange
-        const string html = "<div><p class='league text-uppercase'>Premier League</p><p class='league text-uppercase'>La Lig</p></div>";
+        const string html =
+            "<div><p class='league text-uppercase'>Premier League</p><p class='league text-uppercase'>La Lig</p></div>";
 
         // Act
         var result = convertRequestsServiceImp.GetLeague(html);

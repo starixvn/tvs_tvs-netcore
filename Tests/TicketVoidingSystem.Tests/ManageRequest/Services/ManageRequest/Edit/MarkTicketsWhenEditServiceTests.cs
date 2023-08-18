@@ -1,0 +1,40 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using NSubstitute;
+using TicketVoidingSystem.ManageRequest.Constants;
+using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
+using TicketVoidingSystem.Models;
+using Xunit;
+
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
+
+public class MarkTicketsWhenEditServiceTests
+{
+    private readonly MarkTicketsService markTicketsService;
+    private readonly MarkTicketsWhenEditServiceImp service;
+
+    public MarkTicketsWhenEditServiceTests()
+    {
+        markTicketsService = Substitute.For<MarkTicketsService>();
+        service = new MarkTicketsWhenEditServiceImp(markTicketsService);
+    }
+
+    [Fact]
+    public async Task Execute_ValidData_ReturnTransInfo()
+    {
+        // Arrange
+        var query = new EditRequestQuery { MarkTransIds = "1", IssueTypeId = 1, UnMarkTransIds = "1" };
+        var results = new List<Result>();
+        markTicketsService
+            .MarkTicketsInTVS(Arg.Any<string>(), query.IssueTypeId, MarkTypeConstant.ExecuteMarkTickets)
+            .ReturnsForAnyArgs(results);
+
+        // Act
+        var actual = await service.Execute(query);
+
+        // Assert
+        AssertExtension.Equal(results, actual);
+    }
+}

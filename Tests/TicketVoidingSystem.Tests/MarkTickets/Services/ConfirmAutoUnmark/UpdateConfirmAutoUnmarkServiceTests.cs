@@ -46,10 +46,13 @@ public class UpdateConfirmAutoUnmarkServiceTests : IClassFixture<RemotingRefFixt
         Assert.NotNull(actual);
     }
 
-    [Fact]
-    public async Task UpdateConfirmAutoUnmark_RepositoryHasCalled()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(null)]
+    public async Task UpdateConfirmAutoUnmark_RepositoryHasCalled(int? childMatchId)
     {
         // Arrange
+        var query = new UpdateConfirmAutoUnmarkQuery { ChildMatchId = childMatchId };
         var repository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
         var combineValidationService = Substitute.For<CombineValidationService>();
@@ -60,10 +63,11 @@ public class UpdateConfirmAutoUnmarkServiceTests : IClassFixture<RemotingRefFixt
         var service = new UpdateConfirmAutoUnmarkServiceImp(repository, sessionService, combineValidationService);
 
         // Act
-        var actual = await service.UpdateConfirmAutoUnmark(new UpdateConfirmAutoUnmarkQuery(), new List<BetId>());
+        var actual = await service.UpdateConfirmAutoUnmark(query, new List<BetId>());
 
         // Assert
-        await repository.Received().FetchAsync<UpdateConfirmAutoUnmarkValidation>(Arg.Any<UpdateConfirmAutoUnmarkCriteria>());
+        await repository.Received()
+            .FetchAsync<UpdateConfirmAutoUnmarkValidation>(Arg.Any<UpdateConfirmAutoUnmarkCriteria>());
         Assert.NotNull(actual);
     }
 }

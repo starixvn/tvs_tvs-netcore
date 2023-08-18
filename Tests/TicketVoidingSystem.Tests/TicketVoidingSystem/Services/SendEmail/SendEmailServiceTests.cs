@@ -38,7 +38,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail
             var tickets = new List<TicketEmailModel>();
             var expectedResults = new List<Result>();
 
-            sitesEmailService.GetSitesByCategory(Arg.Any<bool>()).Returns(new List<SiteEmail>());
+            sitesEmailService.GetSitesByCategory(Arg.Any<int>()).Returns(new List<SiteEmail>());
 
             // Act
             var results = await service.SendEmail(model, tickets, true);

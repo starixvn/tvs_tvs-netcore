@@ -36,7 +36,7 @@ exports[`LogInfoWrongHdpComponent LogInfoWrongHdpComponent init should match sna
           >
             <i
               aria-hidden="true"
-              class="fa fa-trash-o delete-event-icon"
+              class="fa-solid fa-trash-can fa-sm delete-event-icon"
             />
           </div>
         </div>

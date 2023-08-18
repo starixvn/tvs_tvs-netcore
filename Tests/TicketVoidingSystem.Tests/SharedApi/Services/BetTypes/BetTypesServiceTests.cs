@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NSubstitute;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
@@ -38,11 +39,11 @@ public class BetTypesServiceTests
     }
 
     [Fact]
-    public async Task GetGroupBetTypes_BetTypesIsEmpty_ExpectedValue()
+    public async Task GetGroupBetTypes_ResultIsSuccessful_ExpectedValue()
     {
         // Arrange
         var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "" };
-        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() } };
+        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() }, Result  = new Result{ ErrorCode  = 0 } };
         var expectedResult = new GroupBetTypesViewModel
         {
             GroupBetTypes = new List<GroupBetTypeModel> { new() { BetTypes = new List<BetTypeModel> { new() } } }
@@ -56,6 +57,38 @@ public class BetTypesServiceTests
 
         // Assert
         AssertExtension.Equal(expectedResult.GroupBetTypes, result.GroupBetTypes);
+    }
+
+    [Fact]
+    public async Task GetGroupBetTypes_ResultIsNotSuccessful_ExpectedValue()
+    {
+        // Arrange
+        var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "" };
+        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel>
+        {
+            new(){ GroupName  ="a", Id  = "1"},
+            new(){ GroupName  ="a", Id  = "2"},
+            new(){ GroupName  ="b", Id  = "3"},
+            new(){ GroupName  ="b", Id  = "4"}
+        }, Result = new Result { ErrorCode = 1 } };
+        var expectedResult = new GroupBetTypesViewModel
+        {
+            Result = betTypes.Result,
+            GroupBetTypes = new List<GroupBetTypeModel> { new() { GroupName = "a", BetTypes = new List<BetTypeModel> { new(){ GroupName  ="a", Id  = "1"},
+                new(){ GroupName  ="a", Id  = "2"}}},
+                new (){ GroupName = "b", BetTypes = new List<BetTypeModel> { new(){ GroupName  ="b", Id  = "3"},
+                    new(){ GroupName  ="b", Id  = "4"} }
+            } }
+        };
+
+        repository.GetBetTypes(Arg.Any<GetBetTypesCriteria>())
+            .ReturnsForAnyArgs(betTypes);
+
+        // Act
+        var result = await service.GetGroupBetTypes(query);
+
+        // Assert
+        AssertExtension.Equal(expectedResult, result);
     }
 
     [Fact]

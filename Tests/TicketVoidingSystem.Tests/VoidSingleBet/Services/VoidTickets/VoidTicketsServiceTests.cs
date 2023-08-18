@@ -66,7 +66,9 @@ public class VoidTicketsServiceTests
             UserPassword = string.Empty,
             Message = new Message(),
             Tickets = new List<BetId> { new() { SiteDbGroupId = 0 } },
-            TransIdCrickets = new List<BetId> { new(){ SiteDbGroupId  = 0} }
+            TransIdCrickets = new List<BetId> { new(){ SiteDbGroupId  = 0} },
+            FromTransDate = DateTime.Today,
+            ToTransDate = DateTime.Today
         };
         var validations = new List<VoidTicketValidation>
         {

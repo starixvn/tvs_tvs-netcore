@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
 using Xunit;
@@ -153,6 +154,74 @@ public class MailResultServiceTests
 
         // Act
         var result = service.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
+
+        // Assert
+        AssertExtension.Equal(expected, result);
+    }
+
+    [Fact]
+    public void CreateCombineResults_FromAfterVoidServiceIsFalse_ReturnExpected()
+    {
+        // Arrange
+        var model = new CombineMessageModel
+        {
+            Results = new List<Result>(), SuccessfulLicensees = new List<string>(), FailedLicensees = new List<string>()
+        };
+        var expected = new List<Result>
+        {
+            new()
+            {
+                ErrorCode = 0,
+                ErrorMsg = StringResource.VoidBetSuccessfully
+            },
+            new()
+            {
+                ErrorCode = 0,
+                ErrorMsg = string.Empty
+            },
+            new()
+            {
+                ErrorCode = ErrorCode.SendMessageOrEmailFail,
+                ErrorMsg = string.Empty
+            }
+        };
+
+        // Act
+        var result = service.CreateCombineResults(model, false);
+
+        // Assert
+        AssertExtension.Equal(expected, result);
+    }
+
+    [Fact]
+    public void CreateCombineResults_FromAfterVoidServiceIsTrue_ReturnExpected()
+    {
+        // Arrange
+        var model = new CombineMessageModel
+        {
+            Results = new List<Result>(), SuccessfulLicensees = new List<string> { "siteNameSuccess" },
+            FailedLicensees = new List<string> { "siteNameFails" }
+        };
+        const string siteNameSuccess = "siteNameSuccess";
+        const string siteNameFails = "siteNameFails";
+        var expected = new List<Result>
+        {
+            new()
+            {
+                ErrorCode = ErrorCode.LicenseeSuccess,
+                ErrorMsg = string.Format(StringResource.VoidBetSendMailSuccess, siteNameSuccess),
+                Data = siteNameSuccess
+            },
+            new()
+            {
+                ErrorCode = ErrorCode.LicenseeFail,
+                ErrorMsg = string.Format(StringResource.VoidBetSendMailFail, siteNameFails),
+                Data = siteNameFails
+            }
+        };
+
+        // Act
+        var result = service.CreateCombineResults(model, true);
 
         // Assert
         AssertExtension.Equal(expected, result);

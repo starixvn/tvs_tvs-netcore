@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { ModalType } from '../../../utility/components/modal/modal';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -31,6 +30,8 @@ import { AddRequestQuery } from './models/add-request.query';
 import { ChildMatchModel } from './models/related-event.model';
 import { AddRequestResultModel, RequestModel } from './models/request.model';
 import { OthersComponent } from './others/others.component';
+import { ModalType } from '../../../utility/components/modal/modal.model';
+import { AbnormalFilterBy } from '../../../utility/constants/config';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -216,6 +217,7 @@ describe('AddRequestComponent', () => {
     const addRequestStore = new AddRequestStore();
     addRequestStore.savingRequestStatus.subscribe = jest.fn();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
+    addRequestStore.getAbnormalFilterBySubject.subscribe = jest.fn();
     const component = new AddRequestComponent(null, null, null, addRequestStore);
     component.isEdit = true;
 
@@ -224,13 +226,41 @@ describe('AddRequestComponent', () => {
     expect(component.isEdit).toBeTruthy();
   });
 
+  it('#ngOnDestroy should be call unsubscribe', async () => {
+    const addRequestStore = new AddRequestStore();
+    const component = new AddRequestComponent(null, null, null, addRequestStore);
+    component.savingRequestSubscription = addRequestStore.savingRequestStatus.subscribe(status => {
+      component.isDisabledSaveButton = status;
+    });
+    component.checkValidSubIssueTypeInFilterSubscription = addRequestStore.getCheckValidSubIssueTypeInFilterSubject.subscribe(() => {
+      component.filterComponent.checkValidSubIssueType();
+    });
+    component.blockingUiSubscription = addRequestStore.blockingUiStatus.subscribe(status => {
+      component.isBlock = status;
+    });
+    component.abnormalFilterBySubscription = addRequestStore.getAbnormalFilterBySubject.subscribe(type => {
+      component.abnormalFilterBy = type;
+    });
+    component.savingRequestSubscription.unsubscribe = jest.fn();
+    component.checkValidSubIssueTypeInFilterSubscription.unsubscribe = jest.fn();
+    component.blockingUiSubscription.unsubscribe = jest.fn();
+    component.abnormalFilterBySubscription.unsubscribe = jest.fn();
+
+    component.ngOnDestroy();
+
+    expect(component.savingRequestSubscription.unsubscribe).toHaveBeenCalled();
+    expect(component.checkValidSubIssueTypeInFilterSubscription.unsubscribe).toHaveBeenCalled();
+    expect(component.blockingUiSubscription.unsubscribe).toHaveBeenCalled();
+    expect(component.abnormalFilterBySubscription.unsubscribe).toHaveBeenCalled();
+  });
+
   it('#saveRequestEarlyOrWrongKO should handle when validation EKO component false', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '8';
     const addRequestStore = new AddRequestStore();
     addRequestStore.savingRequestStatus.subscribe = jest.fn();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
-    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null);
+    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null, null);
     mockEventEarlyKickOffComponent.isValid = jest.fn().mockImplementation(() => false);
 
     const component = new AddRequestComponent(null, null, null, null);
@@ -243,7 +273,7 @@ describe('AddRequestComponent', () => {
   it('#saveRequestEarlyOrWrongKO should execute save request when validation is true and not have warning', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '8';
-    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null);
+    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null, null);
     mockEventEarlyKickOffComponent.isValid = jest.fn().mockImplementation(() => true);
     mockEventEarlyKickOffComponent.warningMessageList = [];
     const mockExecuteSaveRequestEarlyKO = jest.fn();
@@ -570,7 +600,7 @@ describe('AddRequestComponent', () => {
   it('#saveRequestEarlyOrWrongKO should execute save request when request voided', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '8';
-    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null);
+    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null, null);
     mockEventEarlyKickOffComponent.warningMessageList = [];
     const mockExecuteSaveRequestEarlyKO = jest.fn();
     const component = new AddRequestComponent(null, null, null, null);
@@ -586,7 +616,7 @@ describe('AddRequestComponent', () => {
   it('#saveRequestEarlyOrWrongKO should execute save request when validation is true and have warning', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '8';
-    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null);
+    const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null, null);
     mockEventEarlyKickOffComponent.isValid = jest.fn().mockImplementation(() => true);
     mockEventEarlyKickOffComponent.warningMessageList = ['abc'];
     const mockModalConfirm = jest.fn();
@@ -642,7 +672,7 @@ describe('AddRequestComponent', () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = IssueTypeConstant.RED_CARD;
     const mockSaveRequest = jest.fn();
-    const eventRedCardComponent = new EventRedCardComponent(null, null, null, null, null);
+    const eventRedCardComponent = new EventRedCardComponent(null, null, null, null, null, null, null);
     eventRedCardComponent.saveRequest = mockSaveRequest;
     const component = new AddRequestComponent(null, null, null, null);
     component.model = fakeRequestModel;

@@ -34,6 +34,7 @@ public class CheckBoxExtensionTests
     [InlineData(false, false, true, null, true)]
     [InlineData(false, false, false, null, true)]
     [InlineData(false, false, false, 1, true)]
+    [InlineData(false, false, true, 1, false)]
     public void IsDisable_ReturnsExpected_WithCheckCancelCashOutTicket
         (bool unSettled, bool instantlySettled, bool settled, int? statusWinLost, bool expected)
     {
@@ -109,6 +110,23 @@ public class CheckBoxExtensionTests
 
         // Assert
         Assert.False(result);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void IsDisable_WithBetTypesSaba_WithCheckInstantlySettled(bool instantlySettled)
+    {
+        // Arrange
+        var item = new GetTicketModel
+            { BetType = 228, SubStatus = "123", Status = "123", GroupName = "1", IsCashOut = false };
+        var permission = new VoidPermission { InstantlySettled = instantlySettled, Settled = false, UnSettled = false };
+
+        // Act
+        var result = item.IsDisable(permission, 0);
+
+        // Assert
+        Assert.Equal(!instantlySettled, result);
     }
 
     [Fact]

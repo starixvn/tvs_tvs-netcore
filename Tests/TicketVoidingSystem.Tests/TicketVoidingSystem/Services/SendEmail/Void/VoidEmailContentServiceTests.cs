@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Fanex.MailDeliver.Model;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.SendEmail;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
@@ -45,15 +48,15 @@ public class VoidEmailContentServiceTests
     }
 
     [Theory]
-    [InlineData(true, false, false, VoidType.Abnormal)]
-    [InlineData(false, true, false, VoidType.Abnormal)]
-    [InlineData(false, false, true, VoidType.Abnormal)]
-    [InlineData(false, false, false, VoidType.None)]
-    public async void Create_HasValidTicketAndSite_ReturnExpectedMailRecord(bool isLikelyAbnormalBet,
-        bool isAbnormalAccount, bool isFilterByUserName, VoidType voidType)
+    [InlineData(false, IssueTypeConstant.AbnormalBet)]
+    [InlineData(false, IssueTypeConstant.AbnormalAccount)]
+    [InlineData(true, IssueTypeConstant.DangerAccepted)]
+    [InlineData(false, IssueTypeConstant.RedCard)]
+    [InlineData(false, IssueTypeConstant.WrongScore)]
+    public async Task Create_HasValidTicketAndSite_ReturnExpectedMailRecord(bool isFilterByUserName, int issueTypeId)
     {
         // Arrange
-        var tickets = new List<TicketEmailModel> { new() { Recommend = 1 } };
+        var tickets = new List<TicketEmailModel> { new() { Recommend = 1 }, new() { IsCancelCashOut = true } };
         var site = new SiteEmail { ToList = "1;2;3" };
         var mailRecordResult = new MailRecordResult
         {
@@ -68,17 +71,16 @@ public class VoidEmailContentServiceTests
         };
         var mailVoidViewModel = new MailVoidViewModel
         {
-            IsLikelyAbnormalBet = isLikelyAbnormalBet,
-            IsAbnormalAccount = isAbnormalAccount,
+            IssueTypeId = issueTypeId,
             IsFilterByUserName = isFilterByUserName
         };
         repository.FetchAsync<GetOperatorInfoModel>(Arg.Any<GetOperatorInfoCriteria>())
             .ReturnsForAnyArgs(new List<GetOperatorInfoModel> { new() { AgentId = 1, OperatorID = "11" } });
         ticketService.GetTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), site, true)
             .ReturnsForAnyArgs(new TicketEmailViewModel());
-        subjectService.CreateVoid(Arg.Any<MailVoidViewModel>(), Arg.Any<IEnumerable<TicketEmailModel>>(),
+        subjectService.CreateVoid(Arg.Any<MailVoidViewModel>(), tickets.Select(x => x.Site),
             Arg.Any<SiteEmail>(), Arg.Any<EmailGroup>(), Arg.Any<VoidType>()).ReturnsForAnyArgs("subject");
-        templateEmailService.Create(Arg.Any<MailVoidViewModel>(), Arg.Any<IEnumerable<TicketEmailViewModel>>(),
+        templateEmailService.Create(Arg.Any<MailVoidViewModel>(),
                 Arg.Any<SiteEmail>(), "subject")
             .ReturnsForAnyArgs(mailRecordResult);
 
@@ -87,7 +89,7 @@ public class VoidEmailContentServiceTests
 
         // Assert
         AssertExtension.Equal(mailRecordResult.MailRecord, actual);
-        subjectService.Received(1).CreateVoid(Arg.Any<MailVoidViewModel>(), Arg.Any<IEnumerable<TicketEmailModel>>(),
-            Arg.Any<SiteEmail>(), Arg.Any<EmailGroup>(), voidType);
+        templateEmailService.Received(1).Create(Arg.Any<MailVoidViewModel>(),
+            Arg.Any<SiteEmail>(), "subject");
     }
 }

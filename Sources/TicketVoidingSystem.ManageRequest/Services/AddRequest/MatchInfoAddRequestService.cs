@@ -48,7 +48,7 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
         {
             160 => $"Lucky 3 Game No.{match.MatchCode}",
             161 => $"Number Game No.{match.MatchCode}",
-            164 => $"Happy 5 No .{match.MatchCode}",
+            164 => $"Happy 5 No.{match.MatchCode}",
             207 => $"{remotingRefService.GetBFName(match.HomeId)} - vs - {remotingRefService.GetBFName(match.AwayId)}",
             _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };

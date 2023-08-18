@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,7 +26,7 @@ public class GetTemplateSettingHandlerTests
     }
 
     [Fact]
-    public async Task Handle_Returns_TemplateSettingViewModel()
+    public async Task Handle_NoHasTemplateModel_ReturnExpected()
     {
         // Arrange
         var request = new GetTemplateSettingRequest();
@@ -59,7 +57,59 @@ public class GetTemplateSettingHandlerTests
         var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(expectedViewModel.MessageTemplates.ToList().Count, result.MessageTemplates.ToList().Count);
-        Assert.Equal(expectedViewModel.TemplateSettings.ToList().Count, result.TemplateSettings.ToList().Count);
+        AssertExtension.Equal(expectedViewModel, result);
+    }
+
+    [Fact]
+    public async Task Handle_HasTemplateModel_ReturnExpected()
+    {
+        // Arrange
+        var request = new GetTemplateSettingRequest();
+        var templateModels = new List<TemplateModel>
+        {
+            new()
+            {
+                JsonValue =
+                    "[{\"Name\":\"Actual Score\",\"MsgEnglish\":\"Actual Score (EN)\",\"MsgChineseTraditional\":\"Actual Score (TC)\"," +
+                    "\"MsgChineseSimplified\":\"Actual Score (SC)\",\"MsgChineseNewSimplified\":\"Actual Score (New SC)\"}]"
+            }
+        };
+        var templateSettings = new List<TemplateSetting> { new() };
+        var expectedViewModel = new TemplateSettingViewModel
+        {
+            MessageTemplates = new List<MessageTemplateViewModel>
+            {
+                new()
+                {
+                    InputTexts = new List<InputText>
+                    {
+                        new()
+                        {
+                            Name = "Actual Score",
+                            MsgEnglish = "Actual Score (EN)",
+                            MsgChineseTraditional = "Actual Score (TC)",
+                            MsgChineseSimplified = "Actual Score (SC)",
+                            MsgChineseNewSimplified = "Actual Score (New SC)"
+                        }
+                    }
+                }
+            },
+            TemplateSettings = templateSettings
+        };
+
+        repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>(), Arg.Any<CancellationToken>())
+            .Returns(templateModels);
+
+        repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>(), Arg.Any<CancellationToken>())
+            .Returns(templateSettings);
+
+        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>())
+            .Returns(new MessageTemplateViewModel());
+
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        AssertExtension.Equal(expectedViewModel, result);
     }
 }
