@@ -30,6 +30,7 @@ import { IssueTypes } from './filter/issue-types.model';
 import { AddRequestQuery } from './models/add-request.query';
 import { AddRequestResultModel, RequestModel } from './models/request.model';
 import { TransInfoAddRequestModel } from './models/trans-info-add-request.model';
+import { CopyRequestInfoService } from './services/copy-request-info.service';
 
 @Component({
   selector: 'add-request',
@@ -77,7 +78,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly addRequestApiService: AddRequestApiService,
     private readonly modalService: ModalService,
     private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore
+    private readonly addRequestStore: AddRequestStore,
+    private readonly copyRequestInfoService: CopyRequestInfoService
   ) { }
 
   ngOnInit(): void {
@@ -393,6 +395,33 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.isEdit && editingBy !== this.userId;
   }
   
+  async copyEmailRequestInfo() {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.matchId, this.model.others.operatorsList);
+    this.addRequestStore.changeBlockingUiStatus(false);
+    alert(`Request No.${this.requestId} has been copied to clipboard.`);
+  }
+
+  async copyLetstalkRequestInfo() {
+    let logInfoDetail = [];
+    if (this.isRedCard()) {
+      logInfoDetail = this.eventRedCardComponent.getLogInfoDetail();
+    }
+
+    if (this.isDangerAccepted()) {
+      logInfoDetail = this.eventDangerAcceptedComponent.getLogInfoDetail();
+    }
+
+    if (this.isWrongScoreIssueType()) {
+      logInfoDetail = this.eventWrongScoreComponent.getLogInfoDetail();
+    }
+
+    this.addRequestStore.changeBlockingUiStatus(true);
+    this.copyRequestInfoService.copyLetstalkRequestInfo(this.requestId, this.matchId, logInfoDetail, this.model.others.operatorsList);
+    this.addRequestStore.changeBlockingUiStatus(false);
+    alert(`Request No.${this.requestId} has been copied to clipboard.`);
+  }
+
   isShowOthersSimpleFields(): boolean {
     return this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds() || this.isReducedOver();
   }
@@ -405,6 +434,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   isShowSaveAndVoidButton(): boolean {
     return (this.model.filter.action === TVSRequestActionType.MANUAL_VOID_ID.toString())
       && this.isEarlyOrWrongKO();
+  }
+
+  isShowCopyInfoButton(): boolean {
+    return this.model.filter.isVoided && (this.isDangerAccepted() || this.isRedCard() || this.isWrongScoreIssueType());
   }
 
   isLikelyAbnormalBetIssueType(): boolean {

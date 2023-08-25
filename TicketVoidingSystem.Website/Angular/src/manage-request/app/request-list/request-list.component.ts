@@ -6,13 +6,14 @@ import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
+import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestStatus } from '../../../utility/models/signal-r.model';
 import { StaticService } from '../../../utility/services/static.service';
-import { CopyRequestInfoQuery } from '../models/copy-request-info.query';
 import { TicketListModal } from '../ticket-list/ticket-list.modal';
 import { CommonService } from './../../../utility/services/common.service';
 import { AppService } from './../app.service';
@@ -231,9 +232,25 @@ export class RequestListComponent implements OnInit, OnChanges {
       requestId: requestId,
       matchId: matchId
     };
-    const requestInfo = await this.appService.copyRequestInfo(query);
-    this.clipboardService.copyFromContent(requestInfo.info);
+    const requestInfo = await this.commonService.copyRequestInfo(query);
+    this.clipboardService.copyFromContent(this.createContentCopy(requestInfo));
     alert(`Request No.${requestId} has been copied to clipboard.`);
+  }
+
+  private createContentCopy(requestInfo: CopyRequestInfoResponse): string {
+    const momentGlobalShowTime = moment(requestInfo.globalShowTime);
+    const content = `K.O Time: ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`
+      + `League: ${requestInfo.leagueName}\n`
+      + `Match: ${requestInfo.matchEvent}\n`
+      + `Match ID: ${requestInfo.matchId}\n`
+      + `Request No: ${requestInfo.requestId}\n`
+      + `Issue Type: ${requestInfo.issueTypeName} - ${requestInfo.subIssueTypeName}\n`
+      + `VAR: ${requestInfo.isCheckedVar ? 'YES' : 'NO'}\n`
+      + `Provider: ${requestInfo.provider}\n`
+      + `Start Void Time: ${moment(requestInfo.startVoidTime)
+        .format(DateTimeFormat.TIME_FORMAT)} (${requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
+
+      return content;
   }
 
   public checkCanCopyRequestInfo(issueTypeId: number): boolean {

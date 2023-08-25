@@ -46,9 +46,9 @@ public class InsertVoidingHistoryServiceImp : InsertVoidingHistoryService
         return model.VoidingHistoryId;
     }
 
-    private VoidDataXMLModel CreateVoidDataXmlModel(InsertQueueQuery query)
+    private VoidDataXmlModel CreateVoidDataXmlModel(InsertQueueQuery query)
     {
-        var voidData = new VoidDataXMLModel
+        var voidData = new VoidDataXmlModel
         {
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
@@ -62,7 +62,8 @@ public class InsertVoidingHistoryServiceImp : InsertVoidingHistoryService
             IssueTypeId = query.IssueTypeId,
             SubIssueTypeId = query.SubIssueTypeId,
             SubIssueTypeName = query.SubIssueTypeName,
-            SubIssueTypeNameCS = query.SubIssueTypeNameCS
+            SubIssueTypeNameCS = query.SubIssueTypeNameCS,
+            IsHasSettledTicket = query.IsHasSettledTicket
         };
 
         if (query.Message != null)

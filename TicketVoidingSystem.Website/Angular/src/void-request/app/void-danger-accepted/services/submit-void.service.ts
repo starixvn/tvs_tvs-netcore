@@ -97,6 +97,7 @@ export class SubmitVoidService {
       subIssueTypeName: voidMatch.subIssueType.subIssueTypeName,
       subIssueTypeNameCS: voidMatch.subIssueType.subIssueTypeNameCS,
       issueTypeId: requestDetail.request.issueTypeId,
+      isHasSettledTicket: voidMatch.voidTicketsMini.isHasSettledTicket,
       voidFromTime: moment(new Date(voidMatch.voidTicketsMini.fromTime)).format('hh:mm:ss A'),
       voidToTime: moment(new Date(voidMatch.voidTicketsMini.toTime)).format('hh:mm:ss A'),
       voidFromDate: moment(new Date(voidMatch.voidTicketsMini.fromDate)).format('MM/DD/YYYY'),

@@ -18,6 +18,7 @@ export class VoidTicketsQuery {
   subIssueTypeName: string;
   subIssueTypeNameCS: string;
   issueTypeId?: number;
+  isHasSettledTicket: boolean;
   voidingHistoryId?: number;
   historyStatusId?: number;
   negativeBalanceUsers?: string;

@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -383,5 +384,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       toTime = this.displayFullDateTimeFormat(wrongScoreModels.filter(x => x.isChecked)[wrongScoreModels.filter(x => x.isChecked).length - 1].logInfoDetail.voidToTime);
     }
     return `${fromTime} - ${toTime}`;
+  }
+
+  public getLogInfoDetail(): LogInfoDetail[] {
+    return this.wrongScoreModels.filter(x => x.isChecked).map(x => x.logInfoDetail);
   }
 }

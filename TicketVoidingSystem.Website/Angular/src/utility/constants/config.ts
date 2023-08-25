@@ -160,8 +160,9 @@ export class TVSRequestActionType {
 
 export class DateTimeFormat {
   static readonly DATE_FORMAT = 'YYYY/MM/DD';
-
+  static readonly DATE_MONTH_YEAR = 'DD MMMM yyyy';
   static readonly TIME_FORMAT = 'hh:mm:ss.SSS A';
+  static readonly SHORT_TIME_FORMAT = 'hh:mm A';
   static readonly FULL_DATE_TIME_FORMAT = 'YYYY/MM/DD hh:mm:ss.SSS A';
 }
 
@@ -235,6 +236,7 @@ export class ABExceptionListVoidVIP {
 
 export class TimeZone {
   static readonly AMERICA_CARACAS = 'America/Caracas';
+  static readonly ASIA_MANILA = 'Asia/Manila';
 }
 
 export class SubIssueTypeGroup {
