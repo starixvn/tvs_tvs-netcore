@@ -7,11 +7,11 @@
           <div class="modal-title">
             <strong>Sub Type List</strong>
           </div>
-          <button class="close" (click)="onClose()">
+          <button class="close" (click)="closePopup()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" [blockUi]="isBlockUi">
           <div class="check-all-area" *ngIf="isDangerAccepted()">
             <input type="checkbox" id="view-all-option" class="mr-1" [(ngModel)]="isCheckedViewAllOptions" />
             <label class="col-form-label" for="view-all-option"> View all options</label>
@@ -19,7 +19,7 @@
           <div class="check-type-wrong-score" *ngIf="isWrongScore()">
             <div>
               <label class="no-onwards">
-                <input class="mr-1" type="radio" 
+                <input class="mr-1" type="radio"
                   name="type-of-wrong-score"
                   [value]="false"
                   (change)="onChangeTypeOfWrongScore()"
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="modal-body-container">
-            <div class="select-sub-type-body">            
+            <div class="select-sub-type-body">
               <div class="header-select-sub-type">
                 <div class="col-tb-3 col-header">No.</div>
                 <div class="col-tb-30 col-header">Sub Type</div>
@@ -47,7 +47,8 @@
                 <div class="col-tb-3 col-header">AA</div>
                 <div class="col-tb-3 col-header">PA</div>
                 <div class="col-tb-3 col-header">SA</div>
-                <div class="col-tb-40 col-header">Description</div>
+                <div class="col-tb-20 col-header">Description</div>
+                <div class="col-tb-20 col-header">Note</div>
               </div>
               <div class="container-select-sub-type">
                 <div class="main-match" *ngFor="let item of subIssueTypes; ">
@@ -90,9 +91,14 @@
                       <div class="col-tb-3 col-ct col-ct-aa-time"><span *ngIf="group.aa">+</span>{{group.aa}}</div>
                       <div class="col-tb-3 col-ct col-ct-pa-time"><span *ngIf="group.aa">+</span>{{group.pa}}</div>
                       <div class="col-tb-3 col-ct col-ct-sa-time"><span *ngIf="group.aa">+</span>{{group.sa}}</div>
-                      <div class="col-tb-40 col-ct col-ct-description">
+                      <div class="col-tb-20 col-ct col-ct-description">
                         <div *ngFor="let desc of group.description">
                           <div [innerHTML]="desc"></div>
+                        </div>
+                      </div>
+                      <div class="col-tb-20 col-ct col-ct-note">
+                        <div>
+                          <textarea autosize class="remark form-control form-control-sm" [(ngModel)]="group.note" (blur)="saveNote(group)"></textarea>
                         </div>
                       </div>
                     </div>

@@ -5,6 +5,7 @@
     "isCollapse": false,
     "groups": [
       {
+        "groupId": 22,
         "name": "No Indication Home RC/Away RC",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -30,9 +31,12 @@
           "Over 1mins consider wrong score/Missed red card: RC 10:00:00, last ticket trans.time 10:01:00.",
           "Within 1mins consider danger accept Goal/red card: RC 10:00:00, last ticket trans.time 10:00:20.",
           "*Home Missed > Request Home.  Away Missed > Request Away."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 23,
         "name": "Wrong Indication Home RC/Away RC",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -56,9 +60,12 @@
           "=> Wrong update Home/Away Red Card score -> But there is 'No Red Card' awarded.",
           "*Wrong Home RC > Request Home, Wrong Away RC > Request Away. AA:3-PA:3-SA:9",
           "*Wrong Swap team RC: Home RC but show wrong Away RC > Request Away. AA:0-PA:0-SA:0"
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 24,
         "name": "Home RC/Away RC award under Regular Time",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -81,9 +88,12 @@
           "Red card awarded in between regular time of 75 minutes until full-time completed period. Extra time main match/child match/link match and/or any other related product affected the betting ticket must be voided.",
           "=> Extra time market ticket voiding process of Home/Away team Red Card awarded within the regular time period.",
           "*Home RC > Request Home. Away RC > Request Away"
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 25,
         "name": "Replacement of Sent-Off player",
         "iconClass": "",
         "buttonSelectHomeAway": [],
@@ -99,9 +109,12 @@
         "sa": "0",
         "description": [
           "This request will be based on the first ticket, 1H and/or FT of the HDP/1x2 acceptance time. <strong>User input &#60;Replacement of sent-off player time> to &#60;Removed Red Card time&#62;</Replacement></strong>. TVS will auto search the 1st ticket time of the HDP/1x2 following the given time range, if detected, we need to void. (Use accept time to request)"
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 26,
         "name": "Replacement of Sent-Off player (All)",
         "iconClass": "",
         "buttonSelectHomeAway": [],
@@ -117,7 +130,9 @@
         "sa": "0",
         "description": [
           "This request will be based on the first ticket of any type of bet. <strong>User input &#60;Replacement of sent-off player time> to &#60;Removed Red Card time&#62;</strong>. TVS will auto search for the first ticket time for any type of bet within the given time range, If detected have a ticket, we need to void. (Use accept time to request)"
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       }
     ]
   }

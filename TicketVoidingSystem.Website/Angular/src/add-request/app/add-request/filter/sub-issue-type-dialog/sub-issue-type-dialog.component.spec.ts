@@ -4,20 +4,21 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { SubIssueTypeNoteModel } from '../../models/sub-type-note.model';
 import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog.model';
 import { Button, Category, GroupButton } from './sub-issue-type-json.model';
-import SubIssueTypeDangerAcceptedConfig from './sub-type-danger-accepted.json';
-import SubIssueTypeRedCardConfig from './sub-type-red-card.json';
 
 describe('SubIssueTypeDialogComponent', () => {
   @NgModule({
     declarations: [],
-    imports: [      
+    imports: [
       FormsModule,
       NgbModule,
     ],
     providers: [
+      AddRequestApiService
     ]
   })
   class AppModuleTest { }
@@ -26,6 +27,9 @@ describe('SubIssueTypeDialogComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(SubIssueTypeDialogComponent, AppModuleTest);
+    const element = document.createElement('section');
+    element.setAttribute("user-id", "1");
+    document.getElementById = jest.fn().mockImplementation(() => element);
   });
 
   it('SubIssueTypeDialogComponent should init match snapshot', async () => {
@@ -35,31 +39,32 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(fixture).toMatchSnapshot();
   });
-  
-  it('#ngOnChanges should call #getSubTypeConfig', async () => {
+
+  it('#ngOnChanges should call #getSubIssueTypeWithUserNote', async () => {
     const model = new SubIssueTypeDialogModel();
     model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
     const { instance } = await shallow.render();
     const changes = {
       'model': new SimpleChange(null, model, true)
     };
-    instance['getSubTypeConfig'] = jest.fn();
+    instance.model.isOpen = true;
+    instance['getSubIssueTypeWithUserNote'] = jest.fn();
     instance.ngOnChanges(changes);
 
-    expect(instance['getSubTypeConfig']).toHaveBeenCalledTimes(1);
+    expect(instance['getSubIssueTypeWithUserNote']).toHaveBeenCalledTimes(1);
   });
-  
-  it('#ngOnChanges should call #getSubTypeConfig', async () => {
+
+  it('#ngOnChanges should not call #getSubIssueTypeWithUserNote', async () => {
     const model = new SubIssueTypeDialogModel();
     model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
     const { instance } = await shallow.render();
     const changes = {
       'aa': new SimpleChange(null, model, true)
     };
-    instance['getSubTypeConfig'] = jest.fn();
+    instance['getSubIssueTypeWithUserNote'] = jest.fn();
     instance.ngOnChanges(changes);
 
-    expect(instance['getSubTypeConfig']).toHaveBeenCalledTimes(0);
+    expect(instance['getSubIssueTypeWithUserNote']).toHaveBeenCalledTimes(0);
   });
 
   it('#ngOnChanges should not call #isDangerAccepted', async () => {
@@ -69,15 +74,15 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(instance.isDangerAccepted).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#onClose should update correct data', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
-    instance.onClose();
+    instance.closePopup();
 
     expect(instance.model.isOpen).toBe(false);
   });
-  
+
   it('#onSelectSubIssueType should emit updateSubTypeEvent', async () => {
     const groupButton = new GroupButton();
     const { instance } = await shallow.render();
@@ -87,7 +92,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(instance.updateSubTypeEvent.emit).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#isHaveButton should return true', async () => {
     const button = new Button();
     const { instance } = await shallow.render();
@@ -95,14 +100,14 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#isHaveButton should return false', async () => {
     const { instance } = await shallow.render();
     const actual = instance.isHaveButton([]);
 
     expect(actual).toBe(false);
   });
-  
+
   it('#isDangerAccepted should return false', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
@@ -111,7 +116,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBe(false);
   });
-  
+
   it('#isDangerAccepted should return true', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
@@ -120,7 +125,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBe(true);
   });
-  
+
   it('#checkCanShowButtonSelectAll should return false', async () => {
     const button = new Button();
     button.subIssueTypeId = SubIssueTypeConstant.GOAL;
@@ -131,7 +136,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBe(false);
   });
-  
+
   it('#checkCanShowButtonSelectAll should return true', async () => {
     const button = new Button();
     button.subIssueTypeId = 3;
@@ -142,7 +147,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBe(true);
   });
-  
+
   it('#checkCanShowButtonSelectAll should return false when have not any buttons', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
@@ -151,77 +156,46 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBe(false);
   });
-  
+
   it('#onChangeTypeOfWrongScore should called #getSubIssueTypeWrongScoreConfig', async () => {
     const { instance } = await shallow.render();
     instance['getSubIssueTypeWrongScoreConfig'] = jest.fn();
-    
+
     instance.onChangeTypeOfWrongScore();
 
     expect(instance['getSubIssueTypeWrongScoreConfig']).toHaveBeenCalledTimes(1);
   });
-  
-  it('#getSubTypeConfig should return data when isDangerAccepted', async () => {
-    const { instance } = await shallow.render();
-    instance.model = new SubIssueTypeDialogModel();
-    instance.model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
-    
-    const actual = instance['getSubTypeConfig']();
 
-    expect(actual).toBe(SubIssueTypeDangerAcceptedConfig);
-  });
-  
-  it('#getSubTypeConfig should return data when isRedCard', async () => {
-    const { instance } = await shallow.render();
-    instance.model = new SubIssueTypeDialogModel();
-    instance.model.issueTypeId = IssueTypeConstant.RED_CARD;
-    
-    const actual = instance['getSubTypeConfig']();
-
-    expect(actual).toBe(SubIssueTypeRedCardConfig);
-  });
-  
-  it('#getSubTypeConfig should return data when isWrongScore', async () => {
-    const { instance } = await shallow.render();
-    instance.model = new SubIssueTypeDialogModel();
-    instance.model.issueTypeId = IssueTypeConstant.WRONG_SCORE;
-    instance['getSubIssueTypeWrongScoreConfig'] = jest.fn().mockImplementation(() => [new Category()]);
-
-    const actual = instance['getSubTypeConfig']();
-
-    expect(actual).toBeDefined();
-  });
-  
   it('#getSubTypeConfig should return empty', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
     instance.model.issueTypeId = null;
-    
+
     const actual = instance['getSubTypeConfig']();
 
     expect(actual.length).toBe(0);
   });
-  
+
   it('#isDangerAccepted should return true', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
     instance.model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
-    
+
     const actual = instance.isDangerAccepted();
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#isWrongScore should return true', async () => {
     const { instance } = await shallow.render();
     instance.model = new SubIssueTypeDialogModel();
     instance.model.issueTypeId = IssueTypeConstant.WRONG_SCORE;
-    
+
     const actual = instance.isWrongScore();
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#isHasSubTypeNoOnWards should return false when button null', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -232,7 +206,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isHasSubTypeNoOnWards should return false', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -245,7 +219,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isHasSubTypeNoOnWards should return false', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -258,7 +232,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isHasSubTypeNoOnWards should return true', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -271,7 +245,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#isHasSubTypeOnWards should return false when button null', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -282,7 +256,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isHasSubTypeOnWards should return false', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -295,7 +269,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isHasSubTypeOnWards should return false', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -308,7 +282,7 @@ describe('SubIssueTypeDialogComponent', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isHasSubTypeOnWards should return true', async () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
@@ -320,5 +294,65 @@ describe('SubIssueTypeDialogComponent', () => {
     const actual = instance['isHasSubTypeOnWards'](groupButton);
 
     expect(actual).toBeTruthy();
+  });
+
+  it('#preventNoteEditable should update all subIssueTypes to noteEditable true', async () => {
+    const { instance } = await shallow.render();
+    const category = new Category();
+    category.groups=[new GroupButton()];
+    instance.subIssueTypes = [category];
+    instance['preventNoteEditable']();
+
+    expect(instance.subIssueTypes.flatMap(x => x.groups).every(y => y.noteEditable)).toBeFalsy();
+  });
+
+  it('#editNote should update noteEditable true', async () => {
+    const groupButton = new GroupButton();
+    const { instance } = await shallow.render();
+    jest.useFakeTimers();
+    instance.editNote(groupButton);
+    jest.runAllTimers();
+
+    expect(groupButton.noteEditable).toBeTruthy();
+  });
+
+  it('#saveNote should call #saveSubIssueTypeNote', async () => {
+    const element = document.createElement('section');
+    element.setAttribute("noteGroup", "1");
+    element.innerHTML = 'innerHTML';
+    document.getElementById = jest.fn().mockImplementation(() => element);
+    const groupButton = new GroupButton();
+    groupButton.note = '';
+    const mockSaveSubIssueTypeNote = jest.fn();
+    const { instance } = await shallow
+    .mock(AddRequestApiService, { saveSubIssueTypeNote: mockSaveSubIssueTypeNote })
+    .render();
+    instance.model = new SubIssueTypeDialogModel();
+    instance.model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
+    instance.userId = '11';
+    await instance.saveNote(groupButton);
+
+    expect(mockSaveSubIssueTypeNote).toHaveBeenCalledTimes(1);
+  });
+
+  it('#getSubIssueTypeWithUserNote should call #getSubIssueTypeNote', async () => {
+    const subNote = new SubIssueTypeNoteModel();
+    subNote.groupId = 1;
+    subNote.note = 'note';
+    const button = new GroupButton();
+    button.groupId = 1;
+    const category = new Category();
+    category.groups=[button];
+    const mockGetSubIssueTypeNote = jest.fn().mockReturnValue([subNote]);
+    const { instance } = await shallow
+    .mock(AddRequestApiService, { getSubIssueTypeNote: mockGetSubIssueTypeNote })
+    .render();
+    instance['getSubTypeConfig'] = jest.fn().mockReturnValue([category]);
+    instance.model = new SubIssueTypeDialogModel();
+    instance.model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
+    instance.userId = '11';
+    await instance['getSubIssueTypeWithUserNote']();
+
+    expect(mockGetSubIssueTypeNote).toHaveBeenCalledTimes(1);
   });
 });

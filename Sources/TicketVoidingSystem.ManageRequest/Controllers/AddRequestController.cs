@@ -50,6 +50,12 @@ public class AddRequestController : ControllerBase
     public async Task<IActionResult> GetLinkedLog(GetLinkedLogRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    public async Task<IActionResult> GetSubIssueTypeNote(GetSubIssueTypeNoteRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> SaveSubIssueTypeNote(SaveSubIssueTypeNoteRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
     public async Task<IActionResult> GetPoolHouseTickets(GetPoolHouseTicketRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]

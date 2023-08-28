@@ -273,5 +273,7 @@
         <Setting Key="OWP_TVSSupport_GetProviderByMatchId" SpName="OWP_TVSSupport_GetProviderByMatchId" DbName="DBOWP.bodb_OWP.bodbOWPNet" TimeOut="600" />
         <Setting Key="TicketVoiding_TicketRequest_Void_Select" SpName="TicketVoiding_TicketRequest_Void_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_TicketProcess_Update" SpName="TicketVoiding_TicketProcess_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_SubIssueTypeNote_Update" SpName="TicketVoiding_SubIssueTypeNote_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_SubIssueTypeNote_Select" SpName="TicketVoiding_SubIssueTypeNote_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
 </Functions>

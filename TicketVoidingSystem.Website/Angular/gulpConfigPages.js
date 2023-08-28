@@ -134,7 +134,7 @@ const configPages = [
   markTickets,
   ticketListing,
   voidSingleBet,
-  voidRequest,
+  //voidRequest,
   manageRequest,
   addRequest,
   editRequest

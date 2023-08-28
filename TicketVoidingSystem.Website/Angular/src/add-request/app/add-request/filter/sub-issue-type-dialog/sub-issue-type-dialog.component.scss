@@ -159,6 +159,9 @@
 .col-tb-50 {
   width: 50%;
 }
+.col-tb-20 {
+  width: 20%;
+}
 .height-100 {
   height: 100%;
 }
@@ -201,6 +204,23 @@
 }
 .col-ct-sa-time {
   background-color: #6699ff !important;
+}
+.col-ct-note {
+  padding: 2px !important;
+  div {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  textarea {
+    padding: 2px;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    resize: none;
+  }
 }
 
 .header-select-sub-type {

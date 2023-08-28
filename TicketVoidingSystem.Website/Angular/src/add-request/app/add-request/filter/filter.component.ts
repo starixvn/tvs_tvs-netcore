@@ -20,7 +20,6 @@ import { ActionVoidService } from './services/action-void.service';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { Category } from './sub-issue-type-dialog/sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-issue-type-dialog/sub-type-danger-accepted.json';
-import SubIssueTypeRedCardConfig from './sub-issue-type-dialog/sub-type-red-card.json';
 
 @Component({
   selector: 'filter',
@@ -106,7 +105,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   private getAllowanceTimeBySubIssueType() {
     let subIssueTypeConfig: Category[] = [];
-    subIssueTypeConfig = this.isDangerAccepted() ? SubIssueTypeDangerAcceptedConfig : SubIssueTypeRedCardConfig;
+    subIssueTypeConfig = SubIssueTypeDangerAcceptedConfig;
     for (const category of subIssueTypeConfig) {
       const groupSubIssueType = category.groups.find(group =>
         group.buttonSelectHomeAway?.some(button =>button.subIssueTypeId === Number(this.model.subIssueTypeId)) ||

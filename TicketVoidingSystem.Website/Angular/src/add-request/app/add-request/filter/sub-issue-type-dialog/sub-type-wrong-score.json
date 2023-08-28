@@ -5,6 +5,7 @@
     "isCollapse": false,
     "groups": [
       {
+        "groupId": 27,
         "name": "No indication Home/Away Goal (No Onwards)<div class='text-danger'>Filter by Accept Time</div>",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -30,9 +31,12 @@
           "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
           "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
           "* Home Missed > Request Home. Away Missed > Request Away."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 28,
         "name": "No indication Home/Away Goal (Onwards)<div class='text-danger'>Filter by Accept Time</div>",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -58,9 +62,12 @@
           "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
           "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
           "* Home Missed > Request Home. Away Missed > Request Away."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 29,
         "name": "No indication Home/Away Booking (No Onwards)<div class='text-danger'>Filter by Accept Time</div>",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -86,9 +93,12 @@
           "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
           "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
 		      "* Home Missed > Request Home. Away Missed > Request Away."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 30,
         "name": "No indication Home/Away Booking (Onwards)<div class='text-danger'>Filter by Accept Time</div>",
         "iconClass": "",
         "buttonSelectHomeAway": [
@@ -114,9 +124,12 @@
           "Over 1 min consider wrong score/Missed > Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:01:00.",
           "Within 1mins consider danger accept Goal/Corner/Goal kick/booking 10:00:00, last ticket trans.time 10:00:20.",
 		      "* Home Missed > Request Home. Away Missed > Request Away."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 31,
         "name": "Wrong Indication Goal (No Onwards)<div class='text-danger'>Filter by Trans Time",
         "iconClass": "",
         "buttonSelectHomeAway": [],
@@ -135,9 +148,12 @@
           "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
           "Example: 0-0 to 0-1, Cancel Goal, all 0-1 need void all. Single team O/U home team score 0-0 accept after Goal valid.",
           "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 32,
         "name": "Wrong Indication Goal (Onwards)<div class='text-danger'>Filter by Trans Time",
         "iconClass": "",
         "buttonSelectHomeAway": [],
@@ -156,9 +172,12 @@
           "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
           "Example: 0-0 to 0-1, Cancel Goal, all 0-1 need void all. Single team O/U home team score 0-0 accept after Goal valid.",
           "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 33,
         "name": "Wrong Indication Swap Team Score (No Onwards)<div class='text-danger'>Filter by Trans Time & Accept Time",
         "iconClass": "",
         "buttonSelectHomeAway": [],
@@ -176,9 +195,12 @@
           "Provider wrong display Swap Team Score.",
           "=> Wrong update Away Score -> Correct there is Home Score awarded. So Single team O/U home team admin will wrong accept.",
           "Example: 0-0 to 0-1 wrong update,  Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       },
       {
+        "groupId": 34,
         "name": "Wrong Indication Swap Team Score (Onwards)<div class='text-danger'>Filter by Trans Time & Accept Time",
         "iconClass": "",
         "buttonSelectHomeAway": [],
@@ -196,7 +218,9 @@
           "Provider wrong display Swap Team Score.",
           "=> Wrong update Away Score -> Correct there is Home Score awarded. So Single team O/U home team admin will wrong accept.",
           "Example: 0-0 to 0-1 wrong update,  Correct is 1-0, need void all ticket. Single team O/U home team score 0-0 accept after Goal is wrong, need void all."
-        ]
+        ],
+        "note":"",
+        "noteEditable": false
       }
     ]
   }

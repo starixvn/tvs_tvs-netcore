@@ -6,6 +6,7 @@ export class Category {
 }
 
 export class GroupButton {
+  groupId: number;
   name: string;
   iconClass: string;
   buttonSelectHomeAway: Button[];
@@ -14,6 +15,8 @@ export class GroupButton {
   pa: string;
   sa: string;
   description: string[];
+  note: string;
+  noteEditable: boolean;
 }
 
 export class Button {
