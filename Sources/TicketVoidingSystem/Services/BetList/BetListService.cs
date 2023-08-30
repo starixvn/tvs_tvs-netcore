@@ -158,7 +158,7 @@ public class BetListServiceImp : BetListService
     public string GetBetTypeName(int id, long refNo)
     {
         var betTypeId = remotingRefWrapperService.GetParentIdByBetTypeId(id);
-        if (string.IsNullOrWhiteSpace(betTypeId))
+        if (string.IsNullOrWhiteSpace(betTypeId) || betTypeId == "0")
         {
             betTypeId = id.ToString();
         }
@@ -172,7 +172,7 @@ public class BetListServiceImp : BetListService
     public string GetDisplayedBetTypeName(int id, long refNo)
     {
         var betTypeId = remotingRefWrapperService.GetParentIdByBetTypeId(id);
-        if (string.IsNullOrWhiteSpace(betTypeId))
+        if (string.IsNullOrWhiteSpace(betTypeId) || betTypeId == "0")
         {
             betTypeId = id.ToString();
         }
