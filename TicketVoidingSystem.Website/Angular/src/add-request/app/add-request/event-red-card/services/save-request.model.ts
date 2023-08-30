@@ -13,8 +13,8 @@ import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 
 export class SaveRequestArg {
   requestId: number;
-  requestedBy: string;
   userId: number;
+  requestedBy: string;
   isEdit: boolean;
   actionIdOfFirstTimeAccess: string;
   filter: FilterModel;
@@ -22,7 +22,7 @@ export class SaveRequestArg {
   others: OthersModel;
   primitiveProps: PrimitiveProperty;
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
-  mainEvent: LogInfoRedCard;
+  allEvents: LogInfoRedCard[];
   leagueEventRedCardComponent: LeagueEventRedCardComponent;
   filterTimeAreaComponent: FilterTimeAreaComponent;
   logInfoComponents: QueryList<LogInfoRedCardComponent>;

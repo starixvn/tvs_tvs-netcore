@@ -15,7 +15,7 @@ import { PopupService } from './services/popup.service';
 import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
-import { PrimitiveProperty } from './void-danger-accepted.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 @Component({
   selector: 'void-danger-accepted',
   templateUrl: './void-danger-accepted.component.html',

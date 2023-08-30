@@ -22,7 +22,7 @@ import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted.component';
-import { PrimitiveProperty } from './void-danger-accepted.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 
 class Helper {
   static readonly fakeRequestId = 50121;

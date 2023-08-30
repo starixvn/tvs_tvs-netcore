@@ -5,7 +5,7 @@ import { TemplateMessageComponent } from '../../../utility/components/template-m
 import { LABELS } from '../../../utility/constants/labels';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
-import { VoidPageCommonItem } from '../models/void-page-common-item.model';
+import { VoidMatch } from '../models/void-match.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,8 +57,8 @@ export class PopupService {
     });
   }
 
-  private getWarningInTemplateMessage(voidPageCommonItems: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): string {
-    const matchesHaveWarning = this.getMatchesHaveWarning(voidPageCommonItems, templateMessageComponents);
+  public getWarningInTemplateMessage(matchHasTickets: VoidMatch[], templateMessageComponents: TemplateMessageComponent[]): string {
+    const matchesHaveWarning = this.getMatchesHaveWarning(matchHasTickets, templateMessageComponents);
 
     if (matchesHaveWarning.length > 0) {
       const matchIdList = `- Match Id: ${matchesHaveWarning.join(', ')}`;
@@ -71,9 +71,9 @@ export class PopupService {
     return '';
   }
 
-  private getMatchesHaveWarning(voidPageCommonItems: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): number[] {
-    const matchHasWarning = voidPageCommonItems.filter(voidPageCommonItem =>
-      templateMessageComponents.find(x => x.value.matchId === voidPageCommonItem.matchModel.matchId).isHasWarningForDynamicInput());
+  private getMatchesHaveWarning(matchHasTickets: VoidMatch[], templateMessageComponents: TemplateMessageComponent[]): number[] {
+    const matchHasWarning = matchHasTickets.filter(voidMatch =>
+      templateMessageComponents.find(x => x.value.matchId === voidMatch.matchModel.matchId).isHasWarningForDynamicInput());
 
     return matchHasWarning.map(x => x.matchModel.matchId);
   }

@@ -21,7 +21,7 @@ import { OthersModel } from '../others/others.model';
 import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
 import { ConfirmDangerAcceptedModel } from './confirm-danger-accepted/confirm-danger-accepted.model';
-import { AddRelatedEventArg } from './event-danger-accepted.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { EventDangerAcceptedService } from './services/event-danger-accepted.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
@@ -44,6 +44,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() dangerAcceptedModels: RedCardModel[] = [];
+  
   @Output() dangerAcceptedModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchInfo>();
 
@@ -60,7 +61,6 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
-
   getAllowanceTimeSubscription: Subscription;
 
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
@@ -114,8 +114,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
 
-    if (!this.validationService.validateCommonData(this.filter, this.leagueEventDangerAcceptedComponent,
-      this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
+    if (!this.validationService.validateCommonData(this.filter, this.leagueEventDangerAcceptedComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
       return;
     }
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
@@ -263,7 +262,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   }
 
   isShowVarCheck(): boolean {
-    return this.mainEvent.subIssueTypeId && StaticService.isShowVarCheck(this.mainEvent.subIssueTypeId);
+    return StaticService.isShowVarCheck(this.mainEvent.subIssueTypeId);
   }
 
   changeVarCheckValue(isVarChecked: boolean): void {

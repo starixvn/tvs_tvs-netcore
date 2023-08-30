@@ -32,17 +32,21 @@ export class LogInfoService {
 
   private initGetLogInfoRedCardQuery(filterBy: number, isEdit: boolean, requestId: number,
     filter: FilterModel, events: LogInfoRedCard[], defaultFilterTimeWithAllowance: FilterTimeWithAllowance): GetLogInfoQuery {
-    const dangerAcceptedModel = this.getDangerAcceptedModel(filterBy, events, defaultFilterTimeWithAllowance);
+    const getLogInfoQuery = this.getLogInfoModel(filterBy, events, defaultFilterTimeWithAllowance);
     const query = new GetLogInfoQuery();
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
     query.issueTypeId = Number(filter.issueTypeId);
-    query.dangerAcceptedModels = dangerAcceptedModel;
+    if (StaticService.isRedCard(filter.issueTypeId.toString())) {
+      query.redCardModels = getLogInfoQuery;
+    } else if (StaticService.isDangerAccepted(filter.issueTypeId.toString())) {
+      query.dangerAcceptedModels = getLogInfoQuery;
+    }
 
     return query;
   }
 
-  private getDangerAcceptedModel(filterBy: number, events: LogInfoRedCard[],
+  private getLogInfoModel(filterBy: number, events: LogInfoRedCard[],
     defaultFilterTimeWithAllowance: FilterTimeWithAllowance): RedCardGetLogInfoQuery[] {
     return events.map(x => {
       const logInfoQuery = new RedCardGetLogInfoQuery();

@@ -24,6 +24,7 @@ import { TicketsListComponent } from './tickets-list/tickets-list.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-dup
     VoidDangerAcceptedComponent,
     VoidOtherIssueComponent,
     LogInfoNewComponent,
-    VoidDuplicateTicketsComponent
+    VoidDuplicateTicketsComponent,
+    VoidRedCardComponent
   ],
   imports: [
     AdvancedModeModule,

@@ -10,7 +10,7 @@ import { AppService } from '../../app.service';
 import { VoidMatch } from '../../models/void-match.model';
 import { VoidTicketsQuery } from '../../models/void-tickets.query';
 import { CheckRequestService } from '../../services/check-request.service';
-import { PrimitiveProperty } from '../void-danger-accepted.model';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { PopupService } from './popup.service';
 import { ValidationService } from './validation.service';
 
@@ -29,6 +29,7 @@ export class SubmitVoidService {
     requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<void> {
     primitiveProperty.isBlockUI = true;
     const matchHasTickets = voidMatches.filter(item => item.voidTicketsMini.total > 0);
+    
     const validation = this.validationService.checkValidationBeforeVoid(matchHasTickets, templateMessageComponents);
     primitiveProperty.errorMessage = validation.errorMsg;
     if (validation.isSuccessful) {
@@ -85,7 +86,6 @@ export class SubmitVoidService {
       singleTickets: voidMatch.voidTicketsMini.singleTickets.filter(x => !voidMatch.voidTicketsMini.uncheckedTransIds.includes(x.transId)),
       parlayTickets: voidMatch.voidTicketsMini.parlayTickets.filter(x => !voidMatch.voidTicketsMini.uncheckedTransIds.includes(x.transId)),
       cancelCashOutTickets: voidMatch.voidTicketsMini.cancelCashOutTickets.filter(x => !voidMatch.voidTicketsMini.uncheckedTransIds.includes(x.transId)),
-
       cricketTickets: voidMatch.voidTicketsMini.cricketTickets,
       userName: userName,
       userPassword: this.passwordService.hash(userPassword),

@@ -10,7 +10,7 @@ import { AppService } from '../../app.service';
 import { VoidMatch } from '../../models/void-match.model';
 import { CheckRequestService } from '../../services/check-request.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
-import { PrimitiveProperty } from '../void-danger-accepted.model';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { PopupService } from './popup.service';
 import { SubmitVoidService } from './submit-void.service';
 import { ValidationService } from './validation.service';

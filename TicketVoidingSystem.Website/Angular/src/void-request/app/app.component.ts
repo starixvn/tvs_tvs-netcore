@@ -36,12 +36,12 @@ export class AppComponent implements OnInit {
     await this.signalRService.initializeConnection();
   }
 
-  isApplyVoidNewDesign(): boolean {
+  isShowVoidDangerAccepted(): boolean {
     return StaticService.isDangerAccepted(this.requestDetail.request?.issueTypeId.toString())
-    || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId.toString())
-    || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId.toString())
-    || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId.toString())
-    || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId.toString());
+      || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId.toString());
   }
 
   updateBlockUI(isBlock: boolean): void {
@@ -52,7 +52,16 @@ export class AppComponent implements OnInit {
     return this.isReadyRender && StaticService.isVoidAction(this.requestDetail.request.actionId);
   }
 
-  isDuplicateTickets(): boolean {
+  isShowVoidDuplicateTickets(): boolean {
     return StaticService.isDuplicateTickets(this.requestDetail.request?.issueTypeId.toString());
   }
+
+  isShowVoidRedCard(): boolean {
+    return StaticService.isRedCard(this.requestDetail.request?.issueTypeId.toString());
+  }
+
+  isShowVoidOtherIssue(): boolean {
+    return !this.isShowVoidDuplicateTickets() && !this.isShowVoidDangerAccepted() && !this.isShowVoidRedCard()
+  }
+
 }
