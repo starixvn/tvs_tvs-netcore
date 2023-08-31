@@ -19,15 +19,15 @@ public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLice
     private readonly DuplicateTicketsEmailContentService emailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
-    private readonly ChinaViewMessageService chinaViewMessageService;
+    private readonly LeagueNameMessageService leagueNameMessageService;
 
     public DuplicateTicketsEmailLicenseeServiceImp(DuplicateTicketsEmailContentService emailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, ChinaViewMessageService chinaViewMessageService)
+        MailResultService mailResultService, LeagueNameMessageService leagueNameMessageService)
     {
         this.emailContentService = emailContentService;
         this.fanexMailApiService = fanexMailApiService;
         this.mailResultService = mailResultService;
-        this.chinaViewMessageService = chinaViewMessageService;
+        this.leagueNameMessageService = leagueNameMessageService;
     }
 
     public async Task<IEnumerable<Result>> Send(DuplicateTicketsMailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets)
@@ -52,7 +52,7 @@ public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLice
     {
         var modelClone = mailLicenseesModel.DeepClone();
         modelClone.TemplatePath = TemplateEmailPath.DuplicateTicketsVoidBetChinese;
-        chinaViewMessageService.ReplaceMessageChinaViewLicensee(modelClone.Match, modelClone.Message, site);
+        leagueNameMessageService.RemoveSaBaOfLeagueName(modelClone.Match, modelClone.Message, site);
 
         if (!string.IsNullOrEmpty(site.ToList))
         {

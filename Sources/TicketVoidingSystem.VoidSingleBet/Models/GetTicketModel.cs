@@ -103,4 +103,6 @@ public class GetTicketModel
     public bool IsInstantSettlement { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public int SpecialPlatform { get; set; }
 }

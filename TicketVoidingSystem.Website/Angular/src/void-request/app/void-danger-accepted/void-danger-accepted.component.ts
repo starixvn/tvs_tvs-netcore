@@ -111,6 +111,7 @@ export class VoidDangerAcceptedComponent implements OnInit {
   isShowAffectedLicenseeArea(voidMatch: VoidMatch): boolean {
     return voidMatch.affectedLicensee.show && voidMatch.affectedLicensee.licenseesName.length > 0
       || voidMatch.chinaViewLicensee.show && voidMatch.chinaViewLicensee.licenseesName.length > 0
+      || voidMatch.jollyViewLicensee.show && voidMatch.jollyViewLicensee.licenseesName.length > 0
       || voidMatch.affectedInstantLicensee.show && voidMatch.affectedInstantLicensee.licenseesName.length > 0
       || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0;
   }

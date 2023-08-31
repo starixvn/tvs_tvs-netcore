@@ -108,6 +108,7 @@ export class VoidDuplicateTicketsComponent implements OnInit {
   isShowAffectedLicenseeArea(voidPageItem: VoidPageDuplicateTicketsModel): boolean {
     return voidPageItem.affectedLicensee.show && voidPageItem.affectedLicensee.licenseesName.length > 0
       || voidPageItem.chinaViewLicensee.show && voidPageItem.chinaViewLicensee.licenseesName.length > 0
+      || voidPageItem.jollyViewLicensee.show && voidPageItem.jollyViewLicensee.licenseesName.length > 0
       || voidPageItem.affectedInstantLicensee.show && voidPageItem.affectedInstantLicensee.licenseesName.length > 0
       || voidPageItem.cashOutLicensee.show && voidPageItem.cashOutLicensee.licenseesName.length > 0;
   }

@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using StackExchange.Redis;
+using System.Text.Json;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
@@ -6,16 +8,16 @@ using TicketVoidingSystem.Models.SendMessage;
 
 namespace TicketVoidingSystem.Services.SendEmail;
 
-public interface ChinaViewMessageService
+public interface LeagueNameMessageService
 {
-    void ReplaceMessageChinaViewLicensee(Match match, Message Message, SiteEmail site);
+    void RemoveSaBaOfLeagueName(Match match, Message Message, SiteEmail site);
 }
 
-public class ChinaViewMessageServiceImp : ChinaViewMessageService
+public class LeagueNameMessageServiceImp : LeagueNameMessageService
 {
-    public void ReplaceMessageChinaViewLicensee(Match match, Message Message, SiteEmail site)
+    public void RemoveSaBaOfLeagueName(Match match, Message Message, SiteEmail site)
     {
-        if (IsChinaViewAndSaBaLeague(match, site))
+        if (IsMustRemoveSaBaForLeague(match, site))
         {
             var serializedContentChineseSimplified = JsonSerializer.Serialize(Message.ContentChineseSimplified);
             var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified.Replace("沙巴", ""));
@@ -25,8 +27,8 @@ public class ChinaViewMessageServiceImp : ChinaViewMessageService
         }
     }
 
-    private static bool IsChinaViewAndSaBaLeague(Match match, SiteEmail site)
+    private static bool IsMustRemoveSaBaForLeague(Match match, SiteEmail site)
     {
-        return match?.LeagueGroupId.IsLeagueGroupIdSaBa() == true && site.IsChinaView;
+        return match?.LeagueGroupId.IsLeagueGroupIdSaBa() == true && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports);
     }
 }

@@ -67,7 +67,9 @@ export class TicketsService {
     voidPageItem.affectedLicensee.licenseesName = data.licenseesName;
     voidPageItem.affectedLicensee.show = true;
     voidPageItem.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
+    voidPageItem.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
     voidPageItem.chinaViewLicensee.show = true;
+    voidPageItem.jollyViewLicensee.show = true;
     voidPageItem.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
     voidPageItem.affectedInstantLicensee.show = true;
     voidPageItem.cashOutLicensee.licenseesName = data.cashOutLicenseesName;

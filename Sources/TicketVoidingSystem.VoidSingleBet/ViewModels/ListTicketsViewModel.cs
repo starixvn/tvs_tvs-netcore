@@ -28,6 +28,8 @@ public class ListTicketsViewModel
 
     public string ChinaViewLicenseesName { get; set; }
 
+    public string JollyViewLicenseesName { get; set; }
+
     public string Id { get; set; }
 
     public IEnumerable<Group<TicketViewModel>> Groups { get; set; }

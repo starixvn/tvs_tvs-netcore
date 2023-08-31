@@ -38,6 +38,7 @@ export class FilterComponent implements OnInit {
   @Input() affectedInstantLicensee = new AffectedLicensee();
   @Input() cashOutLicensee = new AffectedLicensee();
   @Input() chinaViewLicensee = new AffectedLicensee();
+  @Input() jollyViewLicensee = new AffectedLicensee();
 
   @Output() searchEvent = new EventEmitter<GetTicketsQuery>();
   @Output() viewLogInfoEvent = new EventEmitter<GetTicketsQuery>();
@@ -575,6 +576,7 @@ export class FilterComponent implements OnInit {
   public isShowAffectedLicenseeArea(): boolean {
     return this.affectedLicensee.show && this.affectedLicensee.licenseesName?.length > 0 ||
       this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName?.length > 0 ||
+      this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName?.length > 0 ||
       this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName?.length > 0 ||
       this.cashOutLicensee.show && this.cashOutLicensee.licenseesName?.length > 0;
   }

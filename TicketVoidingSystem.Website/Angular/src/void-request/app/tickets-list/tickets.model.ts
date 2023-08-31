@@ -29,6 +29,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   licenseesName: string;
   instantLicenseesName: string;
   chinaViewLicenseesName: string;
+  jollyViewLicenseesName: string;
   cashOutLicenseesName: string;
   betTypes: string;
   isHasSettledTicket: boolean;

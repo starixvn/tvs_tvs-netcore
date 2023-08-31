@@ -27,6 +27,8 @@ public class AmendmentResponse
     public string Message { get; set; }
 
     public bool IsChinaView { get; set; }
+
+    public int SpecialPlatform { get; set; }
 }
 
 public class LicenseeFile

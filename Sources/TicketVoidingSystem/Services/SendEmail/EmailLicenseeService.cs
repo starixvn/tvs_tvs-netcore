@@ -20,15 +20,15 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     private readonly VoidEmailContentService voidEmailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
-    private readonly ChinaViewMessageService chinaViewMessageService;
+    private readonly LeagueNameMessageService leagueNameMessageService;
 
     public EmailLicenseeServiceImp(VoidEmailContentService voidEmailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, ChinaViewMessageService chinaViewMessageService)
+        MailResultService mailResultService, LeagueNameMessageService leagueNameMessageService)
     {
         this.voidEmailContentService = voidEmailContentService;
         this.fanexMailApiService = fanexMailApiService;
         this.mailResultService = mailResultService;
-        this.chinaViewMessageService = chinaViewMessageService;
+        this.leagueNameMessageService = leagueNameMessageService;
     }
 
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
@@ -53,7 +53,7 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     {
         var modelClone = mailLicenseesModel.DeepClone();
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
-        chinaViewMessageService.ReplaceMessageChinaViewLicensee(modelClone.Match, modelClone.Message, site);
+        leagueNameMessageService.RemoveSaBaOfLeagueName(modelClone.Match, modelClone.Message, site);
 
         if (!string.IsNullOrEmpty(site.ToList))
         {

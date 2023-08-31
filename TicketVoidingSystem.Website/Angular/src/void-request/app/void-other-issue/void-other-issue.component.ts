@@ -74,6 +74,7 @@ export class VoidOtherIssueComponent implements OnInit {
   affectedLicensee = new AffectedLicensee();
   affectedInstantLicensee = new AffectedLicensee();
   chinaViewLicensee = new AffectedLicensee();
+  jollyViewLicensee = new AffectedLicensee();
   cashOutLicensee = new AffectedLicensee();
   voidQuery = new VoidTicketsQuery();
 
@@ -205,7 +206,9 @@ export class VoidOtherIssueComponent implements OnInit {
       this.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
       this.affectedInstantLicensee.show = true;
       this.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
+      this.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
       this.chinaViewLicensee.show = true;
+      this.jollyViewLicensee.show = true;
       this.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
       this.cashOutLicensee.show = true;
     } catch {
@@ -506,6 +509,7 @@ export class VoidOtherIssueComponent implements OnInit {
   public isShowAffectedLicenseeArea(): boolean {
     return this.affectedLicensee.show && this.affectedLicensee.licenseesName.length > 0
       || this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName.length > 0
+      || this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName.length > 0
       || this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName.length > 0
       || this.cashOutLicensee.show && this.cashOutLicensee.licenseesName.length > 0;
   }

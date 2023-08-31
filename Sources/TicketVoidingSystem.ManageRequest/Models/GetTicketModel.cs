@@ -121,4 +121,6 @@ public class GetTicketModel
     public int? StatusWinLost { get; set; }
 
     public DateTime CheckTimeCancelCashOut { get; set; }
+
+    public int SpecialPlatform { get; set; }
 }

@@ -64,6 +64,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   affectedInstantLicensee = new AffectedLicensee();
   cashOutLicensee = new AffectedLicensee();
   chinaViewLicensee = new AffectedLicensee();
+  jollyViewLicensee = new AffectedLicensee();
   templateValue = new TemplateValue();
   isShowLogInfoOnly = false;
   issueTypeId: number;
@@ -114,6 +115,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.affectedInstantLicensee.show = true;
     this.cashOutLicensee.show = true;
     this.chinaViewLicensee.show = true;
+    this.jollyViewLicensee.show = true;
   }
 
   async viewLogInfoEvent(getTicketsQuery: GetTicketsQuery) {
@@ -125,6 +127,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.affectedInstantLicensee.show = false;
     this.cashOutLicensee.show = false;
     this.chinaViewLicensee.show = false;
+    this.jollyViewLicensee.show = false;
   }
 
 
@@ -229,6 +232,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.affectedInstantLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
     this.chinaViewLicensee = new AffectedLicensee();
+    this.jollyViewLicensee = new AffectedLicensee();
   }
 
   async pagingSearchTicket(pagingEvent: PagingModel) {
@@ -239,6 +243,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.affectedInstantLicensee.show = false;
     this.cashOutLicensee.show = false;
     this.chinaViewLicensee.show = false;
+    this.jollyViewLicensee.show = false;
   }
 
   async exportExcel() {
@@ -290,6 +295,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
     this.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
     this.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
+    this.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
     this.ticketsModel.pagingModel = new PagingModel();
     this.ticketsModel.pagingModel.total = data.totalItems;
     this.ticketsModel.pagingModel.page = this.getTicketsQuery.pageIndex + 1;
@@ -427,6 +433,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.affectedInstantLicensee.show = false;
     this.cashOutLicensee.show = false;
     this.chinaViewLicensee.show = false;
+    this.jollyViewLicensee.show = false;
 
     if (results[0].errorCode <= 0) {
       await this.handleAfterVoidPaging();
@@ -459,6 +466,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.affectedInstantLicensee.show = false;
       this.cashOutLicensee.show = false;
       this.chinaViewLicensee.show = false;
+      this.jollyViewLicensee.show = false;
     }
   }
 

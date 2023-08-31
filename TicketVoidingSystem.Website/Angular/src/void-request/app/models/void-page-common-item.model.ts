@@ -16,6 +16,7 @@ export class VoidPageCommonItem {
   pagingVoidTickets: PagingModel;
   affectedLicensee: AffectedLicensee;
   chinaViewLicensee: AffectedLicensee;
+  jollyViewLicensee: AffectedLicensee;
   affectedInstantLicensee: AffectedLicensee;
   cashOutLicensee: AffectedLicensee;
 
@@ -37,6 +38,7 @@ export class VoidPageCommonItem {
     this.affectedLicensee = new AffectedLicensee();
     this.affectedInstantLicensee = new AffectedLicensee();
     this.chinaViewLicensee = new AffectedLicensee();
+    this.jollyViewLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
   }
 }
