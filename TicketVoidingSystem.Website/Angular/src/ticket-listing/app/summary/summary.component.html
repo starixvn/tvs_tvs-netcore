@@ -76,6 +76,7 @@
         <div>- Credit Total bet: <strong>{{totalBetCountOfCredit}}</strong></div>
         <div>- Normal Licensee Total bet: <strong>{{totalBetCountOfLicensee}}</strong></div>
         <div>- CV Licensee Total bet: <strong>{{totalBetCountOfChinaView}}</strong></div>
+        <div>- JS Licensee Total bet: <strong>{{totalBetCountOfJollyView}}</strong></div>
       </div>
       <div class="note">Negative Balance: [Licensee]</div>
     </div>
@@ -89,6 +90,11 @@
         <span class="note">CV Licensee(s): </span>
         <span class="affected-licensees-highlight" id="china-view-licensees-highlight"
           (click)="copyClipboard(chinaViewLicensees)">{{chinaViewLicensees}}</span>
+      </div>
+      <div class="jolly-view-licensee" *ngIf="jollyViewLicensees">
+        <span class="note">JS Licensee(s): </span>
+        <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
+          (click)="copyClipboard(jollyViewLicensees)">{{jollyViewLicensees}}</span>
       </div>
     </div>
   </div>

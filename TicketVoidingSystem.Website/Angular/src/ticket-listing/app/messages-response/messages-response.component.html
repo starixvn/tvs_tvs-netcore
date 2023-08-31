@@ -18,7 +18,7 @@
           <span class="icon-warning"></span>
           <div [innerHTML]="result.message | sanitizeHtml"></div>
           <div class="flex-grow-1"></div>
-          <button *ngIf="result.isCanReSend" class="btn-resend" (click)="onClickResendData(result.isChinaView)">RESEND
+          <button *ngIf="result.isCanReSend" class="btn-resend" (click)="onClickResendData(result)">RESEND
             DATA</button>
         </div>
       </div>

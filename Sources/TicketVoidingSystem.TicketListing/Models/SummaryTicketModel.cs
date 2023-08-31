@@ -15,4 +15,6 @@ public class SummaryTicketModel
     public string BetTypeName { get; set; }
 
     public bool IsChinaView { get; set; }
+
+    public int SpecialPlatform { get; set; }
 }

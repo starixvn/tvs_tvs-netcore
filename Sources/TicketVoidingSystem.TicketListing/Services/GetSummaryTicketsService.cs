@@ -85,8 +85,9 @@ public class GetSummaryTicketsServiceImp : GetSummaryTicketsService
                     Total = item.TotalTrans
                 }).ToList(),
                 BetTypes = query.BetTypes,
-                IsChinaView = view.First().IsChinaView
-            });
+                IsChinaView = view.First().IsChinaView,
+                SpecialPlatform = view.First().SpecialPlatform
+        });
 
         return a;
     }

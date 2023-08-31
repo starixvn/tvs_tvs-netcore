@@ -154,54 +154,6 @@ export class TicketListComponent implements OnInit, OnChanges {
     return false;
   }
 
-  private isDangerAcceptedIssueType(): boolean {
-    if (this.requestDetail.request?.issueTypeId) {
-      return StaticService.isDangerAccepted(this.requestDetail.request.issueTypeId.toString());
-    }
-
-    return false;
-  }
-
-  private isWrongScoreIssueType(): boolean {
-    if (this.requestDetail.request?.issueTypeId) {
-      return StaticService.isWrongScore(this.requestDetail.request.issueTypeId.toString());
-    }
-
-    return false;
-  }
-
-  private isRedCardIssueType(): boolean {
-    if (this.requestDetail.request?.issueTypeId) {
-      return StaticService.isRedCard(this.requestDetail.request.issueTypeId.toString());
-    }
-
-    return false;
-  }
-
-  private isWrongHDP(): boolean {
-    return this.requestDetail.request?.issueTypeId ? StaticService.isWrongHDP(this.requestDetail.request.issueTypeId.toString()) : false;
-  }
-
-  private isWrong1stHDP(): boolean {
-    return this.requestDetail.request?.issueTypeId ? StaticService.isWrong1stHDP(this.requestDetail.request.issueTypeId.toString()) : false;
-  }
-  
-  private isWrongOU(): boolean {
-    return this.requestDetail.request?.issueTypeId ? StaticService.isWrongOU(this.requestDetail.request.issueTypeId.toString()) : false;
-  }
-
-  private isWrong1stOU(): boolean {
-    return this.requestDetail.request?.issueTypeId ? StaticService.isWrong1stOU(this.requestDetail.request.issueTypeId.toString()) : false;
-  }
-
-  private isWrongOdds(): boolean {
-    return StaticService.isWrongOdds(this.requestDetail.request.issueTypeId?.toString());
-  }
-
-  private isReducedOver(): boolean {
-    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId?.toString());
-  }
-
   private isArchivedTicketIssueType(): boolean {
     if (this.requestDetail.request?.issueTypeId) {
       return StaticService.isArchivedTicket(this.requestDetail.request.issueTypeId.toString());
