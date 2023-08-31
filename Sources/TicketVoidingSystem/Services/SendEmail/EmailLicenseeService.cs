@@ -53,7 +53,7 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     {
         var modelClone = mailLicenseesModel.DeepClone();
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
-        leagueNameMessageService.RemoveSaBaOfLeagueName(modelClone.Match, modelClone.Message, site);
+        leagueNameMessageService.RemoveSabaOfLeagueName(modelClone.Match, modelClone.Message, site);
 
         if (!string.IsNullOrEmpty(site.ToList))
         {

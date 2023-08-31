@@ -2,7 +2,6 @@
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using Newtonsoft.Json;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
@@ -90,7 +89,7 @@ public class BetListCoreServiceImp : BetListCoreService
 
         var choice = betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
 
-        if (match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports))
+        if (Helper.IsMustRemoveSabaText(match, site))
         {
             var serializedChoice = JsonConvert.SerializeObject(choice);
             choice = JsonConvert.DeserializeObject<string>(serializedChoice.Replace("沙巴", "").Replace("SABA ", ""));

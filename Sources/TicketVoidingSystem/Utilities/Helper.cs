@@ -9,7 +9,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Utilities;
@@ -184,5 +186,10 @@ public static class Helper
         }
 
         return result;
+    }
+
+    public static bool IsMustRemoveSabaText(Match match, SiteEmail site)
+    {
+        return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports);
     }
 }

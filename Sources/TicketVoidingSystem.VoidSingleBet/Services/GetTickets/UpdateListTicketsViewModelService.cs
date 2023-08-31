@@ -47,7 +47,8 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
         var jollyViewLicensee = data.Where(item => item.SpecialPlatform == SpecialPlatformConstant.JollySports).Select(item => item.LicenseeName).Distinct().ToArray();
-        var licensees = data.Where(item => item.IsDeposit && !chinaViewLicensee.Contains(item.LicenseeName) && !jollyViewLicensee.Contains(item.LicenseeName)).Select(item => item.LicenseeName).Distinct().ToArray();
+        var licensees = data.Where(item => item.IsDeposit && !chinaViewLicensee.Contains(item.LicenseeName) && !jollyViewLicensee.Contains(item.LicenseeName))
+            .Select(item => item.LicenseeName).Distinct().ToArray();
 
         Array.Sort(licensees, StringComparer.InvariantCulture);
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);

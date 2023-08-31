@@ -52,7 +52,7 @@ public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLice
     {
         var modelClone = mailLicenseesModel.DeepClone();
         modelClone.TemplatePath = TemplateEmailPath.DuplicateTicketsVoidBetChinese;
-        leagueNameMessageService.RemoveSaBaOfLeagueName(modelClone.Match, modelClone.Message, site);
+        leagueNameMessageService.RemoveSabaOfLeagueName(modelClone.Match, modelClone.Message, site);
 
         if (!string.IsNullOrEmpty(site.ToList))
         {
