@@ -74,7 +74,8 @@ public class GetTicketsServiceImp : GetTicketsService
         }
 
         var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
-        var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
+        var matchId = GetMatchIdForQueryTransInfoJson(query);
+        var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, matchId);
 
         return await GetBetTransTicket(query, transInfoJsonList);
     }
@@ -82,7 +83,8 @@ public class GetTicketsServiceImp : GetTicketsService
     private async Task<IEnumerable<GetTicketModel>> GetTicketsDefault(GetTicketsQuery query)
     {
         var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
-        var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
+        var matchId = GetMatchIdForQueryTransInfoJson(query);
+        var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, matchId);
 
         return await GetBetTransTicket(query, transInfoJsonList);
     }

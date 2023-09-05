@@ -1,4 +1,5 @@
 ﻿using Fanex.Data.Repository;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using NSubstitute;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -46,6 +47,106 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
                 CancelCashOutTickets = new List<BetId> { betId1, betId2, betId2 },
                 CricketTickets = new List<BetId> { betId1 },
                 IssueTypeId = issueTypeId
+            };
+
+            var mappingTypes = new[] {
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel)
+        };
+            var requestDetailTicketModel = new RequestDetailTicketModel { TransId = 123, SiteDbGroupId = 1, RequestId = 1 };
+            var validVoidSingleTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
+            var validVoidParlayTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel };
+            var validVoidCricketTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel, requestDetailTicketModel };
+            var validCancelCOTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
+            var validVoidSingleTickets14 = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel };
+
+            IEnumerable<object>[] expectedTicketTypeModel = {validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
+                validVoidCricketTickets,validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14 };
+
+            insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);
+            repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes).ReturnsForAnyArgs(expectedTicketTypeModel);
+            sessionService.GetClientIp().ReturnsForAnyArgs("123");
+            repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
+            repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
+
+            // Act
+            await service.InsertTicketVoidingQueue(query);
+
+            // Assert
+            await repository.Received().ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>());
+        }
+
+        [Fact]
+        public async Task InsertTicketVoidingQueue_HasOnlySingleTickets_CalledExpected()
+        {
+            // Arrange
+            var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1, MatchId = 1 };
+            var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2, MatchId = null };
+
+            var query = new InsertQueueQuery
+            {
+                SingleTickets = new List<BetId> { betId1, betId2 },
+                ParlayTickets = new List<BetId>(),
+                CancelCashOutTickets = new List<BetId>(),
+                CricketTickets = new List<BetId>(),
+                IssueTypeId = IssueTypeConstant.Wrong1stHDP,
+                RequestId = 1
+            };
+
+            var mappingTypes = new[] {
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel)
+        };
+            var requestDetailTicketModel = new RequestDetailTicketModel { TransId = 123, SiteDbGroupId = 1, RequestId = 1 };
+            var validVoidSingleTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
+            var validVoidParlayTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel };
+            var validVoidCricketTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel, requestDetailTicketModel };
+            var validCancelCOTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
+            var validVoidSingleTickets14 = new List<RequestDetailTicketModel> { requestDetailTicketModel, requestDetailTicketModel };
+
+            IEnumerable<object>[] expectedTicketTypeModel = {validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
+                validVoidCricketTickets,validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14 };
+
+            insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);
+            repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes).ReturnsForAnyArgs(expectedTicketTypeModel);
+            sessionService.GetClientIp().ReturnsForAnyArgs("123");
+            repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
+            repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
+
+            // Act
+            await service.InsertTicketVoidingQueue(query);
+
+            // Assert
+            await repository.Received().ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>());
+        }
+
+        [Fact]
+        public async Task InsertTicketVoidingQueue_HasOnlyParlayTicketsTickets_CalledExpected()
+        {
+            // Arrange
+            var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1 };
+            var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
+
+            var query = new InsertQueueQuery
+            {
+                SingleTickets = new List<BetId>(),
+                ParlayTickets = new List<BetId> { betId1, betId2 },
+                CancelCashOutTickets = new List<BetId>(),
+                CricketTickets = new List<BetId>(),
+                IssueTypeId = IssueTypeConstant.Wrong1stHDP,
+                RequestId = 1
             };
 
             var mappingTypes = new[] {

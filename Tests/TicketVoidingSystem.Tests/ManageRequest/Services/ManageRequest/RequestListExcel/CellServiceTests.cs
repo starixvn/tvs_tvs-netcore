@@ -58,7 +58,7 @@ public class CellServiceTests
     }
 
     [Fact]
-    public void RenderDataWorksheet_IndexIsNull_SetDataCorrectly()
+    public void RenderDataWorksheet_CheckIsHighlightBackground_SetDataCorrectly()
     {
         // Arrange
         var worksheet = SetupTestingSheet.CreateTestingSheet();
@@ -70,35 +70,32 @@ public class CellServiceTests
             new()
             {
                 RequestId = 1,
-                NumberOfRequestDetails = 1,
+                NumberOfRequestDetails = null,
                 Index = null
-            }
-        };
-
-        // Act
-        cellService.RenderDataWorksheet(worksheet, requests);
-
-        // Assert
-        Assert.Equal(1, worksheet.Cells[2, 1].GetValue<int>());
-        Assert.False(worksheet.Cells[$"A{2}:A{3}"].Merge);
-        Assert.Equal(ExcelFillStyle.Solid, worksheet.Cells[$"A{2}:U{3}"].Style.Fill.PatternType = ExcelFillStyle.Solid);
-    }
-
-    [Fact]
-    public void RenderDataWorksheet_IndexIs2_SetDataCorrectly()
-    {
-        // Arrange
-        var worksheet = SetupTestingSheet.CreateTestingSheet();
-        const int lastRow = 10;
-        const int lasCol = 5;
-        worksheet.Cells[lastRow, lasCol].Value = "1";
-        var requests = new List<ExcelRequestModel>
-        {
+            },
+            new()
+            {
+                RequestId = 1,
+                NumberOfRequestDetails = null,
+                Index = 1
+            },
+            new()
+            {
+                RequestId = 1,
+                NumberOfRequestDetails = null,
+                Index = 2
+            },
             new()
             {
                 RequestId = 1,
                 NumberOfRequestDetails = 1,
                 Index = 2
+            },
+            new()
+            {
+                RequestId = 1,
+                NumberOfRequestDetails = 1,
+                Index = 3
             }
         };
 

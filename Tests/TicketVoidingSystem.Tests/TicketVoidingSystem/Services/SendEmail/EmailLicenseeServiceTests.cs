@@ -17,7 +17,7 @@ public class EmailLicenseeServiceTests
     private readonly VoidEmailContentService voidEmailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
-    private readonly ChinaViewMessageService chinaViewMessageService;
+    private readonly LeagueNameMessageServiceImp leagueNameMessageService;
     private EmailLicenseeServiceImp service;
 
     public EmailLicenseeServiceTests()
@@ -25,8 +25,8 @@ public class EmailLicenseeServiceTests
         voidEmailContentService = Substitute.For<VoidEmailContentService>();
         fanexMailApiService = Substitute.For<FanexMailApiService>();
         mailResultService = Substitute.For<MailResultService>();
-        chinaViewMessageService = Substitute.For<ChinaViewMessageService>();
-        service = new EmailLicenseeServiceImp(voidEmailContentService, fanexMailApiService, mailResultService, chinaViewMessageService);
+        leagueNameMessageService = Substitute.For<LeagueNameMessageServiceImp>();
+        service = new EmailLicenseeServiceImp(voidEmailContentService, fanexMailApiService, mailResultService, leagueNameMessageService);
     }
 
     [Theory]
@@ -90,7 +90,7 @@ public class EmailLicenseeServiceTests
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = isChinaView, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
-        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService, chinaViewMessageService);
+        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService, leagueNameMessageService);
         mailResultService.CreateFail("1", true).ReturnsForAnyArgs(new Result());
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
@@ -107,7 +107,7 @@ public class EmailLicenseeServiceTests
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = true, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
-        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService, chinaViewMessageService);
+        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService, leagueNameMessageService);
         mailResultService.CreateFail("1", true).ReturnsForAnyArgs(new Result());
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);

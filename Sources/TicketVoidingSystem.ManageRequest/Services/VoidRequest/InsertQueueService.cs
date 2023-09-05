@@ -60,10 +60,10 @@ public class InsertQueueServiceImp : InsertQueueService
     {
         return new TicketTypeModel
         {
-            ValidVoidSingleTickets = CreateTicketModel(query.SingleTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
-            ValidVoidParlayTickets = CreateTicketModel(query.ParlayTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
-            ValidVoidCricketTickets = CreateTicketModel(query.CricketTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
-            ValidCancelCOTickets = CreateTicketModel(query.CancelCashOutTickets?.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidVoidSingleTickets = CreateTicketModel(query.SingleTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidVoidParlayTickets = CreateTicketModel(query.ParlayTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidVoidCricketTickets = CreateTicketModel(query.CricketTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
+            ValidCancelCOTickets = CreateTicketModel(query.CancelCashOutTickets.Where(x => x.SiteDbGroupId == siteDbGroupId), query.RequestId, query.IssueTypeId),
             ValidVoidSingleTickets14 = Enumerable.Empty<RequestDetailTicketModel>()
         };
     }
