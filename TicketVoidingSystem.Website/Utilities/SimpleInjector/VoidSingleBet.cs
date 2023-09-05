@@ -13,11 +13,14 @@ public static class VoidSingleBet
     {
         services.AddTransient<CellService, CellServiceImp>();
         services.AddTransient<WorkSheetService<GetTicketsQuery>, GetTicketsWorksheetService>();
+
         services.AddTransient<CheckBoxService, CheckBoxServiceImp>();
         services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
+        services.AddTransient<GroupTicketService, GroupTicketServiceImp>();
         services.AddTransient<MapTicketService, MapTicketServiceImp>();
-
+        services.AddTransient<PermissionService, PermissionServiceImp>();
         services.AddTransient<UpdateListTicketsViewModelService, UpdateListTicketsViewModelServiceImp>();
+
         services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
         services.AddTransient<NetPositionForCricketService, NetPositionForCricketServiceImp>();
         services.AddTransient<VoidTicketsService, VoidTicketsServiceImp>();

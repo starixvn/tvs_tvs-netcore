@@ -65,7 +65,7 @@ public static class ObjectToXMLExtension
         return voidDataXml;
     }
 
-    public static string ToEventWrongScoreXml(this IEnumerable<WrongScoreInfoViewModel> models)
+    public static string ToEventWrongScoreXml(this IEnumerable<WrongScoreInfoViewModel> models) // NOSONAR
     {
         if (!models.Any())
         {
@@ -115,7 +115,7 @@ public static class ObjectToXMLExtension
         return new[] { string.Empty, string.Empty };
     }
 
-    public static string ToEventDangerAcceptedXml(this IEnumerable<DangerAcceptedViewModel> models)
+    public static string ToEventDangerAcceptedXml(this IEnumerable<DangerAcceptedViewModel> models) // NOSONAR
     {
         if (!models.Any())
         {

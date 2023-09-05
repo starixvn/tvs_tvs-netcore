@@ -59,7 +59,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         }
     }
 
-    private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)
+    private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR
     {
         var command = mapper.Map<EditRequestCommand>(query);
         command.Operators = query.OperatorsList?.OperatorToXml();

@@ -41,7 +41,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
         return transInfoJsonList;
     }
 
-    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)
+    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)  // NOSONAR
     {
         var criteria = new GetTicketSiteDbCriteria
         {

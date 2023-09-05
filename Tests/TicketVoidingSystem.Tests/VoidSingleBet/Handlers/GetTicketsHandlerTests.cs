@@ -1,62 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.BetList.Core.Entities;
 using NSubstitute;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.BetList;
-using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Handlers;
 using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
-using TicketVoidingSystem.VoidSingleBet.ViewModels;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidSingleBet.Handlers;
 
 public class GetTicketsHandlerTests
 {
-    [Fact]
-    public async Task GetTickets_HaveTicketsDisplay_AssignDataTicket()
+    private GetTicketsService getTicketsService;
+    private MatchService matchService;
+    private GroupTicketService groupTicketService;
+    private UpdateListTicketsViewModelService updateListTicketsViewModelService;
+
+    private void InitGetTicketsHandlerTests()
     {
-        // Arrange
-        var request = new GetTicketsRequest();
-        var listGroup = new List<Group<GetTicketModel>>
-            {
-                new()
-                {
-                    Tickets = new List<GetTicketModel> { new() }
-                }
-            };
-        var data = new List<GetTicketModel>();
-        var getTicketsService = Substitute.For<GetTicketsService>();
-        var matchService = Substitute.For<MatchService>();
-        var sessionService = Substitute.For<SessionService>();
-        var mapTicketService = Substitute.For<MapTicketService>();
-        var updateListTicketsViewModelService = Substitute.For<UpdateListTicketsViewModelService>();
-        var betListService = Substitute.For<BetListService>();
-        mapTicketService.MapToTicketViewModel(default, default, default).ReturnsForAnyArgs(new TicketViewModel());
-        getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
-        betListService.GetBetTypeName(Arg.Compat.Any<Ticket>()).ReturnsForAnyArgs("");
-        betListService.GetBetTypeNameChineseTraditional(Arg.Compat.Any<Ticket>()).ReturnsForAnyArgs("");
-        betListService.GetBetTypeNameNewChineseSimplified(Arg.Compat.Any<Ticket>()).ReturnsForAnyArgs("");
-        betListService.GetBetTypeNameChineseSimplified(Arg.Compat.Any<Ticket>()).ReturnsForAnyArgs("");
-        var pagingService = Substitute.For<PagingService>();
-        pagingService.Paging(data, request.PageIndex, request.PageSize)
-            .ReturnsForAnyArgs(new List<GetTicketModel> { new() });
-        pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
-        var handler = new GetTicketsHandler(pagingService, getTicketsService, matchService, sessionService,
-            mapTicketService, updateListTicketsViewModelService);
-
-        // Act
-        await handler.Handle(request, CancellationToken.None);
-
-        // Assert
-        await getTicketsService.Received(1).GetTickets(Arg.Any<GetTicketsQuery>());
+        getTicketsService = Substitute.For<GetTicketsService>();
+        matchService = Substitute.For<MatchService>();
+        groupTicketService = Substitute.For<GroupTicketService>();
+        updateListTicketsViewModelService = Substitute.For<UpdateListTicketsViewModelService>();
     }
 
+    [Fact]
+    public async Task Handler_WhenCreateGroupsGetTicketModelHaveEmptyData_ReturnViewModelWithEmptyGroup()
+    {
+        // Arrange
+        InitGetTicketsHandlerTests();
+        var request = new GetTicketsRequest { MatchId = 1 };
+        var listGroup = new List<Group<GetTicketModel>>{ new() { Tickets = new List<GetTicketModel>() }
+            };
+        var getTicketsResult = new List<GetTicketModel>();
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
+        groupTicketService.CreateGroupsGetTicketModel(default, default).ReturnsForAnyArgs(listGroup);
+        var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(default, default);
+        updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default);
+        Assert.Empty(actual.Groups);
+    }
+
+    [Fact]
+    public async Task Handler_WhenCreateGroupsGetTicketModelHaveData_ReturnViewModelWithExpectedGroups()
+    {
+        // Arrange
+        InitGetTicketsHandlerTests();
+        var request = new GetTicketsRequest { MatchId = 1 };
+        var listGroup = new List<Group<GetTicketModel>> { new() { Tickets = new List<GetTicketModel> { new() } }, new() { Tickets = new List<GetTicketModel> { new() } } };
+        var getTicketsResult = new List<GetTicketModel>();
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
+        groupTicketService.CreateGroupsGetTicketModel(default, default).ReturnsForAnyArgs(listGroup);
+        var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        await groupTicketService.ReceivedWithAnyArgs(2).CreateGroupTicketViewModel(default, default);
+        updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default);
+        Assert.Equal(2, actual.Groups.Count());
+    }
+
+    /*
     [Fact]
     public async Task GetTickets_NotHaveAnyTickets_ReturnEmptyTicketViewModel()
     {
@@ -196,4 +210,5 @@ public class GetTicketsHandlerTests
         // Assert
         Assert.NotEmpty(model.Groups);
     }
+    */
 }

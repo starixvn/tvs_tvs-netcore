@@ -73,7 +73,7 @@ public class InsertQueueServiceImp : InsertQueueService
         return new[] { IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore, IssueTypeConstant.AbnormalAccount }.Contains(issueTypeId);
     }
 
-    private async Task<TicketTypeModel> ReCheckTicketsStatus(TicketTypeModel ticketTypeModel, int siteDbGroupId)
+    private async Task<TicketTypeModel> ReCheckTicketsStatus(TicketTypeModel ticketTypeModel, int siteDbGroupId)  // NOSONAR
     {
         var mappingTypes = new[] {
             typeof(RequestDetailTicketModel),

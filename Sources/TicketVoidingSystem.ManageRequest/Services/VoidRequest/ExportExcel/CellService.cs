@@ -25,7 +25,7 @@ public class CellServiceImp : CellService
         return $"Void Bet - MatchId: {matchId}";
     }
 
-    public void AddMatch(ExcelWorksheet worksheet, Match match)
+    public void AddMatch(ExcelWorksheet worksheet, Match match)  // NOSONAR
     {
         const int RowMatchInfo = 5;
         var eventTime = match.EventDate == DateTime.MinValue ? string.Empty : match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);

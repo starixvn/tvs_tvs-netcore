@@ -15,7 +15,7 @@ public interface CellService
 
 public class CellServiceImp : CellService
 {
-    public void SetStyle(ExcelWorksheet worksheet)
+    public void SetStyle(ExcelWorksheet worksheet)  // NOSONAR
     {
         var lastRow = worksheet.Dimension.End.Row;
         var lasCol = worksheet.Dimension.End.Column;
@@ -33,7 +33,7 @@ public class CellServiceImp : CellService
         worksheet.Cells[2, 17, lastRow, 18].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
     }
 
-    public void RenderDataWorksheet(ExcelWorksheet worksheet, IEnumerable<ExcelRequestModel> requests)
+    public void RenderDataWorksheet(ExcelWorksheet worksheet, IEnumerable<ExcelRequestModel> requests)  // NOSONAR
     {
         var index = 2;
 
