@@ -83,4 +83,9 @@ public static class IssueTypeExtension
     {
         return id.IsEarlyKickOffTime() || id.IsWrongKickOffTime();
     }
+
+    public static bool DuplicateTickets(this int id)
+    {
+        return id == IssueTypeConstant.DuplicateTickets;
+    }
 }

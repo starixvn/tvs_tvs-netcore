@@ -8,22 +8,22 @@ namespace TicketVoidingSystem.Services.SendEmail.Subject;
 
 public interface SubjectService
 {
-    string CreateVoid(MailViewModel mailViewModel, IEnumerable<TicketEmailModel> tickets, SiteEmail site, EmailGroup group, VoidType type);
+    string CreateVoid(MailViewModel mailViewModel, IEnumerable<string> sites, SiteEmail site, EmailGroup group, VoidType type);
 
     string CreateRecover(MailViewModel mailViewModel, EmailGroup group, RecoverType type);
 }
 
 public class SubjectServiceImp : SubjectService
 {
-    public string CreateVoid(MailViewModel mailViewModel, IEnumerable<TicketEmailModel> tickets, SiteEmail site, EmailGroup group, VoidType type)
+    public string CreateVoid(MailViewModel mailViewModel, IEnumerable<string> sites, SiteEmail site, EmailGroup group, VoidType type)
     {
         var labelService = SubjectFactory.CreateVoid(type);
         var subject = group switch
         {
             EmailGroup.Csd => SubjectLicensee(mailViewModel, site, labelService.Licensee()),
             EmailGroup.CashOut => SubjectCashOut(mailViewModel, labelService.Licensee()),
-            EmailGroup.ItQa => SubjectItQa(mailViewModel, tickets, labelService.It()),
-            EmailGroup.ItSupport => SubjectItSupport(mailViewModel, tickets, labelService.It()),
+            EmailGroup.ItQa => SubjectItQa(mailViewModel, sites, labelService.It()),
+            EmailGroup.ItSupport => SubjectItSupport(mailViewModel, sites, labelService.It()),
             _ => ExceptionGroup.WrongGroup
         };
 
@@ -44,22 +44,22 @@ public class SubjectServiceImp : SubjectService
         return string.Format(CultureInfo.InvariantCulture, format, siteName, dateTime);
     }
 
-    private static string SubjectItQa(MailViewModel mailViewModel, IEnumerable<TicketEmailModel> tickets, string format)
+    private static string SubjectItQa(MailViewModel mailViewModel, IEnumerable<string> sites, string format)
     {
-        return SubjectItGroup(mailViewModel, tickets, StringResource.TestCurrency, format);
+        return SubjectItGroup(mailViewModel, sites, StringResource.TestCurrency, format);
     }
 
-    private static string SubjectItSupport(MailViewModel mailViewModel, IEnumerable<TicketEmailModel> tickets, string format)
+    private static string SubjectItSupport(MailViewModel mailViewModel, IEnumerable<string> sites, string format)
     {
-        return SubjectItGroup(mailViewModel, tickets, StringResource.RealCurrency, format);
+        return SubjectItGroup(mailViewModel, sites, StringResource.RealCurrency, format);
     }
 
-    private static string SubjectItGroup(MailViewModel mailViewModel, IEnumerable<TicketEmailModel> tickets,
+    private static string SubjectItGroup(MailViewModel mailViewModel, IEnumerable<string> sites,
         string prefix, string format)
     {
-        var sites = tickets.JoinSites(s => s.Site);
+        var joinedSite = sites.JoinSites(s => s);
         var dateTime = mailViewModel.DateTime;
-        return string.Format(CultureInfo.InvariantCulture, format, prefix, sites.ToUpperInvariant(), dateTime);
+        return string.Format(CultureInfo.InvariantCulture, format, prefix, joinedSite.ToUpperInvariant(), dateTime);
     }
 
     public string CreateRecover(MailViewModel mailViewModel, EmailGroup group, RecoverType type)

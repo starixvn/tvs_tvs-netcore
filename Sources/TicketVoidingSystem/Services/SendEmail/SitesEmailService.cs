@@ -14,7 +14,7 @@ public interface SitesEmailService
 {
     Task<IEnumerable<SiteEmail>> GetSites();
 
-    Task<IEnumerable<SiteEmail>> GetSitesByCategory(bool isLikelyAbnormalBet);
+    Task<IEnumerable<SiteEmail>> GetSitesByCategory(int issueTypeId);
 
     SiteEmail GetSiteByName(IEnumerable<SiteEmail> sites, string name);
 }
@@ -38,9 +38,9 @@ public class SitesEmailServiceImp : SitesEmailService
         return sites;
     }
 
-    public async Task<IEnumerable<SiteEmail>> GetSitesByCategory(bool isLikelyAbnormalBet)
+    public async Task<IEnumerable<SiteEmail>> GetSitesByCategory(int issueTypeId)
     {
-        var category = isLikelyAbnormalBet ? CategoryEmail.AbNormalBet : CategoryEmail.BetDeletionReport;
+        var category = Helper.IsLikelyAbnormalBet(issueTypeId) ? CategoryEmail.AbNormalBet : CategoryEmail.BetDeletionReport;
         var mailingListCriteria = new MailingListCriteria { CategoryId = category };
         var sites = (await repository.FetchAsync<SiteEmail>(mailingListCriteria)).ToList();
         sites = ExcludeTestSites(sites);

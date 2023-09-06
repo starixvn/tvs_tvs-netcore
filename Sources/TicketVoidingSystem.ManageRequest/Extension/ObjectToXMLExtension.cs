@@ -312,6 +312,16 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
+    public static string ToDuplicateTicketsXml(this DuplicateTicketsViewModel model)
+    {
+        var stringBuilder = $"<r FilterBy='{model.FilterBy}' "
+                            + $"MatchId='{model.MatchId}' "
+                            + $"OrgTransIds='{model.OrgTransIds}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
     public static string ToRequestInfoGetVoidedTicketXml(this IEnumerable<GetRequestInfoModel> requests)
     {
         if (!requests.Any())

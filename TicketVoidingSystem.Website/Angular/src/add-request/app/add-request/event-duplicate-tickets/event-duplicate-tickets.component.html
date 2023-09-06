@@ -1,0 +1,35 @@
+<div [blockUi]="primitiveProps.isBlockBetIds">
+  <div class="d-flex mb-2 header-bet-id" [ngStyle]="{'max-width.px': 1065}">
+    <div class="form-check form-check-inline" *ngFor="let item of abnormalFilterBy.duplicateTicketsFilterItems">
+      <input class="form-check-input" type="radio" name="inlineRadioOptions" [attr.value]="item.value"
+        [checked]="item.value === duplicateTicketsModel.filterBy" id="inlineRadio-{{item.value}}"
+        (change)="changeFilterBy(item.value)" [disabled]="filter.isVoided || isEdit"/>
+      <label *ngIf="!item.hidden" class="form-check-label" for="inlineRadio-{{item.value}}">{{item.name}}</label>
+    </div>
+    <div class="flex-grow-1"></div>
+    <button type="submit" class="btn btn-danger btn-sm" *ngIf="primitiveProps.isShowButtonRemoveInvalid" (click)="removeInvalidTransIds()">Remove Invalid</button>
+  </div>
+  <div class="mb-3">
+    <div class="mr-4 mb-1">Original BetID(s)</div>
+    <textarea rows="3" class="form-control form-control-sm org-transId"
+      [ngStyle]="{'max-width.px': 1065}"
+      [(ngModel)]="duplicateTicketsModel.orgTransIds"
+      [disabled]="isDisableBetIds()">
+    </textarea>
+  </div>
+  <div>
+    <div class="mr-4 mb-1">Duplicated BetID(s)</div>
+    <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sdm-8'"
+      [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+      [hideDifferentMatch]="duplicateTicketsModel.filterBy === 1" [disabled]="isDisableBetIds()" [initBetIds]="duplicateTicketsModel.transIds"
+      (afterFocusOutBetIds)="afterFocusOutBetIds()"
+      [isShowLabel]="false"
+      [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
+    </bet-ids>
+  </div>
+</div>
+
+<league-event-abnormal *ngIf="isShowLeagueEvent()" #leagueEvent [isEdit]="isEdit" [initSportType]="filter.sportType"
+  [eventDate]="filter.eventDate" [initMatchId]="duplicateTicketsModel.matchId" [actionId]="filter.action">
+</league-event-abnormal>
+<tooltip [tooltip]="tooltip"></tooltip>

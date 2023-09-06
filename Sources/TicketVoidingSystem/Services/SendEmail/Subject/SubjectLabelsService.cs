@@ -16,6 +16,13 @@ public class SubjectVoidImp : SubjectLabelsService
     public string It() => StringResource.Subject_VoidedBetsReportForIt;
 }
 
+public class SubjectVoidDuplicateTicketsImp : SubjectLabelsService
+{
+    public string Licensee() => StringResource.Subject_DuplicateTicketVoidedFor;
+
+    public string It() => StringResource.Subject_DuplicateTicketVoidedForIt;
+}
+
 public class SubjectVoidAbnormalImp : SubjectLabelsService
 {
     public string Licensee() => StringResource.Subject_VoidedAbnormalBetsReport;

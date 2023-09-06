@@ -16,4 +16,5 @@ export class IssueTypeConstant {
   static readonly ARCHIVED_TICKET = '17';
   static readonly OTHER_ISSUES = '18';
   static readonly REDUCED_OVER = '19';
+  static readonly DUPLICATE_TICKETS = '20';
 }

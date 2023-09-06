@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Services.SendEmail;
@@ -14,6 +15,8 @@ public interface MailResultService
     List<Result> InsertCombineLicenseesName(List<Result> results, string siteNameSuccess, string siteNameFails);
 
     List<Result> InsertCombineLicenseesNameForAfterVoidService(List<Result> results, string siteNameSuccess, string siteNameFails);
+
+    IEnumerable<Result> CreateCombineResults(CombineMessageModel model, bool isFromAfterVoidService);
 }
 
 public class MailResultServiceImp : MailResultService
@@ -113,5 +116,14 @@ public class MailResultServiceImp : MailResultService
         }
 
         return results;
+    }
+
+    public IEnumerable<Result> CreateCombineResults(CombineMessageModel model, bool isFromAfterVoidService)
+    {
+        var results = model.Results;
+        var successfulLicensees = string.Join(", ", model.SuccessfulLicensees);
+        var failedLicensees = string.Join(", ", model.FailedLicensees);
+        return isFromAfterVoidService ? InsertCombineLicenseesNameForAfterVoidService(results, successfulLicensees, failedLicensees)
+            : InsertCombineLicenseesName(results, successfulLicensees, failedLicensees);
     }
 }

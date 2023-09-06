@@ -26,6 +26,8 @@ public interface DescriptionElementService
     string BuildWrongScores(int filterBy, string wrongScores);
 
     string BuildMixParlay(int totalTickets);
+
+    string BuildParlay(int totalTickets);
 }
 
 public class DescriptionElementServiceImp : DescriptionElementService
@@ -114,5 +116,10 @@ public class DescriptionElementServiceImp : DescriptionElementService
     public string BuildMixParlay(int totalTickets)
     {
         return $"<div>Mix Parlay: <span class=\"text-primary total-parlay\">{totalTickets}</span></div>";
+    }
+
+    public string BuildParlay(int totalTickets)
+    {
+        return $"<div>Parlay: <span class=\"text-primary total-parlay\">{totalTickets}</span></div>";
     }
 }

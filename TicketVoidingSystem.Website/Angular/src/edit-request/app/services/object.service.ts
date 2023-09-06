@@ -75,6 +75,9 @@ export class ObjectService {
     } else if (this.validationService.isReducedOver(args.detailViewModel)) {
       args.requestModel.reducedOverModels = args.detailViewModel.reducedOverModels;
       args.primitiveProperty.matchId = args.detailViewModel.reducedOverModels[0].matchId;
+    } else if (this.validationService.isDuplicateTickets(args.detailViewModel)) {
+      args.requestModel.duplicateTicketsModel = args.detailViewModel.duplicateTicketsModel;
+      args.primitiveProperty.matchId = args.detailViewModel.duplicateTicketsModel.matchId;
     } else if (this.validationService.isAbnormalAccount(args.detailViewModel)) {
       args.requestModel.abnormalAccountModel = this.createEventForAbnormalAccount(args.detailViewModel);
     } else {

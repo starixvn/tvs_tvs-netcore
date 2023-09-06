@@ -140,6 +140,9 @@
     <Content Update="Views\EmailTemplate\Chinese\VoidBet.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="Views\EmailTemplate\Chinese\VoidBetDuplicateTickets.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Views\EmailTemplate\English\RecoverBet.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

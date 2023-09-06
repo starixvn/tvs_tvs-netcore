@@ -65,6 +65,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.ReducedOverModels = MapEventReducedOver(secondResultSet);
                 break;
 
+            case IssueTypeConstant.DuplicateTickets:
+                viewModel.DuplicateTicketsModel = MapEventDuplicateTickets(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
                 break;
@@ -197,7 +201,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    private IEnumerable<ReducedOverViewModel> MapEventReducedOver(IEnumerable<RequestEventModel> requestEventModels)
+    private static IEnumerable<ReducedOverViewModel> MapEventReducedOver(IEnumerable<RequestEventModel> requestEventModels)
     {
         return requestEventModels.Select(model => new ReducedOverViewModel
         {
@@ -211,6 +215,18 @@ public class GetRequestServiceImp : GetRequestService
             Live = model.Live,
             NonLive = model.NonLive
         });
+    }
+
+    private static DuplicateTicketsViewModel MapEventDuplicateTickets(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        return new DuplicateTicketsViewModel
+        {
+            TransIds = requestEventModels.First().TransIds,
+            OrgTransIds = requestEventModels.First().OrgTransIds,
+            MatchId = requestEventModels.First().MatchId,
+            FilterBy = requestEventModels.First().FilterBy,
+            SubIssueTypeId = requestEventModels.First().SubIssueTypeId
+        };
     }
 
     private string GetMatchName(RequestEventModel requestEventModel)

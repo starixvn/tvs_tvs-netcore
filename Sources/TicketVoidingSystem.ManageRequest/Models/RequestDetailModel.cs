@@ -7,6 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class RequestDetailModel
 {
+    public int RequestId { get; set; }
     public int SportType { get; set; }
     public int IssueTypeId { get; set; }
     public int ActionId { get; set; }
@@ -72,6 +73,7 @@ public class RequestEventModel
     public int AwayId { get; set; }
     public bool IsNeutral { get; set; }
     public string TransIds { get; set; }
+    public string OrgTransIds { get; set; }
 
     [JsonConverter(typeof(GMT8DateTimeJsonConverter))]
     public DateTime? KickOffTime { get; set; }

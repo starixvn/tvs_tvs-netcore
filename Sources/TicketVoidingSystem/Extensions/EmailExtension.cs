@@ -43,9 +43,14 @@ public static class EmailExtension
         return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
     }
 
-    public static string JoinSites<T>(this IEnumerable<T> tickets, Func<T, string> filter)
+    public static bool Valid(this IEnumerable<DuplicateTicketsRequestInfo> tickets, SiteEmail site)
     {
-        var sites = tickets.Select(filter).Distinct().ToArray();
+        return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
+    }
+
+    public static string JoinSites<T>(this IEnumerable<T> items, Func<T, string> filter)
+    {
+        var sites = items.Select(filter).Distinct().ToArray();
         return string.Join(", ", sites);
     }
 }

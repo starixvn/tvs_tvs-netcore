@@ -15,7 +15,7 @@
 
   <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sm-8'"
     [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
-    [hideDifferentMatch]="false" [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds"
+    [hideDifferentMatch]="abnormalBetModel.filterBy === 1" [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds"
     (afterFocusOutBetIds)="afterFocusOutBetIds()"
     [isShowLabel]="false"
     [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">

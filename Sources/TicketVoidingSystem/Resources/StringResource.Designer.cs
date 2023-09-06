@@ -19,7 +19,7 @@ namespace TicketVoidingSystem.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class StringResource {
@@ -283,6 +283,24 @@ namespace TicketVoidingSystem.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 實時兌現被取消註單 - List of cancelled cash out tickets.
+        /// </summary>
+        public static string ListOfCancelledCashOutTickets {
+            get {
+                return ResourceManager.GetString("ListOfCancelledCashOutTickets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 作废清单 - List of voided tickets.
+        /// </summary>
+        public static string ListOfVoidedTickets {
+            get {
+                return ResourceManager.GetString("ListOfVoidedTickets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;Item InputType=&quot;{0}&quot; Name=&quot;{1}&quot; OrderBy=&quot;{2}&quot; JsonValue=&quot;{3}&quot;/&gt;.
         /// </summary>
         public static string MessageTemplateItemXml {
@@ -397,6 +415,24 @@ namespace TicketVoidingSystem.Resources {
         public static string SMP_Selection_Result {
             get {
                 return ResourceManager.GetString("SMP_Selection_Result", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] - 复制注单作废 ({1}) | Duplicate Ticket Voided ({2}).
+        /// </summary>
+        public static string Subject_DuplicateTicketVoidedFor {
+            get {
+                return ResourceManager.GetString("Subject_DuplicateTicketVoidedFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}[{1}] - 复制注单作废 ({2}) | Duplicate Ticket Voided ({3}).
+        /// </summary>
+        public static string Subject_DuplicateTicketVoidedForIt {
+            get {
+                return ResourceManager.GetString("Subject_DuplicateTicketVoidedForIt", resourceCulture);
             }
         }
         

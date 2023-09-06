@@ -75,4 +75,5 @@ public class TicketEmailModel : EmailSupport, SendMessageDbModel
     public bool IsVipMember { get; set; }
     public int? OddsId { get; set; }
     public DateTime EndTime { get; set; }
+    public bool IsCancelCashOut { get; set; }
 }

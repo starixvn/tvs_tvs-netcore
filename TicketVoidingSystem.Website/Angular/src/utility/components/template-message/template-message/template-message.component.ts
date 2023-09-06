@@ -25,6 +25,7 @@ const MESSAGE_TEMPLATE_ID_35 = 35;
 const MESSAGE_TEMPLATE_ID_36 = 36;
 const MESSAGE_TEMPLATE_ID_37 = 37;
 const MESSAGE_TEMPLATE_ID_38 = 38;
+const MESSAGE_TEMPLATE_ID_65 = 65;
 
 @Component({
   selector: 'template-message',
@@ -120,6 +121,8 @@ export class TemplateMessageComponent implements OnChanges {
     let templateId = 0;
     if (this.isAbnormalAccount() || this.isAbnormalBetMixParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_37;
+    } else if (this.isDuplicateTicketsMixParlay()) {
+      templateId = MESSAGE_TEMPLATE_ID_65;
     } else {
       templateId = this.findTemplateId(this.subIssueTypeId, this.value.sportTypeId, this.value.isCheckedVar);
     }
@@ -446,6 +449,10 @@ export class TemplateMessageComponent implements OnChanges {
 
   isAbnormalBetMixParlay(): boolean {
     return this.isAbnormalBet() && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  }
+
+  isDuplicateTicketsMixParlay(): boolean {
+    return StaticService.isDuplicateTickets(this.issueTypeId?.toString()) && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 
   isAbnormalAccount(): boolean {

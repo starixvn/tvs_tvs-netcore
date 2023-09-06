@@ -53,7 +53,7 @@
           [(ngModel)]="model.action"
           [clearable]="false"
           (change)="updateModel();changeActionWaitingToManualVoid()"
-          [disabled]="model.isVoided" 
+          [disabled]="isDisableActionVoid()"
           [searchable]="false">
         </ng-select>
       </div>

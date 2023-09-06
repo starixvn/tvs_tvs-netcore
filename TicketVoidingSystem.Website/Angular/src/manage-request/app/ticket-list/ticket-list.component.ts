@@ -118,6 +118,7 @@ export class TicketListComponent implements OnInit, OnChanges {
   isShowMatchInfo(requestDetail: RequestDetailViewModel) {
     return !this.isAbnormalAccountIssueType(requestDetail)
       && !(this.isAbnormalBetIssueType(requestDetail) && requestDetail.event.filterBy === AbnormalFilterBy.MIX_PARLAY)
+      && !(this.isDuplicateTickets(requestDetail) && requestDetail.duplicateTicketsModel.filterBy === AbnormalFilterBy.MIX_PARLAY)
       && !this.isArchivedTicketIssueType();
   }
 
@@ -131,6 +132,10 @@ export class TicketListComponent implements OnInit, OnChanges {
 
   isLikelyAbnormalBetIssueType(requestDetail: RequestDetailViewModel): boolean {
     return this.isAbnormalBetIssueType(requestDetail) || this.isAbnormalBetRealMemberIssueType(requestDetail);
+  }
+
+  isDuplicateTickets(requestDetail: RequestDetailViewModel): boolean {
+    return StaticService.isDuplicateTickets(requestDetail.request?.issueTypeId.toString());
   }
 
   isAbnormalBetIssueType(requestDetail: RequestDetailViewModel): boolean {

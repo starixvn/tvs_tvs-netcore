@@ -16,6 +16,7 @@ import { EarlyKickOffService } from './add-request.service';
 import { AddRequestStore } from './add-request.store';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
+import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
@@ -60,6 +61,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongOU') eventWrongOuComponent: EventWrongOuComponent;
   @ViewChild('eventWrongOdds') eventWrongOddsComponent: EventWrongOddsComponent;
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
+  @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -232,6 +234,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.isReducedOver()) {
       await this.eventReducedOverComponent.saveRequest();
+    }
+
+    if (this.isDuplicateTickets()) {
+      await this.eventDuplicateTicketsComponent.saveRequest();
     }
   }
 
@@ -427,7 +433,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isShowOthersFullFields(): boolean {
-    return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType()
+    return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
       && !this.isWrongHDP() && !this.isWrong1stHDP() && !this.isWrongOU() && !this.isWrong1stOU() && !this.isWrongOdds() && !this.isReducedOver();
   }
 
@@ -503,5 +509,13 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isReducedOver(): boolean {
     return StaticService.isReducedOver(this.model.filter.issueTypeId);
+  }
+
+  isDuplicateTickets(): boolean {
+    return StaticService.isDuplicateTickets(this.model.filter.issueTypeId);
+  }
+
+  isDuplicateTicketsMixParlay(): boolean {
+    return StaticService.isDuplicateTickets(this.model.filter.issueTypeId) && this.abnormalFilterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 }

@@ -97,6 +97,11 @@
         <Setting Key="DBSIG2.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.Nap_SpecialDelete_MarkTickets_Update" SpName="Nap_SpecialDelete_MarkTickets_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
+        <Setting Key="DBCTG.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.TicketVoiding_AutoVoidRequest_Queue_Insert" SpName="TicketVoiding_AutoVoidRequest_Queue_Insert" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
         <Setting Key="TicketVoiding_AutoUnmark_Select" SpName="TicketVoiding_AutoUnmark_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_AutoUnmark_Ticket_Select" SpName="TicketVoiding_AutoUnmark_Ticket_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_AutoUnmarkSetting_Insert" SpName="TicketVoiding_AutoUnmarkSetting_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
@@ -230,6 +235,9 @@
         <Setting Key="DBSIG2.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.TicketVoiding_GetBetTypesHaveTickets" SpName="TicketVoiding_GetBetTypesHaveTickets" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
+        <Setting Key="TicketVoiding_Request_CheckDuplicateTickets" SpName="TicketVoiding_Request_CheckDuplicateTickets" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_DuplicateTickets_TransIds_Select" SpName="TicketVoiding_DuplicateTickets_TransIds_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="TicketVoiding_DuplicateTickets_Select" SpName="TicketVoiding_DuplicateTickets_Select" DbName="DBRPT.bodb_Report.bodbAdminNet" TimeOut="600" />
         <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_SportsType_Select" SpName="TicketVoiding_SportsType_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_Action_Select" SpName="TicketVoiding_Action_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
