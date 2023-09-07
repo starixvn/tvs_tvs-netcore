@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;8669;8618</NoWarn>
+    <NoWarn>1701;1702;8669;8618;8632</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;8669;8618</NoWarn>
+    <NoWarn>1701;1702;8669;8618;8632</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Angular\**" />
