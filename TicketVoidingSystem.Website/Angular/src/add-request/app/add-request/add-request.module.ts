@@ -65,6 +65,10 @@ import { SubIssueTypeDialogComponent } from './filter/sub-issue-type-dialog/sub-
 import { LeagueEventComponent } from './league-event/league-event.component';
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
+import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
+import { FilterNotParticipateComponent } from './event-not-participate/filter-not-participate/filter-not-participate.component';
+import { FilterNotParticipateItemComponent } from './event-not-participate/filter-not-participate-item/filter-not-participate-item.component';
+import { LogInfoNotParticipateComponent } from './event-not-participate/log-info-not-participate/log-info-not-participate.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +118,10 @@ import { OthersService } from './others/others.service';
     FilterReducedOverItemComponent,
     LogInfoReducedOverComponent,
     EventDuplicateTicketsComponent,
+    EventNotParticipateComponent,
+    FilterNotParticipateComponent,
+    FilterNotParticipateItemComponent,
+    LogInfoNotParticipateComponent,
   ],
   exports: [
     AddRequestComponent

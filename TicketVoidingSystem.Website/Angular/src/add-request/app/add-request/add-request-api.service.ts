@@ -13,6 +13,7 @@ import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-reques
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
+import { NotParticipateBetType } from './event-not-participate/models/not-participate-bet-type.model';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
@@ -110,5 +111,10 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async copyLetstalkRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
     return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyLetstalkRequestInfo');
+  }
+
+  /* istanbul ignore next */
+  async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetType[]> {
+    return this.httpService.postJson<{ matchId: number }, NotParticipateBetType[]>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
   }
 }

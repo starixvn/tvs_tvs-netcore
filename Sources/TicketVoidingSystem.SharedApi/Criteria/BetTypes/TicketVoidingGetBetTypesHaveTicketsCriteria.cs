@@ -2,7 +2,7 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+namespace TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 
 public class TicketVoidingGetBetTypesHaveTicketsCriteria : CriteriaBase
 {

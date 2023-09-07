@@ -14,6 +14,8 @@ public interface BetTypesRepository
     Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria);
 
     Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
+
+    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId);
 }
 
 public class BetTypesRepositoryImp : BetTypesRepository
@@ -57,5 +59,27 @@ public class BetTypesRepositoryImp : BetTypesRepository
         }
 
         return betTypesInAllServers.Distinct();
+    }
+
+    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId)
+    {
+        var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
+        {
+            MatchId = matchId
+        };
+        var betTypesAllServers = new List<BetTypeModel>();
+        var fetchTasks = SiteDbGroupConstant.ServerList
+            .Select(server => FetchDataAsync(server.Id, criteria));
+        var fetchedData = await Task.WhenAll(fetchTasks);
+
+        betTypesAllServers.AddRange(fetchedData.SelectMany(x => x));
+
+        return betTypesAllServers;
+    }
+
+    private async Task<IEnumerable<BetTypeModel>> FetchDataAsync(int siteDbGroupId, TicketVoidingGetBetTypesHaveTicketsCriteria criteria)
+    {
+        criteria.SiteDbGroupId = siteDbGroupId;
+        return await repository.FetchAsync<BetTypeModel>(criteria);
     }
 }

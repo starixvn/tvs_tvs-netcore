@@ -4,6 +4,7 @@ import { AbnormalAccountModel } from './abnormal-account.model';
 import { AbnormalBetModel } from './abnormal-bet.model';
 import { EventDetailModel } from './event-detail.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
+import { NotParticipateModel } from './event-not-participate.model';
 import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { EventTicket14Model } from './event-ticket-14.model';
@@ -25,6 +26,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   wrongOuModels: WrongOuModel[];
   wrongOddsModels: WrongOddsModel[];
   reducedOverModels: ReducedOverModel[];
+  notParticipateModels: NotParticipateModel[];
   others: OthersModel;
 
   constructor() {
@@ -41,6 +43,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.wrongOddsModels = [];
     this.reducedOverModels = [];
     this.reducedOverModels = [];
+    this.notParticipateModels = [];
     this.others = new OthersModel();
   }
 }

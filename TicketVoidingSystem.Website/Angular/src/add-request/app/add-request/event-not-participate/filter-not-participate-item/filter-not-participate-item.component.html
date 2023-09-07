@@ -1,0 +1,28 @@
+<div class="d-flex">
+  <ng-select class="bet-type-dropdown mr-2"
+    [disabled]="isVoided"
+    [items]="originalNotParticipateBetTypes"
+    bindLabel="betTypeName"
+    bindValue="betTypeId"
+    [(ngModel)]="model.betTypeId"
+    [clearable]="false"
+    (change)="changeFilter();updateCheckedBetTypes($event)">
+  </ng-select>
+  <ng-container>
+    <multiple-selection *ngIf="!primitivePropertyItem.isDisabledPlayer"
+      class="multiple-selection player-dropdown{{index}} mr-2"
+      [selectedItems]="model.playerIds"
+      [isDisabled]="isVoided"
+      [multipleSelect]="model.playerMultipleSelection"
+      (checkedItems)="changeFilter();updateCheckedPlayers($event)">
+    </multiple-selection>
+    <div class="invalid-field mr-2" *ngIf="primitivePropertyItem.isDisabledPlayer"></div>
+  </ng-container>
+  <div *ngIf="!(isFirst && isLast)"class="d-flex align-items-center mr-2">
+    <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+  </div>
+  <div *ngIf="isLast" class="d-flex align-items-center">
+    <em class="pointer fa fa-plus-circle fa-icon-add" (click)="addBetTypeItem()" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

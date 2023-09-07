@@ -518,4 +518,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   isDuplicateTicketsMixParlay(): boolean {
     return StaticService.isDuplicateTickets(this.model.filter.issueTypeId) && this.abnormalFilterBy === AbnormalFilterBy.MIX_PARLAY;
   }
+
+  isNotParticipate(): boolean {
+    return StaticService.isNotParticipate(this.model.filter.issueTypeId);
+  }
 }

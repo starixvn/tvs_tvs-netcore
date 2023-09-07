@@ -1,0 +1,29 @@
+.bet-type-dropdown {
+  width: 300px;
+}
+
+multiple-selection[class*='player-dropdown'] {
+  width: 200px;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.fa-icon-remove {
+  font-size: 13px;
+  color: gray;
+}
+
+.fa-icon-add {
+  font-size: 13px;
+  color: #007bff;
+}
+
+.invalid-field {
+  width: 200px;
+  background-color: #e9ecef;
+  opacity: 1;
+  border-radius: 0.2rem;
+  border: 1px solid #ced4da;
+}

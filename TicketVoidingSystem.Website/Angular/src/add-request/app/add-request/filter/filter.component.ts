@@ -255,6 +255,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: () => this.actionVoidService.getActionVoidAbnormalBetRealMember(),
       [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
       [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
+      [IssueTypeConstant.NOT_PARTICIPATE]: () => this.actionVoidService.getActionVoidNotParticipate(),
     };
 
     const actionFunction = actionMapping[this.issueTypes.issueId];
@@ -316,15 +317,27 @@ export class FilterComponent implements OnInit, OnChanges {
     if (this.isLikelyDangerAccepted() || this.isWrongScore()) {
       this.model.sportType = SportType.SOCCER;
     }
-    if (this.isReducedOver()) {
+    if (this.isReducedOver() || this.isNotParticipate()) {
       this.model.sportType = SportType.CRICKET;
     }
     this.modelChange.emit(this.model);
   }
 
   public isDisabledSportControl(): boolean {
-    return this.isEdit || this.isLikelyDangerAccepted() || this.isWrongScore() || this.isWrongHDP() || this.isWrong1stHDP()
-      || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds() || this.isReducedOver();
+    const issuTypeDisableSportControl = [
+      IssueTypeConstant.DANGER_ACCEPTED,
+      IssueTypeConstant.RED_CARD,
+      IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_HDP,
+      IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.REDUCED_OVER,
+      IssueTypeConstant.NOT_PARTICIPATE
+    ];
+
+    return this.isEdit || issuTypeDisableSportControl.includes(this.issueTypes.issueId?.toString());
   }
 
   isShowSubType(): boolean {
@@ -402,6 +415,10 @@ export class FilterComponent implements OnInit, OnChanges {
 
   isDuplicateTickets(): boolean {
     return StaticService.isDuplicateTickets(this.issueTypes.issueId?.toString());
+  }
+
+  isNotParticipate(): boolean {
+    return StaticService.isNotParticipate(this.issueTypes.issueId?.toString());
   }
 
   haveAbnormalBetFromPermission(): boolean {
