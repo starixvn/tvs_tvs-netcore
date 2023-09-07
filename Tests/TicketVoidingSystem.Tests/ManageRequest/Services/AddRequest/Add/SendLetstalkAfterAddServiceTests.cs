@@ -1,6 +1,7 @@
 ﻿using System;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
@@ -28,13 +29,16 @@ public class SendLetstalkAfterAddServiceTests
     [Theory]
     [InlineData(1, 1, 31)]
     [InlineData(2, null, 38)]
-    public void Execute_Successful_CalledExpected(int filterBy, int matchId, int subIssueTypeId)
+    public void Execute_Successful_CalledExpected(int filterBy, int? matchId, int subIssueTypeId)
     {
         // Arrange
         var query = new AddRequestQuery
         {
-            MatchId = matchId, FilterBy = filterBy, IsHasUusTickets = false,
-            IssueTypeId = IssueTypeConstant.AbnormalBet, SubIssueTypeId = subIssueTypeId
+            MatchId = matchId,
+            FilterBy = filterBy,
+            IsHasUusTickets = false,
+            IssueTypeId = IssueTypeConstant.AbnormalBet,
+            SubIssueTypeId = subIssueTypeId
         };
         var match = new Match
         {
@@ -52,7 +56,7 @@ public class SendLetstalkAfterAddServiceTests
         // Assert
         notificationLetstalkService.Received(1)
             .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), null);
-        matchService.Received(1).GetMatch(matchId);
+        matchService.Received(1).GetMatch(Arg.Any<GetMatchInfoCriteria>());
         matchService.Received(1).UpdateMatchInfoFromRemotingRef(Arg.Any<Match>());
     }
 

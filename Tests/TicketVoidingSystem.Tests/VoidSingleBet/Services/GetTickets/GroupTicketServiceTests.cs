@@ -17,7 +17,7 @@ public class GroupTicketServiceTests
     private PagingService pagingService;
     private PermissionService permissionService;
 
-    public void InItFakeServiceTest()
+    private void InItFakeServiceTest()
     {
         pagingService = Substitute.For<PagingService>();
         mapTicketService = Substitute.For<MapTicketService>();
@@ -25,7 +25,7 @@ public class GroupTicketServiceTests
     }
 
     [Fact]
-    public async Task CreateGroupsGetTicketModel_NoHasTickets_ReturnExpected()
+    public void CreateGroupsGetTicketModel_NoHasTickets_ReturnExpected()
     {
         // Arrange
         InItFakeServiceTest();
@@ -92,7 +92,7 @@ public class GroupTicketServiceTests
         var match = new Match();
         var tickets = new TicketViewModel { MainTransId = "1" };
         var expected = new Group<TicketViewModel>
-            { Name = group.Name, Tickets = new List<TicketViewModel> { tickets } };
+        { Name = group.Name, Tickets = new List<TicketViewModel> { tickets } };
         permissionService.GetUserPermission().ReturnsForAnyArgs(new UserPermission());
         mapTicketService.MapToTicketViewModel(Arg.Any<GetTicketModel>(), match, Arg.Any<UserPermission>())
             .ReturnsForAnyArgs(tickets);
