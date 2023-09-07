@@ -26,7 +26,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         this.logger = logger;
     }
 
-    public override async void OnActionExecuting(ActionExecutingContext context)
+    public override void OnActionExecuting(ActionExecutingContext context)
     {
         var httpContext = context.HttpContext;
         if (IsSkipAction(context.ActionDescriptor, httpContext))
@@ -36,13 +36,11 @@ public class LogActionFilterAttribute : ActionFilterAttribute
 
         var requestMethod = httpContext.Request.Method;
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"REQUEST-{requestMethod} URL: {httpContext.Request.GetDisplayUrl()}");
+        stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - {DateTime.Now:MM/dd/yyyy-HH/mm/ss}");
         stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
-        stringBuilder.AppendLine($"Username: {httpContext.User.Identity?.Name}");
-        stringBuilder.AppendLine($"Server Time: {DateTime.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Params: {JsonSerializer.Serialize(context.ActionArguments)}");
-        stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
-        await logger.InfoAsync(stringBuilder.ToString());
+
+        httpContext.Items["request-log"] = stringBuilder.ToString();
         httpContext.Items["timer"] = Stopwatch.StartNew();
         base.OnActionExecuting(context);
     }
@@ -72,11 +70,12 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         }
 
         var sw = httpContext.Items["timer"] as Stopwatch;
+        var requestLog = httpContext.Items["request-log"] as string;
         var responseData = context.Result is OkObjectResult objectResult ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"RESPONSE URL: {httpContext.Request.GetDisplayUrl()}");
-        stringBuilder.AppendLine($"Username: {httpContext.User.Identity?.Name}");
-        stringBuilder.AppendLine($"Server Time: {DateTime.Now:MM/dd/yyyy HH:mm:ss}");
+        stringBuilder.Append(requestLog);
+        stringBuilder.AppendLine("=============================================");
+        stringBuilder.AppendLine($"End Time: {DateTime.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Execution Time: {sw?.ElapsedMilliseconds} ms");
         stringBuilder.AppendLine($"Response: {responseData}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
