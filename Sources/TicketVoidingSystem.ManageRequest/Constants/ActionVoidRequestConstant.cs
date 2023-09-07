@@ -6,6 +6,7 @@ public static class ActionVoidRequestConstant
     public const string QueueActionVoidInstant5m = "VoidInstant5m";
     public const string QueueActionVoidInstant10m = "VoidInstant10m";
     public const string QueueActionVoidInstantNoPolicy = "VoidInstantNopolicy";
+    public const string QueueActionVoidResultKeyed = "VoidResultKeyed";
 
     public const byte ManualVoid = 5;
     public const byte AutoVoidWinningId = 1;
@@ -13,6 +14,7 @@ public static class ActionVoidRequestConstant
     public const byte AutoVoidAllInstantWithOutPolicyId = 8;
     public const byte AutoVoidAll5mBeforeKickOffId = 6;
     public const byte AutoVoidAll10mBeforeKickOffId = 7;
+    public const byte AutoVoidAllResultKeyedId = 9;
 
     public static IEnumerable<QueueAutoVoidModel> QueueAutoVoidList =>
         new List<QueueAutoVoidModel>

@@ -154,6 +154,7 @@ export class TVSRequestActionType {
   static readonly MANUAL_VOID_ID = 5;
   static readonly TAKE_NOTE_ID = 2;
   static readonly WAITING_ID = 3;
+  static readonly AUTO_VOID_RESULT_KEYED_ID = 9;
 
   static readonly MANUAL_VOID = 'Manual Void';
 }
@@ -335,8 +336,8 @@ export class SiteDbGroupConstant {
 
 export class ActionVoidByIssueTypeConst {
   static readonly REDUCED_OVER: number[] = [
+    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly WRONG_ODDS: number[] = [
