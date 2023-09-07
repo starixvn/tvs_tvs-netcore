@@ -18,7 +18,8 @@ export class StaticService {
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID
       || actionId === TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID
       || actionId === TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY;
+      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY
+      || actionId === TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID;
   }
 
   static isAbnormalBet(issueTypeId: string): boolean {
