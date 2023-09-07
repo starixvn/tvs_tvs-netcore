@@ -317,6 +317,9 @@ describe('SaveRequestService', () => {
     args.usernamesComponent = new UsernamesComponent(null);
     args.usernamesComponent.groupUsername = new GroupUsername();
     args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'AB');
+    args.filter.isVoided = false;
+    args.primitiveProps = new PrimitiveProperty();
+    args.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     saveRequestService = new SaveRequestService(null, null, null);
 
     const actual = saveRequestService['initAddRequestQuery'](args);
@@ -325,6 +328,22 @@ describe('SaveRequestService', () => {
     expect(actual.issueTypeId).toBe(args.filter.issueTypeId);
   });
   
+  it('#initAddRequestQuery should return expected model when transInfoAddRequestModel is null', async () => {
+    const args = Helper.fakeSaveRequestArg;
+    args.usernamesComponent = new UsernamesComponent(null);
+    args.usernamesComponent.groupUsername = new GroupUsername();
+    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'AB');
+    args.filter.isVoided = false;
+    args.primitiveProps = new PrimitiveProperty();
+    args.primitiveProps.transInfoAddRequestModel = null;
+    saveRequestService = new SaveRequestService(null, null, null);
+
+    const actual = saveRequestService['initAddRequestQuery'](args);
+
+    expect(actual.actionId).toBe(args.filter.action);
+    expect(actual.issueTypeId).toBe(args.filter.issueTypeId);
+  });
+
   it('#cancelValidateUsernamesWhenFocusOut should call #triggerFocusOutUsernames', async () => {
     const primitiveProps = new PrimitiveProperty();
     const usernamesComponent = new UsernamesComponent(null);

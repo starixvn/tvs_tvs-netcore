@@ -31,7 +31,7 @@ exports[`FilterComponent DateTimeComponent should init match snapshot 1`] = `
         </div>
       </div>
       <div
-        class="time"
+        class="time-input"
       >
         <input
           class="hour ng-untouched ng-pristine ng-valid"

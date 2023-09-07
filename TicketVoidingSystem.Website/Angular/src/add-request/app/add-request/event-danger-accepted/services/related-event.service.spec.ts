@@ -12,7 +12,7 @@ import { FilterModel } from '../../filter/filter.model';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { AddRelatedEventArg } from '../event-danger-accepted.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
@@ -124,7 +124,7 @@ describe('RelatedEventService', () => {
     expect(addRequestApiService.getChildMatches).toHaveBeenCalledTimes(1);
   });
 
-  it('#updateEvents should return expected model', async () => {
+  it('#assignChildMatchToLogInfoModel should return expected model', async () => {
     // Arrange
     const addRequestApiService = new AddRequestApiService(null);
     addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));

@@ -46,8 +46,8 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
 
   private updateRemoveCustomerClassStatus() {
     const transIdList = this.model.transIds.split(',');
-    const ticketsOfCustomerClass201List = this.model.ticketsOfCustomerClass201?.split(',');
-    const ticketsOfCustomerClass4KList = this.model.ticketsOfCustomerClass4K?.split(',');
+    const ticketsOfCustomerClass201List = this.model.ticketsOfCustomerClass201.split(',');
+    const ticketsOfCustomerClass4KList = this.model.ticketsOfCustomerClass4K.split(',');
     const ticketsOfCustomerClass201And4KList = [...ticketsOfCustomerClass201List, ...ticketsOfCustomerClass4KList].filter(x => x !== '');
 
     if (this.isAllTicketsOfCustomerClass(transIdList, ticketsOfCustomerClass201List)) {

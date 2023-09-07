@@ -12,7 +12,7 @@
             [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected">
         </log-info>
 
-        <filter *ngIf="isRedCard() || isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"
+        <filter *ngIf="isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"
             [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
         </filter>
     </div>

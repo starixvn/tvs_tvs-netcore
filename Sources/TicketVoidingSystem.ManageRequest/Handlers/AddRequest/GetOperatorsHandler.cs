@@ -33,7 +33,7 @@ public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumera
         return operators;
     }
 
-    private IEnumerable<OperatorInfo?> UpdateViewModel(IEnumerable<OperatorInfoModel> data)
+    private static IEnumerable<OperatorInfo?> UpdateViewModel(IEnumerable<OperatorInfoModel> data)
     {
         if (!data.Any())
         {

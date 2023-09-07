@@ -1,4 +1,4 @@
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { CommonTicketsModel } from '../../../utility/models/common.tickets.model';
 import { GroupModel } from './group-tickets.model';

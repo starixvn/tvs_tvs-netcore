@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { AcceptType, DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -99,7 +99,7 @@ export class LogInfoRedCardComponent {
   getSubIssueTypeName(): string {
     const defaultText = 'Select Sub Type';
     if (this.logInfo.subIssueTypeId) {
-      return this.subIssueTypes.find(x => x.subIssueTypeId === this.logInfo.subIssueTypeId)?.subIssueTypeName;
+      return this.subIssueTypes.find(x => x.subIssueTypeId === this.logInfo.subIssueTypeId).subIssueTypeName;
     }
 
     return defaultText;

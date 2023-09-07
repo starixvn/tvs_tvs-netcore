@@ -1,0 +1,122 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using NSubstitute;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
+using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
+using Xunit;
+
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
+
+public class GetPoolHouseTicketServiceTests
+{
+    private readonly MapTicketsService mapTicketsService;
+    private readonly PagingService pagingService;
+    private readonly GetPoolHouseTicketServiceImp service;
+
+    public GetPoolHouseTicketServiceTests()
+    {
+        mapTicketsService = Substitute.For<MapTicketsService>();
+        pagingService = Substitute.For<PagingService>();
+        service = new GetPoolHouseTicketServiceImp(mapTicketsService, pagingService);
+    }
+
+    [Fact]
+    public void GetTicketsViewModel_NoHasOriginTickets_ReturnEmptyGroups()
+    {
+        // Arrange
+        var originTickets = new List<GetTicketModel>();
+        var request = new GetPoolHouseTicketRequest();
+        var expected = new TicketsViewModel
+        {
+            TotalSingle = 0,
+            TotalParlay = 0,
+            Groups = Enumerable.Empty<Group<TicketViewModel>>()
+        };
+
+        // Act
+        var actual = service.GetTicketsViewModel(originTickets, request);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetTicketsViewModel_NoHasAfterPagingTickets_ReturnEmptyGroups()
+    {
+        // Arrange
+        var afterPagingTickets = new List<GetTicketModel>();
+        var originTickets = new List<GetTicketModel> { new() };
+        var request = new GetPoolHouseTicketRequest();
+        var expected = new TicketsViewModel
+        {
+            TotalSingle = 1,
+            TotalParlay = 0,
+            Groups = Enumerable.Empty<Group<TicketViewModel>>()
+        };
+        pagingService.Paging(originTickets, request.PageIndex, request.PageSize).ReturnsForAnyArgs(afterPagingTickets);
+
+        // Act
+        var actual = service.GetTicketsViewModel(originTickets, request);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetTicketsViewModel_HasAfterPagingTickets_ReturnExpected()
+    {
+        // Arrange
+        var afterPagingTickets = new List<GetTicketModel>
+        {
+            new() { IsMixParlay = true, GroupName = "Parlay" },
+            new() { IsMixParlay = true, GroupName = "1" },
+            new() { IsMixParlay = false, GroupName = "Others" },
+            new() { IsMixParlay = false, GroupName = "1" }
+        };
+        var originTickets = new List<GetTicketModel>
+        {
+            new() { IsMixParlay = true, GroupName = "Parlay" },
+            new() { IsMixParlay = true, GroupName = "1" },
+            new() { IsMixParlay = false, GroupName = "Others" },
+            new() { IsMixParlay = false, GroupName = "1" }
+        };
+        var request = new GetPoolHouseTicketRequest { IssueTypeId = 1 };
+        var singleTickets = new List<GetTicketModel>
+        {
+            new() { IsMixParlay = false, GroupName = "1" }
+        };
+        var groups = new List<Group<GetTicketModel>>
+            { new() { Name = "1", Tickets = singleTickets, DisplayTotalTickets = 1 } };
+        pagingService.Paging(originTickets, request.PageIndex, request.PageSize).ReturnsForAnyArgs(afterPagingTickets);
+        pagingService.Groups(singleTickets, ticket => ticket.GroupName).ReturnsForAnyArgs(groups);
+        mapTicketsService
+            .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), null, ChoiceType.None, 1)
+            .ReturnsForAnyArgs(new TicketViewModel());
+        var expectedGroups = new List<Group<TicketViewModel>>
+        {
+            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 3 } }, DisplayTotalTickets = 2 },
+            new()
+            {
+                Name = "Parlay", Tickets = new List<TicketViewModel> { new() { No = 3 } }, DisplayTotalTickets = 1
+            },
+            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 3 } }, DisplayTotalTickets = 1 }
+        };
+        var expected = new TicketsViewModel
+        {
+            TotalSingle = 2,
+            TotalParlay = 2,
+            Groups = expectedGroups
+        };
+
+        // Act
+        var actual = service.GetTicketsViewModel(originTickets, request);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+}

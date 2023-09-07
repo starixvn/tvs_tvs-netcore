@@ -7,7 +7,8 @@ import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/
 import { LeagueEventRedCardComponent } from '../league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
-import { ValidationService } from './validation-service';
+import { ValidationService } from './validation.service';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 
 class Helper {
   static readonly fakeValidationMessageError: ValidationMessage = {
@@ -23,7 +24,7 @@ class Helper {
     isShowPopup: true,
     transIds: '',
     requestId: 1,
-  };  
+  };
   static readonly fakeLogInfoRedCard: LogInfoRedCard = {
     matchId: 1111,
     isMainMatch: true,
@@ -60,6 +61,87 @@ describe('ValidationService', () => {
     expect(result).toBeTruthy();
   });
 
+  it('#isAllEventsValid should return false when has not event isEventMatchValid', async () => {
+    // Arrange
+    validationService.isEventMatchValid = jest.fn().mockReturnValue(false);
+
+    // Action
+    const result = validationService.isAllEventsValid([Helper.fakeLogInfoRedCard]);
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
+  it('#isAllEventsValid should return true when has event isEventMatchValid', async () => {
+    // Arrange
+    validationService.isEventMatchValid = jest.fn().mockReturnValue(true);
+
+    // Action
+    const result = validationService.isAllEventsValid([Helper.fakeLogInfoRedCard]);
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('#isValidInputRelatedEvent should return false when Invalid MatchId', async () => {
+    // Arrange
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+
+    // Action
+    const result = validationService.isValidInputRelatedEvent(1111, '1', [Helper.fakeLogInfoRedCard], tooltip);
+
+    // Assert
+    expect(result).toBeFalsy();
+    expect(tooltip.display).toHaveBeenCalledTimes(1);
+  });
+
+  it('#isValidInputRelatedEvent should return false when Invalid MatchId', async () => {
+    // Arrange
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+
+    // Action
+    const result = validationService.isValidInputRelatedEvent(1111, '1', [Helper.fakeLogInfoRedCard], tooltip);
+
+    // Assert
+    expect(result).toBeFalsy();
+    expect(tooltip.display).toHaveBeenCalledTimes(1);
+  });
+
+  it('#isValidInputRelatedEvent should return true when MatchId is Valid', async () => {
+    // Arrange
+    
+    // Action
+    const result = validationService.isValidInputRelatedEvent(1, '1', [Helper.fakeLogInfoRedCard], null);
+
+    // Assert
+    expect(result).toBeTruthy();
+  });
+
+  it('#isValidInputRelatedEvent should return true when MatchId already exists in the list', async () => {
+    // Arrange
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const fackRelatedEvent: LogInfoRedCard = {
+      matchId: 1,
+      isMainMatch: false,
+      eventName: '',
+      leagueName: '',
+      subIssueTypeId: 7,
+      voidTimeArea: null,
+      logInfoDetail: null,
+      messageValidationLogInfo: [Helper.fakeValidationMessageNotError],
+    };
+    
+    // Action
+    const result = validationService.isValidInputRelatedEvent(1, '1', [Helper.fakeLogInfoRedCard, fackRelatedEvent], tooltip);
+
+    // Assert
+    expect(result).toBeFalsy();
+    expect(tooltip.display).toHaveBeenCalledTimes(1);
+  });
+
   it('#isHasAllowanceTime should return true when allowance time and is zero', async () => {
     // Arrange
     const logInfoRedCard = new LogInfoRedCard();
@@ -87,7 +169,7 @@ describe('ValidationService', () => {
     // Assert
     expect(result).toBe(false);
   });
-  
+
   it('#validateCommonData should return false when has not subIssueTypeId', async () => {
     // Arrange
     const filterModel = new FilterModel();
@@ -104,7 +186,7 @@ describe('ValidationService', () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-    
+
     const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
     const spyIsMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => false);
 
@@ -122,7 +204,7 @@ describe('ValidationService', () => {
     filterModel.subIssueTypeId = '1';
     const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
     const spyLeagueEventRedCardComponentIsMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => true);
-    
+
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => false);
 
@@ -139,10 +221,10 @@ describe('ValidationService', () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-    
+
     const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
     const spyLeagueEventRedCardComponentIsMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => true);
-    
+
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
 
@@ -152,7 +234,7 @@ describe('ValidationService', () => {
     logInfoRedCardComponent.showValidationDetail = jest.fn();
     const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
-    
+
     // Action
     const result = validationService.validateCommonData(filterModel, leagueEventRedCardComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore);
 
@@ -166,10 +248,10 @@ describe('ValidationService', () => {
     // Arrange
     const filterModel = new FilterModel();
     filterModel.subIssueTypeId = '1';
-    
+
     const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
     const spyLeagueEventRedCardComponentIsMatchIdValid = jest.spyOn(leagueEventRedCardComponent, 'isMatchIdValid').mockImplementation(() => true);
-    
+
     const filterTimeAreaComponent = new FilterTimeAreaComponent(null, null);
     const spyFilterTimeAreaComponentIsValid = jest.spyOn(filterTimeAreaComponent, 'isValid').mockImplementation(() => true);
 
@@ -179,7 +261,7 @@ describe('ValidationService', () => {
     logInfoRedCardComponent.showValidationDetail = jest.fn();
     const logInfoComponents = new QueryList<LogInfoRedCardComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
-    
+
     // Action
     const result = validationService.validateCommonData(filterModel, leagueEventRedCardComponent, filterTimeAreaComponent, logInfoComponents, mockAddRequestStore);
 
@@ -188,7 +270,7 @@ describe('ValidationService', () => {
     expect(spyFilterTimeAreaComponentIsValid).toHaveBeenCalledTimes(1);
     expect(result).toBeTruthy();
   });
-  
+
   it('#isEventMatchValid should return false when mainMatch has error', async () => {
     // Arrange
     const event = Helper.fakeLogInfoRedCard;
@@ -215,7 +297,7 @@ describe('ValidationService', () => {
     // Assert
     expect(result).toBe(false);
   });
-  
+
   it('#isEventMatchValid should return true', async () => {
     // Arrange
     const event = Helper.fakeLogInfoRedCard;
@@ -228,7 +310,7 @@ describe('ValidationService', () => {
     // Assert
     expect(result).toBeTruthy();
   });
-  
+
   it('#isEditingByAnotherUser should return true', async () => {
     const result = validationService.isEditingByAnotherUser(true, 1, 2);
 

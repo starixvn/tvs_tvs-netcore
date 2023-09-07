@@ -20,7 +20,7 @@ import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
-import { PrimitiveProperty } from '../void-danger-accepted.model';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { TemplateMessageService } from './template-message.service';
 import { TicketsService } from './tickets.service';
 import { VoidPageService } from './void-page.service';

@@ -11,6 +11,59 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
 public class EmailExtensionTests
 {
     [Fact]
+    public void Valid_ValidData_ReturnTrue()
+    {
+        // Arrange
+        var tickets = new List<DuplicateTicketsRequestInfo> { new() };
+        var site = new SiteEmail
+        {
+            ToList = "1"
+        };
+
+        // Act
+        var result = tickets.Valid(site);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Valid_NoHasDuplicateTicketsRequestInfo_ReturnFalse()
+    {
+        // Arrange
+        var tickets = new List<DuplicateTicketsRequestInfo>();
+
+        var site = new SiteEmail
+        {
+            ToList = "1"
+        };
+
+        // Act
+        var result = tickets.Valid(site);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Valid_ToListIsNull_ReturnFalse()
+    {
+        // Arrange
+        var tickets = new List<DuplicateTicketsRequestInfo>();
+
+        var site = new SiteEmail
+        {
+            ToList = null
+        };
+
+        // Act
+        var result = tickets.Valid(site);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
     public void ToOperatorsXml_ReturnsEmptyString_WhenAgentIdsIsNull()
     {
         // Arrange

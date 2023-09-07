@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { GetLogInfoQuery } from '../../../add-request/app/add-request/models/add-request.query';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
@@ -128,9 +128,6 @@ export class VoidOtherIssueComponent implements OnInit {
       if (this.isWrongScore()) {
         this.match = await this.commonService.getMatch(this.requestDetail.wrongScoreModels[0].matchId);
         this.isShowVar = this.requestDetail.wrongScoreModels[0].isCheckedVar;
-      } else if (this.isRedCard()) {
-        this.match = await this.commonService.getMatch(this.requestDetail.redCardModels[0].matchId);
-        this.isShowVar = this.requestDetail.redCardModels[0].isCheckedVar;
       } else if (this.isWrongOdds()) {
         this.match = await this.commonService.getMatch(this.requestDetail.wrongOddsModels[0].matchId);
       } else if (this.isReducedOver()) {
@@ -142,7 +139,7 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   private initLiveScore(): void {
-    if (this.isRedCard() || this.isWrongScore() || this.isWrongOdds()) {
+    if (this.isWrongScore() || this.isWrongOdds()) {
       this.liveScoreSelection = this.logInfoDetails[0].liveScores.split('|');
     }
   }
@@ -182,10 +179,6 @@ export class VoidOtherIssueComponent implements OnInit {
   private getKickOffDate(): string {
     if (this.isWrongScore()) {
       return this.requestDetail.wrongScoreModels[0].eventDate.toString();
-    }
-
-    if (this.isRedCard()) {
-      return this.requestDetail.redCardModels[0].eventDate.toString();
     }
 
     if (this.isWrongOdds()) {
@@ -250,21 +243,6 @@ export class VoidOtherIssueComponent implements OnInit {
     }
   }
 
-  updateTemplateValueForRedCard() {
-    if (this.isRedCard()) {
-      this.templateValue.eventType = EventType.LIVE;
-
-      this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
-      if (!this.logInfoDetails[0].scoreNormalTicket) {
-        this.templateValue.isUpdateScoreHaveText = false;
-      } else {
-        this.templateValue.isUpdateScoreHaveText = this.logInfoDetails[0].scoreNormalTicket.split(',').length > 1 ? true : false;
-      }
-      this.templateValue.isCheckTime = this.requestDetail.redCardModels[0].filterBy === TVSRequestFilterBy.CHECK_TIME;
-      this.templateValue.isCheckedVar = this.requestDetail.redCardModels[0].isCheckedVar;
-    }
-  }
-
   updateTemplateValueForWrongScore() {
     if (this.isWrongScore()) {
       const score = (this.filterBy === TVSRequestFilterBy.TRANS_TIME || this.filterBy === TVSRequestFilterBy.TRANS_TIME_AND_CHECK_TIME)
@@ -310,7 +288,6 @@ export class VoidOtherIssueComponent implements OnInit {
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
     this.templateValue.toTransTime = this.ticketsModel.toTime;
     this.updateTemplateValueForAbnormalBet();
-    this.updateTemplateValueForRedCard();
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
     this.templateValue.totalTickets = this.ticketsModel.total;
@@ -502,10 +479,6 @@ export class VoidOtherIssueComponent implements OnInit {
     return StaticService.isAbnormalAccount(this.requestDetail.request.issueTypeId.toString());
   }
 
-  isRedCard(): boolean {
-    return StaticService.isRedCard(this.requestDetail.request.issueTypeId.toString());
-  }
-
   isWrongScore(): boolean {
     return StaticService.isWrongScore(this.requestDetail.request.issueTypeId.toString());
   }
@@ -605,10 +578,7 @@ export class VoidOtherIssueComponent implements OnInit {
       issueTypeId: this.requestDetail.request.issueTypeId,
       subIssueTypeId: StaticService.getSubIssueTypeId(this.requestDetail),
     };
-    if (this.isRedCard()) {
-      query.matchId = this.requestDetail.redCardModels[0].matchId;
-      query.redCardModels = MappingModelStaticService.buidRedCardGetLogInfoModel(this.requestDetail.redCardModels);
-    } else if (this.isWrongScore()) {
+    if (this.isWrongScore()) {
       query.matchId = this.requestDetail.wrongScoreModels[0].matchId;
       query.wrongScoreModels = MappingModelStaticService.buidWrongScoreGetLogInfoModel(this.requestDetail.wrongScoreModels);
     } else if (this.isWrongOdds()) {
@@ -630,6 +600,6 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   public isHasLogInfo(): boolean {
-    return this.isRedCard() || this.isWrongScore() || this.isWrongOdds() || this.isReducedOver();
+    return this.isWrongScore() || this.isWrongOdds() || this.isReducedOver();
   }
 }

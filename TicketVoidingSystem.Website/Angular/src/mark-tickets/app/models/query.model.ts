@@ -1,4 +1,4 @@
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { CheckedBetType } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { DateTimeFormat } from '../../../utility/constants/config';
 import { BetID } from '../../../utility/models/bet-id.model';

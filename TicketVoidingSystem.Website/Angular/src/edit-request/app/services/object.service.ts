@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment-timezone';
 import { AbnormalAccountModel } from '../../../add-request/app/add-request/models/abnormal-account.model';
 import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';

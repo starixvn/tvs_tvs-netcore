@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';

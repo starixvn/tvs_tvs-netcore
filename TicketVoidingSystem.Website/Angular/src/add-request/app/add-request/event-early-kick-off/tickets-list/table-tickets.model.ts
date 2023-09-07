@@ -1,6 +1,5 @@
 import { GroupModel } from './group-tickets.model';
-
-import * as moment from 'moment';
+import moment from 'moment-timezone';
 
 export class TableTicketsModel {
   id: string;

@@ -141,12 +141,16 @@ describe('EventReducedOverComponent', () => {
   it('updateModelWhenChangeMatchId should call #filterService.getPlayers', async () => {
     const mockGetReducedOverBetTypes = jest.fn().mockReturnValue(Helper.fakeReducedOverBetTypes);
     const mockGetPlayers = jest.fn();
+    const mockChangeBlockingUiStatus = jest.fn();
     const mockRenderGroupReducedOverBetTypes = jest.fn();
     const { instance } = await shallow
     .mock(FilterReducedOverService, {
       getPlayers: mockGetPlayers,
       getReducedOverBetTypes: mockGetReducedOverBetTypes,
       renderGroupReducedOverBetTypes: mockRenderGroupReducedOverBetTypes
+    })
+    .mock(AddRequestStore, {
+      changeBlockingUiStatus: mockChangeBlockingUiStatus,
     })
     .render({
       bind: {
@@ -161,6 +165,7 @@ describe('EventReducedOverComponent', () => {
     expect(mockRenderGroupReducedOverBetTypes).toHaveBeenCalledTimes(1);
     expect(mockGetReducedOverBetTypes).toHaveBeenCalledTimes(1);
     expect(mockGetPlayers).toHaveBeenCalledTimes(1);
+    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
 
   it('clickSearch should call #logInfoService.getLogInfo', async () => {

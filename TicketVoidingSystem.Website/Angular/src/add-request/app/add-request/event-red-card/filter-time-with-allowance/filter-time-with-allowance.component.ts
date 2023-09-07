@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';

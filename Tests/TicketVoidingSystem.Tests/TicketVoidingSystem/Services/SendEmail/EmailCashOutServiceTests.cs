@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using Fanex.MailDeliver.Model;
+using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -12,12 +15,14 @@ public class EmailCashOutServiceTests
     private readonly EmailSimpleService emailSimpleService;
     private readonly EmailCashOutServiceImp service;
     private readonly SitesEmailService sitesEmailService;
+    private readonly VoidEmailContentService voidEmailContentService;
 
     public EmailCashOutServiceTests()
     {
         sitesEmailService = Substitute.For<SitesEmailService>();
         emailSimpleService = Substitute.For<EmailSimpleService>();
-        service = new EmailCashOutServiceImp(sitesEmailService, emailSimpleService);
+        voidEmailContentService = Substitute.For<VoidEmailContentService>();
+        service = new EmailCashOutServiceImp(sitesEmailService, emailSimpleService, voidEmailContentService);
     }
 
     [Fact]
@@ -30,12 +35,14 @@ public class EmailCashOutServiceTests
             { new() { IsCashOut = true }, new() { IsCashOut = true } };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.CashOut)
             .ReturnsForAnyArgs(new SiteEmail());
+        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+                Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.CashOut, true)
+            .ReturnsForAnyArgs(new MailRecord());
 
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
 
         // Assert
-        emailSimpleService.Received(1).Send(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
-            Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.CashOut, true);
+        emailSimpleService.Received(1).Send(Arg.Any<MailRecord>(), EmailGroup.CashOut);
     }
 }

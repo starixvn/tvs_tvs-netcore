@@ -16,8 +16,7 @@ public class GetRemarkHandlerTests
 {
     [Theory]
     [ClassData(typeof(RemarkTestCase))]
-    public async Task GetRemark_CheckPermission_ReturnRemarkWithPermission(bool settled, bool unSettled,
-        bool instantlySettled, List<string> expected)
+    public async Task GetRemark_CheckPermission_ReturnRemarkWithPermission(bool settled, bool unSettled, bool instantlySettled, List<string> expected)
     {
         // Arrange
         var sessionService = Substitute.For<SessionService>();
@@ -33,7 +32,7 @@ public class GetRemarkHandlerTests
         var results = await handler.Handle(new GetRemarkRequest(), CancellationToken.None);
 
         // Assert
-        Assert.Equal(expected.Count, results.Count());
+        AssertExtension.Equal(expected, results);
     }
 
     private class RemarkModelTest
@@ -73,7 +72,7 @@ public class GetRemarkHandlerTests
             Expected = new List<string>
             {
                 "You can void \"Settled\" or \"Unsettled\" tickets.",
-                "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time."
+                "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets."
             }
         };
 
@@ -85,7 +84,7 @@ public class GetRemarkHandlerTests
             Expected = new List<string>
             {
                 "You can only void \"Unsettled\" tickets.",
-                "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time."
+                "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets."
             }
         };
 
@@ -97,7 +96,7 @@ public class GetRemarkHandlerTests
             Expected = new List<string>
             {
                 "You can only void \"Unsettled\" tickets.",
-                "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time."
+                "You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets."
             }
         };
 
@@ -109,17 +108,12 @@ public class GetRemarkHandlerTests
             Expected = new List<string>()
         };
 
-        private readonly IEnumerable<object[]> testCase = new List<object[]>
+        public IEnumerator<object[]> GetEnumerator()
         {
-            new object[] { OnlySettled.Settled, OnlySettled.UnSettled, OnlySettled.InstantlySettled, OnlySettled.Expected },
-            new object[] { OnlyUnSettled.Settled, OnlyUnSettled.UnSettled, OnlyUnSettled.InstantlySettled, OnlyUnSettled.Expected },
-            new object[] { SettledAndInstant.Settled, SettledAndInstant.UnSettled, SettledAndInstant.InstantlySettled, SettledAndInstant.Expected },
-            new object[] { UnSettledAndInstant.Settled, UnSettledAndInstant.UnSettled, UnSettledAndInstant.InstantlySettled, UnSettledAndInstant.Expected },
-            new object[] { OnlyInstant.Settled, OnlyInstant.UnSettled, OnlyInstant.InstantlySettled, OnlyInstant.Expected },
-            new object[] { NotAnyPermission.Settled, NotAnyPermission.UnSettled, NotAnyPermission.InstantlySettled, NotAnyPermission.Expected }
-        };
-
-        public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();
+            var remarkTests = new List<RemarkModelTest> { OnlySettled, OnlyUnSettled, SettledAndInstant, UnSettledAndInstant, OnlyInstant, NotAnyPermission };
+            var testCase = remarkTests.Select(x => new object[] { x.Settled, x.UnSettled, x.InstantlySettled, x.Expected });
+            return testCase.GetEnumerator();
+        }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

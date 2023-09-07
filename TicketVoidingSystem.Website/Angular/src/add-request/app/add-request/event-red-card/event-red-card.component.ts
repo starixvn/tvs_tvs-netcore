@@ -1,9 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import * as moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -22,7 +21,13 @@ import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation-service';
+import { ValidationService } from './services/validation.service';
+import { ChildMatchModel } from '../models/related-event.model';
+import * as _ from 'lodash';
+import { EventRedCardService } from './services/event-red-card.service';
+import { RelatedEventService } from './services/related-event.service';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 
 @Component({
   selector: 'event-red-card',
@@ -52,9 +57,13 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   defaultFilterTimeWithAllowance = new FilterTimeWithAllowance();
   confirmRedCard = new ConfirmRedCardModel();
   mainEvent = new LogInfoRedCard();
+  allSelectedEvents: LogInfoRedCard[] = [];
+  relatedEvents: ChildMatchModel[] = [];
+  addChildMatchModel = new AddChildMatchModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
-
   getAllowanceTimeSubscription: Subscription;
+
+  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
 
   constructor(
     private readonly element: ElementRef,
@@ -62,6 +71,8 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     private readonly addRequestStore: AddRequestStore,
+    private readonly relatedEventService: RelatedEventService,
+    private readonly eventRedCardService: EventRedCardService,
   ) {
     this.tooltip.element = this.element;
   }
@@ -69,28 +80,29 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
-      this.handleChangeDefaultFilterArea();
+      this.resetLogInfoAndHideAllEvents();
+      this.logInfoService.resetVoidTimeArea(this.allSelectedEvents, this.defaultFilterTimeWithAllowance);
+      this.logInfoService.resetIsCheckedVar(this.allSelectedEvents);
       this.filter.isChangeSubTypeManual = false;
-      this.logInfoService.resetIsCheckedVar(this.mainEvent);
     }
   }
 
-  ngOnInit(): void {
-    if (this.addRequestStore.getAllowanceTimeSubject) {
-      this.getAllowanceTimeSubscription = this.addRequestStore.getAllowanceTimeSubject.subscribe(model => {
-        this.defaultFilterTimeWithAllowance.aaTime = model.aaTime;
-        this.defaultFilterTimeWithAllowance.paTime = model.paTime;
-        this.defaultFilterTimeWithAllowance.saTime = model.saTime;
-      });
-    }
-
+  async ngOnInit(): Promise<void> {
+    this.getAllowanceTimeSubscription = this.addRequestStore.getAllowanceTimeSubject.subscribe(model => {
+      this.defaultFilterTimeWithAllowance.aaTime = model.aaTime;
+      this.defaultFilterTimeWithAllowance.paTime = model.paTime;
+      this.defaultFilterTimeWithAllowance.saTime = model.saTime;
+    });
     if (this.isEdit) {
-      this.updateMainEvent(this.mainEvent, this.redCardModels);
-      this.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.redCardModels, this.filter);
+      this.eventRedCardService.assignModelsToEvents(this.allSelectedEvents, this.redCardModels, this.primitiveProps, this.addRequestStore);
+      this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
+      this.eventRedCardService.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.redCardModels);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
       this.primitiveProps.isShowLogInfoMainMatch = true;
+      this.primitiveProps.isShowRelatedEvents = true;
     } else {
-      this.initDefaultMainEvent(this.mainEvent);
-      this.initDefaultFilterTime(this.defaultFilterTimeWithAllowance);
+      this.mainEvent = this.eventRedCardService.initDefaultMainEvent(this.allSelectedEvents);
+      this.eventRedCardService.initDefaultFilterTime(this.defaultFilterTimeWithAllowance);
       this.primitiveProps.filterBy = TVSRequestFilterBy.CHECK_TIME;
     }
   }
@@ -99,76 +111,41 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.getAllowanceTimeSubscription?.unsubscribe();
   }
 
-  private initDefaultFilterTime(defaultFilter: FilterTimeWithAllowance): void {
-    const currentMoment = moment.utc().tz('America/Caracas');
-    defaultFilter.fromDateTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    defaultFilter.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-  }
-
-  private initDefaultMainEvent(mainEvent: LogInfoRedCard): void {
-    mainEvent.isMainMatch = true;
-  }
-
-  private updateMainEvent(mainEvent: LogInfoRedCard, inputModels: RedCardModel[]): void {
-    const eventSource = inputModels.find(x => x.isMainMatch);
-    mainEvent.matchId = eventSource.matchId;
-    mainEvent.subIssueTypeId = eventSource.subIssueTypeId;
-    mainEvent.isCheckedVar = eventSource.isCheckedVar;
-    mainEvent.isMainMatch = true;
-    mainEvent.eventName = eventSource.name;
-    mainEvent.logInfoDetail = eventSource.logInfoDetail;
-    mainEvent.voidTimeArea = {
-      fromDateTime: eventSource.voidFromTime,
-      toDateTime: eventSource.voidToTime,
-      aaTime: eventSource.aaTime,
-      paTime: eventSource.paTime,
-      saTime: eventSource.saTime
-    } as FilterTimeWithAllowance;
-
-    this.addRequestStore.changeAllowanceTime({
-      aaTime: eventSource.aaTime,
-      paTime: eventSource.paTime,
-      saTime: eventSource.saTime,
-    });
-
-    this.primitiveProps.filterBy = eventSource.filterBy;
-  }
-
-  private updateDefaultFilterTime(defaultFilter: FilterTimeWithAllowance, inputModels: RedCardModel[], filterModel: FilterModel): void {
-    const eventSource = inputModels.find(x => x.isMainMatch);
-    defaultFilter.fromDateTime = eventSource.filterFromTransTime;
-    defaultFilter.toDateTime = eventSource.filterToTransTime;
-  }
-
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.logInfoService.resetAllEventBeforeSearch(this.mainEvent, this.defaultFilterTimeWithAllowance, Number(this.filter.subIssueTypeId));
 
     if (!this.validationService.validateCommonData(this.filter, this.leagueEventRedCardComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
       return;
     }
-
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
       this.mainEvent.isHighLightVarCheck = true;
       return;
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    await this.logInfoService.getLogInfo([this.mainEvent], this.primitiveProps, this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
+    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
       x.filterTimeWithAllowanceComponent?.updateData();
       x.showValidationDetail();
     });
+    this.logInfoService.updateIsCheckedVar(this.allSelectedEvents, this.mainEvent.isCheckedVar);
+    this.primitiveProps.isShowLogInfoMainMatch = true;
+    this.primitiveProps.isShowRelatedEvents = true;
     this.addRequestStore.changeSavingRequestStatus(false);
     this.addRequestStore.changeBlockingUiStatus(false);
-    this.primitiveProps.isShowLogInfoMainMatch = true;
   }
 
   changeMatchEvent(): void {
     this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.logInfoService.resetAllEventBeforeSearch(this.mainEvent, this.defaultFilterTimeWithAllowance, Number(this.filter.subIssueTypeId));
+    this.primitiveProps.isShowRelatedEvents = false;
+    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
+    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
     this.mainEvent.matchId = this.leagueEventRedCardComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.leagueEventRedCardComponent?.selectedMatch.name;
+    this.mainEvent.leagueName = this.leagueEventRedCardComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchCode = this.leagueEventRedCardComponent?.selectedMatch.matchCode;
     this.updateMatchId.emit(this.leagueEventRedCardComponent?.selectedMatch);
   }
 
@@ -176,11 +153,12 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     return (this.mainEvent.matchId) ? true : false;
   }
 
-  handleChangeDefaultFilterArea() {
+  resetLogInfoAndHideAllEvents() {
     this.primitiveProps.isShowLogInfoMainMatch = false;
-    this.logInfoService.resetAllEventBeforeSearch(this.mainEvent, this.defaultFilterTimeWithAllowance, Number(this.filter.subIssueTypeId));
+    this.primitiveProps.isShowRelatedEvents = false;
+    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
-
+  
   async saveRequest(): Promise<void> {
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
@@ -193,19 +171,70 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
+  async saveRelatedEvent(selectedRelatedEvents: ChildMatchModel[]): Promise<void> {
+    this.primitiveProps.isBlock = true;
+    this.allSelectedEvents = this.allSelectedEvents.filter(x =>
+      (selectedRelatedEvents.some(y => y.matchId === x.matchId)
+        || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+      || x.isMainMatch);
+    const newChildEvents = selectedRelatedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
+    if (newChildEvents.length > 0) {
+      const newEvents = this.relatedEventService.assignChildMatchToLogInfoModel(newChildEvents, this.defaultFilterTimeWithAllowance, this.mainEvent.subIssueTypeId);
+      await this.eventRedCardService.updateSubIssueTypeAndAllowanceTime(newEvents, this.mainEvent, this.relatedEvents, this.defaultFilterTimeWithAllowance);
+      await this.logInfoService.getLogInfo(newEvents, this.primitiveProps, this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
+      this.logInfoService.updateIsCheckedVar(newEvents, this.mainEvent.isCheckedVar);
+      this.allSelectedEvents.push(...newEvents);
+      this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    }
+    this.primitiveProps.isShowRelatedEvents = true;
+    this.primitiveProps.isBlock = false;
+  }
+  
+  async handleClickAddRelatedEvent(): Promise<void> {
+    await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
+    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+  }
+
+  handleDeleteEvent(matchId: number): void {
+    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
+  }
+
+  showAddChildMatchModal(matchType: number) {
+    this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
+    this.addChildMatchModel.matchType = matchType;
+    this.addChildMatchModel.isOpen = true;
+    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+  }
+  
+  countChildMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length;
+  }
+
+  isDisabledChildMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length === 0;
+  }
+
+  countLinkMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length;
+  }
+
+  isDisabledLinkMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
+  }
+
   private initSaveRequestInput() {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
-    arg.requestedBy = this.requestedBy;
-    arg.userId = this.userId;
     arg.isEdit = this.isEdit;
+    arg.userId = this.userId;
+    arg.requestedBy = this.requestedBy;
     arg.actionIdOfFirstTimeAccess = this.actionIdOfFirstTimeAccess;
     arg.filter = this.filter;
     arg.issueTypes = this.issueTypes;
     arg.others = this.others;
     arg.primitiveProps = this.primitiveProps;
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
-    arg.mainEvent = this.mainEvent;
+    arg.allEvents = this.allSelectedEvents;
     arg.leagueEventRedCardComponent = this.leagueEventRedCardComponent;
     arg.filterTimeAreaComponent = this.filterTimeAreaComponent;
     arg.logInfoComponents = this.logInfoComponents;
@@ -215,8 +244,25 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     return arg;
   }
 
+  private initAddRelatedEventArgs() {
+    const arg = new AddRelatedEventArg();
+    arg.tooltip = this.tooltip;
+    arg.requestId = this.requestId;
+    arg.isEdit = this.isEdit;
+    arg.filter = this.filter;
+    arg.primitiveProps = this.primitiveProps;
+    arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
+    arg.allEvents = this.allSelectedEvents;
+    arg.mainEvent = this.mainEvent;
+    arg.addRequestStore = this.addRequestStore;
+    arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
+    arg.originalRelatedEvents = this.relatedEvents;
+
+    return arg;
+  }
+
   isShowVarCheck(): boolean {
-    return this.mainEvent.subIssueTypeId && StaticService.isShowVarCheck(this.mainEvent.subIssueTypeId);
+    return StaticService.isShowVarCheck(this.mainEvent.subIssueTypeId);
   }
 
   changeVarCheckValue(isVarChecked: boolean): void {

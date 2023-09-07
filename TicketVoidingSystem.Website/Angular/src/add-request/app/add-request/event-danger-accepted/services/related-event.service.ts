@@ -8,7 +8,7 @@ import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-
 import { FilterModel } from '../../filter/filter.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { AddRelatedEventArg } from '../event-danger-accepted.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';

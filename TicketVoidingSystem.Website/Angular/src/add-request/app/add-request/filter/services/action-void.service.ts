@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from 'src/utility/constants/config';
+import { ActionVoidByIssueTypeConst, TVSRequestActionType, AbnormalFilterBy } from '../../../../../utility/constants/config';
 
 @Injectable({
   providedIn: 'root'

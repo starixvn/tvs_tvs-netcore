@@ -1,0 +1,171 @@
+<div>
+    <ng-container *ngIf="isLoadedBasicData">
+      <div *ngFor="let item of voidMatches; let id = index" class="bg-gray match-void">
+        <div class="full-width d-flex bg-gray match-void">
+          <div class="index-of-match d-flex align-items-center">
+            <div class="number-circle"><span><strong>{{id + 1}}</strong></span></div>
+          </div>
+          <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
+            <div>
+              <div class="alert alert-dark p-1 m-0 mb-1"><span>
+                <span *ngIf="item.isCheckedVar" class="alert padding-2-10 text-white bg-danger">VAR</span>
+                Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
+              </div>
+            </div>
+            <div class="alert alert-dark match-info p-1 m-0 flex-grow-1">
+              <span>Match Code/ID:
+                <strong class="match-text">{{item.matchModel.matchCode}}/{{item.matchModel.matchId}}</strong></span><br />
+              <span>Match Event: <strong class="match-text">{{item.matchModel.matchEvent}}</strong></span><br />
+              <span>League: <strong class="match-text">{{item.matchModel.leagueName}}</strong></span><br />
+            </div>
+          </div>
+          <div class="col-sm-6 m-0 pd-right-0 pd-left-5">
+            <div class="log-info-cell alert alert-dark p-1 m-0">
+              <log-info-new [logInfoDetail]="item.logInfoDetail" [issueTypeId]="requestDetail.request.issueTypeId" [isMainMatch]="item.isMainMatch" [isPoolHouseAffected]="item.isPoolHouseAffected"></log-info-new>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <div class="area-icon">
+              <em [ngClass]="item.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
+                (click)="onClickShowVoidTickets(item)"></em>
+              <em
+                [ngClass]="item.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
+                (click)="onClickShowTemplateMessage(item)"></em>
+            </div>
+          </div>
+        </div>
+  
+        <div>
+          <div class="affected-licensees" *ngIf="item.isShowTicketFull && isShowAffectedLicenseeArea(item)">
+            <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
+            <div *ngIf="item.affectedLicensee.show && item.affectedLicensee.licenseesName.length > 0">
+              <span class="affected-licensees-highlight"
+                (click)="onClickCopyLicenseesToClipboard(item.affectedLicensee.licenseesName)">{{item.affectedLicensee.licenseesName}}</span>
+            </div>
+            <div class="china-view-licensee"
+              *ngIf="item.chinaViewLicensee.show && item.chinaViewLicensee.licenseesName.length > 0">
+              <span class="note">China View Licensee Affected List:</span><br />
+              <span class="affected-licensees-highlight"
+                (click)="onClickCopyLicenseesToClipboard(item.chinaViewLicensee.licenseesName)">{{item.chinaViewLicensee.licenseesName}}</span>
+            </div>
+            <div class="instant-licensee"
+              *ngIf="item.affectedInstantLicensee.show && item.affectedInstantLicensee.licenseesName.length > 0">
+              <span class="note">Instant OU Licensee Affected List:</span><br />
+              <span class="affected-licensees-highlight"
+                (click)="onClickCopyLicenseesToClipboard(item.affectedInstantLicensee.licenseesName)">{{item.affectedInstantLicensee.licenseesName}}</span>
+            </div>
+            <div class="cash-out-licensee"
+              *ngIf="item.cashOutLicensee.show && item.cashOutLicensee.licenseesName.length > 0">
+              <span class="note">Cash Out Licensee Affected List:</span><br />
+              <span class="affected-licensees-highlight"
+                  (click)="onClickCopyLicenseesToClipboard(item.cashOutLicensee.licenseesName)">{{item.cashOutLicensee.licenseesName}}</span>
+            </div>
+          </div>
+  
+          <tickets-list class="m-0" *ngIf="item.isShowTicketFull" [model]="item.voidTicketsFull"
+            [(paging)]="item.pagingVoidTickets" (pagingChange)="onPagingTicketsChange(item)" (exportExcelEvent)="exportTickets(item)"
+            [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
+            [isDisableCheckbox]="true">
+          </tickets-list>
+  
+          <div [ngClass]="item.isShowTemplateMessage ? 'display-block' : 'display-none'">
+            <ng-container *ngIf="item.voidTicketsMini?.total > 0">
+              <template-message #templateMessage [value]="item.templateValue"
+                [issueTypeId]="requestDetail.request.issueTypeId" [subIssueTypeId]="item.subIssueType.subIssueTypeId"
+                [voidFunction]="2"
+                >
+              </template-message>
+  
+              <div class="reason-area">
+                <div class="gray-header">
+                  Reason
+                </div>
+                <table>
+                  <tr class="header-language">
+                    <td>
+                      <span class="required">&nbsp;&nbsp;*</span> <span>English (Max {{150 -
+                        item.voidReason.reasonEnglish?.length}} characters)</span>
+                    </td>
+                    <td>
+                      <span class="required">&nbsp;&nbsp;*</span> <span>Chinese Simplified (Max {{150 -
+                        item.voidReason.reasonChineseSimplified?.length}} characters)</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <textarea maxlength="150" class="reason" [(ngModel)]="item.voidReason.reasonEnglish"></textarea>
+                    </td>
+                    <td>
+                      <textarea maxlength="150" class="reasonSC"
+                        [(ngModel)]="item.voidReason.reasonChineseSimplified"></textarea>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </ng-container>
+  
+            <ng-container *ngIf="item.voidTicketsMini?.total === 0">
+              <div class="reason-area">
+                <div class="gray-header">
+                  Message
+                </div>
+                <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
+              </div>
+              <div class="reason-area">
+                <div class="gray-header">
+                  Reason
+                </div>
+                <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+  
+      <fieldset class="confirm-delete">
+        <legend>Confirmation</legend>
+        <table>
+          <tr>
+            <td>
+              <label>Username</label>
+            </td>
+            <td>
+              <input class="form-control form-control-sm" type="text" disabled value="{{primitiveProperty.userName}}" />
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <label>Password</label>
+            </td>
+            <td>
+              <input autocomplete="new-password" type="password" class="password form-control form-control-sm"
+                [(ngModel)]="primitiveProperty.userPassword" />
+            </td>
+            <td><span>&nbsp;&nbsp;(*)</span></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <input type="button" class="btn btn-success btn-sm font-weight-bold btn-void-all-matches"
+                value="Void All" [disabled]="primitiveProperty.isBlockUI" (click)="onClickVoidAllMatches()" />
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <div *ngIf="primitiveProperty.errorMessage" class="error-text error-color">
+        <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{primitiveProperty.errorMessage}}
+      </div>
+  
+      <tooltip [tooltip]="tooltip"></tooltip>
+    </ng-container>
+  </div>
+  <div *ngIf="primitiveProperty.isBlockUI">
+    <div class="in modal-backdrop spinner-overlay"></div>
+    <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+      <div class="loading-message">
+        <div class="loading"></div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,7 +1,7 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Shallow } from 'shallow-render';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
@@ -91,6 +91,7 @@ describe('FilterTimeWithAllowanceComponent', () => {
         isDisabled: false,
       }
     });
+    instance.filterTimeWithAllowanceModel.fromDateTime = null;
     instance.setDefaultValue = jest.fn();
     instance['isHasTime'] = jest.fn();
     instance.initData = jest.fn();
@@ -146,6 +147,44 @@ describe('FilterTimeWithAllowanceComponent', () => {
     // Assert
     expect(instance.fromDate).toStrictEqual(expectedFromDate);
     expect(instance.toDate).toStrictEqual(expectedToDate);
+  });
+
+  it('#clearTimeWhenChangeActionWaitingToManualVoid should reset fromTime & toTime', async () => {
+    // Arrange
+    const { instance } = await shallow.render({
+      bind: {
+        filterTimeWithAllowanceModel: Helper.fakeFilterTimeWithAllowance,
+        isEdit: false,
+        isUseInLogInfo: false,
+        isDisabled: false,
+      }
+    });
+
+    // Action
+    instance.clearTimeWhenChangeActionWaitingToManualVoid();
+
+    // Assert
+    expect(instance.fromTime).toBe('');
+    expect(instance.toTime).toBe('');
+  });
+
+  it('#isValid should return false when #isFromTimeValid return false', async () => {
+    // Arrange
+    const { instance } = await shallow.render({
+      bind: {
+        filterTimeWithAllowanceModel: Helper.fakeFilterTimeWithAllowance,
+        isEdit: false,
+        isUseInLogInfo: false,
+        isDisabled: false,
+      }
+    });
+    instance.isFromTimeValid = jest.fn().mockImplementation(() => false);
+
+    // Action
+    const actual = instance.isValid();
+
+    // Assert
+    expect(actual).toBe(false);
   });
 
   it('#isValid should return false when #isFromTimeValid return false', async () => {
@@ -589,7 +628,6 @@ describe('FilterTimeWithAllowanceComponent', () => {
       }
     });
     instance['isInputTimeValid'] = jest.fn().mockImplementation(() => true);
-
     // Action
     const actual = instance['isToTimeValid']();
 

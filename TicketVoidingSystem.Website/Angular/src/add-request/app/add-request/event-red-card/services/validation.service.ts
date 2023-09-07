@@ -6,6 +6,7 @@ import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.co
 import { LeagueEventRedCardComponent } from '../league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,28 @@ export class ValidationService {
 
     return true;
   }
+  
+  isAllEventsValid(events: LogInfoRedCard[]): boolean {
+    if (events.some(x => !this.isEventMatchValid(x))) {
+      return false;
+    } 
+
+    return true;
+  }
+  
+  
+  isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, allEvents: LogInfoRedCard[], tooltip: Tooltip): boolean {    
+    if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
+      tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      return false;
+    }
+    if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
+      tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      return false;
+    }
+
+    return true;
+  }
 
   isEventMatchValid(event: LogInfoRedCard): boolean {
     if (event.isMainMatch && event.messageValidationLogInfo.some(x => x.isError)) {
@@ -60,4 +83,5 @@ export class ValidationService {
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
   }
+
 }

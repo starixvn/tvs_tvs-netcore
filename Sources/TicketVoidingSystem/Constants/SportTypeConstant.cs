@@ -9,4 +9,8 @@ public static class SportTypeConstant
     public const int CashOut = 5;
 
     public const int Basketball = 2;
+
+    public const int NumberGame = 161;
+
+    public const int Lucky3Game = 160;
 }

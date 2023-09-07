@@ -11,9 +11,10 @@
       </span>
   </div>
 
-    <void-danger-accepted *ngIf="isApplyVoidNewDesign() && !isDuplicateTickets()" [requestDetail]="requestDetail"></void-danger-accepted>
-    <void-other-issue *ngIf="!isApplyVoidNewDesign() && !isDuplicateTickets()" [requestId]="requestId" [requestDetail]="requestDetail"></void-other-issue>
-    <void-duplicate-tickets *ngIf="isDuplicateTickets()" [requestDetail]="requestDetail"></void-duplicate-tickets>
+    <void-danger-accepted *ngIf="isShowVoidDangerAccepted()" [requestDetail]="requestDetail"></void-danger-accepted>
+    <void-other-issue *ngIf="isShowVoidOtherIssue()" [requestId]="requestId" [requestDetail]="requestDetail"></void-other-issue>
+    <void-duplicate-tickets *ngIf="isShowVoidDuplicateTickets()" [requestDetail]="requestDetail"></void-duplicate-tickets>
+    <void-red-card *ngIf="isShowVoidRedCard()" [requestDetail]="requestDetail"></void-red-card>
 
   </ng-container>
   <div *ngIf="!isValidRequest()" class="mg-10 no-data">

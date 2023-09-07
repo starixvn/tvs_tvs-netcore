@@ -7,7 +7,6 @@ import { AddChildMatchComponent } from '../../../../utility/components/add-child
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockFullUiModule } from '../../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { PipeModule } from '../../../../utility/components/pipes/pipe.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
@@ -27,6 +26,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -209,7 +209,6 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-
     await instance.handleSearchEvent();
 
     expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);

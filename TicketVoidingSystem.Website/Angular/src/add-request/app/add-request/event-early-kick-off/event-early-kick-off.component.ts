@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { TimeModel } from '../../../../utility/components/date-time/date-time/time.model';
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { DateTimeFormat } from '../../../../utility/constants/config';

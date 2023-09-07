@@ -1,6 +1,6 @@
 import { UsernamesComponent } from '../../../../../utility/components/user-names/user-names.component';
 import { GroupUsername } from '../../../../../utility/components/user-names/user-names.model';
-import { CommonService } from '../../../../../utility/services/common.service';
+import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
@@ -53,11 +53,11 @@ class Helper {
 
 describe('ValidationService', () => {
   let validationService: ValidationService;
-  let commonService: CommonService;
+  let addRequestApiService: AddRequestApiService;
 
   beforeEach(() => {
-    commonService = new CommonService(null);
-    validationService = new ValidationService(commonService);
+    addRequestApiService = new AddRequestApiService(null);
+    validationService = new ValidationService(addRequestApiService);
     validationService['getTransInfo'] = jest.fn();
   });
 
@@ -229,14 +229,12 @@ describe('ValidationService', () => {
   });
   
   it('#getValidation should call #checkValidUsernames', async () => {
-    const results = {} as CheckUsernamesViewModel;
     const args = Helper.fakeValidationBusinessRuleArgs;
-    const spyCheckValidUsernames = jest.spyOn(commonService, 'checkValidUsernames').mockImplementation(() => Promise.resolve(results));
-
+    addRequestApiService.checkValidUsernames = jest.fn().mockReturnValue(new CheckUsernamesViewModel());
     const actual = await validationService['getValidation'](args, '');
 
-    expect(spyCheckValidUsernames).toHaveBeenCalledTimes(1);
-    expect(actual).toEqual(results);
+    expect(addRequestApiService.checkValidUsernames).toHaveBeenCalledTimes(1);
+    expect(actual).toEqual(new CheckUsernamesViewModel());
   });
   
   it('#isHasWarningEditTakeNoteRequest should return true', async () => {

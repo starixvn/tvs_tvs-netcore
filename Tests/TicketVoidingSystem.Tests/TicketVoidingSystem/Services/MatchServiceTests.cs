@@ -1,8 +1,11 @@
-﻿using Fanex.Data.Repository;
+﻿using System.Threading.Tasks;
+using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.ViewModels;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
@@ -59,6 +62,27 @@ public class MatchServiceTests
     }
 
     [Fact]
+    public async Task GetMatchAddRequest_ReturnExpected()
+    {
+        // Arrange
+        var criteria = new GetMatchInfoAddRequestCriteria { ErrorCode = 0, ErrorMsg = "" };
+        var match = new Match();
+        repository.GetAsync<Match>(criteria).ReturnsForAnyArgs(match);
+        var expected = new MatchInfoAddRequestViewModel
+        {
+            Match = match,
+            ErrorCode = criteria.ErrorCode,
+            ErrorMsg = criteria.ErrorMsg
+        };
+
+        // Act
+        var actual = await service.GetMatchAddRequest(criteria);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
     public void UpdateMatchInfoFromRemotingRef_HasMatchNotNull_ReturnMatchUpdated()
     {
         // Arrange
@@ -87,7 +111,8 @@ public class MatchServiceTests
             SportTypeNameTraditional = "SportName",
             MatchEvent = "TeamName - vs - TeamName",
             MatchEventSimplified = "TeamName - vs - TeamName",
-            MatchEventNewSimplified = "TeamName - vs - TeamName"
+            MatchEventNewSimplified = "TeamName - vs - TeamName",
+            Name = "0 - TeamName - vs - TeamName"
         };
         // Act
         var actual = service.UpdateMatchInfoFromRemotingRef(query);
@@ -129,7 +154,8 @@ public class MatchServiceTests
             SportTypeNameTraditional = "SportName",
             MatchEvent = "TeamName (N) - LeagueName",
             MatchEventSimplified = "TeamName (中) - LeagueName",
-            MatchEventNewSimplified = "TeamName (中) - LeagueName"
+            MatchEventNewSimplified = "TeamName (中) - LeagueName",
+            Name = "0 - TeamName (N) - LeagueName"
         };
         // Act
         var actual = service.UpdateMatchInfoFromRemotingRef(query);

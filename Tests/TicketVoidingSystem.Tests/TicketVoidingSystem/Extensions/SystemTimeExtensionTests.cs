@@ -7,6 +7,17 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
 public class SystemTimeExtensionTests
 {
     [Fact]
+    public void ZoneCanada_DateTimeIsNull_ReturnNull()
+    {
+        // Arrange
+        // Act
+        var actual = ((DateTime?)null).ZoneCanada();
+
+        // Assert
+        Assert.Null(actual);
+    }
+
+    [Fact]
     public void ZoneManila_DateTimeIsNull_ReturnExpected()
     {
         // Arrange

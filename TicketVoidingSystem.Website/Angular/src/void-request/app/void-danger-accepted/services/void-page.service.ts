@@ -9,7 +9,7 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { VoidMatch } from '../../models/void-match.model';
-import { PrimitiveProperty } from '../void-danger-accepted.model';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { TemplateMessageService } from './template-message.service';
 import { TicketsService } from './tickets.service';
 

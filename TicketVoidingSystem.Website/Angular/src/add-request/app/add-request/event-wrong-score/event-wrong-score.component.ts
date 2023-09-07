@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';

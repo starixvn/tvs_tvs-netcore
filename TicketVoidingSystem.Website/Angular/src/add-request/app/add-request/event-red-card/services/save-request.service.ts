@@ -10,7 +10,7 @@ import { PopupService } from '../../services/popup.service';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
-import { ValidationService } from './validation-service';
+import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class SaveRequestService {
 
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
-    this.logInfoService.resetLogInfoOfEvent(arg.mainEvent);
+    this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
 
     if (!this.validationService.validateCommonData(arg.filter, arg.leagueEventRedCardComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
       return false;
@@ -33,7 +33,7 @@ export class SaveRequestService {
 
     arg.primitiveProps.isShowLogInfoMainMatch = false;
     arg.addRequestStore.changeBlockingUiStatus(true);
-    await this.logInfoService.getLogInfo([arg.mainEvent], arg.primitiveProps, arg.isEdit, arg.requestId, arg.filter, arg.defaultFilterTimeWithAllowance);
+    await this.logInfoService.getLogInfo(arg.allEvents, arg.primitiveProps, arg.isEdit, arg.requestId, arg.filter, arg.defaultFilterTimeWithAllowance);
     arg.logInfoComponents.forEach(x => {
       x.filterTimeWithAllowanceComponent?.updateData();
       x.showValidationDetail();
@@ -41,11 +41,11 @@ export class SaveRequestService {
     arg.primitiveProps.isShowLogInfoMainMatch = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
-    if (!this.validateVarCheck(arg.mainEvent)) {
+    if (!this.validateVarCheck(arg.allEvents)) {
       return false;
     }
 
-    if (!this.validationService.isEventMatchValid(arg.mainEvent)) {
+    if (!this.validationService.isAllEventsValid(arg.allEvents)) {
       return false;
     }
 
@@ -67,8 +67,8 @@ export class SaveRequestService {
     arg.confirmRedCard.requestedBy = arg.requestedBy;
     arg.confirmRedCard.isEditingByAnotherUser =
       this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
-    arg.confirmRedCard.isHasWarningSettledTicket = arg.mainEvent.logInfoDetail?.settleCount > 0;
-    arg.confirmRedCard.isHasWarningForRedCard = arg.mainEvent.messageValidationLogInfo?.length > 0;
+    arg.confirmRedCard.isHasWarningSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
+    arg.confirmRedCard.isHasWarningForRedCard = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
     arg.confirmRedCard.isHasWarningEditTakeNoteRequest =
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess);
     arg.confirmRedCard.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
@@ -93,13 +93,16 @@ export class SaveRequestService {
     await this.addRequestService.executeSaveRequest(args.isEdit, args.requestId, query, args.addRequestStore);
   }
 
-  private validateVarCheck(event: LogInfoRedCard): boolean {
-    if(StaticService.isShowVarCheck(event.subIssueTypeId) && (_.isNull(event.isCheckedVar) || _.isUndefined(event.isCheckedVar))) {
-      event.isHighLightVarCheck = true;
-      return false;
-    }
+  private validateVarCheck(allEvents: LogInfoRedCard[]): boolean {
+    let isSelectedVarAllEvents = true;
+    allEvents.forEach(x => {
+      if(StaticService.isShowVarCheck(x.subIssueTypeId) && (_.isNull(x.isCheckedVar) || _.isUndefined(x.isCheckedVar))) {
+        x.isHighLightVarCheck = true;
+        isSelectedVarAllEvents = false;
+      }
+    });
 
-    return true;
+    return isSelectedVarAllEvents;
   }
 
   private initAddRequestQuery(arg: SaveRequestArg): AddRequestQuery {
@@ -121,7 +124,7 @@ export class SaveRequestService {
     query.remark = arg.others.remark;
 
     if (!arg.filter.isVoided) {
-      query.redCardInfo = [arg.mainEvent].filter(x => x.logInfoDetail).map(x => {
+      query.redCardInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
         return {
           isMainMatch: x.isMainMatch,
           filterBy: arg.primitiveProps.filterBy,

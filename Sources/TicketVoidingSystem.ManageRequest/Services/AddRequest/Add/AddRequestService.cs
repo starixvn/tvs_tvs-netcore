@@ -81,7 +81,7 @@ public class AddRequestServiceImp : AddRequestService
         };
     }
 
-    private async Task<int> ExecuteAddRequest(AddRequestQuery query)
+    private async Task<int> ExecuteAddRequest(AddRequestQuery query)  // NOSONAR
     {
         var command = mapper.Map<AddRequestCommand>(query);
         command.Operators = query.OperatorsList?.OperatorToXml();

@@ -91,7 +91,7 @@ class Helper {
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
-    issueTypeId: '11',
+    issueTypeId: '1',
     subIssueTypeId: '1',
     action: '1',
     isTest: true,
@@ -195,7 +195,7 @@ describe('LogInfoService', () => {
     logInfoService['getTransInfo'] = jest.fn();
 
     // Action
-    const result = await logInfoService['initGetLogInfoRedCardQuery'](1, true, Helper.fakeRequestId,
+    const result = logInfoService['initGetLogInfoRedCardQuery'](1, true, Helper.fakeRequestId,
       Helper.fakeFilterModel, [Helper.fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
 
     // Assert
@@ -212,7 +212,7 @@ describe('LogInfoService', () => {
     logInfoService['getTransInfo'] = jest.fn();
 
     // Action
-    const result = await logInfoService['initGetLogInfoRedCardQuery'](1, false, Helper.fakeRequestId,
+    const result = logInfoService['initGetLogInfoRedCardQuery'](1, false, Helper.fakeRequestId,
       Helper.fakeFilterModel, [Helper.fakeLogInfoRedCard], Helper.fakeFilterTimeWithAllowance);
 
     // Assert
@@ -311,18 +311,20 @@ describe('LogInfoService', () => {
     expect(logInfo.isCheckedVar).toBeNull();
   });
 
-  it('#getDangerAcceptedModel should update filterFromTransTime from input', async () => {
+  it('#getLogInfoModel update value expected when no Has Allowance Time', async () => {
     // Arrange
+    let validationService = new ValidationService();
+    validationService.isHasAllowanceTime = jest.fn().mockReturnValue(false);
     const logInfo = _.cloneDeep(Helper.fakeLogInfoRedCard);
-    const validationService = new ValidationService();
-    validationService.isHasAllowanceTime = jest.fn().mockImplementation(() => false);
+    logInfo.voidTimeArea.fromDateTime = ""
     logInfoService = new LogInfoService(validationService, null);
+    const fakeLogInfoRedCard = _.clone(Helper.fakeLogInfoRedCard);
 
     // Action
-    const actual = logInfoService['getDangerAcceptedModel'](null, [logInfo], Helper.fakeFilterTimeWithAllowance);
+    let result = logInfoService['getLogInfoModel'](1, [fakeLogInfoRedCard], null);
 
     // Assert
-    expect(actual[0].filterFromTransTime).toBe(logInfo.voidTimeArea.fromDateTime);
-    expect(actual[0].filterToTransTime).toBe(logInfo.voidTimeArea.toDateTime);
+    expect(result[0].filterFromTransTime).toBe('2020/10/08 09:44:46.361 PM');
+    expect(result[0].filterToTransTime).toBe('2020/10/09 09:44:46.361 PM');
   });
 });

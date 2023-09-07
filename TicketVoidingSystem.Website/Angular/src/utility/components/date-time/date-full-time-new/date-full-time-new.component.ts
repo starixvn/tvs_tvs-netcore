@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { CommonStaticService } from '../../../../utility/services/common.service';

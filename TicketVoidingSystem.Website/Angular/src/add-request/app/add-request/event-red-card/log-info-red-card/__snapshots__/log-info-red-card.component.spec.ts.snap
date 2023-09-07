@@ -76,7 +76,7 @@ exports[`LogInfoRedCardComponent LogInfoRedCardComponent init should match snaps
                 </button>
                 <i
                   aria-hidden="true"
-                  class="fa fa-trash-o delete-event-icon"
+                  class="fa-solid fa-trash-can fa-sm delete-event-icon pointer"
                 />
               </div>
             </div>

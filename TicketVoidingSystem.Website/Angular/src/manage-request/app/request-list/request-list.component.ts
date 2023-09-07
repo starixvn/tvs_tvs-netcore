@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
@@ -224,7 +224,8 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongHDP(issueTypeId.toString()) ||
       StaticService.isWrongOU(issueTypeId.toString()) ||
       StaticService.isWrong1stOU(issueTypeId.toString()) ||
-      StaticService.isWrong1stHDP(issueTypeId.toString());
+      StaticService.isWrong1stHDP(issueTypeId.toString()) ||
+      StaticService.isRedCard(issueTypeId.toString());
   }
 
   public async copyRequestInfo(requestId: number, matchId: number): Promise<void> {

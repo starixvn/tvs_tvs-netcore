@@ -15,7 +15,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
           class="full-time from-date-time"
         >
           <label
-            class="col-form-label mr-2"
+            class="col-form-label col-form-label-sm mr-2"
           >
             From
           </label>
@@ -54,7 +54,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
           class="full-time to-date-time"
         >
           <label
-            class="col-form-label mr-2"
+            class="col-form-label col-form-label-sm mr-2"
           >
             To
           </label>
@@ -111,7 +111,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
             class="d-flex"
           >
             <label
-              class="col-form-label mr-2 label-width-60"
+              class="col-form-label col-form-label-sm mr-2 label-width-60"
             >
               AA/PA/SA
             </label>
@@ -129,7 +129,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
                   type="text"
                 />
                 <label
-                  class="col-form-label mr-1"
+                  class="col-form-label col-form-label-sm mr-1"
                 >
                   /
                 </label>
@@ -141,7 +141,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
                   type="text"
                 />
                 <label
-                  class="col-form-label mr-1"
+                  class="col-form-label col-form-label-sm mr-1"
                 >
                   /
                 </label>
@@ -155,7 +155,7 @@ exports[`FilterTimeWithAllowanceComponent FilterTimeWithAllowanceComponent init 
               </div>
             </div>
             <label
-              class="col-form-label"
+              class="col-form-label col-form-label-sm"
             >
               (s)
             </label>

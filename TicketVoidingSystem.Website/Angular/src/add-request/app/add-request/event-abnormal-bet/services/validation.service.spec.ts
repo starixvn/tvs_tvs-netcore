@@ -1,4 +1,3 @@
-import { PermissionManage } from '../../../../../utility/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
@@ -12,6 +11,7 @@ import { CheckTransIdsViewModel, PrimitiveProperty, ValidationAbnormalBet } from
 import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
+import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 
 class Helper {
   static readonly fakeTransId = '1000002';

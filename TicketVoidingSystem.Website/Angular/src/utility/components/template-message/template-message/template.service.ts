@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { MatchModel } from '../../../../utility/models/match.model';

@@ -189,4 +189,17 @@ public class IssueTypeExtensionTests
         // Assert
         Assert.Equal(result, actual);
     }
+
+    [Theory]
+    [InlineData(20, true)]
+    [InlineData(1, false)]
+    public void DuplicateTickets_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.DuplicateTickets();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
 }

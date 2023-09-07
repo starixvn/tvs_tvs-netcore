@@ -9,4 +9,6 @@ export class ConfirmRedCardModel {
   requestId: number;
   userId: number;
   requestedBy: string;
+  isHasWarningEvent: boolean;
+  warningRelatedEvents: string[] = [];
 }

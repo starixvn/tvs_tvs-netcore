@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
@@ -30,7 +31,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
     public async Task GetTickets_ValidCriteria_RepositoryHasCalled()
     {
         // Arrange
-        var query = new GetTicketsQuery { MatchId = 132, OddsType = "123" };
+        var query = new GetTicketsQuery { MatchId = 132, OddsType = "123", FromTransDate = DateTime.Now, ToTransDate = DateTime.Now };
         var ticketsLists = new List<GetTicketModel> { new() { IsMixParlay = true }, new() { IsMixParlay = false } };
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(new GetTicketsCriteria());
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).ReturnsForAnyArgs(ticketsLists);

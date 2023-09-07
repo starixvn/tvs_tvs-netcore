@@ -1,9 +1,9 @@
+import { PipeModule } from './../../../../../utility/pipes/pipe.module';
 import { ElementRef, NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { PipeModule } from '../../../../../utility/components/pipes/pipe.module';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { AcceptType } from '../../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
@@ -531,6 +531,24 @@ describe('LogInfoRedCardComponent', () => {
 
     // Assert
     expect(actual).toBe(expected);
+  });
+
+  it('#displayMinTime should return - when minTime is null', async () => {
+    // Arrange
+    const logInfo = Helper.fakeLogInfoRedCard;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        logInfo: logInfo,
+        subIssueTypes: Helper.fakeSubIssueType
+      }
+    });
+
+    // Action
+    const actual = instance.displayMinTime(null);
+
+    // Assert
+    expect(actual).toBe('-');
   });
 
   it('#changeVarCheckValue should update isCheckedVar', async () => {

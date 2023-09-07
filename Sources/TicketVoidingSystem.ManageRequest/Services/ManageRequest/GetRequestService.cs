@@ -24,7 +24,7 @@ public class GetRequestServiceImp : GetRequestService
         this.remotingRefService = remotingRefService;
     }
 
-    public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)
+    public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
     {
         var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request);
         var viewModel = new RequestDetailViewModel

@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using Fanex.MailDeliver.Model;
+using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -13,12 +16,14 @@ public class EmailItSupportServiceTests
     private readonly EmailSimpleService emailSimpleService;
     private readonly EmailItSupportServiceImp service;
     private readonly SitesEmailService sitesEmailService;
+    private readonly VoidEmailContentService voidEmailContentService;
 
     public EmailItSupportServiceTests()
     {
         sitesEmailService = Substitute.For<SitesEmailService>();
         emailSimpleService = Substitute.For<EmailSimpleService>();
-        service = new EmailItSupportServiceImp(sitesEmailService, emailSimpleService);
+        voidEmailContentService = Substitute.For<VoidEmailContentService>();
+        service = new EmailItSupportServiceImp(sitesEmailService, emailSimpleService, voidEmailContentService);
     }
 
     [Theory]
@@ -70,13 +75,15 @@ public class EmailItSupportServiceTests
         };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());
+        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+                Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService)
+            .Returns(new MailRecord());
 
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, isFromAfterVoidService);
 
         // Assert
-        emailSimpleService.Received(1).Send(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
-            Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService);
+        emailSimpleService.Received(1).Send(Arg.Any<MailRecord>(), EmailGroup.ItSupport);
     }
 
     [Theory]
@@ -116,33 +123,15 @@ public class EmailItSupportServiceTests
         };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());
+        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+                Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService)
+            .Returns(new MailRecord());
 
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, isFromAfterVoidService);
 
         // Assert
-        emailSimpleService.Received(1).Send(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
-            Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService);
-    }
-
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public void Send_NoHasTicket(bool isFromAfterVoidService)
-    {
-        // Arrange
-        var mailVoidViewModel = new MailVoidViewModel();
-        var sites = new List<SiteEmail>();
-        var tickets = new List<TicketEmailModel>();
-        sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
-            .ReturnsForAnyArgs(new SiteEmail());
-
-        // Act
-        _ = service.Send(mailVoidViewModel, sites, tickets, isFromAfterVoidService);
-
-        // Assert
-        emailSimpleService.Received(1).Send(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
-            Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, isFromAfterVoidService);
+        emailSimpleService.Received(1).Send(Arg.Any<MailRecord>(), EmailGroup.ItSupport);
     }
 
     [Fact]
@@ -151,16 +140,18 @@ public class EmailItSupportServiceTests
         // Arrange
         var mailVoidViewModel = new MailVoidViewModel();
         var sites = new List<SiteEmail>();
-        var tickets = new List<TicketEmailModel>{ new (){ IsItSupport  = false, Currency = 20} };
+        var tickets = new List<TicketEmailModel> { new() { IsItSupport = true, Currency = 20 }, new() { IsItSupport = false, Currency = 1 } };
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItSupport)
             .ReturnsForAnyArgs(new SiteEmail());
+        voidEmailContentService.Create(mailVoidViewModel.DeepClone(), Arg.Any<SiteEmail>(),
+                Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, true)
+            .Returns(new MailRecord());
 
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
 
         // Assert
-        emailSimpleService.Received(1).Send(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
-            Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.ItSupport, true);
+        emailSimpleService.Received(1).Send(Arg.Any<MailRecord>(), EmailGroup.ItSupport);
     }
 
 }

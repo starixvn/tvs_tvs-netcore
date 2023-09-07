@@ -14,9 +14,10 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 
 public class EmailLicenseeServiceTests
 {
+    private readonly VoidEmailContentService voidEmailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
-    private readonly VoidEmailContentService voidEmailContentService;
+    private readonly ChinaViewMessageService chinaViewMessageService;
     private EmailLicenseeServiceImp service;
 
     public EmailLicenseeServiceTests()
@@ -24,7 +25,8 @@ public class EmailLicenseeServiceTests
         voidEmailContentService = Substitute.For<VoidEmailContentService>();
         fanexMailApiService = Substitute.For<FanexMailApiService>();
         mailResultService = Substitute.For<MailResultService>();
-        service = new EmailLicenseeServiceImp(voidEmailContentService, fanexMailApiService, mailResultService);
+        chinaViewMessageService = Substitute.For<ChinaViewMessageService>();
+        service = new EmailLicenseeServiceImp(voidEmailContentService, fanexMailApiService, mailResultService, chinaViewMessageService);
     }
 
     [Theory]
@@ -34,7 +36,7 @@ public class EmailLicenseeServiceTests
     {
         // Arrange
         var mailVoidViewModel = new MailVoidViewModel
-            { Match = new Match { LeagueGroupId = 42 }, Message = new Message { ContentEnglish = "SABA123" } };
+        { Match = new Match { LeagueGroupId = 42 }, Message = new Message { ContentEnglish = "SABA123" } };
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = true, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
@@ -55,7 +57,7 @@ public class EmailLicenseeServiceTests
     {
         // Arrange
         var mailVoidViewModel = new MailVoidViewModel
-            { Match = new Match { LeagueGroupId = 42 }, Message = new Message { ContentEnglish = "SABA123" } };
+        { Match = new Match { LeagueGroupId = 42 }, Message = new Message { ContentEnglish = "SABA123" } };
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = true } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
@@ -82,12 +84,13 @@ public class EmailLicenseeServiceTests
         // Arrange
         var mailVoidViewModel = new MailVoidViewModel
         {
-            Match = new Match { LeagueGroupId = leagueGroupId }, Message = new Message { ContentEnglish = "SABA123" }
+            Match = new Match { LeagueGroupId = leagueGroupId },
+            Message = new Message { ContentEnglish = "SABA123" }
         };
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = isChinaView, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
-        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService);
+        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService, chinaViewMessageService);
         mailResultService.CreateFail("1", true).ReturnsForAnyArgs(new Result());
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
@@ -104,7 +107,7 @@ public class EmailLicenseeServiceTests
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = true, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
-        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService);
+        service = new EmailLicenseeServiceImp(null, fanexMailApiService, mailResultService, chinaViewMessageService);
         mailResultService.CreateFail("1", true).ReturnsForAnyArgs(new Result());
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
