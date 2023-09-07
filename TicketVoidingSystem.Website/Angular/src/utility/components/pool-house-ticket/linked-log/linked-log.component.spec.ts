@@ -3,10 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { Result } from '../../../models/result';
-import { BlockUiModule } from '../../../modules/block-ui/block-ui.module';
-import { PipeModule } from '../../../modules/pipes/pipe.module';
-import { ToolTipModule } from '../../../modules/tooltip/tooltip.module';
+import { BlockUiModule } from '../../block-ui/block-ui.module';
+import { ToolTipModule } from '../../tooltip/tooltip.module';
 import { LinkedLogComponent } from './linked-log.component';
 import { LinkedLogsViewModel } from './linked-log.model';
 

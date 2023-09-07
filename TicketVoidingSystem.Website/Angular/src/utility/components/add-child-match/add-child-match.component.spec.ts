@@ -4,9 +4,9 @@ import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
 import { MatchType } from '../../constants/config';
-import { BlockUiModule } from '../../modules/block-ui/block-ui.module';
-import { ToolTipModule } from '../../modules/tooltip/tooltip.module';
 import { HttpService } from '../../services/http.service';
+import { BlockUiModule } from '../block-ui/block-ui.module';
+import { ToolTipModule } from '../tooltip/tooltip.module';
 import { AddChildMatchComponent } from './add-child-match.component';
 import { AddChildMatchModel } from './add-child-match.model';
 
@@ -15,7 +15,8 @@ class Helper {
 
   static readonly fakeAddChildMatchModel: AddChildMatchModel = {
     isOpen: true,
-    matchType: 0
+    matchType: 0,
+    selectedMatchIds: []
   };
   static readonly fakeChildMatchModelList: ChildMatchModel[] = [
     {
@@ -289,7 +290,7 @@ describe('AddChildMatchComponent', () => {
       }
     });
     instance.relatedEvents = Helper.fakeTempChildMatches;
-    instance.selectedEvents = Helper.fakeTempChildMatches;
+    instance.tempRelatedEvents = Helper.fakeTempChildMatches;
     instance.handleCheckBox = jest.fn();
     const changes = {
       'model': new SimpleChange(new AddChildMatchModel(), new AddChildMatchModel(), true)

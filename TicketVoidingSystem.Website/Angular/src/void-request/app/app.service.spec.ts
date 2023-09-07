@@ -1,4 +1,4 @@
-import { RequestDetailModel, RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
 import { VoidedReason } from '../../utility/models/reason.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -53,7 +53,8 @@ describe('AppService', () => {
       source: null,
       sportType: 2,
       voidedBy: null,
-      userId: 0
+      userId: 0,
+      requestId: 1
     };
     const fakeRequestDetailViewModel: RequestDetailViewModel = {
       requestId: 5002,
@@ -67,7 +68,8 @@ describe('AppService', () => {
       wrongHdpModels: [],
       wrongOuModels: [],
       wrongOddsModels: [],
-      reducedOverModels: []
+      reducedOverModels: [],
+      duplicateTicketsModel: null
     };
    mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
 

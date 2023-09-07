@@ -49,6 +49,7 @@ class Helper {
     sportType: 2,
     voidedBy: null,
     userId: 0,
+    requestId: 1
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -62,7 +63,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
   static readonly fakeLogInfoArg: LogInfoArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
@@ -103,6 +105,7 @@ class Helper {
     wrongOddsModels: [],
     reducedOverModels: [],
     others: new OthersModel(),
+    duplicateTicketsModel: null
   };
   static readonly fakeMapEventArg: MapEventArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,

@@ -10,6 +10,7 @@ import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
+import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
@@ -18,7 +19,6 @@ import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { AppService } from '../app.service';
-import { CopyRequestInfoResponse } from '../models/copy-request-info.query';
 import { PermissionManage } from '../models/permission-manage.model';
 import { TicketListComponent } from '../ticket-list/ticket-list.component';
 import { RequestListComponent } from './request-list.component';
@@ -725,11 +725,11 @@ describe('RequestListComponent', () => {
     expect(actual).toBeFalsy();
   });
 
-  it('#copyRequestInfo should call #copyRequestInfo', async () => {
+  it('#copyRequestInfo should call #commonService.copyRequestInfo', async () => {
     // Arrange
     const mockCopyRequestInfo = jest.fn().mockReturnValue(new CopyRequestInfoResponse());
     const { instance } = await shallow
-    .mock(AppService, { copyRequestInfo: mockCopyRequestInfo })
+    .mock(CommonService, { copyRequestInfo: mockCopyRequestInfo })
     .mock(ClipboardService, { copyFromContent: jest.fn() })
     .render();
     window.alert = jest.fn();

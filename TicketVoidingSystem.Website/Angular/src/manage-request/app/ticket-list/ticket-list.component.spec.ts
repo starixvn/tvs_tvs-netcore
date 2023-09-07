@@ -42,7 +42,8 @@ class Helper {
     source: null,
     sportType: 2,
     voidedBy: 'sa',
-    userId: 0
+    userId: 0,
+    requestId: 1
   };
 
   static readonly fakeRequestEventModel: RequestEventModel = {
@@ -77,7 +78,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
 
   static readonly fakeTicketsModel: TicketsModel = {
@@ -447,7 +449,7 @@ describe('TicketListComponent', () => {
     instance['isAbnormalAccountIssueType'] = jest.fn().mockImplementation(() => false);
     instance['isAbnormalBetIssueType'] = jest.fn().mockImplementation(() => false);
     instance['isArchivedTicketIssueType'] = jest.fn().mockImplementation(() => true);
-    const actual = instance.isShowMatchInfo(null);
+    const actual = instance.isShowMatchInfo(Helper.fakeRequestDetailViewModel);
 
     expect(actual).toBe(false);
   });

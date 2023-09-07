@@ -389,7 +389,7 @@ describe('FilterComponent', () => {
     const { instance } = await shallow
     .mock(AppService, { getMatchInfo: jest.fn().mockImplementation(() => matchModel)})
     .render();
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null);
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     instance.advancedModeComponent.resetBetTeam = jest.fn();
     instance.validateProduct = jest.fn().mockImplementation(() => false);
 
@@ -403,7 +403,7 @@ describe('FilterComponent', () => {
     const { instance } = await shallow
     .mock(AppService, { getMatchInfo: jest.fn().mockImplementation(() => matchModel)})
     .render();
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null);
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     instance.advancedModeComponent.resetBetTeam = jest.fn();    
     instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
     instance.advancedModeBasketball.renderSelection = jest.fn();
@@ -637,7 +637,7 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     let actualResult = true;
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null);
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     instance.matchId = '12345';
     instance.fromDate = '2020-08-01';
     instance.toDate = '2020-08-02';
@@ -659,7 +659,7 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     let actualResult = true;
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null);
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     instance.matchId = '12345';
     instance.fromDate = '2020-08-01';
     instance.toDate = '2020-08-02';
@@ -750,7 +750,7 @@ describe('FilterComponent', () => {
     instance.sportType = SportTypeConst.E_SPORTS;
     instance.groupBetTypes = new GroupBetTypesModel([], false);
     jest.spyOn(instance.groupBetTypes, 'getValueCheckedBetTypes').mockImplementation(() => checkedBettypes);
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null);
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     jest.spyOn(instance.advancedModeComponent, 'getBetTypeModels');
     // Action and Assert
     instance.getParams();
@@ -816,7 +816,7 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.matchId = '12345';
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null);
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     jest.spyOn(instance.advancedModeComponent, 'resetBetTeam');
     // Action and Assert
     instance.resetFilter();

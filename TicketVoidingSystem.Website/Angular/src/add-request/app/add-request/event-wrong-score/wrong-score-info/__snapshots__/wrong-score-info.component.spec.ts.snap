@@ -24,7 +24,7 @@ exports[`EventRedCardComponent WrongScoreInfoComponent init should match snapsho
             class="mr-5"
           >
             <div
-              class="score d-flex align-items-center position-relative"
+              class="score d-flex align-items-center position-relative form-control form-control-sm"
               placement="bottom"
             >
               <div
@@ -46,7 +46,7 @@ exports[`EventRedCardComponent WrongScoreInfoComponent init should match snapsho
             class="mr-2"
           >
             <div
-              class="time-last-ticket-label"
+              class="time-last-ticket-label form-control form-control-sm"
             >
                Time of Last Ticket 
             </div>

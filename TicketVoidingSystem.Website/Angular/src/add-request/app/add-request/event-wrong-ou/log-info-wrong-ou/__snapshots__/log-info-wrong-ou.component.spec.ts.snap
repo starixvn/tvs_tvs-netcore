@@ -36,7 +36,7 @@ exports[`LogInfoWrongOuComponent LogInfoWrongOuComponent init should match snaps
           >
             <i
               aria-hidden="true"
-              class="fa fa-trash-o delete-event-icon"
+              class="fa-solid fa-trash-can fa-sm delete-event-icon"
             />
           </div>
         </div>
@@ -47,30 +47,6 @@ exports[`LogInfoWrongOuComponent LogInfoWrongOuComponent init should match snaps
             class="log"
           >
             <filter-wrong-ou />
-            <div>
-              <hr
-                class="mt-2 mb-2"
-              />
-              <span>
-                Live Score: 
-              </span>
-              <strong>
-                0 - 0
-              </strong>
-              . Void time: 
-              <strong>
-                2020/10/08 09:44:46.361 PM - 2020/10/09 09:44:46.361 PM
-              </strong>
-              <br />
-               LG/Early - Single Count: 
-              <strong>
-              </strong>
-              <br />
-            </div>
-          </div>
-          <div
-            class="message mt-2"
-          >
           </div>
         </div>
       </div>

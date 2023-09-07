@@ -1,4 +1,3 @@
-import { CopyRequestInfoQuery } from 'src/utility/models/copy-request-info.query';
 import { GeneralInfo, GeneralInfoViewModel } from '../../utility/components/request-info/request-info.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -149,19 +148,6 @@ describe('AppService', () => {
 
     // Action
     const actualData = await appService.getGeneralInfo(query);
-
-    // Assert
-    expect(actualData).toEqual(expectedData);
-  });
-
-  it('#copyRequestInfo should return expected data', async() => {
-    // Arrange
-    const expectedData = '12312';
-    const query = new CopyRequestInfoQuery();
-    mockHttpService.postJson.mockResolvedValue(expectedData);
-
-    // Action
-    const actualData = await appService.copyRequestInfo(query);
 
     // Assert
     expect(actualData).toEqual(expectedData);

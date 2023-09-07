@@ -7,11 +7,11 @@ import { AddChildMatchComponent } from '../../../../utility/components/add-child
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockFullUiModule } from '../../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { PipeModule } from '../../../../utility/components/pipes/pipe.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
@@ -208,6 +208,11 @@ describe('EventWrongOuComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
+    const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null);
+    logInfoWrongHdpComponents.isMainMatch = true;
+    const logInfoComponents = new QueryList<LogInfoWrongOuComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
+    instance.logInfoComponents = logInfoComponents;
 
     await instance.handleSearchEvent();
 

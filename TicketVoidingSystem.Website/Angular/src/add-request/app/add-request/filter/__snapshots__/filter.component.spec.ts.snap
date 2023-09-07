@@ -104,19 +104,20 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
             </div>
           </div>
           <div
-            class="filter-checkbox-test mr-4"
+            class="d-flex align-items-end"
           >
             <div
-              class="checkbox-test line-height d-flex align-items-center"
+              class="form-check form-check-inline form-control-sm checkbox-test"
             >
               <input
                 aria-label="Checkbox for following text input"
                 class="mr-1 ng-untouched ng-pristine ng-valid"
                 id="chk-is-test"
+                name="checkbox-test"
                 type="checkbox"
               />
               <label
-                class="col-form-label"
+                class="form-check-label"
                 for="chk-is-test"
               >
                 is Test

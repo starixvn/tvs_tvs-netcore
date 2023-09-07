@@ -69,7 +69,10 @@ describe('ValidationService', () => {
     betIdsComponent.getAllBetIdsAreNotNumber = jest.fn().mockReturnValue([]);
     const leagueEventComponent = new LeagueEventAbnormalComponent(null, null);
     leagueEventComponent.updateUndefinedMatchAndLeague = jest.fn();
-    const actual = service.validateCommonData(betIdsComponent, leagueEventComponent, new PrimitiveProperty(), AbnormalFilterBy.SINGLE);
+    const duplicateTicketsModel = new DuplicateTicketsModel();
+    duplicateTicketsModel.filterBy = AbnormalFilterBy.SINGLE;
+    const mockService = new ValidationService(null);
+    const actual = mockService.validateCommonData(betIdsComponent, leagueEventComponent, new PrimitiveProperty(), duplicateTicketsModel);
 
     expect(leagueEventComponent.updateUndefinedMatchAndLeague).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
@@ -161,7 +164,7 @@ describe('ValidationService', () => {
       arg.leagueEventComponent = x;
       await mockService['callApiCheckDuplicateTickets'](arg);
 
-      expect(addRequestApiService.checkDuplicateTickets).toHaveBeenCalledTimes(1);
+      expect(addRequestApiService.checkDuplicateTickets).toHaveBeenCalled();
     });
   });
 

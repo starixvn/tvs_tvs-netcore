@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
+import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -30,8 +31,6 @@ import { AddRequestQuery } from './models/add-request.query';
 import { ChildMatchModel } from './models/related-event.model';
 import { AddRequestResultModel, RequestModel } from './models/request.model';
 import { OthersComponent } from './others/others.component';
-import { ModalType } from '../../../utility/components/modal/modal.model';
-import { AbnormalFilterBy } from '../../../utility/constants/config';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -218,7 +217,7 @@ describe('AddRequestComponent', () => {
     addRequestStore.savingRequestStatus.subscribe = jest.fn();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
     addRequestStore.getAbnormalFilterBySubject.subscribe = jest.fn();
-    const component = new AddRequestComponent(null, null, null, addRequestStore);
+    const component = new AddRequestComponent(null, null, null, addRequestStore, null);
     component.isEdit = true;
 
     component.ngOnInit();
@@ -228,7 +227,7 @@ describe('AddRequestComponent', () => {
 
   it('#ngOnDestroy should be call unsubscribe', async () => {
     const addRequestStore = new AddRequestStore();
-    const component = new AddRequestComponent(null, null, null, addRequestStore);
+    const component = new AddRequestComponent(null, null, null, addRequestStore, null);
     component.savingRequestSubscription = addRequestStore.savingRequestStatus.subscribe(status => {
       component.isDisabledSaveButton = status;
     });
@@ -263,7 +262,7 @@ describe('AddRequestComponent', () => {
     const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null, null);
     mockEventEarlyKickOffComponent.isValid = jest.fn().mockImplementation(() => false);
 
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.eventEarlyKickOffComponent = mockEventEarlyKickOffComponent;
     await component.saveRequestEarlyOrWrongKO(false);
 
@@ -277,7 +276,7 @@ describe('AddRequestComponent', () => {
     mockEventEarlyKickOffComponent.isValid = jest.fn().mockImplementation(() => true);
     mockEventEarlyKickOffComponent.warningMessageList = [];
     const mockExecuteSaveRequestEarlyKO = jest.fn();
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.eventEarlyKickOffComponent = mockEventEarlyKickOffComponent;
     component.executeSaveRequestEarlyKO = mockExecuteSaveRequestEarlyKO;
     component['isEditingByAnotherUser'] = jest.fn().mockImplementation(() => false);
@@ -297,7 +296,7 @@ describe('AddRequestComponent', () => {
     const spyInitAddRequestQuery = jest.spyOn(EarlyKickOffService, 'initAddRequestQuery')
       .mockImplementation(x => fakeAddRequestQuery);
     const mockEditSingleRequest = jest.fn();
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.editSingleRequest = mockEditSingleRequest;
     component.isEdit = true;
 
@@ -317,7 +316,7 @@ describe('AddRequestComponent', () => {
     const spyInitAddRequestQuery = jest.spyOn(EarlyKickOffService, 'initAddRequestQuery')
       .mockImplementation(() => fakeAddRequestQuery);
     const mockAddSingleRequest = jest.fn();
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.addSingleRequest = mockAddSingleRequest;
     component.isEdit = false;
 
@@ -332,7 +331,7 @@ describe('AddRequestComponent', () => {
   it('#saveRequest should save request of EKO or Wrong KO', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '8';
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     component.isEdit = true;
     component.saveRequestEarlyOrWrongKO = jest.fn();
@@ -346,7 +345,7 @@ describe('AddRequestComponent', () => {
   it('#addSingleRequest should call #openModelErrorMessageRequest when add request return error', async () => {
     const mockAddRequestService = new AddRequestApiService(null);
     mockAddRequestService.addRequest = jest.fn().mockImplementation(() => Helper.fakeAddRequestResultModelFail[0]);
-    const component = new AddRequestComponent(mockAddRequestService, null, null, null);
+    const component = new AddRequestComponent(mockAddRequestService, null, null, null, null);
     component.openModelErrorMessageRequest = jest.fn();
 
     await component.addSingleRequest(new AddRequestQuery(), true);
@@ -360,7 +359,7 @@ describe('AddRequestComponent', () => {
   it('#addSingleRequest should go to void page after add request successfully', async () => {
     const mockAddRequestService = new AddRequestApiService(null);
     mockAddRequestService.addRequest = jest.fn().mockImplementation(() => Helper.fakeAddRequestResultModel[0]);
-    const component = new AddRequestComponent(mockAddRequestService, null, null, null);
+    const component = new AddRequestComponent(mockAddRequestService, null, null, null, null);
     component.goToVoidPage = jest.fn();
 
     await component.addSingleRequest(new AddRequestQuery(), true);
@@ -381,7 +380,7 @@ describe('AddRequestComponent', () => {
     mockAddRequestService.addRequest = jest.fn().mockImplementation(() => Helper.fakeAddRequestResultModel[0]);
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = mockModalServiceOpen;
-    const component = new AddRequestComponent(mockAddRequestService, modalService, null, null);
+    const component = new AddRequestComponent(mockAddRequestService, modalService, null, null, null);
 
     await component.addSingleRequest(new AddRequestQuery(), false);
     expect(component.isBlock).toBe(false);
@@ -395,7 +394,7 @@ describe('AddRequestComponent', () => {
   it('#editSingleRequest should call #openModelErrorMessageRequest when edit request return error', async () => {
     const mockAddRequestService = new AddRequestApiService(null);
     mockAddRequestService.editRequest = jest.fn().mockImplementation(() => Helper.fakeAddRequestResultModelFail[0]);
-    const component = new AddRequestComponent(mockAddRequestService, null, null, null);
+    const component = new AddRequestComponent(mockAddRequestService, null, null, null, null);
     component.openModelErrorMessageRequest = jest.fn();
 
     await component.editSingleRequest(new AddRequestQuery(), true);
@@ -409,7 +408,7 @@ describe('AddRequestComponent', () => {
   it('#editSingleRequest should go to void page after edit request successfully', async () => {
     const mockAddRequestService = new AddRequestApiService(null);
     mockAddRequestService.editRequest = jest.fn().mockImplementation(() => Helper.fakeAddRequestResultModel[0]);
-    const component = new AddRequestComponent(mockAddRequestService, null, null, null);
+    const component = new AddRequestComponent(mockAddRequestService, null, null, null, null);
     component.requestId = 111;
     component.goToVoidPage = jest.fn();
 
@@ -431,7 +430,7 @@ describe('AddRequestComponent', () => {
     mockAddRequestService.editRequest = jest.fn().mockImplementation(() => Helper.fakeAddRequestResultModel[0]);
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = mockModalServiceOpen;
-    const component = new AddRequestComponent(mockAddRequestService, modalService, null, null);
+    const component = new AddRequestComponent(mockAddRequestService, modalService, null, null, null);
 
     component.requestId = 111;
 
@@ -453,7 +452,7 @@ describe('AddRequestComponent', () => {
     };
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.confirmWithThreeButton = mockConfirmWithThreeButton;
-    const component = new AddRequestComponent(null, modalService, null, null);
+    const component = new AddRequestComponent(null, modalService, null, null, null);
 
     await component.editSingleRequestHaveConfirm(new AddRequestQuery(), true, true);
     expect(mockConfirmWithThreeButton.mock.calls[0][0]).toStrictEqual(confirmWithThreeButtonModal);
@@ -481,7 +480,7 @@ describe('AddRequestComponent', () => {
     };
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.confirm = mockConfirm;
-    const component = new AddRequestComponent(null, modalService, null, null);
+    const component = new AddRequestComponent(null, modalService, null, null, null);
 
     await component.editSingleRequestHaveConfirm(new AddRequestQuery(), true, false);
     expect(mockConfirm.mock.calls[0][0]).toStrictEqual(confirmWithModal);
@@ -505,7 +504,7 @@ describe('AddRequestComponent', () => {
     };
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.open = mockOpen;
-    const component = new AddRequestComponent(null, modalService, null, null);
+    const component = new AddRequestComponent(null, modalService, null, null, null);
 
     component.openModelErrorMessageRequest(Helper.fakeAddRequestResultModelFail[0], 'Test');
     expect(mockOpen.mock.calls[0][0]).toStrictEqual(openModal);
@@ -517,7 +516,7 @@ describe('AddRequestComponent', () => {
   it('#updateModel should assign default data for decidedBy when is abnormal', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '1';
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     Helper.initHtml();
 
@@ -530,7 +529,7 @@ describe('AddRequestComponent', () => {
   it('#updateModel should not assign default data for decidedBy when is not abnormal', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '13';
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
 
     component.updateModel(Helper.fakeFilterModel);
@@ -542,7 +541,7 @@ describe('AddRequestComponent', () => {
   it('#reloadPageOrBackToManagePage should assign', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '13';
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
@@ -557,7 +556,7 @@ describe('AddRequestComponent', () => {
   it('#reloadPageOrBackToManagePage should reload', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '11';
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
@@ -571,7 +570,7 @@ describe('AddRequestComponent', () => {
 
   it('#goToVoidPage should assign to page', async () => {
     const fakeRequestModel = new RequestModel();
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
@@ -585,7 +584,7 @@ describe('AddRequestComponent', () => {
 
   it('#backToManagePage should assign to page', async () => {
     const fakeRequestModel = new RequestModel();
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
@@ -603,7 +602,7 @@ describe('AddRequestComponent', () => {
     const mockEventEarlyKickOffComponent = new EventEarlyKickOffComponent(null, null, null);
     mockEventEarlyKickOffComponent.warningMessageList = [];
     const mockExecuteSaveRequestEarlyKO = jest.fn();
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.eventEarlyKickOffComponent = mockEventEarlyKickOffComponent;
     component.executeSaveRequestEarlyKO = mockExecuteSaveRequestEarlyKO;
     component.model.filter.isVoided = true;
@@ -623,7 +622,7 @@ describe('AddRequestComponent', () => {
     const mockExecuteSaveRequestEarlyKO = jest.fn();
     const modalService = new ModalService(new NgbModalConfig(null), null, null);
     modalService.confirm = mockModalConfirm;
-    const component = new AddRequestComponent(null, modalService, null, null);
+    const component = new AddRequestComponent(null, modalService, null, null, null);
     component.eventEarlyKickOffComponent = mockEventEarlyKickOffComponent;
     component.model = fakeRequestModel;
     component.executeSaveRequestEarlyKO = mockExecuteSaveRequestEarlyKO;
@@ -644,7 +643,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventAbnormalBetComponent = new EventAbnormalBetComponent(null, null, null, null, null);
     eventAbnormalBetComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     component.eventAbnormalBetComponent = eventAbnormalBetComponent;
 
@@ -659,7 +658,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventDangerAcceptedComponent = new EventDangerAcceptedComponent(null, null, null, null, null, null, null);
     eventDangerAcceptedComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     component.eventDangerAcceptedComponent = eventDangerAcceptedComponent;
 
@@ -674,7 +673,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventRedCardComponent = new EventRedCardComponent(null, null, null, null, null, null, null);
     eventRedCardComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     component.eventRedCardComponent = eventRedCardComponent;
 
@@ -689,7 +688,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventWrongScoreComponent = new EventWrongScoreComponent(null, null, null, null, null, null, null, null);
     eventWrongScoreComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     component.eventWrongScoreComponent = eventWrongScoreComponent;
 
@@ -704,7 +703,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventArchivedTicketComponent = new EventTicket14Component(null, null, null);
     eventArchivedTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.model = fakeRequestModel;
     component.eventTicket14Component = eventArchivedTicketComponent;
 
@@ -714,7 +713,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Username"', async () => {
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => true);
     const actual = component.getEventLabel();
 
@@ -722,7 +721,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Ticket Info"', async () => {
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
     component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => true);
     const actual = component.getEventLabel();
@@ -731,7 +730,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Event"', async () => {
-    const component = new AddRequestComponent(null, null, null, null);
+    const component = new AddRequestComponent(null, null, null, null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
     component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => false);
     const actual = component.getEventLabel();

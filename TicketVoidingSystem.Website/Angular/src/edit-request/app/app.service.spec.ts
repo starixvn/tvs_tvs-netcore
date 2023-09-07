@@ -29,6 +29,7 @@ describe('AppService', () => {
       sportType: 2,
       voidedBy: null,
       userId: 0,
+      requestId: 1
     };
     const fakeRequestDetailViewModel: RequestDetailViewModel = {
       requestId: 111,
@@ -42,7 +43,8 @@ describe('AppService', () => {
       wrongHdpModels: [],
       wrongOuModels: [],
       wrongOddsModels: [],
-      reducedOverModels: []
+      reducedOverModels: [],
+      duplicateTicketsModel: null
     };
     mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
 

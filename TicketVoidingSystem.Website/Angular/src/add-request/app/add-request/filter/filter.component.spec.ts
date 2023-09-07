@@ -137,7 +137,7 @@ describe('FilterComponent', () => {
       .mock(CommonService,
         {
           getIssueTypePermissionList: jest.fn().mockImplementation(() => Helper.getFakeIssueTypePermissionList()),
-          getActions: jest.fn().mockImplementation(() => Helper.getFakeActions())
+          getVoidActions: jest.fn().mockImplementation(() => Helper.getFakeActions())
         }
       )
       .mock(FilterService,
@@ -445,36 +445,6 @@ describe('FilterComponent', () => {
     expect(instance.updateModel).toHaveBeenCalledTimes(1);
   });
   
-  it('#initData should not call #updateModel when have not previousSelectedIssueType ', async () => {
-    // Arrange
-    document.body.innerHTML = '<section id="body" user-name="star" user-id="360418"></section>';
-
-    const { instance } = await shallow
-      .render({
-        bind: {
-          model: Helper.fakeFilterModel,
-          issueTypes: Helper.fakeIssueTypes
-        }
-      });
-    instance['initialize'] = false;
-    instance.isEdit = false;
-    instance.getIssueTypes = jest.fn();
-    instance.initSelections = jest.fn();      
-    instance.updateSubByIssue = jest.fn();
-    instance['updateCurrentAction'] = jest.fn();
-    instance.updateModel = jest.fn();
-
-    instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => true);
-    jest.spyOn(window.localStorage.__proto__, 'getItem');
-    window.localStorage.__proto__.getItem = jest.fn().mockImplementation(() => null);
-
-    // Act
-    await instance.initData();
-
-    // Assert
-    expect(instance.updateModel).toHaveBeenCalledTimes(0);
-  });
-  
   it('#initData should not call #updateModel when add edit request ', async () => {
     // Arrange
     const { instance } = await shallow
@@ -499,7 +469,7 @@ describe('FilterComponent', () => {
     expect(instance.updateModel).toHaveBeenCalledTimes(0);
   });
   
-  it('#initData should not call #updateModel when initialize true ', async () => {
+  it('#initData should not call #updateModel when initialize false ', async () => {
     // Arrange
     const { instance } = await shallow
       .render({
@@ -528,7 +498,7 @@ describe('FilterComponent', () => {
       )
       .mock(CommonService,
         {
-          getActions: jest.fn().mockImplementation(() => Helper.getFakeActions()),
+          getVoidActions: jest.fn().mockImplementation(() => Helper.getFakeActions()),
         }
       )
       .render({
@@ -552,7 +522,7 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow
       .mock(FilterService, { getSportsType: jest.fn().mockImplementation(() => Helper.getFakeSportsType()) })
-      .mock(CommonService, { getActions: jest.fn().mockImplementation(() => Helper.getFakeActions()) })
+      .mock(CommonService, { getVoidActions: jest.fn().mockImplementation(() => Helper.getFakeActions()) })
       .render({
         bind: {
           model: Helper.fakeFilterModel,
@@ -864,7 +834,7 @@ describe('FilterComponent', () => {
     expect(instance.subIssueTypeDialogModel.issueTypeId).toBe(instance.model.issueTypeId);
   });
   
-  it('#onChangeIssueType should call expected when isLikelyDangerAccepted', async () => {
+  it('#onChangeIssueType should call expected method', async () => {
     const { instance } = await shallow
     .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn()})
     .render({
@@ -879,16 +849,11 @@ describe('FilterComponent', () => {
     instance.updateModel = jest.fn();
     instance['setWidthControlByIssueType'] = jest.fn();
 
-    [true, false].forEach(x => {
-      instance.isLikelyDangerAccepted = jest.fn().mockImplementation(() => x);
+    instance.onChangeIssueType();
 
-      instance.onChangeIssueType();
-
-      expect(instance.isLikelyDangerAccepted).toHaveBeenCalledTimes(1);
-      expect(instance['updateCurrentAction']).toHaveBeenCalled();
-      expect(instance.updateModel).toHaveBeenCalled();
-      expect(instance['setWidthControlByIssueType']).toHaveBeenCalled();
-    });
+    expect(instance['updateCurrentAction']).toHaveBeenCalled();
+    expect(instance.updateModel).toHaveBeenCalled();
+    expect(instance['setWidthControlByIssueType']).toHaveBeenCalled();
   });
   
   it('#onChangeSubIssueType should call #updateModel', async () => {

@@ -1,28 +1,22 @@
 import { ElementRef, NgModule, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
-import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { PipeModule } from '../../../../../utility/components/pipes/pipe.module';
-import { PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-tickets.model';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
-import { PoolHouseTicketValue } from '../../../../../utility/constants/config';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { Result } from '../../../../../utility/models/result';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { BetType, GroupBetType, GroupBetTypesModel } from '../group-bettypes-pool-house/group-bettypes-pool-house.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { LinkedLogsViewModel, PoolHouseLinkedLogsData } from '../models/link-log.model';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { PoolHouseTicketViewModel } from '../models/pool-house-ticket.model';
-import { ValidationService } from '../services/validation.service';
-import { TicketsModel } from '../tickets/tickets.model';
-import { PoolHouseTicketsComponent } from './pool-house-tickets.component';
-
+import { AddRequestApiService } from '../../../add-request/app/add-request/add-request-api.service';
+import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
+import { FilterWithHdpModel } from '../../../add-request/app/add-request/event-wrong-hdp/models/filter-with-hdp.model';
+import { LogInfoWrongHdp } from '../../../add-request/app/add-request/event-wrong-hdp/models/log-info-wrong-hdp.model';
+import { FilterModel } from '../../../add-request/app/add-request/filter/filter.model';
+import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
+import { Result } from '../../../utility/models/result';
+import { PipeModule } from '../../../utility/pipes/pipe.module';
+import { BlockUiModule } from '../block-ui/block-ui.module';
+import { PagingModel } from '../paging/paging/paging.model';
+import { ToolTipModule } from '../tooltip/tooltip.module';
+import { LinkedLogsViewModel, PoolHouseLinkedLogsData } from './linked-log/linked-log.model';
+import { PoolHouseTicketComponent } from './pool-house-ticket.component';
+import { PoolHouseTicketViewModel, PoolHouseTicketsModel } from './pool-house-ticket.model';
+import { TicketsModel } from './tickets/tickets.model';
 class Helper {
   static readonly inputsSelector = '.form-control';
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -80,7 +74,6 @@ class Helper {
     filterWithHdp: new FilterWithHdpModel(),
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
-    isFetchNewPHData: false,
     isPoolHouseAffected: false,
     poolHouseCheckedBetTypes: null,
     linkedLogsViewModel: Helper.fakeLinkedLogsViewModel
@@ -94,7 +87,14 @@ class Helper {
   };
   static readonly fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
     checkedBetTypes: '1,2',
-    isOpen: false
+    isOpen: false,
+    groupBetTypes: [],
+    isAffectedGroup1H1X2: true,
+    isAffectedGroup1X2: true,
+    isAffectedGroupAIO: true,
+    linkedLogsViewModel: null,
+    query: null,
+    tickets: null
   };
 }
 
@@ -112,25 +112,23 @@ describe('GroupBettypesPoolHouseComponent', () => {
     providers: [
       AddRequestApiService,
       AddRequestStore,
-      ValidationService
     ]
   })
   class AppModuleTest { }
 
-  let shallow: Shallow<PoolHouseTicketsComponent>;
+  let shallow: Shallow<PoolHouseTicketComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(PoolHouseTicketsComponent, AppModuleTest)
+    shallow = new Shallow(PoolHouseTicketComponent, AppModuleTest)
       .mock(ElementRef, {})
       .dontMock(NgbModule);
   });
 
-  it('PoolHouseTicketsComponent init should match snapshot', async () => {
+  it('PoolHouseTicketComponent init should match snapshot', async () => {
     const { fixture } = await shallow
     .render({
       bind: {
         model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
       }
     });
 
@@ -142,7 +140,6 @@ describe('GroupBettypesPoolHouseComponent', () => {
     .render({
       bind: {
         model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
       }
     });
     instance.model.isOpen = true;
@@ -157,89 +154,11 @@ describe('GroupBettypesPoolHouseComponent', () => {
     expect(instance['updatePoolHouseTicketModal']).toHaveBeenCalledTimes(1);
   });
 
-  it('getPoolHouseData should call #getPoolHouseTickets', async () => {
-    const mockChangeBlockingUiStatus = jest.fn();
-    const mockGetPoolHouseTickets = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakePoolHouseTicketViewModel));
-    const { instance } = await shallow
-    .mock(AddRequestApiService, { getPoolHouseTickets: mockGetPoolHouseTickets })
-    .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => true) })
-    .render({
-      bind: {
-        model: Helper.fakePoolHouseTicketsModel,
-        filter: Helper.fakeFilterModel
-      }
-    });
-    instance.paging = new PagingModel();
-    instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-
-    await instance.getPoolHouseData();
-
-    expect(mockGetPoolHouseTickets).toHaveBeenCalledTimes(1);
-  });
-
-  it('initGetPoolHouseTicketQuery should return query with hdpValue not null', async () => {
-    const { instance } = await shallow
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => false) })
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
-      }
-    });
-    instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-
-    const actual = instance['initGetPoolHouseTicketQuery']();
-
-    expect(actual.hdpValue).toBe(Helper.fakeLogInfoWrongHdp.filterWithHdp.hdpValue);
-  });
-
-  it('pagingEvent should call #getPoolHouseData', async () => {
-    const { instance } = await shallow
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => false) })
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
-      }
-    });
-    const betType = new BetType(12, '', true);
-    const groupBetTypes = new GroupBetType('', [betType], true);
-    instance.groupBetTypesModel = new GroupBetTypesModel([groupBetTypes], true);
-    instance.getPoolHouseData = jest.fn();
-
-    instance.pagingEvent();
-
-    expect(instance.getPoolHouseData).toHaveBeenCalledTimes(1);
-  });
-
-  it('changeCheckBetTypeAndTicket should call #groupBetTypesModel.checkAllBetType', async () => {
-    const { instance } = await shallow
-    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => false) })
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
-      }
-    });
-    instance.tickets = new TicketsModel();
-    instance.tickets.checkAllTickets = jest.fn();
-    instance.model.checkedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
-    instance.groupBetTypesModel = new GroupBetTypesModel([], true);
-    instance.groupBetTypesModel.checkAllBetType = jest.fn();
-
-    instance['changeCheckBetTypeAndTicket']();
-
-    expect(instance.groupBetTypesModel.checkAllBetType).toHaveBeenCalledTimes(1);
-    expect(instance.tickets.checkAllTickets).toHaveBeenCalledTimes(1);
-  });
-
   it('changedBetTypes should call #tickets.handlecheckTicketByBetTypes', async () => {
     const { instance } = await shallow
     .render({
       bind: {
         model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
       }
     });
     instance.tickets = new TicketsModel();
@@ -255,7 +174,6 @@ describe('GroupBettypesPoolHouseComponent', () => {
     .render({
       bind: {
         model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
       }
     });
 
@@ -269,60 +187,12 @@ describe('GroupBettypesPoolHouseComponent', () => {
     .render({
       bind: {
         model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
       }
     });
-    instance['geCheckedBetTypes'] = jest.fn();
+    instance['getCheckedBetTypes'] = jest.fn();
 
     instance.saveClick();
 
     expect(instance.model.isOpen).toBeFalsy();
-  });
-
-  it('isHideLinkedLog should return true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
-      }
-    });
-    instance.poolHouseTicketViewModel = Helper.fakePoolHouseTicketViewModel;
-
-    const actual = instance.isHideLinkedLog();
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('isHideLinkedLog should return true when isAffectedGroup1X2 false', async () => {
-    const fakePoolHouseTicketViewModel = _.cloneDeep(Helper.fakePoolHouseTicketViewModel);
-    fakePoolHouseTicketViewModel.isAffectedGroup1X2 = false;
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
-      }
-    });
-    instance.poolHouseTicketViewModel = fakePoolHouseTicketViewModel;
-
-    const actual = instance.isHideLinkedLog();
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('checkCanShowGroupLinkedLog should return false', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-        filter: Helper.fakeFilterModel
-      }
-    });
-    ['1X2', '1H 1X2', 'AIO', ''].forEach(x => {
-      const actual = instance['checkCanShowGroupLinkedLog'](x, Helper.fakePoolHouseTicketViewModel);
-
-      expect(actual).toBeFalsy();
-    });
   });
 });

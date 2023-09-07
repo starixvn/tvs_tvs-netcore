@@ -7,7 +7,8 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog.model';
 import { Button, Category, GroupButton } from './sub-issue-type-json.model';
-
+import SubIssueTypeDangerAcceptedConfig from './sub-type-danger-accepted.json';
+import SubIssueTypeRedCardConfig from './sub-type-red-card.json';
 
 describe('SubIssueTypeDialogComponent', () => {
   @NgModule({
@@ -167,7 +168,7 @@ describe('SubIssueTypeDialogComponent', () => {
     
     const actual = instance['getSubTypeConfig']();
 
-    expect(actual).toBeUndefined();
+    expect(actual).toBe(SubIssueTypeDangerAcceptedConfig);
   });
   
   it('#getSubTypeConfig should return data when isRedCard', async () => {
@@ -177,7 +178,7 @@ describe('SubIssueTypeDialogComponent', () => {
     
     const actual = instance['getSubTypeConfig']();
 
-    expect(actual).toBeUndefined();
+    expect(actual).toBe(SubIssueTypeRedCardConfig);
   });
   
   it('#getSubTypeConfig should return data when isWrongScore', async () => {
@@ -262,7 +263,7 @@ describe('SubIssueTypeDialogComponent', () => {
     const { instance } = await shallow.render();
     const groupButton = new GroupButton();
     const button = new Button();
-    button.subIssueTypeId = SubIssueTypeConstant.NO_INDICATION_AWAY_SCORE_NO_ONWARDS;
+    button.subIssueTypeId = SubIssueTypeConstant.NO_INDICATION_AWAY_GOAL_NO_ONWARDS;
     groupButton.buttonSelectAll = [];
     groupButton.buttonSelectHomeAway = [button];
 

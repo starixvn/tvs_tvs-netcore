@@ -1,4 +1,4 @@
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../add-request/app/add-request/models/request.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { BetID } from '../../../../utility/models/bet-id.model';
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
@@ -7,10 +7,10 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
 import { Result } from '../../../../utility/models/result';
 import { PasswordService } from '../../../../utility/services/password.service';
 import { AppService } from '../../app.service';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { CheckRequestService } from '../../services/check-request.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
-import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { PopupService } from './popup.service';
 import { SubmitVoidService } from './submit-void.service';
 import { ValidationService } from './validation.service';
@@ -42,7 +42,8 @@ class Helper {
     source: null,
     sportType: 2,
     voidedBy: null,
-    userId: 0
+    userId: 0,
+    requestId: 1
   };
   static readonly fakeRequestEventModel: RequestEventModel = {
     awayId: 18486,
@@ -80,7 +81,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
 }
 

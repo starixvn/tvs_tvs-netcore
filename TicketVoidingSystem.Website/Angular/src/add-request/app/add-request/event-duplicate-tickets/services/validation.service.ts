@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
@@ -34,7 +33,7 @@ export class ValidationService {
   }
 
   public validateCommonData(betIdsComponent: BetIdsComponent, leagueEventComponent: LeagueEventAbnormalComponent,
-    primitiveProps: PrimitiveProperty, duplicateTicketsModel: DuplicateTicketsModel, tooltip: Tooltip): boolean {
+    primitiveProps: PrimitiveProperty, duplicateTicketsModel: DuplicateTicketsModel): boolean {
     if (betIdsComponent.isHasBetId()) {
       return true;
     }
@@ -51,7 +50,7 @@ export class ValidationService {
   }
 
   public async checkValidBusinessRule(args: SaveRequestArg): Promise<boolean> {
-    if (!this.validateCommonData(args.betIdsComponent, args.leagueEventComponent, args.primitiveProps, args.duplicateTicketsModel, args.tooltip)) {
+    if (!this.validateCommonData(args.betIdsComponent, args.leagueEventComponent, args.primitiveProps, args.duplicateTicketsModel)) {
       return false;
     }
 

@@ -42,7 +42,8 @@ class Helper {
     source: null,
     sportType: 2,
     voidedBy: null,
-    userId: 0
+    userId: 0,
+    requestId: 1
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -56,7 +57,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
   static readonly fakeLogInfoArg: LogInfoArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
