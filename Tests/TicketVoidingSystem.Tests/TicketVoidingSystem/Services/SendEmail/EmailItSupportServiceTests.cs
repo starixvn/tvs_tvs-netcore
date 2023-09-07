@@ -2,7 +2,6 @@
 using Fanex.MailDeliver.Model;
 using Force.DeepCloner;
 using NSubstitute;
-using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;

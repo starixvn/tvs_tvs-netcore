@@ -1,5 +1,4 @@
-﻿using Fanex.NAP.Client.AspNetCore.Attributes;
-using Fanex.NAP.Core.Business;
+﻿using Fanex.NAP.Client.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +7,8 @@ using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Controllers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]

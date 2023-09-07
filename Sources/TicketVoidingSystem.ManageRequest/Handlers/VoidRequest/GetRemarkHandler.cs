@@ -1,10 +1,11 @@
-﻿using Fanex.NAP.Core.Business;
-using MediatR;
+﻿using MediatR;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetRemarkRequest : IRequest<IEnumerable<string>>
 {

@@ -1,4 +1,4 @@
-﻿using Fanex.NAP.Core.Business;
+﻿using Fanex.NAP.Client.Helpers.Business;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.Web;

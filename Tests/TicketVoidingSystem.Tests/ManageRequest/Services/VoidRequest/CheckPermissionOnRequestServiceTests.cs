@@ -6,10 +6,11 @@ using TicketVoidingSystem.Services;
 using Xunit;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using Fanex.NAP.Core.Business;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
 {
+    using Fanex.NAP.Client.Helpers.Business;
+
     public class CheckPermissionOnRequestServiceTests
     {
         [Fact]

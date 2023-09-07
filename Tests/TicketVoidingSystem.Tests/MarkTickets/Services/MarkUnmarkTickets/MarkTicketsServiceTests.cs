@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;

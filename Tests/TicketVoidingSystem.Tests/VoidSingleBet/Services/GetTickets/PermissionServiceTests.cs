@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.VoidSingleBet.Models;
@@ -8,6 +7,8 @@ using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidSingleBet.Services.GetTickets;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class PermissionServiceTests
 {

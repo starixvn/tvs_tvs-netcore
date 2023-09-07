@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Client.AspNetCore.Attributes;
-using Fanex.NAP.Core.Business;
+using Fanex.NAP.Client.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +7,8 @@ using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 [Route("[controller]")]
 public class TicketVoidingSystemController : Controller

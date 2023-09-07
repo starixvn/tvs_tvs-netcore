@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
 using TicketVoidingSystem.Services;
@@ -8,6 +7,8 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Services.MarkUnmarkTickets
 {
+    using Fanex.NAP.Client.Helpers.Business;
+
     public class UserPermissionServiceTests
     {
         private readonly SessionService sessionService;

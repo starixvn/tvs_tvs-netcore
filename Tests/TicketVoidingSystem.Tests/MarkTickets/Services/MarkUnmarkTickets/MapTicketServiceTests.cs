@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;

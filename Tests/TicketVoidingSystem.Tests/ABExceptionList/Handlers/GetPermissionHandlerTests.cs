@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.Services;
@@ -7,6 +6,8 @@ using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ABExceptionList.Handlers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetPermissionHandlerTests
 {

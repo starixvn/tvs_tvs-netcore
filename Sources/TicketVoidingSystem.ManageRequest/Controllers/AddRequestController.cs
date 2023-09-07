@@ -1,11 +1,12 @@
-﻿using Fanex.NAP.Client.AspNetCore.Attributes;
+﻿using Fanex.NAP.Client.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.Web;
-using static Fanex.NAP.Core.Business.Constant;
 
 namespace TicketVoidingSystem.ManageRequest.Controllers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -60,7 +61,7 @@ public class AddRequestController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetProvider(GetProviderRequest request) => Ok(await mediator.Send(request));
 
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Policy.Host)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
     [HttpPost]
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
 }

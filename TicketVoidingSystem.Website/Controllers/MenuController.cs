@@ -1,9 +1,10 @@
-﻿using Fanex.NAP.Client.AspNetCore.Attributes;
-using Fanex.NAP.Core.Business;
+﻿using Fanex.NAP.Client.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class MenuController : Controller
 {
