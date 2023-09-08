@@ -34,6 +34,7 @@ public class ManageRequestController : ControllerBase
     public async Task<IActionResult> GetRequest(int id) => Ok(await mediator.Send(new GetRequestRequest { RequestId = id }));
 
     [HttpPost]
+    [SkipLogging]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]
     public async Task<IActionResult> GetRequests(SelectRequestsRequest request) => Ok(await mediator.Send(request));
 
@@ -62,6 +63,7 @@ public class ManageRequestController : ControllerBase
     public async Task<IActionResult> GetGeneralInfo(GetGeneralInfoRequest request) => Ok(await mediator.Send(request));
 
     [HttpGet]
+    [SkipLogging]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingRequest)]
     public async Task<IActionResult> GetMarkedTicketsCount() => Ok(await mediator.Send(new GetMarkedTicketsCountRequest()));
 

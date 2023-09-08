@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
+using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
 
@@ -35,6 +36,7 @@ public class SharedApiController : ControllerBase
     }
 
     [HttpGet]
+    [SkipLogging]
     public async Task<IActionResult> GetBalanceUp() => Ok(await mediator.Send(new GetBalanceUpDayRequest()));
 
     [HttpGet]

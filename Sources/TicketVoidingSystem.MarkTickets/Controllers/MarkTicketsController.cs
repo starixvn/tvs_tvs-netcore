@@ -45,6 +45,7 @@ public class MarkTicketsController : ControllerBase
     public async Task<IActionResult> GetDetailTickets(GetDetailTicketsRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetAllMarkedTickets(AllMarkedTicketsRequest request) => Ok(await mediator.Send(request));
 
