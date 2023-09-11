@@ -227,6 +227,7 @@ public class LogInfoServiceImp : LogInfoService
         criteria.Wrong1stOuInfo = query.Wrong1stOuModels?.ToWrongOuInfoXml();
         criteria.WrongOddsInfo = query.WrongOddsModels?.ToWrongOddsInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
+        criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;

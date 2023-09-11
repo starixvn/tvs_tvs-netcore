@@ -65,6 +65,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.ReducedOverModels = MapEventReducedOver(secondResultSet);
                 break;
 
+            case IssueTypeConstant.NotParticipate:
+                viewModel.NotParticipateModels = MapEventNotParticipate(secondResultSet);
+                break;
+
             case IssueTypeConstant.DuplicateTickets:
                 viewModel.DuplicateTicketsModel = MapEventDuplicateTickets(secondResultSet);
                 break;
@@ -214,6 +218,18 @@ public class GetRequestServiceImp : GetRequestService
             Runs = model.Runs,
             Live = model.Live,
             NonLive = model.NonLive
+        });
+    }
+
+    private static IEnumerable<NotParticipateViewModel> MapEventNotParticipate(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        return requestEventModels.Select(model => new NotParticipateViewModel
+        {
+            EventDate = model.EventDate,
+            MatchId = model.MatchId,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTypeId = model.BetTypeId,
+            PlayerIds = model.PlayerIds,
         });
     }
 

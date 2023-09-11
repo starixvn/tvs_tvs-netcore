@@ -2,6 +2,7 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
@@ -429,12 +430,22 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isShowOthersSimpleFields(): boolean {
-    return this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds() || this.isReducedOver();
+    const issueTypesHasSimpleFields = [
+      IssueTypeConstant.WRONG_HDP,
+      IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.REDUCED_OVER,
+      IssueTypeConstant.NOT_PARTICIPATE
+    ]
+
+    return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);
   }
 
   isShowOthersFullFields(): boolean {
     return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
-      && !this.isWrongHDP() && !this.isWrong1stHDP() && !this.isWrongOU() && !this.isWrong1stOU() && !this.isWrongOdds() && !this.isReducedOver();
+      && this.isShowOthersSimpleFields();
   }
 
   isShowSaveAndVoidButton(): boolean {

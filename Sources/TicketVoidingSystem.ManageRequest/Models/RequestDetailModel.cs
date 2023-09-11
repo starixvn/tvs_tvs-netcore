@@ -386,6 +386,15 @@ public class RequestEventModel
         }
     }
 
+    public int BetTypeId
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.BetTypeId;
+        }
+    }
+
     public string RequestExtraInfo { get; set; }
 
     public string Usernames { get; set; }

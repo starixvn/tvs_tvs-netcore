@@ -67,6 +67,8 @@ public class AddRequestQuery
 
     public IEnumerable<ReducedOverViewModel>? ReducedOverInfo { get; set; }
 
+    public IEnumerable<NotParticipateViewModel>? NotParticipateInfo { get; set; }
+
     public DuplicateTicketsViewModel? DuplicateTicketsInfo { get; set; }
 
     public string TransInfoJson { get; set; }

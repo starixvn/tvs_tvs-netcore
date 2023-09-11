@@ -180,6 +180,27 @@ public static class LogInfoExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToNotParticipateInfoXml(this IEnumerable<NotParticipateViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"BetTypeId='{model.BetTypeId}' "
+                       + $"PlayerIds='{model.PlayerIds}'";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
     public static string GetAbnormalAccountInfoXml(string usernames, string productIds, string statusIds, DateTime? fromDate, DateTime? toDate)
     {
         return $"<root><r Usernames='{usernames}' "

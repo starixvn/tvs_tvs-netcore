@@ -201,6 +201,9 @@ public class GetTransInfoServiceImp : GetTransInfoService
             case IssueTypeConstant.ReducedOver:
                 return query.ReducedOverModels.ToReducedOverInfoXml();
 
+            case IssueTypeConstant.NotParticipate:
+                return query.NotParticipateModels.ToNotParticipateInfoXml();
+
             default:
                 return "";
         }

@@ -73,6 +73,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.Wrong1stHdpInfo = query.Wrong1stHdpInfo?.ToEventWrongHdpXml();
         command.WrongOddsInfo = query.WrongOddsInfo?.ToEventWrongOddsXml();
         command.ReducedOverInfo = query.ReducedOverInfo?.ToEventReducedOverXml();
+        command.NotParticipateInfo = query.NotParticipateInfo?.ToEventNotParticipateXml();
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();

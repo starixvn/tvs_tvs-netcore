@@ -301,6 +301,31 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToEventNotParticipateXml(this IEnumerable<NotParticipateViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"BetTypeId='{model.BetTypeId}' "
+                       + $"PlayerIds='{model.PlayerIds}' "
+                       + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+                       + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                       + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
     public static string ToAbnormalAccountXml(this AbnormalAccountViewModel model)
     {
         var stringBuilder = $"<r Usernames='{model.Usernames}' "

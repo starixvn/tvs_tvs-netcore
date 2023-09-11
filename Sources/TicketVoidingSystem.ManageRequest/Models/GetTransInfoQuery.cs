@@ -22,4 +22,5 @@ public class GetTransInfoQuery
     public IEnumerable<WrongOuViewModel>? Wrong1stOuModels { get; set; }
     public IEnumerable<WrongOddsViewModel>? WrongOddsModels { get; set; }
     public IEnumerable<ReducedOverViewModel>? ReducedOverModels { get; set; }
+    public IEnumerable<NotParticipateViewModel>? NotParticipateModels { get; set; }
 }

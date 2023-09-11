@@ -95,6 +95,7 @@ public class AddRequestServiceImp : AddRequestService
         command.Wrong1stOuInfo = query.Wrong1stOuInfo?.ToEventWrongOuXml();
         command.WrongOddsInfo = query.WrongOddsInfo?.ToEventWrongOddsXml();
         command.ReducedOverInfo = query.ReducedOverInfo?.ToEventReducedOverXml();
+        command.NotParticipateInfo = query.NotParticipateInfo?.ToEventNotParticipateXml();
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
@@ -118,6 +119,7 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.RedCard => string.Join(", ", query.RedCardInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongOdds => string.Join(", ", query.WrongOddsInfo.Select(x => x.MatchId)),
             IssueTypeConstant.ReducedOver => query.ReducedOverInfo.First().MatchId.ToString(),
+            IssueTypeConstant.NotParticipate => query.NotParticipateInfo.First().MatchId.ToString(),
             IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
             IssueTypeConstant.EarlyKickOffTime => query.MatchId.ToString(),
             IssueTypeConstant.WrongKickOffTime => query.MatchId.ToString(),
