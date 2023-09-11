@@ -77,7 +77,7 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
 
     this.multipleSelect.selectionTitle = this.multipleSelect.getDisplayedItems();
     this.multipleSelect.isCheckAll = count === countChecked;
-    this.checkedItems.emit(this.multipleSelect.getValueItems().split(','));
+    this.checkedItems.emit(this.multipleSelect.getValueItems().split(',').filter(x => x !== ''));
   }
 
   toggle() {

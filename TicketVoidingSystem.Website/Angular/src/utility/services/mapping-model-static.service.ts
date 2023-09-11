@@ -1,4 +1,6 @@
 import * as _ from "lodash";
+import { NotParticipateGetLogInfoQuery } from "src/add-request/app/add-request/event-not-participate/models/get-log-info.query";
+import { NotParticipateModel } from "src/add-request/app/add-request/models/event-not-participate.model";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
@@ -126,5 +128,18 @@ export class MappingModelStaticService {
       live: x.live,
       nonLive: x.nonLive
     } as ReducedOverGetLogInfoQuery));
+  }
+
+  static buidNotParticipateGetLogInfoModel(notParticipateModels: NotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
+    if (_.isNull(notParticipateModels) || _.isUndefined(notParticipateModels)) {
+      return null;
+    }
+
+    return notParticipateModels.map(x => ({
+      matchId: x.matchId,
+      subIssueTypeId: x.subIssueTypeId,
+      betTypeId: x.betTypeId,
+      playerIds: x.playerIds,
+    } as NotParticipateGetLogInfoQuery));
   }
 }

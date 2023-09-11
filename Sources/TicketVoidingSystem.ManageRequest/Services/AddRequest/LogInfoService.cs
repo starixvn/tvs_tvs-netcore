@@ -85,6 +85,9 @@ public class LogInfoServiceImp : LogInfoService
             case IssueTypeConstant.ReducedOver:
                 return GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail);
 
+            case IssueTypeConstant.NotParticipate:
+                return GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail);
+
             default:
                 return GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail);
         }
@@ -198,6 +201,18 @@ public class LogInfoServiceImp : LogInfoService
         });
     }
 
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+    {
+        return query.NotParticipateModels.Select(item => new GetLogInfoModel
+        {
+            MatchId = item.MatchId,
+            Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
+            TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+        });
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -252,6 +267,7 @@ public class LogInfoServiceImp : LogInfoService
             Wrong1stOuModels = query.Wrong1stOuModels,
             WrongOddsModels = query.WrongOddsModels,
             ReducedOverModels = query.ReducedOverModels,
+            NotParticipateModels = query.NotParticipateModels,
             MatchId = query.MatchId,
             KickOffTime = query.KickOffTime,
             IssueTypeId = query.IssueTypeId

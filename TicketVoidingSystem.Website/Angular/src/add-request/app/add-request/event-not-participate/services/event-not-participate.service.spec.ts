@@ -2,9 +2,6 @@ import { MultipleSelection } from '../../../../../utility/components/multiple-se
 import { NgSelectMixtureModel } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { ReducedOverModel } from '../../models/event-reduced-over.model';
-import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
-import { LogInfoReducedOver } from '../models/log-info-not-participate.model';
-import { EventReducedOverService } from './event-not-participate.service';
 
 class Helper {
   static readonly fakeFilterReducedOverModel: FilterReducedOverModel = {

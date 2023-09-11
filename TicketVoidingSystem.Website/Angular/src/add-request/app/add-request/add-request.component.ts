@@ -19,6 +19,7 @@ import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-b
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
+import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
@@ -63,6 +64,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongOdds') eventWrongOddsComponent: EventWrongOddsComponent;
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
+  @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -239,6 +241,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.isDuplicateTickets()) {
       await this.eventDuplicateTicketsComponent.saveRequest();
+    }
+
+    if (this.isNotParticipate()) {
+      await this.eventNotParticipateComponent.saveRequest();
     }
   }
 
@@ -445,7 +451,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isShowOthersFullFields(): boolean {
     return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
-      && this.isShowOthersSimpleFields();
+      && !this.isShowOthersSimpleFields();
   }
 
   isShowSaveAndVoidButton(): boolean {

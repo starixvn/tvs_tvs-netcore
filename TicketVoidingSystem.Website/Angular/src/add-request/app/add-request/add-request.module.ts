@@ -33,6 +33,10 @@ import { EventDangerAcceptedComponent } from './event-danger-accepted/event-dang
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { TicketsListComponent } from './event-early-kick-off/tickets-list/tickets-list.component';
+import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
+import { FilterNotParticipateItemComponent } from './event-not-participate/filter-not-participate/filter-not-participate-item/filter-not-participate-item.component';
+import { FilterNotParticipateComponent } from './event-not-participate/filter-not-participate/filter-not-participate.component';
+import { LogInfoNotParticipateComponent } from './event-not-participate/log-info-not-participate/log-info-not-participate.component';
 import { ConfirmRedCardComponent } from './event-red-card/confirm-red-card/confirm-red-card.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { FilterTimeAreaComponent } from './event-red-card/filter-time-area/filter-time-area.component';
@@ -65,10 +69,6 @@ import { SubIssueTypeDialogComponent } from './filter/sub-issue-type-dialog/sub-
 import { LeagueEventComponent } from './league-event/league-event.component';
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
-import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
-import { FilterNotParticipateComponent } from './event-not-participate/filter-not-participate/filter-not-participate.component';
-import { FilterNotParticipateItemComponent } from './event-not-participate/filter-not-participate-item/filter-not-participate-item.component';
-import { LogInfoNotParticipateComponent } from './event-not-participate/log-info-not-participate/log-info-not-participate.component';
 
 @NgModule({
   declarations: [
@@ -121,7 +121,7 @@ import { LogInfoNotParticipateComponent } from './event-not-participate/log-info
     EventNotParticipateComponent,
     FilterNotParticipateComponent,
     FilterNotParticipateItemComponent,
-    LogInfoNotParticipateComponent,
+    LogInfoNotParticipateComponent
   ],
   exports: [
     AddRequestComponent

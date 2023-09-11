@@ -75,6 +75,9 @@ export class ObjectService {
     } else if (this.validationService.isReducedOver(args.detailViewModel)) {
       args.requestModel.reducedOverModels = args.detailViewModel.reducedOverModels;
       args.primitiveProperty.matchId = args.detailViewModel.reducedOverModels[0].matchId;
+    } else if (this.validationService.isNotParticipate(args.detailViewModel)) {
+      args.requestModel.notParticipateModels = args.detailViewModel.notParticipateModels;
+      args.primitiveProperty.matchId = args.detailViewModel.notParticipateModels[0].matchId;
     } else if (this.validationService.isDuplicateTickets(args.detailViewModel)) {
       args.requestModel.duplicateTicketsModel = args.detailViewModel.duplicateTicketsModel;
       args.primitiveProperty.matchId = args.detailViewModel.duplicateTicketsModel.matchId;

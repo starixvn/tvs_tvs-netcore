@@ -31,6 +31,7 @@ export class EventNotParticipateService {
 
   private createFilterNotParticipateModel(inputModel: NotParticipateModel): FilterNotParticipateModel {
     const model = new FilterNotParticipateModel();
+    model.betTypeId = inputModel.betTypeId;
     model.playerIds = inputModel.playerIds.split(',');
 
     return model;

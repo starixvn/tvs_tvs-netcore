@@ -1,3 +1,4 @@
+import { NotParticipateModel } from 'src/add-request/app/add-request/models/event-not-participate.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
@@ -75,6 +76,7 @@ export class RequestDetailViewModel {
   wrongOuModels: WrongOuModel[];
   wrongOddsModels: WrongOddsModel[];
   reducedOverModels: ReducedOverModel[];
+  notParticipateModels: NotParticipateModel[];
   duplicateTicketsModel: DuplicateTicketsModel;
   messages: Message[];
 }

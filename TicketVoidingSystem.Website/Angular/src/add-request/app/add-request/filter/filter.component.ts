@@ -226,7 +226,8 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
       [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200, sport: 150 },
-      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 150, action: 170, sport: 150 }
+      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 150, action: 170, sport: 150 },
+      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 150, action: 200, sport: 150 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};

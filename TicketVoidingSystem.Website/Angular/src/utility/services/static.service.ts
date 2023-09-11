@@ -120,6 +120,8 @@ export class StaticService {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
     } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.reducedOverModels[0].subIssueTypeId;
+    } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.notParticipateModels[0].subIssueTypeId;
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.duplicateTicketsModel.subIssueTypeId;
     } else {
@@ -142,6 +144,8 @@ export class StaticService {
       return requestDetail.wrongOddsModels[0].eventDate;
     } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.reducedOverModels[0].eventDate;
+    } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.notParticipateModels[0].eventDate;
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {

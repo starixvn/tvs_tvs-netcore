@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import * as _ from 'lodash';
 import { OddsInfo } from 'src/utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetType } from '../models/not-participate-bet-type.model';
@@ -34,9 +35,20 @@ export class FilterNotParticipateComponent implements OnInit {
 
   public addBetTypeItem(): void {
     this.models.push(this.filterService.initDefaultFilter());
+    this.updateStatusItem();
+  }
+
+  public changeBetTypeItem(): void {
+    this.updateStatusItem();
   }
 
   public removeBetTypeItem(index: number): void {
     this.models.splice(index, 1);
+    this.updateStatusItem();
+  }
+
+  private updateStatusItem(): void {
+    this.originalNotParticipateBetTypes.forEach(x => x.disabled = this.models.some(y => y.betTypeId === x.betTypeId));
+    this.originalNotParticipateBetTypes = _.cloneDeep(this.originalNotParticipateBetTypes);
   }
 }

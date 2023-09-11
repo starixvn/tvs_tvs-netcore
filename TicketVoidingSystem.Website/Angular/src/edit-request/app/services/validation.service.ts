@@ -79,6 +79,11 @@ export class ValidationService {
   }
 
   /* istanbul ignore next */
+  public isNotParticipate(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isNotParticipate(detailViewModel.request.issueTypeId.toString());
+  }
+
+  /* istanbul ignore next */
   public isDuplicateTickets(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isDuplicateTickets(detailViewModel.request.issueTypeId.toString());
   }

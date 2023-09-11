@@ -193,7 +193,7 @@ public static class LogInfoExtension
             var line = $"<r MatchId='{model.MatchId}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"BetTypeId='{model.BetTypeId}' "
-                       + $"PlayerIds='{model.PlayerIds}'";
+                       + $"PlayerIds='{model.PlayerIds}' />";
 
             stringBuilder.AppendLine(line);
         }

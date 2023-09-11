@@ -18,7 +18,7 @@ export class LogInfoService {
     private readonly validationService: ValidationService
   ) { }
 
-  async getLogInfo(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): Promise<void> {    
+  async getLogInfo(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): Promise<void> {
     const args = this.createLogInfoArg(primitiveProperty, detailViewModel);
     if (this.validationService.isRedCard(detailViewModel)) {
       await this.getLogInfoRedCard(args);
@@ -34,6 +34,8 @@ export class LogInfoService {
       await this.getLogInfoWrongOdds(args);
     } else if (this.validationService.isReducedOver(detailViewModel)) {
       await this.getLogInfoReducedOver(args);
+    } else if (this.validationService.isNotParticipate(detailViewModel)) {
+      await this.getLogInfobuidNotParticipate(args);
     }
   }
 
@@ -176,6 +178,24 @@ export class LogInfoService {
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.reducedOverModels.find(y => y.matchId === x.matchId);
+      model.logInfoDetail = x.logInfoDetail;
+    });
+    args.primitiveProperty.isBlock = false;
+  }
+
+  private async getLogInfobuidNotParticipate(args: LogInfoArg): Promise<void> {
+    args.primitiveProperty.isBlock = true;
+    const models = MappingModelStaticService.buidNotParticipateGetLogInfoModel(args.detailViewModel.notParticipateModels);
+    const query = new GetLogInfoQuery();
+    query.requestId = args.primitiveProperty.requestId;
+    query.isShowLogOnly = true;
+    query.issueTypeId = args.detailViewModel.request.issueTypeId;
+    query.actionId = args.detailViewModel.request.actionId;
+    query.notParticipateModels = models;
+
+    const data = await this.commonService.getLogInfo(query);
+    data.getLogInfoModels.forEach(x => {
+      const model = args.detailViewModel.notParticipateModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
     });
     args.primitiveProperty.isBlock = false;

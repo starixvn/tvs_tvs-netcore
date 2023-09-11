@@ -4,7 +4,7 @@ import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
-import { PrimitivePropertyItem } from '../filter-not-participate-item/filter-not-participate-item.model';
+import { PrimitivePropertyItem } from '../filter-not-participate/filter-not-participate-item/filter-not-participate-item.model';
 import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';

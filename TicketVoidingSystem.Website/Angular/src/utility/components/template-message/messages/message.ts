@@ -10,4 +10,7 @@
     contentJapanese: string;
     contentItalian: string;
     contentSpanish: string;
+    playerNamesEnglish: string;
+    playerNamesChineseTraditional: string;
+    playerNamesChineseSimplified: string;
 }

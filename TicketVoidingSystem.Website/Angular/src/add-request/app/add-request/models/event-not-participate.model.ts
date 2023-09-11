@@ -7,4 +7,5 @@ export class NotParticipateModel {
   logInfoDetail: LogInfoDetail;
   betTypeId: number;
   playerIds: string;
+  playerNames: string;
 }

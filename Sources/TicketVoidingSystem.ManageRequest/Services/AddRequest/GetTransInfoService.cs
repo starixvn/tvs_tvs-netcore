@@ -105,6 +105,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.ReducedOverInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.NotParticipate:
+                criteria.NotParticipateInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;

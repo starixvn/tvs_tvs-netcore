@@ -28,6 +28,8 @@ public class GetTicketSiteDbCriteria : CriteriaBase
 
     public string ReducedOverInfo { get; set; }
 
+    public string NotParticipateInfo { get; set; }
+
     public string AbnormalBetTransIds { get; set; }
 
     public string AbnormalAccounts { get; set; }

@@ -21,7 +21,6 @@ export class TicketsService {
     query.pageIndex = PagingConstant.INDEX_ZERO;
     query.pageSize = PagingConstant.SIZE_ONE;
     query.match = matchModel;
-    query.kickOffDate = null;
     query.requestId = requestDetail.requestId;
     query.issueTypeId = requestDetail.request.issueTypeId;
 
@@ -34,10 +33,10 @@ export class TicketsService {
     return voidTickets;
   }
 
-  async loadVoidTicketsFullOnFirstTime(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, matchModel?: MatchModel): Promise<void> {
+  async loadVoidTicketsFullOnFirstTime(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel): Promise<void> {
     voidPageItem.pagingVoidTickets.selection = [PagingConstant.SIZE_ONE, PagingConstant.SIZE_TWO, PagingConstant.SIZE_THREE, PagingConstant.SIZE_FOUR];
     voidPageItem.pagingVoidTickets.pageSize = PagingConstant.SIZE_ONE;
-    const query = this.initTicketQuery(requestDetail, matchModel);
+    const query = this.initTicketQuery(requestDetail, voidPageItem.matchModel);
     await this.getVoidTicketsFull(voidPageItem, query);
     voidPageItem.isLoadedTicketFull = true;
   }

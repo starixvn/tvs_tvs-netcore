@@ -60,8 +60,11 @@ export class AppComponent implements OnInit {
     return StaticService.isRedCard(this.requestDetail.request?.issueTypeId.toString());
   }
 
-  isShowVoidOtherIssue(): boolean {
-    return !this.isShowVoidDuplicateTickets() && !this.isShowVoidDangerAccepted() && !this.isShowVoidRedCard()
+  isShowVoidNotParticipate(): boolean {
+    return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId.toString());
   }
 
+  isShowVoidOtherIssue(): boolean {
+    return !this.isShowVoidDuplicateTickets() && !this.isShowVoidDangerAccepted() && !this.isShowVoidRedCard() && !this.isShowVoidNotParticipate();
+  }
 }

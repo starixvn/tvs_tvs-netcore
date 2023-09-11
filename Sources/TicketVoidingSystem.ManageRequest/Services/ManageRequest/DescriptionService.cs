@@ -38,7 +38,8 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
-                {IssueTypeConstant.DuplicateTickets, BuildSingleOrParlay}
+                {IssueTypeConstant.DuplicateTickets, BuildSingleOrParlay},
+                {IssueTypeConstant.NotParticipate, BuildMatchLeague}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);

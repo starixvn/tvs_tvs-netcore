@@ -22,8 +22,9 @@ import { LogInfoNewComponent } from './log-info-new/log-info-new.component';
 import { LogInfoComponent } from './log-info/log-info.component';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
-import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
+import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
 
 @NgModule({
@@ -37,7 +38,8 @@ import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
     VoidOtherIssueComponent,
     LogInfoNewComponent,
     VoidDuplicateTicketsComponent,
-    VoidRedCardComponent
+    VoidRedCardComponent,
+    VoidNotParticipateComponent
   ],
   imports: [
     AdvancedModeModule,
