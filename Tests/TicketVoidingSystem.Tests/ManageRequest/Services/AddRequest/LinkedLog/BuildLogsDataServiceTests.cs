@@ -26,8 +26,7 @@ public class BuildLogsDataServiceTests
         // Arrange
         var getLinkedLogModel = new GetLinkedLogModel { IssueTypeId = issueTypeId, SubIssueTypeId = subIssueTypeId };
         var linkedOddsInfo = new LinkedOddsInfo();
-        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>();
-        linkedOddsInfoDic.Add(1, linkedOddsInfo);
+        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo> { { 1, linkedOddsInfo } };
         var resultFromApi = new List<PoolHouseLinkedLogResponse>
             { new() { LinkGroup = groupId, LinkedOddsInfoDic = linkedOddsInfoDic } };
 

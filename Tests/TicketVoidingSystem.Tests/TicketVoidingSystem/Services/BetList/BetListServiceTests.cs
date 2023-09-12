@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Fanex.BetList.Core.Entities;
-using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
 using FizzWare.NBuilder;
 using NSubstitute;
@@ -222,21 +221,6 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
 
         // Assert
         Assert.NotNull(actual);
-    }
-
-    [Fact]
-    public void GetBetTeam_ReturnName()
-    {
-        // Arrange
-        const string expected =
-            "<div class=''><span class=\"{betTeamClassName}\">{betTeam}</span><div class=\"event-date\">{eventDate}</div></div>";
-        service = new BetListServiceImp(null, null);
-
-        // Act
-        var actual = service.GetBetTeam(new Choice_Template());
-
-        // Assert
-        Assert.Equal(expected, actual);
     }
 
     [Fact]

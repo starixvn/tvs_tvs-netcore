@@ -12,10 +12,6 @@ public interface MailResultService
 
     Result CreateFail(string siteName, bool isFromAfterVoidService);
 
-    List<Result> InsertCombineLicenseesName(List<Result> results, string siteNameSuccess, string siteNameFails);
-
-    List<Result> InsertCombineLicenseesNameForAfterVoidService(List<Result> results, string siteNameSuccess, string siteNameFails);
-
     IEnumerable<Result> CreateCombineResults(CombineMessageModel model, bool isFromAfterVoidService);
 }
 
@@ -39,7 +35,7 @@ public class MailResultServiceImp : MailResultService
         };
     }
 
-    public List<Result> InsertCombineLicenseesName(List<Result> results, string siteNameSuccess, string siteNameFails)
+    public static List<Result> InsertCombineLicenseesName(List<Result> results, string siteNameSuccess, string siteNameFails)
     {
         InsertSuccessful(results);
         InsertSuccessfulCombine(results, siteNameSuccess);
@@ -91,7 +87,7 @@ public class MailResultServiceImp : MailResultService
         }
     }
 
-    public List<Result> InsertCombineLicenseesNameForAfterVoidService(List<Result> results, string siteNameSuccess, string siteNameFails)
+    public static List<Result> InsertCombineLicenseesNameForAfterVoidService(List<Result> results, string siteNameSuccess, string siteNameFails)
     {
         if (!string.IsNullOrEmpty(siteNameSuccess))
         {

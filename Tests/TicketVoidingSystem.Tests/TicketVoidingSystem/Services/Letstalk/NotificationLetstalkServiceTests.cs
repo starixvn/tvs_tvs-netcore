@@ -18,14 +18,13 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
 {
     private readonly GroupVoidSettledBetService groupVoidSettledBetService;
     private readonly GroupTicketListingService groupTicketListingService;
-    private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
     private readonly NotificationLetstalkServiceImp service;
 
     public NotificationLetstalkServiceTests()
     {
         groupVoidSettledBetService = Substitute.For<GroupVoidSettledBetService>();
         groupTicketListingService = Substitute.For<GroupTicketListingService>();
-        groupAbnormalBetRequestService = Substitute.For<GroupAbnormalBetRequestService>();
+        var groupAbnormalBetRequestService = Substitute.For<GroupAbnormalBetRequestService>();
         service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService, groupAbnormalBetRequestService);
     }
 

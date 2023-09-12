@@ -1,7 +1,7 @@
 ﻿@using Fanex.NAP.Client.Session
 @{
     var session = new NapSession(httpContextAccessor);
-    var userName = User?.Identity?.Name;
+    var userName = User.Identity?.Name;
     var userId = session.UserId;
 }
 <!DOCTYPE html>
@@ -24,6 +24,5 @@
     <script src="~/lib/jquery/dist/jquery-blockui.1.33.min.js"></script>
     <script src="~/js/sub-parlay-ticket.js"></script>
     <script src="~/nap-auth/re-checkin.js"></script>
-@*    <script src="@Url.Content("~/auth/recheckinscript")" type="text/javascript"></script>*@
 </body>
 </html>

@@ -16,7 +16,6 @@ public class EditRequestServiceTests
 {
     private readonly LoggingService loggingService;
     private readonly MarkTicketsWhenEditService marketTicketsWhenEditService;
-    private readonly ReCalculateTicketsService reCalculateTicketsService;
     private readonly EditRequestServiceImp service;
     private readonly UpdateRequestProcessStage updateRequestProcessStage;
 
@@ -24,7 +23,7 @@ public class EditRequestServiceTests
     {
         loggingService = Substitute.For<LoggingService>();
         marketTicketsWhenEditService = Substitute.For<MarkTicketsWhenEditService>();
-        reCalculateTicketsService = Substitute.For<ReCalculateTicketsService>();
+        var reCalculateTicketsService = Substitute.For<ReCalculateTicketsService>();
         updateRequestProcessStage = Substitute.For<UpdateRequestProcessStage>();
         service = new EditRequestServiceImp(loggingService, marketTicketsWhenEditService, reCalculateTicketsService,
             updateRequestProcessStage);

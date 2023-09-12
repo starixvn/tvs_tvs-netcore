@@ -12,13 +12,12 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.MatchInfo;
 
 public class GetMatchInfoForAddRequestTests
 {
-    private readonly BetListService betListService;
     private readonly GetMatchInfoAddRequestHandler handler;
     private readonly MatchService matchService;
 
     public GetMatchInfoForAddRequestTests()
     {
-        betListService = Substitute.For<BetListService>();
+        var betListService = Substitute.For<BetListService>();
         matchService = Substitute.For<MatchService>();
         handler = new GetMatchInfoAddRequestHandler(betListService, matchService);
     }

@@ -16,12 +16,11 @@ public class GetLinkedLogServiceTests
     private readonly BuildLogsDataService buildLogsDataService;
     private readonly LinkedLogApiService linkedLogApiService;
     private readonly LinkGroupBettypeService linkGroupBettypeService;
-    private readonly LoggingService loggingService;
     private readonly GetLinkedLogServiceImp service;
 
     public GetLinkedLogServiceTests()
     {
-        loggingService = Substitute.For<LoggingService>();
+        var loggingService = Substitute.For<LoggingService>();
         linkedLogApiService = Substitute.For<LinkedLogApiService>();
         linkGroupBettypeService = Substitute.For<LinkGroupBettypeService>();
         buildLogsDataService = Substitute.For<BuildLogsDataService>();

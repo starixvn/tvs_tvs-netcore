@@ -24,7 +24,7 @@
             <strong>亲爱的客户,</strong><br />
             请注意, 本公司发现您旗下会员有重单. 我们保留第 @(Model.TotalOrgTransIds) 张注单为有效, 然而已经将第二张注单作废. 请查看以下信息:<br />
             <strong>信息:</strong><br />
-            @if (!string.IsNullOrWhiteSpace(@Model.ChineseSimplified))
+            @if (!string.IsNullOrWhiteSpace(Model.ChineseSimplified))
             {
                 <span style="width: 1350px;">@Model.ChineseSimplified</span><br />
             }
@@ -37,7 +37,7 @@
             we retained @(Model.TotalOrgTransIds) ticket as valid and had proceed to void the duplicate(s). Please
             refer to the below message:<br>
             <strong>Message:</strong><br />
-            @if (!string.IsNullOrWhiteSpace(@Model.English))
+            @if (!string.IsNullOrWhiteSpace(Model.English))
             {
                 <span style="width: 1350px;">@Model.English</span><br />
             }
@@ -54,7 +54,7 @@
             <table cellspacing="1" style="background-color: #CBCBCB; font-size: 12pt;">
                 @foreach (var group in Model.DuplicateTickets)
                 {
-                    var backgroundColor = @group.Id % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                    var backgroundColor = group.Id % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
                     <tr valign="Middle" style="background-color: @backgroundColor; height: 25px;">
                         <td align="Center" style="padding: 10px;">
                             @group.Id

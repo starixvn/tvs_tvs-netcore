@@ -20,8 +20,6 @@ public static class BetTypeConstant
 
     public const int MaxSportingSolutionBetType = 1399;
 
-    //
-
     public const int FirstNumberGame = 81;
 
     public const int SecondNumberGame = 120;

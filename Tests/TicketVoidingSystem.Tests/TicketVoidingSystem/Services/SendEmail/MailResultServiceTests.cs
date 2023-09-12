@@ -90,7 +90,7 @@ public class MailResultServiceTests
         };
 
         // Act
-        var result = service.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
+        var result = MailResultServiceImp.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
 
         // Assert
         AssertExtension.Equal(expected, result);
@@ -120,7 +120,7 @@ public class MailResultServiceTests
         };
 
         // Act
-        var result = service.InsertCombineLicenseesNameForAfterVoidService(results, siteNameSuccess, siteNameFails);
+        var result = MailResultServiceImp.InsertCombineLicenseesNameForAfterVoidService(results, siteNameSuccess, siteNameFails);
 
         // Assert
         AssertExtension.Equal(expected, result);
@@ -153,7 +153,7 @@ public class MailResultServiceTests
         };
 
         // Act
-        var result = service.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
+        var result = MailResultServiceImp.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
 
         // Assert
         AssertExtension.Equal(expected, result);

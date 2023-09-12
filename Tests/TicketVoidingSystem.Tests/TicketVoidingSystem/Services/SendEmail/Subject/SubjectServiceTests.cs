@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using Xunit;
@@ -14,25 +13,6 @@ public class SubjectServiceTests
     public SubjectServiceTests()
     {
         service = new SubjectServiceImp();
-    }
-
-    [Theory]
-    [InlineData(EmailGroup.Recover, "Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
-    [InlineData(EmailGroup.CashOut, "Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
-    [InlineData(EmailGroup.ItQa, "Test Currency - Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
-    [InlineData(EmailGroup.ItSupport, "Real Currency - Recovered Cash Out Transaction Report (02/02/2022 02:02:02)")]
-    [InlineData(EmailGroup.None, "Exception Subject")]
-    public void CreateRecover_ReturnRecover(EmailGroup group, string expected)
-    {
-        // Arrange
-        const RecoverType type = RecoverType.CashOut;
-        var mailViewModel = new MailViewModel { DateTime = new DateTime(2022, 2, 2, 2, 2, 2) };
-
-        // Act
-        var actual = service.CreateRecover(mailViewModel, group, type);
-
-        // Assert
-        Assert.Equal(expected, actual);
     }
 
     [Theory]

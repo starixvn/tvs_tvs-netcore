@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Fanex.Logging;
-using Microsoft.Extensions.Configuration;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Utilities;
 
@@ -19,7 +18,7 @@ public class TicketVoidingSystemHttpClientServiceImp : TicketVoidingSystemHttpCl
 {
     private readonly HttpClient httpClient;
 
-    public TicketVoidingSystemHttpClientServiceImp(HttpClient client, IConfiguration configuration)
+    public TicketVoidingSystemHttpClientServiceImp(HttpClient client)
     {
         httpClient = client;
         httpClient.BaseAddress = new Uri(AppSettingService.AppSetting.TicketVoidingSystemUrl);

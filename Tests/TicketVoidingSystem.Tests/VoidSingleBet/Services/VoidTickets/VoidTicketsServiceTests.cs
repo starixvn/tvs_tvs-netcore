@@ -92,7 +92,7 @@ public class VoidTicketsServiceTests
         {
             Tickets = tickets.ToList(),
             Validation = combineValidation,
-            TicketsRollbackNetPosition = new List<BetId> { }
+            TicketsRollbackNetPosition = new List<BetId>()
         };
         // Act
         var result = await service.VoidBet(query);

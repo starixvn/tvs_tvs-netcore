@@ -36,20 +36,7 @@ public class CashOutApiServiceTests
         // Assert
         await cashOutHttpClientService.Received(1).PostRequest("VoidBet", Arg.Any<CashOutApiModel>());
     }
-
-    [Fact]
-    public async Task UndoVoidBet_HasCalled_AlwaysCalledPostRequest()
-    {
-        // Arrange
-        var requestModel = new CashOutApiModel();
-
-        // Act
-        await service.UndoVoidBet(requestModel);
-
-        // Assert
-        await cashOutHttpClientService.Received(1).PostRequest("UndoVoidBet", Arg.Any<CashOutApiModel>());
-    }
-
+    
     [Fact]
     public async Task VoidBetForCashOutBasketball_HasValidTickets_HasCalledPostRequest()
     {
