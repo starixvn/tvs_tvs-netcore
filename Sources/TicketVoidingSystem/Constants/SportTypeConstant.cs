@@ -13,4 +13,8 @@ public static class SportTypeConstant
     public const int NumberGame = 161;
 
     public const int Lucky3Game = 160;
+
+    public const int Happy5 = 164;
+
+    public const int Bullfighting = 207;
 }

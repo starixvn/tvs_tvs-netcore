@@ -15,7 +15,7 @@ public interface CellService
 
 public class CellServiceImp : CellService
 {
-    public void SetStyle(ExcelWorksheet worksheet)  // NOSONAR
+    public void SetStyle(ExcelWorksheet worksheet)
     {
         var lastRow = worksheet.Dimension.End.Row;
         var lasCol = worksheet.Dimension.End.Column;
