@@ -1,0 +1,105 @@
+﻿@using TicketVoidingSystem.Constants
+@model bool
+
+<fieldset id="fsMessage" class="form display-none">
+    <legend>Message</legend>
+    @if (Model)
+    {
+        <div class="message-type">
+            <label><span>*</span>Message Type</label>
+            @Html.DropDownList("ddl-message-type", new List<SelectListItem>
+                    {
+                        new SelectListItem {Text = "N/A", Value = ""},
+                        new SelectListItem {Text = "Void (Unsettled)", Value = MessageContentType.VoidUnsettled.ToString() },
+                        new SelectListItem {Text = "Void (Settled)", Value = MessageContentType.VoidSettled.ToString() },
+                        new SelectListItem {Text = "Recover", Value = MessageContentType.Recover.ToString() },
+                        new SelectListItem {Text = "Refund", Value = MessageContentType.Refund.ToString() },
+                        new SelectListItem {Text = "Reject", Value = MessageContentType.Reject.ToString() },
+                        new SelectListItem {Text = "Re-settle", Value = MessageContentType.ReSettle.ToString() },
+                        new SelectListItem {Text = "UnCalculate", Value = MessageContentType.UnCalculate.ToString() },
+                        new SelectListItem {Text = "Others", Value = MessageContentType.Others.ToString() }
+                    })
+        </div>
+    }
+    <table class="tbl-message">
+        <tr>
+            <th colspan="4" class="tbl-message-header">
+                <span>Please include "&#64;&#64;" in your message to replace ticket numbers.</span>
+            </th>
+        </tr>
+        <tr class="tbl-message-header-language">
+            <th>
+                <span>*</span>English
+            </th>
+            <th>
+                <span>*</span>Chinese Traditional
+            </th>
+            <th>
+                <span>*</span>Chinese Simplified
+            </th>
+            <th>
+                <span>*</span>New Chinese Simplified
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <textarea rows="1" id="msg-en" class="input-message msg-void-ticket"></textarea>
+            </td>
+            <td>
+                <textarea rows="1" id="msg-ch" class="input-message msg-void-ticket"></textarea>
+            </td>
+            <td>
+                <textarea rows="1" id="msg-cs" class="input-message msg-void-ticket"></textarea>
+            </td>
+            <td>
+                <textarea rows="1" id="msg-zhcn" class="input-message msg-void-ticket"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" class="tbl-message-header-other-language">
+                <span onclick="Message.Helper.displayMoreMsg()">
+                    Other languages
+                    <span id="spMoreMsg">[+]</span>
+                </span>
+            </td>
+        </tr>
+        <tr class="other-languages display-none">
+            <th>
+                Thai
+            </th>
+            <th>
+                Korean
+            </th>
+            <th>
+                Japanese
+            </th>
+            <th>
+                Italian
+            </th>
+        </tr>
+        <tr class="other-languages display-none">
+            <td>
+                <textarea rows="1" id="msg-th" class="input-message msg-void-ticket"></textarea>
+            </td>
+            <td>
+                <textarea rows="1" id="msg-ko" class="input-message msg-void-ticket"></textarea>
+            </td>
+            <td>
+                <textarea rows="1" id="msg-jp" class="input-message msg-void-ticket"></textarea>
+            </td>
+            <td>
+                <textarea rows="1" id="msg-it" class="input-message msg-void-ticket"></textarea>
+            </td>
+        </tr>
+        <tr class="other-languages display-none">
+            <th>
+                Spanish
+            </th>
+        </tr>
+        <tr class="other-languages display-none">
+            <td>
+                <textarea rows="1" id="msg-es" class="input-message msg-void-ticket"></textarea>
+            </td>
+        </tr>
+    </table>
+</fieldset>

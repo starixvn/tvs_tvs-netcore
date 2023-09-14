@@ -2,5 +2,59 @@
     Layout = "~/Views/Shared/_LayoutOld.cshtml";
     ViewBag.Title = "Upload Batch Message";
 }
-
-<h1>dddd</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/old-page/upload-batch-message/batch-message.less" />
+}
+@section Headline {
+    <div class="title">
+        Home / Upload Batch Message
+    </div>
+}
+<div data-ng-app="app.uploadBatchMessage" data-ng-controller="UploadBatchMessageController as vm">
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "BatchMessageForm" }))
+    {
+        <div class="filter-bar">
+            <div>
+                <div class="filter-row filter">
+                    <div class="filter-cell">
+                        @await Html.PartialAsync("~/Views/UploadBatchMessage/_FilterProducts.cshtml")
+                    </div>
+                </div>
+                <div class="filter-row input-bet">
+                    <div class="filter-cell">
+                        <div class="lbl-field span" style="margin-right: 13px;">
+                            <label for="TransId">
+                                BetID(s)
+                            </label>
+                        </div>
+                        <div class="edit-field span8" style="width: 670px;">
+                            <div class="span6 offset number-group" style="width: 670px; max-height: 478px; overflow: auto;">
+                                <input id="txtTransId" class="text-number" autofocus />
+                            </div>
+                            <div class="float-left">
+                                <p id="errorBetId" style="margin-top: -22px;">
+                                </p>
+                                <br />
+                                Ex: 1234567890, 1223457890, 2234567890
+                            </div>
+                            <div class="float-right em">
+                                <p style="margin-top: 5px;">Max: 1000 bets</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-row">
+                    @await Html.PartialAsync("_Message", true)
+                </div>
+                <div class="filter-row action-buttons">
+                    @await Html.PartialAsync("~/Views/UploadBatchMessage/_Button.cshtml")
+                </div>
+                <div id="show-message" title="Upload Batch Result" class="display-none">
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script src="~/old-page/bundle-upload-batch-message.js"></script>
+}

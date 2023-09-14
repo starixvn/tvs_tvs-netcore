@@ -122,6 +122,7 @@
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0" />
     <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.1" />
     <PackageReference Include="ONEbook.UM.Transport" Version="3.1.2" />
+    <PackageReference Include="codeessentials.WebOptimizer.Dotless" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>

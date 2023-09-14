@@ -1,5 +1,4 @@
 ﻿@using Fanex.NAP.Client.Session
-@using Microsoft.AspNetCore.Routing
 @using TicketVoidingSystem.Website.ViewComponents
 @{
     var session = new NapSession(httpContextAccessor);
@@ -8,72 +7,75 @@
 }
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <base href="@Url.Content("~/")" />
-    <meta charset="utf-8" />
-    <title>@ViewBag.Title &mdash; NAP Special Delete</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="~/favicon.ico" />
-    <link rel="stylesheet" href="~/old-page/bundle-libs.css" />
-    @await RenderSectionAsync("Head", false)
-    @if (IsSectionDefined("Styles"))
-    {
-        @await RenderSectionAsync("Styles")
-    }
-    else
-    {
-        <link href="~/content/base/styles.less" rel="stylesheet" type="text/css" />
-    }
-</head>
-<body origin-url="@Url.Content("~")">
-    <div class="row header-user-info user-info-background">
-        <a class="logo" href="~/?ref=logo">&nbsp;</a>
-        <div style="width: 60px; float: right;">
-            &nbsp;
+    <head>
+        <base href="@Url.Content("~/")" />
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title &mdash; NAP Special Delete</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="~/favicon.ico" />
+        <link rel="stylesheet" href="~/old-page/bundle-libs.css" />
+        @await RenderSectionAsync("Head", false)
+        @if (IsSectionDefined("Styles"))
+        {
+            @await RenderSectionAsync("Styles")
+        }
+        else
+        {
+            <link href="~/content/base/styles.less" rel="stylesheet" type="text/css" />
+        }
+        <script type="text/javascript">
+        window.rootUrl = '@Url.Content("~")';
+    </script>
+    </head>
+    <body origin-url="@Url.Content("~")">
+        <div class="row header-user-info user-info-background">
+            <a class="logo" href="~/?ref=logo">&nbsp;</a>
+            <div style="width: 60px; float: right;">
+                &nbsp;
+            </div>
+            <div class="user-info dropdown">
+                <span class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">
+                    &nbsp;<em class="icon-avata"></em>&nbsp; Welcome, <span class="username">@userName</span>
+                    <span class="icon-menu-down"></span>
+                </span>
+                <ul class="dropdown-menu" role="menu">
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/ChangePassword")">
+                            Change Password
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/LogOut")">
+                            Sign Out
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="user-info dropdown">
-            <span class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">
-                &nbsp;<em class="icon-avata"></em>&nbsp; Welcome, <span class="username">@userName</span>
-                <span class="icon-menu-down"></span>
-            </span>
-            <ul class="dropdown-menu" role="menu">
-                <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/ChangePassword")">
-                        Change Password
-                    </a>
-                </li>
-                <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/LogOut")">
-                        Sign Out
-                    </a>
-                </li>
-            </ul>
+        <header>
+            @await Component.InvokeAsync(nameof(Menu))
+        </header>
+        <section id="headline">
+            @await RenderSectionAsync("Headline", false)
+        </section>
+        <section id="body" user-name="@userName" user-id="@userId">
+            @RenderBody()
+        </section>
+        <div class="alert alert-success" id="msg-box" style="z-index: 9999;display:none;">
+            <button type="button" class="close" data-dismiss="alert">
+                &times;
+            </button>
+            <div class="alert-content">
+            </div>
         </div>
-    </div>
-<header>
-    @await Component.InvokeAsync(nameof(Menu))
-</header>
-    <section id="headline">
-        @await RenderSectionAsync("Headline", false)
-    </section>
-    <section id="body" user-name="@userName" user-id="@userId">
-        @RenderBody()
-    </section>
-    <div class="alert alert-success" id="msg-box" style="z-index: 9999;display:none;">
-        <button type="button" class="close" data-dismiss="alert">
-            &times;
-        </button>
-        <div class="alert-content">
+        <div id="msg">
         </div>
-    </div>
-    <div id="msg">
-    </div>
 
-@* @Scripts.Render("~/scripts/libs") *@
-    <script src="~/lib/jquery/dist/jquery-1.8.2.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery-blockui.1.33.min.js"></script>
-    <script src="~/js/sub-parlay-ticket.js"></script>
-    <script src="~/nap-auth/re-checkin.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+        <script src="~/old-page/bundle-libs-script.js"></script>
+        @await RenderSectionAsync("Scripts", false)
+
+        @*<script src="~/js/sub-parlay-ticket.js"></script>
+        <script src="~/nap-auth/re-checkin.js"></script>*@
+
+    </body>
 </html>
