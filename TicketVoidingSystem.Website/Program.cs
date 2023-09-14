@@ -52,6 +52,24 @@ builder.Services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomIntJsonConverter());
 });
 
+builder.Services.AddWebOptimizer(pipeline =>
+{
+    pipeline.AddCssBundle("/old-page/bundle-libs.css",
+        "old-page/content/jquery-ui/jquery-ui-1.9.1.custom.min.css",
+                        "old-page/content/jquery-ui/chosen.jquery.css",
+                        "old-page/scripts/_libs/fanexgrid/fanex.grid.css",
+                        "old-page/scripts/_libs/fanexgrid/fanex.pagination.css",
+                        "old-page/scripts/_Libs/Validation/validationEngine.jquery.css",
+                        "old-page/Content/BetList.css",
+                        "old-page/Content/bullfighting.css",
+                        "old-page/Scripts/_Libs/FanexGrid/Fanex.Pagination.css",
+                        "old-page/Scripts/_Libs/TimePicker/jquery-ui-timepicker-addon.css",
+                        "old-page/Scripts/_Libs/FanexMultipleSelect/fanex.multiSelect.css",
+                        "old-page/Scripts/_Libs/ContextMenu/jquery.contextMenu.css",
+                        "old-page/Scripts/_Libs/toastr/toastr.css");
+    //pipeline.AddJavaScriptBundle("/js/bundle.js", "js/plus.js", "js/minus.js");
+});
+
 // Build app
 var app = builder.Build();
 
@@ -62,6 +80,7 @@ app.Use((context, next) =>
 });
 app.UseDeveloperExceptionPage();
 app.UseResponseCompression();
+app.UseWebOptimizer();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
