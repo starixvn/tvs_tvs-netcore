@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
@@ -18,10 +19,9 @@ public class LeagueNameMessageServiceImp : LeagueNameMessageService
         if (Helper.IsMustRemoveSabaText(match, site))
         {
             var serializedContentChineseSimplified = JsonSerializer.Serialize(Message.ContentChineseSimplified);
-            var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified.Replace("沙巴", ""));
-
-            Message.ContentChineseSimplified = deSerializedContentChineseSimplified;
-            Message.ContentEnglish = Message.ContentEnglish.Replace("SABA ", "");
+            var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified);
+            Message.ContentChineseSimplified = deSerializedContentChineseSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase);
+            Message.ContentEnglish = Message.ContentEnglish.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }

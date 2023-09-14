@@ -19,7 +19,7 @@ public class GetMatchInfoForAddRequestTests
     {
         var betListService = Substitute.For<BetListService>();
         matchService = Substitute.For<MatchService>();
-        handler = new GetMatchInfoAddRequestHandler(betListService, matchService);
+        handler = new GetMatchInfoAddRequestHandler(matchService);
     }
 
     [Fact]

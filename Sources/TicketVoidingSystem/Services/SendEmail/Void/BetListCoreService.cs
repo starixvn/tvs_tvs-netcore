@@ -95,7 +95,9 @@ public class BetListCoreServiceImp : BetListCoreService
         if (Helper.IsMustRemoveSabaText(match, site))
         {
             var serializedChoice = JsonConvert.SerializeObject(choice);
-            choice = JsonConvert.DeserializeObject<string>(serializedChoice.Replace("沙巴", "").Replace("SABA ", ""));
+            choice = JsonConvert.DeserializeObject<string>(serializedChoice)
+                .Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
+                .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
         }
 
         return choice;

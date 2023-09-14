@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.ViewModels;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MatchInfo;
@@ -14,14 +13,10 @@ public class GetMatchInfoForAddRequest : GetMatchInfoAddRequestCriteria, IReques
 
 public class GetMatchInfoAddRequestHandler : IRequestHandler<GetMatchInfoForAddRequest, MatchInfoAddRequestViewModel>
 {
-    private readonly BetListService betListService;
     private readonly MatchService matchService;
 
-    public GetMatchInfoAddRequestHandler(
-        BetListService betListService,
-        MatchService matchService)
+    public GetMatchInfoAddRequestHandler(MatchService matchService)
     {
-        this.betListService = betListService;
         this.matchService = matchService;
     }
 
