@@ -29,7 +29,6 @@ public class TicketServiceImp : TicketService
         ticket.IsVipMember = item.IsVipMember;
         ticket.OperatorID = item.OperatorID;
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        ticket.Currency = item.CurrencyName;
         ticket.Score = item.IsLive && (!item.BetTypeId.HideScore() || item.IsMixParlay)
             ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         ticket.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.Winlost).ToString("#,##0.##");
