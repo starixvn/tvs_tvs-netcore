@@ -21,22 +21,19 @@ export class ValidationService {
   }
 
   public checkValidationBeforeVoid(voidPageItem: VoidPageDuplicateTicketsModel, templateMessageComponent: TemplateMessageComponent): Result<null> {
+    const textInvalidMatch = voidPageItem.matchModel ? ` (MatchId: ${voidPageItem.matchModel.matchId})` : '';
     if (voidPageItem === null || voidPageItem === undefined || voidPageItem.voidTicketsMini.total === 0) {
       return ResultModelService.createFailResult(LABELS.ALL_TICKETS_VOIDED, 1);
     }
 
-    if (!templateMessageComponent) {
-      return ResultModelService.createFailResult(`${LABELS.INVALID_TEMPLATE_MESSAGE} (MatchId: ${voidPageItem.matchModel.matchId})`, 1);
-    }
-
-    if (!templateMessageComponent.checkValidation()) {
-      return ResultModelService.createFailResult(`${LABELS.INVALID_TEMPLATE_MESSAGE} (MatchId: ${voidPageItem.matchModel.matchId})`, 1);
+    if (!templateMessageComponent || !templateMessageComponent.checkValidation()) {
+      return ResultModelService.createFailResult(`${LABELS.INVALID_TEMPLATE_MESSAGE}${textInvalidMatch}`, 1);
     }
 
     this.mapValidMessageToVoidPageItem(voidPageItem, templateMessageComponent);
 
-    if (!this.isDuplicateTicketsMixParlay(voidPageItem.filterBy) && (voidPageItem.voidReason?.reasonEnglish === '' || voidPageItem.voidReason?.reasonChineseSimplified === '')) {
-      return ResultModelService.createFailResult(`${LABELS.INPUT_REASON} (MatchId: ${voidPageItem.matchModel.matchId})`, 1);
+    if (voidPageItem.voidReason?.reasonEnglish === '' || voidPageItem.voidReason?.reasonChineseSimplified === '') {
+      return ResultModelService.createFailResult(`${LABELS.INPUT_REASON}${textInvalidMatch}`, 1);
     }
 
     return ResultModelService.createSuccessResult();
