@@ -13,7 +13,6 @@ import { CommonPrimitiveProperty } from '../../models/common-primitive-property.
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
-import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +23,7 @@ export class VoidPageService {
     private readonly appService: AppService,
     private readonly commonService: CommonService,
     private readonly ticketsService: TicketsService,
-    private readonly templateService: TemplateService,
-    private readonly validationService: ValidationService,
+    private readonly templateService: TemplateService
     ) {
   }
 
