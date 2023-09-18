@@ -5,7 +5,7 @@ import { MultipleSelection } from '../../../utility/components/multiple-selectio
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../utility/constants/text';
 
-const BasketballBetTypes = [609, 610, 611, 612, 613, 614, 615, 616, 617, 627, 628, 629, 630, 631];
+const BasketballBetTypes = [609, 610, 611, 612, 613, 614, 615, 616, 617, 627, 628, 629, 630, 631, 650];
 const BadmintonBetTypes = [707, 708, 709, 710, 711, 712, 713, 714];
 const PHAIO5BetTypes = [381, 382, 383, 384, 385];
 
