@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.MarkTickets.Services.MarkUnmarkTickets;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public interface UserPermissionService
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
@@ -29,12 +28,15 @@ public class LinkGroupBettypeServiceTests
     [InlineData(IssueTypeConstant.WrongOdds, SubIssueTypeConstant.Handicap)]
     [InlineData(IssueTypeConstant.WrongOdds, SubIssueTypeConstant.FixGame)]
     [InlineData(IssueTypeConstant.DangerAccepted, SubIssueTypeConstant.Handicap)]
-    public async Task CheckAffectedToGroup_ValidData_ReturnExpected(int issueTypeId, int subIssueTypeId)
+    public void CheckAffectedToGroup_ValidData_ReturnExpected(int issueTypeId, int subIssueTypeId)
     {
         // Arrange
         var getLinkedLogModel = new GetLinkedLogModel
         {
-            SubIssueTypeId = subIssueTypeId, IssueTypeId = issueTypeId, MatchId = 1, LiveIndicator = 1,
+            SubIssueTypeId = subIssueTypeId,
+            IssueTypeId = issueTypeId,
+            MatchId = 1,
+            LiveIndicator = 1,
             FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2)
         };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>

@@ -6,7 +6,6 @@ using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.Excel;
-using TplNetCore.Element;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest

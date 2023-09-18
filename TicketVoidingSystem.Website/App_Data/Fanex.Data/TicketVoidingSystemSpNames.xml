@@ -200,11 +200,6 @@
         <Setting Key="DBSIG2.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.TicketVoiding_TransInfo_VoidARC_Select" SpName="TicketVoiding_TransInfo_VoidARC_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
-        <Setting Key="DBCTG.TicketVoiding_Request_AutoVoidQueue_Insert" SpName="TicketVoiding_Request_AutoVoidQueue_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG.TicketVoiding_Request_AutoVoidQueue_Insert" SpName="TicketVoiding_Request_AutoVoidQueue_Insert" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG2.TicketVoiding_Request_AutoVoidQueue_Insert" SpName="TicketVoiding_Request_AutoVoidQueue_Insert" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG3.TicketVoiding_Request_AutoVoidQueue_Insert" SpName="TicketVoiding_Request_AutoVoidQueue_Insert" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
-
         <Setting Key="DBCTG.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG2.TicketVoiding_ReCalculate_Single_PreUpdate" SpName="TicketVoiding_ReCalculate_Single_PreUpdate" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />

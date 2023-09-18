@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.VoidSingleBet.Handlers;
@@ -11,6 +10,8 @@ using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidSingleBet.Handlers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetRemarkHandlerTests
 {

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Fanex.Data.Repository;
-using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;

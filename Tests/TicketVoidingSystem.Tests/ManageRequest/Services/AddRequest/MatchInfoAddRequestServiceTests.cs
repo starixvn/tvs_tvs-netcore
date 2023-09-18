@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -21,7 +20,7 @@ public class MatchInfoAddRequestServiceTests
     }
 
     [Fact]
-    public async Task UpdateDataFromRemotingRef_HasMatchInfoIsNull_ReturnNull()
+    public void UpdateDataFromRemotingRef_HasMatchInfoIsNull_ReturnNull()
     {
         // Arrange
         // Act
@@ -44,7 +43,12 @@ public class MatchInfoAddRequestServiceTests
         // Arrange
         var matchInfo = new MatchInfoAddRequest
         {
-            IsNeutral = isNeutral, HomeId = 1, AwayId = 2, MatchId = 1, LeagueId = 1, SportType = sportType,
+            IsNeutral = isNeutral,
+            HomeId = 1,
+            AwayId = 2,
+            MatchId = 1,
+            LeagueId = 1,
+            SportType = sportType,
             MatchCode = "1",
             IsOutright = isOutright
         };
@@ -78,11 +82,11 @@ public class MatchInfoAddRequestServiceTests
     }
 
     [Fact]
-    public async Task UpdateDataFromRemotingRef_HasListMatchInfo_ReturnExpected()
+    public void UpdateDataFromRemotingRef_HasListMatchInfo_ReturnExpected()
     {
         // Arrange
         var matchInfo = new MatchInfoAddRequest
-            { IsNeutral = true, HomeId = 1, AwayId = 2, MatchId = 1, LeagueId = 1, SportType = 161, MatchCode = "1" };
+        { IsNeutral = true, HomeId = 1, AwayId = 2, MatchId = 1, LeagueId = 1, SportType = 161, MatchCode = "1" };
         remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English).Returns("123");
         remotingRefService.GetTeamName(matchInfo.AwayId, LanguageCode.English).Returns("456");
         remotingRefService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English).ReturnsForAnyArgs("123");

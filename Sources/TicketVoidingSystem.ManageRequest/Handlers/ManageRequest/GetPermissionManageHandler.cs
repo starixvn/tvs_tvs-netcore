@@ -1,10 +1,11 @@
-﻿using Fanex.NAP.Core.Business;
-using MediatR;
+﻿using MediatR;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetPermissionManageRequest : IRequest<PermissionManage>
 {

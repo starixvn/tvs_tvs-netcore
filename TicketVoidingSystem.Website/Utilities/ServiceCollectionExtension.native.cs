@@ -15,11 +15,8 @@ using Fanex.Logging.Extensions.AspNetCore;
 using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
-using Fanex.NAP.Client.AspNetCore.Configuration;
-using Fanex.NAP.Client.AspNetCore.Session;
 using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Client.Services;
+using Fanex.NAP.Client.Session;
 using Fanex.RemotingRef;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -53,6 +50,9 @@ using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
 namespace TicketVoidingSystem.Website.Utilities;
+
+using Fanex.NAP.Client.Helpers.Web;
+using Fanex.NAP.Client.Services;
 
 public static class ServiceCollectionExtension
 {
@@ -106,8 +106,6 @@ public static class ServiceCollectionExtension
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                //// options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
-                //// options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(AppSettingService.AppSetting.AuthSettings.CookieTimeOut);
                 options.Cookie = new CookieBuilder
                 {
@@ -191,7 +189,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<IDynamicRepository, DynamicRepository>();
         services.AddTransient<ILogger, Logger>();
         services.AddSingleton<IUserIdProvider, CustomIdProvider>();
-        services.AddSingleton<CheckUMFilterAttribute>();
+        services.AddScoped<CheckUMFilterAttribute>();
         services.AddSingleton<IRemotingRefService, RemotingRefService>();
     }
 

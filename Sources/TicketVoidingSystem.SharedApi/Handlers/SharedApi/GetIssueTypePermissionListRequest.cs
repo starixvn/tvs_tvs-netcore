@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using MediatR;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetIssueTypePermissionListRequest : IRequest<IEnumerable<IssueType>>
 {

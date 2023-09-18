@@ -37,7 +37,7 @@ public class GetLinkedLogServiceTests
         var defaultLogData = new List<PoolHouseLinkedLogData> { new() };
         var resultFromApi = new List<PoolHouseLinkedLogResponse> { new() };
         var linkGroupBettypeValidation = new LinkGroupBettypeValidation
-            { IsLinkGroup1X2 = true, IsLinkGroupAIO = false };
+        { IsLinkGroup1X2 = true, IsLinkGroupAIO = false };
         linkedLogApiService.GetLinkedLog(getLinkedLogModel).ReturnsForAnyArgs(resultFromApi);
         var groupPoolHouseLinkedLog = new List<PoolHouseLinkedLogData> { new() };
         linkGroupBettypeService.CheckAffectedToGroup(getLinkedLogModel, resultFromApi)
@@ -70,7 +70,7 @@ public class GetLinkedLogServiceTests
         var defaultLogData = new List<PoolHouseLinkedLogData> { new() };
         var resultFromApi = new List<PoolHouseLinkedLogResponse> { new() };
         var linkGroupBettypeValidation = new LinkGroupBettypeValidation
-            { IsLinkGroup1X2 = true, IsLinkGroupAIO = false };
+        { IsLinkGroup1X2 = true, IsLinkGroupAIO = false };
         linkedLogApiService.GetLinkedLog(getLinkedLogModel).ReturnsForAnyArgs(resultFromApi);
         var groupPoolHouseLinkedLog = new List<PoolHouseLinkedLogData>();
         linkGroupBettypeService.CheckAffectedToGroup(getLinkedLogModel, resultFromApi)
@@ -126,7 +126,7 @@ public class GetLinkedLogServiceTests
     [InlineData(IssueTypeConstant.WrongOdds, "1X2", SubIssueTypeConstant.Handicap)]
     [InlineData(IssueTypeConstant.WrongOdds, "1H 1X2", 1)]
     [InlineData(1, "", 1)]
-    public async Task GetDefaultLogData_ValidData_ReturnExpected(int issueTypeId, string groupName, int subIssueTypeId)
+    public void GetDefaultLogData_ValidData_ReturnExpected(int issueTypeId, string groupName, int subIssueTypeId)
     {
         // Arrange
         var getLinkedLogModel = new GetLinkedLogModel { SubIssueTypeId = subIssueTypeId, IssueTypeId = issueTypeId };

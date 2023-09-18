@@ -7,7 +7,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Extension;
 
-public class ObjectToXMLExtensionFacts
+public class ObjectToXmlExtensionFacts
 {
     [Fact]
     public void ToRequestXml_HasRequest_ReturnXML()

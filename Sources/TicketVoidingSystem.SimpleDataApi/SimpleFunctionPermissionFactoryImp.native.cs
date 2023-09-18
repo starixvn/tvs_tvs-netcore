@@ -1,8 +1,9 @@
-﻿using Fanex.NAP.Core.Business;
-using Olympus.SimpleDataApi;
+﻿using Olympus.SimpleDataApi;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SimpleDataApi;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class SimpleFunctionPermissionFactoryImp : SimpleFunctionPermissionFactoryBase
 {

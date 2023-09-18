@@ -1,5 +1,4 @@
 ﻿using Fanex.Data.Repository;
-using Fanex.NAP.Core.Business;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -7,6 +6,8 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public interface CheckPermissionOnRequestService
 {

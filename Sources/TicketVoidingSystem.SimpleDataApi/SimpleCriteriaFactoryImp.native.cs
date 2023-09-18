@@ -1,5 +1,4 @@
 ﻿using Fanex.Data.Repository;
-using Fanex.NAP.Core.Business;
 using Olympus.SimpleDataApi;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SimpleDataApi.Criteria;
@@ -7,6 +6,8 @@ using TicketVoidingSystem.SimpleDataApi.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SimpleDataApi;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
 {

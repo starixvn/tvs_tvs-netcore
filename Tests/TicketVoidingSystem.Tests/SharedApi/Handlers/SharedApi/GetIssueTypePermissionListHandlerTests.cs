@@ -9,6 +9,8 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;
 
+using Fanex.NAP.Client.Helpers.Business;
+
 public class GetIssueTypePermissionListHandlerTests
 {
     private readonly SessionService sessionService;
@@ -30,7 +32,7 @@ public class GetIssueTypePermissionListHandlerTests
         // Mock the sessionService.HasPermission method to return true for all IssueTypeFunctionKeysConstant values
         foreach (var issueTypeFunctionKey in IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList)
         {
-            sessionService.HasPermission(issueTypeFunctionKey.FunctionKey, Fanex.NAP.Core.Business.Constant.Policy.Read).Returns(true);
+            sessionService.HasPermission(issueTypeFunctionKey.FunctionKey, Constant.Policy.Read).Returns(true);
         }
 
         // Act
@@ -49,7 +51,7 @@ public class GetIssueTypePermissionListHandlerTests
         // Mock the sessionService.HasPermission method to return false for all IssueTypeFunctionKeysConstant values
         foreach (var issueTypeFunctionKey in IssueTypeFunctionKeysConstant.IssueTypeFunctionKeyList)
         {
-            sessionService.HasPermission(issueTypeFunctionKey.FunctionKey, Fanex.NAP.Core.Business.Constant.Policy.Read).Returns(false);
+            sessionService.HasPermission(issueTypeFunctionKey.FunctionKey, Constant.Policy.Read).Returns(false);
         }
 
         // Act

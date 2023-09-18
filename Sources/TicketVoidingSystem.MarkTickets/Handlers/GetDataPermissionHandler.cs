@@ -1,12 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using MediatR;
 using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.MarkTickets.Handlers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetDataPermissionRequest : IRequest<DataPermission>
 {

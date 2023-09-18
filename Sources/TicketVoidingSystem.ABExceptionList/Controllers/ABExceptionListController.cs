@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Client.AspNetCore.Attributes;
-using Fanex.NAP.Core.Business;
+using Fanex.NAP.Client.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ABExceptionList.Controllers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]

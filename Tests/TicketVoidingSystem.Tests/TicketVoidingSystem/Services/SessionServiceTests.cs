@@ -1,16 +1,17 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using Fanex.NAP.Client.Configuration;
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Client.Models;
-using Fanex.NAP.Client.Services;
-using Fanex.NAP.Core.Business;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using TicketVoidingSystem.Services;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
+
+using Fanex.NAP.Client.Configuration;
+using Fanex.NAP.Client.Helpers.Business;
+using Fanex.NAP.Client.Helpers.Web;
+using Fanex.NAP.Client.Models;
+using Fanex.NAP.Client.Services;
 
 public class SessionServiceTests
 {

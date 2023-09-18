@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.MarkTickets.Handlers;
 using TicketVoidingSystem.Services;
@@ -8,6 +7,8 @@ using TicketVoidingSystem.Web;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.MarkTickets.Handlers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetDataPermissionHandlerTests
 {

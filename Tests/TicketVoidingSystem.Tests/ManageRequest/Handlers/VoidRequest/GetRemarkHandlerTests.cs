@@ -1,5 +1,4 @@
 using System.Threading;
-using Fanex.NAP.Core.Business;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.Services;
@@ -8,6 +7,8 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
 {
+    using Fanex.NAP.Client.Helpers.Business;
+
     public class GetRemarkHandlerTests
     {
         [Theory]

@@ -1,12 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Fanex.NAP.Core.Business;
 using MediatR;
 using TicketVoidingSystem.ABExceptionList.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 public class GetPermissionRequest : IRequest<PermissionABExceptionList>
 {

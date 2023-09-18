@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Fanex.NAP.Client.AspNetCore.Attributes;
-using Fanex.NAP.Core.Business;
+using Fanex.NAP.Client.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,8 @@ using TicketVoidingSystem.MarkTickets.Handlers.UserLogs;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.MarkTickets.Controllers;
+
+using Fanex.NAP.Client.Helpers.Business;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -44,6 +45,7 @@ public class MarkTicketsController : ControllerBase
     public async Task<IActionResult> GetDetailTickets(GetDetailTicketsRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    [SkipLogging]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> GetAllMarkedTickets(AllMarkedTicketsRequest request) => Ok(await mediator.Send(request));
 
