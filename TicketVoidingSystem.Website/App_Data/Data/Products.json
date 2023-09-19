@@ -1,0 +1,201 @@
+﻿{
+  "Groups": [
+    {
+      "Name": "Group 1",
+      "IsChecked": true,
+      "Products": [
+        {
+          "Name": "Sportsbook",
+          "Value": 1
+        },
+        {
+          "Name": "Number Game",
+          "Value": 3
+        },
+        {
+          "Name": "Virtual Sports",
+          "Value": 5
+        },
+        {
+          "Name": "Virtual Sports 2",
+          "Value": 27
+        },
+        {
+          "Name": "Virtual Sports 3",
+          "Value": 77
+        },
+        {
+          "Name": "Bet Builder",
+          "Value": 1002
+        },
+        {
+          "Name": "Saba Promotion",
+          "Value": 37
+        },
+        {
+          "Name": "Bitcoin",
+          "Value": 69
+        }
+      ]
+    },
+    {
+      "Name": "Group 2",
+      "Products": [
+        {
+          "Name": "Keno",
+          "Value": 8
+        },
+        {
+          "Name": "Lottery",
+          "Value": 28
+        },
+        {
+          "Name": "Virtual Games",
+          "Value": 38
+        },
+        {
+          "Name": "Table Games",
+          "Value": 40
+        },
+        {
+          "Name": "Sports Lottery",
+          "Value": 63
+        },
+        {
+          "Name": "Happy 5 Linked Games",
+          "Value": 3
+        }
+      ]
+    },
+    {
+      "Name": "Group 3",
+      "Products": [
+        {
+          "Name": "AG Casino",
+          "Value": 11
+        },
+        {
+          "Name": "AllBet",
+          "Value": 21
+        },
+        {
+          "Name": "SA Gaming",
+          "Value": 39
+        },
+        {
+          "Name": "AE Sexy",
+          "Value": 45
+        },
+        {
+          "Name": "ION",
+          "Value": 52
+        },
+        {
+          "Name": "WM",
+          "Value": 51
+        },
+        {
+          "Name": "BG",
+          "Value": 57
+        },
+        {
+          "Name": "IBCBet Live Casino",
+          "Value": 46
+        },
+        {
+          "Name": "BBIN",
+          "Value": 47
+        },
+        {
+          "Name": "PP Live Casino",
+          "Value": 65
+        },
+        {
+          "Name": "FGG",
+          "Value": 70
+        },
+        {
+          "Name": "Yebet",
+          "Value": 76
+        }
+      ]
+    },
+    {
+      "Name": "Group 4",
+      "Products": [
+        {
+          "Name": "Saba Casino",
+          "Value": 6
+        },
+        {
+          "Name": "Macau Games",
+          "Value": 22
+        },
+        {
+          "Name": "PP",
+          "Value": 32
+        },
+        {
+          "Name": "SG",
+          "Value": 36
+        },
+        {
+          "Name": "SABA.games",
+          "Value": 42
+        },
+        {
+          "Name": "Arcadia Gaming",
+          "Value": 34
+        },
+        {
+          "Name": "PG Soft",
+          "Value": 55
+        },
+        {
+          "Name": "Joker",
+          "Value": 56
+        },
+        {
+          "Name": "MaxGame",
+          "Value": 60
+        },
+        {
+          "Name": "Funky Games",
+          "Value": 50
+        },
+        {
+          "Name": "Habanero",
+          "Value": 61
+        },
+        {
+          "Name": "Creative Gaming",
+          "Value": 62
+        },
+        {
+          "Name": "AdvantPlay",
+          "Value": 67
+        },
+        {
+          "Name": "AdvantPlay Mini",
+          "Value": 68
+        },
+        {
+          "Name": "Vgaming",
+          "Value": 66
+        },
+        {
+          "Name": "SEAL Entertainment",
+          "Value": 72
+        },
+        {
+          "Name": "MG-RNG",
+          "Value": 73
+        },
+        {
+          "Name": "Jili",
+          "Value": 75
+        }
+      ]
+    }
+  ]
+}

@@ -21,7 +21,7 @@
         }
 
         function getProducts() {
-            $http.get("UploadBatchMessage/BatchMessage/GetProducts").success(function (data) {
+            $http.get("api/UploadBatchMessage/GetProducts").success(function (data) {
                 vm.products = data;
             });
         }
@@ -66,7 +66,7 @@
                 productIds: productIds,
                 groupName: vm.getGroupName()
             };
-            var url = "UploadBatchMessage/BatchMessage/CheckTransIds";
+            var url = "api/UploadBatchMessage/CheckTransIds";
 
             $http.post(url, data).then(function (response) {
                 var result = response.data;
@@ -104,7 +104,7 @@
                 messageContentType: messageType
             };
 
-            var url = "UploadBatchMessage/BatchMessage/UpdateMessage";
+            var url = "api/UploadBatchMessage/UpdateMessage";
             $http.post(url, data).then(function successCallback(response) {
                 var result = response.data;
                 if (result.ErrorCode === 0) {
@@ -122,10 +122,10 @@
             var message;
             if (result.ErrorCode > 0) {
                 message = '<div class="msg-fail row">&nbsp;<div class="icon-warning-sign"></div>&nbsp;<div class="span23"><span>' +
-                                result.ErrorMsg + '</span></div></div>';
+                    result.ErrorMsg + '</span></div></div>';
             } else {
                 message = '<div class="msg-success row">&nbsp;<div class="icon-ok"></div>&nbsp;<div class="span23"><span>' +
-                                result.ErrorMsg + '</span></div></div>';
+                    result.ErrorMsg + '</span></div></div>';
             }
 
             $("#show-message").empty();

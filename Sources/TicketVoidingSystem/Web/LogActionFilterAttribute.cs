@@ -71,7 +71,12 @@ public class LogActionFilterAttribute : ActionFilterAttribute
 
         var sw = httpContext.Items["timer"] as Stopwatch;
         var requestLog = httpContext.Items["request-log"] as string;
-        var responseData = context.Result is OkObjectResult objectResult ? JsonSerializer.Serialize(objectResult.Value) : string.Empty;
+        var responseData = context.Result switch
+        {
+            OkObjectResult okObjectResult => JsonSerializer.Serialize(okObjectResult.Value),
+            JsonResult jsonResult => JsonSerializer.Serialize(jsonResult.Value),
+            _ => string.Empty
+        };
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(requestLog);
         stringBuilder.AppendLine("=============================================");

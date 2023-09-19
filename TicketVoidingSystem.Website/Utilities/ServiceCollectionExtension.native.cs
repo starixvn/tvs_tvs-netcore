@@ -31,6 +31,7 @@ using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using SharpRaven;
+using SpecialDelete.UploadBatchMessage.Controllers;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ManageRequest;
@@ -53,6 +54,7 @@ namespace TicketVoidingSystem.Website.Utilities;
 
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
+using TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class ServiceCollectionExtension
 {
@@ -226,6 +228,7 @@ public static class ServiceCollectionExtension
         services.RegisterAddRequestServices();
         services.RegisterManageRequestServices();
         services.RegisterVoidRequestServices();
+        services.RegisterUploadBatchMessageServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -242,6 +245,8 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddRequestController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ManageRequestController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidRequestController).Assembly));
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UploadBatchMessageController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
