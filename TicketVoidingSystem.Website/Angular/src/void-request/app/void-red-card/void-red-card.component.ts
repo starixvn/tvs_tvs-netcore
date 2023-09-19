@@ -1,6 +1,4 @@
-import { CommonService } from '../../../utility/services/common.service';
 import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
-import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
@@ -8,13 +6,14 @@ import { TemplateMessageComponent } from '../../../utility/components/template-m
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
+import { CommonService } from '../../../utility/services/common.service';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
-import { VoidPageService } from './services/void-page.service';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { TicketsService } from './services/tickets.service';
 import { PopupService } from '../services/popup.service';
 import { SubmitVoidService } from './services/submit-void.service';
+import { TicketsService } from './services/tickets.service';
+import { VoidPageService } from './services/void-page.service';
 
 @Component({
   selector: 'void-red-card',
@@ -112,6 +111,7 @@ export class VoidRedCardComponent implements OnInit {
   isShowAffectedLicenseeArea(voidMatch: VoidMatch): boolean {
     return voidMatch.affectedLicensee.show && voidMatch.affectedLicensee.licenseesName.length > 0
       || voidMatch.chinaViewLicensee.show && voidMatch.chinaViewLicensee.licenseesName.length > 0
+      || voidMatch.jollyViewLicensee.show && voidMatch.jollyViewLicensee.licenseesName.length > 0
       || voidMatch.affectedInstantLicensee.show && voidMatch.affectedInstantLicensee.licenseesName.length > 0
       || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0;
   }
