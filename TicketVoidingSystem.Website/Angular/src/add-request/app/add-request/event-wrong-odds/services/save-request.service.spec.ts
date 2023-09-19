@@ -120,6 +120,7 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    saveRequestArg.primitiveProps = new PrimitiveProperty();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     const validationService = new ValidationService();

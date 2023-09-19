@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { RequestDetailModel, RequestDetailViewModel } from '../../add-request/app/add-request/models/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
 import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
@@ -32,7 +32,8 @@ class Helper {
     source: null,
     sportType: 2,
     voidedBy: null,
-    userId: 0
+    userId: 0,
+    requestId: 1
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -46,7 +47,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
 }
 
@@ -109,7 +111,7 @@ describe('AppComponent', () => {
     instance.requestDetail = Helper.fakeRequestDetailViewModel;
     instance.requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
 
-    const actual = instance.isApplyVoidNewDesign();
+    const actual = instance.isShowVoidDangerAccepted();
 
     expect(actual).toBeFalsy();
   });
@@ -119,7 +121,7 @@ describe('AppComponent', () => {
     instance.requestDetail = Helper.fakeRequestDetailViewModel;
     instance.requestDetail.request = null;
 
-    const actual = instance.isApplyVoidNewDesign();
+    const actual = instance.isShowVoidDangerAccepted();
 
     expect(actual).toBeFalsy();
   });

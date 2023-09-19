@@ -61,7 +61,9 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null);
+    logInfoWrongHdpComponents.isMainMatch = true;
+    saveRequestArg.logInfoComponents = [logInfoWrongHdpComponents];
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
 

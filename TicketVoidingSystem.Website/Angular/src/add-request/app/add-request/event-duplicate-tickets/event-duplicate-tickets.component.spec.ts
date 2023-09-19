@@ -4,6 +4,7 @@ import { Shallow } from 'shallow-render';
 import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
@@ -56,7 +57,8 @@ describe('EventAbnormalBetComponent', () => {
     ],
     imports: [
       BlockUiModule,
-      FormsModule
+      FormsModule,
+      ToolTipModule
     ],
     providers: [
       ValidationService,

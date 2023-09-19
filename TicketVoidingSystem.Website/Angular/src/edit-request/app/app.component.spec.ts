@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { AddRequestComponent } from '../../add-request/app/add-request/add-request.component';
 import { BlockFullUiModule } from '../../utility/components/block-full-ui/block-full-ui.module';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { HttpService } from './../../utility/services/http.service';
 import { AppComponent } from './app.component';
@@ -43,6 +44,7 @@ class Helper {
     sportType: 2,
     voidedBy: null,
     userId: 1,
+    requestId: 1
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -56,13 +58,14 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
 }
 
 describe('AppComponent', () => {
   @NgModule({
-    declarations: [ AddRequestComponent ],
+    declarations: [ AddRequestComponent, MenuBarComponent ],
     imports: [
       BlockFullUiModule
     ],

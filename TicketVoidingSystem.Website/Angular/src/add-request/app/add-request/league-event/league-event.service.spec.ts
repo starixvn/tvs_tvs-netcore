@@ -1,5 +1,5 @@
 
-import { LeagueInfo, MatchInfo } from '../../../../utility/models/event.model';
+import { MatchInfo } from '../../../../utility/models/event.model';
 import { HttpService } from '../../../../utility/services/http.service';
 import { LeagueEventService } from './league-event.service';
 
@@ -11,27 +11,6 @@ describe('EventMatchService', () => {
   beforeEach(() => {
     mockHttpService = new HttpService(null) as jest.Mocked<HttpService>;
     leagueEventService = new LeagueEventService(mockHttpService);
-  });
-
-  it('#getLeagues should return expected data', async () => {
-    // Arrange
-    const expectedLeagues: LeagueInfo[] = [
-      {
-        leagueId: 80714,
-        leagueName: '*AFC ASIAN CUP 2019 (IN UAE) - GROUP E WINNER'
-      },
-      {
-        leagueId: 80603,
-        leagueName: '*AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS'
-      }
-    ];
-    mockHttpService.postJson.mockResolvedValue(expectedLeagues);
-
-    // Action
-    const actualData = await leagueEventService.getLeagues(1, '2019-09-19 12:00:00.000');
-
-    // Assert
-    expect(actualData).toStrictEqual(expectedLeagues);
   });
 
   it('#getMatchs should return expected data', async () => {

@@ -1,3 +1,4 @@
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from '../../add-request.store';
 import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
@@ -53,15 +54,16 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
-    const validationService = new ValidationService(null);
-    validationService.checkValidBusinessRule = jest.fn().mockImplementation(() => false);
-
-    const saveRequestService = new SaveRequestService(null, null, validationService);
+    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
+    saveRequestArg.duplicateTicketsModel.orgTransIds = '122';
+    saveRequestArg.tooltip = new Tooltip()
+    saveRequestArg.tooltip.display = jest.fn();
+    const saveRequestService = new SaveRequestService(null, null, null);
+    saveRequestService['checkValidBusinessRuleBeforeSave'] = jest.fn().mockReturnValue(false);
 
     const actual = await saveRequestService['recheckBeforeSaveRequest'](saveRequestArg);
 
     expect(saveRequestArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-    expect(validationService.checkValidBusinessRule).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
   });
 

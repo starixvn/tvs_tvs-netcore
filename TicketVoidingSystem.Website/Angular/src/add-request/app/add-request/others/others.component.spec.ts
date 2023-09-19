@@ -310,7 +310,7 @@ describe('OthersComponent', () => {
       IssueTypeConstant.WRONG_SCORE,
     ].forEach(async x => {
       instance.issueTypeId = x;
-      await instance['initProvider'](false, '1', '1');
+      await instance['initProvider'](false, 1, 1);
       
       // Assert
       expect(mockGetProvider).toHaveBeenCalled;
@@ -330,7 +330,7 @@ describe('OthersComponent', () => {
       IssueTypeConstant.WRONG_SCORE,
     ].forEach(async x => {
       instance.issueTypeId = x;
-      await instance['initProvider'](false, '1', null);
+      await instance['initProvider'](false, 1, null);
       
       // Assert
       expect(mockGetProvider).toHaveBeenCalled();

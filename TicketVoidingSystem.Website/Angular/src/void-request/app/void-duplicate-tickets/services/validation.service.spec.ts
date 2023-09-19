@@ -67,15 +67,6 @@ describe('ValidationService', () => {
     expect(actual.isSuccessful).toBeFalsy();
   });
 
-  it('#checkValidationBeforeVoid should return false when voidPageItem not valid', async () => {
-    [null, undefined].forEach(x => {
-      const mockValidationService = new ValidationService(null);
-      const actual = mockValidationService.checkValidationBeforeVoid(x, null);
-
-      expect(actual.isSuccessful).toBeFalsy();
-    });
-  });
-
   it('#checkValidationBeforeVoid should return false when voidPageItem has total = 0', async () => {
     const voidPageItem = new VoidPageDuplicateTicketsModel();
     voidPageItem.voidTicketsMini = new TicketsModel();

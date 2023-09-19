@@ -1,4 +1,4 @@
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from 'src/add-request/app/add-request/models/request.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from 'src/edit-request/app/request.model';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
@@ -30,7 +30,8 @@ class Helper {
     source: null,
     sportType: 2,
     voidedBy: null,
-    userId: 0
+    userId: 0,
+    requestId: 1
   };
   static readonly fakeRequestEventModel: RequestEventModel = {
     awayId: 18486,
@@ -68,7 +69,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
   static readonly fakeTemplateValue: TemplateValue = {
     matchId: 9000,

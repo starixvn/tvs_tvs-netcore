@@ -1,7 +1,6 @@
 ﻿using System;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
@@ -56,7 +55,7 @@ public class SendLetstalkAfterAddServiceTests
         // Assert
         notificationLetstalkService.Received(1)
             .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), null);
-        matchService.Received(1).GetMatch(Arg.Any<GetMatchInfoCriteria>());
+        matchService.Received(1).GetMatch(Arg.Any<int>());
         matchService.Received(1).UpdateMatchInfoFromRemotingRef(Arg.Any<Match>());
     }
 

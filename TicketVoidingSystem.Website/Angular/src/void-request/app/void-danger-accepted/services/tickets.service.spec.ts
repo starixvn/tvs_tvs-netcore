@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request/app/add-request/models/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -54,7 +54,8 @@ class Helper {
     source: null,
     sportType: 2,
     voidedBy: null,
-    userId: 0
+    userId: 0,
+    requestId: 1
   };
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
@@ -68,7 +69,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
 }
 

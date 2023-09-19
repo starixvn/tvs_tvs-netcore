@@ -2,9 +2,9 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
-import { PipeModule } from 'src/utility/components/pipes/pipe.module';
-import { ToolTipModule } from 'src/utility/components/tooltip/tooltip.module';
+import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house.component';
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
 
@@ -41,50 +41,32 @@ describe('GroupBettypesPoolHouseComponent', () => {
     const { fixture } = await shallow
     .render({
       bind: {
-        model: new GroupBetTypesModel([], true),
+        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, '', false),
       }
     });
 
     expect(fixture).toMatchSnapshot();
   });
   
-  it('ngOnInit should emit #changedBetTypesEvent', async () => {
+  it('ngOnInit should call #renderDisplayGroupBetTypes', async () => {
     const { instance } = await shallow
     .render({
       bind: {
-        model: new GroupBetTypesModel([], true),
+        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, '', false),
       }
     });
-    instance.checkedBetTypes = '1,2,3';
-    instance.model.checkBetType = jest.fn();
-    instance.changedBetTypesEvent.emit = jest.fn();
+    instance['renderDisplayGroupBetTypes'] = jest.fn();
 
     instance.ngOnInit();
 
-    expect(instance.model.checkBetType).toHaveBeenCalledTimes(1);
-    expect(instance.changedBetTypesEvent.emit).toHaveBeenCalledTimes(1);
-  });
-  
-  it('ngOnInit should not emit #changedBetTypesEvent', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: new GroupBetTypesModel([], true),
-      }
-    });
-    instance.checkedBetTypes = null;
-    instance.changedBetTypesEvent.emit = jest.fn();
-
-    instance.ngOnInit();
-
-    expect(instance.changedBetTypesEvent.emit).toHaveBeenCalledTimes(0);
+    expect(instance['renderDisplayGroupBetTypes']).toHaveBeenCalledTimes(1);
   });
   
   it('changedBetTypes should emit #changedBetTypesEvent', async () => {
     const { instance } = await shallow
     .render({
       bind: {
-        model: new GroupBetTypesModel([], true),
+        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, '', false),
       }
     });
     instance.changedBetTypesEvent.emit = jest.fn();

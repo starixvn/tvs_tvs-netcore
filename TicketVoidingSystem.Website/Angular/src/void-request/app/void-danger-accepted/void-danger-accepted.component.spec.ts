@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../add-request/app/add-request/models/request.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
@@ -14,6 +14,7 @@ import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.
 import { AffectedLicensee } from '../../../utility/models/affected-licensee.model';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
@@ -22,7 +23,6 @@ import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted.component';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -42,6 +42,7 @@ class Helper {
     sportType: 2,
     voidedBy: null,
     userId: 1,
+    requestId: 1
   };
   static readonly fakeRequestEventModel: RequestEventModel = {
     awayId: 18486,
@@ -79,7 +80,8 @@ class Helper {
     wrongHdpModels: [],
     wrongOuModels: [],
     wrongOddsModels: [],
-    reducedOverModels: []
+    reducedOverModels: [],
+    duplicateTicketsModel: null
   };
   static getFakeAffectedLicensee(): AffectedLicensee {
     return {

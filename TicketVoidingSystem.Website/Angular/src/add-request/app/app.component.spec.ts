@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AddRequestComponent } from './add-request/add-request.component';
 import { AppComponent } from './app.component';
 jest.mock('../../utility/services/signal-r.service.native');
 
-class Helper {
-  static readonly titleSelector = '.title';
-}
-
 describe('AppComponent', () => {
   @NgModule({
-    declarations: [AddRequestComponent],
+    declarations: [AddRequestComponent, MenuBarComponent],
     imports: [
     ],
     providers: [

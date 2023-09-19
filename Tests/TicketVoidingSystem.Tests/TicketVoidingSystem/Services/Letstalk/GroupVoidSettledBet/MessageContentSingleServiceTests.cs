@@ -76,7 +76,7 @@ public class MessageContentSingleServiceTests
                        + $"League: {model.Match.LeagueName}{Environment.NewLine}"
                        + $"Match: {matchEvent}{Environment.NewLine}"
                        + $"Voided by: {model.UserName}{Environment.NewLine}"
-                       + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}"
+                       + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}{Environment.NewLine}"
                        + $"(Single Count: {countInfo.SingleCount}, Instant OU: {countInfo.InstantOUCount}, Cash Out: {countInfo.CashOutCount}, Parlay Count: {countInfo.ParlayCount})";
 
         uusTicketService.IsValidSettledSingleTicket(Arg.Any<TicketEmailModel>()).Returns(true);
@@ -128,7 +128,7 @@ public class MessageContentSingleServiceTests
                        + $"League: {model.Match.LeagueName}{Environment.NewLine}"
                        + $"Match: {matchEvent}{Environment.NewLine}"
                        + $"Voided by: {model.UserName}{Environment.NewLine}"
-                       + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}"
+                       + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}{Environment.NewLine}"
                        + $"(Single Count: {countInfo.SingleCount}, Instant OU: {countInfo.InstantOUCount}, Cash Out: {countInfo.CashOutCount}, Parlay Count: {countInfo.ParlayCount})";
 
         uusTicketService.IsValidSettledParlayTicket(Arg.Any<TicketEmailModel>(), Arg.Any<bool>()).Returns(true);
@@ -180,7 +180,7 @@ public class MessageContentSingleServiceTests
                        + $"League: {model.Match.LeagueName}{Environment.NewLine}"
                        + $"Match: {matchEvent}{Environment.NewLine}"
                        + $"Voided by: {model.UserName}{Environment.NewLine}"
-                       + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}"
+                       + $"Void Time: {model.VoidFromTime} - {model.VoidToTime}{Environment.NewLine}"
                        + $"(Single Count: {countInfo.SingleCount}, Instant OU: {countInfo.InstantOUCount}, Cash Out: {countInfo.CashOutCount}, Parlay Count: {countInfo.ParlayCount})";
 
         uusTicketService.IsValidSettledParlayTicket(Arg.Any<TicketEmailModel>(), Arg.Any<bool>()).Returns(false);

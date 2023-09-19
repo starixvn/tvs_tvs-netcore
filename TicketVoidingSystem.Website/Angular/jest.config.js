@@ -6,8 +6,8 @@ module.exports = {
   globalSetup: 'jest-preset-angular/global-setup',
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
-    //'<rootDir>/src/**/*.spec.ts'
-    '<rootDir>/src/void-request/app/void-duplicate-tickets/services/validation.service.spec.ts'
+    '<rootDir>/src/**/*.spec.ts'
+    //'<rootDir>/src/void-request/app/void-duplicate-tickets/services/validation.service.spec.ts'
   ],
   testPathIgnorePatterns: [
     '<rootDir>/src/manage-void-services/',

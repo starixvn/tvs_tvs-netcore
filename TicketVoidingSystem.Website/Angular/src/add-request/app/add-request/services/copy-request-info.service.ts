@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { AcceptType, DateTimeFormat } from '../../../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';

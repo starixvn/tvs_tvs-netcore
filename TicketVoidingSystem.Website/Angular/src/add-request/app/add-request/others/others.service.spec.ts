@@ -28,7 +28,7 @@ describe('OthersService', () => {
     // Assert
     expect(actualResult).toBe(expectedOperatorInfo);
   });
-  
+
   it('#getProvider should return expected data', async() => {
     // Arrange
     const expectedProvider: Provider[] = [
@@ -38,7 +38,7 @@ describe('OthersService', () => {
     mockHttpService.postJson.mockResolvedValue(expectedProvider);
 
     // Action
-    const actualResult = await othersService.getProvider('0');
+    const actualResult = await othersService.getProvider(0);
 
     // Assert
     expect(actualResult).toBe(expectedProvider);

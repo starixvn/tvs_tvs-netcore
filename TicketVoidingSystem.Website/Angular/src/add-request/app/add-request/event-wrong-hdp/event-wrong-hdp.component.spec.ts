@@ -11,6 +11,7 @@ import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.mo
 import { MatchType } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
@@ -26,7 +27,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -209,6 +209,12 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    logInfoWrongHdpComponents.isMainMatch = true;
+    const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
+    instance.logInfoComponents = logInfoComponents;
+
     await instance.handleSearchEvent();
 
     expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
