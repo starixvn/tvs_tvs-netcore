@@ -7,7 +7,7 @@ module.exports = {
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
     '<rootDir>/src/**/*.spec.ts'
-    //'<rootDir>/src/void-request/app/void-duplicate-tickets/services/validation.service.spec.ts'
+    //'<rootDir>/src/edit-request/**/*.spec.ts'
   ],
   testPathIgnorePatterns: [
     '<rootDir>/src/manage-void-services/',

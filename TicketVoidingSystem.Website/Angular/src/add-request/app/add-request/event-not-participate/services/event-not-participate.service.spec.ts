@@ -1,64 +1,57 @@
 import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
-import { NgSelectMixtureModel } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { ReducedOverModel } from '../../models/event-reduced-over.model';
+import { NotParticipateModel } from '../../models/event-not-participate.model';
+import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
+import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
+import { EventNotParticipateService } from './event-not-participate.service';
 
 class Helper {
-  static readonly fakeFilterReducedOverModel: FilterReducedOverModel = {
-    betTypeIds: [],
+  static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
+    betTypeId: 1,
     playerIds: [],
-    live: true,
-    nonLive: true,
-    runs: '',
-    wicketOver: '',
-    betTypeNgSelectMixtureModel: new NgSelectMixtureModel(),
     playerMultipleSelection: new MultipleSelection()
   };
-  static readonly fakeLogInfoReducedOver: LogInfoReducedOver = {
+  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
     matchId: 1,
-    filterReducedOvers: [Helper.fakeFilterReducedOverModel],
+    filterNotParticipates: [Helper.fakeFilterNotParticipateModel],
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: []
   };
-  static readonly fakeReducedOverModels: ReducedOverModel[] = [
+  static readonly fakeNotParticipateModels: NotParticipateModel[] = [
     {
-      betTypeIds: '1,2',
-      live: true,
-      nonLive: true,
-      matchId: 1,
+      betTypeId: 1,
       playerIds: '1',
-      wicketOver: '1',
-      filterWicketOver: '1',
-      runs: '1',
       subIssueTypeId: 1,
-      logInfoDetail: new LogInfoDetail()
+      logInfoDetail: new LogInfoDetail(),
+      matchId: 1,
+      playerNames: ''
     }
   ];
 }
 
-describe('EventReducedOverService', () => {
-  let service: EventReducedOverService;
+describe('EventNotParticipateService', () => {
+  let service: EventNotParticipateService;
 
   beforeEach(() => {
-    service = new EventReducedOverService();
+    service = new EventNotParticipateService();
   });
 
-  it('#getReducedOverGetLogInfoModel should return list objects ReducedOverGetLogInfoQuery with correct length', async () => {
-    const actual = service.getReducedOverGetLogInfoModel(1, 1, [Helper.fakeFilterReducedOverModel]);
+  it('#getNotParticipateGetLogInfoModel should return list objects NotParticipateGetLogInfoQuery with correct length', async () => {
+    const actual = service.getNotParticipateGetLogInfoModel(1, 1, [Helper.fakeFilterNotParticipateModel]);
 
     expect(actual.length).toBe(1);
   });
 
-  it('#getReducedOverModel should return list objects ReducedOverModel with correct length', async () => {
-    const actual = service.getReducedOverModel(1, Helper.fakeLogInfoReducedOver);
+  it('#getNotParticipateModel should return list objects NotParticipateModel with correct length', async () => {
+    const actual = service.getNotParticipateModel(1, Helper.fakeLogInfoNotParticipate);
 
     expect(actual.length).toBe(1);
   });
 
-  it('#assignModelsToEvents should return LogInfoReducedOver with correct props', async () => {
-    const actual = service.assignModelsToEvents(Helper.fakeReducedOverModels);
+  it('#assignModelsToEvents should return LogInfoNotParticipate with correct props', async () => {
+    const actual = service.assignModelsToEvents(Helper.fakeNotParticipateModels);
 
-    expect(actual.matchId).toBe(Helper.fakeReducedOverModels[0].matchId);
-    expect(actual.logInfoDetail).toEqual(Helper.fakeReducedOverModels[0].logInfoDetail);
+    expect(actual.matchId).toBe(Helper.fakeNotParticipateModels[0].matchId);
+    expect(actual.logInfoDetail).toEqual(Helper.fakeNotParticipateModels[0].logInfoDetail);
   });
 });

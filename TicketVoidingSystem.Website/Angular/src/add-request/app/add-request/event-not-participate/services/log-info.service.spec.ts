@@ -15,11 +15,13 @@ class Helper {
   static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
     {
       betTypeId: 1,
-      betTypeName: ''
+      betTypeName: '',
+      disabled: false
     },
     {
       betTypeId: 2,
-      betTypeName: ''
+      betTypeName: '',
+      disabled: false
     }
   ];
   static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {

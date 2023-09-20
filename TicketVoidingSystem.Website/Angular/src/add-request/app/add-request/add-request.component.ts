@@ -2,10 +2,10 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@
 import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
 import { MatchInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
@@ -162,10 +162,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isDisabledSaveButton = false;
     }
   }
-  
+
   private getMessageConfirmationEKO(): string {
     let message = '';
-    
+
     if (this.eventEarlyKickOffComponent.warningMessageList.length > 0) {
       message = 'There are some warnings in this request.';
     }
@@ -407,7 +407,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return this.isEdit && editingBy !== this.userId;
   }
-  
+
   async copyEmailRequestInfo() {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.matchId, this.model.others.operatorsList);

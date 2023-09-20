@@ -59,7 +59,8 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
 }
 

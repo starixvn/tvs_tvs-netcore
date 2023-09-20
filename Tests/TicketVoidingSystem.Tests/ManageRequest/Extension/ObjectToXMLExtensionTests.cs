@@ -882,6 +882,19 @@ public class ObjectToXmlExtensionFacts
     }
 
     [Fact]
+    public void ToNotParticipateInfoXml_HasParticipateViewModelIsArrayEmpty_ReturnStringEmpty()
+    {
+        // Arrange
+        var models = new List<NotParticipateViewModel>();
+
+        // Act
+        var actual = models.ToNotParticipateInfoXml();
+
+        // Assert
+        Assert.Equal(string.Empty, actual);
+    }
+
+    [Fact]
     public void ToReducedOverInfoXml_ReducedOverViewModelHasData_ReturnStringExpected()
     {
         // Arrange
@@ -892,6 +905,21 @@ public class ObjectToXmlExtensionFacts
 
         // Act
         var actual = models.ToReducedOverInfoXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToNotParticipateInfoXml_NotParticipateViewModelHasData_ReturnStringExpected()
+    {
+        // Arrange
+        var models = new List<NotParticipateViewModel> { new() };
+        const string expected =
+            "<root><r MatchId='0' SubIssueTypeId='0' BetTypeId='0' PlayerIds='' /></root>";
+
+        // Act
+        var actual = models.ToNotParticipateInfoXml();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -930,6 +958,19 @@ public class ObjectToXmlExtensionFacts
 
         // Act
         var actual = models.ToEventReducedOverXml();
+
+        // Assert
+        Assert.Equal("", actual);
+    }
+
+    [Fact]
+    public void ToEventNotParticipateXml_NotParticipateViewModelIsNull_ReturnEmpty()
+    {
+        // Arrange
+        var models = new List<NotParticipateViewModel>();
+
+        // Act
+        var actual = models.ToEventNotParticipateXml();
 
         // Assert
         Assert.Equal("", actual);
@@ -977,6 +1018,36 @@ public class ObjectToXmlExtensionFacts
                                 + "VoidFromTime='2022-02-02 02:02:02.000' /></root>";
         // Act
         var actual = models.ToEventReducedOverXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventNotParticipateXml_HasNotParticipateViewModel_ReturnExpected()
+    {
+        // Arrange
+        var models = new List<NotParticipateViewModel>
+        {
+            new()
+            {
+                MatchId = 1,
+                SubIssueTypeId = 1,
+                PlayerIds = "1",
+                LogInfoDetail = new LogInfoDetail
+                {
+                    SingleCount = 1,
+                    MainParlayCount = 1,
+                    VoidToTime = new DateTime(2022, 2, 2, 2, 2, 2),
+                    VoidFromTime = new DateTime(2022, 2, 2, 2, 2, 2)
+                }
+            }
+        };
+
+        const string expected = "<root><r MatchId='1' SubIssueTypeId='1' BetTypeId='0' PlayerIds='1' SingleCount ='1' " +
+                                "MainParlayCount='1' VoidToTime='2022-02-02 02:02:02.000' VoidFromTime='2022-02-02 02:02:02.000' /></root>";
+        // Act
+        var actual = models.ToEventNotParticipateXml();
 
         // Assert
         Assert.Equal(expected, actual);

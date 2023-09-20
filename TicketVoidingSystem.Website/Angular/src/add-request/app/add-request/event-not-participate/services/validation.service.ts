@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
-import { StaticService } from '../../../../../utility/services/static.service';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { PrimitivePropertyItem } from '../filter-not-participate/filter-not-participate-item/filter-not-participate-item.model';
 import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
@@ -47,14 +46,6 @@ export class ValidationService {
     }
 
     return true;
-  }
-
-  public isValidSingleDecimalRuns(value: string, elementClass: string, tooltip: Tooltip): boolean {
-    return StaticService.isCorrectFormatSingleDecimal(value, elementClass, tooltip, TEXT.INVALID_RUNS);
-  }
-
-  public isValidOnlyNumberWicketOver(value: string, elementClass: string, tooltip: Tooltip): boolean {
-    return StaticService.isCorrectFormatOnlyNumber(value, elementClass, tooltip, TEXT.INVALID_WICKET_OVER);
   }
 
   public isValidLogInfoEvent(logInfoNotParticipate: LogInfoNotParticipate): boolean {

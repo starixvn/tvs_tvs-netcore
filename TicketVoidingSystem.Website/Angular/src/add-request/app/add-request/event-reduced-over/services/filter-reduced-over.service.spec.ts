@@ -86,11 +86,13 @@ describe('FilterReducedOverService', () => {
   it('#getPlayers should return ReducedOverBetType', async () => {
     const commonService = new CommonService(null);
     commonService.GetOddsInfoSpecialBetTypes = jest.fn().mockReturnValue(Helper.fakePlayers);
-    const service = new FilterReducedOverService(null, commonService);
-    const actual = await service.getPlayers(1, '');
+    const mockService = new FilterReducedOverService(null, commonService);
+    [1, null].forEach(async x => {
+      const actual = await mockService.getPlayers(x, '');
 
-    expect(actual).toEqual(Helper.fakePlayers)
-    expect(commonService.GetOddsInfoSpecialBetTypes).toHaveBeenCalledTimes(1);
+      expect(actual).toEqual(Helper.fakePlayers)
+      expect(commonService.GetOddsInfoSpecialBetTypes).toHaveBeenCalled();
+    })
   });
 
   it('#renderPlayer should return ItemsSelect', async () => {

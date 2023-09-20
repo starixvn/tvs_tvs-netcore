@@ -1,8 +1,8 @@
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from 'src/edit-request/app/request.model';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../../add-request/app/add-request/models/event-wrong-score.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -70,7 +70,8 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
   static readonly fakeTemplateValue: TemplateValue = {
     matchId: 9000,

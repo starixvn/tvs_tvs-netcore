@@ -1,11 +1,11 @@
 import * as _ from "lodash";
-import { NotParticipateGetLogInfoQuery } from "src/add-request/app/add-request/event-not-participate/models/get-log-info.query";
-import { NotParticipateModel } from "src/add-request/app/add-request/models/event-not-participate.model";
+import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
 import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query";
 import { WrongScoreGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-score/event-wrong-score.model";
+import { NotParticipateModel } from "../../add-request/app/add-request/models/event-not-participate.model";
 import { RedCardGetLogInfoQuery, RedCardModel } from "../../add-request/app/add-request/models/event-red-card.model";
 import { ReducedOverModel } from "../../add-request/app/add-request/models/event-reduced-over.model";
 import { WrongHdpModel } from "../../add-request/app/add-request/models/event-wrong-hdp.model";
@@ -15,7 +15,7 @@ import { WrongScoreModel } from "../../add-request/app/add-request/models/event-
 import { StaticService } from "./static.service";
 
 export class MappingModelStaticService {
-  static buidRedCardGetLogInfoModel(redCardModels: RedCardModel[]): RedCardGetLogInfoQuery[] {
+  static buildRedCardGetLogInfoModel(redCardModels: RedCardModel[]): RedCardGetLogInfoQuery[] {
     if (_.isNull(redCardModels) || _.isUndefined(redCardModels)) {
       return null;
     }
@@ -29,7 +29,7 @@ export class MappingModelStaticService {
     } as RedCardGetLogInfoQuery));
   }
 
-  static buidWrongScoreGetLogInfoModel(wrongScoreModels: WrongScoreModel[]): WrongScoreGetLogInfoQuery[] {
+  static buildWrongScoreGetLogInfoModel(wrongScoreModels: WrongScoreModel[]): WrongScoreGetLogInfoQuery[] {
     if (_.isNull(wrongScoreModels) || _.isUndefined(wrongScoreModels)) {
       return null;
     }
@@ -45,7 +45,7 @@ export class MappingModelStaticService {
     } as WrongScoreGetLogInfoQuery));
   }
 
-  static buidWrongHdpGetLogInfoModel(wrongHdpModels: WrongHdpModel[]): WrongHdpGetLogInfoQuery[] {
+  static buildWrongHdpGetLogInfoModel(wrongHdpModels: WrongHdpModel[]): WrongHdpGetLogInfoQuery[] {
     if (_.isNull(wrongHdpModels) || _.isUndefined(wrongHdpModels)) {
       return null;
     }
@@ -66,7 +66,7 @@ export class MappingModelStaticService {
     } as WrongHdpGetLogInfoQuery));
   }
 
-  static buidWrongOuGetLogInfoModel(wrongOuModels: WrongOuModel[]): WrongOuGetLogInfoQuery[] {
+  static buildWrongOuGetLogInfoModel(wrongOuModels: WrongOuModel[]): WrongOuGetLogInfoQuery[] {
     if (_.isNull(wrongOuModels) || _.isUndefined(wrongOuModels)) {
       return null;
     }
@@ -85,7 +85,7 @@ export class MappingModelStaticService {
     } as WrongOuGetLogInfoQuery));
   }
 
-  static buidWrongOddsGetLogInfoModel(wrongOuModels: WrongOddsModel[]): WrongOddsGetLogInfoQuery[] {
+  static buildWrongOddsGetLogInfoModel(wrongOuModels: WrongOddsModel[]): WrongOddsGetLogInfoQuery[] {
     if (_.isNull(wrongOuModels) || _.isUndefined(wrongOuModels)) {
       return null;
     }
@@ -112,7 +112,7 @@ export class MappingModelStaticService {
     } as WrongOddsGetLogInfoQuery));
   }
 
-  static buidReducedOverGetLogInfoModel(reducedOverModels: ReducedOverModel[]): ReducedOverGetLogInfoQuery[] {
+  static buildReducedOverGetLogInfoModel(reducedOverModels: ReducedOverModel[]): ReducedOverGetLogInfoQuery[] {
     if (_.isNull(reducedOverModels) || _.isUndefined(reducedOverModels)) {
       return null;
     }
@@ -130,7 +130,7 @@ export class MappingModelStaticService {
     } as ReducedOverGetLogInfoQuery));
   }
 
-  static buidNotParticipateGetLogInfoModel(notParticipateModels: NotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
+  static buildNotParticipateGetLogInfoModel(notParticipateModels: NotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
     if (_.isNull(notParticipateModels) || _.isUndefined(notParticipateModels)) {
       return null;
     }

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { GetLogInfoQuery } from 'src/add-request/app/add-request/models/add-request.query';
-import { GetLogInfoModel } from 'src/add-request/app/add-request/models/get-log-info.model';
-import { MappingModelStaticService } from 'src/utility/services/mapping-model-static.service';
+import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
+import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
+import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
 import { AppService } from '../../app.service';
 import { CommonPrimitiveProperty } from '../../models/common-primitive-property.model';
 import { TicketsService } from '../../services/tickets.service';
@@ -63,20 +63,6 @@ export class VoidPageService {
     return templateValue;
   }
 
-  public toggleTicketsArea(voidPageItem: VoidNotParticipateModel): void {
-    const currentIsShowTicketFull = voidPageItem.isShowTicketFull;
-    const currentIsShowTemplateMessage = voidPageItem.isShowTemplateMessage;
-    voidPageItem.isShowTicketFull = !currentIsShowTicketFull;
-    voidPageItem.isShowTemplateMessage = currentIsShowTemplateMessage;
-  }
-
-  public toggleTemplateMessageArea(voidPageItem: VoidNotParticipateModel): void {
-    const currentIsShowTemplateMessage = voidPageItem.isShowTemplateMessage;
-    const currentIsShowTicketFull = voidPageItem.isShowTicketFull;
-    voidPageItem.isShowTicketFull = currentIsShowTicketFull;
-    voidPageItem.isShowTemplateMessage = !currentIsShowTemplateMessage;
-  }
-
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {
     const basicRequestInfo: BasicRequestInfo = {
       matchId: requestDetail.notParticipateModels[0].matchId,
@@ -108,7 +94,7 @@ export class VoidPageService {
     query.requestId = requestDetail.requestId;
     query.isShowLogOnly = true;
     query.issueTypeId = requestDetail.request.issueTypeId;
-    query.notParticipateModels = MappingModelStaticService.buidNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
+    query.notParticipateModels = MappingModelStaticService.buildNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
 
     const viewModel = await this.commonService.getLogInfo(query);
     primitiveProperty.isBlockUI = false;

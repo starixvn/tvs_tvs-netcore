@@ -8,8 +8,8 @@ import { MappingModelStaticService } from '../../../../utility/services/mapping-
 import { StaticService } from '../../../../utility/services/static.service';
 import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
-import { VoidMatch } from '../../models/void-match.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
+import { VoidMatch } from '../../models/void-match.model';
 import { TemplateMessageService } from './template-message.service';
 import { TicketsService } from './tickets.service';
 
@@ -97,23 +97,23 @@ export class VoidPageService {
     query.issueTypeId = requestDetail.request.issueTypeId;
 
     if (StaticService.isDangerAccepted(requestDetail.request.issueTypeId.toString())) {
-      query.dangerAcceptedModels = MappingModelStaticService.buidRedCardGetLogInfoModel(requestDetail.dangerAcceptedModels);
+      query.dangerAcceptedModels = MappingModelStaticService.buildRedCardGetLogInfoModel(requestDetail.dangerAcceptedModels);
     }
 
     if (StaticService.isWrongHDP(requestDetail.request.issueTypeId.toString())) {
-      query.wrongHdpModels = MappingModelStaticService.buidWrongHdpGetLogInfoModel(requestDetail.wrongHdpModels);
+      query.wrongHdpModels = MappingModelStaticService.buildWrongHdpGetLogInfoModel(requestDetail.wrongHdpModels);
     }
 
     if (StaticService.isWrong1stHDP(requestDetail.request.issueTypeId.toString())) {
-      query.wrong1stHdpModels = MappingModelStaticService.buidWrongHdpGetLogInfoModel(requestDetail.wrongHdpModels);
+      query.wrong1stHdpModels = MappingModelStaticService.buildWrongHdpGetLogInfoModel(requestDetail.wrongHdpModels);
     }
 
     if (StaticService.isWrongOU(requestDetail.request.issueTypeId.toString())) {
-      query.wrongOuModels = MappingModelStaticService.buidWrongOuGetLogInfoModel(requestDetail.wrongOuModels);
+      query.wrongOuModels = MappingModelStaticService.buildWrongOuGetLogInfoModel(requestDetail.wrongOuModels);
     }
 
     if (StaticService.isWrong1stOU(requestDetail.request.issueTypeId.toString())) {
-      query.wrong1stOuModels = MappingModelStaticService.buidWrongOuGetLogInfoModel(requestDetail.wrongOuModels);
+      query.wrong1stOuModels = MappingModelStaticService.buildWrongOuGetLogInfoModel(requestDetail.wrongOuModels);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);

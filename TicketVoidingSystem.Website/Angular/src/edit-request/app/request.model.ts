@@ -1,5 +1,5 @@
-import { NotParticipateModel } from 'src/add-request/app/add-request/models/event-not-participate.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
+import { NotParticipateModel } from '../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
@@ -68,15 +68,15 @@ export class RequestDetailViewModel {
   requestId: number;
   lastModifiedDate: Date;
   request: RequestDetailModel;
-  event: RequestEventModel;
-  wrongScoreModels: WrongScoreModel[];
-  dangerAcceptedModels: RedCardModel[];
-  redCardModels: RedCardModel[];
-  wrongHdpModels: WrongHdpModel[];
-  wrongOuModels: WrongOuModel[];
-  wrongOddsModels: WrongOddsModel[];
-  reducedOverModels: ReducedOverModel[];
-  notParticipateModels: NotParticipateModel[];
-  duplicateTicketsModel: DuplicateTicketsModel;
-  messages: Message[];
+  event?: RequestEventModel;
+  wrongScoreModels?: WrongScoreModel[];
+  dangerAcceptedModels?: RedCardModel[];
+  redCardModels?: RedCardModel[];
+  wrongHdpModels?: WrongHdpModel[];
+  wrongOuModels?: WrongOuModel[];
+  wrongOddsModels?: WrongOddsModel[];
+  reducedOverModels?: ReducedOverModel[];
+  notParticipateModels?: NotParticipateModel[];
+  duplicateTicketsModel?: DuplicateTicketsModel;
+  messages?: Message[];
 }

@@ -1,6 +1,9 @@
 import * as _ from 'lodash';
+import { NotParticipateModel } from '../../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../../add-request/app/add-request/models/event-red-card.model';
+import { ReducedOverModel } from '../../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../../add-request/app/add-request/models/event-wrong-hdp.model';
+import { WrongOddsModel } from '../../../add-request/app/add-request/models/event-wrong-odds.model';
 import { WrongOuModel } from '../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../add-request/app/add-request/models/event-wrong-score.model';
 import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../add-request/app/add-request/models/get-log-info.model';
@@ -58,7 +61,8 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
   static readonly fakeLogInfoArg: LogInfoArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
@@ -207,6 +211,51 @@ describe('LogInfoService', () => {
     expect(spyIsDangerAccepted).toHaveBeenCalledTimes(1);
   });
 
+  it('#getLogInfo should call expected function when isWrongOdds', async () => {
+    // Arrange
+    logInfoService['createLogInfoArg'] = jest.fn();
+    logInfoService['getLogInfoWrongOdds'] = jest.fn();
+    const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
+    detailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS);
+
+    // Action
+    await logInfoService.getLogInfo(null, detailViewModel);
+
+    // Assert
+    expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
+    expect(logInfoService['getLogInfoWrongOdds']).toHaveBeenCalledTimes(1);
+  });
+
+  it('#getLogInfo should call expected function when isReducedOver', async () => {
+    // Arrange
+    logInfoService['createLogInfoArg'] = jest.fn();
+    logInfoService['getLogInfoReducedOver'] = jest.fn();
+    const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
+    detailViewModel.request.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
+
+    // Action
+    await logInfoService.getLogInfo(null, detailViewModel);
+
+    // Assert
+    expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
+    expect(logInfoService['getLogInfoReducedOver']).toHaveBeenCalledTimes(1);
+  });
+
+  it('#getLogInfo should call expected function when isNotParticipate', async () => {
+    // Arrange
+    logInfoService['createLogInfoArg'] = jest.fn();
+    logInfoService['getLogInfoNotParticipate'] = jest.fn();
+    const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
+    detailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+
+    // Action
+    await logInfoService.getLogInfo(null, detailViewModel);
+
+    // Assert
+    expect(logInfoService['createLogInfoArg']).toHaveBeenCalledTimes(1);
+    expect(logInfoService['getLogInfoNotParticipate']).toHaveBeenCalledTimes(1);
+  });
+
   it('#getLogInfo should call expected function', async () => {
     // Arrange
     const spyIsRedCard = jest.spyOn(validationService, 'isRedCard').mockImplementation(() => false);
@@ -218,6 +267,7 @@ describe('LogInfoService', () => {
     const spyIsWrong1stOu = jest.spyOn(validationService, 'isWrong1stOu').mockImplementation(() => false);
     const spyIsWrongOdds = jest.spyOn(validationService, 'isWrongOdds').mockImplementation(() => false);
     const spyIsReducedOver = jest.spyOn(validationService, 'isReducedOver').mockImplementation(() => false);
+    const spyIsNotParticipate = jest.spyOn(validationService, 'isNotParticipate').mockImplementation(() => false);
 
     logInfoService['createLogInfoArg'] = jest.fn();
     logInfoService['getLogInfoDangerAccepted'] = jest.fn();
@@ -228,6 +278,7 @@ describe('LogInfoService', () => {
     logInfoService['isWrongOu'] = jest.fn();
     logInfoService['isWrong1stOu'] = jest.fn();
     logInfoService['isReducedOver'] = jest.fn();
+    logInfoService['isNotParticipate'] = jest.fn();
 
     // Action
     await logInfoService.getLogInfo(null, null);
@@ -246,6 +297,7 @@ describe('LogInfoService', () => {
     expect(spyIsWrong1stOu).toHaveBeenCalledTimes(1);
     expect(spyIsWrongOdds).toHaveBeenCalledTimes(1);
     expect(spyIsReducedOver).toHaveBeenCalledTimes(1);
+    expect(spyIsNotParticipate).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfoRedCard should get correct info', async () => {
@@ -362,5 +414,62 @@ describe('LogInfoService', () => {
       expect(spyCommonServiceGetLogInfo).toHaveBeenCalled();
       expect(spyIsWrongOu).toHaveBeenCalled();
     });
+  });
+
+  it('#getLogInfoWrongOdds should get correct info', async () => {
+    // Arrange
+    const spyCommonServiceGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
+    const wrongOddsModel = new WrongOddsModel();
+    wrongOddsModel.matchId = Helper.fakeMatchId;
+    const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
+    detailViewModel.wrongOddsModels = [wrongOddsModel];
+    detailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS);
+    const args = _.clone(Helper.fakeLogInfoArg);
+    args.detailViewModel = detailViewModel;
+
+    // Action
+    await logInfoService['getLogInfoWrongOdds'](args);
+
+    // Assert
+    expect(args.detailViewModel.wrongOddsModels[0].logInfoDetail).toStrictEqual(Helper.fakeGetLogInfoModel.logInfoDetail);
+    expect(spyCommonServiceGetLogInfo).toHaveBeenCalled();
+  });
+
+  it('#getLogInfoReducedOver should get correct info', async () => {
+    // Arrange
+    const spyCommonServiceGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
+    const reducedOverModel = new ReducedOverModel();
+    reducedOverModel.matchId = Helper.fakeMatchId;
+    const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
+    detailViewModel.reducedOverModels = [reducedOverModel];
+    detailViewModel.request.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
+    const args = _.clone(Helper.fakeLogInfoArg);
+    args.detailViewModel = detailViewModel;
+
+    // Action
+    await logInfoService['getLogInfoReducedOver'](args);
+
+    // Assert
+    expect(args.detailViewModel.reducedOverModels[0].logInfoDetail).toStrictEqual(Helper.fakeGetLogInfoModel.logInfoDetail);
+    expect(spyCommonServiceGetLogInfo).toHaveBeenCalled();
+  });
+
+  it('#getLogInfoNotParticipate should get correct info', async () => {
+    // Arrange
+    const spyCommonServiceGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
+    const notParticipateModel = new NotParticipateModel();
+    notParticipateModel.matchId = Helper.fakeMatchId;
+    const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
+    detailViewModel.notParticipateModels = [notParticipateModel];
+    detailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+    const args = _.clone(Helper.fakeLogInfoArg);
+    args.detailViewModel = detailViewModel;
+
+    // Action
+    await logInfoService['getLogInfoNotParticipate'](args);
+
+    // Assert
+    expect(args.detailViewModel.notParticipateModels[0].logInfoDetail).toStrictEqual(Helper.fakeGetLogInfoModel.logInfoDetail);
+    expect(spyCommonServiceGetLogInfo).toHaveBeenCalled();
   });
 });

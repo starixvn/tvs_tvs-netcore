@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterNotParticipateItemComponent FilterNotParticipateItemComponent init should match snapshot 1`] = `
+FilterNotParticipateItemComponent {
+  "addItemEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "changeBetTypeEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "changeFilterEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "element": null,
+  "filterService": null,
+  "model": Object {
+    "betTypeId": 1,
+    "playerIds": Array [
+      "1",
+      "2",
+    ],
+    "playerMultipleSelection": MultipleSelection {
+      "allItemsCheckedText": "All",
+      "buttonHeight": "36px",
+      "characterText": ", ",
+      "characterValue": ",",
+      "checkAllCheckBoxText": "Check All Items",
+      "isCheckAll": false,
+      "isDefaultSelectAll": true,
+      "isShowPlaceHolder": false,
+      "items": Array [],
+      "maxHeight": "350px",
+      "maxWidth": "170px",
+      "noData": "No Data",
+      "noneItemCheckedText": "None Selected",
+      "numberItemsDisplay": 3,
+      "showHeader": true,
+      "subfixNumberItemsCheckedText": " selected",
+    },
+  },
+  "primitivePropertyItem": PrimitivePropertyItem {
+    "isDisabledPlayer": true,
+  },
+  "removeItemEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "validationService": null,
+}
+`;

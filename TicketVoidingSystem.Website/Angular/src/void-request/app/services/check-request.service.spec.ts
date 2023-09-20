@@ -10,7 +10,7 @@ class Helper {
 
 }
 
-describe('ValidationService', () => {
+describe('CheckRequestService', () => {
   let checkRequestService: CheckRequestService;
 
   beforeEach(() => {

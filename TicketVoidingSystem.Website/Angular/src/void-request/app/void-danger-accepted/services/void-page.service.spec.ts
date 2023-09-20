@@ -58,7 +58,7 @@ class Helper {
     errCode: 1,
     errMsg: 'error',
     isSuccessful: false,
-  };  
+  };
   static readonly fakeSqlResultSuccessful: SqlResult = {
     errCode: 0,
     errMsg: '',
@@ -94,9 +94,10 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
-  
+
   static readonly fakeIssueTypeList: IssueType[] = [
     { issueTypeId: 1, issueTypeName: 'Danger Accepted'},
     { issueTypeId: 11, issueTypeName: 'Abnormal Bet'},
@@ -135,7 +136,7 @@ class Helper {
       subIssueTypeName: 'Wrong Kick Off Time',
       subIssueTypeNameCS: ''
     }
-  ];  
+  ];
   static readonly fakeIssueTypesModel: IssueTypesModel = {
     issueTypes: Helper.fakeIssueTypeList,
     subIssueTypes: Helper.fakeSubIssueTypeList
@@ -169,7 +170,7 @@ describe('VoidPageService', () => {
     expect(spyGetIssueTypes).toHaveBeenCalledTimes(1);
     expect(result).toStrictEqual(issueTypesModel);
   });
-  
+
   it('#getBasicVoidMatchesData should return call expected function', async () => {
     // Arrange
     const getLogInfoModel = new GetLogInfoModel();
@@ -198,7 +199,7 @@ describe('VoidPageService', () => {
     expect(voidPageService['getSubIssueTypeModel']).toHaveBeenCalledTimes(1);
     expect(result.length).toBeGreaterThan(0);
   });
-  
+
   it('#loadUnderneathVoidMatchesData should update model', async () => {
     // Arrange
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation(() => new GetTicketsQuery());
@@ -219,7 +220,7 @@ describe('VoidPageService', () => {
       expect(spyGetVoidedReason).toHaveBeenCalledTimes(2);
     });
   });
-  
+
   it('#toggleTicketsArea should update model', async () => {
     // Arrange
     const currentVoidMatch = _.clone(Helper.fakeVoidMatch);
@@ -232,7 +233,7 @@ describe('VoidPageService', () => {
     expect(allVoidMatches[0].isShowTemplateMessage).toBe(false);
     expect(allVoidMatches[0].isShowTicketFull).toBe(false);
   });
-  
+
   it('#toggleTemplateMessageArea should update model', async () => {
     // Arrange
     const currentVoidMatch = _.clone(Helper.fakeVoidMatch);
@@ -245,7 +246,7 @@ describe('VoidPageService', () => {
     expect(allVoidMatches[0].isShowTemplateMessage).toBe(false);
     expect(allVoidMatches[0].isShowTicketFull).toBe(false);
   });
-  
+
   it('#getAllLogInfo should return expected model', async () => {
     // Arrange
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
@@ -272,7 +273,7 @@ describe('VoidPageService', () => {
       expect(result).toStrictEqual(getLogInfoModels);
     });
   });
-  
+
   it('#getSubIssueTypeModel should return expected model', async () => {
     // Arrange
     const issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
@@ -283,7 +284,7 @@ describe('VoidPageService', () => {
     // Assert
     expect(result).toStrictEqual(issueTypes.subIssueTypes[0]);
   });
-  
+
   it('#getDisplayIssueTypeName should return expected model', async () => {
     // Arrange
     const issueTypeId = Number(IssueTypeConstant.DANGER_ACCEPTED);
@@ -295,7 +296,7 @@ describe('VoidPageService', () => {
     // Assert
     expect(result).toEqual('Danger Accepted - Goal');
   });
-  
+
   it('#getDisplayIssueTypeName should return expected model', async () => {
     // Arrange
     const issueTypeId = Number(IssueTypeConstant.ABNORMAL_ACCOUNT);
@@ -308,7 +309,7 @@ describe('VoidPageService', () => {
     // Assert
     expect(result).toEqual('Abnormal Account');
   });
-  
+
   it('#initBasicRequestInfo should return expected when isWrongHDP', async () => {
     // Arrange
     const wrongOuModelHasHomeFavorite = new WrongHdpModel();
@@ -329,7 +330,7 @@ describe('VoidPageService', () => {
       expect(actual).toBeDefined();
     });
   });
-  
+
   it('#initBasicRequestInfo should return expected when isWrongOU', async () => {
     // Arrange
     const mockCommonService = new CommonService(null);
@@ -348,7 +349,7 @@ describe('VoidPageService', () => {
       expect(actual).toBeDefined();
     });
   });
-  
+
   it('#initBasicRequestInfo should return []', async () => {
     // Arrange
     const mockCommonService = new CommonService(null);

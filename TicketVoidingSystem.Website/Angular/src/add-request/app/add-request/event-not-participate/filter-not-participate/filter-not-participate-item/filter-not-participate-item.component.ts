@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { OddsInfo } from 'src/utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
+import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { FilterNotParticipateModel } from '../../models/filter-not-participate.model';
 import { NotParticipateBetType } from '../../models/not-participate-bet-type.model';
 import { FilterNotParticipateService } from '../../services/filter-not-participate.service';

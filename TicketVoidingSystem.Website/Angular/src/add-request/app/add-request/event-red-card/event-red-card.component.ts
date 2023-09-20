@@ -1,13 +1,17 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { RedCardModel } from '../models/event-red-card.model';
+import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
 import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
@@ -18,16 +22,12 @@ import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-tim
 import { LeagueEventRedCardComponent } from './league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
+import { EventRedCardService } from './services/event-red-card.service';
 import { LogInfoService } from './services/log-info.service';
+import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { ChildMatchModel } from '../models/related-event.model';
-import * as _ from 'lodash';
-import { EventRedCardService } from './services/event-red-card.service';
-import { RelatedEventService } from './services/related-event.service';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
-import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 
 @Component({
   selector: 'event-red-card',
@@ -158,7 +158,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowRelatedEvents = false;
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
-  
+
   async saveRequest(): Promise<void> {
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
@@ -189,7 +189,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowRelatedEvents = true;
     this.primitiveProps.isBlock = false;
   }
-  
+
   async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
@@ -205,7 +205,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.addChildMatchModel.isOpen = true;
     this.addChildMatchModel = _.clone(this.addChildMatchModel);
   }
-  
+
   countChildMatches(): number {
     return this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length;
   }

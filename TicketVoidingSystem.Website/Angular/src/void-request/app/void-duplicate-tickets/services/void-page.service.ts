@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AbnormalFilterBy } from 'src/utility/constants/config';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
+import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -79,11 +79,11 @@ export class VoidPageService {
   }
 
   private async getVoidedReason(voidPageItem: VoidPageDuplicateTicketsModel): Promise<VoidedReason> {
-    const reason = this.appService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
+    const reason = await this.appService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
     if (this.isDuplicateTicketsMixParlay(voidPageItem.filterBy)) {
       return {
-        reasonEnglish: `Mix Parlay - ${(await reason).reasonEnglish}`,
-        reasonChineseSimplified: `串关 - ${(await reason).reasonChineseSimplified}`
+        reasonEnglish: `Mix Parlay - ${reason.reasonEnglish}`,
+        reasonChineseSimplified: `串关 - ${reason.reasonChineseSimplified}`
       } as VoidedReason;
     }
 

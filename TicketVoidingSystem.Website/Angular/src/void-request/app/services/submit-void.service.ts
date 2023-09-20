@@ -28,7 +28,7 @@ export class SubmitVoidService {
     primitiveProperty.errorMessage = validation.errorMsg;
     if (validation.isSuccessful) {
       this.popupService.showVoidBetConfirm(
-        this.getConfirmMessage(),
+        `<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`,
         async () => {
           this.checkRequestModified(voidPageItems, primitiveProperty);
         });
@@ -62,10 +62,6 @@ export class SubmitVoidService {
     } else {
       this.popupService.showSubmitVoidRequestError(insertQueueResult);
     }
-  }
-
-  private getConfirmMessage(): string {
-    return `<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`;
   }
 
   private checkValidationBeforeVoid(voidPageItems: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): Result<null> {

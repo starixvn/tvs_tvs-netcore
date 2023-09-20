@@ -3,8 +3,12 @@ import { FilterModel } from '../../../add-request/app/add-request/filter/filter.
 import { AbnormalAccountModel } from '../../../add-request/app/add-request/models/abnormal-account.model';
 import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 import { EventDetailModel } from '../../../add-request/app/add-request/models/event-detail.model';
+import { DuplicateTicketsModel } from '../../../add-request/app/add-request/models/event-duplicate-tickets.model';
+import { NotParticipateModel } from '../../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../../add-request/app/add-request/models/event-red-card.model';
+import { ReducedOverModel } from '../../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../../add-request/app/add-request/models/event-wrong-hdp.model';
+import { WrongOddsModel } from '../../../add-request/app/add-request/models/event-wrong-odds.model';
 import { WrongOuModel } from '../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../add-request/app/add-request/models/event-wrong-score.model';
 import { GetLogInfoModel, Validation } from '../../../add-request/app/add-request/models/get-log-info.model';
@@ -64,7 +68,8 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
   static readonly fakeLogInfoArg: LogInfoArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
@@ -105,7 +110,8 @@ class Helper {
     wrongOddsModels: [],
     reducedOverModels: [],
     others: new OthersModel(),
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
   static readonly fakeMapEventArg: MapEventArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
@@ -287,6 +293,50 @@ describe('ObjectService', () => {
     objectService['mapEvent'](args);
 
     expect(args.requestModel.abnormalAccountModel).toBe(abnormalAccountModel);
+  });
+
+  it('#mapEvent should update correct model when isWrongOdds', async () => {
+    const args = _.clone(Helper.fakeMapEventArg);
+    args.detailViewModel.event = new RequestEventModel();
+    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS);
+    args.detailViewModel.wrongOddsModels = [new WrongOddsModel()];
+
+    objectService['mapEvent'](args);
+
+    expect(args.requestModel.wrongOddsModels).toBe(args.detailViewModel.wrongOddsModels);
+  });
+
+  it('#mapEvent should update correct model when isReducedOver', async () => {
+    const args = _.clone(Helper.fakeMapEventArg);
+    args.detailViewModel.event = new RequestEventModel();
+    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
+    args.detailViewModel.reducedOverModels = [new ReducedOverModel()];
+
+    objectService['mapEvent'](args);
+
+    expect(args.requestModel.reducedOverModels).toBe(args.detailViewModel.reducedOverModels);
+  });
+
+  it('#mapEvent should update correct model when isNotParticipate', async () => {
+    const args = _.clone(Helper.fakeMapEventArg);
+    args.detailViewModel.event = new RequestEventModel();
+    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+    args.detailViewModel.notParticipateModels = [new NotParticipateModel()];
+
+    objectService['mapEvent'](args);
+
+    expect(args.requestModel.notParticipateModels).toBe(args.detailViewModel.notParticipateModels);
+  });
+
+  it('#mapEvent should update correct model when isDuplicateTickets', async () => {
+    const args = _.clone(Helper.fakeMapEventArg);
+    args.detailViewModel.event = new RequestEventModel();
+    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.DUPLICATE_TICKETS);
+    args.detailViewModel.duplicateTicketsModel = new DuplicateTicketsModel();
+
+    objectService['mapEvent'](args);
+
+    expect(args.requestModel.duplicateTicketsModel).toBe(args.detailViewModel.duplicateTicketsModel);
   });
 
   it('#mapOthers should update correct model', async () => {

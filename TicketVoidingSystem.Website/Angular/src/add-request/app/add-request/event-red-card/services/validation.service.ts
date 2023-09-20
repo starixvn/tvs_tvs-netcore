@@ -1,4 +1,5 @@
 import { Injectable, QueryList } from '@angular/core';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
@@ -6,7 +7,6 @@ import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.co
 import { LeagueEventRedCardComponent } from '../league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 
 @Injectable({
   providedIn: 'root'

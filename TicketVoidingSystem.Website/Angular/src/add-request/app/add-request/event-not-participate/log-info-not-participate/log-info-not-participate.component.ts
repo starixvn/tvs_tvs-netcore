@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import moment from 'moment-timezone';
-import { ModalService } from 'src/utility/components/modal/modal.service';
-import { DateTimeFormat } from 'src/utility/constants/config';
-import { StaticService } from 'src/utility/services/static.service';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 

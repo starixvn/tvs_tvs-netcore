@@ -44,7 +44,8 @@ describe('AppService', () => {
       wrongOuModels: [],
       wrongOddsModels: [],
       reducedOverModels: [],
-      duplicateTicketsModel: null
+      duplicateTicketsModel: null,
+      notParticipateModels: []
     };
     mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
 

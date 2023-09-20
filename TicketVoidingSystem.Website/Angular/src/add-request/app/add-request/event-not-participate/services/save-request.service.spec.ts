@@ -5,39 +5,31 @@ import { FilterModel } from '../../filter/filter.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
-import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
-import { LogInfoReducedOver } from '../models/log-info-not-participate.model';
+import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
+import { NotParticipateBetType } from '../models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { EventReducedOverService } from './event-not-participate.service';
+import { EventNotParticipateService } from './event-not-participate.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
 
 class Helper {
-  static readonly fakeReducedOverBetTypes: ReducedOverBetType[] = [
+  static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
     {
       betTypeId: 1,
       betTypeName: '',
-      isHasOverWicket: true,
-      isHasPlayer: true,
-      isHasRuns: true,
-      parentId: 0,
-      items: []
+      disabled: false
     },
     {
       betTypeId: 2,
       betTypeName: '',
-      isHasOverWicket: true,
-      isHasPlayer: true,
-      isHasRuns: true,
-      parentId: 0,
-      items: []
+      disabled: false
     }
   ];
-  static readonly fakeLogInfoReducedOver: LogInfoReducedOver = {
+  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
     matchId: 1,
-    filterReducedOvers: [],
+    filterNotParticipates: [],
     logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: []
   };
@@ -156,19 +148,19 @@ describe('SaveRequestService', () => {
     service['proceedSaveRequest'] = jest.fn();
 
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationReducedOver = jest.fn().mockImplementation(() => true);
+    validationService.checkCanShowConfirmationNotParticipate = jest.fn().mockImplementation(() => true);
 
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
 
     const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
-    saveRequestService['getMessageConfirmationReducedOver'] = jest.fn().mockImplementation(() => 'aaa');
+    saveRequestService['getMessageConfirmationNotParticipate'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationReducedOver).toHaveBeenCalledTimes(1);
-    expect(saveRequestService['getMessageConfirmationReducedOver']).toHaveBeenCalledTimes(1);
+    expect(validationService.checkCanShowConfirmationNotParticipate).toHaveBeenCalledTimes(1);
+    expect(saveRequestService['getMessageConfirmationNotParticipate']).toHaveBeenCalledTimes(1);
 
     expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
     expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
@@ -184,14 +176,14 @@ describe('SaveRequestService', () => {
   it('#proceedSaveRequest should called #executeSaveRequestApi', async () => {
     const saveRequestArg = new SaveRequestArg();
     const validationService = new ValidationService();
-    validationService.checkCanShowConfirmationReducedOver = jest.fn().mockImplementation(() => false);
+    validationService.checkCanShowConfirmationNotParticipate = jest.fn().mockImplementation(() => false);
 
     const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
     saveRequestService['executeSaveRequestApi'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
 
-    expect(validationService.checkCanShowConfirmationReducedOver).toHaveBeenCalledTimes(1);
+    expect(validationService.checkCanShowConfirmationNotParticipate).toHaveBeenCalledTimes(1);
     expect(saveRequestService['executeSaveRequestApi']).toHaveBeenCalledTimes(1);
   });
 
@@ -206,26 +198,26 @@ describe('SaveRequestService', () => {
     saveRequestArg.filter = new FilterModel();
     saveRequestArg.filter.action = '2';
     saveRequestArg.actionIdOfFirstTimeAccess = '5';
-    saveRequestArg.logInfoEvent = Helper.fakeLogInfoReducedOver;
+    saveRequestArg.logInfoEvent = Helper.fakeLogInfoNotParticipate;
     saveRequestArg.logInfoEvent.logInfoDetail.settleCount = 1;
     saveRequestArg.logInfoEvent.messageValidationLogInfo.push({ isError: false, reason: 'aaa'});
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
     document.getElementById = jest.fn().mockImplementation(() => element);
 
-    const actual = service['getMessageConfirmationReducedOver'](saveRequestArg);
+    const actual = service['getMessageConfirmationNotParticipate'](saveRequestArg);
 
     expect(actual).toBe(expected);
   });
 
-  it('#getMessageConfirmationReducedOver should return expected msg', async () => {
+  it('#getMessageConfirmationNotParticipate should return expected msg', async () => {
     const expected = '<div class=\'mg-top-10\'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.isEdit = false;
-    saveRequestArg.logInfoEvent = new LogInfoReducedOver();
+    saveRequestArg.logInfoEvent = new LogInfoNotParticipate();
     saveRequestArg.logInfoEvent.messageValidationLogInfo = null;
 
-    const actual = service['getMessageConfirmationReducedOver'](saveRequestArg);
+    const actual = service['getMessageConfirmationNotParticipate'](saveRequestArg);
 
     expect(actual).toBe(expected);
   });
@@ -233,7 +225,7 @@ describe('SaveRequestService', () => {
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.isEdit = false;
-    saveRequestArg.logInfoEvent = new LogInfoReducedOver();
+    saveRequestArg.logInfoEvent = new LogInfoNotParticipate();
     saveRequestArg.filter = new FilterModel();
     saveRequestArg.filter.isVoided = true;
     saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
@@ -277,21 +269,21 @@ describe('SaveRequestService', () => {
     expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
 
-  it('#initAddRequestQuery should called #eventReducedOverService.getReducedOverModel', async () => {
+  it('#initAddRequestQuery should called #eventNotParticipateService.getNotParticipateModel', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.isEdit = false;
-    saveRequestArg.logInfoEvent = new LogInfoReducedOver();
+    saveRequestArg.logInfoEvent = new LogInfoNotParticipate();
     saveRequestArg.filter = new FilterModel();
     saveRequestArg.filter.isVoided = false;
     saveRequestArg.primitiveProps = new PrimitivePropertyEvent();
     saveRequestArg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     saveRequestArg.others = new OthersModel();
-    const eventReducedOverService = new EventReducedOverService();
-    const spyGetReducedOverModel = jest.spyOn(eventReducedOverService, 'getReducedOverModel').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, null, eventReducedOverService);
+    const eventNotParticipateService = new EventNotParticipateService();
+    const spyGetNotParticipateModel = jest.spyOn(eventNotParticipateService, 'getNotParticipateModel').mockImplementation();
+    const saveRequestService = new SaveRequestService(null, null, null, null, eventNotParticipateService);
 
     saveRequestService['initAddRequestQuery'](saveRequestArg);
 
-    expect(spyGetReducedOverModel).toHaveBeenCalledTimes(1);
+    expect(spyGetNotParticipateModel).toHaveBeenCalledTimes(1);
   });
 });

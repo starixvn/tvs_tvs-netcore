@@ -1,6 +1,6 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { GetLogInfoModel, ValidationMessage } from 'src/add-request/app/add-request/models/get-log-info.model';
+import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { DateFullTimeNewComponent } from '../components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalType } from '../components/modal/modal.model';
@@ -219,7 +219,7 @@ export class StaticService {
       issueTypeId === IssueTypeConstant.RED_CARD ||
       issueTypeId === IssueTypeConstant.WRONG_SCORE;
   }
-  
+
   static getDurationTime(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, filterFromTransTime: string, filterToTransTime: string): string {
     if (!fromTimeComponent?.isTimeValid() || !toTimeComponent?.isTimeValid()) {
       return '-';

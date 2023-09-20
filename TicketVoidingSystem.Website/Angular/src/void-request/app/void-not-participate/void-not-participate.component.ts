@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Subscription, timer } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -23,7 +23,6 @@ export class VoidNotParticipateComponent implements OnInit {
   public voidPageItem: VoidNotParticipateModel;
   public issueTypes: IssueTypesModel;
   private readonly afterLoadUnderneathDataSubscription: Subscription;
-  private readonly observableTimer = timer(0, 100);
   public tooltip = new Tooltip();
   constructor(
     private readonly element: ElementRef,

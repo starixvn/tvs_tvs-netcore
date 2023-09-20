@@ -590,13 +590,13 @@ export class VoidOtherIssueComponent implements OnInit {
     };
     if (this.isWrongScore()) {
       query.matchId = this.requestDetail.wrongScoreModels[0].matchId;
-      query.wrongScoreModels = MappingModelStaticService.buidWrongScoreGetLogInfoModel(this.requestDetail.wrongScoreModels);
+      query.wrongScoreModels = MappingModelStaticService.buildWrongScoreGetLogInfoModel(this.requestDetail.wrongScoreModels);
     } else if (this.isWrongOdds()) {
       query.matchId = this.requestDetail.wrongOddsModels[0].matchId;
-      query.wrongOddsModels = MappingModelStaticService.buidWrongOddsGetLogInfoModel(this.requestDetail.wrongOddsModels);
+      query.wrongOddsModels = MappingModelStaticService.buildWrongOddsGetLogInfoModel(this.requestDetail.wrongOddsModels);
     } else if (this.isReducedOver()) {
       query.matchId = this.requestDetail.reducedOverModels[0].matchId;
-      query.reducedOverModels = MappingModelStaticService.buidReducedOverGetLogInfoModel(this.requestDetail.reducedOverModels);
+      query.reducedOverModels = MappingModelStaticService.buildReducedOverGetLogInfoModel(this.requestDetail.reducedOverModels);
     }
 
     return query;
