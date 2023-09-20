@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Fanex.NAP.Client.Models.MenuItem>
+﻿@using TicketVoidingSystem.Utilities
+@model IEnumerable<Fanex.NAP.Client.Models.MenuItem>
 
 @if (Model != null)
 {
@@ -22,7 +23,7 @@
                 }
                 if (item.Count == 0)
                 {
-                    var menuUrl =  Url.Content("~" + menuItem.Url);
+                    var menuUrl = Helper.GetMenuPath(menuItem, Url);
                     <li class="@className"><a href="@menuUrl">@menuItem.Name</a></li>
                 }
                 else
@@ -33,7 +34,7 @@
                         <ul>
                             @foreach (var subMenuItem in item)
                             {
-                                var menuUrl = Url.Content("~" + subMenuItem.Url);
+                                var menuUrl = Helper.GetMenuPath(subMenuItem, Url);
 
                                 <li><a href="@menuUrl">@subMenuItem.Name</a></li>
                             }

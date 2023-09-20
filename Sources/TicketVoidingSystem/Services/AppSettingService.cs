@@ -48,7 +48,8 @@ public static class AppSettingService
                 AppMailAddress = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailAddress)}")
             },
             IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb)),
-            TicketVoidingSystemUrl = configuration.GetValue<string>(nameof(AppSettingModel.TicketVoidingSystemUrl))
+            TicketVoidingSystemUrl = configuration.GetValue<string>(nameof(AppSettingModel.TicketVoidingSystemUrl)),
+            OldSiteRootUrl = configuration.GetValue<string>(nameof(AppSettingModel.OldSiteRootUrl))
         };
 
         AppSetting = setting;

@@ -58,6 +58,7 @@ export class MenuBarComponent implements OnInit {
     || menuName === MenuName.TICKET_LISTING
     || menuName === MenuName.VOID_SINGLE_BET
     || menuName === MenuName.MANAGE_REQUEST
-    || menuName === MenuName.ADD_REQUEST;
+    || menuName === MenuName.ADD_REQUEST
+    || menuName === MenuName.UPLOAD_BATCH_MESSAGE;
   }
 }

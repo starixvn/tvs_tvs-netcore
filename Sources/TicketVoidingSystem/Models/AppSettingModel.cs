@@ -28,6 +28,8 @@ public class AppSettingModel
 
     public string TicketVoidingSystemUrl { get; init; }
 
+    public string OldSiteRootUrl { get; init; }
+
     public string LinkedLogUrl { get; set; }
 }
 

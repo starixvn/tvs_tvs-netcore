@@ -1,4 +1,5 @@
-﻿@using Fanex.NAP.Client.Session
+﻿@addTagHelper *, WebOptimizer.Core
+@using Fanex.NAP.Client.Session
 @using TicketVoidingSystem.Website.ViewComponents
 @{
     var session = new NapSession(httpContextAccessor);
@@ -24,10 +25,10 @@
             <link href="~/content/base/styles.less" rel="stylesheet" type="text/css" />
         }
         <script type="text/javascript">
-        window.rootUrl = '@Url.Content("~")';
+        window.rootUrl = '@Url.Content("~/")';
     </script>
     </head>
-    <body origin-url="@Url.Content("~")">
+<body origin-url="@Url.Content("~/")">
         <div class="row header-user-info user-info-background">
             <a class="logo" href="~/?ref=logo">&nbsp;</a>
             <div style="width: 60px; float: right;">
@@ -73,9 +74,9 @@
 
         <script src="~/old-page/bundle-libs-script.js"></script>
         @await RenderSectionAsync("Scripts", false)
+        <script src="~/js/sub-parlay-ticket.js"></script>
 
-        @*<script src="~/js/sub-parlay-ticket.js"></script>
-        <script src="~/nap-auth/re-checkin.js"></script>*@
+        @* <script src="~/nap-auth/re-checkin.js"></script> *@
 
     </body>
 </html>

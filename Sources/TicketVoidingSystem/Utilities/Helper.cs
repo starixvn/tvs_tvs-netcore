@@ -8,11 +8,14 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Fanex.NAP.Client.Models;
+using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Utilities;
 
@@ -175,5 +178,26 @@ public static class Helper
     public static bool IsMustRemoveSabaText(Match match, SiteEmail site)
     {
         return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports);
+    }
+
+    public static string GetMenuPath(MenuItem menu, IUrlHelper urlHelper)
+    {
+        if (IsMenuOfNewPage(menu))
+        {
+            return urlHelper.Content("~") + menu.Url;
+        }
+
+        if (AppSettingService.AppSetting.OldSiteRootUrl.StartsWith("/"))
+        {
+            return urlHelper.Content($"~{AppSettingService.AppSetting.OldSiteRootUrl}") + menu.Url[1..];
+        }
+
+        return AppSettingService.AppSetting.OldSiteRootUrl + menu.Url[1..];
+    }
+
+    private static bool IsMenuOfNewPage(MenuItem menu)
+    {
+        return menu.Name == "AB Exception List" || menu.Name == "Mark/Unmark Tickets" || menu.Name == "Ticket Listing" || menu.Name == "Void Single Bet"
+               || menu.Name == "Manage Request" || menu.Name == "Add Request" || menu.Name == "Upload Batch Message";
     }
 }

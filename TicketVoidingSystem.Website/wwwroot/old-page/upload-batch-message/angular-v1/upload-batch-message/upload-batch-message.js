@@ -22,7 +22,7 @@
 
         function getProducts() {
             $http.get("api/UploadBatchMessage/GetProducts").success(function (data) {
-                vm.products = data;
+                vm.products = data;    
             });
         }
 

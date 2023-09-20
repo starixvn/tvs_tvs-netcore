@@ -5,4 +5,5 @@ export class MenuName {
   static readonly VOID_SINGLE_BET = 'Void Single Bet';
   static readonly MANAGE_REQUEST = 'Manage Request';
   static readonly ADD_REQUEST = 'Add Request';
+  static readonly UPLOAD_BATCH_MESSAGE = 'Upload Batch Message';
 }
