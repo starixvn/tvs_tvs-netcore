@@ -15,6 +15,7 @@ using TicketVoidingSystem.TicketListing.Services.SendDataOic;
 using TicketVoidingSystem.Web;
 using TicketVoidingSystem.Web.JsonConverter;
 using TicketVoidingSystem.Website.Utilities;
+using TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 var builder = WebApplication.CreateBuilder(args);
 
