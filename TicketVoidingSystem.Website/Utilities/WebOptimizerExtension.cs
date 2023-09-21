@@ -10,7 +10,7 @@ public static class WebOptimizerExtension
     {
         services.AddWebOptimizer(pipeline =>
         {
-            pipeline.CompileLessFiles("/old-page/upload-batch-message/batch-message.less");
+            pipeline.CompileLessFiles("/old-page/**/*.less");
 
             var cssSetting = new CssSettings { OutputMode = NUglify.OutputMode.SingleLine, CommentMode = CssComment.None };
             var codeSetting = new CodeSettings { MinifyCode = true };
