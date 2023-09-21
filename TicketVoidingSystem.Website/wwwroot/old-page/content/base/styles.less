@@ -1,4 +1,4 @@
-﻿@import "bootstrap/bootstrap.less";
+﻿@import "../bootstrap/bootstrap.less";
 @import "colors.less";
 @import "mixins.less";
 
@@ -28,7 +28,7 @@
 }
 
 .header-user-info {
-	.clearfix();
+    .clearfix();
     min-width: 1688px;
 }
 
@@ -164,8 +164,6 @@ html {
 }
 
 body {
-    font-size: 13px !important;
-    line-height: 20px !important;
     min-width: 320px;
 }
 
@@ -225,17 +223,6 @@ p, ul, ol, dl {
     line-height: 16px;
 }
 
-.loader {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    padding-top: 300px;
-    display: none;
-}
-
 .submit {
     .btn-2D(@secondColor);
 }
@@ -253,7 +240,7 @@ header, #headline, #body, .filter-bar {
 }
 
 header {
-    //background: url('../../Content/base/img/bg-header.png') repeat-x;
+    // background: url('../../content/base/img/bg-header.png') repeat-x;
     background-color: @secondColor;
     border-top: 1px solid #FFFFFF;
     min-width: 1686px;
@@ -276,7 +263,7 @@ header {
                 position: relative;
 
                 a {
-                    color: @white !important;
+                    color: @white;
                 }
             }
 
@@ -303,9 +290,9 @@ header {
                         a {
                             float: left;
                             padding: 7px 14px;
-                            min-width: 210px;
+                            min-width: 180px;
                             white-space: nowrap;
-                            color: #1d4088 !important;
+                            color: #1d4088;
                             border: 1px solid #8e9fc3;
                             border-top: 0;
                             .transition(all .2s ease-in-out);
@@ -313,7 +300,7 @@ header {
                             &:hover {
                                 text-decoration: none;
                                 background-color: #8e9fc3;
-                                color: @white !important;
+                                color: @white;
                             }
                         }
                     }
@@ -325,7 +312,7 @@ header {
                         border-bottom: solid 1px transparent;
                         background: @white;
                         text-decoration: none;
-                        color: #1d4088 !important;
+                        color: #1d4088;
                     }
 
                     ul {
@@ -375,13 +362,13 @@ header {
     }
 
     .icon-avata {
-        background: url('../../Content/base/img/user.png') no-repeat !important;
+        background: url('../../content/base/img/user.png') no-repeat !important;
         margin-top: 2px;
         transform: scale(0.9);
     }
 
     .icon-avata-hover {
-        background: url('../../Content/base/img/user-hover.png') no-repeat !important;
+        background: url('../../content/base/img/user-hover.png') no-repeat !important;
         margin-top: 2px;
         transform: scale(0.9);
     }
@@ -395,25 +382,25 @@ header {
     }
 
     .icon-menu-down {
-        background: url('../../Content/base/img/arrow-up-down.png') no-repeat -1px -8px !important;
+        background: url('../../content/base/img/arrow-up-down.png') no-repeat -1px -8px !important;
         margin-top: 11px;
         transform: scale(1.2);
     }
 
     .icon-menu-up {
-        background: url('../../Content/base/img/arrow-up-down.png') no-repeat -1px -1px !important;
+        background: url('../../content/base/img/arrow-up-down.png') no-repeat -1px -1px !important;
         margin-top: 11px;
         transform: scale(1.2);
     }
 
     .icon-menu-down-hover {
-        background: url('../../Content/base/img/arrow-up-down-hover.png') no-repeat -1px -8px !important;
+        background: url('../../content/base/img/arrow-up-down-hover.png') no-repeat -1px -8px !important;
         margin-top: 11px;
         transform: scale(1.2);
     }
 
     .icon-menu-up-hover {
-        background: url('../../Content/base/img/arrow-up-down-hover.png') no-repeat !important;
+        background: url('../../content/base/img/arrow-up-down-hover.png') no-repeat !important;
         margin-top: 11px;
         transform: scale(1.2);
     }
@@ -434,11 +421,9 @@ header {
 
 .user-info-background {
     background-color: #555555;
-    margin-right: 0px !important;
-    margin-left: -2px !important;
 
     .logo {
-        background: url('../../Content/base/img/sprite.png') no-repeat;
+        background: url('../../content/base/img/sprite.png') no-repeat;
         border-right: 1px solid #404040;
         float: left;
         padding: 18px 75px 0;
@@ -462,10 +447,6 @@ header {
         &:hover {
             text-decoration: none;
         }
-    }
-
-    .dropdown-toggle::after {
-        display: none !important;
     }
 }
 
@@ -606,13 +587,13 @@ header {
             cursor: pointer;
 
             .icon-show-all-bettype {
-                background: url('../../Content/base/img/sprite.png') no-repeat -7px -142px !important;
+                background: url('../../content/base/img/sprite.png') no-repeat -7px -142px !important;
                 width: 18px !important;
                 margin-top: 3px;
             }
 
             .icon-hide-all-bettype {
-                background: url('../../Content/base/img/sprite.png') no-repeat -25px -142px !important;
+                background: url('../../content/base/img/sprite.png') no-repeat -25px -142px !important;
                 width: 18px !important;
                 margin-top: 3px;
             }
@@ -741,19 +722,65 @@ header {
 /********************************************************/
 
 .form {
+    label,
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
+    input[type="url"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="color"],
+    .uneditable-input {
+        float: left;
+    }
 
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
+    input[type="url"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="color"],
+    .uneditable-input {
+        .border-radius(0);
 
+        &:focus {
+            border-color: @linkColor;
+            .box-shadow(0 0 3px @linkColor);
+        }
+    }
+
+    label {
+        clear: left;
+        min-width: 140px;
+    }
 
     .submitMessage {
         float: left;
         clear: both;
-        background: url('../../Content/base/img/sprite.png') no-repeat -7px -86px;
+        background: url('../../content/base/img/sprite.png') no-repeat -7px -86px;
         padding: 6px 12px;
         color: #FFF;
         font-weight: bold;
 
         &:hover {
-            background: url('../../Content/base/img/sprite.png') no-repeat -85px -86px;
+            background: url('../../content/base/img/sprite.png') no-repeat -85px -86px;
             text-decoration: none;
             color: @white;
             font-weight: bold;
@@ -792,6 +819,28 @@ fieldset.form {
     color: red;
 }
 
+// ALERT //
+/*.alert {
+    position: fixed;
+    top: 300px;
+    left: 300px;
+    right: 300px;
+    .border-radius(0);
+    .box-shadow(0 0 5px @grayLight);
+    display: none;
+    z-index: 9999;
+    min-width: 620px;
+
+    .fail {
+        color: #AC1E25;
+        display: inline-block;
+        margin-bottom: 2px;
+
+        i {
+            margin-top: 3px;
+        }
+    }
+}*/
 
 .loading {
     width: 32px;
@@ -850,6 +899,10 @@ fieldset.form {
     .nbr;
     .nbb;
 }
+
+/*.alert {
+    text-shadow: none;
+}*/
 
 #fsMessage {
     width: 95% !important;
@@ -913,6 +966,12 @@ fieldset.form {
     float: left !important;
 }
 
+/*.alert-success {
+    background-color: #B1ED9A;
+    border-color: #575956;
+    color: #246625;
+}*/
+
 .componentCheckBoxAll {
     background-color: #FFFFFF;
     height: 45px;
@@ -927,7 +986,7 @@ fieldset.form {
     display: block;
     clear: left;
     float: left;
-    background: url('../../Content/base/img/checkBox.png') white no-repeat;
+    background: url('../../content/base/img/checkBox.png') white no-repeat;
     background-position: 0px -17px;
     cursor: pointer;
 }
@@ -945,11 +1004,11 @@ fieldset.form {
     cursor: pointer;
     margin-top: 12px;
     width: 10px;
-    background: url('../../Content/base/img/arrow-down.png') no-repeat center;
+    background: url('../../content/base/img/arrow-down.png') no-repeat center;
 }
 
 .iconChecked {
-    background: url('../../Content/base/img/ion-check.png') no-repeat right;
+    background: url('../../content/base/img/ion-check.png') no-repeat right;
 }
 
 .item-number {
@@ -973,7 +1032,7 @@ fieldset.form {
 }
 
 .icon-delete {
-    background: url('../../Content/base/img/icon-close.png') no-repeat right;
+    background: url('../../content/base/img/icon-close.png') no-repeat right;
     margin: 4px 2px 0 2px;
     float: right;
     cursor: pointer;
@@ -1009,19 +1068,19 @@ fieldset.form {
 }
 
 .icon-warning {
-    background: url('../../Content/base/img/sprite.png') no-repeat -45px -38px;
+    background: url('../../content/base/img/sprite.png') no-repeat -45px -38px;
     width: 18px !important;
     height: 18px !important;
 }
 
 .icon-scroll-up {
-    background: url('../../Content/base/img/sprite.png') no-repeat -95px -38px;
+    background: url('../../content/base/img/sprite.png') no-repeat -95px -38px;
     width: 18px !important;
     height: 18px !important;
 }
 
 .icon-scroll-down {
-    background: url('../../Content/base/img/sprite.png') no-repeat -110px -38px;
+    background: url('../../content/base/img/sprite.png') no-repeat -110px -38px;
     width: 18px !important;
     height: 18px !important;
 }
@@ -1029,7 +1088,7 @@ fieldset.form {
 .submitRecover {
     float: left;
     clear: both;
-    background: url('../../Content/base/img/sprite.png') no-repeat -7px -89px;
+    background: url('../../content/base/img/sprite.png') no-repeat -7px -89px;
     padding: 6px 14px;
     margin-top: 10px;
     margin-left: 20px;
@@ -1038,7 +1097,7 @@ fieldset.form {
     border: 0px;
 
     &:hover {
-        background: url('../../Content/base/img/sprite.png') no-repeat -85px -89px;
+        background: url('../../content/base/img/sprite.png') no-repeat -85px -89px;
         text-decoration: none;
         color: @white;
         font-weight: bold;
@@ -1056,14 +1115,14 @@ fieldset.form {
 .submitRecover {
     float: left;
     clear: both;
-    background: url('../../../Content/base/img/sprite.png') no-repeat -7px -89px;
+    background: url('../../../content/base/img/sprite.png') no-repeat -7px -89px;
     padding: 6px 14px;
     color: #FFF;
     font-weight: bold;
     border: 0px;
 
     &:hover {
-        background: url('../../../Content/base/img/sprite.png') no-repeat -85px -89px;
+        background: url('../../../content/base/img/sprite.png') no-repeat -85px -89px;
         text-decoration: none;
         color: @white;
         font-weight: bold;
@@ -1078,10 +1137,20 @@ fieldset.form {
     margin-top: 5px;
 }
 
+.plain-msg-fail {
+	font-weight:bolder;
+	margin-top: 5px;
+}
+
 .msg-success {
     border: 1px solid #6a8f5c;
     background-color: #e5f7df;
     margin-top: 5px;
+}
+
+.plain-msg-success {
+	font-weight:bolder;
+	margin-top: 5px;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -1093,14 +1162,14 @@ fieldset.form {
 }
 
 .icon-warning-sign {
-    background: url('../../Content/base/img/sprite.png') no-repeat -25px -122px !important;
+    background: url('../../content/base/img/sprite.png') no-repeat -25px -122px !important;
     width: 18px !important;
     float: left;
     margin-left: 5px;
 }
 
 .icon-ok {
-    background: url('../../Content/base/img/sprite.png') no-repeat -7px -122px !important;
+    background: url('../../content/base/img/sprite.png') no-repeat -7px -122px !important;
     width: 18px !important;
     float: left;
     margin-left: 5px;
@@ -1121,14 +1190,14 @@ fieldset.form {
 .submitRecover {
     float: left;
     clear: both;
-    background: url('../../Content/base/img/sprite.png') no-repeat -7px -89px;
+    background: url('../../content/base/img/sprite.png') no-repeat -7px -89px;
     padding: 6px 14px;
     color: #FFF;
     font-weight: bold;
     border: 0px;
 
     &:hover {
-        background: url('../../Content/base/img/sprite.png') no-repeat -85px -89px;
+        background: url('../../content/base/img/sprite.png') no-repeat -85px -89px;
         text-decoration: none;
         color: @white;
         font-weight: bold;
@@ -1236,14 +1305,4 @@ fieldset.form {
             float: right;
         }
     }
-}
-
-.confirm-auto-unmark-content {
-    color: #004085;
-    background-color: #cce5ff;
-    padding: .75rem 1.25rem;
-    border: 1px solid transparent;
-    border-radius: .25rem;
-    font-weight:700;
-    margin-bottom: 10px;
 }
