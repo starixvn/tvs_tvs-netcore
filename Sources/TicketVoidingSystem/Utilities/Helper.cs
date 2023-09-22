@@ -9,7 +9,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Fanex.NAP.Client.Models;
-using Microsoft.AspNetCore.Mvc;
+using Force.DeepCloner;
+using Microsoft.AspNetCore.Http;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
@@ -180,19 +181,36 @@ public static class Helper
         return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports);
     }
 
-    public static string GetMenuPath(MenuItem menu, IUrlHelper urlHelper)
+    public static IEnumerable<MenuItem> UpdateNapMenuItem(IEnumerable<MenuItem> menuItemList, IHttpContextAccessor httpContextAccessor)
     {
+        var menuItemsClone = menuItemList.DeepClone();
+        foreach (var item in menuItemsClone)
+        {
+            item.Url = GetMenuPath(item, httpContextAccessor);
+        }
+
+        return menuItemsClone;
+    }
+
+    private static string GetMenuPath(MenuItem menu, IHttpContextAccessor httpContextAccessor)
+    {
+        if (string.IsNullOrWhiteSpace(menu.Url))
+        {
+            return string.Empty;
+        }
+
         if (IsMenuOfNewPage(menu))
         {
-            return urlHelper.Content("~") + menu.Url;
+            return $"{httpContextAccessor.HttpContext.Request.PathBase}{menu.Url}";
         }
 
         if (AppSettingService.AppSetting.OldSiteRootUrl.StartsWith("/"))
         {
-            return urlHelper.Content($"~{AppSettingService.AppSetting.OldSiteRootUrl}") + menu.Url[1..];
+            var oldSiteAbsolutePath = $"https://{httpContextAccessor.HttpContext.Request.Host}{AppSettingService.AppSetting.OldSiteRootUrl}";
+            return $"{oldSiteAbsolutePath}{menu.Url[1..]}";
         }
 
-        return AppSettingService.AppSetting.OldSiteRootUrl + menu.Url[1..];
+        return $"{AppSettingService.AppSetting.OldSiteRootUrl}{menu.Url[1..]}";
     }
 
     private static bool IsMenuOfNewPage(MenuItem menu)

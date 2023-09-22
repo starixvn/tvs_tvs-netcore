@@ -2,6 +2,7 @@
 using Fanex.NAP.Client.Session;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Website.ViewComponents;
 
@@ -17,8 +18,8 @@ public class Menu : ViewComponent
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var session = new NapSession(httpContextAccessor);
+        var menuItems = Helper.UpdateNapMenuItem(session.MenuItemList, httpContextAccessor);
 
-        return await Task.FromResult<IViewComponentResult>(View(session.MenuItemList));
+        return await Task.FromResult<IViewComponentResult>(View(menuItems));
     }
-
 }
