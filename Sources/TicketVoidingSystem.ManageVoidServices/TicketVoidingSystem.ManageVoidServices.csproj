@@ -13,7 +13,7 @@
     <NoWarn>1701;1702;8669;8618;8632</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
+    <PackageReference Include="Fanex.Data.Repository" Version="4.2.3" />
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 

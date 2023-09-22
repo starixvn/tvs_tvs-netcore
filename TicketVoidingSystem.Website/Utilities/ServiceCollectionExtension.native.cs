@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
 using Fanex.Caching.Redis;
-using Fanex.Data;
 using Fanex.Data.Repository;
-using Fanex.Data.SqlServer;
 using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
@@ -61,24 +58,6 @@ public static class ServiceCollectionExtension
     public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
     {
         AppSettingService.InitSetting(configuration);
-    }
-
-    public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connections = configuration.GetSection("ConnectionStrings")
-            .GetChildren()
-            .AsEnumerable()
-            .ToDictionary(
-                x => x.Key,
-                y => new ConnectionConfiguration(y.Key, y.Value)
-            );
-
-        DbSettingProviderManager
-            .StartNewSession()
-            .Use(connections)
-            .WithSqlServer()
-            .UseDefaultDbSettingProvider(configuration.GetSection("StoredProcedurePath").Value)
-            .Run();
     }
 
     public static void RegisterSentry(this IServiceCollection services)

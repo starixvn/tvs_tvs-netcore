@@ -227,14 +227,14 @@
     <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.3" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.2" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0.2" />
-    <PackageReference Include="Fanex.Data" Version="4.2.2" />
-    <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
+    <PackageReference Include="Fanex.Data" Version="4.2.3" />
+    <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.3" />
     <PackageReference Include="Fanex.LetstalkService.Client" Version="1.0.0.19" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1" />
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.0.1-beta1" />
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="1.0.1" />
-    <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.10" />
+    <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.13" />
     <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.16" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.391" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.11" />
@@ -242,8 +242,8 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ONEbook.UM" Version="3.1.6" />
-    <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.0" />
-    <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.1" />
+    <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.1.1" />
+    <PackageReference Include="ONEbook.UM.AspNetCore.Filters" Version="3.1.1.1" />
     <PackageReference Include="ONEbook.UM.Transport" Version="3.1.2" />
     <PackageReference Include="codeessentials.WebOptimizer.Dotless" Version="3.1.0" />
   </ItemGroup>

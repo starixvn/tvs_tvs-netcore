@@ -1,3 +1,4 @@
+using Fanex.Data.SqlServer;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
@@ -27,7 +28,7 @@ builder.Services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpCl
 builder.Services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
 builder.Services.AddHttpClient<TicketVoidingSystemHttpClientService, TicketVoidingSystemHttpClientServiceImp>();
 builder.Services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
-builder.Services.RegisterFanexData(builder.Configuration);
+builder.Services.AddFanexSql(builder.Configuration);
 builder.Services.RegisterFanexExceptionHandler();
 builder.Services.RegisterSentry();
 builder.Services.RegisterOneBookUM(builder.Configuration);
