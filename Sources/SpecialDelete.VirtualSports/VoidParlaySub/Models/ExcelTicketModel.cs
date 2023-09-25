@@ -1,6 +1,6 @@
-﻿namespace SpecialDelete.VirtualSports.VoidParlaySub.Models;
+﻿using Epplus.Mapper.Annotations;
 
-using Epplus.Mapper.Annotations;
+namespace SpecialDelete.VirtualSports.VoidParlaySub.Models;
 
 public class ExcelTicketModel
 {

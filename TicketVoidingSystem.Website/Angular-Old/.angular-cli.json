@@ -6,14 +6,14 @@
   "apps": [
     {
       "assets": [],
-      "deployUrl": "",
+      "deployUrl": "dist/old-page/void-parlay-sub-virtual-sports/",
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       },
       "environmentSource": "environments/environment.ts",
-      "index": "index.html",
-      "outDir": "../wwwwroot/dist/old-page/void-parlay-sub-virtual-sports",
+      "index": "index.cshtml",
+      "outDir": "../wwwroot/dist/old-page/void-parlay-sub-virtual-sports",
       "main": "main.ts",
       "polyfills": "../polyfills.ts",
       "prefix": "",

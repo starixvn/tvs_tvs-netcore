@@ -8,24 +8,16 @@ using TicketVoidingSystem.Web;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Controllers;
 
+[ApiController]
 [Route("api/VirtualSports/[controller]/[action]")]
-public class VoidParlaySubController : ControllerBase
+public class VoidParlaySubBetController : ControllerBase
 {
     private readonly IMediator mediator;
 
-    public VoidParlaySubController(IMediator mediator)
+    public VoidParlaySubBetController(IMediator mediator)
     {
         this.mediator = mediator;
     }
-
-    //[NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidParlaySubBet, Policy = Constant.Policy.Read)]
-    //public async Task<ActionResult> Index()
-    //{
-    //    var viewModel = await mediator.Send(new IndexRequest()).ConfigureAwait(false);
-    //    viewModel.Root = Url.Content("~");
-
-    //    return View("~/dist/void-parlay-sub-virtual-sports/index.cshtml", viewModel);
-    //}
 
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidParlaySubBet, Policy = Constant.Policy.Read)]

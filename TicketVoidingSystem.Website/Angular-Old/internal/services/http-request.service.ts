@@ -1,8 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Response, ResponseContentType } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { Headers, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions, Response, ResponseContentType } from '@angular/http';
 import * as FileSaver from 'file-saver';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 import { BlockUIService } from '../../external/services/block-ui.service';
@@ -16,7 +15,6 @@ export class HttpRequestService {
 
     public postJson<T>(object: any, url: string): Observable<T> {
         this.blockUIService.blockUIEvent.emit(true);
-
         const body = JSON.stringify(object);
         const headers = new Headers({ 'Content-Type': 'application/json' });
         const options = new RequestOptions({ headers: headers });

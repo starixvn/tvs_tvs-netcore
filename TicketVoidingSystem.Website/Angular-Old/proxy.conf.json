@@ -1,13 +1,20 @@
 ﻿{
   "/api": {
     "target": "https://localhost:44312/",
-    "secure": false
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "ws": true
   },
   "/state-api":{
     "target": "https://localhost:44312/",
     "secure": false
   },
   "/old-page":{
+    "target": "https://localhost:44312/",
+    "secure": false
+  },
+  "/js":{
     "target": "https://localhost:44312/",
     "secure": false
   }

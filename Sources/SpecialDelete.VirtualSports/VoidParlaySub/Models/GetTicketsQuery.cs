@@ -1,7 +1,5 @@
 ﻿namespace SpecialDelete.VirtualSports.VoidParlaySub.Models;
 
-using System;
-
 public class GetTicketsQuery
 {
     public int MatchId { get; set; }

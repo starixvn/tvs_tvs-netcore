@@ -228,7 +228,7 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidRequestController).Assembly));
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UploadBatchMessageController).Assembly));
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidParlaySubController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidParlaySubBetController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)

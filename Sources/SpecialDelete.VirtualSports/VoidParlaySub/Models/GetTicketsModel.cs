@@ -1,7 +1,6 @@
-﻿namespace SpecialDelete.VirtualSports.VoidParlaySub.Models;
+﻿using SpecialDelete.VirtualSports.Common.Models;
 
-using System.Collections.Generic;
-using Common.Models;
+namespace SpecialDelete.VirtualSports.VoidParlaySub.Models;
 
 public class GetTicketsModel
 {

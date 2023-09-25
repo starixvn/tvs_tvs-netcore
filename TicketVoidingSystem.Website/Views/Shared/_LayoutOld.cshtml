@@ -22,21 +22,26 @@
         }
         else
         {
-            <link href="~/content/base/styles.less" rel="stylesheet" type="text/css" />
+            <link href="~/old-page/bundle/angular-old-styles.css" rel="stylesheet" type="text/css" />
         }
         <script type="text/javascript">
         window.rootUrl = '@Url.Content("~/")';
         </script>
     </head>
-<body user-name="@userName" origin-url="@Url.Content("~/")">
+<body user-name="@userName" root-url="@Url.Content("~/")">
         @await Component.InvokeAsync(nameof(LogOut), new { userName })
 
         <header>
             @await Component.InvokeAsync(nameof(Menu))
         </header>
-        <section id="headline">
-            @await RenderSectionAsync("Headline", false)
-        </section>
+
+        @if (IsSectionDefined("Headline"))
+        {
+            <section id="headline">
+                @await RenderSectionAsync("Headline", false)
+            </section>
+        }
+
         <section id="body" user-name="@userName" user-id="@userId">
             @RenderBody()
         </section>
@@ -52,8 +57,6 @@
 
         <script src="~/old-page/bundle/script-libs.js"></script>
         @await RenderSectionAsync("Scripts", false)
-        @* <script src="~/js/sub-parlay-ticket.js"></script> *@
-
         <script src="~/nap-auth/re-checkin.js"></script>
 
     </body>
