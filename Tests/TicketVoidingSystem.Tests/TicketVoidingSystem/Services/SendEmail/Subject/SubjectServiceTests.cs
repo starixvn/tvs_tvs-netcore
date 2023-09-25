@@ -8,12 +8,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Subje
 
 public class SubjectServiceTests
 {
-    private readonly SubjectServiceImp service;
-
-    public SubjectServiceTests()
-    {
-        service = new SubjectServiceImp();
-    }
+    private readonly SubjectServiceImp service = new();
 
     [Theory]
     [InlineData(EmailGroup.Csd, "Voided Cash Out Transaction Report for 2 (02/02/2022 02:02:02)")]

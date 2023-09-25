@@ -11,14 +11,9 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
 {
 	public class CellServiceTests
 	{
-		private readonly CellServiceImp cellService;
+		private readonly CellServiceImp cellService = new();
 
-		public CellServiceTests()
-		{
-			cellService = new CellServiceImp();
-		}
-
-		[Fact]
+        [Fact]
 		public void AddMatch_ShouldSetMatchInfoInWorksheetCells()
 		{
 			// Arrange

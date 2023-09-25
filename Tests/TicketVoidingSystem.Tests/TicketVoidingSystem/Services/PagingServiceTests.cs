@@ -8,12 +8,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services;
 
 public class PagingServiceTests
 {
-    private readonly PagingServiceImp service;
-
-    public PagingServiceTests()
-    {
-        service = new PagingServiceImp();
-    }
+    private readonly PagingServiceImp service = new();
 
     [Fact]
     public void Paging_HasValidData_ReturnExpected()

@@ -7,12 +7,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendMessage;
 
 public class MessageItemServiceTests
 {
-    private readonly MessageItemServiceImp service;
-
-    public MessageItemServiceTests()
-    {
-        service = new MessageItemServiceImp();
-    }
+    private readonly MessageItemServiceImp service = new();
 
     [Fact]
     public void InsertMessage_ValidData_CacheServiceCalledContainAsync()

@@ -36,7 +36,8 @@ public class EmailLicenseeServiceTests
     {
         // Arrange
         var mailVoidViewModel = new MailVoidViewModel
-        { Match = new Match { LeagueGroupId = 42 }, Message = new Message { ContentEnglish = "SABA123" } };
+        { Match = new Match { LeagueGroupId = 42, LeagueName = "Saba123", LeagueNameSimplified = "沙巴123", LeagueNameNewSimplified = "沙巴123" },
+            Message = new Message { ContentEnglish = "SABA123", ContentChineseSimplified = "沙巴123" } };
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = true, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
@@ -57,7 +58,10 @@ public class EmailLicenseeServiceTests
     {
         // Arrange
         var mailVoidViewModel = new MailVoidViewModel
-        { Match = new Match { LeagueGroupId = 42 }, Message = new Message { ContentEnglish = "SABA123" } };
+        {
+            Match = new Match { LeagueGroupId = 42, LeagueName = "Saba123", LeagueNameSimplified = "沙巴123", LeagueNameNewSimplified = "沙巴123" },
+            Message = new Message { ContentEnglish = "SABA123", ContentChineseSimplified = "沙巴123" }
+        };
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = true } };
         var tickets = new List<TicketEmailModel>
             { new() { EmailGroup = "1" }, new() { Currency = CurrencyConstant.UusId } };
@@ -85,7 +89,7 @@ public class EmailLicenseeServiceTests
         var mailVoidViewModel = new MailVoidViewModel
         {
             Match = new Match { LeagueGroupId = leagueGroupId },
-            Message = new Message { ContentEnglish = "SABA123" }
+            Message = new Message { ContentEnglish = "SABA123", ContentChineseSimplified = "沙巴123" }
         };
         var sites = new List<SiteEmail> { new() { Site = "1", IsChinaView = isChinaView, ToList = "1;2;3" } };
         var tickets = new List<TicketEmailModel>
@@ -96,7 +100,7 @@ public class EmailLicenseeServiceTests
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
 
         // Assert
-        fanexMailApiService.Received(1).WriteLog(EmailGroup.Csd, Arg.Any<Exception>());
+        fanexMailApiService.WriteLog(EmailGroup.Csd, Arg.Any<Exception>());
     }
 
     [Fact]

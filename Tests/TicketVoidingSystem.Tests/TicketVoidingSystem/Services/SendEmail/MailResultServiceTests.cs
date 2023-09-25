@@ -10,12 +10,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 
 public class MailResultServiceTests
 {
-    private readonly MailResultServiceImp service;
-
-    public MailResultServiceTests()
-    {
-        service = new MailResultServiceImp();
-    }
+    private readonly MailResultServiceImp service = new();
 
     [Theory]
     [InlineData(true, ErrorCode.SendEmailToLicenseeSuccess)]

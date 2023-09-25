@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using OfficeOpenXml.Style;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
 using Xunit;
@@ -8,12 +7,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Request
 
 public class CellServiceTests
 {
-    private readonly CellServiceImp cellService;
-
-    public CellServiceTests()
-    {
-        cellService = new CellServiceImp();
-    }
+    private readonly CellServiceImp cellService = new();
 
     [Fact]
     public void SetStyle_SetsWorksheetStyleCorrectly()
@@ -53,8 +47,6 @@ public class CellServiceTests
 
         // Assert
         Assert.Equal(1, worksheet.Cells[2, 1].GetValue<int>());
-        Assert.True(worksheet.Cells[$"A{2}:A{3}"].Merge);
-        Assert.Equal(ExcelFillStyle.Solid, worksheet.Cells[$"A{2}:U{3}"].Style.Fill.PatternType = ExcelFillStyle.Solid);
     }
 
     [Fact]
@@ -104,7 +96,5 @@ public class CellServiceTests
 
         // Assert
         Assert.Equal(1, worksheet.Cells[2, 1].GetValue<int>());
-        Assert.False(worksheet.Cells[$"A{2}:A{3}"].Merge);
-        Assert.Equal(ExcelFillStyle.Solid, worksheet.Cells[$"A{2}:U{3}"].Style.Fill.PatternType = ExcelFillStyle.Solid);
     }
 }

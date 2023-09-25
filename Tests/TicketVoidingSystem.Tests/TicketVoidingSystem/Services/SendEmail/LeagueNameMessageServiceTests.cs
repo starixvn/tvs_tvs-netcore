@@ -30,16 +30,22 @@ public class LeagueNameMessageServiceTests
     public Task ReplaceMessageChinaViewLicensee_ReplaceExpected()
     {
         // Arrange
-        var message = new Message { ContentEnglish = "123321" };
+        var message = new Message { ContentEnglish = "123321", ContentChineseSimplified = "123321" };
         var site = new SiteEmail { IsChinaView = true };
+        var match = new Match
+        {
+            LeagueGroupId = 42, LeagueName = "Saba123", LeagueNameSimplified = "沙巴123",
+            LeagueNameNewSimplified = "沙巴123"
+        };
 
         var service = new LeagueNameMessageServiceImp();
 
         // Act
-        service.RemoveSabaOfLeagueName(new Match { LeagueGroupId = 42 }, message, site);
+        service.RemoveSabaOfLeagueName(match, message, site);
 
         // Assert
         Assert.Equal("123321", message.ContentEnglish);
+        Assert.Equal("123321", message.ContentChineseSimplified);
         return Task.CompletedTask;
     }
 }
