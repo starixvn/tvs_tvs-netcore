@@ -1,0 +1,386 @@
+﻿$width1: 50px;
+$width2: 30px;
+$width3: 130px;
+$width4: 140px;
+$width5: 140px;
+$width6: 70px;
+$width7: 60px;
+$width8: 70px;
+$width9: 70px;
+
+@mixin setIconCheckBox() {
+    width: 20px;
+    height: 18px;
+    margin: 0 auto;
+    display: block;
+    background: url(images/checkBox.png) white no-repeat;
+    cursor: pointer;
+}
+
+@mixin setTable() {
+    border-spacing: 0;
+    font-size: 0.9em;
+    width: 100%;
+    text-align: center;
+}
+
+@mixin setCellTable() {
+    padding: 2px;
+
+    > div {
+        width: 100%;
+    }
+}
+
+@mixin setRow1() {
+    width: $width1;
+    @include setCellTable();
+}
+
+@mixin setRow2() {
+    width: $width2;
+    @include setCellTable();
+}
+
+@mixin setRow3() {
+    width: $width3;
+    @include setCellTable();
+}
+
+@mixin setRow4() {
+    width: $width4;
+    @include setCellTable();
+}
+
+@mixin setRow5() {
+    width: $width5;
+    @include setCellTable();
+}
+
+@mixin setRow6() {
+    width: $width6;
+    @include setCellTable();
+}
+
+@mixin setRow7() {
+    width: $width7;
+    @include setCellTable();
+}
+
+@mixin setRow8() {
+    width: $width8;
+    @include setCellTable();
+}
+
+@mixin setRow9() {
+    width: $width9;
+    @include setCellTable();
+}
+
+@mixin setRow10() {
+    padding: 2px;
+}
+
+.tickets {
+    margin: 10px;
+    width: 1249px;
+    border-left: solid 1px #c5c5c5;
+
+    .icon-checkbox-none {
+        @include setIconCheckBox();
+        background-position: 0px -17px;
+    }
+
+    .icon-checkbox-any {
+        @include setIconCheckBox();
+        background-position: 0px -34px;
+    }
+
+    .icon-checkbox-all {
+        @include setIconCheckBox();
+        background-position: 0px 0px;
+    }
+
+    .li-checked {
+        background: url(images/icon-check.png) no-repeat right;
+    }
+
+    .icon-arrow-white-down {
+        float: right;
+        cursor: pointer;
+        margin-top: -12px;
+        width: 10px;
+        height: 5px;
+        background: url(images/arrow-down.png) no-repeat center;
+    }
+
+    .grid-title {
+        background: #555555;
+        background: -moz-linear-gradient(#555555, #555555);
+        border: solid 1px #989998;
+        height: 25px;
+        margin-bottom: 3px;
+        vertical-align: middle;
+        display: flex;
+        justify-content: space-between;
+
+        &-label {
+            color: #FFFFFF;
+            font-size: 0.9em;
+            font-weight: bold;
+            height: 18px;
+            padding-left: 4px;
+            padding-top: 5px;
+        }
+
+        &-toolbox {
+            padding-right: 2px;
+            padding-top: 3px;
+
+            &-excel {
+                background: url("images/excel-icon.png") 0px -26px no-repeat;
+                border: 0 solid red;
+                cursor: pointer;
+                font-size: 11px;
+                height: 17px;
+                margin: 0 2px;
+                overflow: visible;
+                padding-left: 6px;
+                padding-right: 6px;
+                width: 18px;
+
+                &:hover {
+                    background: url("images/excel-icon.png") 0px 0px no-repeat;
+                }
+            }
+
+            &:hover {
+                -moz-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
+                -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
+                box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.25);
+            }
+        }
+    }
+
+    .ticket-header {
+        table {
+            @include setTable();
+
+            tr {
+                th {
+                    background: #4e71bb;
+                    background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+                    background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+                    color: #fff;
+                    border: solid #c5c5c5;
+                    border-width: 0 1px 1px 0;
+                    padding: 10px 2px !important;
+                }
+
+                th:nth-child(1) {
+                    background: white;
+                    width: 46px;
+                    border: solid 2px #4e71bb;
+                }
+
+                th:nth-child(2) {
+                    border-left-width: 1px;
+                    @include setRow2();
+                }
+
+                th:nth-child(3) {
+                    @include setRow3();
+                }
+
+                th:nth-child(4) {
+                    @include setRow4();
+                }
+
+                th:nth-child(5) {
+                    @include setRow5();
+                }
+
+                th:nth-child(6) {
+                    @include setRow6();
+                }
+
+                th:nth-child(7) {
+                    @include setRow7();
+                }
+
+                th:nth-child(8) {
+                    @include setRow8();
+                }
+
+                th:nth-child(9) {
+                    @include setRow9();
+                }
+
+                th:nth-child(10) {
+                    @include setRow10();
+                }
+            }
+        }
+    }
+
+    .ticket-content {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        table {
+            @include setTable();
+
+            tbody {
+                tr:nth-child(odd) {
+                    td {
+                        background: #dde2ed;
+                    }
+                }
+
+                tr:hover {
+                    td {
+                        background-color: #aebad4;
+                    }
+                }
+            }
+
+            tr {
+                .group-ticket {
+                    text-align: left;
+                    font-weight: bold;
+                    cursor: pointer;
+
+                    .icon-down {
+                        width: 0;
+                        height: 0;
+                        display: inline-block;
+                        vertical-align: middle;
+                        border-top: 4px dashed;
+                        border-right: 4px solid transparent;
+                        border-left: 4px solid transparent;
+                    }
+
+                    .icon-right {
+                        width: 0;
+                        height: 0;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin: 0 2px;
+                        border-left: 4px dashed;
+                        border-top: 4px solid transparent;
+                        border-bottom: 4px solid transparent;
+                    }
+                }
+
+                .no-data {
+                    background: #fff !important;
+                    color: red;
+                    font-weight: bold;
+                }
+
+                td {
+                    background-color: #fff;
+                    border-color: #888888;
+                    border-style: solid;
+                    border-width: 0 1px 1px 0;
+                    line-height: 18px;
+                    overflow: hidden;
+                    white-space: normal;
+                }
+
+                td:nth-child(1) {
+                    @include setRow1();
+                }
+
+                td:nth-child(2) {
+                    @include setRow2();
+                }
+
+                td:nth-child(3) {
+                    @include setRow3();
+                }
+
+                td:nth-child(4) {
+                    @include setRow4();
+                }
+
+                td:nth-child(5) {
+                    @include setRow5();
+                }
+
+                td:nth-child(6) {
+                    @include setRow6();
+                    text-align: right;
+                }
+
+                td:nth-child(7) {
+                    @include setRow7();
+                    text-align: right;
+                }
+
+                td:nth-child(8) {
+                    @include setRow8();
+                    text-align: right;
+                }
+
+                td:nth-child(9) {
+                    @include setRow9();
+                }
+
+                td:nth-child(10) {
+                    @include setRow10();
+                    text-align: right;
+                }
+            }
+        }
+
+        input[type=checkbox] {
+            margin: 0px;
+            cursor: pointer;
+        }
+
+        input[type=checkbox][disabled] {
+            cursor: not-allowed;
+        }
+
+        .display-none {
+            display: none;
+        }
+    }
+
+    .list-check-groups {
+        ul {
+            z-index: 3;
+            -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            background: #FFF;
+            border: 1px solid #DDD;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            color: #000;
+            display: inline-block;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            list-style-type: none;
+            margin: 0;
+            max-width: 250px;
+            min-width: 80px;
+            padding: 0;
+            position: absolute;
+
+            li {
+                -moz-user-select: -moz-none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
+                background-color: #FFF;
+                padding: 2px 35px 2px 5px;
+                position: relative;
+
+                &:hover {
+                    background-color: #F0F0F0;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

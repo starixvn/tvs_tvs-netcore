@@ -1,0 +1,43 @@
+﻿.messages {
+    margin: 0 10px;
+
+    legend {
+        font-weight: bold;
+    }
+
+    table {
+        width: 100%;
+        font-size: 8pt;
+        border-spacing: 1px;
+        background-color: white;
+        text-align: center;
+        font-weight: bold;
+
+        tr {
+            th {
+                background-color: #4e71bb;
+                color: white;
+            }
+
+            td {
+                textarea {
+                    min-height: 110px;
+                    width: 100%;
+                    padding: 0px;
+                    margin: 0px;
+                    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+                    resize: vertical;
+                }
+            }
+        }
+
+        .header-language {
+            background-color: #cccccc;
+        }
+
+        .header-other-language {
+            color: #ffcc00;
+            cursor: pointer;
+        }
+    }
+}

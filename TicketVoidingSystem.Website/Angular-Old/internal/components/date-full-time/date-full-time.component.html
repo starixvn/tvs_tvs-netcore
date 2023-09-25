@@ -1,0 +1,23 @@
+<div class="date-full-time from-date-time">
+  <form>
+    <date-picker
+      class="date-input"
+      [showClearButton]="false"
+      format="YYYY/MM/DD"
+      [(ngModel)]="date"
+      [disabled]="isDisabled"
+      (ngModelChange)="changeModel()"
+      name="date">
+    </date-picker>
+  </form>
+  <div class="time-filter">
+      <input type="text" class="form-control form-control-sm time-input{{index}}"
+          [(ngModel)]="time" placeholder="HH:mm:ss.SSS AM/PM"
+          (ngModelChange)="changeModel();onChangeTime($event)"
+          [disabled]="isDisabled"
+          (paste)="onPasteTime()"
+          (blur)="validateWithTooltip()"
+      />
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

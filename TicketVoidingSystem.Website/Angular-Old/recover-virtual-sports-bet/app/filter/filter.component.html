@@ -1,0 +1,48 @@
+﻿<div class="filter">
+    <div class="line-1 display-flex">
+        <div class="left">
+            Ticket Type
+        </div>
+        <div class="display-flex">
+            <select class="ticket-type" [(ngModel)]="ticketType" (change)="changedTicketType()">
+                <option *ngFor="let item of ticketsType" [ngValue]="item">{{item}}</option>
+            </select>
+            <div class="type display-flex" *ngIf="ticketType === 'Mix Parlay'">
+                Type
+                <label *ngFor="let item of types">
+                    <input type="radio" name="type-mixparlay"
+                           [attr.value]="item"
+                           (change)="changedType(item)"
+                           [checked]="item === 'Sub'" />
+                    {{item}}
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="line-2 display-flex" *ngIf="ticketType === 'Mix Parlay' && type === 'Sub'">
+        <div class="left">
+            MatchID
+        </div>
+        <div class="match">
+            <input maxlength="10" class="match-id" type="text" only-number [(ngModel)]="matchId" (blur)="blurMatchId()" />
+            <span class="red" *ngIf="!isSuccessMatch">(&#10041;)</span>
+            <span class="green" *ngIf="isSuccessMatch">(&#10004;)</span>
+        </div>
+    </div>
+
+    <div class="line-3 display-flex">
+        <div class="left">
+            BetID(s)
+        </div>
+        <div class="right">
+            <input-betids #betIds></input-betids>
+            <span class="invalid-betid"></span>
+        </div>
+    </div>
+
+    <div class="search">
+        <input type="button" class="submit" value="Search" (click)="searchTicket()" />
+    </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

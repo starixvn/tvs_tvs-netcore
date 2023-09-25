@@ -1,0 +1,347 @@
+﻿@mixin select-style {
+    width: 100%;
+    margin-bottom: 0px;
+    padding: 1px 2px;
+    height: 22px;
+    border-radius: 0;
+}
+
+.advanced-mode {
+    margin-bottom: 10px;
+
+    .fieldset-collapse {
+        height: 0px;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+    }
+
+    fieldset {
+        legend {
+            font-style: italic;
+            cursor: pointer;
+        }
+
+        .all-bet-types {
+            padding: 2px 0 2px 5px;
+            margin-bottom: 10px;
+        }
+
+        .float-right {
+            float: right;
+        }
+
+        /deep/ div.multiple-selection {
+            button {
+                width: 100%;
+                margin-bottom: 0px;
+                padding: 1px 2px;
+                height: 22px;
+                border-radius: 0;
+            }
+        }
+
+        .bet-team {
+            padding: 2px 0 2px 5px;
+            border-bottom: 1px solid #c8c8c8;
+
+            select {
+                border: 1px solid #767676 !important;
+            }
+
+            .left {
+                margin-right: 10px;
+            }
+
+            &-1 {
+                display: flex;
+                justify-content: space-between;
+
+                input[type=text] {
+                    border: 1px solid #767676;
+                }
+
+                .right {
+                    display: flex;
+                    justify-content: flex-start;
+                    min-width: 608px;
+
+                    .input-area {
+                        display: contents;
+                    }
+
+                    >div {
+                        margin-right: 10px;
+                        width: 158px;
+
+                        .right-selection {
+                            display: flex;
+
+                            span {
+                                margin-right: 5px;
+                                width: 70px;
+                            }
+
+                            select {
+                                @include select-style;
+                            }
+                        }
+                    }
+
+                    &-input {
+                        display: flex;
+                        justify-content: space-between;
+
+                        input {
+                            width: 50px;
+                            margin-bottom: 0px;
+                            margin-left: 5px;
+                            height: 16px;
+                            padding: 1px 2px;
+                            border-radius: 0;
+                        }
+                    }
+                }
+            }
+
+            &-2 {
+                label {
+                    input[type="checkbox"] {
+                        margin-top: -3px;
+                    }
+                }
+
+                .flex-start {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    >div {
+                        display: flex;
+                    }
+
+                    >label {
+                        margin: 0px;
+                    }
+
+                    span {
+                        margin: 0 5px 0 10px;
+                    }
+
+                    select {
+                        @include select-style;
+                    }
+                }
+
+                table {
+                    border-collapse: collapse;
+                    border: 1px solid #7c98a4;
+
+                    td {
+                        border: 1px solid #7c98a4;
+
+                        label {
+                            margin: 0 5px;
+                        }
+                    }
+                }
+            }
+
+            &-3 {
+                display: flex;
+                justify-content: space-between;
+
+                label {
+                    margin-bottom: 0px;
+                    margin-right: 5px;
+
+                    input[type="checkbox"] {
+                        margin-top: -3px;
+                    }
+                }
+
+                .bet-team-checkbox {
+                    display: flex;
+
+                    .left {
+                        min-width: 200px;
+                    }
+
+                    .right {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        .bet-team-item {
+                            min-width: 120px;
+                        }
+                    }
+
+                    input[type="text"] {
+                        width: 100px;
+                        height: 20px;
+                        padding: 0px;
+                        margin-bottom: 0px;
+                    }
+                }
+            }
+
+            &-4 {
+                display: flex;
+                flex-wrap: wrap;
+
+                .left {
+                    margin-right: 10px;
+                }
+            }
+
+            &-5 {
+                display: flex;
+
+                .right {
+                    display: flex;
+                    justify-content: flex-start;
+
+                    span {
+                        margin-left: 20px;
+                    }
+
+                    select {
+                        width: 70px;
+                        margin-bottom: 0px;
+                        padding: 1px 2px;
+                        height: 22px;
+                        border-radius: 0px;
+                    }
+                }
+            }
+
+            &-6 {
+                display: flex;
+                justify-content: space-between;
+
+                .bet-team-checkbox {
+                    display: flex;
+                }
+
+                .left {
+                    min-width: 200px;
+                }
+
+                label {
+                    margin-bottom: 0px;
+                    margin-right: 5px;
+
+                    input[type="checkbox"] {
+                        margin-top: -3px;
+                    }
+                }
+
+                .right {
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+
+                    >div {
+                        margin-right: 10px;
+                        width: 158px;
+                    }
+
+                    &-input {
+                        display: flex;
+                        justify-content: space-between;
+
+                        input {
+                            width: 80px;
+                            margin-bottom: 0px;
+                            margin-left: 5px;
+                            height: 16px;
+                            padding: 1px 2px;
+                            border-radius: 0;
+                        }
+                    }
+                }
+
+                .inputs {
+                    min-width: 608px;
+                }
+            }
+
+            &-8 {
+                display: flex;
+                justify-content: space-between;
+
+                .multiple-selection-area {
+                    min-width: auto !important;
+                }
+
+                .right {
+                    display: flex;
+                    justify-content: flex-start;
+                    min-width: 608px;
+
+                    .input-area {
+                        display: contents;
+                    }
+
+                    >div {
+                        margin-right: 10px;
+
+                        .right-selection {
+                            display: flex;
+
+                            span {
+                                margin-right: 5px;
+                                width: 80px;
+                            }
+
+                            select {
+                                @include select-style;
+                            }
+
+                            .multiple-selection {
+                                min-width: auto;
+
+                                button {
+                                    span {
+                                        width: auto;
+                                        margin-right: 0px;
+                                    }
+                                }
+
+                                span.i-up,
+                                span.i-down {
+                                    width: auto !important;
+                                }
+                            }
+                        }
+                    }
+
+                    &-input {
+                        display: flex;
+                        justify-content: space-between;
+
+                        input {
+                            width: 80px;
+                            margin-bottom: 0px;
+                            margin-left: 5px;
+                            height: 20px;
+                            padding: 1px 2px;
+                            border-radius: 0;
+                        }
+                    }
+                }
+            }
+
+            .multiple-selection {
+                min-width: 270px;
+
+                /deep/ button {
+                    width: 100%;
+                    margin-bottom: 0px;
+                    padding: 1px 2px;
+                    height: 22px;
+                    border-radius: 0;
+                }
+            }
+        }
+    }
+}

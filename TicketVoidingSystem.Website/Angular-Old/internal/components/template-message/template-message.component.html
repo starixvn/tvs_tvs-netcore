@@ -1,0 +1,43 @@
+<div class="message-handler" *ngIf="isShowMessages && value.name === undefined ">
+    <div class="issue-type">
+        <label>Issue Type</label>
+        <select [(ngModel)]="settings.issueId" (ngModelChange)="updateSubIssueType();updateTemplate()">
+            <option *ngFor="let item of settings.issueTypes" [attr.value]="item.issueTypeId">{{item.issueTypeName}}
+            </option>
+        </select>
+    </div>
+
+    <div class="selection" *ngIf="settings.selectedSubIssueTypes.length > 1">
+        <label>Sub Type</label>
+        <select [(ngModel)]="settings.subIssueId" (ngModelChange)="updateTemplate()">
+            <option *ngFor="let option of settings.selectedSubIssueTypes" [attr.value]="option.subIssueTypeId">
+                {{option.subIssueTypeName}}</option>
+        </select>
+    </div>
+
+    <div class="input-text row" *ngFor="let item of selectedTemplated.inputTexts">
+        <div class="col-3">
+            <label>{{item.msgEnglish}}</label>
+            <input type="text" [(ngModel)]="item.msgEnglishValue"
+                (ngModelChange)="generateChinese(item);updateMessage()">
+        </div>
+        <div class="col-3" [hidden]="item.hideChinese">
+            <label>{{item.msgChineseTraditional}}</label>
+            <input type="text" [(ngModel)]="item.msgChineseTraditionalValue" (ngModelChange)="updateMessage()">
+        </div>
+        <div class="col-3" [hidden]="item.hideChinese">
+            <label>{{item.msgChineseSimplified}}</label>
+            <input type="text" [(ngModel)]="item.msgChineseSimplifiedValue" (ngModelChange)="updateMessage()">
+        </div>
+        <div class="col-3" [hidden]="item.hideChinese">
+            <label>{{item.msgChineseNewSimplified}}</label>
+            <input type="text" [(ngModel)]="item.msgChineseNewSimplifiedValue" (ngModelChange)="updateMessage()">
+        </div>
+        <div>
+            <label class="margin-top-30">{{item.pattern}}</label>
+        </div>
+    </div>
+</div>
+<div class="message">
+    <messages #messages [isShowMessages]="isShowMessages" [(message)]="message"></messages>
+</div>

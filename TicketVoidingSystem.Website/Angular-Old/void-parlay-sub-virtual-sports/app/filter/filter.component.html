@@ -1,0 +1,43 @@
+﻿<div class="filter">
+    <div class="filter-control">
+        <div class="left">
+            <span>Search by</span>
+        </div>
+        <div class="right">
+            <label *ngFor="let item of mode">
+                <input type="radio" name="filter-control" [attr.value]="item" [checked]="item === 'MatchId'" (change)="controlFilter(item)" />
+                {{item}}
+            </label>
+        </div>
+    </div>
+    <div class="filter-by-matchid" *ngIf="filterByMatchId">
+        <div class="left">
+            <span>
+                {{mode[0]}}
+            </span>
+        </div>
+        <div class="right">
+            <div class="input-matchid">
+                <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId" (blur)="blurMatchId()" autofocus />
+                <span class="red" *ngIf="!isSuccessMatch">(&#10041;)</span>
+                <span class="green" *ngIf="isSuccessMatch">(&#10004;)</span>
+            </div>
+            <bettypes-virtualsport #betTypesVSComponent 
+                                   [groups]="groupsBetTypes" 
+                                   [sportType]="sportType"></bettypes-virtualsport>
+        </div>
+    </div>
+    <div class="filter-by-sub-betids" *ngIf="!filterByMatchId">
+        <div class="left">
+            {{mode[1]}}
+        </div>
+        <div class="right">
+            <input-betids #betIds></input-betids>
+            <span class="invalid-betid"></span>
+        </div>
+    </div>
+    <div class="search">
+        <input type="button" class="submit" value="Search" (click)="searchTicket()" />
+    </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

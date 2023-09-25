@@ -1,0 +1,303 @@
+﻿<div class="advanced-mode" *ngIf="isShowAdvancedMode">
+    <fieldset [ngClass]="{'fieldset-collapse': !isShowContent}">
+        <legend title="Collapse advanced mode" (click)="isShowContent = !isShowContent">
+            <em [ngClass]="{'icon-minus-sign': isShowContent, 'icon-plus-sign': !isShowContent}"></em>Advanced mode
+        </legend>
+        <div *ngIf="isTicketListing" class="all-bet-types">
+            <div class="bet-team-1">
+                <div class="left"><b>All bet types: </b></div>
+                <div class="right">
+                    <div class="right-selection">
+                        <span><b>Map:</b></span>
+                        <multiple-select class="multiple-selection-map float-right" [multipleSelect]="mapList"
+                            (checkedItems)="updateAllMapAndRoundItemsSelection($event, 'Map:')">
+                        </multiple-select>
+                    </div>
+                    <div class="right-selection">
+                        <span><b>Round:</b></span>
+                        <multiple-select class="multiple-selection-round float-right" [multipleSelect]="roundList"
+                            (checkedItems)="updateAllMapAndRoundItemsSelection($event, 'Round:')">
+                        </multiple-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div [hidden]="!isShowContent" *ngFor="let betTeam of betTeams; let index = index">
+            <div [ngSwitch]="betTeam.type" *ngIf="betTeam.checkedBetTypes.length > 0">
+                <div *ngSwitchCase="1" class="bet-team">
+                    <div class="bet-team-1">
+                        <div class="left">
+                            {{betTeam.name}}:
+                        </div>
+                        <div class="right">
+                            <ng-container *ngIf="!isTicketListing">
+                                <div *ngFor="let selection of betTeam.selections">
+                                    <div class="right-selection">
+                                        <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                                        <select [(ngModel)]="selection.value"
+                                            (change)="handleChangeFancyBetTypeCricket(betTeam)">
+                                            <option *ngFor="let item of selection.items" [attr.value]="item.value">
+                                                {{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-container *ngIf="isTicketListing">
+                                <div *ngFor="let multiSelection of betTeam.multiSelectionList">
+                                    <div class="right-selection">
+                                        <span>{{multiSelection.name}}</span>
+                                        <multiple-select class="multiple-selection-{{index}} float-right"
+                                            [multipleSelect]="multiSelection.multipleSelect">
+                                        </multiple-select>
+                                    </div>
+                                </div>
+                                <div *ngFor="let selection of betTeam.selections">
+                                    <div class="right-selection">
+                                        <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                                        <select [(ngModel)]="selection.value"
+                                            (change)="handleChangeFancyBetTypeCricket(betTeam)">
+                                            <option *ngFor="let item of selection.items" [attr.value]="item.value">
+                                                {{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="right-input" *ngFor="let item of betTeam.items">
+                                {{item.name}}
+                                <input type="text" maxlength="5" [(ngModel)]="item.value" [disabled]="item.flag"
+                                    decimalOnly />
+                            </div>
+                            <div class="input-area" *ngIf="isShowTextBox(betTeam)">
+                                <div class="right-input mg-right-10" *ngFor="let input of betTeam.inputs">
+                                    {{input.name}}
+                                    <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="2" class="bet-team">
+                    <div class="bet-team-2">
+                        <div class="flex-start">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="betTeam.isChecked"
+                                    (ngModelChange)="betTeam.checkItems()" class="bet-team-{{index}}" />
+                                {{betTeam.name}}
+                            </label>
+                            <div *ngFor="let selection of betTeam.selections" class="flex-start">
+                                <div>
+                                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                                    <select [(ngModel)]="selection.value">
+                                        <option *ngFor="let item of selection.items" [attr.value]="item.value">
+                                            {{item.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <template ngFor let-item [ngForOf]="betTeam.items" let-e="even">
+                                        <td *ngIf="e || item.flag" [attr.rowspan]="item.flag?2:1">
+                                            <label>
+                                                <input type="checkbox" [(ngModel)]="item.isChecked"
+                                                    (ngModelChange)="betTeam.controlIsChecked()" />
+                                                {{item.name}}
+                                            </label>
+                                        </td>
+                                    </template>
+                                </tr>
+                                <tr>
+                                    <template ngFor let-item [ngForOf]="betTeam.items" let-e="even">
+                                        <td *ngIf="!e && !item.flag">
+                                            <label>
+                                                <input type="checkbox" [(ngModel)]="item.isChecked"
+                                                    (ngModelChange)="betTeam.controlIsChecked()" />
+                                                {{item.name}}
+                                            </label>
+                                        </td>
+                                    </template>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div *ngSwitchCase="3" class="bet-team">
+                    <div class="bet-team-3">
+                        <div class="bet-team-checkbox">
+                            <div class="left">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked"
+                                        (ngModelChange)="betTeam.checkItems()" class="bet-team-{{index}}" />
+                                    {{betTeam.name}}
+                                </label>
+                            </div>
+                            <div class="right">
+                                <div *ngFor="let item of betTeam.items" class="bet-team-item">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="item.isChecked"
+                                            (ngModelChange)="betTeam.controlIsChecked()" />
+                                        {{item.name}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="multiple-selection" *ngIf="betTeam.multiSelection !== undefined">
+                            <span>{{betTeam.multiSelection.name}}</span>
+                            <multiple-select class="multiple-selection-{{index}}"
+                                [multipleSelect]="betTeam.multiSelection.multipleSelect"></multiple-select>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="4" class="bet-team">
+                    <div class="bet-team-4">
+                        <div class="left">
+                            {{betTeam.name}}
+                        </div>
+                        <div class="right multiple-selection">
+                            <multiple-select class="multiple-selection-{{index}}"
+                                [multipleSelect]="betTeam.multiSelection.multipleSelect"></multiple-select>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="5" class="bet-team">
+                    <div class="bet-team-5">
+                        <div class="left">
+                            {{betTeam.name}}
+                        </div>
+                        <div class="right">
+                            <div class="right-selection">
+                                <span>{{betTeam.selections[0].name}}</span>
+                                <select [(ngModel)]="betTeam.selections[0].value">
+                                    <ng-container *ngFor="let item of betTeam.selections[0].items">
+                                        <option [ngValue]="item.value"
+                                            *ngIf="betTeam.isValidOptionForType5(item, betTeam.selections[0].name)">
+                                            {{item.name}}
+                                        </option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                            <div class="right-selection">
+                                <span>{{betTeam.selections[1].name}}</span>
+                                <select [(ngModel)]="betTeam.selections[1].value">
+                                    <ng-container *ngFor="let item of betTeam.selections[1].items">
+                                        <option [ngValue]="item.value"
+                                            *ngIf="betTeam.isValidOptionForType5(item, betTeam.selections[1].name)">
+                                            {{item.name}}
+                                        </option>
+                                    </ng-container>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="6" class="bet-team">
+                    <div class="bet-team-6">
+                        <div class="bet-team-checkbox">
+                            <div class="left">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked"
+                                        (ngModelChange)="betTeam.checkItems()" class="bet-team-{{index}}" />
+                                    {{betTeam.name}}
+                                </label>
+                            </div>
+                            <div class="right">
+                                <div *ngFor="let item of betTeam.items" class="bet-team-item">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="item.isChecked"
+                                            (ngModelChange)="betTeam.controlIsChecked()" />
+                                        {{item.name}}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="multiple-selection" *ngIf="betTeam.multiSelection !== undefined">
+                                <span>{{betTeam.multiSelection.name}}</span>
+                                <multiple-select class="multiple-selection-{{index}}"
+                                    [multipleSelect]="betTeam.multiSelection.multipleSelect"></multiple-select>
+                            </div>
+                        </div>
+
+                        <div class="right inputs">
+                            <div class="right-input" *ngFor="let input of betTeam.inputs">
+                                {{input.name}}
+                                <input type="text" [(ngModel)]="input.value" decimalOnly />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div *ngSwitchCase="7" class="bet-team">
+                    <div class="bet-team-3">
+                        <div class="bet-team-checkbox">
+                            <div class="left">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked"
+                                        (ngModelChange)="betTeam.checkItems()" class="bet-team-{{index}}" />
+                                    {{betTeam.name}}
+                                </label>
+                            </div>
+                            <div class="right">
+                                <div *ngFor="let item of betTeam.items" class="bet-team-item">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="item.isChecked"
+                                            (ngModelChange)="betTeam.controlIsChecked()" />
+                                        {{item.name}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="right-input" *ngFor="let input of betTeam.inputs">
+                                {{input.name}}
+                                <input type="text" [(ngModel)]="input.value" decimalOnly />
+                            </div>
+                        </div>
+                        <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
+                            <div class="float-right">
+                                <span>{{betTeam.multiSelection.name}}</span>
+                                <multiple-select class="multiple-selection-{{index}}"
+                                    [multipleSelect]="betTeam.multiSelection.multipleSelect">
+                                </multiple-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="8" class="bet-team">
+                    <div class="bet-team-8">
+                        <div class="left mg-right-10">
+                            {{betTeam.name}}:
+                        </div>
+                        <div class="right">
+                            <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
+                                <div>
+                                    <span class="mr-2">{{betTeam.multiSelection.name}}</span>
+                                    <multiple-select class="multiple-selection-{{index}}"
+                                        [multipleSelect]="betTeam.multiSelection.multipleSelect">
+                                    </multiple-select>
+                                </div>
+                            </div>
+                            <ng-container *ngFor="let selection of betTeam.selections">
+                                <div *ngIf="!selection.isMultiple">
+                                    <div class="right-selection">
+                                        <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                                        <select [(ngModel)]="selection.value"
+                                            (change)="handleChangeFancyBetTypeCricket(betTeam)">
+                                            <option *ngFor="let item of selection.items" [attr.value]="item.value">
+                                                {{item.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="input-area" *ngIf="isShowTextBox(betTeam)">
+                                <div class="right-input mg-right-10" *ngFor="let input of betTeam.inputs">
+                                    {{input.name}}
+                                    <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

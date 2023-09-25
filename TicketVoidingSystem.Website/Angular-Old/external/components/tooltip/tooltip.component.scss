@@ -1,0 +1,39 @@
+﻿.ng2-tool-tip {
+    opacity: 0.87;
+    position: absolute;
+    cursor: pointer;
+    text-align: left;
+    padding-top: 12px;
+
+    em {
+        top: 2px;
+        position: absolute;
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: 12px;
+        vertical-align: middle;
+        border-bottom: 9px dashed;
+        border-bottom-color: red;
+        border-right: 9px solid transparent;
+        border-left: 9px solid transparent;
+        z-index: 1000;
+    }
+
+    span {
+        -moz-border-radius: 6px;
+        -moz-box-shadow: 0 0 6px #000;
+        -webkit-border-radius: 6px;
+        -webkit-box-shadow: 0 0 6px #000;
+        background: #ee0101;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        box-shadow: 0 0 6px #000;
+        color: #fff;
+        font-size: 11px;
+        min-width: 120px;
+        padding: 4px 25px 4px 10px;
+        position: relative;
+        width: 100%;
+    }
+}

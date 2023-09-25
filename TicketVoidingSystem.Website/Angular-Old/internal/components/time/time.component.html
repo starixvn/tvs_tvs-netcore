@@ -1,0 +1,13 @@
+﻿<div class="ng-time">
+    <input type="text" maxlength="2" min="0" max="23" class="hour"
+           [(ngModel)]="time.hour" time-control (keydown)="onKey($event)"
+           [disabled]="disabled" />
+    <span>:</span>
+    <input type="text" maxlength="2" min="0" max="59" class="minute"
+           [(ngModel)]="time.minute" time-control (keydown)="onKey($event)"
+           [disabled]="disabled" />
+    <span>:</span>
+    <input type="text" maxlength="2" min="0" max="59" class="second"
+           [(ngModel)]="time.second" time-control (keydown)="onKey($event)"
+           [disabled]="disabled" />
+</div>

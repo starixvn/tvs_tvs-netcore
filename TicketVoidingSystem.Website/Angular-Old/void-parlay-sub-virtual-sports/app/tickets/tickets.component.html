@@ -1,0 +1,100 @@
+﻿<div class="tickets" *ngIf="isShowTickets">
+    <div class="grid-title" *ngIf="ticketsModel.groups.length > 0">
+        <div class="grid-title-label">Void Parlay Virtual Sports Bet (Sub)</div>
+        <div class="grid-title-toolbox">
+            <input type="button" class="grid-title-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+        </div>
+    </div>
+    <div class="ticket-header">
+        <table>
+            <thead>
+                <tr>
+                    <th class="list-check-groups-input">
+                        <div>
+                            <span [ngClass]="{'checkbox-dropdown-list': true,
+                                  'icon-checkbox-none':ticketsModel.iconCheckBox == 0,
+                                  'icon-checkbox-any':ticketsModel.iconCheckBox == 1,
+                                  'icon-checkbox-all':ticketsModel.iconCheckBox == 2}"
+                                  (click)="ticketsModel.checkGroups()">
+                            </span>
+                            <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
+                        </div>
+                    </th>
+                    <th><div>No</div></th>
+                    <th><div>BetID</div></th>
+                    <th><div>Member</div></th>
+                    <th><div>Trans.Date</div></th>
+                    <th><div>Odds</div></th>
+                    <th><div>Stake</div></th>
+                    <th><div>Winloss</div></th>
+                    <th><div>Status</div></th>
+                    <th><div>Choice</div></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="ticket-content">
+        <table>
+            <tbody *ngFor="let group of ticketsModel.groups">
+                <tr>
+                    <td>
+                        <div>
+                            <input type="checkbox"
+                                   [(ngModel)]="group.isCheckAll"
+                                   (ngModelChange)="group.checkTickets();
+                                                    ticketsModel.changeIconCheckBox()"
+                                   [disabled]="group.isDisabled" />
+                        </div>
+                    </td>
+                    <td [attr.colspan]="10" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
+                        <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
+                        {{group.name}}
+                    </td>
+                </tr>
+                <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
+                    <td>
+                        <div>
+                            <input type="checkbox"
+                                   [(ngModel)]="ticket.isChecked"
+                                   (change)="group.changeTickets(ticket);
+                                             ticketsModel.changeIconCheckBox()"
+                                   [disabled]="ticket.isDisable" />
+                        </div>
+                    </td>
+                    <td><div>{{ticket.no}}</div></td>
+                    <td><div>{{ticket.betId}}</div></td>
+                    <td><div>{{ticket.member}}</div></td>
+                    <td><div>{{ticket.transDate}}</div></td>
+                    <td><div [innerHTML]="ticket.odds | sanitizeHtml"></div></td>
+                    <td><div [innerHTML]="ticket.stake | sanitizeHtml"></div></td>
+                    <td><div [innerHTML]="ticket.winLoss | sanitizeHtml"></div></td>
+                    <td><div [innerHTML]="ticket.status | sanitizeHtml"></div></td>
+                    <td><div [innerHTML]="ticket.choice | sanitizeHtml"></div></td>
+                </tr>
+            </tbody>
+        </table>
+        <table *ngIf="ticketsModel.groups.length == 0 || ticketsModel.groups == null">
+            <tbody>
+                <tr>
+                    <td colspan="10" class="no-data">There is no data</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <paging [pagingModel]="ticketsModel.pagingModel" (changePagingEvent)="changePagingEvent($event)"></paging>
+
+    <div class="list-check-groups" *ngIf="isShowListCheckGroup">
+        <ul [style.top]="ticketsModel.iconCheckBoxTop">
+            <li [ngClass]="{'li-checked':ticketsModel.iconCheckBox == 2}"
+                (click)="ticketsModel.checkAllGroupsDropDown()">All</li>
+            <li *ngFor="let group of ticketsModel.groups"
+                [ngClass]="{'li-checked':group.isCheckAll}"
+                (click)="group.isCheckAll = group.isDisabled ? false : !group.isCheckAll;
+                group.checkTickets();
+                ticketsModel.changeIconCheckBox()">
+                {{group.name}}
+            </li>
+        </ul>
+    </div>
+</div>

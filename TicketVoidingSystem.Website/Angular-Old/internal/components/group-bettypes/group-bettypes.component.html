@@ -1,0 +1,49 @@
+﻿<div class="group-bettypes" *ngIf="model.groupBetTypes.length > 0 && display">
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">
+                    <div>
+                        <label>
+                            <input type="checkbox" class="group-bettypes-all-checkbox"
+                                   [(ngModel)]="model.isChecked"
+                                   (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
+                            All Bet types
+                        </label>
+                        <label *ngIf="scroll" (click)="collapse = !collapse">
+                            <em [ngClass]="{'icon-plus-bettypes': collapse, 'icon-minus-bettypes': !collapse}"></em>
+                            Show All Bet types
+                        </label>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody [ngClass]="{'collapse': collapse && scroll}">
+            <tr *ngFor="let group of model.groupBetTypes">
+                <td *ngIf="group.isShow && group.betTypes.length > 0">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="group.isChecked"
+                               (ngModelChange)="group.changeCheckedGroupToBetType();
+                                                model.changeCheckedGroupToModel();
+                                                changedBetTypes()" />
+                        {{group.groupName}}
+                    </label>
+                </td>
+                <td *ngIf="group.isShow && group.betTypes.length > 0">
+                    <div class="display-flex">
+                        <div class="bet-type" *ngFor="let betType of group.betTypes">
+                            <label [ngClass]="{'highlight-bettype':betType.highlight}">
+                                <input type="checkbox" [(ngModel)]="betType.isChecked"
+                                       (ngModelChange)="group.changeCheckedBetTypeToGroup();
+                                                        model.changeCheckedGroupToModel();
+                                                        changedBetTypes()" />
+                                {{betType.name}}
+                            </label>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

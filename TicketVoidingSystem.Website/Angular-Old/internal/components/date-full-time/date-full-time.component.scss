@@ -1,0 +1,52 @@
+.date-full-time {
+  display: flex;  
+  margin: 0px 5px;
+  line-height: 0px;
+  display: flex;
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+
+  input {
+      width: 105px;
+      height: 16px;
+      margin: 0px;
+      padding: 1px;
+      border-radius: 0px;
+  }
+
+  span {
+      margin: 0 -3px;
+      font-weight: bold;
+      position: relative;
+      top: 2px;
+  }
+
+  form {
+      width: 115px;
+      margin: 0px;
+
+      /deep/ input.datepicker-actions__input {
+          padding: 1px 2px;
+          margin: 0px;
+          width: 80px;
+          height: 16px;
+          border-radius: 0;
+          font-family: inherit !important;
+          font-size: inherit;
+      }
+
+      /deep/ button.datepicker-actions__button {
+          border: none;
+          background-color: #ebebeb;
+          padding: 1px 5px;
+      }
+
+      /deep/ button.datepicker-actions__button {
+          margin-left: 0px;
+      }
+  }
+}

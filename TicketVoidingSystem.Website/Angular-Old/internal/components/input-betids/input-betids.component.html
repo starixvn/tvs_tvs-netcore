@@ -1,0 +1,24 @@
+﻿<div class="input-bet-ids" (click)="focusTransId()">
+    <div *ngIf="groupNumber.items.length > 0">
+        <div *ngFor="let item of groupNumber.items">
+            <div class="item-number" [ngClass]="item.cssClass">
+                <span (click)="item.changeSelected();clickEvent(item)">{{item.value}}</span>
+                <span class="icon-delete" (click)="groupNumber.remove(item)">&nbsp;</span>
+            </div>
+        </div>
+    </div>
+    <input #input class="trans-id" type="text" maxlength="19" [(ngModel)]="transId"
+           (keydown)="onKey($event)"
+           (blur)="addItem(transId)"
+           (paste)="pasteItem($event)"
+           (keyup.shift)="shiftKey=false"
+           (keydown.shift)="shiftKey=true" />
+</div>
+<span class="invalid-data"></span>
+<span class="note note-invalid-tickets">(*) Invalid BetID(s) are highlighted in RED.</span>
+<span class="note note-moved-tickets" [hidden]="hideWarningMove">(*) Moved tickets are highlighted in ORANGE.</span>
+<div class="flex-between">
+    <span>Ex: 1234567890, 1223457890, 2234567890</span>
+    <span class="red">Max: {{maxItems - groupNumber.items.length}} bets</span>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

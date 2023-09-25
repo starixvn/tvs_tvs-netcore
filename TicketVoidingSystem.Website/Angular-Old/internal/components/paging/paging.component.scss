@@ -1,0 +1,131 @@
+﻿@mixin setCurrentPaging() {
+    border-radius: 2px;
+    background: #355391;
+    color: #fff;
+}
+
+.ticket-paging {
+    color: #616161;
+    font-size: 1em;
+    border-bottom: solid 1px #c5c5c5;
+    border-right: solid 1px #c5c5c5;
+    border-top: solid 1px #c5c5c5;
+    position: relative;
+
+    .paging-control {
+        background: #f2f2f2;
+        display: flex;
+        justify-content: space-between;
+        padding: 3px 10px;
+
+        .left {
+            .page-size {
+                color: #3e5fa6;
+                font-weight: bold;
+                float: left;
+            }
+
+            .form-control {
+                cursor: pointer;
+                float: left;
+                font-size: 0.9em;
+                height: 22px;
+                margin-left: 5px;
+                margin-bottom: 0px;
+                outline: none;
+                padding: 0px 15px 0px 5px;
+                text-align: right;
+                width: 71px;
+            }
+
+            .number-list {
+                border: 1px solid #969696;
+                border-radius: 3px;
+                float: left;
+                height: 20px;
+                margin-left: 12px;
+
+                ul {
+                    display: inline;
+                    list-style-type: none;
+                    margin: 0;
+                    padding: 0;
+
+                    li {
+                        background: url(images/seperations.png) right 7px no-repeat;
+                        display: inline;
+                        float: left;
+                        margin-right: 2px;
+                        padding: 0 2px;
+                        line-height: 20px;
+
+                        span {
+                            padding: 0 2px;
+                            border-radius: 2px;
+                            color: #616161;
+                            text-align: center;
+                            cursor: pointer;
+
+                            &:hover {
+                                @include setCurrentPaging();
+                            }
+                        }
+
+                        .current-page {
+                            @include setCurrentPaging();
+                            cursor: default;
+                        }
+                    }
+
+                    li:first-child {
+                        background: none;
+                        margin-right: 0px;
+                    }
+
+                    li:nth-last-child(2) {
+                        background: none;
+                    }
+
+                    li:last-child {
+                        background: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .paging-go-to-page {
+        border: 1px solid #969696;
+        width: 150px;
+        border-radius: 4px;
+        line-height: 26px;
+        text-align: center;
+        background: #f2f2f2;
+        position: absolute;
+        top: -25px;
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .page-number {
+            padding: 0px;
+            width: 50px;
+            outline: none;
+            margin-top: -2px;
+            margin-bottom: 1px;
+        }
+
+        .btn-go-to-page {
+            background: url(images/go-hover-icon.png) 0 0 no-repeat;
+            border: none 0px;
+            width: 20px;
+            cursor: pointer;
+
+            &:hover {
+                background-position: 0 -22px;
+            }
+        }
+    }
+}

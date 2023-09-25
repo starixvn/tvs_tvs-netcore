@@ -1,0 +1,14 @@
+﻿{
+  "/api": {
+    "target": "https://localhost:44312/",
+    "secure": false
+  },
+  "/state-api":{
+    "target": "https://localhost:44312/",
+    "secure": false
+  },
+  "/old-page":{
+    "target": "https://localhost:44312/",
+    "secure": false
+  }
+}

@@ -1,0 +1,92 @@
+﻿.filter {
+    background-color: #ebebeb;
+    margin: 0 10px;
+    padding: 5px 10px 10px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    .display-flex {
+        display: flex;
+        width: 100%;
+    }
+
+    .left {
+        min-width: 70px;
+    }
+
+    .line-1 {
+        line-height: 30px;
+
+        .ticket-type {
+            width: 111px;
+            cursor: pointer;
+        }
+
+        .type {
+            margin-left: 30px;
+
+            label {
+                margin-left: 10px;
+                line-height: 30px;
+                cursor: pointer;
+
+                input[type="radio"] {
+                    margin: 0px;
+                }
+            }
+        }
+    }
+
+    .line-2 {
+        line-height: 30px;
+        margin-bottom: 3px;
+
+        .match {
+            .match-id {
+                margin: 0px;
+                width: 90px;
+                height: 18px;
+            }
+
+            .red {
+                color: red;
+            }
+
+            .green {
+                color: limegreen;
+            }
+        }
+    }
+
+    .line-3 {
+        .right {
+            width: 100%;
+        }
+    }
+
+    .search {
+        height: 25px;
+
+        .submit {
+            display: inline-block;
+            padding: 2px 13px 3px;
+            border: 0px;
+            background: url(../../../images/sprite.png) no-repeat -7px -62px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            font-size: 13px;
+            height: 25px;
+            line-height: 20px;
+
+            &:hover {
+                background: url(../../../images/sprite.png) no-repeat -75px -62px;
+                text-decoration: none;
+                padding: 2px 13px 3px;
+                font-weight: bold;
+                color: white;
+            }
+        }
+    }
+}
