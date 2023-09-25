@@ -276,4 +276,25 @@
         <Setting Key="TicketVoiding_SubIssueTypeNote_Update" SpName="TicketVoiding_SubIssueTypeNote_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_SubIssueTypeNote_Select" SpName="TicketVoiding_SubIssueTypeNote_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="VirtualSport">
+        <Setting Key="DBCTG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Upd" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverVSBetRadar_Sel" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Sel" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>
