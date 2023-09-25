@@ -4,6 +4,6 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
-  "files": ["home-page/main.ts", "polyfills.ts"],
+  "files": ["edit-request/main.ts", "polyfills.ts"],
   "exclude": ["test.ts", "**/*.spec.ts"]
 }
