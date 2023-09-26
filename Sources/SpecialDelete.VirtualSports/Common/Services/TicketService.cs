@@ -1,5 +1,7 @@
 ﻿using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.Common.ViewModels;
+using SpecialDelete.VirtualSports.RecoverBet.Models;
+using SpecialDelete.VirtualSports.RecoverBet.Services.GetTickets;
 using SpecialDelete.VirtualSports.VoidParlaySub.Services.GetTickets;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
@@ -10,20 +12,20 @@ public interface TicketService
 {
     TicketViewModel GetTicket(GetTicketModel item);
 
-    //  TicketViewModel GetTicket(GetTicketModel item, Recover typeOfRecover);
+    TicketViewModel GetTicket(GetTicketModel item, Recover typeOfRecover);
 }
 
 public class TicketServiceImp : TicketService
 {
     private readonly VoidBetListService voidBetListService;
-    // private readonly RecoverBetListService recoverBetListService;
+    private readonly RecoverBetListService recoverBetListService;
 
     public TicketServiceImp(
-        VoidBetListService voidBetListService)
-    //    RecoverBetListService recoverBetListService)
+        VoidBetListService voidBetListService,
+        RecoverBetListService recoverBetListService)
     {
         this.voidBetListService = voidBetListService;
-        // this.recoverBetListService = recoverBetListService;
+        this.recoverBetListService = recoverBetListService;
     }
 
     public TicketViewModel GetTicket(GetTicketModel item)
@@ -33,12 +35,12 @@ public class TicketServiceImp : TicketService
         return ticket;
     }
 
-    //public TicketViewModel GetTicket(GetTicketModel item, Recover typeOfRecover)
-    //{
-    //    var ticket = recoverBetListService.Create(item, typeOfRecover);
-    //    Mapper(ticket, item);
-    //    return ticket;
-    //}
+    public TicketViewModel GetTicket(GetTicketModel item, Recover typeOfRecover)
+    {
+        var ticket = recoverBetListService.Create(item, typeOfRecover);
+        Mapper(ticket, item);
+        return ticket;
+    }
 
     private static void Mapper(TicketViewModel ticket, GetTicketModel item)
     {

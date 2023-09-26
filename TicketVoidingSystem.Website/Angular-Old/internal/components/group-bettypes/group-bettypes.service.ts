@@ -11,7 +11,7 @@ export class AppService {
     constructor(private httpRequestService: HttpRequestService) { }
 
     getBetTeams(query: GetBetTypesQuery): Observable<GroupBetTypesModel> {
-        const url = 'BetTypes/GetGroupBetTypesNg';
+        const url = 'api/BetTypes/GetGroupBetTypesNg';
         return this.httpRequestService.postJson(query, url);
     }
 }

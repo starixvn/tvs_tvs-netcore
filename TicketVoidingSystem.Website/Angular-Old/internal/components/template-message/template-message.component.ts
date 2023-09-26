@@ -1,12 +1,12 @@
-import { MessagesComponent } from './../messages/messages.component';
-import { TemplateService } from './template.service';
-import { TemplateReplace, TemplateContentConst, IssueTypeId, VoidFunction, Format, SubIssueTypeId } from './template.const';
-import { TemplateSettings, IssueTypesModel } from './template-setting.model';
-import { HttpService } from './../../services/http.service';
-import { TemplateModel, TemplateContent, InputText, TemplateValue } from './template.model';
-import { Component, OnInit, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
-import { Message } from '../messages/message';
+import { Component, Input, OnChanges, OnInit, SimpleChange, ViewChild } from '@angular/core';
 import { EventType } from '../../const/sport-type';
+import { Message } from '../messages/message';
+import { HttpService } from './../../services/http.service';
+import { MessagesComponent } from './../messages/messages.component';
+import { IssueTypesModel, TemplateSettings } from './template-setting.model';
+import { Format, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace, VoidFunction } from './template.const';
+import { InputText, TemplateContent, TemplateModel, TemplateValue } from './template.model';
+import { TemplateService } from './template.service';
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -53,9 +53,9 @@ export class TemplateMessageComponent implements OnInit, OnChanges {
 
   async getTemplateSettings() {
     if (this.settings.issueTypes.length === 0) {
-      const typeViewModel = await this.httpService.getJson<IssueTypesModel>('TicketVoiding/GetIssueTypes');
+      const typeViewModel = await this.httpService.getJson<IssueTypesModel>('api/SharedApi/GetIssueTypes');
       this.updateIssueTypesByFunction(typeViewModel);
-      const data = await this.httpService.getJson<TemplateSettings>('MessageTemplate/GetTemplateSettings');
+      const data = await this.httpService.getJson<TemplateSettings>('api/MessageTemplate/GetTemplateSettings');
 
       this.settings = data;
       this.settings.issueTypes = typeViewModel.issueTypes;

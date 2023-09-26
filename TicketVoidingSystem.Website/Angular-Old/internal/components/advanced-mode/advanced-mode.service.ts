@@ -13,12 +13,12 @@ export class AdvancedModeService {
     ) { }
 
     async getBetTeams(): Promise<Array<BetTeam>> {
-        const url = 'BetTypes/GetBetTeams';
+        const url = 'api/BetTypes/GetBetTeams';
         return this.httpService.getJson(url);
     }
 
     async GetOddsInfoSpecialBetTypes(query: GetOddsInfoQuery): Promise<Array<OddsInfo>> {
-        const url = 'BetTypes/GetOddsInfoSpecialBetTypes';
+        const url = 'api/BetTypes/GetOddsInfoSpecialBetTypes';
         return this.httpService.postJson(query, url);
     }
 
