@@ -189,7 +189,7 @@ public static class HtmlExtension
 
         return choice.AppendWithNewLine(bettype.InnerHtml.StripHtml())
             .AppendWithNewLine(match)
-            .AppendWithNewLine(league.InnerHtml.StripHtml());
+            .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
     }
 
     private static string GetMatch(HtmlDocument doc)

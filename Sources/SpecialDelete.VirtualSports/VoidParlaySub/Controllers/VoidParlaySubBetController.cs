@@ -27,7 +27,7 @@ public class VoidParlaySubBetController : ControllerBase
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidParlaySubBet, Policy = Constant.Policy.Host)]
     public async Task<IActionResult> VoidTickets(VoidTicketsRequest request) => Ok(await mediator.Send(request));
 
-    [HttpGet]
+    [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidParlaySubBet, Policy = Constant.Policy.Read)]
     public async Task<IActionResult> ExportExcel(ExportExcelRequest request)
     {
