@@ -4,6 +4,7 @@ using SpecialDelete.VirtualSports.RecoverBet.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendMessage;
@@ -14,9 +15,9 @@ public interface RecoverTicketsService
 {
     Task<RecoverTicketsModel> ExecuteQuery(Query query);
 
-    void RemoveMessage(RecoverTicketsModel model);
+    Task RemoveMessage(RecoverTicketsModel model);
 
-    void SendEmail(RecoverTicketsModel model, Recover typeOfRecover);
+    Task SendEmail(RecoverTicketsModel model, Recover typeOfRecover);
 }
 
 public class RecoverTicketsServiceImp : RecoverTicketsService
@@ -67,33 +68,33 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
         }
     }
 
-    public void RemoveMessage(RecoverTicketsModel model)
+    public async Task RemoveMessage(RecoverTicketsModel model)
     {
         var transIds = string.Join(",", model.Tickets.Select(x => x.TransId));
         var userId = sessionService.UserId;
-        sendMessageService.RemoveMessage(userId, transIds);
-        sendMessageService.DeleteTransaction(model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), MatchId = x.MatchId }));
+        await sendMessageService.RemoveMessage(userId, transIds);
+        await sendMessageService.DeleteTransaction(model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), MatchId = x.MatchId }));
     }
 
-    public void SendEmail(RecoverTicketsModel model, Recover typeOfRecover)
+    public async Task SendEmail(RecoverTicketsModel model, Recover typeOfRecover)
     {
         var mailViewModel = CreateMailViewModel(model.Validation.NegativeBalanceUsers);
-        var sites = sitesEmailService.GetSites();
-        var csdRecoverSite = sitesEmailService.GetSiteByName(sites, Labels.CsdRecovery);
+        var sites = await sitesEmailService.GetSites();
+        var csdRecoverSite = sitesEmailService.GetSiteByName(sites, StringResource.CsdRecovery);
         var csdRecoverTickets = model.Tickets
             .Where(s => !s.IsItSupport || s.IsItSupport && s.CurrencyCode != CurrencyConstant.UusCode).ToList();
         var csdRecoverMailModel = CreateMailModel(csdRecoverSite, csdRecoverTickets, mailViewModel);
         emailService.SendEmail(csdRecoverMailModel, EmailGroup.Recover, typeOfRecover);
 
         mailViewModel.NegativeBalanceUsers = model.Validation.NegativeBalanceUsers;
-        var itQaSite = sitesEmailService.GetSiteByName(sites, Labels.ItQa);
+        var itQaSite = sitesEmailService.GetSiteByName(sites, StringResource.ItQa);
         var itQaTickets = model.Tickets
             .Where(s => s.IsItSupport && s.CurrencyCode == CurrencyConstant.UusCode).ToList();
         var itQaMailModel = CreateMailModel(itQaSite, itQaTickets, mailViewModel);
         emailService.SendEmail(itQaMailModel, EmailGroup.ItQa, typeOfRecover);
 
         mailViewModel.NegativeBalanceUsers = model.Validation.NegativeBalanceUsers;
-        var itSupportSite = sitesEmailService.GetSiteByName(sites, Labels.ItSupport);
+        var itSupportSite = sitesEmailService.GetSiteByName(sites, StringResource.ItSupport);
         var itSupportTickets = model.Tickets
             .Where(s => s.IsItSupport && s.CurrencyCode != CurrencyConstant.UusCode).ToList();
         var itSupportMailModel = CreateMailModel(itSupportSite, itSupportTickets, mailViewModel);
@@ -107,7 +108,7 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
             ActorUsername = sessionService.UserName,
             DateTime = DateTime.Now,
             NegativeBalanceUsers = negativeBalanceUsers,
-            TemplatePath = TemplateName.RecoverVirtualSports
+            TemplatePath = TemplateEmailPath.RecoverVirtualSports
         };
     }
 

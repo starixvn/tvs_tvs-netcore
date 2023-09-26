@@ -12,14 +12,14 @@ public interface EmailService
 
 public class EmailServiceImp : EmailService
 {
-    private readonly SendEmailService sendEmailService;
+    private readonly FanexMailApiService fanexMailApiService;
     private readonly EmailRecordService recordService;
 
     public EmailServiceImp(
-        SendEmailService sendEmailService,
+        FanexMailApiService fanexMailApiService,
         EmailRecordService recordService)
     {
-        this.sendEmailService = sendEmailService;
+        this.fanexMailApiService = fanexMailApiService;
         this.recordService = recordService;
     }
 
@@ -28,11 +28,11 @@ public class EmailServiceImp : EmailService
         try
         {
             var mailRecord = recordService.Create(model, group, typeOfRecover);
-            sendEmailService.SendEmail(mailRecord);
+            fanexMailApiService.SendEmail(mailRecord);
         }
         catch (Exception exception)
         {
-            sendEmailService.WriteLog(group, exception);
+            fanexMailApiService.WriteLog(group, exception);
         }
     }
 }

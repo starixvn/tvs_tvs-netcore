@@ -32,6 +32,7 @@ using ONEbook.UM.Transport;
 using SharpRaven;
 using SpecialDelete.UploadBatchMessage.Controllers;
 using SpecialDelete.VirtualSports;
+using SpecialDelete.VirtualSports.RecoverBet.Controllers;
 using SpecialDelete.VirtualSports.VoidParlaySub.Controllers;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
@@ -210,6 +211,7 @@ public static class ServiceCollectionExtension
         services.RegisterVoidRequestServices();
         services.RegisterUploadBatchMessageServices();
         services.RegisterVirtualSportsVoidServices();
+        services.RegisterVirtualSportsRecoverServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -229,6 +231,7 @@ public static class ServiceCollectionExtension
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UploadBatchMessageController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidParlaySubBetController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverVirtualSportsBetController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)

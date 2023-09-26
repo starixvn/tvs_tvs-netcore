@@ -3,6 +3,8 @@ using Fanex.MailDeliver.Model;
 using SpecialDelete.VirtualSports.Common.Services;
 using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
@@ -49,7 +51,7 @@ public class EmailRecordServiceImp : EmailRecordService
             model.ViewModel.Groups = CreateGroups(model.Tickets, typeOfRecover);
             model.ViewModel.NegativeBalanceUsers = negativeBalanceUsersInSite;
             var subject = subjectService.CreateRecover(model, group, RecoverType.VirtualSports);
-            var mailRecord = templateEmailService.Create(model, subject);
+            var mailRecord = templateEmailService.CreateForRecover(model, subject);
             return mailRecord.MailRecord;
         }
 

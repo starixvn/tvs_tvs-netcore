@@ -9,6 +9,8 @@ namespace TicketVoidingSystem.Services.SendEmail.Subject;
 public interface SubjectService
 {
     string CreateVoid(MailViewModel mailViewModel, IEnumerable<string> sites, SiteEmail site, EmailGroup group, VoidType type);
+
+    string CreateRecover<T, U>(MailRecoverModel<T, U> model, EmailGroup group, RecoverType type);
 }
 
 public class SubjectServiceImp : SubjectService
@@ -26,6 +28,19 @@ public class SubjectServiceImp : SubjectService
         };
 
         return subject;
+    }
+
+    public string CreateRecover<T, U>(MailRecoverModel<T, U> model, EmailGroup group, RecoverType type)
+    {
+        var labels = SubjectFactory.CreateRecover(type);
+        return group switch
+        {
+            EmailGroup.Recover => string.Format(labels.Licensee(), model.ViewModel.DateTime),
+            EmailGroup.CashOut => string.Format(labels.Licensee(), model.ViewModel.DateTime),
+            EmailGroup.ItQa => string.Format(labels.It(), StringResource.TestCurrency, model.ViewModel.DateTime),
+            EmailGroup.ItSupport => string.Format(labels.It(), StringResource.RealCurrency, model.ViewModel.DateTime),
+            _ => ExceptionGroup.WrongGroup
+        };
     }
 
     private static string SubjectLicensee(MailViewModel mailViewModel, SiteEmail site, string format)

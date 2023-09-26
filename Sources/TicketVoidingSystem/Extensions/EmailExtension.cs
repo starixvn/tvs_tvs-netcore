@@ -48,6 +48,11 @@ public static class EmailExtension
         return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
     }
 
+    public static bool Valid<T>(this MailModel<T> model)
+    {
+        return model.Tickets.Count > 0 && !string.IsNullOrEmpty(model.Site.ToList);
+    }
+
     public static string JoinSites<T>(this IEnumerable<T> items, Func<T, string> filter)
     {
         var sites = items.Select(filter).Distinct().ToArray();

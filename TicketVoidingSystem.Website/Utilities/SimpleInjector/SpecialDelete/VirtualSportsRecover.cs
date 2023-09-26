@@ -1,19 +1,22 @@
-﻿namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SpecialDelete.VirtualSports.RecoverBet.Repositories;
+using SpecialDelete.VirtualSports.RecoverBet.Services;
+using SpecialDelete.VirtualSports.RecoverBet.Services.GetTickets;
+using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets;
 
-public class VirtualSportsRecover
+namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
+
+public static class VirtualSportsRecover
 {
+    public static void RegisterVirtualSportsRecoverServices(this IServiceCollection services)
+    {
+        services.AddTransient<Repository, RepositoryImp>();
+        services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
+        services.AddTransient<RecoverBetListService, RecoverBetListServiceImp>();
+        services.AddTransient<EmailRecordService, EmailRecordServiceImp>();
+        services.AddTransient<EmailService, EmailServiceImp>();
+        services.AddTransient<NotificationService, NotificationServiceImp>();
+        services.AddTransient<RecoverTicketsService, RecoverTicketsServiceImp>();
+        services.AddTransient<RecoverBetService, RecoverBetServiceImp>();
+    }
 }
-
-//public static Container RegisterRecoverBet(this Container container)
-//{
-//    container.Register<Repository, RepositoryImp>(Lifestyle.Transient);
-//    container.Register<GetTicketsService, GetTicketsServiceImp>(Lifestyle.Transient);
-//    container.Register<RecoverBetListService, RecoverBetListServiceImp>(Lifestyle.Transient);
-//    container.Register<EmailRecordService, EmailRecordServiceImp>(Lifestyle.Transient);
-//    container.Register<EmailService, EmailServiceImp>(Lifestyle.Transient);
-//    container.Register<NotificationService, NotificationServiceImp>(Lifestyle.Transient);
-//    container.Register<RecoverTicketsService, RecoverTicketsServiceImp>(Lifestyle.Transient);
-//    container.Register<RecoverBetService, RecoverBetServiceImp>(Lifestyle.Transient);
-
-//    return container;
-//}

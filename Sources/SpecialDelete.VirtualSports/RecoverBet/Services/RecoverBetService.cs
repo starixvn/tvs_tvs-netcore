@@ -96,8 +96,8 @@ public class RecoverBetServiceImp : RecoverBetService
     {
         try
         {
-            recoverTicketsService.RemoveMessage(model);
-            recoverTicketsService.SendEmail(model, query.TypeOfRecover);
+            await recoverTicketsService.RemoveMessage(model);
+            await recoverTicketsService.SendEmail(model, query.TypeOfRecover);
             return CreateMessage(model, query.TypeOfRecover);
         }
         catch (Exception exception)
