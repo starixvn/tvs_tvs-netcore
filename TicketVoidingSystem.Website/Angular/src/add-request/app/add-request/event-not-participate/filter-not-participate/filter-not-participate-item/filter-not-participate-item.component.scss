@@ -2,6 +2,11 @@
   width: 300px;
 }
 
+.filter-not-participate {
+  ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+    font-style: italic;
+  }
+}
 multiple-selection[class*='player-dropdown'] {
   width: 200px;
 }

@@ -436,7 +436,8 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly NOT_PARTICIPATE: number[] = [
+    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID
+    TVSRequestActionType.TAKE_NOTE_ID
   ];
 }

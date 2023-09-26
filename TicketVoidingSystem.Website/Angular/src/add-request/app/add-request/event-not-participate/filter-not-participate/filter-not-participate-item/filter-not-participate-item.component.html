@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex filter-not-participate">
   <ng-select class="bet-type-dropdown mr-2"
     [disabled]="isVoided"
     [items]="originalNotParticipateBetTypes"
@@ -6,6 +6,7 @@
     bindValue="betTypeId"
     [(ngModel)]="model.betTypeId"
     [clearable]="false"
+    placeholder="Select bet type"
     (change)="changeFilter();updateCheckedBetTypes($event)">
   </ng-select>
   <ng-container>
