@@ -975,7 +975,7 @@ describe('EventWrongScoreComponent', () => {
     expect(actual).toBe('2020/10/08 09:44:46.361 PM');
   });
 
-  it('#isShowLogInfoFilterByAcceptedTime should return true', async () => {
+  it('#isShowLogInfoFilterByAcceptedTime should return true when logInfoDetail not null', async () => {
     const mockChangeSavingRequestStatus = jest.fn();
 
     const { instance } = await shallow
@@ -1000,9 +1000,7 @@ describe('EventWrongScoreComponent', () => {
     expect(actual).toBe(true);
   });
 
-  it('#isShowLogInfoFilterByAcceptedTime should return false', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel;
+  it('#isShowLogInfoFilterByAcceptedTime should return true when messageValidationLogInfo.length > 0', async () => {
     const mockChangeSavingRequestStatus = jest.fn();
 
     const { instance } = await shallow
@@ -1014,11 +1012,90 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
-          wrongScoreModels: fakeWrongScoreModel,
+          filter: Helper.fakeFilterModel,
+        }
+      });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = null;
+    instance.wrongScoreModels[0].messageValidationLogInfo = [new ValidationMessage()];
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.primitiveProps.filterBy = 2;
+
+    const actual = instance.isShowLogInfoFilterByAcceptedTime();
+
+    expect(actual).toBe(true);
+  });
+
+  it('#isShowLogInfoFilterByAcceptedTime should return false when messageValidationLogInfo no has', async () => {
+    const mockChangeSavingRequestStatus = jest.fn();
+
+    const { instance } = await shallow
+      .mock(WrongScoreService, {
+        getFilterByBaseOnSubIssueType: jest.fn(),
+        getSelectedWrongScoreComponents: jest.fn(),
+        getSelectedWrongScores: jest.fn(),
+      })
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+        }
+      });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = null;
+    instance.wrongScoreModels[0].messageValidationLogInfo = null;
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.primitiveProps.filterBy = 2;
+
+    const actual = instance.isShowLogInfoFilterByAcceptedTime();
+
+    expect(actual).toBe(false);
+  });
+
+  it('#isShowLogInfoFilterByAcceptedTime should return false when wrongScoreModels is null', async () => {
+    // Arrange
+    const mockChangeSavingRequestStatus = jest.fn();
+
+    const { instance } = await shallow
+      .mock(WrongScoreService, {
+        getFilterByBaseOnSubIssueType: jest.fn(),
+        getSelectedWrongScoreComponents: jest.fn(),
+        getSelectedWrongScores: jest.fn(),
+      })
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
           filter: Helper.fakeFilterModel,
         }
       });
 
+    instance.wrongScoreModels = null;
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.primitiveProps.filterBy = 3;
+
+    const actual = instance.isShowLogInfoFilterByAcceptedTime();
+
+    expect(actual).toBeFalsy();
+  });
+
+  it('#isShowLogInfoFilterByAcceptedTime should return false when filterBy != 2', async () => {
+    // Arrange
+    const mockChangeSavingRequestStatus = jest.fn();
+
+    const { instance } = await shallow
+      .mock(WrongScoreService, {
+        getFilterByBaseOnSubIssueType: jest.fn(),
+        getSelectedWrongScoreComponents: jest.fn(),
+        getSelectedWrongScores: jest.fn(),
+      })
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+        }
+      });
+
+    instance.wrongScoreModels = null;
     instance.primitiveProps = new PrimitiveProperty();
     instance.primitiveProps.filterBy = 3;
 
@@ -1083,7 +1160,6 @@ describe('EventWrongScoreComponent', () => {
     // Arrange
     const mockClearDataValidation = jest.fn();
     const mockValidateCommonData = jest.fn().mockImplementation(() => false);
-    const mockGetSelectedWrongScoreComponents = jest.fn();
     const mockChangeSavingRequestStatus = jest.fn();
 
     const { instance } = await shallow
@@ -1183,6 +1259,7 @@ describe('EventWrongScoreComponent', () => {
     const { instance } = await shallow
       .mock(LogInfoService, {
         clearDataValidation: mockClearDataValidation,
+        getLogInfo: jest.fn()
       })
       .mock(ValidationService, {
         validateCommonData: jest.fn(),
@@ -1191,6 +1268,7 @@ describe('EventWrongScoreComponent', () => {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
+        createMainWrongScoreModel: jest.fn()
       })
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
@@ -1198,11 +1276,44 @@ describe('EventWrongScoreComponent', () => {
           filter: Helper.fakeFilterModel,
         }
       });
+
     instance.wrongScoreModels = null;
 
     instance.handleSearchEvent();
 
     expect(mockClearDataValidation).toHaveBeenCalledTimes(0);
+  });
+
+  it('#handleSearchEvent should called #clearDataValidation', async () => {
+    const mockClearDataValidation = jest.fn();
+
+    const { instance } = await shallow
+      .mock(LogInfoService, {
+        clearDataValidation: mockClearDataValidation,
+        getLogInfo: jest.fn()
+      })
+      .mock(ValidationService, {
+        validateCommonData: jest.fn().mockReturnValue(true),
+      })
+      .mock(WrongScoreService, {
+        getFilterByBaseOnSubIssueType: jest.fn(),
+        getSelectedWrongScoreComponents: jest.fn(),
+        getSelectedWrongScores: jest.fn(),
+        createMainWrongScoreModel: jest.fn()
+      })
+      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+        }
+      });
+
+    instance.primitiveProps.filterBy = TVSRequestFilterBy.CHECK_TIME
+    instance.wrongScoreModels = null;
+
+    instance.handleSearchEvent();
+
+    expect(mockClearDataValidation).toHaveBeenCalledTimes(1);
   });
 
   it('#getHighlightMinTimeClass should return highlight-min-aa', async () => {
@@ -1223,7 +1334,7 @@ describe('EventWrongScoreComponent', () => {
         }
       });
     instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = AcceptType.AUTO_ACCEPT;
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
 
     // Action
     const actual = instance.getHighlightMinTimeClass(new Date());
@@ -1251,7 +1362,8 @@ describe('EventWrongScoreComponent', () => {
         }
       });
     instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = AcceptType.SECOND_ACCEPT;
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
+    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = 2;
 
     // Action
     const actual = instance.getHighlightMinTimeClass(new Date());
@@ -1279,7 +1391,8 @@ describe('EventWrongScoreComponent', () => {
         }
       });
     instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = AcceptType.PENDING_ACCEPT;
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
+    instance.wrongScoreModels[0].logInfoDetail.highlightAcceptType = 3;
 
     // Action
     const actual = instance.getHighlightMinTimeClass(new Date());
@@ -1306,6 +1419,8 @@ describe('EventWrongScoreComponent', () => {
           filter: Helper.fakeFilterModel,
         }
       });
+
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
 
     // Action
     const actual = instance.getHighlightMinTimeClass(null);
@@ -1340,7 +1455,7 @@ describe('EventWrongScoreComponent', () => {
     expect(actual).toBe('-');
   });
 
-  it('#displayMinTime should return expected time', async () => {
+  it('#displayMinTime should return expected time when has acceptTypeName', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
 
@@ -1358,12 +1473,42 @@ describe('EventWrongScoreComponent', () => {
         }
       });
     instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
     instance.getHighlightMinTimeClass(new Date("2020-10-08 09:44:46.361 PM"));
+
     // Action
     const actual = instance.displayMinTime(new Date("2020-10-08 09:44:46.361 PM"));
 
     // Assert
     expect(actual).toBe('09:44:46.361 PM - PA');
+  });
+
+  it('#displayMinTime should return expected time when no has acceptTypeName', async () => {
+    // Arrange
+    const mockChangeSavingRequestStatus = jest.fn();
+
+    const { instance } = await shallow
+      .mock(WrongScoreService, {
+        getFilterByBaseOnSubIssueType: jest.fn(),
+        getSelectedWrongScoreComponents: jest.fn(),
+        getSelectedWrongScores: jest.fn(),
+      })
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+        }
+      });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
+    instance.getHighlightMinTimeClass(new Date("2020-10-08 09:44:46.361 PM"));
+    instance.acceptTypeName = null;
+
+    // Action
+    const actual = instance.displayMinTime(new Date("2020-10-08 09:44:46.361 PM"));
+
+    // Assert
+    expect(actual).toBe('09:44:46.361 PM');
   });
 
   it('#changeVarCheckValue should update isCheckedVar', async () => {
@@ -1622,7 +1767,6 @@ describe('EventWrongScoreComponent', () => {
 
   it('#getTimeSelectedScore should return expected time', async () => {
     // Arrange
-    const mockGetFilterByBaseOnSubIssueType = jest.fn();
     const mockChangeSavingRequestStatus = jest.fn();
 
     const { instance } = await shallow
@@ -1634,11 +1778,11 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
     instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = Helper.fakeLogInfoDetail;
     instance.getHighlightMinTimeClass(new Date("2020-10-08 09:44:46.361 PM"));
     // Action
     const actual = instance.getTimeSelectedScore(Helper.fakeWrongScoreModel);
@@ -1657,16 +1801,17 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = null;
 
     // Action
     const actual = instance.getParlayCountSelectedScore(Helper.fakeWrongScoreModel);
 
     // Assert
-    expect(actual).toBe(2);
+    expect(actual).toBe(1);
   });
 
   it('#getSingleCountSelectedScore should return expected SingleCount', async () => {
@@ -1680,16 +1825,17 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = null;
 
     // Action
     const actual = instance.getSingleCountSelectedScore(Helper.fakeWrongScoreModel);
 
     // Assert
-    expect(actual).toBe(2);
+    expect(actual).toBe(1);
   });
 
   it('#getCancelCashOutCountSelectedScore should return expected CancelCashOutCount', async () => {
@@ -1703,16 +1849,17 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+    instance.wrongScoreModels[0].logInfoDetail = null;
 
     // Action
     const actual = instance.getCancelCashOutCountSelectedScore(Helper.fakeWrongScoreModel);
 
     // Assert
-    expect(actual).toBe(2);
+    expect(actual).toBe(1);
   });
 
   it('#isShowLogInfoSelectedScores should return false', async () => {
@@ -1726,7 +1873,6 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1752,7 +1898,6 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1765,5 +1910,28 @@ describe('EventWrongScoreComponent', () => {
 
     // Assert
     expect(actual).toBe(true);
+  });
+
+  it('#getLogInfoDetail should return LogInfoDetail[]', async () => {
+    // Arrange
+    const { instance } = await shallow
+      .mock(WrongScoreService, {
+        getFilterByBaseOnSubIssueType: jest.fn(),
+        getSelectedWrongScoreComponents: jest.fn(),
+        getSelectedWrongScores: jest.fn(),
+      })
+      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+        }
+      });
+    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
+
+    // Action
+    const actual = instance.getLogInfoDetail();
+
+    // Assert
+    expect(actual.length).toBe(2);
   });
 });

@@ -21,21 +21,6 @@ class Helper {
 }
 
 describe('FilterWithHdpComponent', () => {
-  @NgModule({
-    declarations: [
-      DateFullTimeNewComponent
-    ],
-    imports: [
-      NgbModule,
-      FormsModule,
-      ToolTipModule
-    ],
-    providers: [
-      ValidationService
-    ]
-  })
-  class AppModuleTest { }
-  let shallow: Shallow<FilterWrongOuComponent>;
 
   beforeEach(() => {
   });
@@ -182,5 +167,47 @@ describe('FilterWithHdpComponent', () => {
     component['emitRefreshEvent']();
 
     expect(component.refreshEvent.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('#isValidLiveIndicator should should return false when liveIndicator is Null', async () => {
+    const component = new FilterWrongOuComponent(null, null);
+    component.tooltip.display = jest.fn();
+    component.filterWrongOuModel =  Helper.fakeFilterWrongOuModel;
+    component.filterWrongOuModel.liveIndicator = null;
+
+    let actual = component['isValidLiveIndicator']();
+
+    expect(actual).toBeFalsy();
+  });
+
+  it('#isValidLiveIndicator should should return false when liveIndicator is Undefined', async () => {
+    const component = new FilterWrongOuComponent(null, null);
+    component.tooltip.display = jest.fn();
+    component.filterWrongOuModel = Helper.fakeFilterWrongOuModel;
+    component.filterWrongOuModel.liveIndicator = undefined;
+
+    let actual = component['isValidLiveIndicator']();
+
+    expect(actual).toBeFalsy();
+  });
+
+  it('#isValidLiveIndicator should should return true', async () => {
+    const component = new FilterWrongOuComponent(null, null);
+    component.tooltip.display = jest.fn();
+    component.filterWrongOuModel = Helper.fakeFilterWrongOuModel;
+    component.filterWrongOuModel.liveIndicator = 12;
+
+    let actual = component['isValidLiveIndicator']();
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isCorrectFormatHdp should return false', async () => {
+    const component = new FilterWrongOuComponent(null, null);
+    component.tooltip.display = jest.fn();
+    component.tooltip.display = jest.fn();
+    let actual = component.isCorrectFormatHdp("111111", "");
+
+    expect(actual).toBeFalsy;
   });
 });

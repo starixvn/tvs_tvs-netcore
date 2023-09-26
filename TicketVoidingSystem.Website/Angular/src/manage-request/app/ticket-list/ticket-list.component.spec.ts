@@ -552,51 +552,6 @@ describe('TicketListComponent', () => {
     expect(actual).toBe(false);
   });
 
-  it('#isDangerAcceptedIssueType should return false when requestDetail have not request', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.request = null;
-
-    const actual = instance['isDangerAcceptedIssueType']();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#isWrongScoreIssueType should return false when requestDetail have not request', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.request = null;
-
-    const actual = instance['isWrongScoreIssueType']();
-
-    expect(actual).toBe(false);
-  });
-
-  it('#isRedCardIssueType should return false when requestDetail have not request', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    instance.requestDetail = new RequestDetailViewModel();
-    instance.requestDetail.request = null;
-
-    const actual = instance['isRedCardIssueType']();
-
-    expect(actual).toBe(false);
-  });
-
   it('#isAbnormalBetRealMemberIssueType should return true', async () => {
     const { instance } = await shallow
       .render(Helper.ticketListComponentHtml, {

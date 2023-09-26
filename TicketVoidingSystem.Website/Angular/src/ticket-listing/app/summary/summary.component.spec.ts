@@ -8,11 +8,11 @@ class Helper {
   static readonly totalBetCountSelector = '.total-bet-count';
   static readonly emptyTableSelector = '.empty-table';
   static readonly affectedLicenseesSelector = '.affected-licensees';
-  static readonly fakeSummaryItem = new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap');
-  static readonly fakeSummaryItemHaveItems = new SummaryItem('DEF', 1130, false, 'Bet', '2', [Helper.fakeSummaryItem], 'Handicap');
-  static readonly fakeSummaryItemHaveItemsCV = new SummaryItem('DEF', 1130, true, 'Bet', '2', [Helper.fakeSummaryItem], 'Handicap');
-  static readonly fakeSummaryItemByCN88 = new SummaryItem('haifa', 1131, true, '12Bet', '2', [], 'Handicap');
-  static readonly fakeSummaryItemByCredit = new SummaryItem('Credit', 1132, true, '12Bet', '2', [], 'Handicap');
+  static readonly fakeSummaryItem = new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap', 1);
+  static readonly fakeSummaryItemHaveItems = new SummaryItem('DEF', 1130, false, 'Bet', '2', [Helper.fakeSummaryItem], 'Handicap', 1);
+  static readonly fakeSummaryItemHaveItemsCV = new SummaryItem('DEF', 1130, true, 'Bet', '2', [Helper.fakeSummaryItem], 'Handicap', 1);
+  static readonly fakeSummaryItemByCN88 = new SummaryItem('haifa', 1131, true, '12Bet', '2', [], 'Handicap', 1);
+  static readonly fakeSummaryItemByCredit = new SummaryItem('Credit', 1132, true, '12Bet', '2', [], 'Handicap', 1);
 }
 
 describe('SummaryComponent', () => {

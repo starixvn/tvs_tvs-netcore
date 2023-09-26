@@ -85,8 +85,8 @@ describe('AppService', () => {
   it('#getSummary should return expected data', async () => {
     // Arrange
     const expectedData = {
-      groupByLicensees: [new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap')],
-      groupByBetTypes: [new SummaryItem('EDF', 1129, false, '12Bet', '2', [], 'Handicap')]
+      groupByLicensees: [new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap', 1)],
+      groupByBetTypes: [new SummaryItem('EDF', 1129, false, '12Bet', '2', [], 'Handicap', 1)]
     };
     mockHttpService.postJson.mockResolvedValue(expectedData);
 

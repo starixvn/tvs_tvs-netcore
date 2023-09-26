@@ -42,7 +42,7 @@ class Helper {
     isLoadedTicketFull: true,
     isBlockBetList: true,
     affectedLicensee: new AffectedLicensee(),
-    affectedInstantLicensee: new AffectedLicensee(),    
+    affectedInstantLicensee: new AffectedLicensee(),
     chinaViewLicensee: new AffectedLicensee(),
     cashOutLicensee: new AffectedLicensee(),
     isShowTemplateMessage: true,
@@ -50,7 +50,8 @@ class Helper {
     isAllLiveTickets: false,
     isCheckedEarlyEvent: false,
     isMainMatch: false,
-    isPoolHouseAffected: false
+    isPoolHouseAffected: false,
+    jollyViewLicensee: new AffectedLicensee
   };
   static readonly fakeSqlResultError: SqlResult = {
     errCode: 1,

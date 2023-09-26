@@ -136,12 +136,20 @@ describe('FilterWithHdpComponent', () => {
     expect(component.teamFavorite).toBe(TeamFavorite.HOME);
   });
 
+  it('#isCorrectFormatHdp should return false', async () => {
+    const component = new FilterWithHdpComponent(null, null);
+    component.tooltip = new Tooltip();
+    component.tooltip.display = jest.fn();
+    let actual = component.isCorrectFormatHdp("111111", "");
+
+    expect(actual).toBeFalsy;
+  });
+
   it('#changeFilter should emit #changeFilterEvent', async () => {
     const component = new FilterWithHdpComponent(null, null);
     component.filterWithHdpModel = Helper.fakeFilterWithHdpModel;
     component.isEdit = false;
     component.changeFilterEvent.emit = jest.fn();
-
     component.changeFilter();
 
     expect(component.changeFilterEvent.emit).toHaveBeenCalledTimes(1);

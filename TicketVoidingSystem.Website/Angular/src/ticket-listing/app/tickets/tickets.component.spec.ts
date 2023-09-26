@@ -17,7 +17,7 @@ class Helper {
   static getFakeTicketsModel(): TicketsModel {
     const model = new TicketsModel();
     model.title = 'Title';
-    model.item = new SummaryItem('ABC', 100, false, '12Bet', '2', [], 'Handicap');
+    model.item = new SummaryItem('ABC', 100, false, '12Bet', '2', [], 'Handicap', 1);
     model.tickets = [
       {
         ballSequence: null,

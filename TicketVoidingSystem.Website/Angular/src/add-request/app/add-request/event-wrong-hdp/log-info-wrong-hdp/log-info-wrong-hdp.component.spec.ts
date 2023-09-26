@@ -21,6 +21,7 @@ import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';
+import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -61,6 +62,7 @@ class Helper {
     linkedLogsViewModel: new LinkedLogsViewModel(),
     poolHouseCheckedBetTypes: ''
   };
+
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
@@ -116,6 +118,23 @@ describe('LogInfoWrongHdpComponent', () => {
     });
 
     expect(fixture).toMatchSnapshot();
+  });
+
+  it('#ngOnInit should update isShowValidation True when edit is True', async () => {
+    const mockGetLogInfo = jest.fn();
+    const { instance } = await shallow
+    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+        logInfo: Helper.fakeLogInfoWrongHdp
+      }
+    });
+
+    await instance.ngOnInit();
+
+    expect(instance.isShowValidation).toBeTruthy();
   });
 
   it('refreshLogInfo should call #getLogInfo', async () => {
@@ -468,6 +487,60 @@ describe('LogInfoWrongHdpComponent', () => {
     const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
     fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
     const { instance } = await shallow
+    .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => false) })
+    .render({
+      bind: {
+        isEdit: false,
+        filter: Helper.fakeFilterModel,
+        logInfo: fakeLogInfoWrongHdp
+      }
+    });
+    fakeLogInfoWrongHdp.filterWithHdp.hdpValue = "hdpValue";
+
+    const actual = instance['initGetPoolHouseTicketQuery']();
+
+    expect(actual.hdpValue).toBe("hdpValue");
+  });
+
+  it('initGetPoolHouseTicketQuery should update homeFavorite & awayFavorite', async () => {
+    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
+    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
+    fakeLogInfoWrongHdp.filterWithHdp.homeFavorite = "homeFavorite";
+    fakeLogInfoWrongHdp.filterWithHdp.awayFavorite = "awayFavorite";
+
+    let fakeQuery: GetPoolHouseTicketQuery = {
+      matchId: 0,
+      actionId: 0,
+      requestId: 0,
+      issueTypeId: 0,
+      subIssueTypeId: 0,
+      homeFavorite: '',
+      awayFavorite: '',
+      hdpValue: '',
+      wrongMarket: '',
+      isLinkGroup1X2: false,
+      isLinkGroupAIO: false,
+      filterFromTransTime: '',
+      filterToTransTime: '',
+      liveIndicator: 0,
+      pageIndex: 1,
+      pageSize: 1,
+      wrongOddsInfo: []
+    };
+
+    let fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
+      isOpen: false,
+      checkedBetTypes: '',
+      query: fakeQuery,
+      groupBetTypes: [],
+      tickets: new TicketsModel(),
+      isAffectedGroup1X2: false,
+      isAffectedGroup1H1X2: false,
+      isAffectedGroupAIO: false,
+      linkedLogsViewModel: new LinkedLogsViewModel
+    };
+
+    const { instance } = await shallow
     .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => true) })
     .render({
       bind: {
@@ -476,9 +549,13 @@ describe('LogInfoWrongHdpComponent', () => {
         logInfo: fakeLogInfoWrongHdp
       }
     });
+    instance.poolHouseTicketsModel = fakePoolHouseTicketsModel;
 
     const actual = instance['initGetPoolHouseTicketQuery']();
 
-    expect(actual.hdpValue).toBe(Helper.fakeLogInfoWrongHdp.filterWithHdp.hdpValue);
+    expect(actual.homeFavorite).toBe("homeFavorite");
+    expect(actual.awayFavorite).toBe("awayFavorite");
+    expect(actual.pageIndex ).toBe(1);
+    expect(actual.pageSize ).toBe(1);
   });
 });

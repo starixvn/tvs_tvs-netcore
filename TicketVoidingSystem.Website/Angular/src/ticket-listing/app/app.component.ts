@@ -315,7 +315,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const resultSendDataAgain = await this.appService.sendDataToOic(this.sendFileQueries.filter(x => x.isChinaView === result.isChinaView && x.specialPlatform === result.specialPlatform));
     if (resultSendDataAgain[0].code === 0) {
       const licenseesName = this.sendFileQueries.filter(y => y.isChinaView === result.isChinaView && y.specialPlatform === result.specialPlatform).map(t => t.licenseeName).join(', ');
-      const result = this.messagesResponse.results.find(x => x.isChinaView === result.isChinaView && x.specialPlatform === result.specialPlatform);
+      result = this.messagesResponse.results.find(x => x.isChinaView === result.isChinaView && x.specialPlatform === result.specialPlatform);
       result.code = 0;
       result.message = 'Data of ' + licenseesName + ' are sent successfully!';
       result.isSuccessful = true;

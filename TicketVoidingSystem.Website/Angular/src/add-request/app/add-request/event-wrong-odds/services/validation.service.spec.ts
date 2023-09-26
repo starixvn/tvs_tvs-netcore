@@ -313,6 +313,13 @@ describe('ValidationService', () => {
     expect(actual).toBeFalsy();
   });
 
+  it('#isValidFilterOddsRange should return false when oddsValue not 0', async () => {
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const actual = service['isValidFilterOddsRange']('0', '2', tooltip);
+
+    expect(actual).toBeFalsy();
+  });
   it('#isValidFilterOddsRange should return true', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();

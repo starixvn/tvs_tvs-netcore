@@ -22,6 +22,7 @@ import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
+import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -102,6 +103,73 @@ describe('LogInfoWrongOuComponent', () => {
     shallow = new Shallow(LogInfoWrongOuComponent, AppModuleTest)
       .mock(ElementRef, {})
       .dontMock(NgbModule);
+  });
+
+  it('#ngOnInit should update isShowValidation True when edit is True', async () => {
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: Helper.fakeFilterModel,
+        logInfo: Helper.fakeLogInfoWrongOu,
+        isEdit: true
+      }
+    });
+
+    instance.ngOnInit();
+
+    expect(instance.isShowValidation ).toBeTruthy();
+  });
+
+  it('initGetPoolHouseTicketQuery should update homeFavorite & awayFavorite', async () => {
+    const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
+    fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
+    
+    let fakeQuery: GetPoolHouseTicketQuery = {
+      matchId: 0,
+      actionId: 0,
+      requestId: 0,
+      issueTypeId: 0,
+      subIssueTypeId: 0,
+      homeFavorite: '',
+      awayFavorite: '',
+      hdpValue: '',
+      wrongMarket: '',
+      isLinkGroup1X2: false,
+      isLinkGroupAIO: false,
+      filterFromTransTime: '',
+      filterToTransTime: '',
+      liveIndicator: 0,
+      pageIndex: 1,
+      pageSize: 1,
+      wrongOddsInfo: []
+    };
+
+    let fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
+      isOpen: false,
+      checkedBetTypes: '',
+      query: fakeQuery,
+      groupBetTypes: [],
+      tickets: new TicketsModel(),
+      isAffectedGroup1X2: false,
+      isAffectedGroup1H1X2: false,
+      isAffectedGroupAIO: false,
+      linkedLogsViewModel: new LinkedLogsViewModel
+    };
+
+    const { instance } = await shallow
+    .render({
+      bind: {
+        isEdit: false,
+        filter: Helper.fakeFilterModel,
+        logInfo: fakeLogInfoWrongOu
+      }
+    });
+    instance.poolHouseTicketsModel = fakePoolHouseTicketsModel;
+
+    const actual = instance['initGetPoolHouseTicketQuery']();
+
+    expect(actual.pageIndex ).toBe(1);
+    expect(actual.pageSize ).toBe(1);
   });
 
   it('LogInfoWrongOuComponent init should match snapshot', async () => {

@@ -34,7 +34,7 @@ class Helper {
 
   static fakeIssueTypes: IssueTypes = {
     issueTypes: [
-      { issueTypeId: 8, issueTypeName: 'Early Kick Off'},
+      { issueTypeId: 8, issueTypeName: 'Early Kick Off' },
       { issueTypeId: 9, issueTypeName: 'Wrong Kick Off Time' },
       { issueTypeId: 11, issueTypeName: 'Abnormal Bet' },
       { issueTypeId: 10, issueTypeName: 'Red Card' },
@@ -42,20 +42,20 @@ class Helper {
       { issueTypeId: 3, issueTypeName: 'Wrong Score' }
     ],
     subIssueTypes: [
-        { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null },
-        { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null },
-        { subIssueTypeId: 27, issueTypeId: 11, subIssueTypeName: 'Abnormal', subIssueTypeNameCS: '非正常' },
-        { subIssueTypeId: 28, issueTypeId: 11, subIssueTypeName: 'Group Betting', subIssueTypeNameCS: '群组投注' },
-        { subIssueTypeId: 29, issueTypeId: 11, subIssueTypeName: 'Hedging', subIssueTypeNameCS: '出货集团' },
-        { subIssueTypeId: 30, issueTypeId: 11, subIssueTypeName: 'Arbitrage', subIssueTypeNameCS: '打水套利' },
-        { subIssueTypeId: 31, issueTypeId: 11, subIssueTypeName: 'Fixed Game', subIssueTypeNameCS: '内定赛事' },
-        { subIssueTypeId: 32, issueTypeId: 11, subIssueTypeName: 'AB Bet', subIssueTypeNameCS: '单' },
-        { subIssueTypeId: 36, issueTypeId: 11, subIssueTypeName: 'Robot Betting', subIssueTypeNameCS: '机械投注' },
-        { subIssueTypeId: 37, issueTypeId: 11, subIssueTypeName: 'Irrigation Bet', subIssueTypeNameCS: '灌水投注' },
-        { subIssueTypeId: 38, issueTypeId: 11, subIssueTypeName: 'System Formula Bet', subIssueTypeNameCS: '系统计算投注' },
-        { subIssueTypeId: 39, issueTypeId: 1, subIssueTypeName: 'System Formula Bet 1', subIssueTypeNameCS: '系统计算投注' },
-        { subIssueTypeId: 40, issueTypeId: 10, subIssueTypeName: 'System Formula Bet 2', subIssueTypeNameCS: '系统计算投注' },
-        { subIssueTypeId: 41, issueTypeId: 3, subIssueTypeName: 'System Formula Bet 3', subIssueTypeNameCS: '系统计算投注' },
+      { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null },
+      { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null },
+      { subIssueTypeId: 27, issueTypeId: 11, subIssueTypeName: 'Abnormal', subIssueTypeNameCS: '非正常' },
+      { subIssueTypeId: 28, issueTypeId: 11, subIssueTypeName: 'Group Betting', subIssueTypeNameCS: '群组投注' },
+      { subIssueTypeId: 29, issueTypeId: 11, subIssueTypeName: 'Hedging', subIssueTypeNameCS: '出货集团' },
+      { subIssueTypeId: 30, issueTypeId: 11, subIssueTypeName: 'Arbitrage', subIssueTypeNameCS: '打水套利' },
+      { subIssueTypeId: 31, issueTypeId: 11, subIssueTypeName: 'Fixed Game', subIssueTypeNameCS: '内定赛事' },
+      { subIssueTypeId: 32, issueTypeId: 11, subIssueTypeName: 'AB Bet', subIssueTypeNameCS: '单' },
+      { subIssueTypeId: 36, issueTypeId: 11, subIssueTypeName: 'Robot Betting', subIssueTypeNameCS: '机械投注' },
+      { subIssueTypeId: 37, issueTypeId: 11, subIssueTypeName: 'Irrigation Bet', subIssueTypeNameCS: '灌水投注' },
+      { subIssueTypeId: 38, issueTypeId: 11, subIssueTypeName: 'System Formula Bet', subIssueTypeNameCS: '系统计算投注' },
+      { subIssueTypeId: 39, issueTypeId: 1, subIssueTypeName: 'System Formula Bet 1', subIssueTypeNameCS: '系统计算投注' },
+      { subIssueTypeId: 40, issueTypeId: 10, subIssueTypeName: 'System Formula Bet 2', subIssueTypeNameCS: '系统计算投注' },
+      { subIssueTypeId: 41, issueTypeId: 3, subIssueTypeName: 'System Formula Bet 3', subIssueTypeNameCS: '系统计算投注' },
     ],
     issueId: 0,
     selectedSubIssueTypes: [],
@@ -65,7 +65,7 @@ class Helper {
   static getFakeSportsType(): SportInfo[] {
     return [
       { sportType: 1, sportName: 'Soccer' },
-      { sportType: 2, sportName: 'Basketball'},
+      { sportType: 2, sportName: 'Basketball' },
       { sportType: 3, sportName: 'Football' },
     ];
   }
@@ -103,7 +103,7 @@ describe('FilterComponent', () => {
       FormsModule,
       NgSelectModule,
       NgbModule,
-      
+
     ],
     providers: [
       AddRequestStore,
@@ -117,9 +117,9 @@ describe('FilterComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(FilterComponent, AppModuleTest)
-              .dontMock(DateTimeModule)
-              .dontMock(NgbModule)
-              .mock(ElementRef, {});
+      .dontMock(DateTimeModule)
+      .dontMock(NgbModule)
+      .mock(ElementRef, {});
   });
 
   it('FilterComponent should init match snapshot', async () => {
@@ -209,7 +209,7 @@ describe('FilterComponent', () => {
     expect(instance.issueTypes.selectedSubIssueTypes.length).toBe(2);
     expect(instance.issueTypes.issueTypes.length).toBe(6);
   });
-  
+
   it('#ngOnChanges Should call expected function and return expected data when isLikelyDangerAccepted true', async () => {
     // Arrange
     const { instance } = await shallow
@@ -245,7 +245,7 @@ describe('FilterComponent', () => {
     expect(instance.issueTypes.selectedSubIssueTypes.length).toBe(2);
     expect(instance.issueTypes.issueTypes.length).toBe(6);
   });
-  
+
   it('#ngOnChanges Should call expected function and return expected data when isLikelyDangerAccepted false', async () => {
     // Arrange
     const { instance } = await shallow
@@ -267,7 +267,7 @@ describe('FilterComponent', () => {
     instance.model.subIssueTypeId = '12';
     instance.issueTypes = new IssueTypes(fakeIssueTypes);
     instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-    instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => true);
+    instance.issueTypes.issueId = null;
     instance.isLikelyDangerAccepted = jest.fn().mockImplementation(() => false);
     instance['getAllowanceTimeBySubIssueType'] = jest.fn();
     instance['setWidthControlByIssueType'] = jest.fn();
@@ -288,15 +288,15 @@ describe('FilterComponent', () => {
     // Arrange
     const mockChangeActionWaitingToManualEditPage = jest.fn();
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeActionWaitingToManualEditPage: mockChangeActionWaitingToManualEditPage
-    })
-    .render({
-      bind: {
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .mock(AddRequestStore, {
+        changeActionWaitingToManualEditPage: mockChangeActionWaitingToManualEditPage
+      })
+      .render({
+        bind: {
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isEdit = true;
     instance.actionIds = ['3'];
     instance.model.action = '5';
@@ -308,20 +308,20 @@ describe('FilterComponent', () => {
     expect(mockChangeActionWaitingToManualEditPage).toHaveBeenCalledTimes(1);
     expect(mockChangeActionWaitingToManualEditPage).toHaveBeenCalledWith(true);
   });
-  
+
   it('#changeActionWaitingToManualVoid should not call #changeActionWaitingToManualEditPage when add request', async () => {
     // Arrange
     const mockChangeActionWaitingToManualEditPage = jest.fn();
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeActionWaitingToManualEditPage: mockChangeActionWaitingToManualEditPage
-    })
-    .render({
-      bind: {
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .mock(AddRequestStore, {
+        changeActionWaitingToManualEditPage: mockChangeActionWaitingToManualEditPage
+      })
+      .render({
+        bind: {
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isEdit = false;
     instance.actionIds = ['3'];
     instance.model.action = '5';
@@ -345,16 +345,16 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.isAbnormalAccount).toBeTruthy();
   });
-  
+
   it('#haveIssueTypeFromPermission should be return true when has issue type id', async () => {
     // Arrange
     const { instance } = await shallow
-    .render({
-      bind: {
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
 
     // Act
@@ -363,7 +363,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.haveIssueTypeFromPermission).toBeTruthy();
   });
-  
+
   it('#ngOnInit should be call expected function', async () => {
     // Arrange
     const { instance } = await shallow
@@ -389,7 +389,7 @@ describe('FilterComponent', () => {
     expect(instance.isEditOrExternalUrl).toHaveBeenCalledTimes(1);
     expect(instance.updateModel).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#ngOnInit should be call expected function when isEditOrExternalUrl true', async () => {
     // Arrange
     const { instance } = await shallow
@@ -415,7 +415,7 @@ describe('FilterComponent', () => {
     expect(instance.isEditOrExternalUrl).toHaveBeenCalledTimes(1);
     expect(instance.updateModel).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#initData should be call #updateModel when add request', async () => {
     // Arrange
     document.body.innerHTML = '<section id="body" user-name="star" user-id="360418"></section>';
@@ -429,7 +429,7 @@ describe('FilterComponent', () => {
     instance['initialize'] = false;
     instance.isEdit = false;
     instance.getIssueTypes = jest.fn();
-    instance.initSelections = jest.fn();      
+    instance.initSelections = jest.fn();
     instance.updateSubByIssue = jest.fn();
     instance['updateCurrentAction'] = jest.fn();
     instance.updateModel = jest.fn();
@@ -444,7 +444,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.updateModel).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#initData should not call #updateModel when add edit request ', async () => {
     // Arrange
     const { instance } = await shallow
@@ -457,7 +457,7 @@ describe('FilterComponent', () => {
     instance['initialize'] = false;
     instance.isEdit = true;
     instance.getIssueTypes = jest.fn();
-    instance.initSelections = jest.fn();      
+    instance.initSelections = jest.fn();
     instance.updateSubByIssue = jest.fn();
     instance['updateCurrentAction'] = jest.fn();
     instance.updateModel = jest.fn();
@@ -468,7 +468,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.updateModel).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#initData should not call #updateModel when initialize false ', async () => {
     // Arrange
     const { instance } = await shallow
@@ -487,7 +487,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.updateModel).toHaveBeenCalledTimes(0);
   });
-    
+
   it('#initSelections should be call #updateModel when add request', async () => {
     // Arrange
     const { instance } = await shallow
@@ -517,7 +517,7 @@ describe('FilterComponent', () => {
     expect(instance.model.sportType).toEqual(Helper.fakeFilterModel.sportType);
     expect(instance.actionIds[0]).toEqual(Helper.fakeFilterModel.action);
   });
-  
+
   it('#initSelections should be call #updateModel when edit request', async () => {
     // Arrange
     const { instance } = await shallow
@@ -538,7 +538,28 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.model.sportType).toEqual(SportType.SOCCER);
   });
-  
+
+  it('#getAllowanceTimeBySubIssueType should be call #updateModel when edit request', async () => {
+    // Arrange
+    const { instance } = await shallow
+      .mock(FilterService, { getSportsType: jest.fn().mockImplementation(() => Helper.getFakeSportsType()) })
+      .mock(CommonService, { getVoidActions: jest.fn().mockImplementation(() => Helper.getFakeActions()) })
+      .render({
+        bind: {
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
+    instance.isEdit = false;
+    instance.actionIds = [];
+
+    // Act
+    await instance['getAllowanceTimeBySubIssueType']();
+
+    // Assert
+    expect(instance.model.sportType).toEqual(SportType.SOCCER);
+  });
+
   it('#getIssueTypes should be back to not authorized page', async () => {
     // Arrange
     const mockChangeBlockingUiStatus = jest.fn();
@@ -568,8 +589,8 @@ describe('FilterComponent', () => {
 
     // Assert
     expect(window.location.assign).toHaveBeenCalledWith(Helper.urlNotAuthorizedPage);
-  });  
-  
+  });
+
   it('#getIssueTypes should be set value issueId when add request and has not abnormalBet permission', async () => {
     // Arrange
     const mockChangeBlockingUiStatus = jest.fn();
@@ -605,7 +626,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.filterIssueTypePermission).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getIssueTypes should be set value issueId when add request and has abnormalBet permission', async () => {
     // Arrange
     const mockChangeBlockingUiStatus = jest.fn();
@@ -641,7 +662,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.filterIssueTypePermission).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getIssueTypes should be set value issueId when edit request', async () => {
     // Arrange
     const mockChangeBlockingUiStatus = jest.fn();
@@ -702,7 +723,7 @@ describe('FilterComponent', () => {
           model: Helper.fakeFilterModel,
           issueTypes: Helper.fakeIssueTypes
         }
-      }); 
+      });
     instance.issueTypes = Helper.fakeIssueTypes;
 
     // Act
@@ -711,7 +732,7 @@ describe('FilterComponent', () => {
     // Assert
     expect(instance.issueTypes.issueId).toBe(Helper.fakeIssueTypes.issueId);
   });
-  
+
   it('#ngOnDestroy should not call unsubscribe when abnormalFilterBySubscription null', async () => {
     const { instance } = await shallow
       .render({
@@ -719,14 +740,14 @@ describe('FilterComponent', () => {
           model: Helper.fakeFilterModel,
           issueTypes: Helper.fakeIssueTypes
         }
-      }); 
+      });
     instance.abnormalFilterBySubscription = null;
 
     instance.ngOnDestroy();
 
     expect(instance.abnormalFilterBySubscription).toBeNull();
   });
-  
+
   it('#getSubIssueTypeName should return name when has subIssueId', async () => {
     const { instance } = await shallow
       .render({
@@ -765,7 +786,7 @@ describe('FilterComponent', () => {
 
     expect(actual).toBe('Select Sub Type');
   });
-  
+
   it('#getSubIssueTypeName should return default text when has not subIssueId', async () => {
     const fakeIssueTypes = _.cloneDeep(Helper.fakeIssueTypes);
     fakeIssueTypes.subIssueId = null;
@@ -776,12 +797,12 @@ describe('FilterComponent', () => {
           issueTypes: fakeIssueTypes
         }
       });
-      
+
     const actual = instance.getSubIssueTypeName();
 
     expect(actual).toBe('Select Sub Type');
   });
-  
+
   it('#initDate should init date with date time that is not model.eventDate', async () => {
     const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
     fakeFilterModel.eventDate = '2020-11-09 12:08:49.737';
@@ -794,24 +815,24 @@ describe('FilterComponent', () => {
           issueTypes: Helper.fakeIssueTypes
         }
       });
-      
+
     instance.initDate();
 
     expect(instance.date.year).toBeGreaterThan(date.getFullYear());
   });
-  
+
   it('#updateDataAfterClosed should call #updateModel', async () => {
     const { instance } = await shallow
-    .mock(AddRequestStore, { changeAllowanceTime: jest.fn()})
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .mock(AddRequestStore, { changeAllowanceTime: jest.fn() })
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.updateModel = jest.fn();
-      
+
     instance.updateDataAfterClosed(1);
 
     expect(instance.updateModel).toHaveBeenCalledTimes(1);
@@ -819,31 +840,31 @@ describe('FilterComponent', () => {
 
   it('#openDialog should update subIssueTypeDialogModel', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.subIssueTypeDialogModel = new SubIssueTypeDialogModel();
-      
+
     instance.openDialog();
 
     expect(instance.subIssueTypeDialogModel.isOpen).toBeTruthy();
     expect(instance.subIssueTypeDialogModel.issueTypeId).toBe(instance.model.issueTypeId);
   });
-  
+
   it('#onChangeIssueType should call expected method', async () => {
     const { instance } = await shallow
-    .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn()})
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.updateSubByIssue = jest.fn();
     instance['updateCurrentAction'] = jest.fn();
     instance.updateModel = jest.fn();
@@ -855,51 +876,51 @@ describe('FilterComponent', () => {
     expect(instance.updateModel).toHaveBeenCalled();
     expect(instance['setWidthControlByIssueType']).toHaveBeenCalled();
   });
-  
+
   it('#onChangeSubIssueType should call #updateModel', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.updateModel = jest.fn();
 
     instance.onChangeSubIssueType();
 
     expect(instance.updateModel).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#setWidthControlByIssueType should update correctly', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
 
-    [1,8,9,13,10,4,5,6,7,11,15,3,17,19].forEach(issueId => {
+    [1, 8, 9, 13, 10, 4, 5, 6, 7, 11, 15, 3, 17, 19].forEach(issueId => {
       instance.model.issueTypeId = issueId.toString();
 
       instance['setWidthControlByIssueType']();
 
-    expect(instance.widthActionControl).toBeGreaterThan(0);
+      expect(instance.widthActionControl).toBeGreaterThan(0);
     });
   });
-  
+
   it('#updateCurrentAction should update actions when is abnormal mix parlay', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => true);
     instance.isAbnormalBet = jest.fn().mockImplementation(() => true);
     instance.abnormalFilterBy = AbnormalFilterBy.MIX_PARLAY;
@@ -909,16 +930,16 @@ describe('FilterComponent', () => {
 
     expect(instance.actions.length).toBeGreaterThan(0);
   });
-  
+
   it('#updateCurrentAction should update actions when is AB real member', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => true);
     instance.abnormalFilterBy = null;
     instance.originActions = Helper.getFakeActions();
@@ -927,16 +948,16 @@ describe('FilterComponent', () => {
 
     expect(instance.actions.length).toBeGreaterThan(0);
   });
-  
+
   it('#updateCurrentAction should update actions when is Archived ticket', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => false);
     instance.isArchivedTicket = jest.fn().mockImplementation(() => true);
     instance.originActions = Helper.getFakeActions();
@@ -945,16 +966,16 @@ describe('FilterComponent', () => {
 
     expect(instance.actions.length).toBeGreaterThan(0);
   });
-  
+
   it('#updateCurrentAction should update actions when is Abnormal Account', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => false);
     instance.isArchivedTicket = jest.fn().mockImplementation(() => false);
     instance.isAbnormalAccount = jest.fn().mockImplementation(() => true);
@@ -964,16 +985,16 @@ describe('FilterComponent', () => {
 
     expect(instance.actions.length).toBeGreaterThan(0);
   });
-  
+
   it('#updateCurrentAction should update actions when is others', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => false);
     instance.isArchivedTicket = jest.fn().mockImplementation(() => false);
     instance.isAbnormalAccount = jest.fn().mockImplementation(() => true);
@@ -983,36 +1004,36 @@ describe('FilterComponent', () => {
 
     expect(instance.actions.length).toBeGreaterThan(0);
   });
-  
+
   it('#filterIssueTypePermission should filter issueTypes', async () => {
     const issues = _.cloneDeep(Helper.fakeIssueTypes);
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
-    
+
     instance.filterIssueTypePermission(issues);
 
     expect(issues.issueTypes.length).toBeGreaterThan(0);
   });
-  
+
   it('#updateModel should emit modelChange', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.modelChange.emit = jest.fn();
     instance.date = new NgbDate(2021, 12, 21);
-    
+
     [1, 3, 11].forEach(x => {
       instance.issueTypes.issueId = x;
 
@@ -1021,16 +1042,16 @@ describe('FilterComponent', () => {
       expect(instance.modelChange.emit).toHaveBeenCalled();
     });
   });
-  
+
   it('#updateModel should emit modelChange when have not issueId, subIssueId', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.modelChange.emit = jest.fn();
     instance.date = new NgbDate(2021, 12, 21);
     instance.issueTypes.issueId = null;
@@ -1040,16 +1061,16 @@ describe('FilterComponent', () => {
 
     expect(instance.modelChange.emit).toHaveBeenCalled();
   });
-  
+
   it('#isShowSubType should return true', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypes.issueId = 1;
     instance.issueTypes.selectedSubIssueTypes = Helper.fakeIssueTypes.subIssueTypes;
 
@@ -1057,16 +1078,16 @@ describe('FilterComponent', () => {
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#isShowButtonSelectSubType should return false', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     [null, 11].forEach(x => {
       instance.issueTypes.issueId = x;
 
@@ -1075,16 +1096,16 @@ describe('FilterComponent', () => {
       expect(actual).toBeFalsy();
     });
   });
-  
+
   it('#updateSubByIssue should update selectedSubIssueTypes correctly', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     [1, 11, 10, 8].forEach(x => {
       instance.issueTypes.issueId = x;
 
@@ -1093,80 +1114,80 @@ describe('FilterComponent', () => {
       expect(instance.issueTypes.selectedSubIssueTypes.length).toBeGreaterThan(0);
     });
   });
-  
+
   it('#isDangerAccepted should return false', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypes.issueId = null;
 
     const actual = instance.isDangerAccepted();
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#isRedCard should return false', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypes.issueId = null;
 
     const actual = instance.isRedCard();
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#haveAbnormalBetFromPermission should return true', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypesPermission = Helper.getFakeIssueTypePermissionList();
 
     const actual = instance.haveAbnormalBetFromPermission();
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#checkValidSubIssueType should return true', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypes.subIssueId = 1;
 
     const actual = instance.checkValidSubIssueType();
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#checkValidSubIssueType should return false', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        model: Helper.fakeFilterModel,
-        issueTypes: Helper.fakeIssueTypes
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          model: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes
+        }
+      });
     instance.issueTypes.subIssueId = null;
 
     const actual = instance.checkValidSubIssueType();
