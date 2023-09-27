@@ -35,10 +35,10 @@ public class SubjectServiceImp : SubjectService
         var labels = SubjectFactory.CreateRecover(type);
         return group switch
         {
-            EmailGroup.Recover => string.Format(labels.Licensee(), model.ViewModel.DateTime),
-            EmailGroup.CashOut => string.Format(labels.Licensee(), model.ViewModel.DateTime),
-            EmailGroup.ItQa => string.Format(labels.It(), StringResource.TestCurrency, model.ViewModel.DateTime),
-            EmailGroup.ItSupport => string.Format(labels.It(), StringResource.RealCurrency, model.ViewModel.DateTime),
+            EmailGroup.Recover => string.Format(CultureInfo.InvariantCulture, labels.Licensee(), model.ViewModel.DateTime),
+            EmailGroup.CashOut => string.Format(CultureInfo.InvariantCulture, labels.Licensee(), model.ViewModel.DateTime),
+            EmailGroup.ItQa => string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.TestCurrency, model.ViewModel.DateTime),
+            EmailGroup.ItSupport => string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.RealCurrency, model.ViewModel.DateTime),
             _ => ExceptionGroup.WrongGroup
         };
     }

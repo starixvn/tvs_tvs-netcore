@@ -38,12 +38,14 @@ public class BetTypesServiceTests
         await repository.Received().GetBetTypes(criteria);
     }
 
-    [Fact]
-    public async Task GetGroupBetTypes_ResultIsSuccessful_ExpectedValue()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(0)]
+    public async Task GetGroupBetTypes_ResultIsSuccessful_ExpectedValue(int errorCode)
     {
         // Arrange
         var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "" };
-        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() }, Result  = new Result{ ErrorCode  = 0 } };
+        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() }, Result  = new Result{ ErrorCode  = errorCode } };
         var expectedResult = new GroupBetTypesViewModel
         {
             GroupBetTypes = new List<GroupBetTypeModel> { new() { BetTypes = new List<BetTypeModel> { new() } } }

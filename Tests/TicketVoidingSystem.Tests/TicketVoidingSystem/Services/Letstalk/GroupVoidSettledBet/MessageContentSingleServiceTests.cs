@@ -98,12 +98,13 @@ public class MessageContentSingleServiceTests
         {
             Match = new Match
             {
-                MatchId = 123,
+                MatchId = 0,
                 EventDate = new DateTime(2022, 1, 1, 1, 1, 1),
                 KickOffTime = new DateTime(2022, 1, 1, 1, 1, 2),
                 LeagueName = "Premier League",
                 HomeName = "Team A",
                 AwayName = "Team B",
+                AwayId = 0
             },
             UserName = "John Doe",
             VoidFromTime = new DateTime(2022, 1, 1, 1, 1, 3).ToString("dd MM yyyy"),

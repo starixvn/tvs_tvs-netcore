@@ -86,7 +86,7 @@ public class RecoverBetServiceImp : RecoverBetService
 
         var results = new List<Result>
         {
-            new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg }
+            new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg }
         };
 
         return results;

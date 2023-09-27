@@ -9,15 +9,15 @@
             <label><span>*</span>Message Type</label>
             @Html.DropDownList("ddl-message-type", new List<SelectListItem>
                     {
-                        new SelectListItem {Text = "N/A", Value = ""},
-                        new SelectListItem {Text = "Void (Unsettled)", Value = MessageContentType.VoidUnsettled.ToString() },
-                        new SelectListItem {Text = "Void (Settled)", Value = MessageContentType.VoidSettled.ToString() },
-                        new SelectListItem {Text = "Recover", Value = MessageContentType.Recover.ToString() },
-                        new SelectListItem {Text = "Refund", Value = MessageContentType.Refund.ToString() },
-                        new SelectListItem {Text = "Reject", Value = MessageContentType.Reject.ToString() },
-                        new SelectListItem {Text = "Re-settle", Value = MessageContentType.ReSettle.ToString() },
-                        new SelectListItem {Text = "UnCalculate", Value = MessageContentType.UnCalculate.ToString() },
-                        new SelectListItem {Text = "Others", Value = MessageContentType.Others.ToString() }
+                        new() {Text = "N/A", Value = ""},
+                        new() {Text = "Void (Unsettled)", Value = MessageContentType.VoidUnsettled.ToString() },
+                        new() {Text = "Void (Settled)", Value = MessageContentType.VoidSettled.ToString() },
+                        new() {Text = "Recover", Value = MessageContentType.Recover.ToString() },
+                        new() {Text = "Refund", Value = MessageContentType.Refund.ToString() },
+                        new() {Text = "Reject", Value = MessageContentType.Reject.ToString() },
+                        new() {Text = "Re-settle", Value = MessageContentType.ReSettle.ToString() },
+                        new() {Text = "UnCalculate", Value = MessageContentType.UnCalculate.ToString() },
+                        new() {Text = "Others", Value = MessageContentType.Others.ToString() }
                     })
         </div>
     }

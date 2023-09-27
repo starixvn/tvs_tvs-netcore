@@ -31,6 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />
+    <ProjectReference Include="..\..\Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ManageVoidServices\TicketVoidingSystem.ManageVoidServices.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />

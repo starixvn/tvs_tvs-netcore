@@ -101,13 +101,13 @@ public class ObjectToXmlExtensionFacts
     {
         // Arrange
         var expected = "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' " +
-                                "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-                                "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' MatchId='123' SingleCount='1' " +
-                                "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTime='' MinType='' />" +
-                                $"{Environment.NewLine}<r LiveHomeScore='' LiveAwayScore='' ScoreId='0' AATime='' PATime='' SATime='' LiveScores='' " +
-                                "SubIssueTypeId='0' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='' VoidFromTime='' " +
-                                "VoidToTime='' MatchId='' SingleCount='' MainParlayCount='' ActualScore='' FilterBy='' IsCheckedVar='' " +
-                                "MinTime='' MinType='' /></root>";
+                       "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                       "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' MatchId='123' SingleCount='1' " +
+                       "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTime='' MinType='' />" + Environment.NewLine +
+                       "<r LiveHomeScore='' LiveAwayScore='' ScoreId='0' AATime='' PATime='' SATime='' LiveScores='' " +
+                       "SubIssueTypeId='0' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='' VoidFromTime='' " +
+                       "VoidToTime='' MatchId='' SingleCount='' MainParlayCount='' ActualScore='' FilterBy='' IsCheckedVar='' " +
+                       "MinTime='' MinType='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -298,16 +298,16 @@ public class ObjectToXmlExtensionFacts
     {
         // Arrange
         var expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-                                "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-                                "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
-                                "IsCheckedVar='' MinTime='2018-10-30 16:20:20.222' MinType='' />" +
-                                $"{Environment.NewLine}<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-                                "LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
-                                "VoidFromTime='' VoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTime='' MinType='' />" +
-                                $"{Environment.NewLine}<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-                                "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-                                "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
-                                "IsCheckedVar='' MinTime='' MinType='' /></root>";
+                       "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                       "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
+                       "IsCheckedVar='' MinTime='2018-10-30 16:20:20.222' MinType='' />" + Environment.NewLine +
+                       "<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+                       "LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
+                       "VoidFromTime='' VoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTime='' MinType='' />" + Environment.NewLine +
+                       "<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+                       "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                       "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
+                       "IsCheckedVar='' MinTime='' MinType='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
