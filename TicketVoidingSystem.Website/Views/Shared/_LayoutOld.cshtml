@@ -29,30 +29,8 @@
         </script>
     </head>
 <body user-name="@userName" origin-url="@Url.Content("~/")">
-        <div class="row header-user-info user-info-background">
-            <a class="logo" href="~/?ref=logo">&nbsp;</a>
-            <div style="width: 60px; float: right;">
-                &nbsp;
-            </div>
-            <div class="user-info dropdown">
-                <span class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="0">
-                    &nbsp;<em class="icon-avata"></em>&nbsp; Welcome, <span class="username">@userName</span>
-                    <span class="icon-menu-down"></span>
-                </span>
-                <ul class="dropdown-menu" role="menu">
-                    <li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/ChangePassword")">
-                            Change Password
-                        </a>
-                    </li>
-                    <li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="@Url.Content("~/Auth/LogOut")">
-                            Sign Out
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        @await Component.InvokeAsync(nameof(LogOut), new { userName })
+
         <header>
             @await Component.InvokeAsync(nameof(Menu))
         </header>
