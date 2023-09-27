@@ -34,12 +34,13 @@ import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
 
 import * as _ from 'lodash';
+import { PasswordService } from '../../internal/services/password.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [BlockUIService, HttpRequestService, AppService]
+  providers: [BlockUIService, HttpRequestService, AppService, PasswordService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Home / Void Parlay Virtual Sports Bet (Sub)';
@@ -68,7 +69,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private element: ElementRef,
     private blockUIService: BlockUIService,
-    private appService: AppService
+    private appService: AppService,
+    private passwordService: PasswordService
   ) {}
 
   public ngOnInit() {
@@ -208,7 +210,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       reason: this.confirmation.reason,
       reasonSC: this.confirmation.reasonSC,
       userName: this.confirmation.userName,
-      password: this.confirmation.userPassword
+      password: this.passwordService.hash(this.confirmation.userPassword)
     };
 
     this.appService.voidTicket(queryModel).subscribe(data => {

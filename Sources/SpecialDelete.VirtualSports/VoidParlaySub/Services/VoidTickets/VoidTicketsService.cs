@@ -71,7 +71,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
     {
         query.Message.CreatorName = sessionService.UserName;
         query.Message.CreatorId = sessionService.UserId;
-        var messageId = await sendMessageService.InsertMessage(query.Message, query.MatchId, null, false);
+        var messageId = await sendMessageService.InsertMessage(query.Message, query.MatchId ?? 0, null, false);
         var reasonId = await sendMessageService.InsertReason(query.Reason, query.ReasonSC);
         await sendMessageService.SendMessage(tickets, messageId, 0, query.Message.CreatorId);
         await sendMessageService.InsertMessageIntoAdminSite(query.Message);

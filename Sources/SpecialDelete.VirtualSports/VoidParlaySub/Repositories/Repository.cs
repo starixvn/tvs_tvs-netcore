@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Fanex.Data;
 using Fanex.Data.Repository;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.VoidParlaySub.Criteria;
@@ -10,7 +9,6 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Repositories;
-
 public interface Repository
 {
     Task<GetTicketsModel> GetTickets(GetTicketsQuery query);
@@ -105,7 +103,6 @@ public class RepositoryImp : Repository
     {
         var criteria = mapper.Map<VoidTicketsCriteria>(query);
         criteria.UserId = sessionService.UserId;
-        criteria.Password = Cryptography.EncryptPassword(query.Password);
         criteria.Ip = sessionService.GetClientIp();
 
         return criteria;

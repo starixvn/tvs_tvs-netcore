@@ -1,3 +1,5 @@
+@using RazorEngine.Text
+
 <table cellspacing="0" style="border: 1px solid; border-collapse: collapse; font-size: 8pt; font-family: 'Segoe UI',Tahoma,Arial,sans-serif; background-color: #E7F1F3">
     <tr height="70">
         <th style="background-color: #404C5A; color: #ffffff; text-transform: uppercase; padding-left: 10px; font-size: 20px; text-align: left;">
@@ -77,19 +79,19 @@
                     @ticket.TransDate
             </td>
             <td align="Center">
-                @Html.Raw(ticket.Odds)
+                @(new RawString(ticket.Odds))
         </td>
         <td align="Center">
-            @Html.Raw(@ticket.Stake)
+            @(new RawString(@ticket.Stake))
     </td>
     <td align="Right">
-        @Html.Raw(@ticket.WinLoss)
+        @(new RawString(@ticket.WinLoss))
 </td>
 <td align="Center">
-    @Html.Raw(@ticket.Status)
+    @(new RawString(@ticket.Status))
 </td>
 <td align="Right">
-    @Html.Raw(ticket.Choice)
+    @(new RawString(ticket.Choice))
 </td>
 <td align="Center">
     @ticket.BetFrom
@@ -108,7 +110,7 @@
             }
             Recovered by: <strong>@Model.ActorUsername</strong>
             <br>
-            Date: <strong>@Model.DateTime</strong>
+            JSType.Date: <strong>@Model.DateTime</strong>
             <br>
             <br>
         </td>

@@ -14,13 +14,13 @@ public class Query
 {
     public string TicketType { get; set; }
 
-    public string Type { get; set; }
+    public string? Type { get; set; }
 
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
-    public string TransIds { get; set; }
+    public string? TransIds { get; set; }
 
-    public IEnumerable<BetId> Tickets { get; set; }
+    public IEnumerable<BetId>? Tickets { get; set; }
 
     public Recover TypeOfRecover => GetTypeOfRecover();
 

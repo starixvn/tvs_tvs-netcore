@@ -1,4 +1,6 @@
-﻿<table cellspacing="0" style="border: 1px solid; border-collapse: collapse; font-size: 8pt; font-family: 'Segoe UI',Tahoma,Arial,sans-serif; background-color: #E7F1F3">
+﻿@using RazorEngine.Text
+
+<table cellspacing="0" style="border: 1px solid; border-collapse: collapse; font-size: 8pt; font-family: 'Segoe UI',Tahoma,Arial,sans-serif; background-color: #E7F1F3">
     <tr height="70">
         <th style="background-color: #404C5A; color: #ffffff; text-transform: uppercase; padding-left: 10px; font-size: 20px; text-align: left;">
             Recover bet information
@@ -77,10 +79,10 @@
                     @transaction.TransDate
             </td>
             <td align="Right">
-                @Html.Raw(transaction.Odds)
+                @(new RawString(transaction.Odds))
         </td>
         <td align="Right">
-            @Html.Raw(transaction.Stake)
+            @(new RawString(transaction.Stake))
     </td>
     <td align="Right">
         @transaction.WinLost
@@ -89,7 +91,7 @@
     @transaction.Status
 </td>
 <td align="Right">
-    @Html.Raw(transaction.Choice)
+    @(new RawString(transaction.Choice))
 </td>
 <td align="Center">
     @transaction.BetFrom
@@ -108,7 +110,7 @@
             }
             Recovered by: <strong>@Model.ActorUsername</strong>
             <br>
-            Date: <strong>@Model.DateTime</strong>
+            JSType.Date: <strong>@Model.DateTime</strong>
             <br>
             <br>
         </td>

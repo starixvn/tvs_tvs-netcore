@@ -5,7 +5,7 @@ namespace SpecialDelete.VirtualSports.VoidParlaySub.Models;
 
 public class VoidTicketsQuery
 {
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public IEnumerable<BetId> Tickets { get; set; }
 

@@ -2,7 +2,7 @@
 
 public class GetTicketsQuery
 {
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public string BetTypes { get; set; }
 

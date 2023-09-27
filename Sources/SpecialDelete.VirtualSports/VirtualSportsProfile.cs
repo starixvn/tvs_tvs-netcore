@@ -6,6 +6,8 @@ using SpecialDelete.VirtualSports.RecoverBet.Models;
 using SpecialDelete.VirtualSports.VoidParlaySub.Criteria;
 using SpecialDelete.VirtualSports.VoidParlaySub.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using GetTicketsCriteria = SpecialDelete.VirtualSports.RecoverBet.Criteria.GetTicketsCriteria;
+
 
 namespace SpecialDelete.VirtualSports;
 

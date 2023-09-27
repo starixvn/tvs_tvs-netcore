@@ -10,7 +10,7 @@ public class RecoverTicketsCriteria : CriteriaBase
 
     public string Type { get; set; }
 
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public string TransIds { get; set; }
 
