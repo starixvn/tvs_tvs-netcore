@@ -215,7 +215,9 @@ public static class Helper
 
     private static bool IsMenuOfNewPage(MenuItem menu)
     {
-        return menu.Name == "AB Exception List" || menu.Name == "Mark/Unmark Tickets" || menu.Name == "Ticket Listing" || menu.Name == "Void Single Bet"
-               || menu.Name == "Manage Request" || menu.Name == "Add Request" || menu.Name == "Upload Batch Message";
+#pragma warning disable S1067 // Expressions should not be too complex
+        return menu.Name is "AB Exception List" or "Mark/Unmark Tickets" or "Ticket Listing" or "Void Single Bet" or "Manage Request" or "Add Request"
+            or "Upload Batch Message" or "Void Parlay Sub Bet" or "Recover Virtual Sports Bet";
+#pragma warning restore S1067 // Expressions should not be too complex
     }
 }

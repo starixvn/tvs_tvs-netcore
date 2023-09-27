@@ -33,4 +33,13 @@ public class MenuController : Controller
     {
         return View("~/wwwroot/dist/old-page/void-parlay-sub-virtual-sports/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("VirtualSports/[action]")]
+    [Route("VirtualSports/[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverVirtualSportsBet, Policy = Constant.Policy.Read)]
+    public IActionResult RecoverVirtualSportsBet()
+    {
+        return View("~/wwwroot/dist/old-page/recover-virtual-sports-bet/index.cshtml");
+    }
 }
