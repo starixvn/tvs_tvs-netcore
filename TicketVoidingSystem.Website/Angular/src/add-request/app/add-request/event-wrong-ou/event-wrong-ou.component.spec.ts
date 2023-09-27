@@ -32,20 +32,20 @@ class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
   static readonly fakeLogInfoDetail: LogInfoDetail =
-  {
-    matchId: 12345,
-    liveScores: '0 - 0',
-    voidFromTime: new Date(Helper.fakeFromDateTime),
-    voidToTime: new Date(Helper.fakeToDateTime),
-    singleCount: 1,
-    mainParlayCount: 1,
-    cashOutCount: 3,
-    settleCount: 1,
-    instantlySettleCount: 2,
-    scoreNormalTicket: '',
-    scoreOfMatch: '',
-    cancelCashOutCount: 1
-  };
+    {
+      matchId: 12345,
+      liveScores: '0 - 0',
+      voidFromTime: new Date(Helper.fakeFromDateTime),
+      voidToTime: new Date(Helper.fakeToDateTime),
+      singleCount: 1,
+      mainParlayCount: 1,
+      cashOutCount: 3,
+      settleCount: 1,
+      instantlySettleCount: 2,
+      scoreNormalTicket: '',
+      scoreOfMatch: '',
+      cancelCashOutCount: 1
+    };
   static readonly fakeFilterWrongOuModel: FilterWrongOuModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
@@ -141,12 +141,12 @@ describe('EventWrongOuComponent', () => {
 
   it('EventWrongOuComponent init should match snapshot', async () => {
     const { fixture } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .render({
+        bind: {
+          isEdit: false,
+          filter: Helper.fakeFilterModel,
+        }
+      });
 
     expect(fixture).toMatchSnapshot();
   });
@@ -158,13 +158,13 @@ describe('EventWrongOuComponent', () => {
     };
     const mockInitDefaultFilter = jest.fn();
     const { instance } = await shallow
-    .mock(EventWrongOuService, { initDefaultFilter: mockInitDefaultFilter })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(EventWrongOuService, { initDefaultFilter: mockInitDefaultFilter })
+      .render({
+        bind: {
+          isEdit: false,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance['resetLogInfoAndHideEvents'] = jest.fn();
     instance.resetAllData = jest.fn();
@@ -182,13 +182,13 @@ describe('EventWrongOuComponent', () => {
     const filter = _.cloneDeep(Helper.fakeFilterModel);
     filter.isChangeSubTypeManual = true;
     const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: filter,
-      }
-    });
+      .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: filter,
+        }
+      });
     instance['resetLogInfoAndHideEvents'] = jest.fn();
 
     instance.ngOnChanges(changes);
@@ -200,14 +200,14 @@ describe('EventWrongOuComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockValidateCommonData = jest.fn().mockImplementation(() => false);
     const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongOuComponent>();
@@ -227,22 +227,22 @@ describe('EventWrongOuComponent', () => {
     const mockGetChildMatches = jest.fn();
     const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
-    .mock(LogInfoService, {
-      resetLogInfoOfEvent: mockResetLogInfoOfEvent,
-      getLogInfo: mockGetLogInfo
-    })
-    .mock(EventWrongOuService, {
-      getLinkedLog: jest.fn(),
-    })
-    .mock(ValidationService, { validateCommonData: mockValidateCommonData })
-    .mock(RelatedEventService, { getChildMatches: mockGetChildMatches })
-    .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(LogInfoService, {
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+        getLogInfo: mockGetLogInfo
+      })
+      .mock(EventWrongOuService, {
+        getLinkedLog: jest.fn(),
+      })
+      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
+      .mock(RelatedEventService, { getChildMatches: mockGetChildMatches })
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     instance.primitiveProps = new PrimitiveProperty();
     const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
@@ -262,13 +262,13 @@ describe('EventWrongOuComponent', () => {
   it('changeMatchEvent should call expected method when have not league event', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
@@ -284,13 +284,13 @@ describe('EventWrongOuComponent', () => {
   it('changeMatchEvent should call expected method', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
@@ -307,13 +307,14 @@ describe('EventWrongOuComponent', () => {
 
   it('showAddChildMatchModal should update data', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     instance.addChildMatchModel = new AddChildMatchModel();
+    instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
 
     instance.showAddChildMatchModal(1);
 
@@ -338,13 +339,13 @@ describe('EventWrongOuComponent', () => {
     logInfo[1].matchId = 12341234;
     const mockUpdateEvents = jest.fn().mockImplementation(() => [Helper.fakeLogInfoWrongHdp]);
     const { instance } = await shallow
-    .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
     instance.relatedEvents = [new ChildMatchModel()];
     instance.relatedEvents[0].matchId = logInfo[1].matchId;
     instance.relatedEvents[0].matchType = 2;
@@ -358,12 +359,12 @@ describe('EventWrongOuComponent', () => {
 
   it('handleDeleteEvent should update data', async () => {
     const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
 
     const logInfo = [_.cloneDeep(Helper.fakeLogInfoWrongHdp)];
     logInfo[0].matchId = 123123;
@@ -377,13 +378,13 @@ describe('EventWrongOuComponent', () => {
   it('handleClickAddRelatedEvent should update data', async () => {
     const mockAddRelatedEventByInput = jest.fn();
     const { instance } = await shallow
-    .mock(RelatedEventService, { addRelatedEventByInput: mockAddRelatedEventByInput })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(RelatedEventService, { addRelatedEventByInput: mockAddRelatedEventByInput })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
 
     await instance.handleClickAddRelatedEvent();
 
@@ -394,16 +395,21 @@ describe('EventWrongOuComponent', () => {
     const mockChangeBlockingUiStatus = jest.fn();
     const mockSaveRequest = jest.fn();
     const { instance } = await shallow
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
-    .mock(EventWrongOuService, { getLinkedLog: jest.fn() })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-      }
-    });
+      .mock(SaveRequestService, { saveRequest: mockSaveRequest })
+      .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
+      .mock(EventWrongOuService, { getLinkedLog: jest.fn() })
+      .render({
+        bind: {
+          isEdit: true,
+          filter: Helper.fakeFilterModel,
+        }
+      });
+    const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null);
+    logInfoWrongHdpComponents.isMainMatch = true;
+    const logInfoComponents = new QueryList<LogInfoWrongOuComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
 
+    instance.logInfoComponents = logInfoComponents;
     await instance.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
@@ -436,12 +442,12 @@ describe('EventWrongOuComponent', () => {
     const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.relatedEvents = fakeChildMatches;
 
     // Action
@@ -458,12 +464,12 @@ describe('EventWrongOuComponent', () => {
     const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.relatedEvents = fakeChildMatches;
 
     // Action
@@ -480,12 +486,12 @@ describe('EventWrongOuComponent', () => {
     const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.relatedEvents = fakeChildMatches;
 
     // Action
@@ -502,12 +508,12 @@ describe('EventWrongOuComponent', () => {
     const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
-    .render({
-      bind: {
-        filter: fakeFilterModel,
-        isEdit: false
-      }
-    });
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.relatedEvents = fakeChildMatches;
 
     // Action
@@ -522,12 +528,12 @@ describe('EventWrongOuComponent', () => {
     const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
     fakeChildMatches[0].matchType = MatchType.LINK;
     const { instance } = await shallow
-    .render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        isEdit: false
-      }
-    });
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.relatedEvents = fakeChildMatches;
 
     // Action
@@ -541,12 +547,12 @@ describe('EventWrongOuComponent', () => {
     const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
     fakeChildMatches[0].matchType = MatchType.CHILD;
     const { instance } = await shallow
-    .render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        isEdit: false
-      }
-    });
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
     instance.relatedEvents = fakeChildMatches;
 
     const actual = instance.countChildMatches();

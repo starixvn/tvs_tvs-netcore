@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
 using TicketVoidingSystem.TicketListing.Services;
@@ -29,17 +30,19 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         var affectedTickets = await affectTicketsFromSettlementHistoryService.GetTickets(firstQuery.IsReSettled, firstQuery.MatchId);
         await SendForNormalLicensee(request.Queries, affectedTickets, resultLicensees);
         await SendForChinaViewLicensee(request.Queries, affectedTickets, resultLicensees);
+        await SendForJollySportLicensee(request.Queries, affectedTickets, resultLicensees);
 
         return resultLicensees;
     }
 
     private async Task SendForNormalLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
     {
-        var normalQueries = queries.Where(x => !x.IsChinaView).ToList();
+        var normalQueries = queries.Where(x => !x.IsChinaView && x.SpecialPlatform != SpecialPlatformConstant.JollySports).ToList();
         if (normalQueries.Any())
         {
             var result = await sendDataToOicService.Send(normalQueries, affectedTickets);
             result.IsChinaView = false;
+            result.SpecialPlatform = SpecialPlatformConstant.NormalSite;
             response.Add(result);
         }
     }
@@ -51,6 +54,18 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         {
             var result = await sendDataToOicService.Send(chinaViewQueries, affectedTickets);
             result.IsChinaView = true;
+            response.Add(result);
+        }
+    }
+
+    private async Task SendForJollySportLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
+    {
+        var jollySportQueries = queries.Where(x => x.SpecialPlatform == SpecialPlatformConstant.JollySports).ToList();
+        if (jollySportQueries.Any())
+        {
+            var result = await sendDataToOicService.Send(jollySportQueries, affectedTickets);
+            result.IsChinaView = false;
+            result.SpecialPlatform = SpecialPlatformConstant.JollySports;
             response.Add(result);
         }
     }

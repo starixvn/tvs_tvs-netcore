@@ -10,12 +10,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
 
 public class TicketsViewModelServiceTests
 {
-    private readonly TicketsViewModelServiceImp service;
-
-    public TicketsViewModelServiceTests()
-    {
-        service = new TicketsViewModelServiceImp();
-    }
+    private readonly TicketsViewModelServiceImp service = new();
 
     [Fact]
     public void UpdateViewModel_UpdateValidTickets_ReturnCorrect()

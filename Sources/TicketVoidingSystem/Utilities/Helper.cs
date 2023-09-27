@@ -9,7 +9,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Utilities;
@@ -118,12 +120,7 @@ public static class Helper
             return MessageContentType.VoidAbnormal;
         }
 
-        if (messageContent.ToLowerInvariant().Contains("kindly double check your statement again"))
-        {
-            return MessageContentType.VoidSettled;
-        }
-
-        return MessageContentType.VoidUnsettled;
+        return messageContent.ToLowerInvariant().Contains("kindly double check your statement again") ? MessageContentType.VoidSettled : MessageContentType.VoidUnsettled;
     }
 
     public static bool IsLikelyAbnormalBet(int issueTypeId)
@@ -134,12 +131,6 @@ public static class Helper
     private static bool IsAbnormalBet(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalBet == issueTypeId;
-    }
-
-    public static bool IsAbnormalBetMixParlay(int issueTypeId, int? filterBy)
-    {
-        const int filterByMixParlay = 1;
-        return IssueTypeConstant.AbnormalBet == issueTypeId && filterBy == filterByMixParlay;
     }
 
     public static bool IsAbnormalBetSingleRequest(int issueTypeId, int? filterBy)
@@ -155,11 +146,6 @@ public static class Helper
     public static bool IsAbnormalBetRealMember(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalBetRealMember == issueTypeId;
-    }
-
-    public static bool IsArchivedTicket(int issueTypeId)
-    {
-        return IssueTypeConstant.ArchivedTicket == issueTypeId;
     }
 
     public static string GetBetFrom(string betFrom)
@@ -184,5 +170,10 @@ public static class Helper
         }
 
         return result;
+    }
+
+    public static bool IsMustRemoveSabaText(Match match, SiteEmail site)
+    {
+        return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports);
     }
 }

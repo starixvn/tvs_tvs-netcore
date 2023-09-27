@@ -24,14 +24,20 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
         service = new BetListCoreServiceImp(mapper, betListService);
     }
 
-    [Fact]
-    public void BuildTicket_HasValidData_ReturnTicketEmailViewModel()
+    [Theory]
+    [InlineData(SpecialPlatformConstant.JollySports, "Pe4", "MP")]
+    [InlineData(SpecialPlatformConstant.JollySports, "pe4", "MP")]
+    [InlineData(SpecialPlatformConstant.JollySports, "PE4", "MP")]
+    [InlineData(SpecialPlatformConstant.JollySports, "EE", "EE")]
+    [InlineData(SpecialPlatformConstant.JollySports, "", "")]
+    [InlineData(SpecialPlatformConstant.NormalSite, "PE4", "PE4")]
+    public void BuildTicket_HasValidData_ReturnTicketEmailViewModel(int specialPlatform, string currencyName, string currencyNameExpected)
     {
         // Arrange
         var item = new TicketEmailModel
-            { IsMixParlay = true, CurrencyName = "CurrencyName", BetTypeId = BetTypeConstant.BitCoinOverUnder };
+        { IsMixParlay = true, CurrencyName = currencyName, BetTypeId = BetTypeConstant.BitCoinOverUnder };
         var match = new Match();
-        var site = new SiteEmail();
+        var site = new SiteEmail{ SpecialPlatform  = specialPlatform };
         var expected = new TicketEmailViewModel
         {
             Odds = "Odds",
@@ -40,7 +46,8 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
             BetType = "BetType",
             Status = "Status",
             Choice = "Choice",
-            BetTypeSimplified = "BetTypeSimplified"
+            BetTypeSimplified = "BetTypeSimplified",
+            Currency = currencyNameExpected
         };
         mapper.Map<Ticket>(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(new Ticket());
         betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");

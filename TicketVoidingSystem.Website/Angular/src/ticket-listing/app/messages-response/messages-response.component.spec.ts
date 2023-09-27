@@ -4,6 +4,7 @@ import { Shallow } from 'shallow-render';
 import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { MessagesResponseComponent } from './messages-response.component';
 import { MessagesResponse } from './messages-response.model';
+import { AmendmentReponse } from '../models/query.model';
 
 describe('MessagesResponseComponent', () => {
   @NgModule({
@@ -43,7 +44,7 @@ describe('MessagesResponseComponent', () => {
     });
     instance.resendDataEvent.emit = jest.fn();
 
-    instance.onClickResendData(true);
+    instance.onClickResendData(new AmendmentReponse());
 
     expect(instance.resendDataEvent.emit).toHaveBeenCalledTimes(1);
   });

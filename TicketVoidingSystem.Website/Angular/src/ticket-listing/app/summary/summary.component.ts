@@ -2,6 +2,7 @@
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
 import { SummaryItem } from './summary.model';
+import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
 @Component({
   selector: 'summary-tickets',
   templateUrl: './summary.component.html',
@@ -21,11 +22,13 @@ export class SummaryComponent implements OnChanges {
   isShowSend = true;
   affectedLicensees = '';
   chinaViewLicensees = '';
+  jollyViewLicensees = '';
   negativeBalanceUsers = '';
   totalLicensee = 0;
   totalBetCountOfCredit = 0;
   totalBetCountOfChinaView = 0;
   totalBetCountOfLicensee = 0;
+  totalBetCountOfJollyView = 0;
 
   constructor(private readonly clipboardService: ClipboardService) { }
 
@@ -73,12 +76,17 @@ export class SummaryComponent implements OnChanges {
   updateAffectedLicensees() {
     const model = Number(this.groupBy) === 0 ? this.items : this.itemsGroupByLicensee;
     this.affectedLicensees = model
-      .filter(x => x.isChecked && x.name !== 'Credit' && !x.isChinaView)
+      .filter(x => x.isChecked && x.name !== 'Credit' && !x.isChinaView && x.specialPlatform !== SpecialPlatform.Jolly_Sports)
       .map(x => x.licenseeName)
       .join(', ');
 
     this.chinaViewLicensees = model
       .filter(x => x.isChecked && x.isChinaView)
+      .map(x => x.licenseeName)
+      .join(', ');
+
+    this.jollyViewLicensees = model
+      .filter(x => x.isChecked && x.specialPlatform === SpecialPlatform.Jolly_Sports)
       .map(x => x.licenseeName)
       .join(', ');
   }
@@ -91,10 +99,13 @@ export class SummaryComponent implements OnChanges {
     this.totalBetCountOfChinaView = _.sumBy(chinaViewGroups, 'total');
 
     const licenseeGroups = _.reject(this.itemsGroupByLicensee, function (o) {
-      return o.name === 'Credit' || o.isChinaView;
+      return o.name === 'Credit' || o.isChinaView || o.specialPlatform === SpecialPlatform.Jolly_Sports;
     });
     this.totalBetCountOfLicensee = _.sumBy(licenseeGroups, 'total');
     this.totalLicensee = this.itemsGroupByLicensee.filter(x => x.name !== 'Credit').length;
+
+    const jollyViewGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 2 });
+    this.totalBetCountOfJollyView = _.sumBy(jollyViewGroups, 'total');
   }
 
   sendExcelFile() {
@@ -120,6 +131,6 @@ export class SummaryComponent implements OnChanges {
   }
 
   isShowAffectedLicensees(): boolean {
-    return this.isShowSend && (this.affectedLicensees.length > 0 || this.chinaViewLicensees.length > 0);
+    return this.isShowSend && (this.affectedLicensees.length > 0 || this.chinaViewLicensees.length > 0 || this.jollyViewLicensees.length > 0);
   }
 }

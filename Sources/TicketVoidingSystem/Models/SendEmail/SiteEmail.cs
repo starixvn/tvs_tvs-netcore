@@ -15,4 +15,6 @@ public class SiteEmail
     public int IsAvailabe { get; set; }
 
     public bool IsChinaView { get; set; }
+
+    public int SpecialPlatform { get; set; }
 }

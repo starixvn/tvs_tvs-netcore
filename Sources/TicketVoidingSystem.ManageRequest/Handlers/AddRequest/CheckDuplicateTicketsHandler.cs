@@ -27,7 +27,7 @@ public class CheckDuplicateTicketsHandler : IRequestHandler<CheckDuplicateTicket
     private readonly IDynamicRepository repository;
     private readonly MatchInfoAddRequestService matchInfoAddRequestService;
 
-    public CheckDuplicateTicketsHandler(IDynamicRepository repository, MatchInfoAddRequestService matchInfoAddRequestService, GetTransInfoService getTransInfoService)
+    public CheckDuplicateTicketsHandler(IDynamicRepository repository, MatchInfoAddRequestService matchInfoAddRequestService)
     {
         this.repository = repository;
         this.matchInfoAddRequestService = matchInfoAddRequestService;

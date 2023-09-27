@@ -16,6 +16,7 @@ public class TicketsViewModel
     public int TotalCancelCashOut { get; set; }
     public string LicenseesName { get; set; }
     public string ChinaViewLicenseesName { get; set; }
+    public string JollyViewLicenseesName { get; set; }
     public string InstantLicenseesName { get; set; }
     public string CashOutLicenseesName { get; set; }
     public bool IsAllLiveTickets { get; set; }

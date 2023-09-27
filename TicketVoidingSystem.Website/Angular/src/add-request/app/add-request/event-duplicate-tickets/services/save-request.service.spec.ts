@@ -50,6 +50,36 @@ describe('SaveRequestService', () => {
     expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(0);
   });
 
+  it('#checkValidBusinessRuleBeforeSave should return true', async () => {
+    const saveRequestArg = new SaveRequestArg();
+    saveRequestArg.addRequestStore = new AddRequestStore();
+    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
+    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
+    saveRequestArg.duplicateTicketsModel.orgTransIds = '122';
+    let validationService = new ValidationService(null);
+    validationService.checkValidBusinessRule = jest.fn().mockReturnValue(true);
+    const saveRequestService = new SaveRequestService(null, null, validationService);
+
+    const actual = await saveRequestService['checkValidBusinessRuleBeforeSave'](saveRequestArg);
+
+    expect(actual).toBeTruthy();
+  });
+  
+  it('#checkValidBusinessRuleBeforeSave should return false', async () => {
+    const saveRequestArg = new SaveRequestArg();
+    saveRequestArg.addRequestStore = new AddRequestStore();
+    saveRequestArg.addRequestStore.changeBlockingUiStatus = jest.fn();
+    saveRequestArg.duplicateTicketsModel = new DuplicateTicketsModel();
+    saveRequestArg.duplicateTicketsModel.orgTransIds = null;
+    saveRequestArg.tooltip = new Tooltip()
+    saveRequestArg.tooltip.display = jest.fn();
+    const saveRequestService = new SaveRequestService(null, null, null);
+
+    const actual = await saveRequestService['checkValidBusinessRuleBeforeSave'](saveRequestArg);
+
+    expect(actual).toBeFalsy();
+  });
+
   it('#recheckBeforeSaveRequest should return false when does not pass validation', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();

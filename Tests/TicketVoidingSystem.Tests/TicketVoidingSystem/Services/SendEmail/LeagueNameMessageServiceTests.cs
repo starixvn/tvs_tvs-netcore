@@ -7,7 +7,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 
-public class ChinaViewMessageServiceTests
+public class LeagueNameMessageServiceTests
 {
     [Fact]
     public Task ReplaceMessageChinaViewLicensee_NotReplace()
@@ -16,10 +16,10 @@ public class ChinaViewMessageServiceTests
         var message = new Message { ContentEnglish = "123SABA321" };
         var site = new SiteEmail { IsChinaView = true };
 
-        var service = new ChinaViewMessageServiceImp();
+        var service = new LeagueNameMessageServiceImp();
 
         // Act
-        service.ReplaceMessageChinaViewLicensee(null, message, site);
+        service.RemoveSabaOfLeagueName(null, message, site);
 
         // Assert
         Assert.Equal("123SABA321", message.ContentEnglish);
@@ -30,16 +30,22 @@ public class ChinaViewMessageServiceTests
     public Task ReplaceMessageChinaViewLicensee_ReplaceExpected()
     {
         // Arrange
-        var message = new Message { ContentEnglish = "123321" };
+        var message = new Message { ContentEnglish = "123321", ContentChineseSimplified = "123321" };
         var site = new SiteEmail { IsChinaView = true };
+        var match = new Match
+        {
+            LeagueGroupId = 42, LeagueName = "Saba123", LeagueNameSimplified = "沙巴123",
+            LeagueNameNewSimplified = "沙巴123"
+        };
 
-        var service = new ChinaViewMessageServiceImp();
+        var service = new LeagueNameMessageServiceImp();
 
         // Act
-        service.ReplaceMessageChinaViewLicensee(new Match { LeagueGroupId = 42 }, message, site);
+        service.RemoveSabaOfLeagueName(match, message, site);
 
         // Assert
         Assert.Equal("123321", message.ContentEnglish);
+        Assert.Equal("123321", message.ContentChineseSimplified);
         return Task.CompletedTask;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -19,7 +18,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
 public class AddRequestServiceTests
 {
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
-    private readonly LoggingService loggingService;
     private readonly IMapper mapper;
     private readonly MarkTicketsService markTicketsService;
     private readonly IDynamicRepository repository;
@@ -32,7 +30,7 @@ public class AddRequestServiceTests
         mapper = Substitute.For<IMapper>();
         repository = Substitute.For<IDynamicRepository>();
         sessionService = Substitute.For<SessionService>();
-        loggingService = Substitute.For<LoggingService>();
+        var loggingService = Substitute.For<LoggingService>();
         markTicketsService = Substitute.For<MarkTicketsService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
@@ -75,7 +73,6 @@ public class AddRequestServiceTests
         markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)
             .ReturnsForAnyArgs(markTicketResults);
 
-        var expected = Enumerable.Empty<Result>();
         // Act
         var actual = service.Execute(query);
 
@@ -107,7 +104,7 @@ public class AddRequestServiceTests
             MarkTransIds = "1", IssueTypeId = issueTypeId, TransInfoJson = "123", MatchId = 1,
             KickOffTime = new DateTime(2022, 2, 2, 2, 2, 2),
             ActionId = 1,
-            OperatorsList = null,
+            OperatorsList = null
         };
         var markTicketResults = new List<Result> { new() { ErrorCode = 0 } };
         markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)

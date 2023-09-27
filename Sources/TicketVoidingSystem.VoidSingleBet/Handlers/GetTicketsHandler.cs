@@ -8,8 +8,6 @@ using TicketVoidingSystem.VoidSingleBet.ViewModels;
 
 namespace TicketVoidingSystem.VoidSingleBet.Handlers;
 
-using Fanex.NAP.Client.Helpers.Business;
-
 public class GetTicketsRequest : GetTicketsQuery, IRequest<ListTicketsViewModel>
 {
 }

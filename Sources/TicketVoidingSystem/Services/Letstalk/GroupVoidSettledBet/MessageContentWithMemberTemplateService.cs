@@ -95,7 +95,6 @@ public class MessageContentWithMemberTemplateServiceImp : MessageContentWithMemb
 
     private static IList<string> GenerateMultipleContent(string content, IEnumerable<string> members)
     {
-        // Jacob: hàm phức tạp quá, thay vì đếm character, có thể nghĩ ra hướng: 1 content part bao gồm xxx member
         var results = new List<string>();
         var tempContent = $"{content}{Environment.NewLine}Username (p1): ";
         var contentPart = 1;

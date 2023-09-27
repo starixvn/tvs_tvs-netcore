@@ -312,6 +312,7 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
+    instance.allSelectedEvents = [new LogInfoWrongHdp()]
     instance.addChildMatchModel = new AddChildMatchModel();
 
     instance.showAddChildMatchModal(1);
@@ -402,7 +403,12 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    logInfoWrongHdpComponents.isMainMatch = true;
+    const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
+    logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
+    instance.logInfoComponents = logInfoComponents;    
+    
     await instance.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);

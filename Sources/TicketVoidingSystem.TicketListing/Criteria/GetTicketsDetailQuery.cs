@@ -25,6 +25,8 @@ public class SendFileQuery : GetDetailQuery
     public string? Title { get; set; }
 
     public bool IsChinaView { get; set; }
+
+    public int SpecialPlatform { get; set; }
 }
 
 public class ExportExcelQuery : SendFileQuery

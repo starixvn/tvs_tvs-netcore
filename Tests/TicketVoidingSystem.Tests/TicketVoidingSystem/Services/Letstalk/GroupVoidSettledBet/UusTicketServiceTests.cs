@@ -8,12 +8,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk.GroupV
 
 public class UusTicketServiceTests : AppSettingFixture
 {
-    private readonly UusTicketServiceImp uusTicketService;
-
-    public UusTicketServiceTests()
-    {
-        uusTicketService = new UusTicketServiceImp();
-    }
+    private readonly UusTicketServiceImp uusTicketService = new();
 
     [Fact]
     public void IsValidCashOut_TicketIsNotCashOut_ReturnFalse()

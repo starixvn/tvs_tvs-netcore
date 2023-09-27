@@ -22,7 +22,7 @@ public class CheckDuplicateTicketsHandlerTests
     {
         repository = Substitute.For<IDynamicRepository>();
         matchInfoAddRequestService = Substitute.For<MatchInfoAddRequestService>();
-        handler = new CheckDuplicateTicketsHandler(repository, matchInfoAddRequestService, null);
+        handler = new CheckDuplicateTicketsHandler(repository, matchInfoAddRequestService);
     }
 
     [Fact]

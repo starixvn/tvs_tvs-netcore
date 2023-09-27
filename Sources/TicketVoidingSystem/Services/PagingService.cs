@@ -10,8 +10,6 @@ public interface PagingService
     IEnumerable<T> Paging<T>(in IEnumerable<T> tickets, int index, int size);
 
     IEnumerable<Group<T>> Groups<T>(in IEnumerable<T> tickets, Func<T, string> filter);
-
-    IEnumerable<Group<T>> PagingGroups<T>(in IEnumerable<Group<T>> groups, int pageIndex, int pageSize);
 }
 
 public class PagingServiceImp : PagingService
@@ -30,32 +28,5 @@ public class PagingServiceImp : PagingService
             Name = group.Key,
             Tickets = group.Select(ticket => ticket).ToList()
         });
-    }
-
-    public IEnumerable<Group<T>> PagingGroups<T>(in IEnumerable<Group<T>> groups, int pageIndex, int pageSize)
-    {
-        var skip = pageIndex * pageSize;
-        var allTickets = groups.Select(groupTicket =>
-                groupTicket.Tickets
-                    .Select(ticket => new
-                    {
-                        groupTicket.Name,
-                        Tickets = ticket
-                    }))
-            .SelectMany(tickets => tickets);
-
-        var ticketGroupAfterSkip = allTickets.Skip(skip)
-            .Take(pageSize)
-            .GroupBy(
-                ticket => ticket.Name,
-                ticket => ticket.Tickets,
-                (groupName, groupTicket) => new Group<T>
-                {
-                    Name = groupName,
-                    Tickets = groupTicket.ToList()
-                })
-            .ToList();
-
-        return ticketGroupAfterSkip;
     }
 }

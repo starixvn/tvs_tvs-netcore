@@ -132,7 +132,7 @@ const configPages = [
   //manageVoidServices,
   //abExceptionList,
   //markTickets,
-  //ticketListing,
+  // ticketListing,
   //voidSingleBet,
   voidRequest,
   //manageRequest,

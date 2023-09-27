@@ -25,6 +25,7 @@ export class TicketsModel {
     instantLicenseesName: string;
     cashOutLicenseesName: string;
     chinaViewLicenseesName: string;
+    jollyViewLicenseesName: string;
     betTypeNameReplaceMessage: Message;
 
     groups: Array<GroupModel>;

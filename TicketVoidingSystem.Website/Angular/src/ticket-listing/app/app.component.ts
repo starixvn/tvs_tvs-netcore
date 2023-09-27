@@ -26,6 +26,7 @@ import { AmendmentReponse, CommonQuery, ExportExcelQuery, GetTicketsDetailQuery,
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
 import { TicketsModel } from './tickets/ticket.model';
+import { SpecialPlatform } from '../../utility/constants/special-platform.constant';
 
 @Component({
   selector: 'app-root',
@@ -99,7 +100,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.hideContent();
     this.commonQuery = event.query;
     const data = await this.appService.getSummary(event.query);
-    this.displayMatch(event.match, event.query.product);
+    this.displayMatch(event.match);
     this.renderSummaryItems(data);
     this.isShowSummary = true;
     this.showSendColumn = event.query.groupBy.toString() === '0' && Product.SHOW_SEND_COLUMN.indexOf(event.query.product) > -1;
@@ -110,7 +111,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   }
 
-  displayMatch(match: MatchModel, product: number) {
+  displayMatch(match: MatchModel) {
     this.matchViewModel = match;
     this.isShowMatch = true;
   }
@@ -123,7 +124,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const items =
       this.commonQuery.groupBy.toString() === '0' ? summaryItemViewModel.groupByLicensees : summaryItemViewModel.groupByBetTypes;
     items.forEach(item => {
-      this.summaryItems.push(new SummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, item.items, ''));
+      this.summaryItems.push(new SummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, item.items, '', item.specialPlatform));
     });
   }
 
@@ -214,7 +215,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       eventDate: this.matchViewModel.eventDate,
       startTime: this.matchViewModel.startTime,
       endTime: this.matchViewModel.endTime,
-      totalCreditTickets: item.total
+      totalCreditTickets: item.total,
+      specialPlatform: item.specialPlatform
     });
 
     return query;
@@ -265,7 +267,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         matchCode: null,
         matchEvent: null,
         startTime: null,
-        endTime: null
+        endTime: null,
+        specialPlatform: item.specialPlatform
       });
 
       this.sendFileQueries.push(query);
@@ -288,24 +291,31 @@ export class AppComponent implements OnInit, AfterViewInit {
     const results: AmendmentReponse[] = [];
     response.forEach(x => {
       if (x.code === 0) {
-        const licenseesName = this.sendFileQueries.filter(y => y.isChinaView === x.isChinaView).map(t => t.licenseeName).join(', ');
+        const licenseesName = this.sendFileQueries.filter(y => y.isChinaView === x.isChinaView && y.specialPlatform === x.specialPlatform).map(t => t.licenseeName).join(', ');
         const message = 'Data of ' + licenseesName + ' are sent successfully!';
-        results.push({ code: 0, message: message, isSuccessful: true, isChinaView: x.isChinaView, isCanReSend: false });
+        results.push({ code: 0, message: message, isSuccessful: true, isChinaView: x.isChinaView, isCanReSend: false, specialPlatform: x.specialPlatform });
       } else {
-        const prefix = x.isChinaView ? 'China View Licensee: ' : 'Normal Licensee: ';
+        const prefix = this.getPrefixLicensees(x);
         const message = x.message === null ? prefix + 'Failed to send data.' : prefix + x.message;
-        results.push({ code: 1, message: message, isSuccessful: false, isChinaView: x.isChinaView, isCanReSend: true });
+        results.push({ code: 1, message: message, isSuccessful: false, isChinaView: x.isChinaView, isCanReSend: true, specialPlatform: x.specialPlatform });
       }
     });
 
     this.messagesResponse.open('Send Data Result', results);
   }
 
-  public async resendData(isChinaView: boolean): Promise<void> {
-    const resultSendDataAgain = await this.appService.sendDataToOic(this.sendFileQueries.filter(x => x.isChinaView === isChinaView));
+  getPrefixLicensees(response: AmendmentReponse): string {
+    if (response.isChinaView) {
+      return 'China View Licensee: ';
+    }
+    return response.specialPlatform === SpecialPlatform.Jolly_Sports ? 'Jolly Sports Licensee: ' : 'Normal Licensee: ';
+  }
+
+  public async resendData(result: AmendmentReponse): Promise<void> {
+    const resultSendDataAgain = await this.appService.sendDataToOic(this.sendFileQueries.filter(x => x.isChinaView === result.isChinaView && x.specialPlatform === result.specialPlatform));
     if (resultSendDataAgain[0].code === 0) {
-      const licenseesName = this.sendFileQueries.filter(y => y.isChinaView === isChinaView).map(t => t.licenseeName).join(', ');
-      const result = this.messagesResponse.results.find(x => x.isChinaView === isChinaView);
+      const licenseesName = this.sendFileQueries.filter(y => y.isChinaView === result.isChinaView && y.specialPlatform === result.specialPlatform).map(t => t.licenseeName).join(', ');
+      result = this.messagesResponse.results.find(x => x.isChinaView === result.isChinaView && x.specialPlatform === result.specialPlatform);
       result.code = 0;
       result.message = 'Data of ' + licenseesName + ' are sent successfully!';
       result.isSuccessful = true;

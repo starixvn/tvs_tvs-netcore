@@ -11,8 +11,9 @@ export class SummaryItem {
   isGroup: boolean;
   isChecked: boolean;
   isShow: boolean;
+  specialPlatform: number;
 
-  constructor(name: string, total: number, isChinaView: boolean, licenseeName: string, betTypes: string, items: SummaryItem[], betTypeName: string) {
+  constructor(name: string, total: number, isChinaView: boolean, licenseeName: string, betTypes: string, items: SummaryItem[], betTypeName: string, specialPlatform: number) {
     this.name = name;
     this.total = total;
     this.isChinaView = isChinaView;
@@ -23,6 +24,7 @@ export class SummaryItem {
     this.isGroup = items.length > 0;
     this.isChecked = items.length > 0;
     this.isShow = true;
+    this.specialPlatform = specialPlatform;
   }
 
   addSecondaryBetType(betTypes: string): string {
@@ -42,7 +44,7 @@ export class SummaryItem {
   renderItems(items: SummaryItem[]) {
     this.items = [];
     items.forEach(item => {
-      this.items.push(new SummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, [], this.betTypeName));
+      this.items.push(new SummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, [], this.betTypeName, item.specialPlatform));
     });
   }
 }

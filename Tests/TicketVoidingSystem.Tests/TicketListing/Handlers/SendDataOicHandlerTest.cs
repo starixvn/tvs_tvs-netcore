@@ -38,6 +38,30 @@ public class SendDataOicHandlerTest
     }
 
     [Fact]
+    public async Task Handle_HasOnlyJollySport_ReturnResult()
+    {
+        // Arrange
+        var expected = new AmendmentResponse();
+        var jollySportQuery = new SendFileQuery { IsChinaView = false, SpecialPlatform = 2 };
+        var request = new SendDataToOicRequest
+        {
+            Queries = new[] { jollySportQuery }
+        };
+        var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
+        var sendDataToOicService = Substitute.For<SendDataToOicService>();
+        sendDataToOicService.Send(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
+        affectTicketsFromSettlementHistoryService.GetTickets(default, default).ReturnsForAnyArgs("");
+
+        var handler = new SendDataOicHandler(sendDataToOicService, affectTicketsFromSettlementHistoryService);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(1, actual.Count);
+    }
+
+    [Fact]
     public async Task Handle_HasOnlyNormalQuery_ReturnResult()
     {
         // Arrange

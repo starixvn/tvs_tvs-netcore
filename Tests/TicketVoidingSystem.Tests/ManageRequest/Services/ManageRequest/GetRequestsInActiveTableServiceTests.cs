@@ -29,11 +29,13 @@ public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixt
     }
 
     [Theory]
-    [InlineData(IssueTypeConstant.DangerAccepted)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
-    [InlineData(IssueTypeConstant.AbnormalBet)]
-    [InlineData(0)]
-    public async Task GetRequestsInActiveTable_ValidData_ReturnListRequestModel(int issueTypeId)
+    [InlineData(IssueTypeConstant.DangerAccepted, 2, 1)]
+    [InlineData(IssueTypeConstant.DangerAccepted, 1, 1)]
+    [InlineData(IssueTypeConstant.DangerAccepted, 2, 2)]
+    [InlineData(IssueTypeConstant.AbnormalBetRealMember, 2, 1)]
+    [InlineData(IssueTypeConstant.AbnormalBet, 2, 1)]
+    [InlineData(0, 2, 1)]
+    public async Task GetRequestsInActiveTable_ValidData_ReturnListRequestModel(int issueTypeId, int requestId, int matchId)
     {
         // Arrange
         var query = new SelectRequestsQuery();
@@ -48,7 +50,7 @@ public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixt
             .FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(Arg.Any<SelectActiveRequestsCriteria>())
             .ReturnsForAnyArgs((requests, requestInfo, requestInfoGetCalcTime));
         repository.Fetch<GetRequestInfoModel>(Arg.Any<GetTotalVoidedTicketCriteria>())
-            .Returns(new List<GetRequestInfoModel> { new() { RequestId = 2, MatchId = 1 } });
+            .Returns(new List<GetRequestInfoModel> { new() { RequestId = requestId, MatchId = matchId } });
         repository.Fetch<GetBettypeForRequestModel>(Arg.Any<GetBettypeNamesCriteria>())
             .Returns(new List<GetBettypeForRequestModel> { new() });
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("aa");

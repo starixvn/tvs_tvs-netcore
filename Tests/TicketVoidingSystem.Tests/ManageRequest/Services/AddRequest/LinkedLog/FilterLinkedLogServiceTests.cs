@@ -29,10 +29,12 @@ public class FilterLinkedLogServiceTests
     public void FilterApiResponse_ValidData_ReturnExpected(int issueTypeId, int betType)
     {
         // Arrange
-        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>();
-        linkedOddsInfoDic.Add(1, new LinkedOddsInfo { BetType = betType, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 });
+        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>
+        {
+            { 1, new LinkedOddsInfo { BetType = betType, Hdp1 = 1 } },
+            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 } },
+            { 3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 } }
+        };
         var getLinkedLogModel = new GetLinkedLogModel
             { IssueTypeId = issueTypeId, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
@@ -76,10 +78,12 @@ public class FilterLinkedLogServiceTests
     public void FilterApiResponse_NoHasValidData_ReturnExpected(int issueTypeId, int betType)
     {
         // Arrange
-        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>();
-        linkedOddsInfoDic.Add(1, new LinkedOddsInfo { BetType = betType, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 });
+        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>
+        {
+            { 1, new LinkedOddsInfo { BetType = betType, Hdp1 = 1 } },
+            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 } },
+            { 3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 } }
+        };
         var getLinkedLogModel = new GetLinkedLogModel
             { IssueTypeId = issueTypeId, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
@@ -118,10 +122,12 @@ public class FilterLinkedLogServiceTests
     public void FilterApiResponse_WithIssueTypeIdIsWrongOdds_ReturnHasValueExpected()
     {
         // Arrange
-        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>();
-        linkedOddsInfoDic.Add(1, new LinkedOddsInfo { BetType = 1, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 });
+        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>
+        {
+            { 1, new LinkedOddsInfo { BetType = 1, Hdp1 = 1 } },
+            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 } },
+            { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
+        };
         var getLinkedLogModel = new GetLinkedLogModel
             { IssueTypeId = IssueTypeConstant.WrongOdds, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
@@ -170,10 +176,12 @@ public class FilterLinkedLogServiceTests
         bool IsValidHdpWrongOdds, bool IsValidOddsWrongOdds)
     {
         // Arrange
-        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>();
-        linkedOddsInfoDic.Add(1, new LinkedOddsInfo { BetType = 1, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 });
+        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>
+        {
+            { 1, new LinkedOddsInfo { BetType = 1, Hdp1 = 1 } },
+            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 } },
+            { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
+        };
         var getLinkedLogModel = new GetLinkedLogModel
             { IssueTypeId = IssueTypeConstant.WrongOdds, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
@@ -218,10 +226,12 @@ public class FilterLinkedLogServiceTests
     public void FilterApiResponse_WithIssueTypeIdIsRedCard_ReturnHasNoValue()
     {
         // Arrange
-        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>();
-        linkedOddsInfoDic.Add(1, new LinkedOddsInfo { BetType = 1, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 });
-        linkedOddsInfoDic.Add(3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 });
+        var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>
+        {
+            { 1, new LinkedOddsInfo { BetType = 1, Hdp1 = 1 } },
+            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 } },
+            { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
+        };
         var getLinkedLogModel = new GetLinkedLogModel
             { IssueTypeId = IssueTypeConstant.RedCard, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>

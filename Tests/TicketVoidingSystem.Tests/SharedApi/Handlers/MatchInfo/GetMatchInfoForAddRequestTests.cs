@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.SharedApi.Handlers.MatchInfo;
 using TicketVoidingSystem.ViewModels;
 using Xunit;
@@ -12,15 +11,13 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.MatchInfo;
 
 public class GetMatchInfoForAddRequestTests
 {
-    private readonly BetListService betListService;
     private readonly GetMatchInfoAddRequestHandler handler;
     private readonly MatchService matchService;
 
     public GetMatchInfoForAddRequestTests()
     {
-        betListService = Substitute.For<BetListService>();
         matchService = Substitute.For<MatchService>();
-        handler = new GetMatchInfoAddRequestHandler(betListService, matchService);
+        handler = new GetMatchInfoAddRequestHandler(matchService);
     }
 
     [Fact]

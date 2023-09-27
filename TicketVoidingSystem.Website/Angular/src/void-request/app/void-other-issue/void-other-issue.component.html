@@ -34,6 +34,12 @@
                 <span class="affected-licensees-highlight"
                     (click)="copyClipboard(chinaViewLicensee.licenseesName)">{{chinaViewLicensee.licenseesName}}</span>
             </div>
+            <div class="jolly-view-licensee"
+                *ngIf="jollyViewLicensee.show && jollyViewLicensee.licenseesName.length > 0">
+                <span class="note">Jolly Sports Licensee Affected List:</span><br />
+                <span class="affected-licensees-highlight"
+                    (click)="copyClipboard(jollyViewLicensee.licenseesName)">{{jollyViewLicensee.licenseesName}}</span>
+            </div>
             <div class="instant-licensee"
                 *ngIf="affectedInstantLicensee.show && affectedInstantLicensee.licenseesName.length > 0">
                 <span class="note">Instant OU Licensee Affected List:</span><br />

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -32,16 +34,17 @@ public class GetTicketsHandlerTests
     }
 
     [Theory]
-    [InlineData(0, "Parlay")]
-    [InlineData(1, "1")]
-    public async Task GetTickets_HaveTicketsDisplay_ReturnTicketsViewModel(int matchId, string groupName)
+    [InlineData(0)]
+    [InlineData(1)]
+    public async Task GetTickets_HaveTicketsDisplay_ReturnTicketsViewModel(int matchId)
     {
         // Arrange
         var request = new GetTicketsRequest { Match = new Match { MatchId = matchId } };
         var listGroup = new List<Group<GetTicketModel>>
         {
             new()
-            {   Name = groupName,
+            {
+                Name = "1",
                 Tickets = new List<GetTicketModel> { new() }
             }
         };
@@ -68,24 +71,27 @@ public class GetTicketsHandlerTests
     public async Task GetTickets_HaveMatchIsNull_ReturnTicketsViewModel()
     {
         // Arrange
-        var request = new GetTicketsRequest();
-        var listGroup = new List<Group<GetTicketModel>>
-        {
-            new()
-            {
-                Tickets = new List<GetTicketModel> { new() }
-            }
-        };
-        var data = new List<GetTicketModel>();
+        var request = new GetTicketsRequest { Match = null };
+        var listGroup = new List<Group<GetTicketModel>> { new() { Name = "123" } };
+        var data = new List<GetTicketModel>
+            { new() { IsMixParlay = false, RefNo = 1 }, new() { IsMixParlay = true }, new() { IsMixParlay = false } };
+        const int singleCount = 2;
+        var tickets = new List<GetTicketModel> { new() { IsMixParlay = false } };
+        var allGroups = new List<Group<GetTicketModel>> { new() { Name = "a" } };
         checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
         getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
         mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
-            .ReturnsForAnyArgs(new Group<TicketViewModel>());
-        pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
-        pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
+            .ReturnsForAnyArgs(new Group<TicketViewModel>
+                { Name = "Parlay", Tickets = new List<TicketViewModel> { new() { IsParlay = true } } });
+        pagingService.Paging(data, default, default).ReturnsForAnyArgs(tickets);
+        pagingService.Groups(Arg.Is<IEnumerable<GetTicketModel>>(x => x.SequenceEqual(tickets)),
+            Arg.Any<Func<GetTicketModel, string>>()).Returns(listGroup);
+        pagingService.Groups(Arg.Is<IEnumerable<GetTicketModel>>(x => x.Count() == singleCount),
+            Arg.Any<Func<GetTicketModel, string>>()).Returns(allGroups);
+
         var expected = new TicketsViewModel
         {
-            Groups = new List<Group<TicketViewModel>> { new() }
+            Groups = new List<Group<TicketViewModel>>()
         };
 
         // Act

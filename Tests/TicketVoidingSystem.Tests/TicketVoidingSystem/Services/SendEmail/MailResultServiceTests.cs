@@ -10,12 +10,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 
 public class MailResultServiceTests
 {
-    private readonly MailResultServiceImp service;
-
-    public MailResultServiceTests()
-    {
-        service = new MailResultServiceImp();
-    }
+    private readonly MailResultServiceImp service = new();
 
     [Theory]
     [InlineData(true, ErrorCode.SendEmailToLicenseeSuccess)]
@@ -90,7 +85,7 @@ public class MailResultServiceTests
         };
 
         // Act
-        var result = service.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
+        var result = MailResultServiceImp.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
 
         // Assert
         AssertExtension.Equal(expected, result);
@@ -120,7 +115,7 @@ public class MailResultServiceTests
         };
 
         // Act
-        var result = service.InsertCombineLicenseesNameForAfterVoidService(results, siteNameSuccess, siteNameFails);
+        var result = MailResultServiceImp.InsertCombineLicenseesNameForAfterVoidService(results, siteNameSuccess, siteNameFails);
 
         // Assert
         AssertExtension.Equal(expected, result);
@@ -153,7 +148,7 @@ public class MailResultServiceTests
         };
 
         // Act
-        var result = service.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
+        var result = MailResultServiceImp.InsertCombineLicenseesName(results, siteNameSuccess, siteNameFails);
 
         // Assert
         AssertExtension.Equal(expected, result);

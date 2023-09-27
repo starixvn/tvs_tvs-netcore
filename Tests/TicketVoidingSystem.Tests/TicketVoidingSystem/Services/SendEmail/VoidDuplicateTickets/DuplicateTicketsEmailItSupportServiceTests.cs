@@ -24,7 +24,7 @@ public class DuplicateTicketsEmailItSupportServiceTests
     }
 
     [Fact]
-    public async Task Send_ValidData_CallExpected()
+    public async Task Send_HasDuplicateTickets_CallExpected()
     {
         // Arrange
         InItFakeServiceTests();
@@ -39,6 +39,30 @@ public class DuplicateTicketsEmailItSupportServiceTests
             new() { IsItSupport = false, IsITSupportCreatedRequest = false, IsHasUusTickets = true },
             new() { IsItSupport = false, IsITSupportCreatedRequest = false, IsHasUusTickets = false }
         };
+        sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa)
+            .ReturnsForAnyArgs(new SiteEmail());
+        emailContentService.Create(Arg.Any<DuplicateTicketsMailVoidViewModel>(), Arg.Any<SiteEmail>(),
+                Arg.Any<IEnumerable<DuplicateTicketsRequestInfo>>(), EmailGroup.ItSupport)
+            .ReturnsForAnyArgs(new MailRecord());
+        var service =
+            new DuplicateTicketsEmailItSupportServiceImp(sitesEmailService, emailSimpleService,
+                emailContentService);
+        // Act
+        await service.Send(default, default, duplicateTickets);
+
+        // Assert
+        sitesEmailService.Received(1).GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa);
+        emailContentService.Received(1).Create(Arg.Any<DuplicateTicketsMailVoidViewModel>(), Arg.Any<SiteEmail>(),
+            Arg.Any<IEnumerable<DuplicateTicketsRequestInfo>>(), EmailGroup.ItSupport);
+        await emailSimpleService.Received(1).Send(Arg.Any<MailRecord>(), EmailGroup.ItSupport);
+    }
+
+    [Fact]
+    public async Task Send_NoHasDuplicateTickets_CallExpected()
+    {
+        // Arrange
+        InItFakeServiceTests();
+        var duplicateTickets = new List<DuplicateTicketsRequestInfo>();
         sitesEmailService.GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa)
             .ReturnsForAnyArgs(new SiteEmail());
         emailContentService.Create(Arg.Any<DuplicateTicketsMailVoidViewModel>(), Arg.Any<SiteEmail>(),

@@ -16,4 +16,7 @@ public class SummaryItem
     public string LicenseeName { get; set; }
 
     public bool IsChinaView { get; set; }
+
+    public int SpecialPlatform { get; set; }
+
 }

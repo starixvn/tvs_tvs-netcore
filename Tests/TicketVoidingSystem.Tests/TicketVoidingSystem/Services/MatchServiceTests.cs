@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;

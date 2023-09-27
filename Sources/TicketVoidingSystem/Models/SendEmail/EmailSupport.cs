@@ -14,10 +14,3 @@ public interface EmailSupport
 
     int Currency { get; set; }
 }
-
-public interface EmailRecoverSupport
-{
-    bool IsItSupport { get; set; }
-
-    string CurrencyCode { get; set; }
-}

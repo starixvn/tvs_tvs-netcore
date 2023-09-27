@@ -36,8 +36,6 @@ public interface BetListService
 
     string GetBetTypeName(int id, long refNo);
 
-    string GetBetTeam(Choice_Template choice);
-
     string GetStatus(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowVnIp);
 
     string GetComboParlayName(ITicket ticket);
@@ -181,19 +179,6 @@ public class BetListServiceImp : BetListService
         const int FistNextBet = 86;
         const int SecondNextBet = 85;
         return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
-    }
-
-    public string GetBetTeam(Choice_Template choice)
-    {
-        var temp = choice;
-        temp.ScoreMapIcon = null;
-        temp.BetType = null;
-        temp.Match = null;
-        temp.League = null;
-        temp.Handicap = null;
-        temp.Score = null;
-
-        return temp;
     }
 
     public string GetStatus(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowVnIp)

@@ -21,7 +21,7 @@
             <br />
             您好,<br />
             请注意以下列表是因为 <strong>@Model.VoidReasonSC</strong> 而所作废的注单摘要.<br />
-            @if (!string.IsNullOrWhiteSpace(@Model.ChineseSimplified)) {
+            @if (!string.IsNullOrWhiteSpace(Model.ChineseSimplified)) {
             <strong style="width: 1350px;">@Model.ChineseSimplified</strong>
             <br />
             }
@@ -30,7 +30,7 @@
             Please be notified that the list in table below is the summary of all tickets which have been voided
             due to the reason of <strong>@Model.VoidReason</strong>.
             <br>
-            @if (!string.IsNullOrWhiteSpace(@Model.English))
+            @if (!string.IsNullOrWhiteSpace(Model.English))
             {
             <strong style="width: 1350px;">@Model.English</strong>
             <br />
@@ -184,7 +184,7 @@
                     </tr>
                     @foreach (var ticket in group.Tickets)
                     {
-                        var backgroundColor = @ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                        var backgroundColor = ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
                         <tr valign="Middle" style="background-color: @backgroundColor; height: 25px;">
                             <td align="Center">
                                 @ticket.No
@@ -207,7 +207,7 @@
                                 @if (!string.IsNullOrEmpty(ticket.OperatorID))
                                 {
                                     <br />
-                                    @(new RawString("(" + @ticket.OperatorID + ")"))
+                                    @(new RawString("(" + ticket.OperatorID + ")"))
                                 }
                             </td>
                             <td align="Center">
@@ -216,16 +216,16 @@
                             <td align="Center">
                                 @if (!string.IsNullOrEmpty(ticket.BetTypeSimplified))
                                 {
-                                    @(new RawString(@ticket.BetTypeSimplified))
+                                    @(new RawString(ticket.BetTypeSimplified))
                                     <br />
                                 }
-                                @(new RawString(@ticket.BetType))
+                                @(new RawString(ticket.BetType))
                             </td>
                             <td align="Right">
                                 @(new RawString(ticket.Odds))
                             </td>
                             <td align="Right" class="auto-style2">
-                                @(new RawString(@ticket.Stake))
+                                @(new RawString(ticket.Stake))
                             </td>
                             <td align="Right">
                                 @ticket.WinLoss

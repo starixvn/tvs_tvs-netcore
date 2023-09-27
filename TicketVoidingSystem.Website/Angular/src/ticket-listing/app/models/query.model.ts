@@ -49,6 +49,7 @@ export class SendFileQuery extends GetDetailQuery {
   matchEvent: string;
   title?: string;
   isChinaView: boolean;
+  specialPlatform: number;
 }
 
 export class SendFileResult {
@@ -83,4 +84,5 @@ export class AmendmentReponse {
   isChinaView: boolean;
   isSuccessful: boolean;
   isCanReSend: boolean;
+  specialPlatform: number;
 }

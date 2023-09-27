@@ -33,9 +33,9 @@ jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
   static readonly fakeDate = '2019-11-18 12:08:49.737';
   static readonly loadingSelector = '.loading';
-  static readonly fakeSummaryItem = new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap');
-  static readonly fakeSummaryItemForParlayBettype = new SummaryItem('ABC', 1129, false, '12Bet', '29', [], 'Handicap');
-  static readonly fakeSummaryItemLarger200000 = new SummaryItem('CDE', 210000, false, '12Bet', '2', [], 'Handicap');
+  static readonly fakeSummaryItem = new SummaryItem('ABC', 1129, false, '12Bet', '2', [], 'Handicap', 0);
+  static readonly fakeSummaryItemForParlayBettype = new SummaryItem('ABC', 1129, false, '12Bet', '29', [], 'Handicap', 1);
+  static readonly fakeSummaryItemLarger200000 = new SummaryItem('CDE', 210000, false, '12Bet', '2', [], 'Handicap', 1);
   static readonly fakeMatchModel: MatchModel = {
     matchId: 28321695,
     homeId: 10935,
@@ -150,7 +150,8 @@ class Helper {
     message: '',
     isChinaView: false,
     isSuccessful: true,
-    isCanReSend: false
+    isCanReSend: false,
+    specialPlatform: 0
   };
 
   static readonly fakeAmendmentReponseError: AmendmentReponse = {
@@ -158,7 +159,8 @@ class Helper {
     message: 'error',
     isChinaView: false,
     isSuccessful: true,
-    isCanReSend: false
+    isCanReSend: false,
+    specialPlatform: 0
   };
 
   static getFakeExportExcelQuery(betTypes: string, singleOrSubParlay: string, summaryItem: SummaryItem): ExportExcelQuery {
@@ -174,7 +176,8 @@ class Helper {
       startTime: new Date(Helper.fakeDate),
       endTime: new Date(Helper.fakeDate),
       isChinaView: false,
-      totalCreditTickets: 1129
+      totalCreditTickets: 1129,
+      specialPlatform: 0
     });
   }
 }
@@ -588,7 +591,7 @@ describe('AppComponent', () => {
     });
   });
 
-  it('resendData should update correct data when resend successfully', async () => {
+  it('#resendData should update correct data when resend successfully', async () => {
     const normalQuery = new SendFileQuery();
     normalQuery.isChinaView = false;
     normalQuery.licenseeName = '';
@@ -607,8 +610,16 @@ describe('AppComponent', () => {
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.results = [Helper.fakeAmendmentReponseSuccessfully];
     instance.matchViewModel = Helper.fakeMatchModel;
+    let result: AmendmentReponse = {
+      isChinaView: false,
+      specialPlatform: 0,
+      code: 0,
+      message: '',
+      isSuccessful: false,
+      isCanReSend: false
+    };
 
-    await instance.resendData(false);
+    await instance.resendData(result);
 
     expect(mockSendDataToOic).toHaveBeenCalledTimes(1);
   });
@@ -629,7 +640,7 @@ describe('AppComponent', () => {
     instance.messagesResponse.results = [Helper.fakeAmendmentReponseSuccessfully];
     instance.matchViewModel = Helper.fakeMatchModel;
 
-    await instance.resendData(false);
+    await instance.resendData(new AmendmentReponse());
 
     expect(mockSendDataToOic).toHaveBeenCalledTimes(1);
   });

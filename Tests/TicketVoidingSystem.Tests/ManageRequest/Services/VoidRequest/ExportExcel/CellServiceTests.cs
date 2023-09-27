@@ -7,12 +7,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest.ExportExc
 
 public class CellServiceTests
 {
-    private readonly CellServiceImp cellService;
-
-    public CellServiceTests()
-    {
-        cellService = new CellServiceImp();
-    }
+    private readonly CellServiceImp cellService = new();
 
     [Fact]
     public void CreateTitle_HasMatchId_ReturnTitle()

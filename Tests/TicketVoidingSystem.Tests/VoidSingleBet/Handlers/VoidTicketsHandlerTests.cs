@@ -53,8 +53,9 @@ public class VoidTicketsHandlerTests
 
         // Assert
         await voidResultCacheService.ReceivedWithAnyArgs(2).SetVoidResultsCache(default, default);
-        Assert.Single(actual);
-        Assert.Equal(ErrorCode.ExecuteQueryAPIFail, actual.First().ErrorCode);
+        var iEnumerable = actual.ToList();
+        Assert.Single(iEnumerable);
+        Assert.Equal(ErrorCode.ExecuteQueryAPIFail, iEnumerable.First().ErrorCode);
     }
 
     [Fact]

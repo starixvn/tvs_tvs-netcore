@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Fanex.BetList.Core.Entities;
 using NSubstitute;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.VoidSingleBet.Models;
 using TicketVoidingSystem.VoidSingleBet.Services.GetTickets;
@@ -17,21 +20,77 @@ public class UpdateListTicketsViewModelServiceTests
     public void Update_ValidParams_ModelHasUpdated(bool isMixParlay)
     {
         // Arrange
+        var betTypeNameReplaceMessage = new TemplateContentModel
+        {
+            ContentEnglish = "ContentEnglish",
+            ContentChineseTraditional = "ContentChineseTraditional",
+            ContentChineseSimplified = "ContentChineseSimplified",
+            ContentNewChineseSimplified = "ContentNewChineseSimplified"
+        };
+        var expected = new ListTicketsViewModel
+        {
+            TotalItems = 5,
+            SingleCount = 4,
+            ParlayCount = 1,
+            LicenseesName = "12BET",
+            InstantLicenseesName = "12BET",
+            CashOutLicenseesName = "123, 343",
+            ChinaViewLicenseesName = "343",
+            JollyViewLicenseesName = "123",
+            BetTypeNameReplaceMessage = betTypeNameReplaceMessage,
+            FromTransTime = new DateTime(2023, 5, 7, 2, 2, 2).ZoneManila(),
+            ToTransTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila(),
+            FromCheckTime = new DateTime(2023, 5, 7, 2, 2, 2).ZoneManila(),
+            ToCheckTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila()
+        };
         var listTicketsViewModel = new ListTicketsViewModel();
         var tickets = new List<GetTicketModel>
         {
-            new() { LicenseeName = "12BET", IsInstantSettlement = true, IsDeposit = true, IsMixParlay = isMixParlay, IsChinaView = false },
-            new() { LicenseeName = "12BET", IsCashOut = true, IsDeposit = true, IsMixParlay = isMixParlay, IsChinaView = true },
-            new() { LicenseeName = "12BET", IsCashOut = true, IsDeposit = false, IsMixParlay = isMixParlay, IsChinaView = true }
+            new()
+            {
+                LicenseeName = "343", IsCashOut = true, IsDeposit = true, IsMixParlay = isMixParlay, IsChinaView = true,
+                TransDate = new DateTime(2023, 5, 9, 2, 2, 2), CheckTime = new DateTime(2023, 5, 7, 2, 2, 2)
+            },
+            new()
+            {
+                LicenseeName = "343", IsCashOut = true, IsDeposit = false, IsMixParlay = !isMixParlay,
+                IsChinaView = true, TransDate = new DateTime(2023, 5, 7, 2, 2, 2),
+                CheckTime = new DateTime(2023, 5, 9, 2, 2, 2)
+            },
+            new()
+            {
+                LicenseeName = "12BET", IsInstantSettlement = true, IsDeposit = true, IsMixParlay = false,
+                IsChinaView = false, TransDate = new DateTime(2023, 5, 8, 2, 2, 2),
+                CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
+            },
+            new()
+            {
+                LicenseeName = "123", IsCashOut = true, IsDeposit = true, IsMixParlay = false, IsChinaView = false,
+                SpecialPlatform = 2, TransDate = new DateTime(2023, 5, 9, 2, 2, 2),
+                CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
+            },
+            new()
+            {
+                LicenseeName = "123", IsCashOut = true, IsDeposit = false, IsMixParlay = false, IsChinaView = false,
+                SpecialPlatform = 2, TransDate = new DateTime(2023, 5, 9, 2, 2, 2),
+                CheckTime = new DateTime(2023, 5, 8, 2, 2, 2)
+            }
         };
         var betListService = Substitute.For<BetListService>();
+        betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("ContentEnglish");
+        betListService.GetBetTypeNameChineseTraditional(Arg.Any<Ticket>())
+            .ReturnsForAnyArgs("ContentChineseTraditional");
+        betListService.GetBetTypeNameChineseSimplified(Arg.Any<Ticket>()).ReturnsForAnyArgs("ContentChineseSimplified");
+        betListService.GetBetTypeNameNewChineseSimplified(Arg.Any<Ticket>())
+            .ReturnsForAnyArgs("ContentNewChineseSimplified");
+
         var service = new UpdateListTicketsViewModelServiceImp(TestSetup.CreateMapper(), betListService);
 
         // Act
         service.Update(listTicketsViewModel, tickets);
 
         // Assert
-        Assert.NotNull(listTicketsViewModel);
+        AssertExtension.Equal(expected, listTicketsViewModel);
         betListService.Received().GetBetTypeName(Arg.Any<Ticket>());
     }
 

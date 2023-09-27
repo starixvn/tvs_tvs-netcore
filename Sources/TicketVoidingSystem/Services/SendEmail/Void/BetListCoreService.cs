@@ -2,6 +2,8 @@
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using Newtonsoft.Json;
+using System;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
@@ -29,7 +31,7 @@ public class BetListCoreServiceImp : BetListCoreService
     public TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, SiteEmail site, bool isFromAfterVoidService)
     {
         var viewModel = new TicketEmailViewModel();
-        var ticket = CreateTicket(item, match);
+        var ticket = CreateTicket(item, match, site);
         var ticketHelper = new TicketHelper
         {
             IsShowOddsWithChoice = item.IsMixParlay,
@@ -44,14 +46,15 @@ public class BetListCoreServiceImp : BetListCoreService
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
         viewModel.Choice = BuildChoice(ticket, ticketHelper, item, match, site);
         viewModel.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
+        viewModel.Currency = ticket.Currency;
 
         return viewModel;
     }
 
-    private Ticket CreateTicket(TicketEmailModel item, Match match)
+    private Ticket CreateTicket(TicketEmailModel item, Match match, SiteEmail site)
     {
         var ticket = mapper.Map<Ticket>(item);
-        ticket.Currency = item.CurrencyName;
+        ticket.Currency = GetCurrencyName(item, site);
         ticket.Winlost = FanexCommonConverter.ToDecimal(item.Winlost);
         ticket.OddsType = item.IsMixParlay ? string.Empty : item.OddsType.ToString();
         ticket.BetId = item.IsMixParlay ? default : item.BetId;
@@ -89,13 +92,24 @@ public class BetListCoreServiceImp : BetListCoreService
 
         var choice = betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
 
-        if (match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && site.IsChinaView)
+        if (Helper.IsMustRemoveSabaText(match, site))
         {
             var serializedChoice = JsonConvert.SerializeObject(choice);
-            choice = JsonConvert.DeserializeObject<string>(serializedChoice.Replace("沙巴", "").Replace("SABA ", ""));
+            choice = JsonConvert.DeserializeObject<string>(serializedChoice)
+                .Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
+                .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
         }
 
         return choice;
+    }
+
+    private static string GetCurrencyName(TicketEmailModel item, SiteEmail site)
+    {
+        if (site.SpecialPlatform != SpecialPlatformConstant.JollySports)
+        {
+            return item.CurrencyName;
+        }
+        return item.CurrencyName.Equals(CurrencyConstant.Pe4, StringComparison.InvariantCultureIgnoreCase) ? CurrencyConstant.Mp : item.CurrencyName;
     }
 
     private string BuildChoiceParlay(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)

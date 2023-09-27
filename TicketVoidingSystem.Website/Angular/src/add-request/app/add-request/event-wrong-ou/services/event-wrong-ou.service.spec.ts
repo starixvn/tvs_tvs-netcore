@@ -3,6 +3,10 @@ import { WrongOuModel } from '../../models/event-wrong-ou.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
+import { FilterModel } from '../../filter/filter.model';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -35,13 +39,54 @@ class Helper {
     liveIndicator: 1,
     poolHouseCheckedBetTypes: ''
   };
+  static readonly fakeFilterModel: FilterModel = {
+    sportType: 0,
+    subIssueTypeId: '',
+    action: '',
+    isTest: false,
+    isAbnormal: false,
+    isVoided: false
+  }
 }
 
 describe('EventWrongOuService', () => {
   let service: EventWrongOuService;
-
+  
   beforeEach(() => {
     service = new EventWrongOuService(null);
+  });
+
+  it('#getLinkedLog should return LinkedLogsViewModel', async () => {
+    const mainEvent = _.cloneDeep(Helper.fakeLogInfoWrongOu);
+    let viewModel: LinkedLogsViewModel = {
+      poolHouseLinkedLogsData: [],
+      isLinkGroup1X2: false,
+      isLinkGroupAIO: false,
+      result: undefined
+    }
+    let addRequestApiService = new AddRequestApiService(null)
+    addRequestApiService.getLinkedLogs = jest.fn().mockReturnValue(viewModel);
+    service = new EventWrongOuService(addRequestApiService);
+    let actual = await service.getLinkedLog(mainEvent, Helper.fakeFilterModel);
+
+    expect(actual).toBe(viewModel);
+  });
+
+  it('#getWrongOuModel should return WrongOuGetLogInfoQuery[]', async () => {    
+    let logInfoWrongOu: LogInfoWrongOu = {
+      matchId: 0,
+      leagueName: '',
+      isMainMatch: true,
+      eventName: '',
+      isPoolHouseAffected: false,
+      poolHouseCheckedBetTypes: '',
+      filterWrongOu: new FilterWrongOuModel,
+      logInfoDetail: new LogInfoDetail,
+      linkedLogsViewModel: new LinkedLogsViewModel
+    }
+    let actual = await service.getWrongOuModel(Helper.fakeFilterModel, [logInfoWrongOu]);
+
+    expect(actual.length).toBe(1);
   });
 
   it('#assignModelsToEvents should push data to #allEvents', async () => {

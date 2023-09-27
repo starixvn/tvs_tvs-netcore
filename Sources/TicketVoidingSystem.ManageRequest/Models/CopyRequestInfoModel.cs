@@ -64,8 +64,3 @@ public class CopyRequestInfoModel
 
     public string Remark { get; set; }
 }
-
-public class CopyRequestInfoResponse
-{
-    public string Info { get; set; }
-}

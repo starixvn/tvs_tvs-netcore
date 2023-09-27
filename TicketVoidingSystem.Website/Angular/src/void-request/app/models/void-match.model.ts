@@ -26,6 +26,7 @@ export class VoidMatch {
   affectedLicensee: AffectedLicensee;
   affectedInstantLicensee: AffectedLicensee;
   chinaViewLicensee: AffectedLicensee;
+  jollyViewLicensee: AffectedLicensee;
   cashOutLicensee: AffectedLicensee;
   isShowTemplateMessage: boolean;
   templateMessage?: Message;
@@ -44,6 +45,7 @@ export class VoidMatch {
     this.affectedLicensee = new AffectedLicensee();
     this.affectedInstantLicensee = new AffectedLicensee();
     this.chinaViewLicensee = new AffectedLicensee();
+    this.jollyViewLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
     this.voidReason = new VoidedReason();
   }
