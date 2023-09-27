@@ -2,7 +2,7 @@ using Fanex.Data.SqlServer;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Signin.AspNetCore.Attribute;
+using Fanex.NAP.SignIn.Attribute;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

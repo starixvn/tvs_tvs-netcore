@@ -225,9 +225,9 @@
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.ESports" Version="2.0.0" />
-    <PackageReference Include="Fanex.Caching.AspNetCore" Version="2.2.3" />
-    <PackageReference Include="Fanex.Caching.Redis" Version="2.2.3" />
-    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.3" />
+    <PackageReference Include="Fanex.Caching.AspNetCore" Version="2.2.4" />
+    <PackageReference Include="Fanex.Caching.Redis" Version="2.2.4" />
+    <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.4" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.2" />
     <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0.2" />
     <PackageReference Include="Fanex.Data" Version="4.2.3" />
@@ -237,8 +237,8 @@
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.0.1-beta1" />
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="1.0.1" />
-    <PackageReference Include="Fanex.NAP.Client.AspNetCore" Version="2.0.0.13" />
-    <PackageReference Include="Fanex.NAP.Signin.AspNetCore" Version="2.0.0.16" />
+    <PackageReference Include="Fanex.NAP.Client" Version="2.0.0" />
+    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.1" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.391" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="7.0.11" />
