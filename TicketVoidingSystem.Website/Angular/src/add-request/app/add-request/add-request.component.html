@@ -137,7 +137,6 @@
             [others]="model.others"
             [requestId]="requestId"
             [filter]="model.filter"
-            [issueTypeId]="model.filter.issueTypeId"
             [wrongOddsModels]="model.wrongOddsModels"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-odds>
@@ -151,7 +150,6 @@
             [others]="model.others"
             [requestId]="requestId"
             [filter]="model.filter"
-            [issueTypeId]="model.filter.issueTypeId"
             [reducedOverModels]="model.reducedOverModels"
             (updateMatchId)="updateMatchId($event)">
           </event-reduced-over>
@@ -169,6 +167,8 @@
 
           <event-not-participate #eventNotParticipate
             *ngIf="isNotParticipate()"
+            [userId]="userId"
+            [requestedBy]="requestedBy"
             [isEdit]="isEdit"
             [requestId]="requestId"
             [filter]="model.filter"

@@ -27,7 +27,6 @@ export class EventReducedOverComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() requestId: number;
   @Input() filter: FilterModel;
-  @Input() issueTypeId: string;
   @Input() reducedOverModels: ReducedOverModel[] = [];
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
