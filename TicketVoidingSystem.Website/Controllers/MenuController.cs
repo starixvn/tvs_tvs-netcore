@@ -42,4 +42,13 @@ public class MenuController : Controller
     {
         return View("~/wwwroot/dist/old-page/recover-virtual-sports-bet/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverByBetID, Policy = Constant.Policy.Read)]
+    public IActionResult RecoverByBetId()
+    {
+        return View("~/wwwroot/dist/old-page/recover-by-betid/index.cshtml");
+    }
 }

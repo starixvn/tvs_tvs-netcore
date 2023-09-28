@@ -30,6 +30,8 @@ using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using SharpRaven;
+using SpecialDelete.RecoverByBetId;
+using SpecialDelete.RecoverByBetId.Controllers;
 using SpecialDelete.UploadBatchMessage.Controllers;
 using SpecialDelete.VirtualSports;
 using SpecialDelete.VirtualSports.RecoverBet.Controllers;
@@ -212,6 +214,7 @@ public static class ServiceCollectionExtension
         services.RegisterUploadBatchMessageServices();
         services.RegisterVirtualSportsVoidServices();
         services.RegisterVirtualSportsRecoverServices();
+        services.RegisterRecoverByBetIdServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -232,6 +235,7 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UploadBatchMessageController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidParlaySubBetController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverVirtualSportsBetController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverByBetIdController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
@@ -243,5 +247,6 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(VoidSingleBetProfile));
         services.AddAutoMapper(typeof(ManageRequestProfile));
         services.AddAutoMapper(typeof(VirtualSportsProfile));
+        services.AddAutoMapper(typeof(RecoverByBetIdProfile));
     }
 }

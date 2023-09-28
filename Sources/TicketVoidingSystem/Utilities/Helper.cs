@@ -217,7 +217,7 @@ public static class Helper
     {
 #pragma warning disable S1067 // Expressions should not be too complex
         return menu.Name is "AB Exception List" or "Mark/Unmark Tickets" or "Ticket Listing" or "Void Single Bet" or "Manage Request" or "Add Request"
-            or "Upload Batch Message" or "Void Parlay Sub Bet" or "Recover Virtual Sports Bet";
+            or "Upload Batch Message" or "Void Parlay Sub Bet" or "Recover Virtual Sports Bet" or "Recover By Bet ID";
 #pragma warning restore S1067 // Expressions should not be too complex
     }
 }

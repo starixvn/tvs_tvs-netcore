@@ -297,4 +297,15 @@
         <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverVSBetRadar_Upd" SpName="NAP_SpecialDelete_RecoverVSBetRadar_Upd" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="RecoverByBetId">
+        <Setting Key="DBCTG.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverByBetId_Select" SpName="NAP_SpecialDelete_RecoverByBetId_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>

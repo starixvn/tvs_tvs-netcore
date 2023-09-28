@@ -252,6 +252,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />

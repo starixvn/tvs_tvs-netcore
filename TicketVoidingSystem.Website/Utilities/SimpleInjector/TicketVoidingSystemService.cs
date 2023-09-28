@@ -10,6 +10,7 @@ using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
 using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 using TicketVoidingSystem.Services.NetPosition;
 using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Recover;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.Services.SendEmail.VoidDuplicateTickets;
@@ -74,6 +75,7 @@ public static class TicketVoidingSystemService
         services.AddScoped<DuplicateTicketsEmailItQaService, DuplicateTicketsEmailItQaServiceImp>();
         services.AddScoped<DuplicateTicketsEmailItSupportService, DuplicateTicketsEmailItSupportServiceImp>();
         services.AddScoped<DuplicateTicketsEmailContentService, DuplicateTicketsEmailContentServiceImp>();
+        services.AddScoped(typeof(EmailRecoverService<,>), typeof(EmailRecoverServiceImp<,>));
 
         //Send Message
         services.AddSingleton<MessageItemService, MessageItemServiceImp>();

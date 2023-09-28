@@ -31,7 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketVoidingSystem.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialDelete.UploadBatchMessage", "Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj", "{BE7420DA-D17F-48BF-9CB3-D48053757543}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecialDelete.VirtualSports", "Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj", "{BD25C860-F099-49C3-A4FB-222EE0F95AAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialDelete.VirtualSports", "Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj", "{BD25C860-F099-49C3-A4FB-222EE0F95AAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecialDelete.RecoverByBetId", "Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj", "{A9C39EEF-26F1-45AC-BC87-30A1E6168047}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{BD25C860-F099-49C3-A4FB-222EE0F95AAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD25C860-F099-49C3-A4FB-222EE0F95AAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD25C860-F099-49C3-A4FB-222EE0F95AAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9C39EEF-26F1-45AC-BC87-30A1E6168047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C39EEF-26F1-45AC-BC87-30A1E6168047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C39EEF-26F1-45AC-BC87-30A1E6168047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C39EEF-26F1-45AC-BC87-30A1E6168047}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{83BE8FB7-BE2C-4A55-998B-9ED6BDD6CEE5} = {8102D830-AEF3-4155-A063-BDA9B57B9FE1}
 		{BE7420DA-D17F-48BF-9CB3-D48053757543} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{BD25C860-F099-49C3-A4FB-222EE0F95AAF} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
+		{A9C39EEF-26F1-45AC-BC87-30A1E6168047} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C225DEEC-3E60-478B-B241-CA1321AD50E2}

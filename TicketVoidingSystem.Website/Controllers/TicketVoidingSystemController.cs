@@ -39,7 +39,7 @@ public class TicketVoidingSystemController : Controller
             return View("~/wwwroot/dist/ticket-voiding-system/void-request/index.cshtml");
         }
 
-        return View("~/Views/NotAuthorized.cshtml");
+        return View("~/Views/Auth/AccessDenied.cshtml");
     }
 
     [HttpGet]
