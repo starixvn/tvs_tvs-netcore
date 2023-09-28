@@ -13,17 +13,17 @@ export class AppService {
     constructor(private httpRequestService: HttpRequestService) { }
 
     checkNegativeBalance(queryModel: CheckNegativeBalanceQuery): Observable<Array<NegativeBalance>> {
-        const url = 'Tickets/CheckNegativeBalance';
+        const url = 'api/SharedApi/CheckNegativeBalance';
         return this.httpRequestService.postJson(queryModel, url);
     }
 
     getTickets(query: GetTicketsQuery): Observable<TicketsModel> {
-        const url = 'Home/RecoverByBetId/GetTickets';
+        const url = 'api/RecoverByBetId/GetTickets';
         return this.httpRequestService.postJson<TicketsModel>(query, url);
     }
 
     recoverTicket(query: RecoverTicketsQuery): Observable<Array<Result>> {
-        const url = 'Home/RecoverByBetId/RecoverTickets';
+        const url = 'api/RecoverByBetId/RecoverTickets';
         return this.httpRequestService.postJson(query, url);
     }
 }

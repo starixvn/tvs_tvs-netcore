@@ -11,6 +11,11 @@
         <Setting Key="DBSIG2.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_GetBetTypesHaveTickets" SpName="NAP_GetBetTypesHaveTickets" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
+        <Setting Key="DBCTG.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransCheckNegativeBalance" SpName="NAP_BettransCheckNegativeBalance" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
         <Setting Key="TicketVoiding_Site_Select" SpName="TicketVoiding_Site_Select" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="NAP_BetTypeSel" SpName="NAP_BetTypeSel" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600">
             <Mapping DataField="typeid" ObjectProperty="Id" />
