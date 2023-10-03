@@ -1,6 +1,7 @@
 FROM hub.nexdev.net/base/dotnet/core/sdk:7.0-alpine AS builder
 WORKDIR /src
 
+COPY ./Sources/SpecialDelete.UploadBatchMessage ./Sources/SpecialDelete.UploadBatchMessage
 COPY ./Sources/TicketVoidingSystem ./Sources/TicketVoidingSystem
 COPY ./Sources/TicketVoidingSystem.ABExceptionList ./Sources/TicketVoidingSystem.ABExceptionList
 COPY ./Sources/TicketVoidingSystem.ManageVoidServices ./Sources/TicketVoidingSystem.ManageVoidServices

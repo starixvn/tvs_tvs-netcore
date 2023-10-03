@@ -1,0 +1,45 @@
+.btn-2D (@color) {
+    display: inline-block;
+    padding: 2px 13px 3px;
+    border: 0px;
+    background: url('../../content/base/img/sprite.png') no-repeat -7px -62px;
+    color: @white;
+    font-weight: bold;
+
+    &:hover {
+        background: url('../../content/base/img/sprite.png') no-repeat -75px -62px;
+        text-decoration: none;
+        padding: 2px 13px 3px;
+        font-weight: bold;
+        color: @white;
+    }
+
+    &:active, &:focus {
+    }
+}
+
+.btn-3D (@color) {
+    display: inline-block;
+    padding: 3px 22px 5px;
+    #gradient.vertical(@color, darken(@color, 8%));
+    border: 1px solid darken(@color, 10%);
+    .border-radius(0);
+    .box-shadow(0 2px 3px rgba(255, 255, 255, 0.25) inset);
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.5);
+    text-transform: capitalize;
+    vertical-align: middle;
+    color: @white;
+    .transition(all 0.25s ease 0s);
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: none;
+        color: @white;
+        .box-shadow(~"0 1px 8px rgba(0,0,0,0.75), 0 2px 3px rgba(255,255,255,0.5) inset");
+    }
+
+    &:active, &:focus {
+        position: relative;
+        top: 1px;
+    }
+}

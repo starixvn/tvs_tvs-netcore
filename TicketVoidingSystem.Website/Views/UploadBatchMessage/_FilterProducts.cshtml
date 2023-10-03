@@ -1,0 +1,21 @@
+﻿<div class="lbl-field span">
+    <label for="TransId">
+        Product(s)
+    </label>
+</div>
+<div class="edit-field span8">
+    <div class="filter-products">
+        <div ng-repeat="group in vm.products">
+            <div class="group">
+                <input class="float-left" id="group-{{$index}}" name="group" type="radio" ng-model="group.IsChecked" ng-checked="group.IsChecked" value="{{$index}}" ng-click="vm.onGroup(group.Name)" />
+                <label for="group-{{$index}}">{{group.Name}}</label>
+            </div>
+            <div class="products">
+                <div class="product" ng-repeat="product in group.Products">
+                    <input class="float-left product-id" type="checkbox" id="product-{{product.Value}}" value="{{product.Value}}" ng-checked="group.IsChecked" ng-disabled="!group.IsChecked" />
+                    <label class="product-label" for="product-{{product.Value}}">{{product.Name}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

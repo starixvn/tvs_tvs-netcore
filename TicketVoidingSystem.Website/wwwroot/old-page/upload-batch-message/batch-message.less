@@ -1,0 +1,163 @@
+﻿@import "../content/base/styles.less";
+
+.filter-bar {
+    fieldset {
+        margin: 0;
+        padding-top: 0;
+        padding-bottom: 10px;
+
+        legend {
+            font-style: italic;
+
+            i {
+                margin-top: 3px;
+            }
+        }
+
+        .live-score, .datetime {
+            label {
+                float: left;
+                margin: 0 3px;
+            }
+
+            input[type=text], input[type=checkbox] {
+                float: left;
+                width: 15px;
+            }
+
+            i {
+                float: left;
+                margin-left: 5px;
+                margin-top: 3px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+        }
+
+        .datetime {
+            input[type=checkbox] {
+                margin: 4px 0 0;
+            }
+        }
+    }
+
+    .bettype-wrp {
+        background-color: lighten(@filterBarBackground, 10%);
+        .box-shadow(inset 0 0 3px darken(@filterBarBackground, 50%));
+        margin-bottom: 10px;
+        padding: 5px 10px;
+
+        .tbl-bettype {
+            th, td {
+                padding: 3px 50px 3px 0;
+            }
+
+            th {
+                border-bottom: 1px solid darken(@filterBarBackground, 10%);
+            }
+        }
+    }
+
+    .action-buttons {
+        margin-top: 10px;
+    }
+}
+
+.ui-datepicker {
+    width: auto;
+    font-size: 0.9em;
+}
+
+#opt-filters {
+    margin-bottom: 10px;
+
+    legend {
+        color: @emColor;
+    }
+}
+
+#TransId {
+    width: 100px;
+}
+
+.filter-bar-inner {
+    padding: 10px !important;
+    float: left;
+}
+
+.input-bet {
+    padding-top: 10px;
+}
+
+.submit-update-batch {
+    background: url('../content/base/img/upload-batch.png') no-repeat 0px 0px;
+    color: @white;
+    height: 28px;
+    border: 0 none;
+    width: 152px !important;
+}
+
+.submit-update-batch:hover {
+    background: url('../content/base/img/upload-batch.png') no-repeat 0px -27px;
+    color: @white;
+    height: 28px;
+    border: 0 none;
+    width: 152px !important;
+}
+
+.span23 {
+    width: 812px !important;
+}
+
+.filter {
+    margin-top: 10px;
+}
+
+.filter-products {
+    background-color: white;
+    width: 1145px;
+    height: auto;
+    border-style: ridge;
+
+    .product-label {
+        margin-top: 3px;
+        margin-bottom: 0;
+    }
+}
+
+.group {
+    margin-left: 10px;
+    width: 65px;
+}
+
+.products {
+    display: flex;
+    margin-left: 30px;
+    flex-wrap: wrap;
+
+    .product {
+        display: flex;
+        min-width: 170px;
+    }
+}
+
+.upload-batch-message {
+    margin-right: 50px;
+}
+
+.message-type {
+    margin: 5px 0;
+
+    label {
+        min-width: 0;
+        margin-right: 10px;
+
+        span {
+            color: red;
+        }
+    }
+
+    select {
+        width: 120px;
+    }
+}

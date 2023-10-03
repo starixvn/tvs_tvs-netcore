@@ -12,6 +12,8 @@ namespace TicketVoidingSystem.Services.SendMessage;
 
 public interface SendMessageService
 {
+    Task<int> InsertMessageIdForBatchMessage(Message message, int matchId, int messageContentType);
+
     Task<int> InsertMessage(Message message, int matchId, int? leagueGroupId, bool isLikelyAbnormalBet);
 
     Task<int> InsertReason(string reasonEnglish, string reasonChineseSimplified);
@@ -21,6 +23,8 @@ public interface SendMessageService
     Task InsertMessageIntoAdminSite(Message message);
 
     Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId);
+
+    Task InsertBatchMessage(int userId, string message);
 }
 
 public class SendMessageServiceImp : SendMessageService
@@ -34,9 +38,20 @@ public class SendMessageServiceImp : SendMessageService
         this.messageItemService = messageItemService;
     }
 
+    public async Task<int> InsertMessageIdForBatchMessage(Message message, int matchId, int messageContentType)
+    {
+        return await InsertMessage(message, matchId, null, messageContentType);
+    }
+
     public async Task<int> InsertMessage(Message message, int matchId, int? leagueGroupId, bool isLikelyAbnormalBet)
     {
         var messageContentType = Helper.GetMessageContentType(isLikelyAbnormalBet, message.ContentEnglish);
+
+        return await InsertMessage(message, matchId, leagueGroupId, messageContentType);
+    }
+
+    private async Task<int> InsertMessage(Message message, int matchId, int? leagueGroupId, int messageContentType)
+    {
         var criteria = new CreateMessageCriteria
         {
             MatchId = matchId,
@@ -102,7 +117,7 @@ public class SendMessageServiceImp : SendMessageService
         });
     }
 
-    private async Task InsertBatchMessage(int userId, string message)
+    public async Task InsertBatchMessage(int userId, string message)
     {
         var command = new SendMessageCommand
         {

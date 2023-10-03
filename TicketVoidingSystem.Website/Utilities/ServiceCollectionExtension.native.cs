@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
 using Fanex.Caching.Redis;
-using Fanex.Data;
 using Fanex.Data.Repository;
-using Fanex.Data.SqlServer;
 using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
@@ -31,6 +28,7 @@ using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using SharpRaven;
+using SpecialDelete.UploadBatchMessage.Controllers;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ManageRequest;
@@ -53,30 +51,13 @@ namespace TicketVoidingSystem.Website.Utilities;
 
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.Client.Services;
+using TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class ServiceCollectionExtension
 {
     public static void LoadAppSetting(this IServiceCollection services, IConfiguration configuration)
     {
         AppSettingService.InitSetting(configuration);
-    }
-
-    public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connections = configuration.GetSection("ConnectionStrings")
-            .GetChildren()
-            .AsEnumerable()
-            .ToDictionary(
-                x => x.Key,
-                y => new ConnectionConfiguration(y.Key, y.Value)
-            );
-
-        DbSettingProviderManager
-            .StartNewSession()
-            .Use(connections)
-            .WithSqlServer()
-            .UseDefaultDbSettingProvider(configuration.GetSection("StoredProcedurePath").Value)
-            .Run();
     }
 
     public static void RegisterSentry(this IServiceCollection services)
@@ -226,6 +207,7 @@ public static class ServiceCollectionExtension
         services.RegisterAddRequestServices();
         services.RegisterManageRequestServices();
         services.RegisterVoidRequestServices();
+        services.RegisterUploadBatchMessageServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -242,6 +224,8 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AddRequestController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ManageRequestController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidRequestController).Assembly));
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UploadBatchMessageController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)

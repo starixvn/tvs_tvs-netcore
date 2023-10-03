@@ -1,3 +1,4 @@
+using Fanex.Data.SqlServer;
 using Fanex.NAP.Client;
 using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
@@ -15,6 +16,7 @@ using TicketVoidingSystem.TicketListing.Services.SendDataOic;
 using TicketVoidingSystem.Web;
 using TicketVoidingSystem.Web.JsonConverter;
 using TicketVoidingSystem.Website.Utilities;
+using TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,7 @@ builder.Services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpCl
 builder.Services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
 builder.Services.AddHttpClient<TicketVoidingSystemHttpClientService, TicketVoidingSystemHttpClientServiceImp>();
 builder.Services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
-builder.Services.RegisterFanexData(builder.Configuration);
+builder.Services.AddFanexSql(builder.Configuration);
 builder.Services.RegisterFanexExceptionHandler();
 builder.Services.RegisterSentry();
 builder.Services.RegisterOneBookUM(builder.Configuration);
@@ -51,6 +53,7 @@ builder.Services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDateTimeJsonConverter());
     options.JsonSerializerOptions.Converters.Add(new CustomIntJsonConverter());
 });
+builder.Services.RegisterWebOptimizer();
 
 // Build app
 var app = builder.Build();
@@ -62,6 +65,7 @@ app.Use((context, next) =>
 });
 app.UseDeveloperExceptionPage();
 app.UseResponseCompression();
+app.UseWebOptimizer();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 app.UseMiddleware<ExceptionHandlerMiddleware>();

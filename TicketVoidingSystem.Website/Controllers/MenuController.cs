@@ -16,4 +16,13 @@ public class MenuController : Controller
     {
         return View("~/wwwroot/dist/ticket-listing/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.UploadBatchMsg, Policy = Constant.Policy.Read)]
+    public IActionResult UploadBatchMessage()
+    {
+        return View("~/Views/UploadBatchMessage/Index.cshtml");
+    }
 }
