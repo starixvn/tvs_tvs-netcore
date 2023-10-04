@@ -16,14 +16,11 @@ export class UsernamesComponent implements OnInit {
   @Input() widthCss = '';
   @Input() model = '';
   @Input() disabled = false;
+  @Input() maxUsername = 50;
   @Output() focusOutUsernames = new EventEmitter();
-
-  maxUsername = 50;
   maxLengthOneUsername = 30;
-
   groupUsername: GroupUsername;
   username: string;
-
   lastItem: UsernameItem;
   shiftKey: boolean;
   tooltip = new Tooltip();
@@ -141,15 +138,19 @@ export class UsernamesComponent implements OnInit {
     const validIndex = this.groupUsername.checkValidItems();
     let result = true;
     switch (validIndex) {
-      case 0:
+      case 1:
         this.tooltip.display(this.errorTooltipClassName, LABELS.REQUIRED_USERNAME);
         result = false;
         break;
-      case 1:
+      case 2:
         this.tooltip.display(this.errorTooltipClassName, LABELS.INVALID_USERNAMES);
         result = false;
         break;
-      case 2:
+      case 3:
+        this.tooltip.display(this.errorTooltipClassName, LABELS.MAX_USERNAME_EXCEEDED);
+        result = false;
+        break;
+      case 0:
         result = true;
         break;
     }

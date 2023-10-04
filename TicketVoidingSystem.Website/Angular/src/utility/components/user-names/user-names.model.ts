@@ -9,7 +9,8 @@ export class CSSCLASS {
 export class GroupUsername {
     items: Array<UsernameItem>;
     isSelectedAll = false;
-
+    isExceededTotalUsernames = false;
+    
     constructor() {
         this.items = [];
     }
@@ -35,18 +36,15 @@ export class GroupUsername {
     }
 
     checkValidItems(): number {
-        let result = 0;
         if (this.items.length === 0) {
-            return result;
-        } else {
-            result = 2;
-            this.items.forEach(item => {
-                if (!item.isValid) {
-                    result = 1;
-                }
-            });
-            return result;
+            return 1;
+        } else if (this.items.some(x => !x.isValid)) {
+            return 2;
+        } else if (this.isExceededTotalUsernames) {
+            return 3;
         }
+
+        return 0;
     }
 
     setItemListValue(list: string[], item: UsernameItem, css: string, toolTipText = '') {
