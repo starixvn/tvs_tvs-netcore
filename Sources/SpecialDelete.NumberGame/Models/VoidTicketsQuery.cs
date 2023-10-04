@@ -5,7 +5,7 @@ namespace SpecialDelete.NumberGame.Models;
 
 public class VoidTicketsQuery
 {
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public DateTime FromTransDate { get; set; }
 

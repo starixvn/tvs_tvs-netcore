@@ -1,6 +1,6 @@
 ﻿import { Result } from '../../models/result';
-import { PrimaryBetType } from '../group-bettypes/group-bettypes.model';
 import { Product } from '../../shared/config';
+import { PrimaryBetType } from '../group-bettypes/group-bettypes.model';
 
 import * as _ from 'lodash';
 
@@ -75,27 +75,27 @@ export class BetTypeModel {
 
 export class BetTypesModel {
     result: Result;
-    bettypes: BetTypeModel[];
+    betTypes: BetTypeModel[];
     isChecked: boolean;
 
     constructor(betTypes: BetTypeModel[], isChecked: boolean) {
         this.isChecked = isChecked;
-        this.bettypes = [];
+        this.betTypes = [];
         betTypes.forEach(item => {
             const betType = new BetTypeModel(item.id, item.name, item.liveIndicator, item.type, isChecked);
-            this.bettypes.push(betType);
+            this.betTypes.push(betType);
         });
     }
 
     changeAll() {
-        this.bettypes.forEach(item => {
+        this.betTypes.forEach(item => {
             item.isChecked = this.isChecked;
         });
     }
 
     changeItem() {
         this.isChecked = true;
-        this.bettypes.forEach(item => {
+        this.betTypes.forEach(item => {
             if (item.isShow && !item.isChecked) {
                 this.isChecked = false;
             }
@@ -104,7 +104,7 @@ export class BetTypesModel {
 
     getCheckedBetTypes(): string[] {
         const result = [];
-        this.bettypes.forEach(item => {
+        this.betTypes.forEach(item => {
             if (item.isShow && item.isChecked) {
                 result.push(item.id);
             }
@@ -115,8 +115,8 @@ export class BetTypesModel {
 
     checkDisplay(): boolean {
         let display = false;
-        for (let i = 0; i < this.bettypes.length && !display; i++) {
-            display = this.bettypes[i].isShow;
+        for (let i = 0; i < this.betTypes.length && !display; i++) {
+            display = this.betTypes[i].isShow;
         }
 
         return display;

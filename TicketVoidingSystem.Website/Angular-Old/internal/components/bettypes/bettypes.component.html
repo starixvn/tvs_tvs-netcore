@@ -1,4 +1,4 @@
-﻿<div class="bettypes" *ngIf="model!= undefined && model.bettypes.length > 0 && display">
+﻿<div class="bettypes" *ngIf="model!= undefined && model.betTypes.length > 0 && display">
     <div class="header">
         <label>
             <input type="checkbox" class="checkbox-all-bettypes" [(ngModel)]="model.isChecked" (ngModelChange)="model.changeAll()" />
@@ -6,10 +6,10 @@
         </label>
     </div>
     <div class="content">
-        <ng-container *ngFor="let bettype of model.bettypes">
-            <label *ngIf="bettype.isShow">
-                <input type="checkbox" [(ngModel)]="bettype.isChecked" (ngModelChange)="model.changeItem()" />
-                {{bettype.name}}
+        <ng-container *ngFor="let betType of model.betTypes">
+            <label *ngIf="betType.isShow">
+                <input type="checkbox" [(ngModel)]="betType.isChecked" (ngModelChange)="model.changeItem()" />
+                {{betType.name}}
             </label>
         </ng-container>
     </div>

@@ -20,6 +20,7 @@ import {
 } from '../../internal/models/negative-balance';
 import { Result } from '../../internal/models/result';
 import { HttpRequestService } from '../../internal/services/http-request.service';
+import { PasswordService } from '../../internal/services/password.service';
 import { TEXT } from '../../internal/shared/text';
 import { AppService } from './app.service';
 import { FilterComponent } from './filter/filter.component';
@@ -28,13 +29,14 @@ import { GroupModel } from './tickets/group.model';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
 
+
 import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [BlockUIService, HttpRequestService, AppService]
+  providers: [BlockUIService, HttpRequestService, AppService, PasswordService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('filter') filterComponent: FilterComponent;
@@ -60,7 +62,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private element: ElementRef,
     private blockUIService: BlockUIService,
-    private appService: AppService
+    private appService: AppService,
+    private passwordService: PasswordService
   ) {}
 
   public ngOnInit() {
@@ -211,7 +214,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       reason: this.confirmation.reason,
       reasonSC: this.confirmation.reasonSC,
       userName: this.confirmation.userName,
-      userPwd: this.confirmation.userPassword
+      userPwd: this.passwordService.hash(this.confirmation.userPassword)
     });
 
     this.appService.voidTicket(queryModel).subscribe(data => {

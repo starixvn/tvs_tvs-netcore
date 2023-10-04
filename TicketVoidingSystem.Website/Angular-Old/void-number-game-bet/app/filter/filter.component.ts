@@ -64,7 +64,7 @@ export class FilterComponent implements OnInit {
     const query: GetBetTypesQuery = { mode: ModeType.NUMBER_GAME, matchId: 0 };
     this.appService.getBetTypes(query)
       .subscribe(data => {
-        this.betTypes = new BetTypesModel(data.bettypes, true);
+        this.betTypes = new BetTypesModel(data.betTypes, true);
       });
   }
 
@@ -107,10 +107,11 @@ export class FilterComponent implements OnInit {
 
   checkMatchIsNumberGame() {
     if (this.sportType !== 161 && this.sportType !== 164) {
+      this.isValidMatchId = false;
       this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
+    } else {
+      this.isValidMatchId = true;
     }
-
-    this.isValidMatchId = true;
   }
 
   searchTickets() {

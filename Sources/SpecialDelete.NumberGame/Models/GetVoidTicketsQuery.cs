@@ -2,7 +2,7 @@
 
 public class GetVoidTicketsQuery
 {
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public DateTime FromTransDate { get; set; }
 
