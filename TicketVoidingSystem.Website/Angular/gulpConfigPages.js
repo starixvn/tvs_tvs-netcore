@@ -128,14 +128,14 @@ const editRequest = {
   indexEJSPath: './src/edit-request/index.ejs'
 };
 const configPages = [
-  homePage,
-  manageVoidServices,
-  abExceptionList,
-  markTickets,
-  ticketListing,
+  //homePage,
+  //manageVoidServices,
+  //abExceptionList,
+  //markTickets,
+  //ticketListing,
   voidSingleBet,
   //voidRequest,
-  manageRequest,
+  //manageRequest,
   //addRequest,
   //editRequest
 ];
