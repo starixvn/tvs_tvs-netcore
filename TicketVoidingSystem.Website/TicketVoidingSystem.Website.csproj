@@ -65,6 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sources\SpecialDelete.NumberGame\SpecialDelete.NumberGame.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj" />

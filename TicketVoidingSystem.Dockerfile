@@ -4,6 +4,7 @@ WORKDIR /src
 COPY ./Sources/SpecialDelete.UploadBatchMessage ./Sources/SpecialDelete.UploadBatchMessage
 COPY ./Sources/SpecialDelete.VirtualSports ./Sources/SpecialDelete.VirtualSports
 COPY ./Sources/SpecialDelete.RecoverByBetId ./Sources/SpecialDelete.RecoverByBetId
+COPY ./Sources/SpecialDelete.NumberGame ./Sources/SpecialDelete.NumberGame
 COPY ./Sources/TicketVoidingSystem ./Sources/TicketVoidingSystem
 COPY ./Sources/TicketVoidingSystem.ABExceptionList ./Sources/TicketVoidingSystem.ABExceptionList
 COPY ./Sources/TicketVoidingSystem.ManageVoidServices ./Sources/TicketVoidingSystem.ManageVoidServices

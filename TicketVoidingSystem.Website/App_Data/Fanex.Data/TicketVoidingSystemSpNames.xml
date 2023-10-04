@@ -313,4 +313,15 @@
         <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverByBetId_Update" SpName="NAP_SpecialDelete_RecoverByBetId_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="NumberGame">
+        <Setting Key="DBCTG.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransSelSpecialDel_NumberGame" SpName="NAP_BettransSelSpecialDel_NumberGame" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>
