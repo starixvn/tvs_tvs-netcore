@@ -1,11 +1,11 @@
 ﻿{
   "Groups": [
     {
-      "SportTypes": [ 190, 191, 192, 194 ],
+      "SportTypes": [ 190, 191, 192, 194, 195, 196, 197 ],
       "BetTypes": [
         {
           "Id": 2701,
-          "Name": "FT 1X2"
+          "Name": "FT.1X2"
         },
         {
           "Id": 2702,
@@ -13,19 +13,19 @@
         },
         {
           "Id": 2703,
-          "Name": "FT O/U"
+          "Name": "Over/Under"
         },
         {
           "Id": 2704,
-          "Name": "1H O/U"
+          "Name": "1H Over/Under"
         },
         {
           "Id": 2705,
-          "Name": "FT HDP"
+          "Name": "Handicap"
         },
         {
           "Id": 2706,
-          "Name": "1H HDP"
+          "Name": "1H Handicap"
         },
         {
           "Id": 2707,

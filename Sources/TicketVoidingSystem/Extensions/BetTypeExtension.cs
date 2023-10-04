@@ -64,7 +64,7 @@ public static class BetTypeExtension
                || id is >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType;
     }
 
-    private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194 };
+    private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194, 195, 196, 197 };
 
     public static bool IsVirtualSport(this int sportTypeId)
     {
