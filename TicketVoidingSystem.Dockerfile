@@ -33,5 +33,6 @@ USER dotnetuser
 WORKDIR /app
 COPY --from=builder /app .
 ENV TZ="America/La_Paz"
+ENV COMPlus_EnableDiagnostics=0
 
 ENTRYPOINT ["dotnet", "TicketVoidingSystem.Website.dll"]
