@@ -1,0 +1,55 @@
+﻿<div class="filter">
+    <div class="remark">
+        <em class="icon-warning"></em>You can only void today tickets.
+    </div>
+
+    <div class="filter-control">
+        <span>Search by</span>
+        <label *ngFor="let item of option">
+            <input type="radio" name="filter-control" [attr.value]="item" [checked]="item === 'MatchId'" (change)="controlFilter(item)" />
+            {{item}}
+        </label>
+    </div>
+    <div class="filter-by-matchid" [hidden]="!filterByMatchId">
+        <div class="input-matchid">
+            <label class="match">
+                Match ID
+                <input maxlength="10" class="match-id" type="text" only-number [(ngModel)]="matchId" (blur)="blurMatchId()" autofocus />
+            </label>
+            <div class="from-date">
+                <label>(GMT + 8) From</label>
+                <date-full-time #fromDateTime [(dateTime)]="fromTransDate"></date-full-time>
+            </div>
+            <div class="to-date">
+                <label>To</label>
+                <date-full-time #toDateTime [(dateTime)]="toTransDate"></date-full-time>
+            </div>
+        </div>
+        <fieldset *ngIf="sportType === 161">
+            <legend>
+                <em class="icon-filter"></em>Optional Filters
+            </legend>
+            <div class="optional-filters">
+                <span>Ball Sequence:</span>
+                <label>
+                    <input type="checkbox" [(ngModel)]="ballSequences.isChecked" (ngModelChange)="ballSequences.changeAll()" />
+                    {{ballSequences.name}}
+                </label>
+                <label *ngFor="let item of ballSequences.items">
+                    <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="ballSequences.changeItem()" />
+                    {{item.name}}
+                </label>
+            </div>
+        </fieldset>
+        <bettypes #bettypesComponent [model]="betTypes" [product]="1" [ballSequence]="ballSequences.value" [sportType]="sportType"></bettypes>
+    </div>
+    <div class="filter-by-betids" [hidden]="filterByMatchId">
+        <input-betids #betIds [maxItems]="100" [hideWarningMove]="true"></input-betids>
+        <span class="invalid-betid"></span>
+    </div>
+
+    <div class="search">
+        <input type="button" class="submit" value="Search" (click)="searchTickets()" />
+    </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

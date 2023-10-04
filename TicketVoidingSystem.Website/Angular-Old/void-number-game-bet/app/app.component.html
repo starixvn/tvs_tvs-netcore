@@ -1,0 +1,33 @@
+<div class="title">
+    Home / Void Number Game Bet
+</div>
+
+<div id="body">
+    <filter #filter (searchEvent)="searchEvent($event)"></filter>
+    <tickets #ticket [ticketsModel]="ticketsModel"
+             [isShowTickets]="isShowTickets"
+             (pagingSearchTicket)="pagingSearchTicket($event)"
+             (exportExcelEvent)="exportExcel($event)"></tickets>
+    <div *ngIf="isShowTickets" class="switch-send-message">
+        <div [ngClass]="{'send-message-on':isShowMessages, 'send-message-off':!isShowMessages}"
+             (click)="isShowMessages = !isShowMessages">
+            <span class="send-message">Send Message</span>
+        </div>
+    </div>
+    
+    <messages #messages [isShowMessages]="isShowMessages"></messages>
+    <confirmation #confirmation [isShowConfirm]="isShowConfirm" (voidEvent)="voidBet($event)"></confirmation>
+</div>
+
+<modal [modal]="modal" (confirmEvent)="confirmEvent()"></modal>
+<notification [notification]="notification"></notification>
+<tooltip [tooltip]="tooltip"></tooltip>
+<messages-result [messagesResult]="messagesResult"></messages-result>
+<div *ngIf="blockUI">
+    <div class="in modal-backdrop spinner-overlay"></div>
+    <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+        <div class="loading-message">
+            <div class="loading"></div>
+        </div>
+    </div>
+</div>
