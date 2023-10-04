@@ -17,6 +17,7 @@ import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
 import { GetChildMatchQuery } from './models/get-child-match.query';
+import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +85,16 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async getLinkedLogs(query: GetLinkedLogQuery): Promise<LinkedLogsViewModel> {
     return this.httpService.postJson<GetLinkedLogQuery, LinkedLogsViewModel>(query, 'api/AddRequest/GetLinkedLog');
+  }
+
+  /* istanbul ignore next */
+  async getSubIssueTypeNote(query: GetSubIssueTypeNoteQuery): Promise<SubIssueTypeNoteModel[]> {
+    return this.httpService.postJson<GetSubIssueTypeNoteQuery, SubIssueTypeNoteModel[]>(query, 'api/AddRequest/GetSubIssueTypeNote');
+  }
+
+  /* istanbul ignore next */
+  async saveSubIssueTypeNote(query: SaveSubIssueTypeNoteQuery): Promise<SubIssueTypeNoteModel[]> {
+    return this.httpService.postJson<SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel[]>(query, 'api/AddRequest/SaveSubIssueTypeNote');
   }
 
   /* istanbul ignore next */

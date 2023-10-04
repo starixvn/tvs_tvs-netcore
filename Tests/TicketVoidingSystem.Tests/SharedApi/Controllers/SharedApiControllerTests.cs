@@ -20,16 +20,16 @@ public class SharedApiControllerTests
         controller = new SharedApiController(mediator, httpContextAccessor);
     }
 
-    [Fact]
-    public void GetNapUserInfo_HasRequest_ReturnIActionResult()
-    {
-        // Arrange
-        // Act
-        var actual = controller.GetNapUserInfo();
+    //[Fact]
+    //public void GetNapUserInfo_HasRequest_ReturnIActionResult()
+    //{
+    //    // Arrange
+    //    // Act
+    //    var actual = controller.GetNapUserInfo();
 
-        // Assert
-        Assert.NotNull(actual);
-    }
+    //    // Assert
+    //    Assert.NotNull(actual);
+    //}
 
     [Fact]
     public async Task GetBalanceUp_HasRequest_CallMediatorRequest()

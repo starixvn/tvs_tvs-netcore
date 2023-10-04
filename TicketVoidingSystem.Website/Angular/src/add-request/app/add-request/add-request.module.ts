@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AutosizeModule } from 'ngx-autosize';
 import { AddChildMatchComponent } from '../../../utility/components/add-child-match/add-child-match.component';
 import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
@@ -136,7 +137,8 @@ import { OthersService } from './others/others.service';
     PoolHouseTicketModule,
     NgbCollapseModule,
     NgSelectMixtureModule,
-    MultipleSelectionModule
+    MultipleSelectionModule,
+    AutosizeModule
   ],
   providers: [
     FilterService,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -29,31 +30,31 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
     }
 
     [Fact]
-    public void Execute_Successful_ReturnExpected()
+    public async Task Execute_Successful_ReturnExpected()
     {
         // Arrange
         sessionService.GetClientIp().ReturnsForAnyArgs("1");
         repository.FetchAsync<Result>(Arg.Any<MarkTicketsCommand>())
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 0 } });
         // Act
-        var actual = service.MarkTicketsInTVS("1", 1, 1);
+        var actual = await service.MarkTicketsInTVS("1", 1, 1);
 
         // Assert
-        Assert.Equal(0, actual.Result.First().ErrorCode);
+        Assert.Equal(0, actual.First().ErrorCode);
     }
 
     [Fact]
-    public void Execute_HasException_ReturnExpected()
+    public async Task Execute_HasException_ReturnExpected()
     {
         // Arrange
         var exception = new Exception();
         sessionService.GetClientIp().Throws(exception);
 
         // Act
-        var actual = service.MarkTicketsInTVS("1", 1, 1);
+        var actual = await service.MarkTicketsInTVS("1", 1, 1);
 
         // Assert
-        loggingService.ErrorAsync(Arg.Any<Exception>());
-        Assert.Equal(1, actual.Result.First().ErrorCode);
+        await loggingService.ErrorAsync(Arg.Any<Exception>());
+        Assert.Equal(1, actual.First().ErrorCode);
     }
 }

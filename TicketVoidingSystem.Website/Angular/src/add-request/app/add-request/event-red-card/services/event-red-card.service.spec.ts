@@ -4,15 +4,15 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../../add-request.store';
-import { PrimitiveProperty } from '../event-red-card.model';
-import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../../filter/filter.model';
 import { GroupButton } from '../../filter/sub-issue-type-dialog/sub-issue-type-json.model';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
+import { PrimitiveProperty } from '../event-red-card.model';
+import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
 import { EventRedCardService } from './event-red-card.service';
 
 class Helper {
@@ -111,6 +111,9 @@ class Helper {
     pa: '4',
     sa: '4',
     description: [],
+    groupId: 1,
+    note: '',
+    noteEditable: false
   };
 }
 

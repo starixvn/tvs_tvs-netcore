@@ -70,13 +70,13 @@ export class EventDangerAcceptedService {
     defaultFilter.fromDateTime = eventSource.filterFromTransTime;
     defaultFilter.toDateTime = eventSource.filterToTransTime;
   }
-  
-  initDefaultFilterTime(defaultFilter: FilterTimeWithAllowance): void { 
+
+  initDefaultFilterTime(defaultFilter: FilterTimeWithAllowance): void {
     const currentMoment = moment.utc().tz('America/Caracas');
     defaultFilter.fromDateTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     defaultFilter.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
-  
+
   initDefaultMainEvent(allSelectedEvents: LogInfoRedCard[]): LogInfoRedCard {
     const mainEvent = new LogInfoRedCard();
     mainEvent.isMainMatch = true;
@@ -117,7 +117,7 @@ export class EventDangerAcceptedService {
       x.voidTimeArea = this.getNewFilterTimeWithAllowanceBySubIssueType(x, defaultFilter);
     });
   }
-  
+
   private getNewFilterTimeWithAllowanceBySubIssueType(event: LogInfoRedCard, defaultFilter: FilterTimeWithAllowance): FilterTimeWithAllowance {
     const group = this.getGroupSubTypeIncludeAllowanceTime(event.subIssueTypeId);
     const voidTimeArea = {

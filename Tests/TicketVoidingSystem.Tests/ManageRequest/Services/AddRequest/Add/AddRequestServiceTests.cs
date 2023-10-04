@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -39,33 +40,33 @@ public class AddRequestServiceTests
     }
 
     [Fact]
-    public void Execute_HasMarkTransIdsIsWhiteSpace_ReturnErrorCodeExpected()
+    public async Task Execute_HasMarkTransIdsIsWhiteSpace_ReturnErrorCodeExpected()
     {
         // Arrange
         var query = new AddRequestQuery { MarkTransIds = "", IssueTypeId = 1 };
 
         // Act
-        var actual = service.Execute(query);
+        var actual = await service.Execute(query);
 
         // Assert
-        Assert.Equal(1, actual.Result.ErrorCode);
+        Assert.Equal(1, actual.ErrorCode);
     }
 
     [Fact]
-    public void Execute_HasIssueTypeIdIsArchivedTicket_ReturnErrorCodeExpected()
+    public async Task Execute_HasIssueTypeIdIsArchivedTicket_ReturnErrorCodeExpected()
     {
         // Arrange
         var query = new AddRequestQuery { MarkTransIds = "123", IssueTypeId = 17 };
 
         // Act
-        var actual = service.Execute(query);
+        var actual = await service.Execute(query);
 
         // Assert
-        Assert.Equal(1, actual.Result.ErrorCode);
+        Assert.Equal(1, actual.ErrorCode);
     }
 
     [Fact]
-    public void Execute_NoHasResultSuccessful_ReturnExpected()
+    public async Task Execute_NoHasResultSuccessful_ReturnExpected()
     {
         // Arrange
         var query = new AddRequestQuery { MarkTransIds = "1", IssueTypeId = 1 };
@@ -74,10 +75,10 @@ public class AddRequestServiceTests
             .ReturnsForAnyArgs(markTicketResults);
 
         // Act
-        var actual = service.Execute(query);
+        var actual = await service.Execute(query);
 
         // Assert
-        Assert.Equal(1, actual.Result.ErrorCode);
+        Assert.Equal(1, actual.ErrorCode);
     }
 
     [Theory]
@@ -101,7 +102,10 @@ public class AddRequestServiceTests
         // Arrange
         var query = new AddRequestQuery
         {
-            MarkTransIds = "1", IssueTypeId = issueTypeId, TransInfoJson = "123", MatchId = 1,
+            MarkTransIds = "1",
+            IssueTypeId = issueTypeId,
+            TransInfoJson = "123",
+            MatchId = 1,
             KickOffTime = new DateTime(2022, 2, 2, 2, 2, 2),
             ActionId = 1,
             OperatorsList = null

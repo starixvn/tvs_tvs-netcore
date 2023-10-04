@@ -112,6 +112,9 @@ class Helper {
     pa: '4',
     sa: '4',
     description: [],
+    groupId: 1,
+    note: '',
+    noteEditable: false
   };
 }
 
