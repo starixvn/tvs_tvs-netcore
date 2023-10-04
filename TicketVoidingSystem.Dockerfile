@@ -17,11 +17,13 @@ COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVo
 
 WORKDIR /src/TicketVoidingSystem.Website
 RUN dotnet nuget add source http://nuget.nexdev.net/api/v2
-RUN dotnet restore -v n
+RUN --mount=type=cache,target=/root/.nuget/packages \
+ dotnet restore -v n
 
 COPY ./TicketVoidingSystem.Website .
 
-RUN dotnet publish -r linux-x64 --self-contained false -c Release -o /app 
+RUN --mount=type=cache,target=/root/.nuget/packages \
+ dotnet publish -r linux-x64 --self-contained false -c Release -o /app 
 
 FROM hub.nexdev.net/base/dotnet/core/aspnet:7.0-alpine AS base
 
