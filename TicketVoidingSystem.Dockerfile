@@ -16,7 +16,7 @@ COPY ./Sources/TicketVoidingSystem.ManageRequest ./Sources/TicketVoidingSystem.M
 COPY ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
 WORKDIR /src/TicketVoidingSystem.Website
-RUN dotnet nuget add source http://nuget.nexdev.net/api/v2
+RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
 RUN --mount=type=cache,target=/root/.nuget/packages \
  dotnet restore -v n
 
