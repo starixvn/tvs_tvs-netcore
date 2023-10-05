@@ -94,10 +94,12 @@ public class BetListCoreServiceImp : BetListCoreService
 
         if (Helper.IsMustRemoveSabaText(match, site))
         {
+            var leagueNameReplaced = match.LeagueName.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            var leagueNameSimplifiedReplaced = match.LeagueNameSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase);
             var serializedChoice = JsonConvert.SerializeObject(choice);
             choice = JsonConvert.DeserializeObject<string>(serializedChoice)
-                .Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-                .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+                .Replace(match.LeagueNameSimplified, leagueNameSimplifiedReplaced, StringComparison.InvariantCultureIgnoreCase)
+                .Replace(match.LeagueName, leagueNameReplaced, StringComparison.InvariantCultureIgnoreCase);
         }
 
         return choice;

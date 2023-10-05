@@ -18,10 +18,14 @@ public class LeagueNameMessageServiceImp : LeagueNameMessageService
     {
         if (Helper.IsMustRemoveSabaText(match, site))
         {
+            var leagueNameReplaced = match.LeagueName.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            var leagueNameSimplifiedReplaced = match.LeagueNameSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase);
+
             var serializedContentChineseSimplified = JsonSerializer.Serialize(message.ContentChineseSimplified);
             var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified);
-            message.ContentChineseSimplified = deSerializedContentChineseSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase);
-            message.ContentEnglish = message.ContentEnglish.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            message.ContentChineseSimplified = deSerializedContentChineseSimplified.Replace(match.LeagueNameSimplified,
+                leagueNameSimplifiedReplaced, StringComparison.InvariantCultureIgnoreCase);
+            message.ContentEnglish = message.ContentEnglish.Replace(match.LeagueName, leagueNameReplaced, StringComparison.InvariantCultureIgnoreCase);
 
             match.LeagueName = match.LeagueName.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
             match.LeagueNameSimplified = match.LeagueNameSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase);
