@@ -6,13 +6,11 @@ public class GetTransInfoQuery
 {
     public int MatchId { get; set; }
     public int IssueTypeId { get; set; }
-    public DateTime? KickOffTime { get; set; }
+
+    //public DateTime? KickOffTime { get; set; }
     public string TransIds { get; set; }
-    public string Usernames { get; set; }
-    public DateTime? FromDate { get; set; }
-    public DateTime? ToDate { get; set; }
-    public string ProductIds { get; set; }
-    public string StatusIds { get; set; }
+
+    public AbnormalAccountViewModel? AbnormalAccountViewModel { get; set; }
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreModels { get; set; }
     public IEnumerable<DangerAcceptedViewModel>? DangerAcceptedModels { get; set; }
     public IEnumerable<DangerAcceptedViewModel>? RedCardModels { get; set; }
@@ -23,4 +21,5 @@ public class GetTransInfoQuery
     public IEnumerable<WrongOddsViewModel>? WrongOddsModels { get; set; }
     public IEnumerable<ReducedOverViewModel>? ReducedOverModels { get; set; }
     public IEnumerable<NotParticipateViewModel>? NotParticipateModels { get; set; }
+    public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffModels { get; set; }
 }

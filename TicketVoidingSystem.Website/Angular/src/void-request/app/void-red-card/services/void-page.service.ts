@@ -85,7 +85,6 @@ export class VoidPageService {
       requestId: requestDetail.requestId,
       isShowLogOnly: true,
       issueTypeId: requestDetail.request.issueTypeId,
-      matchId: requestDetail.redCardModels[0].matchId,
       redCardModels: MappingModelStaticService.buildRedCardGetLogInfoModel(requestDetail.redCardModels),
     };
 

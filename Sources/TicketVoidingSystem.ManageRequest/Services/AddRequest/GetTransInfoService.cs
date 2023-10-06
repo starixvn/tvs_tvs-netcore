@@ -1,6 +1,5 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -172,11 +171,11 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 return query.TransIds;
 
             case IssueTypeConstant.AbnormalAccount:
-                return LogInfoExtension.GetAbnormalAccountInfoXml(query.Usernames, query.ProductIds, query.StatusIds, query.FromDate, query.ToDate);
+                return query.AbnormalAccountViewModel.ToAbnormalAccountInfoXml();
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                return LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada());
+                return query.EarlyKickOffModels.ToKickOffInfoXml();
 
             case IssueTypeConstant.WrongScore:
                 return query.WrongScoreModels.ToWrongScoreInfoXml();

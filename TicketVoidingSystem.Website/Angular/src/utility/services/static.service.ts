@@ -124,6 +124,8 @@ export class StaticService {
       return requestDetail.notParticipateModels[0].subIssueTypeId;
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.duplicateTicketsModel.subIssueTypeId;
+    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -148,6 +150,8 @@ export class StaticService {
       return requestDetail.notParticipateModels[0].eventDate;
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return null;
+    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).eventDate;
     } else {
       return requestDetail.event.eventDate;
     }

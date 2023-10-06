@@ -37,8 +37,6 @@ public class AddRequestQuery
 
     public int? MatchId { get; set; }
 
-    public DateTime? KickOffTime { get; set; }
-
     public string? TransIds { get; set; }
 
     public bool? IsHasUusTickets { get; set; }
@@ -66,6 +64,8 @@ public class AddRequestQuery
     public IEnumerable<WrongOddsViewModel>? WrongOddsInfo { get; set; }
 
     public IEnumerable<ReducedOverViewModel>? ReducedOverInfo { get; set; }
+
+    public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffInfo { get; set; }
 
     public IEnumerable<NotParticipateViewModel>? NotParticipateInfo { get; set; }
 

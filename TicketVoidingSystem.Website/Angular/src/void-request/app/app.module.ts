@@ -26,6 +26,7 @@ import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-dup
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
+import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
     VoidDuplicateTicketsComponent,
     VoidRedCardComponent,
     VoidNotParticipateComponent
+    VoidEarlyKickOffComponent
   ],
   imports: [
     AdvancedModeModule,

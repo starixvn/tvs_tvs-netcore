@@ -69,6 +69,11 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.NotParticipateModels = MapEventNotParticipate(secondResultSet);
                 break;
 
+            case IssueTypeConstant.EarlyKickOffTime:
+            case IssueTypeConstant.WrongKickOffTime:
+                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet);
+                break;
+
             case IssueTypeConstant.DuplicateTickets:
                 viewModel.DuplicateTicketsModel = MapEventDuplicateTickets(secondResultSet);
                 break;
@@ -204,6 +209,18 @@ public class GetRequestServiceImp : GetRequestService
             FavoriteValue = model.FavoriteValue
         });
     }
+    
+    private static IEnumerable<NotParticipateViewModel> MapEventNotParticipate(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        return requestEventModels.Select(model => new NotParticipateViewModel
+        {
+            EventDate = model.EventDate,
+            MatchId = model.MatchId,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTypeId = model.BetTypeId,
+            PlayerIds = model.PlayerIds,
+        });
+    }
 
     private static IEnumerable<ReducedOverViewModel> MapEventReducedOver(IEnumerable<RequestEventModel> requestEventModels)
     {
@@ -221,15 +238,18 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    private static IEnumerable<NotParticipateViewModel> MapEventNotParticipate(IEnumerable<RequestEventModel> requestEventModels)
+    private IEnumerable<EarlyKickOffViewModel> MapEventEarlyKickOff(IEnumerable<RequestEventModel> requestEventModels)
     {
-        return requestEventModels.Select(model => new NotParticipateViewModel
+        return requestEventModels.Select(model => new EarlyKickOffViewModel()
         {
-            EventDate = model.EventDate,
             MatchId = model.MatchId,
+            MatchCode = model.MatchCode,
+            Name = GetMatchName(model),
+            LeagueName = remotingRefService.GetLeagueName(model.LeagueId, LanguageCode.English),
+            IsMainMatch = model.IsMainMatch,
             SubIssueTypeId = model.SubIssueTypeId,
-            PlayerId = model.PlayerId,
-            GroupBetTypeIds = model.GroupBetTypeIds,
+            EventDate = model.EventDate,
+            KickOffTime = model.KickOffTime
         });
     }
 

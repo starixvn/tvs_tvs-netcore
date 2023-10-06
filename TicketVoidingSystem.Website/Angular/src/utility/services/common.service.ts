@@ -14,7 +14,6 @@ import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/b
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
-import { DateTimeFormat } from '../constants/config';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../models/copy-request-info.query';
@@ -150,7 +149,7 @@ export class CommonService {
 }
 
 export class CommonStaticService {
-  static convertToStrictTimeFormat(sourceTime: string): string {
-    return moment(sourceTime.trim(), DateTimeFormat.TIME_FORMAT, true).format(DateTimeFormat.TIME_FORMAT);
+  static convertToStrictTimeFormat(sourceTime: string, format: string): string {
+    return moment(sourceTime.trim(), format, true).format(format);
   }
 }

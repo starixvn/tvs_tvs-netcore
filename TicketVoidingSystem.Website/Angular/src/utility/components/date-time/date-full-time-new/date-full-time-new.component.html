@@ -20,6 +20,7 @@
     </div>
     <div class="time-filter">
         <input type="text" class="form-control form-control-sm time-input{{index}}"
+            [style.width.px]="withOfTime"
             [(ngModel)]="time" placeholder="HH:mm:ss.SSS AM/PM"
             (ngModelChange)="changeModel();onChangeTime($event)"
             [disabled]="isDisabled"

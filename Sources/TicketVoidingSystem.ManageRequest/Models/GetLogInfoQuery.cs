@@ -19,6 +19,7 @@ public class GetLogInfoQuery
     public IEnumerable<WrongOddsViewModel>? WrongOddsModels { get; set; }
     public IEnumerable<ReducedOverViewModel>? ReducedOverModels { get; set; }
     public IEnumerable<NotParticipateViewModel>? NotParticipateModels { get; set; }
+    public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffModels { get; set; }
     public bool? IsShowLogOnly { get; set; }
     public DateTime? KickOffTime { get; set; }
 }

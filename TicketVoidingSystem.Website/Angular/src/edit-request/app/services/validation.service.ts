@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TVSRequestFilterBy } from 'src/utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
 import { RequestDetailViewModel } from '../request.model';
 
@@ -86,5 +87,16 @@ export class ValidationService {
   /* istanbul ignore next */
   public isDuplicateTickets(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isDuplicateTickets(detailViewModel.request.issueTypeId.toString());
+  }
+
+  /* istanbul ignore next */
+  public isEarlyKickOfOrWrongKickOff(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isEarlyKickOff(detailViewModel.request.issueTypeId.toString())
+    || StaticService.isWrongKickOff(detailViewModel.request.issueTypeId.toString());
+  }
+
+  /* istanbul ignore next */
+  public isAbnormalArchivedTicket(detailViewModel: RequestDetailViewModel): boolean {
+    return this.isArchivedTicket(detailViewModel) && detailViewModel.event.filterBy === TVSRequestFilterBy.ABNORMAL;
   }
 }

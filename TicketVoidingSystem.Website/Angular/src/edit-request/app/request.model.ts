@@ -1,3 +1,4 @@
+import { EarlyKickOffModel } from 'src/add-request/app/add-request/models/event-eko.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { NotParticipateModel } from '../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
@@ -66,10 +67,12 @@ export class RequestEventModel {
 
 export class RequestDetailViewModel {
   requestId: number;
+  messages: Message[];
   lastModifiedDate: Date;
   request: RequestDetailModel;
   event?: RequestEventModel;
   wrongScoreModels?: WrongScoreModel[];
+  duplicateTicketsModel: DuplicateTicketsModel;
   dangerAcceptedModels?: RedCardModel[];
   redCardModels?: RedCardModel[];
   wrongHdpModels?: WrongHdpModel[];
@@ -77,6 +80,5 @@ export class RequestDetailViewModel {
   wrongOddsModels?: WrongOddsModel[];
   reducedOverModels?: ReducedOverModel[];
   notParticipateModels?: NotParticipateModel[];
-  duplicateTicketsModel?: DuplicateTicketsModel;
-  messages?: Message[];
+  earlyKickOffModels: EarlyKickOffModel[];
 }

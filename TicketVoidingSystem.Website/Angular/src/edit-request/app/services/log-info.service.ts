@@ -36,15 +36,14 @@ export class LogInfoService {
       await this.getLogInfoReducedOver(args);
     } else if (this.validationService.isNotParticipate(detailViewModel)) {
       await this.getLogInfoNotParticipate(args);
+    } else if (this.validationService.isEarlyKickOfOrWrongKickOff(detailViewModel)) {
+      //await this.getLogInfoEarlyKickOff(args);
     }
   }
 
   private async getLogInfoRedCard(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
-    const mainEvent = args.detailViewModel.redCardModels.find(x => x.isMainMatch);
     const query: GetLogInfoQuery = {
       requestId: args.primitiveProperty.requestId,
-      matchId: mainEvent.matchId,
       actionId: args.detailViewModel.request.actionId,
       isShowLogOnly: true,
       issueTypeId: args.detailViewModel.request.issueTypeId,
@@ -57,14 +56,11 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
       model.isChecked = true;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   private async getLogInfoWrongScore(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const query: GetLogInfoQuery = {
       requestId: args.primitiveProperty.requestId,
-      matchId: args.detailViewModel.wrongScoreModels[0].matchId,
       actionId: args.detailViewModel.request.actionId,
       issueTypeId: args.detailViewModel.request.issueTypeId,
       isShowLogOnly: true,
@@ -77,11 +73,9 @@ export class LogInfoService {
       const wrongScore = args.detailViewModel.wrongScoreModels.find(y => y.scoreId === x.scoreId);
       wrongScore.logInfoDetail = x.logInfoDetail;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   private async getLogInfoDangerAccepted(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const query: GetLogInfoQuery = {
       requestId: args.primitiveProperty.requestId,
       isShowLogOnly: true,
@@ -96,11 +90,9 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
       model.isChecked = true;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   private async getLogInfoWrongHdp(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const models = MappingModelStaticService.buildWrongHdpGetLogInfoModel(args.detailViewModel.wrongHdpModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
@@ -120,11 +112,9 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
       model.isPoolHouseAffected = x.validation.isPoolHouseAffected;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   private async getLogInfoWrongOu(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const models = MappingModelStaticService.buildWrongOuGetLogInfoModel(args.detailViewModel.wrongOuModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
@@ -143,11 +133,9 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
       model.isPoolHouseAffected = x.validation.isPoolHouseAffected;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   private async getLogInfoWrongOdds(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const models = MappingModelStaticService.buildWrongOddsGetLogInfoModel(args.detailViewModel.wrongOddsModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
@@ -162,11 +150,9 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
       model.isPoolHouseAffected = x.validation.isPoolHouseAffected;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   private async getLogInfoReducedOver(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const models = MappingModelStaticService.buildReducedOverGetLogInfoModel(args.detailViewModel.reducedOverModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
@@ -180,10 +166,8 @@ export class LogInfoService {
       const model = args.detailViewModel.reducedOverModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
     });
-    args.primitiveProperty.isBlock = false;
   }
-
-  private async getLogInfoNotParticipate(args: LogInfoArg): Promise<void> {
+   private async getLogInfoNotParticipate(args: LogInfoArg): Promise<void> {
     args.primitiveProperty.isBlock = true;
     const models = MappingModelStaticService.buildNotParticipateGetLogInfoModel(args.detailViewModel.notParticipateModels);
     const query = new GetLogInfoQuery();
@@ -200,6 +184,24 @@ export class LogInfoService {
     });
     args.primitiveProperty.isBlock = false;
   }
+
+  // private async getLogInfoEarlyKickOff(args: LogInfoArg): Promise<void> {
+  //   args.primitiveProperty.isBlock = true;
+  //   const models = MappingModelStaticService.buidEarlyKickOffGetLogInfoModel(args.detailViewModel.earlyKickOffModels);
+  //   const query = new GetLogInfoQuery();
+  //   query.requestId = args.primitiveProperty.requestId;
+  //   query.isShowLogOnly = true;
+  //   query.issueTypeId = args.detailViewModel.request.issueTypeId;
+  //   query.actionId = args.detailViewModel.request.actionId;
+  //   query.earlyKickOffModels = models;
+
+  //   const data = await this.commonService.getLogInfo(query);
+  //   data.getLogInfoModels.forEach(x => {
+  //     const model = args.detailViewModel.earlyKickOffModels.find(y => y.matchId === x.matchId);
+  //     model.logInfoDetail = x.logInfoDetail;
+  //   });
+  //   args.primitiveProperty.isBlock = false;
+  // }
 
   private createLogInfoArg(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): LogInfoArg {
     const args = new LogInfoArg();

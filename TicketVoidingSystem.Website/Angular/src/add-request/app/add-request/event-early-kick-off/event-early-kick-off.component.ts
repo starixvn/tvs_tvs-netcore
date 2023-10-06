@@ -1,20 +1,30 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { TimeModel } from '../../../../utility/components/date-time/date-time/time.model';
-import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
-import { DateTimeFormat } from '../../../../utility/constants/config';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
+import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
+import { MatchType } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { CommonService } from '../../../../utility/services/common.service';
-import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
+import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
-import { LeagueEventComponent } from '../league-event/league-event.component';
-import { GetLogInfoQuery } from '../models/add-request.query';
-import { EventDetailModel } from '../models/event-detail.model';
-import { GetTicketsQuery } from '../models/get-tickets.query';
+import { IssueTypes } from '../filter/issue-types.model';
+import { EarlyKickOffModel } from '../models/event-eko.model';
+import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
-import { TableTicketsModel } from './tickets-list/table-tickets.model';
+import { OthersModel } from '../others/others.model';
+import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
+import { AddRelatedEventArg } from './models/add-related-event.model';
+import { LogInfoEarlyKickOff } from './models/log-info-eko.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
+import { SaveRequestArg } from './models/save-request-arg.model';
+import { EventEarlyKickOffService } from './services/event-eko.service';
+import { LogInfoService } from './services/log-info.service';
+import { RelatedEventService } from './services/related-event.service';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -23,130 +33,199 @@ import { TableTicketsModel } from './tickets-list/table-tickets.model';
 })
 export class EventEarlyKickOffComponent implements OnInit {
   @Input() filter: FilterModel;
-  @Input() eventDetailModel = new EventDetailModel();
-  @Input() isVoided: boolean;
   @Input() isEdit: boolean;
   @Input() requestId: number;
-  @Input() matchId: number;
+  @Input() issueTypes = new IssueTypes();
+  @Input() userId: number;
+  @Input() actionIdOfFirstTimeAccess: string;
+  @Input() earlyKickOffModels: EarlyKickOffModel[] = [];
+  @Input() requestedBy: string;
+  @Input() others = new OthersModel();
+  @Output() updateMatchId = new EventEmitter<number>();
+  @ViewChild('leagueEvent') leagueEventComponent: LeagueEventRedCardComponent;
+  @ViewChild('kickOffTime') kickOffTimeComponent: DateFullTimeNewComponent;
+  @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoEkoComponent>;
+  private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
 
-  @Output() matchIdChange = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventComponent: LeagueEventComponent;
-
-  selectedMatch: MatchModel;
-  kickOffTime = new TimeModel(new Date(moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS')));
-  paging = new PagingModel();
-  query = new GetTicketsQuery();
-  tableTicketsModel = new TableTicketsModel();
-  isBlockBetList: boolean;
-  isBlockKickOffTime: boolean;
-  isShowTicket = false;
-  warningMessageList: string[] = [];
   transInfoAddRequestModel: TransInfoAddRequestModel;
+  mainEvent = new LogInfoEarlyKickOff();
+  allSelectedEvents: LogInfoEarlyKickOff[] = [];
+  relatedEvents: ChildMatchModel[] = [];
+  addChildMatchModel = new AddChildMatchModel();
+  primitiveProps = new PrimitiveProperty();
+  tooltip = new Tooltip();
   constructor(
-    private readonly httpService: HttpService,
-    private readonly commonService: CommonService,
-    private readonly addRequestStore: AddRequestStore
-    ) { }
+    private readonly element: ElementRef,
+    private readonly addRequestStore: AddRequestStore,
+    private readonly logInfoService: LogInfoService,
+    private readonly saveRequestService: SaveRequestService,
+    private readonly validationService: ValidationService,
+    private readonly relatedEventService: RelatedEventService,
+    private readonly eventEarlyKickOffService: EventEarlyKickOffService,
+    ) {
+      this.tooltip.element = this.element;
+     }
 
-  async ngOnInit(): Promise<void> {
-    await this.updateData();
-  }
-
-  async getKickOffTime() {
-    if (this.eventDetailModel.matchId && !this.isEdit) {
-      this.isBlockKickOffTime = true;
-      this.isBlockKickOffTime = false;
-      const time = new Date(this.selectedMatch.kickOffTime);
-      this.kickOffTime = new TimeModel(time);
-      this.updateEventDetailModel();
+  public async ngOnInit(): Promise<void> {
+    if (this.isEdit) {
+      this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels);
+      this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
+      this.addRequestStore.changeBlockingUiStatus(true);
+      await this.getTicketsMainEvent();
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.primitiveProps.isShowLogInfoEvents = true;
+      this.addRequestStore.changeBlockingUiStatus(false);
     } else {
-      if (this.eventDetailModel.matchId) {
-        const time = new Date(this.eventDetailModel.kickOffTime);
-        this.kickOffTime = new TimeModel(time);
-      } else {
-        this.kickOffTime = new TimeModel(new Date(moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS')));
-      }
+      this.resetAllData();
+      this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents);
     }
   }
-
-  updateEventDetailModel() {
-    this.eventDetailModel.kickOffTime = new Date(this.kickOffTime.getValue());
+  public changeMatchEvent(): void {
+    this.primitiveProps.isShowLogInfoEvents = false;
+    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
+    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+    this.mainEvent.leagueName = this.leagueEventComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchId = this.leagueEventComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.leagueEventComponent?.selectedMatch.name;
+    this.mainEvent.matchCode = this.leagueEventComponent?.selectedMatch.matchCode;
+    this.mainEvent.kickOffTime = this.updateKickOffTime(this.leagueEventComponent?.selectedMatch);
+    this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
+    this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
-  async updateData() {
-    this.isShowTicket = false;
-    this.warningMessageList = [];
-    if (this.eventDetailModel.matchId) {
-      
-      this.selectedMatch = await this.commonService.getMatch(this.eventDetailModel.matchId, false);
+  public changeKickOffTime(): void {
+    this.primitiveProps.isShowLogInfoEvents = false;
+    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+  }
+
+  public async handleSearchEvent(): Promise<void> {
+    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+    this.allSelectedEvents.filter(x => !x.isMainMatch).forEach(x => {
+      x.isCollapse = true;
+    })
+
+    if (!this.validationService.validateCommonData(this.leagueEventComponent, this.tooltip, this.kickOffTimeComponent)) {
+      return;
     }
-    await this.getKickOffTime();
-  }
 
-  private initQuery() {
-    this.paging.pageSize = PagingConstant.SIZE_ONE;
-    this.query.pageIndex = PagingConstant.INDEX_ZERO;
-    this.query.pageSize = PagingConstant.SIZE_ONE;
-    this.query.match = this.selectedMatch;
-    this.query.kickOffDate = this.kickOffTime.getValue();
-    this.query.issueTypeId = Number(this.filter.issueTypeId);
-    this.query.requestId = null;
-    this.query.actionId = Number(this.filter.action);
-    this.query.transInfoJson = this.transInfoAddRequestModel?.transInfoJson;
-  }
-
-  async getTickets() {
-    this.isShowTicket = true;
-    this.isBlockBetList = true;
-    const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(this.query, 'api/VoidRequest/GetTickets');
-    this.isBlockBetList = false;
-    this.tableTicketsModel.initData(data);
-    this.paging.total = data.total;
-  }
-
-  async isValid(): Promise<boolean> {
-    const result = this.leagueEventComponent.isMatchIdValid();
-    if (result) {
-      await this.getWarningMessage();
-    }
-    return result;
-  }
-
-  async search() {
-    if (await this.isValid()) {
-      this.initQuery();
-      await this.getTickets();
-    }
-  }
-
-  async pagingEvent() {
-    this.query.pageIndex = this.paging.page - 1;
-    this.query.pageSize = this.paging.pageSize;
-    await this.getTickets();
-  }
-
-  async getWarningMessage(): Promise<void> {
-    const getLogInfoQuery: GetLogInfoQuery = {
-        matchId: this.eventDetailModel.matchId,
-        issueTypeId: Number(this.filter.issueTypeId),
-        actionId: Number(this.filter.action),
-        requestId: this.isEdit ? this.requestId : null,
-        kickOffTime: moment(this.eventDetailModel.kickOffTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
-    };
+    this.primitiveProps.isShowLogInfoEvents = false;
     this.addRequestStore.changeBlockingUiStatus(true);
-    const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
-    const logInfo = viewModel.getLogInfoModels[0];
-    this.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
-    this.warningMessageList = [];
-    if (logInfo.validation && logInfo.validation.isExistedInOtherRequest) {
-      logInfo.ticketRequest.forEach(item => {
-        this.warningMessageList.push(`Tickets ${item.transIds} is existed in Request ${item.requestId}.`);
-      });
-    }
+
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
+    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    await this.getTicketsMainEvent();
+    this.primitiveProps.isShowLogInfoEvents = true;
+
     this.addRequestStore.changeBlockingUiStatus(false);
   }
-  
-  changeMatchInfo(matchInfo: MatchInfo) {
-    this.matchIdChange.emit(matchInfo.matchId);
+
+  public async getTicketsMainEvent(): Promise<void> {
+    const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.mainEvent, this.filter);
+    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+  }
+
+  public async handleClickAddRelatedEvent(): Promise<void> {
+    await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
+  }
+
+  public async saveRequest(isSaveAndVoid: boolean): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    await this.saveRequestService.saveRequest(this.initSaveRequestInput(isSaveAndVoid));
+    this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  private initSaveRequestInput(isSaveAndVoid: boolean) {
+    const arg = new SaveRequestArg();
+    arg.requestId = this.requestId;
+    arg.requestedBy = this.requestedBy;
+    arg.isEdit = this.isEdit;
+    arg.userId = this.userId;
+    arg.actionIdOfFirstTimeAccess = this.actionIdOfFirstTimeAccess;
+    arg.others = this.others;
+    arg.filter = this.filter;
+    arg.primitiveProps = this.primitiveProps;
+    arg.leagueEventComponent = this.leagueEventComponent;
+    arg.allEvents = this.allSelectedEvents;
+    arg.addRequestStore = this.addRequestStore;
+    arg.tooltip = this.tooltip;
+    arg.kickOffTimeComponent = this.kickOffTimeComponent;
+    arg.others = this.others;
+    arg.isSaveAndVoid = isSaveAndVoid;
+
+    return arg;
+  }
+
+  private initAddRelatedEventArgs() {
+    const arg = new AddRelatedEventArg();
+    arg.requestId = this.requestId;
+    arg.tooltip = this.tooltip;
+    arg.isEdit = this.isEdit;
+    arg.filter = this.filter;
+    arg.allEvents = this.allSelectedEvents;
+    arg.primitiveProps = this.primitiveProps;
+    arg.mainEvent = this.mainEvent;
+    arg.addRequestStore = this.addRequestStore;
+    arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
+    arg.originalRelatedEvents = this.relatedEvents;
+
+    return arg;
+  }
+
+  public showAddChildMatchModal(matchTypeId: number) {
+    this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
+    this.addChildMatchModel.matchType = matchTypeId;
+    this.addChildMatchModel.isOpen = true;
+    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+  }
+
+  public async saveRelatedEvent(selectedEvents: ChildMatchModel[]): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    this.allSelectedEvents = this.allSelectedEvents.filter(x =>
+      (selectedEvents.some(y => y.matchId === x.matchId)
+      || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+      || x.isMainMatch);
+    const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
+    const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent);
+    if (newEvents.length > 0) {
+      await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      this.allSelectedEvents.push(...newEvents);
+      this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    }
+    this.addRequestStore.changeBlockingUiStatus(false);
+
+  }
+
+  public handleDeleteEvent(matchId: number): void {
+    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
+  }
+
+  public isDisabledChildMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length === 0;
+  }
+
+  public isDisabledLinkMatches(): boolean {
+    return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
+  }
+
+  public countLinkMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length;
+  }
+
+  public resetAllData(): void {
+    this.primitiveProps.isShowLogInfoEvents = false;
+    this.allSelectedEvents = [];
+  }
+
+  public countChildMatches(): number {
+    return this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length;
+  }
+
+  private updateKickOffTime(matchInfo: MatchInfo): string {
+    if (matchInfo?.matchId && !this.isEdit) {
+      return moment(matchInfo.kickOffTime).tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
+    }
+
+    return moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
   }
 }

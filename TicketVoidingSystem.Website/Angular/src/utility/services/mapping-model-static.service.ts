@@ -1,5 +1,7 @@
 import * as _ from "lodash";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
+import { EarlyKickOffGetLogInfoQuery } from "src/add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
+import { EarlyKickOffModel } from "src/add-request/app/add-request/models/event-eko.model";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
@@ -129,7 +131,7 @@ export class MappingModelStaticService {
       nonLive: x.nonLive
     } as ReducedOverGetLogInfoQuery));
   }
-
+  
   static buildNotParticipateGetLogInfoModel(notParticipateModels: NotParticipateModel[]): NotParticipateGetLogInfoQuery[] {
     if (_.isNull(notParticipateModels) || _.isUndefined(notParticipateModels)) {
       return null;
@@ -141,5 +143,18 @@ export class MappingModelStaticService {
       groupBetTypeIds: x.groupBetTypeIds,
       playerId: x.playerId,
     } as NotParticipateGetLogInfoQuery));
+  }
+
+  static buidEarlyKickOffGetLogInfoModel(earlyKickOffModels: EarlyKickOffModel[]): EarlyKickOffGetLogInfoQuery[] {
+    if (_.isNull(earlyKickOffModels) || _.isUndefined(earlyKickOffModels)) {
+      return null;
+    }
+
+    return earlyKickOffModels.map(x => ({
+      matchId: x.matchId,
+      subIssueTypeId: x.subIssueTypeId,
+      isMainMatch: x.isMainMatch,
+      kickOffTime: x.kickOffTime
+    } as EarlyKickOffGetLogInfoQuery));
   }
 }

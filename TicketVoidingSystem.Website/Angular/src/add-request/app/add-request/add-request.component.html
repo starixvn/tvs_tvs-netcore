@@ -18,11 +18,14 @@
           <event-early-kick-off #eventEarlyKickOff
             *ngIf="isEarlyOrWrongKO()"
             [filter]="model.filter"
-            [eventDetailModel]="model.eventDetail"
-            [isVoided]="model.filter.isVoided"
             [isEdit]="isEdit"
+            [issueTypes]="issueTypes"
             [requestId]="requestId"
-            [(matchId)]="matchId">
+            [userId]="userId"
+            [requestedBy]="requestedBy"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [earlyKickOffModels]="model.earlyKickOffModels"
+            (updateMatchId)="updateMatchId($event)">
           </event-early-kick-off>
 
           <event-abnormal-bet #eventAbnormalBet
@@ -90,7 +93,7 @@
             [wrongOuModels]="model.wrongOuModels"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-ou>
-  
+
           <abnormal-accounts #abnormalAccount
             *ngIf="isAbnormalAccount()"
             [userId]="userId"
@@ -180,7 +183,7 @@
         </div>
       </div>
     </div>
-  
+
     <others *ngIf="isShowOthersFullFields()"
       [isEdit]="isEdit"
       [(model)]="model.others"

@@ -64,7 +64,11 @@ export class AppComponent implements OnInit {
     return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId.toString());
   }
 
-  isShowVoidOtherIssue(): boolean {
-    return !this.isShowVoidDuplicateTickets() && !this.isShowVoidDangerAccepted() && !this.isShowVoidRedCard() && !this.isShowVoidNotParticipate();
+  isShowVoidEarlyKickOff(): boolean {
+    return StaticService.isEarlyKickOff(this.requestDetail.request?.issueTypeId.toString());
+  }
+  
+   isShowVoidOtherIssue(): boolean {
+    return !this.isShowVoidDuplicateTickets() && !this.isShowVoidDangerAccepted() && !this.isShowVoidRedCard() && !this.isShowVoidNotParticipate() && !this.isShowVoidEarlyKickOff();
   }
 }

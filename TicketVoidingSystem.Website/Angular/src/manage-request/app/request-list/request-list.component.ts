@@ -225,7 +225,8 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongOU(issueTypeId.toString()) ||
       StaticService.isWrong1stOU(issueTypeId.toString()) ||
       StaticService.isWrong1stHDP(issueTypeId.toString()) ||
-      StaticService.isRedCard(issueTypeId.toString());
+      StaticService.isRedCard(issueTypeId.toString()) ||
+      StaticService.isEarlyKickOff(issueTypeId.toString());
   }
 
   public async copyRequestInfo(requestId: number, matchId: number): Promise<void> {
