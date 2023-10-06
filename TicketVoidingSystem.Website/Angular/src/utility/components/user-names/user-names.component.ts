@@ -25,6 +25,7 @@ export class UsernamesComponent implements OnInit {
   shiftKey: boolean;
   tooltip = new Tooltip();
   isFocusingUsernames = false;
+  isSelectedAll = false;
 
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
@@ -96,6 +97,18 @@ export class UsernamesComponent implements OnInit {
     }
   }
 
+  isCtrlKeyAndNumpad1Key(event: KeyboardEvent, code: number): boolean {
+    const KEY_NUMPAD_1 = 97;
+    return event.ctrlKey && code === KEY_NUMPAD_1;
+  }
+
+  selectAllItems() {
+    this.isSelectedAll = !this.isSelectedAll;
+    this.groupUsername.items.forEach(item => {
+      item.changeSelectedAll(this.isSelectedAll);
+    });
+  }
+
   onKey(event: KeyboardEvent): boolean | undefined {
     const KEY_SPACE = 32;
     const KEY_SEMICOLON_FIREFOX = 59;
@@ -106,8 +119,9 @@ export class UsernamesComponent implements OnInit {
     const keyBackspace = 66;
     const keyDelete = 68;
     const code = event.key.charCodeAt(0);
-
-    if (code === keyBackspace && value === '') {
+    if (this.isCtrlKeyAndNumpad1Key(event, code)) {
+      this.groupUsername.selectAllItems();
+    } else if (code === keyBackspace && value === '') {
       this.groupUsername.removeLasted();
     } else if (code === keyDelete) {
       this.groupUsername.removeSelected();

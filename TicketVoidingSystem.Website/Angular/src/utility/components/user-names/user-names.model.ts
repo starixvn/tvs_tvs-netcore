@@ -10,9 +10,19 @@ export class GroupUsername {
     items: Array<UsernameItem>;
     isSelectedAll = false;
     isExceededTotalUsernames = false;
-    
+    isSelected: boolean;
+    cssClass: string;
+    defaultClass: string;
+
     constructor() {
         this.items = [];
+    }
+
+    selectAllItems() {
+        this.isSelectedAll = !this.isSelectedAll;
+        this.items.forEach(item => {
+            item.changeSelectedAll(this.isSelectedAll);
+        });
     }
 
     getValue(): string {
@@ -124,13 +134,6 @@ export class GroupUsername {
 
     removeLasted() {
         this.items.pop();
-    }
-
-    changeSelected() {
-        this.isSelectedAll = !this.isSelectedAll;
-        this.items.forEach(item => { 
-            item.changeSelectedAll(this.isSelectedAll); 
-        });
     }
 
     removeSelected() {
