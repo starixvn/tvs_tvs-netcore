@@ -92,6 +92,9 @@ public class MatchServiceImp : MatchService
         match.SportTypeNameNewSimplified = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.NewChineseSimplified);
         match.SportTypeNameTraditional = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.ChineseTraditional);
         match.Name = $"{match.MatchId} - {match.MatchEvent}";
+        match.OriginLeagueName = match.LeagueName;
+        match.OriginLeagueNameSimplified = match.LeagueNameSimplified;
+        match.OriginLeagueNameNewSimplified = match.LeagueNameNewSimplified;
 
         return match;
     }
