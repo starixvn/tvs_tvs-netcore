@@ -164,6 +164,63 @@ public static class HtmlExtension
         return node.InnerText.StripHtml();
     }
 
+    public static string ChoiceParlay(string html)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var choice = doc.DocumentNode.SelectNodes("//a").First().InnerHtml.StripHtml();
+        var offerName = doc.DocumentNode.SelectNodes("//div[@class='offer-name-list']//div");
+        if (offerName != null)
+        {
+            var offerNameList = offerName.ToArray();
+            choice = offerNameList.Aggregate(choice, (current, item) => current.AppendWithNewLine(item.InnerHtml.StripHtml()));
+        }
+
+        var handicap = html.Handicap(doc);
+        choice = choice.AppendWithNewLine(handicap);
+        return AddFooter(doc, choice);
+    }
+
+    private static string AddFooter(HtmlDocument doc, string choice)
+    {
+        var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First();
+        var match = GetMatch(doc);
+        var league = doc.DocumentNode.SelectNodes("//div[@class='league']").First();
+
+        return choice.AppendWithNewLine(bettype.InnerHtml.StripHtml())
+            .AppendWithNewLine(match)
+            .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
+    }
+
+    private static string GetMatch(HtmlDocument doc)
+    {
+        var matches = doc.DocumentNode.SelectNodes("//div[@class='match']").ToArray();
+
+        return matches.Aggregate(string.Empty, (current, item) => current.AppendWithNewLine(item.InnerHtml.StripHtml()));
+    }
+
+    public static string ChoiceCashOut(string html)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var node = doc.DocumentNode.SelectNodes("//span").First();
+        var choice = node.ChildNodes[0].InnerText;
+        return AddFooter(doc, choice);
+    }
+
+    public static string ChoiceNumberGame(string html)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var first = doc.DocumentNode.SelectNodes("//span").First();
+        var choice = first.InnerHtml.StripHtml();
+        var match = GetMatch(doc);
+        var league = doc.DocumentNode.SelectNodes("//div[@class='league']").First();
+
+        return choice.AppendWithNewLine(match)
+            .AppendWithNewLine(league.InnerHtml.StripHtml());
+    }
+
     public static string ChoiceSubParlay(this string html, bool isParlay)
     {
         if (string.IsNullOrEmpty(html))

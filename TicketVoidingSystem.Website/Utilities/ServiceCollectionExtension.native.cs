@@ -13,6 +13,8 @@ using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
 using Fanex.NAP.Client.Configuration;
+using Fanex.NAP.Client.Helpers.Web;
+using Fanex.NAP.Client.Services;
 using Fanex.NAP.Client.Session;
 using Fanex.RemotingRef;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -28,7 +30,12 @@ using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using SharpRaven;
+using SpecialDelete.RecoverByBetId;
+using SpecialDelete.RecoverByBetId.Controllers;
 using SpecialDelete.UploadBatchMessage.Controllers;
+using SpecialDelete.VirtualSports;
+using SpecialDelete.VirtualSports.RecoverBet.Controllers;
+using SpecialDelete.VirtualSports.VoidParlaySub.Controllers;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.ManageRequest;
@@ -46,12 +53,9 @@ using TicketVoidingSystem.VoidSingleBet;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
 using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
+using TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 namespace TicketVoidingSystem.Website.Utilities;
-
-using Fanex.NAP.Client.Helpers.Web;
-using Fanex.NAP.Client.Services;
-using TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 public static class ServiceCollectionExtension
 {
@@ -208,6 +212,9 @@ public static class ServiceCollectionExtension
         services.RegisterManageRequestServices();
         services.RegisterVoidRequestServices();
         services.RegisterUploadBatchMessageServices();
+        services.RegisterVirtualSportsVoidServices();
+        services.RegisterVirtualSportsRecoverServices();
+        services.RegisterRecoverByBetIdServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -226,6 +233,9 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidRequestController).Assembly));
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UploadBatchMessageController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidParlaySubBetController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverVirtualSportsBetController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverByBetIdController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
@@ -236,5 +246,7 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(TicketListingProfile));
         services.AddAutoMapper(typeof(VoidSingleBetProfile));
         services.AddAutoMapper(typeof(ManageRequestProfile));
+        services.AddAutoMapper(typeof(VirtualSportsProfile));
+        services.AddAutoMapper(typeof(RecoverByBetIdProfile));
     }
 }

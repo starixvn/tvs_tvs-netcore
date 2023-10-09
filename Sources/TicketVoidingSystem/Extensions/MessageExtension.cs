@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 
@@ -42,6 +43,20 @@ public static class MessageExtension
             var element = new XElement("r",
                 new XAttribute("TransId", ticket.TransId),
                 new XAttribute("CustId", ticket.CustId),
+                new XAttribute("MatchId", ticket.MatchId));
+            custInfo.Add(element);
+        }
+
+        return custInfo.ToString();
+    }
+
+    public static string CreateDeleteTransactionTicketsXml(this IEnumerable<BetId> betIds)
+    {
+        var custInfo = new XElement("root");
+        foreach (var ticket in betIds)
+        {
+            var element = new XElement("r",
+                new XAttribute("TransId", ticket.TransId),
                 new XAttribute("MatchId", ticket.MatchId));
             custInfo.Add(element);
         }

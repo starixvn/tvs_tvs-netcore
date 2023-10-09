@@ -57,4 +57,7 @@ public class SharedApiController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetIssueTypePermissionList() => Ok(await mediator.Send(new GetIssueTypePermissionListRequest()));
+
+    [HttpPost]
+    public async Task<IActionResult> CheckNegativeBalance(CheckNegativeBalanceRequest request) => Ok(await mediator.Send(request));
 }

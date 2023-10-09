@@ -24,6 +24,8 @@ public static class LayoutBundle
                             "old-page/Scripts/_Libs/ContextMenu/jquery.contextMenu.css",
                             "old-page/Scripts/_Libs/toastr/toastr.css");
 
+        pipeline.AddLessBundle("/old-page/bundle/angular-old-styles.css", "old-page/content/base/styles.less");
+
         //// script bundle
         pipeline.AddJavaScriptBundle("/old-page/bundle/script-libs.js", scriptSetting,
                             "old-page/Scripts/_Libs/jQuery/jquery-1.8.2.js",

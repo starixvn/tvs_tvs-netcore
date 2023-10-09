@@ -1,0 +1,26 @@
+<div class="title">
+    {{title}}
+</div>
+
+<div id="body">
+    <filter #filter
+            (searchEvent)="searchEvent($event)"></filter>
+    <tickets #ticket
+             [ticketsModel]="ticketsModel"
+             [isShowTickets]="isShowTickets"></tickets>
+    <div class="recover-button" *ngIf="isShowBtnRecover">
+        <input type="button" value="Recover" class="btn-recover" (click)="recoverBet()" />
+    </div>
+</div>
+
+<modal [modal]="modal" (confirmEvent)="confirmEvent()"></modal>
+<tooltip [tooltip]="tooltip"></tooltip>
+<messages-result [messagesResult]="messagesResult"></messages-result>
+<div *ngIf="blockUI">
+    <div class="in modal-backdrop spinner-overlay"></div>
+    <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+        <div class="loading-message">
+            <div class="loading"></div>
+        </div>
+    </div>
+</div>

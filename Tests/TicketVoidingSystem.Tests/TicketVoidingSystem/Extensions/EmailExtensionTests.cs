@@ -11,6 +11,57 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
 public class EmailExtensionTests
 {
     [Fact]
+    public void Valid_InputIsMailModel_ReturnTrue()
+    {
+        // Arrange
+        var model = new MailModel<int>
+        {
+            Tickets = new List<int> { 1 },
+            Site = new SiteEmail { ToList = "1" }
+        };
+
+        // Act
+        var result = model.Valid();
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Valid_MailModelHasToListSiteEmpty_ReturnFalse()
+    {
+        // Arrange
+        var model = new MailModel<int>
+        {
+            Tickets = new List<int> { 1 },
+            Site = new SiteEmail { ToList = "" }
+        };
+
+        // Act
+        var result = model.Valid();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Valid_MailModelNoHasTickets_ReturnFalse()
+    {
+        // Arrange
+        var model = new MailModel<int>
+        {
+            Tickets = new List<int>(),
+            Site = new SiteEmail { ToList = "1" }
+        };
+
+        // Act
+        var result = model.Valid();
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
     public void Valid_ValidData_ReturnTrue()
     {
         // Arrange

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Criteria.SendMessage;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Utilities;
@@ -25,6 +26,10 @@ public interface SendMessageService
     Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId);
 
     Task InsertBatchMessage(int userId, string message);
+
+    Task RemoveMessage(int userId, string transIds);
+
+    Task DeleteTransaction(IEnumerable<BetId> betIds);
 }
 
 public class SendMessageServiceImp : SendMessageService
@@ -154,5 +159,24 @@ public class SendMessageServiceImp : SendMessageService
         };
 
         await repository.ExecuteAsync(criteria);
+    }
+
+    public async Task RemoveMessage(int userId, string transIds)
+    {
+        var command = new RemoveMessageCommand
+        {
+            UserId = userId,
+            TransIds = transIds
+        };
+        await repository.ExecuteAsync(command);
+    }
+
+    public async Task DeleteTransaction(IEnumerable<BetId> betIds)
+    {
+        var command = new DeleteVoidedTransactionCommand
+        {
+            TicketsXml = betIds.CreateDeleteTransactionTicketsXml()
+        };
+        await repository.ExecuteAsync(command);
     }
 }

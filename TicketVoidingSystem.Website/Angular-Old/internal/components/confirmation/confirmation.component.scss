@@ -1,0 +1,46 @@
+﻿.confirm-delete {
+    margin: 5px 10px;
+    float: left;
+
+    legend {
+        font-weight: bold;
+    }
+
+    table {
+        tr {
+            td:first-child {
+                min-width: 140px;
+            }
+
+            textarea {
+                height: 22px;
+                width: 500px;
+                font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            }
+
+            input {
+                height: 22px;
+            }
+
+            input[disabled] {
+                cursor: not-allowed;
+            }
+
+            .void-bet {
+                border: 0px;
+                background: url(../../../images/sprite.png) no-repeat -7px -62px;
+                color: white;
+                font-weight: bold;
+                cursor: pointer;
+                font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+                font-size: 13px;
+                height: 25px;
+                line-height: 20px;
+
+                &:hover {
+                    background: url(../../../images/sprite.png) no-repeat -75px -62px;
+                }
+            }
+        }
+    }
+}

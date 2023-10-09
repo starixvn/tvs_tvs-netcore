@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.LetstalkService.Core.Models;
 using NSubstitute;
@@ -10,22 +9,25 @@ using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
 using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
 using TicketVoidingSystem.Services.Letstalk.GroupVoidSettledBet;
 using Xunit;
-using LetstalkModel = Fanex.LetstalkService.Core.Models.LetstalkModel;
+using Result = TicketVoidingSystem.Models.Result;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.Letstalk;
 
 public class NotificationLetstalkServiceTests : AppSettingFixture
 {
-    private readonly GroupVoidSettledBetService groupVoidSettledBetService;
+    private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
     private readonly GroupTicketListingService groupTicketListingService;
+    private readonly GroupVoidSettledBetService groupVoidSettledBetService;
+
     private readonly NotificationLetstalkServiceImp service;
 
     public NotificationLetstalkServiceTests()
     {
         groupVoidSettledBetService = Substitute.For<GroupVoidSettledBetService>();
         groupTicketListingService = Substitute.For<GroupTicketListingService>();
-        var groupAbnormalBetRequestService = Substitute.For<GroupAbnormalBetRequestService>();
-        service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService, groupAbnormalBetRequestService);
+        groupAbnormalBetRequestService = Substitute.For<GroupAbnormalBetRequestService>();
+        service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService,
+            groupAbnormalBetRequestService);
     }
 
     [Fact]
@@ -35,15 +37,17 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
         var ticketInfo = new TicketInfoForLetstalk();
         var tickets = new List<TicketEmailModel>();
 
-        groupVoidSettledBetService.SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(), Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>())
-            .Returns(new List<Models.Result>());
+        groupVoidSettledBetService.SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(), Arg.Any<TicketInfoForLetstalk>(),
+                Arg.Any<IEnumerable<TicketEmailModel>>())
+            .Returns(new List<Result>());
 
         // Act
         var result = await service.SendToGroupVoidSettledBets(ticketInfo, tickets);
 
         // Assert
-        Assert.Equal(new List<Models.Result>(), result);
-        await groupVoidSettledBetService.Received(1).SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(), Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>());
+        Assert.Equal(new List<Result>(), result);
+        await groupVoidSettledBetService.Received(1).SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(),
+            Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>());
     }
 
     [Fact]
@@ -65,17 +69,12 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
     {
         // Arrange
         var attachment = new LetstalkAttachment();
-        var expected = new NotImplementedException();
 
         // Act
+        _ = await service.SendToGroupAbnormalBetRequest("", "", attachment);
+
         // Assert
-        try
-        {
-            _ = await service.SendToGroupAbnormalBetRequest("", "", attachment);
-        }
-        catch (Exception e)
-        {
-            Assert.Equal(expected.Message, e.Message);
-        }
+        await groupAbnormalBetRequestService.Received(1)
+            .SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());
     }
 }

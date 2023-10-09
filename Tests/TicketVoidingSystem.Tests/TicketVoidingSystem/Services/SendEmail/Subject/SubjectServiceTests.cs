@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpecialDelete.VirtualSports.Common.ViewModels;
+using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using Xunit;
@@ -30,6 +32,28 @@ public class SubjectServiceTests
 
         // Act
         var actual = service.CreateVoid(mailViewModel, sites, site, group, type);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(EmailGroup.Recover, "Recovered Cash Out Transaction Report (02/02/2023 02:02:02)")]
+    [InlineData(EmailGroup.CashOut, "Recovered Cash Out Transaction Report (02/02/2023 02:02:02)")]
+    [InlineData(EmailGroup.ItQa, "Test Currency - Recovered Cash Out Transaction Report (02/02/2023 02:02:02)")]
+    [InlineData(EmailGroup.ItSupport, "Real Currency - Recovered Cash Out Transaction Report (02/02/2023 02:02:02)")]
+    [InlineData(EmailGroup.Csd, "Exception Subject")]
+    public void CreateRecover_ReturnExpected(EmailGroup group, string expected)
+    {
+        // Arrange
+        var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>
+        {
+            ViewModel = new MailRecoverViewModel<MailTicketViewModel>
+                { DateTime = new DateTime(2023, 2, 2, 2, 2, 2) }
+        };
+
+        // Act
+        var actual = service.CreateRecover(model, group, RecoverType.CashOut);
 
         // Assert
         Assert.Equal(expected, actual);

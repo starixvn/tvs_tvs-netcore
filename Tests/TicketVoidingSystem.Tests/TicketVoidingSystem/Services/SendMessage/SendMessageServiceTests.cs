@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Criteria.SendMessage;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services.SendMessage;
@@ -21,6 +22,42 @@ public class SendMessageServiceTests
         repository = Substitute.For<IDynamicRepository>();
         messageItemService = Substitute.For<MessageItemService>();
         service = new SendMessageServiceImp(repository, messageItemService);
+    }
+
+    [Fact]
+    public async Task InsertMessageIdForBatchMessage_ValidData_RepositoryHasCalledGetAsync()
+    {
+        // Arrange
+        repository.GetAsync<int>(Arg.Any<CreateMessageCriteria>()).ReturnsForAnyArgs(1);
+
+        // Act
+        var actual = await service.InsertMessageIdForBatchMessage(new Message(), 1, 1);
+
+        // Assert
+        Assert.Equal(1, actual);
+        await repository.Received(1).GetAsync<int>(Arg.Any<CreateMessageCriteria>());
+    }
+
+    [Fact]
+    public async Task RemoveMessage_ValidData_RepositoryHasCalledExecuteAsync()
+    {
+        // Arrange
+        // Act
+        await service.RemoveMessage(1, "1");
+
+        // Assert
+        await repository.Received(1).ExecuteAsync(Arg.Any<RemoveMessageCommand>());
+    }
+
+    [Fact]
+    public async Task DeleteTransaction_ValidData_RepositoryHasCalledExecuteAsync()
+    {
+        // Arrange
+        // Act
+        await service.DeleteTransaction(new List<BetId>());
+
+        // Assert
+        await repository.Received(1).ExecuteAsync(Arg.Any<DeleteVoidedTransactionCommand>());
     }
 
     [Fact]

@@ -1,0 +1,45 @@
+﻿<div class="ticket-paging" *ngIf="pagingModel.totalItems > 0">
+    <div class="paging-control">
+        <div class="left">
+            <span class="page-size">Page size</span>
+            <select class="form-control" [(ngModel)]="pageSizeSelected" (ngModelChange)="clickSelect()">
+                <option *ngFor="let item of pageSizeOption">{{item}}</option>
+            </select>
+            <div class="number-list">
+                <ul>
+                    <li *ngFor="let item of pageSizeList">
+                        <span *ngIf="item.cssClass == 'previous-page'" (click)="handleWithPrevious()">
+                            <span [ngClass]="item.cssClass">{{item.value}}</span>
+                        </span>
+                        <span *ngIf="item.cssClass == 'current-page'">
+                            <span [ngClass]="item.cssClass">{{item.value}}</span>
+                        </span>
+                        <span *ngIf="item.cssClass == 'go-to-page'" (click)="handleWithGoToPage()">
+                            <span [ngClass]="item.cssClass">{{item.value}}</span>
+                        </span>
+                        <span *ngIf="item.cssClass == 'normal-page'" (click)="handleWithNormal(item)">
+                            <span [ngClass]="item.cssClass">{{item.value}}</span>
+                        </span>
+                        <span *ngIf="item.cssClass == 'next-page'" (click)="handleWithNext()">
+                            <span [ngClass]="item.cssClass">{{item.value}}</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="right">
+            <span>
+                Displaying
+                <strong>{{start}}</strong> to
+                <strong>{{end}}</strong> of
+                <strong>{{pagingModel.totalItems}}</strong> item(s)
+            </span>
+        </div>
+    </div>
+    <div class="paging-go-to-page" *ngIf="isShowGoToPage" [style.left]="leftPositionGotoPage">
+        <span>Go to Page</span>
+        <input type="number" class="form-control page-number" min="1" max="{{maxNumber}}" number-range autofocus
+               [(ngModel)]="pageNumber" (keyup.enter)="goToPage()" />
+        <input type="button" class="btn-go-to-page" (click)="goToPage()" />
+    </div>
+</div>

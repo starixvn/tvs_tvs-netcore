@@ -1,0 +1,33 @@
+﻿<div class="match-detail" *ngIf="isShowMatch">
+    <table *ngIf="!matchDetail.isOutright">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Match Event</th>
+                <th>Event Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{matchDetail.matchCode}}</td>
+                <td>{{matchDetail.matchEvent}}</td>
+                <td>{{matchDetail.eventDate | date:"MM/dd/yyyy"}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table *ngIf="matchDetail.isOutright">
+        <thead>
+            <tr>
+                <th>League</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{matchDetail.leagueName}}</td>
+                <td>{{matchDetail.homeName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

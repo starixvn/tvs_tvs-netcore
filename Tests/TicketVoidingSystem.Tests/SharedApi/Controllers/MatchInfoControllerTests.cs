@@ -42,4 +42,16 @@ public class MatchInfoControllerTests
         // Assert
         await mediator.Received().Send(Arg.Any<GetFirstTimeAndKickOffTimeRequest>());
     }
+
+    [Fact]
+    public async Task GetInfoForAddRequest_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+
+        // Act
+        await controller.GetInfoForAddRequest(null);
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetMatchInfoForAddRequest>());
+    }
 }

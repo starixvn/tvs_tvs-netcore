@@ -36,6 +36,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
         sessionService.GetClientIp().ReturnsForAnyArgs("1");
         repository.FetchAsync<Result>(Arg.Any<MarkTicketsCommand>())
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 0 } });
+
         // Act
         var actual = await service.MarkTicketsInTVS("1", 1, 1);
 
@@ -54,7 +55,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>
         var actual = await service.MarkTicketsInTVS("1", 1, 1);
 
         // Assert
-        await loggingService.ErrorAsync(Arg.Any<Exception>());
+        await loggingService.Received(1).ErrorAsync(Arg.Any<Exception>());
         Assert.Equal(1, actual.First().ErrorCode);
     }
 }

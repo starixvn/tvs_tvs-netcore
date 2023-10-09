@@ -48,9 +48,33 @@ public static class EmailExtension
         return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
     }
 
+    public static bool Valid<T>(this MailModel<T> model)
+    {
+        return model.Tickets.Count > 0 && !string.IsNullOrEmpty(model.Site.ToList);
+    }
+
     public static string JoinSites<T>(this IEnumerable<T> items, Func<T, string> filter)
     {
         var sites = items.Select(filter).Distinct().ToArray();
         return string.Join(", ", sites);
+    }
+
+    public static string GetNegativeBalanceUsers<T, U>(
+        this MailRecoverModel<T, U> model, EmailGroup group, Func<U, string> filter)
+    {
+        return GetNegativeBalanceUsers(model, group, filter, model.ViewModel);
+    }
+
+    private static string GetNegativeBalanceUsers<U>
+        (MailModel<U> model, EmailGroup group, Func<U, string> filter, MailViewModel viewModel)
+    {
+        if (group == EmailGroup.CashOut)
+        {
+            return string.Empty;
+        }
+
+        var usersInSite = model.Tickets.Select(filter).ToList();
+        var negativeBalanceUsers = viewModel.NegativeBalanceUsers;
+        return negativeBalanceUsers.Intersected(usersInSite);
     }
 }

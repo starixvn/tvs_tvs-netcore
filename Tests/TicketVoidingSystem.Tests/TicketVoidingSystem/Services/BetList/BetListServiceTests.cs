@@ -389,7 +389,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var ticketData = new List<ITicketData>();
         ticket.BetTypeId = 1605;
 
-        // tr
+        // Act
         var result = service.GetHandicap(ticket, ticketHelper, ticketData, true);
 
         // Assert

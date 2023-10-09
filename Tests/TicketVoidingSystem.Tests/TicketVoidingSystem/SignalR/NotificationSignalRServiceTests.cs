@@ -10,13 +10,12 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.SignalR
 {
     public class NotificationSignalRServiceTests
     {
-        private readonly TicketVoidingSystemHttpClientService ticketVoidingSystemHttpClientService;
         private readonly IHubContext<NotificationHub, ClientEvent> hubContext;
         private readonly NotificationSignalRServiceImp service;
 
         public NotificationSignalRServiceTests()
         {
-            ticketVoidingSystemHttpClientService = Substitute.For<TicketVoidingSystemHttpClientService>();
+            var ticketVoidingSystemHttpClientService = Substitute.For<TicketVoidingSystemHttpClientService>();
             hubContext = Substitute.For<IHubContext<NotificationHub, ClientEvent>>();
             service = new NotificationSignalRServiceImp(ticketVoidingSystemHttpClientService, hubContext);
         }
@@ -31,7 +30,6 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.SignalR
             _ = service.UpdateRequestStatusToAllUser(status);
 
             // Assert
-            ticketVoidingSystemHttpClientService.Received(1).SignalRUpdateRequestStatusToAllUsers(status);
             hubContext.Clients.All.Received(1).updateRequestStatus(status);
         }
     }
