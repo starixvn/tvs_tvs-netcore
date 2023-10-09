@@ -793,43 +793,37 @@
       "betTypeId": 9502,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9504,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9506,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9514,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9516,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9518,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9532,
@@ -856,57 +850,49 @@
       "betTypeId": 9618,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9620,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9622,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9677,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9679,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9681,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9683,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9685,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -1
+      "IsHasRuns": false
     },
 
     {
@@ -934,50 +920,43 @@
       "betTypeId": 9503,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9505,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9507,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9515,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9517,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9519,
-      "IsHasOverWicket": false,
+      "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9527,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -3
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9528,
@@ -1032,57 +1011,49 @@
       "betTypeId": 9619,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9621,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9623,
       "IsHasOverWicket": true,
       "IsHasPlayer": false,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9687,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9689,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9691,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9693,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     },
     {
       "betTypeId": 9695,
       "IsHasOverWicket": false,
       "IsHasPlayer": true,
-      "IsHasRuns": false,
-      "ParentId": -2
+      "IsHasRuns": false
     }
   ]
 }
