@@ -1,0 +1,73 @@
+﻿@import '../../../styles/mixin.scss';
+
+.filter {
+  @include filter-background();
+
+  .remark {
+    @include remark();
+  }
+
+  .filter-control {
+    display: flex;
+    margin-bottom: 10px;
+
+    label {
+      margin-bottom: 0px;
+      margin-left: 10px;
+
+      input {
+        margin: 0px;
+      }
+    }
+  }
+
+  .filter-by-matchid {
+    margin-bottom: 10px;
+
+    .input-matchid {
+      display: flex;
+
+      .from-date {
+        display: flex;
+        margin-right: 10px;
+      }
+      
+      .to-date {
+        display: flex;
+      }
+    }
+
+    label {
+      margin-bottom: 0px;
+    }
+
+    .match {
+      margin-right: 20px;
+
+      .match-id {
+        @include InputText(102px);
+      }
+    }
+
+
+    .optional-filters {
+      display: flex;
+
+      label {
+        margin: 0px 5px 0px 5px;
+
+        input {
+          margin: 0px;
+        }
+      }
+    }
+  }
+
+  .filter-by-betids {
+    margin-bottom: 10px;
+  }
+
+  .search {
+    @include search-button('../../../images/sprite.png');
+  }
+}

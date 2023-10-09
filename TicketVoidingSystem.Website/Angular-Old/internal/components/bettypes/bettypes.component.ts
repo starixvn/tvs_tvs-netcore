@@ -1,9 +1,9 @@
-﻿import { Component, Input, OnInit, ElementRef, OnChanges, SimpleChange } from '@angular/core';
+﻿import { Component, ElementRef, Input, OnChanges, SimpleChange } from '@angular/core';
 
 import { Tooltip } from '../../../external/components/tooltip/tooltip';
-import { TEXT } from '../../shared/text';
 import { Product } from '../../shared/config';
-import { BetTypesModel, BetTypeModel } from './bettypes.model';
+import { TEXT } from '../../shared/text';
+import { BetTypesModel } from './bettypes.model';
 
 import * as _ from 'lodash';
 
@@ -40,7 +40,7 @@ export class BetTypesComponent implements OnChanges {
     changeIsShow() {
         if (this.model !== undefined) {
             this.model.isChecked = true;
-            this.model.bettypes.forEach(item => {
+            this.model.betTypes.forEach(item => {
                 item.isShow = item.type === this.product;
                 item.displayNumberGame(this.product, this.sportType, this.ballSequence);
                 item.isChecked = item.isShow;

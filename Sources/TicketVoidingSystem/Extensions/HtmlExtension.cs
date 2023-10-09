@@ -218,7 +218,7 @@ public static class HtmlExtension
         var league = doc.DocumentNode.SelectNodes("//div[@class='league']").First();
 
         return choice.AppendWithNewLine(match)
-            .AppendWithNewLine(league.InnerHtml.StripHtml());
+            .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
     }
 
     public static string ChoiceSubParlay(this string html, bool isParlay)

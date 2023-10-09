@@ -51,4 +51,13 @@ public class MenuController : Controller
     {
         return View("~/wwwroot/dist/old-page/recover-by-betid/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidNumberGameBet, Policy = Constant.Policy.Read)]
+    public IActionResult VoidNumberGameBet()
+    {
+        return View("~/wwwroot/dist/old-page/void-number-game-bet/index.cshtml");
+    }
 }
