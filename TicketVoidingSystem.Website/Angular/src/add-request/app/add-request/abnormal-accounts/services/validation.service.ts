@@ -42,6 +42,8 @@ export class ValidationService {
       if (invalidUsernames) {
         return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames) } as ValidationBusinessRuleOutput;
       }
+      
+      args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
       if (viewModel.validation.isExceededTotalUsernames) {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }

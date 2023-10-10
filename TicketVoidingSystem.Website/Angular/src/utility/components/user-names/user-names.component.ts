@@ -16,18 +16,16 @@ export class UsernamesComponent implements OnInit {
   @Input() widthCss = '';
   @Input() model = '';
   @Input() disabled = false;
+  @Input() maxUsername = 50;
   @Output() focusOutUsernames = new EventEmitter();
-
-  maxUsername = 50;
   maxLengthOneUsername = 30;
-
   groupUsername: GroupUsername;
   username: string;
-
   lastItem: UsernameItem;
   shiftKey: boolean;
   tooltip = new Tooltip();
   isFocusingUsernames = false;
+  isSelectedAll = false;
 
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
@@ -99,6 +97,18 @@ export class UsernamesComponent implements OnInit {
     }
   }
 
+  isCtrlKeyAndNumpad1Key(event: KeyboardEvent, code: number): boolean {
+    const KEY_NUMPAD_1 = 97;
+    return event.ctrlKey && code === KEY_NUMPAD_1;
+  }
+
+  selectAllItems() {
+    this.isSelectedAll = !this.isSelectedAll;
+    this.groupUsername.items.forEach(item => {
+      item.changeSelectedAll(this.isSelectedAll);
+    });
+  }
+
   onKey(event: KeyboardEvent): boolean | undefined {
     const KEY_SPACE = 32;
     const KEY_SEMICOLON_FIREFOX = 59;
@@ -109,8 +119,9 @@ export class UsernamesComponent implements OnInit {
     const keyBackspace = 66;
     const keyDelete = 68;
     const code = event.key.charCodeAt(0);
-
-    if (code === keyBackspace && value === '') {
+    if (this.isCtrlKeyAndNumpad1Key(event, code)) {
+      this.groupUsername.selectAllItems();
+    } else if (code === keyBackspace && value === '') {
       this.groupUsername.removeLasted();
     } else if (code === keyDelete) {
       this.groupUsername.removeSelected();
@@ -141,15 +152,19 @@ export class UsernamesComponent implements OnInit {
     const validIndex = this.groupUsername.checkValidItems();
     let result = true;
     switch (validIndex) {
-      case 0:
+      case 1:
         this.tooltip.display(this.errorTooltipClassName, LABELS.REQUIRED_USERNAME);
         result = false;
         break;
-      case 1:
+      case 2:
         this.tooltip.display(this.errorTooltipClassName, LABELS.INVALID_USERNAMES);
         result = false;
         break;
-      case 2:
+      case 3:
+        this.tooltip.display(this.errorTooltipClassName, LABELS.MAX_USERNAME_EXCEEDED);
+        result = false;
+        break;
+      case 0:
         result = true;
         break;
     }
