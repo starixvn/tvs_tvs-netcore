@@ -106,8 +106,8 @@ public class BetListServiceImp : BetListService
         var oddHtml = Builder.BuildOdds(ticket, null, oddsTypeName);
         var oddName = oddsService.GetOddsName(oddHtml);
         oddName = isParlay ? string.Empty : oddName;
-        return string.IsNullOrWhiteSpace(oddName)
-            ? oddHtml.Replace("<br />", " ") : oddHtml.Replace("<br />", " (") + ")";
+        return isParlay ? "-"
+            : string.IsNullOrWhiteSpace(oddName) ? oddHtml.Replace("<br />", " ") : oddHtml.Replace("<br />", " (") + ")";
     }
 
     public string GetBetType(object betTypeId, string language)

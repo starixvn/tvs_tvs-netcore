@@ -40,7 +40,7 @@ public class BetListCoreServiceImp : BetListCoreService
             ShowMatch = !isFromAfterVoidService,
             ShowLeague = !isFromAfterVoidService
         };
-        viewModel.Odds = betListService.GetOdds(ticket, false);
+        viewModel.Odds = betListService.GetOdds(ticket, item.BetTypeId.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticket);
         viewModel.BetTypeSimplified = betListService.GetBetTypeNameChineseSimplified(ticket);

@@ -34,7 +34,7 @@ public class BetListRecoverBetIdServiceImp : BetListRecoverBetIdService
 
         ticketViewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         ticketViewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
-        ticketViewModel.Odds = betListService.GetOdds(ticket, false);
+        ticketViewModel.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         ticketViewModel.Choice = choiceType == ChoiceType.Email ?
             betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>") :
             betListService.BuildChoice(ticket, ticketHelper, null, false);
