@@ -20,6 +20,7 @@ public class TicketsViewModel
     public string InstantLicenseesName { get; set; }
     public string CashOutLicenseesName { get; set; }
     public bool IsAllLiveTickets { get; set; }
+    public bool IsAllNonLiveTickets { get; set; }
     public bool IsHasAioMessage { get; set; }
     public string BetTypes { get; set; }
     public DateTime FromTime { get; set; }

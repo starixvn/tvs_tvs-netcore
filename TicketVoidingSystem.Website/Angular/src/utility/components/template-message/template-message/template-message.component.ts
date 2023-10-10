@@ -38,6 +38,7 @@ export class TemplateMessageComponent implements OnChanges {
   @Input() issueTypeId: number;
   @Input() isShowMessages = true;
   @Input() voidFunction?: number;
+  @Input() isAllNonLiveTickets = false;
 
   @ViewChild('messages') messagesComponent: MessagesComponent;
 
@@ -45,7 +46,6 @@ export class TemplateMessageComponent implements OnChanges {
   selectedTemplated = new TemplateModel();
   message = new Message();
   templateSettings: TemplateSetting[];
-
   private readonly hideInputChineseForTemplateId = [
     MESSAGE_TEMPLATE_ID_8,
     MESSAGE_TEMPLATE_ID_9,
@@ -185,7 +185,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.HOME_TEAM_NAME, this.value.homeTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.AWAY_TEAM_NAME, this.value.awayTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.LEAGUE_NAME, this.value.leagueName);
-    this.templateService.replaceAll(this.message, TemplateReplace.EVENT_DATE, this.value.eventDate);
+    this.templateService.replaceAll(this.message, TemplateReplace.EVENT_DATE, this.value.kickOffTime);
     this.templateService.replaceTime(this.message, this.value, this.selectedTemplated.templateId);
     this.templateService.replaceKickOffTime(this.message, this.value.kickOffTime);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.PLAYER_NAME, this.value.playerName);
@@ -328,7 +328,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateScore() {
-    if (this.value.score !== undefined && this.value.score.length > 0) {
+    if (this.value.score !== undefined && this.value.score.length > 0 && !this.isAllNonLiveTickets) {
       const score: TemplateContent = {
         msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score}) `,
         msgChineseTraditional: `(${TemplateContentConst.SCORE.msgChineseTraditional} ${this.value.score}) `,
@@ -342,7 +342,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateScoreHaveText() {
-    if (this.value.score !== undefined && this.value.score.length > 0) {
+    if (this.value.score !== undefined && this.value.score.length > 0 && !this.isAllNonLiveTickets) {
       const score: TemplateContent = {
         msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
         msgChineseTraditional:
