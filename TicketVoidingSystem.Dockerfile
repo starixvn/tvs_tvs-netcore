@@ -1,26 +1,23 @@
-FROM hub.nexdev.net/base/dotnet/core/sdk:7.0-alpine AS builder
+
+# dotnet subset
+FROM hub.nexdev.net/base/dotnet/core/sdk:7.0-alpine AS prepare-restore-files
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet tool install --global --no-cache dotnet-subset --version 0.3.2
+
 WORKDIR /src
+COPY . .
+RUN dotnet subset restore ./TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj --root-directory /src --output /src/restore_subset/
 
-COPY ./Sources/SpecialDelete.NumberGame/*.csproj ./Sources/SpecialDelete.NumberGame/
-COPY ./Sources/SpecialDelete.RecoverByBetId/*.csproj ./Sources/SpecialDelete.RecoverByBetId/
-COPY ./Sources/SpecialDelete.UploadBatchMessage/*.csproj ./Sources/SpecialDelete.UploadBatchMessage/
-COPY ./Sources/SpecialDelete.VirtualSports/*.csproj ./Sources/SpecialDelete.VirtualSports/
-COPY ./Sources/TicketVoidingSystem/*.csproj ./Sources/TicketVoidingSystem/
-COPY ./Sources/TicketVoidingSystem.ABExceptionList/*.csproj ./Sources/TicketVoidingSystem.ABExceptionList/
-COPY ./Sources/TicketVoidingSystem.ManageRequest/*.csproj ./Sources/TicketVoidingSystem.ManageRequest/
-COPY ./Sources/TicketVoidingSystem.ManageVoidServices/*.csproj ./Sources/TicketVoidingSystem.ManageVoidServices/
-COPY ./Sources/TicketVoidingSystem.MarkTickets/*.csproj ./Sources/TicketVoidingSystem.MarkTickets/
-COPY ./Sources/TicketVoidingSystem.SharedApi/*.csproj ./Sources/TicketVoidingSystem.SharedApi/
-COPY ./Sources/TicketVoidingSystem.SimpleDataApi/*.csproj ./Sources/TicketVoidingSystem.SimpleDataApi/
-COPY ./Sources/TicketVoidingSystem.TicketListing/*.csproj ./Sources/TicketVoidingSystem.TicketListing/
-COPY ./Sources/TicketVoidingSystem.VoidSingleBet/*.csproj ./Sources/TicketVoidingSystem.VoidSingleBet/
-COPY ./TicketVoidingSystem.Website/*.csproj ./TicketVoidingSystem.Website/
+# restore
+FROM hub.nexdev.net/base/dotnet/core/sdk:7.0-alpine AS builder
 
-
+WORKDIR /src
+COPY --from=prepare-restore-files /src/restore_subset .
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
 RUN --mount=type=cache,target=/root/.nuget/packages \
  dotnet restore TicketVoidingSystem.Website/TicketVoidingSystem.Website.csproj
 
+ # publish
 COPY ./Sources/. ./Sources
 COPY ./TicketVoidingSystem.Website/. ./TicketVoidingSystem.Website
 
