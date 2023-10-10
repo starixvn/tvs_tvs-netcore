@@ -19,6 +19,7 @@ export class VoidPageCommonItem {
   jollyViewLicensee: AffectedLicensee;
   affectedInstantLicensee: AffectedLicensee;
   cashOutLicensee: AffectedLicensee;
+  cancelCashOutLicensee: AffectedLicensee;
 
   subIssueType?: SubIssueType;
   displayIssueTypeName: string;
@@ -40,5 +41,6 @@ export class VoidPageCommonItem {
     this.chinaViewLicensee = new AffectedLicensee();
     this.jollyViewLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
+    this.cancelCashOutLicensee = new AffectedLicensee();
   }
 }

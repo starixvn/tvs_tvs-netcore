@@ -110,7 +110,8 @@ export class VoidDuplicateTicketsComponent implements OnInit {
       || voidPageItem.chinaViewLicensee.show && voidPageItem.chinaViewLicensee.licenseesName.length > 0
       || voidPageItem.jollyViewLicensee.show && voidPageItem.jollyViewLicensee.licenseesName.length > 0
       || voidPageItem.affectedInstantLicensee.show && voidPageItem.affectedInstantLicensee.licenseesName.length > 0
-      || voidPageItem.cashOutLicensee.show && voidPageItem.cashOutLicensee.licenseesName.length > 0;
+      || voidPageItem.cashOutLicensee.show && voidPageItem.cashOutLicensee.licenseesName.length > 0
+      || voidPageItem.cancelCashOutLicensee.show && voidPageItem.cancelCashOutLicensee.licenseesName.length > 0;
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {

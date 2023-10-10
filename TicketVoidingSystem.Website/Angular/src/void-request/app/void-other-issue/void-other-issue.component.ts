@@ -76,6 +76,7 @@ export class VoidOtherIssueComponent implements OnInit {
   chinaViewLicensee = new AffectedLicensee();
   jollyViewLicensee = new AffectedLicensee();
   cashOutLicensee = new AffectedLicensee();
+  cancelCashOutLicensee = new AffectedLicensee();
   voidQuery = new VoidTicketsQuery();
 
   uncheckedTransIds: string[] = [];
@@ -211,6 +212,8 @@ export class VoidOtherIssueComponent implements OnInit {
       this.jollyViewLicensee.show = true;
       this.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
       this.cashOutLicensee.show = true;
+      this.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
+      this.cancelCashOutLicensee.show = true;
     } catch {
       this.isShowTicket = false;
     }
@@ -511,7 +514,8 @@ export class VoidOtherIssueComponent implements OnInit {
       || this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName.length > 0
       || this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName.length > 0
       || this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName.length > 0
-      || this.cashOutLicensee.show && this.cashOutLicensee.licenseesName.length > 0;
+      || this.cashOutLicensee.show && this.cashOutLicensee.licenseesName.length > 0
+      || this.cancelCashOutLicensee.show && this.cancelCashOutLicensee.licenseesName.length > 0;
   }
 
   async getGroupBetTypes(): Promise<void> {

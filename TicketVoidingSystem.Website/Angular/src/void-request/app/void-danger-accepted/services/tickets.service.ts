@@ -73,7 +73,9 @@ export class TicketsService {
     voidMatch.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
     voidMatch.affectedInstantLicensee.show = true;    
     voidMatch.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
+    voidMatch.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
     voidMatch.cashOutLicensee.show = true;
+    voidMatch.cancelCashOutLicensee.show = true;
     voidMatch.isBlockBetList = false;
   }
 }

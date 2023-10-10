@@ -96,6 +96,7 @@ export class TicketListComponent implements OnInit, OnChanges {
   private updateGeneralInfoByTickets(): void {
     if (this.generalInfoViewModel.generalInfoModel && this.tickets) {
       this.generalInfoViewModel.generalInfoModel.licenseeNames = this.tickets.licenseeNames;
+      this.generalInfoViewModel.generalInfoModel.cancelCashOutLicenseesName = this.tickets.cancelCashOutLicenseesName;
       this.generalInfoViewModel.generalInfoModel.totalVoidedTickets = this.tickets.totalVoidedTickets;
       this.generalInfoViewModel.generalInfoModel.totalCancelCashOut = this.tickets.totalCancelCashOut;
       this.generalInfoViewModel.generalInfoModel.reason = this.issue.subIssueTypeName;

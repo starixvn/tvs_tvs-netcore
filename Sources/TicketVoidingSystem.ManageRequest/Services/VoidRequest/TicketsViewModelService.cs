@@ -108,6 +108,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var cancelCashOutLicensee = data.Where(item => item.IsCancelCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
         var jollyViewLicensee = data.Where(item => item.SpecialPlatform == SpecialPlatformConstant.JollySports).Select(item => item.LicenseeName).Distinct().ToArray();
         var licensees = data.Where(item => item.IsDeposit && !chinaViewLicensee.Contains(item.LicenseeName) && !jollyViewLicensee.Contains(item.LicenseeName))
@@ -115,10 +116,12 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         Array.Sort(licensees, StringComparer.InvariantCulture);
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);
         Array.Sort(cashOutLicensee, StringComparer.InvariantCulture);
+        Array.Sort(cancelCashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
         model.LicenseesName = string.Join(", ", licensees);
         model.InstantLicenseesName = string.Join(", ", instantLicensee);
         model.CashOutLicenseesName = string.Join(", ", cashOutLicensee);
+        model.CancelCashOutLicenseesName = string.Join(", ", cancelCashOutLicensee); 
         model.ChinaViewLicenseesName = string.Join(", ", chinaViewLicensee);
         model.JollyViewLicenseesName = string.Join(", ", jollyViewLicensee);
     }

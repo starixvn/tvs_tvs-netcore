@@ -113,7 +113,8 @@ export class VoidDangerAcceptedComponent implements OnInit {
       || voidMatch.chinaViewLicensee.show && voidMatch.chinaViewLicensee.licenseesName.length > 0
       || voidMatch.jollyViewLicensee.show && voidMatch.jollyViewLicensee.licenseesName.length > 0
       || voidMatch.affectedInstantLicensee.show && voidMatch.affectedInstantLicensee.licenseesName.length > 0
-      || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0;
+      || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0
+      || voidMatch.cancelCashOutLicensee.show && voidMatch.cancelCashOutLicensee.licenseesName.length > 0;
   }
   
   onClickCopyLicenseesToClipboard(text: string): void {

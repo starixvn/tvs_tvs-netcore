@@ -45,6 +45,7 @@ class Helper {
     affectedInstantLicensee: new AffectedLicensee(),
     chinaViewLicensee: new AffectedLicensee(),
     cashOutLicensee: new AffectedLicensee(),
+    cancelCashOutLicensee: new AffectedLicensee(),
     isShowTemplateMessage: true,
     templateMessage: new Message(),
     isAllLiveTickets: false,

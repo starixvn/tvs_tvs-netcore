@@ -13,6 +13,7 @@ public class VoidedTicketsViewModel
     public int TotalVoidedTickets { get; set; }
     public int TotalCancelCashOut { get; set; }
     public string LicenseeNames { get; set; }
+    public string CancelCashOutLicenseesName { get; set; }
     public string GeneralBetTypeCombinations { get; set; }
 }
 

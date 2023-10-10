@@ -74,6 +74,8 @@ export class TicketsService {
     voidPageItem.affectedInstantLicensee.show = true;
     voidPageItem.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
     voidPageItem.cashOutLicensee.show = true;
+    voidPageItem.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
+    voidPageItem.cancelCashOutLicensee.show = true;
     voidPageItem.isBlockBetList = false;
   }
 }
