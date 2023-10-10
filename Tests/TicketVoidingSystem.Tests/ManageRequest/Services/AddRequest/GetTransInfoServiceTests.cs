@@ -40,7 +40,7 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
     [InlineData(IssueTypeConstant.ArchivedTicket)]
     [InlineData(IssueTypeConstant.WrongOdds)]
     [InlineData(IssueTypeConstant.ReducedOver)]
-    [InlineData(null)]
+    [InlineData(0)]
     [InlineData(99999)]
     public async Task GetTransInfoJson_ReturnsListOfTransInfoJson(int issueTypeId)
     {

@@ -56,7 +56,7 @@ public class RecoverTicketsHandler : IRequestHandler<RecoverTicketsRequest, IEnu
         try
         {
             await recoverTicketsService.RemoveMessage(string.Join(",", model.Tickets.Select(x => x.TransId)));
-            recoverTicketsService.SendEmail(model.Tickets.ToList(), query.NegativeBalanceUsers);
+            await recoverTicketsService.SendEmail(model.Tickets.ToList(), query.NegativeBalanceUsers);
             return recoverTicketsService.CreateMessage(model);
         }
         catch (Exception exception)

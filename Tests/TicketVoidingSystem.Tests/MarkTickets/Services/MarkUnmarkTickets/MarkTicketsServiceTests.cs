@@ -16,7 +16,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassF
     [Theory]
     [InlineData(0, 0, "errorMsg")]
     [InlineData(1, 1, "errorMsg")]
-    [InlineData(1, null, null)]
+    [InlineData(1, 0, null)]
     public async Task Execute_RepositoryHasCalled(byte statusId, int errorCode, string errorMsg)
     {
         // Arrange
