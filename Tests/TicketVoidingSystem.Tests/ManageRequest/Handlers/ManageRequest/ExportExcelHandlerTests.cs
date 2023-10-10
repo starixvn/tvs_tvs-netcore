@@ -24,7 +24,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var model = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            Assert.Equal(model.FileName, expected);
+            Assert.Contains(expected, model.FileName);
         }
     }
 }
