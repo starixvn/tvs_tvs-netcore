@@ -181,11 +181,12 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   replaceValue() {
+    let eventDate = moment(new Date(this.value.kickOffTime)).format(Format.EVENT_DATE);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.SPORT_TYPE, this.value.sportType);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.HOME_TEAM_NAME, this.value.homeTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.AWAY_TEAM_NAME, this.value.awayTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.LEAGUE_NAME, this.value.leagueName);
-    this.templateService.replaceAll(this.message, TemplateReplace.EVENT_DATE, this.value.kickOffTime);
+    this.templateService.replaceAll(this.message, TemplateReplace.EVENT_DATE, eventDate);
     this.templateService.replaceTime(this.message, this.value, this.selectedTemplated.templateId);
     this.templateService.replaceKickOffTime(this.message, this.value.kickOffTime);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.PLAYER_NAME, this.value.playerName);
@@ -212,19 +213,21 @@ export class TemplateMessageComponent implements OnChanges {
 
   checkCanUpdateEventTypeToBlank(): boolean {
     const issueTypes = [
+      IssueTypeId.DANGER_ACCEPTED,
+      IssueTypeId.WRONG_SCORE,
+      IssueTypeId.RED_CARD,
+      IssueTypeId.WRONG_MARKET_OFFERED,
       IssueTypeId.REDUCED_OVER,
-      IssueTypeId.WRONG_ODDS,
-      IssueTypeId.WRONG_HDP,
-      IssueTypeId.WRONG_1ST_HDP,
-      IssueTypeId.WRONG_OU,
-      IssueTypeId.WRONG_1ST_OU
+      IssueTypeId.MATCH_COMPLETED,
+      IssueTypeId.NOT_PARTICIPATE
     ];
-
-    if (issueTypes.includes(this.issueTypeId)) {
-      return true;
-    }
-
-    return issueTypes.includes(this.issueTypeId) && this.value.eventDate === moment(new Date()).format(Format.EVENT_DATE);
+    const subIssueTypeS = [
+      SubIssueTypeId.ABANDONED,
+      SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
+      SubIssueTypeId.TECHNICAL_ERROR
+    ];
+    return (issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
+      && this.value.eventDate === moment(new Date()).format(Format.EVENT_DATE);
   }
 
   updateInputs() {
@@ -254,8 +257,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateInputsNextCorner() {
-    for(const element of this.selectedTemplated.inputTexts){
-      if (this.issueTypeId === IssueTypeId.DANGER_ACCEPTED && this.value.numberOfCorner && element.msgEnglish === "Next Corner"){
+    for (const element of this.selectedTemplated.inputTexts) {
+      if (this.issueTypeId === IssueTypeId.DANGER_ACCEPTED && this.value.numberOfCorner && element.msgEnglish === "Next Corner") {
         const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === this.value.numberOfCorner.toString());
         element.msgEnglishValue = nextCorner.englishValue;
         element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;
@@ -430,9 +433,9 @@ export class TemplateMessageComponent implements OnChanges {
 
   isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() &&
-    (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
-      || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
-      || (this.isOtherIssues && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
+      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
+        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
+        || (this.isOtherIssues && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
   }
 
   isShowAioCheckBoxMessage(): boolean {

@@ -289,7 +289,6 @@ export class VoidOtherIssueComponent implements OnInit {
       return;
     }
     this.templateValue = this.templateService.getTemplateValue(this.query.match);
-    this.templateValue.kickOffTime = this.query.kickOffDate;
     this.templateValue.checkSettled = this.checkSettled();
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
     this.templateValue.toTransTime = this.ticketsModel.toTime;

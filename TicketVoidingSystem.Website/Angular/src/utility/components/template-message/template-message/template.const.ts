@@ -36,11 +36,17 @@ export class IssueTypeId {
   static readonly WRONG_MARKET_OFFERED = 12;
   static readonly ABNORMAL_ACCOUNT = 13;
   static readonly REDUCED_OVER = 19;
+  static readonly MATCH_COMPLETED = 14;
+  static readonly NOT_PARTICIPATE = 21;
+  static readonly OTHER_ISSUES = 18;
 }
 
 export class SubIssueTypeId {
   static readonly ONWARDS = 33;
   static readonly NO_ONWARDS = 34;
+  static readonly TECHNICAL_ERROR = 108;
+  static readonly GAME_CRASHED_VOID_LIVE = 109;
+  static readonly ABANDONED = 110;
 }
 
 export class TemplateReplace {
