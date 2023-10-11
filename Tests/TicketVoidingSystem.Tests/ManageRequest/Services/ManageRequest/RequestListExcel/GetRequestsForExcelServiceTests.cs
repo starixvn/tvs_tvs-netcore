@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -34,7 +36,7 @@ public class GetRequestsForExcelServiceTests
     }
 
     [Fact]
-    public async void GetRequestsExcel_DefaultQuery_ReturnEmpty()
+    public async Task GetRequestsExcel_DefaultQuery_ReturnEmpty()
     {
         // Arrange
         var query = new SelectRequestsQuery();
@@ -55,7 +57,7 @@ public class GetRequestsForExcelServiceTests
     }
 
     [Fact]
-    public async void GetRequestsExcel_DefaultQuery_ReturnCorrect()
+    public async Task GetRequestsExcel_DefaultQuery_ReturnCorrect()
     {
         // Arrange
         var query = new SelectRequestsQuery();
@@ -78,8 +80,11 @@ public class GetRequestsForExcelServiceTests
                 new()
                 {
                     MatchId = 1
-                }
-            }
+                },
+                new()
+            },
+            CalcFullTime = new DateTime(2023,2,2,2,2,2),
+            CalcHalfTime = new DateTime(2023, 2, 2, 2, 2, 2)
         };
 
         var outputRequests = new List<RequestModel>
@@ -95,7 +100,7 @@ public class GetRequestsForExcelServiceTests
         convertRequestsService.GetAllSubIssueTypes().Returns(new List<SubIssueType> { new() });
         convertRequestsService.GetAllVoidActions().Returns(new List<VoidAction> { new() });
         mapper.Map<ExcelRequestModel>(Arg.Any<RequestViewModel>()).Returns(new ExcelRequestModel { MatchId = "12" });
-        
+
         // Act
         var result = await service.GetRequestsExcel(query);
 

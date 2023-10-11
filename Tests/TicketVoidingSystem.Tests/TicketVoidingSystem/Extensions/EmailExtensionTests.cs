@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NSubstitute;
+using SpecialDelete.VirtualSports.Common.ViewModels;
+using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using Xunit;
@@ -245,5 +247,36 @@ public class EmailExtensionTests
 
         // Assert
         Assert.Equal("Site1, Site2, Site3", result);
+    }
+
+    [Fact]
+    public void GetNegativeBalanceUsers_EmailGroupIsCashOut_ReturnEmpty()
+    {
+        // Arrange
+        var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>();
+
+        // Act
+        var result = model.GetNegativeBalanceUsers(EmailGroup.CashOut, t => t.UserName);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+
+    [Fact]
+    public void GetNegativeBalanceUsers_EmailGroupNotCashOut_ReturnEmpty()
+    {
+        // Arrange
+        var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>
+        {
+            Tickets = new List<RecoverTicketModel>(),
+            ViewModel = new MailRecoverViewModel<MailTicketViewModel> { NegativeBalanceUsers = "" }
+        };
+
+        // Act
+        var result = model.GetNegativeBalanceUsers(EmailGroup.Csd, t => t.UserName);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
     }
 }

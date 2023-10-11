@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
@@ -23,7 +24,7 @@ public class ConvertRequestsServiceTests
     }
 
     [Fact]
-    public async void GetAllIssueTypes_ReturnCorrect()
+    public async Task GetAllIssueTypes_ReturnCorrect()
     {
         // Arrange
         repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>()).Returns(new List<IssueType> { new() });
@@ -36,7 +37,7 @@ public class ConvertRequestsServiceTests
     }
 
     [Fact]
-    public async void GetAllSubIssueTypes_ReturnCorrect()
+    public async Task GetAllSubIssueTypes_ReturnCorrect()
     {
         // Arrange
         repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>())
@@ -50,7 +51,7 @@ public class ConvertRequestsServiceTests
     }
 
     [Fact]
-    public async void GetAllVoidActions_ReturnCorrect()
+    public async Task GetAllVoidActions_ReturnCorrect()
     {
         // Arrange
         repository.FetchAsync<VoidAction>(Arg.Any<GetActionsCriteria>()).Returns(new List<VoidAction> { new() });
@@ -104,6 +105,13 @@ public class ConvertRequestsServiceTests
         "Mix Parlay: abc")]
     [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary'>abc</div>", "")]
     [InlineData(IssueTypeConstant.DangerAccepted, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.RedCard, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.WrongHDP, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.Wrong1stHDP, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.WrongOU, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.Wrong1stOU, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.WrongOdds, "<div class='void-time'>abc</div>", "abc")]
+    [InlineData(IssueTypeConstant.WrongKickOffTime, "<div class='ko-time'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.EarlyKickOffTime, "<div class='ko-time'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.WrongScore, "<div class='void-wrong-score'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.ArchivedTicket,
