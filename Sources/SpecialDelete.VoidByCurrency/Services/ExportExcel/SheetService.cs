@@ -1,15 +1,13 @@
-﻿namespace SpecialDelete.VoidByCurrency.Services.ExportExcel;
-
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Drawing;
-using Common.Extensions;
-using Core.Constants;
-using Core.DTO;
+﻿using System.Drawing;
 using Epplus.Mapper.Extensions;
-using GetTickets;
-using Models;
 using OfficeOpenXml;
+using SpecialDelete.VoidByCurrency.Models;
+using SpecialDelete.VoidByCurrency.Services.GetTickets;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models;
+
+namespace SpecialDelete.VoidByCurrency.Services.ExportExcel;
 
 public interface SheetService
 {
@@ -43,17 +41,20 @@ public class SheetServiceImp : SheetService
         worksheet.Cells[1, 1].Value = $"Void By Currency - MatchId: {matchId}";
     }
 
-    public void AddMatch(ExcelWorksheet worksheet, Match match)
+    public void AddMatch(ExcelWorksheet worksheet, Match? match)
     {
-        const int matchCodeCol = 1;
-        const int row = 5;
-        const int matchEventCol = 2;
-        const int eventTimeCol = 4;
+        if (match != null)
+        {
+            const int matchCodeCol = 1;
+            const int row = 5;
+            const int matchEventCol = 2;
+            const int eventTimeCol = 4;
 
-        var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
-        worksheet.Cells[row, matchCodeCol].Value = match.MatchCode;
-        worksheet.Cells[row, matchEventCol].Value = match.MatchEvent;
-        worksheet.Cells[row, eventTimeCol].Value = eventTime;
+            var eventTime = match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
+            worksheet.Cells[row, matchCodeCol].Value = match.MatchCode;
+            worksheet.Cells[row, matchEventCol].Value = match.MatchEvent;
+            worksheet.Cells[row, eventTimeCol].Value = eventTime;
+        }
     }
 
     public async Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query)

@@ -1,17 +1,14 @@
-﻿namespace SpecialDelete.VoidByCurrency.Services.ExportExcel;
-
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Common.Excel;
-using Core.DTO;
-using Epplus.Mapper.Extensions;
+﻿using Epplus.Mapper.Extensions;
 using Fanex.Data.Repository;
-using Models;
 using OfficeOpenXml;
-using Criteria;
+using SpecialDelete.VoidByCurrency.Criteria;
+using SpecialDelete.VoidByCurrency.Models;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.Excel;
 
-public class SheetControlImp : SheetControl<GetTicketsQuery>
+namespace SpecialDelete.VoidByCurrency.Services.ExportExcel;
+
+public class SheetControlImp : WorkSheetService<GetTicketsQuery>
 {
     private readonly SheetService sheetService;
     private readonly IDynamicRepository repository;
@@ -29,11 +26,11 @@ public class SheetControlImp : SheetControl<GetTicketsQuery>
         throw new NotImplementedException();
     }
 
-    public async Task BindingAsync(ExcelWorksheet worksheet, GetTicketsQuery model)
+    public async Task BindingContent(ExcelWorksheet worksheet, GetTicketsQuery model)
     {
         sheetService.AddTitle(worksheet, model.MatchId);
         var criteria = new GetMatchCriteria { MatchId = model.MatchId };
-        var match = repository.Fetch<Match>(criteria).FirstOrDefault();
+        var match = (await repository.FetchAsync<Match>(criteria)).FirstOrDefault();
         sheetService.AddMatch(worksheet, match);
 
         var tickets = await sheetService.GetTickets(model);

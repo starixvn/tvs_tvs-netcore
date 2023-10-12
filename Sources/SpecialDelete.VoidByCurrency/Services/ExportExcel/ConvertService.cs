@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Fizzler.Systems.HtmlAgilityPack;
+using HtmlAgilityPack;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Extensions.TN;
 
@@ -36,7 +37,7 @@ public class ConvertServiceImp : ConvertService
     {
         var choice = html.Handicap(doc);
         var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
-        var bettypeDescription = HtmlExtension.GetBettypeDescription(doc);
+        var bettypeDescription = HtmlExtension.GetBetTypeDescription(doc);
         if (!string.IsNullOrWhiteSpace(bettypeDescription))
         {
             betType = betType.AppendWithNewLine(bettypeDescription);

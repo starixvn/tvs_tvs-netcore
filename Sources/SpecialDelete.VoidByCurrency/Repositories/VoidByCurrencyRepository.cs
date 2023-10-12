@@ -1,17 +1,13 @@
-﻿namespace SpecialDelete.VoidByCurrency.Repositories;
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Common.SendEmail.Models;
-using Core.Constants;
-using Core.Utils;
-using Criteria;
-using Fanex.Common;
+﻿using AutoMapper;
 using Fanex.Data.Repository;
-using Models;
-using SpecialDelete.Common.Services;
+using SpecialDelete.VoidByCurrency.Criteria;
+using SpecialDelete.VoidByCurrency.Models;
+using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Utilities;
+
+namespace SpecialDelete.VoidByCurrency.Repositories;
 
 public interface VoidByCurrencyRepository
 {
@@ -22,11 +18,13 @@ public interface VoidByCurrencyRepository
 
 public class VoidByCurrencyRepositoryImp : VoidByCurrencyRepository
 {
+    private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
-    private readonly ISessionService sessionService;
+    private readonly SessionService sessionService;
 
-    public VoidByCurrencyRepositoryImp(IDynamicRepository repository, ISessionService sessionService)
+    public VoidByCurrencyRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
     {
+        this.mapper = mapper;
         this.repository = repository;
         this.sessionService = sessionService;
     }
@@ -83,9 +81,9 @@ public class VoidByCurrencyRepositoryImp : VoidByCurrencyRepository
 
     private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
     {
-        var criteria = Mapper.Map<VoidTicketsCriteria>(query);
+        var criteria = mapper.Map<VoidTicketsCriteria>(query);
         criteria.UserId = sessionService.UserId;
-        criteria.UserPassword = Cryptography.CfsEnCode(query.UserPassword);
+        criteria.UserPassword = query.UserPassword;
         criteria.Ip = sessionService.GetClientIp();
 
         return criteria;

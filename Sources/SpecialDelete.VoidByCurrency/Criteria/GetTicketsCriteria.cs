@@ -1,6 +1,6 @@
 ﻿using Fanex.Data;
 using Fanex.Data.Repository;
-using SpecialDelete.Core.Utils;
+using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VoidByCurrency.Criteria;
 
