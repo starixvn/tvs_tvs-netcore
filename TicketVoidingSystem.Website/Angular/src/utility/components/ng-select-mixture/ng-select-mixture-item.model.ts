@@ -1,3 +1,5 @@
+import { GroupReducedOverConstant } from "src/add-request/app/add-request/event-reduced-over/constants/bet-type-reduced-over.constant";
+
 export class NgSelectMixtureItem {
   value: string;
   name: string;
@@ -47,11 +49,11 @@ export class NgSelectMixtureItem {
   }
 
   checkBySelectedItem(selectedItems: string[]): void {
-    this.checked = selectedItems.includes(this.value);
     this.items.forEach(item => {
       item.checked = selectedItems.includes(item.value);
       item.checkBySelectedItem(selectedItems);
     });
+    this.checked = this.isItemGroup() ? this.items.every(x => x.checked) : selectedItems.includes(this.value);;
   }
 
   unCheckChilds(): void {
@@ -121,5 +123,11 @@ export class NgSelectMixtureItem {
 
   isSingleSelect(): boolean {
     return this.items.length === 0 && this.parentId === 0;
+  }
+
+  isItemGroup(): boolean {
+    return this.value === GroupReducedOverConstant.ALL_HOME_OE.toString()
+      || this.value === GroupReducedOverConstant.ALL_AWAY_OE.toString()
+      || this.value === GroupReducedOverConstant.OTHERS_OE_BET_TYPE.toString();
   }
 }
