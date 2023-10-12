@@ -16,6 +16,8 @@ public interface MatchService
 
     Task<Match> GetMatch(int matchId);
 
+    Task<Match> GetMatchVoidByCurrency(GetMatchInfoVoidByCurrencyCriteria criteria);
+
     Match UpdateMatchInfoFromRemotingRef(Match match);
 }
 
@@ -54,6 +56,11 @@ public class MatchServiceImp : MatchService
     public async Task<Match> GetMatch(int matchId)
     {
         var criteria = new GetMatchInfoCriteria { MatchId = matchId };
+        return await repository.GetAsync<Match>(criteria);
+    }
+
+    public async Task<Match> GetMatchVoidByCurrency(GetMatchInfoVoidByCurrencyCriteria criteria)
+    {
         return await repository.GetAsync<Match>(criteria);
     }
 
