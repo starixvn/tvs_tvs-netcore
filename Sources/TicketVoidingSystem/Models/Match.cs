@@ -84,4 +84,11 @@ public class Match
     public int MatchType { get; set; }
 
     public int ParentId { get; set; }
+
+    public string OriginLeagueName { get; set; }
+
+    public string OriginLeagueNameSimplified { get; set; }
+
+    public string OriginLeagueNameNewSimplified { get; set; }
+
 }

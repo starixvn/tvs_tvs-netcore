@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
-using Newtonsoft.Json;
-using System;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
@@ -21,11 +20,13 @@ public class BetListCoreServiceImp : BetListCoreService
 {
     private readonly IMapper mapper;
     private readonly BetListService betListService;
+    private readonly LeagueNameMessageService leagueNameMessageService;
 
-    public BetListCoreServiceImp(IMapper mapper, BetListService betListService)
+    public BetListCoreServiceImp(IMapper mapper, BetListService betListService, LeagueNameMessageService leagueNameMessageService)
     {
         this.mapper = mapper;
         this.betListService = betListService;
+        this.leagueNameMessageService = leagueNameMessageService;
     }
 
     public TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, SiteEmail site, bool isFromAfterVoidService)
@@ -92,15 +93,7 @@ public class BetListCoreServiceImp : BetListCoreService
 
         var choice = betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
 
-        if (Helper.IsMustRemoveSabaText(match, site))
-        {
-            var serializedChoice = JsonConvert.SerializeObject(choice);
-            choice = JsonConvert.DeserializeObject<string>(serializedChoice)
-                .Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-                .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        return choice;
+        return leagueNameMessageService.RemoveSabaInChoiceColumn(choice, match, site);
     }
 
     private static string GetCurrencyName(TicketEmailModel item, SiteEmail site)
