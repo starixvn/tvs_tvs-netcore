@@ -6,6 +6,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
@@ -16,12 +17,14 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
     private readonly BetListService betListService;
     private readonly IMapper mapper;
     private readonly BetListCoreServiceImp service;
+    private readonly LeagueNameMessageService leagueNameMessageService;
 
     public BetListCoreServiceTests()
     {
         mapper = Substitute.For<IMapper>();
         betListService = Substitute.For<BetListService>();
-        service = new BetListCoreServiceImp(mapper, betListService);
+        leagueNameMessageService = Substitute.For<LeagueNameMessageService>();
+        service = new BetListCoreServiceImp(mapper, betListService, leagueNameMessageService);
     }
 
     [Theory]
@@ -96,7 +99,7 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var item = new TicketEmailModel { IsMixParlay = false, BetTypeId = 29 };
-        var match = new Match { LeagueGroupId = 42 };
+        var match = new Match { LeagueGroupId = 42, OriginLeagueName = "Saba123", OriginLeagueNameSimplified = "沙巴123", OriginLeagueNameNewSimplified = "沙巴123" };
         var site = new SiteEmail { IsChinaView = true };
 
         mapper.Map<Ticket>(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(new Ticket());
@@ -114,7 +117,7 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.BuildTicket(item, match, site, true);
 
         // Assert
-        AssertExtension.Equal("ChoiceExcel", actual.Choice);
+        AssertExtension.Equal("", actual.Choice);
     }
 
     [Fact]
@@ -139,6 +142,6 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.BuildTicket(item, null, site, true);
 
         // Assert
-        AssertExtension.Equal("ChoiceExcel", actual.Choice);
+        AssertExtension.Equal("", actual.Choice);
     }
 }

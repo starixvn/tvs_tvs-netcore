@@ -35,7 +35,10 @@ public class LeagueNameMessageServiceTests
         var match = new Match
         {
             LeagueGroupId = 42, LeagueName = "Saba123", LeagueNameSimplified = "沙巴123",
-            LeagueNameNewSimplified = "沙巴123"
+            LeagueNameNewSimplified = "沙巴123",
+            OriginLeagueName = "Saba123",
+            OriginLeagueNameSimplified = "沙巴123",
+            OriginLeagueNameNewSimplified = "沙巴123"
         };
 
         var service = new LeagueNameMessageServiceImp();
