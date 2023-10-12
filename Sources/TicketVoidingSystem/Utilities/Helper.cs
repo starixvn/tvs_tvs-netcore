@@ -215,10 +215,8 @@ public static class Helper
 
     private static bool IsMenuOfNewPage(MenuItem menu)
     {
-#pragma warning disable S1067 // Expressions should not be too complex
         string[] listNames = {"AB Exception List" , "Mark/Unmark Tickets" , "Ticket Listing" , "Void Single Bet" , "Manage Request" , "Add Request"
-            , "Upload Batch Message" , "Void Parlay Sub Bet" , "Recover Virtual Sports Bet" , "Recover By Bet ID" , "Void Number Game Bet" };
+            , "Upload Batch Message" , "Void Parlay Sub Bet" , "Recover Virtual Sports Bet" , "Recover By Bet ID" , "Void Number Game Bet", "Void By Currency" };
         return listNames.Contains(menu.Name);
-#pragma warning restore S1067 // Expressions should not be too complex
     }
 }

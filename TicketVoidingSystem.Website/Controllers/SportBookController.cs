@@ -1,10 +1,9 @@
 ﻿using Fanex.NAP.Client.Attributes;
+using Fanex.NAP.Client.Helpers.Business;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
-
-using Fanex.NAP.Client.Helpers.Business;
 
 [Route("[controller]")]
 public class SportBookController : Controller
@@ -25,5 +24,14 @@ public class SportBookController : Controller
     public IActionResult VoidSingleBet()
     {
         return View("~/wwwroot/dist/void-single-bet/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency, Policy = Constant.Policy.Read)]
+    public IActionResult VoidByCurrency()
+    {
+        return View("~/wwwroot/dist/void-by-currency/index.cshtml");
     }
 }

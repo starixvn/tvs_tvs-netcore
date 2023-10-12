@@ -19,15 +19,6 @@ public class VoidByCurrencyController : ControllerBase
         this.mediator = mediator;
     }
 
-    //[NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency)]
-    //public async Task<ActionResult> Index()
-    //{
-    //    var viewModel = await mediator.Send(new IndexRequest()).ConfigureAwait(false);
-    //    viewModel.Root = Url.Content("~");
-
-    //    return View("~/dist/void-by-currency/index.cshtml", viewModel);
-    //}
-
     [HttpGet]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency)]
     public async Task<IActionResult> GetFilterModel() => Ok(await mediator.Send(new GetFilterModelRequest()));
