@@ -14,8 +14,6 @@ public class VoidTicketsCriteria : CriteriaBase
 
     public string TransIds { get; set; }
 
-    public string SoldTransIds { get; set; }
-
     public int UserId { get; set; }
 
     public string UserName { get; set; }

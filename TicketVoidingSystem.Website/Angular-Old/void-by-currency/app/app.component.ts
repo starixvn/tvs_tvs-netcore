@@ -18,6 +18,7 @@ import { MessagesComponent } from '../../internal/components/messages/messages.c
 import { PagingEvent, PagingModel } from '../../internal/components/paging/paging.model';
 import { Result } from '../../internal/models/result';
 import { HttpRequestService } from '../../internal/services/http-request.service';
+import { PasswordService } from '../../internal/services/password.service';
 import { StaticService } from '../../internal/services/static.service';
 import { FunctionConst } from '../../internal/shared/config';
 import { TEXT } from '../../internal/shared/text';
@@ -30,12 +31,11 @@ import { GroupViewModel } from './tickets-result/group.viewmodel';
 import { TicketViewModel } from './tickets-result/ticket.viewmodel';
 import { TicketsResultComponent } from './tickets-result/tickets-result.component';
 import { GroupTicketsViewModel } from './tickets-result/tickets.viewmodel';
-
 @Component({
   selector: 'void-by-currency',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [BlockUIService, FilterService, HttpRequestService, CheckingPermissionService, AppService]
+  providers: [BlockUIService, FilterService, HttpRequestService, CheckingPermissionService, AppService, PasswordService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('filter') filterComponent: FilterComponent;
@@ -66,7 +66,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly element: ElementRef,
     private readonly blockUIService: BlockUIService,
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    private readonly passwordService: PasswordService
   ) { }
 
   public ngOnInit() {
@@ -257,7 +258,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       reason: this.confirmation.reason,
       reasonSC: this.confirmation.reasonSC,
       userName: this.confirmation.userName,
-      userPassword: this.confirmation.userPassword,
+      userPassword: this.passwordService.hash(this.confirmation.userPassword),
       negativeBalanceUsers: this.negativeBalanceUsers,
       match: this.matchDetail,
       voidFromTime: moment(new Date(this.ticketsViewModel.fromTransTime)).format('hh:mm:ss A'),

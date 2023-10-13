@@ -1,8 +1,8 @@
 ﻿using Epplus.Mapper.Extensions;
 using Fanex.Data.Repository;
 using OfficeOpenXml;
-using SpecialDelete.VoidByCurrency.Criteria;
 using SpecialDelete.VoidByCurrency.Models;
+using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.Excel;
 
@@ -21,15 +21,10 @@ public class SheetControlImp : WorkSheetService<GetTicketsQuery>
         this.repository = repository;
     }
 
-    public void Binding(ExcelWorksheet worksheet, GetTicketsQuery model)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task BindingContent(ExcelWorksheet worksheet, GetTicketsQuery model)
     {
         sheetService.AddTitle(worksheet, model.MatchId);
-        var criteria = new GetMatchCriteria { MatchId = model.MatchId };
+        var criteria = new GetMatchInfoVoidByCurrencyCriteria { MatchId = model.MatchId };
         var match = (await repository.FetchAsync<Match>(criteria)).FirstOrDefault();
         sheetService.AddMatch(worksheet, match);
 

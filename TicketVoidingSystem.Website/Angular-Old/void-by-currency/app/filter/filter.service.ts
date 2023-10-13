@@ -11,12 +11,12 @@ export class FilterService {
     constructor(private httpRequestService: HttpRequestService) { }
 
     getFilterModel(): Observable<FilterModel> {
-        const url = 'SportBook/VoidByCurrency/GetFilterModel';
+        const url = 'api/VoidByCurrency/GetFilterModel';
         return this.httpRequestService.getJson(url);
     }
 
     getMatchDetail(id: string): Observable<MatchViewModel> {
-        const url = 'SportBook/VoidByCurrency/GetMatch';
+        const url = 'api/MatchInfo/GetInfoForVoidByCurrency';
         return this.httpRequestService.postJson({ matchId: parseInt(id, 10) }, url);
     }
 }

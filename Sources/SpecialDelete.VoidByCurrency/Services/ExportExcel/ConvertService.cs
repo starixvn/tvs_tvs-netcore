@@ -22,8 +22,8 @@ public class ConvertServiceImp : ConvertService
             choice = HeaderParlay(doc);
         }
         var betType = BetType(doc, html);
-
-        return betType.Contains("Single Match Parlay") ? choice : choice.AppendWithNewLine(betType).StripHtml();
+        var outputChoice = betType.Contains("Single Match Parlay") ? choice : choice.AppendWithNewLine(betType).StripHtml();
+        return outputChoice.Replace("\r\n", "\n");
     }
 
     private static string HeaderParlay(HtmlDocument doc)

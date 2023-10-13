@@ -14,22 +14,22 @@ export class AppService {
     constructor(private httpRequestService: HttpRequestService) { }
 
     getTicket(queryModel: GetTicketQueryModel): Observable<GroupTicketsViewModel> {
-        const url = 'SportBook/VoidByCurrency/GetTickets';
+        const url = 'api/VoidByCurrency/GetTickets';
         return this.httpRequestService.postJson<GroupTicketsViewModel>(queryModel, url);
     }
 
     exportExcel(queryModel: GetTicketQueryModel) {
-        const url = 'SportBook/VoidByCurrency/ExportExcel';
+        const url = 'api/VoidByCurrency/ExportExcel';
         return this.httpRequestService.downloadFile(queryModel, url);
     }
 
     checkNegativeBalance(queryModel: CheckNegativeBalanceQuery): Observable<Array<NegativeBalance>> {
-        const url = 'Tickets/CheckNegativeBalance';
+        const url = 'api/SharedApi/CheckNegativeBalance';
         return this.httpRequestService.postJson(queryModel, url);
     }
 
     voidTicket(queryModel: VoidTicketQueryModel): Observable<Array<Result>> {
-        const url = 'SportBook/VoidByCurrency/VoidTickets';
+        const url = 'api/VoidByCurrency/VoidTickets';
         return this.httpRequestService.postJson(queryModel, url);
     }
 }

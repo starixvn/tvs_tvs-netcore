@@ -15,8 +15,6 @@ public class VoidTicketsQuery
 
     public string TicketType { get; set; }
 
-    public string SoldTransIds { get; set; }
-
     public IEnumerable<BetId> CricketTransIds { get; set; }
 
     public Message Message { get; set; }
