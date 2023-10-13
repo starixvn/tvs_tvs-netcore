@@ -13,7 +13,7 @@ public interface SheetService
 {
     void AddTitle(ExcelWorksheet worksheet, int matchId);
 
-    void AddMatch(ExcelWorksheet worksheet, Match match);
+    void AddMatch(ExcelWorksheet worksheet, Match? match);
 
     Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query);
 

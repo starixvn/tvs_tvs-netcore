@@ -49,7 +49,7 @@ public class BetListCoreServiceImp : BetListCoreService
         var subTransId = item.SubTransId.ToString(CultureInfo.InvariantCulture);
         var parlayChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{subTransId}'>{subChoice}</div><div id=");
         parlayChoice += $"<div id='divEvent_{subTransId}'></div>";
-        ticketDetail.Odds = betListService.GetOdds(ticket, false);
+        ticketDetail.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         ticketDetail.Stake = betListService.BuildStake(ticket, ticketHelper);
         ticketDetail.Choice = item.IsMixParlay ? parlayChoice : mainChoice;
         ticketDetail.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
@@ -70,7 +70,7 @@ public class BetListCoreServiceImp : BetListCoreService
         };
 
         var outrightChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        ticketDetail.Odds = betListService.GetOdds(ticket, false);
+        ticketDetail.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         ticketDetail.Stake = betListService.BuildStake(ticket, ticketHelper);
         ticketDetail.Choice = outrightChoice;
         ticketDetail.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
