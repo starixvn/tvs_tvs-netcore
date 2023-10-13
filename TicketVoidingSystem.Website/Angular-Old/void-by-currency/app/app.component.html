@@ -1,0 +1,37 @@
+﻿<div class="title">
+    Home / Void By Currency
+</div>
+
+<div id="body">
+    <filter #filter
+            (searchEvent)="searchEvent($event)"
+            (changeMatchEvent)="hideContent($event)"></filter>
+    <match-detail [matchDetail]="matchDetail"
+                  [isShowMatch]="isShowMatch"></match-detail>
+    <tickets-result #ticketsResult
+                    [ticketsViewModel]="ticketsViewModel"
+                    [isShowTickets]="isShowTickets"
+                    (pagingSearchTicket)="pagingSearchTicket($event)"
+                    (exportExcelEvent)="exportExcel($event)"></tickets-result>
+    <span class="message-bettrade"></span>
+    <messages #messages
+              [isShowMessages]="isShowMessages"></messages>
+    <confirmation #confirmation
+                  [isShowConfirm]="isShowConfirm"
+                  (voidEvent)="voidBet($event)"></confirmation>
+</div>
+<modal [modal]="modal" (confirmEvent)="confirmEvent()"></modal>
+<notification [notification]="notification"></notification>
+<checking-permission #checkingPermission [checkingPermissionModel]="checkingPermissionModel" (allow)="voidTickets()"
+    (deny)="notHavePermission()"></checking-permission>
+<tooltip [tooltip]="tooltip"></tooltip>
+<messages-result [messagesResult]="messagesResult"></messages-result>
+
+<div *ngIf="blockUI">
+    <div class="in modal-backdrop spinner-overlay"></div>
+    <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+        <div class="loading-message">
+            <div class="loading"></div>
+        </div>
+    </div>
+</div>

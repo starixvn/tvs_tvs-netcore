@@ -1,0 +1,74 @@
+﻿<div class="filter">
+    <div class="display-flex-between">
+        <div class="remark">
+            <em class="icon-warning"></em>{{remark}}
+        </div>
+        <div class="scroll-filter" (click)="isShowFilter = !isShowFilter">
+            <em [ngClass]="{'icon-scroll-down':isShowFilter, 'icon-scroll-up':!isShowFilter}"></em>
+        </div>
+    </div>
+    <div class="content-filter" *ngIf="isShowFilter">
+        <div class="display-flex-start">
+            <label>
+                MatchId
+                <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId" (blur)="blurMatchId()" autofocus />
+            </label>
+            <label *ngIf="currencies.items.length > 1">
+                Currency
+                <multiple-select class="currencies" [multipleSelect]="currencies"></multiple-select>
+            </label>
+            <label>
+                Ticket Type
+                <select class="form-control" [(ngModel)]="ticketType.value">
+                    <option *ngFor="let item of ticketType.items" [attr.value]="item.value">{{item.name}}</option>
+                </select>
+            </label>
+        </div>
+        <div class="group-licensee">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">
+                            <label>
+                                <input class="check-group-licensee" type="checkbox"
+                                       [(ngModel)]="checkAllLicensee"
+                                       (ngModelChange)="changeCheckAllLicensee()" />
+                                All Licensees
+                            </label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let group of groupLicensees">
+                        <td>
+                            <span [ngClass]="{'icon-collapse':group.isCollapse, 'icon-expand':!group.isCollapse}"
+                                  (click)="group.isCollapse = !group.isCollapse"></span>
+                            <label>
+                                <input type="checkbox"
+                                       [(ngModel)]="group.isChecked"
+                                       (ngModelChange)="group.checkedGroup(); checkAllCheckBox()" />
+                                {{group.groupName}}
+                            </label>
+                        </td>
+                        <td>
+                            <div class="licensee-in-group" [ngClass]="{'hide':group.isCollapse}">
+                                <div class="licensee" *ngFor="let licensee of group.licensees">
+                                    <label>
+                                        <input type="checkbox"
+                                               [(ngModel)]="licensee.isChecked"
+                                               (ngModelChange)="group.checkedLicensee(); checkAllCheckBox()" />
+                                        {{licensee.name}}
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="search">
+            <input type="button" class="submit" value="Search" (click)="searchTicket()" />
+        </div>
+    </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>
