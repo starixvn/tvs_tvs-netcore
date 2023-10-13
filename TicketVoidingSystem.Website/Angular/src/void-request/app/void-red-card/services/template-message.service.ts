@@ -27,7 +27,8 @@ export class TemplateMessageService {
     templateValue.score = this.getLiveScoreForTemplateMessage(voidMatch.logInfoDetail.scoreNormalTicket, voidMatch.logInfoDetail.scoreOfMatch);
     templateValue.isCheckTime = requestDetail.redCardModels[0].filterBy === TVSRequestFilterBy.CHECK_TIME;
     templateValue.isCheckedVar = voidMatch.isCheckedVar;
-  
+    templateValue.isAllNonLiveTickets = voidMatch.voidTicketsMini.isAllNonLiveTickets;
+    
     return templateValue;
   }
 

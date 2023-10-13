@@ -63,7 +63,7 @@
 
     <div [ngClass]="{'display-block': paging.total > 0, 'display-none': paging.total <= 0}">
         <template-message *ngIf="!isArchivedTickets()" #messages [value]="templateValue" [issueTypeId]="issue.issueTypeId"
-            [subIssueTypeId]="issue.subIssueTypeId" [voidFunction]="2" [isAllNonLiveTickets]="ticketsModel.isAllNonLiveTickets">
+            [subIssueTypeId]="issue.subIssueTypeId" [voidFunction]="2">
         </template-message>
         <confirmation #confirmation (voidAll)="voidAll()" [isDisabledButton]="isBlockBetList"></confirmation>
     </div>

@@ -38,7 +38,6 @@ export class TemplateMessageComponent implements OnChanges {
   @Input() issueTypeId: number;
   @Input() isShowMessages = true;
   @Input() voidFunction?: number;
-  @Input() isAllNonLiveTickets = false;
 
   @ViewChild('messages') messagesComponent: MessagesComponent;
 
@@ -331,7 +330,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateScore() {
-    if (this.value.score !== undefined && this.value.score.length > 0 && !this.isAllNonLiveTickets) {
+    if (this.value.score !== undefined && this.value.score.length > 0 && !this.value?.isAllNonLiveTickets) {
       const score: TemplateContent = {
         msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score}) `,
         msgChineseTraditional: `(${TemplateContentConst.SCORE.msgChineseTraditional} ${this.value.score}) `,
@@ -345,7 +344,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateScoreHaveText() {
-    if (this.value.score !== undefined && this.value.score.length > 0 && !this.isAllNonLiveTickets) {
+    if (this.value.score !== undefined && this.value.score.length > 0 && !this.value?.isAllNonLiveTickets) {
       const score: TemplateContent = {
         msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
         msgChineseTraditional:

@@ -57,8 +57,8 @@ export class TemplateValue {
   correctOdds?: string;
   filterOuType?: string;
   ouValue?: string;
-
   isCheckedVar?: boolean;
   playerName?: TemplateContent;
   numberOfCorner?: number;
+  isAllNonLiveTickets?: boolean
 }

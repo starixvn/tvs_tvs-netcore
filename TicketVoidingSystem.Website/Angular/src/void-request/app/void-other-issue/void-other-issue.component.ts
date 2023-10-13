@@ -292,6 +292,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.templateValue.checkSettled = this.checkSettled();
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
     this.templateValue.toTransTime = this.ticketsModel.toTime;
+    this.templateValue.isAllNonLiveTickets = this.ticketsModel.isAllNonLiveTickets;
     this.updateTemplateValueForAbnormalBet();
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
