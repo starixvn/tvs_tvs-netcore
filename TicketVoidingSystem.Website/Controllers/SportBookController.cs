@@ -32,6 +32,6 @@ public class SportBookController : Controller
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency, Policy = Constant.Policy.Read)]
     public IActionResult VoidByCurrency()
     {
-        return View("~/wwwroot/dist/void-by-currency/index.cshtml");
+        return View("~/wwwroot/dist/old-page/void-by-currency/index.cshtml");
     }
 }
