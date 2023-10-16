@@ -26,7 +26,8 @@ class Helper {
     generalBetTypeCombinations: '',
     scoreResult: '',
     reason: '',
-    totalCancelCashOut: 0
+    totalCancelCashOut: 0,
+    cancelCashOutLicenseesName: ''
   };
 }
 
@@ -93,7 +94,8 @@ describe('AppService', () => {
       totalVoidedTickets: 0,
       totalCancelCashOut: 0,
       licenseeNames: '',
-      generalBetTypeCombinations: ''
+      generalBetTypeCombinations: '',
+      cancelCashOutLicenseesName: ''
     };
     mockHttpService.postJson.mockResolvedValue(expectedData);
 

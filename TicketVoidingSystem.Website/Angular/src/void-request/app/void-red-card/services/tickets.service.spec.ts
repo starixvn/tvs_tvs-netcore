@@ -40,7 +40,8 @@ class Helper {
     isCheckedEarlyEvent: false,
     isMainMatch: false,
     isPoolHouseAffected: false,
-    jollyViewLicensee: new AffectedLicensee
+    jollyViewLicensee: new AffectedLicensee,
+    cancelCashOutLicensee: new AffectedLicensee
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,

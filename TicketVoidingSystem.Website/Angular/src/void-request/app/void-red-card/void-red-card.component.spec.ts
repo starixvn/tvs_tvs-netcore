@@ -673,15 +673,15 @@ describe('VoidRedCardComponent', () => {
   it('#isShowAffectedLicenseeArea should return expected', async () => {
     const testCase = [
       {affectedLicensee: Helper.getFakeAffectedLicensee(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
+        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
       {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicensee(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
+        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
       {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicensee(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
+        affectedInstantLicensee: Helper.getFakeAffectedLicensee(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
       {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicensee(), expected: true },
+        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicensee(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
       {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: false },
+        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: false },
     ];
     const voidMatch = new VoidMatch();
     const { instance } = await shallow.render();
@@ -690,6 +690,7 @@ describe('VoidRedCardComponent', () => {
       voidMatch.chinaViewLicensee = x.chinaViewLicensee;
       voidMatch.affectedInstantLicensee = x.affectedInstantLicensee;
       voidMatch.cashOutLicensee = x.cashOutLicensee;
+      voidMatch.cancelCashOutLicensee = x.cancelAnimationFrame;
 
       const actual = instance.isShowAffectedLicenseeArea(voidMatch);
 
