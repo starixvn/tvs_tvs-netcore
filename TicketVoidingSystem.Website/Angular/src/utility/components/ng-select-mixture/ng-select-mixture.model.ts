@@ -51,7 +51,7 @@ export class NgSelectMixtureModel {
 
   getDisplayedText(selectedItem: string[]): string {
     if(this.isSingleItem(selectedItem)) {
-      const x = this.items.find(x => selectedItem.includes(x.value) );
+      const x = this.items.find(y => selectedItem.includes(y.value) );
       return x.name;
     } else {
       return this.getDisplayedAllChildItems();
