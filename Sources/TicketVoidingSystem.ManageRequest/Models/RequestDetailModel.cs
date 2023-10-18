@@ -386,12 +386,21 @@ public class RequestEventModel
         }
     }
 
-    public int BetTypeId
+    public int PlayerId
     {
         get
         {
             var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.BetTypeId;
+            return root.PlayerId;
+        }
+    }
+
+    public string GroupBetTypeIds
+    {
+        get
+        {
+            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
+            return root.GroupBetTypeIds;
         }
     }
 

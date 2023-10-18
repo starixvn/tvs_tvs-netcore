@@ -14,15 +14,14 @@ import { NotParticipateBetType } from '../../models/not-participate-bet-type.mod
 import { FilterNotParticipateService } from '../../services/filter-not-participate.service';
 import { ValidationService } from '../../services/validation.service';
 import { FilterNotParticipateItemComponent } from './filter-not-participate-item.component';
-import { PrimitivePropertyItem } from './filter-not-participate-item.model';
 
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
-    betTypeId: 1,
-    playerIds: ['1', '2'],
-    playerMultipleSelection: new MultipleSelection()
+    playerId: 1,
+    groupBetTypeIds: ['1', '2'],
+    groupBetTypeMultipleSelection: new MultipleSelection()
   };
   static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
     {
@@ -98,10 +97,10 @@ describe('FilterNotParticipateItemComponent', () => {
     const component = new FilterNotParticipateItemComponent(null, null, null);
     component.originalNotParticipateBetTypes = Helper.fakeNotParticipateBetTypes;
     component.model = Helper.fakeFilterNotParticipateModel;
-    component.updateCheckedBetTypes = jest.fn();
+    component.updateCheckedPlayer = jest.fn();
     component.ngOnInit();
 
-    expect(component.updateCheckedBetTypes).toHaveBeenCalledTimes(1);
+    expect(component.updateCheckedPlayer).toHaveBeenCalledTimes(1);
   });
 
   it('changeFilter should emit #changeFilterEvent', async () => {
@@ -128,7 +127,7 @@ describe('FilterNotParticipateItemComponent', () => {
     component.model = new FilterNotParticipateModel();
     component.updateCheckedPlayers(checkedPlayerIds);
 
-    expect(component.model.playerIds).toEqual(checkedPlayerIds);
+    expect(component.model.groupBetTypeIds).toEqual(checkedPlayerIds);
   });
 
   it('addBetTypeItem should emit #addItemEvent', async () => {
@@ -178,46 +177,29 @@ describe('FilterNotParticipateItemComponent', () => {
     component.originalNotParticipateBetTypes = _.cloneDeep(Helper.fakeNotParticipateBetTypes);
     component.originalPlayers = Helper.fakePlayers;
     component.model = new FilterNotParticipateModel();
-    component.model.playerMultipleSelection = new MultipleSelection();
-    component.model.playerMultipleSelection.getDisplayedItems = jest.fn();
+    component.model.groupBetTypeMultipleSelection = new MultipleSelection();
+    component.model.groupBetTypeMultipleSelection.getDisplayedItems = jest.fn();
     component['renderPlayerByBetType'](1);
 
-    expect(component.model.playerMultipleSelection.items).toEqual(Helper.fakeItemsSelect);
+    expect(component.model.groupBetTypeMultipleSelection.items).toEqual(Helper.fakeItemsSelect);
   });
 
   it('resetValue should update playerIds to []', async () => {
     const component = new FilterNotParticipateItemComponent(null, null, null);
     component.model = Helper.fakeFilterNotParticipateModel;
-    component.model.betTypeId = 2;
+    component.model.playerId = 2;
     component['resetValue'](1);
 
-    expect(component.model.playerIds).toEqual([]);
+    expect(component.model.groupBetTypeIds).toEqual([]);
   });
 
   it('resetValue should not update playerIds to []', async () => {
     const component = new FilterNotParticipateItemComponent(null, null, null);
     component.model = Helper.fakeFilterNotParticipateModel;
-    component.model.betTypeId = 2;
-    component.model.playerIds = ['1'];
+    component.model.playerId = 2;
+    component.model.groupBetTypeIds = ['1'];
     component['resetValue'](2);
 
-    expect(component.model.playerIds).toEqual(['1']);
-  });
-
-  it('updateCheckedBetTypes should emit #changeBetTypeEvent', async () => {
-    const selectedBetType = new NotParticipateBetType();
-    const component = new FilterNotParticipateItemComponent(null, null, null);
-    component.model = Helper.fakeFilterNotParticipateModel;
-    component.primitivePropertyItem = new PrimitivePropertyItem();
-    component.changeBetTypeEvent.emit = jest.fn();
-    component['renderPlayerByBetType'] = jest.fn();
-    component['resetValue'] = jest.fn();
-
-    component.updateCheckedBetTypes(selectedBetType);
-
-    expect(component.changeBetTypeEvent.emit).toHaveBeenCalledTimes(1);
-    expect(component['renderPlayerByBetType']).toHaveBeenCalledWith(Helper.fakeFilterNotParticipateModel.betTypeId);
-    expect(component['resetValue']).toHaveBeenCalledWith(selectedBetType.betTypeId);
-    expect(component.primitivePropertyItem.isDisabledPlayer).toBeFalsy();
+    expect(component.model.groupBetTypeIds).toEqual(['1']);
   });
 });

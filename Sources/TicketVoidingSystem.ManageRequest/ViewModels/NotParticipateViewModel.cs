@@ -8,7 +8,7 @@ public class NotParticipateViewModel
     public int MatchId { get; set; }
     public int IssueTypeId { get; set; }
     public int SubIssueTypeId { get; set; }
-    public int BetTypeId { get; set; }
-    public string? PlayerIds { get; set; }
+    public int PlayerId { get; set; }
+    public string GroupBetTypeIds { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
 }

@@ -12,9 +12,9 @@ class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
-    betTypeId: 0,
-    playerIds: [],
-    playerMultipleSelection: new MultipleSelection()
+    playerId: 0,
+    groupBetTypeIds: [],
+    groupBetTypeMultipleSelection: new MultipleSelection()
   };
   static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
     {

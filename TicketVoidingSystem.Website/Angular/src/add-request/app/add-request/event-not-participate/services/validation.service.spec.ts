@@ -4,7 +4,6 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
-import { PrimitivePropertyItem } from '../filter-not-participate/filter-not-participate-item/filter-not-participate-item.model';
 import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
@@ -74,8 +73,8 @@ describe('ValidationService', () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const filterModel = new FilterNotParticipateModel();
-    filterModel.betTypeId = null;
-    const actual = service.isAllFieldsHaveValue(filterModel, 1, new PrimitivePropertyItem(), tooltip);
+    filterModel.playerId = null;
+    const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
 
     expect(actual).toBeFalsy();
     expect(tooltip.display).toHaveBeenCalledTimes(1);
@@ -84,12 +83,10 @@ describe('ValidationService', () => {
   it('#isAllFieldsHaveValue should return false when playerIds invalid', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const primitiveProps = new PrimitivePropertyItem();
-    primitiveProps.isDisabledPlayer = false;
     const filterModel = new FilterNotParticipateModel();
-    filterModel.betTypeId = 1;
-    filterModel.playerIds = [];
-    const actual = service.isAllFieldsHaveValue(filterModel, 1, primitiveProps, tooltip);
+    filterModel.playerId = 1;
+    filterModel.groupBetTypeIds = [];
+    const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
 
     expect(actual).toBeFalsy();
     expect(tooltip.display).toHaveBeenCalledTimes(1);
@@ -98,12 +95,10 @@ describe('ValidationService', () => {
   it('#isAllFieldsHaveValue should return true', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
-    const primitiveProps = new PrimitivePropertyItem();
-    primitiveProps.isDisabledPlayer = false;
     const filterModel = new FilterNotParticipateModel();
-    filterModel.betTypeId = 1;
-    filterModel.playerIds = ['1'];
-    const actual = service.isAllFieldsHaveValue(filterModel, 1, primitiveProps, tooltip);
+    filterModel.playerId = 1;
+    filterModel.groupBetTypeIds = ['1'];
+    const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
 
     expect(actual).toBeTruthy();
   })

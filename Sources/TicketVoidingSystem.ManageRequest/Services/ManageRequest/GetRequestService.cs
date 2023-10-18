@@ -228,8 +228,8 @@ public class GetRequestServiceImp : GetRequestService
             EventDate = model.EventDate,
             MatchId = model.MatchId,
             SubIssueTypeId = model.SubIssueTypeId,
-            BetTypeId = model.BetTypeId,
-            PlayerIds = model.PlayerIds,
+            PlayerId = model.PlayerId,
+            GroupBetTypeIds = model.GroupBetTypeIds,
         });
     }
 

@@ -41,9 +41,9 @@ class Helper {
     messageValidationLogInfo: []
   };
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
-    betTypeId: 1,
-    playerIds: [],
-    playerMultipleSelection: new MultipleSelection()
+    playerId: 1,
+    groupBetTypeIds: [],
+    groupBetTypeMultipleSelection: new MultipleSelection()
   };
   static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
     {

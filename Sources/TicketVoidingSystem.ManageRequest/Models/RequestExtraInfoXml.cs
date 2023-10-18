@@ -99,5 +99,9 @@ public class RequestExtraInfoXml
     public bool NonLive { get; set; }
 
     [XmlAttribute(AttributeName = "BetTypeId")]
-    public int BetTypeId { get; set; } // NotParticipate single option
+    public int PlayerId { get; set; } // NotParticipate
+
+    [XmlAttribute(AttributeName = "GroupBetTypeIds")]
+    public string GroupBetTypeIds { get; set; } // NotParticipate
+
 }

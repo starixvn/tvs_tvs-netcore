@@ -1,10 +1,23 @@
-.bet-type-dropdown {
+.player-dropdown {
   width: 300px;
+}
+
+.filter-group-bet-type ng-select {
+  width: 200px;
 }
 
 .filter-not-participate {
   ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
     font-style: italic;
+  }
+
+  ::ng-deep .ng-value {
+    background-color: transparent !important;
+    border: none !important;
+  }
+
+  ::ng-deep .ng-placeholder {
+    z-index: 0 !important;
   }
 }
 multiple-selection[class*='player-dropdown'] {

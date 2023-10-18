@@ -1,24 +1,44 @@
 <div class="d-flex filter-not-participate">
-  <ng-select class="bet-type-dropdown mr-2"
+  <ng-select class="player-dropdown mr-2"
     [disabled]="isVoided"
-    [items]="originalNotParticipateBetTypes"
-    bindLabel="betTypeName"
-    bindValue="betTypeId"
-    [(ngModel)]="model.betTypeId"
+    [items]="originalPlayers"
+    bindLabel="playerName"
+    bindValue="playerId"
+    [(ngModel)]="model.playerId"
     [clearable]="false"
-    placeholder="Select bet type"
-    (change)="changeFilter();updateCheckedBetTypes($event)">
+    placeholder="Select player"
+    (change)="changeFilter()">
   </ng-select>
-  <ng-container>
+  <!-- <ng-container>
     <multiple-selection *ngIf="!primitivePropertyItem.isDisabledPlayer"
-      class="multiple-selection player-dropdown{{index}} mr-2"
-      [selectedItems]="model.playerIds"
+      class="multiple-selection group-bet-type-dropdown{{index}} mr-2"
+      [selectedItems]="model.groupBetTypeIds"
       [isDisabled]="isVoided"
-      [multipleSelect]="model.playerMultipleSelection"
+      [multipleSelect]="model.groupBetTypeMultipleSelection"
       (checkedItems)="changeFilter();updateCheckedPlayers($event)">
     </multiple-selection>
     <div class="invalid-field mr-2" *ngIf="primitivePropertyItem.isDisabledPlayer"></div>
-  </ng-container>
+  </ng-container> -->
+  <div class="filter-group-bet-type d-flex mr-2">
+    <ng-select class="group-bet-type-dropdown{{index}}" [items]="groupBetTypes" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+      [clearable]="false" [(ngModel)]="model.groupBetTypeIds" bindValue="value" (change)="changeFilter()"
+      [disabled]="false" groupBy="group" [selectableGroup]="true"
+      [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
+      <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
+      </ng-template>
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
+      </ng-template>
+      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+        <div class="ng-value">
+          <span class="ng-value-label">
+            {{items.length === groupBetTypes.length ? 'All' : items.length + ' selected'}}
+          </span>
+        </div>
+      </ng-template>
+    </ng-select>
+  </div>
   <div *ngIf="!(isFirst && isLast)"class="d-flex align-items-center mr-2">
     <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)" [ngClass]="{'cursor-not-allowed': isVoided}"></em>
   </div>

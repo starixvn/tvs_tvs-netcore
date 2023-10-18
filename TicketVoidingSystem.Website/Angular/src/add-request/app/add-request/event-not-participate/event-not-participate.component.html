@@ -12,11 +12,9 @@
   [isEdit]="isEdit"
   [isVoided]="filter.isVoided"
   [models]="logInfoEvent.filterNotParticipates"
-  [originalNotParticipateBetTypes]="originalNotParticipateBetTypes"
   [originalPlayers]="originalPlayers"
   [matchId]="logInfoEvent.matchId"
   (changeFilterEvent)="resetLogInfoOfEvent()">
-
 </filter-not-participate>
 <div class="mb-3 d-flex">
   <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"

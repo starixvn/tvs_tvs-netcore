@@ -3,7 +3,6 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
-import { PrimitivePropertyItem } from '../filter-not-participate/filter-not-participate-item/filter-not-participate-item.model';
 import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
@@ -13,14 +12,8 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
   providedIn: 'root'
 })
 export class ValidationService {
-  private readonly BET_TYPE_CLASS = 'bet-type-dropdown';
-  private readonly WICKET_OVER_CLASS = 'wicket-over-input';
   private readonly PLAYER_CLASS = 'player-dropdown';
-  private readonly RUNS_CLASS = 'runs-input';
-  private readonly LIVE_INDICATOR_CLASS = 'live-indicator';
-
-  constructor() {
-  }
+  private readonly GROUP_BET_TYPE_CLASS = 'group-bet-type-dropdown';
 
   public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, filterNotParticipateComponent: FilterNotParticipateComponent): boolean {
     if (!leagueEventComponent.isMatchIdValid()) {
@@ -34,14 +27,14 @@ export class ValidationService {
     return true;
   }
 
-  public isAllFieldsHaveValue(model: FilterNotParticipateModel, index: number, primitivePropertyItem: PrimitivePropertyItem, tooltip: Tooltip): boolean {
-    if (!model.betTypeId) {
-      tooltip.display(`${this.BET_TYPE_CLASS}${index}`, TEXT.REQUIRED_FIELD);
+  public isAllFieldsHaveValue(model: FilterNotParticipateModel, index: number, tooltip: Tooltip): boolean {
+    if (!model.playerId) {
+      tooltip.display(`${this.PLAYER_CLASS}${index}`, TEXT.REQUIRED_FIELD);
       return false;
     }
 
-    if (!primitivePropertyItem.isDisabledPlayer && model.playerIds.length === 0) {
-      tooltip.display(`${this.PLAYER_CLASS}${index}`, TEXT.REQUIRED_FIELD);
+    if (model.groupBetTypeIds.length === 0) {
+      tooltip.display(`${this.GROUP_BET_TYPE_CLASS}${index}`, TEXT.REQUIRED_FIELD);
       return false;
     }
 

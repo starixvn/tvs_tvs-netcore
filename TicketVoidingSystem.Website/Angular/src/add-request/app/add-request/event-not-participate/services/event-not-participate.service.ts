@@ -31,8 +31,8 @@ export class EventNotParticipateService {
 
   private createFilterNotParticipateModel(inputModel: NotParticipateModel): FilterNotParticipateModel {
     const model = new FilterNotParticipateModel();
-    model.betTypeId = inputModel.betTypeId;
-    model.playerIds = inputModel.playerIds.split(',');
+    model.playerId = inputModel.betTypeId;
+    model.groupBetTypeIds = inputModel.playerIds.split(',');
 
     return model;
   }
@@ -41,16 +41,16 @@ export class EventNotParticipateService {
     const model = new NotParticipateGetLogInfoQuery();
     model.matchId = matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.betTypeId = inputModel.betTypeId
-    model.playerIds = inputModel.playerIds.join(',');
+    model.betTypeId = inputModel.playerId
+    model.playerIds = inputModel.groupBetTypeIds.join(',');
 
     return model;
   }
 
   private createNotParticipateModel(inputModel: FilterNotParticipateModel, matchId: number, subIssueTypeId: number, logInfoDetail: LogInfoDetail): NotParticipateModel {
     const model = new NotParticipateModel();
-    model.betTypeId = inputModel.betTypeId
-    model.playerIds = inputModel.playerIds.join(',');
+    model.betTypeId = inputModel.playerId
+    model.playerIds = inputModel.groupBetTypeIds.join(',');
     model.matchId = matchId;
     model.subIssueTypeId = subIssueTypeId;
     model.logInfoDetail = logInfoDetail;
