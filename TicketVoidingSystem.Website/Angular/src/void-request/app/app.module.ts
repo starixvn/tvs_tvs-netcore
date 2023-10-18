@@ -40,7 +40,7 @@ import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick
     LogInfoNewComponent,
     VoidDuplicateTicketsComponent,
     VoidRedCardComponent,
-    VoidNotParticipateComponent
+    VoidNotParticipateComponent,
     VoidEarlyKickOffComponent
   ],
   imports: [

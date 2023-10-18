@@ -26,7 +26,7 @@ export class VoidPageService {
     return this.commonService.getIssueTypes();
   }
 
-  async getBasicVoidMatchesData(issueTypes: IssueTypesModel, requestDetail: RequestDetailViewModel): Promise<VoidPageEarlyKickOffModel[]> {
+  async getBasicVoidPageItemsData(issueTypes: IssueTypesModel, requestDetail: RequestDetailViewModel): Promise<VoidPageEarlyKickOffModel[]> {
     const voidMatches: VoidPageEarlyKickOffModel[] = [];
     const basicRequestInfo = this.initBasicRequestInfo(requestDetail);
     for (const element of basicRequestInfo) {
@@ -36,13 +36,14 @@ export class VoidPageService {
       voidMatchInfo.matchModel = await this.commonService.getMatch(element.matchId);
       voidMatchInfo.isMainMatch = element.isMainMatch;
       voidMatchInfo.isShowTemplateMessage = false;
+      voidMatchInfo.detailViewModel = requestDetail;
       voidMatches.push(voidMatchInfo);
     }
 
     return voidMatches;
   }
 
-  async loadUnderneathVoidMatchesData(voidMatches: VoidPageEarlyKickOffModel[], requestDetail: RequestDetailViewModel): Promise<void> {
+  async loadUnderneathVoidPageItemsData(voidMatches: VoidPageEarlyKickOffModel[], requestDetail: RequestDetailViewModel): Promise<void> {
     for (const element of voidMatches) {
       const ticketQuery = this.ticketsService.initTicketQuery(requestDetail, element.matchModel);
       element.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
