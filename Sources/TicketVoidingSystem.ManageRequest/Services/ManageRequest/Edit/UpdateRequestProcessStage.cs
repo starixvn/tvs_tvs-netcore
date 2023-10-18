@@ -77,7 +77,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
-        command.KickOffInfo = query.EarlyKickOffInfo?.ToKickOffInfoXml();
+        command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
 
         return command;
     }

@@ -34,7 +34,13 @@ export class LogInfoEkoComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     if (this.isEdit) {
-      this.logInfo.isShowValidation = true;
+      if (this.logInfo.isMainMatch) {
+        this.logInfo.isShowValidation = true;
+        this.logInfo.isCollapse = false;
+      } else {
+        this.logInfo.isShowValidation = false;
+        this.logInfo.isCollapse = true;
+      }
     }
   }
 

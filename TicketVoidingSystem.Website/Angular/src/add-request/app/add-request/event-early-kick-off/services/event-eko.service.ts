@@ -21,6 +21,7 @@ export class EventEarlyKickOffService {
       event.isMainMatch = x.isMainMatch;
       event.eventName = x.name;
       event.kickOffTime = x.kickOffTime;
+      event.subIssueTypeId = x.subIssueTypeId;
 
       allEvents.push(event);
     });
