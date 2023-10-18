@@ -203,7 +203,7 @@ public class LogInfoServiceImp : LogInfoService
             LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
         });
     }
-    
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {

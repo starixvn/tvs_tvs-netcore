@@ -168,7 +168,6 @@ export class LogInfoService {
     });
   }
    private async getLogInfoNotParticipate(args: LogInfoArg): Promise<void> {
-    args.primitiveProperty.isBlock = true;
     const models = MappingModelStaticService.buildNotParticipateGetLogInfoModel(args.detailViewModel.notParticipateModels);
     const query = new GetLogInfoQuery();
     query.requestId = args.primitiveProperty.requestId;
@@ -182,7 +181,6 @@ export class LogInfoService {
       const model = args.detailViewModel.notParticipateModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
     });
-    args.primitiveProperty.isBlock = false;
   }
 
   // private async getLogInfoEarlyKickOff(args: LogInfoArg): Promise<void> {

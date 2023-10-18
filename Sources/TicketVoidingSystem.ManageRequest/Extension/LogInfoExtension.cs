@@ -202,13 +202,13 @@ public static class LogInfoExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string GetAbnormalAccountInfoXml(string usernames, string productIds, string statusIds, DateTime? fromDate, DateTime? toDate)
+    public static string ToAbnormalAccountInfoXml(this AbnormalAccountViewModel model)
     {
         return $"<root><r Usernames='{model.Usernames}' "
-                + $"ProductIds='{model.ProductIds}' "
-                + $"StatusIds='{model.StatusIds}' "
-                + $"FromDate='{model.FromDate}' "
-                + $"ToDate='{model.ToDate}'/></root>";
+               + $"ProductIds='{model.ProductIds}' "
+               + $"StatusIds='{model.StatusIds}' "
+               + $"FromDate='{model.FromDate}' "
+               + $"ToDate='{model.ToDate}'/></root>";
     }
 
     public static string ToKickOffInfoXml(this IEnumerable<EarlyKickOffViewModel> models)
