@@ -84,6 +84,13 @@ export class TemplateService {
     }
   }
 
+  replaceEventDate(message: Message, value: string){
+    let kickOffTimeDateGMT8 = new Date(value);
+    kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
+    let eventDate = moment(kickOffTimeDateGMT8).format(Format.EVENT_DATE);
+    this.replaceAll(message, TemplateReplace.EVENT_DATE, eventDate);
+  }
+  
   replaceKickOffTime(message: Message, time: string) {
     const kickOffTime = moment(new Date(time)).format(TemplateContentConst.DATE_TIME);
     const replacedContent: TemplateContent = {

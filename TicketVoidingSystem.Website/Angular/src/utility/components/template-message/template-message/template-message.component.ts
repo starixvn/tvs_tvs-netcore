@@ -180,14 +180,11 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   replaceValue() {
-    let kickOffTimeDate = new Date(this.value.kickOffTime);
-    kickOffTimeDate.setHours(kickOffTimeDate.getHours() - 12);
-    let eventDate = moment(kickOffTimeDate).format(Format.EVENT_DATE);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.SPORT_TYPE, this.value.sportType);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.HOME_TEAM_NAME, this.value.homeTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.AWAY_TEAM_NAME, this.value.awayTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.LEAGUE_NAME, this.value.leagueName);
-    this.templateService.replaceAll(this.message, TemplateReplace.EVENT_DATE, eventDate);
+    this.templateService.replaceEventDate(this.message, this.value.kickOffTime);
     this.templateService.replaceTime(this.message, this.value, this.selectedTemplated.templateId);
     this.templateService.replaceKickOffTime(this.message, this.value.kickOffTime);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.PLAYER_NAME, this.value.playerName);
