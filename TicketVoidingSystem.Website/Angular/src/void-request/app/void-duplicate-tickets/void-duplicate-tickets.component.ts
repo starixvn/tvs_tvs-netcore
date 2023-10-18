@@ -65,7 +65,6 @@ export class VoidDuplicateTicketsComponent implements OnInit {
 
   isShowAffectedLicenseeArea(voidPageItem: VoidPageDuplicateTicketsModel): boolean {
     return this.voidPageCommonService.isShowAffectedLicenseeArea(voidPageItem);
-      || voidPageItem.cancelCashOutLicensee.show && voidPageItem.cancelCashOutLicensee.licenseesName.length > 0;
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {
