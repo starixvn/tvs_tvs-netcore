@@ -224,8 +224,21 @@ export class TemplateMessageComponent implements OnChanges {
       SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
       SubIssueTypeId.TECHNICAL_ERROR
     ];
-    return (issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
-      && this.value.eventDate === moment(new Date()).format(Format.EVENT_DATE);
+    if((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
+      && this.value.eventDate !== moment(new Date()).format(Format.EVENT_DATE))
+    {
+      return false;
+    };
+
+    const issueTypesHasCheckBoxEarlyEvent = [
+      IssueTypeId.WRONG_ODDS,
+      IssueTypeId.WRONG_HDP,
+      IssueTypeId.WRONG_1ST_HDP,
+      IssueTypeId.WRONG_OU,
+      IssueTypeId.WRONG_1ST_OU
+    ];
+
+    return (issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && !this.value.isCheckedEarlyEvent);
   }
 
   updateInputs() {
