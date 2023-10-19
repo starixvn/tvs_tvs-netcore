@@ -405,7 +405,7 @@ export class AdvancedModeComponent implements OnChanges {
       }
     } else {
       odds.forEach(x => {
-        items.push(new Selection(x.playerName, x.playerId, null, true, null));
+        items.push(new Selection(x.playerName, x.playerId.toString(), null, true, null));
       });
     }
 

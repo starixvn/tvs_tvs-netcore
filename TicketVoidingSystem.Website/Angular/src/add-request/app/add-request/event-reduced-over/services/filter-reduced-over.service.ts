@@ -100,7 +100,7 @@ export class FilterReducedOverService {
   }
 
   public renderPlayer(oddsInfoList: OddsInfo[]): ItemsSelect[] {
-    const model = oddsInfoList.map(x => new ItemsSelect(0, x.playerId, x.playerName, false, true, true, []));
+    const model = oddsInfoList.map(x => new ItemsSelect(0, x.playerId.toString(), x.playerName, false, true, true, []));
     model.forEach(x => x.checkFromChilds());
     return model;
   }

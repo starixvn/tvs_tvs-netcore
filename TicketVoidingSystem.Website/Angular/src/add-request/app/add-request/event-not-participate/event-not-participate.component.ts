@@ -6,7 +6,6 @@ import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
-import { NotParticipateBetType } from './models/not-participate-bet-type.model';
 import { Player } from './models/player.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
@@ -37,7 +36,6 @@ export class EventNotParticipateComponent implements OnInit {
 
   logInfoEvent = new LogInfoNotParticipate();
   primitivePropertyEvent = new PrimitivePropertyEvent();
-  originalNotParticipateBetTypes: NotParticipateBetType[];
   originalPlayers: Player[];
 
   constructor(
@@ -60,8 +58,7 @@ export class EventNotParticipateComponent implements OnInit {
 
   private async updateModelWhenChangeMatchId(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.originalNotParticipateBetTypes = await this.filterService.getNotParticipateBetTypes(this.logInfoEvent.matchId);
-    this.originalPlayers = await this.filterService.getPlayers(this.logInfoEvent.matchId, this.originalNotParticipateBetTypes.map(x => x.betTypeId).join(','));
+    this.originalPlayers = await this.filterService.getPlayers(this.logInfoEvent.matchId);
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 

@@ -687,9 +687,9 @@ export class Player {
 }
 
 export class OddsInfo {
-  betTypeId: string;
+  betTypeId: number;
   oddsId: string;
-  playerId: string;
+  playerId: number;
   playerName: string;
   betChoice: string;
   playNamesChineseTraditional: string;

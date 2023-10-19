@@ -43,7 +43,7 @@ export class FilterNotParticipateComponent {
   }
 
   private updateStatusItem(): void {
-    this.originalPlayers.forEach(x => x.disabled = this.models.some(y => y.playerId.toString() === x.playerId));
+    this.originalPlayers.forEach(x => x.disabled = this.models.some(y => y.playerId === x.playerId));
     this.originalPlayers = _.cloneDeep(this.originalPlayers);
   }
 }
