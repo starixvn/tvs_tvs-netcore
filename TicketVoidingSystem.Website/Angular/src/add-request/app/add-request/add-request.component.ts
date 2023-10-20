@@ -79,7 +79,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.blockingUiSubscription = this.addRequestStore.blockingUiStatus.subscribe(status => {
-      this.isBlock = status;
+      this.isBlock = status.length > 0;
     });
 
     this.abnormalFilterBySubscription = this.addRequestStore.getAbnormalFilterBySubject.subscribe(type => {

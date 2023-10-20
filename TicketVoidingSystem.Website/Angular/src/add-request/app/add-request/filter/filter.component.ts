@@ -302,7 +302,6 @@ export class FilterComponent implements OnInit, OnChanges {
       this.updateSubByIssue();
     }
     this.addRequestStore.changeBlockingUiStatus(false);
-
   }
 
   filterIssueTypePermission(issues: IssueTypes) {

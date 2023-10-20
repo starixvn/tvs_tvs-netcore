@@ -19,7 +19,6 @@ export class OthersComponent implements OnChanges, OnInit {
   @Input() model = new OthersModel();
   @Output() modelChange = new EventEmitter<OthersModel>();
   isCollapse: boolean;
-  isBlock: boolean;
 
   operators: OperatorInfo[] = [];
   groupOperators: GroupOperator[] = [];

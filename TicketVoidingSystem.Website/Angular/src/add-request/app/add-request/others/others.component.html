@@ -22,7 +22,7 @@
               maxlength="200">
           </div>
         </div>
-           
+
         <div class="col-6 col-sm-6 col-md-4" *ngFor="let group of groupOperators">
           <label class="col-form-label">{{group.name}}</label>
           <div class="operator-list">
@@ -47,7 +47,7 @@
             <input type="text" class="form-control form-control-sm" [(ngModel)]="model.provider" (change)="updateModel()">
           </div>
         </div>
-  
+
         <div class="col-6 col-sm-6 col-md-4">
           <label class="col-form-label">Source</label>
           <div class="input-area">

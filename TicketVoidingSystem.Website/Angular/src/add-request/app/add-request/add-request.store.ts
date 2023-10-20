@@ -7,7 +7,7 @@ export class AddRequestStore {
   private readonly savingRequestStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private readonly checkValidSubIssueTypeInFilterSubject: Subject<null> = new Subject();
   private readonly allowanceTimeSubject: Subject<AllowanceTime> = new Subject();
-  private readonly blockingUiStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private readonly blockingUiStatusSubject: BehaviorSubject<boolean[]> = new BehaviorSubject([]);
   private readonly changeActionWaitingToManualEditPageSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private readonly abnormalFilterBySubject: Subject<number> = new Subject();
 
@@ -38,12 +38,15 @@ export class AddRequestStore {
     this.allowanceTimeSubject.next(model);
   }
 
-  get blockingUiStatus(): Observable<boolean> {
+  get blockingUiStatus(): Observable<boolean[]> {
     return this.blockingUiStatusSubject.asObservable();
   }
 
   changeBlockingUiStatus(newValue: boolean): void {
-    this.blockingUiStatusSubject.next(newValue);
+    let value: boolean[] = [];
+    this.blockingUiStatus.subscribe(x => { value = x });
+    newValue ? value.push(newValue) : value.pop();
+    this.blockingUiStatusSubject.next(value);
   }
   
   get getChangeActionWaitingToManualEditPageSubject(): Observable<boolean> {
