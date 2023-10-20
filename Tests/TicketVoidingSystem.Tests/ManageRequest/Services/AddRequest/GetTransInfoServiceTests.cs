@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
@@ -58,13 +57,9 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
             WrongOddsModels = new List<WrongOddsViewModel>(),
             ReducedOverModels = new List<ReducedOverViewModel>(),
             MatchId = 1,
-            KickOffTime = DateTime.Now,
-            Usernames = "a",
-            ProductIds = "1",
-            StatusIds = "1",
             TransIds = "1",
-            FromDate = DateTime.Now,
-            ToDate = DateTime.Now
+            EarlyKickOffModels = new List<EarlyKickOffViewModel>(),
+            AbnormalAccountViewModel = new AbnormalAccountViewModel()
         };
         repository.GetAsync<string>(Arg.Any<GetTicketSiteDbCriteria>()).ReturnsForAnyArgs("ss");
 

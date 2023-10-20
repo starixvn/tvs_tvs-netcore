@@ -69,7 +69,7 @@ public class UpdateRequestProcessStageTests
 
         // Assert
         await repository.Received(1).ExecuteAsync(Arg.Any<EditRequestCommand>());
-        await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId);
+        await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, null);
         AssertExtension.Equal(expected, actual);
     }
 

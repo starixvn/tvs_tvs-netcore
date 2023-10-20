@@ -536,7 +536,7 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         {
             IssueTypeId = issueTypeId,
             MatchId = matchId,
-            KickOffTime = DateTime.Now
+            EarlyKickOffModels = new List<EarlyKickOffViewModel>{new(){ MatchId  = 996063 } }
         };
         repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
         session.UserId.ReturnsForAnyArgs(userId);
