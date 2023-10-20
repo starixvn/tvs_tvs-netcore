@@ -77,4 +77,8 @@ export class VoidEarlyKickOffComponent implements OnInit {
   updateDetailViewModel(): void {
     this.voidPageItems[0].detailViewModel = this.requestDetail;
   }
+
+  getKickOffDate(matchId: number): string {
+    return this.requestDetail.earlyKickOffModels.find(x => x.matchId === matchId).kickOffTime;
+  }
 }
