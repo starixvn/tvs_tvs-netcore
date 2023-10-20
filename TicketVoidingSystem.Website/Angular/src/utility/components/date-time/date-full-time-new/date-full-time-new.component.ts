@@ -65,12 +65,17 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
       this.tooltip.display(`time-input${this.index}`, `Invalid Date Time format. The correct format is "${this.dateTimeFormat}"`);
       return false;
     }
+    this.getDateTime();
 
+    return true;
+  }
+
+  public getDateTime(): string {
     this.time = CommonStaticService.convertToStrictTimeFormat(this.time, this.timeFormat);
     this.dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`,this.dateTimeFormat, true).format(this.dateTimeFormat);
     this.dateTimeChange.emit(this.dateTime);
 
-    return true;
+    return this.dateTime;
   }
 
   public isTimeValid(): boolean {

@@ -95,6 +95,7 @@ export class EventEarlyKickOffComponent implements OnInit {
 
   public changeKickOffTime(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
+    this.allSelectedEvents.forEach(x => x.kickOffTime = this.kickOffTimeComponent.getDateTime())
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
@@ -147,6 +148,7 @@ export class EventEarlyKickOffComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
     arg.leagueEventComponent = this.leagueEventComponent;
     arg.allEvents = this.allSelectedEvents;
+    arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;
     arg.tooltip = this.tooltip;
     arg.kickOffTimeComponent = this.kickOffTimeComponent;

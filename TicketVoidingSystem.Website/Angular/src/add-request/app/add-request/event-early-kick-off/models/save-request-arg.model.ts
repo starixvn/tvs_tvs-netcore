@@ -17,6 +17,7 @@ export class SaveRequestArg {
   others: OthersModel;
   primitiveProps: PrimitiveProperty;
   allEvents: LogInfoEarlyKickOff[];
+  mainEvent: LogInfoEarlyKickOff;
   leagueEventComponent: LeagueEventRedCardComponent;
   tooltip: Tooltip;
   kickOffTimeComponent: DateFullTimeNewComponent;
