@@ -42,11 +42,10 @@ public class GetPoolHouseTicketHandlerTests
     [InlineData(7, false, true, 1, true)]
     [InlineData(2, true, false, 6, true)]
     [InlineData(2, true, false, 120, true)]
-    [InlineData(2, false, true, 9, true)]
+    [InlineData(2, false, true, 119, true)]
     [InlineData(2, false, false, 121, false)]
     public async Task Handler_Successful_ReturnModelExpected(int issueTypeId, bool isAffectedGroup1X2,
-        bool isAffectedGroup1H1X2, int subIssueTypeId,
-        bool isLinkGroup1X2)
+        bool isAffectedGroup1H1X2, int subIssueTypeId, bool isLinkGroup1X2)
     {
         // Arrange
         var wrongOddsInfo = new List<WrongOddsViewModel> { new() };

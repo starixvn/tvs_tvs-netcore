@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnInit, SimpleChange } from '@angular/core
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { TimeModel } from '../../../utility/components/date-time/date-time/time.model';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { StaticService } from '../../../utility/services/static.service';
@@ -22,10 +21,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() isShowAbnormalAccountInfo = false;
   @Input() isShowVar = false;
 
-  kickOffTime = new TimeModel(new Date());
   issueTypeName: string;
   isExpandGeneralInfo = false;
-  isEarlyKOIssueType = false;
   isAbnormalAccount = false;
   isAbnormalBet = false;
   product = '';
@@ -52,13 +49,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     if (!_.isUndefined(this.issue.issueTypeId)) {
       this.issueTypeName = this.issue.name === this.issue.subIssueTypeName ? this.issue.name : `${this.issue.name} - ${this.issue.subIssueTypeName}`;
 
-      this.updateDefaultIssueType(false, false);
-      if (this.isEarlyKickOffIssueType()) {
-        this.isEarlyKOIssueType = true;
-        if (!_.isUndefined(this.model.event)) {
-          this.kickOffTime = new TimeModel(new Date(this.model.event.kickOffTime));
-        }
-      }
+      this.updateDefaultIssueType(false);
 
       if (this.isAbnormalAccountIssueType()) {
         this.isAbnormalAccount = true;
@@ -70,8 +61,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     }
   }
 
-  private updateDefaultIssueType(eko: boolean, abnormalAccount: boolean): void {
-    this.isEarlyKOIssueType = eko;
+  private updateDefaultIssueType(abnormalAccount: boolean): void {
     this.isAbnormalAccount = abnormalAccount;
   }
 

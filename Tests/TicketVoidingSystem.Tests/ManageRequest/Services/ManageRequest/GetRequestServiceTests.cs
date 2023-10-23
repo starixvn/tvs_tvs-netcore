@@ -543,4 +543,51 @@ public class GetRequestServiceTests
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
     }
+
+    [Theory]
+    [InlineData(IssueTypeConstant.EarlyKickOffTime)]
+    [InlineData(IssueTypeConstant.WrongKickOffTime)]
+    [InlineData(IssueTypeConstant.NotParticipate)]
+    public async Task GetRequest_ReturnExpectedViewModel(int issueTypeId)
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData =
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+                new List<RequestDetailModel>
+                {
+                    new()
+                    {
+                        IssueTypeId = issueTypeId, SportType = 1,
+                        OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                    }
+                },
+                new List<RequestEventModel> { new() { MatchId = 12345 } },
+                new List<Message> { new() }
+            );
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = issueTypeId,
+                SportType = 1,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+            },
+            Event = null,
+            Messages = new List<Message> { new() },
+            WrongHdpModels = new List<WrongHdpViewModel>()
+        };
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+            .ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1)
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+                Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
+        Assert.Null(actualResult.Event);
+    }
 }

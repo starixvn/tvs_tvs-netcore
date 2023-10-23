@@ -68,10 +68,12 @@ export class EventEarlyKickOffComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     if (this.isEdit) {
-      this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels);
+      this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels, this.filter);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.addRequestStore.changeBlockingUiStatus(true);
-      await this.getTicketsMainEvent();
+      if (!this.filter.isVoided) {
+        await this.getTicketsMainEvent();
+      }
       this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);

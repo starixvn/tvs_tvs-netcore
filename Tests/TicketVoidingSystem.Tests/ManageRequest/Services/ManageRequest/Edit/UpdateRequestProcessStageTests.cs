@@ -40,7 +40,7 @@ public class UpdateRequestProcessStageTests
         // Arrange
         var query = new EditRequestQuery
         {
-            RequestId = 1, ActionId = 1, MatchId = 1, OperatorsList = new List<OperatorQuery>(),
+            RequestId = 1, ActionId = 1, MatchId = 1, OperatorsList = new List<OperatorQuery>{new()},
             WrongScoreInfo = new List<WrongScoreInfoViewModel>(),
             WrongOuInfo = new List<WrongOuViewModel>(),
             Wrong1stOuInfo = new List<WrongOuViewModel>(),
@@ -51,7 +51,9 @@ public class UpdateRequestProcessStageTests
             DangerAcceptedInfo = new List<DangerAcceptedViewModel>(),
             RedCardInfo = new List<DangerAcceptedViewModel>(),
             AbnormalAccountInfo = new AbnormalAccountViewModel(),
-            DuplicateTicketsInfo = new DuplicateTicketsViewModel()
+            DuplicateTicketsInfo = new DuplicateTicketsViewModel(),
+            NotParticipateInfo = new List<NotParticipateViewModel>(),
+            EarlyKickOffInfo = new List<EarlyKickOffViewModel>()
         };
         var expected = new Result
         {
@@ -69,7 +71,7 @@ public class UpdateRequestProcessStageTests
 
         // Assert
         await repository.Received(1).ExecuteAsync(Arg.Any<EditRequestCommand>());
-        await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, null);
+        await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
         AssertExtension.Equal(expected, actual);
     }
 
@@ -83,19 +85,8 @@ public class UpdateRequestProcessStageTests
             RequestId = 1,
             ActionId = 1,
             MatchId = 1,
-            OperatorsList = null,
-            WrongScoreInfo = null,
-            WrongOuInfo = null,
-            Wrong1stOuInfo = null,
-            WrongHdpInfo = null,
-            Wrong1stHdpInfo = null,
-            WrongOddsInfo = null,
-            ReducedOverInfo = null,
-            DangerAcceptedInfo = null,
-            RedCardInfo = null,
-            AbnormalAccountInfo = null,
-            DuplicateTicketsInfo = null,
-            KickOffTime = DateTime.Now
+            KickOffTime = DateTime.Now,
+            OperatorsList = null
         };
 
         mapper.Map<EditRequestCommand>(Arg.Any<EditRequestQuery>())

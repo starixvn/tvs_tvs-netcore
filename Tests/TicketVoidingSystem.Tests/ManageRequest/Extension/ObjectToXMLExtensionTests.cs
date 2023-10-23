@@ -100,14 +100,16 @@ public class ObjectToXmlExtensionFacts
     public void ToEventWrongScoreXml_HasData_ReturnXML()
     {
         // Arrange
-        var expected = "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' " +
-                       "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-                       "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' MatchId='123' SingleCount='1' " +
-                       "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTime='' MinType='' />" + Environment.NewLine +
-                       "<r LiveHomeScore='' LiveAwayScore='' ScoreId='0' AATime='' PATime='' SATime='' LiveScores='' " +
-                       "SubIssueTypeId='0' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='' VoidFromTime='' " +
-                       "VoidToTime='' MatchId='' SingleCount='' MainParlayCount='' ActualScore='' FilterBy='' IsCheckedVar='' " +
-                       "MinTime='' MinType='' /></root>";
+        var expected =
+            "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='1-1' " +
+            "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+            "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' MatchId='123' SingleCount='1' " +
+            "MainParlayCount='1' ActualScore='2-2' FilterBy='' IsCheckedVar='' MinTime='' MinType='' />" +
+            Environment.NewLine +
+            "<r LiveHomeScore='' LiveAwayScore='' ScoreId='0' AATime='' PATime='' SATime='' LiveScores='' " +
+            "SubIssueTypeId='0' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='' VoidFromTime='' " +
+            "VoidToTime='' MatchId='' SingleCount='' MainParlayCount='' ActualScore='' FilterBy='' IsCheckedVar='' " +
+            "MinTime='' MinType='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -147,10 +149,11 @@ public class ObjectToXmlExtensionFacts
     public void ToEventWrongScoreXml_ModelHasTimeIsNull_ReturnXML()
     {
         // Arrange
-        const string expected = "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='' " +
-                                "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='' VoidFromTime='' " +
-                                "VoidToTime='' MatchId='0' SingleCount='0' MainParlayCount='0' ActualScore='2-2' FilterBy='' IsCheckedVar='' " +
-                                "MinTime='' MinType='' /></root>";
+        const string expected =
+            "<root><r LiveHomeScore='1' LiveAwayScore='1' ScoreId='3' AATime='' PATime='' SATime='' LiveScores='' " +
+            "SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='' VoidFromTime='' " +
+            "VoidToTime='' MatchId='0' SingleCount='0' MainParlayCount='0' ActualScore='2-2' FilterBy='' IsCheckedVar='' " +
+            "MinTime='' MinType='' /></root>";
 
         var model = new WrongScoreInfoViewModel
         {
@@ -194,7 +197,7 @@ public class ObjectToXmlExtensionFacts
             InstantlySettleCount = 1,
             MainParlayCount = 1,
             HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
-            HighlightAcceptType = 1,
+            HighlightAcceptType = 1
         };
         var model = new WrongScoreInfoViewModel
         {
@@ -297,17 +300,19 @@ public class ObjectToXmlExtensionFacts
     public void ToEventDangerAcceptedXml_HasData_ReturnXML()
     {
         // Arrange
-        var expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-                       "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-                       "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
-                       "IsCheckedVar='' MinTime='2018-10-30 16:20:20.222' MinType='' />" + Environment.NewLine +
-                       "<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-                       "LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
-                       "VoidFromTime='' VoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTime='' MinType='' />" + Environment.NewLine +
-                       "<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-                       "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-                       "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
-                       "IsCheckedVar='' MinTime='' MinType='' /></root>";
+        var expected =
+            "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+            "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+            "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
+            "IsCheckedVar='' MinTime='2018-10-30 16:20:20.222' MinType='' />" + Environment.NewLine +
+            "<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+            "LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
+            "VoidFromTime='' VoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTime='' MinType='' />" +
+            Environment.NewLine +
+            "<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+            "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+            "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
+            "IsCheckedVar='' MinTime='' MinType='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -319,7 +324,7 @@ public class ObjectToXmlExtensionFacts
             CashOutCount = 1,
             InstantlySettleCount = 1,
             MainParlayCount = 1,
-            HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local),
+            HighlightMinTime = new DateTime(2018, 10, 30, 16, 20, 20, 222, DateTimeKind.Local)
         };
         var logInfoDetail2 = new LogInfoDetail
         {
@@ -331,7 +336,7 @@ public class ObjectToXmlExtensionFacts
             CashOutCount = 1,
             InstantlySettleCount = 1,
             MainParlayCount = 1,
-            HighlightMinTime = null,
+            HighlightMinTime = null
         };
 
         var model = new DangerAcceptedViewModel
@@ -915,8 +920,7 @@ public class ObjectToXmlExtensionFacts
     {
         // Arrange
         var models = new List<NotParticipateViewModel> { new() };
-        const string expected =
-            "<root><r MatchId='0' SubIssueTypeId='0' BetTypeId='0' PlayerIds='' /></root>";
+        const string expected = "<root><r MatchId='0' SubIssueTypeId='0' PlayerId='0' GroupBetTypeIds='' /></root>";
 
         // Act
         var actual = models.ToNotParticipateInfoXml();
@@ -1044,8 +1048,9 @@ public class ObjectToXmlExtensionFacts
             }
         };
 
-        const string expected = "<root><r MatchId='1' SubIssueTypeId='1' BetTypeId='0' PlayerIds='1' SingleCount ='1' " +
-                                "MainParlayCount='1' VoidToTime='2022-02-02 02:02:02.000' VoidFromTime='2022-02-02 02:02:02.000' /></root>";
+        const string expected = "<root><r MatchId='1' SubIssueTypeId='1' PlayerId='0' GroupBetTypeIds='1' SingleCount ='1' MainParlayCount='1' " +
+                                "VoidToTime='2022-02-02 02:02:02.000' VoidFromTime='2022-02-02 02:02:02.000' /></root>";
+
         // Act
         var actual = models.ToEventNotParticipateXml();
 
@@ -1140,6 +1145,47 @@ public class ObjectToXmlExtensionFacts
                                 + "FavoriteValue='1' /></root>";
         // Act
         var actual = models.ToEventWrongOddsXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventKickOffXml_HasDataViewModel_ReturnExpected()
+    {
+        // Arrange
+        var models = new List<EarlyKickOffViewModel>
+        {
+            new()
+            {
+                MatchId = 1, IsMainMatch = true, SubIssueTypeId = 1, KickOffTime = new DateTime(2023, 3, 3, 3, 3, 3, 3)
+            }
+        };
+        const string expected =
+            "<root><r MatchId='1' IsMainMatch='true' SubIssueTypeId='1' KickOffTime='03/02/2023 15:03:03'/></root>";
+
+        // Act
+        var actual = models.ToEventKickOffXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToEventKickOffXml_NoHasKickOffTimeInDataViewModel_ReturnExpected()
+    {
+        // Arrange
+        var models = new List<EarlyKickOffViewModel>
+        {
+            new()
+            {
+                MatchId = 1, IsMainMatch = true, SubIssueTypeId = 1
+            }
+        };
+        const string expected = "<root><r MatchId='1' IsMainMatch='true' SubIssueTypeId='1' KickOffTime=''/></root>";
+
+        // Act
+        var actual = models.ToEventKickOffXml();
 
         // Assert
         Assert.Equal(expected, actual);

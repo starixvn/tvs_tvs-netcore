@@ -377,11 +377,13 @@ export class ActionVoidByIssueTypeConst {
   ];
   static readonly EARLY_KICK_OFF: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];
   static readonly WRONG_KICK_OFF: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];

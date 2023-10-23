@@ -95,6 +95,7 @@ public class AddRequestServiceTests
     [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
     [InlineData(IssueTypeConstant.AbnormalBet)]
     [InlineData(IssueTypeConstant.DuplicateTickets)]
+    [InlineData(IssueTypeConstant.NotParticipate)]
     [InlineData(1111111)]
     public void Execute_HasResultSuccessful_CalledExpected(int issueTypeId)
     {

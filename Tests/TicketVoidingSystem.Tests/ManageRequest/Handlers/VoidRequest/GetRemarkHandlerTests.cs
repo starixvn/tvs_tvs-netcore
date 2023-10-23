@@ -1,4 +1,5 @@
 using System.Threading;
+using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.Services;
@@ -16,7 +17,8 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
         [InlineData(true, true, true, "You can void \"Settled\" or \"Unsettled\" tickets., You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets.")]
         [InlineData(false, true, true, "You can only void \"Unsettled\" tickets., You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets.")]
         [InlineData(false, true, false, "You can only void \"Unsettled\" tickets.")]
-        public async void GetRemark_CheckPermission_ReturnRemark(bool settled, bool unsettled, bool instantlySettled, string expected)
+        [InlineData(false, false, true, "You can only void \"Unsettled\" tickets., You can void \"Instantly Settled\" tickets settled by Instant Settlement during live time and SABA Time Machine settled tickets.")]
+        public async Task GetRemark_CheckPermission_ReturnRemark(bool settled, bool unsettled, bool instantlySettled, string expected)
         {
             // Arrange
             var sessionService = Substitute.For<SessionService>();
@@ -34,6 +36,26 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
 
             // Assert
             Assert.Equal(listExpected, remark);
+        }
+
+        [Fact]
+        public async Task GetRemark_NoHasPermission_ReturnRemark()
+        {
+            // Arrange
+            var sessionService = Substitute.For<SessionService>();
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host)
+                .Returns(false);
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host)
+                .Returns(false);
+            sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host)
+                .Returns(false);
+            var handler = new GetRemarkHandler(sessionService);
+
+            // Act
+            var remark = await handler.Handle(new GetRemarkRequest(), CancellationToken.None);
+
+            // Assert
+            Assert.Empty(remark);
         }
     }
 }

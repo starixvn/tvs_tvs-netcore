@@ -12,7 +12,7 @@ import { TableTicketsModel } from "../tickets-list/table-tickets.model";
 })
 
 export class EventEarlyKickOffService {
-  assignModelsToEvents(allEvents: LogInfoEarlyKickOff[], inputModels: EarlyKickOffModel[]): void {
+  assignModelsToEvents(allEvents: LogInfoEarlyKickOff[], inputModels: EarlyKickOffModel[], filter: FilterModel): void {
     inputModels.forEach(x => {
       const event = new LogInfoEarlyKickOff();
       event.matchId = x.matchId;
@@ -22,6 +22,7 @@ export class EventEarlyKickOffService {
       event.eventName = x.name;
       event.kickOffTime = x.kickOffTime;
       event.subIssueTypeId = x.subIssueTypeId;
+      event.isCollapse = filter.isVoided || !x.isMainMatch;
 
       allEvents.push(event);
     });

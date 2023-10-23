@@ -21,7 +21,7 @@
   </div>
 </div>
 <div class="mb-3">
-  <button type="submit" class="btn btn-primary btn-sm" (click)="handleSearchEvent()">Search</button>
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="handleSearchEvent()">Search</button>
 </div>
 <div>
   <div class="main-match-log-info mb-3" *ngIf="primitiveProps.isShowLogInfoEvents">

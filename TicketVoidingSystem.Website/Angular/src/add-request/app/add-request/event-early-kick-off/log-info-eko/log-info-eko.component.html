@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="col-sm-5 p-0">
-        <div class="float-right d-flex" *ngIf="!isMainMatch">
+        <div class="float-right d-flex" *ngIf="!isMainMatch && isEarlyKickOff()">
           <label class="col-form-label text-right nowrap mr-1">Sub Type:</label>
           <div class="d-flex align-items-center">
             <ng-select class="sub-type-select mr-2"

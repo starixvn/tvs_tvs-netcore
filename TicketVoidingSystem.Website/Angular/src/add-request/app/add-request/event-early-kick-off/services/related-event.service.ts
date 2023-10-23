@@ -44,7 +44,7 @@ export class RelatedEventService {
           kickOffTime: mainEvent.kickOffTime,
           subIssueTypeId: mainEvent.subIssueTypeId,
           eventName: `${x.matchId} - ${x.matchEvent}`,
-          logInfoDetail: null,
+          //logInfoDetail: null,
           messageValidationLogInfo: null,
           isCollapse: true,
           isShowValidation: false,
@@ -90,19 +90,18 @@ export class RelatedEventService {
     const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
     const newEvents = this.updateEvents(newChildEvents, arg.mainEvent);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
-    //eventsGetLogInfo.push(...newEvents);
+    eventsGetLogInfo.push(...newEvents);
 
     return eventsGetLogInfo;
   }
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoEarlyKickOff[], originalAllEvents: LogInfoEarlyKickOff[]): void {
     eventsGetLogInfo.forEach(x => {
-      if (!originalAllEvents.some(y => y.matchId === x.matchId) && x.logInfoDetail) {
+      if (!originalAllEvents.some(y => y.matchId === x.matchId)) {
         originalAllEvents.push(x);
       } else {
         const event = originalAllEvents.find(y => y.matchId === x.matchId);
         if (event) {
-          event.logInfoDetail = x.logInfoDetail;
           event.messageValidationLogInfo = x.messageValidationLogInfo;
           event.subIssueTypeId = x.subIssueTypeId;
         }

@@ -26,13 +26,14 @@ export class LogInfoService {
   public async getTickets(query: GetTicketsQuery, logInfo: LogInfoEarlyKickOff, isEdit: boolean,
     requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
     this.resetLogInfoOfEvent([logInfo]);
-    logInfo.isShowValidation = false;
+    //logInfo.isShowValidation = false;
     await this.getLogInfo([logInfo], isEdit, requestId, filter, primitiveProps);
     query.transInfoJson = primitiveProps.transInfoAddRequestModel.transInfoJson;
     logInfo.pagingModel.pageSize = PagingConstant.SIZE_ONE;
     const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(query, 'api/VoidRequest/GetTickets');
     logInfo.tableTicketsModel.initData(data);
     logInfo.isShowValidation = true;
+    logInfo.isCollapse = false;
     logInfo.pagingModel.total = data.total;
   }
 
@@ -72,17 +73,17 @@ export class LogInfoService {
     allSelectedEvents.forEach(event => {
       const logInfoModel = logInfoModels.find(x => x.matchId === event.matchId);
       if (logInfoModel) {
-        event.logInfoDetail = logInfoModel.logInfoDetail;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
-        event.isShowValidation = logInfoModel.validation.isInvalidTotalTickets;
         event.isCollapse = logInfoModel.validation.isInvalidTotalTickets ? false : event.isCollapse;
+        if (logInfoModel.validation.isInvalidTotalTickets) {
+          event.isShowValidation = true;
+        }
       }
     });
   }
 
   resetLogInfoOfEvent(allSelectedEvents: LogInfoEarlyKickOff[]): void {
     allSelectedEvents.forEach(event => {
-      event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
     });
   }

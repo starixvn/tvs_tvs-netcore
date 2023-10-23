@@ -219,28 +219,12 @@ public class LogInfoServiceImp : LogInfoService
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelEarlyKickOff(GetLogInfoQuery query, IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
-        //return query.EarlyKickOffModels.Select(item => new GetLogInfoModel
-        //{
-        //    MatchId = item.MatchId,
-        //    Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
-        //    TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-        //    LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
-        //});
-        return query.EarlyKickOffModels.Select(item =>
+        return query.EarlyKickOffModels.Select(item => new GetLogInfoModel
         {
-            var x = new GetLogInfoModel
-            {
-                MatchId = item.MatchId,
-                Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
-                TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
-                LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
-            };
-            if (x.MatchId == 74560781)
-            {
-                x.Validation.IsInvalidTotalTickets = true;
-            }
-
-            return x;
+            MatchId = item.MatchId,
+            Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
+            TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
         });
     }
 

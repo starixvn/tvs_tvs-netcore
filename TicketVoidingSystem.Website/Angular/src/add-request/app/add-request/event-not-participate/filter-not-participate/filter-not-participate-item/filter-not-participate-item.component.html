@@ -12,7 +12,7 @@
   <div class="filter-group-bet-type d-flex mr-2">
     <ng-select class="group-bet-type-dropdown{{index}}" [items]="groupBetTypes" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
       [clearable]="false" [(ngModel)]="model.groupBetTypeIds" bindValue="value" (change)="changeFilter()"
-      [disabled]="false" groupBy="group" [selectableGroup]="true"
+      [disabled]="isVoided" groupBy="group" [selectableGroup]="true"
       [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
       <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
         <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}

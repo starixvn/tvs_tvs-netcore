@@ -33,15 +33,6 @@ export class LogInfoEkoComponent implements OnInit {
   ) { }
 
   public async ngOnInit(): Promise<void> {
-    if (this.isEdit) {
-      if (this.logInfo.isMainMatch) {
-        this.logInfo.isShowValidation = true;
-        this.logInfo.isCollapse = false;
-      } else {
-        this.logInfo.isShowValidation = false;
-        this.logInfo.isCollapse = true;
-      }
-    }
   }
 
    async pagingEvent() {
@@ -75,5 +66,9 @@ export class LogInfoEkoComponent implements OnInit {
 
   public openPopupTransIds(requestId: number, transIds: string): void {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);
+  }
+
+  public isEarlyKickOff(): boolean {
+    return StaticService.isEarlyKickOff(this.filter.issueTypeId);
   }
 }

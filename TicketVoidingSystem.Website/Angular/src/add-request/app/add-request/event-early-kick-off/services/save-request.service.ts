@@ -34,16 +34,15 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
-    //arg.primitiveProps.isShowLogInfoEvents = true;
 
     if (!this.validationService.validateCommonData(arg.leagueEventComponent, arg.tooltip, arg.kickOffTimeComponent)) {
       return false;
     }
 
     arg.addRequestStore.changeBlockingUiStatus(true);
-    await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     const query = this.logInfoService.initQuery(arg.mainEvent.pagingModel.page - 1, arg.mainEvent.pagingModel.pageSize, arg.mainEvent, arg.filter);
-    await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
+    await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps); // must be called before getLogInfo
+    await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     arg.addRequestStore.changeBlockingUiStatus(false);
 
     if (this.validationService.isAllEventsValid(arg.allEvents)) {

@@ -209,7 +209,7 @@ public class GetRequestServiceImp : GetRequestService
             FavoriteValue = model.FavoriteValue
         });
     }
-    
+
     private static IEnumerable<NotParticipateViewModel> MapEventNotParticipate(IEnumerable<RequestEventModel> requestEventModels)
     {
         return requestEventModels.Select(model => new NotParticipateViewModel
@@ -217,8 +217,8 @@ public class GetRequestServiceImp : GetRequestService
             EventDate = model.EventDate,
             MatchId = model.MatchId,
             SubIssueTypeId = model.SubIssueTypeId,
-            BetTypeId = model.BetTypeId,
-            PlayerIds = model.PlayerIds,
+            PlayerId = model.PlayerId,
+            GroupBetTypeIds = model.GroupBetTypeIds,
         });
     }
 

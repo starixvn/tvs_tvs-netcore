@@ -65,7 +65,7 @@ export class AppComponent implements OnInit {
   }
 
   isShowVoidEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.requestDetail.request?.issueTypeId.toString());
+    return StaticService.isEarlyKickOff(this.requestDetail.request?.issueTypeId.toString()) || StaticService.isWrongKickOff(this.requestDetail.request?.issueTypeId.toString());
   }
   
    isShowVoidOtherIssue(): boolean {
