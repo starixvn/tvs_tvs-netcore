@@ -281,6 +281,7 @@ export class VoidOtherIssueComponent implements OnInit {
       this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
       this.templateValue.ouValue = this.requestDetail.wrongOddsModels[0].ouValue;
       this.templateValue.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+      this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
     }
   }
 
