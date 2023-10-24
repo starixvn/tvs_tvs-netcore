@@ -58,10 +58,6 @@ export class FilterNotParticipateItemComponent {
     return this.validationService.isAllFieldsHaveValue(this.model, this.index, this.tooltip);
   }
 
-  // public updateCheckedPlayer(playerId: number): void {
-  //   this.originalPlayers.find(x => x.playerId === playerId.toString()).disabled = true;
-  // }
-
   public addBetTypeItem(): void {
     if (!this.isVoided) {
       this.addItemEvent.emit();
@@ -73,8 +69,4 @@ export class FilterNotParticipateItemComponent {
       this.removeItemEvent.emit(index);
     }
   }
-
-  // public isDisableOption(): boolean {
-  //   return this.allFilterItem.some(x => x.playerId === this.model.playerId);
-  // }
 }

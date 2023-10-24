@@ -138,8 +138,8 @@ export class MappingModelStaticService {
     return notParticipateModels.map(x => ({
       matchId: x.matchId,
       subIssueTypeId: x.subIssueTypeId,
-      betTypeId: x.betTypeId,
-      playerIds: x.playerIds,
+      groupBetTypeIds: x.groupBetTypeIds,
+      playerId: x.playerId,
     } as NotParticipateGetLogInfoQuery));
   }
 }

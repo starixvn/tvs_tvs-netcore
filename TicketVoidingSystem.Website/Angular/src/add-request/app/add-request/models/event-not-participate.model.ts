@@ -5,7 +5,7 @@ export class NotParticipateModel {
   subIssueTypeId: number;
   eventDate?: Date;
   logInfoDetail: LogInfoDetail;
-  betTypeId: number;
-  playerIds: string;
+  groupBetTypeIds: string;
+  playerId: number;
   playerNames: string;
 }
