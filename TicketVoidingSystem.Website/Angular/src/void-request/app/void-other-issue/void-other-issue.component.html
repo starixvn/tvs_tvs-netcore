@@ -52,6 +52,12 @@
                 <span class="affected-licensees-highlight"
                     (click)="copyClipboard(cashOutLicensee.licenseesName)">{{cashOutLicensee.licenseesName}}</span>
             </div>
+            <div class="cancel-cash-out-licensee"
+                *ngIf="cancelCashOutLicensee.show && cancelCashOutLicensee.licenseesName.length > 0">
+                <span class="note">Cancel Cash Out Licensee Affected List:</span><br />
+                <span class="affected-licensees-highlight"
+                    (click)="copyClipboard(cancelCashOutLicensee.licenseesName)">{{cancelCashOutLicensee.licenseesName}}</span>
+            </div>
         </div>
     </div>
 

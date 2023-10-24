@@ -3,6 +3,7 @@ export class TicketsModel {
   totalVoidedTickets: number;
   totalCancelCashOut: number;
   licenseeNames: string;
+  cancelCashOutLicenseesName: string;
   generalBetTypeCombinations: string;
 }
 

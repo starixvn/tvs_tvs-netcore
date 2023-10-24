@@ -66,6 +66,12 @@
               <span class="affected-licensees-highlight"
                   (click)="onClickCopyLicenseesToClipboard(item.cashOutLicensee.licenseesName)">{{item.cashOutLicensee.licenseesName}}</span>
             </div>
+            <div class="cancel-cash-out-licensee"
+              *ngIf="item.cancelCashOutLicensee.show && item.cancelCashOutLicensee.licenseesName.length > 0">
+              <span class="note">Cancel Cash Out Licensee Affected List:</span><br />
+              <span class="affected-licensees-highlight"
+                  (click)="onClickCopyLicenseesToClipboard(item.cancelCashOutLicensee.licenseesName)">{{item.cancelCashOutLicensee.licenseesName}}</span>
+            </div>
           </div>
   
           <tickets-list class="m-0" *ngIf="item.isShowTicketFull" [model]="item.voidTicketsFull"

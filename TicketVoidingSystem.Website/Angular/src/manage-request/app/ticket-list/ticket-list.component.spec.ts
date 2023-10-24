@@ -94,7 +94,8 @@ class Helper {
     totalVoidedTickets: 1,
     totalCancelCashOut: 0,
     licenseeNames: '',
-    generalBetTypeCombinations: ''
+    generalBetTypeCombinations: '',
+    cancelCashOutLicenseesName: ''
   };
 
   static readonly fakeMatchModel: MatchModel = {
@@ -153,7 +154,8 @@ class Helper {
     generalBetTypeCombinations: '',
     scoreResult: '',
     reason: '',
-    totalCancelCashOut: 0
+    totalCancelCashOut: 0,
+    cancelCashOutLicenseesName: ''
   };
 }
 

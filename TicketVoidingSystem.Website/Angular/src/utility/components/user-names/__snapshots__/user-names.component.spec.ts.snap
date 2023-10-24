@@ -42,7 +42,7 @@ exports[`UsernamesComponent UsernamesComponent should init match snapshot 1`] = 
           <span
             class="red"
           >
-            Max: 50 Usernames
+            Max: SMA = 50 / Member = 2000
           </span>
         </div>
       </div>

@@ -42,7 +42,8 @@ class Helper {
     totalVoidedTickets: 4,
     totalCancelCashOut: 0,
     licenseeNames: '',
-    generalBetTypeCombinations: ''
+    generalBetTypeCombinations: '',
+    cancelCashOutLicenseesName: ''
   };
 }
 

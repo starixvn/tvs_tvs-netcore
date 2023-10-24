@@ -76,6 +76,7 @@ export class VoidOtherIssueComponent implements OnInit {
   chinaViewLicensee = new AffectedLicensee();
   jollyViewLicensee = new AffectedLicensee();
   cashOutLicensee = new AffectedLicensee();
+  cancelCashOutLicensee = new AffectedLicensee();
   voidQuery = new VoidTicketsQuery();
 
   uncheckedTransIds: string[] = [];
@@ -211,6 +212,8 @@ export class VoidOtherIssueComponent implements OnInit {
       this.jollyViewLicensee.show = true;
       this.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
       this.cashOutLicensee.show = true;
+      this.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
+      this.cancelCashOutLicensee.show = true;
     } catch {
       this.isShowTicket = false;
     }
@@ -278,6 +281,7 @@ export class VoidOtherIssueComponent implements OnInit {
       this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
       this.templateValue.ouValue = this.requestDetail.wrongOddsModels[0].ouValue;
       this.templateValue.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+      this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
     }
   }
 
@@ -286,10 +290,10 @@ export class VoidOtherIssueComponent implements OnInit {
       return;
     }
     this.templateValue = this.templateService.getTemplateValue(this.query.match);
-    this.templateValue.kickOffTime = this.query.kickOffDate;
     this.templateValue.checkSettled = this.checkSettled();
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
     this.templateValue.toTransTime = this.ticketsModel.toTime;
+    this.templateValue.isAllNonLiveTickets = this.ticketsModel.isAllNonLiveTickets;
     this.updateTemplateValueForAbnormalBet();
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
@@ -511,7 +515,8 @@ export class VoidOtherIssueComponent implements OnInit {
       || this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName.length > 0
       || this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName.length > 0
       || this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName.length > 0
-      || this.cashOutLicensee.show && this.cashOutLicensee.licenseesName.length > 0;
+      || this.cashOutLicensee.show && this.cashOutLicensee.licenseesName.length > 0
+      || this.cancelCashOutLicensee.show && this.cancelCashOutLicensee.licenseesName.length > 0;
   }
 
   async getGroupBetTypes(): Promise<void> {

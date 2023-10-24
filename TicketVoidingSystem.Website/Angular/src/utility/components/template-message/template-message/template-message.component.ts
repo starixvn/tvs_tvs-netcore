@@ -45,7 +45,6 @@ export class TemplateMessageComponent implements OnChanges {
   selectedTemplated = new TemplateModel();
   message = new Message();
   templateSettings: TemplateSetting[];
-
   private readonly hideInputChineseForTemplateId = [
     MESSAGE_TEMPLATE_ID_8,
     MESSAGE_TEMPLATE_ID_9,
@@ -185,7 +184,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.HOME_TEAM_NAME, this.value.homeTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.AWAY_TEAM_NAME, this.value.awayTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.LEAGUE_NAME, this.value.leagueName);
-    this.templateService.replaceAll(this.message, TemplateReplace.EVENT_DATE, this.value.eventDate);
+    this.templateService.replaceEventDate(this.message, this.value.kickOffTime);
     this.templateService.replaceTime(this.message, this.value, this.selectedTemplated.templateId);
     this.templateService.replaceKickOffTime(this.message, this.value.kickOffTime);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.PLAYER_NAME, this.value.playerName);
@@ -212,7 +211,26 @@ export class TemplateMessageComponent implements OnChanges {
 
   checkCanUpdateEventTypeToBlank(): boolean {
     const issueTypes = [
+      IssueTypeId.DANGER_ACCEPTED,
+      IssueTypeId.WRONG_SCORE,
+      IssueTypeId.RED_CARD,
+      IssueTypeId.WRONG_MARKET_OFFERED,
       IssueTypeId.REDUCED_OVER,
+      IssueTypeId.MATCH_COMPLETED,
+      IssueTypeId.NOT_PARTICIPATE
+    ];
+    const subIssueTypeS = [
+      SubIssueTypeId.ABANDONED,
+      SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
+      SubIssueTypeId.TECHNICAL_ERROR
+    ];
+    if((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
+      && this.value.eventDate !== moment(new Date()).format(Format.EVENT_DATE))
+    {
+      return false;
+    };
+
+    const issueTypesHasCheckBoxEarlyEvent = [
       IssueTypeId.WRONG_ODDS,
       IssueTypeId.WRONG_HDP,
       IssueTypeId.WRONG_1ST_HDP,
@@ -220,11 +238,7 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.WRONG_1ST_OU
     ];
 
-    if (issueTypes.includes(this.issueTypeId)) {
-      return true;
-    }
-
-    return issueTypes.includes(this.issueTypeId) && this.value.eventDate === moment(new Date()).format(Format.EVENT_DATE);
+    return (issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && !this.value.isCheckedEarlyEvent);
   }
 
   updateInputs() {
@@ -254,8 +268,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateInputsNextCorner() {
-    for(const element of this.selectedTemplated.inputTexts){
-      if (this.issueTypeId === IssueTypeId.DANGER_ACCEPTED && this.value.numberOfCorner && element.msgEnglish === "Next Corner"){
+    for (const element of this.selectedTemplated.inputTexts) {
+      if (this.issueTypeId === IssueTypeId.DANGER_ACCEPTED && this.value.numberOfCorner && element.msgEnglish === "Next Corner") {
         const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === this.value.numberOfCorner.toString());
         element.msgEnglishValue = nextCorner.englishValue;
         element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;
@@ -328,7 +342,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateScore() {
-    if (this.value.score !== undefined && this.value.score.length > 0) {
+    if (this.value.score !== undefined && this.value.score.length > 0 && !this.value?.isAllNonLiveTickets) {
       const score: TemplateContent = {
         msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score}) `,
         msgChineseTraditional: `(${TemplateContentConst.SCORE.msgChineseTraditional} ${this.value.score}) `,
@@ -342,7 +356,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateScoreHaveText() {
-    if (this.value.score !== undefined && this.value.score.length > 0) {
+    if (this.value.score !== undefined && this.value.score.length > 0 && !this.value?.isAllNonLiveTickets) {
       const score: TemplateContent = {
         msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
         msgChineseTraditional:
@@ -430,9 +444,9 @@ export class TemplateMessageComponent implements OnChanges {
 
   isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() &&
-    (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
-      || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
-      || (this.isOtherIssues && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
+      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
+        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
+        || (this.isOtherIssues && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
   }
 
   isShowAioCheckBoxMessage(): boolean {

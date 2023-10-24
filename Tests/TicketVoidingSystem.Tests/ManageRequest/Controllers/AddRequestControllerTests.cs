@@ -182,4 +182,27 @@ public class AddRequestControllerTests
         // Assert
         await mediator.Received().Send(Arg.Any<AddRequest>());
     }
+
+
+    [Fact]
+    public async Task GetSubIssueTypeNote_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetSubIssueTypeNote(null);
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetSubIssueTypeNoteRequest>());
+    }
+
+    [Fact]
+    public async Task SaveSubIssueTypeNote_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.SaveSubIssueTypeNote(null);
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<SaveSubIssueTypeNoteRequest>());
+    }
 }

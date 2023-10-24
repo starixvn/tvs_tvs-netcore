@@ -19,7 +19,9 @@ public class TicketsViewModel
     public string JollyViewLicenseesName { get; set; }
     public string InstantLicenseesName { get; set; }
     public string CashOutLicenseesName { get; set; }
+    public string CancelCashOutLicenseesName { get; set; }
     public bool IsAllLiveTickets { get; set; }
+    public bool IsAllNonLiveTickets { get; set; }
     public bool IsHasAioMessage { get; set; }
     public string BetTypes { get; set; }
     public DateTime FromTime { get; set; }

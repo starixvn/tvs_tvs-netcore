@@ -17,7 +17,6 @@ export class TemplateMessageService {
 
   getTemplateValue(voidMatch: VoidMatch, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
-    templateValue.kickOffTime = null;
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
     templateValue.fromTransTime = voidMatch.voidTicketsMini.fromTime;
     templateValue.toTransTime = voidMatch.voidTicketsMini.toTime;
@@ -28,7 +27,8 @@ export class TemplateMessageService {
     templateValue.score = this.getLiveScoreForTemplateMessage(voidMatch.logInfoDetail.scoreNormalTicket, voidMatch.logInfoDetail.scoreOfMatch);
     templateValue.isCheckTime = requestDetail.redCardModels[0].filterBy === TVSRequestFilterBy.CHECK_TIME;
     templateValue.isCheckedVar = voidMatch.isCheckedVar;
-  
+    templateValue.isAllNonLiveTickets = voidMatch.voidTicketsMini.isAllNonLiveTickets;
+    
     return templateValue;
   }
 

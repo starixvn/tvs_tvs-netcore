@@ -28,6 +28,7 @@ export class VoidMatch {
   chinaViewLicensee: AffectedLicensee;
   jollyViewLicensee: AffectedLicensee;
   cashOutLicensee: AffectedLicensee;
+  cancelCashOutLicensee: AffectedLicensee;
   isShowTemplateMessage: boolean;
   templateMessage?: Message;
   isAllLiveTickets: boolean;
@@ -47,6 +48,7 @@ export class VoidMatch {
     this.chinaViewLicensee = new AffectedLicensee();
     this.jollyViewLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
+    this.cancelCashOutLicensee = new AffectedLicensee();
     this.voidReason = new VoidedReason();
   }
 }

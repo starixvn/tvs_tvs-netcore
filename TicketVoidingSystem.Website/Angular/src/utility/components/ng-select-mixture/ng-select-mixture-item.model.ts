@@ -1,4 +1,4 @@
-import { GroupReducedOverConstant } from "src/add-request/app/add-request/event-reduced-over/constants/bet-type-reduced-over.constant";
+import { GroupReducedOverConstant } from '../../../add-request/app/add-request/event-reduced-over/constants/bet-type-reduced-over.constant';
 
 export class NgSelectMixtureItem {
   value: string;

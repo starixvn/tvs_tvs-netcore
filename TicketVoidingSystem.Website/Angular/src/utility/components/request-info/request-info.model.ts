@@ -10,6 +10,7 @@ export class GeneralInfo {
     negativeBalanceUsers: string;
     voidingHistoryIds: string;
     licenseeNames: string;
+    cancelCashOutLicenseesName: string;
     generalBetTypeCombinations: string;
     scoreResult: string;
     reason: string;
