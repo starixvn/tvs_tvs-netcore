@@ -32,7 +32,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
     [Theory]
     [InlineData(0, "errorMsg")]
     [InlineData(1, "errorMsg")]
-    [InlineData(null, null)]
+    [InlineData(0, null)]
     public async Task GetTickets_HasCriteria_ReturnExpected(int errorCode, string errorMsg)
     {
         // Arrange

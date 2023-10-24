@@ -43,7 +43,7 @@ public class BetListCoreServiceImp : BetListCoreService
 
         var ticket = SetTicket(item, match);
 
-        viewModel.Odds = betListService.GetOdds(ticket, false);
+        viewModel.Odds = betListService.GetOdds(ticket, Convert.ToInt32(item.BetType).IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticket);
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);

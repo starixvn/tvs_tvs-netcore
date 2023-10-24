@@ -42,7 +42,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         var ticketHelper = CreateBetListTicketHelper(item);
         var ticket = MapToBetListTicket(item, match);
 
-        viewModel.Odds = betListService.GetOdds(ticket, false);
+        viewModel.Odds = betListService.GetOdds(ticket, Convert.ToInt32(item.BetType).IsParlay());
         viewModel.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticket);

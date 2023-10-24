@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;8669;8618;8632</NoWarn>
+    <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;8669;8618;8632</NoWarn>
+    <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Angular-Old\**" />
@@ -51,11 +51,11 @@
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="1.0.1.1" />
     <PackageReference Include="Fanex.NAP.Client" Version="2.0.0" />
-    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.1" />
-    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.391" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="7.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.11" />
+    <PackageReference Include="Fanex.NAP.SignIn" Version="2.0.1.1" />
+    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.396" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="7.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ONEbook.UM" Version="3.1.6" />
     <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.1.1.1" />

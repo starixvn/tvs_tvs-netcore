@@ -59,7 +59,7 @@ public class SendCreditDataToLetstalkHandlerTest
     //    var actual = await handler.Handle(request, CancellationToken.None);
 
     //    // Assert
-    //    Assert.Equal(1, actual.Count);
+    //    Assert.Single(actual);
     //}
 
     //[Fact]

@@ -5,6 +5,7 @@ using Fanex.BetList.Core.TicketHelper;
 using SpecialDelete.NumberGame.Models;
 using SpecialDelete.NumberGame.ViewModels;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services.BetList;
 
 namespace SpecialDelete.NumberGame.Services.GetTickets;
@@ -37,7 +38,7 @@ public class BetListCoreServiceImp : BetListCoreService
             IsShowOddsWithChoice = false
         };
 
-        viewModel.Odds = betListService.GetOdds(ticket, false);
+        viewModel.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         var choice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         const int BetType = 90;

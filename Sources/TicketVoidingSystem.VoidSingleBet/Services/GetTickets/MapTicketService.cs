@@ -52,7 +52,7 @@ public class MapTicketServiceImp : MapTicketService
             ShowSystemParlayDetail = false
         };
         var ticketBetList = CreateTicketBetList(item, match);
-        viewModel.Odds = betListService.GetOdds(ticketBetList, false);
+        viewModel.Odds = betListService.GetOdds(ticketBetList, item.BetType.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticketBetList, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticketBetList);
         viewModel.Choice = BuildChoice(ticketBetList, ticketHelper, item);

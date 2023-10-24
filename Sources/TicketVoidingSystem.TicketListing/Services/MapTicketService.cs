@@ -110,7 +110,7 @@ public class MapTicketServiceImp : MapTicketService
             IsShowOddsWithChoice = item.IsParlay,
             ShowSystemParlayPlayerComm = item.IsParlay
         };
-        ticketHtml.Odds = betListService.GetOdds(ticket, item.IsParlay);
+        ticketHtml.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         ticketHtml.Stake = betListService.BuildStake(ticket, ticketHelper);
         ticketHtml.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
         ticketHtml.BetType = betListService.GetBetTypeName(ticket);
@@ -129,7 +129,6 @@ public class MapTicketServiceImp : MapTicketService
         }
 
         return betListService.BuildChoice(ticket, ticketHelper, null, false);
-
     }
 
     private Ticket SetMainTicket(DetailTicketModel item)

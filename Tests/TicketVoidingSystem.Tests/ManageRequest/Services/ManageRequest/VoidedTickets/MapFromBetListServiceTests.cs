@@ -94,7 +94,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
         // Act
         var result = service.MapToVoidedTicketViewModel(item, match, choiceType, issueTypeId);
 
-        // Assert           
+        // Assert
         AssertExtension.Equal(expected, result);
     }
 
@@ -150,7 +150,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
         // Act
         var result = service.MapToVoidedTicketViewModel(item, null, choiceType, issueTypeId);
 
-        // Assert           
+        // Assert
         AssertExtension.Equal(choice, result.Choice);
     }
 }

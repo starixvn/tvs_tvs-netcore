@@ -54,7 +54,7 @@ public class CellServiceImp : CellService
         var startRow = isHasMatch ? 8 : 6;
         worksheet.Cells.Style.WrapText = true;
         var lastRow = worksheet.Dimension.End.Row;
-        worksheet.HighlightFont($"F{startRow}:F{lastRow}", $"LEFT(F{startRow},1)=\"-\"", Color.Red);
         worksheet.HighlightBackground($"A{startRow}:M{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
+        worksheet.HighlightFont($"F{startRow}:F{lastRow}", $"LEFT(F{startRow},1)=\"-\"", Color.Red);
     }
 }

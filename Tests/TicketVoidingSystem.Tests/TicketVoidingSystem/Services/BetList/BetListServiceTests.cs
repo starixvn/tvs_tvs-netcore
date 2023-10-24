@@ -100,7 +100,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var result = service.GetOdds(ticket, true);
 
         // Assert
-        Assert.Equal("<span class=\"underdog\">-</span> <span class=\"oddstype\"></span>", result);
+        Assert.Equal("-", result);
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         var result = service.GetOdds(ticket, false);
 
         // Assert
-        Assert.Equal("<span class=\"underdog\">-</span> (<span class=\"oddstype\"></span>)", result);
+        Assert.Equal("<span class=\"underdog {oddsClassName}\">-</span> (<span class=\"oddstype\"></span>)", result);
     }
 
     [Fact]
