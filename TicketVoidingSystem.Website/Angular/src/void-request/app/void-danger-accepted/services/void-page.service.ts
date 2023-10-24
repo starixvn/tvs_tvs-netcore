@@ -58,6 +58,7 @@ export class VoidPageService {
       const ticketQuery = this.ticketsService.initTicketQuery(element.matchModel, requestDetail);
       element.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
       element.isAllLiveTickets = element.voidTicketsMini.isAllLiveTickets;
+      element.isAllNonLiveTickets = element.voidTicketsMini.isAllNonLiveTickets;
       element.isCheckedEarlyEvent = false;
       element.templateValue = this.templateMessageService.getTemplateValue(element, requestDetail);
       element.templateValue.numberOfCorner = element.matchModel.numberOfCorner;

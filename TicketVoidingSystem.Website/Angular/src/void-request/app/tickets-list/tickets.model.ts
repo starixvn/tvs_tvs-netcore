@@ -65,6 +65,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.isHasAioMessage = data.isHasAioMessage;
     this.isHasSettledTicket = data.isHasSettledTicket;
     this.isAllLiveTickets = data.isAllLiveTickets;
+    this.isAllNonLiveTickets = data.isAllNonLiveTickets;
   }
 
   mapGroups(groups: Array<GroupModel>) {

@@ -32,6 +32,8 @@ export class VoidMatch {
   isShowTemplateMessage: boolean;
   templateMessage?: Message;
   isAllLiveTickets: boolean;
+  isAllNonLiveTickets: boolean;
+
   isCheckedEarlyEvent: boolean;
   wrongMarket?: string;
   actualMarket?: string;
