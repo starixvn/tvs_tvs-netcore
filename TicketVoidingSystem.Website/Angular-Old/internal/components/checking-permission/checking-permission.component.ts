@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CheckingPermissionModel } from './checking-permission.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Notification } from '../../../external/components/notification/notification';
+import { CheckingPermissionModel } from './checking-permission.model';
 import { CheckingPermissionService } from './checking-permission.service';
 
 @Component({
@@ -22,8 +22,8 @@ export class CheckingPermissionComponent implements OnInit {
 
   checkPermission() {
     this.checkingPermissionService.checkVoidBetPermission(this.checkingPermissionModel).subscribe(data => {
-      if (data.ErrCode !== 0) {
-        this.notificationPermission.open('WARNING', data.ErrMsg);
+      if (data.errCode !== 0) {
+        this.notificationPermission.open('WARNING', data.errMsg);
       } else {
         this.allow.emit(true);
       }

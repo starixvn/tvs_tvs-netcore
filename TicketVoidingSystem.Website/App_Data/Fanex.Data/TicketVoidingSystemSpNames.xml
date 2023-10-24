@@ -324,4 +324,19 @@
         <Setting Key="DBSIG2.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_BettransDelSpecial_NumberGame" SpName="NAP_BettransDelSpecial_NumberGame" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="VoidByCurrency">
+        <Setting Key="DBCTG.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidByCurrency_Select" SpName="NAP_SpecialDelete_VoidByCurrency_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidByCurrency_Update" SpName="NAP_SpecialDelete_VoidByCurrency_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" SpName="NAP_SpecialDelete_VoidByCurrency_SelectLicensees" DbName="DBOIC.bodb_OIC.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" SpName="NAP_SpecialDelete_VoidByCurrency_SelectAllCurrency" DbName="DBCUST.CustDB.bodbAdminNet" TimeOut="600" />
+        <Setting Key="NAP_SpecialDelete_VoidByCurrency_MatchInfo_Select" SpName="NAP_SpecialDelete_VoidByCurrency_MatchInfo_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>

@@ -6,18 +6,18 @@
   "apps": [
     {
       "assets": [],
-      "deployUrl": "dist/old-page/void-number-game-bet/",
+      "deployUrl": "dist/old-page/void-by-currency/",
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       },
       "environmentSource": "environments/environment.ts",
       "index": "index.cshtml",
-      "outDir": "../wwwroot/dist/old-page/void-number-game-bet",
+      "outDir": "../wwwroot/dist/old-page/void-by-currency",
       "main": "main.ts",
       "polyfills": "../polyfills.ts",
       "prefix": "",
-      "root": "void-number-game-bet",
+      "root": "void-by-currency",
       "scripts": [],
       "styles": [],
       "test": "test.ts",

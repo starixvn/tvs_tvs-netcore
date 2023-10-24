@@ -9,7 +9,7 @@ export class RecoverResult extends Result {
 }
 
 export class SqlResult {
-  ErrCode: number;
-  ErrMsg: string;
+  errCode: number;
+  errMsg: string;
   isSuccessful: boolean;
 }
