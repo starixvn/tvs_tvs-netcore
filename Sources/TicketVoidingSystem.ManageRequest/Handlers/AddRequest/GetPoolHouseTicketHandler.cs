@@ -82,7 +82,7 @@ public class GetPoolHouseTicketHandler : IRequestHandler<GetPoolHouseTicketReque
         {
             IssueTypeConstant.Wrong1stHDP => true,
             IssueTypeConstant.Wrong1stOU => true,
-            IssueTypeConstant.WrongOdds => query.SubIssueTypeId is SubIssueTypeConstant.Wrong1stHDP or SubIssueTypeConstant.FirstHalfOverUnder,
+            IssueTypeConstant.WrongOdds => query.SubIssueTypeId is SubIssueTypeConstant.FirstHalfHandicap or SubIssueTypeConstant.FirstHalfOverUnder,
             _ => false
         };
     }
