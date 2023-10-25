@@ -1,36 +1,13 @@
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
-import { NotParticipateBetType } from '../models/not-participate-bet-type.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
-
-class Helper {
-  static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
-    {
-      betTypeId: 1,
-      betTypeName: '',
-      disabled: false
-    },
-    {
-      betTypeId: 2,
-      betTypeName: '',
-      disabled: false
-    }
-  ];
-  static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
-    matchId: 1,
-    filterNotParticipates: [],
-    logInfoDetail: new LogInfoDetail(),
-    messageValidationLogInfo: []
-  };
-}
 
 describe('ValidationService', () => {
   let service: ValidationService;

@@ -72,7 +72,7 @@ export class RequestDetailViewModel {
   request: RequestDetailModel;
   event?: RequestEventModel;
   wrongScoreModels?: WrongScoreModel[];
-  duplicateTicketsModel: DuplicateTicketsModel;
+  duplicateTicketsModel?: DuplicateTicketsModel;
   dangerAcceptedModels?: RedCardModel[];
   redCardModels?: RedCardModel[];
   wrongHdpModels?: WrongHdpModel[];
@@ -80,5 +80,5 @@ export class RequestDetailViewModel {
   wrongOddsModels?: WrongOddsModel[];
   reducedOverModels?: ReducedOverModel[];
   notParticipateModels?: NotParticipateModel[];
-  earlyKickOffModels: EarlyKickOffModel[];
+  earlyKickOffModels?: EarlyKickOffModel[];
 }

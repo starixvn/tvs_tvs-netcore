@@ -1,4 +1,3 @@
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { NotParticipateModel } from '../../models/event-not-participate.model';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
@@ -8,8 +7,7 @@ import { EventNotParticipateService } from './event-not-participate.service';
 class Helper {
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 1,
-    groupBetTypeIds: [],
-    groupBetTypeMultipleSelection: new MultipleSelection()
+    groupBetTypeIds: []
   };
   static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
     matchId: 1,
@@ -19,8 +17,8 @@ class Helper {
   };
   static readonly fakeNotParticipateModels: NotParticipateModel[] = [
     {
-      betTypeId: 1,
-      playerIds: '1',
+      groupBetTypeIds: '1',
+      playerId: 1,
       subIssueTypeId: 1,
       logInfoDetail: new LogInfoDetail(),
       matchId: 1,

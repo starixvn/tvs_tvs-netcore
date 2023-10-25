@@ -60,7 +60,7 @@ describe('EventEarlyKickOffService', () => {
 
   it('#assignModelsToEvents should assign new item to allEvents', async () => {
     const allEvents = [_.cloneDeep(Helper.fakeLogInfoEarlyKickOff)]
-    service.assignModelsToEvents(allEvents, [Helper.fakeEarlyKickOffModel]);
+    service.assignModelsToEvents(allEvents, [Helper.fakeEarlyKickOffModel], new FilterModel());
 
     expect(allEvents.length).toBe(2);
   });

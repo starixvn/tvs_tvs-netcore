@@ -73,8 +73,12 @@ public class MapTicketsExcelServiceTests
         Assert.Equal(4, result.Count());
     }
 
-    [Fact]
-    public void MapToGroupExcelVoidedTickets_ReturnsGroups()
+    [Theory]
+    [InlineData(38, 11)]
+    [InlineData(29, 13)]
+    [InlineData(1, 13)]
+    [InlineData(1, 1)]
+    public void MapToGroupExcelVoidedTickets_ReturnsGroups(short betTypeId, int issueTypeId)
     {
         // Arrange
         var originalGroup = new Group<VoidedTicketModel>
@@ -83,12 +87,11 @@ public class MapTicketsExcelServiceTests
             Tickets = new List<VoidedTicketModel>
             {
                 new() { TransId = 1 },
-                new() { TransId = 2, BetType = 38 }
+                new() { TransId = 2, BetType = betTypeId }
             }
         };
         var match = new Match();
         const int startIndex = 1;
-        const int issueTypeId = 123;
         var excelTicket = new ExcelVoidedTicketModel { No = 1, BetId = "Bet1", Member = "Member1" };
 
         mapFromBetListService

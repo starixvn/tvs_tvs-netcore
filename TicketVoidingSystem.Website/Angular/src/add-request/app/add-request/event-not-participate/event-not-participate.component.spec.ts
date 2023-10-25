@@ -2,7 +2,6 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../add-request.store';
@@ -14,7 +13,6 @@ import { FilterNotParticipateComponent } from './filter-not-participate/filter-n
 import { LogInfoNotParticipateComponent } from './log-info-not-participate/log-info-not-participate.component';
 import { FilterNotParticipateModel } from './models/filter-not-participate.model';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
-import { NotParticipateBetType } from './models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
 import { EventNotParticipateService } from './services/event-not-participate.service';
 import { FilterNotParticipateService } from './services/filter-not-participate.service';
@@ -26,8 +24,8 @@ class Helper {
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeNotParticipateModels: NotParticipateModel[] = [
     {
-      betTypeId: 1,
-      playerIds: '1',
+      groupBetTypeIds: '1',
+      playerId: 1,
       subIssueTypeId: 1,
       logInfoDetail: new LogInfoDetail(),
       matchId: 1,
@@ -42,21 +40,8 @@ class Helper {
   };
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 1,
-    groupBetTypeIds: [],
-    groupBetTypeMultipleSelection: new MultipleSelection()
+    groupBetTypeIds: []
   };
-  static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
-    {
-      betTypeId: 1,
-      betTypeName: '',
-      disabled: false
-    },
-    {
-      betTypeId: 2,
-      betTypeName: '',
-      disabled: false
-    }
-  ];
 }
 
 describe('EventNotParticipateComponent', () => {
@@ -98,9 +83,6 @@ describe('EventNotParticipateComponent', () => {
 
   it('ngOnInit should call #updateModelWhenChangeMatchId when isEdit', async () => {
     const { instance } = await shallow
-    .mock(FilterNotParticipateService, {
-      initDefaultPlayerSelection: jest.fn()
-    })
     .mock(EventNotParticipateService, { assignModelsToEvents: jest.fn().mockReturnValue(Helper.fakeLogInfoNotParticipate) })
     .render({
       bind: {
@@ -120,13 +102,11 @@ describe('EventNotParticipateComponent', () => {
   });
 
   it('updateModelWhenChangeMatchId should call #filterService.getPlayers', async () => {
-    const mockGetNotParticipateBetTypes = jest.fn().mockReturnValue(Helper.fakeNotParticipateBetTypes);
     const mockGetPlayers = jest.fn();
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
     .mock(FilterNotParticipateService, {
-      getPlayers: mockGetPlayers,
-      getNotParticipateBetTypes: mockGetNotParticipateBetTypes,
+      getPlayers: mockGetPlayers
     })
     .mock(AddRequestStore, {
       changeBlockingUiStatus: mockChangeBlockingUiStatus,
@@ -141,7 +121,6 @@ describe('EventNotParticipateComponent', () => {
 
     await instance['updateModelWhenChangeMatchId']();
 
-    expect(mockGetNotParticipateBetTypes).toHaveBeenCalledTimes(1);
     expect(mockGetPlayers).toHaveBeenCalledTimes(1);
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });

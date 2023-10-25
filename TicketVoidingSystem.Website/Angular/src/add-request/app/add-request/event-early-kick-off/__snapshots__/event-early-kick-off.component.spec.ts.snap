@@ -1,5 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent init should match snapshot 1`] = `
+EventEarlyKickOffComponent {
+  "INPUT_MATCH_ID_CLASS": "input-related-match-id",
+  "addChildMatchModel": AddChildMatchModel {},
+  "addRequestStore": null,
+  "allSelectedEvents": Array [],
+  "earlyKickOffModels": Array [],
+  "element": null,
+  "eventEarlyKickOffService": null,
+  "issueTypes": IssueTypes {
+    "issueTypes": Array [],
+    "selectedSubIssueTypes": Array [],
+    "subIssueTypes": Array [],
+  },
+  "logInfoService": null,
+  "mainEvent": LogInfoEarlyKickOff {
+    "logInfoDetail": LogInfoDetail {},
+    "pagingModel": PagingModel {
+      "page": 1,
+      "pageSize": 3000,
+      "selection": Array [
+        500,
+        1000,
+        2000,
+        3000,
+      ],
+      "total": 0,
+    },
+    "tableTicketsModel": TableTicketsModel {
+      "groups": Array [],
+    },
+  },
+  "others": OthersModel {},
+  "primitiveProps": PrimitiveProperty {},
+  "relatedEventService": null,
+  "relatedEvents": Array [],
+  "saveRequestService": null,
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "updateMatchId": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "validationService": null,
+}
+`;
+
 exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent should init match snapshot 1`] = `
 <ng-component
   __ngContext__={[Function LRootView]}

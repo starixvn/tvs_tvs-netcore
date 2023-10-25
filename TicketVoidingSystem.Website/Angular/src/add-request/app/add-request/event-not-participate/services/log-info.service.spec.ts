@@ -6,24 +6,11 @@ import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
-import { NotParticipateBetType } from '../models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventNotParticipateService } from './event-not-participate.service';
 import { LogInfoService } from './log-info.service';
 
 class Helper {
-  static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
-    {
-      betTypeId: 1,
-      betTypeName: '',
-      disabled: false
-    },
-    {
-      betTypeId: 2,
-      betTypeName: '',
-      disabled: false
-    }
-  ];
   static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
     matchId: 1,
     filterNotParticipates: [],

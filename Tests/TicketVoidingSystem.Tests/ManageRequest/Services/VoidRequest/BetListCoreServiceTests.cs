@@ -24,16 +24,18 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             service = new BetListCoreServiceImp(mapper, betListService);
         }
 
-        [Fact]
-        public void GetTicket_PlainTextForExportExcel_HasBetListServiceBuildChoice()
+        [Theory]
+        [InlineData(38, true, 11)]
+        [InlineData(31, true, 13)]
+        public void GetTicket_PlainTextForExportExcel_HasBetListServiceBuildChoice(short betTypeId, bool isParlay, int issueTypeId)
         {
             // Arrange
             var item = new GetTicketModel
             {
-                BetType = 31,
+                BetType = betTypeId,
                 IsLiveIndicator = true,
                 BetdaqId = 1,
-                IsMixParlay = true,
+                IsMixParlay = isParlay,
                 SubTransId = 1,
                 Hdp1 = 1,
                 Hdp2 = 2,
@@ -41,11 +43,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
                 RefNo = 4,
                 AwayId = 1,
                 HomeId = 0,
-                LeagueId = 3
+                LeagueId = 3,
             };
             var match = new Match();
-            var choiceType = ChoiceType.Excel;
-            var issueTypeId = 11;
+            const ChoiceType choiceType = ChoiceType.Excel;
             betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("a");
             betListService.BuildStake(Arg.Any<Ticket>(), Arg.Any<TicketHelper>()).ReturnsForAnyArgs("b");
             betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("c");
@@ -67,16 +68,19 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             betListService.Received().BuildChoiceExcel(Arg.Any<Ticket>(), Arg.Any<TicketHelper>(), null, false);
         }
 
-        [Fact]
-        public void GetTicket_NotPlainTextForExportExcel_ChoiceFromBuildChoiceParlay()
+        [Theory]
+        [InlineData(ChoiceType.Excel, 31, true, 13, "")]
+        [InlineData(ChoiceType.Email, 38, false, 13, "<div id=11")]
+        [InlineData(ChoiceType.Excel, 31, false, 11, "<div id=11")]
+        public void GetTicket_NotPlainTextForExportExcel_ChoiceFromBuildChoiceParlay(ChoiceType choiceType, short betTypeId, bool isParlay, int issueTypeId, string expected)
         {
             // Arrange
             var item = new GetTicketModel
             {
-                BetType = 31,
+                BetType = betTypeId,
                 IsLiveIndicator = true,
                 BetdaqId = 1,
-                IsMixParlay = false,
+                IsMixParlay = isParlay,
                 SubTransId = 1,
                 Hdp1 = 1,
                 Hdp2 = 2,
@@ -84,10 +88,9 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
                 RefNo = 4,
                 AwayId = 1,
                 HomeId = 0,
-                LeagueId = 3
+                LeagueId = 3,
+                SportType = 1
             };
-            var choiceType = new ChoiceType();
-            var issueTypeId = 11;
             betListService.BuildChoice(Arg.Any<ITicket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("<div id=11");
             mapper.Map<Ticket>(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(new Ticket());
 
@@ -95,7 +98,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             var actual = service.GetTicket(item, null, choiceType, issueTypeId);
 
             // Assert
-            Assert.Equal("<div id=11", actual.Choice);
+            Assert.Equal(expected, actual.Choice);
         }
 
         [Fact]
@@ -105,7 +108,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             var issueTypeId = IssueTypeConstant.DangerAccepted;
             var item = new GetTicketModel
             {
-                BetType = 31,
+                BetType = 38,
                 IsLiveIndicator = true,
                 BetdaqId = 1,
                 IsMixParlay = true,
@@ -118,7 +121,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
                 HomeId = 0,
                 LeagueId = 3
             };
-            var choiceType = new ChoiceType();
+            const ChoiceType choiceType = new();
             betListService.BuildChoice(Arg.Any<ITicket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("<div id=11");
             mapper.Map<Ticket>(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(new Ticket());
 

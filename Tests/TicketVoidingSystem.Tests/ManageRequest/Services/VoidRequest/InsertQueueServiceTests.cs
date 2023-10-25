@@ -36,7 +36,7 @@ public class InsertQueueServiceTests
     public async Task InsertTicketVoidingQueue_ValidRequest_HasCreateInsertTicketVoidingQueueCriteria(int issueTypeId)
     {
         // Arrange
-        var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1 };
+        var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1, MatchId = 1 };
         var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
 
         var query = new InsertQueueQuery

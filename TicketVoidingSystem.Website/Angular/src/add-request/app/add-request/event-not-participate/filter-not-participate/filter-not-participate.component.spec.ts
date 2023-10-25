@@ -2,9 +2,8 @@ import { ElementRef, NgModule, QueryList } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
-import { NotParticipateBetType } from '../models/not-participate-bet-type.model';
+import { Player } from '../models/player.model';
 import { FilterNotParticipateService } from '../services/filter-not-participate.service';
 import { FilterNotParticipateItemComponent } from './filter-not-participate-item/filter-not-participate-item.component';
 import { FilterNotParticipateComponent } from './filter-not-participate.component';
@@ -13,18 +12,17 @@ class Helper {
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 0,
-    groupBetTypeIds: [],
-    groupBetTypeMultipleSelection: new MultipleSelection()
+    groupBetTypeIds: []
   };
-  static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
+  static readonly fakePlayers: Player[] = [
     {
+      betChoice: '',
       betTypeId: 1,
-      betTypeName: '1',
-      disabled: false
-    },
-    {
-      betTypeId: 2,
-      betTypeName: '2',
+      oddsId: '1',
+      playerId: 1,
+      playerName: '',
+      playNamesChineseSimplified: '',
+      playNamesChineseTraditional: '',
       disabled: false
     }
   ];
@@ -87,7 +85,6 @@ describe('FilterNotParticipateComponent', () => {
     const filterItemComponents = new QueryList<FilterNotParticipateComponent>();
     filterItemComponents.reset([...filterItemComponents.toArray(), filterItemComponent]);
     instance.filterItemComponents = filterItemComponents;
-    instance.originalNotParticipateBetTypes = Helper.fakeNotParticipateBetTypes;
     const actual = instance.isValid();
 
     expect(actual).toBeTruthy();
@@ -101,7 +98,7 @@ describe('FilterNotParticipateComponent', () => {
         models: [Helper.fakeFilterNotParticipateModel]
       }
     });
-    instance.originalNotParticipateBetTypes = Helper.fakeNotParticipateBetTypes;
+    instance.originalPlayers = Helper.fakePlayers;
     instance.addBetTypeItem();
 
     expect(instance.models.length).toBe(2);
@@ -115,7 +112,7 @@ describe('FilterNotParticipateComponent', () => {
         models: [Helper.fakeFilterNotParticipateModel]
       }
     });
-    instance.originalNotParticipateBetTypes = Helper.fakeNotParticipateBetTypes;
+    instance.originalPlayers = Helper.fakePlayers;
     instance.models.push(new FilterNotParticipateModel());
     instance.removeBetTypeItem(1);
 

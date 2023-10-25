@@ -6,7 +6,6 @@ import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.mo
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
-import { NotParticipateBetType } from '../models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventNotParticipateService } from './event-not-participate.service';
@@ -15,18 +14,6 @@ import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
 
 class Helper {
-  static readonly fakeNotParticipateBetTypes: NotParticipateBetType[] = [
-    {
-      betTypeId: 1,
-      betTypeName: '',
-      disabled: false
-    },
-    {
-      betTypeId: 2,
-      betTypeName: '',
-      disabled: false
-    }
-  ];
   static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
     matchId: 1,
     filterNotParticipates: [],

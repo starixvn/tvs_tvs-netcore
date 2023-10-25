@@ -103,19 +103,20 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         Assert.Equal("-", result);
     }
 
-    [Fact]
-    public void GetOdds_OddNameIsNotNullOrWhiteSpace_ReturnOddHtmlWithReplacedBrTagsAndClosingBracket()
+    [Theory]
+    [InlineData("OddName", "<span class=\"underdog {oddsClassName}\">-</span> (<span class=\"oddstype\"></span>)")]
+    [InlineData(null, "<span class=\"underdog {oddsClassName}\">-</span> <span class=\"oddstype\"></span>")]
+    public void GetOdds_OddNameIsNotNullOrWhiteSpace_ReturnOddHtmlWithReplacedBrTagsAndClosingBracket(string oddName, string expected)
     {
         // Arrange
         var ticket = new Ticket();
-        const string oddName = "OddName";
         oddsService.GetOddsName(Arg.Any<string>()).Returns(oddName);
 
         // Act
         var result = service.GetOdds(ticket, false);
 
         // Assert
-        Assert.Equal("<span class=\"underdog {oddsClassName}\">-</span> (<span class=\"oddstype\"></span>)", result);
+        Assert.Equal(expected, result);
     }
 
     [Fact]

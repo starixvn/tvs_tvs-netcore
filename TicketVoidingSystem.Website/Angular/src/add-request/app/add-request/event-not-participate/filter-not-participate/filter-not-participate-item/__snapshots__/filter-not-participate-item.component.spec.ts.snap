@@ -30,34 +30,29 @@ FilterNotParticipateItemComponent {
     "thrownError": null,
   },
   "element": null,
-  "filterService": null,
+  "groupBetTypes": Array [
+    Object {
+      "group": "All",
+      "name": "1 Inns",
+      "value": "1",
+    },
+    Object {
+      "group": "All",
+      "name": "2 Inns",
+      "value": "2",
+    },
+    Object {
+      "group": "All",
+      "name": "FT",
+      "value": "3",
+    },
+  ],
   "model": Object {
-    "betTypeId": 1,
-    "playerIds": Array [
+    "groupBetTypeIds": Array [
       "1",
       "2",
     ],
-    "playerMultipleSelection": MultipleSelection {
-      "allItemsCheckedText": "All",
-      "buttonHeight": "36px",
-      "characterText": ", ",
-      "characterValue": ",",
-      "checkAllCheckBoxText": "Check All Items",
-      "isCheckAll": false,
-      "isDefaultSelectAll": true,
-      "isShowPlaceHolder": false,
-      "items": Array [],
-      "maxHeight": "350px",
-      "maxWidth": "170px",
-      "noData": "No Data",
-      "noneItemCheckedText": "None Selected",
-      "numberItemsDisplay": 3,
-      "showHeader": true,
-      "subfixNumberItemsCheckedText": " selected",
-    },
-  },
-  "primitivePropertyItem": PrimitivePropertyItem {
-    "isDisabledPlayer": true,
+    "playerId": 1,
   },
   "removeItemEvent": EventEmitter_ {
     "__isAsync": false,

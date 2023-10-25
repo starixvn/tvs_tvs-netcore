@@ -14,26 +14,8 @@ FilterNotParticipateComponent {
   "filterService": null,
   "models": Array [
     Object {
-      "betTypeId": 0,
-      "playerIds": Array [],
-      "playerMultipleSelection": MultipleSelection {
-        "allItemsCheckedText": "All",
-        "buttonHeight": "36px",
-        "characterText": ", ",
-        "characterValue": ",",
-        "checkAllCheckBoxText": "Check All Items",
-        "isCheckAll": false,
-        "isDefaultSelectAll": true,
-        "isShowPlaceHolder": false,
-        "items": Array [],
-        "maxHeight": "350px",
-        "maxWidth": "170px",
-        "noData": "No Data",
-        "noneItemCheckedText": "None Selected",
-        "numberItemsDisplay": 3,
-        "showHeader": true,
-        "subfixNumberItemsCheckedText": " selected",
-      },
+      "groupBetTypeIds": Array [],
+      "playerId": 0,
     },
   ],
 }
