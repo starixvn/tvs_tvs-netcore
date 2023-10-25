@@ -2,7 +2,7 @@
 # dotnet subset
 FROM hub.nexdev.net/base/dotnet/core/sdk:7.0-alpine AS prepare-restore-files
 ENV PATH="${PATH}:/root/.dotnet/tools"
-RUN dotnet tool install --global --no-cache dotnet-subset --version 0.3.2
+RUN dotnet tool install --global --no-cache dotnet-subset --version 0.3.1
 
 WORKDIR /src
 COPY . .
