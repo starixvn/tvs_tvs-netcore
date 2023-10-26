@@ -217,7 +217,8 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.WRONG_MARKET_OFFERED,
       IssueTypeId.REDUCED_OVER,
       IssueTypeId.MATCH_COMPLETED,
-      IssueTypeId.NOT_PARTICIPATE
+      IssueTypeId.NOT_PARTICIPATE,
+      IssueTypeId.WRONG_QUARTER_HDP
     ];
     const subIssueTypeS = [
       SubIssueTypeId.ABANDONED,
@@ -225,7 +226,7 @@ export class TemplateMessageComponent implements OnChanges {
       SubIssueTypeId.TECHNICAL_ERROR
     ];
     if((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
-      && this.value.eventDate !== moment(new Date()).format(Format.EVENT_DATE))
+      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE))
     {
       return false;
     };
@@ -238,7 +239,7 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.WRONG_1ST_OU
     ];
 
-    return (issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && !this.value.isCheckedEarlyEvent);
+    return !(issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && this.value.isCheckedEarlyEvent);
   }
 
   updateInputs() {
