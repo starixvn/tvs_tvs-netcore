@@ -227,9 +227,9 @@ export class EventEarlyKickOffComponent implements OnInit {
 
   private updateKickOffTime(matchInfo: MatchInfo): string {
     if (matchInfo?.matchId && !this.isEdit) {
-      return moment(matchInfo.kickOffTime).tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
+      return moment(matchInfo.kickOffTime).format('YYYY-MM-DD HH:mm:ss.SSS');
     }
 
-    return moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
+    return moment().format('YYYY-MM-DD HH:mm:ss.SSS');
   }
 }
