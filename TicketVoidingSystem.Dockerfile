@@ -2,7 +2,7 @@
 # dotnet subset
 FROM hub.nexdev.net/base/dotnet/core/sdk:7.0-alpine AS prepare-restore-files
 ENV PATH="${PATH}:/root/.dotnet/tools"
-RUN dotnet tool install --global --no-cache dotnet-subset --version 0.3.1
+RUN dotnet tool install --global --no-cache dotnet-subset --version 0.3.2
 
 WORKDIR /src
 COPY . .
@@ -23,7 +23,7 @@ COPY ./TicketVoidingSystem.Website/. ./TicketVoidingSystem.Website
 
 WORKDIR /src/TicketVoidingSystem.Website
 RUN --mount=type=cache,target=/root/.nuget/packages \
- dotnet publish -c release -o /app --no-restore
+ dotnet publish -c release -o /app
 
 FROM hub.nexdev.net/base/dotnet/core/aspnet:7.0-alpine AS base
 

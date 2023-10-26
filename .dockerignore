@@ -2,3 +2,5 @@
 **/obj
 **/.vscode
 **/.vs
+TicketVoidingSystem.Website/Angular/**
+TicketVoidingSystem.Website/Angular-Old/**
