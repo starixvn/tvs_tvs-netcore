@@ -53,7 +53,7 @@ export class LogInfoEkoComponent implements OnInit {
   }
 
   public isShowMessage(): boolean {
-    return this.logInfo.messageValidationLogInfo?.length > 0 && this.logInfo.messageValidationLogInfo.every(x => !x.isError);
+    return this.logInfo.messageValidationLogInfo?.some(x => !x.isError);
   }
 
   public handleDeleteEvent(matchId: number) {

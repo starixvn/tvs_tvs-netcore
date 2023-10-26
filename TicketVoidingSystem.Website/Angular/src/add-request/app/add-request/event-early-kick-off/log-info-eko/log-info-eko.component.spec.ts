@@ -6,7 +6,6 @@ import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { FilterModel } from '../../filter/filter.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
@@ -20,7 +19,6 @@ class Helper {
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
     matchId: 1,
-    logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     eventName: '',
     isCollapse: false,
@@ -31,6 +29,7 @@ class Helper {
     matchModel: new MatchModel(),
     pagingModel: new PagingModel(),
     subIssueTypeId: 1,
+    isInvalidTotalTickets: false,
     tableTicketsModel: new TableTicketsModel()
   };
 }

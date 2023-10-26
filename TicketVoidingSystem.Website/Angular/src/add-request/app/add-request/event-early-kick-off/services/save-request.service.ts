@@ -43,6 +43,7 @@ export class SaveRequestService {
     const query = this.logInfoService.initQuery(arg.mainEvent.pagingModel.page - 1, arg.mainEvent.pagingModel.pageSize, arg.mainEvent, arg.filter);
     await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps); // must be called before getLogInfo
     await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
+    arg.primitiveProps.isShowLogInfoEvents = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
     if (this.validationService.isAllEventsValid(arg.allEvents)) {
@@ -122,8 +123,16 @@ export class SaveRequestService {
   private getMessageConfirmation(arg: SaveRequestArg): string {
     let message = '';
 
+    if (arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError))) {
+      message = `${message}<div>There are some warnings in this request.</div>`;
+    }
+
     if (arg.isEdit && arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) {
       message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
+    }
+
+    if (arg.isEdit && arg.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
+      message = `${message}<div style="color:red">Please remind this request ${arg.requestId} is confirmed by ${arg.requestedBy}.</div>`;
     }
 
     return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;

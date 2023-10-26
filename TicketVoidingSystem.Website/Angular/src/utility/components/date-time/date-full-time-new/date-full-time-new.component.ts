@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { NgbDate, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { CommonStaticService } from '../../../../utility/services/common.service';
@@ -24,6 +24,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   @Input() timeFormat = DateTimeFormat.TIME_FORMAT;
   @Output() dateTimeChange = new EventEmitter<string>();
   @Output() changeEvent = new EventEmitter();
+  @ViewChild('datePicker') datePicker: NgbInputDatepicker;
 
   tooltip = new Tooltip();
   date: NgbDate;
@@ -50,6 +51,14 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.updateData();
+  }
+
+  public onClickIconCalendar(): void {
+    if (this.allowedHideDate) {
+      this.isShowInputDate = !this.isShowInputDate;
+    } else {
+      this.datePicker.toggle();
+    }
   }
 
   public updateData(): void {

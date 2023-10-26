@@ -82,10 +82,13 @@ export class EventEarlyKickOffComponent implements OnInit {
       this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents);
     }
   }
+
   public changeMatchEvent(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+
+    console.log(this.mainEvent)
     this.mainEvent.leagueName = this.leagueEventComponent?.selectedMatch.leagueName;
     this.mainEvent.matchId = this.leagueEventComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.leagueEventComponent?.selectedMatch.name;
@@ -97,7 +100,9 @@ export class EventEarlyKickOffComponent implements OnInit {
 
   public changeKickOffTime(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
-    this.allSelectedEvents.forEach(x => x.kickOffTime = this.kickOffTimeComponent.getDateTime())
+    if (this.kickOffTimeComponent.isTimeValid()) {
+      this.allSelectedEvents.forEach(x => x.kickOffTime = this.kickOffTimeComponent.getDateTime());
+    }
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 

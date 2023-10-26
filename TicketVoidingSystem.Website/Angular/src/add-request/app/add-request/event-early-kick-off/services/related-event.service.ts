@@ -97,7 +97,7 @@ export class RelatedEventService {
 
   private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoEarlyKickOff[], originalAllEvents: LogInfoEarlyKickOff[]): void {
     eventsGetLogInfo.forEach(x => {
-      if (!originalAllEvents.some(y => y.matchId === x.matchId)) {
+      if (!originalAllEvents.some(y => y.matchId === x.matchId) && !x.isInvalidTotalTickets) {
         originalAllEvents.push(x);
       } else {
         const event = originalAllEvents.find(y => y.matchId === x.matchId);

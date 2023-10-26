@@ -1,5 +1,4 @@
 import { PagingModel } from "../../../../../utility/components/paging/paging/paging.model";
-import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
 import { MatchModel } from "../../../../../utility/models/match.model";
 import { ValidationMessage } from "../../models/get-log-info.model";
 import { TableTicketsModel } from "../tickets-list/table-tickets.model";
@@ -18,7 +17,7 @@ export class LogInfoEarlyKickOff {
   isCollapse: boolean;
   pagingModel = new PagingModel();
 
-  logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
+  isInvalidTotalTickets: boolean;
   isShowValidation: boolean;
 }

@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { FilterModel } from '../../filter/filter.model';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
@@ -11,7 +10,6 @@ import { EventEarlyKickOffService } from './event-eko.service';
 class Helper {
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
     matchId: 1,
-    logInfoDetail: new LogInfoDetail(),
     messageValidationLogInfo: [],
     eventName: '',
     isCollapse: false,
@@ -22,6 +20,7 @@ class Helper {
     matchModel: new MatchModel(),
     pagingModel: new PagingModel(),
     subIssueTypeId: 1,
+    isInvalidTotalTickets: false,
     tableTicketsModel: new TableTicketsModel()
   };
 
