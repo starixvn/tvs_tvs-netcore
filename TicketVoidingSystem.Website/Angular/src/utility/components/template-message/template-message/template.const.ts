@@ -39,6 +39,7 @@ export class IssueTypeId {
   static readonly MATCH_COMPLETED = 14;
   static readonly NOT_PARTICIPATE = 21;
   static readonly OTHER_ISSUES = 18;
+  static readonly WRONG_QUARTER_HDP = 16;
 }
 
 export class SubIssueTypeId {
