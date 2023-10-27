@@ -18,10 +18,7 @@
     <Compile Remove="Angular\**" />
     <Content Remove="Angular-Old\**" />
     <Content Remove="Angular\**" />
-    <EmbeddedResource Remove="Angular-Old\**" />
-    <EmbeddedResource Remove="Angular\**" />
-    <None Remove="Angular-Old\**" />
-    <None Remove="Angular\**" />
+
   </ItemGroup>
 
   <ItemGroup>
@@ -80,11 +77,4 @@
     <ProjectReference Include="..\Sources\TicketVoidingSystem.VoidSingleBet\TicketVoidingSystem.VoidSingleBet.csproj" />
     <ProjectReference Include="..\Sources\TicketVoidingSystem\TicketVoidingSystem.csproj" />
   </ItemGroup>
-
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-
 </Project>
