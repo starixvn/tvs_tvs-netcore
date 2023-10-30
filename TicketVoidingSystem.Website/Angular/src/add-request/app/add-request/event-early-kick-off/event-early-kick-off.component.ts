@@ -15,6 +15,7 @@ import { EarlyKickOffModel } from '../models/event-eko.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { OthersModel } from '../others/others.model';
+import { ConfirmEarlyKickOffModel } from './confirm-eko/confirm-eko.model';
 import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
 import { AddRelatedEventArg } from './models/add-related-event.model';
 import { LogInfoEarlyKickOff } from './models/log-info-eko.model';
@@ -52,6 +53,7 @@ export class EventEarlyKickOffComponent implements OnInit {
   allSelectedEvents: LogInfoEarlyKickOff[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
+  confirmEarlyKickOff = new ConfirmEarlyKickOffModel();
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
   constructor(
@@ -143,6 +145,14 @@ export class EventEarlyKickOffComponent implements OnInit {
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput(false));
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
+  }
+
   private initSaveRequestInput(isSaveAndVoid: boolean) {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
@@ -159,6 +169,7 @@ export class EventEarlyKickOffComponent implements OnInit {
     arg.addRequestStore = this.addRequestStore;
     arg.tooltip = this.tooltip;
     arg.kickOffTimeComponent = this.kickOffTimeComponent;
+    arg.confirmEarlyKickOff = this.confirmEarlyKickOff;
     arg.others = this.others;
     arg.isSaveAndVoid = isSaveAndVoid;
 

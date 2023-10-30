@@ -70,6 +70,7 @@ import { LeagueEventComponent } from './league-event/league-event.component';
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
 import { LogInfoEkoComponent } from './event-early-kick-off/log-info-eko/log-info-eko.component';
+import { ConfirmEkoComponent } from './event-early-kick-off/confirm-eko/confirm-eko.component';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { LogInfoEkoComponent } from './event-early-kick-off/log-info-eko/log-inf
     LogInfoEkoComponent,
     FilterNotParticipateComponent,
     FilterNotParticipateItemComponent,
-    LogInfoNotParticipateComponent
+    LogInfoNotParticipateComponent,
+    ConfirmEkoComponent
   ],
   exports: [
     AddRequestComponent

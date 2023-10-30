@@ -80,4 +80,5 @@
   (selectedEventsChange)="saveRelatedEvent($event)"
   [model]="addChildMatchModel">
 </add-child-match>
+<confirm-eko [model]="confirmEarlyKickOff" (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()"></confirm-eko>
 <tooltip [tooltip]="tooltip"></tooltip>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DateFullTimeNewComponent } from 'src/utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -37,11 +37,7 @@ export class ValidationService {
   }
 
   public isAllEventsValid(logInfoEarlyKickOff: LogInfoEarlyKickOff[]): boolean {
-    if (logInfoEarlyKickOff.some(x => x.messageValidationLogInfo.some(y => y.isError))) {
-      return false;
-    }
-
-    return true;
+   return logInfoEarlyKickOff.every(x => this.isEventMatchValid(x));
   }
 
   public checkCanShowConfirmationEarlyKickOff(saveRequestArg: SaveRequestArg): boolean {
@@ -55,5 +51,21 @@ export class ValidationService {
 
   private isTimeKickOffValid(kickOffTimeComponent: DateFullTimeNewComponent): boolean {
     return kickOffTimeComponent.validateWithTooltip();
+  }
+
+  public isEventMatchValid(event: LogInfoEarlyKickOff): boolean {
+    if (event.isMainMatch && event.messageValidationLogInfo.some(x => x.isError)) {
+      return false;
+    }
+
+    if (!event.isMainMatch && event.messageValidationLogInfo.some(x => x.isError && !x.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
+    return isEdit && editingBy !== createdBy;
   }
 }

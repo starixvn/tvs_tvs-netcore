@@ -4,6 +4,7 @@ import { AddRequestStore } from "../../add-request.store";
 import { LeagueEventRedCardComponent } from "../../event-red-card/league-event-red-card/league-event-red-card.component";
 import { FilterModel } from "../../filter/filter.model";
 import { OthersModel } from "../../others/others.model";
+import { ConfirmEarlyKickOffModel } from "../confirm-eko/confirm-eko.model";
 import { LogInfoEarlyKickOff } from "./log-info-eko.model";
 import { PrimitiveProperty } from "./primitive-property.model";
 
@@ -23,4 +24,5 @@ export class SaveRequestArg {
   kickOffTimeComponent: DateFullTimeNewComponent;
   addRequestStore: AddRequestStore;
   isSaveAndVoid: boolean;
+  confirmEarlyKickOff: ConfirmEarlyKickOffModel;
 }

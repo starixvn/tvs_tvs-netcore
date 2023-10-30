@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import * as _ from 'lodash';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -55,20 +57,13 @@ export class SaveRequestService {
 
   private proceedSaveRequest(arg: SaveRequestArg) {
     if (this.validationService.checkCanShowConfirmationEarlyKickOff(arg)) {
-      this.popupService.showConfirm(
-        this.getMessageConfirmation(arg),
-        async () => {
-          await this.onClickConfirmSave(arg);
-        },
-        () => {
-          arg.addRequestStore.changeSavingRequestStatus(false);
-        });
+      this.showPopupConfirmSave(arg);
     } else {
       this.executeSaveRequestApi(arg);
     }
   }
 
-  private async onClickConfirmSave(arg: SaveRequestArg) {
+  public async onClickConfirmSave(arg: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
     if (isDataValidAgain) {
@@ -103,7 +98,7 @@ export class SaveRequestService {
     query.remark = args.others.remark;
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
     if (!args.filter.isVoided) {
-      query.earlyKickOffInfo = args.allEvents.map(x => this.getEarlyKickOffModel(x));
+      query.earlyKickOffInfo = args.allEvents.filter(x => !x.isInvalidTotalTickets).map(x => this.getEarlyKickOffModel(x));
     }
 
     return query;
@@ -118,6 +113,29 @@ export class SaveRequestService {
     model.kickOffTime = event.kickOffTime;
 
     return model;
+  }
+
+  private showPopupConfirmSave(arg: SaveRequestArg) {
+    arg.confirmEarlyKickOff.warningRelatedEvents = [];
+    if (!arg.filter.isVoided) {
+      arg.allEvents.filter(x => !x.isMainMatch).forEach(y => {
+        y.messageValidationLogInfo.forEach(t => {
+          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+            arg.confirmEarlyKickOff.warningRelatedEvents.push(y.eventName);
+          }
+        });
+      });
+      arg.confirmEarlyKickOff.isHasWarningEvent = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
+      arg.confirmEarlyKickOff.isHasWarningEditTakeNoteRequest =
+      (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
+    }
+
+    arg.confirmEarlyKickOff.requestId = arg.requestId;
+    arg.confirmEarlyKickOff.requestedBy = arg.requestedBy;
+    arg.confirmEarlyKickOff.isEditingByAnotherUser =
+      this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
+    arg.confirmEarlyKickOff.isOpenDialog = true;
+    arg.confirmEarlyKickOff = _.clone(arg.confirmEarlyKickOff);
   }
 
   private getMessageConfirmation(arg: SaveRequestArg): string {
@@ -136,5 +154,17 @@ export class SaveRequestService {
     }
 
     return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
+  }
+
+  private getMessageExcludeRelatedMatch(allEvents: LogInfoEarlyKickOff[]): void {
+    let message = 'Related match(es) excluded when creating new request because having no valid tickets in the current range:'
+    const x = [];
+    allEvents.filter(x => !x.isMainMatch).forEach(y => {
+      y.messageValidationLogInfo.forEach(t => {
+        if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          x.push(y.eventName);
+        }
+      });
+    });
   }
 }
