@@ -288,6 +288,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.templateValue.totalTickets = this.ticketsModel.getNumberOfCheckedTickets();
     this.templateValue.betTypeNameReplaceMessage = betTypeNameReplaceMessage;
     this.templateValue.playerName = this.filterComponent.playerNamesSelected;
+    this.templateValue.match = this.matchViewModel;
   }
 
   renderTickets(data: TicketsModel) {

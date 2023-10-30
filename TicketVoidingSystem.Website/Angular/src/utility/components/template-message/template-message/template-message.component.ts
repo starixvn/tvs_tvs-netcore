@@ -184,9 +184,9 @@ export class TemplateMessageComponent implements OnChanges {
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.HOME_TEAM_NAME, this.value.homeTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.AWAY_TEAM_NAME, this.value.awayTeamName);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.LEAGUE_NAME, this.value.leagueName);
-    this.templateService.replaceEventDate(this.message, this.value.kickOffTime);
+    this.templateService.replaceEventDate(this.message, this.value.match?.kickOffTime);
     this.templateService.replaceTime(this.message, this.value, this.selectedTemplated.templateId);
-    this.templateService.replaceKickOffTime(this.message, this.value.kickOffTime);
+    this.templateService.replaceKickOffTime(this.message, this.value?.kickOffTime);
     this.templateService.replaceEachLanguage(this.message, TemplateReplace.PLAYER_NAME, this.value.playerName);
   }
 

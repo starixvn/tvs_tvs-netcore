@@ -54,7 +54,6 @@ export class TemplateService {
       eventDate: moment(new Date(match.eventDate)).format(Format.EVENT_DATE),
       sportTypeId: match.sportType,
       matchId: match.matchId,
-      kickOffTime: match.kickOffTime
     };
   }
 
