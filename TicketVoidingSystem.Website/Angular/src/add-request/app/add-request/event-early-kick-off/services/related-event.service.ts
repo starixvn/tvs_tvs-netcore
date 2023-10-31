@@ -29,6 +29,7 @@ export class RelatedEventService {
     query.eventDate = filterModel.eventDate;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
+    query.sportType = filterModel.sportType;
 
     return this.addRequestApiService.getChildMatches(query);
   }

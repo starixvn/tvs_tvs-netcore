@@ -3,4 +3,5 @@ export class GetChildMatchQuery {
   issueTypeId: number;
   isMainMatch: boolean;
   eventDate: string;
+  sportType: number;
 }

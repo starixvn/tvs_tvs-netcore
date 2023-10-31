@@ -90,7 +90,6 @@ export class EventEarlyKickOffComponent implements OnInit {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
 
-    console.log(this.mainEvent)
     this.mainEvent.leagueName = this.leagueEventComponent?.selectedMatch.leagueName;
     this.mainEvent.matchId = this.leagueEventComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.leagueEventComponent?.selectedMatch.name;

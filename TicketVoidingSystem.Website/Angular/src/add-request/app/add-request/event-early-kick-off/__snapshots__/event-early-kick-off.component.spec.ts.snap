@@ -6,6 +6,9 @@ EventEarlyKickOffComponent {
   "addChildMatchModel": AddChildMatchModel {},
   "addRequestStore": null,
   "allSelectedEvents": Array [],
+  "confirmEarlyKickOff": ConfirmEarlyKickOffModel {
+    "warningRelatedEvents": Array [],
+  },
   "earlyKickOffModels": Array [],
   "element": null,
   "eventEarlyKickOffService": null,
@@ -16,7 +19,6 @@ EventEarlyKickOffComponent {
   },
   "logInfoService": null,
   "mainEvent": LogInfoEarlyKickOff {
-    "logInfoDetail": LogInfoDetail {},
     "pagingModel": PagingModel {
       "page": 1,
       "pageSize": 3000,

@@ -8,6 +8,7 @@ public class GetRelatedMatchCriteria : CriteriaBase
     public DateTime? EventDate { get; set; }
     public bool IsMainMatch { get; set; }
     public int IssueTypeId { get; set; }
+    public int? SportType { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_RelatedEvent_Select";
 

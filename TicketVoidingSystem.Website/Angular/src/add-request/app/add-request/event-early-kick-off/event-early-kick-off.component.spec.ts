@@ -1,12 +1,16 @@
-import { NgModule } from '@angular/core';
+import { NgModule, QueryList } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { AddChildMatchComponent } from '../../../../utility/components/add-child-match/add-child-match.component';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
+import { MatchType } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { HttpService } from '../../../../utility/services/http.service';
@@ -14,13 +18,20 @@ import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { LeagueEventComponent } from '../league-event/league-event.component';
+import { EarlyKickOffModel } from '../models/event-eko.model';
 import { GetLogInfoModel, GetLogInfoViewModel } from '../models/get-log-info.model';
+import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
+import { ConfirmEkoComponent } from './confirm-eko/confirm-eko.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off.component';
+import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
 import { LogInfoEarlyKickOff } from './models/log-info-eko.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { EventEarlyKickOffService } from './services/event-eko.service';
 import { LogInfoService } from './services/log-info.service';
+import { RelatedEventService } from './services/related-event.service';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 import { TableTicketsModel } from './tickets-list/table-tickets.model';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
 
@@ -31,6 +42,24 @@ class Helper {
   static readonly kickOffTime = '2019-11-18 12:08:49.737';
   static readonly timeModelValue = '2019/11/18 12:08:49';
   static readonly defaultDate = '2019-11-09 12:08:49.737';
+  static readonly fakeEarlyKickOffModel: EarlyKickOffModel = {
+    eventDate: new Date(),
+    isMainMatch: true,
+    kickOffTime: '',
+    matchId: 1,
+    subIssueTypeId: 1
+  }
+  static readonly fakeChildMatches: ChildMatchModel[] = [
+    {
+      matchId: 12345,
+      matchCode: '111',
+      matchEvent: 'Test A vs Test B',
+      isChecked: true,
+      matchType: 1,
+      leagueName: '',
+      name: ''
+    }
+  ];
   static readonly fakeGetLogInfoModelList: GetLogInfoModel[] = [{
     matchId: 12345,
     validation: {
@@ -156,6 +185,7 @@ describe('EventEarlyKickOffComponent', () => {
       TicketsListComponent,
       LeagueEventRedCardComponent,
       AddChildMatchComponent,
+      ConfirmEkoComponent
 
     ],
     imports: [
@@ -236,4 +266,497 @@ describe('EventEarlyKickOffComponent', () => {
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
   });
 
+
+  it('changeKickOffTime should call logInfoService.resetLogInfoOfEvent', async () => {
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const { instance } = await shallow
+    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.allSelectedEvents =  [Helper.fakeLogInfoEarlyKickOff];
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.kickOffTimeComponent = new DateFullTimeNewComponent(null);
+    instance.kickOffTimeComponent.isTimeValid = jest.fn().mockReturnValue(false);
+
+    instance.changeKickOffTime();
+
+    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('changeKickOffTime should call kickOffTimeComponent.getDateTime', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const mockResetLogInfoOfEvent = jest.fn();
+    const { instance } = await shallow
+    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.allSelectedEvents =  [Helper.fakeLogInfoEarlyKickOff];
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.kickOffTimeComponent = new DateFullTimeNewComponent(null);
+    instance.kickOffTimeComponent.isTimeValid = jest.fn().mockReturnValue(true);
+    instance.kickOffTimeComponent.getDateTime = jest.fn();
+
+    instance.changeKickOffTime();
+
+    expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+    expect(instance.kickOffTimeComponent.getDateTime).toHaveBeenCalledTimes(1);
+  });
+
+  it('getTicketsMainEvent should call logInfoService.getTickets', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const mockGetTickets = jest.fn();
+    const mockInitQuery = jest.fn();
+    const { instance } = await shallow
+    .mock(LogInfoService, { getTickets: mockGetTickets, initQuery: mockInitQuery})
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.getTicketsMainEvent();
+
+    expect(mockGetTickets).toHaveBeenCalledTimes(1);
+    expect(mockInitQuery).toHaveBeenCalledTimes(1);
+  });
+
+  it('handleClickAddRelatedEvent should call relatedEventService.addRelatedEventByInput', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const mockAddRelatedEventByInput = jest.fn();
+    const { instance } = await shallow
+    .mock(RelatedEventService, { addRelatedEventByInput: mockAddRelatedEventByInput})
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.handleClickAddRelatedEvent();
+
+    expect(mockAddRelatedEventByInput).toHaveBeenCalledTimes(1);
+  });
+
+  it('saveRequest should call saveRequestService.saveRequest', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const mockSaveRequest = jest.fn();
+    const { instance } = await shallow
+    .mock(SaveRequestService, { saveRequest: mockSaveRequest})
+    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.saveRequest(true);
+
+    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('onClickConfirmSaveRequest should call saveRequestService.onClickConfirmSave', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const mockOnClickConfirmSave = jest.fn();
+    const { instance } = await shallow
+    .mock(SaveRequestService, { onClickConfirmSave: mockOnClickConfirmSave})
+    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.onClickConfirmSaveRequest();
+
+    expect(mockOnClickConfirmSave).toHaveBeenCalledTimes(1);
+  });
+
+
+  it('onClickCancelSaveRequest should call addRequestStore.changeSavingRequestStatus', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const mockChangeSavingRequestStatus = jest.fn();
+    const { instance } = await shallow
+    .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus})
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.onClickCancelSaveRequest();
+
+    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
+  });
+
+  it('showAddChildMatchModal should call update addChildMatchModel.isOpen = true', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const { instance } = await shallow
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    instance.addChildMatchModel = new AddChildMatchModel();
+    instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff];
+    instance.showAddChildMatchModal(1);
+
+    expect(instance.addChildMatchModel.isOpen).toBeTruthy();
+    expect(instance.addChildMatchModel.matchType).toBe(1);
+  });
+
+  it('#saveRelatedEvent should not call logInfoService.getLogInfo when have not new matches diff match id', async () => {
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mockGetLogInfo = jest.fn();
+    const mockUpdateEvents = jest.fn().mockReturnValue([]);
+    const { instance } = await shallow
+      .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
+      .mock(LogInfoService, {
+        getLogInfo: mockGetLogInfo,
+        resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+      })
+      .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, new LogInfoEarlyKickOff()];
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.addChildMatchModel.matchType = 1;
+    const childMatchModel: ChildMatchModel = {
+      matchEvent: '',
+      name: '',
+      isChecked: false,
+      matchType: 3,
+      matchId: 1111,
+      leagueName: '',
+      matchCode: "1111",
+    }
+    instance.relatedEvents = [childMatchModel];
+    await instance.saveRelatedEvent(Helper.fakeChildMatches);
+
+    expect(mockGetLogInfo).toHaveBeenCalledTimes(0);
+  });
+
+  it('#saveRelatedEvent should be call expected function when have not new matches diff match id', async () => {
+    const mockResetLogInfoOfEvent = jest.fn();
+    const mockUpdateEvents = jest.fn().mockReturnValue([new LogInfoEarlyKickOff()]);
+    const mockGetLogInfo = jest.fn();
+    const { instance } = await shallow
+    .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
+    .mock(LogInfoService, {
+      getLogInfo: mockGetLogInfo,
+      resetLogInfoOfEvent: mockResetLogInfoOfEvent,
+    })
+    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
+    .render({
+      bind: {
+        filter: Helper.fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.allSelectedEvents = [new LogInfoEarlyKickOff()];
+    instance.primitiveProps = new PrimitiveProperty();
+
+    await instance.saveRelatedEvent(Helper.fakeChildMatches);
+
+    expect(mockUpdateEvents).toHaveBeenCalledTimes(1);
+    expect(mockGetLogInfo).toHaveBeenCalledTimes(1);
+  });
+
+  it('handleDeleteEvent should slice 1 item in allSelectedEvents', async () => {
+    const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
+    const { instance } = await shallow
+    .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .render({
+      bind: {
+        isEdit: true,
+        filter: Helper.fakeFilterModel,
+      }
+    });
+    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    childEvent.matchId = 99;
+    childEvent.isMainMatch = false;
+    instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
+    instance.handleDeleteEvent(99);
+
+    expect(instance.allSelectedEvents.length).toBe(1);
+  });
+
+
+  it('#isDisabledLinkMatches should return true when request voided', async () => {
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = true;
+    const { instance } = await shallow
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+    const actual = instance.isDisabledLinkMatches();
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledLinkMatches should return true when have not any link matches', async () => {
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.NORMAL;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.relatedEvents = fakeChildMatches;
+    const actual = instance.isDisabledLinkMatches();
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledLinkMatches should return false', async () => {
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.LINK;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.relatedEvents = fakeChildMatches;
+
+    const actual = instance.isDisabledLinkMatches();
+
+    expect(actual).toBe(false);
+  });
+
+  it('#isDisabledChildMatches should return true when request voided', async () => {
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = true;
+    const { instance } = await shallow
+      .render({
+        bind: {
+          filter: fakeFilterModel,
+          isEdit: false
+        }
+      });
+
+    const actual = instance.isDisabledChildMatches();
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledChildMatches should return true when have not any link matches', async () => {
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.NORMAL;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.relatedEvents = fakeChildMatches;
+    const actual = instance.isDisabledChildMatches();
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isDisabledChildMatches should return false', async () => {
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.CHILD;
+    const fakeFilterModel = _.cloneDeep(Helper.fakeFilterModel);
+    fakeFilterModel.isVoided = false;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.relatedEvents = fakeChildMatches;
+    const actual = instance.isDisabledChildMatches();
+
+    expect(actual).toBe(false);
+  });
+
+  it('#countLinkMatches should return number of link matches', async () => {
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.LINK;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: Helper.fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.relatedEvents = fakeChildMatches;
+    const actual = instance.countLinkMatches();
+
+    expect(actual).toBe(1);
+  });
+
+  it('#countChildMatches should return number of link matches', async () => {
+    const fakeChildMatches = _.cloneDeep(Helper.fakeChildMatches);
+    fakeChildMatches[0].matchType = MatchType.CHILD;
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: Helper.fakeFilterModel,
+        isEdit: false
+      }
+    });
+    instance.relatedEvents = fakeChildMatches;
+    const actual = instance.countChildMatches();
+
+    expect(actual).toBe(1);
+  });
+
+  it('#updateKickOffTime should return time formatted when has matchInfo', async () => {
+    const { instance } = await shallow
+    .render({
+      bind: {
+        filter: Helper.fakeFilterModel,
+        isEdit: false
+      }
+    });
+    const matchInfo = new MatchInfo();
+    matchInfo.matchId = 1;
+    matchInfo.kickOffTime = '2023/11/18 12:08:49.737';
+    instance.isEdit = false;
+    const actual = instance['updateKickOffTime'](matchInfo);
+
+    expect(actual).toBe('2023-11-18 12:08:49.737');
+  });
+
+  it('#handleSearchEvent should be return when inValidateCommonData', async () => {
+    const mockValidateCommonData = jest.fn().mockImplementation(() => false);
+    const { instance } = await shallow
+      .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn(), })
+      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          earlyKickOffModels: [Helper.fakeEarlyKickOffModel],
+          isEdit: false,
+        }
+      });
+    await instance.handleSearchEvent();
+
+    expect(instance.primitiveProps.isShowLogInfoEvents).toBeFalsy();
+    expect(mockValidateCommonData).toHaveBeenCalledTimes(1);
+  });
+
+  it('#handleSearchEvent should be call #getLogInfo', async () => {
+    const mockValidateCommonData = jest.fn().mockImplementation(() => true);
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockGetChildMatches = jest.fn();
+    const mockGetDataWhenSearch = jest.fn();
+    const { instance } = await shallow
+      .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+      .mock(AddRequestStore, {
+        changeBlockingUiStatus: mockChangeBlockingUiStatus
+      })
+      .mock(ValidationService, { validateCommonData: mockValidateCommonData })
+      .mock(RelatedEventService, {
+        getChildMatches: mockGetChildMatches,
+        getDataWhenSearch: mockGetDataWhenSearch,
+      })
+      .render({
+        bind: {
+          filter: Helper.fakeFilterModel,
+          isEdit: false
+        }
+      });
+    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    childEvent.isMainMatch = false;
+    const logInfoRedCardComponent = new LogInfoEkoComponent(null, null);
+    const logInfoComponents = new QueryList<LogInfoEkoComponent>();
+    instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
+    instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
+    instance.getTicketsMainEvent = jest.fn();
+
+    await instance.handleSearchEvent();
+
+    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
+    expect(mockGetDataWhenSearch).toHaveBeenCalledTimes(1);
+    expect(instance.getTicketsMainEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnInit should be call #eventEarlyKickOffService.assignModelsToEvents when edit and not voided', async () => {
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockGetChildMatches = jest.fn();
+    const eventEarlyKickOffService = new EventEarlyKickOffService();
+    eventEarlyKickOffService.assignModelsToEvents = jest.fn();
+    const addRequestStore = new AddRequestStore();
+    addRequestStore.changeBlockingUiStatus = mockChangeBlockingUiStatus;
+    const relatedEventService = new RelatedEventService(null, null, null);
+    relatedEventService.getChildMatches = mockGetChildMatches;
+    const component = new EventEarlyKickOffComponent(null, addRequestStore, null, null, null, relatedEventService, eventEarlyKickOffService);
+    component.filter = Helper.fakeFilterModel;
+    component.filter.isVoided = true;
+    component.isEdit = true;
+    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    childEvent.isMainMatch = false;
+    component.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
+    component.getTicketsMainEvent = jest.fn();
+    component.filter.isVoided = false;
+
+    await component.ngOnInit();
+
+    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
+    expect(component.getTicketsMainEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnInit should be call #getTicketsMainEvent when edit and request voided', async () => {
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockGetChildMatches = jest.fn();
+    const eventEarlyKickOffService = new EventEarlyKickOffService();
+    eventEarlyKickOffService.assignModelsToEvents = jest.fn();
+    const addRequestStore = new AddRequestStore();
+    addRequestStore.changeBlockingUiStatus = mockChangeBlockingUiStatus;
+    const relatedEventService = new RelatedEventService(null, null, null);
+    relatedEventService.getChildMatches = mockGetChildMatches;
+    const component = new EventEarlyKickOffComponent(null, addRequestStore, null, null, null, relatedEventService, eventEarlyKickOffService);
+
+    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    childEvent.isMainMatch = false;
+    component.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
+    component.filter = Helper.fakeFilterModel;
+    component.filter.isVoided = true;
+    component.isEdit = true;
+
+    await component.ngOnInit();
+
+    expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
+    expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
+  });
 });
