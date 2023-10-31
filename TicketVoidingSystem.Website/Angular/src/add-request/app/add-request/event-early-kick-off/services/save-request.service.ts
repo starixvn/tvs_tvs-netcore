@@ -137,34 +137,4 @@ export class SaveRequestService {
     arg.confirmEarlyKickOff.isOpenDialog = true;
     arg.confirmEarlyKickOff = _.clone(arg.confirmEarlyKickOff);
   }
-
-  private getMessageConfirmation(arg: SaveRequestArg): string {
-    let message = '';
-
-    if (arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError))) {
-      message = `${message}<div>There are some warnings in this request.</div>`;
-    }
-
-    if (arg.isEdit && arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-    }
-
-    if (arg.isEdit && arg.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${arg.requestId} is confirmed by ${arg.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-  }
-
-  private getMessageExcludeRelatedMatch(allEvents: LogInfoEarlyKickOff[]): void {
-    let message = 'Related match(es) excluded when creating new request because having no valid tickets in the current range:'
-    const x = [];
-    allEvents.filter(x => !x.isMainMatch).forEach(y => {
-      y.messageValidationLogInfo.forEach(t => {
-        if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
-          x.push(y.eventName);
-        }
-      });
-    });
-  }
 }

@@ -41,12 +41,13 @@ export class ValidationService {
   }
 
   public checkCanShowConfirmationEarlyKickOff(saveRequestArg: SaveRequestArg): boolean {
+    const isHasWarningEvent = saveRequestArg.allEvents.filter(x => !x.isMainMatch).some(x => x.isInvalidTotalTickets);
     const isHasWarningTicket = saveRequestArg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
     const isEditingByAnotherUser = saveRequestArg.isEdit && saveRequestArg.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = saveRequestArg.isEdit
       && saveRequestArg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && saveRequestArg.filter.action !== saveRequestArg.actionIdOfFirstTimeAccess;
 
-    return isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
+    return isHasWarningEvent || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
 
   private isTimeKickOffValid(kickOffTimeComponent: DateFullTimeNewComponent): boolean {
