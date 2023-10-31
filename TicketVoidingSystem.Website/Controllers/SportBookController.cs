@@ -34,4 +34,13 @@ public class SportBookController : Controller
     {
         return View("~/wwwroot/dist/old-page/void-by-currency/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Read)]
+    public IActionResult VoidByBetId()
+    {
+        return View("~/wwwroot/dist/old-page/void-by-currency/index.cshtml");
+    }
 }

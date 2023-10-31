@@ -38,6 +38,8 @@ using SpecialDelete.UploadBatchMessage.Controllers;
 using SpecialDelete.VirtualSports;
 using SpecialDelete.VirtualSports.RecoverBet.Controllers;
 using SpecialDelete.VirtualSports.VoidParlaySub.Controllers;
+using SpecialDelete.VoidByBetId;
+using SpecialDelete.VoidByBetId.Controllers;
 using SpecialDelete.VoidByCurrency;
 using SpecialDelete.VoidByCurrency.Controllers;
 using StackExchange.Redis;
@@ -221,6 +223,7 @@ public static class ServiceCollectionExtension
         services.RegisterRecoverByBetIdServices();
         services.RegisterVoidNumberGameServices();
         services.RegisterVoidByCurrencyServices();
+        services.RegisterVoidByBetIdServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -244,6 +247,7 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverByBetIdController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidNumberGameBetController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByCurrencyController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByBetIdController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
@@ -258,5 +262,6 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(RecoverByBetIdProfile));
         services.AddAutoMapper(typeof(NumberGameProfile));
         services.AddAutoMapper(typeof(VoidByCurrencyProfile));
+        services.AddAutoMapper(typeof(VoidByBetIdProfile));
     }
 }
