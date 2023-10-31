@@ -80,8 +80,8 @@ public class MapTicketsExcelServiceImp : MapTicketsExcelService
     private static string BuildChoice(VoidedTicketModel ticket, VoidedTicketViewModel ticketDetail, int issueTypeId)
     {
         return Convert.ToInt32(ticket.BetType).IsSingleMatchParlay()
-               || (Convert.ToInt32(ticket.BetType).IsParlay() && issueTypeId.IsAbnormalAccountOrAbnormalBet()) 
+               || (Convert.ToInt32(ticket.BetType).IsParlay() && issueTypeId.IsIssueTypeVoidMainParlay())
             ? ticketDetail.Choice
-            : ticketDetail.Choice.ChoiceShortSubParlay(ticket.IsMixParlay);       
+            : ticketDetail.Choice.ChoiceShortSubParlay(ticket.IsMixParlay);
     }
 }

@@ -57,7 +57,7 @@ public class BetListCoreServiceImp : BetListCoreService
 
     private static bool IsGetPlainTextForExportExcel(int betTypeId, ChoiceType choiceType, bool isParlay, int issueTypeId)
     {
-        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet()));
+        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsIssueTypeVoidMainParlay()));
     }
 
     private Ticket SetTicket(GetTicketModel item, Match? match)
@@ -101,7 +101,7 @@ public class BetListCoreServiceImp : BetListCoreService
 
     private string BuildChoiceParlay(ITicket ticket, TicketHelper ticketHelper, GetTicketModel item, int issueTypeId, string mainChoice)
     {
-        if (!issueTypeId.IsAbnormalAccountOrAbnormalBet())
+        if (!issueTypeId.IsIssueTypeVoidMainParlay())
         {
             SetValueSubTicket(ticket, item);
             var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);

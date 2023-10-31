@@ -29,6 +29,11 @@ public static class IssueTypeExtension
         return id == IssueTypeConstant.AbnormalBet;
     }
 
+    public static bool IsDuplicateTickets(this int id)
+    {
+        return id == IssueTypeConstant.DuplicateTickets;
+    }
+
     public static bool IsArchivedTicket(this int id)
     {
         return id == IssueTypeConstant.ArchivedTicket;
@@ -74,9 +79,9 @@ public static class IssueTypeExtension
         return id == IssueTypeConstant.WrongOU;
     }
 
-    public static bool IsAbnormalAccountOrAbnormalBet(this int id)
+    public static bool IsIssueTypeVoidMainParlay(this int id)
     {
-        return id.IsAbnormalAccount() || id.IsAbnormalBet();
+        return id.IsAbnormalAccount() || id.IsAbnormalBet() || id.IsDuplicateTickets();
     }
 
     public static bool IsEarlyKickOffOrWrongKickOff(this int id)

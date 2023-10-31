@@ -11,8 +11,7 @@ public static class BetTypeExtension
 {
     public static bool IsParlay(this int id)
     {
-        const int betTypeParlay = 29;
-        return id == betTypeParlay;
+        return id is BetTypeConstant.SystemParlay or BetTypeConstant.VirtualSportParlay;
     }
 
     public static bool IsParlayAndBetBuilder(this int id)
@@ -71,9 +70,14 @@ public static class BetTypeExtension
         return VirtualSports.Contains(sportTypeId);
     }
 
+    public static bool IsVirtualSportParlay(this int id)
+    {
+        return id is BetTypeConstant.VirtualSportParlay;
+    }
+
     public static bool IsHideHandicap(this int id)
     {
-        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();
+        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3() || id.IsVirtualSportParlay();
     }
 
     public static bool HideScore(this int id)

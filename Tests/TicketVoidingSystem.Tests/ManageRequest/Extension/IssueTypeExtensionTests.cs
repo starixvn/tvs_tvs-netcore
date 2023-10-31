@@ -184,7 +184,7 @@ public class IssueTypeExtensionTests
     {
         // Arrange
         // Act
-        var actual = issueTypeId.IsAbnormalAccountOrAbnormalBet();
+        var actual = issueTypeId.IsIssueTypeVoidMainParlay();
 
         // Assert
         Assert.Equal(result, actual);

@@ -113,7 +113,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
 
     private static bool IsGetPlainTextForExportExcel(int betTypeId, ChoiceType choiceType, bool isParlay, int issueTypeId)
     {
-        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsAbnormalAccountOrAbnormalBet()));
+        return choiceType == ChoiceType.Excel && (betTypeId.IsSingleMatchParlay() || (isParlay && issueTypeId.IsIssueTypeVoidMainParlay()));
     }
 
     private string BuildChoice(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId)
@@ -124,7 +124,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
 
     private string GetChoiceForTicketParlay(ITicket ticket, TicketHelper ticketHelper, VoidedTicketModel item, int issueTypeId, string mainChoice)
     {
-        if (!issueTypeId.IsAbnormalAccountOrAbnormalBet())
+        if (!issueTypeId.IsIssueTypeVoidMainParlay())
         {
             SetValueSubTicket(ticket, item);
             var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
