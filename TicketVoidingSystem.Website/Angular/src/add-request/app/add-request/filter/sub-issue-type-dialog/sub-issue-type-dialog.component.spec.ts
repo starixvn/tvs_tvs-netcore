@@ -41,9 +41,12 @@ describe('SubIssueTypeDialogComponent', () => {
   });
 
   it('#ngOnChanges should call #getSubIssueTypeWithUserNote', async () => {
+    const mockGetSubIssueTypeNote = jest.fn().mockReturnValue([new SubIssueTypeNoteModel()]);
     const model = new SubIssueTypeDialogModel();
     model.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
-    const { instance } = await shallow.render();
+    const { instance } = await shallow
+    .mock(AddRequestApiService, { getSubIssueTypeNote: mockGetSubIssueTypeNote })
+    .render();
     const changes = {
       'model': new SimpleChange(null, model, true)
     };
@@ -159,10 +162,12 @@ describe('SubIssueTypeDialogComponent', () => {
 
   it('#onChangeTypeOfWrongScore should called #getSubIssueTypeWrongScoreConfig', async () => {
     const { instance } = await shallow.render();
+    instance['getSubIssueTypeWithUserNote'] = jest.fn();
     instance['getSubIssueTypeWrongScoreConfig'] = jest.fn();
 
     instance.onChangeTypeOfWrongScore();
 
+    expect(instance['getSubIssueTypeWithUserNote']).toHaveBeenCalledTimes(1);
     expect(instance['getSubIssueTypeWrongScoreConfig']).toHaveBeenCalledTimes(1);
   });
 

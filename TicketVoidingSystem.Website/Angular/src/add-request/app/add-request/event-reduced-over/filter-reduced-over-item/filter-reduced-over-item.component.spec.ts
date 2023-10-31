@@ -54,9 +54,9 @@ class Helper {
   static readonly fakePlayers: OddsInfo[] = [
     {
       betChoice: '',
-      betTypeId: '1',
+      betTypeId: 1,
       oddsId: '1',
-      playerId: '1',
+      playerId: 1,
       playerName: '',
       playNamesChineseSimplified: '',
       playNamesChineseTraditional: ''

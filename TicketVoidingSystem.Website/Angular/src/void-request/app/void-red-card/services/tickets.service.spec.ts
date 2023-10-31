@@ -1,5 +1,5 @@
-import { DuplicateTicketsModel } from './../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import * as _ from 'lodash';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -12,8 +12,8 @@ import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
+import { DuplicateTicketsModel } from './../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { TicketsService } from './tickets.service';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -41,7 +41,8 @@ class Helper {
     isMainMatch: false,
     isPoolHouseAffected: false,
     jollyViewLicensee: new AffectedLicensee,
-    cancelCashOutLicensee: new AffectedLicensee
+    cancelCashOutLicensee: new AffectedLicensee,
+    isAllNonLiveTickets: true
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,

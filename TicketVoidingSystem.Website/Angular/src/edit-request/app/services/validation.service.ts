@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TVSRequestFilterBy } from 'src/utility/constants/config';
+import { TVSRequestFilterBy } from '../../../utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
 import { RequestDetailViewModel } from '../request.model';
 

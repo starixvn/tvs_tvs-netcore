@@ -4,6 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
+import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -42,7 +43,8 @@ describe('LogInfoEkoComponent', () => {
     imports: [
       NgbModule,
       FormsModule,
-      NgSelectModule
+      NgSelectModule,
+      BlockUiModule
     ],
     providers: [
       ModalService,

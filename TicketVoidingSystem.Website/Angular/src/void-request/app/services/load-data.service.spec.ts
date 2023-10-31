@@ -3,6 +3,7 @@ import { RequestDetailViewModel } from "../../../edit-request/app/request.model"
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { CommonPrimitiveProperty } from "../models/common-primitive-property.model";
 import { VoidPageCommonItem } from "../models/void-page-common-item.model";
+import { TicketsModel } from '../tickets-list/tickets.model';
 import { CheckRequestService } from "./check-request.service";
 import { LoadDataService } from "./load-data.service";
 import { SubmitVoidService } from './submit-void.service';
@@ -130,8 +131,11 @@ describe('LoadDataService', () => {
     const submitVoidService = new SubmitVoidService(null, null, null, null);
     submitVoidService.submitVoid = jest.fn();
     const service = new LoadDataService(submitVoidService, null, null);
+    const voidPageCommonItem = [new VoidPageCommonItem()];
+    voidPageCommonItem[0].voidTicketsMini = new TicketsModel();
+    voidPageCommonItem[0].voidTicketsMini.total = 1;
 
-    await service.checkLoadedFullDataBeforeVoid(null, [templateMessageViewChild], primitiveProperty, afterLoadUnderneathDataSubscription);
+    await service.checkLoadedFullDataBeforeVoid(voidPageCommonItem, [templateMessageViewChild], primitiveProperty, afterLoadUnderneathDataSubscription);
 
     expect(afterLoadUnderneathDataSubscription.unsubscribe).toHaveBeenCalledTimes(1);
     expect(submitVoidService.submitVoid).toHaveBeenCalledTimes(1);

@@ -1,14 +1,14 @@
-import { Component, ElementRef, Input, OnInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
-import { VoidPageService } from '../void-early-kick-off/services/void-page.service';
-import { TicketsService } from '../services/tickets.service';
-import { VoidPageEarlyKickOffModel } from './models/void-page-early-kick-off.model';
-import { VoidPageCommonService } from '../services/void-page-common.service';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
+import { TicketsService } from '../services/tickets.service';
+import { VoidPageCommonService } from '../services/void-page-common.service';
+import { VoidPageService } from '../void-early-kick-off/services/void-page.service';
+import { VoidPageEarlyKickOffModel } from './models/void-page-early-kick-off.model';
 
 @Component({
   selector: 'void-early-kick-off',

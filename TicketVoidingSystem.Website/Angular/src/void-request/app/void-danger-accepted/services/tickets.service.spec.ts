@@ -40,7 +40,8 @@ class Helper {
     isCheckedEarlyEvent: false,
     isMainMatch: false,
     isPoolHouseAffected: false,
-    cancelCashOutLicensee: new AffectedLicensee
+    cancelCashOutLicensee: new AffectedLicensee,
+    isAllNonLiveTickets: true
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,

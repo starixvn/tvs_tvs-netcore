@@ -86,7 +86,7 @@ exports[`AddChildMatchComponent #AddChildMatchComponent init should match snapsh
                                 Related
                               </div>
                               <input
-                                class="mt-1 ng-untouched ng-pristine ng-valid"
+                                class="ng-untouched ng-pristine ng-valid"
                                 type="checkbox"
                               />
                             </div>

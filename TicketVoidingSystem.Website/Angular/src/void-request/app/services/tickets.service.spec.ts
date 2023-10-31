@@ -39,7 +39,8 @@ class Helper {
     jollyViewLicensee: new AffectedLicensee(),
     isShowTemplateMessage: true,
     templateMessage: new Message(),
-    detailViewModel: null
+    detailViewModel: null,
+    cancelCashOutLicensee: new AffectedLicensee(),
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,

@@ -4,9 +4,12 @@ import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.c
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
+import { HttpService } from '../../../../../utility/services/http.service';
 import { FilterModel } from '../../filter/filter.model';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../models/get-log-info.model';
+import { GetTicketsQuery } from '../../models/get-tickets.query';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
@@ -19,7 +22,6 @@ class Helper {
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
     matchId: 1,
-    messageValidationLogInfo: [],
     eventName: '',
     isCollapse: false,
     isMainMatch: true,
@@ -123,7 +125,7 @@ describe('LogInfoService', () => {
     expect(actual).toBeDefined();
   });
 
-  it('#assignResultLogInfoToEvents should not update model', async () => {
+  it('#assignResultLogInfoToEvents should not update messageValidationLogInfo', async () => {
     const matchId = 1234;
     const events = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
     events[0].matchId = matchId;
@@ -134,36 +136,61 @@ describe('LogInfoService', () => {
 
     logInfoService['assignResultLogInfoToEvents'](events, logInfoModels);
 
-    expect(events).toHaveBeenCalledTimes(0);
+    expect(events.every(x => x.messageValidationLogInfo === undefined)).toBeTruthy();
   });
 
-  it('#assignResultLogInfoToEvents should update model when have log', async () => {
-    const matchId = 1234;
-    const events = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
-    events[0].matchId = matchId;
-    const logInfoModels = _.cloneDeep([Helper.fakeGetLogInfoModel]);
-    logInfoModels[0].matchId = matchId;
-    logInfoModels[0].logInfoDetail.matchId = matchId;
+  it('#assignResultLogInfoToEvents should update messageValidationLogInfo when have log', async () => {
+    const mainMatchId = 1234;
+    const childMatchId = 1235;
+    const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    childEvent.matchId = childMatchId;
+    childEvent.isMainMatch = false;
+    const mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    mainEvent.matchId = mainMatchId;
+    mainEvent.isMainMatch = true;
+    const events = [childEvent, mainEvent];
+    const logInfoModelsMain = _.cloneDeep(Helper.fakeGetLogInfoModel);
+    logInfoModelsMain.matchId = mainMatchId;
+    logInfoModelsMain.logInfoDetail.matchId = mainMatchId;
+    const logInfoModelsChild = _.cloneDeep(Helper.fakeGetLogInfoModel);
+    logInfoModelsChild.matchId = childMatchId;
+    logInfoModelsChild.logInfoDetail.matchId = childMatchId;
+    logInfoModelsChild.validation.isInvalidTotalTickets = true
     const logInfoService = new LogInfoService(null, null, null);
 
-    logInfoService['assignResultLogInfoToEvents'](events, logInfoModels);
+    logInfoService['assignResultLogInfoToEvents'](events, [logInfoModelsMain, logInfoModelsChild]);
 
-    expect(logInfoService['createCheckProcessModel']).toHaveBeenCalledTimes(0);
+    expect(events.every(x => x.messageValidationLogInfo !== undefined)).toBeTruthy();
   });
 
   it('#resetLogInfoOfEvent should update model to null', async () => {
     const events = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
-
     service['resetLogInfoOfEvent'](events);
 
     expect(events[0].messageValidationLogInfo).toBeNull();
   });
 
-  it('#resetLogInfoOfEvent should update model to null', async () => {
-    const events = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
+  it('#getTickets should call httpService.postJson', async () => {
+    const event = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
+    const primitiveProperty = new PrimitiveProperty();
+    primitiveProperty.transInfoAddRequestModel = new TransInfoAddRequestModel();
+    const httpService = new HttpService(null);
+    httpService.postJson = jest.fn().mockReturnValue(new TableTicketsModel());
+    const mockService = new LogInfoService(httpService, null, null);
+    mockService.getLogInfo = jest.fn();
 
-    service['resetLogInfoOfEvent'](events);
+    mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel(), primitiveProperty);
 
-    expect(events[0].messageValidationLogInfo).toBeNull();
+    expect(mockService.getLogInfo).toHaveBeenCalledTimes(1);
+    expect(event.isCollapse).toBeFalsy();
+  });
+
+  it('#initQuery should return GetTicketsQuery', async () => {
+    const actual = service.initQuery(1, 1, Helper.fakeLogInfoEarlyKickOff, new FilterModel());
+
+    expect(actual.pageIndex).toBe(1);
+    expect(actual.pageSize).toBe(1);
+    expect(actual.match).toEqual(Helper.fakeLogInfoEarlyKickOff.matchModel);
+    expect(actual.requestId ).toBeNull();
   });
 });

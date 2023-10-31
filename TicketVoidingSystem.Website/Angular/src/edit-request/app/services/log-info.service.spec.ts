@@ -23,7 +23,6 @@ class Helper {
   static readonly fakeMatchId = 90000;
   static readonly fakeDate = '2020-11-09 12:08:49.737';
   static readonly fakePrimitiveProperty: PrimitiveProperty = {
-    isBlock: false,
     matchId: Helper.fakeMatchId,
     requestId: Helper.fakeRequestId,
     sportType: 1,

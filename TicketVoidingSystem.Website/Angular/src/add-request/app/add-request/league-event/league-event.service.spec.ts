@@ -21,14 +21,16 @@ describe('EventMatchService', () => {
         name: 'Test1',
         sportType: 1,
         leagueId: 12345,
-        leagueName: '*AFC ASIAN CUP 2019 (IN UAE) - GROUP E WINNER'
+        leagueName: '*AFC ASIAN CUP 2019 (IN UAE) - GROUP E WINNER',
+        kickOffTime: ''
       },
       {
         matchId: 45678,
         name: 'Test2',
         sportType: 1,
         leagueId: 12345,
-        leagueName: '*AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS'
+        leagueName: '*AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
+        kickOffTime: ''
       }
     ];
 

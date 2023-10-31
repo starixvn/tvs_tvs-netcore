@@ -389,18 +389,18 @@ describe('FilterComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     let oddsInfo: OddsInfo[] = [{
-      betTypeId: '',
+      betTypeId: 1,
       oddsId: '',
-      playerId: '1',
+      playerId: 1,
       playerName: '',
       betChoice: '',
       playNamesChineseTraditional: '',
       playNamesChineseSimplified: ''
     },
     {
-      betTypeId: '',
+      betTypeId: 1,
       oddsId: '1',
-      playerId: '',
+      playerId: 1,
       playerName: '',
       betChoice: '1',
       playNamesChineseTraditional: '',
@@ -457,9 +457,9 @@ describe('FilterComponent', () => {
       .render();
     instance.getPlayerValueSelectedFromBetTypeQuery = jest.fn().mockReturnValue("aa");
     let oddsInfo: OddsInfo[] = [{
-      betTypeId: '',
+      betTypeId: 1,
       oddsId: '',
-      playerId: '1',
+      playerId: 1,
       playerName: 'aa',
       betChoice: '',
       playNamesChineseTraditional: '',

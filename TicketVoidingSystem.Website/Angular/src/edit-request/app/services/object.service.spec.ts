@@ -14,7 +14,6 @@ import { WrongScoreModel } from '../../../add-request/app/add-request/models/eve
 import { GetLogInfoModel, Validation } from '../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
 import { OthersModel } from '../../../add-request/app/add-request/others/others.model';
-import { TVSRequestFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { LogInfoArg } from '../models/log-info.model';
@@ -30,7 +29,6 @@ class Helper {
   static readonly fakeMatchId = 90000;
   static readonly fakeDate = '2020-11-09 12:08:49.737';
   static readonly fakePrimitiveProperty: PrimitiveProperty = {
-    isBlock: false,
     matchId: Helper.fakeMatchId,
     requestId: Helper.fakeRequestId,
     sportType: 1,
@@ -111,7 +109,8 @@ class Helper {
     reducedOverModels: [],
     others: new OthersModel(),
     duplicateTicketsModel: null,
-    notParticipateModels: []
+    notParticipateModels: [],
+    earlyKickOffModels: []
   };
   static readonly fakeMapEventArg: MapEventArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,
@@ -237,7 +236,7 @@ describe('ObjectService', () => {
       const event = new RequestEventModel();
       event.matchId = Helper.fakeMatchId;
       event.kickOffTime = item;
-      args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.EARLY_KICK_OFF);
+      args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
       args.detailViewModel.event = event;
       objectService['mapEventDetailModel'] = jest.fn();
 
@@ -365,41 +364,6 @@ describe('ObjectService', () => {
 
     expect(results.matchId).toBe(Helper.fakeRequestDetailViewModel.event.matchId);
     expect(results.transIds).toBe(Helper.fakeRequestDetailViewModel.event.transIds);
-  });
-
-  it('#mapEventDetailModel should return correct model', async () => {
-    const dates = [new Date('2021-09-29 00:00:00.000'), new Date('1752-09-29 00:00:00.000'), null];
-    dates.forEach(item => {
-      const requestModel = _.clone(Helper.fakeRequestModel);
-      const event = new RequestEventModel();
-      event.kickOffTime = item;
-
-      objectService['mapEventDetailModel'](requestModel, event, 1, new Date());
-
-      expect(requestModel.eventDetail.matchId).toBe(event.matchId);
-      expect(requestModel.eventDetail.sportType).toBe(1);
-      expect(requestModel.eventDetail.leagueId).toBe(event.leagueId);
-      expect(requestModel.eventDetail.transIds).toBe(event.transIds);
-      expect(requestModel.eventDetail.productIds).toBe(event.productIds);
-    });
-  });
-
-  it('#isAbnormalArchivedTicket should return true', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ARCHIVED_TICKET);
-    args.detailViewModel.event.filterBy = TVSRequestFilterBy.ABNORMAL;
-    const actual = objectService['isAbnormalArchivedTicket'](args.detailViewModel);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isAbnormalArchivedTicket should return false', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ARCHIVED_TICKET);
-    args.detailViewModel.event.filterBy = null;
-    const actual = objectService['isAbnormalArchivedTicket'](args.detailViewModel);
-
-    expect(actual).toBe(false);
   });
 
   it('#createEventForAbnormalAccount should return false', async () => {

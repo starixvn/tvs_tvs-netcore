@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { TicketsService } from '../../services/tickets.service';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
-import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
 
 @Injectable({
@@ -50,28 +50,6 @@ export class VoidPageService {
       element.templateValue = this.getTemplateValue(element);
       element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
     }
-  }
-
-  public toggleTicketsArea(currentVoidMatch: VoidPageEarlyKickOffModel, allVoidMatches: VoidPageEarlyKickOffModel[]): void {
-    const currentIsShowTicketFull = currentVoidMatch.isShowTicketFull;
-    const currentIsShowTemplateMessage = currentVoidMatch.isShowTemplateMessage;
-    allVoidMatches.forEach(item => {
-      item.isShowTemplateMessage = false;
-      item.isShowTicketFull = false;
-    });
-    currentVoidMatch.isShowTicketFull = !currentIsShowTicketFull;
-    currentVoidMatch.isShowTemplateMessage = currentIsShowTemplateMessage;
-  }
-
-  public toggleTemplateMessageArea(currentVoidMatch: VoidPageEarlyKickOffModel, allVoidMatches: VoidPageEarlyKickOffModel[]): void {
-    const currentIsShowTemplateMessage = currentVoidMatch.isShowTemplateMessage;
-    const currentIsShowTicketFull = currentVoidMatch.isShowTicketFull;
-    allVoidMatches.forEach(item => {
-      item.isShowTemplateMessage = false;
-      item.isShowTicketFull = false;
-    });
-    currentVoidMatch.isShowTicketFull = currentIsShowTicketFull;
-    currentVoidMatch.isShowTemplateMessage = !currentIsShowTemplateMessage;
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo[] {

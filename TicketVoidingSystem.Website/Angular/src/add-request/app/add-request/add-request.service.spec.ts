@@ -2,13 +2,10 @@ import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
 import { AddRequestApiService } from './add-request-api.service';
-import { AddRequestService, EarlyKickOffService } from './add-request.service';
+import { AddRequestService } from './add-request.service';
 import { AddRequestStore } from './add-request.store';
-import { FilterModel } from './filter/filter.model';
 import { AddRequestQuery } from './models/add-request.query';
-import { EventDetailModel } from './models/event-detail.model';
-import { AddRequestResultModel, RequestModel } from './models/request.model';
-import { OthersModel } from './others/others.model';
+import { AddRequestResultModel } from './models/request.model';
 import { PopupService } from './services/popup.service';
 
 class Helper {
@@ -69,7 +66,7 @@ describe('AppService', () => {
     window.location.reload = jest.fn();
     window.location.assign = jest.fn();
     mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
-    await mockAddRequestService['addRequest'](new AddRequestQuery(), '17', mockAddRequestStore);
+    await mockAddRequestService['addRequest'](new AddRequestQuery(), '17', mockAddRequestStore, false);
 
     expect(spyAddRequestServiceAddRequest).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowAddedRequestSuccessful).toHaveBeenCalledTimes(1);
@@ -90,7 +87,7 @@ describe('AppService', () => {
     window.location.reload = jest.fn();
     mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
 
-    await mockAddRequestService['addRequest'](new AddRequestQuery(), '1', mockAddRequestStore);
+    await mockAddRequestService['addRequest'](new AddRequestQuery(), '1', mockAddRequestStore, false);
 
     expect(spyAddRequestServiceAddRequest).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowSaveRequestError).toHaveBeenCalledTimes(1);
@@ -112,7 +109,7 @@ describe('AppService', () => {
     window.location.assign = jest.fn();
     mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
 
-    await mockAddRequestService['editRequest'](fakeAddRequestQuery, mockAddRequestStore);
+    await mockAddRequestService['editRequest'](fakeAddRequestQuery, mockAddRequestStore, false);
 
     expect(spyAddRequestServiceEditRequest).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowEditedRequestSuccessful).toHaveBeenCalledTimes(1);
@@ -129,27 +126,11 @@ describe('AppService', () => {
     const spyPopupServiceShowError = jest.spyOn(mockPopupService, 'showSaveRequestError').mockImplementation();
     mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
 
-    await mockAddRequestService['editRequest'](new AddRequestQuery(), mockAddRequestStore);
+    await mockAddRequestService['editRequest'](new AddRequestQuery(), mockAddRequestStore, false);
 
     expect(spyAddRequestServiceEditRequest).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowError).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowError.mock.calls[0][0]).toEqual(Helper.fakeResultError.errorMsg);
     expect(spyPopupServiceShowError.mock.calls[0][1]).toEqual(LABELS.EDIT_REQUEST_RESULT_TITLE);
-  });
-
-  it('#EarlyKickOffService.initAddRequestQuery should return correct model', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter = new FilterModel();
-    fakeRequestModel.eventDetail = new EventDetailModel();
-    fakeRequestModel.others = new OthersModel();
-
-    const actual = EarlyKickOffService.initAddRequestQuery(fakeRequestModel, null);
-
-    expect(actual.issueTypeId).toBe(fakeRequestModel.filter.issueTypeId);
-    expect(actual.subIssueTypeId).toBe(fakeRequestModel.filter.subIssueTypeId);
-    expect(actual.actionId).toBe(fakeRequestModel.filter.action);
-    expect(actual.decidedBy).toBe(fakeRequestModel.others.decidedBy);
-    expect(actual.remark).toBe(fakeRequestModel.others.remark);
-    expect(actual.mistakenBy).toBe(fakeRequestModel.others.mistakenBy);
   });
 });

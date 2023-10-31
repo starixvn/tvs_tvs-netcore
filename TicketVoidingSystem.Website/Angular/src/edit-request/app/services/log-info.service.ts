@@ -36,8 +36,6 @@ export class LogInfoService {
       await this.getLogInfoReducedOver(args);
     } else if (this.validationService.isNotParticipate(detailViewModel)) {
       await this.getLogInfoNotParticipate(args);
-    } else if (this.validationService.isEarlyKickOfOrWrongKickOff(detailViewModel)) {
-      //await this.getLogInfoEarlyKickOff(args);
     }
   }
 
@@ -182,24 +180,6 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
     });
   }
-
-  // private async getLogInfoEarlyKickOff(args: LogInfoArg): Promise<void> {
-  //   args.primitiveProperty.isBlock = true;
-  //   const models = MappingModelStaticService.buidEarlyKickOffGetLogInfoModel(args.detailViewModel.earlyKickOffModels);
-  //   const query = new GetLogInfoQuery();
-  //   query.requestId = args.primitiveProperty.requestId;
-  //   query.isShowLogOnly = true;
-  //   query.issueTypeId = args.detailViewModel.request.issueTypeId;
-  //   query.actionId = args.detailViewModel.request.actionId;
-  //   query.earlyKickOffModels = models;
-
-  //   const data = await this.commonService.getLogInfo(query);
-  //   data.getLogInfoModels.forEach(x => {
-  //     const model = args.detailViewModel.earlyKickOffModels.find(y => y.matchId === x.matchId);
-  //     model.logInfoDetail = x.logInfoDetail;
-  //   });
-  //   args.primitiveProperty.isBlock = false;
-  // }
 
   private createLogInfoArg(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): LogInfoArg {
     const args = new LogInfoArg();

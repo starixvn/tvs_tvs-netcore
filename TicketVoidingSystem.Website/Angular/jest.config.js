@@ -6,8 +6,8 @@ module.exports = {
   globalSetup: 'jest-preset-angular/global-setup',
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: [
-    //'<rootDir>/src/**/*.spec.ts'
-    '<rootDir>/src/add-request/app/add-request/event-early-kick-off/event-early-kick-off.component.spec.ts',
+    '<rootDir>/src/**/*.spec.ts'
+    //'<rootDir>/src/add-request/app/add-request/event-wrong-score/event-wrong-score.component.spec.ts',
   ],
   testPathIgnorePatterns: [
     '<rootDir>/src/manage-void-services/',

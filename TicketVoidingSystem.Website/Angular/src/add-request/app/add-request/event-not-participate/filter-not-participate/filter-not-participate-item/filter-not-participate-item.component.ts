@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import { Selection } from 'src/utility/models/selection.model';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
+import { Selection } from '../../../../../../utility/models/selection.model';
 import { FilterNotParticipateModel } from '../../models/filter-not-participate.model';
 import { Player } from '../../models/player.model';
 import { ValidationService } from '../../services/validation.service';

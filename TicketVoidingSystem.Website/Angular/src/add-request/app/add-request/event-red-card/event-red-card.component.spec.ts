@@ -1,36 +1,36 @@
-import { AddChildMatchComponent } from './../../../../utility/components/add-child-match/add-child-match.component';
 import { ElementRef, NgModule, QueryList, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
+import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
 import { ValidationMessage } from '../models/get-log-info.model';
+import { ChildMatchModel } from '../models/related-event.model';
+import { AddChildMatchComponent } from './../../../../utility/components/add-child-match/add-child-match.component';
 import { ConfirmRedCardComponent } from './confirm-red-card/confirm-red-card.component';
 import { EventRedCardComponent } from './event-red-card.component';
 import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
+import { FilterTimeWithAllowanceComponent } from './filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
 import { LeagueEventRedCardComponent } from './league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
+import { EventRedCardService } from './services/event-red-card.service';
 import { LogInfoService } from './services/log-info.service';
+import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { AddRequestStore } from '../add-request.store';
-import { RelatedEventService } from './services/related-event.service';
-import { EventRedCardService } from './services/event-red-card.service';
-import { ChildMatchModel } from '../models/related-event.model';
-import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
-import { FilterTimeWithAllowanceComponent } from './filter-time-with-allowance/filter-time-with-allowance.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -134,6 +134,7 @@ class Helper {
     leagueName: 'leagueName',
     leagueId: 1,
     name: 'name',
+    kickOffTime: ''
   };
 
 }

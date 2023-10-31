@@ -14,7 +14,8 @@ class Helper {
     leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
     matchId: 70000364,
     name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
-    sportType: 1
+    sportType: 1,
+    kickOffTime: ''
   }
   
   static readonly fakeMatchViewModel: MatchInfoViewModel = {

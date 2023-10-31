@@ -52,7 +52,8 @@ class Helper {
     isCheckedEarlyEvent: false,
     isMainMatch: false,
     isPoolHouseAffected: false,
-    jollyViewLicensee: new AffectedLicensee
+    jollyViewLicensee: new AffectedLicensee,
+    isAllNonLiveTickets: true
   };
   static readonly fakeSqlResultError: SqlResult = {
     errCode: 1,

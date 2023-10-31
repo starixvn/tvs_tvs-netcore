@@ -3,18 +3,19 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
-import { LeagueInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
+import { LeagueInfo, MatchInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
 import { LeagueEventService } from '../../league-event/league-event.service';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal.component';
 
 class Helper {
   static readonly fakeEventDate = '2020-11-06 09:44:46.361 PM';
-  static readonly fakeMatch = {
+  static readonly fakeMatch: MatchInfo = {
     leagueId: 80714,
     leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
     matchId: 70000364,
     name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
-    sportType: 1
+    sportType: 1,
+    kickOffTime: ''
   };
   static readonly fakeMatchViewModel: MatchInfoViewModel = {
     match: Helper.fakeMatch,

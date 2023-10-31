@@ -45,7 +45,6 @@ export class RelatedEventService {
           kickOffTime: mainEvent.kickOffTime,
           subIssueTypeId: mainEvent.subIssueTypeId,
           eventName: `${x.matchId} - ${x.matchEvent}`,
-          //logInfoDetail: null,
           messageValidationLogInfo: null,
           isCollapse: true,
           isShowValidation: false,

@@ -222,7 +222,7 @@ describe('VoidPageService', () => {
     expect(actual.checkSettled).toBe(voidItem.voidTicketsMini.isHasSettledTicket);
   });
 
-  it('#getTemplateValue should return DisplayIssueTypeName when issueTypeName = subIssueTypeName ', async () => {
+  it('#getDisplayIssueTypeName should return DisplayIssueTypeName when issueTypeName = subIssueTypeName ', async () => {
     const issueType = new IssueType();
     issueType.issueTypeId = 20;
     issueType.issueTypeName = 'Sub Duplicate'

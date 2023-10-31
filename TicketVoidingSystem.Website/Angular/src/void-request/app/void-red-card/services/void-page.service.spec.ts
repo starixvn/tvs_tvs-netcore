@@ -1,9 +1,8 @@
-import { DuplicateTicketsModel } from './../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import * as _ from 'lodash';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -16,14 +15,15 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
 import { SqlResult } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
-import { GetTicketsQuery } from '../../models/get-tickets.query';
-import { VoidMatch } from '../../models/void-match.model';
-import { TicketsModel } from '../../tickets-list/tickets.model';
-import { PrimitiveProperty } from '../../models/primitive-property.model';
-import { TemplateMessageService } from './template-message.service';
-import { TicketsService } from '../../services/tickets.service';
-import { VoidPageService } from './void-page.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
+import { GetTicketsQuery } from '../../models/get-tickets.query';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
+import { VoidMatch } from '../../models/void-match.model';
+import { TicketsService } from '../../services/tickets.service';
+import { TicketsModel } from '../../tickets-list/tickets.model';
+import { DuplicateTicketsModel } from './../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
+import { TemplateMessageService } from './template-message.service';
+import { VoidPageService } from './void-page.service';
 
 class Helper {
     static readonly fakeRequestId = 50121;
@@ -52,7 +52,8 @@ class Helper {
         isMainMatch: false,
         isPoolHouseAffected: false,
         jollyViewLicensee: new AffectedLicensee,
-        cancelCashOutLicensee: new AffectedLicensee
+        cancelCashOutLicensee: new AffectedLicensee,
+        isAllNonLiveTickets: true
     };
     static readonly fakeSqlResultError: SqlResult = {
         errCode: 1,
