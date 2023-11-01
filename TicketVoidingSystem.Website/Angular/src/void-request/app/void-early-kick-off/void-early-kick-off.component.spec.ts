@@ -63,7 +63,7 @@ describe('VoidDuplicateTicketsComponent', () => {
     voidItem.matchModel = new MatchModel();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');
     const mockLoadUnderneathVoidPageItemsData = jest.fn();
-    const mockGetBasicVoidPageItemsData = jest.fn().mockReturnValue(voidItem);
+    const mockGetBasicVoidPageItemsData = jest.fn().mockReturnValue([voidItem]);
     const mockGetIssueTypes = jest.fn();
     const { instance } = await shallow
       .mock(VoidPageService, {

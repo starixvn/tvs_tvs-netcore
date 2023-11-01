@@ -156,10 +156,12 @@ describe('VoidPageService', () => {
     const voidItem = new VoidPageEarlyKickOffModel();
     voidItem.subIssueType = new SubIssueType();
     voidItem.matchModel = new MatchModel();
+    voidItem.templateValue = new TemplateValue();
+    voidItem.matchModel.matchId = Helper.fakeRequestDetailViewModel.earlyKickOffModels[0].matchId;
     const spyInitTicketQuery = jest.spyOn(ticketsService, 'initTicketQuery').mockImplementation();
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockReturnValue(Promise.resolve(new TicketsModel()))
     const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockReturnValue(Promise.resolve(new VoidedReason()));
-    voidPageService['getTemplateValue'] = jest.fn();
+    voidPageService['getTemplateValue'] = jest.fn().mockReturnValue(new TemplateValue());
 
     await voidPageService.loadUnderneathVoidPageItemsData([voidItem], Helper.fakeRequestDetailViewModel);
 
