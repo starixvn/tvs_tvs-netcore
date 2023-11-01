@@ -52,7 +52,6 @@ export class VoidPageService {
     const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.filterBy = requestDetail.duplicateTicketsModel.filterBy;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
-    templateValue.match = voidPageItem.matchModel;
     return templateValue;
   }
 

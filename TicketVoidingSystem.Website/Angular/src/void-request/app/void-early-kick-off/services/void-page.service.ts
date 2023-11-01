@@ -48,6 +48,7 @@ export class VoidPageService {
       const ticketQuery = this.ticketsService.initTicketQuery(requestDetail, element.matchModel);
       element.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
       element.templateValue = this.getTemplateValue(element);
+      element.templateValue.kickOffTime = requestDetail.earlyKickOffModels.find(x => x.matchId === element.matchModel.matchId).kickOffTime;
       element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
     }
   }
@@ -78,7 +79,6 @@ export class VoidPageService {
   private getTemplateValue(voidMatch: VoidPageEarlyKickOffModel): TemplateValue {
     const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
-    
     return templateValue;
   }
 }
