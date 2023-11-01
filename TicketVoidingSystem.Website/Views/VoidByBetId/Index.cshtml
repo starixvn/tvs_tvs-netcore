@@ -1,0 +1,45 @@
+﻿@using TicketVoidingSystem.Website.ViewComponents
+@{
+    Layout = "~/Views/Shared/_LayoutOld.cshtml";
+    ViewBag.Title = "Void by Bet ID";
+}
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/old-page/bundle/void-by-bet-id-style.css" />
+    <link rel="stylesheet" type="text/css" href="~/old-page/Scripts/_Libs/BootstrapMultiselect/bootstrap-multiselect.css" />
+}
+@section Headline {
+    <div class="title">
+        Home / Void by Bet ID
+    </div>
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "void-by-bet-id-form" }))
+{
+    @await Component.InvokeAsync(nameof(VoidByBetIdFilter))
+
+    <div id="report-content">
+        <div class="display-none content-grid">
+            <div class="freegrid" id="matchInfo">
+            </div>
+        </div>
+        <div class="display-none content-grid">
+            <div class="freegrid" id="ticketInfo">
+            </div>
+        </div>
+        <fieldset id="fsAbnormalBetReason" class="form" style="display: none;">
+            <legend>Abnormal Bet - Reason</legend>
+            <div>
+                @Html.DropDownList("ddl-abnormal-reason", new List<SelectListItem>())
+            </div>
+        </fieldset>
+        @await Html.PartialAsync("_Message", false)
+        @await Html.PartialAsync("_ConfirmDeleteNew")
+    </div>
+    <div id="show-error-move-bet">
+    </div>
+    <div id="show-message" title="Void Bet Result" class="display-none"></div>
+    <div id="show-message-have-button" title="WARNING" class="display-none"></div>
+    <input type="hidden" id="max-ticket-export" value="100000" />
+}
+@section Scripts {
+    <script src="~/old-page/bundle/void-by-bet-id.js"></script>
+}

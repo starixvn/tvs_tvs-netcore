@@ -1,26 +1,26 @@
 ﻿using Fanex.NAP.Client.Helpers.Business;
-using MediatR;
 using SpecialDelete.VoidByBetId.Models;
 using SpecialDelete.VoidByBetId.ViewModels;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
-namespace SpecialDelete.VoidByBetId.Handlers;
+namespace SpecialDelete.VoidByBetId.Services;
 
-public class Ping : IRequest<IndexViewModel>
+public interface RemarkService
 {
+    Task<IndexViewModel> GetInfo();
 }
 
-public class IndexHandler : IRequestHandler<Ping, IndexViewModel>
+public class RemarkServiceImp : RemarkService
 {
     private readonly SessionService sessionService;
 
-    public IndexHandler(SessionService sessionService)
+    public RemarkServiceImp(SessionService sessionService)
     {
         this.sessionService = sessionService;
     }
 
-    public async Task<IndexViewModel> Handle(Ping request, CancellationToken cancellationToken)
+    public async Task<IndexViewModel> GetInfo()
     {
         return new IndexViewModel
         {

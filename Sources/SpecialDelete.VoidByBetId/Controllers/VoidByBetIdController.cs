@@ -19,14 +19,6 @@ public class VoidByBetIdController : ControllerBase
         this.mediator = mediator;
     }
 
-    //[NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
-    //public async Task<ActionResult> Index()
-    //{
-    //    var model = await mediator.Send(new Ping()).ConfigureAwait(false);
-    //    ViewBag.UserName = model.UserName;
-    //    return View(model);
-    //}
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
     public async Task<IActionResult> ExportExcel(ExportExcelRequest request)

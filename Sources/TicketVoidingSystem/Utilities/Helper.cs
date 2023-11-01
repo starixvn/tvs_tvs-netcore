@@ -219,7 +219,8 @@ public static class Helper
 #pragma warning restore S1541 // Methods and properties should not be too complex
     {
         string[] listNames = {"AB Exception List" , "Mark/Unmark Tickets" , "Ticket Listing" , "Void Single Bet" , "Manage Request" , "Add Request"
-            , "Upload Batch Message" , "Void Parlay Sub Bet" , "Recover Virtual Sports Bet" , "Recover By Bet ID" , "Void Number Game Bet", "Void By Currency" };
+            , "Upload Batch Message" , "Void Parlay Sub Bet" , "Recover Virtual Sports Bet" , "Recover By Bet ID" , "Void Number Game Bet", "Void By Currency"
+            , "Void By Bet ID" };
         return listNames.Contains(menu.Name);
     }
 }
