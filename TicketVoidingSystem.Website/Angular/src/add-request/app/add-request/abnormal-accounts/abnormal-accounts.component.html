@@ -13,7 +13,7 @@
 
 <div [blockUi]="primitiveProps.isBlockUsernames">
     <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="2050"
-        (focusOutUsernames)="focusOutUsernames()" [userNameComponentCss]="'row'" [widthCss]="'col-8 col-sm-8'">
+        (focusOutUsernames)="focusOutUsernames()" [inputUsernameCss]="'col-sm-8'" [inputUsernameStyle]="{'max-width.px': 1065}">
     </user-names>
 </div>
 

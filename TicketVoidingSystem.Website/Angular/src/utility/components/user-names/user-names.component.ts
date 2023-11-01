@@ -12,8 +12,9 @@ export class UsernamesComponent implements OnInit {
   private readonly errorTooltipClassName = 'invalid-data';
   @ViewChild('input') input;
   @Input() isAbException = false;
-  @Input() userNameComponentCss = '';
-  @Input() widthCss = '';
+  @Input() usernameComponentCss = '';
+  @Input() inputUsernameStyle = {};
+  @Input() inputUsernameCss = '';
   @Input() model = '';
   @Input() disabled = false;
   @Input() maxUsername = 50;

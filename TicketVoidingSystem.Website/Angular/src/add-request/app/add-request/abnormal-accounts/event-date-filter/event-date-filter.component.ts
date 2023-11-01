@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
@@ -26,8 +25,7 @@ export class EventDateFilterComponent implements OnInit {
   private readonly TO_DATE_CLASS = 'to-date';
 
   constructor(
-    private readonly element: ElementRef,
-    private readonly commonService: CommonService,
+    private readonly element: ElementRef
   ) {
     this.tooltip.element = this.element;
    }
