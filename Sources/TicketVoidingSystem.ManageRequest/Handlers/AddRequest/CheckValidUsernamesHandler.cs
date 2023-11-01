@@ -26,21 +26,60 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
     {
         var criteria = await CreateCriteria(request);
-        var (validation, transInfoAddRequest, transInfoJson) = await repository
-            .FetchMultipleAsync<CheckUsernamesModel, TransInfoAddRequestModel, string>(criteria, cancellationToken);
+        var mappingTypes = new[] { typeof(CheckUsernamesModel), typeof(TransInfoAddRequestModel), typeof(string), typeof(TicketCalculateWinLostAccount), typeof(AccountWinlostModel) };
+        var result = await repository.FetchMultipleAsync(criteria, mappingTypes, cancellationToken);
+        var checkUsernamesModel = result[0].Cast<CheckUsernamesModel>();
+        var transInfoAddRequestModel = result[1].Cast<TransInfoAddRequestModel>().FirstOrDefault();
+        var transInfoJson = result[2].Cast<string>();
+        //var ticketCalculateWinLostAccount = result[3].Cast<TicketCalculateWinLostAccount>();
+        //var accountWinlostModel = result[4].Cast<AccountWinlostModel>();
+
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = validation.FirstOrDefault() ?? new CheckUsernamesModel(),
+            Validation = checkUsernamesModel.FirstOrDefault() ?? new CheckUsernamesModel(),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
-                RemoveTransIds = transInfoAddRequest.FirstOrDefault()?.RemoveTransIds,
-                UnMarkTransIds = transInfoAddRequest.FirstOrDefault()?.UnMarkTransIds,
-                MarkTransIds = transInfoAddRequest.FirstOrDefault()?.MarkTransIds,
+                RemoveTransIds = transInfoAddRequestModel?.RemoveTransIds,
+                UnMarkTransIds = transInfoAddRequestModel?.UnMarkTransIds,
+                MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
                 TransInfoJson = transInfoJson.FirstOrDefault()
-            }
+            },
+            AccountWinlostModels = GetAccountWinlostModels()
         };
 
         return viewModel;
+    }
+
+    private IEnumerable<AccountWinlostModel> GetAccountWinlostModels()
+    {
+        return new List<AccountWinlostModel>
+        {
+            new()
+            {
+                Username = "AAA", UserId = 1, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                EstimateVoidAmount = 20, WinLostAfterVoid = 10
+            },
+            new()
+            {
+                Username = "BBB", UserId = 2, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                EstimateVoidAmount = 20, WinLostAfterVoid = 10
+            },
+            new()
+            {
+                Username = "CCC", UserId = 3, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                EstimateVoidAmount = 20, WinLostAfterVoid = 10
+            },
+            new()
+            {
+                Username = "DD", UserId = 4, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                EstimateVoidAmount = 20, WinLostAfterVoid = 10
+            },
+            new()
+            {
+                Username = "EE", UserId = 5, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                EstimateVoidAmount = 20, WinLostAfterVoid = 10
+            }
+        };
     }
 
     private async Task<CheckValidUsernamesCriteria> CreateCriteria(CheckValidUsernamesRequest model)

@@ -214,7 +214,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.DANGER_ACCEPTED]: { issueType: 180, subIssueType: 300, action: 150, sport: 150 },
       [IssueTypeConstant.EARLY_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170, sport: 220 },
       [IssueTypeConstant.WRONG_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170, sport: 220 },
-      [IssueTypeConstant.ABNORMAL_ACCOUNT]: { issueType: 180, subIssueType: 170, action: 170 },
+      [IssueTypeConstant.ABNORMAL_ACCOUNT]: { issueType: 180, subIssueType: 170, action: 210 },
       [IssueTypeConstant.RED_CARD]: { issueType: 180, subIssueType: 285, action: 150, sport: 150 },
       [IssueTypeConstant.WRONG_HDP]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
       [IssueTypeConstant.WRONG_1ST_HDP]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },

@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { TVSRequestActionType } from 'src/utility/constants/config';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -6,6 +7,7 @@ import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
+import { AccountWinlostModel } from './models/account-winlost.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
 import { ValidationBusinessRuleArgs } from './models/validation.model';
@@ -34,7 +36,7 @@ export class AbnormalAccountsComponent {
 
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
-
+  accountWinlostModels: AccountWinlostModel[] = [];
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
@@ -61,6 +63,16 @@ export class AbnormalAccountsComponent {
     await this.saveRequestService.onYesConfirmWarningModal(this.initSaveRequestInput());
   }
   
+  public isShowUserInfo(): boolean {
+    return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+  }
+
+  public async handleSearchEvent(): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    const validationOutput = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
+    this.accountWinlostModels = validationOutput.accountWinlostModels;
+    this.addRequestStore.changeBlockingUiStatus(false);
+  }
   private initSaveRequestInput() {
     const arg = new SaveRequestArg(); 
     arg.requestId = this.requestId;

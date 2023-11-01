@@ -1,0 +1,81 @@
+<div class="account-list">
+  <div class="title-account-list">
+    <div class="title-account-list-label"></div>
+  </div>
+  <div class="table-header">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
+          <th scope="col" class="col-tb-2">
+            <div>Username</div>
+          </th>
+          <th scope="col" class="col-tb-3">
+            <div>Given Credit</div>
+          </th>
+          <th scope="col" class="col-tb-4">
+            <div>Adjust Void Limit</div>
+          </th>
+          <th scope="col" class="col-tb-5">
+            <div>Current Winning</div>
+          </th>
+          <th scope="col" class="col-tb-6">
+            <div>Current Losing</div>
+          </th>
+          <th scope="col" class="col-tb-7">
+            <div>Estimate Void Amount</div>
+          </th>
+          <th scope="col">
+            <div>WinLost After Void</div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-content">
+    <table>
+      <ng-container *ngFor="let item of accountWinlostModels; index as i">
+        <tbody>
+          <tr [ngClass]="item.currentLosing > item.givenCredit ? 'bg-yellow' : ''">
+            <td class="col-tb-1">
+              <div>{{i + 1}}</div>
+            </td>
+            <td class="col-tb-2 text-left">
+              <div>{{item.username}}</div>
+            </td>
+            <td class="col-tb-3 text-right">
+              <div>{{item.givenCredit}}</div>
+            </td>
+            <td class="col-tb-4 text-right adjust-gv">
+              <input class="form-control form-control-sm" type="text" name="cid" value="11" (blur)="reCalculate(item)"/>
+              <!-- <div>{{item.adjustVoidLimit}}</div> -->
+            </td>
+            <td class="col-tb-5 text-right">
+              <div>{{item.currentWinning}}</div>
+            </td>
+            <td class="col-tb-6 text-right">
+              <div>{{item.currentLosing}}</div>
+            </td>
+            <td class="col-tb-7 text-right">
+              <div>{{item.estimateVoidAmount}}</div>
+            </td>
+            <td class="text-right">
+              <div>{{item.winLostAfterVoid}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </ng-container>
+    </table>
+
+    <table *ngIf="accountWinlostModels == null || accountWinlostModels.length == 0">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging> -->
+  </div>

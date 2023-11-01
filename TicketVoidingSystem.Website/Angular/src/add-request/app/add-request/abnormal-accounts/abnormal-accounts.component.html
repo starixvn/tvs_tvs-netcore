@@ -18,9 +18,16 @@
 </div>
 
 <product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"></product-filter>
-
 <event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit">
 </event-date-filter>
+
+<div *ngIf="isShowUserInfo()" class="mt-3">
+  <div class="mb-3">
+    <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+    (click)="handleSearchEvent()">Search</button>
+  </div>
+  <account-table [accountWinlostModels]="accountWinlostModels"></account-table>
+</div>
 
 <confirm-abnormal-account [model]="confirmAbnormalAccount" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()">

@@ -40,7 +40,10 @@ export class ValidationService {
       const viewModel = await this.getValidation(args, usernames);
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
-        return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames) } as ValidationBusinessRuleOutput;
+        return {
+          isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
+          accountWinlostModels: viewModel.accountWinlostModels // need to remove, for testing
+        } as ValidationBusinessRuleOutput;
       }
       
       args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
@@ -56,7 +59,8 @@ export class ValidationService {
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
         confirmAbnormalAccountModel: this.getConfirmAbnormalBetModel(viewModel.validation),
-        transInfoAddRequestModel: viewModel.transInfoAddRequestModel
+        transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
+        accountWinlostModels: viewModel.accountWinlostModels
       } as ValidationBusinessRuleOutput;
     } catch {
       return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, usernames) } as ValidationBusinessRuleOutput;

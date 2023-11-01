@@ -6,6 +6,7 @@ public class CheckValidUsernamesViewModel
 {
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
     public CheckUsernamesModel Validation { get; set; }
+    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
 }
 
 public class CheckUsernamesModel
