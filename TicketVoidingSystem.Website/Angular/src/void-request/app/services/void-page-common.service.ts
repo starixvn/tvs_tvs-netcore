@@ -42,13 +42,8 @@ export class VoidPageCommonService {
     }
   }
 
-  async onClickShowVoidTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty): Promise<void> {
-    this.loadDataService.onClickShowVoidTickets(voidPageItem, requestDetail, primitiveProperty);
-  }
-
-  async checkLoadedFullDataBeforeShowMessageTemplate(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty,
-    afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
-      this.loadDataService.checkLoadedFullDataBeforeShowMessageTemplate(voidPageItem, primitiveProperty, afterLoadUnderneathDataSubscription);
+  async onClickShowVoidTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
+    this.loadDataService.onClickShowVoidTickets(voidPageItem, requestDetail, primitiveProperty, allVoidPageItems);
   }
 
   async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], templateMessageViewChilds: TemplateMessageComponent[], primitiveProperty: CommonPrimitiveProperty,
@@ -57,8 +52,8 @@ export class VoidPageCommonService {
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
-    afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
-      this.loadDataService.onClickShowTemplateMessage(voidPageItem, primitiveProperty, requestDetail, afterLoadUnderneathDataSubscription);
+    afterLoadUnderneathDataSubscription: Subscription, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
+      this.loadDataService.onClickShowTemplateMessage(voidPageItem, primitiveProperty, requestDetail, afterLoadUnderneathDataSubscription, allVoidPageItems);
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {

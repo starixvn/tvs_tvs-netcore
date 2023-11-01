@@ -19,7 +19,7 @@ export class LoadDataService {
   ) { }
   private readonly observableTimer = timer(0, 100);
 
-  async onClickShowVoidTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty): Promise<void> {
+  async onClickShowVoidTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
     if (!voidPageItem.isShowTicketFull) {
       primitiveProperty.isBlockUI = true;
       const isRequestModified = await this.checkRequestService.isRequestModified(requestDetail.requestId, requestDetail.lastModifiedDate);
@@ -29,14 +29,14 @@ export class LoadDataService {
       }
     }
 
-    this.toggleTicketsArea(voidPageItem);
+    this.toggleTicketsArea(voidPageItem, allVoidPageItems);
     if (!voidPageItem.isLoadedTicketFull) {
       await this.ticketsService.loadVoidTicketsFullOnFirstTime(voidPageItem, requestDetail);
     }
   }
 
   async checkLoadedFullDataBeforeShowMessageTemplate(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty,
-    afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
+    afterLoadUnderneathDataSubscription: Subscription, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
     if (primitiveProperty.isRunningSubscriptionCallback) {
       return;
     }
@@ -44,7 +44,7 @@ export class LoadDataService {
     primitiveProperty.isBlockUI = true;
 
     if (primitiveProperty.isLoadedUnderneathData) {
-      this.toggleTemplateMessageArea(voidPageItem);
+      this.toggleTemplateMessageArea(voidPageItem, allVoidPageItems);
       primitiveProperty.isBlockUI = false;
       afterLoadUnderneathDataSubscription.unsubscribe();
     }
@@ -70,7 +70,7 @@ export class LoadDataService {
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
-    afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
+    afterLoadUnderneathDataSubscription: Subscription, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
     if (!voidPageItem.isShowTemplateMessage) {
       primitiveProperty.isBlockUI = true;
       const isRequestModified = await this.checkRequestService.isRequestModified(requestDetail.requestId, requestDetail.lastModifiedDate);
@@ -85,20 +85,32 @@ export class LoadDataService {
     }
 
     afterLoadUnderneathDataSubscription = this.observableTimer.subscribe(async () => {
-      await this.checkLoadedFullDataBeforeShowMessageTemplate(voidPageItem, primitiveProperty, afterLoadUnderneathDataSubscription);
+      await this.checkLoadedFullDataBeforeShowMessageTemplate(voidPageItem, primitiveProperty, afterLoadUnderneathDataSubscription, allVoidPageItems);
     });
   }
 
-  private toggleTemplateMessageArea(voidPageItem: VoidPageCommonItem): void {
+  private toggleTemplateMessageArea(voidPageItem: VoidPageCommonItem, allVoidPageItems?: VoidPageCommonItem[]): void {
     const currentIsShowTemplateMessage = voidPageItem.isShowTemplateMessage;
     const currentIsShowTicketFull = voidPageItem.isShowTicketFull;
+    if (allVoidPageItems) {
+      allVoidPageItems.forEach(x => {
+        x.isShowTemplateMessage = false;
+        x.isShowTicketFull = false;
+      })
+    }
     voidPageItem.isShowTicketFull = currentIsShowTicketFull;
     voidPageItem.isShowTemplateMessage = !currentIsShowTemplateMessage;
   }
 
-  private toggleTicketsArea(voidPageItem: VoidPageCommonItem): void {
+  private toggleTicketsArea(voidPageItem: VoidPageCommonItem, allVoidPageItems?: VoidPageCommonItem[]): void {
     const currentIsShowTicketFull = voidPageItem.isShowTicketFull;
     const currentIsShowTemplateMessage = voidPageItem.isShowTemplateMessage;
+    if (allVoidPageItems) {
+      allVoidPageItems.forEach(x => {
+        x.isShowTemplateMessage = false;
+        x.isShowTicketFull = false;
+      })
+    }
     voidPageItem.isShowTicketFull = !currentIsShowTicketFull;
     voidPageItem.isShowTemplateMessage = currentIsShowTemplateMessage;
   }

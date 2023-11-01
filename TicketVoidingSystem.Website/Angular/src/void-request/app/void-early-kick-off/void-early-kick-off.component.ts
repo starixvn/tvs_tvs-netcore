@@ -46,7 +46,7 @@ export class VoidEarlyKickOffComponent implements OnInit {
   }
 
   async onClickShowVoidTickets(voidPageItem: VoidPageEarlyKickOffModel): Promise<void> {
-    this.voidPageCommonService.onClickShowVoidTickets(voidPageItem, this.requestDetail, this.primitiveProperty);
+    this.voidPageCommonService.onClickShowVoidTickets(voidPageItem, this.requestDetail, this.primitiveProperty, this.voidPageItems);
   }
 
   async onPagingTicketsChange(voidPageItem: VoidPageEarlyKickOffModel): Promise<void> {
@@ -58,7 +58,7 @@ export class VoidEarlyKickOffComponent implements OnInit {
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidPageEarlyKickOffModel): Promise<void> {
-    this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription);
+    this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidPageItems);
   }
 
   isShowAffectedLicenseeArea(voidPageItem: VoidPageEarlyKickOffModel): boolean {

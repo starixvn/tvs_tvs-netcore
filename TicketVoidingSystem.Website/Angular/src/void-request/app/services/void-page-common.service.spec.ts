@@ -69,13 +69,6 @@ describe('VoidPageCommonService', () => {
     expect(spyOnClickShowVoidTickets).toHaveBeenCalledTimes(1);
   });
 
-  it('#checkLoadedFullDataBeforeShowMessageTemplate should called #loadDataService.checkLoadedFullDataBeforeShowMessageTemplate', async () => {
-    const spyCheckLoadedFullDataBeforeShowMessageTemplate = jest.spyOn(loadDataService, 'checkLoadedFullDataBeforeShowMessageTemplate').mockImplementation();
-    await voidPageCommonService.checkLoadedFullDataBeforeShowMessageTemplate(null, null, null);
-
-    expect(spyCheckLoadedFullDataBeforeShowMessageTemplate).toHaveBeenCalledTimes(1);
-  });
-
   it('#checkLoadedFullDataBeforeVoid should called #loadDataService.checkLoadedFullDataBeforeVoid', async () => {
     const spyCheckLoadedFullDataBeforeVoid = jest.spyOn(loadDataService, 'checkLoadedFullDataBeforeVoid').mockImplementation();
     await voidPageCommonService.checkLoadedFullDataBeforeVoid(null, null, null, null);
