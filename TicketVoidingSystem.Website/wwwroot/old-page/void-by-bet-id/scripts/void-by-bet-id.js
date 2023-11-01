@@ -119,7 +119,7 @@ var VoidByBetId = {
     getTicket: function (params) {
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/VoidByBetId/GetTickets",
+            url: window.rootUrl + "api/VoidByBetId/GetTickets",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(params),
@@ -176,7 +176,7 @@ var VoidByBetId = {
     getMatch: function (params) {
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "Match/GetInfo",
+            url: window.rootUrl + "api/MatchInfo/GetInfo",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(params),
@@ -202,7 +202,7 @@ var VoidByBetId = {
     getMessageTemplate: function () {
         $.ajax({
             type: "GET",
-            url: window.rootUrl + "Utility/GetTemplateAbnormalBet",
+            url: window.rootUrl + "api/MessageTemplate/GetTemplateAbnormalBet",
             contentType: "application/json; charset=utf-8",
             beforeSend: function () {
                 NapTicketControl.disableInput();
@@ -600,7 +600,7 @@ var VoidByBetId = {
         var results = null;
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/VoidByBetId/VoidBet",
+            url: window.rootUrl + "api/VoidByBetId/VoidBet",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -631,7 +631,7 @@ var VoidByBetId = {
 
                 $.ajax({
                     type: "POST",
-                    url: window.rootUrl + "Utility/GetVoidResultCache",
+                    url: window.rootUrl + "api/SharedApi/GetVoidResultCache",
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -672,7 +672,7 @@ var VoidByBetId = {
     getBalanceUp: function () {
         $.ajax({
             type: "GET",
-            url: window.rootUrl + "Utility/GetBalanceUp",
+            url: window.rootUrl + "api/SharedApi/GetBalanceUp",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false,
@@ -689,7 +689,7 @@ var VoidByBetId = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/VoidByBetId/CheckUsername",
+            url: window.rootUrl + "api/VoidByBetId/CheckUsername",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false,
@@ -708,7 +708,7 @@ var VoidByBetId = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/VoidByBetId/CheckAbnormalBet",
+            url: window.rootUrl + "api/VoidByBetId/CheckAbnormalBet",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false,
@@ -855,7 +855,7 @@ var VoidByBetId = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "Tickets/CheckNegativeBalance",
+            url: window.rootUrl + "api/SharedApi/CheckNegativeBalance",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),

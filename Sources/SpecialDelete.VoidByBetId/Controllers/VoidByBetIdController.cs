@@ -40,5 +40,6 @@ public class VoidByBetIdController : ControllerBase
     public async Task<JsonResult> VoidBet(VoidTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
 
     [HttpPost]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
     public async Task<JsonResult> CheckAbnormalBet(CheckAbnormalBetRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
 }
