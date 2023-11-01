@@ -36,6 +36,8 @@ public static class BetTypeConstant
 
     public const int SecondVirtualSport = 2899;
 
+    public const int VirtualSportParlay = 2799;
+
     public const int PenaltyShootoutCombo = 376;
 
     public const int Handicap = 1;
