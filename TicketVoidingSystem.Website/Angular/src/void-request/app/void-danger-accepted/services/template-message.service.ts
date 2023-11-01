@@ -27,7 +27,7 @@ export class TemplateMessageService {
     templateValue.totalTickets = voidMatch.voidTicketsMini.total;
     templateValue.isCheckedEarlyEvent = false;
     templateValue.isAllNonLiveTickets = voidMatch.voidTicketsMini.isAllNonLiveTickets;
-    
+    templateValue.match = voidMatch.matchModel;
     const issueTypeId = requestDetail.request.issueTypeId.toString();
     if (StaticService.isDangerAccepted(issueTypeId)) {
       this.initValueForDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.dangerAcceptedModels[0].filterBy, voidMatch.isCheckedVar);

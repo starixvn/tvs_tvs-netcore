@@ -276,7 +276,6 @@ export class VoidOtherIssueComponent implements OnInit {
   updateTemplateValueForWrongOdds() {
     if (this.isWrongOdds()) {
       this.templateValue.checkAIOMessage = this.ticketsModel.isHasAioMessage;
-      this.templateValue.match = this.match;
       this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
       this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
       this.templateValue.ouValue = this.requestDetail.wrongOddsModels[0].ouValue;
@@ -290,6 +289,7 @@ export class VoidOtherIssueComponent implements OnInit {
       return;
     }
     this.templateValue = this.templateService.getTemplateValue(this.query.match);
+    this.templateValue.kickOffTime = this.query.kickOffDate;
     this.templateValue.checkSettled = this.checkSettled();
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
     this.templateValue.toTransTime = this.ticketsModel.toTime;
@@ -298,6 +298,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
     this.templateValue.totalTickets = this.ticketsModel.total;
+    this.templateValue.match = this.query.match;
   }
 
   private getLiveScoreForTemplateMessage(scoreNormalTicket: string, scoreOfMatch: string): string {
