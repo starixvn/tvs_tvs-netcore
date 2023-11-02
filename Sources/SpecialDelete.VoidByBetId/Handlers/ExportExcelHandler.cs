@@ -21,7 +21,7 @@ public class ExportExcelHandler : IRequestHandler<ExportExcelRequest, ExcelFileM
 
     public async Task<ExcelFileModel> Handle(ExportExcelRequest request, CancellationToken cancellationToken)
     {
-        var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+        var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
         var fileName = $"Void_By_Bet_ID_{createDate}";
         return new ExcelFileModel
         {

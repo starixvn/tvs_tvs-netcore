@@ -106,7 +106,7 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
         return new MailRecoverViewModel<MailTicketViewModel>
         {
             ActorUsername = sessionService.UserName,
-            DateTime = DateTime.Now,
+            DateTime = DateTimeOffset.Now.DateTime,
             NegativeBalanceUsers = negativeBalanceUsers,
             TemplatePath = TemplateEmailPath.RecoverVirtualSports
         };

@@ -110,12 +110,12 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var nodesSingle = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-single']");
         if (nodesSingle != null)
         {
-            return $"Single: {nodesSingle.First().InnerText}";
+            return $"Single: {nodesSingle[0].InnerText}";
         }
 
         var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
 
-        return nodesParlay != null ? $"Mix Parlay: {nodesParlay.First().InnerText}" : string.Empty;
+        return nodesParlay != null ? $"Mix Parlay: {nodesParlay[0].InnerText}" : string.Empty;
     }
 
     private static string BuildTotalSingleOrParlay(string html)
@@ -126,19 +126,19 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var nodesSingle = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-single']");
         if (nodesSingle != null)
         {
-            return $"Single: {nodesSingle.First().InnerText}";
+            return $"Single: {nodesSingle[0].InnerText}";
         }
 
         var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
 
-        return nodesParlay != null ? $"Parlay: {nodesParlay.First().InnerText}" : string.Empty;
+        return nodesParlay != null ? $"Parlay: {nodesParlay[0].InnerText}" : string.Empty;
     }
 
     private static string BuildVoidTime(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var description = doc.DocumentNode.SelectNodes("//*[@class='void-time']").First().InnerText;
+        var description = doc.DocumentNode.SelectNodes("//*[@class='void-time']")[0].InnerText;
 
         return description;
     }
@@ -147,7 +147,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var description = doc.DocumentNode.SelectNodes("//*[@class='ko-time']").First().InnerText;
+        var description = doc.DocumentNode.SelectNodes("//*[@class='ko-time']")[0].InnerText;
 
         return description;
     }
@@ -156,7 +156,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var description = doc.DocumentNode.SelectNodes("//*[@class='void-wrong-score']").First().InnerText;
+        var description = doc.DocumentNode.SelectNodes("//*[@class='void-wrong-score']")[0].InnerText;
 
         return description;
     }
@@ -165,8 +165,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var totalSingle = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-single']").First().InnerText;
-        var totalParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']").First().InnerText;
+        var totalSingle = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-single']")[0].InnerText;
+        var totalParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']")[0].InnerText;
         var description = $"Single: {totalSingle}, Parlay: {totalParlay}";
 
         return description;
@@ -176,8 +176,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var voidTime = doc.DocumentNode.SelectNodes("//*[@class='void-time']").First().InnerText;
-        var total = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-account']").First().InnerText;
+        var voidTime = doc.DocumentNode.SelectNodes("//*[@class='void-time']")[0].InnerText;
+        var total = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-account']")[0].InnerText;
         var description = voidTime.AppendWithNewLine($"No. of Account: {total}");
 
         return description;
@@ -199,7 +199,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='sport']");
 
-        return nodes != null && nodes.Any() ? nodes.First().InnerText : string.Empty;
+        return nodes != null && nodes.Any() ? nodes[0].InnerText : string.Empty;
     }
 
     public string GetEvent(string html)
@@ -208,7 +208,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='match']");
 
-        return nodes != null && nodes.Any() ? nodes.First().InnerText : string.Empty;
+        return nodes != null && nodes.Any() ? nodes[0].InnerText : string.Empty;
     }
 
     public string GetLeague(string html)
@@ -217,7 +217,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         doc.LoadHtml(html);
         var nodes = doc.DocumentNode.SelectNodes("//*[@class='league text-uppercase']");
 
-        return nodes != null && nodes.Any() ? nodes.First().InnerText : string.Empty;
+        return nodes != null && nodes.Any() ? nodes[0].InnerText : string.Empty;
     }
 
     public string GetVarCheckValue(bool isCheckedVar)

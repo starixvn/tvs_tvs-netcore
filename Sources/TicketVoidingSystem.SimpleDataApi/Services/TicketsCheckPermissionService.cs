@@ -36,10 +36,10 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
     {
         var (tickets, cancelCashOutTickets) = GetTicketForCheckPermission(queryModel);
         var transInfoJsonList = new List<string>();
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
         {
-            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
-            var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
+            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
+            var cancelCashOutTicketsInSiteDb = cancelCashOutTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
             if (!ticketsInSiteDb.Any() && !cancelCashOutTicketsInSiteDb.Any())
             {
                 continue;
@@ -47,7 +47,7 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
 
             var criteria = new GetTransInfoForCheckPermissionCriteria
             {
-                SiteDbGroupId = server.Id,
+                SiteDbGroupId = siteDbGroupId,
                 TransIds = Helper.JoinBetIdList(ticketsInSiteDb),
                 CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSiteDb)
             };
