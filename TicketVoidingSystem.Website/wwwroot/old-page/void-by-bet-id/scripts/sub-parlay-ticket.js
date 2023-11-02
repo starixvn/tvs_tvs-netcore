@@ -27,7 +27,7 @@ var mainTicketParlay = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SubParlayTicket/GetNormalParlay",
+            url: window.rootUrl + "api/SubParlayTicket/GetNormalParlay",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -38,7 +38,7 @@ var mainTicketParlay = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                    arrChoice.push('<div class="line">' + row.choice + '</div>');
                 }
 
                 $('#divEvent_' + refNo).html(arrChoice.join('')).show();
@@ -83,7 +83,7 @@ var mainTicketParlay = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SubParlayTicket/GetComboParlay",
+            url: window.rootUrl + "api/SubParlayTicket/GetComboParlay",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -94,11 +94,11 @@ var mainTicketParlay = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    if (row.SubTransId === "") {
-                        arrChoice.push('<div>' + row.Choice + '</div>');
+                    if (row.subTransId === "") {
+                        arrChoice.push('<div>' + row.choice + '</div>');
                     }
                     else {
-                        arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
 
@@ -149,7 +149,7 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
 
     $.ajax({
         type: "POST",
-        url: window.rootUrl + "SubParlayTicket/GetSelectionsSMP",
+        url: window.rootUrl + "api/SubParlayTicket/GetSelectionsSMP",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: JSON.stringify(param),
