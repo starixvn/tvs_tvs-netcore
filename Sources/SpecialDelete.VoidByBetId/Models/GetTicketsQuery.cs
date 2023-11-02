@@ -4,9 +4,9 @@ using System;
 
 public class GetTicketsQuery
 {
-    public string CustId { get; set; }
+    public string? CustId { get; set; }
 
-    public string TransIds { get; set; }
+    public string? TransIds { get; set; }
 
     public DateTime? FromDate { get; set; }
 
@@ -14,11 +14,11 @@ public class GetTicketsQuery
 
     public bool IncludeMainParlay { get; set; }
 
-    public string Products { get; set; }
+    public string? Products { get; set; }
 
-    public string StatusIds { get; set; }
+    public string? StatusIds { get; set; }
 
-    public string InvalidTransIds { get; set; }
+    public string? InvalidTransIds { get; set; }
 
-    public string MovedTransIds { get; set; }
+    public string? MovedTransIds { get; set; }
 }

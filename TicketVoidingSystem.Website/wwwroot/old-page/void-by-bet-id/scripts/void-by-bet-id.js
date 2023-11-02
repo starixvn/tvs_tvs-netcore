@@ -540,7 +540,7 @@ var VoidByBetId = {
             NapTicketControl.MessageNotAllowExportExcel();
             return;
         }
-        var url = window.rootUrl + "SportBook/VoidByBetId/ExportExcel";
+        var url = window.rootUrl + "api/VoidByBetId/ExportExcel";
 
         NapTicketControl.xhrDownloadFile(url, params);
     },
@@ -559,7 +559,7 @@ var VoidByBetId = {
             VoidFromDate: VoidByBetId.voidFromDate,
             VoidToDate: VoidByBetId.voidToDate,
             TransIdCrickets: VoidByBetId.tickets.filter(x => transIdCricketList.includes(x.TransId.toString())),
-            Password: $('#password').val(),
+            Password: CryptoJS.CfsEnCode($('#password').val()),
             UserName: $('#username').val(),
             NegativeBalanceUsers: VoidByBetId.storageParams.UsersNegativeCredit,
             Reason: $('#reason').val(),

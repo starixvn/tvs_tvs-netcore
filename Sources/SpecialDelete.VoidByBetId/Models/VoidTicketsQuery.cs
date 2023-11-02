@@ -28,15 +28,15 @@ public class VoidTicketsQuery
 
     public Message Message { get; set; }
 
-    public string SubIssueTypeName { get; set; }
+    public string? SubIssueTypeName { get; set; }
 
-    public string SubIssueTypeNameCS { get; set; }
+    public string? SubIssueTypeNameCS { get; set; }
 
-    public string FilterUserName { get; set; }
+    public string? FilterUserName { get; set; }
 
-    public string Products { get; set; }
+    public string? Products { get; set; }
 
-    public string StatusIds { get; set; }
+    public string? StatusIds { get; set; }
 
     public DateTime? FromDate { get; set; }
 
@@ -50,7 +50,7 @@ public class VoidTicketsQuery
 
     public string VoidToDate { get; set; }
 
-    public Match Match { get; set; }
+    public Match? Match { get; set; }
 
     public bool IsFilterByBetId { get; set; }
 

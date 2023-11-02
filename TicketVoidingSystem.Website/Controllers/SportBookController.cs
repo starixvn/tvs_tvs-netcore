@@ -1,6 +1,7 @@
 ﻿using Fanex.NAP.Client.Attributes;
 using Fanex.NAP.Client.Helpers.Business;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
@@ -8,6 +9,13 @@ namespace TicketVoidingSystem.Website.Controllers;
 [Route("[controller]")]
 public class SportBookController : Controller
 {
+    private readonly SessionService sessionService;
+
+    public SportBookController(SessionService sessionService)
+    {
+        this.sessionService = sessionService;
+    }
+
     [HttpGet]
     [Route("[action]")]
     [Route("[action]/Index")]
@@ -41,6 +49,7 @@ public class SportBookController : Controller
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Read)]
     public IActionResult VoidByBetId()
     {
+        ViewBag.UserName = sessionService.UserName;
         return View("~/Views/VoidByBetId/Index.cshtml");
     }
 }
