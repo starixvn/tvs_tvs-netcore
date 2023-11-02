@@ -21,4 +21,5 @@ public class TicketsViewModel
     public string FromDate { get; set; }
     public string ToDate { get; set; }
     public string LicenseesName { get; set; }
+    public int MatchId { get; set; }
 }

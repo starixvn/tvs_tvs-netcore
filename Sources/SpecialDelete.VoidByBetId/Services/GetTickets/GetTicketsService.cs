@@ -10,7 +10,7 @@ namespace SpecialDelete.VoidByBetId.Services.GetTickets;
 
 public interface GetTicketsService
 {
-    Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds)> GetTickets(GetTicketsQuery query);
+    Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int matchId)> GetTickets(GetTicketsQuery query);
 
     Task<Group<TicketViewModel>> AssignData(Group<GetTicketModel> groupTicket, bool isVoidByBetId);
 }
@@ -31,7 +31,7 @@ public class GetTicketsServiceImp : GetTicketsService
         this.ticketHtmlService = ticketHtmlService;
     }
 
-    public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds)> GetTickets(GetTicketsQuery query)
+    public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int matchId)> GetTickets(GetTicketsQuery query)
     {
         return await repository.GetTickets(query);
     }

@@ -29,14 +29,14 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     {
         var isVoidByBetId = string.IsNullOrWhiteSpace(request.CustId);
         var viewModel = new TicketsViewModel();
-        var (tickets, invalidTransIds, movedTransIds) = await getTicketsService.GetTickets(request);
+        var (tickets, invalidTransIds, movedTransIds, matchId) = await getTicketsService.GetTickets(request);
         var groups = GenerateGroup(tickets.ToList());
         foreach (var item in groups)
         {
             viewModel.Groups.Add(await getTicketsService.AssignData(item, isVoidByBetId));
         }
         UpdateViewModel(viewModel, tickets, invalidTransIds, movedTransIds);
-
+        viewModel.MatchId = matchId;
         return viewModel;
     }
 

@@ -11,7 +11,7 @@ namespace SpecialDelete.VoidByBetId.Repositories;
 
 public interface VoidByBetIdRepository
 {
-    Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds)> GetTickets(GetTicketsQuery query);
+    Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query);
 
     Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
 }
@@ -29,7 +29,7 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
         this.sessionService = sessionService;
     }
 
-    public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds)> GetTickets(GetTicketsQuery query)
+    public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query)
     {
         var tickets = new List<GetTicketModel>();
         var validations = new List<GetTicketValidation>();
@@ -87,13 +87,13 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
         };
     }
 
-    private static (IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds) BuildResultGetTickets(IEnumerable<GetTicketModel> tickets
+    private static (IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId) BuildResultGetTickets(IEnumerable<GetTicketModel> tickets
         , IEnumerable<GetTicketValidation> validations)
     {
         var invalidTransIds = Helper.GetIntersectTransIdString(validations.Select(y => y.InvalidTransIds));
         var movedTransIds = Helper.GetUnionTransIdString(validations.Select(x => x.MovedTransIds));
 
-        return (tickets, invalidTransIds, movedTransIds);
+        return (tickets, invalidTransIds, movedTransIds, validations.FirstOrDefault().MatchId);
     }
 
     private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
@@ -106,7 +106,7 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
             Ip = sessionService.GetClientIp(),
-            IsAbnormalBet = query.IsLikeLyAbnormalBet || !query.IsFilterByBetId,
+            IsAbnormalBet = query.IsAbnormalBet || !query.IsFilterByBetId,
             FilterUserName = query.FilterUserName,
             Products = query.Products,
             StatusIds = query.StatusIds,

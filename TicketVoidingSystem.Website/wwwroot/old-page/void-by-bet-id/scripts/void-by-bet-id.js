@@ -28,6 +28,7 @@ var VoidByBetId = {
     voidFromDate: "",
     voidToDate: "",
     tickets: [],
+    matchId: "0",
 
     search: function () {
         VoidByBetId.matchInfo = {};
@@ -40,25 +41,6 @@ var VoidByBetId = {
 
         var params = VoidByBetId.getParams();
         if (params) {
-            if (params.MatchId && $('#MatchId').is(':disabled') === false) {
-                if (BigInt(params.MatchId) > VoidByBetId.MaxInt) {
-                    $('#msg').html(tooltip.show('invalid-match', messages.invalidMatchId)).show();
-                    VoidByBetId.isValidMatchAndTranIds = false;
-                } else {
-                    VoidByBetId.checkValidateMatchAndTranIds(params.MatchId, params.TransIds);
-                }
-            }
-
-            if (!VoidByBetId.isValidMatchAndTranIds) {
-                return;
-            }
-
-            if (params.MatchId && $('#MatchId').is(':disabled') === false) {
-                VoidByBetId.getMatch({ matchId: params.MatchId });
-            } else {
-                $('#matchInfo').hide();
-            }
-
             VoidByBetId.getTicket(params);
         }
     },
@@ -67,8 +49,8 @@ var VoidByBetId = {
         var params = {};
         if (VoidByBetId.isFilterByBetId()) {
             params.TransIds = VoidByBetId.getBetIds();
-            params.MatchId = $('#MatchId').val();
             params.includeMainParlay = $('#ckbox-include-parlay').is(':checked');
+            params.isAbnormalBet = $('#ckbox-abnormal-bet').is(':checked');
         }
         else if (VoidByBetId.isFilterByUserName()) {
             var username = $('#txt-username').val();
@@ -142,22 +124,25 @@ var VoidByBetId = {
                 VoidByBetId.voidToDate = rs.ToDate;
                 NapTicketControl.Helper.displayContent(true);
                 VoidByBetId.loadTicket(rs);
+                VoidByBetId.matchId = rs.MatchId
 
                 if (rs.LicenseesName.length > 0) {
                     $('#affected-licensees').show();
                     $('#affected-licensees-highlight').text(rs.LicenseesName);
                 }
 
-                if ((params.MatchId && $('#MatchId').is(':disabled') === false)) {
+                if (rs.MatchId > 0) {
+                    VoidByBetId.getMatch({ matchId: rs.MatchId });
                     NapTicketControl.Helper.removeValidateVoidByBetId();
+                } else {
+                    $('#matchInfo').hide();
                     VoidByBetId.loadMessageTemplate();
-                }
-                else {
-                    $("#fsAbnormalBetReason").hide();
                 }
 
-                if (VoidByBetId.isFilterByUserName() && rs.TotalItem > 0) {
-                    VoidByBetId.loadMessageTemplate();
+                if (!params.isAbnormalBet) {
+                    $("#fsAbnormalBetReason").hide();
+                }
+                if (VoidByBetId.TotalItem !== "0" && VoidByBetId.isFilterByUserName()) {
                     NapTicketControl.Helper.updateInputContent("#reason", 'Abnormal bet');
                     NapTicketControl.Helper.updateInputContent("#reasonSC", '非正常投注');
                 }
@@ -187,6 +172,7 @@ var VoidByBetId = {
                 if (match !== null) {
                     VoidByBetId.matchInfo = match;
                     VoidByBetId.loadMatchInfo(match);
+                    VoidByBetId.loadMessageTemplate();
                 }
             },
             error: function () { },
@@ -285,19 +271,22 @@ var VoidByBetId = {
     },
 
     loadMessageTemplate: function () {
-        if (VoidByBetId.isFilterByUserName()) {
-            const templateMsgIdDefault = 37;
-            VoidByBetId.messageTemplate = VoidByBetId.templatesList.find(x => x.templateId === templateMsgIdDefault);
-            VoidByBetId.generateStatementForMessage();
-        } else {
-            VoidByBetId.generateMessageTemplateValue(VoidByBetId.matchInfo);
+        VoidByBetId.getTemplateFromSubIssueType(parseInt($('#ddl-abnormal-reason').val()));
+        if (($('#ckbox-abnormal-bet').is(':checked') || VoidByBetId.isFilterByUserName()) && VoidByBetId.TotalItem != "0") {
+            if (VoidByBetId.matchId == "0") {
+                const n = 37;
+                VoidByBetId.messageTemplate = VoidByBetId.templatesList.find(t => t.templateId === n);
+                VoidByBetId.generateStatementForMessage()
+            }
+            else {
+                VoidByBetId.generateMessageTemplateValue(VoidByBetId.matchInfo);
+            }
+            VoidByBetId.replaceValueForMessageTemplate();
+            NapTicketControl.Helper.updateInputContent("#msg-en", VoidByBetId.messageTemplateData.msgEnglish);
+            NapTicketControl.Helper.updateInputContent("#msg-ch", VoidByBetId.messageTemplateData.msgChineseTraditional);
+            NapTicketControl.Helper.updateInputContent("#msg-cs", VoidByBetId.messageTemplateData.msgChineseSimplified);
+            NapTicketControl.Helper.updateInputContent("#msg-zhcn", VoidByBetId.messageTemplateData.msgChineseNewSimplified)
         }
-        VoidByBetId.replaceValueForMessageTemplate();
-
-        NapTicketControl.Helper.updateInputContent("#msg-en", VoidByBetId.messageTemplateData.msgEnglish);
-        NapTicketControl.Helper.updateInputContent("#msg-ch", VoidByBetId.messageTemplateData.msgChineseTraditional);
-        NapTicketControl.Helper.updateInputContent("#msg-cs", VoidByBetId.messageTemplateData.msgChineseSimplified);
-        NapTicketControl.Helper.updateInputContent("#msg-zhcn", VoidByBetId.messageTemplateData.msgChineseNewSimplified);
     },
 
     resetContent: function () {
@@ -406,7 +395,7 @@ var VoidByBetId = {
         VoidByBetId.checkSettledTickets();
         $.each(VoidByBetId.messageTemplate, function (index, value) {
             if (index !== 'jsonValue' && index !== 'templateId') {
-                if (VoidByBetId.isFilterByBetId()) {
+                if (VoidByBetId.matchId != "0") {
                     value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{Home team name}}', 'homeTeamName');
                     value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{Away team name}}', 'awayTeamName');
                     value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{League name}}', 'leagueName');
@@ -586,9 +575,14 @@ var VoidByBetId = {
             param.ToDate = $("#to-date").val();
         }
 
-        if (VoidByBetId.isFilterByBetId()) {
+        if (VoidByBetId.matchId != "0") {
             param.Match = VoidByBetId.matchInfo;
         }
+        else {
+            param.Match = null;
+        }
+
+        param.isAbnormalBet = $('#ckbox-abnormal-bet').is(':checked');
 
         if ($("#fsAbnormalBetReason").is(':visible')) {
             param.IssueTypeId = VoidByBetId.issueType.issueTypeId.toString();
@@ -696,55 +690,6 @@ var VoidByBetId = {
             data: JSON.stringify(param),
             success: function (result) {
                 VoidByBetId.storageParams.CustomerIds = result;
-            }
-        });
-    },
-
-    checkValidateMatchAndTranIds: function (matchId, tranIds) {
-        var param = {
-            matchId: matchId,
-            transIds: tranIds
-        };
-
-        $.ajax({
-            type: "POST",
-            url: window.rootUrl + "api/VoidByBetId/CheckAbnormalBet",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            async: false,
-            data: JSON.stringify(param),
-            success: function (data) {
-                if (data.InvalidMatchId.length <= 0) {
-                    VoidByBetId.isValidMatchAndTranIds = true;
-                    var messageInvalidTranIds = '';
-                    if (data.InvalidTransIds.length > 0) {
-                        messageInvalidTranIds += messages.hightlightInvalidBetId;
-                        VoidByBetId.showInvalidTransIds(data.InvalidTransIds, 'value-number-invalid');
-                        VoidByBetId.isValidMatchAndTranIds = false;
-                    }
-
-                    if (data.MovedTransIds.length > 0) {
-                        messageInvalidTranIds += messageInvalidTranIds.length > 0 ? '<br>' + messages.hightlightMoveTicket : messages.hightlightMoveTicket;
-                        VoidByBetId.showInvalidTransIds(data.MovedTransIds, 'value-number-move-bet');
-                        VoidByBetId.isValidMatchAndTranIds = false;
-                    }
-
-                    if (data.DifferentMatchTransIds) {
-                        messageInvalidTranIds += messageInvalidTranIds.length > 0 ? '<br/>' + messages.hightlightDifferentMatchTicket : messages.hightlightDifferentMatchTicket;
-                        VoidByBetId.showInvalidTransIds(data.DifferentMatchTransIds, 'value-number-not-match');
-                        VoidByBetId.isValidMatchAndTranIds = false;
-                    }
-
-                    if (messageInvalidTranIds.length > 0) {
-                        $('#msg').html(tooltip.show('errorBetId', messageInvalidTranIds)).show();
-                    }
-                } else {
-                    $('#msg').html(tooltip.show('invalid-match', messages.invalidMatchId)).show();
-                    VoidByBetId.isValidMatchAndTranIds = false;
-                }
-            },
-            complete: function (e) {
-                VoidByBetId.checkCanShowRemoveInvalid();
             }
         });
     },
@@ -916,7 +861,6 @@ var VoidByBetId = {
         NapTicketControl.Helper.ResetReason();
         Message.Helper.clearMsgContent();
         $('#password').val('');
-        $('#MatchId').val('');
         VoidByBetId.intByBetId();
     },
 
@@ -971,7 +915,10 @@ var VoidByBetId = {
     intByBetId: function () {
         VoidByBetId.getTemplateFromSubIssueType(parseInt(NapTicketControl.Helper.issueTypeAbnormalBet));
         if ($('#ckbox-include-parlay').is(':checked') === false) {
-            $('#MatchId').removeAttr('disabled');
+            $('#ckbox-abnormal-bet').removeAttr('disabled');
+        }
+        if ($('#ckbox-abnormal-bet').is(':checked') === false) {
+            $('#ckbox-include-parlay').removeAttr('disabled');
         }
         $("#number-group").removeClass('number-group-disabled');
         $("#number-group").addClass('number-group');
@@ -1042,9 +989,17 @@ var VoidByBetId = {
 
         $('#ckbox-include-parlay').click(function () {
             if (this.checked) {
-                $('#MatchId').attr('disabled', 'disabled');
+                $('#ckbox-abnormal-bet').attr('disabled', 'disabled');
             } else {
-                $('#MatchId').removeAttr('disabled');
+                $('#ckbox-abnormal-bet').removeAttr('disabled');
+            }
+        });
+
+        $('#ckbox-abnormal-bet').click(function () {
+            if (this.checked) {
+                $('#ckbox-include-parlay').attr('disabled', 'disabled');
+            } else {
+                $('#ckbox-include-parlay').removeAttr('disabled');
             }
         });
 
@@ -1112,14 +1067,11 @@ var VoidByBetId = {
             }
         }).ForceIntegerOnly();
 
-        $("#MatchId").keyup(function () { }).ForceIntegerOnly();
-
         NapTicketControl.Helper.InitNumberGroup();
 
         VoidByBetId.getMessageTemplate();
 
         $("#ddl-abnormal-reason").change(function () {
-            VoidByBetId.getTemplateFromSubIssueType(parseInt($(this).val()));
             VoidByBetId.loadMessageTemplate();
         });
     },
@@ -1135,11 +1087,11 @@ var VoidByBetId = {
 
     resetFilter: function () {
         $('#ckbox-include-parlay').prop('checked', false);
+        $('#ckbox-abnormal-bet').prop('checked', false);
         $('#txt-username').val('');
         $('#from-date').datepicker('setDate', null);
         $('#to-date').datepicker('setDate', null);
         $('#txtTransId').val('');
-        $('#MatchId').val('');
         $('.txt-calendar').val('');
     },
 

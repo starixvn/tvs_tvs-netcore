@@ -21,4 +21,6 @@ public class GetTicketsQuery
     public string? InvalidTransIds { get; set; }
 
     public string? MovedTransIds { get; set; }
+
+    public bool IsAbnormalBet { get; set; }
 }

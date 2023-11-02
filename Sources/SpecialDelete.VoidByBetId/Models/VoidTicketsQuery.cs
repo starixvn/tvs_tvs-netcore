@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Models;
+﻿using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendMessage;
 
 namespace SpecialDelete.VoidByBetId.Models;
@@ -54,5 +53,5 @@ public class VoidTicketsQuery
 
     public bool IsFilterByBetId { get; set; }
 
-    public bool IsLikeLyAbnormalBet => IssueTypeId == IssueTypeConstant.AbnormalBet || IssueTypeId == IssueTypeConstant.AbnormalBetRealMember;
+    public bool IsAbnormalBet { get; set; }
 }

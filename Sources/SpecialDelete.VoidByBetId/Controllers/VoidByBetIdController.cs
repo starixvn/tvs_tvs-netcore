@@ -38,8 +38,4 @@ public class VoidByBetIdController : ControllerBase
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Host)]
     [HttpPost]
     public async Task<JsonResult> VoidBet(VoidTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
-
-    [HttpPost]
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID)]
-    public async Task<JsonResult> CheckAbnormalBet(CheckAbnormalBetRequest request) => this.JsonResultPascalCase(await mediator.Send(request));
 }

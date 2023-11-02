@@ -92,12 +92,12 @@ public class HandleServiceImp : HandleService
     {
         query.Message.CreatorId = sessionService.UserId;
         query.Message.CreatorName = sessionService.UserName;
-        var isMessageContentAbnormal = query.IsLikeLyAbnormalBet || !query.IsFilterByBetId;
+        var isMessageContentAbnormal = query.IsAbnormalBet || !query.IsFilterByBetId;
         var messageId = await sendMessageService.InsertMessage(query.Message, 0, query.Match?.LeagueGroupId, isMessageContentAbnormal);
         var reasonId = await sendMessageService.InsertReason(query.Reason, query.ReasonSC);
 
         await sendMessageService.SendMessage(tickets, messageId, query.IssueTypeId, query.Message.CreatorId);
-        if (!query.IsLikeLyAbnormalBet)
+        if (!query.IsAbnormalBet)
         {
             await sendMessageService.InsertMessageIntoAdminSite(query.Message);
         }
@@ -109,7 +109,7 @@ public class HandleServiceImp : HandleService
     {
         var emailModel = mapper.Map<EmailVoidModel>(query);
         emailModel.IsFilterByUsername = !query.IsFilterByBetId;
-        if (query.IsLikeLyAbnormalBet)
+        if (query.IsAbnormalBet)
         {
             emailModel.Reason = $"{emailModel.Reason}({query.SubIssueTypeName})";
             emailModel.ReasonSC = $"{emailModel.ReasonSC}({query.SubIssueTypeNameCS})";

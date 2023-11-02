@@ -350,11 +350,6 @@
         <Setting Key="DBSIG2.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_SpecialDelete_VoidBetIdList_Upd" SpName="NAP_SpecialDelete_VoidBetIdList_Upd" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
-        <Setting Key="DBCTG.NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" SpName="NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG.NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" SpName="NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" SpName="NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
-        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" SpName="NAP_SpecialDelete_VoidBetId_CheckAbnormalBet" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
-
         <Setting Key="NAP_CustomerSelInfoByUsername" SpName="NAP_CustomerSelInfoByUsername" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
 </Functions>

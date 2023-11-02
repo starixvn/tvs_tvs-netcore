@@ -4,7 +4,6 @@ using SpecialDelete.VoidByBetId.Repositories;
 using SpecialDelete.VoidByBetId.Services;
 using SpecialDelete.VoidByBetId.Services.ExportExcel;
 using SpecialDelete.VoidByBetId.Services.GetTickets;
-using SpecialDelete.VoidByBetId.Services.Validation;
 using SpecialDelete.VoidByBetId.Services.VoidTickets;
 using TicketVoidingSystem.Services.Excel;
 
@@ -17,7 +16,6 @@ public static class VoidByBetId
         services.AddTransient<BetListCoreService, BetListCoreServiceImp>();
         services.AddTransient<ConditionService, ConditionServiceImp>();
         services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
-        services.AddTransient<CheckAbnormalBetService, CheckAbnormalBetServiceImp>();
         services.AddTransient<TicketService, TicketServiceImp>();
         services.AddTransient<HandleService, HandleServiceImp>();
         services.AddTransient<VoidByBetIdRepository, VoidByBetIdRepositoryImp>();

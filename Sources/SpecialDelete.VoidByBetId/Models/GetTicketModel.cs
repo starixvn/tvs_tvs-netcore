@@ -58,4 +58,6 @@ public class GetTicketValidation
     public string InvalidTransIds { get; set; }
 
     public string MovedTransIds { get; set; }
+
+    public int MatchId { get; set; }
 }
