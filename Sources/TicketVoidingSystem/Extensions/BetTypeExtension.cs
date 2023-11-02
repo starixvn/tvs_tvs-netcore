@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
@@ -42,9 +43,8 @@ public static class BetTypeExtension
 
     public static bool IsSabaPromotion(this int id)
     {
-        const int betType17000 = 17000;
-        const int betType17003 = 17003;
-        return id is betType17000 or betType17003;
+        int[] SportTypeSabaPromotions = { 17000, 17001, 17002, 17003, 17004, 17006 };
+        return SportTypeSabaPromotions.Contains(id);
     }
 
     public static bool IsOutright(this int id)
