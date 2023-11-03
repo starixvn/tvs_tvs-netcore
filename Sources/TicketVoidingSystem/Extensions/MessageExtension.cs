@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using TicketVoidingSystem.Models;
@@ -18,7 +19,7 @@ public static class MessageExtension
 
         const string Pattern = "\\s*@@\\s*";
         const string Replacement = " @@ ";
-        var regex = new Regex(Pattern);
+        var regex = new Regex(Pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         var result = regex.Replace(text, Replacement);
         return result.Trim();
     }

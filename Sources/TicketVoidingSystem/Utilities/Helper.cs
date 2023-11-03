@@ -204,7 +204,7 @@ public static class Helper
             return $"{httpContextAccessor.HttpContext.Request.PathBase}{menu.Url}";
         }
 
-        if (AppSettingService.AppSetting.OldSiteRootUrl.StartsWith("/"))
+        if (AppSettingService.AppSetting.OldSiteRootUrl.StartsWith('/'))
         {
             var oldSiteAbsolutePath = $"https://{httpContextAccessor.HttpContext.Request.Host}{AppSettingService.AppSetting.OldSiteRootUrl}";
             return $"{oldSiteAbsolutePath}{menu.Url[1..]}";

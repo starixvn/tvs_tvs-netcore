@@ -52,7 +52,8 @@ public class SitesEmailServiceImp : SitesEmailService
     private static List<SiteEmail> ExcludeTestSites(List<SiteEmail> sites)
     {
         var testSiteNames = new[] { "spondemo", "athena000" };
-        return sites.Where(s => !testSiteNames.Any(t => t.Equals(s.Site, StringComparison.CurrentCultureIgnoreCase))).ToList();
+        return sites.Where(s => !Array.Exists(testSiteNames, t => t.Equals(s.Site, StringComparison.CurrentCultureIgnoreCase)))
+            .ToList();
     }
 
     private static void HandleEmailConfiguration(List<SiteEmail> sites)

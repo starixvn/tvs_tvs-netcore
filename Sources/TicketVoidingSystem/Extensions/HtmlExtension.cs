@@ -30,7 +30,7 @@ public static class HtmlExtension
 
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var stake = doc.DocumentNode.SelectNodes("//*[@class='stake']").First().InnerText;
+        var stake = doc.DocumentNode.SelectNodes("//*[@class='stake']")[0].InnerText;
         var rebateBonus = html.RebateBonus();
         var nphPromotion = html.NPHPromotion();
 
@@ -59,7 +59,7 @@ public static class HtmlExtension
 
     private static string GetStakeOriginalStake(HtmlDocument doc, string rebateBonus, string nphPromotion, string stake)
     {
-        var originalStake = doc.DocumentNode.SelectNodes("//*[@class='originalStake']").First().InnerText;
+        var originalStake = doc.DocumentNode.SelectNodes("//*[@class='originalStake']")[0].InnerText;
         originalStake = originalStake.AppendWithNewLine(stake);
 
         return GetStakeWithSpecialRemark(originalStake, rebateBonus, nphPromotion);
@@ -67,7 +67,7 @@ public static class HtmlExtension
 
     private static string GetStakeLightBlue(HtmlDocument doc, string rebateBonus, string nphPromotion, string stake)
     {
-        var extend = doc.DocumentNode.SelectNodes("//*[@class='light-blue']").First();
+        var extend = doc.DocumentNode.SelectNodes("//*[@class='light-blue']")[0];
         stake = stake.AppendWithNewLine(extend.InnerText);
 
         return GetStakeWithSpecialRemark(stake, rebateBonus, nphPromotion);
@@ -75,9 +75,9 @@ public static class HtmlExtension
 
     private static string GetStakeReturnStake(HtmlDocument doc, string stake)
     {
-        var returnStake = doc.DocumentNode.SelectNodes("//*[@class='return-stake']").First();
+        var returnStake = doc.DocumentNode.SelectNodes("//*[@class='return-stake']")[0];
         stake = stake.AppendWithNewLine(returnStake.InnerText);
-        var discount = doc.DocumentNode.SelectNodes("//*[@class='discount']").First();
+        var discount = doc.DocumentNode.SelectNodes("//*[@class='discount']")[0];
         stake = stake.AppendWithNewLine(discount.InnerText);
 
         return stake;
@@ -99,7 +99,7 @@ public static class HtmlExtension
         doc.LoadHtml(html);
         if (html.Contains(HtmlClass.RebateBonus))
         {
-            var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']").First();
+            var extend = doc.DocumentNode.SelectNodes("//*[@class='rebate-bonus']")[0];
             return "(" + extend.InnerText + ")";
         }
 
@@ -112,7 +112,7 @@ public static class HtmlExtension
         doc.LoadHtml(html);
         if (html.Contains(HtmlClass.NphPromotion))
         {
-            var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']").First();
+            var extend = doc.DocumentNode.SelectNodes("//*[@class='nph-promotion']")[0];
             return "(" + extend.InnerText + ")";
         }
 
@@ -132,7 +132,7 @@ public static class HtmlExtension
 
     private static string StripHtml(this string htmlText)
     {
-        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
+        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         var stripped = reg.Replace(htmlText, string.Empty);
         return HttpUtility.HtmlDecode(stripped);
     }
@@ -145,12 +145,12 @@ public static class HtmlExtension
         }
 
         string handicap;
-        var node = doc.DocumentNode.SelectNodes("//span").First();
+        var node = doc.DocumentNode.SelectNodes("//span")[0];
 
         if (html.Contains(HtmlClass.ExcludingChoices))
         {
             handicap = node.ChildNodes[0].InnerText + node.ChildNodes[1].InnerText;
-            var secondLine = doc.DocumentNode.SelectNodes("//div[@class='excluding-choices']").First().InnerText;
+            var secondLine = doc.DocumentNode.SelectNodes("//div[@class='excluding-choices']")[0].InnerText;
             return handicap.AppendWithNewLine(secondLine).StripHtml();
         }
 
@@ -168,7 +168,7 @@ public static class HtmlExtension
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var choice = doc.DocumentNode.SelectNodes("//a").First().InnerHtml.StripHtml();
+        var choice = doc.DocumentNode.SelectNodes("//a")[0].InnerHtml.StripHtml();
         var offerName = doc.DocumentNode.SelectNodes("//div[@class='offer-name-list']//div");
         if (offerName != null)
         {
@@ -183,9 +183,9 @@ public static class HtmlExtension
 
     private static string AddFooter(HtmlDocument doc, string choice)
     {
-        var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First();
+        var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']")[0];
         var match = GetMatch(doc);
-        var league = doc.DocumentNode.SelectNodes("//div[@class='league']").First();
+        var league = doc.DocumentNode.SelectNodes("//div[@class='league']")[0];
 
         return choice.AppendWithNewLine(bettype.InnerHtml.StripHtml())
             .AppendWithNewLine(match)
@@ -203,7 +203,7 @@ public static class HtmlExtension
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var node = doc.DocumentNode.SelectNodes("//span").First();
+        var node = doc.DocumentNode.SelectNodes("//span")[0];
         var choice = node.ChildNodes[0].InnerText;
         return AddFooter(doc, choice);
     }
@@ -212,10 +212,10 @@ public static class HtmlExtension
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
-        var first = doc.DocumentNode.SelectNodes("//span").First();
+        var first = doc.DocumentNode.SelectNodes("//span")[0];
         var choice = first.InnerHtml.StripHtml();
         var match = GetMatch(doc);
-        var league = doc.DocumentNode.SelectNodes("//div[@class='league']").First();
+        var league = doc.DocumentNode.SelectNodes("//div[@class='league']")[0];
 
         return choice.AppendWithNewLine(match)
             .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
@@ -233,8 +233,8 @@ public static class HtmlExtension
         var choice = isParlay ? HeaderParlay(doc) : string.Empty;
         var handicap = html.Handicap(doc);
         var bettype = GetBetType(doc);
-        var match = doc.DocumentNode.SelectNodes("//div[@class='match']").First();
-        var league = doc.DocumentNode.SelectNodes("//div[@class='league']").First();
+        var match = doc.DocumentNode.SelectNodes("//div[@class='match']")[0];
+        var league = doc.DocumentNode.SelectNodes("//div[@class='league']")[0];
 
         return choice.AppendWithNewLine(handicap.StripHtml())
             .AppendWithNewLine(bettype)
@@ -244,14 +244,14 @@ public static class HtmlExtension
 
     private static string GetBetType(HtmlDocument doc)
     {
-        var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerHtml.StripHtml();
+        var bettype = doc.DocumentNode.SelectNodes("//div[@class='bettype']")[0].InnerHtml.StripHtml();
         var bettypeDescription = GetBetTypeDescription(doc);
         return string.IsNullOrWhiteSpace(bettypeDescription) ? bettype : bettype.AppendWithNewLine(bettypeDescription);
     }
 
     private static string HeaderParlay(HtmlDocument doc)
     {
-        var choice = doc.DocumentNode.SelectNodes("//a").First().InnerHtml.StripHtml();
+        var choice = doc.DocumentNode.SelectNodes("//a")[0].InnerHtml.StripHtml();
         var offerName = doc.DocumentNode.SelectNodes("//div[@class='offer-name-list']//div");
         if (offerName == null)
         {
