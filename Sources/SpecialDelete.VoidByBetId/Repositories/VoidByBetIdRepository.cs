@@ -92,8 +92,18 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
     {
         var invalidTransIds = Helper.GetIntersectTransIdString(validations.Select(y => y.InvalidTransIds));
         var movedTransIds = Helper.GetUnionTransIdString(validations.Select(x => x.MovedTransIds));
+        var validMatchIdI = GetMatchId(validations);
+        return (tickets, invalidTransIds, movedTransIds, validMatchIdI);
+    }
 
-        return (tickets, invalidTransIds, movedTransIds, validations.FirstOrDefault().MatchId);
+    private static int GetMatchId(IEnumerable<GetTicketValidation> validations)
+    {
+        var matchIds = validations.Where(x => x.MatchId != null).Select(x => x.MatchId).Distinct();
+        if (matchIds.Contains(0))
+        {
+            return 0;
+        }
+        return (int)(matchIds.Count() == 1 ? matchIds.First() : 0) ;
     }
 
     private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)

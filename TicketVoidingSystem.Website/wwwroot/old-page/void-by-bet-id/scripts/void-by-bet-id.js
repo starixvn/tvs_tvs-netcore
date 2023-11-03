@@ -109,7 +109,7 @@ var VoidByBetId = {
                 NapTicketControl.disableInput();
             },
             success: function (rs) {
-                if (VoidByBetId.isFilterByBetId) {
+                if (VoidByBetId.isFilterByBetId()) {
                     VoidByBetId.showInvalidTransIds(rs.InvalidTransIds, 'value-number-invalid');
                     VoidByBetId.showInvalidTransIds(rs.MovedTransIds, 'value-number-move-bet');
                     NapTicketControl.Helper.checkValidateIsMoveTicketWithVoidByBetId();
@@ -133,7 +133,6 @@ var VoidByBetId = {
 
                 if (rs.MatchId > 0) {
                     VoidByBetId.getMatch({ matchId: rs.MatchId });
-                    NapTicketControl.Helper.removeValidateVoidByBetId();
                 } else {
                     $('#matchInfo').hide();
                     VoidByBetId.loadMessageTemplate();

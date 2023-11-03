@@ -59,5 +59,5 @@ public class GetTicketValidation
 
     public string MovedTransIds { get; set; }
 
-    public int MatchId { get; set; }
+    public int? MatchId { get; set; }
 }
