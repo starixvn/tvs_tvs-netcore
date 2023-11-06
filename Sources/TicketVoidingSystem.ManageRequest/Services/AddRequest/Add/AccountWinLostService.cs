@@ -35,17 +35,17 @@ public class AccountWinLostServiceImp : AccountWinLostService
         var stringBuilder = new StringBuilder();
         foreach (var model in accountModels)
         {
-            var line = $"<CustId Id='{model.CustId}' />"
-                + $"<Username Id='{model.Username}' />"
-                + $"<GivenCredit Id='{model.GivenCredit}' />"
-                + $"<AdjustVoidLimit Id='{model.AdjustVoidLimit}' />"
-                + $"<CurrentWinning Id='{model.CurrentWinning}' />"
-                + $"<CurrentLosing Id='{model.CurrentLosing}' />"
-                + $"<EstimateVoidAmount Id='{model.EstimateVoidAmount}' />"
-                + $"<WinLostAfterVoid Id='{model.WinLostAfterVoid}' />";
+            var line = $"<r CustId='{model.CustId}' "
+                + $"<Username='{model.Username}' "
+                + $"<GivenCredit='{model.GivenCredit}' "
+                + $"<AdjustVoidLimit='{model.AdjustVoidLimit}' "
+                + $"<CurrentWinning='{model.CurrentWinning}' "
+                + $"<CurrentLosing='{model.CurrentLosing}' "
+                + $"<EstimateVoidAmount='{model.EstimateVoidAmount}' "
+                + $"<WinLostAfterVoid='{model.WinLostAfterVoid}' />";
             stringBuilder.Append(line);
         }
 
-        return $"{stringBuilder}";
+        return $"<root>{stringBuilder}</root>";
     }
 }
