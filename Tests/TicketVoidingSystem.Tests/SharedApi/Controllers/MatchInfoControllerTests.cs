@@ -44,6 +44,18 @@ public class MatchInfoControllerTests
     }
 
     [Fact]
+    public async Task GetInfoForVoidByCurrency_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+
+        // Act
+        await controller.GetInfoForVoidByCurrency(null);
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetMatchInfoVoidByCurrencyRequest>());
+    }
+
+    [Fact]
     public async Task GetInfoForAddRequest_HasRequest_CallMediatorRequest()
     {
         // Arrange

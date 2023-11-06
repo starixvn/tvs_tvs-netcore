@@ -45,10 +45,16 @@ public class BetTypesServiceTests
     {
         // Arrange
         var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "" };
-        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel> { new() }, Result  = new Result{ ErrorCode  = errorCode } };
-        var expectedResult = new GroupBetTypesViewModel
+        var resultGetBetTypes = new Result { ErrorCode = errorCode };
+        var betTypes = new BetTypesViewModel
         {
-            GroupBetTypes = new List<GroupBetTypeModel> { new() { BetTypes = new List<BetTypeModel> { new() } } }
+            BetTypes = new List<BetTypeModel>
+            {
+                new() { GroupName = "1", Id = "1" },
+                new() { GroupName = "1", Id = "2" },
+                new() { GroupName = "2", Id = "3" }
+            },
+            Result = resultGetBetTypes
         };
 
         repository.GetBetTypes(Arg.Any<GetBetTypesCriteria>())
@@ -58,7 +64,7 @@ public class BetTypesServiceTests
         var result = await service.GetGroupBetTypes(query);
 
         // Assert
-        AssertExtension.Equal(expectedResult.GroupBetTypes, result.GroupBetTypes);
+        AssertExtension.Equal(resultGetBetTypes, result.Result);
     }
 
     [Fact]
@@ -66,21 +72,39 @@ public class BetTypesServiceTests
     {
         // Arrange
         var query = new BetTypeQueryModel { MatchId = 1, BetTypes = "" };
-        var betTypes = new BetTypesViewModel { BetTypes = new List<BetTypeModel>
+        var betTypes = new BetTypesViewModel
         {
-            new(){ GroupName  ="a", Id  = "1"},
-            new(){ GroupName  ="a", Id  = "2"},
-            new(){ GroupName  ="b", Id  = "3"},
-            new(){ GroupName  ="b", Id  = "4"}
-        }, Result = new Result { ErrorCode = 1 } };
+            BetTypes = new List<BetTypeModel>
+            {
+                new() { GroupName = "a", Id = "1" },
+                new() { GroupName = "a", Id = "2" },
+                new() { GroupName = "b", Id = "3" },
+                new() { GroupName = "b", Id = "4" }
+            },
+            Result = new Result { ErrorCode = 1 }
+        };
         var expectedResult = new GroupBetTypesViewModel
         {
             Result = betTypes.Result,
-            GroupBetTypes = new List<GroupBetTypeModel> { new() { GroupName = "a", BetTypes = new List<BetTypeModel> { new(){ GroupName  ="a", Id  = "1"},
-                new(){ GroupName  ="a", Id  = "2"}}},
-                new (){ GroupName = "b", BetTypes = new List<BetTypeModel> { new(){ GroupName  ="b", Id  = "3"},
-                    new(){ GroupName  ="b", Id  = "4"} }
-            } }
+            GroupBetTypes = new List<GroupBetTypeModel>
+            {
+                new()
+                {
+                    GroupName = "a", BetTypes = new List<BetTypeModel>
+                    {
+                        new() { GroupName = "a", Id = "1" },
+                        new() { GroupName = "a", Id = "2" }
+                    }
+                },
+                new()
+                {
+                    GroupName = "b", BetTypes = new List<BetTypeModel>
+                    {
+                        new() { GroupName = "b", Id = "3" },
+                        new() { GroupName = "b", Id = "4" }
+                    }
+                }
+            }
         };
 
         repository.GetBetTypes(Arg.Any<GetBetTypesCriteria>())
@@ -107,7 +131,7 @@ public class BetTypesServiceTests
         repository.GetBetTypes(Arg.Any<GetBetTypesCriteria>())
             .ReturnsForAnyArgs(betTypes);
         repository.GetBetTypesHaveTickets(Arg.Any<BetTypeQueryModel>()).ReturnsForAnyArgs(new List<int> { 1 });
-        
+
         // Act
         var result = await service.GetGroupBetTypes(query);
 

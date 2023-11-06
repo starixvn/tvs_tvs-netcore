@@ -123,6 +123,7 @@ public class ConvertRequestsServiceTests
     [InlineData(IssueTypeConstant.DuplicateTickets, "<div class='text-primary total-single'>abc</div>", "Single: abc")]
     [InlineData(IssueTypeConstant.DuplicateTickets, "<div class='text-primary total-parlay'>abc</div>", "Parlay: abc")]
     [InlineData(IssueTypeConstant.DuplicateTickets, "<div>abc</div>", "")]
+    [InlineData(999, "", "")]
     public void GetDescription_ReturnsExpectedDescription(int issueId, string html, string description)
     {
         // Arrange

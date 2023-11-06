@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 public class LeagueNameMessageServiceTests
 {
     [Fact]
-    public Task ReplaceMessageChinaViewLicensee_NotReplace()
+    public void ReplaceMessageChinaViewLicensee_NotReplace()
     {
         // Arrange
         var message = new Message { ContentEnglish = "123SABA321" };
@@ -23,11 +23,10 @@ public class LeagueNameMessageServiceTests
 
         // Assert
         Assert.Equal("123SABA321", message.ContentEnglish);
-        return Task.CompletedTask;
     }
 
     [Fact]
-    public Task ReplaceMessageChinaViewLicensee_ReplaceExpected()
+    public void ReplaceMessageChinaViewLicensee_ReplaceExpected()
     {
         // Arrange
         var message = new Message { ContentEnglish = "123321", ContentChineseSimplified = "123321" };
@@ -49,6 +48,37 @@ public class LeagueNameMessageServiceTests
         // Assert
         Assert.Equal("123321", message.ContentEnglish);
         Assert.Equal("123321", message.ContentChineseSimplified);
-        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public void RemoveSabaInChoiceColumn_LeagueGroupIsNotSaBa_NotReplace()
+    {
+        // Arrange
+        var match = new Match();
+        var site = new SiteEmail { IsChinaView = false };
+        const string choice = "saba - 123";
+        var service = new LeagueNameMessageServiceImp();
+
+        // Act
+        var result = service.RemoveSabaInChoiceColumn(choice, match, site);
+
+        // Assert
+        Assert.Equal(choice, result);
+    }
+
+    [Fact]
+    public void RemoveSabaInChoiceColumn_LeagueGroupIsSaBa_ReplaceSaba()
+    {
+        // Arrange
+        var match = new Match{ LeagueGroupId = 42, OriginLeagueName  = "saba - 123", OriginLeagueNameSimplified  = "123"};
+        var site = new SiteEmail { IsChinaView = true };
+        const string choice = "123 saba - 123";
+        var service = new LeagueNameMessageServiceImp();
+
+        // Act
+        var result = service.RemoveSabaInChoiceColumn(choice, match, site);
+
+        // Assert
+        Assert.Equal("123 - 123", result);
     }
 }

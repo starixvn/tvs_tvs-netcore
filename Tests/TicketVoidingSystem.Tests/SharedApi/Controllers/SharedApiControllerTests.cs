@@ -109,4 +109,15 @@ public class SharedApiControllerTests
         // Assert
         await mediator.Received(1).Send(Arg.Any<GetIssueTypePermissionListRequest>());
     }
+
+    [Fact]
+    public async Task CheckNegativeBalance_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.CheckNegativeBalance(null);
+
+        // Assert
+        await mediator.Received(1).Send(Arg.Any<CheckNegativeBalanceRequest>());
+    }
 }

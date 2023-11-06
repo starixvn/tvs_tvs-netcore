@@ -28,7 +28,7 @@ public class CellServiceImp : CellService
     public void AddMatch(ExcelWorksheet worksheet, Match match)  // NOSONAR
     {
         const int RowMatchInfo = 5;
-        var eventTime = match.EventDate == DateTimeOffset.MinValue ? string.Empty : match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
+        var eventTime = match.EventDate == DateTimeOffset.MinValue.DateTime ? string.Empty : match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash);
         worksheet.Cells[RowMatchInfo, 1].Value = match.MatchCode;
         worksheet.Cells[RowMatchInfo, 2].Value = match.LeagueName;
         worksheet.Cells[RowMatchInfo, 3].Value = match.MatchEvent;
