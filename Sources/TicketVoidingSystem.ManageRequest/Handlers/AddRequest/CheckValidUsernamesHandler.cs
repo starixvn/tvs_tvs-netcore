@@ -8,8 +8,21 @@ using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class CheckValidUsernamesRequest : CheckValidUsernamesCriteria, IRequest<CheckValidUsernamesViewModel>
+public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 {
+    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
+
+    public int? RequestId { get; set; }
+
+    public int ActionId { get; set; }
+
+    public DateTime? FromDate { get; set; }
+
+    public DateTime? ToDate { get; set; }
+
+    public string ProductIds { get; set; }
+
+    public string StatusIds { get; set; }
 }
 
 public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>
@@ -89,7 +102,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         {
             RequestId = model.RequestId,
             ActionId = model.ActionId,
-            Usernames = model.Usernames,
+            Usernames = string.Join(",", model.AccountWinlostModels.Select(x => x.Username)),
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             ProductIds = model.ProductIds,
@@ -107,7 +120,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             IssueTypeId = IssueTypeConstant.AbnormalAccount,
             AbnormalAccountViewModel = new AbnormalAccountViewModel
             {
-                Usernames = model.Usernames,
+                Usernames = string.Join(",", model.AccountWinlostModels.Select(x => x.Username)),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ProductIds = model.ProductIds,
