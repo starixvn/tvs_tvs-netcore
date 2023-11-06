@@ -56,27 +56,27 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         {
             new()
             {
-                Username = "AAA", UserId = 1, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                Username = "AAA", CustId = 1, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "BBB", UserId = 2, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "BBB", CustId = 2, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "CCC", UserId = 3, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                Username = "CCC", CustId = 3, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "DD", UserId = 4, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "DD", CustId = 4, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "EE", UserId = 5, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "EE", CustId = 5, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             }
         };

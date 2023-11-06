@@ -13,7 +13,7 @@
                         <ng-container *ngIf="!item.isShowTooltip">
                             <span>{{item.value}}</span>
                         </ng-container>
-                        <span class="icon-delete" (click)="groupUsername.remove(item)">&nbsp;</span>
+                        <span class="icon-delete" (click)="groupUsername.remove(item); changeData()">&nbsp;</span>
                     </div>
                 </div>
             </div>

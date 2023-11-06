@@ -1,5 +1,5 @@
 export class AccountWinlostModel {
-  userId: number;
+  custId: number;
   username: string;
   givenCredit: number;
   adjustVoidLimit: number;

@@ -28,7 +28,7 @@ export class ValidationService {
         return { isValid: false } as ValidationBusinessRuleOutput;
       }
 
-      if (usernames === '') {
+      if (usernames.length === 0) {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }
       args.usernamesComponent.groupUsername.resetAllValue();
@@ -37,7 +37,7 @@ export class ValidationService {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }
 
-      const viewModel = await this.getValidation(args, usernames);
+      const viewModel = await this.getValidation(args);
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
         return {
@@ -45,7 +45,7 @@ export class ValidationService {
           accountWinlostModels: viewModel.accountWinlostModels // need to remove, for testing
         } as ValidationBusinessRuleOutput;
       }
-      
+
       args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
       if (viewModel.validation.isExceededTotalUsernames) {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
@@ -54,7 +54,10 @@ export class ValidationService {
         args.primitiveProps.isShowError = true;
         args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;
         args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
-        return { isValid: false } as ValidationBusinessRuleOutput;
+        return {
+          isValid: false,
+          accountWinlostModels: viewModel.accountWinlostModels // need to remove, for testing
+         } as ValidationBusinessRuleOutput;
       }
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
@@ -68,17 +71,17 @@ export class ValidationService {
       args.primitiveProps.isBlockUsernames = false;
     }
   }
-  
+
   private getConfirmAbnormalBetModel(validation: ValidationAbnormalAccount): ConfirmAbnormalAccountModel {
     const confirmModel = new ConfirmAbnormalAccountModel();
     confirmModel.numberOfTicketsExistedInRequest = validation.numberOfTickets;
-    
+
     return confirmModel;
   }
-  
-  private async getValidation(args: ValidationBusinessRuleArgs, usernames: string): Promise<CheckUsernamesViewModel> {
+
+  private async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
     const query: CheckValidUsernamesQuery = {
-      usernames: usernames,
+      accountWinlostModels: args.allAccountWinlostModels,
       requestId: args.requestId,
       actionId: args.actionId,
       productIds: args.abnormalAccountModel.productIds,
@@ -87,7 +90,7 @@ export class ValidationService {
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
     };
     const results = await this.addRequestApiService.checkValidUsernames(query);
-    
+
     return results;
   }
 

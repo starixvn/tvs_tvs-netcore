@@ -6,7 +6,7 @@
         <ng-select class="product" [items]="products" [multiple]="true" bindLabel="name" groupBy="group"
           [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
           [(ngModel)]="selectedProducts" placeholder="Select products" [clearable]="false" [searchable]="false"
-          [disabled]="isDisabled">
+          [disabled]="isDisabled" (change)="changeFilter()">
           <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
             <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{products.length ===
             selectedProducts.length ? 'Unselect All' : 'Select All'}}
@@ -34,7 +34,7 @@
       <ng-select class="ticket-status" [items]="ticketStatus" [multiple]="true" bindLabel="name" groupBy="group"
         [selectableGroup]="true" [selectableGroupAsModel]="false" [closeOnSelect]="false" bindValue="value"
         [(ngModel)]="selectedTicketStatus" placeholder="Select status" [clearable]="false" [searchable]="false"
-        [disabled]="isDisabled">
+        [disabled]="isDisabled" (change)="changeFilter()">
         <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
           <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{ticketStatus.length ===
           selectedTicketStatus.length ? 'Unselect All' : 'Select All'}}

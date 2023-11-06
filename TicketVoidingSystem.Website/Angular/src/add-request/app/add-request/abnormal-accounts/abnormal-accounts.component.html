@@ -12,21 +12,20 @@
 </ngb-alert>
 
 <div [blockUi]="primitiveProps.isBlockUsernames">
-    <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="2050"
+    <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="2050" (change)="changeFilter()"
         (focusOutUsernames)="focusOutUsernames()" [inputUsernameCss]="'col-sm-8'" [inputUsernameStyle]="{'max-width.px': 1065}">
     </user-names>
 </div>
 
-<product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"></product-filter>
-<event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit">
-</event-date-filter>
+<product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit" (changeFilterEvent)="changeFilter()"></product-filter>
+<event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit" (changeFilterEvent)="changeFilter()"></event-date-filter>
 
 <div *ngIf="isShowUserInfo()" class="mt-3">
   <div class="mb-3">
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
     (click)="handleSearchEvent()">Search</button>
   </div>
-  <account-table [accountWinlostModels]="accountWinlostModels"></account-table>
+  <account-table *ngIf="primitiveProps.isShowAccountWinLost" [accountWinlostModels]="validAccountWinlostModels"></account-table>
 </div>
 
 <confirm-abnormal-account [model]="confirmAbnormalAccount" (close)="triggerCloseEvent()"

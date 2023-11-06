@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { TVSRequestActionType } from 'src/utility/constants/config';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
+import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
@@ -36,7 +36,7 @@ export class AbnormalAccountsComponent {
 
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
-  accountWinlostModels: AccountWinlostModel[] = [];
+  validAccountWinlostModels: AccountWinlostModel[] = [];
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
@@ -49,8 +49,8 @@ export class AbnormalAccountsComponent {
       return;
     }
     await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
-  }  
-  
+  }
+
   public triggerCloseEvent() {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
@@ -62,7 +62,7 @@ export class AbnormalAccountsComponent {
   public async onYesConfirmWarningModal(): Promise<void> {
     await this.saveRequestService.onYesConfirmWarningModal(this.initSaveRequestInput());
   }
-  
+
   public isShowUserInfo(): boolean {
     return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
   }
@@ -70,11 +70,13 @@ export class AbnormalAccountsComponent {
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     const validationOutput = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
-    this.accountWinlostModels = validationOutput.accountWinlostModels;
+    this.validAccountWinlostModels = validationOutput.accountWinlostModels;
+    this.primitiveProps.isShowAccountWinLost = true;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
+
   private initSaveRequestInput() {
-    const arg = new SaveRequestArg(); 
+    const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.isEdit = this.isEdit;
     arg.userId = this.userId;
@@ -89,7 +91,7 @@ export class AbnormalAccountsComponent {
     arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
-    
+
     return arg;
   }
 
@@ -101,7 +103,22 @@ export class AbnormalAccountsComponent {
     args.usernamesComponent = this.usernamesComponent;
     args.abnormalAccountModel = this.abnormalAccountModel;
     args.primitiveProps = this.primitiveProps;
+    args.allAccountWinlostModels = this.getAccountWinlostModels();
 
     return args;
+  }
+
+  public getAccountWinlostModels(): AccountWinlostModel[] {
+    const usernames = this.usernamesComponent.groupUsername.getAllValue();
+    return usernames?.split(',').map(x => {
+      return {
+        username: x,
+        adjustVoidLimit: this.validAccountWinlostModels?.find(y => y.username === x)?.adjustVoidLimit
+      } as AccountWinlostModel
+    });
+  }
+
+  changeFilter(): void {
+    this.primitiveProps.isShowAccountWinLost = false;
   }
 }

@@ -19,6 +19,7 @@ export class UsernamesComponent implements OnInit {
   @Input() disabled = false;
   @Input() maxUsername = 50;
   @Output() focusOutUsernames = new EventEmitter();
+  @Output() change = new EventEmitter();
   maxLengthOneUsername = 30;
   groupUsername: GroupUsername;
   username: string;
@@ -56,6 +57,7 @@ export class UsernamesComponent implements OnInit {
       this.model = this.groupUsername.getAllValue();
     }
     this.username = '';
+    this.change.emit();
   }
 
   pasteItem(event: ClipboardEvent) {
@@ -179,5 +181,9 @@ export class UsernamesComponent implements OnInit {
   triggerFocusOutUsernames(): void {
     this.input.nativeElement.blur();
     this.focusOutUsernames.emit();
+  }
+
+  changeData(): void {
+    this.change.emit();
   }
 }

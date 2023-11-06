@@ -68,6 +68,9 @@ public class AddRequestController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetProvider(GetProviderRequest request) => Ok(await mediator.Send(request));
 
+    [HttpPost]
+    public async Task<IActionResult> GetAccountWinLost(GetAccountWinLostRequest request) => Ok(await mediator.Send(request));
+
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
     [HttpPost]
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));

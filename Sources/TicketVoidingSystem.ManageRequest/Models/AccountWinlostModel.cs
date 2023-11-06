@@ -2,7 +2,7 @@
 
 public class AccountWinlostModel
 {
-    public int UserId { get; set; }
+    public int CustId { get; set; }
 
     public string Username { get; set; }
 

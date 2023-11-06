@@ -60,7 +60,8 @@ class Helper {
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
     confirmAbnormalAccountModel: new ConfirmAbnormalAccountModel(),
-    transInfoAddRequestModel: new TransInfoAddRequestModel()
+    transInfoAddRequestModel: new TransInfoAddRequestModel(),
+    accountWinlostModels: []
   };
 }
 
@@ -302,7 +303,7 @@ describe('SaveRequestService', () => {
     const args = Helper.fakeSaveRequestArg;
     args.usernamesComponent = new UsernamesComponent(null);
     args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'AV');
+    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue(['AV'])
     const mockAddRequestService = new AddRequestService(null, null, null);
     mockAddRequestService.executeSaveRequest = jest.fn();
     saveRequestService = new SaveRequestService(null, mockAddRequestService, null);
@@ -316,7 +317,7 @@ describe('SaveRequestService', () => {
     const args = Helper.fakeSaveRequestArg;
     args.usernamesComponent = new UsernamesComponent(null);
     args.usernamesComponent.groupUsername = new GroupUsername();
-    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => 'AB');
+    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue(['AB'])
     args.filter.isVoided = false;
     args.primitiveProps = new PrimitiveProperty();
     args.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();

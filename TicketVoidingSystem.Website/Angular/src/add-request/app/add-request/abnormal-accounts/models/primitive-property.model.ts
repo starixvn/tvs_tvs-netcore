@@ -6,5 +6,6 @@ export class PrimitiveProperty {
   isShowError = false;
   isBeingMoveBetDate: boolean;
   isInvalidTotalTicket: boolean;
+  isShowAccountWinLost = false;
   transInfoAddRequestModel: TransInfoAddRequestModel;
 }

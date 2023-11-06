@@ -10,6 +10,7 @@ export class ValidationBusinessRuleArgs {
   actionId: string;
   issueTypeId: string;
   usernamesComponent: UsernamesComponent;
+  allAccountWinlostModels: AccountWinlostModel[];
   primitiveProps: PrimitiveProperty;
   abnormalAccountModel: AbnormalAccountModel;
 }

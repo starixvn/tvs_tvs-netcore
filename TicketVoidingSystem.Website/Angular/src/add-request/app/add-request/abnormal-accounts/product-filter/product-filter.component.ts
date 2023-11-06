@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ProductFilter, TicketStatus } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
@@ -13,6 +13,7 @@ export class ProductFilterComponent implements OnInit {
   @Input() isEdit: boolean;
   @Input() isDisabled: boolean;
   @Input() abnormalAccountModel: AbnormalAccountModel;
+  @Output() changeFilterEvent = new EventEmitter();
 
   products = ProductFilter.SELECTION_ITEMS;
   ticketStatus = TicketStatus.SELECTION_ITEMS;
@@ -64,5 +65,9 @@ export class ProductFilterComponent implements OnInit {
 
     this.selectedProducts = ProductFilter.SELECTION_ITEMS.filter( x => productValues.includes(x.value.toString())).map(x => x.value);
     this.selectedTicketStatus = TicketStatus.SELECTION_ITEMS.filter(x => ticketStatusValues.includes(x.value.toString())).map(x => x.value);
+  }
+
+  changeFilter(): void {
+    this.changeFilterEvent.emit();
   }
 }
