@@ -42,7 +42,7 @@ export class ValidationService {
       if (invalidUsernames) {
         return {
           isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
-          accountWinlostModels: viewModel.accountWinlostModels // need to remove, for testing
+          accountWinlostModels: viewModel.accountWinlostModels // TODO: need to remove, for testing
         } as ValidationBusinessRuleOutput;
       }
 
@@ -56,7 +56,7 @@ export class ValidationService {
         args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
         return {
           isValid: false,
-          accountWinlostModels: viewModel.accountWinlostModels // need to remove, for testing
+          accountWinlostModels: viewModel.accountWinlostModels // TODO: need to remove, for testing
          } as ValidationBusinessRuleOutput;
       }
       return {

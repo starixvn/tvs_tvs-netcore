@@ -18,7 +18,6 @@ export class AccountTableComponent implements OnInit {
 
   reCalculate(userData: AccountWinlostModel): void {
     this.addRequestStore.changeBlockingUiStatus(true);
-    console.log("recalculate");
     //calc
     this.addRequestStore.changeBlockingUiStatus(false);
   }

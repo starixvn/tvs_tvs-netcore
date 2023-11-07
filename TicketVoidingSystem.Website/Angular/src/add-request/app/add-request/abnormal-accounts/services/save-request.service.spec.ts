@@ -55,7 +55,7 @@ class Helper {
     primitiveProps: new PrimitiveProperty(),
     usernamesComponent: new UsernamesComponent(null),
     productFilterComponent: new ProductFilterComponent(null),
-    eventDateFilterComponent: new EventDateFilterComponent(null, null)
+    eventDateFilterComponent: new EventDateFilterComponent(null)
   };
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,

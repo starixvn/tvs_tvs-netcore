@@ -1,6 +1,7 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
@@ -20,7 +21,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './abnormal-accounts.component.html',
   styleUrls: ['./abnormal-accounts.component.scss']
 })
-export class AbnormalAccountsComponent {
+export class AbnormalAccountsComponent implements OnInit {
   @Input() isVoided: boolean;
   @Input() isEdit: boolean;
   @Input() filter: FilterModel;
@@ -40,8 +41,17 @@ export class AbnormalAccountsComponent {
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService
+    private readonly saveRequestService: SaveRequestService,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
+
+  async ngOnInit(): Promise<void> {
+    if (this.isEdit && this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString()) {
+      this.addRequestStore.changeBlockingUiStatus(true);
+      this.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
+      this.addRequestStore.changeBlockingUiStatus(false);
+    }
+  }
 
   public async focusOutUsernames(): Promise<void> {
     if (this.primitiveProps.isCancelValidate) {
@@ -118,7 +128,7 @@ export class AbnormalAccountsComponent {
     });
   }
 
-  changeFilter(): void {
+  public changeFilter(): void {
     this.primitiveProps.isShowAccountWinLost = false;
   }
 }

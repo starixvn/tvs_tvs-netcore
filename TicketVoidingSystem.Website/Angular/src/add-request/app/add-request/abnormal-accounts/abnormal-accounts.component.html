@@ -1,31 +1,35 @@
 <ngb-alert class="warning-msg" type="warning" [dismissible]="false" *ngIf="primitiveProps.isShowError">
-    <div class="message">
-        <div class="error-text" *ngIf="primitiveProps.isInvalidTotalTicket">
-            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
-            There is no ticket in this request
-        </div>
-        <div class="error-text" *ngIf="primitiveProps.isBeingMoveBetDate">
-            <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
-            The system is running the Movebet process, please wait and try again.
-        </div>
+  <div class="message">
+    <div class="error-text" *ngIf="primitiveProps.isInvalidTotalTicket">
+      <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+      There is no ticket in this request
     </div>
+    <div class="error-text" *ngIf="primitiveProps.isBeingMoveBetDate">
+      <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+      The system is running the Movebet process, please wait and try again.
+    </div>
+  </div>
 </ngb-alert>
 
 <div [blockUi]="primitiveProps.isBlockUsernames">
-    <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="2050" (change)="changeFilter()"
-        (focusOutUsernames)="focusOutUsernames()" [inputUsernameCss]="'col-sm-8'" [inputUsernameStyle]="{'max-width.px': 1065}">
-    </user-names>
+  <user-names #usernames [model]="abnormalAccountModel.usernames" [disabled]="isVoided" [maxUsername]="2050"
+    (change)="changeFilter()" (focusOutUsernames)="focusOutUsernames()" [inputUsernameCss]="'col-sm-8'"
+    [inputUsernameStyle]="{'max-width.px': 1065}">
+  </user-names>
 </div>
 
-<product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit" (changeFilterEvent)="changeFilter()"></product-filter>
-<event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit" (changeFilterEvent)="changeFilter()"></event-date-filter>
+<product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
+  (changeFilterEvent)="changeFilter()"></product-filter>
+<event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
+  (changeFilterEvent)="changeFilter()"></event-date-filter>
 
 <div *ngIf="isShowUserInfo()" class="mt-3">
   <div class="mb-3">
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
-    (click)="handleSearchEvent()">Search</button>
+      (click)="handleSearchEvent()">Search</button>
   </div>
-  <account-table *ngIf="primitiveProps.isShowAccountWinLost" [accountWinlostModels]="validAccountWinlostModels"></account-table>
+  <account-table *ngIf="primitiveProps.isShowAccountWinLost"
+    [accountWinlostModels]="validAccountWinlostModels"></account-table>
 </div>
 
 <confirm-abnormal-account [model]="confirmAbnormalAccount" (close)="triggerCloseEvent()"
