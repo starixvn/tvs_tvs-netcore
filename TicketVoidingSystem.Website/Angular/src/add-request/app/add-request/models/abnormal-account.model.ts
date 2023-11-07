@@ -4,4 +4,5 @@ export class AbnormalAccountModel {
   statusIds: string;
   fromDate: string;
   toDate: string;
+  subIssueTypeId: number;
 }

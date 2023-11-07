@@ -49,6 +49,7 @@ export class AbnormalAccountsComponent implements OnInit {
     if (this.isEdit && this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString()) {
       this.addRequestStore.changeBlockingUiStatus(true);
       this.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
+      this.primitiveProps.isShowAccountWinLost = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     }
   }

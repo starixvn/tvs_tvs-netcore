@@ -78,6 +78,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.DuplicateTicketsModel = MapEventDuplicateTickets(secondResultSet);
                 break;
 
+            case IssueTypeConstant.AbnormalAccount:
+                viewModel.AbnormalAccountModel = MapEventAbnormalAccount(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
                 break;
@@ -261,6 +265,19 @@ public class GetRequestServiceImp : GetRequestService
             OrgTransIds = requestEventModels.First().OrgTransIds,
             MatchId = requestEventModels.First().MatchId,
             FilterBy = requestEventModels.First().FilterBy,
+            SubIssueTypeId = requestEventModels.First().SubIssueTypeId
+        };
+    }
+
+    private static AbnormalAccountViewModel MapEventAbnormalAccount(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        return new AbnormalAccountViewModel
+        {
+            Usernames = requestEventModels.First().Usernames,
+            ProductIds = requestEventModels.First().ProductIds,
+            StatusIds = requestEventModels.First().StatusIds,
+            FromDate = requestEventModels.First().FromDate,
+            ToDate = requestEventModels.First().ToDate,
             SubIssueTypeId = requestEventModels.First().SubIssueTypeId
         };
     }

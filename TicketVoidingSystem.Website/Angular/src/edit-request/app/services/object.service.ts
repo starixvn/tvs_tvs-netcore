@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
-import { AbnormalAccountModel } from '../../../add-request/app/add-request/models/abnormal-account.model';
 import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
 import { StaticService } from '../../../utility/services/static.service';
@@ -81,7 +80,7 @@ export class ObjectService {
       args.requestModel.duplicateTicketsModel = args.detailViewModel.duplicateTicketsModel;
       args.primitiveProperty.matchId = args.detailViewModel.duplicateTicketsModel.matchId;
     } else if (this.validationService.isAbnormalAccount(args.detailViewModel)) {
-      args.requestModel.abnormalAccountModel = this.createEventForAbnormalAccount(args.detailViewModel);
+      args.requestModel.abnormalAccountModel = args.detailViewModel.abnormalAccountModel;
     } else if (this.validationService.isEarlyKickOfOrWrongKickOff(args.detailViewModel)) {
       args.requestModel.earlyKickOffModels = args.detailViewModel.earlyKickOffModels;
       args.primitiveProperty.matchId = args.detailViewModel.earlyKickOffModels.find(x => x.isMainMatch).matchId;
@@ -114,16 +113,5 @@ export class ObjectService {
     abModel.transIds = detailViewModel.event.transIds;
     abModel.filterBy = detailViewModel.event.filterBy;
     return abModel;
-  }
-
-  private createEventForAbnormalAccount(detailViewModel: RequestDetailViewModel): AbnormalAccountModel {
-    const model = new AbnormalAccountModel();
-    model.usernames = detailViewModel.event.usernames;
-    model.productIds = detailViewModel.event.productIds;
-    model.statusIds = detailViewModel.event.statusIds;
-    model.fromDate = detailViewModel.event.fromDate;
-    model.toDate = detailViewModel.event.toDate;
-
-    return model;
   }
 }

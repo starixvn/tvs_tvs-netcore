@@ -7,4 +7,5 @@ public class AbnormalAccountViewModel
     public string StatusIds { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
+    public int SubIssueTypeId { get; set; }
 }

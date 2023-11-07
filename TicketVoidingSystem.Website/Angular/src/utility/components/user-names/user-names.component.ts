@@ -55,9 +55,9 @@ export class UsernamesComponent implements OnInit {
       const item = new UsernameItem(value);
       this.groupUsername.items.push(item);
       this.model = this.groupUsername.getAllValue();
+      this.change.emit();
     }
     this.username = '';
-    this.change.emit();
   }
 
   pasteItem(event: ClipboardEvent) {
