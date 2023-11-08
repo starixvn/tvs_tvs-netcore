@@ -74,22 +74,22 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             },
             new()
             {
-                Username = "BBB", CustId = 2, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "BBB", CustId = 2, GivenCredit = 100, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "CCC", CustId = 3, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                Username = "CCC", CustId = 3, GivenCredit = 500, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "DD", CustId = 4, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "DD", CustId = 4, GivenCredit = 350, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 400,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "EE", CustId = 5, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "EE", CustId = 5, GivenCredit = 400, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             }
         };

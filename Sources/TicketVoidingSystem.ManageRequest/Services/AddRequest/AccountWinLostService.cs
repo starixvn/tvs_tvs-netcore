@@ -3,11 +3,15 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 public interface AccountWinLostService
 {
-    Task Execute(int requestId, IEnumerable<AccountWinlostModel> accountModels);
+    Task SaveAccountWinLost(int requestId, IEnumerable<AccountWinlostModel> accountModels);
+
+    Task<IEnumerable<AccountWinlostModel>> GetAccountWinLost(GetAccountWinLostQuery query);
+
+    Task<IEnumerable<AccountWinlostExcelModel>> GetAccountWinLostExcel(GetAccountWinLostQuery query);
 }
 
 public class AccountWinLostServiceImp : AccountWinLostService
@@ -19,7 +23,7 @@ public class AccountWinLostServiceImp : AccountWinLostService
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, IEnumerable<AccountWinlostModel> accountModels)
+    public async Task SaveAccountWinLost(int requestId, IEnumerable<AccountWinlostModel> accountModels)
     {
         var command = new SaveAccountWinLostCommand
         {
@@ -47,5 +51,32 @@ public class AccountWinLostServiceImp : AccountWinLostService
         }
 
         return $"<root>{stringBuilder}</root>";
+    }
+
+    public async Task<IEnumerable<AccountWinlostModel>> GetAccountWinLost(GetAccountWinLostQuery query)
+    {
+        var criteria = new GetAccountWinLostCriteria()
+        {
+            RequestId = query.RequestId
+        };
+
+        return await repository.FetchAsync<AccountWinlostModel>(criteria);
+    }
+
+    public async Task<IEnumerable<AccountWinlostExcelModel>> GetAccountWinLostExcel(GetAccountWinLostQuery query)
+    {
+        var accounts = await GetAccountWinLost(query);
+        var index = 1;
+        return accounts.Select(x => new AccountWinlostExcelModel
+        {
+            No = index++,
+            Username = x.Username,
+            GivenCredit = x.GivenCredit,
+            AdjustVoidLimit = x.AdjustVoidLimit,
+            CurrentWinning = x.CurrentWinning,
+            CurrentLosing = x.CurrentLosing,
+            EstimateVoidAmount = x.EstimateVoidAmount,
+            WinLostAfterVoid = x.WinLostAfterVoid
+        });
     }
 }

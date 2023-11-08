@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AccountWinLostExcel;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
@@ -37,6 +38,7 @@ public static class ManageRequest
         services.AddTransient<ConvertRequestsService, ConvertRequestsServiceImp>();
         services.AddTransient<GetRequestsForExcelService, GetRequestsForExcelServiceImp>();
         services.AddTransient<WorkSheetService<SelectRequestsQuery>, RequestListWorksheetService>();
+        services.AddTransient<WorkSheetService<GetAccountWinLostQuery>, AccountWinLostWorkSheetService>();
         services.AddTransient<EditRequestService, EditRequestServiceImp>();
         services.AddTransient<MarkTicketsWhenEditService, MarkTicketsWhenEditServiceImp>();
         services.AddTransient<ReCalculateTicketsService, ReCalculateTicketsServiceImp>();

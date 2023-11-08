@@ -7,4 +7,5 @@ export class AccountWinlostModel {
   currentLosing: number;
   estimateVoidAmount: number;
   winLostAfterVoid: number;
+  isHighlight: boolean;
 }

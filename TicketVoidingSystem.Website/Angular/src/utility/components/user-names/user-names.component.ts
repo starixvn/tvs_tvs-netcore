@@ -42,7 +42,6 @@ export class UsernamesComponent implements OnInit {
       });
     }
   }
-
   focusUsername() {
     this.input.nativeElement.focus();
     this.isFocusingUsernames = true;

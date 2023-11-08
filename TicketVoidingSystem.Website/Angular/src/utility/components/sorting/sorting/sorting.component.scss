@@ -1,0 +1,28 @@
+.sort-icon {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  opacity: 80%;
+  scale: 0.9;
+
+  i {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .fa-sort-desc {
+    margin-left: -7.3px;
+  }
+
+  .color-red {
+    color:  #ff0000;
+  }
+}
+
+.sort-icon:hover {
+  opacity: 100%;
+}
+

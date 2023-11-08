@@ -10,25 +10,46 @@
             <div>No</div>
           </th>
           <th scope="col" class="col-tb-2">
-            <div>Username</div>
+            <div class="title-table">
+              <span>Username</span>
+              <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)"></sorting>
+            </div>
           </th>
           <th scope="col" class="col-tb-3">
-            <div>Given Credit</div>
+            <div class="title-table">
+              <span>Given Credit</span>
+              <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)"></sorting>
+            </div>
           </th>
           <th scope="col" class="col-tb-4">
-            <div>Adjust Void Limit</div>
+            <div class="title-table">
+              <span>Adjust Void Limit</span>
+              <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)"></sorting>
+            </div>
           </th>
           <th scope="col" class="col-tb-5">
-            <div>Current Winning</div>
+            <div class="title-table">
+              <span>Current Winning</span>
+              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentWinning', 4)"></sorting>
+            </div>
           </th>
           <th scope="col" class="col-tb-6">
-            <div>Current Losing</div>
+            <div class="title-table">
+              <span>Current Losing</span>
+              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentLosing', 5)"></sorting>
+            </div>
           </th>
           <th scope="col" class="col-tb-7">
-            <div>Estimate Void Amount</div>
+            <div class="title-table">
+              <span>Estimate Void Amount</span>
+              <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)"></sorting>
+            </div>
           </th>
           <th scope="col">
-            <div>WinLost After Void</div>
+            <div class="title-table">
+              <span>WinLost After Void</span>
+              <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)"></sorting>
+            </div>
           </th>
         </tr>
       </thead>
@@ -38,7 +59,7 @@
     <table>
       <ng-container *ngFor="let item of accountWinlostModels; index as i">
         <tbody>
-          <tr [ngClass]="item.currentLosing > item.givenCredit ? 'bg-yellow' : ''">
+          <tr [ngClass]="item.isHighlight ? 'bg-yellow' : ''">
             <td class="col-tb-1">
               <div>{{i + 1}}</div>
             </td>
@@ -49,8 +70,8 @@
               <div>{{item.givenCredit}}</div>
             </td>
             <td class="col-tb-4 text-right adjust-gv">
-              <input class="form-control form-control-sm" type="text" name="cid" value="11" (blur)="reCalculate(item)"/>
-              <!-- <div>{{item.adjustVoidLimit}}</div> -->
+              <input class="form-control form-control-sm" type="text" name="cid" value="{{item.adjustVoidLimit}}"
+                (blur)="reCalculate(item)" />
             </td>
             <td class="col-tb-5 text-right">
               <div>{{item.currentWinning}}</div>
@@ -78,4 +99,4 @@
     </table>
   </div>
   <!-- <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging> -->
-  </div>
+</div>

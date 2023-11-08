@@ -35,6 +35,7 @@ import { ModalModule } from './components/modal/modal.module';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PagingModule } from './components/paging/paging.module';
 import { RequestInfoModule } from './components/request-info/request-info.module';
+import { SortingModule } from './components/sorting/sorting.module';
 import { ToolTipModule } from './components/tooltip/tooltip.module';
 import { OnlyNumberDirective } from './directives/number.directive';
 import { NumbersOnlyDirective } from './directives/numbers-only.directive';
@@ -58,7 +59,8 @@ import { HttpService } from './services/http.service';
     DateTimeModule,
     BlockUiModule,
     BlockFullUiModule,
-    RequestInfoModule
+    RequestInfoModule,
+    SortingModule
   ],
   declarations: [
     UsernamesComponent,
@@ -92,7 +94,8 @@ import { HttpService } from './services/http.service';
     UsernamesComponent,
     MenuBarComponent,
     BlockFullUiModule,
-    DetailNotParticipateComponent
+    DetailNotParticipateComponent,
+    SortingModule
   ],
   providers: [HttpService, CommonService]
 })
