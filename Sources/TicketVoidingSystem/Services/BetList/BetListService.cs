@@ -238,6 +238,11 @@ public class BetListServiceImp : BetListService
             return string.Empty;
         }
 
+        if (ticket.BetTypeId.IsSabaPromotion())
+        {
+            return "-";
+        }
+
         var html = choiceBlock.Handicap.handicap;
         var document = new HtmlDocument();
         document.LoadHtml(html);
