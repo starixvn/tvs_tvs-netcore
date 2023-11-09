@@ -79,7 +79,7 @@ export class ValidationService {
     return confirmModel;
   }
 
-  private async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
+  public async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
     const query: CheckValidUsernamesQuery = {
       accountWinlostModels: args.allAccountWinlostModels,
       requestId: args.requestId,

@@ -48,4 +48,6 @@ public class AccountWinlostExcelModel
 
     [Cell("H2")]
     public long WinLostAfterVoid { get; set; }
+
+    public bool IsHighlight { get; set; }
 }

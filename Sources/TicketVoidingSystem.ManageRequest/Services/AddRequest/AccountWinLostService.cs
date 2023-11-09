@@ -11,7 +11,7 @@ public interface AccountWinLostService
 
     Task<IEnumerable<AccountWinlostModel>> GetAccountWinLost(GetAccountWinLostQuery query);
 
-    Task<IEnumerable<AccountWinlostExcelModel>> GetAccountWinLostExcel(GetAccountWinLostQuery query);
+    IEnumerable<AccountWinlostExcelModel> GetAccountWinLostExcel(IEnumerable<AccountWinlostModel> models);
 }
 
 public class AccountWinLostServiceImp : AccountWinLostService
@@ -63,11 +63,10 @@ public class AccountWinLostServiceImp : AccountWinLostService
         return await repository.FetchAsync<AccountWinlostModel>(criteria);
     }
 
-    public async Task<IEnumerable<AccountWinlostExcelModel>> GetAccountWinLostExcel(GetAccountWinLostQuery query)
+    public IEnumerable<AccountWinlostExcelModel> GetAccountWinLostExcel(IEnumerable<AccountWinlostModel> models)
     {
-        var accounts = await GetAccountWinLost(query);
         var index = 1;
-        return accounts.Select(x => new AccountWinlostExcelModel
+        return models.Select(x => new AccountWinlostExcelModel
         {
             No = index++,
             Username = x.Username,
@@ -76,7 +75,8 @@ public class AccountWinLostServiceImp : AccountWinLostService
             CurrentWinning = x.CurrentWinning,
             CurrentLosing = x.CurrentLosing,
             EstimateVoidAmount = x.EstimateVoidAmount,
-            WinLostAfterVoid = x.WinLostAfterVoid
+            WinLostAfterVoid = x.WinLostAfterVoid,
+            IsHighlight = x.IsHighlight
         });
     }
 }

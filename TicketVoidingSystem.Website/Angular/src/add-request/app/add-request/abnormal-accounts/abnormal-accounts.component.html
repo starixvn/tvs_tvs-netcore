@@ -29,7 +29,11 @@
       (click)="handleSearchEvent()">Search</button>
   </div>
   <account-table *ngIf="primitiveProps.isShowAccountWinLost"
-    [accountWinlostModels]="validAccountWinlostModels"></account-table>
+    [filter]="filter"
+    [requestId]="requestId"
+    [abnormalAccountModel]="abnormalAccountModel"
+    [accountWinlostModels]="validAccountWinlostModels">
+  </account-table>
 </div>
 
 <confirm-abnormal-account [model]="confirmAbnormalAccount" (close)="triggerCloseEvent()"

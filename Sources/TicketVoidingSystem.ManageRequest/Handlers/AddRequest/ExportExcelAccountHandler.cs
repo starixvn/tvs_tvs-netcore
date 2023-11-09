@@ -6,15 +6,15 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class ExportExcelAccountRequest : GetTicketsQuery, IRequest<ExcelFileModel>
+public class ExportExcelAccountRequest : ExportAccountWinLostQuery, IRequest<ExcelFileModel>
 {
 }
 
 public class ExportExcelAccountHandler : IRequestHandler<ExportExcelAccountRequest, ExcelFileModel>
 {
-    private readonly ExcelService<GetTicketsQuery> excelService;
+    private readonly ExcelService<ExportAccountWinLostQuery> excelService;
 
-    public ExportExcelAccountHandler(ExcelService<GetTicketsQuery> excelService)
+    public ExportExcelAccountHandler(ExcelService<ExportAccountWinLostQuery> excelService)
     {
         this.excelService = excelService;
     }
@@ -25,7 +25,7 @@ public class ExportExcelAccountHandler : IRequestHandler<ExportExcelAccountReque
         var fileName = $"TVS_AbnormalAccount_{createDate}";
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.VoidSingleBet),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketVoiding_AbnormalAccount),
             FileName = fileName
         };
     }

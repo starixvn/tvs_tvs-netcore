@@ -71,6 +71,13 @@ public class AddRequestController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetAccountWinLost(GetAccountWinLostRequest request) => Ok(await mediator.Send(request));
 
+    [HttpPost]
+    public async Task<IActionResult> ExportExcelAccount(ExportExcelAccountRequest request)
+    {
+        var model = await mediator.Send(request);
+        return this.ExcelFileResult(Response, model);
+    }
+
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
     [HttpPost]
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));

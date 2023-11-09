@@ -113,9 +113,14 @@ export class AddRequestApiService {
     return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyLetstalkRequestInfo');
   }
 
-   /* istanbul ignore next */
-   async getAccountWinLost(requestId: number): Promise<AccountWinlostModel[]> {
-    return this.httpService.postJson<{requestId: number}, AccountWinlostModel[]>({requestId: requestId}, 'api/AddRequest/GetAccountWinLost');
+  /* istanbul ignore next */
+  async getAccountWinLost(requestId: number): Promise<AccountWinlostModel[]> {
+    return this.httpService.postJson<{ requestId: number }, AccountWinlostModel[]>({ requestId: requestId }, 'api/AddRequest/GetAccountWinLost');
+  }
+
+  /* istanbul ignore next */
+  async exportAccount(models: AccountWinlostModel[]): Promise<void> {
+    return this.httpService.downloadFile({ accounts: models }, 'api/AddRequest/ExportExcelAccount');
   }
   
   /* istanbul ignore next */

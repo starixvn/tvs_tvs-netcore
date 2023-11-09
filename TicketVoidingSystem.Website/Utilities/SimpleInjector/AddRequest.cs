@@ -31,6 +31,7 @@ public static class AddRequest
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
         services.AddTransient<AccountWinLostService, AccountWinLostServiceImp>();
         services.AddTransient<CellService, CellServiceImp>();
+        services.AddTransient<WorkSheetService<ExportAccountWinLostQuery>, AccountWinLostWorkSheetService>();
         services.AddTransient<WorkSheetService<CheckValidTransIdsModel>, GetTicketsForExportExcelService>();
         services.AddTransient<CheckValidTransIdsService, CheckValidTransIdsServiceImp>();
     }
