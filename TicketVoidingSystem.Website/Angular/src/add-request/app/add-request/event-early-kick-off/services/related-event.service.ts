@@ -34,7 +34,7 @@ export class RelatedEventService {
     return this.addRequestApiService.getChildMatches(query);
   }
 
-  updateEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff): LogInfoEarlyKickOff[] {
+  updateEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
     const newEvents = models
       .map(x => {
         return  {
@@ -43,7 +43,7 @@ export class RelatedEventService {
           leagueName: x.leagueName,
           isMainMatch: false,
           kickOffTime: mainEvent.kickOffTime,
-          subIssueTypeId: mainEvent.subIssueTypeId,
+          subIssueTypeId: Number(defaultSubIssueTypeId),
           eventName: `${x.matchId} - ${x.matchEvent}`,
           messageValidationLogInfo: null,
           isCollapse: true,
@@ -71,7 +71,7 @@ export class RelatedEventService {
         addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
         return;
       }
-      const newEvents = this.updateEvents(models, addRelatedEventArg.mainEvent);
+      const newEvents = this.updateEvents(models, addRelatedEventArg.mainEvent, addRelatedEventArg.filter.subIssueTypeId);
       await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter, addRelatedEventArg.primitiveProps);
       addRelatedEventArg.allEvents.push(...newEvents);
       addRelatedEventArg.allEvents = _.orderBy(_.uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
@@ -88,7 +88,7 @@ export class RelatedEventService {
 
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoEarlyKickOff[]> {
     const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
-    const newEvents = this.updateEvents(newChildEvents, arg.mainEvent);
+    const newEvents = this.updateEvents(newChildEvents, arg.mainEvent, arg.filter.subIssueTypeId);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
     eventsGetLogInfo.push(...newEvents);
 

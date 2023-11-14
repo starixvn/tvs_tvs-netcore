@@ -1,4 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component, ElementRef, EventEmitter, Input,
+  OnChanges,
+  OnInit, Output,
+  QueryList, SimpleChanges, ViewChild, ViewChildren
+} from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
@@ -32,7 +37,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './event-early-kick-off.component.html',
   styleUrls: ['./event-early-kick-off.component.scss']
 })
-export class EventEarlyKickOffComponent implements OnInit {
+export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() filter: FilterModel;
   @Input() isEdit: boolean;
   @Input() requestId: number;
@@ -41,6 +46,7 @@ export class EventEarlyKickOffComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() earlyKickOffModels: EarlyKickOffModel[] = [];
   @Input() requestedBy: string;
+  @Input() issueTypeId: string;
   @Input() others = new OthersModel();
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('leagueEvent') leagueEventComponent: LeagueEventRedCardComponent;
@@ -67,6 +73,13 @@ export class EventEarlyKickOffComponent implements OnInit {
     ) {
       this.tooltip.element = this.element;
      }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['issueTypeId'] && !this.isEdit) {
+      this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
+      this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+      this.primitiveProps.isShowLogInfoEvents = false;
+    }
+  }
 
   public async ngOnInit(): Promise<void> {
     if (this.isEdit) {
@@ -81,7 +94,7 @@ export class EventEarlyKickOffComponent implements OnInit {
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
       this.resetAllData();
-      this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents);
+      this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents, this.filter.subIssueTypeId);
     }
   }
 
@@ -205,7 +218,7 @@ export class EventEarlyKickOffComponent implements OnInit {
       || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
-    const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent);
+    const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
     if (newEvents.length > 0) {
       await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter, this.primitiveProps);
       this.allSelectedEvents.push(...newEvents);

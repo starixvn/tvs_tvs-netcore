@@ -28,13 +28,14 @@ export class EventEarlyKickOffService {
     });
   }
 
-  public initDefaultMainEvent(allSelectedEvents: LogInfoEarlyKickOff[]): LogInfoEarlyKickOff {
+  public initDefaultMainEvent(allSelectedEvents: LogInfoEarlyKickOff[], subIssueTypeId: string): LogInfoEarlyKickOff {
     const mainEvent = new LogInfoEarlyKickOff();
     mainEvent.isMainMatch = true;
     mainEvent.isShowValidation = false;
     mainEvent.tableTicketsModel = new TableTicketsModel();
     mainEvent.pagingModel = new PagingModel();
     mainEvent.isCollapse = false;
+    mainEvent.subIssueTypeId = Number(subIssueTypeId);
     mainEvent.kickOffTime = moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
     allSelectedEvents.push(mainEvent);
 
