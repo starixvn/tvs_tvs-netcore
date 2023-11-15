@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { LABELS } from '../../constants/labels';
 import { GroupUsername, UsernameItem } from './user-names.model';
@@ -8,7 +8,7 @@ import { GroupUsername, UsernameItem } from './user-names.model';
   templateUrl: './user-names.component.html',
   styleUrls: ['./user-names.component.scss']
 })
-export class UsernamesComponent implements OnInit {
+export class UsernamesComponent implements OnChanges {
   private readonly errorTooltipClassName = 'invalid-data';
   @ViewChild('input') input;
   @Input() isAbException = false;
@@ -33,28 +33,33 @@ export class UsernamesComponent implements OnInit {
     this.tooltip.element = this.element;
   }
 
-  ngOnInit() {
-    this.groupUsername = new GroupUsername();
-    if (this.model !== undefined && this.model !== null && this.model !== '') {
-      const list = this.model.split(',');
-      list.forEach(item => {
-        this.addItem(item);
-      });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.model) {
+      this.groupUsername = new GroupUsername();
+      if (this.model !== undefined && this.model !== null && this.model !== '') {
+        const list = this.model.split(',');
+        list.forEach(item => {
+          this.addItem(item, true);
+        });
+      }
     }
   }
+
   focusUsername() {
     this.input.nativeElement.focus();
     this.isFocusingUsernames = true;
   }
 
-  addItem(value: string) {
+  addItem(value: string, preventEmitChange: boolean) {
     const MAX_CHARS = 30;
     if (value !== undefined && value !== '' && this.groupUsername.items.length < this.maxUsername) {
       value = value.length > MAX_CHARS ? value.substring(0, MAX_CHARS) + '...' : value;
       const item = new UsernameItem(value);
       this.groupUsername.items.push(item);
       this.model = this.groupUsername.getAllValue();
-      this.change.emit();
+      if (!preventEmitChange) {
+        this.change.emit();
+      }
     }
     this.username = '';
   }
@@ -71,7 +76,7 @@ export class UsernamesComponent implements OnInit {
         .split(',');
       items.forEach(item => {
         const trimText = item.slice(0, this.maxLengthOneUsername);
-        this.addItem(trimText);
+        this.addItem(trimText, false);
       });
 
       setTimeout(() => {
@@ -132,7 +137,7 @@ export class UsernamesComponent implements OnInit {
         event.preventDefault();
         return;
       }
-      this.addItem(value);
+      this.addItem(value, false);
       event.preventDefault();
     } else if (count >= this.maxUsername) {
       return false;

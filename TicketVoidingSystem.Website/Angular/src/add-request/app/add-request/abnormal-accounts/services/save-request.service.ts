@@ -108,7 +108,6 @@ export class SaveRequestService {
   }
 
   private initAddRequestQuery(model: SaveRequestArg): AddRequestQuery {
-    model.abnormalAccountModel.usernames = model.usernamesComponent.groupUsername.getAllValue();    
     const query: AddRequestQuery = new AddRequestQuery();
     query.transInfoJson = model.primitiveProps.transInfoAddRequestModel?.transInfoJson;
     query.unMarkTransIds = model.primitiveProps.transInfoAddRequestModel?.unMarkTransIds;

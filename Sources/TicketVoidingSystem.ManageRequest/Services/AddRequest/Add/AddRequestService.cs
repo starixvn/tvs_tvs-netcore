@@ -22,6 +22,7 @@ public class AddRequestServiceImp : AddRequestService
     private readonly SessionService sessionService;
     private readonly LoggingService loggingService;
     private readonly MarkTicketsService markTicketsService;
+    private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
 
@@ -30,6 +31,7 @@ public class AddRequestServiceImp : AddRequestService
         SessionService sessionService,
         LoggingService loggingService,
         MarkTicketsService markTicketsService,
+        AccountWinLostService accountWinLostService,
         InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
         SendLetstalkAfterAddService sendLetstalkAfterAddService)
     {
@@ -38,6 +40,7 @@ public class AddRequestServiceImp : AddRequestService
         this.sessionService = sessionService;
         this.loggingService = loggingService;
         this.markTicketsService = markTicketsService;
+        this.accountWinLostService = accountWinLostService;
         this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
         this.sendLetstalkAfterAddService = sendLetstalkAfterAddService;
     }
@@ -102,6 +105,11 @@ public class AddRequestServiceImp : AddRequestService
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
 
         await repository.ExecuteAsync(command);
+        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+        {
+            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        }
+
         return command.RequestId;
     }
 

@@ -273,7 +273,10 @@ public class GetRequestServiceImp : GetRequestService
     {
         return new AbnormalAccountViewModel
         {
-            Usernames = requestEventModels.First().Usernames,
+            AccountWinlostModels = requestEventModels.First().Usernames.Split(',').Select(x => new AccountWinlostModel
+            {
+                Username = x
+            }),
             ProductIds = requestEventModels.First().ProductIds,
             StatusIds = requestEventModels.First().StatusIds,
             FromDate = requestEventModels.First().FromDate,

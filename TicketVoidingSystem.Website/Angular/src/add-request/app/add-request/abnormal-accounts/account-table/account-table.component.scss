@@ -118,6 +118,18 @@ table {
         padding: 2px 4px;
         direction: rtl;
       }
+
+      /*For Webkits like Chrome and Safari*/
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /*For FireFox*/
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
     }
 
     tbody {

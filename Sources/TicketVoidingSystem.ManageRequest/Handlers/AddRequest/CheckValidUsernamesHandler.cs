@@ -69,27 +69,27 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         {
             new()
             {
-                Username = "AAA", CustId = 1, GivenCredit = 200, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                Username = "AAA", CustId = 1, GivenCredit = 200, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 50,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "BBB", CustId = 2, GivenCredit = 100, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "BBB", CustId = 2, GivenCredit = 100, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "CCC", CustId = 3, GivenCredit = 500, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 50,
+                Username = "CCC", CustId = 3, GivenCredit = 500, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 50,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "DD", CustId = 4, GivenCredit = 350, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 400,
+                Username = "DD", CustId = 4, GivenCredit = 350, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 400,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             },
             new()
             {
-                Username = "EE", CustId = 5, GivenCredit = 400, AdjustVoidLimit = 0, CurrentWinning = 100, CurrentLosing = 300,
+                Username = "EE", CustId = 5, GivenCredit = 400, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 300,
                 EstimateVoidAmount = 20, WinLostAfterVoid = 10
             }
         };
@@ -120,7 +120,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             IssueTypeId = IssueTypeConstant.AbnormalAccount,
             AbnormalAccountViewModel = new AbnormalAccountViewModel
             {
-                Usernames = string.Join(",", model.AccountWinlostModels.Select(x => x.Username)),
+                AccountWinlostModels = model.AccountWinlostModels,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ProductIds = model.ProductIds,

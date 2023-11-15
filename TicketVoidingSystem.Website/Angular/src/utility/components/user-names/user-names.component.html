@@ -18,7 +18,7 @@
                 </div>
             </div>
             <input #input class="username" type="text" [(ngModel)]="username" (keydown)="onKey($event)"
-                (blur)="addItem(username)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
+                (blur)="addItem(username, false)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
                 (keydown.shift)="shiftKey=true" maxlength="30"/>
         </div>
         <span class="invalid-data"></span>

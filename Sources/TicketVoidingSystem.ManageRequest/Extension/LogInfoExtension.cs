@@ -204,7 +204,7 @@ public static class LogInfoExtension
 
     public static string ToAbnormalAccountInfoXml(this AbnormalAccountViewModel model)
     {
-        return $"<root><r Usernames='{model.Usernames}' "
+        return $"<root><r Usernames='{string.Join(",", model.AccountWinlostModels.Select(x => x.Username))}' "
                + $"ProductIds='{model.ProductIds}' "
                + $"StatusIds='{model.StatusIds}' "
                + $"FromDate='{model.FromDate}' "

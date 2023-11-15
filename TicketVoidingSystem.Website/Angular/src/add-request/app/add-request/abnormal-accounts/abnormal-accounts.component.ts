@@ -35,6 +35,7 @@ export class AbnormalAccountsComponent implements OnInit {
   @ViewChild('products') productFilterComponent: ProductFilterComponent;
   @ViewChild('eventDate') eventDateFilterComponent: EventDateFilterComponent;
 
+  usernamesList: string;
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
   validAccountWinlostModels: AccountWinlostModel[] = [];
@@ -52,6 +53,10 @@ export class AbnormalAccountsComponent implements OnInit {
       this.primitiveProps.isShowAccountWinLost = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     }
+
+    if (this.isEdit) {
+      this.usernamesList = this.abnormalAccountModel.accountWinlostModels.map(x => x.username).join(',')
+    };
   }
 
   public async focusOutUsernames(): Promise<void> {
@@ -98,6 +103,7 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
     arg.addRequestStore = this.addRequestStore;
     arg.abnormalAccountModel = this.abnormalAccountModel;
+    arg.abnormalAccountModel.accountWinlostModels = this.validAccountWinlostModels
     arg.usernamesComponent = this.usernamesComponent;
     arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
@@ -113,8 +119,8 @@ export class AbnormalAccountsComponent implements OnInit {
     args.issueTypeId = this.filter.issueTypeId;
     args.usernamesComponent = this.usernamesComponent;
     args.abnormalAccountModel = this.abnormalAccountModel;
+    args.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels()
     args.primitiveProps = this.primitiveProps;
-    args.allAccountWinlostModels = this.getAccountWinlostModels();
 
     return args;
   }

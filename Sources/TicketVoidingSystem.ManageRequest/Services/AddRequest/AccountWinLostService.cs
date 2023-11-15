@@ -7,7 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 public interface AccountWinLostService
 {
-    Task SaveAccountWinLost(int requestId, IEnumerable<AccountWinlostModel> accountModels);
+    Task SaveAccountWinLost(int requestId, int actionId, IEnumerable<AccountWinlostModel> accountModels);
 
     Task<IEnumerable<AccountWinlostModel>> GetAccountWinLost(GetAccountWinLostQuery query);
 
@@ -23,11 +23,12 @@ public class AccountWinLostServiceImp : AccountWinLostService
         this.repository = repository;
     }
 
-    public async Task SaveAccountWinLost(int requestId, IEnumerable<AccountWinlostModel> accountModels)
+    public async Task SaveAccountWinLost(int requestId, int actionId, IEnumerable<AccountWinlostModel> accountModels)
     {
         var command = new SaveAccountWinLostCommand
         {
             RequestId = requestId,
+            ActionId = actionId,
             AccountWinLostXml = GetAccountWinLostXml(accountModels)
         };
 
@@ -40,13 +41,13 @@ public class AccountWinLostServiceImp : AccountWinLostService
         foreach (var model in accountModels)
         {
             var line = $"<r CustId='{model.CustId}' "
-                + $"<Username='{model.Username}' "
-                + $"<GivenCredit='{model.GivenCredit}' "
-                + $"<AdjustVoidLimit='{model.AdjustVoidLimit}' "
-                + $"<CurrentWinning='{model.CurrentWinning}' "
-                + $"<CurrentLosing='{model.CurrentLosing}' "
-                + $"<EstimateVoidAmount='{model.EstimateVoidAmount}' "
-                + $"<WinLostAfterVoid='{model.WinLostAfterVoid}' />";
+                + $"Username='{model.Username}' "
+                + $"GivenCredit='{model.GivenCredit}' "
+                + $"AdjustVoidLimit='{model.AdjustVoidLimit}' "
+                + $"CurrentWinning='{model.CurrentWinning}' "
+                + $"CurrentLosing='{model.CurrentLosing}' "
+                + $"EstimateVoidAmount='{model.EstimateVoidAmount}' "
+                + $"WinLostAfterVoid='{model.WinLostAfterVoid}' />";
             stringBuilder.Append(line);
         }
 

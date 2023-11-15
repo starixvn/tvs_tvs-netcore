@@ -28,17 +28,19 @@ export class AccountTableComponent {
   ) { }
 
   public async reCalculate(account: AccountWinlostModel): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
-    const updatedAccountAmount = viewModel.accountWinlostModels.find(x => x.custId === account.custId);
-    if (updatedAccountAmount) {
-      account.givenCredit = updatedAccountAmount.givenCredit;
-      account.currentLosing = updatedAccountAmount.currentLosing;
-      account.currentWinning = updatedAccountAmount.currentWinning;
-      account.estimateVoidAmount = updatedAccountAmount.estimateVoidAmount;
-      account.winLostAfterVoid = updatedAccountAmount.winLostAfterVoid;
+    if (account.adjustVoidLimit !== null) {
+      this.addRequestStore.changeBlockingUiStatus(true);
+      const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
+      const updatedAccountAmount = viewModel.accountWinlostModels.find(x => x.custId === account.custId);
+      if (updatedAccountAmount) {
+        account.givenCredit = updatedAccountAmount.givenCredit;
+        account.currentLosing = updatedAccountAmount.currentLosing;
+        account.currentWinning = updatedAccountAmount.currentWinning;
+        account.estimateVoidAmount = updatedAccountAmount.estimateVoidAmount;
+        account.winLostAfterVoid = updatedAccountAmount.winLostAfterVoid;
+      }
+      this.addRequestStore.changeBlockingUiStatus(false);
     }
-    this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   public sorting(isDesc: boolean, orderBy: string, componentId: number): void {
@@ -56,8 +58,9 @@ export class AccountTableComponent {
     const arg = new ValidationBusinessRuleArgs();
     arg.requestId = this.requestId;
     arg.actionId = this.filter.action;
-    arg.allAccountWinlostModels = [account];
+    //arg.allAccountWinlostModels = [account];
     arg.abnormalAccountModel = this.abnormalAccountModel;
+    arg.abnormalAccountModel.accountWinlostModels = [account];
 
     return arg;
   }

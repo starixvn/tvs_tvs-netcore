@@ -8,17 +8,17 @@ public class AccountWinlostModel
 
     public string Username { get; set; }
 
-    public long GivenCredit { get; set; }
+    public decimal GivenCredit { get; set; }
 
-    public long AdjustVoidLimit { get; set; }
+    public decimal? AdjustVoidLimit { get; set; }
 
-    public long CurrentWinning { get; set; }
+    public decimal CurrentWinning { get; set; }
 
-    public long CurrentLosing { get; set; }
+    public decimal CurrentLosing { get; set; }
 
-    public long EstimateVoidAmount { get; set; }
+    public decimal EstimateVoidAmount { get; set; }
 
-    public long WinLostAfterVoid { get; set; }
+    public decimal WinLostAfterVoid { get; set; }
 
     public bool IsHighlight { get; set; }
 }
@@ -32,22 +32,22 @@ public class AccountWinlostExcelModel
     public string Username { get; set; }
 
     [Cell("C2")]
-    public long GivenCredit { get; set; }
+    public decimal GivenCredit { get; set; }
 
     [Cell("D2")]
-    public long AdjustVoidLimit { get; set; }
+    public decimal? AdjustVoidLimit { get; set; }
 
     [Cell("E2")]
-    public long CurrentWinning { get; set; }
+    public decimal CurrentWinning { get; set; }
 
     [Cell("F2")]
-    public long CurrentLosing { get; set; }
+    public decimal CurrentLosing { get; set; }
 
     [Cell("G2")]
-    public long EstimateVoidAmount { get; set; }
+    public decimal EstimateVoidAmount { get; set; }
 
     [Cell("H2")]
-    public long WinLostAfterVoid { get; set; }
+    public decimal WinLostAfterVoid { get; set; }
 
     public bool IsHighlight { get; set; }
 }
