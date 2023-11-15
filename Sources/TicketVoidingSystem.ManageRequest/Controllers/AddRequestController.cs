@@ -7,6 +7,7 @@ using TicketVoidingSystem.Web;
 namespace TicketVoidingSystem.ManageRequest.Controllers;
 
 using Fanex.NAP.Client.Helpers.Business;
+using TicketVoidingSystem.Extensions;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -70,4 +71,11 @@ public class AddRequestController : ControllerBase
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
     [HttpPost]
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> ExportExcel(ExportTicketAbnormalBetRequest request)
+    {
+        var model = await mediator.Send(request);
+        return this.ExcelFileResult(Response, model);
+    }
 }

@@ -3,7 +3,7 @@ import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-i
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { PrimitiveProperty } from '../event-abnormal-bet.model';
+import { PrimitiveProperty, AbnormalBetTicketViewModel } from '../event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 
 export class ValidationBusinessRuleArgs {
@@ -24,4 +24,5 @@ export class ValidationBusinessRuleOutput {
   isValid: boolean;
   warningModel: ConfirmAbnormalBetModel;
   transInfoAddRequestModel: TransInfoAddRequestModel;
+  abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
 }

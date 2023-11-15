@@ -11,7 +11,7 @@ import { ChildMatchModel } from '../add-request/models/related-event.model';
 import { AddRequestResultModel } from '../add-request/models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-request/models/sub-type-link-match.model';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
-import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
+import { CheckTransIdsQuery, CheckTransIdsViewModel, ExportExcelAbnormalBet } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
@@ -110,5 +110,10 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async copyLetstalkRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
     return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyLetstalkRequestInfo');
+  }
+  
+  /* istanbul ignore next */
+  async exportExcelAbnormalBetTickets(query: ExportExcelAbnormalBet) {
+    return await this.httpService.downloadFile<ExportExcelAbnormalBet>(query, 'api/AddRequest/ExportExcel');
   }
 }

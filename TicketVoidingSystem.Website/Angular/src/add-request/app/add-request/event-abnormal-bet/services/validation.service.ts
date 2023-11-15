@@ -7,7 +7,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { CheckTransIdsQuery, CheckTransIdsViewModel, ValidationAbnormalBet } from '../event-abnormal-bet.model';
+import { CheckTransIdsQuery, CheckTransIdsViewModel, ValidationAbnormalBet, AbnormalBetTicketViewModel } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 
 @Injectable({
@@ -40,7 +40,7 @@ export class ValidationService {
     const checkTransIdViewModel = await this.checkAbnormalBetTransIds(args, transIds, matchId, filterBy, args.confirmAbnormalBetComponent);
 
     if (checkTransIdViewModel === null) {
-      return { isValid: false } as ValidationBusinessRuleOutput;
+      return { isValid: false} as ValidationBusinessRuleOutput;
     }
 
     if (!this.isAbnormalBetMixParlay(args)) {
@@ -50,11 +50,18 @@ export class ValidationService {
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
     this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);
+    args.primitiveProps.isShowButtonExportTicket = this.checkIsShowButtonExportTicket(checkTransIdViewModel.abnormalBetTicketRequests);
+
     return {
       isValid: args.betIdsComponent.isAllBetIdsValid(),
       warningModel: this.getConfirmAbnormalBetModel(checkTransIdViewModel.validation),
-      transInfoAddRequestModel: checkTransIdViewModel.transInfoAddRequestModel
+      transInfoAddRequestModel: checkTransIdViewModel.transInfoAddRequestModel,
+      abnormalBetTicketRequests: checkTransIdViewModel.abnormalBetTicketRequests
     } as ValidationBusinessRuleOutput;
+  }
+
+  checkIsShowButtonExportTicket(abnormalBetTicketRequests: AbnormalBetTicketViewModel[]) : boolean{
+    return abnormalBetTicketRequests.findIndex(x => x.remark !== "") >= 0;
   }
 
   public isValidationHasWarningTicket(permission: PermissionManage, confirmModel: ConfirmAbnormalBetModel): boolean {

@@ -19,13 +19,14 @@ public class ManageRequestProfile : Profile
         CreateMap<RequestModel, RequestEventViewModel>();
         CreateMap<EditRequestQuery, EditRequestCommand>();
         CreateMap<GetPoolHouseTicketQuery, GetPoolHouseTicketCriteria>();
-
         CreateMap<RequestModel, RequestViewModel>();
         CreateMap<RequestModel, RequestEventViewModel>();
         CreateMap<SelectRequestsQuery, SelectArchivedRequestsCriteria>();
         CreateMap<SelectRequestsQuery, SelectActiveRequestsCriteria>();
         CreateMap<SelectRequestsQuery, GetActiveRequestInfoCriteria>();
         CreateMap<SelectRequestsQuery, GetArchivedRequestInfoCriteria>();
+        CreateMap<GetAbnormalBetTicketModel, GetTicketModel>();
+        CreateMap<GetAbnormalBetTicketModel, AbnormalBetTicketViewModel>();
 
         CreateMap<GetTicketsQuery, GetTicketsCriteria>();
         CreateMap<GetTicketsQuery, GetBetTrans14TicketsCriteria>();

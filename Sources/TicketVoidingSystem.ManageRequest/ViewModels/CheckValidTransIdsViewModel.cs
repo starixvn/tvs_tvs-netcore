@@ -7,6 +7,7 @@ public class CheckValidTransIdsViewModel
     public ValidationAbnormalBet Validation { get; set; }
     public MatchInfoAddRequest Match { get; set; }
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
+    public IEnumerable<AbnormalBetTicketViewModel> AbnormalBetTicketRequests { get; set; }
 }
 
 public class ValidationAbnormalBet

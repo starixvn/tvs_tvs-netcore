@@ -3,6 +3,7 @@ using MediatR;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -13,26 +14,37 @@ public class CheckValidTransIdsRequest : CheckValidTransIdsModel, IRequest<Check
 
 public class CheckValidTransIdsHandler : IRequestHandler<CheckValidTransIdsRequest, CheckValidTransIdsViewModel>
 {
-    private readonly IDynamicRepository repository;
-    private readonly MatchInfoAddRequestService matchInfoAddRequestService;
     private readonly GetTransInfoService getTransInfoService;
+    private readonly MapAbnormalBetTicketsExcelService mapTicketsExcelService;
+    private readonly MatchInfoAddRequestService matchInfoAddRequestService;
+    private readonly IDynamicRepository repository;
 
-    public CheckValidTransIdsHandler(IDynamicRepository repository, MatchInfoAddRequestService matchInfoAddRequestService, GetTransInfoService getTransInfoService)
+    public CheckValidTransIdsHandler(IDynamicRepository repository,
+        MatchInfoAddRequestService matchInfoAddRequestService,
+        GetTransInfoService getTransInfoService, MapAbnormalBetTicketsExcelService mapTicketsExcelService)
     {
         this.repository = repository;
         this.matchInfoAddRequestService = matchInfoAddRequestService;
         this.getTransInfoService = getTransInfoService;
+        this.mapTicketsExcelService = mapTicketsExcelService;
     }
 
-    public async Task<CheckValidTransIdsViewModel> Handle(CheckValidTransIdsRequest request, CancellationToken cancellationToken)
+    public async Task<CheckValidTransIdsViewModel> Handle(CheckValidTransIdsRequest request,
+        CancellationToken cancellationToken)
     {
         var criteria = await GetCheckValidTransIdsCriteria(request);
-        var mappingTypes = new[] { typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel), typeof(string) };
+        var mappingTypes = new[]
+        {
+            typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
+            typeof(string),
+            typeof(GetAbnormalBetTicketModel)
+        };
         var result = await repository.FetchMultipleAsync(criteria, mappingTypes, cancellationToken);
         var match = result[0].Cast<MatchInfoAddRequest>().FirstOrDefault();
         var validation = result[1].Cast<ValidationAbnormalBet>().FirstOrDefault();
         var transInfoAddRequestModel = result[2].Cast<TransInfoAddRequestModel>().FirstOrDefault();
         var transInfoJson = result[3].Cast<string>().FirstOrDefault();
+        var abnormalBetTicketRequests = result[4].Cast<GetAbnormalBetTicketModel>();
 
         var viewModel = new CheckValidTransIdsViewModel
         {
@@ -44,7 +56,9 @@ public class CheckValidTransIdsHandler : IRequestHandler<CheckValidTransIdsReque
                 UnMarkTransIds = transInfoAddRequestModel?.UnMarkTransIds,
                 MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
                 TransInfoJson = transInfoJson
-            }
+            },
+            AbnormalBetTicketRequests =
+                mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests)
         };
 
         return viewModel;
