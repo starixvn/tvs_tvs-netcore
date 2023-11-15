@@ -1,23 +1,17 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { ModalType } from '../../../utility/components/modal/modal.model';
-import { ModalService } from '../../../utility/components/modal/modal.service';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
-import { LABELS } from '../../../utility/constants/labels';
+import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchInfo } from '../../../utility/models/event.model';
-import { Result } from '../../../utility/models/result';
-import { CommonService } from '../../../utility/services/common.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
-import { AddRequestApiService } from './add-request-api.service';
-import { EarlyKickOffService } from './add-request.service';
 import { AddRequestStore } from './add-request.store';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
+import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
@@ -28,9 +22,7 @@ import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.
 import { FilterComponent } from './filter/filter.component';
 import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
-import { AddRequestQuery } from './models/add-request.query';
-import { AddRequestResultModel, RequestModel } from './models/request.model';
-import { TransInfoAddRequestModel } from './models/trans-info-add-request.model';
+import { RequestModel } from './models/request.model';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
 
 @Component({
@@ -62,11 +54,11 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongOdds') eventWrongOddsComponent: EventWrongOddsComponent;
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
+  @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
   issueTypes = new IssueTypes();
-  isSaveRequestHasWarning: false;
   isDisabledSaveButton = false;
   checkValidSubIssueTypeInFilterSubscription: Subscription;
 
@@ -77,9 +69,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   parentMatchId: number = null;
 
   constructor(
-    private readonly addRequestApiService: AddRequestApiService,
-    private readonly modalService: ModalService,
-    private readonly commonService: CommonService,
     private readonly addRequestStore: AddRequestStore,
     private readonly copyRequestInfoService: CopyRequestInfoService
   ) { }
@@ -90,7 +79,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.blockingUiSubscription = this.addRequestStore.blockingUiStatus.subscribe(status => {
-      this.isBlock = status;
+      this.isBlock = status.length > 0;
     });
 
     this.abnormalFilterBySubscription = this.addRequestStore.getAbnormalFilterBySubject.subscribe(type => {
@@ -125,66 +114,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.parentMatchId = match?.parentId;
   }
 
-  private showErrorModal(messageContent: string): void {
-    this.modalService.open(
-      {
-        title: LABELS.ADD_REQUEST_RESULT_TITLE,
-        message: `Error: ${messageContent}`,
-        type: ModalType.Error
-      },
-      () => {
-        this.isDisabledSaveButton = false;
-      }
-    );
-  }
-
-  //#region EKO
-  async saveRequestEarlyOrWrongKO(isSaveAndVoidButton: boolean): Promise<void> {
-    const isDataValid = this.model.filter.isVoided ? true : await this.eventEarlyKickOffComponent.isValid();
-    if (isDataValid) {
-      if (this.isEditingByAnotherUser() || this.eventEarlyKickOffComponent.warningMessageList.length > 0) {
-        this.modalService.confirm(
-          {
-            title: 'Confirm',
-            message: this.getMessageConfirmationEKO(),
-            type: ModalType.Confirm
-          },
-          async () => this.executeSaveRequestEarlyKO(isSaveAndVoidButton, this.eventEarlyKickOffComponent.transInfoAddRequestModel),
-          () => this.isDisabledSaveButton = false
-        );
-      } else {
-        await this.executeSaveRequestEarlyKO(isSaveAndVoidButton, this.eventEarlyKickOffComponent.transInfoAddRequestModel);
-      }
-    } else {
-      this.isDisabledSaveButton = false;
-    }
-  }
-  
-  private getMessageConfirmationEKO(): string {
-    let message = '';
-    
-    if (this.eventEarlyKickOffComponent.warningMessageList.length > 0) {
-      message = 'There are some warnings in this request.';
-    }
-    if (this.isEditingByAnotherUser()) {
-      message = `${message}<div style="color:red">Please remind this request ${this.requestId} is confirmed by ${this.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-  }
-
-  async executeSaveRequestEarlyKO(isSaveAndVoidButton: boolean, transInfoAddRequestModel: TransInfoAddRequestModel): Promise<void> {
-    const query = EarlyKickOffService.initAddRequestQuery(this.model, transInfoAddRequestModel);
-
-    if (this.isEdit) {
-      await this.editSingleRequest(query, isSaveAndVoidButton);
-    } else {
-      await this.addSingleRequest(query, isSaveAndVoidButton);
-    }
-  }
-  //#endregion EKO
-
-  async saveRequest(isSaveAndVoidButton: boolean): Promise<void> { // NOSONAR
+  async saveRequest(isSaveAndVoid: boolean): Promise<void> { // NOSONAR
     if (!this.isEdit) {
       const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
       localStorage.setItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'),
@@ -197,7 +127,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (this.isEarlyOrWrongKO()) {
-      await this.saveRequestEarlyOrWrongKO(isSaveAndVoidButton);
+      await this.eventEarlyKickOffComponent.saveRequest(isSaveAndVoid);
     }
 
     if (this.isDangerAccepted()) {
@@ -239,139 +169,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isDuplicateTickets()) {
       await this.eventDuplicateTicketsComponent.saveRequest();
     }
-  }
 
-  async addSingleRequest(query: AddRequestQuery, isSaveAndVoid: boolean) {
-    this.isBlock = true;
-    query.guid = `AddRequest-${Guid.create().toString()}`;
-    const result = await this.addRequestApiService.addRequest(query);
-    if (result) {
-      this.handleAfterAddRequest(result, isSaveAndVoid);
-    } else {
-      this.getAddResultCache(query.guid, isSaveAndVoid);
+    if (this.isNotParticipate()) {
+      await this.eventNotParticipateComponent.saveRequest();
     }
-  }
-
-  private handleAfterAddRequest(addResult: Result<AddRequestResultModel>, isSaveAndVoid: boolean) {
-    if (addResult.isSuccessful) {
-      let matchIds = '';
-      if (this.isEarlyOrWrongKO()) {
-        matchIds = `<div class="ml-2 mt-1">- Match(es): <strong>${addResult.data.matchId}</strong></div>`;
-      }
-      if (isSaveAndVoid) {
-        this.goToVoidPage(Number(addResult.data.requestId));
-      } else {
-        this.isBlock = false;
-        this.modalService.open(
-          {
-            title: LABELS.ADD_REQUEST_RESULT_TITLE,
-            message: `<div>Request No.<strong>${addResult.data.requestId}</strong> added successfully!</div>${matchIds}`,
-            type: ModalType.Alert
-          },
-          () => this.reloadPageOrBackToManagePage()
-        );
-      }
-    } else {
-      this.openModelErrorMessageRequest(addResult, LABELS.ADD_REQUEST_RESULT_TITLE);
-    }
-  }
-
-  private getAddResultCache(guid: string, isSaveAndVoid: boolean) {
-    let isChecking = false;
-    const interval = setInterval(async () => {
-      if (!isChecking) {
-        isChecking = true;
-        const result = await this.commonService.getResultCache<AddRequestResultModel>(guid);
-        if (result) {
-          this.handleAfterAddRequest(result, isSaveAndVoid);
-          clearInterval(interval);
-        }
-        isChecking = false;
-      }
-    }, 2000);
-  }
-
-  async editSingleRequest(query: AddRequestQuery, isSaveAndVoid: boolean) {
-    this.isBlock = true;
-    query.requestId = this.requestId;
-    const result = await this.addRequestApiService.editRequest(query);
-
-    if (result.isSuccessful) {
-      if (isSaveAndVoid) {
-        this.goToVoidPage(this.requestId);
-      } else {
-        this.isBlock = false;
-        this.modalService.open(
-          {
-            title: LABELS.EDIT_REQUEST_RESULT_TITLE,
-            message: `Request No.<strong>${this.requestId}</strong> edited successfully!`,
-            type: ModalType.Alert
-          },
-          () => this.reloadPageOrBackToManagePage()
-        );
-      }
-    } else {
-      this.openModelErrorMessageRequest(result, LABELS.EDIT_REQUEST_RESULT_TITLE);
-    }
-  }
-
-  async editSingleRequestHaveConfirm(query: AddRequestQuery, isSaveAndVoid: boolean, isConfirmThreeButton: boolean) {
-    if (isConfirmThreeButton) {
-      this.modalService.confirmWithThreeButton(
-        {
-          title: 'Confirm',
-          message: LABELS.CONFIRM_TVS_UNMARK_TICKET_AND_AUTO_CAL,
-          type: ModalType.ConfirmThreeButton
-        },
-        async () => {
-          query.isConfirmCalculator = true;
-          await this.editSingleRequest(query, false);
-        },
-        async () => {
-          query.isConfirmCalculator = false;
-          await this.editSingleRequest(query, false);
-        },
-        () => {
-          this.isDisabledSaveButton = false;
-        }
-      );
-    } else {
-      this.modalService.confirm(
-        {
-          title: 'Confirm',
-          message: LABELS.CONFIRM_TVS_UNMARK_TICKET,
-          type: ModalType.Confirm
-        },
-        async () => {
-          query.isConfirmCalculator = false;
-          await this.editSingleRequest(query, false);
-        },
-        () => {
-          this.isDisabledSaveButton = false;
-        }
-      );
-    }
-  }
-
-  openModelErrorMessageRequest(result: Result<AddRequestResultModel>, titleMessage: string) {
-    this.isBlock = false;
-
-    this.modalService.open(
-      {
-        title: titleMessage,
-        message: `Error: ${result.errorMsg}`,
-        type: ModalType.Error
-      },
-      () => this.isDisabledSaveButton = false,
-    );
-  }
-
-  reloadPageOrBackToManagePage() {
-    this.isLikelyAbnormalBetIssueType() ? window.location.reload() : window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
-  }
-
-  goToVoidPage(requestId: number): void {
-    window.location.assign(`TicketVoidingSystem/VoidRequest/Index/${requestId}`);
   }
 
   backToManagePage() {
@@ -395,12 +196,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private isEditingByAnotherUser(): boolean {
-    const editingBy = Number(document.getElementById('body').getAttribute('user-id'));
-
-    return this.isEdit && editingBy !== this.userId;
-  }
-  
   async copyEmailRequestInfo() {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.matchId, this.model.others.operatorsList);
@@ -429,12 +224,22 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isShowOthersSimpleFields(): boolean {
-    return this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds() || this.isReducedOver();
+    const issueTypesHasSimpleFields = [
+      IssueTypeConstant.WRONG_HDP,
+      IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.REDUCED_OVER,
+      IssueTypeConstant.NOT_PARTICIPATE
+    ]
+
+    return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);
   }
 
   isShowOthersFullFields(): boolean {
     return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
-      && !this.isWrongHDP() && !this.isWrong1stHDP() && !this.isWrongOU() && !this.isWrong1stOU() && !this.isWrongOdds() && !this.isReducedOver();
+      && !this.isShowOthersSimpleFields();
   }
 
   isShowSaveAndVoidButton(): boolean {
@@ -517,5 +322,9 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isDuplicateTicketsMixParlay(): boolean {
     return StaticService.isDuplicateTickets(this.model.filter.issueTypeId) && this.abnormalFilterBy === AbnormalFilterBy.MIX_PARLAY;
+  }
+
+  isNotParticipate(): boolean {
+    return StaticService.isNotParticipate(this.model.filter.issueTypeId);
   }
 }

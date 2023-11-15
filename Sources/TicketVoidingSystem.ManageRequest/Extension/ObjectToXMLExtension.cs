@@ -2,6 +2,7 @@
 using System.Security;
 using System.Text;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Resources;
@@ -301,6 +302,31 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToEventNotParticipateXml(this IEnumerable<NotParticipateViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"PlayerId='{model.PlayerId}' "
+                       + $"GroupBetTypeIds='{model.GroupBetTypeIds}' "
+                       + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+                       + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+                       + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                       + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
     public static string ToAbnormalAccountXml(this AbnormalAccountViewModel model)
     {
         var stringBuilder = $"<r Usernames='{model.Usernames}' "
@@ -320,6 +346,27 @@ public static class ObjectToXMLExtension
                             + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
+    public static string ToEventKickOffXml(this IEnumerable<EarlyKickOffViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"IsMainMatch='{model.IsMainMatch.ToString().ToLowerInvariant()}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"KickOffTime='{model.KickOffTime?.ZoneCanada().ToString(CultureInfo.InvariantCulture)}'/>";
+
+            stringBuilder.Append(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
     public static string ToRequestInfoGetVoidedTicketXml(this IEnumerable<GetRequestInfoModel> requests)

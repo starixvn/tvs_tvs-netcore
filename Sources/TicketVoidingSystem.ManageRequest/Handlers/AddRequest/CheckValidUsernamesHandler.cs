@@ -66,11 +66,14 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         var getTransInfoQuery = new GetTransInfoQuery
         {
             IssueTypeId = IssueTypeConstant.AbnormalAccount,
-            Usernames = model.Usernames,
-            FromDate = model.FromDate,
-            ToDate = model.ToDate,
-            ProductIds = model.ProductIds,
-            StatusIds = model.StatusIds
+            AbnormalAccountViewModel = new AbnormalAccountViewModel
+            {
+                Usernames = model.Usernames,
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                ProductIds = model.ProductIds,
+                StatusIds = model.StatusIds
+            }
         };
 
         return await getTransInfoService.GetTransInfoJson(getTransInfoQuery);

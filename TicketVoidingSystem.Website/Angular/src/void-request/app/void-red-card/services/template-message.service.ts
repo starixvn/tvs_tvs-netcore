@@ -28,7 +28,6 @@ export class TemplateMessageService {
     templateValue.isCheckTime = requestDetail.redCardModels[0].filterBy === TVSRequestFilterBy.CHECK_TIME;
     templateValue.isCheckedVar = voidMatch.isCheckedVar;
     templateValue.isAllNonLiveTickets = voidMatch.voidTicketsMini.isAllNonLiveTickets;
-    templateValue.match = voidMatch.matchModel;
     return templateValue;
   }
 

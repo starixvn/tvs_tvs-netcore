@@ -377,11 +377,13 @@ export class ActionVoidByIssueTypeConst {
   ];
   static readonly EARLY_KICK_OFF: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];
   static readonly WRONG_KICK_OFF: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];
@@ -432,6 +434,11 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly DUPLICATE_TICKETS_ADD_REQUEST: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly NOT_PARTICIPATE: number[] = [
+    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];

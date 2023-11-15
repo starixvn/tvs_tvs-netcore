@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
@@ -96,6 +95,7 @@ public class AddRequestServiceTests
     [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
     [InlineData(IssueTypeConstant.AbnormalBet)]
     [InlineData(IssueTypeConstant.DuplicateTickets)]
+    [InlineData(IssueTypeConstant.NotParticipate)]
     [InlineData(1111111)]
     public void Execute_HasResultSuccessful_CalledExpected(int issueTypeId)
     {
@@ -106,7 +106,6 @@ public class AddRequestServiceTests
             IssueTypeId = issueTypeId,
             TransInfoJson = "123",
             MatchId = 1,
-            KickOffTime = new DateTime(2022, 2, 2, 2, 2, 2),
             ActionId = 1,
             OperatorsList = null
         };
@@ -123,7 +122,7 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1);
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, null);
         sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
     }
 
@@ -137,7 +136,6 @@ public class AddRequestServiceTests
             IssueTypeId = 20,
             TransInfoJson = "123",
             MatchId = 1,
-            KickOffTime = new DateTime(2022, 2, 2, 2, 2, 2),
             ActionId = 1,
             OperatorsList = null,
             DuplicateTicketsInfo = new DuplicateTicketsViewModel { MatchId = 123 },
@@ -150,7 +148,9 @@ public class AddRequestServiceTests
             DangerAcceptedInfo = new List<DangerAcceptedViewModel>(),
             RedCardInfo = new List<DangerAcceptedViewModel>(),
             AbnormalAccountInfo = new AbnormalAccountViewModel(),
-            WrongOddsInfo = new List<WrongOddsViewModel>()
+            WrongOddsInfo = new List<WrongOddsViewModel>(),
+            EarlyKickOffInfo = new List<EarlyKickOffViewModel>(),
+            NotParticipateInfo = new List<NotParticipateViewModel>()
         };
         var markTicketResults = new List<Result> { new() { ErrorCode = 0 } };
         markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)
@@ -165,7 +165,7 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1);
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
         sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
     }
 }

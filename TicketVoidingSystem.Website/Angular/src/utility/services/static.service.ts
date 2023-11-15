@@ -1,6 +1,6 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
-import { GetLogInfoModel, ValidationMessage } from 'src/add-request/app/add-request/models/get-log-info.model';
+import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { DateFullTimeNewComponent } from '../components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalType } from '../components/modal/modal.model';
@@ -93,6 +93,11 @@ export class StaticService {
   static isDuplicateTickets(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DUPLICATE_TICKETS;
   }
+
+  static isNotParticipate(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.NOT_PARTICIPATE;
+  }
+
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);
@@ -115,8 +120,12 @@ export class StaticService {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
     } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.reducedOverModels[0].subIssueTypeId;
+    } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.notParticipateModels[0].subIssueTypeId;
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.duplicateTicketsModel.subIssueTypeId;
+    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -137,8 +146,12 @@ export class StaticService {
       return requestDetail.wrongOddsModels[0].eventDate;
     } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.reducedOverModels[0].eventDate;
+    } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.notParticipateModels[0].eventDate;
     } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return null;
+    } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).eventDate;
     } else {
       return requestDetail.event.eventDate;
     }
@@ -210,7 +223,7 @@ export class StaticService {
       issueTypeId === IssueTypeConstant.RED_CARD ||
       issueTypeId === IssueTypeConstant.WRONG_SCORE;
   }
-  
+
   static getDurationTime(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, filterFromTransTime: string, filterToTransTime: string): string {
     if (!fromTimeComponent?.isTimeValid() || !toTimeComponent?.isTimeValid()) {
       return '-';

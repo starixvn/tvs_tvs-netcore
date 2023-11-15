@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
-import { RequestDetailModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { TemplateService } from '../../utility/components/template-message/template-message/template.service';

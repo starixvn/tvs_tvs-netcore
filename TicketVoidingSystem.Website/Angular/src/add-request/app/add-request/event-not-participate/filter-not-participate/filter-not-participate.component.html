@@ -1,0 +1,25 @@
+<label class="col-form-label">Filter</label>
+<div class="filter mb-2">
+  <div class="header d-flex mb-2">
+    <div class="player mr-2">Player</div>
+    <div class="group-bet-type mr-2">Group Bet Type</div>
+  </div>
+  <div class="bet-type-container">
+    <div class="bet-type-item mb-2" *ngFor="let model of models; index as index; last as isLast; first as isFirst">
+      <filter-not-participate-item #filterItem
+        [isEdit]="isEdit"
+        [model]="model"
+        [allFilterItem]="models"
+        [isVoided]="isVoided"
+        [index]="index"
+        [isLast]="isLast"
+        [isFirst]="isFirst"
+        (addItemEvent)="addBetTypeItem()"
+        (changeBetTypeEvent)="changeBetTypeItem()"
+        (removeItemEvent)="removeBetTypeItem(index)"
+        [originalPlayers]="originalPlayers"
+        (changeFilterEvent)="changeFilter()">
+      </filter-not-participate-item>
+    </div>
+  </div>
+</div>

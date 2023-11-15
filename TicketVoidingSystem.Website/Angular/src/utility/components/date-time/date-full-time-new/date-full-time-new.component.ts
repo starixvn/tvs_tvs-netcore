@@ -1,8 +1,7 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
+import { NgbDate, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
-import { LABELS } from '../../../../utility/constants/labels';
 import { CommonStaticService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Tooltip } from '../../tooltip/tooltip.model';
@@ -20,19 +19,24 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
   @Input() maxDate: NgbDate;
   @Input() minDate: NgbDate;
   @Input() allowedHideDate = false;
+  @Input() withOfTime = 106;
   @Input() readonly = true;
+  @Input() timeFormat = DateTimeFormat.TIME_FORMAT;
   @Output() dateTimeChange = new EventEmitter<string>();
   @Output() changeEvent = new EventEmitter();
+  @ViewChild('datePicker') datePicker: NgbInputDatepicker;
 
   tooltip = new Tooltip();
   date: NgbDate;
   time: string;
   isShowInputDate = true;
   isPasteTimeEvent: boolean;
+  dateTimeFormat: string;
 
   private readonly ALLOWED_TIME_FORMATS = [
     'h:mm:ss.SSS A',
     'h:mm:ss A',
+    'HH:mm:ss'
   ];
 
   constructor(private readonly element: ElementRef) {
@@ -49,29 +53,42 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
     this.updateData();
   }
 
+  public onClickIconCalendar(): void {
+    if (this.allowedHideDate) {
+      this.isShowInputDate = !this.isShowInputDate;
+    } else {
+      this.datePicker.toggle();
+    }
+  }
+
   public updateData(): void {
     this.timeZone = 'America/Caracas';
-    const momentDateTime = moment(this.dateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    this.dateTimeFormat = `YYYY/MM/DD ${this.timeFormat}`;
+    const momentDateTime = moment(this.dateTime, this.dateTimeFormat);
     this.date = new NgbDate(momentDateTime.year(), momentDateTime.month() + 1, momentDateTime.date());
-    this.time = momentDateTime.format(DateTimeFormat.TIME_FORMAT);
+    this.time = momentDateTime.format(this.timeFormat);
   }
 
   public validateWithTooltip(): boolean {
     if (!this.isTimeValid()) {
-      this.tooltip.display(`time-input${this.index}`, LABELS.INVALID_TIME_FORMAT);
+      this.tooltip.display(`time-input${this.index}`, `Invalid Date Time format. The correct format is "${this.dateTimeFormat}"`);
       return false;
     }
-
-    this.time = CommonStaticService.convertToStrictTimeFormat(this.time);
-    this.dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`,DateTimeFormat.FULL_DATE_TIME_FORMAT, true)
-      .format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    this.dateTimeChange.emit(this.dateTime);
+    this.getDateTime();
 
     return true;
   }
 
+  public getDateTime(): string {
+    this.time = CommonStaticService.convertToStrictTimeFormat(this.time, this.timeFormat);
+    this.dateTime = moment(`${StaticService.convertToFullDate(this.date)} ${this.time}`,this.dateTimeFormat, true).format(this.dateTimeFormat);
+    this.dateTimeChange.emit(this.dateTime);
+
+    return this.dateTime;
+  }
+
   public isTimeValid(): boolean {
-    const timeMoment = moment(this.time.trim(), DateTimeFormat.TIME_FORMAT, true);
+    const timeMoment = moment(this.time.trim(), this.timeFormat, true);
     if (!timeMoment.isValid()) {
       return false;
     }
@@ -85,7 +102,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges {
 
   public onChangeTime(newTime: string): void {
     if (this.isPasteTimeEvent && this.isPasteCorrectTime(newTime)) {
-      this.time = moment(newTime.trim(), this.ALLOWED_TIME_FORMATS, true).format(DateTimeFormat.TIME_FORMAT);
+      this.time = moment(newTime.trim(), this.ALLOWED_TIME_FORMATS, true).format(this.timeFormat);
     }
 
     this.isPasteTimeEvent = false;

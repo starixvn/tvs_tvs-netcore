@@ -26,7 +26,6 @@ export class EventWrongOddsComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() requestId: number;
   @Input() filter: FilterModel;
-  @Input() issueTypeId: string;
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOddsModels: WrongOddsModel[] = [];

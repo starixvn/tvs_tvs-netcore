@@ -1,5 +1,4 @@
 
-import { ValidationService } from './validation.service';
 import * as _ from 'lodash';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
@@ -16,6 +15,7 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
+import { ValidationService } from './validation.service';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -43,7 +43,8 @@ class Helper {
     isMainMatch: false,
     isPoolHouseAffected: false,
     jollyViewLicensee: new AffectedLicensee,
-    cancelCashOutLicensee: new AffectedLicensee
+    cancelCashOutLicensee: new AffectedLicensee,
+    isAllNonLiveTickets: true
   };
   static readonly fakeSqlResultError: SqlResult = {
     errCode: 1,

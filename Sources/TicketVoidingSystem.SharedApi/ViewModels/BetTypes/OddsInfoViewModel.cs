@@ -4,11 +4,11 @@ public class OddsInfoViewModel
 {
     public string OddsId { get; set; }
 
-    public string PlayerId { get; set; }
+    public int PlayerId { get; set; }
 
     public string PlayerName { get; set; }
 
-    public string BetTypeId { get; set; }
+    public int BetTypeId { get; set; }
 
     public string BetChoice { get; set; }
 

@@ -2,6 +2,7 @@
 using System.Security;
 using System.Text;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Extension;
@@ -180,17 +181,52 @@ public static class LogInfoExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string GetAbnormalAccountInfoXml(string usernames, string productIds, string statusIds, DateTime? fromDate, DateTime? toDate)
+    public static string ToNotParticipateInfoXml(this IEnumerable<NotParticipateViewModel> models)
     {
-        return $"<root><r Usernames='{usernames}' "
-                + $"ProductIds='{productIds}' "
-                + $"StatusIds='{statusIds}' "
-                + $"FromDate='{fromDate}' "
-                + $"ToDate='{toDate}'/></root>";
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                       + $"PlayerId='{model.PlayerId}' "
+                       + $"GroupBetTypeIds='{model.GroupBetTypeIds}' />";
+
+            stringBuilder.AppendLine(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
-    public static string GetKickOffInfoXml(int? matchId, DateTime? kickOffTime)
+    public static string ToAbnormalAccountInfoXml(this AbnormalAccountViewModel model)
     {
-        return $"<root><r MatchId='{matchId}' KickOffTime='{kickOffTime?.ToString(CultureInfo.InvariantCulture)}'/></root>";
+        return $"<root><r Usernames='{model.Usernames}' "
+               + $"ProductIds='{model.ProductIds}' "
+               + $"StatusIds='{model.StatusIds}' "
+               + $"FromDate='{model.FromDate}' "
+               + $"ToDate='{model.ToDate}'/></root>";
+    }
+
+    public static string ToKickOffInfoXml(this IEnumerable<EarlyKickOffViewModel> models)
+    {
+        if (!models.Any())
+        {
+            return string.Empty;
+        }
+
+        var stringBuilder = new StringBuilder();
+        foreach (var model in models)
+        {
+            var line = $"<r MatchId='{model.MatchId}' "
+                       + $"KickOffTime='{model.KickOffTime?.ZoneCanada().ToString(CultureInfo.InvariantCulture)}'/>";
+
+            stringBuilder.Append(line);
+        }
+
+        return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 }

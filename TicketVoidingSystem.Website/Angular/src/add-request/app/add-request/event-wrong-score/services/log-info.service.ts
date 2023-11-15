@@ -37,7 +37,6 @@ export class LogInfoService {
 
     const query: GetLogInfoQuery = {
       requestId: isEdit ? requestId : null,
-      matchId: matchId,
       actionId: Number(filter.action),
       issueTypeId: Number(filter.issueTypeId),
       subIssueTypeId: Number(filter.subIssueTypeId),

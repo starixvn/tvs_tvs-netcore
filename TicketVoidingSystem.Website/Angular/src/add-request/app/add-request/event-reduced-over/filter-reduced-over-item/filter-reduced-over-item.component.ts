@@ -76,7 +76,7 @@ export class FilterReducedOverItemComponent implements OnInit {
     if (firstReducedOverBetType) {
       this.primitivePropertyItem.isDisabledPlayer = !firstReducedOverBetType.isHasPlayer;
       if (firstReducedOverBetType.isHasPlayer) {
-        const playersOfCheckedBetTypes = this.originalPlayers.filter(x => checkedBetTypeIds.includes(x.betTypeId));
+        const playersOfCheckedBetTypes = this.originalPlayers.filter(x => checkedBetTypeIds.includes(x.betTypeId.toString()));
         this.model.playerMultipleSelection.items = this.filterService.renderPlayer(playersOfCheckedBetTypes);
         this.model.playerMultipleSelection.items.forEach(x => x.checkBySelectedItem(this.model.playerIds));
         this.model.playerMultipleSelection.isCheckAll = this.model.playerMultipleSelection.items.every(x => x.allChildIsChecked());

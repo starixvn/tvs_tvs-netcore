@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CopyRequestInfoQuery, CopyRequestInfoResponse } from 'src/utility/models/copy-request-info.query';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../../utility/components/pool-house-ticket/pool-house-ticket.model';
+import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { Result } from '../../../utility/models/result';
 import { HttpService } from '../../../utility/services/http.service';
 import { AddRequestQuery } from '../add-request/models/add-request.query';

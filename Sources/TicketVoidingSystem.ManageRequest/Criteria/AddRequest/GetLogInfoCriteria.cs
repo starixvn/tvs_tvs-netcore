@@ -36,6 +36,8 @@ public class GetLogInfoCriteria : CriteriaBase
 
     public string ReducedOverInfo { get; set; }
 
+    public string NotParticipateInfo { get; set; }
+
     public string? TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_LogInfo_Select";

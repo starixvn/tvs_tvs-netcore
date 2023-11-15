@@ -13,6 +13,7 @@ import { PagingConstant } from '../../../utility/components/paging/paging/paging
 import { TemplateContent } from '../../../utility/components/template-message/template-message/template.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { BetTypeAutoCheckByIssue, BetTypeAutoUnCheckByIssue, BetTypeAutoUnCheckBySubIssue } from '../../../utility/constants/bettype-auto-check-list.constant';
+import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { DateTimeFormat, ModeType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../utility/constants/sport.constant';
@@ -26,7 +27,6 @@ import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { AffectedLicensee } from './../models/affected-licensee.model';
 import { Bet, Item, Type } from './filter.model';
-import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 
 @Component({
   selector: 'filter',
@@ -460,7 +460,7 @@ export class FilterComponent implements OnInit {
   }
 
   isPlayerValueMatchWithOddsInfo(oddsInfo: OddsInfo, value: string): boolean {
-    return (value === oddsInfo.playerId) || (value === `${oddsInfo.betChoice},${oddsInfo.oddsId}`);
+    return (value === oddsInfo.playerId?.toString()) || (value === `${oddsInfo.betChoice},${oddsInfo.oddsId}`);
   }
 
   mapPlayerValueToOddsInfo(playerValueSelected: string[]): OddsInfo[] {

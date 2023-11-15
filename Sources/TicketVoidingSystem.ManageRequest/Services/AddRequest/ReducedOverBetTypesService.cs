@@ -1,8 +1,5 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.SharedApi.Models.BetTypes;
+﻿using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
@@ -14,11 +11,11 @@ public interface ReducedOverBetTypesService
 
 public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
 {
-    private readonly IDynamicRepository repository;
+    private readonly BetTypesRepository betTypesRepository;
 
-    public ReducedOverBetTypesServiceImp(IDynamicRepository repository)
+    public ReducedOverBetTypesServiceImp(BetTypesRepository betTypesRepository)
     {
-        this.repository = repository;
+        this.betTypesRepository = betTypesRepository;
     }
 
     public async Task<IEnumerable<ReducedOverBetTypesModel>> GetBetTypes(int matchId)
@@ -32,7 +29,7 @@ public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
 
     private async Task<IEnumerable<ReducedOverBetTypesModel>> GetReducedOverBetTypesHavesTickets(IEnumerable<ReducedOverBetTypesModel> reducedBetTypes, int matchId)
     {
-        var allBetTypesOfMatch = await GetBetTypesHaveTickets(matchId);
+        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId);
 
         var results = reducedBetTypes
             .Where(betType => allBetTypesOfMatch.Any(x => int.Parse(x.Id) == betType.BetTypeId))
@@ -44,27 +41,5 @@ public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
             });
 
         return results;
-    }
-
-    private async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTickets(int matchId)
-    {
-        var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
-        {
-            MatchId = matchId
-        };
-        var betTypesAllServers = new List<BetTypeModel>();
-        var fetchTasks = SiteDbGroupConstant.ServerList
-            .Select(server => FetchDataAsync(server.Id, criteria));
-        var fetchedData = await Task.WhenAll(fetchTasks);
-
-        betTypesAllServers.AddRange(fetchedData.SelectMany(x => x));
-
-        return betTypesAllServers;
-    }
-
-    private async Task<IEnumerable<BetTypeModel>> FetchDataAsync(int siteDbGroupId, TicketVoidingGetBetTypesHaveTicketsCriteria criteria)
-    {
-        criteria.SiteDbGroupId = siteDbGroupId;
-        return await repository.FetchAsync<BetTypeModel>(criteria);
     }
 }

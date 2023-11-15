@@ -1,6 +1,6 @@
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
 import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { AddRequestStore } from '../../add-request.store';
 import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../../filter/filter.model';

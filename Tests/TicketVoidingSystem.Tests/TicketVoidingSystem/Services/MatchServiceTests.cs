@@ -36,6 +36,28 @@ public class MatchServiceTests
     }
 
     [Fact]
+    public void GetMatchVoidByCurrency_RepositoryHasGetAsync()
+    {
+        // Arrange
+        // Act
+        _ = service.GetMatchVoidByCurrency(new GetMatchInfoVoidByCurrencyCriteria());
+
+        // Assert
+        repository.Received(1).GetAsync<Match>(Arg.Any<GetMatchInfoVoidByCurrencyCriteria>());
+    }
+
+    [Fact]
+    public void GetMatchVoidByCurrency_HasInputIsGetMatchId_RepositoryHasGetAsync()
+    {
+        // Arrange
+        // Act
+        _ = service.GetMatchVoidByCurrency(1);
+
+        // Assert
+        repository.Received(1).GetAsync<Match>(Arg.Any<GetMatchInfoVoidByCurrencyCriteria>());
+    }
+
+    [Fact]
     public void GetMatch_HasRequestIsId_RepositoryHasGetAsync()
     {
         // Arrange

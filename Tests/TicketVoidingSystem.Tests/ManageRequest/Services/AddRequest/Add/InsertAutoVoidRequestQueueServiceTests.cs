@@ -1,8 +1,10 @@
 ﻿using Fanex.Data.Repository;
 using NSubstitute;
+using System.Collections.Generic;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
+using TicketVoidingSystem.ManageRequest.ViewModels;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
@@ -27,8 +29,23 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
     {
         // Arrange
         repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs(1);
+
         // Act
-        _ = service.Execute(4, actionId);
+        _ = service.Execute(4, actionId, null);
+
+        // Assert
+        repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
+    }
+
+    [Fact]
+    public void GetData_HasEarlyKickOffViewModel_CalledExpected()
+    {
+        // Arrange
+        repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs(1);
+        var earlyKickOffInfo = new List<EarlyKickOffViewModel> { new() { MatchId = 1 } };
+
+        // Act
+        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, earlyKickOffInfo);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());

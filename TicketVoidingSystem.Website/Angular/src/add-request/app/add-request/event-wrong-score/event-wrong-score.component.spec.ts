@@ -175,6 +175,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
           isEdit: false,
         }
@@ -499,7 +500,6 @@ describe('EventWrongScoreComponent', () => {
 
   it('#saveRequest should return when validateVarCheck false', async () => {
     // Arrange
-    const mockGetFilterByBaseOnSubIssueType = jest.fn();
     const { instance } = await shallow
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .mock(WrongScoreService, {
@@ -635,7 +635,6 @@ describe('EventWrongScoreComponent', () => {
     const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => false);
     const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
     const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
-    const mockChangeSavingRequestStatus = jest.fn();
     const mockGetSelectedWrongScores = jest.fn();
 
     const { instance } = await shallow
@@ -983,6 +982,7 @@ describe('EventWrongScoreComponent', () => {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
+        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
       })
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
@@ -1002,16 +1002,17 @@ describe('EventWrongScoreComponent', () => {
 
   it('#isShowLogInfoFilterByAcceptedTime should return true when messageValidationLogInfo.length > 0', async () => {
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
+        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
       })
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1038,6 +1039,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1065,6 +1067,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1091,6 +1094,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1200,7 +1204,7 @@ describe('EventWrongScoreComponent', () => {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn()
+        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
       })
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
@@ -1228,7 +1232,7 @@ describe('EventWrongScoreComponent', () => {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn()
+        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
       })
       .mock(ValidationService, { validateCommonData: mockValidateCommonData })
       .mock(LogInfoService, {
@@ -1273,6 +1277,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1299,11 +1304,12 @@ describe('EventWrongScoreComponent', () => {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
-        createMainWrongScoreModel: jest.fn()
+        createMainWrongScoreModel: jest.fn().mockReturnValue(Helper.fakeWrongScoreModel[0])
       })
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1319,7 +1325,6 @@ describe('EventWrongScoreComponent', () => {
   it('#getHighlightMinTimeClass should return highlight-min-aa', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1347,7 +1352,6 @@ describe('EventWrongScoreComponent', () => {
   it('#getHighlightMinTimeClass should return highlight-min-sa', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1376,7 +1380,6 @@ describe('EventWrongScoreComponent', () => {
   it('#getHighlightMinTimeClass should return highlight-min-pa', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1432,7 +1435,6 @@ describe('EventWrongScoreComponent', () => {
   it('#displayMinTime should return -', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1458,7 +1460,6 @@ describe('EventWrongScoreComponent', () => {
   it('#displayMinTime should return expected time when has acceptTypeName', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1486,7 +1487,6 @@ describe('EventWrongScoreComponent', () => {
   it('#displayMinTime should return expected time when no has acceptTypeName', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1496,6 +1496,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1515,7 +1516,6 @@ describe('EventWrongScoreComponent', () => {
     // Arrange
     const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1545,7 +1545,6 @@ describe('EventWrongScoreComponent', () => {
     // Arrange
     const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1579,7 +1578,6 @@ describe('EventWrongScoreComponent', () => {
     // Arrange
     const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1637,7 +1635,6 @@ describe('EventWrongScoreComponent', () => {
     const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => false);
     const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1681,7 +1678,6 @@ describe('EventWrongScoreComponent', () => {
     const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
     const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1725,7 +1721,6 @@ describe('EventWrongScoreComponent', () => {
     const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
     const mockSaveRequest = jest.fn().mockImplementation(() => false);
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
@@ -1742,6 +1737,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1778,6 +1774,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1801,6 +1798,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1825,6 +1823,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1849,6 +1848,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1873,6 +1873,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1898,6 +1899,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });
@@ -1923,6 +1925,7 @@ describe('EventWrongScoreComponent', () => {
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
+          wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
         }
       });

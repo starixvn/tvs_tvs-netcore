@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
@@ -69,7 +68,7 @@ public class AddRequestServiceImp : AddRequestService
     private async Task<Result> ExecuteAddAfterMarkTickets(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
-        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.EarlyKickOffInfo);
         await sendLetstalkAfterAddService.Execute(query, requestId);
         return new Result
         {
@@ -95,12 +94,12 @@ public class AddRequestServiceImp : AddRequestService
         command.Wrong1stOuInfo = query.Wrong1stOuInfo?.ToEventWrongOuXml();
         command.WrongOddsInfo = query.WrongOddsInfo?.ToEventWrongOddsXml();
         command.ReducedOverInfo = query.ReducedOverInfo?.ToEventReducedOverXml();
+        command.NotParticipateInfo = query.NotParticipateInfo?.ToEventNotParticipateXml();
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
-        command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff()
-            ? LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
+        command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
 
         await repository.ExecuteAsync(command);
         return command.RequestId;
@@ -118,9 +117,10 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.RedCard => string.Join(", ", query.RedCardInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongOdds => string.Join(", ", query.WrongOddsInfo.Select(x => x.MatchId)),
             IssueTypeConstant.ReducedOver => query.ReducedOverInfo.First().MatchId.ToString(),
+            IssueTypeConstant.NotParticipate => query.NotParticipateInfo.First().MatchId.ToString(),
             IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
-            IssueTypeConstant.EarlyKickOffTime => query.MatchId.ToString(),
-            IssueTypeConstant.WrongKickOffTime => query.MatchId.ToString(),
+            IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
+            IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.AbnormalBetRealMember => query.MatchId.ToString(),
             IssueTypeConstant.AbnormalBet => query.MatchId.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),

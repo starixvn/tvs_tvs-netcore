@@ -4,8 +4,8 @@
             class="input-date form-control form-control-sm {{isDisabled ? '' : 'bg-white'}}"
             placeholder="yyyy-mm-dd"
             [(ngModel)]="date"
-            ngbDatepicker #d="ngbDatepicker"
-            (click)="d.toggle()"
+            ngbDatepicker #datePicker="ngbDatepicker"
+            (click)="datePicker.toggle()"
             [maxDate]="maxDate"
             [minDate]="minDate"
             [disabled]="isDisabled"
@@ -13,13 +13,14 @@
             (ngModelChange)="changeModel();validateWithTooltip()"
         />
         <div class="input-group-append pointer">
-            <span class="input-group-text" (click)="allowedHideDate && (isShowInputDate = !isShowInputDate)">
+            <span class="input-group-text" (click)="onClickIconCalendar()">
                 <em class="fa fa-calendar"></em>
             </span>
         </div>
     </div>
     <div class="time-filter">
         <input type="text" class="form-control form-control-sm time-input{{index}}"
+            [style.width.px]="withOfTime"
             [(ngModel)]="time" placeholder="HH:mm:ss.SSS AM/PM"
             (ngModelChange)="changeModel();onChangeTime($event)"
             [disabled]="isDisabled"

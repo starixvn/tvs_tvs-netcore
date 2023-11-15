@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoidDuplicateTicketsComponent VoidDuplicateTicketsComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <void-early-kick-off>
+    <div>
+    </div>
+    <div>
+      <div
+        class="in modal-backdrop spinner-overlay"
+      />
+      <div
+        aria-atomic="true"
+        aria-live="assertive"
+        class="spinner-message-container"
+      >
+        <div
+          class="loading-message"
+        >
+          <div
+            class="loading"
+          />
+        </div>
+      </div>
+    </div>
+  </void-early-kick-off>
+</ng-component>
+`;

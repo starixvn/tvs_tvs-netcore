@@ -27,6 +27,7 @@ import { BetTypesComponent } from './components/bettypes/bettypes.component';
 import { BlockFullUiModule } from './components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from './components/block-ui/block-ui.module';
 import { DateTimeModule } from './components/date-time/date-time.module';
+import { DetailNotParticipateComponent } from './components/log-info-detail/detail-not-participate/detail-not-participate.component';
 import { MatchDetailComponent } from './components/match-detail/match-detail.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { MessagesResultComponent } from './components/messages-result/messages-result.component';
@@ -73,7 +74,8 @@ import { HttpService } from './services/http.service';
     NumbersOnlyDirective,
     OnlyNumberDirective,
     BetIdsComponent,
-    AutoRefreshComponent
+    AutoRefreshComponent,
+    DetailNotParticipateComponent
   ],
   exports: [
     BaseTicketsListComponent,
@@ -89,7 +91,8 @@ import { HttpService } from './services/http.service';
     AutoRefreshComponent,
     UsernamesComponent,
     MenuBarComponent,
-    BlockFullUiModule
+    BlockFullUiModule,
+    DetailNotParticipateComponent
   ],
   providers: [HttpService, CommonService]
 })

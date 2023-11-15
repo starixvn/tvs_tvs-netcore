@@ -1,4 +1,3 @@
-import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from 'src/utility/components/pool-house-ticket/pool-house-ticket.model';
 import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';

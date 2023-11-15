@@ -1,103 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent should init match snapshot 1`] = `
-<ng-component
-  __ngContext__={[Function LRootView]}
->
-  <event-early-kick-off>
-    <league-event />
-    <div
-      class="form-group"
-    >
-      <label
-        class="col-form-label"
-      >
-        KO Time
-      </label>
-      <div
-        class="d-flex"
-      >
-        <date-time>
-          <div
-            class="date-time"
-          >
-            <div
-              class="input-group"
-            >
-              <input
-                class="form-control form-control-sm bg-white ng-untouched ng-pristine ng-valid"
-                name="dp"
-                ngbdatepicker=""
-                placeholder="yyyy-mm-dd"
-                readonly=""
-              />
-              <div
-                class="input-group-append pointer"
-              >
-                <span
-                  class="input-group-text"
-                >
-                  <em
-                    class="fa fa-calendar"
-                  />
-                </span>
-              </div>
-            </div>
-            <div
-              class="time-input"
-            >
-              <input
-                class="hour ng-untouched ng-pristine ng-valid"
-                max="23"
-                maxlength="2"
-                min="0"
-                time-control=""
-                type="text"
-              />
-              <span>
-                :
-              </span>
-              <input
-                class="minute ng-untouched ng-pristine ng-valid"
-                max="59"
-                maxlength="2"
-                min="0"
-                time-control=""
-                type="text"
-              />
-              <span>
-                :
-              </span>
-              <input
-                class="second ng-untouched ng-pristine ng-valid"
-                max="59"
-                maxlength="2"
-                min="0"
-                time-control=""
-                type="text"
-              />
-            </div>
-          </div>
-        </date-time>
-        <label
-          class="col-form-label col-form-label-sm"
-        >
-          (GMT+8)
-        </label>
-      </div>
-    </div>
-    <div
-      class="no-gutters"
-    >
-      <div>
-        <button
-          class="btn btn-primary btn-sm"
-          type="submit"
-        >
-          Search
-        </button>
-      </div>
-    </div>
-  </event-early-kick-off>
-</ng-component>
+exports[`EventEarlyKickOffComponent EventEarlyKickOffComponent init should match snapshot 1`] = `
+EventEarlyKickOffComponent {
+  "INPUT_MATCH_ID_CLASS": "input-related-match-id",
+  "addChildMatchModel": AddChildMatchModel {},
+  "addRequestStore": null,
+  "allSelectedEvents": Array [],
+  "confirmEarlyKickOff": ConfirmEarlyKickOffModel {
+    "warningRelatedEvents": Array [],
+  },
+  "earlyKickOffModels": Array [],
+  "element": null,
+  "eventEarlyKickOffService": null,
+  "issueTypes": IssueTypes {
+    "issueTypes": Array [],
+    "selectedSubIssueTypes": Array [],
+    "subIssueTypes": Array [],
+  },
+  "logInfoService": null,
+  "mainEvent": LogInfoEarlyKickOff {
+    "pagingModel": PagingModel {
+      "page": 1,
+      "pageSize": 3000,
+      "selection": Array [
+        500,
+        1000,
+        2000,
+        3000,
+      ],
+      "total": 0,
+    },
+    "tableTicketsModel": TableTicketsModel {
+      "groups": Array [],
+    },
+  },
+  "others": OthersModel {},
+  "primitiveProps": PrimitiveProperty {},
+  "relatedEventService": null,
+  "relatedEvents": Array [],
+  "saveRequestService": null,
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "updateMatchId": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "validationService": null,
+}
 `;

@@ -62,7 +62,6 @@ describe('RequestInfoComponent', () => {
     // Action and Assert
     component['updateIssue']();
     expect(component.issueTypeName).toBe(component.issue.name);
-    expect(component.isEarlyKOIssueType).toBe(false);
   });
 
   it('Update issue with issue type is early kick off', () => {
@@ -78,6 +77,5 @@ describe('RequestInfoComponent', () => {
     // Action and Assert
     component['updateIssue']();
     expect(component.issueTypeName).toBe(`${component.issue.name} - ${component.issue.subIssueTypeName}`);
-    expect(component.isEarlyKOIssueType).toBe(true);
   });
 });

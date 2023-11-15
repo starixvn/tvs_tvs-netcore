@@ -1,5 +1,5 @@
-import { GroupModel } from './group-tickets.model';
 import moment from 'moment-timezone';
+import { GroupModel } from './group-tickets.model';
 
 export class TableTicketsModel {
   id: string;
@@ -23,7 +23,6 @@ export class TableTicketsModel {
     this.strFromTime = moment(new Date(data.fromTime)).format('hh:mm:ss A');
     this.strToTime = moment(new Date(data.toTime)).format('hh:mm:ss A');
     this.mapGroups(data.groups);
-
   }
 
   private mapGroups(groups: Array<GroupModel>): void {

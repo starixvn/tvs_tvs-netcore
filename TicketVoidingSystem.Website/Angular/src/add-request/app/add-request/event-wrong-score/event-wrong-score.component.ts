@@ -2,12 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { MatchInfo } from '../../../../utility/models/event.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';

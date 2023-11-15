@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
+import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -9,7 +10,6 @@ import { AppService } from '../../app.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidPageDuplicateTicketsModel } from '../models/void-page-duplicate-tickets.model';
-import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,7 @@ export class VoidPageService {
     private readonly appService: AppService,
     private readonly commonService: CommonService,
     private readonly ticketsService: TicketsService,
-    private readonly templateService: TemplateService,
-    private readonly validationService: ValidationService,
+    private readonly templateService: TemplateService
     ) {
   }
 
@@ -36,7 +35,7 @@ export class VoidPageService {
     voidPageItem.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidPageItem.subIssueType, issueTypes);
     voidPageItem.filterBy = basicRequestInfo.filterBy;
     voidPageItem.detailViewModel = requestDetail;
-    voidPageItem.matchModel = this.validationService.isDuplicateTicketsMixParlay(voidPageItem.filterBy)
+    voidPageItem.matchModel = this.isDuplicateTicketsMixParlay(voidPageItem.filterBy)
       ? null : await this.commonService.getMatch(basicRequestInfo.matchId);
 
     return voidPageItem;
@@ -53,22 +52,7 @@ export class VoidPageService {
     const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.filterBy = requestDetail.duplicateTicketsModel.filterBy;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
-    templateValue.match = voidPageItem.matchModel;
     return templateValue;
-  }
-
-  public toggleTicketsArea(voidPageItem: VoidPageDuplicateTicketsModel): void {
-    const currentIsShowTicketFull = voidPageItem.isShowTicketFull;
-    const currentIsShowTemplateMessage = voidPageItem.isShowTemplateMessage;
-    voidPageItem.isShowTicketFull = !currentIsShowTicketFull;
-    voidPageItem.isShowTemplateMessage = currentIsShowTemplateMessage;
-  }
-
-  public toggleTemplateMessageArea(voidPageItem: VoidPageDuplicateTicketsModel): void {
-    const currentIsShowTemplateMessage = voidPageItem.isShowTemplateMessage;
-    const currentIsShowTicketFull = voidPageItem.isShowTicketFull;
-    voidPageItem.isShowTicketFull = currentIsShowTicketFull;
-    voidPageItem.isShowTemplateMessage = !currentIsShowTemplateMessage;
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {
@@ -94,14 +78,18 @@ export class VoidPageService {
   }
 
   private async getVoidedReason(voidPageItem: VoidPageDuplicateTicketsModel): Promise<VoidedReason> {
-    const reason = this.appService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
-    if (this.validationService.isDuplicateTicketsMixParlay(voidPageItem.filterBy)) {
+    const reason = await this.appService.getVoidedReason(voidPageItem.subIssueType.subIssueTypeId, voidPageItem.matchModel?.sportType);
+    if (this.isDuplicateTicketsMixParlay(voidPageItem.filterBy)) {
       return {
-        reasonEnglish: `Mix Parlay - ${(await reason).reasonEnglish}`,
-        reasonChineseSimplified: `串关 - ${(await reason).reasonChineseSimplified}`
+        reasonEnglish: `Mix Parlay - ${reason.reasonEnglish}`,
+        reasonChineseSimplified: `串关 - ${reason.reasonChineseSimplified}`
       } as VoidedReason;
     }
 
     return reason
+  }
+
+  private isDuplicateTicketsMixParlay(filterBy: number): boolean {
+    return filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 }

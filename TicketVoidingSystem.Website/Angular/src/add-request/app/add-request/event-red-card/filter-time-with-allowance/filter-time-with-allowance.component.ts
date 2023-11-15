@@ -181,7 +181,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
       return false;
     }
 
-    this.fromTime = CommonStaticService.convertToStrictTimeFormat(this.fromTime);
+    this.fromTime = CommonStaticService.convertToStrictTimeFormat(this.fromTime, DateTimeFormat.TIME_FORMAT);
     return true;
   }
 
@@ -191,7 +191,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
       return false;
     }
 
-    this.toTime = CommonStaticService.convertToStrictTimeFormat(this.toTime);
+    this.toTime = CommonStaticService.convertToStrictTimeFormat(this.toTime, DateTimeFormat.TIME_FORMAT);
     return true;
   }
 

@@ -81,7 +81,7 @@ public class RequestExtraInfoXml
     public string FavoriteValue { get; set; }
 
     [XmlAttribute(AttributeName = "BetTypeIds")]
-    public string BetTypeIds { get; set; }
+    public string BetTypeIds { get; set; } // ReducedOver multiple option
 
     [XmlAttribute(AttributeName = "WicketOver")]
     public string WicketOver { get; set; }
@@ -97,4 +97,11 @@ public class RequestExtraInfoXml
 
     [XmlAttribute(AttributeName = "NonLive")]
     public bool NonLive { get; set; }
+
+    [XmlAttribute(AttributeName = "PlayerId")]
+    public int PlayerId { get; set; } // NotParticipate
+
+    [XmlAttribute(AttributeName = "GroupBetTypeIds")]
+    public string GroupBetTypeIds { get; set; } // NotParticipate
+
 }

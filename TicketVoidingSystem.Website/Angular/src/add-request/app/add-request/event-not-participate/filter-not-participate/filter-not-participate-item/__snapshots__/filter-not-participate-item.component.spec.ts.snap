@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FilterNotParticipateItemComponent FilterNotParticipateItemComponent init should match snapshot 1`] = `
+FilterNotParticipateItemComponent {
+  "addItemEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "changeBetTypeEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "changeFilterEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "element": null,
+  "groupBetTypes": Array [
+    Object {
+      "group": "All",
+      "name": "1 Inns",
+      "value": "1",
+    },
+    Object {
+      "group": "All",
+      "name": "2 Inns",
+      "value": "2",
+    },
+    Object {
+      "group": "All",
+      "name": "FT",
+      "value": "3",
+    },
+  ],
+  "model": Object {
+    "groupBetTypeIds": Array [
+      "1",
+      "2",
+    ],
+    "playerId": 1,
+  },
+  "removeItemEvent": EventEmitter_ {
+    "__isAsync": false,
+    "_isScalar": false,
+    "closed": false,
+    "hasError": false,
+    "isStopped": false,
+    "observers": Array [],
+    "thrownError": null,
+  },
+  "tooltip": Tooltip {
+    "element": null,
+  },
+  "validationService": null,
+}
+`;

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -84,6 +83,13 @@ public class LogInfoServiceImp : LogInfoService
 
             case IssueTypeConstant.ReducedOver:
                 return GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail);
+
+            case IssueTypeConstant.NotParticipate:
+                return GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail);
+
+            case IssueTypeConstant.EarlyKickOffTime:
+            case IssueTypeConstant.WrongKickOffTime:
+                return GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail);
 
             default:
                 return GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail);
@@ -198,6 +204,30 @@ public class LogInfoServiceImp : LogInfoService
         });
     }
 
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+    {
+        return query.NotParticipateModels.Select(item => new GetLogInfoModel
+        {
+            MatchId = item.MatchId,
+            Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
+            TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+        });
+    }
+
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelEarlyKickOff(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+    {
+        return query.EarlyKickOffModels.Select(item => new GetLogInfoModel
+        {
+            MatchId = item.MatchId,
+            Validation = validation.FirstOrDefault(x => x.MatchId == item.MatchId),
+            TicketRequest = ticketRequest.Where(x => x.MatchId == item.MatchId),
+            LogInfoDetail = logInfoDetail.FirstOrDefault(x => x.MatchId == item.MatchId),
+        });
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -217,7 +247,7 @@ public class LogInfoServiceImp : LogInfoService
         var transInfoJsonList = await GetTransInfoJson(query);
         var criteria = mapper.Map<GetLogInfoCriteria>(query);
         criteria.UserId = session.UserId;
-        criteria.KickOffInfo = GetKickOffInfo(query);
+        criteria.KickOffInfo = query.EarlyKickOffModels?.ToKickOffInfoXml();
         criteria.WrongScoreInfo = query.WrongScoreModels?.ToWrongScoreInfoXml();
         criteria.DangerAcceptedInfo = query.DangerAcceptedModels?.ToDangerAcceptedInfoXml();
         criteria.RedCardInfo = query.RedCardModels?.ToDangerAcceptedInfoXml();
@@ -227,15 +257,10 @@ public class LogInfoServiceImp : LogInfoService
         criteria.Wrong1stOuInfo = query.Wrong1stOuModels?.ToWrongOuInfoXml();
         criteria.WrongOddsInfo = query.WrongOddsModels?.ToWrongOddsInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
+        criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;
-    }
-
-    private static string GetKickOffInfo(GetLogInfoQuery query)
-    {
-        return (query.IssueTypeId is IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime) ?
-            LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query)
@@ -251,8 +276,9 @@ public class LogInfoServiceImp : LogInfoService
             Wrong1stOuModels = query.Wrong1stOuModels,
             WrongOddsModels = query.WrongOddsModels,
             ReducedOverModels = query.ReducedOverModels,
+            NotParticipateModels = query.NotParticipateModels,
+            EarlyKickOffModels = query.EarlyKickOffModels,
             MatchId = query.MatchId,
-            KickOffTime = query.KickOffTime,
             IssueTypeId = query.IssueTypeId
         };
 

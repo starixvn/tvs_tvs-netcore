@@ -18,7 +18,7 @@ public class LogOut : ViewComponent
     public async Task<IViewComponentResult> InvokeAsync(string userName)
 
     {
-        var oldSiteAbsolutePath = AppSettingService.AppSetting.OldSiteRootUrl.StartsWith("/") ?
+        var oldSiteAbsolutePath = AppSettingService.AppSetting.OldSiteRootUrl.StartsWith('/') ?
              $"https://{httpContextAccessor.HttpContext.Request.Host}{AppSettingService.AppSetting.OldSiteRootUrl}"
              : AppSettingService.AppSetting.OldSiteRootUrl;
         var logoutInfo = new MenuItem

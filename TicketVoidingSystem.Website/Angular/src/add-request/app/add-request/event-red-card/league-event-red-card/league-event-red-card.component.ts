@@ -39,12 +39,12 @@ export class LeagueEventRedCardComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (!this.isEdit && ( changes['sportType'] || changes['eventDate'])) {
-        this.updateUndefinedMatchAndLeague();
-        this.changeEvent.emit();     
+    if (!this.isEdit && (changes['initSportType'] || changes['eventDate'])) {
+      this.updateUndefinedMatchAndLeague();
+      this.changeEvent.emit();
     }
-    if (this.isEdit && this.initMatchId && ( changes['initMatchId'])) {
-      await this.getMatchInEditPage(this.initSportType, this.eventDate, true, this.initMatchId, this.actionId);  
+    if (this.isEdit && this.initMatchId && (changes['initMatchId'])) {
+      await this.getMatchInEditPage(this.initSportType, this.eventDate, true, this.initMatchId, this.actionId);
     }
   }
 
@@ -64,7 +64,7 @@ export class LeagueEventRedCardComponent implements OnChanges {
         this.validationMessage = '';
       } else if (isNumeric(keyword.term)) {
         const model = await this.leagueEventService.getMatch(this.initSportType, this.eventDate, null, this.isEdit, Number(keyword.term), null);
-        if(model.errorCode === 0) {
+        if (model.errorCode === 0) {
           this.matches = [model.match];
         } else {
           this.matches = [];

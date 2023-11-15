@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { RequestDetailModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -40,7 +40,8 @@ class Helper {
     isCheckedEarlyEvent: false,
     isMainMatch: false,
     isPoolHouseAffected: false,
-    cancelCashOutLicensee: new AffectedLicensee
+    cancelCashOutLicensee: new AffectedLicensee,
+    isAllNonLiveTickets: true
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,
@@ -72,7 +73,8 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
 }
 

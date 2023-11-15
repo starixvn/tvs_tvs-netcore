@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmRedCardComponent ConfirmRedCardComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <confirm-eko>
+  </confirm-eko>
+</ng-component>
+`;

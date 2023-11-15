@@ -2,12 +2,13 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int actionId);
+    Task Execute(int requestId, int actionId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -19,24 +20,42 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int actionId)
+    public async Task Execute(int requestId, int actionId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
-            var command = new InsertAutoVoidRequestQueueCommand
+            var matchIds = GetMatchIdsInRequest(earlyKickOffInfo);
+            if (matchIds.Any())
             {
-                RequestIds = requestId.ToString(),
-                StatusId = ExecuteStatus.New,
-                Action = ActionVoidRequestConstant.QueueAutoVoidList.First(x => x.Id == actionId).Name,
-                BroadcastSessionId = Guid.NewGuid().ToString()
-            };
-
-            await InsertAutoVoidRequestQueueForAllServer(command);
+                await ExecuteForAutoVoidInstantMultipleMatches(requestId, actionId, matchIds);
+            }
+            else
+            {
+                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId, 0);
+            }
         }
     }
 
-    private async Task InsertAutoVoidRequestQueueForAllServer(InsertAutoVoidRequestQueueCommand command)
+    private async Task ExecuteForAutoVoidInstantMultipleMatches(int requestId, int actionId, IEnumerable<int> matchIds)
     {
+        foreach (var matchId in matchIds)
+        {
+            var broadcastSessionId = Guid.NewGuid().ToString();
+            await InsertAutoVoidRequestQueueForAllServer(broadcastSessionId, requestId, actionId, matchId);
+        }
+    }
+
+    private async Task InsertAutoVoidRequestQueueForAllServer(string broadcastSessionId, int requestId, int actionId, int? matchId)
+    {
+        var command = new InsertAutoVoidRequestQueueCommand
+        {
+            RequestIds = requestId.ToString(),
+            StatusId = ExecuteStatus.New,
+            Action = ActionVoidRequestConstant.QueueAutoVoidList.First(x => x.Id == actionId).Name,
+            MatchId = matchId,
+            BroadcastSessionId = broadcastSessionId
+        };
+
         var tasks = SiteDbGroupConstant.ServerList.Select(item =>
         {
             command.SiteDbGroupId = item.Id;
@@ -44,6 +63,12 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         });
 
         await Task.WhenAll(tasks);
+    }
+
+    private IEnumerable<int> GetMatchIdsInRequest(IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    {
+        var matchIds = earlyKickOffInfo != null ? earlyKickOffInfo.Select(x => x.MatchId) : Enumerable.Empty<int>();
+        return matchIds;
     }
 
     private static bool CheckCanInsertAutoVoidRequestQueue(int actionId)

@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../add-request.store';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
@@ -15,13 +15,13 @@ import { LogInfoRedCardComponent } from '../event-red-card/log-info-red-card/log
 import { LogInfoRedCard } from '../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
+import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { RedCardModel } from '../models/event-red-card.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
 import { LABELS } from './../../../../utility/constants/labels';
 import { StaticService } from './../../../../utility/services/static.service';
 import { ConfirmDangerAcceptedModel } from './confirm-danger-accepted/confirm-danger-accepted.model';
-import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { EventDangerAcceptedService } from './services/event-danger-accepted.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';

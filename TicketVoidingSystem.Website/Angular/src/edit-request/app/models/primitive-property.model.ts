@@ -1,5 +1,4 @@
 export class PrimitiveProperty {
-  isBlock = false;
   matchId: number;
   requestId: number;
   sportType: number;

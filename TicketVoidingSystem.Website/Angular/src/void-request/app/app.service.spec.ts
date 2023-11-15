@@ -1,4 +1,4 @@
-import { RequestDetailModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { VoidedReason } from '../../utility/models/reason.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
@@ -69,7 +69,8 @@ describe('AppService', () => {
       wrongOuModels: [],
       wrongOddsModels: [],
       reducedOverModels: [],
-      duplicateTicketsModel: null
+      duplicateTicketsModel: null,
+      notParticipateModels: []
     };
    mockHttpService.getJson.mockResolvedValue(fakeRequestDetailViewModel);
 

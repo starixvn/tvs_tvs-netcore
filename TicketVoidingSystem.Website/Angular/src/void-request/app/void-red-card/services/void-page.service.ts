@@ -7,8 +7,8 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
 import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
-import { VoidMatch } from '../../models/void-match.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
+import { VoidMatch } from '../../models/void-match.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
 
@@ -85,10 +85,9 @@ export class VoidPageService {
       requestId: requestDetail.requestId,
       isShowLogOnly: true,
       issueTypeId: requestDetail.request.issueTypeId,
-      matchId: requestDetail.redCardModels[0].matchId,
-      redCardModels: MappingModelStaticService.buidRedCardGetLogInfoModel(requestDetail.redCardModels),
+      redCardModels: MappingModelStaticService.buildRedCardGetLogInfoModel(requestDetail.redCardModels),
     };
-    
+
     const viewModel = await this.commonService.getLogInfo(query);
     primitiveProperty.isBlockUI = false;
 

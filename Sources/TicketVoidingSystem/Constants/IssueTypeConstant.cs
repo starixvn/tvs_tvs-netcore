@@ -18,4 +18,5 @@ public static class IssueTypeConstant
     public const int WrongOdds = 2;
     public const int ReducedOver = 19;
     public const int DuplicateTickets = 20;
+    public const int NotParticipate = 21;
 }

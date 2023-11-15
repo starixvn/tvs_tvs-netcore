@@ -75,22 +75,6 @@
           </ng-container>
         </div>
       </div>
-
-      <!-- <div class="message mt-2" *ngIf="isShowValidation">
-        <span *ngFor="let msg of logInfo.messageValidationLogInfo">
-          <div *ngIf="msg.isError" class="error-text d-flex align-items-center">
-            <i class="fa fa-times-circle icon-error-message mr-1" aria-hidden="true"></i>{{msg.reason}}
-          </div>
-          <div *ngIf="!msg.isError" class="d-flex align-items-center" [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
-            (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
-            <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>{{msg.reason}}
-          </div>
-        </span>
-        <span *ngIf="!logInfo.isPoolHouseAffected && isMainMatch && logInfo.messageValidationLogInfo?.length > 0">
-          PH - Not affected.
-          <span *ngIf="!filter.isVoided" class="pool-house-info" (click)="openPoolHouseDetails()">Details</span>
-        </span>
-      </div> -->
     </div>
   </div>
 </div>

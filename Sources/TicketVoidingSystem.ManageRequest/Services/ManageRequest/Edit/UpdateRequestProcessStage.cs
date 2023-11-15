@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -38,7 +37,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         {
             var command = CreateEditRequestCommand(query);
             await repository.ExecuteAsync(command);
-            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId);
+            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.EarlyKickOffInfo);
 
             return new Result
             {
@@ -73,12 +72,12 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.Wrong1stHdpInfo = query.Wrong1stHdpInfo?.ToEventWrongHdpXml();
         command.WrongOddsInfo = query.WrongOddsInfo?.ToEventWrongOddsXml();
         command.ReducedOverInfo = query.ReducedOverInfo?.ToEventReducedOverXml();
+        command.NotParticipateInfo = query.NotParticipateInfo?.ToEventNotParticipateXml();
         command.DangerAcceptedInfo = query.DangerAcceptedInfo?.ToEventDangerAcceptedXml();
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
-        command.KickOffInfo = query.IssueTypeId.IsEarlyKickOffOrWrongKickOff() ?
-            LogInfoExtension.GetKickOffInfoXml(query.MatchId, query.KickOffTime.ZoneCanada()) : null;
+        command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
 
         return command;
     }

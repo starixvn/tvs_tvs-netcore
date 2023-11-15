@@ -33,21 +33,21 @@ export class SaveRequestService {
     argReducedOver.addRequestStore.changeBlockingUiStatus(false);
   }
 
-  async recheckLogInfoBeforeSaveRequest(argWrongOdds: SaveRequestArg): Promise<boolean> {
-    argWrongOdds.addRequestStore.changeSavingRequestStatus(true);
-    this.logInfoReducedOverService.resetLogInfoOfEvent(argWrongOdds.logInfoEvent);
+  async recheckLogInfoBeforeSaveRequest(argReducedOver: SaveRequestArg): Promise<boolean> {
+    argReducedOver.addRequestStore.changeSavingRequestStatus(true);
+    this.logInfoReducedOverService.resetLogInfoOfEvent(argReducedOver.logInfoEvent);
 
-    if (!this.validationService.validateCommonData(argWrongOdds.leagueEventReducedOverComponent, argWrongOdds.filterReducedOverComponent)) {
+    if (!this.validationService.validateCommonData(argReducedOver.leagueEventReducedOverComponent, argReducedOver.filterReducedOverComponent)) {
       return false;
     }
 
-    argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
-    argWrongOdds.primitiveProps.isShowValidation = false;
-    await this.logInfoReducedOverService.getLogInfo(argWrongOdds.logInfoEvent, argWrongOdds.isEdit, argWrongOdds.requestId, argWrongOdds.filter, argWrongOdds.primitiveProps);
-    argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
-    argWrongOdds.primitiveProps.isShowValidation = true;
+    argReducedOver.addRequestStore.changeBlockingUiStatus(true);
+    argReducedOver.primitiveProps.isShowValidation = false;
+    await this.logInfoReducedOverService.getLogInfo(argReducedOver.logInfoEvent, argReducedOver.isEdit, argReducedOver.requestId, argReducedOver.filter, argReducedOver.primitiveProps);
+    argReducedOver.addRequestStore.changeBlockingUiStatus(false);
+    argReducedOver.primitiveProps.isShowValidation = true;
 
-    if (this.validationService.isValidLogInfoEvent(argWrongOdds.logInfoEvent)) {
+    if (this.validationService.isValidLogInfoEvent(argReducedOver.logInfoEvent)) {
       return true;
     }
 
@@ -87,40 +87,40 @@ export class SaveRequestService {
     return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
 
-  private async executeSaveRequestApi(argWrongOdds: SaveRequestArg): Promise<void> {
-    const query = this.initAddRequestQuery(argWrongOdds);
-    await this.addRequestService.executeSaveRequest(argWrongOdds.isEdit, argWrongOdds.requestId, query, argWrongOdds.addRequestStore);
+  private async executeSaveRequestApi(argReducedOver: SaveRequestArg): Promise<void> {
+    const query = this.initAddRequestQuery(argReducedOver);
+    await this.addRequestService.executeSaveRequest(argReducedOver.isEdit, argReducedOver.requestId, query, argReducedOver.addRequestStore);
   }
 
-  private async onClickConfirmSave(argWrongOdds: SaveRequestArg) {
+  private async onClickConfirmSave(argReducedOver: SaveRequestArg) {
     // validate again for make sure
-    const isDataValidAgain = argWrongOdds.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongOdds);
-    argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
+    const isDataValidAgain = argReducedOver.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argReducedOver);
+    argReducedOver.addRequestStore.changeBlockingUiStatus(true);
     if (isDataValidAgain) {
-      await this.executeSaveRequestApi(argWrongOdds);
+      await this.executeSaveRequestApi(argReducedOver);
     } else {
       this.popupService.showError(TEXT.INVALID_DATA_IN_REQUEST);
     }
-    argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
+    argReducedOver.addRequestStore.changeBlockingUiStatus(false);
   }
 
-  private initAddRequestQuery(argWrongOdds: SaveRequestArg): AddRequestQuery {
+  private initAddRequestQuery(argReducedOver: SaveRequestArg): AddRequestQuery {
     const query: AddRequestQuery = new AddRequestQuery();
-    query.transInfoJson = argWrongOdds.primitiveProps.transInfoAddRequestModel?.transInfoJson;
-    query.unMarkTransIds = argWrongOdds.primitiveProps.transInfoAddRequestModel?.unMarkTransIds;
-    query.markTransIds = argWrongOdds.primitiveProps.transInfoAddRequestModel?.markTransIds;
-    query.issueTypeId = argWrongOdds.filter.issueTypeId;
-    query.isTest = argWrongOdds.filter.isTest;
-    query.actionId = argWrongOdds.filter.action;
-    query.sportType = argWrongOdds.filter.sportType;
-    query.isVoided = argWrongOdds.filter.isVoided;
+    query.transInfoJson = argReducedOver.primitiveProps.transInfoAddRequestModel?.transInfoJson;
+    query.unMarkTransIds = argReducedOver.primitiveProps.transInfoAddRequestModel?.unMarkTransIds;
+    query.markTransIds = argReducedOver.primitiveProps.transInfoAddRequestModel?.markTransIds;
+    query.issueTypeId = argReducedOver.filter.issueTypeId;
+    query.isTest = argReducedOver.filter.isTest;
+    query.actionId = argReducedOver.filter.action;
+    query.sportType = argReducedOver.filter.sportType;
+    query.isVoided = argReducedOver.filter.isVoided;
 
-    query.mistakenBy = argWrongOdds.others.mistakenBy;
-    query.decidedBy = argWrongOdds.others.decidedBy;
-    query.remark = argWrongOdds.others.remark;
+    query.mistakenBy = argReducedOver.others.mistakenBy;
+    query.decidedBy = argReducedOver.others.decidedBy;
+    query.remark = argReducedOver.others.remark;
 
-    if (!argWrongOdds.filter.isVoided) {
-      query.reducedOverInfo = this.eventReducedOverService.getReducedOverModel(Number(argWrongOdds.filter.subIssueTypeId), argWrongOdds.logInfoEvent);
+    if (!argReducedOver.filter.isVoided) {
+      query.reducedOverInfo = this.eventReducedOverService.getReducedOverModel(Number(argReducedOver.filter.subIssueTypeId), argReducedOver.logInfoEvent);
     }
 
     return query;

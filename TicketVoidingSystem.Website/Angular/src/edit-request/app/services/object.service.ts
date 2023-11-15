@@ -3,11 +3,10 @@ import moment from 'moment-timezone';
 import { AbnormalAccountModel } from '../../../add-request/app/add-request/models/abnormal-account.model';
 import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
-import { TVSRequestFilterBy } from '../../../utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
 import { MapEventArg } from '../models/map-event.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { RequestDetailViewModel, RequestEventModel } from '../request.model';
+import { RequestDetailViewModel } from '../request.model';
 import { ValidationService } from './validation.service';
 
 @Injectable({
@@ -44,7 +43,7 @@ export class ObjectService {
       isTest: detailViewModel.request.isTest,
       isVoided: detailViewModel.request.isVoided,
       issueTypeId: detailViewModel.request.issueTypeId.toString(),
-      isAbnormal: this.isAbnormalArchivedTicket(detailViewModel)
+      isAbnormal: this.validationService.isAbnormalArchivedTicket(detailViewModel)
     };
   }
 
@@ -75,22 +74,17 @@ export class ObjectService {
     } else if (this.validationService.isReducedOver(args.detailViewModel)) {
       args.requestModel.reducedOverModels = args.detailViewModel.reducedOverModels;
       args.primitiveProperty.matchId = args.detailViewModel.reducedOverModels[0].matchId;
+    } else if (this.validationService.isNotParticipate(args.detailViewModel)) {
+      args.requestModel.notParticipateModels = args.detailViewModel.notParticipateModels;
+      args.primitiveProperty.matchId = args.detailViewModel.notParticipateModels[0].matchId;
     } else if (this.validationService.isDuplicateTickets(args.detailViewModel)) {
       args.requestModel.duplicateTicketsModel = args.detailViewModel.duplicateTicketsModel;
       args.primitiveProperty.matchId = args.detailViewModel.duplicateTicketsModel.matchId;
     } else if (this.validationService.isAbnormalAccount(args.detailViewModel)) {
       args.requestModel.abnormalAccountModel = this.createEventForAbnormalAccount(args.detailViewModel);
-    } else {
-      args.primitiveProperty.matchId = args.detailViewModel.event.matchId;
-      let dateTime;
-      if (args.detailViewModel.event.kickOffTime) {
-        dateTime = new Date(args.detailViewModel.event.kickOffTime);
-        const minYearOfFireFox = 1753;
-        if (dateTime.getFullYear() < minYearOfFireFox) {
-          dateTime.setFullYear(2001);
-        }
-      }
-      this.mapEventDetailModel(args.requestModel, args.detailViewModel.event, args.primitiveProperty.sportType, dateTime);
+    } else if (this.validationService.isEarlyKickOfOrWrongKickOff(args.detailViewModel)) {
+      args.requestModel.earlyKickOffModels = args.detailViewModel.earlyKickOffModels;
+      args.primitiveProperty.matchId = args.detailViewModel.earlyKickOffModels.find(x => x.isMainMatch).matchId;
     }
   }
 
@@ -131,19 +125,5 @@ export class ObjectService {
     model.toDate = detailViewModel.event.toDate;
 
     return model;
-  }
-
-  private mapEventDetailModel(requestModel: RequestModel, event: RequestEventModel, sportType: number, dateTime: Date): void {
-    requestModel.eventDetail = {
-      sportType: sportType,
-      leagueId: event.leagueId,
-      matchId: event.matchId,
-      kickOffTime: event.kickOffTime,
-      transIds: event.transIds
-    };
-  }
-
-  private isAbnormalArchivedTicket(detailViewModel: RequestDetailViewModel): boolean {
-    return this.validationService.isArchivedTicket(detailViewModel) && detailViewModel.event.filterBy === TVSRequestFilterBy.ABNORMAL;
   }
 }

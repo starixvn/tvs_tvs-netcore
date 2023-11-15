@@ -212,8 +212,8 @@ export class FilterComponent implements OnInit, OnChanges {
   private setWidthControlByIssueType(): void {
     const widthMapping: { [key: number]: { [key: string]: number } } = {
       [IssueTypeConstant.DANGER_ACCEPTED]: { issueType: 180, subIssueType: 300, action: 150, sport: 150 },
-      [IssueTypeConstant.EARLY_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 150, sport: 220 },
-      [IssueTypeConstant.WRONG_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 150, sport: 220 },
+      [IssueTypeConstant.EARLY_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170, sport: 220 },
+      [IssueTypeConstant.WRONG_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170, sport: 220 },
       [IssueTypeConstant.ABNORMAL_ACCOUNT]: { issueType: 180, subIssueType: 170, action: 170 },
       [IssueTypeConstant.RED_CARD]: { issueType: 180, subIssueType: 285, action: 150, sport: 150 },
       [IssueTypeConstant.WRONG_HDP]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
@@ -226,7 +226,8 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
       [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200, sport: 150 },
-      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 150, action: 170, sport: 150 }
+      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170, sport: 150 },
+      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200, sport: 150 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -255,6 +256,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: () => this.actionVoidService.getActionVoidAbnormalBetRealMember(),
       [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
       [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
+      [IssueTypeConstant.NOT_PARTICIPATE]: () => this.actionVoidService.getActionVoidNotParticipate(),
     };
 
     const actionFunction = actionMapping[this.issueTypes.issueId];
@@ -300,7 +302,6 @@ export class FilterComponent implements OnInit, OnChanges {
       this.updateSubByIssue();
     }
     this.addRequestStore.changeBlockingUiStatus(false);
-
   }
 
   filterIssueTypePermission(issues: IssueTypes) {
@@ -316,15 +317,27 @@ export class FilterComponent implements OnInit, OnChanges {
     if (this.isLikelyDangerAccepted() || this.isWrongScore()) {
       this.model.sportType = SportType.SOCCER;
     }
-    if (this.isReducedOver()) {
+    if (this.isReducedOver() || this.isNotParticipate()) {
       this.model.sportType = SportType.CRICKET;
     }
     this.modelChange.emit(this.model);
   }
 
   public isDisabledSportControl(): boolean {
-    return this.isEdit || this.isLikelyDangerAccepted() || this.isWrongScore() || this.isWrongHDP() || this.isWrong1stHDP()
-      || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds() || this.isReducedOver();
+    const issuTypeDisableSportControl = [
+      IssueTypeConstant.DANGER_ACCEPTED,
+      IssueTypeConstant.RED_CARD,
+      IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_HDP,
+      IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.REDUCED_OVER,
+      IssueTypeConstant.NOT_PARTICIPATE
+    ];
+
+    return this.isEdit || issuTypeDisableSportControl.includes(this.issueTypes.issueId?.toString());
   }
 
   isShowSubType(): boolean {
@@ -402,6 +415,10 @@ export class FilterComponent implements OnInit, OnChanges {
 
   isDuplicateTickets(): boolean {
     return StaticService.isDuplicateTickets(this.issueTypes.issueId?.toString());
+  }
+
+  isNotParticipate(): boolean {
+    return StaticService.isNotParticipate(this.issueTypes.issueId?.toString());
   }
 
   haveAbnormalBetFromPermission(): boolean {

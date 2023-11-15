@@ -1,27 +1,26 @@
-import { AffectedLicensee } from './../../../void-single-bet/app/models/affected-licensee.model';
-import { VoidRedCardComponent } from './void-red-card.component';
-import { NgModule, QueryList } from '@angular/core';
+import { ElementRef, NgModule, QueryList } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ClipboardService } from 'ngx-clipboard';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
+import { CommonService } from '../../../utility/services/common.service';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
+import { PopupService } from '../services/popup.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
+import { AffectedLicensee } from './../../../void-single-bet/app/models/affected-licensee.model';
 import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { PopupService } from '../services/popup.service';
-import { RequestDetailModel, RequestEventModel, RequestDetailViewModel } from 'src/edit-request/app/request.model';
-import { ClipboardService } from 'ngx-clipboard';
-import { CommonService } from '../../../utility/services/common.service';
-import { ElementRef } from '@angular/core';
+import { VoidRedCardComponent } from './void-red-card.component';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -80,7 +79,8 @@ class Helper {
     wrongOuModels: [],
     wrongOddsModels: [],
     reducedOverModels: [],
-    duplicateTicketsModel: null
+    duplicateTicketsModel: null,
+    notParticipateModels: []
   };
   static getFakeAffectedLicensee(): AffectedLicensee {
     return {

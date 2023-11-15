@@ -4,9 +4,9 @@ import moment from 'moment-timezone';
 // import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 // import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
 // import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
-import { PermissionManage } from 'src/manage-request/app/models/permission-manage.model';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
+import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
 import { Selection } from '../../utility/models/selection.model';
 import { GetOddsInfoQuery, OddsInfo } from '../components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GetBetTypesQuery, GroupBetTypesModel } from '../components/advanced-mode/group-bettypes/group-bettypes.model';
@@ -14,7 +14,6 @@ import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/b
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
-import { DateTimeFormat } from '../constants/config';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../models/copy-request-info.query';
@@ -39,7 +38,7 @@ export class CommonService {
   async getBalanceUp(): Promise<BalanceUp> {
     return this.httpService.getJson(`api/SharedApi/GetBalanceUp`);
   }
-  
+
   async getBalanceUpZoneManila(): Promise<BalanceUp> {
     return this.httpService.getJson(`api/SharedApi/GetBalanceUpZoneManila`);
   }
@@ -150,7 +149,7 @@ export class CommonService {
 }
 
 export class CommonStaticService {
-  static convertToStrictTimeFormat(sourceTime: string): string {
-    return moment(sourceTime.trim(), DateTimeFormat.TIME_FORMAT, true).format(DateTimeFormat.TIME_FORMAT);
+  static convertToStrictTimeFormat(sourceTime: string, format: string): string {
+    return moment(sourceTime.trim(), format, true).format(format);
   }
 }

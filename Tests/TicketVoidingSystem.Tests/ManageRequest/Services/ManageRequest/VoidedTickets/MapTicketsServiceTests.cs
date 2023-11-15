@@ -42,13 +42,18 @@ public class MapTicketsServiceTests
     public void MapToGroupVoidedTickets_HasInput_ReturnGroupVoidedTicketModel()
     {
         // Arrange
-        // Arrange
         var originalTickets = new List<VoidedTicketModel>
         {
             new()  { IsMixParlay = false, GroupName = "Group1" },
-            new()  { IsMixParlay = false, GroupName = "Group1" },
+            new()  { IsMixParlay = false, GroupName = "Group2" },
         };
+        var allGroups = new List<Group<VoidedTicketModel>>
+        {
+            new() { Name = "Group1", Tickets = new List<VoidedTicketModel>{new()} }
+        };
+
         var query = new GetVoidedTicketsQuery { PageIndex = 1, PageSize = 10 };
+        pagingService.Groups(Arg.Any<IEnumerable<VoidedTicketModel>>(), t => t.GroupName).ReturnsForAnyArgs(allGroups);
 
         // Act
         pagingService.Paging(Arg.Any<IEnumerable<VoidedTicketModel>>(), Arg.Any<int>(), Arg.Any<int>())
@@ -58,13 +63,12 @@ public class MapTicketsServiceTests
 
         // Assert
         var iEnumerable = result.ToList();
-        Assert.Single(iEnumerable);
+        Assert.Equal(2, iEnumerable.Count);
     }
 
     [Fact]
     public void MapToGroupVoidedTicketsViewModel_WithValidInput_ReturnsMappedGroup()
     {
-        // Arrange
         // Arrange
         var group = new Group<VoidedTicketModel>
         {

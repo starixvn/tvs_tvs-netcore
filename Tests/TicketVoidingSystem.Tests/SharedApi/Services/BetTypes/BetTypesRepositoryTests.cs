@@ -87,4 +87,19 @@ public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<Remoting
         // Assert
         Assert.Equal(new List<int> { 1, 2, 3 }, result);
     }
+
+    [Fact]
+    public async Task GetBetTypesHaveTicketsForTvs_repository_HasCalled()
+    {
+        // Arrange
+        var data = new List<BetTypeModel> { new() };
+        repository.FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>())
+            .ReturnsForAnyArgs(data);
+
+        // Act
+        _ = await service.GetBetTypesHaveTicketsForTvs(1);
+
+        // Assert
+        await repository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>());
+    }
 }

@@ -77,4 +77,8 @@ export class ActionVoidService {
       ? ActionVoidByIssueTypeConst.ABNORMAL_BET_SINGLE
       : ActionVoidByIssueTypeConst.ABNORMAL_BET_MIX_PARLAY;
   }
+
+  public getActionVoidNotParticipate(): number[] {
+    return ActionVoidByIssueTypeConst.NOT_PARTICIPATE;
+  }
 }

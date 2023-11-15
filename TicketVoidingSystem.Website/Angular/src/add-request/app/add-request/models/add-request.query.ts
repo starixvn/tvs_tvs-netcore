@@ -1,3 +1,5 @@
+import { NotParticipateGetLogInfoQuery } from '../event-not-participate/models/get-log-info.query';
+import { EarlyKickOffGetLogInfoQuery } from '../event-early-kick-off/models/get-log-info.query';
 import { ReducedOverGetLogInfoQuery } from '../event-reduced-over/models/get-log-info.query';
 import { WrongHdpGetLogInfoQuery } from '../event-wrong-hdp/models/get-log-info.query';
 import { WrongOddsGetLogInfoQuery } from '../event-wrong-odds/models/get-log-info.query';
@@ -6,6 +8,8 @@ import { WrongScoreGetLogInfoQuery } from '../event-wrong-score/event-wrong-scor
 import { OperatorInfo } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
+import { NotParticipateModel } from './event-not-participate.model';
+import { EarlyKickOffModel } from './event-eko.model';
 import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
@@ -45,6 +49,8 @@ export class AddRequestQuery {
   wrong1stOuInfo: WrongOuModel[];
   wrongOddsInfo: WrongOddsModel[];
   reducedOverInfo: ReducedOverModel[];
+  notParticipateInfo: NotParticipateModel[];
+  earlyKickOffInfo: EarlyKickOffModel[];
   abnormalAccountInfo: AbnormalAccountModel;
   duplicateTicketsInfo: DuplicateTicketsModel;
 
@@ -65,13 +71,11 @@ export interface CheckValidTransIdQuery {
 }
 
 export class GetLogInfoQuery {
-  matchId?: number;
   requestId?: number;
   actionId?: number;
   subIssueTypeId?: number;
   issueTypeId?: number;
   isShowLogOnly?: boolean;
-  kickOffTime?: string;
   wrongScoreModels?: WrongScoreGetLogInfoQuery[];
   dangerAcceptedModels?: RedCardGetLogInfoQuery[];
   redCardModels?: RedCardGetLogInfoQuery[];
@@ -81,4 +85,6 @@ export class GetLogInfoQuery {
   wrong1stOuModels?: WrongOuGetLogInfoQuery[];
   wrongOddsModels?: WrongOddsGetLogInfoQuery[];
   reducedOverModels?: ReducedOverGetLogInfoQuery[];
+  notParticipateModels?: NotParticipateGetLogInfoQuery[];
+  earlyKickOffModels?: EarlyKickOffGetLogInfoQuery[];
 }
