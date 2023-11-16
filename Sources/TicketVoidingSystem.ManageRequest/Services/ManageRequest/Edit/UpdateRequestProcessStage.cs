@@ -3,7 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;

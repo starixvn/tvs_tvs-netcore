@@ -4,6 +4,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
@@ -29,11 +30,13 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
 {
     private readonly IDynamicRepository repository;
     private readonly GetTransInfoService getTransInfoService;
+    private readonly CalculateVoidTicketsService calculateVoidTicketsService;
 
-    public CheckValidUsernamesHandler(IDynamicRepository repository, GetTransInfoService getTransInfoService)
+    public CheckValidUsernamesHandler(IDynamicRepository repository, GetTransInfoService getTransInfoService, CalculateVoidTicketsService calculateVoidTicketsService)
     {
         this.repository = repository;
         this.getTransInfoService = getTransInfoService;
+        this.calculateVoidTicketsService = calculateVoidTicketsService;
     }
 
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
@@ -44,8 +47,11 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         var checkUsernamesModel = result[0].Cast<CheckUsernamesModel>();
         var transInfoAddRequestModel = result[1].Cast<TransInfoAddRequestModel>().FirstOrDefault();
         var transInfoJson = result[2].Cast<string>();
-        //var ticketCalculateWinLostAccount = result[3].Cast<TicketCalculateWinLostAccount>();
-        //var accountWinlostModel = result[4].Cast<AccountWinlostModel>();
+        var ticketCalculateWinLostAccount = result[3].Cast<TicketCalculateWinLostAccount>();
+        var accounts = result[4].Cast<AccountWinlostModel>();
+
+        var calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds,
+            ticketCalculateWinLostAccount.ToList(), accounts, request.AccountWinlostModels);
 
         var viewModel = new CheckValidUsernamesViewModel
         {
@@ -57,7 +63,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
                 MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
                 TransInfoJson = transInfoJson.FirstOrDefault()
             },
-            AccountWinlostModels = GetAccountWinlostModels()
+            AccountWinlostModels = calcVoidResult.Accounts
         };
 
         return viewModel;

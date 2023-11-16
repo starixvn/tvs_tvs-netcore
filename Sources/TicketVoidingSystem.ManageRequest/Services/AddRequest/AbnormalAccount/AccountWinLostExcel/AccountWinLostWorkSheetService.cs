@@ -2,7 +2,7 @@
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.Excel;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AccountWinLostExcel;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.AccountWinLostExcel;
 
 public class AccountWinLostWorkSheetService : WorkSheetService<ExportAccountWinLostQuery>
 {

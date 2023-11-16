@@ -3,7 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 
 public interface AccountWinLostService
 {

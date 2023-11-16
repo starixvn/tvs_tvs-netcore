@@ -3,6 +3,9 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.AccountWinLostExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 using TicketVoidingSystem.Services.Excel;
@@ -34,5 +37,11 @@ public static class AddRequest
         services.AddTransient<WorkSheetService<ExportAccountWinLostQuery>, AccountWinLostWorkSheetService>();
         services.AddTransient<WorkSheetService<CheckValidTransIdsModel>, GetTicketsForExportExcelService>();
         services.AddTransient<CheckValidTransIdsService, CheckValidTransIdsServiceImp>();
+
+        services.AddTransient<CalculateHaveStatusWonNotLoseService, CalculateHaveStatusWonNotLoseServiceImp>();
+        services.AddTransient<CalculateRemainStatusService, CalculateRemainStatusServiceImp>();
+        services.AddTransient<CalculateVoidTicketsService, CalculateVoidTicketsServiceImp>();
+        services.AddTransient<CombineVoidTicketsService, CombineVoidTicketsServiceImp>();
+        services.AddTransient<KnapsackAlgorithmService, KnapsackAlgorithmServiceImp>();
     }
 }

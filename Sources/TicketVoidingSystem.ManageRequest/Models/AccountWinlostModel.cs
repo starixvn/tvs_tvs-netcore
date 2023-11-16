@@ -21,6 +21,8 @@ public class AccountWinlostModel
     public decimal WinLostAfterVoid { get; set; }
 
     public bool IsHighlight { get; set; }
+
+    public IEnumerable<TicketCalculateWinLostAccount> VoidTickets { get; set; }
 }
 
 public class AccountWinlostExcelModel
