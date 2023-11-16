@@ -106,8 +106,9 @@ public class BetTypeExtensionTests
     }
 
     [Theory]
-    [InlineData(17000)]
     [InlineData(17003)]
+    [InlineData(17004)]
+    [InlineData(17006)]
     public void IsSabaPromotion_IdMatchesSabaPromotion_ReturnTrue(int id)
     {
         // Arrange

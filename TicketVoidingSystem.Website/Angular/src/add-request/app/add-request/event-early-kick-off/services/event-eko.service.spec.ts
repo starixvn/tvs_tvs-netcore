@@ -49,7 +49,7 @@ describe('EventEarlyKickOffService', () => {
 
   it('#initDefaultMainEvent should return mainEevent with isMainMatch = true and has kickOffTime', async () => {
     const allEvents = [];
-    const actual = service.initDefaultMainEvent(allEvents);
+    const actual = service.initDefaultMainEvent(allEvents, '1');
 
     expect(actual).toBeDefined();
     expect(actual.isMainMatch).toBeTruthy();

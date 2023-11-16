@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Validation\**" />
+    <EmbeddedResource Remove="Services\Validation\**" />
+    <None Remove="Services\Validation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Services\Validation\" />
   </ItemGroup>
 
   <ItemGroup>

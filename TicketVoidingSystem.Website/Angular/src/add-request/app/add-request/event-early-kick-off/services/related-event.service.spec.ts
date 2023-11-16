@@ -111,7 +111,7 @@ describe('RelatedEventService', () => {
     addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
     const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, null);
 
-    const actual = mockRelatedEventService.updateEvents([Helper.fakeChildMatchModel], Helper.fakeLogInfoEarlyKickOff);
+    const actual = mockRelatedEventService.updateEvents([Helper.fakeChildMatchModel], Helper.fakeLogInfoEarlyKickOff, '1');
 
     expect(actual).toBeDefined();
     expect(actual[0].messageValidationLogInfo).toBeNull();
@@ -170,6 +170,7 @@ describe('RelatedEventService', () => {
     arg.tooltip.display = jest.fn();
     arg.mainEvent = Helper.fakeLogInfoEarlyKickOff;
     arg.allEvents = [];
+    arg.filter = new FilterModel();
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.inputRelatedMatchId = '1';
     arg.addRequestStore = new AddRequestStore();
@@ -216,6 +217,7 @@ describe('RelatedEventService', () => {
     childMatchModel.matchType = MatchType.LINK;
     childMatchModel.matchId = 100000000;
     const args = new AddRelatedEventArg();
+    args.filter = new FilterModel();
     args.mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     args.allEvents = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
     const mockRelatedEventService = new RelatedEventService(null, null, null);
