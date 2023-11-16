@@ -7,6 +7,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
@@ -21,6 +22,7 @@ public class AddRequestServiceTests
     private readonly IMapper mapper;
     private readonly MarkTicketsService markTicketsService;
     private readonly IDynamicRepository repository;
+    private readonly AccountWinLostService accountWinLostService;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
     private readonly AddRequestServiceImp service;
     private readonly SessionService sessionService;
@@ -32,10 +34,11 @@ public class AddRequestServiceTests
         sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
         markTicketsService = Substitute.For<MarkTicketsService>();
+        accountWinLostService = Substitute.For<AccountWinLostService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
-        service = new AddRequestServiceImp(mapper, repository, sessionService,
-            loggingService, markTicketsService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService);
+        service = new AddRequestServiceImp(mapper, repository, sessionService, loggingService,
+            markTicketsService, accountWinLostService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService);
     }
 
     [Fact]

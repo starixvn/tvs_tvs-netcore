@@ -9,11 +9,13 @@ exports[`UsernamesComponent UsernamesComponent should init match snapshot 1`] = 
       class="no-gutters"
     >
       <div
-        class="width-170 col-sm-1 col-form-label text-right pd-right-25"
+        class="col-form-label"
       >
         Username(s)
       </div>
-      <div>
+      <div
+        class="col-12 col-sm-8"
+      >
         <div
           class="input-username"
         >

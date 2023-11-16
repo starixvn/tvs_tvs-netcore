@@ -618,13 +618,13 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         var model = new AbnormalAccountViewModel
         {
-            Usernames = "a",
+            AccountWinlostModels = new List<AccountWinlostModel>(),
             ProductIds = "p1",
             StatusIds = "1",
             FromDate = new DateTime(2018, 10, 30, 16, 20, 20, DateTimeKind.Local),
             ToDate = new DateTime(2018, 10, 30, 16, 20, 20, DateTimeKind.Local)
         };
-        const string expected = "<root><r Usernames='a' "
+        const string expected = "<root><r Usernames='' "
                                 + "ProductIds='p1' "
                                 + "StatusIds='1' "
                                 + "FromDate='10/30/2018 16:20:20' "
@@ -643,13 +643,13 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         var model = new AbnormalAccountViewModel
         {
-            Usernames = "a",
+            AccountWinlostModels = new List<AccountWinlostModel>(),
             ProductIds = "p1",
             StatusIds = "1",
             FromDate = null,
             ToDate = null
         };
-        const string expected = "<root><r Usernames='a' "
+        const string expected = "<root><r Usernames='' "
                                 + "ProductIds='p1' "
                                 + "StatusIds='1' "
                                 + "FromDate='' "

@@ -6,30 +6,36 @@ exports[`ProductFilterComponent #ProductFilterComponent init should match snapsh
 >
   <product-filter>
     <div
-      class="row product-filter"
+      class="product-filter flex-wrap"
     >
-      <label
-        class="col-sm-1 col-form-label col-form-label-sm text-right"
-      >
-        Product
-      </label>
       <div
-        class="d-flex dropdown-area"
+        class="mr-4"
       >
-        <div
-          class="multi-select"
-        >
-          <ng-select
-            bindlabel="name"
-            bindvalue="value"
-            class="product ng-untouched ng-pristine ng-valid"
-            groupby="group"
-            placeholder="Select products"
-          >
-          </ng-select>
-        </div>
         <label
-          class="col-form-label col-form-label-sm ticket-status-label"
+          class="col-form-label col-form-label-sm text-right"
+        >
+          Product
+        </label>
+        <div
+          class="d-flex dropdown-area"
+        >
+          <div
+            class="multi-select"
+          >
+            <ng-select
+              bindlabel="name"
+              bindvalue="value"
+              class="product ng-untouched ng-pristine ng-valid"
+              groupby="group"
+              placeholder="Select products"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label
+          class="col-form-label col-form-label-sm"
         >
           Ticket Status
         </label>

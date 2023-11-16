@@ -1,25 +1,38 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Shallow } from 'shallow-render';
+import { SortingModule } from '../../../../../utility/components/sorting/sorting.module';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { AddRequestStore } from '../../add-request.store';
+import { ValidationService } from '../services/validation.service';
 import { AccountTableComponent } from './account-table.component';
 
 describe('AccountTableComponent', () => {
-  let component: AccountTableComponent;
-  let fixture: ComponentFixture<AccountTableComponent>;
+  @NgModule({
+    imports: [
+      FormsModule,
+      NgbModule,
+      SortingModule
+    ],
+    providers: [
+      AddRequestStore,
+      AddRequestApiService,
+      ValidationService
+    ]
+  })
+  class AppModuleTest { }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ AccountTableComponent ]
-    })
-    .compileComponents();
-  });
+  let shallow: Shallow<AccountTableComponent>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccountTableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    shallow = new Shallow(AccountTableComponent, AppModuleTest).dontMock(NgbModule);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('AccountTableComponent should init match snapshot', async () => {
+    const { fixture } = await shallow.render();
+    fixture.detectChanges();
+
+    expect(fixture).toMatchSnapshot();
   });
 });

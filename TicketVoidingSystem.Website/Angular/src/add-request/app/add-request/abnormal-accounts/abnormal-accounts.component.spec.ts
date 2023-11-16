@@ -3,12 +3,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
+import { GroupUsername } from '../../../../utility/components/user-names/user-names.model';
 import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts.component';
+import { AccountTableComponent } from './account-table/account-table.component';
 import { ConfirmAbnormalAccountComponent } from './confirm-abnormal-account/confirm-abnormal-account.component';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -30,11 +33,12 @@ class Helper{
     isAbnormal: false
   };
   static readonly fakeAbnormalAccountModel: AbnormalAccountModel = {
-    usernames: '',
     productIds: '',
     statusIds: '',
     fromDate: null,
-    toDate: null
+    toDate: null,
+    accountWinlostModels: [],
+    subIssueTypeId: 1
   };
 }
 
@@ -42,6 +46,7 @@ describe('AbnormalAccountsComponent', () => {
   @NgModule({
     declarations: [
       UsernamesComponent,
+      AccountTableComponent,
       ProductFilterComponent,
       EventDateFilterComponent,
       AbnormalAccountOtherComponent,
@@ -55,6 +60,8 @@ describe('AbnormalAccountsComponent', () => {
       CommonService,
       AddRequestStore,
       ValidationService,
+      SaveRequestService,
+      AddRequestApiService,
       SaveRequestService
     ]
   })
@@ -111,6 +118,9 @@ describe('AbnormalAccountsComponent', () => {
         isEdit: true,
       }
     });
+    instance.usernamesComponent = new UsernamesComponent(null);
+    instance.usernamesComponent.groupUsername = new GroupUsername();
+    instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
     instance.primitiveProps = new PrimitiveProperty();
     instance.primitiveProps.isCancelValidate = false;
 

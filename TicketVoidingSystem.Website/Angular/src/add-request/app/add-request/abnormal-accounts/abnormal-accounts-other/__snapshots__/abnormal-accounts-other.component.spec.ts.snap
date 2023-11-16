@@ -25,10 +25,10 @@ exports[`AbnormalAccountOtherComponent #AbnormalAccountOtherComponent init shoul
           class="list-group-item flex-column align-items-start"
         >
           <div
-            class="row no-gutters"
+            class="no-gutters"
           >
             <label
-              class="col-sm-1 col-form-label text-right pd-right-25"
+              class="col-form-label text-right"
             >
               Decided By
             </label>
@@ -46,10 +46,10 @@ exports[`AbnormalAccountOtherComponent #AbnormalAccountOtherComponent init shoul
             />
           </div>
           <div
-            class="row no-gutters"
+            class="no-gutters"
           >
             <label
-              class="col-sm-1 col-form-label text-right pd-right-25"
+              class="col-form-label text-right pd-right-25"
             >
               Remark
             </label>

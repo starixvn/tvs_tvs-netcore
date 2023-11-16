@@ -47,7 +47,8 @@ class Helper {
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
     confirmAbnormalAccountModel: new ConfirmAbnormalAccountModel(),
-    transInfoAddRequestModel: new TransInfoAddRequestModel()
+    transInfoAddRequestModel: new TransInfoAddRequestModel(),
+    accountWinlostModels: []
   };
 }
 
@@ -64,7 +65,7 @@ describe('ValidationService', () => {
   it('#isValidCommonData should return true', async () => {
     const productFilterComponent = new ProductFilterComponent(null);
     productFilterComponent.isValidComponent = jest.fn().mockImplementation(() => true);    
-    const eventDateFilterComponent = new EventDateFilterComponent(null, null);
+    const eventDateFilterComponent = new EventDateFilterComponent(null);
     eventDateFilterComponent.isValidEventDate = jest.fn().mockImplementation(() => true);
 
     const actual = validationService.isValidCommonData(productFilterComponent, eventDateFilterComponent);
@@ -231,7 +232,7 @@ describe('ValidationService', () => {
   it('#getValidation should call #checkValidUsernames', async () => {
     const args = Helper.fakeValidationBusinessRuleArgs;
     addRequestApiService.checkValidUsernames = jest.fn().mockReturnValue(new CheckUsernamesViewModel());
-    const actual = await validationService['getValidation'](args, '');
+    const actual = await validationService['getValidation'](args);
 
     expect(addRequestApiService.checkValidUsernames).toHaveBeenCalledTimes(1);
     expect(actual).toEqual(new CheckUsernamesViewModel());

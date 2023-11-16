@@ -286,9 +286,9 @@ describe('ObjectService', () => {
     const abnormalAccountModel = new AbnormalAccountModel();
     const args = _.clone(Helper.fakeMapEventArg);
     args.detailViewModel.event = new RequestEventModel();
+    args.detailViewModel.abnormalAccountModel = abnormalAccountModel;
     args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_ACCOUNT);
 
-    objectService['createEventForAbnormalAccount'] = jest.fn().mockImplementation(() => abnormalAccountModel);
     objectService['mapEvent'](args);
 
     expect(args.requestModel.abnormalAccountModel).toBe(abnormalAccountModel);
@@ -364,14 +364,5 @@ describe('ObjectService', () => {
 
     expect(results.matchId).toBe(Helper.fakeRequestDetailViewModel.event.matchId);
     expect(results.transIds).toBe(Helper.fakeRequestDetailViewModel.event.transIds);
-  });
-
-  it('#createEventForAbnormalAccount should return false', async () => {
-    const args = _.clone(Helper.fakeMapEventArg);
-    const actual = objectService['createEventForAbnormalAccount'](args.detailViewModel);
-
-    expect(actual.usernames).toBe(args.detailViewModel.event.usernames);
-    expect(actual.productIds ).toBe(args.detailViewModel.event.productIds);
-    expect(actual.statusIds ).toBe(args.detailViewModel.event.statusIds);
   });
 });

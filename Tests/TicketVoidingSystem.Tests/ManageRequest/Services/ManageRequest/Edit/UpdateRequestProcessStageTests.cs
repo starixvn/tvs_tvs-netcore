@@ -7,6 +7,7 @@ using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -22,6 +23,7 @@ public class UpdateRequestProcessStageTests
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
     private readonly SessionService sessionService;
+    private readonly AccountWinLostService accountWinLostService;
     private UpdateRequestProcessStageImp service;
 
     public UpdateRequestProcessStageTests()
@@ -29,8 +31,9 @@ public class UpdateRequestProcessStageTests
         mapper = Substitute.For<IMapper>();
         sessionService = Substitute.For<SessionService>();
         repository = Substitute.For<IDynamicRepository>();
+        accountWinLostService = Substitute.For<AccountWinLostService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
-        service = new UpdateRequestProcessStageImp(mapper, repository, sessionService,
+        service = new UpdateRequestProcessStageImp(mapper, repository, accountWinLostService, sessionService,
             insertAutoVoidRequestQueueService);
     }
 
@@ -56,7 +59,7 @@ public class UpdateRequestProcessStageTests
             AbnormalAccountInfo = new AbnormalAccountViewModel(),
             DuplicateTicketsInfo = new DuplicateTicketsViewModel(),
             NotParticipateInfo = new List<NotParticipateViewModel>(),
-            EarlyKickOffInfo = new List<EarlyKickOffViewModel>()
+            EarlyKickOffInfo = new List<EarlyKickOffViewModel>(),
         };
         var expected = new Result
         {
@@ -94,7 +97,7 @@ public class UpdateRequestProcessStageTests
 
         mapper.Map<EditRequestCommand>(Arg.Any<EditRequestQuery>())
             .ReturnsForAnyArgs(new EditRequestCommand { RequestId = 1 });
-        service = new UpdateRequestProcessStageImp(mapper, repository, sessionService, null);
+        service = new UpdateRequestProcessStageImp(mapper, repository, accountWinLostService, sessionService, null);
 
         // Act
         var actual = await service.Execute(query);
