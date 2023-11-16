@@ -1,10 +1,12 @@
 ﻿using Epplus.Mapper.Extensions;
 using OfficeOpenXml;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
@@ -15,14 +17,16 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
     private readonly GetVoidedTicketsService getVoidedTicketsService;
     private readonly GetVoidedTicketsForExcelService getVoidedTicketsForExcelService;
     private readonly MatchService matchService;
+    private readonly BetListService betListService;
 
     public GetVoidedTicketsWorkSheetService(CellService cellService, GetVoidedTicketsService getVoidedTicketsService,
-        GetVoidedTicketsForExcelService getVoidedTicketsForExcelService, MatchService matchService)
+        GetVoidedTicketsForExcelService getVoidedTicketsForExcelService, MatchService matchService, BetListService betListService)
     {
         this.cellService = cellService;
         this.getVoidedTicketsService = getVoidedTicketsService;
         this.getVoidedTicketsForExcelService = getVoidedTicketsForExcelService;
         this.matchService = matchService;
+        this.betListService = betListService;
     }
 
     public async Task BindingContent(ExcelWorksheet worksheet, GetVoidedTicketsQuery model)
@@ -31,6 +35,11 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
         var match = model.IssueTypeId == IssueTypeConstant.AbnormalAccount || model.MatchId is null or 0
             ? null : await getVoidedTicketsService.GetMatchInfo(model.MatchId.Value);
         matchService.UpdateMatchInfoFromRemotingRef(match);
+        if (match != null && match.SportType.IsVirtualSport())
+        {
+            match.MatchCode = betListService.GetMatchCodeBetradar(match.MatchCode);
+        }
+
         AddMatchContent(worksheet, match);
         await AddTicketsContent(worksheet, model, match);
         cellService.SetStyle(worksheet);
