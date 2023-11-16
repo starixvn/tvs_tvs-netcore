@@ -51,14 +51,15 @@ export class AccountTableComponent {
   }
 
   async exportExcel(): Promise<void> {
-    await this.appService.exportAccount(this.accountWinlostModels);
+    if (this.accountWinlostModels?.length > 0) {
+      await this.appService.exportAccount(this.accountWinlostModels);
+    }
   }
 
   private createValidationBusinessRuleArgs(account: AccountWinlostModel): ValidationBusinessRuleArgs {
     const arg = new ValidationBusinessRuleArgs();
     arg.requestId = this.requestId;
     arg.actionId = this.filter.action;
-    //arg.allAccountWinlostModels = [account];
     arg.abnormalAccountModel = this.abnormalAccountModel;
     arg.abnormalAccountModel.accountWinlostModels = [account];
 

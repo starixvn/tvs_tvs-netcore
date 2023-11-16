@@ -119,7 +119,7 @@ export class AbnormalAccountsComponent implements OnInit {
     args.issueTypeId = this.filter.issueTypeId;
     args.usernamesComponent = this.usernamesComponent;
     args.abnormalAccountModel = this.abnormalAccountModel;
-    args.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels()
+    args.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels();
     args.primitiveProps = this.primitiveProps;
 
     return args;

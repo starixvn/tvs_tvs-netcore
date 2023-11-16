@@ -21,7 +21,7 @@ export class UsernamesComponent implements OnChanges {
   @Output() focusOutUsernames = new EventEmitter();
   @Output() change = new EventEmitter();
   maxLengthOneUsername = 30;
-  groupUsername: GroupUsername;
+  groupUsername = new GroupUsername();
   username: string;
   lastItem: UsernameItem;
   shiftKey: boolean;

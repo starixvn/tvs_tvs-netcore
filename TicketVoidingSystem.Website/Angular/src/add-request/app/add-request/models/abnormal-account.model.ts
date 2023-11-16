@@ -1,7 +1,6 @@
 import { AccountWinlostModel } from "../abnormal-accounts/models/account-winlost.model";
 
 export class AbnormalAccountModel {
-  usernames: string;
   accountWinlostModels: AccountWinlostModel[];
   productIds: string;
   statusIds: string;
