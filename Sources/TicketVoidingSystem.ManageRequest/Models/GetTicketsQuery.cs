@@ -11,10 +11,6 @@ public class GetTicketsQuery
     [JsonConverter(typeof(CustomDateTimeJsonConverter))]
     public DateTime? KickOffDate { get; set; }
 
-    public int? LiveHomeScore { get; set; }
-
-    public int? LiveAwayScore { get; set; }
-
     public IEnumerable<BetTypeXml>? BetTypes { get; set; }
 
     public int PageIndex { get; set; }
