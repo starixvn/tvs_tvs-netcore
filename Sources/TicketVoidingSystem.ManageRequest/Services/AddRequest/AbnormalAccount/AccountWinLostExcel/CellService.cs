@@ -38,7 +38,7 @@ public class CellServiceImp : CellService
             worksheet.Cells[index, 4].Value = model.AdjustVoidLimit;
             worksheet.Cells[index, 5].Value = model.CurrentLosing;
             worksheet.Cells[index, 6].Value = model.CurrentWinning;
-            worksheet.Cells[index, 7].Value = model.EstimateVoidAmount;
+            worksheet.Cells[index, 7].Value = model.EstimateVoidAmount == 0 ? "-" : model.EstimateVoidAmount;
             worksheet.Cells[index, 8].Value = model.WinLostAfterVoid;
 
             if (model.IsHighlight)

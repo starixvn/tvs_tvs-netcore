@@ -42,7 +42,9 @@ class Helper {
     primitiveProps: new PrimitiveProperty(),
     usernamesComponent: new UsernamesComponent(null),
     actionId: '1',
-    issueTypeId: '1'
+    issueTypeId: '1',
+    eventDateFilterComponent: new EventDateFilterComponent(null),
+    productFilterComponent: new ProductFilterComponent(null)
   };
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
@@ -97,6 +99,19 @@ describe('ValidationService', () => {
 
     expect(actual.isValid).toBeFalsy();
   });
+
+  it('#checkValidUsernames should return false when isValidCommonData false', async () => {
+    const args = Helper.fakeValidationBusinessRuleArgs;
+    args.primitiveProps.isCancelValidate = false;
+    args.usernamesComponent = new UsernamesComponent(null);
+    args.usernamesComponent.groupUsername = new GroupUsername();
+    args.usernamesComponent.groupUsername.getAllValue = jest.fn().mockImplementation(() => '');
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(false);
+
+    const actual = await validationService.checkValidUsernames(args);
+
+    expect(actual.isValid).toBeFalsy();
+  });
   
   it('#checkValidUsernames should return false when have duplicated usernames', async () => {
     const args = Helper.fakeValidationBusinessRuleArgs;
@@ -108,6 +123,7 @@ describe('ValidationService', () => {
     args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
     args.usernamesComponent.groupUsername.getDuplicatedItems = jest.fn().mockImplementation(() => 'admin');
     args.usernamesComponent.groupUsername.updateDuplicatedItems = jest.fn().mockImplementation();
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
     const actual = await validationService.checkValidUsernames(args);
 
@@ -129,6 +145,7 @@ describe('ValidationService', () => {
     args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
     validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
     validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => false);
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
     const actual = await validationService.checkValidUsernames(args);
 
@@ -151,6 +168,7 @@ describe('ValidationService', () => {
     args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
     validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
     validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => false);
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
     const actual = await validationService.checkValidUsernames(args);
 
@@ -174,6 +192,7 @@ describe('ValidationService', () => {
     args.usernamesComponent.checkValidItems = jest.fn().mockImplementation(() => false);
     validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
     validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => false);
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
     const actual = await validationService.checkValidUsernames(args);
 
@@ -198,6 +217,7 @@ describe('ValidationService', () => {
     validationService['getValidation'] = jest.fn().mockImplementation(() => Promise.resolve(results));
     validationService['getConfirmAbnormalBetModel'] = jest.fn().mockImplementation();
     validationService['highlightInvalidUsernames'] = jest.fn().mockImplementation(() => true);
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
     const actual = await validationService.checkValidUsernames(args);
 
@@ -213,6 +233,7 @@ describe('ValidationService', () => {
     args.usernamesComponent.groupUsername.checkValidItems = jest.fn().mockImplementation(() => {
       throw new TypeError('No server is available');
     });
+    validationService['isValidCommonData'] = jest.fn().mockReturnValue(true);
 
     try {
       const actual = await validationService.checkValidUsernames(args);

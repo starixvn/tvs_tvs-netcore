@@ -32,14 +32,14 @@
           </th>
           <th scope="col" class="col-tb-5">
             <div class="title-table">
-              <span>Current Winning</span>
-              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentWinning', 4)"></sorting>
+              <span>Current Losing</span>
+              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-6">
             <div class="title-table">
-              <span>Current Losing</span>
-              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentLosing', 5)"></sorting>
+              <span>Current Winning</span>
+              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)"></sorting>
             </div>
           </th>
           <th scope="col" class="col-tb-7">
@@ -77,10 +77,10 @@
                 (blur)="reCalculate(item)" />
             </td>
             <td class="col-tb-5 text-right">
-              <div>{{item.currentWinning}}</div>
+              <div>{{item.currentLosing}}</div>
             </td>
             <td class="col-tb-6 text-right">
-              <div>{{item.currentLosing}}</div>
+              <div>{{item.currentWinning}}</div>
             </td>
             <td class="col-tb-7 text-right">
               <div>{{item.estimateVoidAmount === 0 ? '-' : item.estimateVoidAmount}}</div>

@@ -17,8 +17,8 @@
   <div *ngIf="isAbnormalAccount && isShowAbnormalAccountInfo">
     <div class="row no-gutters">Product:&nbsp;<strong>{{product}}</strong></div>
     <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{status}}</strong></div>
-    <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{model.event.fromDate | date: 'yyyy/MM/dd'}} - 
-      {{model.event.toDate | date: 'yyyy/MM/dd'}}
+    <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{model.abnormalAccountModel.fromDate | date: 'yyyy/MM/dd'}} -
+      {{model.abnormalAccountModel.toDate | date: 'yyyy/MM/dd'}}
     </strong></div>
   </div>
   <div *ngIf="isShowGeneralInfo">

@@ -103,6 +103,8 @@ export class SaveRequestService {
     model.abnormalAccountModel = args.abnormalAccountModel;
     model.primitiveProps = args.primitiveProps;
     model.issueTypeId = args.filter.issueTypeId;
+    model.productFilterComponent = args.productFilterComponent;
+    model.eventDateFilterComponent = args.eventDateFilterComponent;
 
     return model;
   }

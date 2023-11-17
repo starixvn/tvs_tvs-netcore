@@ -69,38 +69,6 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         return viewModel;
     }
 
-    private IEnumerable<AccountWinlostModel> GetAccountWinlostModels()
-    {
-        return new List<AccountWinlostModel>
-        {
-            new()
-            {
-                Username = "AAA", CustId = 1, GivenCredit = 200, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 50,
-                EstimateVoidAmount = 20, WinLostAfterVoid = 10
-            },
-            new()
-            {
-                Username = "BBB", CustId = 2, GivenCredit = 100, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 300,
-                EstimateVoidAmount = 20, WinLostAfterVoid = 10
-            },
-            new()
-            {
-                Username = "CCC", CustId = 3, GivenCredit = 500, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 50,
-                EstimateVoidAmount = 20, WinLostAfterVoid = 10
-            },
-            new()
-            {
-                Username = "DD", CustId = 4, GivenCredit = 350, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 400,
-                EstimateVoidAmount = 20, WinLostAfterVoid = 10
-            },
-            new()
-            {
-                Username = "EE", CustId = 5, GivenCredit = 400, AdjustVoidLimit = null, CurrentWinning = 100, CurrentLosing = 300,
-                EstimateVoidAmount = 20, WinLostAfterVoid = 10
-            }
-        };
-    }
-
     private async Task<CheckValidUsernamesCriteria> CreateCriteria(CheckValidUsernamesRequest model)
     {
         var transInfoJsonList = await GetTransInfoJson(model);

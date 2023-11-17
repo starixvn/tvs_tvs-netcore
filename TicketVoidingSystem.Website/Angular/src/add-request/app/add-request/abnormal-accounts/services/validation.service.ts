@@ -13,7 +13,9 @@ import { ProductFilterComponent } from '../product-filter/product-filter.compone
   providedIn: 'root'
 })
 export class ValidationService {
-  constructor(private readonly addRequestApiService: AddRequestApiService) { }
+  constructor(
+    private readonly addRequestApiService: AddRequestApiService
+    ) { }
 
   public isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();
@@ -26,6 +28,10 @@ export class ValidationService {
       if (args.primitiveProps.isCancelValidate) {
         args.primitiveProps.isCancelValidate = false;
         return { isValid: false } as ValidationBusinessRuleOutput;
+      }
+
+      if (!this.isValidCommonData(args.productFilterComponent, args.eventDateFilterComponent)) {
+        return { isValid: false } as ValidationBusinessRuleOutput;;
       }
 
       if (usernames.length === 0) {
@@ -41,8 +47,7 @@ export class ValidationService {
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
         return {
-          isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
-          accountWinlostModels: viewModel.accountWinlostModels // TODO: need to remove, for testing
+          isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames)
         } as ValidationBusinessRuleOutput;
       }
 
@@ -55,8 +60,7 @@ export class ValidationService {
         args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;
         args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
         return {
-          isValid: false,
-          accountWinlostModels: viewModel.accountWinlostModels // TODO: need to remove, for testing
+          isValid: false
          } as ValidationBusinessRuleOutput;
       }
       return {

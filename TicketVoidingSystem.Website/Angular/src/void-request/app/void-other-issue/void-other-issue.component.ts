@@ -108,7 +108,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.paging.selection = [PagingConstant.SIZE_ONE, PagingConstant.SIZE_TWO, PagingConstant.SIZE_THREE, PagingConstant.SIZE_FOUR];
     this.paging.pageSize = PagingConstant.SIZE_ONE;
     if (this.isAbnormalAccount()) {
-      this.usernames = this.requestDetail.event.usernames.split(',').join(', ');
+      this.usernames = this.requestDetail.abnormalAccountModel.accountWinlostModels.map(x => x.username).join(', ');
     }
     if (this.isHasLogInfo()) {
       await this.getLogInfoModel();
@@ -189,6 +189,10 @@ export class VoidOtherIssueComponent implements OnInit {
 
     if (this.isReducedOver()) {
       return this.requestDetail.reducedOverModels[0].eventDate.toString();
+    }
+
+    if (this.isAbnormalAccount()) {
+      return null;
     }
 
     return this.requestDetail.event.kickOffTime?.toString();
@@ -330,7 +334,7 @@ export class VoidOtherIssueComponent implements OnInit {
   checkSettled(): boolean {
     if (this.isAbnormalAccount()) {
       const UNSETTLED_STATUS = '0,1';
-      if (this.requestDetail.event.statusIds === UNSETTLED_STATUS) {
+      if (this.requestDetail.abnormalAccountModel.statusIds === UNSETTLED_STATUS) {
         return false;
       }
 

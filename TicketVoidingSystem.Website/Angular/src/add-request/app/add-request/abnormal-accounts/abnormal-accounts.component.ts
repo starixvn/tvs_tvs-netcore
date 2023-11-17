@@ -86,8 +86,10 @@ export class AbnormalAccountsComponent implements OnInit {
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     const validationOutput = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
-    this.validAccountWinlostModels = validationOutput.accountWinlostModels;
-    this.primitiveProps.isShowAccountWinLost = true;
+    if (validationOutput.isValid) {
+      this.validAccountWinlostModels = validationOutput.accountWinlostModels;
+      this.primitiveProps.isShowAccountWinLost = true;
+    }
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -103,7 +105,7 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
     arg.addRequestStore = this.addRequestStore;
     arg.abnormalAccountModel = this.abnormalAccountModel;
-    arg.abnormalAccountModel.accountWinlostModels = this.validAccountWinlostModels
+    arg.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels();
     arg.usernamesComponent = this.usernamesComponent;
     arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
@@ -113,16 +115,18 @@ export class AbnormalAccountsComponent implements OnInit {
   }
 
   private initValidationBusinessRuleArgs(): ValidationBusinessRuleArgs {
-    const args = new ValidationBusinessRuleArgs();
-    args.actionId = this.filter.action;
-    args.requestId = this.requestId;
-    args.issueTypeId = this.filter.issueTypeId;
-    args.usernamesComponent = this.usernamesComponent;
-    args.abnormalAccountModel = this.abnormalAccountModel;
-    args.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels();
-    args.primitiveProps = this.primitiveProps;
+    const arg = new ValidationBusinessRuleArgs();
+    arg.actionId = this.filter.action;
+    arg.requestId = this.requestId;
+    arg.issueTypeId = this.filter.issueTypeId;
+    arg.usernamesComponent = this.usernamesComponent;
+    arg.abnormalAccountModel = this.abnormalAccountModel;
+    arg.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels();
+    arg.productFilterComponent = this.productFilterComponent;
+    arg.eventDateFilterComponent = this.eventDateFilterComponent;
+    arg.primitiveProps = this.primitiveProps;
 
-    return args;
+    return arg;
   }
 
   public getAccountWinlostModels(): AccountWinlostModel[] {

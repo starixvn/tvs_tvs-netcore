@@ -410,9 +410,9 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.WAITING_ID
   ];
   static readonly ABNORMAL_ACCOUNT: number[] = [
-    TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];
