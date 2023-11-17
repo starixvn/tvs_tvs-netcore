@@ -38,6 +38,8 @@ public static class AddRequest
         services.AddTransient<WorkSheetService<CheckValidTransIdsModel>, GetTicketsForExportExcelService>();
         services.AddTransient<CheckValidTransIdsService, CheckValidTransIdsServiceImp>();
 
+        services.AddTransient<CheckUsernameService, CheckUsernameServiceImp>();
+        services.AddTransient<CompressDataAddRequestService, CompressDataAddRequestServiceImp>();
         services.AddTransient<CalculateHaveStatusWonNotLoseService, CalculateHaveStatusWonNotLoseServiceImp>();
         services.AddTransient<CalculateRemainStatusService, CalculateRemainStatusServiceImp>();
         services.AddTransient<CalculateVoidTicketsService, CalculateVoidTicketsServiceImp>();

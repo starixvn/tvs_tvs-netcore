@@ -13,6 +13,29 @@ public class TicketCalculateWinLostAccount
     public int StatusId { get; set; }
 
     public bool IsVoid14 { get; set; }
+
+    //// more columns for add request
+    public int BetType { get; set; }
+
+    public int BetId { get; set; }
+
+    public bool IsMixParlay { get; set; }
+
+    public int SiteDbGroupId { get; set; }
+
+    public int MatchId { get; set; }
+}
+
+public class TicketAddRequestJson
+{
+    public int mid { get; set; }
+    public long t { get; set; }
+    public int c { get; set; }
+    public int btype { get; set; }
+    public int bid { get; set; }
+    public bool isP { get; set; }
+    public int sitedb { get; set; }
+    public bool isV14 { get; set; }
 }
 
 public class OrderedTickets

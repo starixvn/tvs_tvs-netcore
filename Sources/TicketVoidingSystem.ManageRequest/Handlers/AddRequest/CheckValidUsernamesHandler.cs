@@ -1,9 +1,7 @@
-﻿using Fanex.Data.Repository;
-using MediatR;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+﻿using MediatR;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 
@@ -28,40 +26,37 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 
 public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>
 {
-    private readonly IDynamicRepository repository;
-    private readonly GetTransInfoService getTransInfoService;
+    private readonly CheckUsernameService checkUsernameService;
     private readonly CalculateVoidTicketsService calculateVoidTicketsService;
+    private readonly CompressDataAddRequestService compressDataAddRequestService;
 
-    public CheckValidUsernamesHandler(IDynamicRepository repository, GetTransInfoService getTransInfoService, CalculateVoidTicketsService calculateVoidTicketsService)
+    public CheckValidUsernamesHandler(CheckUsernameService checkUsernameService, CalculateVoidTicketsService calculateVoidTicketsService, CompressDataAddRequestService compressDataAddRequestService)
     {
-        this.repository = repository;
-        this.getTransInfoService = getTransInfoService;
+        this.checkUsernameService = checkUsernameService;
         this.calculateVoidTicketsService = calculateVoidTicketsService;
+        this.compressDataAddRequestService = compressDataAddRequestService;
     }
 
     public async Task<CheckValidUsernamesViewModel> Handle(CheckValidUsernamesRequest request, CancellationToken cancellationToken)
     {
-        var criteria = await CreateCriteria(request);
-        var mappingTypes = new[] { typeof(CheckUsernamesModel), typeof(TransInfoAddRequestModel), typeof(string), typeof(TicketCalculateWinLostAccount), typeof(AccountWinlostModel) };
-        var result = await repository.FetchMultipleAsync(criteria, mappingTypes, cancellationToken);
-        var checkUsernamesModel = result[0].Cast<CheckUsernamesModel>();
-        var transInfoAddRequestModel = result[1].Cast<TransInfoAddRequestModel>().FirstOrDefault();
-        var transInfoJson = result[2].Cast<string>();
-        var ticketCalculateWinLostAccount = result[3].Cast<TicketCalculateWinLostAccount>();
-        var accounts = result[4].Cast<AccountWinlostModel>();
+        var checkUsernamesResult = await checkUsernameService.ExecuteValidationInDb(request);
 
-        var calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds,
-            ticketCalculateWinLostAccount.ToList(), accounts, request.AccountWinlostModels);
+        var calcVoidResult = new CalcVoidTicketsResult();
+        if (request.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+        {
+            var accounts = MapAdjustVoidLimitFromUserInput(checkUsernamesResult.AccountWinlost, request.AccountWinlostModels);
+            calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds, checkUsernamesResult.TicketCalculateWinLostAccount.ToList(), accounts);
+        }
 
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = checkUsernamesModel.FirstOrDefault() ?? new CheckUsernamesModel(),
+            Validation = checkUsernamesResult.ValidationResult,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
-                RemoveTransIds = transInfoAddRequestModel?.RemoveTransIds,
-                UnMarkTransIds = transInfoAddRequestModel?.UnMarkTransIds,
-                MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
-                TransInfoJson = transInfoJson.FirstOrDefault()
+                RemoveTransIds = checkUsernamesResult.TransInfoValidation.RemoveTransIds,
+                UnMarkTransIds = checkUsernamesResult.TransInfoValidation.UnMarkTransIds,
+                MarkTransIds = checkUsernamesResult.TransInfoValidation.MarkTransIds,
+                TransInfoJson = GetOutputTransInfoAddRequest(request, checkUsernamesResult.TransInfoJsonCompress, calcVoidResult.VoidTickets)
             },
             AccountWinlostModels = calcVoidResult.Accounts
         };
@@ -69,39 +64,24 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         return viewModel;
     }
 
-    private async Task<CheckValidUsernamesCriteria> CreateCriteria(CheckValidUsernamesRequest model)
+    private static IEnumerable<AccountWinlostModel> MapAdjustVoidLimitFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel> adjustLimits)
     {
-        var transInfoJsonList = await GetTransInfoJson(model);
-        var criteria = new CheckValidUsernamesCriteria
+        var validAdjustLimits = adjustLimits.Where(x => x.AdjustVoidLimit > 0);
+        foreach (var account in accounts)
         {
-            RequestId = model.RequestId,
-            ActionId = model.ActionId,
-            Usernames = string.Join(",", model.AccountWinlostModels.Select(x => x.Username)),
-            FromDate = model.FromDate,
-            ToDate = model.ToDate,
-            ProductIds = model.ProductIds,
-            StatusIds = model.StatusIds,
-            TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)))
-        };
+            var currentAdjustLimits = validAdjustLimits.FirstOrDefault(x => x.Username == account.Username);
+            if (currentAdjustLimits != null)
+            {
+                account.AdjustVoidLimit = currentAdjustLimits.AdjustVoidLimit;
+            }
+        }
 
-        return criteria;
+        return accounts;
     }
 
-    private async Task<IEnumerable<string>> GetTransInfoJson(CheckValidUsernamesRequest model)
+    private string GetOutputTransInfoAddRequest(CheckValidUsernamesRequest query, string transInfoJsonCompress, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
     {
-        var getTransInfoQuery = new GetTransInfoQuery
-        {
-            IssueTypeId = IssueTypeConstant.AbnormalAccount,
-            AbnormalAccountViewModel = new AbnormalAccountViewModel
-            {
-                AccountWinlostModels = model.AccountWinlostModels,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                ProductIds = model.ProductIds,
-                StatusIds = model.StatusIds
-            }
-        };
-
-        return await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
+        return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
+            ? compressDataAddRequestService.CompressTicket(voidTickets) : transInfoJsonCompress;
     }
 }

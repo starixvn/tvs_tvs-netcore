@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.
 public interface CalculateVoidTicketsService
 {
     Task<CalcVoidTicketsResult> ExecuteForAbnormalAccountWithPolicy(string statusIds, IList<TicketCalculateWinLostAccount> tickets,
-        IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel> adjustLimits);
+        IEnumerable<AccountWinlostModel> accounts);
 }
 
 public class CalculateVoidTicketsServiceImp : CalculateVoidTicketsService
@@ -21,10 +21,9 @@ public class CalculateVoidTicketsServiceImp : CalculateVoidTicketsService
     }
 
     public async Task<CalcVoidTicketsResult> ExecuteForAbnormalAccountWithPolicy(string statusIds, IList<TicketCalculateWinLostAccount> tickets,
-        IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel> adjustLimits)
+        IEnumerable<AccountWinlostModel> accounts)
     {
         var ticketStatusIds = statusIds.Split(",").Select(int.Parse).ToList();
-        MapAdjustVoidLimit(accounts, adjustLimits);
         var orderedAccounts = accounts.OrderBy(x => x.Username).ToList();
         var groupTickets = GroupTicketsByCustIdAndStatus(tickets);
 
@@ -34,19 +33,6 @@ public class CalculateVoidTicketsServiceImp : CalculateVoidTicketsService
         }
 
         return await calculateRemainStatusService.ExecuteParallel(orderedAccounts, groupTickets, ticketStatusIds);
-    }
-
-    private static void MapAdjustVoidLimit(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel> adjustLimits)
-    {
-        var validAdjustLimits = adjustLimits.Where(x => x.AdjustVoidLimit > 0);
-        foreach (var account in accounts)
-        {
-            var currentAdjustLimits = validAdjustLimits.FirstOrDefault(x => x.Username == account.Username);
-            if (currentAdjustLimits != null)
-            {
-                account.AdjustVoidLimit = currentAdjustLimits.AdjustVoidLimit;
-            }
-        }
     }
 
     private static Dictionary<(int CustId, int StatusId), OrderedTickets> GroupTicketsByCustIdAndStatus(IEnumerable<TicketCalculateWinLostAccount> tickets)
