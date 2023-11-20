@@ -17,7 +17,7 @@ export class SaveRequestService {
     private readonly addRequestService: AddRequestService,
     private readonly validationService: ValidationService
     ) { }
-  
+
   async saveRequest(args: SaveRequestArg): Promise<void> {
     args.addRequestStore.changeSavingRequestStatus(true);
     args.addRequestStore.changeBlockingUiStatus(true);
@@ -44,12 +44,12 @@ export class SaveRequestService {
     if (!this.validationService.isValidCommonData(args.productFilterComponent, args.eventDateFilterComponent)) {
       return;
     }
-    const validation = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs(args));
+    const validation = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs(args));
+    args.primitiveProps.validAccountWinlostModels = validation.accountWinlostModels;
+    args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     if (!validation.isValid) {
       return;
     }
-    args.primitiveProps.validAccountWinlostModels = validation.accountWinlostModels;
-    args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     const isHasWarning = await this.checkIfRequestHasWarning(args, validation);
     if (isHasWarning) {
       this.openConfirmAbnormalAccount(args);
@@ -60,7 +60,7 @@ export class SaveRequestService {
 
   async onYesConfirmWarningModal(args: SaveRequestArg): Promise<void> {
     args.addRequestStore.changeBlockingUiStatus(true);
-    const validation = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs(args));
+    const validation = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs(args));
     if (validation.isValid) {
       args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
       await this.executeApiSaveRequest(args);
@@ -69,7 +69,7 @@ export class SaveRequestService {
     }
     args.addRequestStore.changeBlockingUiStatus(false);
   }
-  
+
   private async checkIfRequestHasWarning(args: SaveRequestArg, validation: ValidationBusinessRuleOutput): Promise<boolean> {
     if (!args.filter.isVoided) {
       args.confirmAbnormalAccount.isHasWarningTicketsExistedInRequest = validation.confirmAbnormalAccountModel.numberOfTicketsExistedInRequest > 0;
@@ -84,7 +84,7 @@ export class SaveRequestService {
       || args.confirmAbnormalAccount.isHasWarningEditTakeNoteRequest
       || args.confirmAbnormalAccount.isEditingByAnotherUser;
   }
-  
+
   private openConfirmAbnormalAccount(args: SaveRequestArg) {
     args.confirmAbnormalAccount.requestId = args.requestId;
     args.confirmAbnormalAccount.requestedBy = args.requestedBy;
@@ -126,7 +126,7 @@ export class SaveRequestService {
 
     return query;
   }
-  
+
   private cancelValidateUsernamesWhenFocusOut(primitiveProps: PrimitiveProperty, usernamesComponent: UsernamesComponent): void {
     primitiveProps.isCancelValidate = true;
     usernamesComponent.triggerFocusOutUsernames();

@@ -84,10 +84,10 @@ describe('AbnormalAccountsComponent', () => {
           isEdit: true,
         }
       });
-    
+
     expect(fixture).toMatchSnapshot();
   });
-  
+
   it('#focusOutUsernames should return & update isCancelValidate to false when isCancelValidate true', async () => {
     const {  instance } = await shallow
     .render({
@@ -96,7 +96,7 @@ describe('AbnormalAccountsComponent', () => {
         filter: Helper.fakeFilterModel,
         isEdit: true,
       }
-    });    
+    });
     instance.primitiveProps = new PrimitiveProperty();
     instance.primitiveProps.isCancelValidate = true;
 
@@ -104,11 +104,11 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(instance.primitiveProps.isCancelValidate).toBeFalsy();
   });
-  
+
   it('#focusOutUsernames should called #checkValidUsernames', async () => {
     const mockCheckValidUsernames = jest.fn().mockImplementation();
     const {  instance } = await shallow
-    .mock(ValidationService, { checkValidUsernames: mockCheckValidUsernames })
+    .mock(ValidationService, { checkBusinessRule: mockCheckValidUsernames })
     .render({
       bind: {
         abnormalAccountModel: Helper.fakeAbnormalAccountModel,
@@ -126,7 +126,7 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(mockCheckValidUsernames).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#triggerCloseEvent should called #changeSavingRequestStatus', async () => {
     const mockChangeSavingRequestStatus = jest.fn().mockImplementation();
     const {  instance } = await shallow
@@ -142,7 +142,7 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#triggerCloseEvent should called #changeSavingRequestStatus', async () => {
     const mockChangeSavingRequestStatus = jest.fn().mockImplementation();
     const {  instance } = await shallow
@@ -158,7 +158,7 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveRequest should called #saveRequestService.saveRequest', async () => {
     const mockSaveRequest = jest.fn().mockImplementation();
     const {  instance } = await shallow
@@ -177,7 +177,7 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onYesConfirmWarningModal should called #saveRequestService.onYesConfirmWarningModal', async () => {
     const mockOnYesConfirmWarningModal = jest.fn().mockImplementation();
     const {  instance } = await shallow
@@ -196,7 +196,7 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(mockOnYesConfirmWarningModal).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#initSaveRequestInput should return expected model', async () => {
     const { instance } = await shallow
     .render({

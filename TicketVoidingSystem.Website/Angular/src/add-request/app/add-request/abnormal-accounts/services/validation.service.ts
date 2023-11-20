@@ -21,6 +21,13 @@ export class ValidationService {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();
   }
 
+  public async checkBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
+    const result = await this.checkValidUsernames(args);
+    args.primitiveProps.isShowAccountWinLost = true;
+
+    return result;
+  }
+
   public async checkValidUsernames(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     const usernames = args.usernamesComponent.groupUsername.getAllValue();
     try {
@@ -53,14 +60,18 @@ export class ValidationService {
 
       args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
       if (viewModel.validation.isExceededTotalUsernames) {
-        return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
+        return {
+          isValid: args.usernamesComponent.checkValidItems(),
+          accountWinlostModels: viewModel.accountWinlostModels
+        } as ValidationBusinessRuleOutput;
       }
       if (viewModel.validation.isBeingMoveBetDate || viewModel.validation.isInvalidTotalTicket) {
         args.primitiveProps.isShowError = true;
         args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;
         args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
         return {
-          isValid: false
+          isValid: false,
+          accountWinlostModels: viewModel.accountWinlostModels
          } as ValidationBusinessRuleOutput;
       }
       return {

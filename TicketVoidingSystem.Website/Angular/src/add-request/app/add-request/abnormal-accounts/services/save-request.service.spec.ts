@@ -74,7 +74,7 @@ describe('SaveRequestService', () => {
     addRequestService = new AddRequestService(null, null, null);
     addRequestService.executeSaveRequest = jest.fn();
   });
-  
+
   it('#saveRequest should call #saveWhenRequestNotVoided', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = false;
@@ -89,7 +89,7 @@ describe('SaveRequestService', () => {
 
     expect(saveRequestService['saveWhenRequestNotVoided']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveRequest should call #saveWhenRequestVoided', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.filter.isVoided = true;
@@ -104,7 +104,7 @@ describe('SaveRequestService', () => {
 
     expect(saveRequestService['saveWhenRequestVoided']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestVoided should call #openConfirmAbnormalAccount', async () => {
     const args = Helper.fakeSaveRequestArg;
     saveRequestService = new SaveRequestService(null, addRequestService, validationService);
@@ -115,7 +115,7 @@ describe('SaveRequestService', () => {
 
     expect(saveRequestService['openConfirmAbnormalAccount']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestVoided should call #executeApiSaveRequest', async () => {
     const args = Helper.fakeSaveRequestArg;
     saveRequestService = new SaveRequestService(null, addRequestService, validationService);
@@ -126,7 +126,7 @@ describe('SaveRequestService', () => {
 
     expect(saveRequestService['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestNotVoided should return when #isValidCommonData false', async () => {
     const args = Helper.fakeSaveRequestArg;
     const mockValidationService = new ValidationService(null);
@@ -137,27 +137,27 @@ describe('SaveRequestService', () => {
 
     expect(mockValidationService.isValidCommonData).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestNotVoided should return when #checkValidUsernames false', async () => {
     const args = Helper.fakeSaveRequestArg;
     const mockValidationService = new ValidationService(null);
     mockValidationService.isValidCommonData = jest.fn().mockImplementation(() => true);
-    mockValidationService.checkValidUsernames = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutput));
+    mockValidationService.checkBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutput));
     saveRequestService = new SaveRequestService(null, addRequestService, mockValidationService);
 
     await saveRequestService['saveWhenRequestNotVoided'](args);
 
     expect(mockValidationService.isValidCommonData).toHaveBeenCalledTimes(1);
-    expect(mockValidationService.checkValidUsernames).toHaveBeenCalledTimes(1);
+    expect(mockValidationService.checkBusinessRule).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestNotVoided should call #openConfirmAbnormalAccount when #checkIfRequestHasWarning true', async () => {
     const args = Helper.fakeSaveRequestArg;
     const output = Helper.fakeValidationBusinessRuleOutput;
     output.isValid = true;
     const mockValidationService = new ValidationService(null);
     mockValidationService.isValidCommonData = jest.fn().mockImplementation(() => true);
-    mockValidationService.checkValidUsernames = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutput));
+    mockValidationService.checkBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutput));
     saveRequestService = new SaveRequestService(null, addRequestService, mockValidationService);
     saveRequestService['checkIfRequestHasWarning'] = jest.fn().mockImplementation().mockImplementation(() => Promise.resolve(true));
     saveRequestService['openConfirmAbnormalAccount'] = jest.fn().mockImplementation();
@@ -166,23 +166,23 @@ describe('SaveRequestService', () => {
 
     expect(saveRequestService['openConfirmAbnormalAccount']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#saveWhenRequestNotVoided should call #executeApiSaveRequest when #checkIfRequestHasWarning false', async () => {
     const args = Helper.fakeSaveRequestArg;
     const output = Helper.fakeValidationBusinessRuleOutput;
     output.isValid = true;
     const mockValidationService = new ValidationService(null);
     mockValidationService.isValidCommonData = jest.fn().mockImplementation(() => true);
-    mockValidationService.checkValidUsernames = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutput));
+    mockValidationService.checkBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutput));
     saveRequestService = new SaveRequestService(null, addRequestService, mockValidationService);
     saveRequestService['checkIfRequestHasWarning'] = jest.fn().mockImplementation().mockImplementation(() => Promise.resolve(false));
     saveRequestService['executeApiSaveRequest'] = jest.fn().mockImplementation();
-    
+
     await saveRequestService['saveWhenRequestNotVoided'](args);
 
     expect(saveRequestService['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onYesConfirmWarningModal should call #executeApiSaveRequest', async () => {
     const args = Helper.fakeSaveRequestArg;
     const output = Helper.fakeValidationBusinessRuleOutput;
@@ -190,7 +190,7 @@ describe('SaveRequestService', () => {
     args.addRequestStore = new AddRequestStore();
     args.addRequestStore.changeBlockingUiStatus = jest.fn();
     const mockValidationService = new ValidationService(null);
-    mockValidationService.checkValidUsernames = jest.fn().mockImplementation(() => Promise.resolve(output));
+    mockValidationService.checkBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(output));
     saveRequestService = new SaveRequestService(null, addRequestService, mockValidationService);
     saveRequestService['executeApiSaveRequest'] = jest.fn().mockImplementation();
 
@@ -198,7 +198,7 @@ describe('SaveRequestService', () => {
 
     expect(saveRequestService['executeApiSaveRequest']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onYesConfirmWarningModal should call #showError', async () => {
     const args = Helper.fakeSaveRequestArg;
     const output = Helper.fakeValidationBusinessRuleOutput;
@@ -206,7 +206,7 @@ describe('SaveRequestService', () => {
     args.addRequestStore = new AddRequestStore();
     args.addRequestStore.changeBlockingUiStatus = jest.fn();
     const mockValidationService = new ValidationService(null);
-    mockValidationService.checkValidUsernames = jest.fn().mockImplementation(() => Promise.resolve(output));
+    mockValidationService.checkBusinessRule = jest.fn().mockImplementation(() => Promise.resolve(output));
     const mockPopupService = new PopupService(null);
     mockPopupService.showError = jest.fn();
     saveRequestService = new SaveRequestService(mockPopupService, addRequestService, mockValidationService);
@@ -215,7 +215,7 @@ describe('SaveRequestService', () => {
 
     expect(mockPopupService.showError).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#checkIfRequestHasWarning should return true when isHasWarningTicketsExistedInRequest true', async () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
@@ -233,7 +233,7 @@ describe('SaveRequestService', () => {
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#checkIfRequestHasWarning should return true when isHasWarningEditTakeNoteRequest true', async () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
@@ -251,7 +251,7 @@ describe('SaveRequestService', () => {
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#checkIfRequestHasWarning should return true when isEditingByAnotherUser true', async () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
@@ -269,7 +269,7 @@ describe('SaveRequestService', () => {
 
     expect(actual).toBeTruthy();
   });
-  
+
   it('#checkIfRequestHasWarning should return false', async () => {
     const element = document.createElement('section');
     element.setAttribute("user-id", "1");
@@ -287,7 +287,7 @@ describe('SaveRequestService', () => {
 
     expect(actual).toBeFalsy();
   });
-  
+
   it('#openConfirmAbnormalAccount should update data', async () => {
     const args = Helper.fakeSaveRequestArg;
     saveRequestService = new SaveRequestService(null, null, null);
@@ -298,7 +298,7 @@ describe('SaveRequestService', () => {
     expect(args.confirmAbnormalAccount.requestedBy ).toBe(args.requestedBy );
     expect(args.confirmAbnormalAccount.isOpenDialog ).toBeTruthy();
   });
-  
+
   it('#executeApiSaveRequest should update data', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.usernamesComponent = new UsernamesComponent(null);
@@ -312,7 +312,7 @@ describe('SaveRequestService', () => {
 
     expect(mockAddRequestService.executeSaveRequest).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#initAddRequestQuery should return model', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.usernamesComponent = new UsernamesComponent(null);
@@ -328,7 +328,7 @@ describe('SaveRequestService', () => {
     expect(actual.actionId).toBe(args.filter.action);
     expect(actual.issueTypeId).toBe(args.filter.issueTypeId);
   });
-  
+
   it('#initAddRequestQuery should return expected model when transInfoAddRequestModel is null', async () => {
     const args = Helper.fakeSaveRequestArg;
     args.usernamesComponent = new UsernamesComponent(null);

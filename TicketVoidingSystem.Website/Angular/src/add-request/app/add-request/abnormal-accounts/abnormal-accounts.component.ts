@@ -64,7 +64,7 @@ export class AbnormalAccountsComponent implements OnInit {
       this.primitiveProps.isCancelValidate = false;
       return;
     }
-    await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
+    await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
   }
 
   public triggerCloseEvent() {
@@ -85,11 +85,8 @@ export class AbnormalAccountsComponent implements OnInit {
 
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    const validationOutput = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
-    if (validationOutput.isValid) {
-      this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
-      this.primitiveProps.isShowAccountWinLost = true;
-    }
+    const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
+    this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
