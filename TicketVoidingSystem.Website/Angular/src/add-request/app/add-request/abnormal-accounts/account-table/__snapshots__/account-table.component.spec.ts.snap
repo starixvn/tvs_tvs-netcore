@@ -85,7 +85,7 @@ exports[`AccountTableComponent AccountTableComponent should init match snapshot 
                   class="title-table"
                 >
                   <span>
-                    Current Winning
+                    Current Losing
                   </span>
                   <sorting />
                 </div>
@@ -98,7 +98,7 @@ exports[`AccountTableComponent AccountTableComponent should init match snapshot 
                   class="title-table"
                 >
                   <span>
-                    Current Losing
+                    Current Winning
                   </span>
                   <sorting />
                 </div>

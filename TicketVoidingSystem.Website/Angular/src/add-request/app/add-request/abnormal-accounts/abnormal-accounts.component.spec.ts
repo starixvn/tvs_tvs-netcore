@@ -68,10 +68,8 @@ describe('AbnormalAccountsComponent', () => {
   class AppModuleTest { }
 
   let shallow: Shallow<AbnormalAccountsComponent>;
-  let validationService: ValidationService;
 
   beforeEach(() => {
-    validationService = new ValidationService(null);
     shallow = new Shallow(AbnormalAccountsComponent, AppModuleTest)
                   .dontMock(NgbModule)
                   .mock(ElementRef, {});
@@ -172,6 +170,9 @@ describe('AbnormalAccountsComponent', () => {
         isEdit: true,
       }
     });
+    instance.usernamesComponent = new UsernamesComponent(null);
+    instance.usernamesComponent.groupUsername = new GroupUsername();
+    instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
     await instance.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
@@ -188,6 +189,9 @@ describe('AbnormalAccountsComponent', () => {
         isEdit: true,
       }
     });
+    instance.usernamesComponent = new UsernamesComponent(null);
+    instance.usernamesComponent.groupUsername = new GroupUsername();
+    instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
     await instance.onYesConfirmWarningModal();
 
     expect(mockOnYesConfirmWarningModal).toHaveBeenCalledTimes(1);
@@ -202,6 +206,9 @@ describe('AbnormalAccountsComponent', () => {
         isEdit: true,
       }
     });
+    instance.usernamesComponent = new UsernamesComponent(null);
+    instance.usernamesComponent.groupUsername = new GroupUsername();
+    instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
     const actual = instance['initSaveRequestInput']();
 
     expect(actual.requestId).toBe(instance.requestId);
