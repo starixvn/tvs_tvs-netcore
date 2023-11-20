@@ -75,6 +75,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         var actionAutoVoidInstants = new List<int>
         {
             ActionVoidRequestConstant.AutoVoidAllInstantId,
+            ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicyId,
             ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOffId,
             ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId

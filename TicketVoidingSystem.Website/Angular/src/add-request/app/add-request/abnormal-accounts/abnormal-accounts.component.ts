@@ -8,11 +8,11 @@ import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
-import { AccountWinlostModel } from './models/account-winlost.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request.model';
 import { ValidationBusinessRuleArgs } from './models/validation.model';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
+import { EventAbnormalAccountService } from './services/event-abnormal.account.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
@@ -38,18 +38,18 @@ export class AbnormalAccountsComponent implements OnInit {
   usernamesList: string;
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
-  validAccountWinlostModels: AccountWinlostModel[] = [];
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
+    private readonly addRequestApiService: AddRequestApiService,
+    private readonly eventAbnormalAccountService: EventAbnormalAccountService
   ) { }
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit && this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString()) {
       this.addRequestStore.changeBlockingUiStatus(true);
-      this.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
+      this.primitiveProps.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
       this.primitiveProps.isShowAccountWinLost = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     }
@@ -87,13 +87,14 @@ export class AbnormalAccountsComponent implements OnInit {
     this.addRequestStore.changeBlockingUiStatus(true);
     const validationOutput = await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
     if (validationOutput.isValid) {
-      this.validAccountWinlostModels = validationOutput.accountWinlostModels;
+      this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
       this.primitiveProps.isShowAccountWinLost = true;
     }
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   private initSaveRequestInput() {
+    const usernames = this.usernamesComponent.groupUsername.getAllValue();
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.isEdit = this.isEdit;
@@ -105,7 +106,8 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
     arg.addRequestStore = this.addRequestStore;
     arg.abnormalAccountModel = this.abnormalAccountModel;
-    arg.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels();
+    arg.abnormalAccountModel.accountWinlostModels
+      = this.eventAbnormalAccountService.getAccountWinlostModels(usernames, this.primitiveProps.validAccountWinlostModels);
     arg.usernamesComponent = this.usernamesComponent;
     arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
@@ -115,28 +117,20 @@ export class AbnormalAccountsComponent implements OnInit {
   }
 
   private initValidationBusinessRuleArgs(): ValidationBusinessRuleArgs {
+    const usernames = this.usernamesComponent.groupUsername.getAllValue();
     const arg = new ValidationBusinessRuleArgs();
     arg.actionId = this.filter.action;
     arg.requestId = this.requestId;
     arg.issueTypeId = this.filter.issueTypeId;
     arg.usernamesComponent = this.usernamesComponent;
     arg.abnormalAccountModel = this.abnormalAccountModel;
-    arg.abnormalAccountModel.accountWinlostModels = this.getAccountWinlostModels();
+    arg.abnormalAccountModel.accountWinlostModels
+      = this.eventAbnormalAccountService.getAccountWinlostModels(usernames, this.primitiveProps.validAccountWinlostModels);
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
     arg.primitiveProps = this.primitiveProps;
 
     return arg;
-  }
-
-  public getAccountWinlostModels(): AccountWinlostModel[] {
-    const usernames = this.usernamesComponent.groupUsername.getAllValue();
-    return usernames?.split(',').map(x => {
-      return {
-        username: x,
-        adjustVoidLimit: this.validAccountWinlostModels?.find(y => y.username === x)?.adjustVoidLimit
-      } as AccountWinlostModel
-    });
   }
 
   public changeFilter(): void {

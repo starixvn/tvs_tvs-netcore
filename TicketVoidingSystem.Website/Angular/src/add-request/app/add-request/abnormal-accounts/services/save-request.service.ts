@@ -48,6 +48,7 @@ export class SaveRequestService {
     if (!validation.isValid) {
       return;
     }
+    args.primitiveProps.validAccountWinlostModels = validation.accountWinlostModels;
     args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     const isHasWarning = await this.checkIfRequestHasWarning(args, validation);
     if (isHasWarning) {
