@@ -50,7 +50,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
 
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = checkUsernamesResult.ValidationResult,
+            Validation = GetValidationAfterCalc(request, checkUsernamesResult.ValidationResult, calcVoidResult.VoidTickets),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 RemoveTransIds = checkUsernamesResult.TransInfoValidation.RemoveTransIds,
@@ -83,5 +83,16 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
     {
         return query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
             ? compressDataAddRequestService.CompressTicket(voidTickets) : transInfoJsonCompress;
+    }
+
+    private CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
+    {
+        if (query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
+            && !voidTickets.Any())
+        {
+            validationResult.IsInvalidTotalTicket = true;
+        }
+
+        return validationResult;
     }
 }
