@@ -61,7 +61,14 @@ public class AccountWinLostServiceImp : AccountWinLostService
             RequestId = query.RequestId
         };
 
-        return await repository.FetchAsync<AccountWinlostModel>(criteria);
+        var accounts = await repository.FetchAsync<AccountWinlostModel>(criteria);
+        foreach (var account in accounts)
+        {
+            var compareCredit = account.AdjustVoidLimit is > 0 ? (decimal)account.AdjustVoidLimit : account.GivenCredit;
+            account.IsHighlight = account.CurrentLosing > compareCredit;
+        }
+
+        return accounts;
     }
 
     public IEnumerable<AccountWinlostExcelModel> GetAccountWinLostExcel(IEnumerable<AccountWinlostModel> models)
