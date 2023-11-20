@@ -40,6 +40,6 @@ public class TicketAddRequestJson
 
 public class OrderedTickets
 {
-    public IEnumerable<TicketCalculateWinLostAccount> Ascending { get; set; }
+    public IEnumerable<TicketCalculateWinLostAccount> Descending { get; set; }
     public decimal TotalWinLost { get; set; }
 }

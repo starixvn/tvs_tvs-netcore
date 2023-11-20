@@ -42,7 +42,7 @@ public class CalculateVoidTicketsServiceImp : CalculateVoidTicketsService
                 group => group.Key,
                 group => new OrderedTickets
                 {
-                    Ascending = group.OrderBy(y => y.WinLost).ThenBy(y => y.IsVoid14),
+                    Descending = group.OrderByDescending(y => y.WinLost).ThenBy(y => y.IsVoid14),
                     TotalWinLost = group.Sum(y => y.WinLost)
                 });
     }

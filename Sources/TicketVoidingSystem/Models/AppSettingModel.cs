@@ -30,7 +30,9 @@ public class AppSettingModel
 
     public string OldSiteRootUrl { get; init; }
 
-    public string LinkedLogUrl { get; set; }
+    public string LinkedLogUrl { get; init; }
+
+    public bool IsUseKnapsackAlgorithm { get; set; }
 }
 
 public class AuthSettings

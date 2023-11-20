@@ -11,12 +11,12 @@ public interface CalculateHaveStatusWonNotLoseService
 
 public class CalculateHaveStatusWonNotLoseServiceImp : CalculateHaveStatusWonNotLoseService
 {
-    private readonly KnapsackAlgorithmService knapsackAlgorithmService;
+    private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService;
     private readonly CombineVoidTicketsService combineVoidTicketsService;
 
-    public CalculateHaveStatusWonNotLoseServiceImp(KnapsackAlgorithmService knapsackAlgorithmService, CombineVoidTicketsService combineVoidTicketsService)
+    public CalculateHaveStatusWonNotLoseServiceImp(EstimateVoidWonTicketsService estimateVoidWonTicketsService, CombineVoidTicketsService combineVoidTicketsService)
     {
-        this.knapsackAlgorithmService = knapsackAlgorithmService;
+        this.estimateVoidWonTicketsService = estimateVoidWonTicketsService;
         this.combineVoidTicketsService = combineVoidTicketsService;
     }
 
@@ -48,10 +48,12 @@ public class CalculateHaveStatusWonNotLoseServiceImp : CalculateHaveStatusWonNot
             account.IsHighlight = true;
             account.CurrentLosing = currentLosing;
             account.CurrentWinning = currentWinning;
-            var voidWonTickets = knapsackAlgorithmService.EstimateVoidWonTickets(wonTickets, loseTickets, compareCredit);
+
+            var voidWonTickets = estimateVoidWonTicketsService.Execute(wonTickets, loseTickets, compareCredit);
             var othersVoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds.Where(x => x != TicketStatus.WonId), groupTickets);
             account.EstimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
-            account.WinLostAfterVoid = currentLosing - (currentWinning - account.EstimateVoidAmount);
+            account.WinLostAfterVoid = estimateVoidWonTicketsService.IsCanNotRunAlgorithm(wonTickets, loseTickets, compareCredit)
+                ? currentLosing + currentWinning : Math.Abs(currentLosing - (currentWinning - account.EstimateVoidAmount));
             account.VoidTickets = voidWonTickets.Concat(othersVoidTickets);
         }
         else

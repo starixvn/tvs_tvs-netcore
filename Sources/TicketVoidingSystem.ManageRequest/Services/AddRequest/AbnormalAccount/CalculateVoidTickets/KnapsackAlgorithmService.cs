@@ -4,24 +4,23 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.
 
 public interface KnapsackAlgorithmService
 {
-    IEnumerable<TicketCalculateWinLostAccount> EstimateVoidWonTickets(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit);
+    IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, decimal maxCapacity);
 }
 
 public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
 {
-    public IEnumerable<TicketCalculateWinLostAccount> EstimateVoidWonTickets(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
+    public IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, decimal maxCapacity)
     {
-        var capacityDecimal = compareCredit - (loseTickets.TotalWinLost - wonTickets.TotalWinLost);
-        var capacityMultiply100 = (int)(capacityDecimal * 100) - 1;
+        var capacityMultiply100 = (int)(maxCapacity * 100) - 1;
 
-        var weights = wonTickets.Ascending.Select(x =>
+        var weights = wonTickets.Descending.Select(x =>
         {
             x.WinLostMultiply100 = (int)(x.WinLost * 100);
             return x;
         }).ToList();
 
         var (_, selectedVoidItems) = Knapsack(capacityMultiply100, weights, weights);
-        var voidWonTickets = selectedVoidItems.Select(index => wonTickets.Ascending.ElementAt(index));
+        var voidWonTickets = selectedVoidItems.Select(index => wonTickets.Descending.ElementAt(index));
 
         return voidWonTickets;
     }

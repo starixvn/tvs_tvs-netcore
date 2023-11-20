@@ -18,7 +18,7 @@ public class CombineVoidTicketsServiceImp : CombineVoidTicketsService
         {
             if (groupTickets.TryGetValue((custId, status), out var currentGroup))
             {
-                voidTickets.AddRange(currentGroup.Ascending);
+                voidTickets.AddRange(currentGroup.Descending);
             }
         }
 

@@ -11,6 +11,7 @@ public static class AppSettingService
     {
         var setting = new AppSettingModel
         {
+            IsUseKnapsackAlgorithm = true,
             AuthSettings = new AuthSettings
             {
                 CookieTimeOut = configuration.GetValue<int>($"{nameof(AuthSettings)}:{nameof(AuthSettings.CookieTimeOut)}"),

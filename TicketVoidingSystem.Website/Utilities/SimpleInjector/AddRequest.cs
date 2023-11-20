@@ -45,5 +45,7 @@ public static class AddRequest
         services.AddTransient<CalculateVoidTicketsService, CalculateVoidTicketsServiceImp>();
         services.AddTransient<CombineVoidTicketsService, CombineVoidTicketsServiceImp>();
         services.AddTransient<KnapsackAlgorithmService, KnapsackAlgorithmServiceImp>();
+        services.AddTransient<SortAlgorithmService, SortAlgorithmServiceImp>();
+        services.AddTransient<EstimateVoidWonTicketsService, EstimateVoidWonTicketsServiceImp>();
     }
 }
