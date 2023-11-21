@@ -61,8 +61,9 @@ export class SaveRequestService {
   async onYesConfirmWarningModal(args: SaveRequestArg): Promise<void> {
     args.addRequestStore.changeBlockingUiStatus(true);
     const validation = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs(args));
+    args.primitiveProps.validAccountWinlostModels = validation.accountWinlostModels;
+    args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     if (validation.isValid) {
-      args.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
       await this.executeApiSaveRequest(args);
     } else {
       this.popupService.showError('There are some invalid Bet ID(s) in this request, please check again!');

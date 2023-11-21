@@ -1,6 +1,8 @@
-import { Component, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { RegexConstant } from '../../../../../utility/constants/regex';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
@@ -20,14 +22,21 @@ export class AccountTableComponent {
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() accountWinlostModels: AccountWinlostModel[];
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
+  tooltip = new Tooltip();
 
   constructor(
+    private readonly element: ElementRef,
     private readonly addRequestStore: AddRequestStore,
     private readonly appService: AddRequestApiService,
     private readonly validationService: ValidationService
-  ) { }
+  ) {
+    this.tooltip.element = this.element;
+  }
 
-  public async reCalculate(account: AccountWinlostModel): Promise<void> {
+  public async reCalculate(account: AccountWinlostModel, index: number): Promise<void> {
+    if (!this.isCorrectFormatVoidLimit(account, index)) {
+      return;
+    }
     this.addRequestStore.changeBlockingUiStatus(true);
     const viewModel = await this.validationService.getValidation(this.createValidationBusinessRuleArgs(account));
     const updatedAccountAmount = viewModel.accountWinlostModels.find(x => x.custId === account.custId);
@@ -63,5 +72,31 @@ export class AccountTableComponent {
     arg.abnormalAccountModel.accountWinlostModels = [account];
 
     return arg;
+  }
+
+  public isValid(): boolean {
+    if (this.accountWinlostModels) {
+      return this.accountWinlostModels.every(x => this.isCorrectFormatVoidLimit(x, this.accountWinlostModels.indexOf(x)))
+    }
+
+    return true;
+  }
+
+  onChangeAdjustGV(account: AccountWinlostModel, index: number): void {
+    this.isCorrectFormatVoidLimit(account, index);
+  }
+
+  public isCorrectFormatVoidLimit(account: AccountWinlostModel, index: number): boolean {
+    if (!account.adjustVoidLimit) {
+      return true;
+    }
+
+    if (!RegexConstant.ACCOUNT_VOID_LIMIT.test(account.adjustVoidLimit?.toString())) {
+      this.tooltip.display('adjust-gv' + index, 'Invalid Amount.');
+      return false;
+    }
+    this.tooltip.hide();
+
+    return true;
   }
 }

@@ -6,6 +6,7 @@ import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
+import { AccountTableComponent } from './account-table/account-table.component';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -34,6 +35,7 @@ export class AbnormalAccountsComponent implements OnInit {
   @ViewChild('usernames') usernamesComponent: UsernamesComponent;
   @ViewChild('products') productFilterComponent: ProductFilterComponent;
   @ViewChild('eventDate') eventDateFilterComponent: EventDateFilterComponent;
+  @ViewChild('accountTable') accountTableComponent: AccountTableComponent;
 
   usernamesList: string;
   primitiveProps = new PrimitiveProperty();
@@ -72,6 +74,10 @@ export class AbnormalAccountsComponent implements OnInit {
   }
 
   public async saveRequest(): Promise<void> {
+    if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
+      this.addRequestStore.changeSavingRequestStatus(false);
+      return;
+    }
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
 
@@ -85,6 +91,10 @@ export class AbnormalAccountsComponent implements OnInit {
 
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
+    if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
+      this.addRequestStore.changeBlockingUiStatus(false);
+      return;
+    }
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
     this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
     this.addRequestStore.changeBlockingUiStatus(false);
@@ -109,6 +119,7 @@ export class AbnormalAccountsComponent implements OnInit {
     arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
+    arg.accountTableComponent = this.accountTableComponent;
 
     return arg;
   }
@@ -125,6 +136,7 @@ export class AbnormalAccountsComponent implements OnInit {
       = this.eventAbnormalAccountService.getAccountWinlostModels(usernames, this.primitiveProps.validAccountWinlostModels);
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
+    arg.accountTableComponent = this.accountTableComponent;
     arg.primitiveProps = this.primitiveProps;
 
     return arg;

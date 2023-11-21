@@ -70,23 +70,24 @@
               <div>{{item.username}}</div>
             </td>
             <td class="col-tb-3 text-right">
-              <div>{{item.givenCredit}}</div>
+              <div>{{item.givenCredit.toLocaleString()}}</div>
             </td>
             <td class="col-tb-4 text-right adjust-gv">
-              <input class="form-control form-control-sm" type="number" [(ngModel)]="item.adjustVoidLimit"
-                (blur)="reCalculate(item)" />
+              <input class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
+                (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided"
+                (blur)="reCalculate(item, i)"/>
             </td>
             <td class="col-tb-5 text-right">
-              <div>{{item.currentLosing}}</div>
+              <div>{{item.currentLosing.toLocaleString()}}</div>
             </td>
             <td class="col-tb-6 text-right">
-              <div>{{item.currentWinning}}</div>
+              <div>{{item.currentWinning.toLocaleString()}}</div>
             </td>
-            <td class="col-tb-7 text-right">
-              <div>{{item.estimateVoidAmount}}</div>
+            <td class="col-tb-7 text-right highlight-amount">
+              <div>{{item.estimateVoidAmount.toLocaleString()}}</div>
             </td>
-            <td class="text-right">
-              <div>{{item.winLostAfterVoid}}</div>
+            <td class="text-right highlight-amount">
+              <div>{{item.winLostAfterVoid.toLocaleString()}}</div>
             </td>
           </tr>
         </tbody>
@@ -103,3 +104,4 @@
   </div>
   <!-- <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging> -->
 </div>
+<tooltip [tooltip]="tooltip"></tooltip>

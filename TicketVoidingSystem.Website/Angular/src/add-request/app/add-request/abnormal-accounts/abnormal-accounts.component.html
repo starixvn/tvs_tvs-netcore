@@ -28,7 +28,8 @@
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
       (click)="handleSearchEvent()">Search</button>
   </div>
-  <account-table *ngIf="primitiveProps.isShowAccountWinLost"
+  <account-table #accountTable
+    *ngIf="primitiveProps.isShowAccountWinLost"
     [filter]="filter"
     [requestId]="requestId"
     [abnormalAccountModel]="abnormalAccountModel"
