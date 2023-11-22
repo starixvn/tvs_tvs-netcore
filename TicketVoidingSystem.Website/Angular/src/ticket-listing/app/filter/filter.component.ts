@@ -291,7 +291,7 @@ export class FilterComponent implements OnInit {
   }
 
   private isInvalidProduct7(product: number, sportType: number): boolean {
-    return (product === 7 && sportType !== 178);
+    return (product === 7 && sportType !== 178 && sportType !== 179);
   }
 
   private isInvalidOtherProducts(sportType: number): boolean {
@@ -309,7 +309,7 @@ export class FilterComponent implements OnInit {
       sportType !== 164 &&
       (sportType < 180 || sportType > 186) &&
       (sportType < 190 || sportType > 199) &&
-      sportType !== 178
+      sportType !== 178 && sportType !== 179
     );
   }
 

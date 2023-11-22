@@ -104,10 +104,31 @@
         {
           "Id": 5304,
           "Name": "1H Over/Under"
+        }
+      ]
+    },
+    {
+      "SportTypes": [ 179 ],
+      "BetTypes": [
+        {
+          "Id": 5302,
+          "Name": "FT.1X2"
         },
         {
-          "Id": 5305,
-          "Name": "Correct Score"
+          "Id": 5303,
+          "Name": "1H 1X2"
+        },
+        {
+          "Id": 5304,
+          "Name": "1H Over/Under"
+        },
+        {
+          "Id": 5306,
+          "Name": "Handicap"
+        },
+        {
+          "Id": 5307,
+          "Name": "Over/Under"
         }
       ]
     }

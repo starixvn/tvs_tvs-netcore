@@ -59,8 +59,6 @@ public class CellServiceImp : CellService
     {
         worksheet.Cells.Style.WrapText = true;
         var lastRow = worksheet.Dimension.End.Row;
-        worksheet.HighlightFont($"E8:E{lastRow}", "LEFT(E8,1)=\"-\"", Color.Red);
-        worksheet.HighlightFont($"G8:G{lastRow}", "G8 < 0", Color.Red);
         if (isNumberGame)
         {
             worksheet.HighlightBackground($"A8:L{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
@@ -71,5 +69,7 @@ public class CellServiceImp : CellService
             worksheet.DeleteColumn(deleteColumn);
             worksheet.HighlightBackground($"A8:K{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
         }
+        worksheet.HighlightFont($"E8:E{lastRow}", "LEFT(E8,1)=\"-\"", Color.Red);
+        worksheet.HighlightFont($"G8:G{lastRow}", "G8 < 0", Color.Red);
     }
 }
