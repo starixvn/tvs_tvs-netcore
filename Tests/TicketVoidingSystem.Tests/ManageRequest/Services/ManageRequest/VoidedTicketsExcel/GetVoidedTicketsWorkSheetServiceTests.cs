@@ -29,7 +29,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
         matchService = Substitute.For<MatchService>();
 
         service = new GetVoidedTicketsWorkSheetService(cellService, getVoidedTicketsService,
-            getVoidedTicketsForExcelService, matchService);
+            getVoidedTicketsForExcelService, matchService, null);
     }
 
     [Fact]
@@ -41,7 +41,6 @@ public class GetVoidedTicketsWorkSheetServiceTests
         var mockModel = new GetVoidedTicketsQuery
         {
             MatchId = 1
-
         };
         var mockMatch = new Match
         {
