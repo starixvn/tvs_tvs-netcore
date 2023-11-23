@@ -6,8 +6,6 @@ public class GetTransInfoQuery
 {
     public int MatchId { get; set; }
     public int IssueTypeId { get; set; }
-
-    //public DateTime? KickOffTime { get; set; }
     public string TransIds { get; set; }
 
     public AbnormalAccountViewModel? AbnormalAccountViewModel { get; set; }

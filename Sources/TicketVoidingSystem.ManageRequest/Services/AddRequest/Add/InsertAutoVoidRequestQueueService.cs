@@ -65,10 +65,9 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         await Task.WhenAll(tasks);
     }
 
-    private IEnumerable<int> GetMatchIdsInRequest(IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    private static IEnumerable<int> GetMatchIdsInRequest(IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
     {
-        var matchIds = earlyKickOffInfo != null ? earlyKickOffInfo.Select(x => x.MatchId) : Enumerable.Empty<int>();
-        return matchIds;
+        return earlyKickOffInfo != null ? earlyKickOffInfo.Select(x => x.MatchId) : Enumerable.Empty<int>();
     }
 
     private static bool CheckCanInsertAutoVoidRequestQueue(int actionId)

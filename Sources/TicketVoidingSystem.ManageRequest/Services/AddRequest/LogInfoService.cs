@@ -52,48 +52,25 @@ public class LogInfoServiceImp : LogInfoService
         };
     }
 
-    private static IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation,
+    private static IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
-        switch (query.IssueTypeId)
+        return query.IssueTypeId switch
         {
-            case IssueTypeConstant.WrongScore:
-                return GetLogInfoViewModelWrongScore(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.DangerAccepted:
-                return GetLogInfoViewModelDangerAccepted(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.RedCard:
-                return GetLogInfoViewModelRedCard(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.WrongHDP:
-                return GetLogInfoViewModelWrongHdp(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.Wrong1stHDP:
-                return GetLogInfoViewModelWrong1stHdp(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.WrongOU:
-                return GetLogInfoViewModelWrongOu(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.Wrong1stOU:
-                return GetLogInfoViewModelWrong1stOu(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.WrongOdds:
-                return GetLogInfoViewModelWrongOdds(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.ReducedOver:
-                return GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.NotParticipate:
-                return GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail);
-
-            case IssueTypeConstant.EarlyKickOffTime:
-            case IssueTypeConstant.WrongKickOffTime:
-                return GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail);
-
-            default:
-                return GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail);
-        }
+            IssueTypeConstant.WrongScore => GetLogInfoViewModelWrongScore(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.DangerAccepted => GetLogInfoViewModelDangerAccepted(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.RedCard => GetLogInfoViewModelRedCard(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.WrongHDP => GetLogInfoViewModelWrongHdp(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.Wrong1stHDP => GetLogInfoViewModelWrong1stHdp(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.WrongOU => GetLogInfoViewModelWrongOu(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.Wrong1stOU => GetLogInfoViewModelWrong1stOu(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.WrongOdds => GetLogInfoViewModelWrongOdds(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.ReducedOver => GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.NotParticipate => GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.EarlyKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
+            _ => GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail)
+        };
     }
 
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongScore(GetLogInfoQuery query, IEnumerable<Validation> validation,
@@ -242,7 +219,7 @@ public class LogInfoServiceImp : LogInfoService
             };
     }
 
-    private async Task<GetLogInfoCriteria> GetLogInfoCriteria(GetLogInfoQuery query)
+    private async Task<GetLogInfoCriteria> GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
     {
         var transInfoJsonList = await GetTransInfoJson(query);
         var criteria = mapper.Map<GetLogInfoCriteria>(query);
