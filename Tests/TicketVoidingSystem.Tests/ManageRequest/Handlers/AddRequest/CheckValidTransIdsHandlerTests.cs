@@ -36,7 +36,7 @@ public class CheckValidTransIdsHandlerTests
         var result = new IEnumerable<object>[4];
         var validation = new ValidationAbnormalBet();
         var transInfoAddRequestModel = new TransInfoAddRequestModel
-            { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
+        { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         result[0] = new[] { new MatchInfoAddRequest() };
         result[1] = new[] { validation };
         result[2] = new[] { transInfoAddRequestModel };

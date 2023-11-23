@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using NSubstitute;
+﻿using NSubstitute;
 using SpecialDelete.NumberGame.Models;
 using SpecialDelete.NumberGame.Services.GetTickets;
 using SpecialDelete.NumberGame.ViewModels;

@@ -41,7 +41,9 @@ public class EditRequestServiceTests
         // Arrange
         var query = new EditRequestQuery
         {
-            IssueTypeId = issueTypeId, RemoveTransIds = removeTransIds, IsConfirmCalculator = isConfirmCalculator,
+            IssueTypeId = issueTypeId,
+            RemoveTransIds = removeTransIds,
+            IsConfirmCalculator = isConfirmCalculator,
             MatchId = 1
         };
         var markTicketResults = new List<Result> { new() };

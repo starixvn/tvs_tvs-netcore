@@ -124,7 +124,7 @@ public class EmailRecordServiceTest
         var service = new EmailRecordServiceImp(null, null, null, null, null);
 
         // Act
-        var actual = service.Create(model, EmailGroup.None, Arg.Any<Recover>());
+        var actual = service.Create(model, EmailGroup.None, new Recover());
 
         // Assert
         AssertExtension.Equal(expected, actual);

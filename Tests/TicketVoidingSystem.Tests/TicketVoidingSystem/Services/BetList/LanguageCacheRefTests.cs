@@ -175,7 +175,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.BetList
             // Act
             _ = languageCacheRef.GetKenoBetChoiceName(kenoBetChoiceId, out kenoBetTypeId);
             // Assert
-            remotingRefService.Received(1).GetKenoBetChoice(kenoBetChoiceId, CurrentLanguage, out kenoBetTypeId); 
+            remotingRefService.Received(1).GetKenoBetChoice(kenoBetChoiceId, CurrentLanguage, out kenoBetTypeId);
         }
 
         [Fact]
@@ -185,7 +185,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.BetList
             // Act
             _ = languageCacheRef.GetKenoBetTypeName("1");
             // Assert
-            remotingRefService.Received(1).GetKenoBetType("1", CurrentLanguage); 
+            remotingRefService.Received(1).GetKenoBetType("1", CurrentLanguage);
         }
 
         [Fact]
@@ -239,7 +239,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.BetList
         {
             // Arrange
             const string lotteryBetChoiceId = "1";
-            
+
             // Act
             _ = languageCacheRef.GetLotteryBetChoiceName(lotteryBetChoiceId, out lotteryBetTypeId);
 

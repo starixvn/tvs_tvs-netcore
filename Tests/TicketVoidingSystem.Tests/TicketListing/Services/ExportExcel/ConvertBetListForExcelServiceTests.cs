@@ -27,7 +27,7 @@ public class ConvertBetListForExcelServiceTests
     public void ConvertWinLoss_CheckValidWinLoss_ReturnValue(string html, decimal expected)
     {
         // Arrange
-        
+
         // Act
         var actual = service.WinLossHtmlToText(html);
 

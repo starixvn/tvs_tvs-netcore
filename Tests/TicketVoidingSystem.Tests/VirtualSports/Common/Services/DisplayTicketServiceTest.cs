@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using NSubstitute;
+﻿using NSubstitute;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.Common.Services;
 using SpecialDelete.VirtualSports.Common.ViewModels;

@@ -40,7 +40,7 @@ public class GetTicketsServiceTests
     {
         // Arrange
         var query = new GetTicketsQuery
-            { IssueTypeId = issueTypeId, RequestId = 2, Match = new Match { MatchId = matchId } };
+        { IssueTypeId = issueTypeId, RequestId = 2, Match = new Match { MatchId = matchId } };
         var tickets = new List<BetId> { new(), new() };
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
         repository.FetchMultipleAsync<BetId, BetId, BetId>(Arg.Any<GetTicketInRequestCriteria>())

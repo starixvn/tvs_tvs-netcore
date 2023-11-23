@@ -51,8 +51,11 @@ public class GetPoolHouseTicketHandlerTests
         var wrongOddsInfo = new List<WrongOddsViewModel> { new() };
         var request = new GetPoolHouseTicketRequest
         {
-            IssueTypeId = issueTypeId, SubIssueTypeId = subIssueTypeId, IsLinkGroup1X2 = isLinkGroup1X2,
-            IsLinkGroupAIO = true, WrongOddsInfo = wrongOddsInfo
+            IssueTypeId = issueTypeId,
+            SubIssueTypeId = subIssueTypeId,
+            IsLinkGroup1X2 = isLinkGroup1X2,
+            IsLinkGroupAIO = true,
+            WrongOddsInfo = wrongOddsInfo
         };
         getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
             .ReturnsForAnyArgs(new List<string> { "123", "" });
@@ -92,7 +95,7 @@ public class GetPoolHouseTicketHandlerTests
     {
         // Arrange
         var request = new GetPoolHouseTicketRequest
-            { IssueTypeId = 4, SubIssueTypeId = 1, IsLinkGroup1X2 = true, IsLinkGroupAIO = true, WrongOddsInfo = null };
+        { IssueTypeId = 4, SubIssueTypeId = 1, IsLinkGroup1X2 = true, IsLinkGroupAIO = true, WrongOddsInfo = null };
         getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
             .ReturnsForAnyArgs(new List<string> { "123", "" });
         var betTypes = new List<BetTypeModel> { new() { GroupName = "1" }, new() { GroupName = "2" } };

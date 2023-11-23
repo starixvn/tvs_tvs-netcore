@@ -40,7 +40,10 @@ public class UpdateRequestProcessStageTests
         // Arrange
         var query = new EditRequestQuery
         {
-            RequestId = 1, ActionId = 1, MatchId = 1, OperatorsList = new List<OperatorQuery>{new()},
+            RequestId = 1,
+            ActionId = 1,
+            MatchId = 1,
+            OperatorsList = new List<OperatorQuery> { new() },
             WrongScoreInfo = new List<WrongScoreInfoViewModel>(),
             WrongOuInfo = new List<WrongOuViewModel>(),
             Wrong1stOuInfo = new List<WrongOuViewModel>(),

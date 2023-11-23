@@ -24,7 +24,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.SignalR
         public void UpdateRequestStatusToAllUser_HasUpdateRequestStatus()
         {
             // Arrange
-            var status = new List<RequestStatus>(); 
+            var status = new List<RequestStatus>();
 
             // Act
             _ = service.UpdateRequestStatusToAllUser(status);

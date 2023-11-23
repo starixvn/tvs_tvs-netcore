@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Subje
         public void CreateVoid_HasTypeIsCashOut_ReturnSubjectVoidCashOutImp()
         {
             // Arrange
-            
+
             // Act
             var actual = SubjectFactory.CreateVoid(VoidType.CashOut);
 

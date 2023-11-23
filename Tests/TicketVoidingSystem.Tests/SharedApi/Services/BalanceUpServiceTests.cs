@@ -10,7 +10,7 @@ using Xunit;
 namespace TicketVoidingSystem.Tests.SharedApi.Services;
 public class BalanceUpServiceTests
 {
-private readonly IDynamicRepository repository;
+    private readonly IDynamicRepository repository;
     private readonly BalanceUpServiceImp service;
 
     public BalanceUpServiceTests()

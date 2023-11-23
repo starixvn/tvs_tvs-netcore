@@ -51,7 +51,7 @@ public class GetVoidedTicketsHandlerTests
     public async Task Handle_RequestHasMatchIdIs0_ExpectedReceived()
     {
         // Arrange
-        var request = new GetVoidedTicketsRequest { IssueTypeId = 11, MatchId = 0};
+        var request = new GetVoidedTicketsRequest { IssueTypeId = 11, MatchId = 0 };
         var cancellationToken = CancellationToken.None;
         var getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
         var mapTicketsService = Substitute.For<MapTicketsService>();

@@ -307,6 +307,6 @@ public class HtmlExtensionTests
         Assert.Equal(string.Empty, result);
     }
 
-    
+
 }
 

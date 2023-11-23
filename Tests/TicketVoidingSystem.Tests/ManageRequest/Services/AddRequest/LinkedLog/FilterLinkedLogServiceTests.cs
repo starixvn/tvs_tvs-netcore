@@ -36,7 +36,7 @@ public class FilterLinkedLogServiceTests
             { 3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = issueTypeId, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = issueTypeId, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()
@@ -85,7 +85,7 @@ public class FilterLinkedLogServiceTests
             { 3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = issueTypeId, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = issueTypeId, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()
@@ -129,7 +129,7 @@ public class FilterLinkedLogServiceTests
             { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = IssueTypeConstant.WrongOdds, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = IssueTypeConstant.WrongOdds, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()
@@ -183,7 +183,7 @@ public class FilterLinkedLogServiceTests
             { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = IssueTypeConstant.WrongOdds, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = IssueTypeConstant.WrongOdds, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()
@@ -233,7 +233,7 @@ public class FilterLinkedLogServiceTests
             { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = IssueTypeConstant.RedCard, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = IssueTypeConstant.RedCard, FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var apiLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()

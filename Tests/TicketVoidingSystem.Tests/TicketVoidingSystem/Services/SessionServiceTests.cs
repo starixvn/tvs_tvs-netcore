@@ -97,7 +97,7 @@ public class SessionServiceTests
     {
         // Arrange
         currentSession.UserId = 1;
-        userService.Get(1).ReturnsForAnyArgs(new User{ Password = "1"});
+        userService.Get(1).ReturnsForAnyArgs(new User { Password = "1" });
 
         // Act
         var actual = service.CheckPassword("1");

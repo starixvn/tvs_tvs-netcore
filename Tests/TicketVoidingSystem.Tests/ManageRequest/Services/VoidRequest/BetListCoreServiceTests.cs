@@ -1,17 +1,17 @@
+using AutoMapper;
+using Fanex.BetList.Core.Entities;
+using Fanex.BetList.Core.TicketHelper;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
-using Xunit;
-using AutoMapper;
+using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
-using Fanex.BetList.Core.Entities;
-using Fanex.BetList.Core.TicketHelper;
-using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
 {
-    public class BetListCoreServiceTests: IClassFixture<RemotingRefFixture>
+    public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
     {
         private readonly BetListService betListService;
         private readonly IMapper mapper;

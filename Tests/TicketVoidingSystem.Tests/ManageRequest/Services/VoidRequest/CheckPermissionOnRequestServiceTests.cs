@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Services;
 using Xunit;
-using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
 {

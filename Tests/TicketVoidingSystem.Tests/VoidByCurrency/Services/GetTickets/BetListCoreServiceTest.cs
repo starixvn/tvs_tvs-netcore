@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using AutoMapper;
+﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using NSubstitute;

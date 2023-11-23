@@ -40,7 +40,7 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
         var item = new TicketEmailModel
         { IsMixParlay = true, CurrencyName = currencyName, BetTypeId = BetTypeConstant.BitCoinOverUnder };
         var match = new Match();
-        var site = new SiteEmail{ SpecialPlatform  = specialPlatform };
+        var site = new SiteEmail { SpecialPlatform = specialPlatform };
         var expected = new TicketEmailViewModel
         {
             Odds = "Odds",

@@ -34,7 +34,7 @@ public class SendDataOicHandlerTest
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Single( actual);
+        Assert.Single(actual);
     }
 
     [Fact]

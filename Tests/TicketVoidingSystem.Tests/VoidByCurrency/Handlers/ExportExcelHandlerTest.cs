@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using SpecialDelete.VoidByCurrency.Handlers;

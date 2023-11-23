@@ -23,11 +23,11 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
         public void GetTicket_ValidData_ReturnTicketEmailViewModel()
         {
             // Arrange
-            var item = new TicketEmailModel{ TransDate = new DateTime(2022, 2, 2, 2, 2, 2) };
+            var item = new TicketEmailModel { TransDate = new DateTime(2022, 2, 2, 2, 2, 2) };
             var match = new Match();
             var site = new SiteEmail();
             betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), Arg.Any<SiteEmail>(), true)
-                .ReturnsForAnyArgs(new TicketEmailViewModel{ Stake = "Rebate1" });
+                .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
             var expected = new TicketEmailViewModel
             {
                 Stake = "(Rebate)1",

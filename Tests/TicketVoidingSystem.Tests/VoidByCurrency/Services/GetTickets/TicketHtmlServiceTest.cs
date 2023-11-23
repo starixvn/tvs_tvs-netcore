@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using NSubstitute;
 using SpecialDelete.VoidByCurrency.Models;
 using SpecialDelete.VoidByCurrency.Services.GetTickets;

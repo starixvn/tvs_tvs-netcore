@@ -76,5 +76,5 @@ public class NetPositionForCricketServiceTests
         await netPositionService.Received(1)
             .RollBackNetPosition(Arg.Any<IEnumerable<BetId>>());
     }
-    
+
 }

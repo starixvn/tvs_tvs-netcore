@@ -18,7 +18,7 @@ public class SendEmailApiHandlerTests
     {
         // Arrange
         var message = new SendEmailApiRequest
-            { EmailTickets = new List<TicketEmailModel> { new() }, VoidedReason = new VoidedReason() };
+        { EmailTickets = new List<TicketEmailModel> { new() }, VoidedReason = new VoidedReason() };
         var sendEmailService = Substitute.For<SendEmailService>();
         sendEmailService.SendEmail(Arg.Any<EmailVoidModel>(), Arg.Any<IEnumerable<TicketEmailModel>>(), true)
             .ReturnsForAnyArgs(new List<Result>());

@@ -16,7 +16,7 @@ public class ExportExcelDetailTicketsHandlerTests
     public async Task ExportExcel_ValidRequest_CallExcelServiceCreateStream()
     {
         // Arrange
-        var request = new ExportExcelDetailTicketsRequest { Match = new Match { MatchId = 123} };
+        var request = new ExportExcelDetailTicketsRequest { Match = new Match { MatchId = 123 } };
         var excelService = Substitute.For<ExcelService<GetDetailTicketsQuery>>();
         var handler = new ExportExcelDetailTicketsHandler(excelService);
         var contentAsByteArray = new byte[] { };

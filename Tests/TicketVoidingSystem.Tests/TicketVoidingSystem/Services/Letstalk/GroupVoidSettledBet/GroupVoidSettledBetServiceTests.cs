@@ -52,7 +52,7 @@ public class GroupVoidSettledBetServiceTests
         // Arrange
         var letstalkModel = new LetstalkModel();
         var ticketInfo = new TicketInfoForLetstalk();
-        
+
         // Act
         var results = await service.SendMessageWithTicketInfo(letstalkModel, ticketInfo, null);
         var result = results.ToList()[0];
@@ -100,7 +100,7 @@ public class GroupVoidSettledBetServiceTests
     public async Task SendMessageWithTicketInfo_HasException_HasError()
     {
         // Arrange
-        var ticketInfo = new TicketInfoForLetstalk{ IsMemberTemplate = true};
+        var ticketInfo = new TicketInfoForLetstalk { IsMemberTemplate = true };
         var tickets = new List<TicketEmailModel> { new(), new() };
         service = new GroupVoidSettledBetServiceImp(letstalkSingleMessageService, loggingService,
             messageContentSingleService, null);

@@ -27,12 +27,15 @@ public class GetLastTimeScoreHandlerTests : IClassFixture<AppSettingFixture>
         // Arrange
         var request = new GetLastTimeScoreRequest
         {
-            MatchId = 1, ActionId = 1, FilterBy = 1,
-            ScoreId = 1, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2)
+            MatchId = 1,
+            ActionId = 1,
+            FilterBy = 1,
+            ScoreId = 1,
+            FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2)
         };
         repository.GetAsync<GetLastTimeScoreViewModel>(Arg.Any<GetLastTimeScoreCriteria>()).ReturnsForAnyArgs(
             new GetLastTimeScoreViewModel
-                { LastTime = new DateTime(2022, 2, 2, 2, 2, 2) });
+            { LastTime = new DateTime(2022, 2, 2, 2, 2, 2) });
 
         var viewModel = new GetLastTimeScoreViewModel
         {

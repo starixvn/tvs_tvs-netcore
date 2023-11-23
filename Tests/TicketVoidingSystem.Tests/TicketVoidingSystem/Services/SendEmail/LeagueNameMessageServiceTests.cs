@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TicketVoidingSystem.Models;
+﻿using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services.SendEmail;
@@ -33,7 +32,9 @@ public class LeagueNameMessageServiceTests
         var site = new SiteEmail { IsChinaView = true };
         var match = new Match
         {
-            LeagueGroupId = 42, LeagueName = "Saba123", LeagueNameSimplified = "沙巴123",
+            LeagueGroupId = 42,
+            LeagueName = "Saba123",
+            LeagueNameSimplified = "沙巴123",
             LeagueNameNewSimplified = "沙巴123",
             OriginLeagueName = "Saba123",
             OriginLeagueNameSimplified = "沙巴123",
@@ -70,7 +71,7 @@ public class LeagueNameMessageServiceTests
     public void RemoveSabaInChoiceColumn_LeagueGroupIsSaBa_ReplaceSaba()
     {
         // Arrange
-        var match = new Match{ LeagueGroupId = 42, OriginLeagueName  = "saba - 123", OriginLeagueNameSimplified  = "123"};
+        var match = new Match { LeagueGroupId = 42, OriginLeagueName = "saba - 123", OriginLeagueNameSimplified = "123" };
         var site = new SiteEmail { IsChinaView = true };
         const string choice = "123 saba - 123";
         var service = new LeagueNameMessageServiceImp();

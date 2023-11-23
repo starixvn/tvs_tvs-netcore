@@ -37,7 +37,7 @@ public class GetTicketsHandlerTests
         pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
         var handler = new GetTicketsHandler(getTicketsService, mapTicketService, pagingService, userPermissionService);
         var expected = new TicketsViewModel
-            { TotalItemsList = new List<BetId>(), LicenseesName = "", Groups = new List<Group<TicketViewModel>>() };
+        { TotalItemsList = new List<BetId>(), LicenseesName = "", Groups = new List<Group<TicketViewModel>>() };
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);

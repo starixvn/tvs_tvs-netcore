@@ -23,7 +23,7 @@ public class MatchInfoControllerTests
     {
         // Arrange
         var request = new GetMatchInfoRequest { MatchId = 123456 };
-        
+
         // Act
         await controller.GetInfo(request);
 
@@ -35,7 +35,7 @@ public class MatchInfoControllerTests
     public async Task GetFirstTimeAndKickOffTime_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        
+
         // Act
         await controller.GetFirstTimeAndKickOffTime(123456);
 
