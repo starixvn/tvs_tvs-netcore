@@ -48,6 +48,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds, checkUsernamesResult.TicketCalculateWinLostAccount.ToList(), accounts);
         }
 
+        ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
         var viewModel = new CheckValidUsernamesViewModel
         {
             Validation = GetValidationAfterCalc(request, checkUsernamesResult.ValidationResult, calcVoidResult.VoidTickets),
@@ -94,5 +95,13 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         }
 
         return validationResult;
+    }
+
+    private static void ClearVoidTicketsInAccounts(IEnumerable<AccountWinlostModel> accounts)
+    {
+        foreach (var account in accounts)
+        {
+            account.VoidTickets = Enumerable.Empty<TicketCalculateWinLostAccount>();
+        }
     }
 }

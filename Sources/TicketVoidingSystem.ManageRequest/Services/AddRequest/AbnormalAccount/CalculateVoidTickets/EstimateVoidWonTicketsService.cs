@@ -5,8 +5,6 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.
 
 public interface EstimateVoidWonTicketsService
 {
-    bool IsCanNotRunAlgorithm(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit);
-
     IEnumerable<TicketCalculateWinLostAccount> Execute(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit);
 }
 
@@ -21,9 +19,9 @@ public class EstimateVoidWonTicketsServiceImp : EstimateVoidWonTicketsService
         this.sortAlgorithmService = sortAlgorithmService;
     }
 
-    public bool IsCanNotRunAlgorithm(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
+    private static bool IsCanNotRunAlgorithm(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)
     {
-        return GetMaxCapacity(wonTickets, loseTickets, compareCredit) < 0;
+        return GetMaxCapacity(wonTickets, loseTickets, compareCredit) <= 0;
     }
 
     private static decimal GetMaxCapacity(OrderedTickets wonTickets, OrderedTickets loseTickets, decimal compareCredit)

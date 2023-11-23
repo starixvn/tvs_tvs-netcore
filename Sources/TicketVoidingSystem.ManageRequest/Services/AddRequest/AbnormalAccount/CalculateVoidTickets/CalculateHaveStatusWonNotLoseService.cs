@@ -52,8 +52,7 @@ public class CalculateHaveStatusWonNotLoseServiceImp : CalculateHaveStatusWonNot
             var voidWonTickets = estimateVoidWonTicketsService.Execute(wonTickets, loseTickets, compareCredit);
             var othersVoidTickets = combineVoidTicketsService.Execute(account.CustId, ticketStatusIds.Where(x => x != TicketStatus.WonId), groupTickets);
             account.EstimateVoidAmount = voidWonTickets.Sum(x => x.WinLost);
-            account.WinLostAfterVoid = estimateVoidWonTicketsService.IsCanNotRunAlgorithm(wonTickets, loseTickets, compareCredit)
-                ? currentLosing + currentWinning : Math.Abs(currentLosing - (currentWinning - account.EstimateVoidAmount));
+            account.WinLostAfterVoid = Math.Abs(currentLosing - (currentWinning - account.EstimateVoidAmount));
             account.VoidTickets = voidWonTickets.Concat(othersVoidTickets);
         }
         else
