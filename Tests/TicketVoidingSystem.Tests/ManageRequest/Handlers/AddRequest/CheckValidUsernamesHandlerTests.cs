@@ -14,19 +14,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 
 public class CheckValidUsernamesHandlerTests
 {
-    private readonly CheckUsernameService checkUsernameService;
-    private readonly CalculateVoidTicketsService calculateVoidTicketsService;
-    private readonly CompressDataAddRequestService compressDataAddRequestService;
-    private readonly CheckValidUsernamesHandler handler;
-
-    public CheckValidUsernamesHandlerTests()
-    {
-        checkUsernameService = Substitute.For<CheckUsernameService>();
-        calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
-        compressDataAddRequestService = Substitute.For<CompressDataAddRequestService>();
-        handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
-    }
-
     [Fact]
     public async Task Handler_Successful_ReturnModelExpected()
     {
@@ -42,8 +29,11 @@ public class CheckValidUsernamesHandlerTests
             TransInfoJsonCompress = "123",
             TransInfoValidation = transInfoAddRequestModel
         };
-        checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
-
+        var calcVoidTicketsResult = new CalcVoidTicketsResult()
+        {
+            Accounts = new List<AccountWinlostModel> { new() },
+            VoidTickets = new List<TicketCalculateWinLostAccount> { new() }
+        };
         var viewModel = new CheckValidUsernamesViewModel
         {
             Validation = new CheckUsernamesModel(),
@@ -53,8 +43,16 @@ public class CheckValidUsernamesHandlerTests
                 UnMarkTransIds = "123",
                 MarkTransIds = "456",
                 TransInfoJson = "123"
-            }
+            },
         };
+        var checkUsernameService = Substitute.For<CheckUsernameService>();
+        var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
+        var compressDataAddRequestService = Substitute.For<CompressDataAddRequestService>();
+        compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
+        calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
+            .ReturnsForAnyArgs(calcVoidTicketsResult);
+        checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
+        var handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
@@ -72,6 +70,11 @@ public class CheckValidUsernamesHandlerTests
             ActionId = ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             AccountWinlostModels = new List<AccountWinlostModel> { new() { Username = "123AA" } }
         };
+        var calcVoidTicketsResult = new CalcVoidTicketsResult()
+        {
+            Accounts = new List<AccountWinlostModel> { new() },
+            VoidTickets = new List<TicketCalculateWinLostAccount> { new() }
+        };
         var validation = new CheckUsernamesModel();
         var transInfoAddRequestModel = new TransInfoAddRequestModel { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         var checkResult = new CheckUsernamesInDatabaseResult
@@ -82,10 +85,6 @@ public class CheckValidUsernamesHandlerTests
             TransInfoJsonCompress = "123",
             TransInfoValidation = transInfoAddRequestModel
         };
-        compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
-        calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
-            .ReturnsForAnyArgs(new CalcVoidTicketsResult());
-        checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
 
         var viewModel = new CheckValidUsernamesViewModel
         {
@@ -96,8 +95,17 @@ public class CheckValidUsernamesHandlerTests
                 UnMarkTransIds = "123",
                 MarkTransIds = "456",
                 TransInfoJson = "AAA"
-            }
+            },
+            AccountWinlostModels = calcVoidTicketsResult.Accounts
         };
+        var checkUsernameService = Substitute.For<CheckUsernameService>();
+        var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
+        var compressDataAddRequestService = Substitute.For<CompressDataAddRequestService>();
+        compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
+        calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
+            .ReturnsForAnyArgs(calcVoidTicketsResult);
+        checkUsernameService.ExecuteValidationInDb(null).ReturnsForAnyArgs(checkResult);
+        var handler = new CheckValidUsernamesHandler(checkUsernameService, calculateVoidTicketsService, compressDataAddRequestService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
