@@ -4,6 +4,7 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { AccountTableComponent } from '../account-table/account-table.component';
 import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from '../event-date-filter/event-date-filter.component';
 import { CheckUsernamesViewModel, ValidationAbnormalAccount } from '../models/check-username.model';
@@ -44,7 +45,8 @@ class Helper {
     actionId: '1',
     issueTypeId: '1',
     eventDateFilterComponent: new EventDateFilterComponent(null),
-    productFilterComponent: new ProductFilterComponent(null)
+    productFilterComponent: new ProductFilterComponent(null),
+    accountTableComponent: new AccountTableComponent(null, null, null, null)
   };
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,

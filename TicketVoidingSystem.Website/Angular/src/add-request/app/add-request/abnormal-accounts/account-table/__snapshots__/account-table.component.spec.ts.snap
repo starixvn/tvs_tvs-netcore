@@ -150,6 +150,7 @@ exports[`AccountTableComponent AccountTableComponent should init match snapshot 
         </table>
       </div>
     </div>
+    <tooltip />
   </account-table>
 </ng-component>
 `;
