@@ -19,7 +19,7 @@
 </div>
 
 <product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
-  (changeFilterEvent)="changeFilter()"></product-filter>
+  (changeFilterEvent)="changeFilter()" [actionId]="filter.action"></product-filter>
 <event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
   (changeFilterEvent)="changeFilter()"></event-date-filter>
 

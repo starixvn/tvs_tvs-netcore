@@ -117,6 +117,19 @@ export class TicketStatus {
       group: 'All'
     }
   ];
+
+  static readonly SELECTION_ITEMS_AUTO_VOID_POLICY: Selection[] = [
+    {
+      name: 'Running',
+      value: TicketStatus.RUNNING.toString() + ',' + TicketStatus.WAITING.toString(),
+      group: 'All'
+    },
+    {
+      name: 'Won',
+      value: TicketStatus.WON.toString(),
+      group: 'All'
+    }
+  ];
 }
 
 export class MarkType {

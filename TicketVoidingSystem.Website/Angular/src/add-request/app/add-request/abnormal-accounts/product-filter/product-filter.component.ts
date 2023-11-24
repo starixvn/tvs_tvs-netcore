@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { ProductFilter, TicketStatus } from '../../../../../utility/constants/config';
+import { ProductFilter, TVSRequestActionType, TicketStatus } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
@@ -12,6 +12,7 @@ import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 export class ProductFilterComponent implements OnInit {
   @Input() isEdit: boolean;
   @Input() isDisabled: boolean;
+  @Input() actionId: string;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Output() changeFilterEvent = new EventEmitter();
 
@@ -32,6 +33,15 @@ export class ProductFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateItem();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['actionId']) {
+      this.selectedTicketStatus = this.actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString()
+        ? TicketStatus.SELECTION_ITEMS_AUTO_VOID_POLICY.map(x => x.value)
+        : TicketStatus.SELECTION_ITEMS.map(x => x.value);
+      this.changeFilterEvent.emit();
+    }
   }
 
   isValidComponent(): boolean {
