@@ -32,6 +32,7 @@
     *ngIf="primitiveProps.isShowAccountWinLost"
     [filter]="filter"
     [requestId]="requestId"
+    (changeTable)="hideValidationMessage()"
     [abnormalAccountModel]="abnormalAccountModel"
     [accountWinlostModels]="primitiveProps.validAccountWinlostModels">
   </account-table>

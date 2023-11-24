@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { SortingComponent } from '../../../../../utility/components/sorting/sorting/sorting.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -21,6 +21,7 @@ export class AccountTableComponent {
   @Input() requestId?: number;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() accountWinlostModels: AccountWinlostModel[];
+  @Output() changeTable = new EventEmitter();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
 
@@ -48,6 +49,7 @@ export class AccountTableComponent {
       account.estimateVoidAmount = updatedAccountAmount.estimateVoidAmount;
       account.winLostAfterVoid = updatedAccountAmount.winLostAfterVoid;
     }
+    this.changeTable.emit();
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 

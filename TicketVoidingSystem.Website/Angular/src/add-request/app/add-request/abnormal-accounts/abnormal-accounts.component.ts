@@ -142,7 +142,12 @@ export class AbnormalAccountsComponent implements OnInit {
     return arg;
   }
 
+  public hideValidationMessage(): void {
+    this.primitiveProps.isShowError = false;
+  }
+
   public changeFilter(): void {
     this.primitiveProps.isShowAccountWinLost = false;
+    this.primitiveProps.isShowError = false;
   }
 }

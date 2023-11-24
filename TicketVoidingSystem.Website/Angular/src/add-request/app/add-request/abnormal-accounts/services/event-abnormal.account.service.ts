@@ -7,7 +7,7 @@ import { AccountWinlostModel } from '../models/account-winlost.model';
 export class EventAbnormalAccountService {
   public getAccountWinlostModels(usernames: string, validAccountWinlostModels: AccountWinlostModel[]): AccountWinlostModel[] {
     return usernames?.split(',').map(x => {
-      const validAccount = validAccountWinlostModels?.find(y => y.username === x);
+      const validAccount = validAccountWinlostModels?.find(y => y.username.toLowerCase() === x.toLowerCase());
       return {
         username: x,
         givenCredit: validAccount?.givenCredit,
