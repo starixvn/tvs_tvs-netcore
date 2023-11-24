@@ -18,6 +18,9 @@ import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-eve
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
+import { PrimitiveProperty, AbnormalBetTicketViewModel } from './event-abnormal-bet.model';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
   static readonly fakeTransId = '123456789';
@@ -51,7 +54,8 @@ class Helper {
   static readonly fakeValidationBusinessRule: ValidationBusinessRuleOutput = {
     isValid: true,
     warningModel: new ConfirmAbnormalBetModel(),
-    transInfoAddRequestModel: null
+    transInfoAddRequestModel: null,
+    abnormalBetTicketRequests: [new AbnormalBetTicketViewModel()]
   };
   static readonly fakeConfirmAbnormalBetModel: ConfirmAbnormalBetModel = {
     isOpenDialog: true,
@@ -60,15 +64,15 @@ class Helper {
     transIds: '1022222',
     cn88Tickets: '2123122',
     ticketsOfVIPCustomer: '2123122',
-    settledTickets:'2123122',
+    settledTickets: '2123122',
     ticketsOfCustomerClass201: '2123122',
     ticketsOfCustomerClass4K: '2123122',
     isHasWarningRemovedTickets: false,
     isEditingByAnotherUser: false,
     requestId: 1,
     requestedBy: '',
-    listBettype : '',
-    listBetteam : ''
+    listBettype: '',
+    listBetteam: ''
   };
 }
 
@@ -81,7 +85,8 @@ describe('EventAbnormalBetComponent', () => {
     ],
     imports: [
       BlockUiModule,
-      FormsModule
+      FormsModule,
+      HttpClientTestingModule
     ],
     providers: [
       ValidationService,
@@ -89,6 +94,7 @@ describe('EventAbnormalBetComponent', () => {
       AddRequestStore,
       PopupService,
       CommonService,
+      AddRequestApiService
     ]
   })
   class AppModuleTest { }
@@ -96,6 +102,7 @@ describe('EventAbnormalBetComponent', () => {
   let shallow: Shallow<EventAbnormalBetComponent>;
 
   beforeEach(() => {
+
     shallow = new Shallow(EventAbnormalBetComponent, AppModuleTest);
   });
 
@@ -213,16 +220,16 @@ describe('EventAbnormalBetComponent', () => {
     fakeValidationBusinessRule.isValid = true;
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-    })
-    .render({
-      bind: {
-        abnormalBetModel: Helper.fakeAbnormalBetModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(AddRequestStore, {
+        changeBlockingUiStatus: mockChangeBlockingUiStatus,
+      })
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.filter.isVoided = true;
     instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
     instance['executeApiSaveRequest'] = jest.fn();
@@ -240,16 +247,16 @@ describe('EventAbnormalBetComponent', () => {
     fakeValidationBusinessRule.isValid = true;
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeBlockingUiStatus: mockChangeBlockingUiStatus,
-    })
-    .render({
-      bind: {
-        abnormalBetModel: Helper.fakeAbnormalBetModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(AddRequestStore, {
+        changeBlockingUiStatus: mockChangeBlockingUiStatus,
+      })
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance['checkValidBusinessRule'] = jest.fn().mockImplementation(() => Promise.resolve(fakeValidationBusinessRule));
     instance['executeApiSaveRequest'] = jest.fn();
 
@@ -302,17 +309,17 @@ describe('EventAbnormalBetComponent', () => {
     const mockChangeSavingRequestStatus = jest.fn();
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      changeBlockingUiStatus: mockChangeBlockingUiStatus
-    })
-    .render({
-      bind: {
-        abnormalBetModel: Helper.fakeAbnormalBetModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(AddRequestStore, {
+        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+        changeBlockingUiStatus: mockChangeBlockingUiStatus
+      })
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance['checkIfRequestHasWarning'] = jest.fn();
 
     // Action
@@ -329,17 +336,17 @@ describe('EventAbnormalBetComponent', () => {
     const mockChangeSavingRequestStatus = jest.fn();
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      changeBlockingUiStatus: mockChangeBlockingUiStatus
-    })
-    .render({
-      bind: {
-        abnormalBetModel: Helper.fakeAbnormalBetModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(AddRequestStore, {
+        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+        changeBlockingUiStatus: mockChangeBlockingUiStatus
+      })
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance['saveWhenRequestNotVoided'] = jest.fn();
 
     // Action
@@ -355,16 +362,16 @@ describe('EventAbnormalBetComponent', () => {
     const fakeFilterModel = Helper.fakeFilterModel;
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
-    .mock(AddRequestStore, {
-      changeAbnormalFilterBy: mockChangeAbnormalFilterBy,
-    })
-    .render({
-      bind: {
-        abnormalBetModel: Helper.fakeAbnormalBetModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(AddRequestStore, {
+        changeAbnormalFilterBy: mockChangeAbnormalFilterBy,
+      })
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
 
     // Action
     instance.changeFilterBy(1);
@@ -595,6 +602,7 @@ describe('EventAbnormalBetComponent', () => {
       });
     instance.updateMatchId.emit = jest.fn();
     instance.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
+    instance.primitiveProps = new PrimitiveProperty();
 
     // Action
     const result = await instance['checkValidBusinessRule'](false);
@@ -652,6 +660,7 @@ describe('EventAbnormalBetComponent', () => {
     instance.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
     instance.updateMatchId.emit = jest.fn();
     instance.abnormalBetModel.filterBy = AbnormalFilterBy.SINGLE;
+    instance.primitiveProps = new PrimitiveProperty();
 
     // Action
     await instance['checkValidBusinessRule'](false);
@@ -672,6 +681,8 @@ describe('EventAbnormalBetComponent', () => {
       });
     instance.betIdsComponent = new BetIdsComponent(null);
     instance.betIdsComponent.removeTransId = jest.fn();
+    instance.exportTickets = [];
+    instance.primitiveProps.invalidTransIds = ""
 
     // Action
     instance.removeInvalidTransIds();

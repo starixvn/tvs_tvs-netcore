@@ -48,7 +48,7 @@ export interface ValidationAbnormalBet {
   listBettype: string;
 }
 
-export interface AbnormalBetTicketViewModel {
+export class AbnormalBetTicketViewModel {
   no: number
   betId: string
   leagueName: string

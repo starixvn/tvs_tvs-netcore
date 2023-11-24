@@ -8,6 +8,7 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTicketsExcel;
@@ -18,6 +19,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
     private readonly GetVoidedTicketsForExcelService getVoidedTicketsForExcelService;
     private readonly GetVoidedTicketsService getVoidedTicketsService;
     private readonly MatchService matchService;
+    private readonly BetListService betListService;
 
     private readonly GetVoidedTicketsWorkSheetService service;
 
@@ -27,9 +29,10 @@ public class GetVoidedTicketsWorkSheetServiceTests
         getVoidedTicketsService = Substitute.For<GetVoidedTicketsService>();
         getVoidedTicketsForExcelService = Substitute.For<GetVoidedTicketsForExcelService>();
         matchService = Substitute.For<MatchService>();
+        betListService = Substitute.For<BetListService>();
 
         service = new GetVoidedTicketsWorkSheetService(cellService, getVoidedTicketsService,
-            getVoidedTicketsForExcelService, matchService, null);
+            getVoidedTicketsForExcelService, matchService, betListService);
     }
 
     [Fact]
@@ -40,13 +43,16 @@ public class GetVoidedTicketsWorkSheetServiceTests
 
         var mockModel = new GetVoidedTicketsQuery
         {
-            MatchId = 1
+            MatchId = 1,
+            IssueTypeId = 1
         };
         var mockMatch = new Match
         {
-            MatchId = 1
+            MatchId = 1,
+            SportType = 190
         };
         getVoidedTicketsService.GetMatchInfo(Arg.Any<int>()).Returns(mockMatch);
+        betListService.GetMatchCodeBetradar(Arg.Any<string>()).ReturnsForAnyArgs("1");
 
         // Act
         await service.BindingContent(worksheet, mockModel);
@@ -56,6 +62,7 @@ public class GetVoidedTicketsWorkSheetServiceTests
         await getVoidedTicketsService.Received(1).GetMatchInfo(mockModel.MatchId.Value);
         matchService.Received(1).UpdateMatchInfoFromRemotingRef(mockMatch);
         cellService.Received(1).AddMatch(worksheet, mockMatch);
+        betListService.Received(1).GetMatchCodeBetradar(Arg.Any<string>());
     }
 
     [Theory]

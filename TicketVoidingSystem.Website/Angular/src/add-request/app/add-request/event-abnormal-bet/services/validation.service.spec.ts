@@ -52,7 +52,8 @@ class Helper {
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
     warningModel: Helper.fakeConfirmAbnormalBetModel,
-    transInfoAddRequestModel: new TransInfoAddRequestModel()
+    transInfoAddRequestModel: new TransInfoAddRequestModel(),
+    abnormalBetTicketRequests: []
   };
   static readonly fakeValidationBusinessRuleArgs: ValidationBusinessRuleArgs = {
     requestId: Helper.fakeRequestId,
@@ -152,7 +153,7 @@ describe('ValidationService', () => {
     const mockGroupNumberResetAllItemsToValid = jest.fn();
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockCheckAbnormalBetTransIds = jest.fn().mockImplementation(() => true);
+    const mockCheckAbnormalBetTransIds = jest.fn().mockReturnValue(Helper.fakeValidationBusinessRuleOutput);
     const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => false);
     const args = Helper.fakeValidationBusinessRuleArgs;
     args.filterBy = AbnormalFilterBy.MIX_PARLAY;
@@ -189,7 +190,7 @@ describe('ValidationService', () => {
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
     const mockBetIdsComponentIsAllBetIdsValid = jest.fn().mockImplementation(() => false);
-    const mockCheckAbnormalBetTransIds = jest.fn().mockImplementation(() => true);
+    const mockCheckAbnormalBetTransIds = jest.fn().mockReturnValue(Helper.fakeValidationBusinessRuleOutput);
     const mockGetConfirmAbnormalBetModel = jest.fn();
     const mockHighlightInvalidTransIds = jest.fn();
     const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => true);
@@ -206,6 +207,7 @@ describe('ValidationService', () => {
     validationService['highlightInvalidTransIds'] = mockHighlightInvalidTransIds;
     validationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
     validationService['updateValidation'] = jest.fn();
+
     // Action
     const result = await validationService.checkValidBusinessRule(args);
 
