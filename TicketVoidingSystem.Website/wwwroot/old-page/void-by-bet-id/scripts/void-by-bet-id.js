@@ -992,6 +992,7 @@ var VoidByBetId = {
             } else {
                 $('#ckbox-abnormal-bet').removeAttr('disabled');
             }
+            self.resetData();
         });
 
         $('#ckbox-abnormal-bet').click(function () {
@@ -1000,6 +1001,11 @@ var VoidByBetId = {
             } else {
                 $('#ckbox-include-parlay').removeAttr('disabled');
             }
+            self.resetData();
+        });
+
+        $("#txtTransId").change(function () {
+            self.resetData();
         });
 
         $('.btn-remove-invalid').click(function (e) {
