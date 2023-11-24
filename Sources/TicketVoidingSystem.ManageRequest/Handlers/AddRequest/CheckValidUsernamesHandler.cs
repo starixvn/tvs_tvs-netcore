@@ -61,6 +61,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             AccountWinlostModels = calcVoidResult.Accounts
         };
 
+        ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
         return viewModel;
     }
 
@@ -69,7 +70,7 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         var validAdjustLimits = adjustLimits.Where(x => x.AdjustVoidLimit > 0);
         foreach (var account in accounts)
         {
-            var currentAdjustLimits = validAdjustLimits.FirstOrDefault(x => x.Username == account.Username);
+            var currentAdjustLimits = validAdjustLimits.FirstOrDefault(x => x.Username.Equals(account.Username, StringComparison.InvariantCultureIgnoreCase));
             if (currentAdjustLimits != null)
             {
                 account.AdjustVoidLimit = currentAdjustLimits.AdjustVoidLimit;
@@ -88,11 +89,10 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
     private static CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, CalcVoidTicketsResult calcVoidResult)
     {
         if (query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            && !calcVoidResult.Accounts.Any())
+            && !calcVoidResult.VoidTickets.Any())
         {
             validationResult.IsInvalidTotalTicket = true;
         }
-        ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
 
         return validationResult;
     }
