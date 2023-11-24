@@ -56,7 +56,7 @@ public class AccountWinLostServiceImp : AccountWinLostService
 
     public async Task<IEnumerable<AccountWinlostModel>> GetAccountWinLost(GetAccountWinLostQuery query)
     {
-        var criteria = new GetAccountWinLostCriteria()
+        var criteria = new GetAccountWinLostCriteria
         {
             RequestId = query.RequestId
         };

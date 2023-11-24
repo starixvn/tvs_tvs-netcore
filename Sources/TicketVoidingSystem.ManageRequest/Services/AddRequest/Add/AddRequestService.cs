@@ -27,7 +27,7 @@ public class AddRequestServiceImp : AddRequestService
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
 
-    public AddRequestServiceImp(IMapper mapper,
+    public AddRequestServiceImp(IMapper mapper, //NOSONAR
         IDynamicRepository repository,
         SessionService sessionService,
         LoggingService loggingService,

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { SortingModule } from '../../../../../utility/components/sorting/sorting.module';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { ValidationService } from '../services/validation.service';
@@ -13,7 +14,8 @@ describe('AccountTableComponent', () => {
     imports: [
       FormsModule,
       NgbModule,
-      SortingModule
+      SortingModule,
+      ToolTipModule
     ],
     providers: [
       AddRequestStore,

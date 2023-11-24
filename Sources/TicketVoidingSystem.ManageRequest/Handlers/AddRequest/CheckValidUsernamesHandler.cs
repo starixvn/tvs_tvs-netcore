@@ -99,7 +99,11 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
 
     private static void ClearVoidTicketsInAccounts(IEnumerable<AccountWinlostModel> accounts)
     {
-        if (accounts == null) return;
+        if (accounts == null)
+        {
+            return;
+        }
+
         foreach (var account in accounts)
         {
             account.VoidTickets = Enumerable.Empty<TicketCalculateWinLostAccount>();

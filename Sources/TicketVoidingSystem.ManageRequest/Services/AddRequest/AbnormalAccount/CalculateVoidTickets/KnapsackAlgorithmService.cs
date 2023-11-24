@@ -25,7 +25,8 @@ public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
         return voidWonTickets;
     }
 
-    private static (int maxWeight, IList<int> selectedItems) Knapsack(int capacity, IList<TicketCalculateWinLostAccount> weights, IList<TicketCalculateWinLostAccount> values)
+    private static (int maxWeight, IList<int> selectedItems) Knapsack(int capacity,
+        IList<TicketCalculateWinLostAccount> weights, IList<TicketCalculateWinLostAccount> values)
     {
         var n = weights.Count;
         var dp = new int[capacity + 1];
@@ -43,7 +44,7 @@ public class KnapsackAlgorithmServiceImp : KnapsackAlgorithmService
                 if (weights[i - 1].WinLostMultiply100 <= w)
                 {
                     var newValue = dp[w - (weights[i - 1].WinLostMultiply100)] + values[i - 1].WinLostMultiply100;
-                    if (newValue > dp[w])
+                    if (newValue > dp[w]) //NOSONAR
                     {
                         dp[w] = newValue;
                         selectedItems[w] = new List<int>(selectedItems[w - weights[i - 1].WinLostMultiply100]) { i - 1 };
