@@ -48,10 +48,9 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             calcVoidResult = await calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(request.StatusIds, checkUsernamesResult.TicketCalculateWinLostAccount.ToList(), accounts);
         }
 
-        ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
         var viewModel = new CheckValidUsernamesViewModel
         {
-            Validation = GetValidationAfterCalc(request, checkUsernamesResult.ValidationResult, calcVoidResult.VoidTickets),
+            Validation = GetValidationAfterCalc(request, checkUsernamesResult.ValidationResult, calcVoidResult),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 RemoveTransIds = checkUsernamesResult.TransInfoValidation.RemoveTransIds,
@@ -86,13 +85,14 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
             ? compressDataAddRequestService.CompressTicket(voidTickets) : transInfoJsonCompress;
     }
 
-    private CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, IEnumerable<TicketCalculateWinLostAccount> voidTickets)
+    private static CheckUsernamesModel GetValidationAfterCalc(CheckValidUsernamesRequest query, CheckUsernamesModel validationResult, CalcVoidTicketsResult calcVoidResult)
     {
         if (query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId
-            && !voidTickets.Any())
+            && !calcVoidResult.Accounts.Any())
         {
             validationResult.IsInvalidTotalTicket = true;
         }
+        ClearVoidTicketsInAccounts(calcVoidResult.Accounts);
 
         return validationResult;
     }
