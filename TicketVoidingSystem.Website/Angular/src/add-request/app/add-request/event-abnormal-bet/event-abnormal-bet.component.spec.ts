@@ -62,7 +62,6 @@ class Helper {
     isHasWarningForAbnormalBet: true,
     isHasWarningEditTakeNoteRequest: false,
     transIds: '1022222',
-    cn88Tickets: '2123122',
     ticketsOfVIPCustomer: '2123122',
     settledTickets: '2123122',
     ticketsOfCustomerClass201: '2123122',

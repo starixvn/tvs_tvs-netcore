@@ -29,8 +29,6 @@ public class ValidationAbnormalBet
     public string TransIdsOfCustomerClass201 { get; set; }
     public string TransIdsOfCustomerClass4K { get; set; }
 
-    public string CN88TransIds { get; set; }
-
     public string NonLiveTransIds { get; set; }
 
     public string DifferentLiveScoreTransIds { get; set; }

@@ -82,7 +82,6 @@ export class ValidationService {
   public isValidationHasWarningTicket(permission: PermissionManage, confirmModel: ConfirmAbnormalBetModel): boolean {
     return (permission.manageRequestSettledTicketsHost && confirmModel.settledTickets?.length > 0)
       || (confirmModel.ticketsOfVIPCustomer?.length > 0)
-      || (confirmModel.cn88Tickets?.length > 0)
       || (confirmModel.ticketsOfCustomerClass201?.length > 0)
       || (confirmModel.ticketsOfCustomerClass4K?.length > 0);
   }
@@ -133,7 +132,6 @@ export class ValidationService {
     const confirmModel = new ConfirmAbnormalBetModel();
     confirmModel.settledTickets = result.settledTransIds;
     confirmModel.ticketsOfVIPCustomer = result.transIdsOfVIPCustomer;
-    confirmModel.cn88Tickets = result.cN88TransIds;
     confirmModel.ticketsOfCustomerClass201 = result.transIdsOfCustomerClass201;
     confirmModel.ticketsOfCustomerClass4K = result.transIdsOfCustomerClass4K;
     confirmModel.isHasWarningRemovedTickets = result.isHasWarningRemovedTickets;

@@ -12,13 +12,12 @@ import { OthersModel } from '../others/others.model';
 import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { PrimitiveProperty, AbnormalBetTicketViewModel, ExportExcelAbnormalBet } from './event-abnormal-bet.model';
+import { PrimitiveProperty, AbnormalBetTicketViewModel } from './event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
-import { AddRequestApiService } from '../add-request-api.service';
 
 @Component({
   selector: 'event-abnormal-bet',
@@ -52,7 +51,6 @@ export class EventAbnormalBetComponent implements OnInit {
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly addRequestApiService: AddRequestApiService,
   ) { }
 
   async ngOnInit(): Promise<void> {

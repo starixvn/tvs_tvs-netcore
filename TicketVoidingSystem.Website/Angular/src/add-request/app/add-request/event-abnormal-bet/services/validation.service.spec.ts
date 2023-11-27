@@ -38,7 +38,6 @@ class Helper {
     isHasWarningEditTakeNoteRequest: false,
     isEditingByAnotherUser: false,
     transIds: '1022222',
-    cn88Tickets: '2123122',
     ticketsOfVIPCustomer: '2123122',
     settledTickets:'2123122',
     ticketsOfCustomerClass201: '2123122',
@@ -75,7 +74,6 @@ class Helper {
     unsupportedTransIds: Helper.fakeTransId,
     existingReqTransIds: Helper.fakeTransId,
     transIdsOfVIPCustomer: Helper.fakeTransId,
-    cN88TransIds: Helper.fakeTransId,
     nonLiveTransIds: Helper.fakeTransId,
     differentLiveScoreTransIds: Helper.fakeTransId,
     transIdsOfCustomerClass201: Helper.fakeTransId,
@@ -245,7 +243,6 @@ describe('ValidationService', () => {
     permission.manageRequestSettledTicketsHost = true;
     confirmModel.settledTickets = '';
     confirmModel.ticketsOfVIPCustomer = '';
-    confirmModel.cn88Tickets = '';
     confirmModel.ticketsOfCustomerClass201 = '';
     confirmModel.ticketsOfCustomerClass4K = '';
     confirmModel.listBetteam = '';
@@ -387,7 +384,6 @@ describe('ValidationService', () => {
     // Assert
     expect(result.settledTickets).toEqual(Helper.fakeValidationAbnormalBet.settledTransIds);
     expect(result.ticketsOfVIPCustomer).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfVIPCustomer);
-    expect(result.cn88Tickets).toEqual(Helper.fakeValidationAbnormalBet.cN88TransIds);
     expect(result.ticketsOfCustomerClass201).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfCustomerClass201);
     expect(result.ticketsOfCustomerClass4K).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfCustomerClass4K);
     expect(result.listBettype).toEqual(Helper.fakeValidationAbnormalBet.listBettype);

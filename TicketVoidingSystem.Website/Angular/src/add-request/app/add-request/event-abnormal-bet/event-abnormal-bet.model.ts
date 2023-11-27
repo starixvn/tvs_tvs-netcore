@@ -38,7 +38,6 @@ export interface ValidationAbnormalBet {
   transIdsOfVIPCustomer: string;
   transIdsOfCustomerClass201: string;
   transIdsOfCustomerClass4K: string;
-  cN88TransIds: string;
   nonLiveTransIds: string;
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;
