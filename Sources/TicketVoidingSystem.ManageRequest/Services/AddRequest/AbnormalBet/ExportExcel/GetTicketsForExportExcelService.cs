@@ -3,7 +3,7 @@ using OfficeOpenXml;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.Excel;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 
 public class GetTicketsForExportExcelService : WorkSheetService<CheckValidTransIdsModel>
 {

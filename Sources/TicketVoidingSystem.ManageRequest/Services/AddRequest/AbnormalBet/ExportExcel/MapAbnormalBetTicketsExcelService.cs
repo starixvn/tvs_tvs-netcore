@@ -9,7 +9,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 
 public interface MapAbnormalBetTicketsExcelService
 {

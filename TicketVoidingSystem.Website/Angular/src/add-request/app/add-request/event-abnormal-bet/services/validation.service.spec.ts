@@ -12,6 +12,7 @@ import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-ev
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
 import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
+import { MatchInfo } from '../../../../../utility/models/event.model';
 
 class Helper {
   static readonly fakeTransId = '1000002';
@@ -98,16 +99,19 @@ describe('ValidationService', () => {
     // Arrange
     const mockIsHasBetId = jest.fn().mockImplementation(() => false);
     const mockUpdateUndefinedMatchAndLeague = jest.fn();
+    const expected = new CheckTransIdsViewModel();
     const args = Helper.fakeValidationBusinessRuleArgs;
     args.betIdsComponent.isHasBetId = mockIsHasBetId;
     args.betIdsComponent.groupNumber.resetAllItemsToValid = jest.fn();
     args.betIdsComponent.groupNumber.checkDuplicatedItems = jest.fn();
     args.leagueEventAbnormalComponent.updateUndefinedMatchAndLeague = mockUpdateUndefinedMatchAndLeague;
-    validationService['checkAbnormalBetTransIds'] = jest.fn().mockImplementation(() => null);
+    const mockAdRequestApiService = new AddRequestApiService(null);
+    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
+    const mockValidationService = new ValidationService(mockAdRequestApiService);
     const testCase = [AbnormalFilterBy.MIX_PARLAY, AbnormalFilterBy.SINGLE];
     testCase.forEach(async x => {
       args.filterBy = x;
-      const result = await validationService.checkValidBusinessRule(args);
+      const result = await mockValidationService.checkValidBusinessRule(args);
 
       expect(result.isValid).toBe(false);
     });
@@ -119,8 +123,8 @@ describe('ValidationService', () => {
     const mockGroupNumberResetAllItemsToValid = jest.fn();
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockCheckAbnormalBetTransIds = jest.fn().mockImplementation(() => null);
     const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => false);
+    const expected = null;
     const args = Helper.fakeValidationBusinessRuleArgs;
     args.filterBy = AbnormalFilterBy.MIX_PARLAY;
     args.leagueEventAbnormalComponent = null;
@@ -129,19 +133,19 @@ describe('ValidationService', () => {
     args.betIdsComponent.groupNumber = new GroupNumber();
     args.betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
     args.betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-
-    validationService['checkAbnormalBetTransIds'] = mockCheckAbnormalBetTransIds;
-    validationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
+    const mockAdRequestApiService = new AddRequestApiService(null);
+    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
+    const mockValidationService = new ValidationService(mockAdRequestApiService);
+    mockValidationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
 
     // Action
-    const result = await validationService.checkValidBusinessRule(args);
+    const result = await mockValidationService.checkValidBusinessRule(args);
 
     // Assert
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(mockCheckAbnormalBetTransIds).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
   });
 
@@ -151,8 +155,13 @@ describe('ValidationService', () => {
     const mockGroupNumberResetAllItemsToValid = jest.fn();
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockCheckAbnormalBetTransIds = jest.fn().mockReturnValue(Helper.fakeValidationBusinessRuleOutput);
     const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => false);
+    const expected: CheckTransIdsViewModel = {
+      abnormalBetTicketRequests: [],
+      transInfoAddRequestModel: new TransInfoAddRequestModel,
+      match: new MatchInfo,
+      validation: undefined
+    };
     const args = Helper.fakeValidationBusinessRuleArgs;
     args.filterBy = AbnormalFilterBy.MIX_PARLAY;
     args.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
@@ -163,21 +172,22 @@ describe('ValidationService', () => {
     args.betIdsComponent.groupNumber = new GroupNumber();
     args.betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
     args.betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    validationService['highlightInvalidTransIds'] = jest.fn();
-    validationService['updateValidation'] = jest.fn();
-    validationService['getConfirmAbnormalBetModel'] = jest.fn();
-    validationService['checkAbnormalBetTransIds'] = mockCheckAbnormalBetTransIds;
-    validationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
+    const mockAdRequestApiService = new AddRequestApiService(null);
+    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
+    const mockValidationService = new ValidationService(mockAdRequestApiService);
+    mockValidationService['highlightInvalidTransIds'] = jest.fn();
+    mockValidationService['updateValidation'] = jest.fn();
+    mockValidationService['getConfirmAbnormalBetModel'] = jest.fn();
+    mockValidationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
 
     // Action
-    const result = await validationService.checkValidBusinessRule(args);
+    const result = await mockValidationService.checkValidBusinessRule(args);
 
     // Assert
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(mockCheckAbnormalBetTransIds).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
   });
 
@@ -188,26 +198,33 @@ describe('ValidationService', () => {
     const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
     const mockBetIdsComponentIsAllBetIdsValid = jest.fn().mockImplementation(() => false);
-    const mockCheckAbnormalBetTransIds = jest.fn().mockReturnValue(Helper.fakeValidationBusinessRuleOutput);
     const mockGetConfirmAbnormalBetModel = jest.fn();
     const mockHighlightInvalidTransIds = jest.fn();
     const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => true);
-
+    const mockAdRequestApiService = new AddRequestApiService(null);
+    const expected: CheckTransIdsViewModel = {
+      abnormalBetTicketRequests: [],
+      transInfoAddRequestModel: new TransInfoAddRequestModel,
+      match: new MatchInfo,
+      validation: undefined
+    };
+    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
+    const mockValidationService = new ValidationService(mockAdRequestApiService);
     const args = Helper.fakeValidationBusinessRuleArgs;
+
     args.betIdsComponent.isHasBetId = mockIsHasBetId;
     args.betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
     args.betIdsComponent.isAllBetIdsValid = mockBetIdsComponentIsAllBetIdsValid;
     args.betIdsComponent.groupNumber = new GroupNumber();
     args.betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
     args.betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    validationService['checkAbnormalBetTransIds'] = mockCheckAbnormalBetTransIds;
-    validationService['getConfirmAbnormalBetModel'] = mockGetConfirmAbnormalBetModel;
-    validationService['highlightInvalidTransIds'] = mockHighlightInvalidTransIds;
-    validationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
-    validationService['updateValidation'] = jest.fn();
+    mockValidationService['getConfirmAbnormalBetModel'] = mockGetConfirmAbnormalBetModel;
+    mockValidationService['highlightInvalidTransIds'] = mockHighlightInvalidTransIds;
+    mockValidationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
+    mockValidationService['updateValidation'] = jest.fn();
 
     // Action
-    const result = await validationService.checkValidBusinessRule(args);
+    const result = await mockValidationService.checkValidBusinessRule(args);
 
     // Assert
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
@@ -215,10 +232,8 @@ describe('ValidationService', () => {
     expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
     expect(mockBetIdsComponentIsAllBetIdsValid).toHaveBeenCalledTimes(1);
-    expect(mockCheckAbnormalBetTransIds).toHaveBeenCalledTimes(1);
     expect(mockGetConfirmAbnormalBetModel).toHaveBeenCalledTimes(1);
     expect(mockHighlightInvalidTransIds).toHaveBeenCalledTimes(1);
-    expect(validationService['checkAbnormalBetTransIds']).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
   });
 

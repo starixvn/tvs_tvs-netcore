@@ -7,7 +7,7 @@ using Fanex.BetList.Core.TicketHelper;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;

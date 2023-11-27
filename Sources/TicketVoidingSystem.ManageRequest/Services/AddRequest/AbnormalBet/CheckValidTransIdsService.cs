@@ -1,10 +1,10 @@
 ﻿using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 public interface CheckValidTransIdsService
 {
     Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request);
@@ -29,7 +29,8 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
 
     public async Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request)
     {
-        var criteria = await GetCheckValidTransIdsCriteria(request);
+        var transInfoJsonList = await GetTransInfoJson(request);
+        var criteria = await GetCheckValidTransIdsCriteria(request, transInfoJsonList);
         var mappingTypes = new[]
         {
             typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
@@ -61,9 +62,8 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
         return viewModel;
     }
 
-    private async Task<CheckValidTransIdsCriteria> GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message)
+    private Task<CheckValidTransIdsCriteria> GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message, IEnumerable<string> transInfoJsonList)
     {
-        var transInfoJsonList = await GetTransInfoJson(message);
         var criteria = new CheckValidTransIdsCriteria
         {
             TransIds = message.TransIds,
@@ -73,10 +73,10 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
             SubIssueTypeId = message.SubIssueTypeId,
             IsRemoveCustomerClass201 = message.IsRemoveCustomerClass201,
             IsRemoveCustomerClass4K = message.IsRemoveCustomerClass4K,
-            TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)))
+            TransInfoJson = string.Join(",", transInfoJsonList)
         };
 
-        return criteria;
+        return Task.FromResult(criteria);
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(CheckValidTransIdsModel model)
@@ -86,7 +86,8 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
             IssueTypeId = model.IssueTypeId,
             TransIds = model.TransIds
         };
+        var transInfoJsonList = await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
 
-        return await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
+        return transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x));
     }
 }

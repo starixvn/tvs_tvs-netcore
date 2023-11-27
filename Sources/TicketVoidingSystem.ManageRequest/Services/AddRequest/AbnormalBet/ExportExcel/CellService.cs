@@ -4,7 +4,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using TicketVoidingSystem.ManageRequest.Constants;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 
 public interface CellService
 {
@@ -66,7 +66,7 @@ public class CellServiceImp : CellService
             RemarkConstant.DifferentLiveScore, RemarkConstant.AbWhiteListTransIds
         };
 
-        for (var row = 2; row <= lastRow; row ++)
+        for (var row = 2; row <= lastRow; row++)
         {
             if (!listRemarkHighlightColorRed.Contains(worksheet.Cells[$"R{row}:R{row}"].Value))
             {
