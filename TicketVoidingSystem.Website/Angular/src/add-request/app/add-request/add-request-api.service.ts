@@ -18,6 +18,7 @@ import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
 import { GetChildMatchQuery } from './models/get-child-match.query';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
+import { ValidationBusinessRuleArgs } from './event-abnormal-bet/services/validation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -113,7 +114,7 @@ export class AddRequestApiService {
   }
   
   /* istanbul ignore next */
-  async exportExcelAbnormalBetTickets(query: ExportExcelAbnormalBet) {
-    return await this.httpService.downloadFile<ExportExcelAbnormalBet>(query, 'api/AddRequest/ExportExcel');
+  async exportExcelAbnormalBetTickets(query: CheckTransIdsQuery) {
+    return await this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
   }
 }

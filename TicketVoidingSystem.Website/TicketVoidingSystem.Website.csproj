@@ -31,6 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Angular-Old\**" />
+    <EmbeddedResource Remove="Angular\**" />
+    <None Remove="Angular-Old\**" />
+    <None Remove="Angular\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fanex.BetList.Bitcoin" Version="2.0.0.1" />
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />

@@ -29,6 +29,7 @@ public static class AddRequest
         services.AddTransient<MatchInfoAddRequestService, MatchInfoAddRequestServiceImp>();
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
         services.AddTransient<CellService, CellServiceImp>();
-        services.AddTransient<WorkSheetService<ExportTicketAbnormalBetQuery>, GetTicketsForExportExcelService>();
+        services.AddTransient<WorkSheetService<CheckValidTransIdsModel>, GetTicketsForExportExcelService>();
+        services.AddTransient<CheckValidTransIdsService, CheckValidTransIdsServiceImp>();
     }
 }

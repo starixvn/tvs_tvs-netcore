@@ -102,11 +102,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.primitiveProps.isShowButtonRemoveInvalid = false;
     let invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
     this.exportTickets = this.exportTickets.filter(x => !(invalidTransIds.includes(x.betId)));
-    this.primitiveProps.isShowButtonExportTicket = this.checkIsShowButtonExportTicket();
-  }
-
-  checkIsShowButtonExportTicket() : boolean{
-    return this.exportTickets.findIndex(x => x.remark !== "") >= 0;
+    this.primitiveProps.isShowButtonExportTicket = this.exportTickets.length > 0;
   }
 
   triggerCloseEvent() {
@@ -162,7 +158,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.confirmAbnormalBetModel = _.clone(this.confirmAbnormalBetModel);
   }
 
-  private async checkValidBusinessRule(isValidateFromConfirmPopup: boolean): Promise<ValidationBusinessRuleOutput> {
+  initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup: boolean): ValidationBusinessRuleArgs{
     const args = new ValidationBusinessRuleArgs();
     args.actionId = this.filter.action;
     args.requestId = this.requestId;
@@ -175,6 +171,12 @@ export class EventAbnormalBetComponent implements OnInit {
     args.confirmAbnormalBetComponent = this.confirmAbnormalBetComponent;
     args.primitiveProps = this.primitiveProps;
     args.isValidateFromConfirmPopup = isValidateFromConfirmPopup;
+
+    return args;
+  }
+
+  private async checkValidBusinessRule(isValidateFromConfirmPopup: boolean): Promise<ValidationBusinessRuleOutput> {
+    const args = this.initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup);
     const validation = await this.validationService.checkValidBusinessRule(args);
     this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
@@ -211,10 +213,7 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   public exportExcel() {
-    const query: ExportExcelAbnormalBet = {
-      requestId: this.requestId,
-      tickets: this.exportTickets
-    };
-    this.addRequestApiService.exportExcelAbnormalBetTickets(query);
+    const args = this.initCheckValidBusinessRuleQuery(false);
+    this.validationService.exportExcelAbnormalBetTickets(args)
   }
 }

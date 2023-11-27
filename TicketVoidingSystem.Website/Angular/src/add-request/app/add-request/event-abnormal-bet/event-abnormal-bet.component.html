@@ -11,10 +11,9 @@
     </div>
     <div class="flex-grow-1"></div>
     <div class="d-flex" >
-      <button type="submit" class="btn btn-success btn-sm" *ngIf="primitiveProps.isShowButtonExportTicket" (click)="exportExcel()">Export Ticket</button>
-      <button type="submit" class="btn btn-danger btn-sm mg-left-10" *ngIf="primitiveProps.isShowButtonRemoveInvalid" (click)="removeInvalidTransIds()">Remove Invalid</button>
+      <button type="submit" class="btn btn-danger btn-sm" *ngIf="primitiveProps.isShowButtonRemoveInvalid" (click)="removeInvalidTransIds()">Remove Invalid</button>
+      <button type="submit" class="btn btn-success btn-sm mg-left-10" *ngIf="primitiveProps.isShowButtonExportTicket" (click)="exportExcel()">Export Ticket</button>
     </div>
-    
   </div>
 
   <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sm-8'"

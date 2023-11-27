@@ -5,20 +5,22 @@ using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.ExportExcel;
 
-public class GetTicketsForExportExcelService : WorkSheetService<ExportTicketAbnormalBetQuery>
+public class GetTicketsForExportExcelService : WorkSheetService<CheckValidTransIdsModel>
 {
     private readonly CellService cellService;
+    private readonly CheckValidTransIdsService checkValidTransIdsService;
 
-    public GetTicketsForExportExcelService(CellService cellService)
+    public GetTicketsForExportExcelService(CellService cellService, CheckValidTransIdsService checkValidTransIdsService)
     {
         this.cellService = cellService;
+        this.checkValidTransIdsService = checkValidTransIdsService;
     }
 
-    public Task BindingContent(ExcelWorksheet worksheet, ExportTicketAbnormalBetQuery model)
+    public async Task BindingContent(ExcelWorksheet worksheet, CheckValidTransIdsModel model)
     {
         const int startRowIndex = 2;
-        worksheet.ApplyVertical(model.Tickets, startRowIndex);
+        var checkTransIdViewModel = await checkValidTransIdsService.CheckValidTransIds(model);
+        worksheet.ApplyVertical(checkTransIdViewModel.AbnormalBetTicketRequests, startRowIndex);
         cellService.SetStyle(worksheet);
-        return Task.CompletedTask;
     }
 }

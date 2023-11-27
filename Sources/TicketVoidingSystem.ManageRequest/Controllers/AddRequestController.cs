@@ -73,7 +73,7 @@ public class AddRequestController : ControllerBase
     public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
-    public async Task<IActionResult> ExportExcel(ExportTicketAbnormalBetRequest request)
+    public async Task<IActionResult> ExportExcelTicketAbnormalBet(ExportTicketAbnormalBet request)
     {
         var model = await mediator.Send(request);
         return this.ExcelFileResult(Response, model);
