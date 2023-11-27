@@ -10,12 +10,12 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 
 public class ExportTicketAbnormalBetRequestTests
 {
-    private readonly ExcelService<ExportTicketAbnormalBetQuery> excelService;
+    private readonly ExcelService<CheckValidTransIdsModel> excelService;
     private readonly ExportTicketAbnormalBetHandler handler;
 
     public ExportTicketAbnormalBetRequestTests()
     {
-        excelService = Substitute.For<ExcelService<ExportTicketAbnormalBetQuery>>();
+        excelService = Substitute.For<ExcelService<CheckValidTransIdsModel>>();
         handler = new ExportTicketAbnormalBetHandler(excelService);
     }
 
@@ -26,12 +26,12 @@ public class ExportTicketAbnormalBetRequestTests
     {
         // Arrange
         const string template = "App_Data/Template/TicketVoiding_AbnormalBet.xlsx";
-        var request = new ExportTicketAbnormalBetRequest { RequestId = requestId };
+        var request = new ExportTicketAbnormalBet { RequestId = requestId };
 
         // Act
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await excelService.Received(1).GenerateContentAsByteArray(Arg.Any<ExportTicketAbnormalBetRequest>(), template);
+        await excelService.Received(1).GenerateContentAsByteArray(Arg.Any<ExportTicketAbnormalBet>(), template);
     }
 }

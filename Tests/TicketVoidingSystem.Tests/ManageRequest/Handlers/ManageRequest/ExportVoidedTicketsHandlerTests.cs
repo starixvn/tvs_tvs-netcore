@@ -15,7 +15,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
         public async Task ExportExcel_SetDateTimeNow_ReturnFileNameWithDateTime()
         {
             var request = new ExportVoidedTicketsRequest { RequestId = 12345 };
-            var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+            var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
             var expected = $"Req.{request.RequestId}_TVS_DeleteBet_{createDate}";
             var excelService = Substitute.For<ExcelService<GetVoidedTicketsQuery>>();
             var handler = new ExportVoidedTicketsHandler(excelService);

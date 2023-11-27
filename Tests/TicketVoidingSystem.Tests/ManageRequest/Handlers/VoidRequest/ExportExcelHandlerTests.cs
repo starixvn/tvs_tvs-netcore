@@ -16,7 +16,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
         public async Task ExportExcel_RequestHasMatchIsNull_ReturnFileNameWithDateTime()
         {
             var request = new ExportExcelRequest { RequestId = 12345 };
-            var createDate = $"{DateTime.Now:yyyy_MM_dd}";
+            var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd}";
             var expected = $"Req.{request.RequestId}_TVS_{createDate}";
             var excelService = Substitute.For<ExcelService<GetTicketsQuery>>();
             var handler = new ExportExcelHandler(excelService);
@@ -32,7 +32,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
         public async Task ExportExcel_RequestHasMatchIsNotNull_ReturnFileNameWithDateTime()
         {
             var request = new ExportExcelRequest { RequestId = 12345, Match = new Match() };
-            var createDate = $"{DateTime.Now:yyyy_MM_dd}";
+            var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd}";
             var expected = $"Req.{request.RequestId}_TVS_{createDate}";
             var excelService = Substitute.For<ExcelService<GetTicketsQuery>>();
             var handler = new ExportExcelHandler(excelService);

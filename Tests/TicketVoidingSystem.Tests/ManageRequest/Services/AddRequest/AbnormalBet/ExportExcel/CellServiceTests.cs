@@ -2,7 +2,7 @@
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.ExportExcel;
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 
 public class CellServiceTests
 {

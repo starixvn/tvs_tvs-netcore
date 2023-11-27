@@ -52,11 +52,13 @@ public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelSe
     private AbnormalBetTicketViewModel GetAbnormalBetTicketViewModel(GetAbnormalBetTicketModel abnormalBetTicket)
     {
         if (abnormalBetTicket.MatchId == null)
+        {
             return new AbnormalBetTicketViewModel
             {
                 BetId = abnormalBetTicket.TransId.ToString(),
                 Remark = RemarkConstant.RemarkList.First(x => x.Id == abnormalBetTicket.RemarkId).Name
             };
+        }
 
         var ticketViewModel = SetAbnormalBetTicketViewModel(abnormalBetTicket);
         var getTicketModel = mapper.Map<GetTicketModel>(abnormalBetTicket);

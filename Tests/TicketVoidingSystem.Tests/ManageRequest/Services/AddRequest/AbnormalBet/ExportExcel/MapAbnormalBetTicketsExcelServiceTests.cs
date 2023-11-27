@@ -12,7 +12,7 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.ExportExcel;
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 
 public class MapAbnormalBetTicketsExcelServiceTests
 {

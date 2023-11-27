@@ -21,7 +21,7 @@ public class ExportTicketAbnormalBetHandler : IRequestHandler<ExportTicketAbnorm
 
     public async Task<ExcelFileModel> Handle(ExportTicketAbnormalBet request, CancellationToken cancellationToken)
     {
-        var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+        var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
         var fileName = request.RequestId == null ? $"TVS_AbnormalBet_{createDate}" : $"Req.{request.RequestId}_TVS_AbnormalBet_{createDate}";
         const string template = TemplateExcelPath.TicketVoiding_AbnormalBet;
         return new ExcelFileModel
