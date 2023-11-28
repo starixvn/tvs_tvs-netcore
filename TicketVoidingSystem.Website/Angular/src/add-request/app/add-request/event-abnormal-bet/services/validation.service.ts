@@ -69,7 +69,6 @@ export class ValidationService {
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
     this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);
-    args.primitiveProps.isShowButtonExportTicket = checkTransIdViewModel.abnormalBetTicketRequests.length > 0;
 
     return {
       isValid: args.betIdsComponent.isAllBetIdsValid(),

@@ -61,6 +61,10 @@ export class EventAbnormalBetComponent implements OnInit {
     this.permission = await this.commonService.getPermissionManageRequest();
   }
 
+  isShowButtonExportTicket(): boolean {
+    return this.betIdsComponent?.groupNumber.items.length > 0;
+  }
+
   async afterFocusOutBetIds(): Promise<void> {
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
@@ -100,7 +104,6 @@ export class EventAbnormalBetComponent implements OnInit {
     this.primitiveProps.isShowButtonRemoveInvalid = false;
     let invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
     this.exportTickets = this.exportTickets.filter(x => !(invalidTransIds.includes(x.betId)));
-    this.primitiveProps.isShowButtonExportTicket = this.exportTickets.length > 0;
   }
 
   triggerCloseEvent() {
