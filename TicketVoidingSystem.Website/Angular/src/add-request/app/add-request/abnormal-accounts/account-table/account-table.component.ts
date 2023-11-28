@@ -24,6 +24,7 @@ export class AccountTableComponent {
   @Output() changeTable = new EventEmitter();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
+  isCancelRecalculateAmount: boolean;
 
   constructor(
     private readonly element: ElementRef,
@@ -35,6 +36,13 @@ export class AccountTableComponent {
   }
 
   public async reCalculate(account: AccountWinlostModel, index: number): Promise<void> {
+
+    if (this.isCancelRecalculateAmount) {
+      this.isCancelRecalculateAmount = false;
+      return;
+    }
+    console.log('voo reCalculate')
+
     if (!this.isCorrectFormatVoidLimit(account, index)) {
       return;
     }
@@ -84,7 +92,7 @@ export class AccountTableComponent {
     return true;
   }
 
-  onChangeAdjustGV(account: AccountWinlostModel, index: number): void {
+  public onChangeAdjustGV(account: AccountWinlostModel, index: number): void {
     this.isCorrectFormatVoidLimit(account, index);
   }
 

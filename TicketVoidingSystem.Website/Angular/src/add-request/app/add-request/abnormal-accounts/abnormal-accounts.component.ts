@@ -91,10 +91,15 @@ export class AbnormalAccountsComponent implements OnInit {
 
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
-      this.addRequestStore.changeBlockingUiStatus(false);
-      return;
+    if (this.accountTableComponent) {
+      this.accountTableComponent.isCancelRecalculateAmount = true;
+
+      if (!this.accountTableComponent.isValid()) {
+        this.addRequestStore.changeBlockingUiStatus(false);
+        return;
+      }
     }
+
     const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
     this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
     this.addRequestStore.changeBlockingUiStatus(false);
