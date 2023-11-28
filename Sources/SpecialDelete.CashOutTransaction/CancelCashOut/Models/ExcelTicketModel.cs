@@ -1,4 +1,6 @@
-﻿namespace SpecialDelete.CashOutTransaction.CancelCashOut.Models;
+﻿using Epplus.Mapper.Annotations;
+
+namespace SpecialDelete.CashOutTransaction.CancelCashOut.Models;
 
 public class ExcelTicketModel
 {

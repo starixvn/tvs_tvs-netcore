@@ -30,6 +30,8 @@ using ONEbook.UM.Helpers;
 using ONEbook.UM.Services;
 using ONEbook.UM.Transport;
 using SharpRaven;
+using SpecialDelete.CashOutTransaction;
+using SpecialDelete.CashOutTransaction.CancelCashOut;
 using SpecialDelete.NumberGame;
 using SpecialDelete.NumberGame.Controllers;
 using SpecialDelete.RecoverByBetId;
@@ -225,6 +227,8 @@ public static class ServiceCollectionExtension
         services.RegisterVoidNumberGameServices();
         services.RegisterVoidByCurrencyServices();
         services.RegisterVoidByBetIdServices();
+        services.RegisterCancelCashOutServices();
+        services.RegisterRecoverCashOutTransactionServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -249,6 +253,7 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidNumberGameBetController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByCurrencyController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByBetIdController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CancelCashOutController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
@@ -264,5 +269,6 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(NumberGameProfile));
         services.AddAutoMapper(typeof(VoidByCurrencyProfile));
         services.AddAutoMapper(typeof(VoidByBetIdProfile));
+        services.AddAutoMapper(typeof(CashOutTransactionProfile));
     }
 }
