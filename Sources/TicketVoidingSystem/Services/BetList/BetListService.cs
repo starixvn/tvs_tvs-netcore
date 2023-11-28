@@ -30,6 +30,8 @@ public interface BetListService
 
     string GetBetTypeName(int id, long refNo);
 
+    string GetBetTeam(Choice_Template choice);
+
     string GetBetTypeNameChineseSimplified(ITicket ticket);
 
     string GetBetTypeNameChineseTraditional(ITicket ticket);
@@ -132,6 +134,18 @@ public class BetListServiceImp : BetListService
         const int FistNextBet = 86;
         const int SecondNextBet = 85;
         return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
+    }
+
+    public string GetBetTeam(Choice_Template choice)
+    {
+        choice.ScoreMapIcon = null;
+        choice.BetType = null;
+        choice.Match = null;
+        choice.League = null;
+        choice.Handicap = null;
+        choice.Score = null;
+
+        return choice;
     }
 
     public string GetBetTypeName(ITicket ticket)
