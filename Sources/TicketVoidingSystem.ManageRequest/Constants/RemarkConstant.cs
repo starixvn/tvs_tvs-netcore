@@ -7,7 +7,7 @@ public static class RemarkConstant
     public const string UnsupportedTicket = "Unsupported ticket";
     public const string ExistingOnOtherRequest = "Existing on other request";
     public const string AbWhiteListTransIds = "AB Exection List ticket";
-    public const string NonLiveTicket = "Non live ticket";
+    public const string NonLiveTicket = "Non-Live ticket";
     public const string DifferentLiveScore = "Different live score";
     public const string MovedOrDuplicatedTicket = "Moved or Duplicated tickets";
     public const string DifferentMatch = "Different match";
