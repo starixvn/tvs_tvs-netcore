@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using BetListNPOI.SS.Formula.Functions;
+﻿using System.Drawing;
 using Epplus.Mapper.Extensions;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;

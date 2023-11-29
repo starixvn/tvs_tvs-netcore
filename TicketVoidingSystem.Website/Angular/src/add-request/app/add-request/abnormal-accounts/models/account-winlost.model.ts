@@ -8,4 +8,6 @@ export class AccountWinlostModel {
   estimateVoidAmount: number;
   winLostAfterVoid: number;
   isHighlight: boolean;
+  adjustVoidLimitString: string;
+  isShowInput: boolean;
 }

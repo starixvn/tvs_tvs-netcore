@@ -36,12 +36,11 @@ export class AccountTableComponent {
   }
 
   public async reCalculate(account: AccountWinlostModel, index: number): Promise<void> {
-
+    account.isShowInput = false;
     if (this.isCancelRecalculateAmount) {
       this.isCancelRecalculateAmount = false;
       return;
     }
-    console.log('voo reCalculate')
 
     if (!this.isCorrectFormatVoidLimit(account, index)) {
       return;
@@ -98,15 +97,23 @@ export class AccountTableComponent {
 
   public isCorrectFormatVoidLimit(account: AccountWinlostModel, index: number): boolean {
     if (!account.adjustVoidLimit) {
+      account.adjustVoidLimitString = null
       return true;
     }
 
     if (!RegexConstant.ACCOUNT_VOID_LIMIT.test(account.adjustVoidLimit?.toString())) {
+      account.adjustVoidLimitString = account.adjustVoidLimit.toString();
       this.tooltip.display('adjust-gv' + index, 'Invalid Amount.');
       return false;
     }
+    const numberValue = Number(account.adjustVoidLimit.toString().replaceAll(',', ''));
+    account.adjustVoidLimitString = this.showDecimalWithComma(numberValue);
     this.tooltip.hide();
 
     return true;
+  }
+
+  public showDecimalWithComma(amount: number): string {
+    return amount?.toLocaleString(undefined, { maximumFractionDigits: 4 })
   }
 }

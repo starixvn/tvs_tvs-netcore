@@ -35,12 +35,12 @@ public class CellServiceImp : CellService
         {
             worksheet.Cells[index, NumberConstant.One].Value = model.No;
             worksheet.Cells[index, NumberConstant.Two].Value = model.Username;
-            worksheet.Cells[index, NumberConstant.Three].Value = model.GivenCredit;
-            worksheet.Cells[index, NumberConstant.Four].Value = model.AdjustVoidLimit;
-            worksheet.Cells[index, NumberConstant.Five].Value = model.CurrentLosing;
-            worksheet.Cells[index, NumberConstant.Six].Value = model.CurrentWinning;
-            worksheet.Cells[index, NumberConstant.Seven].Value = model.EstimateVoidAmount;
-            worksheet.Cells[index, NumberConstant.Eight].Value = model.WinLostAfterVoid;
+            worksheet.Cells[index, NumberConstant.Three].Value = CheckNumberOrDecimal(model.GivenCredit);
+            worksheet.Cells[index, NumberConstant.Four].Value = CheckNumberOrDecimal(model.AdjustVoidLimit);
+            worksheet.Cells[index, NumberConstant.Five].Value = CheckNumberOrDecimal(model.CurrentLosing);
+            worksheet.Cells[index, NumberConstant.Six].Value = CheckNumberOrDecimal(model.CurrentWinning);
+            worksheet.Cells[index, NumberConstant.Seven].Value = CheckNumberOrDecimal(model.EstimateVoidAmount);
+            worksheet.Cells[index, NumberConstant.Eight].Value = CheckNumberOrDecimal(model.WinLostAfterVoid);
 
             if (model.IsHighlight)
             {
@@ -49,6 +49,11 @@ public class CellServiceImp : CellService
 
             index++;
         }
+    }
+
+    private static string CheckNumberOrDecimal(decimal? value)
+    {
+        return value % 1 == 0 ? $"{value:N0}" : $"{value:#,0.####}";
     }
 
     private static void HighlightBackground(ExcelWorksheet worksheet, int rowStart, int rowEnd)
