@@ -14,5 +14,5 @@ public class GetTicketsQuery
 
     public int PageSize { get; set; }
 
-    public IEnumerable<TransDateXmlModel> Durations { get; set; }
+    public IEnumerable<TransDateXmlModel>? Durations { get; set; }
 }

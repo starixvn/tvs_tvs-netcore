@@ -7,15 +7,15 @@ namespace SpecialDelete.CashOutTransaction.Common.Extensions;
 
 public static class TransDateTypeExtension
 {
-    public static string ToXml(this IEnumerable<TransDateXmlModel> transdateTypes)
+    public static string ToXml(this IEnumerable<TransDateXmlModel>? transDateTypes)
     {
-        if (transdateTypes == null)
+        if (transDateTypes == null)
         {
             return string.Empty;
         }
 
         var temp = new StringBuilder();
-        foreach (var item in transdateTypes)
+        foreach (var item in transDateTypes)
         {
             var from = item.FromTransDate.ZoneCanada();
             var to = item.ToTransDate.ZoneCanada();

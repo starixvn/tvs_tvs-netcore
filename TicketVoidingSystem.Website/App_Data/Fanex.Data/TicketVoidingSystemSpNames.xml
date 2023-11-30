@@ -354,4 +354,25 @@
 
         <Setting Key="NAP_CustomerSelInfoByUsername" SpName="NAP_CustomerSelInfoByUsername" DbName="DBACC.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="CashOutTransaction">
+        <Setting Key="DBCTG.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidCashOutTransaction_Select" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_VoidCashOutTransaction_Update" SpName="NAP_SpecialDelete_VoidCashOutTransaction_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverCashOutTransaction_Select" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>

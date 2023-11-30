@@ -17,6 +17,7 @@ public static class WebOptimizerExtension
             pipeline.AddUploadBatchMessageBundle(scriptSetting);
             pipeline.AddVoidByBetIdBundle(scriptSetting);
             pipeline.AddCancelCashOutBundle(scriptSetting);
+            pipeline.AddRecoverCashOutBundle(scriptSetting);
         });
     }
 }
