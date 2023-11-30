@@ -8,25 +8,30 @@
 }
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title &mdash; NAP Special Delete</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="shortcut icon" href="~/favicon.ico" />
-        <link rel="stylesheet" href="~/old-page/bundle/layout-libs.css" />
-        @await RenderSectionAsync("Head", false)
-        @if (IsSectionDefined("Styles"))
-        {
-            @await RenderSectionAsync("Styles")
-        }
-        else
-        {
-            <link href="~/old-page/bundle/angular-old-styles.css" rel="stylesheet" type="text/css" />
-        }
-        <script type="text/javascript">
+<head>
+    @if (ViewBag.IsPageUsingJquery == null || !ViewBag.IsPageUsingJquery)
+    {
+        <base href="@Url.Content("~/")"/>
+    }
+
+    <meta charset="utf-8"/>
+    <title>@ViewBag.Title &mdash; NAP Special Delete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="~/favicon.ico"/>
+    <link rel="stylesheet" href="~/old-page/bundle/layout-libs.css"/>
+    @await RenderSectionAsync("Head", false)
+    @if (IsSectionDefined("Styles"))
+    {
+        @await RenderSectionAsync("Styles")
+    }
+    else
+    {
+        <link href="~/old-page/bundle/angular-old-styles.css" rel="stylesheet" type="text/css"/>
+    }
+    <script type="text/javascript">
         window.rootUrl = '@Url.Content("~/")';
         </script>
-    </head>
+</head>
 <body user-name="@userName" root-url="@Url.Content("~/")">
         @await Component.InvokeAsync(nameof(LogOut), new { userName })
 

@@ -22,6 +22,7 @@ public class MenuController : Controller
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.UploadBatchMsg, Policy = Constant.Policy.Read)]
     public IActionResult UploadBatchMessage()
     {
+        ViewBag.IsPageUsingJquery = true;
         return View("~/Views/UploadBatchMessage/Index.cshtml");
     }
 

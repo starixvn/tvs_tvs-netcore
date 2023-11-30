@@ -50,6 +50,7 @@ public class SportBookController : Controller
     public IActionResult VoidByBetId()
     {
         ViewBag.UserName = sessionService.UserName;
+        ViewBag.IsPageUsingJquery = true;
         return View("~/Views/VoidByBetId/Index.cshtml");
     }
 }
