@@ -23,11 +23,13 @@ public class RecordServiceImp : RecordRecoverService<MailTicketViewModel, Recove
     private readonly PagingService pagingService;
 
     public RecordServiceImp(
+        IMapper mapper,
         SubjectService subjectService,
         TemplateEmailService templateEmailService,
         TicketHtmlService ticketHtmlService,
         PagingService pagingService)
     {
+        this.mapper = mapper;
         this.subjectService = subjectService;
         this.templateEmailService = templateEmailService;
         this.ticketHtmlService = ticketHtmlService;

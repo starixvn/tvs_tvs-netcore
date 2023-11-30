@@ -4,7 +4,7 @@ namespace SpecialDelete.CashOutTransaction.Common.Models;
 
 public class GetTicketsQuery
 {
-    public long? MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public int? FilterBy { get; set; }
 

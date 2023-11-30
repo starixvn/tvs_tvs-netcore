@@ -305,7 +305,7 @@ const voidCashOutService = {
             NapTicketControl.MessageNotAllowExportExcel();
             return;
         }
-        NapTicketControl.xhrDownloadFile(window.rootUrl + "SportBook/CancelCashOut/ExportExcel", param);
+        NapTicketControl.xhrDownloadFile(window.rootUrl + "api/CancelCashOut/ExportExcel", param);
     },
 
     voidTickets: function () {
@@ -315,12 +315,12 @@ const voidCashOutService = {
     checkNegativeBalance: function () {
         const ticketsCheckPermission = $('.checkBoxItem:checkbox').not('#chk-ticket-all').map(function () {
             if (this.value !== '') {
-                return { transId: this.value, siteDbGroupId: this.getAttribute('site-db-group-id') };
+                return { transId: this.value, siteDbGroupId: parseInt(this.getAttribute('site-db-group-id')) };
             }
         }).get();
         const tickets = $('.checkBoxItem:checkbox:checked').not('#chk-ticket-all').map(function () {
             if (this.value !== '') {
-                return { transId: this.value, siteDbGroupId: this.getAttribute('site-db-group-id') };
+                return { transId: this.value, siteDbGroupId: parseInt(this.getAttribute('site-db-group-id')) };
             }
         }).get();
         const param = {
@@ -381,7 +381,7 @@ const voidCashOutService = {
         const totalChecked = $('.checkBoxItem:checked').length;
         const params = {
             Tickets: tickets,
-            UserPassword: $('#password').val(),
+            UserPassword: CryptoJS.CfsEnCode($('#password').val()),
             UserName: $('#username').val(),
             Reason: $('#reason').val(),
             ReasonSC: $('#reasonSC').val(),

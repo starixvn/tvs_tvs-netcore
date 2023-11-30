@@ -228,7 +228,7 @@ public static class ServiceCollectionExtension
         services.RegisterVoidByCurrencyServices();
         services.RegisterVoidByBetIdServices();
         services.RegisterCancelCashOutServices();
-        services.RegisterRecoverCashOutTransactionServices();
+        services.RegisterRecoverCashOutServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)

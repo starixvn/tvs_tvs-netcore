@@ -19,13 +19,6 @@ public class CancelCashOutController : Controller
         this.mediator = mediator;
     }
 
-    //public async Task<ActionResult> Index()
-    //{
-    //    var model = await mediator.Send(new Ping()).ConfigureAwait(false);
-    //    ViewBag.UserName = model.UserName;
-    //    return View(model);
-    //}
-
     [HttpPost]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.CancelCashOutAction)]
     public async Task<JsonResult> GetTickets(GetTicketsRequest request) => this.JsonResultPascalCase(await mediator.Send(request));

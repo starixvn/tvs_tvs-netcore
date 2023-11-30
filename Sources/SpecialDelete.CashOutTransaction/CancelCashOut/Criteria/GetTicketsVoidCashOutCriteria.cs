@@ -6,7 +6,7 @@ namespace SpecialDelete.CashOutTransaction.CancelCashOut.Criteria;
 
 public class GetTicketsVoidCashOutCriteria : CriteriaBase
 {
-    public long? MatchId { get; set; }
+    public int? MatchId { get; set; }
 
     public string TransIds { get; set; }
 

@@ -60,6 +60,7 @@ public class SportBookController : Controller
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.CancelCashOutAction)]
     public IActionResult CancelCashOut()
     {
+        ViewBag.UserName = sessionService.UserName;
         return View("~/Views/CancelCashOut/Index.cshtml");
     }
 
