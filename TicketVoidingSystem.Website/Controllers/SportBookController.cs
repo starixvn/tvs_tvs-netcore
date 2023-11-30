@@ -61,6 +61,7 @@ public class SportBookController : Controller
     public IActionResult CancelCashOut()
     {
         ViewBag.UserName = sessionService.UserName;
+        ViewBag.IsPageUsingJquery = true;
         return View("~/Views/CancelCashOut/Index.cshtml");
     }
 
@@ -70,6 +71,7 @@ public class SportBookController : Controller
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverCashOutTransaction)]
     public IActionResult RecoverCashOut()
     {
+        ViewBag.IsPageUsingJquery = true;
         return View("~/Views/RecoverCashOut/Index.cshtml");
     }
 }
