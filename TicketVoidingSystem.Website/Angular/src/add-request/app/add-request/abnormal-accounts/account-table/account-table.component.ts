@@ -116,4 +116,10 @@ export class AccountTableComponent {
   public showDecimalWithComma(amount: number): string {
     return amount?.toLocaleString(undefined, { maximumFractionDigits: 4 })
   }
+
+  public mouseDownEventAdjustGV(account: AccountWinlostModel): void {
+    if (!this.filter.isVoided) {
+      account.isShowInput = !account.isShowInput;
+    }
+  }
 }

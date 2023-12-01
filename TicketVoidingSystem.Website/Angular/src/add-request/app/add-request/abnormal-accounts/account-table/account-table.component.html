@@ -73,7 +73,7 @@
               <div>{{showDecimalWithComma(item.givenCredit)}}</div>
             </td>
             <td class="col-tb-4 text-right adjust-gv">
-              <div class="adjust-string" *ngIf="!item.isShowInput" (mousedown)="item.isShowInput = !item.isShowInput">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
+              <div class="adjust-string" *ngIf="!item.isShowInput" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
               <div>
                 <input *ngIf="item.isShowInput" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
                 (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided" onmouseup="this.focus()"
