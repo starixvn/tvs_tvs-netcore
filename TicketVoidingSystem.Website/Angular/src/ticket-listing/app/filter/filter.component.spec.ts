@@ -11,14 +11,13 @@ import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettype
 import { DateFullTimeComponent } from '../../../utility/components/date-time/date-full-time/date-full-time.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
-import { Product, SportTypeConst } from '../../../utility/constants/config';
+import { Product } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { MatchModel } from '../../../utility/models/match.model';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
-import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/advanced-mode-basketball.component';
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
 import { FilterComponent } from './filter.component';
@@ -61,7 +60,6 @@ describe('FilterComponent', () => {
       GroupBetTypesComponent,
       BetTypesComponent,
       BetTypesVirtualSportComponent,
-      AdvancedModeBasketballComponent,
       AdvancedModeComponent,
       DateFullTimeComponent
     ],
@@ -101,7 +99,6 @@ describe('FilterComponent', () => {
 
     // Assert
     expect(instance.initFilter).toHaveBeenCalledTimes(1);
-    expect(instance.query.quarter).toBe('All');
     expect(instance.groupBetTypes.groupBetTypes.length).toBe(0);
   });
 
@@ -405,15 +402,12 @@ describe('FilterComponent', () => {
     .render();
     instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     instance.advancedModeComponent.resetBetTeam = jest.fn();    
-    instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
-    instance.advancedModeBasketball.renderSelection = jest.fn();
     instance.validateProduct = jest.fn().mockImplementation(() => true);
     instance.handleByProduct = jest.fn();
 
     await instance.checkSportType();
 
     expect(instance.advancedModeComponent.resetBetTeam).toHaveBeenCalledTimes(1);
-    expect(instance.advancedModeBasketball.renderSelection).toHaveBeenCalledTimes(1);
     expect(instance.validateProduct).toHaveBeenCalledTimes(1);
     expect(instance.handleByProduct).toHaveBeenCalledTimes(1);
   });
@@ -580,8 +574,6 @@ describe('FilterComponent', () => {
     jest.spyOn(instance, 'checkFilterParams').mockImplementation(() => true);
     jest.spyOn(instance, 'validateProduct').mockImplementation(() => true);
     jest.spyOn(instance, 'validateBetTypes').mockImplementation(() => true);
-    instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
-    jest.spyOn(instance.advancedModeBasketball, 'validate').mockImplementation(() => true);
     jest.spyOn(instance, 'getParams').mockImplementation();
     jest.spyOn(instance.searchEvent, 'emit').mockImplementation();
 
@@ -643,13 +635,14 @@ describe('FilterComponent', () => {
     instance.toDate = '2020-08-02';
     instance.disabledTransDate = false;
     instance.sportType = 43;
+    instance.query.product = Product.SPORTS_BOOK;
     const testCases = [
       { validation: true, expectedResult: true },
       { validation: false, expectedResult: false },
     ];
     // Action and Assert
     for (const item of testCases) {
-      instance.advancedModeComponent.validate = jest.fn().mockImplementation(() => item.validation);
+      instance.advancedModeComponent.validate = jest.fn().mockReturnValue(item.validation);
       actualResult = instance.checkFilterParams();
       expect(actualResult).toBe(item.expectedResult);
     }
@@ -745,13 +738,12 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     const checkedBettypes = '1,2,3';
     jest.spyOn(instance, 'getCheckedBetTypes').mockImplementation(() => checkedBettypes);
-    instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
-    jest.spyOn(instance.advancedModeBasketball, 'getSelection').mockImplementation(() => '1,2,3');
-    instance.sportType = SportTypeConst.E_SPORTS;
+    instance.sportType = SportType.E_SPORTS;
     instance.groupBetTypes = new GroupBetTypesModel([], false);
     jest.spyOn(instance.groupBetTypes, 'getValueCheckedBetTypes').mockImplementation(() => checkedBettypes);
     instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
     jest.spyOn(instance.advancedModeComponent, 'getBetTypeModels');
+    instance.query.product = Product.SPORTS_BOOK;
     // Action and Assert
     instance.getParams();
     expect(instance.advancedModeComponent.getBetTypeModels).toHaveBeenCalledWith(checkedBettypes);
@@ -763,13 +755,9 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     const checkedBettypes = '1,2,3';
     jest.spyOn(instance, 'getCheckedBetTypes').mockImplementation(() => checkedBettypes);
-    instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
-    jest.spyOn(instance.advancedModeBasketball, 'getSelection').mockImplementation(() => '1,2,3');
     instance.sportType = 0;
     instance.query.product = Product.BET_BUILDER;
     instance.disabledTransDate = false;
-    instance.advancedModeBasketball.isShow = true;
-    instance.advancedModeBasketball.getSelection = jest.fn();
 
     // Action and Assert
     instance.getParams();
@@ -829,11 +817,10 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     const bettype15 = new BetType(15, '1H 1X2', false, 0, true);
     const bettype4 = new BetType(4, 'Correct Score', false, 0, false);
-    instance.checkedIds = [];
     instance.allBetTypes = [];
+
     // Action and Assert
     instance.changeBetTypes([bettype15, bettype4]);
-    expect(instance.checkedIds.length).toBe(1);
     expect(instance.allBetTypes.length).toBe(2);
   });
   
@@ -848,31 +835,6 @@ describe('FilterComponent', () => {
     expect(actual).toBeTruthy();
   });
   
-  it('handleBetTypesAndAdvancedMode should disable #advancedModeBasketball', async () => {
-    // Arrange
-    const testCases = [
-      { isBasketball: true, isBadminton: false, isPHAIO5: false },
-      { isBasketball: false, isBadminton: true, isPHAIO5: false },
-      { isBasketball: false, isBadminton: false, isPHAIO5: true },
-      { isBasketball: false, isBadminton: false, isPHAIO5: false },
-    ];
-    const { instance } = await shallow.render();
-    instance.isReSettled = true;
-    instance.groupBetTypesComponent = new GroupBetTypesComponent(null);
-    instance.groupBetTypes = new GroupBetTypesModel([], false);
-    instance.groupBetTypes.groupBetTypes = [new GroupBetType('', [new BetType(1,'',true,1,true)], false)];
-    instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
-    testCases.forEach(x => {
-      instance.advancedModeBasketball.isBasketball = jest.fn().mockImplementation(() => x.isBasketball);
-      instance.advancedModeBasketball.isBadminton = jest.fn().mockImplementation(() => x.isBadminton);
-      instance.advancedModeBasketball.isPHAIO5 = jest.fn().mockImplementation(() => x.isPHAIO5);
-
-      // Action and Assert
-      instance.handleBetTypesAndAdvancedMode();
-      expect(instance.advancedModeBasketball.isDisabled).toBeTruthy();
-    });
-  });
-  
   it('handleBetTypesAndAdvancedMode should call #enableBetTypesAndAdvancedMode', async () => {
     // Arrange
     const { instance } = await shallow.render();
@@ -882,30 +844,6 @@ describe('FilterComponent', () => {
     // Action and Assert
     instance.handleBetTypesAndAdvancedMode();
     expect(instance['enableBetTypesAndAdvancedMode']).toHaveBeenCalledTimes(1);
-  });
-  
-  it('enableBetTypesAndAdvancedMode should update isShowContent to true', async () => {
-    // Arrange
-    const testCases = [
-      { isBasketball: true, isBadminton: false, isPHAIO5: false },
-      { isBasketball: false, isBadminton: true, isPHAIO5: false },
-      { isBasketball: false, isBadminton: false, isPHAIO5: true },
-      { isBasketball: false, isBadminton: false, isPHAIO5: false },
-    ];
-    const { instance } = await shallow.render();
-    instance.isReSettled = true;    
-    instance.groupBetTypesComponent = new GroupBetTypesComponent(null);
-    instance.advancedModeBasketball = new AdvancedModeBasketballComponent(null);
-
-    testCases.forEach(x => {
-      instance.advancedModeBasketball.isBasketball = jest.fn().mockImplementation(() => x.isBasketball);
-      instance.advancedModeBasketball.isBadminton = jest.fn().mockImplementation(() => x.isBadminton);
-      instance.advancedModeBasketball.isPHAIO5 = jest.fn().mockImplementation(() => x.isPHAIO5);
-
-      // Action and Assert
-      instance['enableBetTypesAndAdvancedMode']();
-      expect(instance.advancedModeBasketball.isShowContent).toBeTruthy();
-    });
   });
   
   it('unCheckAffectedTickets should call #enableBetTypesAndAdvancedMode', async () => {

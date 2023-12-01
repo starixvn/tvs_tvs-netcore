@@ -9,14 +9,6 @@ export enum IconCheckBox {
   all = 2
 }
 
-export class SportsType {
-  static readonly SPORTS_BOOK = 0;
-  static readonly VIRTUAL_SPORTS = 1;
-  static readonly NUMBER_GAME = 2;
-  static readonly BETTRADE = 4;
-  static readonly CASH_OUT = 5;
-}
-
 export class ModeType {
   static readonly SPORT_BOOK = 0;
   static readonly NUMBER_GAME = 1;
@@ -50,13 +42,6 @@ export class Product {
   static readonly SHOW_SEND_COLUMN = [Product.SPORTS_BOOK, Product.NUMBER_GAME, Product.BET_BUILDER];
   static readonly GET_BETTYPES = [Product.SPORTS_BOOK, Product.BET_BUILDER];
   static readonly STATIC_BETTYPES = [Product.NUMBER_GAME, Product.VIRTUAL_SPORTS, Product.BITCOIN];
-}
-
-export class SportTypeConst {
-  static readonly E_SPORTS = 43;
-  static readonly CRICKET = 50;
-  static readonly VOLEYBALL = 6;
-  static readonly TENNIS = 5;
 }
 
 export class ProductFilter {

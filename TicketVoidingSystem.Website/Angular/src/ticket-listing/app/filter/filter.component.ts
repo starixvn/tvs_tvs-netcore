@@ -1,7 +1,6 @@
 ﻿import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import moment from 'moment-timezone';
-import momenttimezone from 'moment-timezone';
+import { default as moment, default as momenttimezone } from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
@@ -13,14 +12,13 @@ import { BlockUiService } from '../../../utility/components/block-ui/block-ui.se
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
-import { DateTimeFormat, ModeType, Product, SportTypeConst } from '../../../utility/constants/config';
+import { DateTimeFormat, ModeType, Product } from '../../../utility/constants/config';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { StaticService } from '../../../utility/services/static.service';
-import { AdvancedModeBasketballComponent } from '../advanced-mode-basketball/advanced-mode-basketball.component';
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
 import { FilterEvent, Item, Licensee, Type } from './filter.model';
@@ -37,7 +35,6 @@ export class FilterComponent implements OnInit {
   @ViewChild('bettypesComponent') betTypesComponent: BetTypesComponent;
   @ViewChild('betTypesVSComponent') betTypesVSComponent: BetTypesVirtualSportComponent;
   @ViewChild('advancedMode') advancedModeComponent: AdvancedModeComponent;
-  @ViewChild('advancedModeBasetball') advancedModeBasketball: AdvancedModeBasketballComponent;
   public query = new GetSummaryQuery();
   tooltip = new Tooltip();
   isShowFilter = true;
@@ -63,16 +60,8 @@ export class FilterComponent implements OnInit {
   ballSequences = new BallSequences();
   isMatch3rd: boolean;
   switchMatch3rd: boolean;
-  checkedIds: number[];
   allBetTypes: BetType[];
   comboParlay: MultipleSelection;
-
-  private readonly sportTypeHaveNormalAdvancedMode = [
-    SportTypeConst.CRICKET,
-    SportTypeConst.E_SPORTS,
-    SportTypeConst.TENNIS,
-    SportTypeConst.VOLEYBALL
-  ];
 
   constructor(
     private readonly element: ElementRef,
@@ -87,7 +76,6 @@ export class FilterComponent implements OnInit {
     await this.initFilter();
     this.setDateTime();
     this.groupBetTypes = new GroupBetTypesModel([], false);
-    this.query.quarter = 'All';
     this.renderComboParlay();
   }
 
@@ -243,7 +231,6 @@ export class FilterComponent implements OnInit {
   async checkSportType() {
     this.advancedModeComponent.resetBetTeam();
     if (this.validateProduct()) {
-      this.advancedModeBasketball.renderSelection();
       await this.handleByProduct();
     }
   }
@@ -391,7 +378,7 @@ export class FilterComponent implements OnInit {
   }
 
   search() {
-    if (this.checkFilterParams() && this.validateProduct() && this.validateBetTypes() && this.advancedModeBasketball.validate()) {
+    if (this.checkFilterParams() && this.validateProduct() && this.validateBetTypes()) {
       const event: FilterEvent = {
         match: this.match,
         query: this.getParams()
@@ -414,12 +401,12 @@ export class FilterComponent implements OnInit {
     }
     if (this.isSelectionNotValid()) {
       this.tooltip.display('multiple-selection', TEXT.INVALID_SELECTION);
-      return false;    
+      return false;
     }
-    if (!this.isHideNormalAdvancedMode()) {
+    if (this.isShowAdvancedMode()) {
       return this.advancedModeComponent.validate();
     }
-  
+
     return true;
   }
 
@@ -448,7 +435,6 @@ export class FilterComponent implements OnInit {
     this.query.ballSequence = this.ballSequences.value.join(',');
     this.query.fromTransDate = this.disabledTransDate ? null : this.fromDate;
     this.query.toTransDate = this.disabledTransDate ? null : this.toDate;
-    this.query.quarter = this.advancedModeBasketball.isShow ? this.advancedModeBasketball.getSelection() : 'All';
     this.query.singleOrSubParlay = this.singleOrSubParlay;
     this.query.isReSettled = this.isReSettled;
     this.query.selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay, this.comboParlay);
@@ -460,7 +446,7 @@ export class FilterComponent implements OnInit {
       this.query.betTypes = this.getCheckedBetTypes();
       this.query.selectionType = '';
     }
-    if (!this.isHideNormalAdvancedMode()) {
+    if (this.isShowAdvancedMode()) {
       const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
       const betTeams = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
       this.query.betTeams = betTeams;
@@ -472,7 +458,7 @@ export class FilterComponent implements OnInit {
     if (bet !== "SubParlay") {
       return "";
     }
-    
+
     const selectedItems = comboParlay.items
       .filter(item => item.checked)
       .map(item => item.value);
@@ -498,7 +484,6 @@ export class FilterComponent implements OnInit {
   }
 
   changeBetTypes(betTypes: BetType[]) {
-    this.checkedIds = betTypes.filter(x => x.isChecked).map(item => item.id);
     this.allBetTypes = betTypes;
   }
 
@@ -518,11 +503,6 @@ export class FilterComponent implements OnInit {
 
   private enableBetTypesAndAdvancedMode(): void {
     this.groupBetTypesComponent.isDisabledAllBetTypes = false;
-    this.advancedModeBasketball.isDisabled = false;
-    if (this.advancedModeBasketball.isBasketball() || this.advancedModeBasketball.isBadminton() || this.advancedModeBasketball.isPHAIO5()) {
-      this.advancedModeBasketball.isShow = true;
-      this.advancedModeBasketball.isShowContent = true;
-    }
   }
 
   handleBetTypesAndAdvancedMode(): void {
@@ -533,19 +513,14 @@ export class FilterComponent implements OnInit {
         x.isChecked = true;
         x.betTypes.forEach(y => y.isChecked = true);
       });
-      this.advancedModeBasketball.isDisabled = true;
-      if (this.advancedModeBasketball.isBasketball() || this.advancedModeBasketball.isBadminton() || this.advancedModeBasketball.isPHAIO5()) {
-        this.advancedModeBasketball.isShow = true;
-        this.advancedModeBasketball.isShowContent = false;
-      }
     } else {
       this.enableBetTypesAndAdvancedMode();
     }
 
   }
 
-  isHideNormalAdvancedMode(): boolean {
-    return !this.sportTypeHaveNormalAdvancedMode.includes(this.sportType);
+  isShowAdvancedMode(): boolean {
+    return this.query.product === Product.SPORTS_BOOK;
   }
 
   isShowFilterTime(): boolean {

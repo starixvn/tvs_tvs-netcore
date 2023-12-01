@@ -28,8 +28,6 @@ public class GetSummaryCriteria : CriteriaBase
 
     public int SecondAcceptFlag { get; set; }
 
-    public string Quarter { get; set; }
-
     public string BetTeams { get; set; }
 
     public string SingleOrSubParlay { get; set; }

@@ -15,7 +15,6 @@ export class CommonQuery {
   fromTransDate: string;
   toTransDate: string;
   groupBy: number;
-  quarter?: string;
   betTeams?: CheckedBetType[];
   singleOrSubParlay: string;
   isReSettled:  boolean;

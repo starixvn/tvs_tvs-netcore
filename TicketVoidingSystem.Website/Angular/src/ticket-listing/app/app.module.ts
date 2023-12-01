@@ -13,7 +13,6 @@ import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { PipeModule } from '../../utility/pipes/pipe.module';
 import { HttpService } from '../../utility/services/http.service';
 import { UtilityModule } from './../../utility/utility.module';
-import { AdvancedModeBasketballComponent } from './advanced-mode-basketball/advanced-mode-basketball.component';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { FilterComponent } from './filter/filter.component';
@@ -23,7 +22,6 @@ import { TicketsComponent } from './tickets/tickets.component';
 
 @NgModule({
   declarations: [
-    AdvancedModeBasketballComponent,
     AppComponent,
     FilterComponent,
     SummaryComponent,
