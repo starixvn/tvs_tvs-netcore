@@ -60,7 +60,7 @@ public class CashOutApiServiceTests
             new() { IsCashOut = true, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
             new() { IsCashOut = false, SportTypeId = SportTypeConstant.Basketball, TransId = 2, CustId = 2 },
             new() { IsCashOut = true, SportTypeId = SportTypeConstant.CashOut, TransId = 2, CustId = 2 },
-            new() { IsCashOut = false, SportTypeId = SportTypeConstant.CashOut	, TransId = 2, CustId = 2 },
+            new() { IsCashOut = false, SportTypeId = SportTypeConstant.CashOut  , TransId = 2, CustId = 2 },
         };
 
         // Act

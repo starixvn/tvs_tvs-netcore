@@ -4,7 +4,6 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 

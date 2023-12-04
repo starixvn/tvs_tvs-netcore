@@ -52,7 +52,7 @@ public class BetListRecoverBetIdServiceImp : BetListRecoverBetIdService
         ticket.IsLive = item.IsLiveIndicator;
         ticket.RefNo = item.RefNo.ToString(CultureInfo.InvariantCulture);
         ticket.Currency = item.CurrencyName;
-        ticket.EventDate = item.BetType.IsBitCoin() ? item.EndTime : new DateTime();
+        ticket.EventDate = item.BetType.IsBitCoin() ? item.EndTime : new DateTimeOffset().DateTime;
 
         return ticket;
     }

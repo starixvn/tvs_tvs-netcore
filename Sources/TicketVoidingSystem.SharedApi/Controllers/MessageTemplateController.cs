@@ -18,4 +18,7 @@ public class MessageTemplateController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetTemplateSettings() => Ok(await mediator.Send(new GetTemplateSettingRequest()));
+
+    [HttpGet]
+    public async Task<IActionResult> GetTemplateAbnormalBet() => Ok(await mediator.Send(new GetTemplateAbnormalBetRequest()));
 }

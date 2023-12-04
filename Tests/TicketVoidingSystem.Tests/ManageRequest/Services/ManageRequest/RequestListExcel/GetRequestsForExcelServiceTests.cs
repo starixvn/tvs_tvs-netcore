@@ -83,7 +83,7 @@ public class GetRequestsForExcelServiceTests
                 },
                 new()
             },
-            CalcFullTime = new DateTime(2023,2,2,2,2,2),
+            CalcFullTime = new DateTime(2023, 2, 2, 2, 2, 2),
             CalcHalfTime = new DateTime(2023, 2, 2, 2, 2, 2)
         };
 

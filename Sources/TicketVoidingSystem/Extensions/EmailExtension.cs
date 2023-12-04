@@ -26,18 +26,6 @@ public static class EmailExtension
         return $"<Operators>{stringBuilder.ToString().Trim()}</Operators>";
     }
 
-    public static string GetNegativeBalanceUsers(this IEnumerable<TicketEmailModel> tickets, EmailGroup group, Func<TicketEmailModel, string> filter, string negativeBalanceUsers)
-    {
-        if (group == EmailGroup.CashOut)
-        {
-            return string.Empty;
-        }
-
-        var usersInSite = tickets.Select(filter).ToList();
-
-        return negativeBalanceUsers.Intersected(usersInSite);
-    }
-
     public static bool Valid(this IEnumerable<TicketEmailModel> tickets, SiteEmail site)
     {
         return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
@@ -75,6 +63,18 @@ public static class EmailExtension
 
         var usersInSite = model.Tickets.Select(filter).ToList();
         var negativeBalanceUsers = viewModel.NegativeBalanceUsers;
+        return negativeBalanceUsers.Intersected(usersInSite);
+    }
+
+    public static string GetNegativeBalanceUsers(this IEnumerable<TicketEmailModel> tickets, EmailGroup group, Func<TicketEmailModel, string> filter, string negativeBalanceUsers)
+    {
+        if (group == EmailGroup.CashOut)
+        {
+            return string.Empty;
+        }
+
+        var usersInSite = tickets.Select(filter).ToList();
+
         return negativeBalanceUsers.Intersected(usersInSite);
     }
 }

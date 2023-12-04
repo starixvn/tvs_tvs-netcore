@@ -76,7 +76,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
     {
         // Arrange
         var query = new GetTicketsQuery { MatchId = 132 };
-        var validation = new List<GetTicketValidationModel> ();
+        var validation = new List<GetTicketValidationModel>();
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
         var criteria = new GetTicketsCriteria();
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);

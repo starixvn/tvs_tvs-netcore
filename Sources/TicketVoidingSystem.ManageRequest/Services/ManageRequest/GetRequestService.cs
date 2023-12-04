@@ -240,7 +240,7 @@ public class GetRequestServiceImp : GetRequestService
 
     private IEnumerable<EarlyKickOffViewModel> MapEventEarlyKickOff(IEnumerable<RequestEventModel> requestEventModels)
     {
-        return requestEventModels.Select(model => new EarlyKickOffViewModel()
+        return requestEventModels.Select(model => new EarlyKickOffViewModel
         {
             MatchId = model.MatchId,
             MatchCode = model.MatchCode,

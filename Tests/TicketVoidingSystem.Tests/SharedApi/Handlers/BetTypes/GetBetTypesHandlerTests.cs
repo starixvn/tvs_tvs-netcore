@@ -23,7 +23,7 @@ public class GetBetTypesHandlerTests
     {
         // Arrange
         var request = new GetBetTypesRequest();
-        
+
         // Act
         _ = await handler.Handle(request, CancellationToken.None);
 

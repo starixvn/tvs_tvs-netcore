@@ -65,7 +65,7 @@ public class TicketsServiceTests : AppSettingFixture, IClassFixture<RemotingRefF
         AssertExtension.Equal(expected, result);
         return Task.CompletedTask;
     }
-    
+
     [Fact]
     public Task GetComboName_Return_ExpectedValue()
     {

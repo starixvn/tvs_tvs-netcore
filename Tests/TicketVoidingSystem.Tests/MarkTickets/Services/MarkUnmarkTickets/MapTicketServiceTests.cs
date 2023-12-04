@@ -173,7 +173,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
             }
         };
         var mapper = Substitute.For<IMapper>();
-        var ticket = new ExcelTicketModel{Choice = null};
+        var ticket = new ExcelTicketModel { Choice = null };
         mapper.Map<Ticket>(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(ticketExpected);
         mapper.Map<ExcelTicketModel>(Arg.Any<TicketViewModel>()).ReturnsForAnyArgs(ticket);
         var betListService = Substitute.For<BetListService>();

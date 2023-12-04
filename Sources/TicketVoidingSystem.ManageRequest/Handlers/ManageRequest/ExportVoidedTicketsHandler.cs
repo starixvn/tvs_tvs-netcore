@@ -21,7 +21,7 @@ public class ExportVoidedTicketsHandler : IRequestHandler<ExportVoidedTicketsReq
 
     public async Task<ExcelFileModel> Handle(ExportVoidedTicketsRequest request, CancellationToken cancellationToken)
     {
-        var createDate = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}";
+        var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
         var fileName = $"Req.{request.RequestId}_TVS_DeleteBet_{createDate}";
         return new ExcelFileModel
         {

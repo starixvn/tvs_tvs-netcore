@@ -50,7 +50,7 @@ public class SendEmailServiceImp : SendEmailService
         {
             TemplatePath = TemplateEmailPath.VoidBetChinese,
             Match = model.Match,
-            DateTime = DateTime.Now,
+            DateTime = DateTimeOffset.Now.DateTime,
             VoidReason = model.Reason,
             VoidReasonSC = model.ReasonSC,
             Message = model.Message,

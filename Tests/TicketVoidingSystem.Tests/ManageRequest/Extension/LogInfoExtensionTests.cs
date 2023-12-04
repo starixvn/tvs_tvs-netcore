@@ -25,7 +25,7 @@ public class LogInfoExtensionTests
     public void GetKickOffInfoXml_HasDataViewModel_ReturnExpected()
     {
         // Arrange
-        var models = new List<EarlyKickOffViewModel>{ new(){ MatchId = 1} };
+        var models = new List<EarlyKickOffViewModel> { new() { MatchId = 1 } };
 
         // Act
         var result = models.ToKickOffInfoXml();
@@ -38,7 +38,7 @@ public class LogInfoExtensionTests
     public void GetKickOffInfoXml_NoHasKickOffTimeInDataViewModel_ReturnExpected()
     {
         // Arrange
-        var models = new List<EarlyKickOffViewModel> { new() { MatchId = 1, KickOffTime = new DateTime(2023,2,2)} };
+        var models = new List<EarlyKickOffViewModel> { new() { MatchId = 1, KickOffTime = new DateTime(2023, 2, 2) } };
 
         // Act
         var result = models.ToKickOffInfoXml();

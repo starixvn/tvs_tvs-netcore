@@ -42,7 +42,7 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         {
             int? numberOfRequestDetail = null;
             int? currentIndex = null;
-            var isCurrentRequestNotExistedInOutputRequests = outputRequests.All(x => x.RequestId != item.RequestId);
+            var isCurrentRequestNotExistedInOutputRequests = outputRequests.TrueForAll(x => x.RequestId != item.RequestId);
             if (isCurrentRequestNotExistedInOutputRequests)
             {
                 numberOfRequestDetail = viewModels.Count(x => x.RequestId == item.RequestId);

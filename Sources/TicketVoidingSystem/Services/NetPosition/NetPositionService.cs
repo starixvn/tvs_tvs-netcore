@@ -48,16 +48,16 @@ public class NetPositionServiceImp : NetPositionService
 
     private IEnumerable<Task<int>> UpdateNetPositionTasks(IEnumerable<BetId> transIds, string action)
     {
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
         {
-            var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId);
+            var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == siteDbGroupId).Select(x => x.TransId);
             if (transIdsInServer.Any())
             {
                 var command = new TicketVoidingNetPositionCriteria
                 {
                     StrTransIds = string.Join(",", transIdsInServer),
                     Action = action,
-                    SiteDbGroupId = server.Id
+                    SiteDbGroupId = siteDbGroupId
                 };
 
                 yield return repository.ExecuteAsync(command);
@@ -75,16 +75,16 @@ public class NetPositionServiceImp : NetPositionService
 
     private IEnumerable<Task<int>> RollBackNetPositionTasks(IEnumerable<BetId> transIds)
     {
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
         {
-            var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId);
+            var transIdsInServer = transIds.Where(x => x.SiteDbGroupId == siteDbGroupId).Select(x => x.TransId);
             if (transIdsInServer.Any())
             {
                 var command = new TicketVoidingNetPositionCriteria
                 {
                     StrTransIds = string.Join(",", transIdsInServer),
                     Action = NetPositionConstant.ActionRecover,
-                    SiteDbGroupId = server.Id
+                    SiteDbGroupId = siteDbGroupId
                 };
 
                 yield return repository.ExecuteAsync(command);

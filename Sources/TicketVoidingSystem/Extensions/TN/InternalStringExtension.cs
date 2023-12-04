@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -22,7 +23,7 @@ public static class InternalStringExtension
 
     public static string StripHtml(this string htmlText)
     {
-        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
+        var reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         var stripped = reg.Replace(htmlText, string.Empty);
         return HttpUtility.HtmlDecode(stripped);
     }

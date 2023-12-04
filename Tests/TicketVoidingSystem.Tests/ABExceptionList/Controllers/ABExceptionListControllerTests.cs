@@ -74,7 +74,7 @@ public class ABExceptionListControllerTests
 
     [Fact]
     public async Task GetPermission_HasRequest_CallMediatorRequest()
-    {            
+    {
         // Arrange
         var permission = new PermissionABExceptionList();
         var mediator = Substitute.For<IMediator>();

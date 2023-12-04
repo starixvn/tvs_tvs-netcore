@@ -87,7 +87,7 @@ public class GetRequestsServiceTests
         var requestModel = new List<RequestModel>();
         var _ = new List<string>();
         var query = new SelectRequestsQuery
-            { RequestId = null, IsFromDateBeforeBUDay = true, IsToDateBeforeBUDay = true };
+        { RequestId = null, IsFromDateBeforeBUDay = true, IsToDateBeforeBUDay = true };
         getRequestsInActiveTableService.GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs((requestModel, _));
         mapper.Map<GetArchivedRequestInfoCriteria>(Arg.Any<SelectRequestsQuery>())
@@ -129,7 +129,7 @@ public class GetRequestsServiceTests
         };
         var _ = new List<string>();
         var query = new SelectRequestsQuery
-            { RequestId = null, IsFromDateBeforeBUDay = true, IsToDateBeforeBUDay = true };
+        { RequestId = null, IsFromDateBeforeBUDay = true, IsToDateBeforeBUDay = true };
 
         getRequestsInActiveTableService.GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs((requestModel, _));
@@ -172,7 +172,7 @@ public class GetRequestsServiceTests
         };
         var _ = new List<string>();
         var query = new SelectRequestsQuery
-            { RequestId = null, IsFromDateBeforeBUDay = true, IsToDateBeforeBUDay = false };
+        { RequestId = null, IsFromDateBeforeBUDay = true, IsToDateBeforeBUDay = false };
 
         getRequestsInActiveTableService.GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs((requestModel, _));

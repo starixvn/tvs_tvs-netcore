@@ -34,6 +34,8 @@ public class CheckBoxExtensionTests
     [InlineData(false, false, true, null, true)]
     [InlineData(false, false, false, null, true)]
     [InlineData(false, false, false, 1, true)]
+    [InlineData(true, true, true, 1, false)]
+    [InlineData(true, true, false, 1, true)]
     public void IsDisable_ReturnsExpected_WithCheckCancelCashOutTicket
         (bool unSettled, bool instantlySettled, bool settled, int? statusWinLost, bool expected)
     {
@@ -71,11 +73,10 @@ public class CheckBoxExtensionTests
     }
 
     [Theory]
-    [InlineData(true, IssueTypeConstant.AbnormalAccount, false, false, true)]
-    [InlineData(true, IssueTypeConstant.AbnormalBet, false, false, true)]
+    [InlineData(true, IssueTypeConstant.AbnormalAccount, true, false, true)]
+    [InlineData(true, IssueTypeConstant.ArchivedTicket, true, false, true)]
+    [InlineData(true, IssueTypeConstant.AbnormalBet, true, false, true)]
     [InlineData(true, IssueTypeConstant.AbnormalBetRealMember, false, false, true)]
-    [InlineData(true, IssueTypeConstant.ArchivedTicket, false, false, true)]
-    [InlineData(false, IssueTypeConstant.ArchivedTicket, false, false, true)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, false, false, true)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, true, false, false)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, false, true, false)]
@@ -83,7 +84,7 @@ public class CheckBoxExtensionTests
         bool unSettled, bool instantlySettled, bool expected)
     {
         // Arrange
-        var item = new GetTicketModel { GroupName = "1", IsCashOut = isCashOut };
+        var item = new GetTicketModel { GroupName = "1", IsCashOut = isCashOut, Status = TicketStatus.Draw };
         var permission = new VoidPermission
         { InstantlySettled = instantlySettled, Settled = false, UnSettled = unSettled };
 

@@ -191,7 +191,7 @@ public class DescriptionServiceTests
     {
         // Arrange
         var request = new RequestDescription
-            { IssueTypeId = IssueTypeConstant.DuplicateTickets, FilterBy = filterBy, TotalSingle = 1 };
+        { IssueTypeId = IssueTypeConstant.DuplicateTickets, FilterBy = filterBy, TotalSingle = 1 };
         elementService.BuildMatch(Arg.Any<string>()).ReturnsForAnyArgs("1");
         elementService.BuildLeague(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs("league");
         elementService.BuildTotal(Arg.Any<int>(), null, Arg.Any<List<string>>()).ReturnsForAnyArgs("1");

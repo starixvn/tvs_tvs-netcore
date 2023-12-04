@@ -39,28 +39,20 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
         doc.LoadHtml(html);
 
         var choice = GetChoiceComboName(doc, html);
-        switch (html)
+        return html switch
         {
-            case var _ when html.Contains(HtmlClass.Lucky3):
-                return GetChoiceLucky3(doc);
-
-            case var _ when html.Contains(HtmlClass.CombinationLink):
-                return GetChoiceSingleMatchParlay(doc, betId);
-
-            case var _ when html.Contains(HtmlClass.BetTypeDescription):
-                return GetChoiceBetTypeDescription(doc, html, choice);
-
-            default:
-                return GetChoiceRefund(doc, html, choice);
-
-        }
+            _ when html.Contains(HtmlClass.Lucky3) => GetChoiceLucky3(doc),
+            _ when html.Contains(HtmlClass.CombinationLink) => GetChoiceSingleMatchParlay(doc, betId),
+            _ when html.Contains(HtmlClass.BetTypeDescription) => GetChoiceBetTypeDescription(doc, html, choice),
+            _ => GetChoiceRefund(doc, html, choice),
+        };
     }
 
     private static string GetChoiceRefund(HtmlDocument doc, string html, string choice)
     {
         var handicap = html.Contains(HtmlClass.Refund) ?
-            doc.DocumentNode.SelectNodes("//div[@class='refund']").First().InnerText :
-            doc.DocumentNode.SelectNodes("//div[@class='']").First().InnerText;
+            doc.DocumentNode.SelectNodes("//div[@class='refund']")[0].InnerText :
+            doc.DocumentNode.SelectNodes("//div[@class='']")[0].InnerText;
         var excludingChoice = handicap.Replace("Excluding", $"{Environment.NewLine}Excluding");
         return choice.AppendWithNewLine(excludingChoice).StripHtml();
     }
@@ -85,9 +77,9 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
 
     private static string GetChoiceLucky3(HtmlDocument doc)
     {
-        var numbers = doc.DocumentNode.SelectNodes("//span[@class='lucky3']").First().FirstChild.InnerText;
-        var handicap = doc.DocumentNode.SelectNodes("//span[@class='handicap']").First().FirstChild.InnerText;
-        var numOfBet = doc.DocumentNode.SelectNodes("//div[@class='num-of-bets']").First().InnerText;
+        var numbers = doc.DocumentNode.SelectNodes("//span[@class='lucky3']")[0].FirstChild.InnerText;
+        var handicap = doc.DocumentNode.SelectNodes("//span[@class='handicap']")[0].FirstChild.InnerText;
+        var numOfBet = doc.DocumentNode.SelectNodes("//div[@class='num-of-bets']")[0].InnerText;
         return numbers
             .AppendWithNewLine(handicap)
             .AppendWithNewLine(numOfBet);
@@ -96,7 +88,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
     private string GetChoiceSingleMatchParlay(HtmlDocument doc, string betId)
     {
         var result = new StringBuilder();
-        var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
+        var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']")[0].InnerText;
         var selections = CreateSelectionsSMP(betId);
 
         foreach (var item in selections)
@@ -123,7 +115,7 @@ public class ConvertBetListForExcelServiceImp : ConvertBetListForExcelService
     private static string GetBetType(HtmlDocument doc, string html)
     {
         var choice = html.Handicap(doc);
-        var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']").First().InnerText;
+        var betType = doc.DocumentNode.SelectNodes("//div[@class='bettype']")[0].InnerText;
         var betTypeDescription = HtmlExtension.GetBetTypeDescription(doc);
         betType = !string.IsNullOrWhiteSpace(betTypeDescription) ? betType.AppendWithNewLine(betTypeDescription) : betType;
 

@@ -1,6 +1,6 @@
-﻿using Fanex.Data.Repository;
+﻿using System.Collections.Generic;
+using Fanex.Data.Repository;
 using NSubstitute;
-using System.Collections.Generic;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;

@@ -13,5 +13,5 @@ internal static class TestSetup
         });
 
         return mockMapper.CreateMapper();
-    }    
+    }
 }

@@ -101,7 +101,7 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
         {
             ActorUsername = sessionService.UserName,
             NegativeBalanceUsers = negativeBalanceUsers,
-            DateTime = DateTime.Now,
+            DateTime = DateTimeOffset.Now.DateTime,
             TemplatePath = TemplateEmailPath.RecoverByBetId
         };
     }

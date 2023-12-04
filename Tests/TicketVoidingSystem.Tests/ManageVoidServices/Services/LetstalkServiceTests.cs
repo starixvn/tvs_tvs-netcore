@@ -43,7 +43,7 @@ public class LetstalkServiceTests
         var statusId = 1;
         var repository = Substitute.For<IDynamicRepository>();
         var service = new LetstalkServiceImp(repository);
-        
+
         // Act
         await service.UpdateLetstalk(requestId, broadcastSessionId, statusId);
 

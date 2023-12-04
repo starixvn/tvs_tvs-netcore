@@ -16,7 +16,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
             var request = new CheckAccessRequestPermissionRequest();
             var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
             checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
-            
+
             var handler = new CheckAccessRequestPermissionHandler(checkPermissionOnRequestService);
 
             // Act

@@ -23,7 +23,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
             checkPermissionOnRequestService.GetVoidPermission().ReturnsForAnyArgs(new VoidPermission());
             var expected = new TicketsViewModel();
             getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
-            
+
             var handler = new GetTicketsMiniHandler(getTicketsService, ticketsViewModelService, checkPermissionOnRequestService);
 
             // Act

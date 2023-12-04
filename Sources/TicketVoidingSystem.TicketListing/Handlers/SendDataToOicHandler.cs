@@ -26,7 +26,7 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
     public async Task<IList<AmendmentResponse>> Handle(SendDataToOicRequest request, CancellationToken cancellationToken)
     {
         var resultLicensees = new List<AmendmentResponse>();
-        var firstQuery = request.Queries.First();
+        var firstQuery = request.Queries[0];
         var affectedTickets = await affectTicketsFromSettlementHistoryService.GetTickets(firstQuery.IsReSettled, firstQuery.MatchId);
         await SendForNormalLicensee(request.Queries, affectedTickets, resultLicensees);
         await SendForChinaViewLicensee(request.Queries, affectedTickets, resultLicensees);

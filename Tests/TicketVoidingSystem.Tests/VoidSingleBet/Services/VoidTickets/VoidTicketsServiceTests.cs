@@ -64,7 +64,7 @@ public class VoidTicketsServiceTests
             UserPassword = string.Empty,
             Message = new Message(),
             Tickets = new List<BetId> { new() { SiteDbGroupId = 0 } },
-            TransIdCrickets = new List<BetId> { new(){ SiteDbGroupId  = 0} },
+            TransIdCrickets = new List<BetId> { new() { SiteDbGroupId = 0 } },
             FromTransDate = DateTime.Today,
             ToTransDate = DateTime.Today
         };
@@ -83,7 +83,8 @@ public class VoidTicketsServiceTests
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService);
-        var combineValidation = new VoidTicketValidation() {
+        var combineValidation = new VoidTicketValidation()
+        {
             ErrorCode = 0,
             ErrorMsg = string.Empty,
             NegativeBalanceUsers = Helper.GetUnionTransIdString(validations.Select(x => x.NegativeBalanceUsers))

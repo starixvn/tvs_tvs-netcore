@@ -36,7 +36,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
 
         var requestMethod = httpContext.Request.Method;
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - {DateTime.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
         stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
         stringBuilder.AppendLine($"Params: {JsonSerializer.Serialize(context.ActionArguments)}");
 
@@ -80,7 +80,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         var stringBuilder = new StringBuilder();
         stringBuilder.Append(requestLog);
         stringBuilder.AppendLine("=============================================");
-        stringBuilder.AppendLine($"End Time: {DateTime.Now:MM/dd/yyyy HH:mm:ss}");
+        stringBuilder.AppendLine($"End Time: {DateTimeOffset.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Execution Time: {sw?.ElapsedMilliseconds} ms");
         stringBuilder.AppendLine($"Response: {responseData}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
@@ -91,7 +91,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
 
     private bool IsExcluded(string url)
     {
-        return excludePatterns.Any(pattern => new Regex(pattern, RegexOptions.IgnoreCase).IsMatch(url));
+        return excludePatterns.Exists(pattern => new Regex(pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100)).IsMatch(url));
     }
 }
 

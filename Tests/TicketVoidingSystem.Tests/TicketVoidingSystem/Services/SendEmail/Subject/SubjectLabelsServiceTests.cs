@@ -1,6 +1,6 @@
-﻿using Xunit;
-using TicketVoidingSystem.Resources;
+﻿using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail.Subject;
+using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Subject
 {

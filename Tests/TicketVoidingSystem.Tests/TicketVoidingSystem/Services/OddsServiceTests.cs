@@ -1,6 +1,6 @@
-﻿using TicketVoidingSystem.Services;
+﻿using NSubstitute;
+using TicketVoidingSystem.Services;
 using Xunit;
-using NSubstitute;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
 {

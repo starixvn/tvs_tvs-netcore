@@ -49,7 +49,7 @@ public class SubjectServiceTests
         var model = new MailRecoverModel<MailTicketViewModel, RecoverTicketModel>
         {
             ViewModel = new MailRecoverViewModel<MailTicketViewModel>
-                { DateTime = new DateTime(2023, 2, 2, 2, 2, 2) }
+            { DateTime = new DateTime(2023, 2, 2, 2, 2, 2) }
         };
 
         // Act

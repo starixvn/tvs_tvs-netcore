@@ -22,8 +22,8 @@ public class SubParlayTicketControllerTests
     public async Task GetNormalParlay_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        var request = new GetNormalParlayRequest(); 
-        
+        var request = new GetNormalParlayRequest();
+
         // Act
         await controller.GetNormalParlay(request);
 
@@ -35,21 +35,21 @@ public class SubParlayTicketControllerTests
     public async Task GetComboParlay_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        var request = new GetComboParlayRequest(); 
-        
+        var request = new GetComboParlayRequest();
+
         // Act
         await controller.GetComboParlay(request);
 
         // Assert
         await mediator.Received().Send(request);
     }
-    
+
     [Fact]
     public async Task GetSelectionsSMP_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        var request = new GetSelectionsSMPRequest(); 
-        
+        var request = new GetSelectionsSMPRequest();
+
         // Act
         await controller.GetSelectionsSMP(request);
 

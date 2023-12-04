@@ -36,7 +36,7 @@ public class CallApiAmendmentStageImp : CallApiAmendmentStage
         {
             Title = title,
             EventDate = eventDate,
-            ReceivedDate = DateTime.Now.ZoneCanada(),
+            ReceivedDate = DateTimeOffset.Now.DateTime.ZoneCanada(),
             SiteId = SiteAmendmentOic.SpecialDelete,
             Details = details
         };
@@ -44,6 +44,6 @@ public class CallApiAmendmentStageImp : CallApiAmendmentStage
 
     private void WriteLog(string title, AmendmentResponse result)
     {
-        loggingService.InfoAsync($"Amendment OIC: {title} - Date: {DateTime.Now} {Environment.NewLine}Result: {result.Code} - {result.Message}");
+        loggingService.InfoAsync($"Amendment OIC: {title} - Date: {DateTimeOffset.Now} {Environment.NewLine}Result: {result.Code} - {result.Message}");
     }
 }

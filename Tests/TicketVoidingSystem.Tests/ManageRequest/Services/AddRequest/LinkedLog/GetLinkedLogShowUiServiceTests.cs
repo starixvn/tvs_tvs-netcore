@@ -37,7 +37,7 @@ public class GetLinkedLogShowUiServiceTests
             { 3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = issueTypeId, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = issueTypeId, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var poolHouseLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()
@@ -79,7 +79,7 @@ public class GetLinkedLogShowUiServiceTests
             { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = IssueTypeConstant.WrongOdds, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = IssueTypeConstant.WrongOdds, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var poolHouseLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()
@@ -126,7 +126,7 @@ public class GetLinkedLogShowUiServiceTests
             { 3, new LinkedOddsInfo { BetType = 1, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel
-            { IssueTypeId = IssueTypeConstant.DangerAccepted, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
+        { IssueTypeId = IssueTypeConstant.DangerAccepted, FilterFromTransTime = new DateTime(2022, 2, 2, 2, 2, 2) };
         var poolHouseLinkedLogResponses = new List<PoolHouseLinkedLogResponse>
         {
             new()

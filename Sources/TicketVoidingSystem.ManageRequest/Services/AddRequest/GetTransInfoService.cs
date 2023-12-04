@@ -30,9 +30,9 @@ public class GetTransInfoServiceImp : GetTransInfoService
     {
         var transInfoJsonList = new List<string>();
         var issueInfo = BuildIssueInfo(query);
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(i => i.Id))
         {
-            var criteria = CreateGetTicketSiteDbCriteria(item, issueInfo, query);
+            var criteria = CreateGetTicketSiteDbCriteria(siteDbGroupId, issueInfo, query);
             var transInfoJson = await repository.GetAsync<string>(criteria);
             transInfoJsonList.Add(transInfoJson);
         }
@@ -40,11 +40,11 @@ public class GetTransInfoServiceImp : GetTransInfoService
         return transInfoJsonList;
     }
 
-    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(SiteDbGroupModel item, string issueInfo, GetTransInfoQuery query)  // NOSONAR
+    private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(int siteDbGroupId, string issueInfo, GetTransInfoQuery query)  // NOSONAR
     {
         var criteria = new GetTicketSiteDbCriteria
         {
-            SiteDbGroupId = item.Id,
+            SiteDbGroupId = siteDbGroupId,
             IssueTypeId = query.IssueTypeId
         };
 
@@ -119,15 +119,15 @@ public class GetTransInfoServiceImp : GetTransInfoService
     public async Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId)
     {
         var transInfoJsonList = new List<string>();
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(i => i.Id))
         {
-            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == item.Id);
-            var parlayTicketsInSite = parlayTickets.Where(x => x.SiteDbGroupId == item.Id);
-            var cancelCashOutTicketsInSite = cancelCashOutTickets.Where(x => x.SiteDbGroupId == item.Id);
+            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
+            var parlayTicketsInSite = parlayTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
+            var cancelCashOutTicketsInSite = cancelCashOutTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
 
             var criteria = new GetTransInfoForVoidCriteria
             {
-                SiteDbGroupId = item.Id,
+                SiteDbGroupId = siteDbGroupId,
                 MatchId = matchId,
                 SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite),
                 ParlayTransIds = Helper.JoinBetIdList(parlayTicketsInSite),
@@ -144,13 +144,13 @@ public class GetTransInfoServiceImp : GetTransInfoService
     public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets)
     {
         var transInfoJsonList = new List<string>();
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(i => i.Id))
         {
-            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == item.Id);
+            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
 
             var criteria = new GetTransInfoForVoid14Criteria
             {
-                SiteDbGroupId = item.Id,
+                SiteDbGroupId = siteDbGroupId,
                 SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite)
             };
 

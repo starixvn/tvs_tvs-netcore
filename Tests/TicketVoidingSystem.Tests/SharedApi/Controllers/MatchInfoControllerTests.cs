@@ -23,7 +23,7 @@ public class MatchInfoControllerTests
     {
         // Arrange
         var request = new GetMatchInfoRequest { MatchId = 123456 };
-        
+
         // Act
         await controller.GetInfo(request);
 
@@ -35,12 +35,24 @@ public class MatchInfoControllerTests
     public async Task GetFirstTimeAndKickOffTime_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        
+
         // Act
         await controller.GetFirstTimeAndKickOffTime(123456);
 
         // Assert
         await mediator.Received().Send(Arg.Any<GetFirstTimeAndKickOffTimeRequest>());
+    }
+
+    [Fact]
+    public async Task GetInfoForVoidByCurrency_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+
+        // Act
+        await controller.GetInfoForVoidByCurrency(null);
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetMatchInfoVoidByCurrencyRequest>());
     }
 
     [Fact]

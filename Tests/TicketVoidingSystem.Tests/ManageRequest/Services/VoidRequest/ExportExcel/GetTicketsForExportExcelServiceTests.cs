@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.ExportExcel;
@@ -45,11 +46,14 @@ public class GetTicketsForExportExcelServiceTests
         AssertExtension.Equal(expected, result);
     }
 
-    [Fact]
-    public Task MapToGroupTicketViewModel_HasTicket_ReturnExpectedValue()
+    [Theory]
+    [InlineData(38, IssueTypeConstant.DangerAccepted)]
+    [InlineData(29, IssueTypeConstant.AbnormalAccount)]
+    [InlineData(29, IssueTypeConstant.DangerAccepted)]
+    public Task MapToGroupTicketViewModel_HasTicket_ReturnExpectedValue(short betType, int issueTypeId)
     {
         // Arrange
-        var query = new GetTicketsQuery { IssueTypeId = 1 };
+        var query = new GetTicketsQuery { IssueTypeId = issueTypeId };
         var data = new List<GetTicketModel>
         {
             new() { IsMixParlay = false, GroupName = "a" },
@@ -62,7 +66,7 @@ public class GetTicketsForExportExcelServiceTests
             {
                 Tickets = new List<GetTicketModel>
                 {
-                    new() { BetType = 38, IsMixParlay = true }
+                    new() { BetType = betType, IsMixParlay = true }
                 }
             }
         };
@@ -73,7 +77,7 @@ public class GetTicketsForExportExcelServiceTests
             Member = "a",
             Odds = "1",
             Status = "1",
-            Choice = "123"
+            Choice = ""
         };
         var excelTicket = new ExcelTicketNoMatchModel();
         mapper.Map<ExcelTicketNoMatchModel>(Arg.Any<TicketViewModel>()).ReturnsForAnyArgs(excelTicket);

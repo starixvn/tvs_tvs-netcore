@@ -31,7 +31,7 @@ public class GetFirstTimeAndKickOffTimeHandler : IRequestHandler<GetFirstTimeAnd
         };
         var ticketTime = await repository.GetAsync<FirstTicketTime>(criteria, cancellationToken);
         ticketTime.MinTransDate = GetMinTransDate(ticketTime);
-        
+
         return new FirstTicketTime
         {
             MinTransDate = ticketTime.MinTransDate.ZoneManila(),
@@ -43,7 +43,8 @@ public class GetFirstTimeAndKickOffTimeHandler : IRequestHandler<GetFirstTimeAnd
     {
         const int yearPrefix = 2000;
         return ticketTime.MinTransDate == default
-            ? new DateTime(ticketTime.MinTransDate.Year + yearPrefix, ticketTime.MinTransDate.Month, ticketTime.MinTransDate.Day)
+            ? new DateTimeOffset(ticketTime.MinTransDate.Year + yearPrefix, ticketTime.MinTransDate.Month, ticketTime.MinTransDate.Day,
+                ticketTime.MinTransDate.Hour, ticketTime.MinTransDate.Minute, ticketTime.MinTransDate.Second, TimeSpan.Zero).DateTime
             : ticketTime.MinTransDate;
     }
 }

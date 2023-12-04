@@ -71,6 +71,30 @@ public class MatchServiceTests
     }
 
     [Fact]
+    public void GetMatchVoidByCurrency_HasRequestIsCriteria_RepositoryHasGetAsync()
+    {
+        // Arrange
+        var query = new GetMatchInfoVoidByCurrencyCriteria();
+
+        // Act
+        _ = service.GetMatchVoidByCurrency(query);
+
+        // Assert
+        repository.Received(1).GetAsync<Match>(Arg.Any<GetMatchInfoVoidByCurrencyCriteria>());
+    }
+
+    [Fact]
+    public void GetMatchVoidByCurrency_HasRequestIsMatchId_RepositoryHasGetAsync()
+    {
+        // Arrange
+        // Act
+        _ = service.GetMatchVoidByCurrency(1);
+
+        // Assert
+        repository.Received(1).GetAsync<Match>(Arg.Any<GetMatchInfoVoidByCurrencyCriteria>());
+    }
+
+    [Fact]
     public void UpdateMatchInfoFromRemotingRef_HasMatchIsNull_ReturnNull()
     {
         // Arrange

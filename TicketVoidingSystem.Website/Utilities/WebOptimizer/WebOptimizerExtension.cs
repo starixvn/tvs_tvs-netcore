@@ -15,6 +15,7 @@ public static class WebOptimizerExtension
 
             pipeline.AddLayoutBundle(cssSetting, scriptSetting);
             pipeline.AddUploadBatchMessageBundle(scriptSetting);
+            pipeline.AddVoidByBetIdBundle(scriptSetting);
         });
     }
 }

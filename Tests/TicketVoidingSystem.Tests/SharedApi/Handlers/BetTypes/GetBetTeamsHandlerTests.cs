@@ -22,7 +22,7 @@ public class GetBetTeamsHandlerTests
     {
         // Arrange
         var request = new GetBetTeamsRequest();
-        
+
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
 

@@ -22,7 +22,7 @@ public class GetBetTypesVirtualSportsHandlerTests
     {
         // Arrange
         var request = new GetBetTypesVirtualSportRequest();
-        
+
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
 

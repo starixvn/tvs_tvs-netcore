@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -31,8 +31,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Sources\SpecialDelete.NumberGame\SpecialDelete.NumberGame.csproj" />
+    <ProjectReference Include="..\..\Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj" />
     <ProjectReference Include="..\..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />
     <ProjectReference Include="..\..\Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj" />
+    <ProjectReference Include="..\..\Sources\SpecialDelete.VoidByBetId\SpecialDelete.VoidByBetId.csproj" />
+    <ProjectReference Include="..\..\Sources\SpecialDelete.VoidByCurrency\SpecialDelete.VoidByCurrency.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ABExceptionList\TicketVoidingSystem.ABExceptionList.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.ManageVoidServices\TicketVoidingSystem.ManageVoidServices.csproj" />
     <ProjectReference Include="..\..\Sources\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />

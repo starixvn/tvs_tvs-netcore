@@ -28,13 +28,13 @@ public interface BetListService
 
     string GetBetTypeName(ITicket ticket);
 
+    string GetBetTypeName(int id, long refNo);
+
     string GetBetTypeNameChineseSimplified(ITicket ticket);
 
     string GetBetTypeNameChineseTraditional(ITicket ticket);
 
     string GetBetTypeNameNewChineseSimplified(ITicket ticket);
-
-    string GetBetTypeName(int id, long refNo);
 
     string GetStatus(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowVnIp);
 
@@ -106,13 +106,32 @@ public class BetListServiceImp : BetListService
         var oddHtml = Builder.BuildOdds(ticket, null, oddsTypeName);
         var oddName = oddsService.GetOddsName(oddHtml);
         oddName = isParlay ? string.Empty : oddName;
-        return isParlay ? "-"
-            : string.IsNullOrWhiteSpace(oddName) ? oddHtml.Replace("<br />", " ") : oddHtml.Replace("<br />", " (") + ")";
+
+        if (isParlay)
+        {
+            return "-";
+        }
+
+        return string.IsNullOrWhiteSpace(oddName) ? oddHtml.Replace("<br />", " ") : oddHtml.Replace("<br />", " (") + ")";
     }
 
     public string GetBetType(object betTypeId, string language)
     {
         return remotingRefWrapperService.GetBetType(betTypeId, language);
+    }
+
+    public string GetBetTypeName(int id, long refNo)
+    {
+        var betTypeId = remotingRefWrapperService.GetParentIdByBetTypeId(id);
+        if (string.IsNullOrWhiteSpace(betTypeId) || betTypeId == "0")
+        {
+            betTypeId = id.ToString();
+        }
+
+        var betName = remotingRefWrapperService.GetBetType(betTypeId, refNo);
+        const int FistNextBet = 86;
+        const int SecondNextBet = 85;
+        return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
     }
 
     public string GetBetTypeName(ITicket ticket)
@@ -151,20 +170,6 @@ public class BetListServiceImp : BetListService
         var betTypeName = builder.GetBetTypeName(ticket, ticketHelper);
 
         return betTypeName;
-    }
-
-    public string GetBetTypeName(int id, long refNo)
-    {
-        var betTypeId = remotingRefWrapperService.GetParentIdByBetTypeId(id);
-        if (string.IsNullOrWhiteSpace(betTypeId) || betTypeId == "0")
-        {
-            betTypeId = id.ToString();
-        }
-
-        var betName = remotingRefWrapperService.GetBetType(betTypeId, refNo);
-        const int FistNextBet = 86;
-        const int SecondNextBet = 85;
-        return id == FistNextBet || id == SecondNextBet ? $"Next {betName}" : betName;
     }
 
     public string GetDisplayedBetTypeName(int id, long refNo)
@@ -231,6 +236,11 @@ public class BetListServiceImp : BetListService
         if (choiceBlock.Handicap?.handicap == null || ticket.BetTypeId.IsHideHandicap())
         {
             return string.Empty;
+        }
+
+        if (ticket.BetTypeId.IsSabaPromotion())
+        {
+            return "-";
         }
 
         var html = choiceBlock.Handicap.handicap;

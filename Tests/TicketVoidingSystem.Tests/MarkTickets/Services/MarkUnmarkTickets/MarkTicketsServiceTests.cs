@@ -57,7 +57,7 @@ public class MarkTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassF
         };
         var repository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
-        repository.FetchAsync<Result>(default).ReturnsForAnyArgs(new List<Result> ());
+        repository.FetchAsync<Result>(default).ReturnsForAnyArgs(new List<Result>());
         var service = new MarkTicketsServiceImp(repository, sessionService);
         var expected = new Result
         {

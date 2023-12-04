@@ -2,7 +2,7 @@
 namespace TicketVoidingSystem.Tests;
 
 internal static class SetupTestingSheet
-{   
+{
     internal static ExcelWorksheet CreateTestingSheet()
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;

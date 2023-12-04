@@ -1,9 +1,9 @@
-﻿using Fanex.RemotingRef;
-using System;
+﻿using System;
+using Fanex.RemotingRef;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
-using Xunit;
 using TicketVoidingSystem.Services;
+using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
 {
@@ -22,7 +22,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
         public void GetBetType_RemotingRefServiceCalledGetBetTypeName()
         {
             // Arrange
-            
+
             // Act
             _ = service.GetBetType("1", "1");
 
@@ -63,7 +63,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
             _ = service.GetParentIdByBetTypeId(1);
 
             // Assert
-            remotingRefService.Received(1).GetParentIdByBetTypeId("1","1");
+            remotingRefService.Received(1).GetParentIdByBetTypeId("1", "1");
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
             // Arrange
 
             // Act
-            _ = service.GetLeagueName(1,"1");
+            _ = service.GetLeagueName(1, "1");
 
             // Assert
             remotingRefService.Received(1).GetLeagueName("1", "1", string.Empty);
@@ -123,7 +123,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
             _ = service.GetComboParlayName("1", "1", 1, 1);
 
             // Assert
-            remotingRefService.Received(1).GetCombinationTypeCombo("1", "1", 1,1, LanguageCode.English);
+            remotingRefService.Received(1).GetCombinationTypeCombo("1", "1", 1, 1, LanguageCode.English);
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services
             // Arrange
 
             // Act
-            _ = service.GetSportName("1","1");
+            _ = service.GetSportName("1", "1");
 
             // Assert
             remotingRefService.Received(1).GetSportName("1", "1");

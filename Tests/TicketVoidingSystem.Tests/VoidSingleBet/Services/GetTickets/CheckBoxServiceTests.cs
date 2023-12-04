@@ -35,7 +35,7 @@ public static class CheckBoxServiceFactory
         };
     }
 
-    internal static GetTicketModel CreateTicket(string status, string groupName, long transId, long handledTransId, bool isMixParlay , string subStatus, bool isCashOut = false)
+    internal static GetTicketModel CreateTicket(string status, string groupName, long transId, long handledTransId, bool isMixParlay, string subStatus, bool isCashOut = false)
     {
         return new GetTicketModel
         {

@@ -1,4 +1,6 @@
-﻿using OfficeOpenXml.Style;
+﻿using System;
+using OfficeOpenXml.Style;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.ExportExcel;
 using TicketVoidingSystem.Models;
 using Xunit;
@@ -23,7 +25,7 @@ public class CellServiceTests
     }
 
     [Fact]
-    public void AddMatch_HasMatchValue_UpdateWorksheet()
+    public void AddMatch_HasEventDateIsMinValue_UpdateWorksheet()
     {
         // Arrange
         var worksheet = SetupTestingSheet.CreateTestingSheet();
@@ -31,7 +33,8 @@ public class CellServiceTests
         {
             MatchCode = "1",
             LeagueName = "a",
-            MatchEvent = "b"
+            MatchEvent = "b",
+            EventDate = DateTimeOffset.MinValue.DateTime
         };
 
         // Act
@@ -42,6 +45,29 @@ public class CellServiceTests
         Assert.Equal(match.LeagueName, worksheet.Cells[5, 2].Value);
         Assert.Equal(match.MatchEvent, worksheet.Cells[5, 3].Value);
         Assert.Equal(string.Empty, worksheet.Cells[5, 4].Value);
+    }
+
+    [Fact]
+    public void AddMatch_MatchHasEventDate_UpdateWorksheet()
+    {
+        // Arrange
+        var worksheet = SetupTestingSheet.CreateTestingSheet();
+        var match = new Match
+        {
+            MatchCode = "1",
+            LeagueName = "a",
+            MatchEvent = "b",
+            EventDate = DateTimeOffset.Now.DateTime
+        };
+
+        // Act
+        cellService.AddMatch(worksheet, match);
+
+        // Assert
+        Assert.Equal(match.MatchCode, worksheet.Cells[5, 1].Value);
+        Assert.Equal(match.LeagueName, worksheet.Cells[5, 2].Value);
+        Assert.Equal(match.MatchEvent, worksheet.Cells[5, 3].Value);
+        Assert.Equal(match.EventDate.ToString(FormatKey.ShortDateFormatWithSlash), worksheet.Cells[5, 4].Value);
     }
 
     [Theory]

@@ -43,7 +43,7 @@ public class SendEmailDuplicateTicketsServiceTests
     {
         // Arrange
         var model = new EmailVoidModel
-            { RequestId = 1, VoidingHistoryId = 1, IssueTypeId = 1, SportType = sportType, Message = new Message() };
+        { RequestId = 1, VoidingHistoryId = 1, IssueTypeId = 1, SportType = sportType, Message = new Message() };
         var duplicateTickets = new List<DuplicateTicketsRequestInfo>();
         repository.FetchAsync<DuplicateTicketsRequestInfo>(Arg.Any<DuplicateTicketsRequestInfoCriteria>())
             .ReturnsForAnyArgs(duplicateTickets);

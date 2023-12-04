@@ -35,7 +35,7 @@ public class BetTypesControllerTests
     public async Task GetBetTeams_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        
+
         // Act
         await controller.GetBetTeams();
 
@@ -48,7 +48,7 @@ public class BetTypesControllerTests
     {
         // Arrange
         var request = new GetOddsInfoRequest { MatchId = 123456 };
-        
+
         // Act
         await controller.GetOddsInfoSpecialBetTypes(request);
 
@@ -60,7 +60,7 @@ public class BetTypesControllerTests
     public async Task GetVirtualSport_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        
+
         // Act
         await controller.GetVirtualSport();
 
@@ -73,7 +73,7 @@ public class BetTypesControllerTests
     {
         // Arrange
         var request = new GetBetTypesRequest { MatchId = 123456 };
-        
+
         // Act
         await controller.GetBetTypes(request);
 

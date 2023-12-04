@@ -22,7 +22,6 @@ public class MessageTemplateControllerTests
     public async Task GetTemplateSettings_HasRequest_CallMediatorRequest()
     {
         // Arrange
-        
         // Act
         await controller.GetTemplateSettings();
 
@@ -30,4 +29,14 @@ public class MessageTemplateControllerTests
         await mediator.Received().Send(Arg.Any<GetTemplateSettingRequest>());
     }
 
+    [Fact]
+    public async Task GetTemplateAbnormalBet_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetTemplateAbnormalBet();
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetTemplateAbnormalBetRequest>());
+    }
 }
