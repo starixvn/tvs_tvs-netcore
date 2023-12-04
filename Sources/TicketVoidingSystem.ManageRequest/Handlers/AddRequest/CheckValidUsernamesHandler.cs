@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
 public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 {
-    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
+    public string Usernames { get; set; }
 
     public int? RequestId { get; set; }
 
@@ -22,6 +22,8 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
     public string ProductIds { get; set; }
 
     public string StatusIds { get; set; }
+
+    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
 }
 
 public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>

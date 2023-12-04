@@ -49,9 +49,9 @@ public class CheckUsernameServiceImp : CheckUsernameService
     {
         var criteria = new CheckValidUsernamesCriteria
         {
+            Usernames = model.Usernames,
             RequestId = model.RequestId,
             ActionId = model.ActionId,
-            Usernames = string.Join(",", model.AccountWinlostModels.Select(x => x.Username)),
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             ProductIds = model.ProductIds,
@@ -69,7 +69,7 @@ public class CheckUsernameServiceImp : CheckUsernameService
             IssueTypeId = IssueTypeConstant.AbnormalAccount,
             AbnormalAccountViewModel = new AbnormalAccountViewModel
             {
-                AccountWinlostModels = model.AccountWinlostModels,
+                Usernames = model.Usernames,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ProductIds = model.ProductIds,

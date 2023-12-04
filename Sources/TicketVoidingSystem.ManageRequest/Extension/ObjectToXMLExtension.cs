@@ -329,7 +329,7 @@ public static class ObjectToXMLExtension
 
     public static string ToAbnormalAccountXml(this AbnormalAccountViewModel model)
     {
-        var stringBuilder = $"<r Usernames='{string.Join(",", model.AccountWinlostModels.Select(x => x.Username))}' "
+        var stringBuilder = $"<r Usernames='{model.Usernames}' "
                             + $"ProductIds='{model.ProductIds}' "
                             + $"StatusIds='{model.StatusIds}' "
                             + $"FromDate='{model.FromDate?.ToString(CultureInfo.InvariantCulture)}' "

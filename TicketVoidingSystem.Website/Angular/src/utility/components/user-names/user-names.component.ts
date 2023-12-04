@@ -20,6 +20,7 @@ export class UsernamesComponent implements OnChanges {
   @Input() maxUsername = 50;
   @Output() focusOutUsernames = new EventEmitter();
   @Output() change = new EventEmitter();
+  @Output() modelChange = new EventEmitter<string>();
   maxLengthOneUsername = 30;
   groupUsername = new GroupUsername();
   username: string;
@@ -58,6 +59,7 @@ export class UsernamesComponent implements OnChanges {
       this.groupUsername.items.push(item);
       this.model = this.groupUsername.getAllValue();
       if (!preventEmitChange) {
+        this.modelChange.emit(this.groupUsername.getAllValue());
         this.change.emit();
       }
     }
@@ -187,7 +189,10 @@ export class UsernamesComponent implements OnChanges {
     this.focusOutUsernames.emit();
   }
 
-  changeData(): void {
+  deleteItem(item: UsernameItem): void {
+    this.groupUsername.remove(item);
+    this.model = this.groupUsername.getAllValue();
+    this.modelChange.emit(this.groupUsername.getAllValue());
     this.change.emit();
   }
 }

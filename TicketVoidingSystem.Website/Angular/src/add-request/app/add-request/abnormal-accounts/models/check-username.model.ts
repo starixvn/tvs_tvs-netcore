@@ -2,13 +2,14 @@ import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.mo
 import { AccountWinlostModel } from "./account-winlost.model";
 
 export interface CheckValidUsernamesQuery {
-  accountWinlostModels: AccountWinlostModel[];
+  usernames: string;
   requestId?: number;
   actionId: string;
   productIds: string;
   statusIds: string;
   fromDate: string;
   toDate: string;
+  accountWinlostModels: AccountWinlostModel[];
 }
 
 

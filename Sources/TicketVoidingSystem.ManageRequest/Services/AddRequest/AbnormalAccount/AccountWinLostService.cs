@@ -37,6 +37,11 @@ public class AccountWinLostServiceImp : AccountWinLostService
 
     public static string GetAccountWinLostXml(IEnumerable<AccountWinlostModel> accountModels)
     {
+        if (accountModels == null)
+        {
+            return string.Empty;
+        }
+
         var stringBuilder = new StringBuilder();
         foreach (var model in accountModels)
         {

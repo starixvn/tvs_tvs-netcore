@@ -96,13 +96,14 @@ export class ValidationService {
 
   public async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
     const query: CheckValidUsernamesQuery = {
-      accountWinlostModels: args.abnormalAccountModel.accountWinlostModels,
+      usernames: args.abnormalAccountModel.usernames,
       requestId: args.requestId,
       actionId: args.actionId,
       productIds: args.abnormalAccountModel.productIds,
       statusIds: args.abnormalAccountModel.statusIds,
       fromDate: moment(args.abnormalAccountModel.fromDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+      accountWinlostModels: this.isAutoVoidWithPolicy(args.actionId) ? args.abnormalAccountModel.accountWinlostModels : null,
     };
     const results = await this.addRequestApiService.checkValidUsernames(query);
 
@@ -120,5 +121,9 @@ export class ValidationService {
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
+  }
+
+  public isAutoVoidWithPolicy(actionId: string): boolean {
+    return actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
   }
 }

@@ -259,29 +259,28 @@ public class GetRequestServiceImp : GetRequestService
 
     private static DuplicateTicketsViewModel MapEventDuplicateTickets(IEnumerable<RequestEventModel> requestEventModels)
     {
+        var model = requestEventModels.First();
         return new DuplicateTicketsViewModel
         {
-            TransIds = requestEventModels.First().TransIds,
-            OrgTransIds = requestEventModels.First().OrgTransIds,
-            MatchId = requestEventModels.First().MatchId,
-            FilterBy = requestEventModels.First().FilterBy,
-            SubIssueTypeId = requestEventModels.First().SubIssueTypeId
+            TransIds = model.TransIds,
+            OrgTransIds = model.OrgTransIds,
+            MatchId = model.MatchId,
+            FilterBy = model.FilterBy,
+            SubIssueTypeId = model.SubIssueTypeId
         };
     }
 
     private static AbnormalAccountViewModel MapEventAbnormalAccount(IEnumerable<RequestEventModel> requestEventModels)
     {
+        var model = requestEventModels.First();
         return new AbnormalAccountViewModel
         {
-            AccountWinlostModels = requestEventModels.First().Usernames.Split(',').Select(x => new AccountWinlostModel
-            {
-                Username = x
-            }),
-            ProductIds = requestEventModels.First().ProductIds,
-            StatusIds = requestEventModels.First().StatusIds,
-            FromDate = requestEventModels.First().FromDate,
-            ToDate = requestEventModels.First().ToDate,
-            SubIssueTypeId = requestEventModels.First().SubIssueTypeId
+            Usernames = model.Usernames,
+            ProductIds = model.ProductIds,
+            StatusIds = model.StatusIds,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            SubIssueTypeId = model.SubIssueTypeId
         };
     }
 

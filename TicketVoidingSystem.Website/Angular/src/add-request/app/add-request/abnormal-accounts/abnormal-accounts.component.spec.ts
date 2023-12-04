@@ -33,6 +33,7 @@ class Helper{
     isAbnormal: false
   };
   static readonly fakeAbnormalAccountModel: AbnormalAccountModel = {
+    usernames: '',
     productIds: '',
     statusIds: '',
     fromDate: null,
