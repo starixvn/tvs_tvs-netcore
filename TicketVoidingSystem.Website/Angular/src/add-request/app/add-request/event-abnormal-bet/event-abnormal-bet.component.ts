@@ -62,7 +62,7 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   isShowButtonExportTicket(): boolean {
-    return this.betIdsComponent?.groupNumber.items.length > 0;
+    return this.betIdsComponent?.groupNumber.items.length > 0 && !this.filter.isVoided;
   }
 
   async afterFocusOutBetIds(): Promise<void> {
