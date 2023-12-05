@@ -12,7 +12,6 @@ class Helper {
     isHasWarningForAbnormalBet: true,
     isHasWarningEditTakeNoteRequest: false,
     transIds: '1022222',
-    cn88Tickets: '2123122',
     ticketsOfVIPCustomer: '2123122',
     settledTickets:'2123122',
     ticketsOfCustomerClass201: '2123122',
@@ -82,7 +81,6 @@ describe('ConfirmAbnormalBetComponent', () => {
         model: Helper.fakeConfirmAbnormalBetModel
       }
     });
-    const cn88Tickets = instance.model.cn88Tickets.split(',').join(', ');
     const ticketsOfVIPCustomer = instance.model.ticketsOfVIPCustomer.split(',').join(', ');
     const settledTickets = instance.model.settledTickets.split(',').join(', ');
     const ticketsOfCustomerClass201 = instance.model.ticketsOfCustomerClass201.split(',').join(', ');
@@ -92,7 +90,6 @@ describe('ConfirmAbnormalBetComponent', () => {
     instance['updateData']();
 
     // Assert
-    expect(instance.cn88Tickets).toEqual(cn88Tickets);
     expect(instance.ticketsOfVIPCustomer).toEqual(ticketsOfVIPCustomer);
     expect(instance.settledTickets).toEqual(settledTickets);
     expect(instance.ticketsOfCustomerClass201).toEqual(ticketsOfCustomerClass201);
@@ -120,7 +117,6 @@ describe('ConfirmAbnormalBetComponent', () => {
   it('#updateData should update value when isHasWarningForAbnormalBet but invalid data', async () => {
     // Arrange
     const fakeConfirmAbnormalBetModel = _.clone(Helper.fakeConfirmAbnormalBetModel);
-    fakeConfirmAbnormalBetModel.cn88Tickets = '';
     fakeConfirmAbnormalBetModel.ticketsOfVIPCustomer = '';
     fakeConfirmAbnormalBetModel.settledTickets = '';
     fakeConfirmAbnormalBetModel.ticketsOfCustomerClass201 = '';
@@ -137,7 +133,6 @@ describe('ConfirmAbnormalBetComponent', () => {
     instance['updateData']();
 
     // Assert
-    expect(instance.cn88Tickets).toBe('');
     expect(instance.ticketsOfVIPCustomer).toBe('');
     expect(instance.settledTickets).toBe('');
     expect(instance.ticketsOfCustomerClass201).toBe('');

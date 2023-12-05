@@ -111,12 +111,14 @@ class Helper {
   static readonly fakeValidationBusinessRuleOutputSuccessful: ValidationBusinessRuleOutput = {
     isValid: true,
     warningModel: new ConfirmAbnormalBetModel(),
-    transInfoAddRequestModel: null
+    transInfoAddRequestModel: null,
+    abnormalBetTicketRequests: []
   };
   static readonly fakeValidationBusinessRuleOutputError: ValidationBusinessRuleOutput = {
     isValid: false,
     warningModel: new ConfirmAbnormalBetModel(),
-    transInfoAddRequestModel: null
+    transInfoAddRequestModel: null,
+    abnormalBetTicketRequests: []
   };
 
   static initHtml(): void {

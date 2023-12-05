@@ -12,12 +12,13 @@ import { OthersModel } from '../others/others.model';
 import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { PrimitiveProperty } from './event-abnormal-bet.model';
+import { PrimitiveProperty, AbnormalBetTicketViewModel } from './event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
+
 @Component({
   selector: 'event-abnormal-bet',
   templateUrl: './event-abnormal-bet.component.html',
@@ -43,12 +44,13 @@ export class EventAbnormalBetComponent implements OnInit {
   confirmAbnormalBetModel = new ConfirmAbnormalBetModel();
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
+  exportTickets: AbnormalBetTicketViewModel[];
 
   constructor(private readonly commonService: CommonService,
     private readonly popupService: PopupService,
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestStore: AddRequestStore
+    private readonly addRequestStore: AddRequestStore,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -57,6 +59,10 @@ export class EventAbnormalBetComponent implements OnInit {
     }
     this.addRequestStore.changeAbnormalFilterBy(this.abnormalBetModel.filterBy);
     this.permission = await this.commonService.getPermissionManageRequest();
+  }
+
+  isShowButtonExportTicket(): boolean {
+    return this.betIdsComponent?.groupNumber?.items.length > 0 && !this.filter.isVoided;
   }
 
   async afterFocusOutBetIds(): Promise<void> {
@@ -96,6 +102,8 @@ export class EventAbnormalBetComponent implements OnInit {
   public removeInvalidTransIds(): void {
     this.betIdsComponent.removeTransId(this.primitiveProps.invalidTransIds);
     this.primitiveProps.isShowButtonRemoveInvalid = false;
+    let invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
+    this.exportTickets = this.exportTickets.filter(x => !(invalidTransIds.includes(x.betId)));
   }
 
   triggerCloseEvent() {
@@ -151,7 +159,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.confirmAbnormalBetModel = _.clone(this.confirmAbnormalBetModel);
   }
 
-  private async checkValidBusinessRule(isValidateFromConfirmPopup: boolean): Promise<ValidationBusinessRuleOutput> {
+  initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup: boolean): ValidationBusinessRuleArgs{
     const args = new ValidationBusinessRuleArgs();
     args.actionId = this.filter.action;
     args.requestId = this.requestId;
@@ -164,7 +172,14 @@ export class EventAbnormalBetComponent implements OnInit {
     args.confirmAbnormalBetComponent = this.confirmAbnormalBetComponent;
     args.primitiveProps = this.primitiveProps;
     args.isValidateFromConfirmPopup = isValidateFromConfirmPopup;
+
+    return args;
+  }
+
+  private async checkValidBusinessRule(isValidateFromConfirmPopup: boolean): Promise<ValidationBusinessRuleOutput> {
+    const args = this.initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup);
     const validation = await this.validationService.checkValidBusinessRule(args);
+    this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     if (this.abnormalBetModel.filterBy !== AbnormalFilterBy.MIX_PARLAY) {
       this.updateMatchId.emit(this.leagueEventAbnormalComponent.selectedMatchId);
@@ -196,5 +211,12 @@ export class EventAbnormalBetComponent implements OnInit {
 
   public isShowLeagueEvent(): boolean {
     return !(this.isAbnormalBet() && this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY);
+  }
+
+  public async exportExcel() {
+    this.primitiveProps.isBlockUI = true;
+    const args = this.initCheckValidBusinessRuleQuery(false);
+    await this.validationService.exportExcelAbnormalBetTickets(args)
+    this.primitiveProps.isBlockUI = false;
   }
 }

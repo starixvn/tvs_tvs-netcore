@@ -12,7 +12,6 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter();
 
-  cn88Tickets: string;
   ticketsOfVIPCustomer: string;
   settledTickets: string;
   ticketsOfCustomerClass201: string;
@@ -34,7 +33,6 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
 
   private updateData(): void {
     if (this.model.isHasWarningForAbnormalBet) {
-      this.cn88Tickets = this.model.cn88Tickets.replaceAll(',', ', ');
       this.ticketsOfVIPCustomer = this.model.ticketsOfVIPCustomer.replaceAll(',', ', ');
       this.settledTickets = this.model.settledTickets.replaceAll(',', ', ');
       this.ticketsOfCustomerClass201 = this.model.ticketsOfCustomerClass201.replaceAll(',', ', ');

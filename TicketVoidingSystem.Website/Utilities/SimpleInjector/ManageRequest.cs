@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
@@ -40,5 +41,6 @@ public static class ManageRequest
         services.AddTransient<MarkTicketsWhenEditService, MarkTicketsWhenEditServiceImp>();
         services.AddTransient<ReCalculateTicketsService, ReCalculateTicketsServiceImp>();
         services.AddTransient<UpdateRequestProcessStage, UpdateRequestProcessStageImp>();
+        services.AddTransient<MapAbnormalBetTicketsExcelService, MapAbnormalBetTicketsExcelServiceImp>();
     }
 }

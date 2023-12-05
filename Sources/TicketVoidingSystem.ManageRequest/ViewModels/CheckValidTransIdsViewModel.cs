@@ -7,6 +7,7 @@ public class CheckValidTransIdsViewModel
     public ValidationAbnormalBet Validation { get; set; }
     public MatchInfoAddRequest Match { get; set; }
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
+    public IEnumerable<AbnormalBetTicketViewModel> AbnormalBetTicketRequests { get; set; }
 }
 
 public class ValidationAbnormalBet
@@ -27,8 +28,6 @@ public class ValidationAbnormalBet
 
     public string TransIdsOfCustomerClass201 { get; set; }
     public string TransIdsOfCustomerClass4K { get; set; }
-
-    public string CN88TransIds { get; set; }
 
     public string NonLiveTransIds { get; set; }
 

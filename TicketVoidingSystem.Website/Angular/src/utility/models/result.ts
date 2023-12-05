@@ -25,7 +25,6 @@ export interface CheckValidTransIdsResult extends CheckProcessModel {
   existingReqTransIds: string;
   transIdsOfVIPCustomer: string;
   transIdsOfCustomerClass1: string;
-  cN88TransIds: string;
   nonLiveTransIds: string;
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;

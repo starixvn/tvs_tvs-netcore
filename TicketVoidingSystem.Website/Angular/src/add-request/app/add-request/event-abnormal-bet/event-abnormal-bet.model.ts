@@ -7,6 +7,7 @@ export class PrimitiveProperty {
   invalidTransIds: string;
   isHasUusTickets: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
+  isBlockUI = false;
 }
 export interface CheckTransIdsQuery {
   matchId: number;
@@ -24,6 +25,7 @@ export class CheckTransIdsViewModel {
   transInfoAddRequestModel: TransInfoAddRequestModel;
   match: MatchInfo;
   validation: ValidationAbnormalBet;
+  abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
 }
 
 export interface ValidationAbnormalBet {
@@ -36,7 +38,6 @@ export interface ValidationAbnormalBet {
   transIdsOfVIPCustomer: string;
   transIdsOfCustomerClass201: string;
   transIdsOfCustomerClass4K: string;
-  cN88TransIds: string;
   nonLiveTransIds: string;
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;
@@ -44,4 +45,33 @@ export interface ValidationAbnormalBet {
   isHasUusTickets: boolean;
   listBetteam: string;
   listBettype: string;
+}
+
+export class AbnormalBetTicketViewModel {
+  no: number
+  betId: string
+  leagueName: string
+  matchEvent: string
+  matchId?: number
+  transDate: string
+  member: string
+  betType: string
+  odds: string
+  stake: string
+  winLoss: string
+  currency: string
+  status: string
+  creator: string
+  score: string
+  hdp: string
+  choice: string
+  remarkId?: number
+  remark: string
+  vip: string
+  customerClass: string
+}
+
+export class ExportExcelAbnormalBet {
+  requestId?: number
+  tickets: AbnormalBetTicketViewModel[]
 }

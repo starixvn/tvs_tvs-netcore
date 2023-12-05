@@ -7,7 +7,6 @@ export class ConfirmAbnormalBetModel {
     transIds: string;
     requestId: number;
     requestedBy: string;
-    cn88Tickets: string;
     ticketsOfVIPCustomer: string;
     settledTickets: string;
     ticketsOfCustomerClass201: string;

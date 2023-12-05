@@ -111,4 +111,9 @@ export class AddRequestApiService {
   async copyLetstalkRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
     return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyLetstalkRequestInfo');
   }
+  
+  /* istanbul ignore next */
+  async exportExcelAbnormalBetTickets(query: CheckTransIdsQuery) {
+    return await this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
+  }
 }

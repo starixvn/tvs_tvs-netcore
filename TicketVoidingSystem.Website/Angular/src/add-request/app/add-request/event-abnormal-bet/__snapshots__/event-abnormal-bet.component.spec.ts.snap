@@ -55,6 +55,10 @@ exports[`EventAbnormalBetComponent #EventAbnormalBetComponent init should match 
         <div
           class="flex-grow-1"
         />
+        <div
+          class="d-flex"
+        >
+        </div>
       </div>
       <bet-ids />
     </div>

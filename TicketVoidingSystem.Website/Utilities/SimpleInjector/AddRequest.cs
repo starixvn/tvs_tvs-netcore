@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+using TicketVoidingSystem.Services.Excel;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
 
@@ -25,5 +29,8 @@ public static class AddRequest
         services.AddTransient<OddsInfoValidationService, OddsInfoValidationServiceImp>();
         services.AddTransient<MatchInfoAddRequestService, MatchInfoAddRequestServiceImp>();
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
+        services.AddTransient<CellService, CellServiceImp>();
+        services.AddTransient<WorkSheetService<CheckValidTransIdsModel>, GetTicketsForExportExcelService>();
+        services.AddTransient<CheckValidTransIdsService, CheckValidTransIdsServiceImp>();
     }
 }

@@ -5,9 +5,8 @@ import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/c
 import { LABELS } from '../../../../../utility/constants/labels';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { CheckTransIdsQuery, CheckTransIdsViewModel, ValidationAbnormalBet } from '../event-abnormal-bet.model';
+import { CheckTransIdsQuery, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 
 @Injectable({
@@ -17,6 +16,29 @@ export class ValidationService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     ) { }
+
+  initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery{
+    const transIds = args.betIdsComponent.getAllBetIds();
+    const matchId = !this.isAbnormalBetMixParlay(args) ? args.leagueEventAbnormalComponent?.selectedMatchId : 29;
+    const filterBy = !this.isAbnormalBetMixParlay(args) ? null : args.filterBy;
+
+    return {
+      matchId: matchId,
+      transIds: transIds,
+      requestId: args.requestId,
+      actionId: args.actionId,
+      filterBy: filterBy,
+      issueTypeId: Number(args.issueTypeId),
+      subIssueTypeId: Number(args.subIssueTypeId),
+      isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
+      isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
+    } as CheckTransIdsQuery;
+  }
+
+  async exportExcelAbnormalBetTickets(args: ValidationBusinessRuleArgs){
+    let query = this.initCheckAbnormalBetTransIdsQuery(args);
+    await this.addRequestApiService.exportExcelAbnormalBetTickets(query);
+  }
 
   public async checkValidBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     if (!args.betIdsComponent.isHasBetId()) {
@@ -33,14 +55,11 @@ export class ValidationService {
     args.betIdsComponent.groupNumber.resetAllItemsToValid();
     args.betIdsComponent.groupNumber.checkDuplicatedItems();
 
-    const transIds = args.betIdsComponent.getAllBetIds();
-
-    const matchId = !this.isAbnormalBetMixParlay(args) ? args.leagueEventAbnormalComponent?.selectedMatchId : 29;
-    const filterBy = !this.isAbnormalBetMixParlay(args) ? null : args.filterBy;
-    const checkTransIdViewModel = await this.checkAbnormalBetTransIds(args, transIds, matchId, filterBy, args.confirmAbnormalBetComponent);
+    let query = this.initCheckAbnormalBetTransIdsQuery(args);
+    const checkTransIdViewModel = await this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);
 
     if (checkTransIdViewModel === null) {
-      return { isValid: false } as ValidationBusinessRuleOutput;
+      return { isValid: false} as ValidationBusinessRuleOutput;
     }
 
     if (!this.isAbnormalBetMixParlay(args)) {
@@ -50,40 +69,24 @@ export class ValidationService {
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
     this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);
+
     return {
       isValid: args.betIdsComponent.isAllBetIdsValid(),
       warningModel: this.getConfirmAbnormalBetModel(checkTransIdViewModel.validation),
-      transInfoAddRequestModel: checkTransIdViewModel.transInfoAddRequestModel
+      transInfoAddRequestModel: checkTransIdViewModel.transInfoAddRequestModel,
+      abnormalBetTicketRequests: checkTransIdViewModel.abnormalBetTicketRequests
     } as ValidationBusinessRuleOutput;
   }
 
   public isValidationHasWarningTicket(permission: PermissionManage, confirmModel: ConfirmAbnormalBetModel): boolean {
     return (permission.manageRequestSettledTicketsHost && confirmModel.settledTickets?.length > 0)
       || (confirmModel.ticketsOfVIPCustomer?.length > 0)
-      || (confirmModel.cn88Tickets?.length > 0)
       || (confirmModel.ticketsOfCustomerClass201?.length > 0)
       || (confirmModel.ticketsOfCustomerClass4K?.length > 0);
   }
 
   public isHasWarningEditTakeNoteRequest(isEdit: boolean, currentActionId: string, actionIdOfFirstTime: string) {
     return isEdit && currentActionId === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentActionId !== actionIdOfFirstTime;
-  }
-
-  private async checkAbnormalBetTransIds(args: ValidationBusinessRuleArgs, transIds: string, matchId: number,
-    filterBy: number, confirmAbnormalBetComponent?: ConfirmAbnormalBetComponent): Promise<CheckTransIdsViewModel> {
-    const query: CheckTransIdsQuery = {
-      matchId: matchId,
-      transIds: transIds,
-      requestId: args.requestId,
-      actionId: args.actionId,
-      filterBy: filterBy,
-      issueTypeId: Number(args.issueTypeId),
-      subIssueTypeId: Number(args.subIssueTypeId),
-      isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
-      isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
-    };
-
-    return this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);
   }
 
   private highlightInvalidTransIds(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean): void {
@@ -128,7 +131,6 @@ export class ValidationService {
     const confirmModel = new ConfirmAbnormalBetModel();
     confirmModel.settledTickets = result.settledTransIds;
     confirmModel.ticketsOfVIPCustomer = result.transIdsOfVIPCustomer;
-    confirmModel.cn88Tickets = result.cN88TransIds;
     confirmModel.ticketsOfCustomerClass201 = result.transIdsOfCustomerClass201;
     confirmModel.ticketsOfCustomerClass4K = result.transIdsOfCustomerClass4K;
     confirmModel.isHasWarningRemovedTickets = result.isHasWarningRemovedTickets;
