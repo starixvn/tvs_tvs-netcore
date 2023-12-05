@@ -26,9 +26,7 @@ public class MapAbnormalBetTicketsExcelServiceTests
         mapper = Substitute.For<IMapper>();
         betListService = Substitute.For<BetListService>();
         remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-        var sessionService = Substitute.For<SessionService>();
-        service = new MapAbnormalBetTicketsExcelServiceImp(mapper, remotingRefWrapperService, betListService,
-            sessionService);
+        service = new MapAbnormalBetTicketsExcelServiceImp(mapper, remotingRefWrapperService, betListService);
     }
 
     [Fact]

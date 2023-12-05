@@ -22,15 +22,13 @@ public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelSe
     private readonly BetListService betListService;
     private readonly IMapper mapper;
     private readonly RemotingRefWrapperService remotingRefWrapperService;
-    private readonly SessionService sessionService;
 
     public MapAbnormalBetTicketsExcelServiceImp(IMapper mapper, RemotingRefWrapperService remotingRefWrapperService,
-        BetListService betListService, SessionService sessionService)
+        BetListService betListService)
     {
         this.mapper = mapper;
         this.remotingRefWrapperService = remotingRefWrapperService;
         this.betListService = betListService;
-        this.sessionService = sessionService;
     }
 
     public IEnumerable<AbnormalBetTicketViewModel> MapDataToAbnormalBetTicketViewModel(
