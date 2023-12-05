@@ -41,7 +41,7 @@ public class CalculateRemainStatusServiceImp : CalculateRemainStatusService
         var currentLosing = loseTickets.TotalWinLost;
 
         account.IsHighlight = false;
-        account.CurrentLosing = currentLosing;
+        account.CurrentLosing = -currentLosing;
         account.CurrentWinning = currentWinning;
         account.EstimateVoidAmount = 0m;
         account.WinLostAfterVoid = 0m;
