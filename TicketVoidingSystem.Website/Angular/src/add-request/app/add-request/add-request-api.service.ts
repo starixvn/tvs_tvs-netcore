@@ -11,14 +11,13 @@ import { ChildMatchModel } from '../add-request/models/related-event.model';
 import { AddRequestResultModel } from '../add-request/models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-request/models/sub-type-link-match.model';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
-import { CheckTransIdsQuery, CheckTransIdsViewModel, ExportExcelAbnormalBet } from './event-abnormal-bet/event-abnormal-bet.model';
+import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
 import { GetChildMatchQuery } from './models/get-child-match.query';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
-import { ValidationBusinessRuleArgs } from './event-abnormal-bet/services/validation.model';
 
 @Injectable({
   providedIn: 'root'

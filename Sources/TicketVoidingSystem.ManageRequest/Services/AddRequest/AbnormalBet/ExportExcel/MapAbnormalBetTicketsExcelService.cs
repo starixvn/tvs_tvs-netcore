@@ -121,7 +121,6 @@ public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelSe
         ticket.Currency = item.CurrencyName;
         ticket.CustomerClass = item.CustomerClass?.ToString();
         ticket.Choice = item.BetTeam;
-        ticket.Creator = sessionService.UserName;
 
         return ticket;
     }

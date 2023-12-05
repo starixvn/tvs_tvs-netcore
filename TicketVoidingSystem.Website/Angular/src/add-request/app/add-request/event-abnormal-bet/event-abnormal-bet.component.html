@@ -32,3 +32,11 @@
 <confirm-abnormal-bet #confirmAbnormalBetComponent [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()" [isEdit]="isEdit">
 </confirm-abnormal-bet>
+<div *ngIf="primitiveProps.isBlockUI">
+  <div class="in modal-backdrop spinner-overlay"></div>
+  <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+    <div class="loading-message">
+      <div class="loading"></div>
+    </div>
+  </div>
+</div>

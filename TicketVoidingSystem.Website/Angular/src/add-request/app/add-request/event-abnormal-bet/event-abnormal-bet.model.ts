@@ -7,6 +7,7 @@ export class PrimitiveProperty {
   invalidTransIds: string;
   isHasUusTickets: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
+  isBlockUI = false;
 }
 export interface CheckTransIdsQuery {
   matchId: number;

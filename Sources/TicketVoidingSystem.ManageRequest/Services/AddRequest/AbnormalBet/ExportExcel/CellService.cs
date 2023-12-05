@@ -22,10 +22,10 @@ public class CellServiceImp : CellService
         const int fontSize = 8;
         worksheet.Cells.Style.Font.Size = fontSize;
         worksheet.Cells.Style.Font.Name = "Tahoma";
-        worksheet.Cells[$"A2:T{lastRow}"].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells[$"A2:T{lastRow}"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells[$"A2:T{lastRow}"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells[$"A2:T{lastRow}"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[$"A2:S{lastRow}"].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[$"A2:S{lastRow}"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[$"A2:S{lastRow}"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[$"A2:S{lastRow}"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
     }
 
     private static void HighlightBackground(ExcelWorksheet worksheet, int lastRow)
@@ -33,7 +33,7 @@ public class CellServiceImp : CellService
         const int two = 2;
         for (var row = 2; row <= lastRow; row += two)
         {
-            var range = worksheet.Cells[$"A{row}:T{row}"];
+            var range = worksheet.Cells[$"A{row}:S{row}"];
             range.Style.Fill.PatternType = ExcelFillStyle.Solid;
             range.Style.Fill.BackgroundColor.SetColor(Color.LemonChiffon);
         }
@@ -43,20 +43,20 @@ public class CellServiceImp : CellService
     {
         var conditionColorMap = new Dictionary<string, Color>
         {
-            { $"R2=\"{RemarkConstant.InvalidTicket}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.SettledTicket}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.UnsupportedTicket}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.ExistingOnOtherRequest}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.NonLiveTicket}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.DifferentLiveScore}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.AbWhiteListTransIds}\"", Color.Red },
-            { $"R2=\"{RemarkConstant.MovedOrDuplicatedTicket}\"", Color.Orange },
-            { $"R2=\"{RemarkConstant.DifferentMatch}\"", Color.DeepSkyBlue }
+            { $"Q2=\"{RemarkConstant.InvalidTicket}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.SettledTicket}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.UnsupportedTicket}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.ExistingOnOtherRequest}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.NonLiveTicket}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.DifferentLiveScore}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.AbWhiteListTransIds}\"", Color.Red },
+            { $"Q2=\"{RemarkConstant.MovedOrDuplicatedTicket}\"", Color.Orange },
+            { $"Q2=\"{RemarkConstant.DifferentMatch}\"", Color.DeepSkyBlue }
         };
 
         foreach (var entry in conditionColorMap)
         {
-            worksheet.HighlightBackground($"R2:R{lastRow}", entry.Key, entry.Value);
+            worksheet.HighlightBackground($"Q2:Q{lastRow}", entry.Key, entry.Value);
         }
 
         var listRemarkHighlightColorRed = new List<string>
@@ -68,12 +68,12 @@ public class CellServiceImp : CellService
 
         for (var row = 2; row <= lastRow; row++)
         {
-            if (!listRemarkHighlightColorRed.Contains(worksheet.Cells[$"R{row}:R{row}"].Value))
+            if (!listRemarkHighlightColorRed.Contains(worksheet.Cells[$"Q{row}:Q{row}"].Value))
             {
                 continue;
             }
 
-            var range = worksheet.Cells[$"R{row}:R{row}"];
+            var range = worksheet.Cells[$"Q{row}:Q{row}"];
             range.Style.Font.Color.SetColor(Color.Yellow);
         }
     }

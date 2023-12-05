@@ -7,17 +7,17 @@ public class AbnormalBetTicketViewModel
     [Cell("A2")]
     public int No { get; set; }
     [Cell("B2")]
-    public string BetId { get; set; }
-    [Cell("C3")]
-    public string LeagueName { get; set; }
-    [Cell("D2")]
-    public string MatchEvent { get; set; }
-    [Cell("E2")]
-    public string MatchId { get; set; }
-    [Cell("F2")]
-    public string TransDate { get; set; }
-    [Cell("G2")]
     public string Member { get; set; }
+    [Cell("C2")]
+    public string BetId { get; set; }
+    [Cell("D2")]
+    public string MatchId { get; set; }
+    [Cell("E3")]
+    public string LeagueName { get; set; }
+    [Cell("F2")]
+    public string MatchEvent { get; set; }
+    [Cell("G2")]
+    public string TransDate { get; set; }
     [Cell("H2")]
     public string BetType { get; set; }
     [Cell("I2")]
@@ -31,17 +31,15 @@ public class AbnormalBetTicketViewModel
     [Cell("M2")]
     public string Status { get; set; }
     [Cell("N2")]
-    public string Creator { get; set; }
-    [Cell("O2")]
     public string Score { get; set; }
-    [Cell("P2")]
+    [Cell("O2")]
     public string Hdp { get; set; }
-    [Cell("Q2")]
+    [Cell("P2")]
     public string Choice { get; set; }
-    [Cell("R2")]
+    [Cell("Q2")]
     public string Remark { get; set; }
-    [Cell("S2")]
+    [Cell("R2")]
     public string Vip { get; set; }
-    [Cell("T2")]
+    [Cell("S2")]
     public string CustomerClass { get; set; }
 }

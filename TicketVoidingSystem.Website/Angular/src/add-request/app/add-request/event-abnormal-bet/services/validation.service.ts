@@ -35,9 +35,9 @@ export class ValidationService {
     } as CheckTransIdsQuery;
   }
 
-  exportExcelAbnormalBetTickets(args: ValidationBusinessRuleArgs){
+  async exportExcelAbnormalBetTickets(args: ValidationBusinessRuleArgs){
     let query = this.initCheckAbnormalBetTransIdsQuery(args);
-    this.addRequestApiService.exportExcelAbnormalBetTickets(query);
+    await this.addRequestApiService.exportExcelAbnormalBetTickets(query);
   }
 
   public async checkValidBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
