@@ -17,7 +17,7 @@ public class VoidTicketsQuery
 
     public Message Message { get; set; }
 
-    public Match Match { get; set; }
+    public Match? Match { get; set; }
 
     public string NegativeBalanceUsers { get; set; }
 }

@@ -9,7 +9,7 @@ const voidCashOutService = {
         FirstTime: true,
         IsCashOutAsUnSettledTicket: true,
     },
-    matchInfo: {},
+    matchInfo: null,
     negativeBalanceUsers: '',
 
     searchTickets: function () {
@@ -458,9 +458,7 @@ const voidCashOutService = {
                 NapTicketControl.disableInput();
             },
             success: function (match) {
-                if (match !== null) {
-                    voidCashOutService.matchInfo = match;
-                }
+                voidCashOutService.matchInfo = match ? match : null;
             },
             error: function () { }
         });
