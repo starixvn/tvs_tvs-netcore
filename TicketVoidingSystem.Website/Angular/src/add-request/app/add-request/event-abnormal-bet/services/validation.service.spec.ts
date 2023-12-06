@@ -1,18 +1,17 @@
+import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
+import { MatchInfo } from '../../../../../utility/models/event.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { CheckTransIdsViewModel, PrimitiveProperty, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
-import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
-import { MatchInfo } from '../../../../../utility/models/event.model';
 
 class Helper {
   static readonly fakeTransId = '1000002';
@@ -117,7 +116,7 @@ describe('ValidationService', () => {
     });
   });
 
-  it('#checkValidBusinessRule should return validation with error when #checkAbnormalBetTransIds return null', async () => {
+  it('#checkValidBusinessRule should return validation with error when #checkValidTransIdsForAbnormalBet return null', async () => {
     // Arrange
     const mockIsHasBetId = jest.fn().mockImplementation(() => true);
     const mockGroupNumberResetAllItemsToValid = jest.fn();
@@ -566,20 +565,6 @@ describe('ValidationService', () => {
     const result = validationService['getInvalidTransIds'](model, false, '');
 
     expect(result).toBe('');
-  });
-
-  it('#checkAbnormalBetTransIds should return expected model', async () => {
-    const expected = new CheckTransIdsViewModel();
-    const model = Helper.fakeValidationBusinessRuleArgs;
-    const mockAdRequestApiService = new AddRequestApiService(null);
-    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
-    const mockValidationService = new ValidationService(mockAdRequestApiService);
-    mockValidationService['getTransInfo'] = jest.fn();
-    [true, false].forEach(async x => {
-      model.isValidateFromConfirmPopup = x;
-      const result = await mockValidationService['checkAbnormalBetTransIds'](model, '', 1, 1, new ConfirmAbnormalBetComponent());
-      expect(result).toStrictEqual(expected);
-    });
   });
 
   it('#updateValidation should called #betIdsComponent.getAllBetIdsAreNotNumber', async () => {

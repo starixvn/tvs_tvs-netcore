@@ -110,6 +110,7 @@ describe('AbnormalAccountsComponent', () => {
     const mockCheckValidUsernames = jest.fn().mockImplementation();
     const {  instance } = await shallow
     .mock(ValidationService, { checkBusinessRule: mockCheckValidUsernames })
+    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
     .render({
       bind: {
         abnormalAccountModel: Helper.fakeAbnormalAccountModel,
@@ -164,6 +165,7 @@ describe('AbnormalAccountsComponent', () => {
     const mockSaveRequest = jest.fn().mockImplementation();
     const {  instance } = await shallow
     .mock(SaveRequestService, { saveRequest: mockSaveRequest })
+    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
     .render({
       bind: {
         abnormalAccountModel: Helper.fakeAbnormalAccountModel,
@@ -183,6 +185,7 @@ describe('AbnormalAccountsComponent', () => {
     const mockOnYesConfirmWarningModal = jest.fn().mockImplementation();
     const {  instance } = await shallow
     .mock(SaveRequestService, { onYesConfirmWarningModal: mockOnYesConfirmWarningModal })
+    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
     .render({
       bind: {
         abnormalAccountModel: Helper.fakeAbnormalAccountModel,
@@ -200,6 +203,7 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#initSaveRequestInput should return expected model', async () => {
     const { instance } = await shallow
+    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
     .render({
       bind: {
         abnormalAccountModel: Helper.fakeAbnormalAccountModel,

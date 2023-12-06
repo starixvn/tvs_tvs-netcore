@@ -78,8 +78,8 @@ public class CalculateHaveStatusWonNotLoseServiceTests
             {
                 new()
                 {
-                    IsHighlight = true, CurrentLosing = 100, CurrentWinning = 150, AdjustVoidLimit = 40,
-                    EstimateVoidAmount = 100, WinLostAfterVoid = 50, VoidTickets = voidTickets, CustId = 1
+                    IsHighlight = true, CurrentLosing = -100, CurrentWinning = 150, AdjustVoidLimit = 40,
+                    EstimateVoidAmount = 100, WinLostAfterVoid = -50, VoidTickets = voidTickets, CustId = 1
                 },
                 new()
                 {
