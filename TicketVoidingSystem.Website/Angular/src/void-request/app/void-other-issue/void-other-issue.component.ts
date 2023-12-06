@@ -108,7 +108,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.paging.selection = [PagingConstant.SIZE_ONE, PagingConstant.SIZE_TWO, PagingConstant.SIZE_THREE, PagingConstant.SIZE_FOUR];
     this.paging.pageSize = PagingConstant.SIZE_ONE;
     if (this.isAbnormalAccount()) {
-      this.usernames = this.requestDetail.abnormalAccountModel.accountWinlostModels.map(x => x.username).join(', ');
+      this.usernames = this.requestDetail.abnormalAccountModel.usernames;
     }
     if (this.isHasLogInfo()) {
       await this.getLogInfoModel();
