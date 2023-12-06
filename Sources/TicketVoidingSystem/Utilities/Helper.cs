@@ -9,9 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Utilities;

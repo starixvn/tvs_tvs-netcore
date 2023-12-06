@@ -18,6 +18,8 @@ public static class VoidByBetId
         services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
         services.AddTransient<TicketService, TicketServiceImp>();
         services.AddTransient<HandleService, HandleServiceImp>();
+        services.AddTransient<AfterVoidService, AfterVoidServiceImp>();
+        services.AddTransient<LetstalkService, LetstalkServiceImp>();
         services.AddTransient<VoidByBetIdRepository, VoidByBetIdRepositoryImp>();
         services.AddTransient<WorkSheetService<GetTicketsQuery>, SheetControlImp>();
         services.AddTransient<SheetService, SheetServiceImp>();

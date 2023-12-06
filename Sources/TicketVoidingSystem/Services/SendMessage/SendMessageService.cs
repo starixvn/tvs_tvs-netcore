@@ -92,18 +92,12 @@ public class SendMessageServiceImp : SendMessageService
 
     public async Task SendMessage(IEnumerable<TicketEmailModel> tickets, int messageId, int issueTypeId, int creatorId)
     {
-        var excludedCN88Tickets = ExcludeCN88Tickets(tickets, Helper.IsLikelyAbnormalBet(issueTypeId));
-        var receivedUsers = GetListSendMessageDb(excludedCN88Tickets);
+        var receivedUsers = GetListSendMessageDb(tickets);
         var messageXml = messageItemService.CreateMessageItems(receivedUsers, messageId);
         if (!string.IsNullOrWhiteSpace(messageXml))
         {
             await InsertBatchMessage(creatorId, messageXml);
         }
-    }
-
-    private static IEnumerable<TicketEmailModel> ExcludeCN88Tickets(IEnumerable<TicketEmailModel> tickets, bool isAbnormalBet)
-    {
-        return isAbnormalBet ? tickets.Where(x => !x.Site.ToLowerInvariant().Equals("cn88")) : tickets;
     }
 
     private static IEnumerable<ReceivedUser> GetListSendMessageDb<T>(IEnumerable<T> tickets) where T : SendMessageDbModel

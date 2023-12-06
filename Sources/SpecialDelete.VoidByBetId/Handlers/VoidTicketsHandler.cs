@@ -1,16 +1,10 @@
-﻿using AutoMapper;
-using MediatR;
-using SpecialDelete.VoidByBetId.Constants;
+﻿using MediatR;
 using SpecialDelete.VoidByBetId.Models;
 using SpecialDelete.VoidByBetId.Services.VoidTickets;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Models.Letstalk;
-using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;
-using TicketVoidingSystem.Services.Letstalk;
 using TicketVoidingSystem.Services.NetPosition;
 using TicketVoidingSystem.Utilities;
 
@@ -22,29 +16,26 @@ public class VoidTicketsRequest : VoidTicketsQuery, IRequest<List<Result>>
 
 public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Result>>
 {
-    private readonly IMapper mapper;
     private readonly NetPositionService netPositionService;
     private readonly HandleService handleService;
     private readonly LoggingService loggingService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
     private readonly ResultCacheService resultCacheService;
     private readonly CashOutApiService cashOutApiService;
+    private readonly AfterVoidService afterVoidService;
 
-    public VoidTicketsHandler(IMapper mapper,
-        NetPositionService netPositionService,
+    public VoidTicketsHandler(NetPositionService netPositionService,
         HandleService handleService,
         LoggingService loggingService,
-        NotificationLetstalkService notificationLetstalkService,
         ResultCacheService resultCacheService,
-        CashOutApiService cashOutApiService)
+        CashOutApiService cashOutApiService,
+        AfterVoidService afterVoidService)
     {
-        this.mapper = mapper;
         this.netPositionService = netPositionService;
         this.handleService = handleService;
         this.loggingService = loggingService;
-        this.notificationLetstalkService = notificationLetstalkService;
         this.resultCacheService = resultCacheService;
         this.cashOutApiService = cashOutApiService;
+        this.afterVoidService = afterVoidService;
     }
 
     public async Task<List<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
@@ -139,92 +130,9 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Resul
     {
         if (model.Tickets.Any())
         {
-            await handleService.SendMessage(query, model.Tickets);
-            results.AddRange(await handleService.SendEmail(query, model.Tickets.ToList()));
-            results.AddRange(await SendLetstalk(query, model));
-        }
-    }
-
-    private async Task<IEnumerable<Result>> SendLetstalk(VoidTicketsQuery query, VoidTicketsModel model)
-    {
-        var results = new List<Result>();
-        var infoForLetstalk = mapper.Map<TicketInfoForLetstalk>(query);
-        if (query.IsFilterByBetId)
-        {
-            if (query.Match != null)
-            {
-                results.AddRange(await notificationLetstalkService.SendToGroupVoidSettledBets(infoForLetstalk, model.Tickets));
-            }
-            else
-            {
-                infoForLetstalk.IsCheckMainParlay = true;
-                results.AddRange(await SendLetstalkWithMultiMessage(model.Tickets, infoForLetstalk));
-            }
-        }
-        else
-        {
-            infoForLetstalk.IsCheckMainParlay = true;
-            infoForLetstalk.IsMemberTemplate = true;
-            results.AddRange(await notificationLetstalkService.SendToGroupVoidSettledBets(infoForLetstalk, model.Tickets));
-        }
-
-        return results;
-    }
-
-    private async Task<IEnumerable<Result>> SendLetstalkWithMultiMessage(IEnumerable<TicketEmailModel> tickets, TicketInfoForLetstalk infoForLetstalk)
-    {
-        var results = new List<Result>();
-        var ticketsList = tickets.Where(item => !item.BetTypeId.IsParlay() && !item.BetTypeId.IsSabaPromotion());
-        if (!ticketsList.Any())
-        {
-            return results;
-        }
-
-        await SendLetstalkWithGroupNormalTickets(ticketsList, infoForLetstalk, results);
-        await SendLetstalkWithGroupVirtualSportsTickets(ticketsList, infoForLetstalk, results);
-
-        return results;
-    }
-
-    private async Task SendLetstalkWithGroupNormalTickets(IEnumerable<TicketEmailModel> ticketsList, TicketInfoForLetstalk infoForLetstalk, List<Result> results)
-    {
-        var groupTickets = ticketsList.Where(t => !BetTypeConstant.VirtualSports.Contains(t.BetTypeId))
-            .GroupBy(b => b.ParentMatchId).Select(ticket => new GroupVoidTicketsModel
-            {
-                GroupName = ticket.Key.Value,
-                Tickets = ticket.ToList(),
-                Type = ticket.Any(t => t.BetTypeId.IsOutright()) ? MatchInfoTypeConstant.Outright : MatchInfoTypeConstant.Normal
-            });
-        if (groupTickets.Any())
-        {
-            await SendLetstalkWithGroupTickets(infoForLetstalk, groupTickets, results);
-        }
-    }
-
-    private async Task SendLetstalkWithGroupVirtualSportsTickets(IEnumerable<TicketEmailModel> ticketsList, TicketInfoForLetstalk infoForLetstalk, List<Result> results)
-    {
-        var groupVirtualSportTickets = ticketsList.Where(t => BetTypeConstant.VirtualSports.Contains(t.BetTypeId))
-            .GroupBy(b => b.OddsId).Select(ticket => new GroupVoidTicketsModel
-            {
-                GroupName = ticket.Key.Value,
-                Tickets = ticket.ToList(),
-                Type = MatchInfoTypeConstant.VirtualSportOrHorseRacing
-            });
-        if (groupVirtualSportTickets.Any())
-        {
-            await SendLetstalkWithGroupTickets(infoForLetstalk, groupVirtualSportTickets, results);
-        }
-    }
-
-    private async Task SendLetstalkWithGroupTickets(TicketInfoForLetstalk infoForLetstalk, IEnumerable<GroupVoidTicketsModel> groupTickets, List<Result> results)
-    {
-        foreach (var group in groupTickets)
-        {
-            infoForLetstalk.Match = await handleService.GetMatchInfo(group.GroupName, group.Type);
-            if (infoForLetstalk.Match != null)
-            {
-                results.AddRange(await notificationLetstalkService.SendToGroupVoidSettledBets(infoForLetstalk, group.Tickets));
-            }
+            await afterVoidService.SendMessage(query, model.Tickets);
+            results.AddRange(await afterVoidService.SendEmail(query, model.Tickets.ToList()));
+            results.AddRange(await afterVoidService.SendLetstalk(query, model));
         }
     }
 }
