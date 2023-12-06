@@ -17,6 +17,7 @@ export class TemplateMessageService {
 
   getTemplateValue(voidMatch: VoidMatch, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
+    templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
     templateValue.fromTransTime = voidMatch.voidTicketsMini.fromTime;
     templateValue.toTransTime = voidMatch.voidTicketsMini.toTime;

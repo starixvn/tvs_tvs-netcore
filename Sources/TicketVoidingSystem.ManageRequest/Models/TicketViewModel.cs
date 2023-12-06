@@ -22,7 +22,6 @@ public class TicketsViewModel
     public string CancelCashOutLicenseesName { get; set; }
     public bool IsAllLiveTickets { get; set; }
     public bool IsAllNonLiveTickets { get; set; }
-    public bool IsHasAioMessage { get; set; }
     public string BetTypes { get; set; }
     public DateTime FromTime { get; set; }
     public DateTime ToTime { get; set; }
@@ -36,6 +35,7 @@ public class TicketsViewModel
     public bool IsHasSettledTicket { get; set; }
     public List<BetId> CheckPermissionTickets { get; set; }
     public List<BetId> AllCancelCashOutTickets { get; set; }
+    public short GroupPHAffected { get; set; }
 }
 
 public class TicketViewModel

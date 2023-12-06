@@ -54,7 +54,8 @@ export class TemplateService {
       eventDate: moment(new Date(match.eventDate)).format(Format.EVENT_DATE),
       sportTypeId: match.sportType,
       matchId: match.matchId,
-      match: match
+      match: match,
+      groupPHAffected: 0
     };
   }
 
@@ -84,13 +85,13 @@ export class TemplateService {
     }
   }
 
-  replaceEventDate(message: Message, value: string){
+  replaceEventDate(message: Message, value: string) {
     let kickOffTimeDateGMT8 = new Date(value);
     kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
     let eventDate = moment(kickOffTimeDateGMT8).format(Format.EVENT_DATE);
     this.replaceAll(message, TemplateReplace.EVENT_DATE, eventDate);
   }
-  
+
   replaceKickOffTime(message: Message, time: string) {
     const kickOffTime = moment(new Date(time)).format(TemplateContentConst.DATE_TIME);
     const replacedContent: TemplateContent = {
@@ -216,15 +217,36 @@ export class TemplateService {
     }
   }
 
-  replaceAOIMessage(message: Message) {
-    const replacedContent: TemplateContent = {
-      msgEnglish: `${TemplateContentConst.AIO_MESSAGE.msgEnglish}`,
-      msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE.msgChineseTraditional}`,
-      msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE.msgChineseSimplified}`,
-      msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE.msgChineseNewSimplified}`
-    };
-
+  replaceAOIMessage(message: Message, groupPHAffected: number) {
+    const replacedContent = this.getAioMessageTemplate(groupPHAffected)
     this.replaceEachLanguage(message, TemplateReplace.AOI_MESSAGE, replacedContent);
+  }
+
+  getAioMessageTemplate(groupPHAffected: number) {
+    if (groupPHAffected === 1) {
+      return {
+        msgEnglish: `${TemplateContentConst.AIO_MESSAGE_1X2.msgEnglish}`,
+        msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE_1X2.msgChineseTraditional}`,
+        msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE_1X2.msgChineseSimplified}`,
+        msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE_1X2.msgChineseNewSimplified}`
+      } as TemplateContent;
+    }
+
+    if (groupPHAffected === 3) {
+      return {
+        msgEnglish: `${TemplateContentConst.AIO_MESSAGE_1X2_AIO.msgEnglish}`,
+        msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE_1X2_AIO.msgChineseTraditional}`,
+        msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE_1X2_AIO.msgChineseSimplified}`,
+        msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE_1X2_AIO.msgChineseNewSimplified}`
+      } as TemplateContent;
+    }
+
+    return {
+      msgEnglish: `${TemplateContentConst.AIO_MESSAGE_AIO.msgEnglish}`,
+        msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseTraditional}`,
+        msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseSimplified}`,
+        msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseNewSimplified}`
+    } as TemplateContent;
   }
 
   replaceSpecialBetType(message: Message, betTypeNameReplaceMessage: Message) {

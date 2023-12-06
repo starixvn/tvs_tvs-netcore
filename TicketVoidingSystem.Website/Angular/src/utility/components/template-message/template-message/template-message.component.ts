@@ -382,8 +382,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateAIOMessage() {
-    if (this.value.checkAIOMessage) {
-      this.templateService.replaceAOIMessage(this.message);
+    if((this.isVoidSinglePage() && this.value.checkAIOMessage) || this.value.groupPHAffected !== 0){
+      this.templateService.replaceAOIMessage(this.message, this.value.groupPHAffected);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.AOI_MESSAGE, '');
     }
@@ -451,7 +451,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowAioCheckBoxMessage(): boolean {
-    return this.isShowMessages && this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU());
+    return this.isShowMessages && this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds());
   }
 
   isShowEarlyEventCheckBoxMessage(): boolean {
