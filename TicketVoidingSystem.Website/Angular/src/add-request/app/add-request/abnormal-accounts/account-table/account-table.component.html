@@ -62,7 +62,7 @@
     <table>
       <ng-container *ngFor="let item of accountWinlostModels; index as i">
         <tbody>
-          <tr [ngClass]="item.isHighlight ? 'bg-yellow' : ''">
+          <tr [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
             <td class="col-tb-1">
               <div>{{i + 1}}</div>
             </td>

@@ -59,6 +59,6 @@ public class CellServiceImp : CellService
     private static void HighlightBackground(ExcelWorksheet worksheet, int rowStart, int rowEnd)
     {
         worksheet.Cells[$"A{rowStart}:H{rowEnd}"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-        worksheet.Cells[$"A{rowStart}:H{rowEnd}"].Style.Fill.BackgroundColor.SetColor(Color.LemonChiffon);
+        worksheet.Cells[$"A{rowStart}:H{rowEnd}"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#F6BA92"));
     }
 }

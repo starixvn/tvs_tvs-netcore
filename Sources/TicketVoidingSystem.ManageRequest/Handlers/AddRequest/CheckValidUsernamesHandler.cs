@@ -23,7 +23,7 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 
     public string StatusIds { get; set; }
 
-    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
+    public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 }
 
 public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesRequest, CheckValidUsernamesViewModel>
@@ -67,12 +67,12 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
         return viewModel;
     }
 
-    private static IEnumerable<AccountWinlostModel> MapAdjustVoidLimitFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel> adjustLimits)
+    private static IEnumerable<AccountWinlostModel> MapAdjustVoidLimitFromUserInput(IEnumerable<AccountWinlostModel> accounts, IEnumerable<AccountWinlostModel>? adjustLimits)
     {
-        var validAdjustLimits = adjustLimits.Where(x => x.AdjustVoidLimit > 0);
+        var validAdjustLimits = adjustLimits?.Where(x => x.AdjustVoidLimit > 0);
         foreach (var account in accounts)
         {
-            var currentAdjustLimits = validAdjustLimits.FirstOrDefault(x => x.Username.Equals(account.Username, StringComparison.InvariantCultureIgnoreCase));
+            var currentAdjustLimits = validAdjustLimits?.FirstOrDefault(x => x.Username.Equals(account.Username, StringComparison.InvariantCultureIgnoreCase));
             if (currentAdjustLimits != null)
             {
                 account.AdjustVoidLimit = currentAdjustLimits.AdjustVoidLimit;

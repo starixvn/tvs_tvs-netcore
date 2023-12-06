@@ -72,7 +72,7 @@ public class EditRequestQuery
     public IEnumerable<ReducedOverViewModel>? ReducedOverInfo { get; set; }
 
     public IEnumerable<NotParticipateViewModel>? NotParticipateInfo { get; set; }
-    
+
     public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffInfo { get; set; }
 
     public DuplicateTicketsViewModel? DuplicateTicketsInfo { get; set; }

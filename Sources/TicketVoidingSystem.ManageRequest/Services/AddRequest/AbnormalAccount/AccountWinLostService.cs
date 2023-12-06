@@ -23,7 +23,7 @@ public class AccountWinLostServiceImp : AccountWinLostService
         this.repository = repository;
     }
 
-    public async Task SaveAccountWinLost(int requestId, int actionId, IEnumerable<AccountWinlostModel> accountModels)
+    public async Task SaveAccountWinLost(int requestId, int actionId, IEnumerable<AccountWinlostModel>? accountModels)
     {
         var command = new SaveAccountWinLostCommand
         {

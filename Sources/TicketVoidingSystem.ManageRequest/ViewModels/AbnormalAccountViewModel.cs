@@ -16,5 +16,5 @@ public class AbnormalAccountViewModel
 
     public int SubIssueTypeId { get; set; }
 
-    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
+    public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 }
