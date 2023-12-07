@@ -75,7 +75,8 @@ class Helper {
       msgChineseTraditional: '',
       msgChineseSimplified: '',
       msgChineseNewSimplified: ''
-    }
+    },
+    groupPHAffected: 0
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
     {

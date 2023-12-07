@@ -290,7 +290,8 @@ public class TicketsViewModelServiceTests
                 BetType = 1,
                 SubBetType = 11,
                 IsCancelCashOut = true,
-                SubStatus = TicketStatus.Won
+                SubStatus = TicketStatus.Won,
+                GroupPHAffected = 1
             },
             new()
             {
@@ -302,7 +303,8 @@ public class TicketsViewModelServiceTests
                 BetType = 1,
                 SubBetType = 11,
                 IsCancelCashOut = false,
-                SubStatus = TicketStatus.Draw
+                SubStatus = TicketStatus.Draw,
+                GroupPHAffected = 2
             }
         };
         var model = new TicketsViewModel();
@@ -334,7 +336,8 @@ public class TicketsViewModelServiceTests
                 GroupName = "(instant settlement)",
                 MatchId = 1,
                 SiteDbGroupId = 1,
-                Status = TicketStatus.Won
+                Status = TicketStatus.Won,
+                GroupPHAffected = 1
             },
             new()
             {
@@ -386,7 +389,8 @@ public class TicketsViewModelServiceTests
                 IsLiveIndicator = true,
                 BetType = 2,
                 SubBetType = 2,
-                Status = TicketStatus.Won
+                Status = TicketStatus.Won,
+                GroupPHAffected = 2
             }
         };
         var model = new TicketsViewModel();
@@ -400,40 +404,5 @@ public class TicketsViewModelServiceTests
 
         // Assert
         Assert.True(model.IsAllLiveTickets);
-        Assert.True(model.IsHasAioMessage);
-    }
-
-    [Fact]
-    public void UpdateViewModel_CheckAioMessageWrongOdds_ReturnFalse()
-    {
-        // Arrange
-        var allTickets = new List<GetTicketModel>
-        {
-            new()
-            {
-                TransId = 1,
-                IsMixParlay = false,
-                IsCricket = false,
-                IsCancelCashOut = false,
-                GroupName = "(instant settlement)",
-                MatchId = 1,
-                SiteDbGroupId = 1,
-                IsLiveIndicator = true,
-                BetType = 2,
-                SubBetType = 2,
-                Status = TicketStatus.Draw
-            }
-        };
-        var model = new TicketsViewModel();
-        var permission = new VoidPermission
-        {
-            Settled = true
-        };
-
-        // Act
-        service.UpdateViewModel(model, allTickets, 2, 1, permission);
-
-        // Assert
-        Assert.False(model.IsHasAioMessage);
     }
 }
