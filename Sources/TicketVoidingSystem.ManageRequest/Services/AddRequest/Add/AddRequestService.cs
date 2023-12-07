@@ -5,6 +5,7 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -22,14 +23,16 @@ public class AddRequestServiceImp : AddRequestService
     private readonly SessionService sessionService;
     private readonly LoggingService loggingService;
     private readonly MarkTicketsService markTicketsService;
+    private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
 
-    public AddRequestServiceImp(IMapper mapper,
+    public AddRequestServiceImp(IMapper mapper, //NOSONAR
         IDynamicRepository repository,
         SessionService sessionService,
         LoggingService loggingService,
         MarkTicketsService markTicketsService,
+        AccountWinLostService accountWinLostService,
         InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
         SendLetstalkAfterAddService sendLetstalkAfterAddService)
     {
@@ -38,6 +41,7 @@ public class AddRequestServiceImp : AddRequestService
         this.sessionService = sessionService;
         this.loggingService = loggingService;
         this.markTicketsService = markTicketsService;
+        this.accountWinLostService = accountWinLostService;
         this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
         this.sendLetstalkAfterAddService = sendLetstalkAfterAddService;
     }
@@ -102,6 +106,11 @@ public class AddRequestServiceImp : AddRequestService
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
 
         await repository.ExecuteAsync(command);
+        if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
+        {
+            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        }
+
         return command.RequestId;
     }
 

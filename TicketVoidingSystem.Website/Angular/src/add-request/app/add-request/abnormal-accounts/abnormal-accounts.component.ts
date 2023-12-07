@@ -1,9 +1,12 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
+import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
 import { OthersModel } from '../others/others.model';
+import { AccountTableComponent } from './account-table/account-table.component';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account/confirm-abnormal-account.model';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
 import { PrimitiveProperty } from './models/primitive-property.model';
@@ -18,7 +21,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './abnormal-accounts.component.html',
   styleUrls: ['./abnormal-accounts.component.scss']
 })
-export class AbnormalAccountsComponent {
+export class AbnormalAccountsComponent implements OnInit {
   @Input() isVoided: boolean;
   @Input() isEdit: boolean;
   @Input() filter: FilterModel;
@@ -31,38 +34,72 @@ export class AbnormalAccountsComponent {
   @ViewChild('usernames') usernamesComponent: UsernamesComponent;
   @ViewChild('products') productFilterComponent: ProductFilterComponent;
   @ViewChild('eventDate') eventDateFilterComponent: EventDateFilterComponent;
+  @ViewChild('accountTable') accountTableComponent: AccountTableComponent;
 
   primitiveProps = new PrimitiveProperty();
   confirmAbnormalAccount = new ConfirmAbnormalAccountModel();
-
   constructor(
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService
+    private readonly saveRequestService: SaveRequestService,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
+
+  async ngOnInit(): Promise<void> {
+    if (this.isEdit && this.validationService.isAutoVoidWithPolicy(this.filter.action)) {
+      this.addRequestStore.changeBlockingUiStatus(true);
+      this.primitiveProps.validAccountWinlostModels = await this.addRequestApiService.getAccountWinLost(this.requestId);
+      this.primitiveProps.isShowAccountWinLost = true;
+      this.addRequestStore.changeBlockingUiStatus(false);
+    }
+  }
 
   public async focusOutUsernames(): Promise<void> {
     if (this.primitiveProps.isCancelValidate) {
       this.primitiveProps.isCancelValidate = false;
       return;
     }
-    await this.validationService.checkValidUsernames(this.initValidationBusinessRuleArgs());
-  }  
-  
+    await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
+  }
+
   public triggerCloseEvent() {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
   public async saveRequest(): Promise<void> {
+    if (this.accountTableComponent && !this.accountTableComponent.isValid()) {
+      this.addRequestStore.changeSavingRequestStatus(false);
+      return;
+    }
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
   }
 
   public async onYesConfirmWarningModal(): Promise<void> {
     await this.saveRequestService.onYesConfirmWarningModal(this.initSaveRequestInput());
   }
-  
+
+  public isShowUserInfo(): boolean {
+    return this.filter.action === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+  }
+
+  public async handleSearchEvent(): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    if (this.accountTableComponent) {
+      this.accountTableComponent.isCancelRecalculateAmount = true;
+
+      if (!this.accountTableComponent.isValid()) {
+        this.addRequestStore.changeBlockingUiStatus(false);
+        return;
+      }
+    }
+
+    const validationOutput = await this.validationService.checkBusinessRule(this.initValidationBusinessRuleArgs());
+    this.primitiveProps.validAccountWinlostModels = validationOutput.accountWinlostModels;
+    this.addRequestStore.changeBlockingUiStatus(false);
+  }
+
   private initSaveRequestInput() {
-    const arg = new SaveRequestArg(); 
+    const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.isEdit = this.isEdit;
     arg.userId = this.userId;
@@ -73,23 +110,40 @@ export class AbnormalAccountsComponent {
     arg.primitiveProps = this.primitiveProps;
     arg.addRequestStore = this.addRequestStore;
     arg.abnormalAccountModel = this.abnormalAccountModel;
+    arg.abnormalAccountModel.accountWinlostModels =
+      this.validationService.isAutoVoidWithPolicy(this.filter.action) ? this.primitiveProps.validAccountWinlostModels : null;
     arg.usernamesComponent = this.usernamesComponent;
     arg.confirmAbnormalAccount = this.confirmAbnormalAccount;
     arg.productFilterComponent = this.productFilterComponent;
     arg.eventDateFilterComponent = this.eventDateFilterComponent;
-    
+    arg.accountTableComponent = this.accountTableComponent;
+
     return arg;
   }
 
   private initValidationBusinessRuleArgs(): ValidationBusinessRuleArgs {
-    const args = new ValidationBusinessRuleArgs();
-    args.actionId = this.filter.action;
-    args.requestId = this.requestId;
-    args.issueTypeId = this.filter.issueTypeId;
-    args.usernamesComponent = this.usernamesComponent;
-    args.abnormalAccountModel = this.abnormalAccountModel;
-    args.primitiveProps = this.primitiveProps;
+    const arg = new ValidationBusinessRuleArgs();
+    arg.actionId = this.filter.action;
+    arg.requestId = this.requestId;
+    arg.issueTypeId = this.filter.issueTypeId;
+    arg.usernamesComponent = this.usernamesComponent;
+    arg.abnormalAccountModel = this.abnormalAccountModel;
+    arg.abnormalAccountModel.accountWinlostModels =
+      this.validationService.isAutoVoidWithPolicy(this.filter.action) ? this.primitiveProps.validAccountWinlostModels : null;
+    arg.productFilterComponent = this.productFilterComponent;
+    arg.eventDateFilterComponent = this.eventDateFilterComponent;
+    arg.accountTableComponent = this.accountTableComponent;
+    arg.primitiveProps = this.primitiveProps;
 
-    return args;
+    return arg;
+  }
+
+  public hideValidationMessage(): void {
+    this.primitiveProps.isShowError = false;
+  }
+
+  public changeFilter(): void {
+    this.primitiveProps.isShowAccountWinLost = false;
+    this.primitiveProps.isShowError = false;
   }
 }

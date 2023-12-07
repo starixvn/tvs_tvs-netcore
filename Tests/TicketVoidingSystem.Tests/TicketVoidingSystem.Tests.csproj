@@ -13,6 +13,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TicketVoidingSystem\Services\Excel\**" />
+    <EmbeddedResource Remove="TicketVoidingSystem\Services\Excel\**" />
+    <None Remove="TicketVoidingSystem\Services\Excel\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -49,7 +55,7 @@
 
   <ItemGroup>
     <Folder Include="ManageRequest\Handlers\ManageRequest\RequestListExcel\" />
-    <Folder Include="TicketVoidingSystem\Services\Excel\" />
+    <Folder Include="ManageRequest\Services\AddRequest\AccountWinLostExcel\" />
     <Folder Include="TicketVoidingSystem\Web\" />
   </ItemGroup>
 

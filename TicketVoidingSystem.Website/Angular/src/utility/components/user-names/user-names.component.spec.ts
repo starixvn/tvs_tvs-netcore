@@ -23,8 +23,8 @@ describe('UsernamesComponent', () => {
     shallow = new Shallow(UsernamesComponent, AppModuleTest)
     .dontMock(NgbModule)
     .mock(ElementRef, {});
-  });  
-  
+  });
+
   it('UsernamesComponent should init match snapshot', async () => {
     // Arrange
     const { fixture } = await shallow.render();

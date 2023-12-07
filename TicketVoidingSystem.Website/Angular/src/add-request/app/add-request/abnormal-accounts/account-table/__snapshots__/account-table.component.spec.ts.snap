@@ -1,0 +1,156 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccountTableComponent AccountTableComponent should init match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <account-table>
+    <div
+      class="account-list"
+    >
+      <div
+        class="title-account-list"
+      >
+        <div
+          class="title-account-list-label"
+        />
+        <div
+          class="title-account-list-toolbox"
+        >
+          <input
+            class="title-account-list-toolbox-excel"
+            title="Export to Excel"
+            type="button"
+          />
+        </div>
+      </div>
+      <div
+        class="table-header"
+      >
+        <table>
+          <thead>
+            <tr>
+              <th
+                class="col-tb-1"
+                scope="col"
+              >
+                <div>
+                  No
+                </div>
+              </th>
+              <th
+                class="col-tb-2"
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    Username
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+              <th
+                class="col-tb-3"
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    Given Credit
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+              <th
+                class="col-tb-4"
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    Adjust Void Limit
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+              <th
+                class="col-tb-5"
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    Current Losing
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+              <th
+                class="col-tb-6"
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    Current Winning
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+              <th
+                class="col-tb-7"
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    Estimate Void Amount
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+              <th
+                scope="col"
+              >
+                <div
+                  class="title-table"
+                >
+                  <span>
+                    WinLost After Void
+                  </span>
+                  <sorting />
+                </div>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div
+        class="table-content"
+      >
+        <table>
+        </table>
+        <table>
+          <tbody>
+            <tr>
+              <td
+                class="no-data"
+              >
+                There is no data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <tooltip />
+  </account-table>
+</ng-component>
+`;

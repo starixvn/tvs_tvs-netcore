@@ -1,0 +1,161 @@
+@import '../../../../../assets/styles/mixin.scss';
+
+.width-1400 {
+  width: 1420px !important;
+}
+
+.account-list {
+  width: 1065px !important;
+}
+
+.title-account-list {
+  @include grid-title('../images/excel-icon.png')
+}
+
+.col-tb-1 {
+  width: 40px;
+  width: 40px;
+}
+
+.col-tb-2 {
+  width: 180px;
+  max-width: 180px;
+}
+
+.col-tb-3 {
+  width: 140px;
+  max-width: 140px;
+}
+
+.col-tb-4 {
+  width: 140px;
+  max-width: 140px;
+}
+
+.col-tb-5 {
+  width: 140px;
+  max-width: 140px;
+}
+
+.col-tb-6 {
+  width: 140px;
+  max-width: 140px;
+}
+
+.col-tb-7 {
+  width: 142px;
+  max-width: 142px;
+}
+
+table {
+  text-align: center;
+}
+
+.table-header {
+  border: solid #888888;
+  border-width: 1px 1px 0 1px;
+
+  table {
+    @include setTable();
+    border: solid #888888;
+    border-width: 1px 1px 0 1px;
+
+    tr {
+      th {
+        background: #4e71bb;
+        background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+        background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+        color: #fff;
+        border: solid #888888;
+        border-width: 1px 1px 0 1px;
+        padding: 3px !important;
+      }
+
+      .col-1 {
+        background: white;
+        width: 46px;
+        border: solid 2px #4e71bb;
+      }
+    }
+
+    .title-table {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.table-content {
+  max-height: 545px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #888888;
+  @include scroll-style();
+
+  table {
+    @include setTable();
+    border: 1px solid #888888;
+
+    tbody:hover,
+    tr:hover td {
+      background: #aebad4;
+    }
+
+    .bg-highlight {
+      background-color: #F6BA92;
+    }
+
+    .highlight-amount {
+      font-weight: bold;
+      color: #4e71bb;
+    }
+
+    .adjust-gv {
+
+      .adjust-string {
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      input {
+        width: 100%;
+        height: 100%;
+        text-align: right;
+        padding: 2px 4px;
+        max-width: 133px;
+        font-size: 0.9em;
+      }
+
+      /*For Webkits like Chrome and Safari*/
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /*For FireFox*/
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+    }
+
+    tbody {
+      td {
+        border-color: #888888;
+        border-style: solid;
+        border-width: 0 1px 1px 0;
+        overflow: hidden;
+        white-space: normal;
+        padding: 3px;
+        height: 30px;
+      }
+    }
+  }
+}

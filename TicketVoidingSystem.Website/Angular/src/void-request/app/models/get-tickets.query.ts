@@ -5,13 +5,9 @@ export class GetTicketsQuery {
   pageIndex: number;
   pageSize: number;
   match: MatchModel;
-  kickOffDate: string;
   requestId?: number;
   issueTypeId: number;
   subIssueTypeId: number;
   betTypes?: CheckedBetType[];
-  actionId?: number;
-  liveHomeScore?: number;
-  liveAwayScore?: number;
   transInfoJson?: string; // only use for EKO search tickets
 }

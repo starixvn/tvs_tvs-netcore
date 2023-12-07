@@ -59,6 +59,7 @@ using TicketVoidingSystem.VoidSingleBet;
 using TicketVoidingSystem.VoidSingleBet.Controllers;
 using TicketVoidingSystem.Website.Utilities.CustomServices;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector;
+using TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
 using TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 
 namespace TicketVoidingSystem.Website.Utilities;

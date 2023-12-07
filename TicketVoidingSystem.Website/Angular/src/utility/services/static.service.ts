@@ -19,6 +19,7 @@ export class StaticService {
       || actionId === TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID
       || actionId === TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY
+      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID
       || actionId === TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID;
   }
 
@@ -126,6 +127,8 @@ export class StaticService {
       return requestDetail.duplicateTicketsModel.subIssueTypeId;
     } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
+    } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.abnormalAccountModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -152,6 +155,8 @@ export class StaticService {
       return null;
     } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).eventDate;
+    } else if (this.isAbnormalAccount) {
+      return null;
     } else {
       return requestDetail.event.eventDate;
     }

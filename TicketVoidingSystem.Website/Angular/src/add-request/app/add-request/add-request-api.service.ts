@@ -10,6 +10,7 @@ import { LastTimeScore, LastTimeScoreQuery } from '../add-request/models/last-ti
 import { ChildMatchModel } from '../add-request/models/related-event.model';
 import { AddRequestResultModel } from '../add-request/models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../add-request/models/sub-type-link-match.model';
+import { AccountWinlostModel } from './abnormal-accounts/models/account-winlost.model';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
@@ -110,6 +111,16 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async copyLetstalkRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
     return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyLetstalkRequestInfo');
+  }
+
+  /* istanbul ignore next */
+  async getAccountWinLost(requestId: number): Promise<AccountWinlostModel[]> {
+    return this.httpService.postJson<{ requestId: number }, AccountWinlostModel[]>({ requestId: requestId }, 'api/AddRequest/GetAccountWinLost');
+  }
+
+  /* istanbul ignore next */
+  async exportAccount(models: AccountWinlostModel[]): Promise<void> {
+    return this.httpService.downloadFile({ accounts: models }, 'api/AddRequest/ExportExcelAccount');
   }
   
   /* istanbul ignore next */

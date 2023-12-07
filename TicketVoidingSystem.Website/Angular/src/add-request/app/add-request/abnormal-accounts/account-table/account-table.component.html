@@ -1,0 +1,110 @@
+<div class="account-list">
+  <div class="title-account-list">
+    <div class="title-account-list-label"></div>
+    <div class="title-account-list-toolbox">
+      <input type="button" class="title-account-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+    </div>
+  </div>
+  <div class="table-header">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
+          <th scope="col" class="col-tb-2">
+            <div class="title-table">
+              <span>Username</span>
+              <sorting #sortingComponent [id]="1" (sortEvent)="sorting($event, 'username', 1)"></sorting>
+            </div>
+          </th>
+          <th scope="col" class="col-tb-3">
+            <div class="title-table">
+              <span>Given Credit</span>
+              <sorting #sortingComponent [id]="2" (sortEvent)="sorting($event, 'givenCredit', 2)"></sorting>
+            </div>
+          </th>
+          <th scope="col" class="col-tb-4">
+            <div class="title-table">
+              <span>Adjust Void Limit</span>
+              <sorting #sortingComponent [id]="3" (sortEvent)="sorting($event, 'adjustVoidLimit', 3)"></sorting>
+            </div>
+          </th>
+          <th scope="col" class="col-tb-5">
+            <div class="title-table">
+              <span>Current Losing</span>
+              <sorting #sortingComponent [id]="4" (sortEvent)="sorting($event, 'currentLosing', 4)"></sorting>
+            </div>
+          </th>
+          <th scope="col" class="col-tb-6">
+            <div class="title-table">
+              <span>Current Winning</span>
+              <sorting #sortingComponent [id]="5" (sortEvent)="sorting($event, 'currentWinning', 5)"></sorting>
+            </div>
+          </th>
+          <th scope="col" class="col-tb-7">
+            <div class="title-table">
+              <span>Estimate Void Amount</span>
+              <sorting #sortingComponent [id]="6" (sortEvent)="sorting($event, 'estimateVoidAmount', 6)"></sorting>
+            </div>
+          </th>
+          <th scope="col">
+            <div class="title-table">
+              <span>WinLost After Void</span>
+              <sorting #sortingComponent [id]="7" (sortEvent)="sorting($event, 'winLostAfterVoid', 7)"></sorting>
+            </div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-content">
+    <table>
+      <ng-container *ngFor="let item of accountWinlostModels; index as i">
+        <tbody>
+          <tr [ngClass]="item.isHighlight ? 'bg-highlight' : ''">
+            <td class="col-tb-1">
+              <div>{{i + 1}}</div>
+            </td>
+            <td class="col-tb-2 text-left">
+              <div>{{item.username}}</div>
+            </td>
+            <td class="col-tb-3 text-right">
+              <div>{{showDecimalWithComma(item.givenCredit)}}</div>
+            </td>
+            <td class="col-tb-4 text-right adjust-gv">
+              <div class="adjust-string" *ngIf="!item.isShowInput" (mousedown)="mouseDownEventAdjustGV(item)">{{item.adjustVoidLimitString ?? showDecimalWithComma(item.adjustVoidLimit)}}</div>
+              <div>
+                <input *ngIf="item.isShowInput" class="form-control form-control-sm adjust-gv{{i}}" type="text" [(ngModel)]="item.adjustVoidLimit"
+                (ngModelChange)="onChangeAdjustGV(item, i)" [disabled]="filter.isVoided" onmouseup="this.focus()"
+                (blur)="reCalculate(item, i)"/>
+              </div>
+            </td>
+            <td class="col-tb-5 text-right">
+              <div>{{showDecimalWithComma(item.currentLosing)}}</div>
+            </td>
+            <td class="col-tb-6 text-right">
+              <div>{{showDecimalWithComma(item.currentWinning)}}</div>
+            </td>
+            <td class="col-tb-7 text-right highlight-amount">
+              <div>{{showDecimalWithComma(item.estimateVoidAmount)}}</div>
+            </td>
+            <td class="text-right highlight-amount">
+              <div>{{showDecimalWithComma(item.winLostAfterVoid)}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </ng-container>
+    </table>
+
+    <table *ngIf="accountWinlostModels == null || accountWinlostModels.length == 0">
+      <tbody>
+        <tr>
+          <td class="no-data">There is no data</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging> -->
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

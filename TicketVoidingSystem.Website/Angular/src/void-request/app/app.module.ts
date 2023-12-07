@@ -23,10 +23,10 @@ import { LogInfoComponent } from './log-info/log-info.component';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
-import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 
 @NgModule({
   declarations: [

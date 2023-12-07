@@ -66,7 +66,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   getProducts(): void {
-    this.product = this.model.event.productIds
+    this.product = this.model.abnormalAccountModel.productIds
       .replace('1', 'Sportsbook')
       .replace('2', 'Parlay')
       .replace('3', 'Bet Builder')
@@ -76,7 +76,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   getStatus(): void {
-    this.status = this.model.event.statusIds
+    this.status = this.model.abnormalAccountModel.statusIds
       .replace('0,1', 'Running')
       .replace('112', 'Won')
       .replace('113', 'Lose')

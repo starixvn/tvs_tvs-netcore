@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -19,15 +20,17 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
     private readonly SessionService sessionService;
+    private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
 
     public UpdateRequestProcessStageImp(IMapper mapper,
-        IDynamicRepository repository,
+        IDynamicRepository repository, AccountWinLostService accountWinLostService,
         SessionService sessionService, InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService)
     {
         this.mapper = mapper;
         this.repository = repository;
         this.sessionService = sessionService;
+        this.accountWinLostService = accountWinLostService;
         this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
     }
 
@@ -38,7 +41,10 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
             var command = CreateEditRequestCommand(query);
             await repository.ExecuteAsync(command);
             await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.EarlyKickOffInfo);
-
+            if (query.IssueTypeId.IsAbnormalAccount())
+            {
+                await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+            }
             return new Result
             {
                 Data = new

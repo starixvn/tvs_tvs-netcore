@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Epplus.Mapper.Extensions;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.TicketListing.Constants;
@@ -59,17 +60,25 @@ public class CellServiceImp : CellService
     {
         worksheet.Cells.Style.WrapText = true;
         var lastRow = worksheet.Dimension.End.Row;
-        if (isNumberGame)
-        {
-            worksheet.HighlightBackground($"A8:L{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
-        }
-        else
+        worksheet.HighlightFont($"E8:E{lastRow}", "LEFT(E8,1)=\"-\"", Color.Red);
+        worksheet.HighlightFont($"G8:G{lastRow}", "G8 < 0", Color.Red);
+        HighlightBackground(worksheet, lastRow, isNumberGame);
+    }
+
+    private static void HighlightBackground(ExcelWorksheet worksheet, int lastRow, bool isNumberGame)
+    {
+        if (!isNumberGame)
         {
             const int deleteColumn = 10;
             worksheet.DeleteColumn(deleteColumn);
-            worksheet.HighlightBackground($"A8:K{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
         }
-        worksheet.HighlightFont($"E8:E{lastRow}", "LEFT(E8,1)=\"-\"", Color.Red);
-        worksheet.HighlightFont($"G8:G{lastRow}", "G8 < 0", Color.Red);
+        const int two = 2;
+        for (var row = 9; row <= lastRow; row += two)
+        {
+            var range = isNumberGame ? worksheet.Cells[$"A{row}:L{row}"] : worksheet.Cells[$"A{row}:K{row}"];
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Fill.BackgroundColor.SetColor(Color.LemonChiffon);
+        }
     }
+
 }

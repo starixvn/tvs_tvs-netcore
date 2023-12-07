@@ -10,7 +10,7 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { MatchType } from '../../../../utility/constants/config';
+import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { MatchInfo } from '../../../../utility/models/event.model';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
@@ -255,7 +255,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
   private updateKickOffTime(matchInfo: MatchInfo): string {
     if (matchInfo?.matchId && !this.isEdit) {
-      return moment(matchInfo.kickOffTime).format('YYYY-MM-DD HH:mm:ss.SSS');
+      return moment(matchInfo.kickOffTime, DateTimeFormat.FULL_DATE_TIME_FORMAT).format('YYYY-MM-DD HH:mm:ss.SSS');
     }
 
     return moment().format('YYYY-MM-DD HH:mm:ss.SSS');

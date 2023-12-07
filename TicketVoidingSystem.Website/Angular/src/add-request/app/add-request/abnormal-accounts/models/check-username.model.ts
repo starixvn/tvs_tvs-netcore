@@ -1,4 +1,5 @@
 import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
+import { AccountWinlostModel } from "./account-winlost.model";
 
 export interface CheckValidUsernamesQuery {
   usernames: string;
@@ -8,12 +9,14 @@ export interface CheckValidUsernamesQuery {
   statusIds: string;
   fromDate: string;
   toDate: string;
+  accountWinlostModels: AccountWinlostModel[];
 }
 
 
 export class CheckUsernamesViewModel {
   validation: ValidationAbnormalAccount;
   transInfoAddRequestModel: TransInfoAddRequestModel;
+  accountWinlostModels: AccountWinlostModel[];
 }
 
 export class ValidationAbnormalAccount {

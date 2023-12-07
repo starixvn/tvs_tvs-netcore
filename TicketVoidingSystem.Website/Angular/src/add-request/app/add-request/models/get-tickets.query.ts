@@ -11,7 +11,5 @@ export class GetTicketsQuery {
   subIssueTypeId: number;
   betTypes?: CheckedBetType[];
   actionId?: number;
-  liveHomeScore?: number;
-  liveAwayScore?: number;
   transInfoJson?: string; // only use for EKO search tickets
 }

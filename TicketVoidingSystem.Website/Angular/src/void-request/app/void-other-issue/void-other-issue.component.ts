@@ -108,7 +108,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.paging.selection = [PagingConstant.SIZE_ONE, PagingConstant.SIZE_TWO, PagingConstant.SIZE_THREE, PagingConstant.SIZE_FOUR];
     this.paging.pageSize = PagingConstant.SIZE_ONE;
     if (this.isAbnormalAccount()) {
-      this.usernames = this.requestDetail.event.usernames.split(',').join(', ');
+      this.usernames = this.requestDetail.abnormalAccountModel.usernames;
     }
     if (this.isHasLogInfo()) {
       await this.getLogInfoModel();
@@ -172,26 +172,9 @@ export class VoidOtherIssueComponent implements OnInit {
     this.query.pageIndex = PagingConstant.INDEX_ZERO;
     this.query.pageSize = PagingConstant.SIZE_ONE;
     this.query.match = this.match;
-    this.query.kickOffDate = this.getKickOffDate();
     this.query.requestId = this.requestId;
     this.query.issueTypeId = this.requestDetail.request.issueTypeId;
     this.query.subIssueTypeId = StaticService.getSubIssueTypeId(this.requestDetail);
-  }
-
-  private getKickOffDate(): string {
-    if (this.isWrongScore()) {
-      return this.requestDetail.wrongScoreModels[0].eventDate.toString();
-    }
-
-    if (this.isWrongOdds()) {
-      return this.requestDetail.wrongOddsModels[0].eventDate.toString();
-    }
-
-    if (this.isReducedOver()) {
-      return this.requestDetail.reducedOverModels[0].eventDate.toString();
-    }
-
-    return this.requestDetail.event.kickOffTime?.toString();
   }
 
   async getTickets() {
@@ -330,7 +313,7 @@ export class VoidOtherIssueComponent implements OnInit {
   checkSettled(): boolean {
     if (this.isAbnormalAccount()) {
       const UNSETTLED_STATUS = '0,1';
-      if (this.requestDetail.event.statusIds === UNSETTLED_STATUS) {
+      if (this.requestDetail.abnormalAccountModel.statusIds === UNSETTLED_STATUS) {
         return false;
       }
 
@@ -466,19 +449,7 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   isHasMatchInfo() {
-    if (this.isAbnormalAccount()) {
-      return false;
-    }
-
-    if (this.isAbnormalBetMixParlay()) {
-      return false;
-    }
-
-    if (this.isArchivedTickets()) {
-      return false;
-    }
-
-    return true;
+    return !this.isAbnormalAccount() && !this.isAbnormalBetMixParlay() && !this.isArchivedTickets();
   }
 
   isAbnormalAccount(): boolean {

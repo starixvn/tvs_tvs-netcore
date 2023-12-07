@@ -117,6 +117,19 @@ export class TicketStatus {
       group: 'All'
     }
   ];
+
+  static readonly SELECTION_ITEMS_AUTO_VOID_POLICY: Selection[] = [
+    {
+      name: 'Running',
+      value: TicketStatus.RUNNING.toString() + ',' + TicketStatus.WAITING.toString(),
+      group: 'All'
+    },
+    {
+      name: 'Won',
+      value: TicketStatus.WON.toString(),
+      group: 'All'
+    }
+  ];
 }
 
 export class MarkType {
@@ -148,6 +161,7 @@ export class ManageRequestStatus {
 export class TVSRequestActionType {
   static readonly AUTO_VOID_WINNING_ID = 1;
   static readonly AUTO_VOID_INSTANT_ID = 4;
+  static readonly AUTO_VOID_INSTANT_WITH_POLICY_ID = 10;
   static readonly AUTO_VOID_5M_BEFORE_KO_ID = 6;
   static readonly AUTO_VOID_10M_BEFORE_KO_ID = 7;
   static readonly AUTO_VOID_INSTANT_WITHOUT_POLICY = 8;
@@ -155,7 +169,6 @@ export class TVSRequestActionType {
   static readonly TAKE_NOTE_ID = 2;
   static readonly WAITING_ID = 3;
   static readonly AUTO_VOID_RESULT_KEYED_ID = 9;
-
   static readonly MANUAL_VOID = 'Manual Void';
 }
 
@@ -412,6 +425,7 @@ export class ActionVoidByIssueTypeConst {
   static readonly ABNORMAL_ACCOUNT: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];

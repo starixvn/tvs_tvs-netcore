@@ -13,10 +13,19 @@ import { ProductFilterComponent } from '../product-filter/product-filter.compone
   providedIn: 'root'
 })
 export class ValidationService {
-  constructor(private readonly addRequestApiService: AddRequestApiService) { }
+  constructor(
+    private readonly addRequestApiService: AddRequestApiService
+    ) { }
 
   public isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();
+  }
+
+  public async checkBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
+    const result = await this.checkValidUsernames(args);
+    args.primitiveProps.isShowAccountWinLost = true;
+
+    return result;
   }
 
   public async checkValidUsernames(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
@@ -28,7 +37,11 @@ export class ValidationService {
         return { isValid: false } as ValidationBusinessRuleOutput;
       }
 
-      if (usernames === '') {
+      if (!this.isValidCommonData(args.productFilterComponent, args.eventDateFilterComponent)) {
+        return { isValid: false } as ValidationBusinessRuleOutput;;
+      }
+
+      if (usernames.length === 0) {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }
       args.usernamesComponent.groupUsername.resetAllValue();
@@ -37,26 +50,35 @@ export class ValidationService {
         return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
       }
 
-      const viewModel = await this.getValidation(args, usernames);
+      const viewModel = await this.getValidation(args);
       const invalidUsernames = viewModel.validation.invalidUserName;
       if (invalidUsernames) {
-        return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames) } as ValidationBusinessRuleOutput;
+        return {
+          isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames)
+        } as ValidationBusinessRuleOutput;
       }
-      
+
       args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
       if (viewModel.validation.isExceededTotalUsernames) {
-        return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
+        return {
+          isValid: args.usernamesComponent.checkValidItems(),
+          accountWinlostModels: viewModel.accountWinlostModels
+        } as ValidationBusinessRuleOutput;
       }
       if (viewModel.validation.isBeingMoveBetDate || viewModel.validation.isInvalidTotalTicket) {
         args.primitiveProps.isShowError = true;
         args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;
         args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
-        return { isValid: false } as ValidationBusinessRuleOutput;
+        return {
+          isValid: false,
+          accountWinlostModels: viewModel.accountWinlostModels
+         } as ValidationBusinessRuleOutput;
       }
       return {
         isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
         confirmAbnormalAccountModel: this.getConfirmAbnormalBetModel(viewModel.validation),
-        transInfoAddRequestModel: viewModel.transInfoAddRequestModel
+        transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
+        accountWinlostModels: viewModel.accountWinlostModels
       } as ValidationBusinessRuleOutput;
     } catch {
       return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, usernames) } as ValidationBusinessRuleOutput;
@@ -64,26 +86,27 @@ export class ValidationService {
       args.primitiveProps.isBlockUsernames = false;
     }
   }
-  
+
   private getConfirmAbnormalBetModel(validation: ValidationAbnormalAccount): ConfirmAbnormalAccountModel {
     const confirmModel = new ConfirmAbnormalAccountModel();
     confirmModel.numberOfTicketsExistedInRequest = validation.numberOfTickets;
-    
+
     return confirmModel;
   }
-  
-  private async getValidation(args: ValidationBusinessRuleArgs, usernames: string): Promise<CheckUsernamesViewModel> {
+
+  public async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {
     const query: CheckValidUsernamesQuery = {
-      usernames: usernames,
+      usernames: args.abnormalAccountModel.usernames,
       requestId: args.requestId,
       actionId: args.actionId,
       productIds: args.abnormalAccountModel.productIds,
       statusIds: args.abnormalAccountModel.statusIds,
       fromDate: moment(args.abnormalAccountModel.fromDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+      accountWinlostModels: this.isAutoVoidWithPolicy(args.actionId) ? args.abnormalAccountModel.accountWinlostModels : null,
     };
     const results = await this.addRequestApiService.checkValidUsernames(query);
-    
+
     return results;
   }
 
@@ -98,5 +121,9 @@ export class ValidationService {
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
+  }
+
+  public isAutoVoidWithPolicy(actionId: string): boolean {
+    return actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
   }
 }

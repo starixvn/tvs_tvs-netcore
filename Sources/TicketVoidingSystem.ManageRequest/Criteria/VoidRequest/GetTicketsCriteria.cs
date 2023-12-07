@@ -6,10 +6,6 @@ public class GetTicketsCriteria : CriteriaBase
 {
     public int MatchId { get; set; }
 
-    public int? LiveHomeScore { get; set; }
-
-    public int? LiveAwayScore { get; set; }
-
     public int RequestId { get; set; }
 
     public int IssueTypeId { get; set; }
@@ -17,6 +13,7 @@ public class GetTicketsCriteria : CriteriaBase
     public string BetTypes { get; set; }
 
     public string TransInfoJson { get; set; }
+
     public string IsCancelCashOut { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Void_Select";

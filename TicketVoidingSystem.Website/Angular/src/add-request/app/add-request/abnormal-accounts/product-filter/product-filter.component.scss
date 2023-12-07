@@ -1,17 +1,10 @@
 .product-filter {
   margin-top: 10px;
   margin-bottom: 10px;
-
-  .dropdown-area {
-    padding-left: 15px;
-  }
+  display: flex;
 
   .multi-select {
     width: 333px;
-  }
-
-  .ticket-status-label {
-    margin: 0px 25px 0px 35px;
   }
 }
 
@@ -23,7 +16,7 @@
       .ng-value {
         background-color: #d2e8ff !important;
       }
-      
+
       .ng-value-icon {
         padding: 1px 3px !important;
       }

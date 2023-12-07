@@ -21,7 +21,6 @@ export class TicketsService {
     query.pageIndex = PagingConstant.INDEX_ZERO;
     query.pageSize = PagingConstant.SIZE_ONE;
     query.match = match;
-    query.kickOffDate = null;
     query.requestId = requestDetail.requestId;
     query.issueTypeId = requestDetail.request.issueTypeId;
       

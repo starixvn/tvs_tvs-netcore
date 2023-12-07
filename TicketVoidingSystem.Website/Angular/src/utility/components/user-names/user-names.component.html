@@ -1,6 +1,6 @@
-<div class="no-gutters" [ngClass]="userNameComponentCss">
-    <div class="width-170 col-sm-1 col-form-label text-right pd-right-25">Username(s)</div>
-    <div [ngClass]="widthCss">
+<div class="no-gutters" [ngClass]="usernameComponentCss">
+    <div class="col-form-label">Username(s)</div>
+    <div class="col-12 col-sm-8" [ngClass]="inputUsernameCss" [ngStyle]="inputUsernameStyle">
         <div #usernames class="input-username" [ngClass]="{'point-event-none disabled-input': disabled}"
             (click)="focusUsername()" (mousedown)="$event.preventDefault()">
             <div *ngIf="groupUsername.items.length > 0">
@@ -13,12 +13,12 @@
                         <ng-container *ngIf="!item.isShowTooltip">
                             <span>{{item.value}}</span>
                         </ng-container>
-                        <span class="icon-delete" (click)="groupUsername.remove(item)">&nbsp;</span>
+                        <span class="icon-delete" (click)="deleteItem(item)">&nbsp;</span>
                     </div>
                 </div>
             </div>
             <input #input class="username" type="text" [(ngModel)]="username" (keydown)="onKey($event)"
-                (blur)="addItem(username)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
+                (blur)="addItem(username, false)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
                 (keydown.shift)="shiftKey=true" maxlength="30"/>
         </div>
         <span class="invalid-data"></span>
@@ -34,7 +34,7 @@
                 <span class="note note-moved-username">(*) Duplicated Username</span>
                 <span class="note note-existed-username">(*) Existed Username</span>
             </span>
-            
+
             <span class="red">Max: {{maxUsername}} Usernames</span>
         </div>
     </div>

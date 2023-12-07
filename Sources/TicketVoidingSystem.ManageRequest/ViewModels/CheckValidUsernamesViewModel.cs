@@ -6,6 +6,7 @@ public class CheckValidUsernamesViewModel
 {
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
     public CheckUsernamesModel Validation { get; set; }
+    public IEnumerable<AccountWinlostModel> AccountWinlostModels { get; set; }
 }
 
 public class CheckUsernamesModel
@@ -25,4 +26,13 @@ public class CheckUsernamesModel
     public int NumberOfTickets { get; set; }
 
     public string UnMarkTransIds { get; set; }
+}
+
+public class CheckUsernamesInDatabaseResult
+{
+    public CheckUsernamesModel ValidationResult { get; set; }
+    public TransInfoAddRequestModel TransInfoValidation { get; set; }
+    public string TransInfoJsonCompress { get; set; }
+    public IEnumerable<TicketCalculateWinLostAccount> TicketCalculateWinLostAccount { get; set; }
+    public IEnumerable<AccountWinlostModel> AccountWinlost { get; set; }
 }

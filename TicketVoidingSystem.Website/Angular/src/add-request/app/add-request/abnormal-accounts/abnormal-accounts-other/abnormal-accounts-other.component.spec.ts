@@ -4,9 +4,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts-other.component';
 
-describe('AbnormalAccountOtherComponent', () => { 
+describe('AbnormalAccountOtherComponent', () => {
   @NgModule({
-    declarations: [      
+    declarations: [
     ],
     imports: [
       NgbModule,

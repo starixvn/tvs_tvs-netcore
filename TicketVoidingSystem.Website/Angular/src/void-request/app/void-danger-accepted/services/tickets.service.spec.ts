@@ -92,7 +92,6 @@ describe('TicketsService', () => {
     const result = ticketsService.initTicketQuery(null, Helper.fakeRequestDetailViewModel);
 
     // Assert
-    expect(result.kickOffDate).toBeNull();
     expect(result.match).toBeNull();
   });
   

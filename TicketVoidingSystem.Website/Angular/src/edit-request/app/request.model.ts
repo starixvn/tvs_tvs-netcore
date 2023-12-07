@@ -1,3 +1,4 @@
+import { AbnormalAccountModel } from 'src/add-request/app/add-request/models/abnormal-account.model';
 import { EarlyKickOffModel } from 'src/add-request/app/add-request/models/event-eko.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { NotParticipateModel } from '../../add-request/app/add-request/models/event-not-participate.model';
@@ -81,4 +82,5 @@ export class RequestDetailViewModel {
   reducedOverModels?: ReducedOverModel[];
   notParticipateModels?: NotParticipateModel[];
   earlyKickOffModels?: EarlyKickOffModel[];
+  abnormalAccountModel?: AbnormalAccountModel;
 }

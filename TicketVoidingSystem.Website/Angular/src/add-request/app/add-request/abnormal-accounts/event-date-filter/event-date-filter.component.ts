@@ -1,10 +1,9 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 
@@ -17,6 +16,7 @@ export class EventDateFilterComponent implements OnInit {
   @Input() isDisabled: boolean;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() isEdit: boolean;
+  @Output() changeFilterEvent = new EventEmitter();
 
   fromDate: NgbDate;
   toDate: NgbDate;
@@ -26,8 +26,7 @@ export class EventDateFilterComponent implements OnInit {
   private readonly TO_DATE_CLASS = 'to-date';
 
   constructor(
-    private readonly element: ElementRef,
-    private readonly commonService: CommonService,
+    private readonly element: ElementRef
   ) {
     this.tooltip.element = this.element;
    }
@@ -68,5 +67,9 @@ export class EventDateFilterComponent implements OnInit {
 
     this.tooltip.display(this.TO_DATE_CLASS, LABELS.INVALID_TO_DATE);
     return false;
+  }
+
+  changeFilter(): void {
+    this.changeFilterEvent.emit();
   }
 }
