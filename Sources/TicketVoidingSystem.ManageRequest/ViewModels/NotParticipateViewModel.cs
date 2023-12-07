@@ -9,6 +9,6 @@ public class NotParticipateViewModel
     public int IssueTypeId { get; set; }
     public int SubIssueTypeId { get; set; }
     public int PlayerId { get; set; }
-    public string GroupBetTypeIds { get; set; }
+    public string BetTypeIds { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
 }

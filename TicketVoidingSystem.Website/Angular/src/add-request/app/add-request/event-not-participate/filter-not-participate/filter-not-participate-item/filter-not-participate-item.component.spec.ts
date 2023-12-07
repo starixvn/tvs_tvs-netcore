@@ -17,7 +17,8 @@ class Helper {
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 1,
-    groupBetTypeIds: ['1', '2']
+    betTypeIds: ['1', '2'],
+    betTypeMultipleSelection: null
   };
   static readonly fakePlayers: OddsInfo[] = [
     {
@@ -71,14 +72,14 @@ describe('FilterNotParticipateItemComponent', () => {
   });
 
   it('FilterNotParticipateItemComponent init should match snapshot', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null);
+    const component = new FilterNotParticipateItemComponent(null, null, null);
     component.model = Helper.fakeFilterNotParticipateModel;
 
     expect(component).toMatchSnapshot();
   });
 
   it('changeFilter should emit #changeFilterEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null);
+    const component = new FilterNotParticipateItemComponent(null, null, null);
     component.changeFilterEvent.emit = jest.fn();
     component.changeFilter();
 
@@ -88,7 +89,7 @@ describe('FilterNotParticipateItemComponent', () => {
   it('isValid should returen true', async () => {
     const validationService = new ValidationService();
     validationService.isAllFieldsHaveValue = jest.fn().mockReturnValue(true);
-    const component = new FilterNotParticipateItemComponent(null, validationService);
+    const component = new FilterNotParticipateItemComponent(null, validationService, null);
 
     const actual = component.isValid();
 
@@ -96,7 +97,7 @@ describe('FilterNotParticipateItemComponent', () => {
   });
 
   it('addBetTypeItem should emit #addItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null);
+    const component = new FilterNotParticipateItemComponent(null, null, null);
     component.isVoided = false;
     component.addItemEvent.emit = jest.fn();
     component.addBetTypeItem();
@@ -105,7 +106,7 @@ describe('FilterNotParticipateItemComponent', () => {
   });
 
   it('addBetTypeItem should not emit #addItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null);
+    const component = new FilterNotParticipateItemComponent(null, null, null);
     component.isVoided = true;
     component.addItemEvent.emit = jest.fn();
     component.addBetTypeItem();
@@ -114,7 +115,7 @@ describe('FilterNotParticipateItemComponent', () => {
   });
 
   it('removeBetTypeItem should emit #removeItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null);
+    const component = new FilterNotParticipateItemComponent(null, null, null);
     component.isVoided = false;
     component.removeItemEvent.emit = jest.fn();
     component.removeBetTypeItem(1);
@@ -123,7 +124,7 @@ describe('FilterNotParticipateItemComponent', () => {
   });
 
   it('removeBetTypeItem should not emit #removeItemEvent', async () => {
-    const component = new FilterNotParticipateItemComponent(null, null);
+    const component = new FilterNotParticipateItemComponent(null, null, null);
     component.isVoided = true;
     component.removeItemEvent.emit = jest.fn();
     component.removeBetTypeItem(1);

@@ -1037,7 +1037,7 @@ public class ObjectToXmlExtensionFacts
             {
                 MatchId = 1,
                 SubIssueTypeId = 1,
-                GroupBetTypeIds = "1",
+                BetTypeIds = "1",
                 LogInfoDetail = new LogInfoDetail
                 {
                     SingleCount = 1,

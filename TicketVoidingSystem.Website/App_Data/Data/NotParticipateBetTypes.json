@@ -1,0 +1,84 @@
+{
+  "NotParticipateBetTypes": [
+    {
+      "BetTypeId": 9652,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9653,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9658,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9659,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9670,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9671,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9674,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9675,
+      "ParentId": 1
+    },
+    {
+      "BetTypeId": 9654,
+      "ParentId": 2
+    },
+    {
+      "BetTypeId": 9655,
+      "ParentId": 2
+    },
+    {
+      "BetTypeId": 9660,
+      "ParentId": 2
+    },
+    {
+      "BetTypeId": 9661,
+      "ParentId": 2
+    },
+    {
+      "BetTypeId": 9650,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9651,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9651,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9656,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9657,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9668,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9669,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9672,
+      "ParentId": 3
+    }
+  ]
+}

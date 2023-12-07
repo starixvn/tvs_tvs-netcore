@@ -1,33 +1,22 @@
 <div class="d-flex filter-not-participate">
   <ng-select class="player-dropdown mr-2"
     [disabled]="isVoided"
-    [items]="originalPlayers"
+    [items]="distincedPlayers"
     bindLabel="playerName"
     bindValue="playerId"
     [(ngModel)]="model.playerId"
     [clearable]="false"
     placeholder="Select player"
-    (change)="changeFilter()">
+    (change)="changeFilter();updateCheckedPlayer($event)">
   </ng-select>
   <div class="filter-group-bet-type d-flex mr-2">
-    <ng-select class="group-bet-type-dropdown{{index}}" [items]="groupBetTypes" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
-      [clearable]="false" [(ngModel)]="model.groupBetTypeIds" bindValue="value" (change)="changeFilter()"
-      [disabled]="isVoided" groupBy="group" [selectableGroup]="true"
-      [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
-      <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
-      </ng-template>
-      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-        <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
-      </ng-template>
-      <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
-        <div class="ng-value">
-          <span class="ng-value-label">
-            {{items.length === groupBetTypes.length ? 'All' : items.length + ' selected'}}
-          </span>
-        </div>
-      </ng-template>
-    </ng-select>
+    <multiple-selection
+      class="multiple-selection bet-type-dropdown{{index}} mr-2"
+      [selectedItems]="model.betTypeIds"
+      [isDisabled]="isVoided"
+      [multipleSelect]="model.betTypeMultipleSelection"
+      (checkedItems)="changeFilter();updateCheckedBetTypes($event)">
+    </multiple-selection>
   </div>
   <div *ngIf="!(isFirst && isLast)"class="d-flex align-items-center mr-2">
     <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)" [ngClass]="{'cursor-not-allowed': isVoided}"></em>

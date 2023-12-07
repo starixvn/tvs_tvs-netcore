@@ -62,7 +62,7 @@ describe('ValidationService', () => {
     tooltip.display = jest.fn();
     const filterModel = new FilterNotParticipateModel();
     filterModel.playerId = 1;
-    filterModel.groupBetTypeIds = [];
+    filterModel.betTypeIds = [];
     const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
 
     expect(actual).toBeFalsy();
@@ -74,7 +74,7 @@ describe('ValidationService', () => {
     tooltip.display = jest.fn();
     const filterModel = new FilterNotParticipateModel();
     filterModel.playerId = 1;
-    filterModel.groupBetTypeIds = ['1'];
+    filterModel.betTypeIds = ['1'];
     const actual = service.isAllFieldsHaveValue(filterModel, 1, tooltip);
 
     expect(actual).toBeTruthy();

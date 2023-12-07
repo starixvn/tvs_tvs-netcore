@@ -12,7 +12,7 @@
           </label>
       </div>
       <div *ngIf="item.expanded">
-          <tree-view [items]="item.items"></tree-view>
+          <tree-view [items]="item.items" [isDisabled]="isDisabled"></tree-view>
       </div>
   </li>
 </ul>

@@ -14,7 +14,8 @@ FilterNotParticipateComponent {
   "filterService": null,
   "models": Array [
     Object {
-      "groupBetTypeIds": Array [],
+      "betTypeIds": Array [],
+      "betTypeMultipleSelection": null,
       "playerId": 0,
     },
   ],

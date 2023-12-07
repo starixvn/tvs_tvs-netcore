@@ -1,9 +1,9 @@
-import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { CommonService } from '../../../../../utility/services/common.service';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { NotParticipateBetTypeViewModel, Player } from '../models/not-participate-bet-type.model';
 import { FilterNotParticipateService } from './filter-not-participate.service';
 
 class Helper {
-  static readonly fakePlayers: OddsInfo[] = [
+  static readonly fakePlayers: Player[] = [
     {
       betChoice: '',
       betTypeId: 1,
@@ -11,9 +11,14 @@ class Helper {
       playerId: 1,
       playerName: '',
       playNamesChineseSimplified: '',
-      playNamesChineseTraditional: ''
+      playNamesChineseTraditional: '',
+      disabled: false
     }
   ];
+  static readonly fakeViewModel: NotParticipateBetTypeViewModel = {
+    notParticipatePlayers: Helper.fakePlayers,
+    notParticipateBetTypes: []
+  }
 }
 
 describe('FilterNotParticipateService', () => {
@@ -30,14 +35,14 @@ describe('FilterNotParticipateService', () => {
   });
 
   it('#getPlayers should return NotParticipateBetType', async () => {
-    const commonService = new CommonService(null);
-    commonService.GetOddsInfoSpecialBetTypes = jest.fn().mockReturnValue(Helper.fakePlayers);
-    const mockService = new FilterNotParticipateService(commonService);
+    const addRequestApiService = new AddRequestApiService(null);
+    addRequestApiService.getNotParticipateBetTypes = jest.fn().mockReturnValue(Helper.fakePlayers);
+    const mockService = new FilterNotParticipateService(addRequestApiService);
     [1, null].forEach(async x => {
-      const actual = await mockService.getPlayers(x);
+      const actual = await mockService.getNotParticipateBetTypes(x);
 
       expect(actual).toEqual(Helper.fakePlayers)
-      expect(commonService.GetOddsInfoSpecialBetTypes).toHaveBeenCalled();
+      expect(addRequestApiService.getNotParticipateBetTypes).toHaveBeenCalled();
     })
   });
 });

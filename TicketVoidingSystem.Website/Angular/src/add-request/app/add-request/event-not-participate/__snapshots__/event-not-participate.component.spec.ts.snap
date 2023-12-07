@@ -12,7 +12,7 @@ EventNotParticipateComponent {
   "logInfoService": null,
   "notParticipateModels": Array [
     Object {
-      "groupBetTypeIds": "1",
+      "betTypeIds": "1",
       "logInfoDetail": LogInfoDetail {},
       "matchId": 1,
       "playerId": 1,

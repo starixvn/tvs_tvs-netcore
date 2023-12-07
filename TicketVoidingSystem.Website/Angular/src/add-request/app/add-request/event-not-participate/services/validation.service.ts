@@ -33,7 +33,7 @@ export class ValidationService {
       return false;
     }
 
-    if (model.groupBetTypeIds.length === 0) {
+    if (model.betTypeIds.length === 0) {
       tooltip.display(`${this.GROUP_BET_TYPE_CLASS}${index}`, TEXT.REQUIRED_FIELD);
       return false;
     }

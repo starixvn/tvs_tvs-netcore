@@ -6,7 +6,7 @@ import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
-import { Player } from './models/player.model';
+import { NotParticipateBetTypeModel, Player } from './models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
 import { EventNotParticipateService } from './services/event-not-participate.service';
@@ -37,6 +37,7 @@ export class EventNotParticipateComponent implements OnInit {
   logInfoEvent = new LogInfoNotParticipate();
   primitivePropertyEvent = new PrimitivePropertyEvent();
   originalPlayers: Player[];
+  originalBetTypes: NotParticipateBetTypeModel[];
 
   constructor(
     private readonly validationService: ValidationService,
@@ -51,6 +52,9 @@ export class EventNotParticipateComponent implements OnInit {
     if (this.isEdit) {
       this.logInfoEvent = this.eventNotParticipateService.assignModelsToEvents(this.notParticipateModels);
       await this.updateModelWhenChangeMatchId();
+      this.logInfoEvent.filterNotParticipates.forEach(x => {
+        x.betTypeMultipleSelection = this.filterService.initDefaultBetTypeSelection();
+      });
       this.primitivePropertyEvent.isShowFilterArea = true;
       this.primitivePropertyEvent.isShowValidation = true;
     }
@@ -58,7 +62,9 @@ export class EventNotParticipateComponent implements OnInit {
 
   private async updateModelWhenChangeMatchId(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.originalPlayers = await this.filterService.getPlayers(this.logInfoEvent.matchId);
+    const viewModel = await this.filterService.getNotParticipateBetTypes(this.logInfoEvent.matchId);
+    this.originalPlayers = viewModel.notParticipatePlayers;
+    this.originalBetTypes = viewModel.notParticipateBetTypes;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -120,10 +126,10 @@ export class EventNotParticipateComponent implements OnInit {
 
   public resetFilterNotParticipate(): void {
     this.logInfoEvent.filterNotParticipates = [];
-    this.initDefaultFilterReducedItem();
+    this.initDefaultFilterNotParticipateItem();
   }
 
-  private initDefaultFilterReducedItem(): void {
+  private initDefaultFilterNotParticipateItem(): void {
     this.logInfoEvent.filterNotParticipates.push(this.filterService.initDefaultFilter());
   }
 }

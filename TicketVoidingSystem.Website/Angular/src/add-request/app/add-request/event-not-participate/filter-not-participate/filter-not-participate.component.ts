@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
-import { Player } from '../models/player.model';
+import { NotParticipateBetTypeModel, Player } from '../models/not-participate-bet-type.model';
 import { FilterNotParticipateService } from '../services/filter-not-participate.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class FilterNotParticipateComponent {
   @Input() matchId: number;
   @Input() isVoided: boolean;
   @Input() originalPlayers: Player[];
+  @Input() originalBetTypes: NotParticipateBetTypeModel[];
   @Output() changeFilterEvent = new EventEmitter();
   @ViewChildren('filterItem') filterItemComponents: QueryList<FilterNotParticipateComponent>;
 

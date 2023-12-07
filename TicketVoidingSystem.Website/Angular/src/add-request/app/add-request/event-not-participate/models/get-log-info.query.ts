@@ -1,6 +1,6 @@
 export class NotParticipateGetLogInfoQuery {
   matchId: number;
   subIssueTypeId: number;
-  groupBetTypeIds: string;
+  betTypeIds: string;
   playerId: number;
 }

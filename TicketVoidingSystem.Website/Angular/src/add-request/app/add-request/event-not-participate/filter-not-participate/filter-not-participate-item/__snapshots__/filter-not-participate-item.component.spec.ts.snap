@@ -29,7 +29,9 @@ FilterNotParticipateItemComponent {
     "observers": Array [],
     "thrownError": null,
   },
+  "distincedPlayers": Array [],
   "element": null,
+  "filterService": null,
   "groupBetTypes": Array [
     Object {
       "group": "All",
@@ -42,16 +44,17 @@ FilterNotParticipateItemComponent {
       "value": "2",
     },
     Object {
-      "group": "All",
+      "group": "All 2",
       "name": "FT",
       "value": "3",
     },
   ],
   "model": Object {
-    "groupBetTypeIds": Array [
+    "betTypeIds": Array [
       "1",
       "2",
     ],
+    "betTypeMultipleSelection": null,
     "playerId": 1,
   },
   "removeItemEvent": EventEmitter_ {

@@ -25,7 +25,7 @@ public static class AddRequestCommon
         services.AddTransient<OddsInfoValidationService, OddsInfoValidationServiceImp>();
         services.AddTransient<MatchInfoAddRequestService, MatchInfoAddRequestServiceImp>();
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
-
+        services.AddTransient<NotParticipateBetTypesService, NotParticipateBetTypesServiceImp>();
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }

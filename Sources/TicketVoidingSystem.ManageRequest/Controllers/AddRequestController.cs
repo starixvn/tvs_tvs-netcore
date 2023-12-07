@@ -63,6 +63,9 @@ public class AddRequestController : ControllerBase
     public async Task<IActionResult> GetReducedOverBetTypes(GetReducedOverBetTypesRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    public async Task<IActionResult> GetNotParticipateBetTypes(GetNotParticipateBetTypesRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
     public async Task<IActionResult> GetOperators(GetOperatorsRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]

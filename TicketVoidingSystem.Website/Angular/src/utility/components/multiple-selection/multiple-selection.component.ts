@@ -44,7 +44,10 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
   }
 
   private checkBySelectedItem(): void {
-    this.multipleSelect.items.forEach(x => x.checkBySelectedItem(this.selectedItems));
+    this.multipleSelect.items.forEach(x => {
+      x.checkBySelectedItem(this.selectedItems);
+      x.checkFromChilds();
+    });
   }
 
   getTitle() {
