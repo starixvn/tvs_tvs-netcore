@@ -66,7 +66,7 @@ public class TicketsViewModelServiceTests
         };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Single(model.SingleTickets);
@@ -98,7 +98,7 @@ public class TicketsViewModelServiceTests
         var uncheckedTransIds = new List<string> { "1" };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Equal(uncheckedTransIds.Count, model.UncheckedTransIds.Count);
@@ -134,7 +134,7 @@ public class TicketsViewModelServiceTests
         };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Equal("AB", model.LicenseesName);
@@ -166,7 +166,7 @@ public class TicketsViewModelServiceTests
         };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Equal("11", model.BetTypes);
@@ -216,7 +216,7 @@ public class TicketsViewModelServiceTests
         var ToDate = new DateTime(2022, 12, 4).ZoneManila();
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Equal(FromTime, model.FromTime);
@@ -265,7 +265,7 @@ public class TicketsViewModelServiceTests
         var MaxTime = new DateTime(2022, 12, 5).ZoneManila();
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Equal(MinTime, model.FromTime);
@@ -314,7 +314,7 @@ public class TicketsViewModelServiceTests
         };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Single(model.AllCancelCashOutTickets);
@@ -358,7 +358,7 @@ public class TicketsViewModelServiceTests
         };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 0, 0, permission);
+        service.UpdateViewModel(model, allTickets, 0, permission);
 
         // Assert
         Assert.Equal(2, model.Total);
@@ -367,12 +367,8 @@ public class TicketsViewModelServiceTests
         Assert.Equal(0, model.TotalCancelCashOut);
     }
 
-    [Theory]
-    [InlineData(6)] //Handicap
-    [InlineData(119)] //FirstHalfHandicap
-    [InlineData(120)] //OverUnder
-    [InlineData(121)] //FirstHalfOverUnder
-    public void UpdateViewModel_UpdateVariableForTemplateMessagesWrongOdds_ReturnTrue(int subIssueTypeId)
+    [Fact]
+    public void UpdateViewModel_UpdateVariableForTemplateMessagesWrongOdds_ReturnTrue()
     {
         // Arrange
         var allTickets = new List<GetTicketModel>
@@ -400,7 +396,7 @@ public class TicketsViewModelServiceTests
         };
 
         // Act
-        service.UpdateViewModel(model, allTickets, 2, subIssueTypeId, permission);
+        service.UpdateViewModel(model, allTickets, 2, permission);
 
         // Assert
         Assert.True(model.IsAllLiveTickets);
