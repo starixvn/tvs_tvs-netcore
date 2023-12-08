@@ -35,7 +35,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
         };
     }
 
-    private async Task<IEnumerable<OddsInfoViewModel>> GetPlayerHaveTickets(IEnumerable<NotParticipateBetTypesModel> notParticipateBetTypesHaveTicket, int matchId)
+    public async Task<IEnumerable<OddsInfoViewModel>> GetPlayerHaveTickets(IEnumerable<NotParticipateBetTypesModel> notParticipateBetTypesHaveTicket, int matchId)
     {
         var criteria = new GetOddsInfoCriteria
         {
@@ -46,7 +46,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
         return await dynamicRepository.FetchAsync<OddsInfoViewModel>(criteria);
     }
 
-    private async Task<IEnumerable<NotParticipateBetTypesModel>> GetNotParticipateBetTypesHavesTickets(IEnumerable<NotParticipateBetTypesModel> betTypes, int matchId)
+    public async Task<IEnumerable<NotParticipateBetTypesModel>> GetNotParticipateBetTypesHavesTickets(IEnumerable<NotParticipateBetTypesModel> betTypes, int matchId)
     {
         var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId);
         var results = betTypes

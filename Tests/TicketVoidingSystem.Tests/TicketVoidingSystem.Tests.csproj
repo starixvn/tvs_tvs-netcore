@@ -55,7 +55,6 @@
 
   <ItemGroup>
     <Folder Include="ManageRequest\Handlers\ManageRequest\RequestListExcel\" />
-    <Folder Include="ManageRequest\Services\AddRequest\AccountWinLostExcel\" />
     <Folder Include="TicketVoidingSystem\Web\" />
   </ItemGroup>
 

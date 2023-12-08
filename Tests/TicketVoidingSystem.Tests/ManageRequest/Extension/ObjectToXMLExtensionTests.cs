@@ -920,7 +920,7 @@ public class ObjectToXmlExtensionFacts
     {
         // Arrange
         var models = new List<NotParticipateViewModel> { new() };
-        const string expected = "<root><r MatchId='0' SubIssueTypeId='0' PlayerId='0' GroupBetTypeIds='' /></root>";
+        const string expected = "<root><r MatchId='0' SubIssueTypeId='0' PlayerId='0' BetTypeIds='' /></root>";
 
         // Act
         var actual = models.ToNotParticipateInfoXml();
@@ -1048,7 +1048,7 @@ public class ObjectToXmlExtensionFacts
             }
         };
 
-        const string expected = "<root><r MatchId='1' SubIssueTypeId='1' PlayerId='0' GroupBetTypeIds='1' SingleCount ='1' MainParlayCount='1' " +
+        const string expected = "<root><r MatchId='1' SubIssueTypeId='1' PlayerId='0' BetTypeIds='1' SingleCount ='1' MainParlayCount='1' " +
                                 "VoidToTime='2022-02-02 02:02:02.000' VoidFromTime='2022-02-02 02:02:02.000' /></root>";
 
         // Act
