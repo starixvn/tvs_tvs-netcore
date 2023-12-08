@@ -12,6 +12,7 @@
           </button>
         </div>
         <div class="modal-body">
+          <div *ngIf="model.isAutoVoid">The request will be voided immediately.</div>
           <ng-container *ngIf="model.isHasWarningTicketsExistedInRequest">
             <div>There are some tickets ({{model.numberOfTicketsExistedInRequest}}) that existed in other Requests.</div>
           </ng-container>

@@ -73,6 +73,7 @@ export class SaveRequestService {
 
   private async checkIfRequestHasWarning(args: SaveRequestArg, validation: ValidationBusinessRuleOutput): Promise<boolean> {
     if (!args.filter.isVoided) {
+      args.confirmAbnormalAccount.isAutoVoid = this.validationService.isAutoVoidAction(args.filter.action);
       args.confirmAbnormalAccount.isHasWarningTicketsExistedInRequest = validation.confirmAbnormalAccountModel.numberOfTicketsExistedInRequest > 0;
       args.confirmAbnormalAccount.numberOfTicketsExistedInRequest = validation.confirmAbnormalAccountModel.numberOfTicketsExistedInRequest;
       args.confirmAbnormalAccount.isHasWarningEditTakeNoteRequest
@@ -81,7 +82,8 @@ export class SaveRequestService {
     args.confirmAbnormalAccount.isEditingByAnotherUser =
       this.validationService.isEditingByAnotherUser(args.isEdit, Number(document.getElementById('body').getAttribute('user-id')), args.userId);
 
-    return args.confirmAbnormalAccount.isHasWarningTicketsExistedInRequest
+    return args.confirmAbnormalAccount.isAutoVoid
+      || args.confirmAbnormalAccount.isHasWarningTicketsExistedInRequest
       || args.confirmAbnormalAccount.isHasWarningEditTakeNoteRequest
       || args.confirmAbnormalAccount.isEditingByAnotherUser;
   }
