@@ -108,7 +108,7 @@ public class AfterVoidServiceImp : AfterVoidService
             ReasonSC = query.ReasonSc,
             IssueTypeId = 0,
             SubIssueTypeId = 0,
-            IsSendMessageToAdminSite = false
+            IsSendMessageToAdminSite = true
         };
         await sendMessageByPlatformService.Execute(param);
     }

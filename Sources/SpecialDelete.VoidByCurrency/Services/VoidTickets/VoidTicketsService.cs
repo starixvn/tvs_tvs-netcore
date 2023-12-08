@@ -81,7 +81,7 @@ public class VoidTicketsServiceImp : VoidTicketsService
             ReasonSC = query.ReasonSC,
             IssueTypeId = 0,
             SubIssueTypeId = 0,
-            IsSendMessageToAdminSite = false
+            IsSendMessageToAdminSite = true
         };
 
         await sendMessageByPlatformService.Execute(param);

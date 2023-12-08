@@ -34,7 +34,7 @@ public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
         var specialMessageId = await SendMessageForSpecialPlatform(specialPlatformTickets, param);
 
         var reasonId = await sendMessageService.InsertReason(param.Reason, param.ReasonSC);
-        await sendMessageService.InsertVoidedTransaction(normalTickets, normalMessageId, reasonId, param.IssueTypeId, param.SubIssueTypeId);
+        await InsertVoidedTransactionForNormalTickets(normalTickets, normalMessageId, reasonId, param);
         await InsertVoidedTransactionForSpecialTickets(specialPlatformTickets, specialMessageId, reasonId, param);
 
         if (param.IsSendMessageToAdminSite)
@@ -45,9 +45,14 @@ public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
 
     private async Task<int> SendMessageForNormalPlatform(IEnumerable<TicketEmailModel> normalTickets, SendMessageTargetParam param)
     {
-        var normalMessageId = await sendMessageService.InsertMessage(param.Message, param.MatchId, param.Match?.LeagueGroupId, param.IsMessageContentAbnormal);
-        await sendMessageService.SendMessage(normalTickets, normalMessageId, param.IssueTypeId, param.Message.CreatorId);
-        return normalMessageId;
+        if (normalTickets.Any())
+        {
+            var normalMessageId = await sendMessageService.InsertMessage(param.Message, param.MatchId, param.Match?.LeagueGroupId, param.IsMessageContentAbnormal);
+            await sendMessageService.SendMessage(normalTickets, normalMessageId, param.IssueTypeId, param.Message.CreatorId);
+            return normalMessageId;
+        }
+
+        return 0;
     }
 
     private async Task<int> SendMessageForSpecialPlatform(IEnumerable<TicketEmailModel> specialPlatformTickets, SendMessageTargetParam param)
@@ -61,6 +66,14 @@ public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
         }
 
         return 0;
+    }
+
+    private async Task InsertVoidedTransactionForNormalTickets(IEnumerable<TicketEmailModel> normalTickets, int normalMessageId, int reasonId, SendMessageTargetParam param)
+    {
+        if (normalTickets.Any() && normalMessageId > 0)
+        {
+            await sendMessageService.InsertVoidedTransaction(normalTickets, normalMessageId, reasonId, param.IssueTypeId, param.SubIssueTypeId);
+        }
     }
 
     private async Task InsertVoidedTransactionForSpecialTickets(IEnumerable<TicketEmailModel> specialPlatformTickets, int specialMessageId, int reasonId, SendMessageTargetParam param)
