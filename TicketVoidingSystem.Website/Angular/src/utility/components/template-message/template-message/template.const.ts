@@ -156,7 +156,7 @@ export class TemplateContentConst {
   };
 
   static readonly AIO_MESSAGE_1X2: TemplateContent = {
-    msgEnglish: ' (Including Affected 1X2 products)',
+    msgEnglish: ' (Including Affected 1X2 product)',
     msgChineseTraditional: ' (包括有被影響獨贏盤产品)',
     msgChineseSimplified: ' (包括有被影响独赢盘产品)',
     msgChineseNewSimplified: ' (包括有被影响独赢盘产品)'
@@ -171,7 +171,7 @@ export class TemplateContentConst {
 
   static readonly AIO_MESSAGE_1X2_AIO: TemplateContent = {
     msgEnglish: ' (Including Affected More Bet Types and 1X2 products)',
-    msgChineseTraditional: ' (包括有被影響更多投注類型和獨贏盤产品)	',
+    msgChineseTraditional: ' (包括有被影響更多投注類型和獨贏盤产品)',
     msgChineseSimplified: ' (包括有被影响更多投注类型和独赢盘产品)',
     msgChineseNewSimplified: ' (包括有被影响更多投注类型和独赢盘产品)'
   };
