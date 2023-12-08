@@ -126,4 +126,9 @@ export class ValidationService {
   public isAutoVoidWithPolicy(actionId: string): boolean {
     return actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
   }
+
+  public isAutoVoidAction(actionId: string): boolean {
+    return actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString()
+    || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+  }
 }

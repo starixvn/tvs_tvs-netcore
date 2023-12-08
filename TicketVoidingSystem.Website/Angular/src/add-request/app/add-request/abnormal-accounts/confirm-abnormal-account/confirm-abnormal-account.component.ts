@@ -10,7 +10,7 @@ export class ConfirmAbnormalAccountComponent {
   @Input() model = new ConfirmAbnormalAccountModel();
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter();
-  
+
   closeClick() {
     this.model.isOpenDialog = false;
     this.close.emit();
