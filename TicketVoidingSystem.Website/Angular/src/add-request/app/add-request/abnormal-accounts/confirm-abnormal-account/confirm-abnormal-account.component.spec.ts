@@ -8,8 +8,9 @@ import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account.model';
 class Helper {
   static readonly fakeConfirmAbnormalAccountModel: ConfirmAbnormalAccountModel = {
     isOpenDialog: true,
+    isAutoVoid: false,
     isHasWarningTicketsExistedInRequest: true,
-    isHasWarningEditTakeNoteRequest: false,    
+    isHasWarningEditTakeNoteRequest: false,
     isEditingByAnotherUser: false,
     requestId: 1,
     requestedBy: '',
@@ -31,7 +32,7 @@ describe('ConfirmAbnormalAccountComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(ConfirmAbnormalAccountComponent, AppModuleTest).dontMock(NgbModule);
   });
-  
+
   it('ConfirmAbnormalAccountComponent should init match snapshot', async () => {
     const { fixture } = await shallow.render({
       bind: {

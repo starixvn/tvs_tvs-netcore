@@ -35,6 +35,7 @@ class Helper {
   };
   static readonly fakeConfirmAbnormalAccountModel: ConfirmAbnormalAccountModel = {
     isOpenDialog: true,
+    isAutoVoid: false,
     isHasWarningEditTakeNoteRequest: false,
     isEditingByAnotherUser: false,
     requestId: 0,
