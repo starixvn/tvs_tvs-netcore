@@ -13,15 +13,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;8601;8604;8618;8632;8669</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Angular-Old\**" />
-    <Compile Remove="Angular\**" />
-    <Content Remove="Angular-Old\**" />
-    <Content Remove="Angular\**" />
 
-  </ItemGroup>
-
-  <ItemGroup>
+    <ItemGroup>
     <None Include="App_Data\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -31,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Angular-Old\**" />
+    <Compile Remove="Angular\**" />
+    <Content Remove="Angular-Old\**" />
+    <Content Remove="Angular\**" />
     <EmbeddedResource Remove="Angular-Old\**" />
     <EmbeddedResource Remove="Angular\**" />
     <None Remove="Angular-Old\**" />
@@ -69,6 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sources\SpecialDelete.CashOutTransaction\SpecialDelete.CashOutTransaction.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.NumberGame\SpecialDelete.NumberGame.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />

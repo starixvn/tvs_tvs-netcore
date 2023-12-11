@@ -53,4 +53,25 @@ public class SportBookController : Controller
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/VoidByBetId/Index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.CancelCashOutAction)]
+    public IActionResult CancelCashOut()
+    {
+        ViewBag.UserName = sessionService.UserName;
+        ViewBag.IsPageUsingJquery = true;
+        return View("~/Views/CancelCashOut/Index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverCashOutTransaction)]
+    public IActionResult RecoverCashOut()
+    {
+        ViewBag.IsPageUsingJquery = true;
+        return View("~/Views/RecoverCashOut/Index.cshtml");
+    }
 }

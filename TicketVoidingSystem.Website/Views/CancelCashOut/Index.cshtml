@@ -1,0 +1,34 @@
+﻿@using TicketVoidingSystem.Website.ViewComponents
+@{
+    Layout = "~/Views/Shared/_LayoutOld.cshtml";
+    ViewBag.Title = "Cancel Cash Out Action";
+}
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/old-page/scripts/_libs/bootstrap-datepicker/bootstrap-datepicker.css" />
+    <link rel="stylesheet" type="text/css" href="~/old-page/bundle/cancel-cash-out-style.css" />
+}
+@section Headline {
+    <div class="title">
+        Home / Cancel Cash Out Action
+    </div>
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "void-cash-out" }))
+{
+    @await Component.InvokeAsync(nameof(CancelCashOutFilter))
+    <div id="report-content">
+        <div class="display-none content-grid">
+            <div class="freegrid" id="ticketInfo">
+            </div>
+        </div>
+        @await Html.PartialAsync("_Message", false)
+        @await Html.PartialAsync("_ConfirmDeleteNew")
+    </div>
+    <div id="show-error-move-bet">
+    </div>
+    <div id="show-message" title="Void Bet Result" class="display-none"></div>
+    <div id="show-message-have-button" title="WARNING" class="display-none"></div>
+    <input type="hidden" id="max-ticket-export" value="100000" />
+}
+@section Scripts {
+    <script src="~/old-page/bundle/cancel-cash-out.js"></script>
+}

@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutOld.cshtml";
+    ViewBag.Title = "Recover Cash Out Transaction";
+}
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/old-page/bundle/recover-cash-out-style.css" />
+}
+@section Headline {
+    <div class="title">
+        Home / Recover Cash Out Transaction
+    </div>
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "recover-cash-out" }))
+{
+    @await Html.PartialAsync("~/Views/RecoverCashOut/_Filter.cshtml")
+    <div id="report-content">
+        <div class="display-none content-grid">
+            <div class="freegrid" id="ticketInfo">
+            </div>
+        </div>
+        <div class="clear-both">
+        </div>
+        <div class="row">
+            <input type="button" value="Recover" class="submitRecover" id="recover" style="display: none" />
+        </div>
+    </div>
+<div id="show-error-move-bet">
+</div>
+<div id="show-message" title="Recover Bet Result" class="display-none">
+</div>
+}
+@section Scripts {
+    <script src="~/old-page/bundle/recover-cash-out.js"></script>
+}

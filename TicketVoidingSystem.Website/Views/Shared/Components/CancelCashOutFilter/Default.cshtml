@@ -1,0 +1,130 @@
+﻿@model SpecialDelete.CashOutTransaction.CancelCashOut.ViewModels.IndexViewModel
+
+<div class="filter-bar">
+    @if (Model.IsShowRemark)
+    {
+        <div class="note-filter-bar">
+            <em class="icon-warning"></em>
+            @Model.Remark
+        </div>
+    }
+    <div class="toggle-filter-bar float-right " title="Collapse filter">
+        <em class="icon-scroll-down" id="scroll-icon"></em>
+    </div>
+    <div class="clear-fix">
+    </div>
+    <div class="filter-bar-inner">
+        <div class="filter-row">
+            <div class="filter-cell">
+                <div class="lbl-field">
+                    <input type="radio" class="radio-bettrade" name="radio-bettrade" id="radio-by-match"
+                           value="0" checked="checked" />
+                </div>
+            </div>
+            <div class="filter-cell">
+                <div class="lbl-field span2">
+                    <label for="radio-by-match">
+                        MatchID
+                    </label>
+                </div>
+                <div class="edit-field span3">
+                    <input type="text" id="txtMatchId" maxlength="10" value="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-cell">
+                <div class="lbl-field">
+                    <label class="bold">Time (GMT +8):</label>
+                </div>
+            </div>
+
+            <div class="filter-cell">
+                <div class="time-type">
+                    <label class="trans-time bold">
+                        <input type="radio" class="radio-time-type" name="radio-time-type" id="transTime" value="0" checked="checked" />
+                        Trans Time
+                    </label>
+
+                    <label class="check-time bold">
+                        <input type="radio" class="radio-time-type" name="radio-time-type" id="acceptTime" value="1" />
+                        Accept Time
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-cell">
+                <div class="lbl-field span1" id="label-from-date-time">
+                    <label>From</label>
+                </div>
+                <div class="edit-field span4">
+                    <input id="fromTransDate" type="text">
+                    <button type="button" class="from-transdate-icon btn-transdate"><span class="datepicker-icon"></span></button>
+                </div>
+            </div>
+
+            <div class="filter-cell">
+                <div class="edit-field">
+                    <input id="fromTime" class="width-130" type="text" placeholder="HH:mm:ss.SSS AM/PM" />
+                </div>
+            </div>
+
+            <div class="filter-cell">
+                <div class="lbl-field span1">
+                    <label>To</label>
+                </div>
+                <div class="edit-field span4">
+                    <input id="toTransDate" type="text">
+                    <button type="button" class="to-transdate-icon btn-transdate"><span class="datepicker-icon"></span></button>
+                </div>
+            </div>
+            <div class="filter-cell">
+                <div class="edit-field">
+                    <input id="toTime" class="width-130" type="text" placeholder="HH:mm:ss.SSS AM/PM" />
+                </div>
+            </div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-cell">
+                <div class="lbl-field">
+                    <input type="radio" class="radio-bettrade" name="radio-bettrade" id="radio-by-bet"
+                           value="1" />
+                </div>
+            </div>
+            <div class="filter-cell">
+                <div class="span2">
+                    <label for="radio-by-bet">By BetID(s)</label>
+                </div>
+            </div>
+            <div class="filter-cell">
+                <div class="edit-field span8" style="width: 600px;">
+                    <div class="span6 offset number-group-disabled" id="number-group" style="width: 600px;">
+                        <input id="txtTransId" class="text-number" />
+                    </div>
+                    <span></span>
+                    <div class="float-left">
+                        <p id="errorBetId" style="margin-top: -22px;">
+                        </p>
+                        <br />
+                        Ex: 1234567890, 1223457890, 2234567890
+                    </div>
+                    <div class="float-left">
+                        <p id="error-move-bet" style="margin-top: -22px; margin-left: 10px;">
+                        </p>
+                    </div>
+                    <div class="float-right em">
+                        <p style="margin-top: 5px;">Max: 100 bets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-cell">
+            </div>
+        </div>
+        <div class="filter-row">
+            <input type="button" value="Search" class="submit" id="btnSearch" />
+        </div>
+    </div>
+</div>

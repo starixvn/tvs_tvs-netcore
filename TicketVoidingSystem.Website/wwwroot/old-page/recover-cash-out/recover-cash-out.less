@@ -1,0 +1,164 @@
+﻿@import "../content/base/styles.less";
+
+.filter-bar {
+    .bettype-wrp {
+        background-color: lighten(@filterBarBackground, 10%);
+        .box-shadow(inset 0 0 3px darken(@filterBarBackground, 50%));
+        margin-bottom: 10px;
+        padding: 5px 10px;
+
+        .tbl-bettype {
+            th, td {
+                padding: 3px 50px 3px 0;
+            }
+
+            th {
+                border-bottom: 1px solid darken(@filterBarBackground, 10%);
+            }
+        }
+    }
+
+    #fromRefno,
+    #toRefno {
+        width: 150px;
+    }
+}
+
+#radio-by-bet, #radio-by-match {
+    margin-bottom: 4px;
+}
+
+.filter-bar-inner {
+    padding: 10px !important;
+    float: left;
+}
+
+.value-number-move-bet {
+    width: 75px;
+    padding-left: 2px;
+    color: #ee8a20;
+}
+
+.formError .formErrorMoveBetContent {
+    -moz-border-radius: 6px;
+    -moz-box-shadow: 0 0 6px #000;
+    -o-border-radius: 6px;
+    -o-box-shadow: 0 0 6px #000;
+    -webkit-border-radius: 6px;
+    -webkit-box-shadow: 0 0 6px #000;
+    background: #ee8a20;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 0 6px #000;
+    color: #fff;
+    font-size: 11px;
+    min-width: 120px;
+    padding: 4px 10px 4px 10px;
+    position: relative;
+    width: 100%;
+}
+
+.formError .formErrorMoveBetArrow {
+    z-index: 996;
+}
+
+.formError .formErrorMoveBetArrow {
+    margin: -2px 0 0 13px;
+    position: relative;
+    width: 15px;
+}
+
+body[dir='rtl'] .formError .formErrorMoveBetArrow,
+body.rtl .formError .formErrorMoveBetArrow {
+    margin: -2px 13px 0 0;
+}
+
+.formError .formErrorMoveBetArrowBottom {
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    margin: 0px 0 0 12px;
+    top: 2px;
+}
+
+.formError .formErrorMoveBetArrow div {
+    -moz-box-shadow: 0 2px 3px #444;
+    -o-box-shadow: 0 2px 3px #444;
+    -webkit-box-shadow: 0 2px 3px #444;
+    background: #ee8a20;
+    border-left: 2px solid #ddd;
+    border-right: 2px solid #ddd;
+    box-shadow: 0 2px 3px #444;
+    display: block;
+    font-size: 0px;
+    font-size: 0;
+    height: 1px;
+    line-height: 0;
+    margin: 0 auto;
+}
+
+.formError .formErrorMoveBetArrowBottom div {
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.greenPopup .formErrorMoveBetArrow div {
+    background: #33be40;
+}
+
+.blackPopup .formErrorMoveBetArrow div {
+    background: #393939;
+    color: #FFF;
+}
+
+.formError .formErrorMoveBetArrow .line10 {
+    border: none;
+    width: 15px;
+}
+
+.formError .formErrorMoveBetArrow .line9 {
+    border: none;
+    width: 13px;
+}
+
+.formError .formErrorMoveBetArrow .line8 {
+    width: 11px;
+}
+
+.formError .formErrorMoveBetArrow .line7 {
+    width: 9px;
+}
+
+.formError .formErrorMoveBetArrow .line6 {
+    width: 7px;
+}
+
+.formError .formErrorMoveBetArrow .line5 {
+    width: 5px;
+}
+
+.formError .formErrorMoveBetArrow .line4 {
+    width: 3px;
+}
+
+.formError .formErrorMoveBetArrow .line3 {
+    border-bottom: 0 solid #ddd;
+    border-left: 2px solid #ddd;
+    border-right: 2px solid #ddd;
+    width: 1px;
+}
+
+.formError .formErrorMoveBetArrow .line2 {
+    background: #ddd;
+    border: none;
+    width: 3px;
+}
+
+.formError .formErrorMoveBetArrow .line1 {
+    background: #ddd;
+    border: none;
+    width: 1px;
+}
