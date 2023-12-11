@@ -7,6 +7,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
+using TicketVoidingSystem.Services.SendMessage;
 
 namespace TicketVoidingSystem.Services.SendEmail;
 
@@ -20,15 +21,15 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     private readonly VoidEmailContentService voidEmailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
-    private readonly LeagueNameMessageService leagueNameMessageService;
+    private readonly SpecialPlatformService specialPlatformService;
 
     public EmailLicenseeServiceImp(VoidEmailContentService voidEmailContentService, FanexMailApiService fanexMailApiService,
-        MailResultService mailResultService, LeagueNameMessageService leagueNameMessageService)
+        MailResultService mailResultService, SpecialPlatformService specialPlatformService)
     {
         this.voidEmailContentService = voidEmailContentService;
         this.fanexMailApiService = fanexMailApiService;
         this.mailResultService = mailResultService;
-        this.leagueNameMessageService = leagueNameMessageService;
+        this.specialPlatformService = specialPlatformService;
     }
 
     public async Task<IEnumerable<Result>> Send(MailVoidViewModel mailLicenseesModel, IEnumerable<SiteEmail> sites, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
@@ -53,7 +54,11 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
     {
         var modelClone = mailLicenseesModel.DeepClone();
         modelClone.TemplatePath = TemplateEmailPath.VoidBetChinese;
-        leagueNameMessageService.RemoveSabaOfLeagueName(modelClone.Match, modelClone.Message, site);
+        if (specialPlatformService.IsSiteSpecialPlatform(modelClone.Match, site))
+        {
+            modelClone.Message = specialPlatformService.RemoveSabaInMessageContent(modelClone.Match, modelClone.Message);
+            modelClone.Match = specialPlatformService.RemoveSabaInMatchInfo(modelClone.Match);
+        }
 
         if (!string.IsNullOrEmpty(site.ToList))
         {

@@ -82,9 +82,8 @@ public static class TicketVoidingSystemService
         services.AddSingleton<MessageItemService, MessageItemServiceImp>();
         services.AddScoped<SendMessageService, SendMessageServiceImp>();
         services.AddScoped<SendMessageByPlatformService, SendMessageByPlatformServiceImp>();
-        services.AddScoped<SpecialPlatformService, SpecialPlatformServiceImp>();
-        
-            
+        services.AddSingleton<SpecialPlatformService, SpecialPlatformServiceImp>();
+
         // SignalR
         services.AddSingleton<NotificationSignalRService, NotificationSignalRServiceImp>();
     }

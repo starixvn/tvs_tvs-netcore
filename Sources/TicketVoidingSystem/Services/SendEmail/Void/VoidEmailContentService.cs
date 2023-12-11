@@ -39,7 +39,7 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
     {
         if (tickets.Valid(site))
         {
-            var transformGroupTickets = await AssignGroupTickets(mailVoidViewModel, tickets, site, isFromAfterVoidService);
+            var transformGroupTickets = await AssignGroupTickets(mailVoidViewModel, tickets, isFromAfterVoidService);
             var voidType = IsLikelyAbnormalBet(mailVoidViewModel.IssueTypeId)
                            || IsAbnormalAccount(mailVoidViewModel.IssueTypeId)
                            || mailVoidViewModel.IsFilterByUserName
@@ -56,7 +56,7 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
         return new MailRecord();
     }
 
-    private async Task<IList<Group<TicketEmailViewModel>>> AssignGroupTickets(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailModel> tickets, SiteEmail site, bool isFromAfterVoidService)
+    private async Task<IList<Group<TicketEmailViewModel>>> AssignGroupTickets(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var groups = new List<Group<TicketEmailViewModel>>();
         if (mailVoidViewModel.IssueTypeId.IsDangerAccepted() ||
@@ -68,19 +68,19 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
 
             if (voidTickets.Any())
             {
-                await AddTicketToGroup(groups, voidTickets, mailVoidViewModel.Match, site,
+                await AddTicketToGroup(groups, voidTickets, mailVoidViewModel.Match,
                     isFromAfterVoidService, StringResource.ListOfVoidedTickets);
             }
 
             if (cancelCashOutTickets.Any())
             {
-                await AddTicketToGroup(groups, cancelCashOutTickets, mailVoidViewModel.Match, site,
+                await AddTicketToGroup(groups, cancelCashOutTickets, mailVoidViewModel.Match,
                     isFromAfterVoidService, StringResource.ListOfCancelledCashOutTickets);
             }
         }
         else
         {
-            await AddTicketToGroup(groups, tickets, mailVoidViewModel.Match, site,
+            await AddTicketToGroup(groups, tickets, mailVoidViewModel.Match,
                 isFromAfterVoidService, StringResource.ListOfVoidedTickets);
         }
 
@@ -88,19 +88,19 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
     }
 
     private async Task AddTicketToGroup(ICollection<Group<TicketEmailViewModel>> groups,
-        IEnumerable<TicketEmailModel> tickets, Match match, SiteEmail site, bool isFromAfterVoidService,
+        IEnumerable<TicketEmailModel> tickets, Match match, bool isFromAfterVoidService,
         string groupName)
     {
         var groupVoidTicket = new Group<TicketEmailViewModel>
         {
-            Tickets = await AssignTickets(tickets, match, site, isFromAfterVoidService),
+            Tickets = await AssignTickets(tickets, match, isFromAfterVoidService),
             Name = groupName
         };
 
         groups.Add(groupVoidTicket);
     }
 
-    private async Task<IEnumerable<TicketEmailViewModel>> AssignTickets(IEnumerable<TicketEmailModel> tickets, Match match, SiteEmail site, bool isFromAfterVoidService)
+    private async Task<IEnumerable<TicketEmailViewModel>> AssignTickets(IEnumerable<TicketEmailModel> tickets, Match match, bool isFromAfterVoidService)
     {
         var ticketsViewModel = new List<TicketEmailViewModel>();
         var index = 1;
@@ -108,7 +108,7 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
         foreach (var item in tickets)
         {
             item.OperatorID = operators.FirstOrDefault(x => x.AgentId == item.Recommend)?.OperatorID;
-            var ticket = ticketService.GetTicket(item, match, site, isFromAfterVoidService);
+            var ticket = ticketService.GetTicket(item, match, isFromAfterVoidService);
             ticket.No = index++;
             ticketsViewModel.Add(ticket);
         }
