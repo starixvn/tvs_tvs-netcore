@@ -81,9 +81,9 @@ describe('FilterNotParticipateComponent', () => {
       }
     });
 
-    const filterItemComponent = new FilterNotParticipateComponent(null);
+    const filterItemComponent = new FilterNotParticipateItemComponent(null, null, null);
     filterItemComponent.isValid = jest.fn().mockReturnValue(true);
-    const filterItemComponents = new QueryList<FilterNotParticipateComponent>();
+    const filterItemComponents = new QueryList<FilterNotParticipateItemComponent>();
     filterItemComponents.reset([...filterItemComponents.toArray(), filterItemComponent]);
     instance.filterItemComponents = filterItemComponents;
     const actual = instance.isValid();

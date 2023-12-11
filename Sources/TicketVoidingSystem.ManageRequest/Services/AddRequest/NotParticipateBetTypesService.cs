@@ -1,4 +1,5 @@
 ﻿using Fanex.Data.Repository;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
@@ -71,9 +72,9 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
     {
         return parentId switch
         {
-            1 => "1 Inns",
-            2 => "2 Inns",
-            3 => "FT",
+            NumberConstant.One => "1 Inns",
+            NumberConstant.Two => "2 Inns",
+            NumberConstant.Three => "FT",
             _ => string.Empty
         };
     }
