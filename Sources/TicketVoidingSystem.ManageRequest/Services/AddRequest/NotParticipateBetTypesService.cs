@@ -49,14 +49,19 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
     public async Task<IEnumerable<NotParticipateBetTypesModel>> GetNotParticipateBetTypesHavesTickets(IEnumerable<NotParticipateBetTypesModel> betTypes, int matchId)
     {
         var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId);
-        var results = betTypes
-            .Where(betType => allBetTypesOfMatch.Any(x => int.Parse(x.Id) == betType.BetTypeId))
-            .Select(betType =>
+        var results = allBetTypesOfMatch
+            .Where(x => betTypes.Any(t => t.BetTypeId == int.Parse(x.Id)))
+            .Select(x =>
             {
-                var x = allBetTypesOfMatch.FirstOrDefault(y => int.Parse(y.Id) == betType.BetTypeId);
-                betType.BetTypeName = x?.Name;
-                betType.ParentName = GetGroupName(betType.ParentId);
-                return betType;
+                var betTypeModel = betTypes.First(y => y.BetTypeId == int.Parse(x.Id));
+                return new NotParticipateBetTypesModel
+                {
+                    BetTypeId = int.Parse(x.Id),
+                    BetTypeName = x.Name,
+                    PlayerId = x.PlayerId,
+                    ParentId = betTypeModel.ParentId,
+                    ParentName = GetGroupName(betTypeModel.ParentId),
+                };
             });
 
         return results;

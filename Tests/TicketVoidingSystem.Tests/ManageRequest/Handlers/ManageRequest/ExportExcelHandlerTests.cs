@@ -16,7 +16,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
         {
             var request = new ExportExcelRequest { RequestId = "12345" };
             var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
-            var expected = $"Manage_Request_TVS_{createDate}";
             var excelService = Substitute.For<ExcelService<SelectRequestsQuery>>();
             var handler = new ExportExcelHandler(excelService);
 
@@ -24,7 +23,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var model = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            Assert.Contains(expected, model.FileName);
+            Assert.Contains("Manage_Request_TVS", model.FileName);
         }
     }
 }

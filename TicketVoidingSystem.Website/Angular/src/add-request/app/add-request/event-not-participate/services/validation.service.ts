@@ -13,7 +13,7 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
 })
 export class ValidationService {
   private readonly PLAYER_CLASS = 'player-dropdown';
-  private readonly GROUP_BET_TYPE_CLASS = 'group-bet-type-dropdown';
+  private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';
 
   public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, filterNotParticipateComponent: FilterNotParticipateComponent): boolean {
     if (!leagueEventComponent.isMatchIdValid()) {

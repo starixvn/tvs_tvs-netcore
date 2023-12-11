@@ -40,6 +40,6 @@ public class ReducedOverBetTypesServiceImp : ReducedOverBetTypesService
                 return betType;
             });
 
-        return results;
+        return results.DistinctBy(x => x.BetTypeId);
     }
 }

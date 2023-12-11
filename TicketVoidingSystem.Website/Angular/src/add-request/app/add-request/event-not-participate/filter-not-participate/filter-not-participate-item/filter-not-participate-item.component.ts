@@ -54,21 +54,25 @@ export class FilterNotParticipateItemComponent {
   }
 
   ngOnInit(): void {
-    this.distincedPlayers = _.uniqBy(this.originalPlayers, 'playerId');
+    this.renderPlayer();
     this.renderBetTypesByPlayer(this.model.playerId);
   }
 
   public updateCheckedPlayer(selectedPlayer: Player){
     if (selectedPlayer) {
       this.changeBetTypeEvent.emit();
+      this.resetBetTypesValue();
       this.renderBetTypesByPlayer(selectedPlayer.playerId);
-      this.resetBetTypesValue(selectedPlayer.playerId);
     }
   }
 
+  private renderPlayer(): void {
+    const playersHaveTicket = this.originalPlayers.filter(x => this.originalBetTypes.some(y => y.playerId === x.playerId));
+    this.distincedPlayers = _.uniqBy(playersHaveTicket, 'playerId');
+  }
+
   private renderBetTypesByPlayer(playerId: number): void {
-    const betTypeIdsOfSelectedPlayers = this.originalPlayers.filter(x => x.playerId === playerId).map(x => x.betTypeId);
-    const betTypesModelSelectedPlayers = this.originalBetTypes.filter(x => betTypeIdsOfSelectedPlayers.includes(x.betTypeId));
+    const betTypesModelSelectedPlayers = this.originalBetTypes.filter(x => x.playerId === playerId);
     this.model.betTypeMultipleSelection.items = this.filterService.renderBetTypes(betTypesModelSelectedPlayers);
     this.model.betTypeMultipleSelection.items.forEach(x => x.checkBySelectedItem(this.model.betTypeIds));
     this.model.betTypeMultipleSelection.isCheckAll = this.model.betTypeMultipleSelection.items.every(x => x.allChildIsChecked());
@@ -90,7 +94,6 @@ export class FilterNotParticipateItemComponent {
     }
   }
 
-
   public updateCheckedBetTypes(checkedPlayerIds: string[]): void {
     this.model.betTypeIds = checkedPlayerIds;
   }
@@ -101,9 +104,7 @@ export class FilterNotParticipateItemComponent {
     }
   }
 
-  private resetBetTypesValue(newPlayerId: number): void {
-    if (this.model.playerId !== newPlayerId) {
-      this.model.betTypeIds = [];
-    }
+  private resetBetTypesValue(): void {
+    this.model.betTypeIds = [];
   }
 }

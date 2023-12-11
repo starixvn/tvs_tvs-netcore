@@ -4,12 +4,13 @@
     [items]="distincedPlayers"
     bindLabel="playerName"
     bindValue="playerId"
-    [(ngModel)]="model.playerId"
     [clearable]="false"
     placeholder="Select player"
-    (change)="changeFilter();updateCheckedPlayer($event)">
+    (change)="changeFilter();updateCheckedPlayer($event)"
+    [(ngModel)]="model.playerId"
+    >
   </ng-select>
-  <div class="filter-group-bet-type d-flex mr-2">
+  <div class="filter-bet-type d-flex mr-2">
     <multiple-selection
       class="multiple-selection bet-type-dropdown{{index}} mr-2"
       [selectedItems]="model.betTypeIds"

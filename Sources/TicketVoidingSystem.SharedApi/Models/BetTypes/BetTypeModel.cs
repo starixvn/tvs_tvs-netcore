@@ -6,6 +6,8 @@ public class BetTypeModel
 
     public string Name { get; set; }
 
+    public int PlayerId { get; set; }
+
     public bool LiveIndicator { get; set; }
 
     public int Type { get; set; }

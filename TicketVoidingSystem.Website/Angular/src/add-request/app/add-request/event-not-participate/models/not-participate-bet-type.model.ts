@@ -9,6 +9,7 @@ export class NotParticipateBetTypeModel {
   betTypeId: number;
   betTypeName: string;
   parentId: number;
+  playerId: number;
   parentName: string;
 }
 
