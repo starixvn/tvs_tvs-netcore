@@ -37,8 +37,10 @@ public class BetListCoreServiceImp : BetListCoreService
             IsShowOddsWithChoice = item.IsMixParlay,
             ShowSystemParlayDetail = false,
             ShowMatch = !isFromAfterVoidService,
-            ShowLeague = !isFromAfterVoidService
+            ShowLeague = !isFromAfterVoidService,
+            HideSabaText = specialPlatformService.IsTicketSpecialPlatform(item)
         };
+
         viewModel.Odds = betListService.GetOdds(ticket, item.BetTypeId.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticket);
@@ -85,14 +87,8 @@ public class BetListCoreServiceImp : BetListCoreService
 
     private string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)
     {
-        if (item.IsMixParlay)
-        {
-            return BuildChoiceParlay(ticket, ticketHelper, item);
-        }
-
-        var choice = betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
-
-        return specialPlatformService.RemoveSabaInChoiceColumn(choice, item);
+        return item.IsMixParlay ? BuildChoiceParlay(ticket, ticketHelper, item)
+            : betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
     }
 
     private string BuildChoiceParlay(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)
