@@ -57,10 +57,6 @@
       "ParentId": 3
     },
     {
-      "BetTypeId": 9651,
-      "ParentId": 3
-    },
-    {
       "BetTypeId": 9656,
       "ParentId": 3
     },
@@ -78,6 +74,10 @@
     },
     {
       "BetTypeId": 9672,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 9673,
       "ParentId": 3
     }
   ]
