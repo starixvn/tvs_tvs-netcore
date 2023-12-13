@@ -18,7 +18,7 @@ public class OddsInfoValidationServiceTests
         var service = new OddsInfoValidationServiceImp();
 
         // Act
-        var actual = service.IsValidFavoriteWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
+        var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
 
         // Assert
         Assert.True(actual);
@@ -36,7 +36,7 @@ public class OddsInfoValidationServiceTests
         var service = new OddsInfoValidationServiceImp();
 
         // Act
-        var actual = service.IsValidFavoriteWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
+        var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
 
         // Assert
         Assert.False(actual);

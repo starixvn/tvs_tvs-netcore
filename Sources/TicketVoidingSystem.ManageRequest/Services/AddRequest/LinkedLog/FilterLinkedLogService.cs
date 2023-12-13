@@ -37,7 +37,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
             .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
             .Where(x => x.LinkGroup is LinkedLogApiConstant.GroupIdAio or LinkedLogApiConstant.GroupId1X2)
             .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => y.BetType == BetTypeConstant.Handicap && oddsInfoValidationService.IsValidFavoriteWrongHdp1StHdp(y, getLinkedLogModel)))
+                .Any(y => y.BetType == BetTypeConstant.Handicap && oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(y, getLinkedLogModel)))
             .OrderByDescending(x => x.Time);
     }
 
@@ -47,7 +47,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
             .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
             .Where(x => x.LinkGroup is LinkedLogApiConstant.GroupIdAio or LinkedLogApiConstant.GroupId1H1X2)
             .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => y.BetType == BetTypeConstant.FirstHalfHandicap && oddsInfoValidationService.IsValidFavoriteWrongHdp1StHdp(y, getLinkedLogModel)))
+                .Any(y => y.BetType == BetTypeConstant.FirstHalfHandicap && oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(y, getLinkedLogModel)))
             .OrderByDescending(x => x.Time);
     }
 

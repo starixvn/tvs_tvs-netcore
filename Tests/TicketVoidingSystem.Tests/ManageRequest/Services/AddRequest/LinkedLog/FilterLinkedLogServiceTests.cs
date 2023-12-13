@@ -58,7 +58,7 @@ public class FilterLinkedLogServiceTests
                 LinkedOddsInfoDic = linkedOddsInfoDic
             }
         };
-        oddsInfoValidationService.IsValidFavoriteWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
         oddsInfoValidationService.IsContainsValue(Arg.Any<string>(), 1).Returns(true);
         oddsInfoValidationService.IsContainsValue(Arg.Any<string>(), 2).Returns(false);
@@ -107,7 +107,7 @@ public class FilterLinkedLogServiceTests
                 LinkedOddsInfoDic = linkedOddsInfoDic
             }
         };
-        oddsInfoValidationService.IsValidFavoriteWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(false);
         oddsInfoValidationService.IsContainsValue(Arg.Any<string>(), Arg.Any<decimal>()).ReturnsForAnyArgs(false);
 
