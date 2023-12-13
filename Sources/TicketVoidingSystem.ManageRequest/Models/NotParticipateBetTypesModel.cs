@@ -17,7 +17,7 @@ public class NotParticipateBetTypesModel
 
     public int ParentId { get; set; }
 
-    public int PlayerId { get; set; }
+    public int? PlayerId { get; set; }
 
     public string ParentName { get; set; }
 }
