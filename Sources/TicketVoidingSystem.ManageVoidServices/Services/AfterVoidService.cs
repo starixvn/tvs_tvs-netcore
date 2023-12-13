@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Fanex.Data.Repository;
+﻿using Fanex.Data.Repository;
+using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageVoidServices.Criteria;
 using TicketVoidingSystem.ManageVoidServices.Models;
@@ -67,6 +67,7 @@ public class AfterVoidServiceImp : AfterVoidService
             VoidingHistoryId = model.VoidingHistoryId,
             IsRunExternalService = model.IsRunExternalService,
             MessageId = model.MessageId,
+            MessageIdSpecial = model.MessageIdSpecial,
             ReasonId = model.ReasonId,
             IsSentBatchMessage = model.IsSentBatchMessage,
             IsSentMessageToAdminSite = model.IsSentMessageToAdminSite,

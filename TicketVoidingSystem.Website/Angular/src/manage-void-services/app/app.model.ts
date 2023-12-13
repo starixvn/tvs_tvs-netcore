@@ -11,6 +11,7 @@ export class VoidBetAutomationModel {
     isAutoVoid: boolean;
     isRunExternalService?: boolean;
     messageId?: number;
+    messageIdSpecial?: number;
     reasonId?: number;
     isSentBatchMessage?: boolean;
     isSentMessageToAdminSite?: boolean;

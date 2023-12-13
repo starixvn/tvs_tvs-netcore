@@ -3,6 +3,7 @@ export class VoidingHistoryModel {
   statusId: number;
   requestId: number;
   messageId: number;
+  messageIdSpecial: number;
   reasonId: number;
   userId: number;
   createdDate?: Date;

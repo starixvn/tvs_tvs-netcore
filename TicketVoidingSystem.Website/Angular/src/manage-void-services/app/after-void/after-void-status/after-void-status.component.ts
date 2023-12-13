@@ -79,11 +79,11 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
 
   initQueryUpdate(): VoidBetAutomationModel {
     const model = new VoidBetAutomationModel();
-
     model.requestId = this.tmpModel.requestId;
     model.voidingHistoryId = this.tmpModel.voidingHistoryId;
     model.isRunExternalService = this.tmpModel.isRunExternalService === 'null' ? null : this.tmpModel.isRunExternalService;
     model.messageId = this.tmpModel.messageId;
+    model.messageIdSpecial = this.tmpModel.messageIdSpecial;
     model.reasonId = this.tmpModel.reasonId;
     model.isSentBatchMessage = this.tmpModel.isSentBatchMessage === 'null' ? null : this.tmpModel.isSentBatchMessage;
     model.isSentMessageToAdminSite = this.tmpModel.isSentMessageToAdminSite === 'null' ? null : this.tmpModel.isSentMessageToAdminSite;
