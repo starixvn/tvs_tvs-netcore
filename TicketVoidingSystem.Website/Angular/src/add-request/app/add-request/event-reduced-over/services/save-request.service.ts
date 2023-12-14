@@ -71,6 +71,10 @@ export class SaveRequestService {
 
   private getMessageConfirmationReducedOver(argReducedOver: SaveRequestArg): string {
     let message = '';
+    if (argReducedOver.logInfoEvent.logInfoDetail.settleCount > 0) {
+      message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
+    }
+
     if (argReducedOver.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
       message = `${message}<div>There are some warnings in this request.</div>`;
     }
