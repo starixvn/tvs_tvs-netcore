@@ -26,8 +26,6 @@ public class AppSettingModel
 
     public FanexMailService FanexMailService { get; init; }
 
-    public string TicketVoidingSystemUrl { get; init; }
-
     public string OldSiteRootUrl { get; init; }
 
     public string LinkedLogUrl { get; init; }
