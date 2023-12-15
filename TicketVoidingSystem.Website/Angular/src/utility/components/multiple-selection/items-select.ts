@@ -28,11 +28,11 @@ export class ItemsSelect {
   }
 
   checkBySelectedItem(selectedItems: string[]): void {
-    this.checked = selectedItems.includes(this.value);
     this.items.forEach(item => {
       item.checked = selectedItems.includes(item.value);
       item.checkBySelectedItem(selectedItems);
     });
+    this.checked = selectedItems.includes(this.value) || this.allChildIsChecked();
   }
 
   expandedAllItems() {

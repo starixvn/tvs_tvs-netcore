@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
-import { Player } from '../models/player.model';
+import { Player } from '../models/not-participate-bet-type.model';
 import { FilterNotParticipateService } from '../services/filter-not-participate.service';
 import { FilterNotParticipateItemComponent } from './filter-not-participate-item/filter-not-participate-item.component';
 import { FilterNotParticipateComponent } from './filter-not-participate.component';
@@ -12,7 +12,8 @@ class Helper {
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 0,
-    groupBetTypeIds: []
+    betTypeIds: [],
+    betTypeMultipleSelection: null
   };
   static readonly fakePlayers: Player[] = [
     {
@@ -80,9 +81,9 @@ describe('FilterNotParticipateComponent', () => {
       }
     });
 
-    const filterItemComponent = new FilterNotParticipateComponent(null);
+    const filterItemComponent = new FilterNotParticipateItemComponent(null, null, null);
     filterItemComponent.isValid = jest.fn().mockReturnValue(true);
-    const filterItemComponents = new QueryList<FilterNotParticipateComponent>();
+    const filterItemComponents = new QueryList<FilterNotParticipateItemComponent>();
     filterItemComponents.reset([...filterItemComponents.toArray(), filterItemComponent]);
     instance.filterItemComponents = filterItemComponents;
     const actual = instance.isValid();

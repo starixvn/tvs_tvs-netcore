@@ -13,7 +13,7 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
 })
 export class ValidationService {
   private readonly PLAYER_CLASS = 'player-dropdown';
-  private readonly GROUP_BET_TYPE_CLASS = 'group-bet-type-dropdown';
+  private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';
 
   public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, filterNotParticipateComponent: FilterNotParticipateComponent): boolean {
     if (!leagueEventComponent.isMatchIdValid()) {
@@ -33,7 +33,7 @@ export class ValidationService {
       return false;
     }
 
-    if (model.groupBetTypeIds.length === 0) {
+    if (model.betTypeIds.length === 0) {
       tooltip.display(`${this.GROUP_BET_TYPE_CLASS}${index}`, TEXT.REQUIRED_FIELD);
       return false;
     }
@@ -46,11 +46,12 @@ export class ValidationService {
   }
 
   public checkCanShowConfirmationNotParticipate(argNotParticipate: SaveRequestArg): boolean {
+    const isHasSettledTicket = argNotParticipate.logInfoEvent.logInfoDetail.settleCount > 0;
     const isHasWarningTicket = argNotParticipate.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
     const isEditingByAnotherUser = argNotParticipate.isEdit && argNotParticipate.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = argNotParticipate.isEdit
       && argNotParticipate.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && argNotParticipate.filter.action !== argNotParticipate.actionIdOfFirstTimeAccess;
 
-    return isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
+    return isHasSettledTicket || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
 }

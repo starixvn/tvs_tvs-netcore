@@ -7,7 +7,8 @@ import { EventNotParticipateService } from './event-not-participate.service';
 class Helper {
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 1,
-    groupBetTypeIds: []
+    betTypeIds: [],
+    betTypeMultipleSelection: null
   };
   static readonly fakeLogInfoNotParticipate: LogInfoNotParticipate = {
     matchId: 1,
@@ -17,7 +18,7 @@ class Helper {
   };
   static readonly fakeNotParticipateModels: NotParticipateModel[] = [
     {
-      groupBetTypeIds: '1',
+      betTypeIds: '1',
       playerId: 1,
       subIssueTypeId: 1,
       logInfoDetail: new LogInfoDetail(),

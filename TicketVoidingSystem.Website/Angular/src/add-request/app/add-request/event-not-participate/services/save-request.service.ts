@@ -71,6 +71,10 @@ export class SaveRequestService {
 
   private getMessageConfirmationNotParticipate(argNotParticipate: SaveRequestArg): string {
     let message = '';
+    if (argNotParticipate.logInfoEvent.logInfoDetail.settleCount > 0) {
+      message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
+    }
+
     if (argNotParticipate.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
       message = `${message}<div>There are some warnings in this request.</div>`;
     }

@@ -1,7 +1,7 @@
 import * as _ from "lodash";
-import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { EarlyKickOffGetLogInfoQuery } from "src/add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { EarlyKickOffModel } from "src/add-request/app/add-request/models/event-eko.model";
+import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
@@ -140,7 +140,7 @@ export class MappingModelStaticService {
     return notParticipateModels.map(x => ({
       matchId: x.matchId,
       subIssueTypeId: x.subIssueTypeId,
-      groupBetTypeIds: x.groupBetTypeIds,
+      betTypeIds: x.betTypeIds,
       playerId: x.playerId,
     } as NotParticipateGetLogInfoQuery));
   }

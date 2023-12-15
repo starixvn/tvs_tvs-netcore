@@ -101,11 +101,12 @@ export class ValidationService {
   }
 
   public checkCanShowConfirmationReducedOver(argReducedOver: SaveRequestArg): boolean {
+    const isHasSettledTicket = argReducedOver.logInfoEvent.logInfoDetail.settleCount > 0;
     const isHasWarningTicket = argReducedOver.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
     const isEditingByAnotherUser = argReducedOver.isEdit && argReducedOver.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = argReducedOver.isEdit
       && argReducedOver.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && argReducedOver.filter.action !== argReducedOver.actionIdOfFirstTimeAccess;
 
-    return isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
+    return isHasSettledTicket || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
 }

@@ -13,6 +13,7 @@ import { FilterNotParticipateComponent } from './filter-not-participate/filter-n
 import { LogInfoNotParticipateComponent } from './log-info-not-participate/log-info-not-participate.component';
 import { FilterNotParticipateModel } from './models/filter-not-participate.model';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
+import { NotParticipateBetTypeViewModel } from './models/not-participate-bet-type.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
 import { EventNotParticipateService } from './services/event-not-participate.service';
 import { FilterNotParticipateService } from './services/filter-not-participate.service';
@@ -24,7 +25,7 @@ class Helper {
   static readonly toDate = '2021-12-21 12:08:49.737';
   static readonly fakeNotParticipateModels: NotParticipateModel[] = [
     {
-      groupBetTypeIds: '1',
+      betTypeIds: '1',
       playerId: 1,
       subIssueTypeId: 1,
       logInfoDetail: new LogInfoDetail(),
@@ -40,7 +41,8 @@ class Helper {
   };
   static readonly fakeFilterNotParticipateModel: FilterNotParticipateModel = {
     playerId: 1,
-    groupBetTypeIds: []
+    betTypeIds: [],
+    betTypeMultipleSelection: null
   };
 }
 
@@ -102,11 +104,11 @@ describe('EventNotParticipateComponent', () => {
   });
 
   it('updateModelWhenChangeMatchId should call #filterService.getPlayers', async () => {
-    const mockGetPlayers = jest.fn();
+    const mockBetTypes = jest.fn().mockReturnValue(new NotParticipateBetTypeViewModel());
     const mockChangeBlockingUiStatus = jest.fn();
     const { instance } = await shallow
     .mock(FilterNotParticipateService, {
-      getPlayers: mockGetPlayers
+      getNotParticipateBetTypes: mockBetTypes
     })
     .mock(AddRequestStore, {
       changeBlockingUiStatus: mockChangeBlockingUiStatus,
@@ -121,7 +123,7 @@ describe('EventNotParticipateComponent', () => {
 
     await instance['updateModelWhenChangeMatchId']();
 
-    expect(mockGetPlayers).toHaveBeenCalledTimes(1);
+    expect(mockBetTypes).toHaveBeenCalledTimes(1);
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
 

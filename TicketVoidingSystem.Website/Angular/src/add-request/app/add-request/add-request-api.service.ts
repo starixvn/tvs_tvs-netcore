@@ -14,6 +14,7 @@ import { AccountWinlostModel } from './abnormal-accounts/models/account-winlost.
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-accounts/models/check-username.model';
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
+import { NotParticipateBetTypeViewModel } from './event-not-participate/models/not-participate-bet-type.model';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
@@ -125,6 +126,10 @@ export class AddRequestApiService {
   
   /* istanbul ignore next */
   async exportExcelAbnormalBetTickets(query: CheckTransIdsQuery) {
-    return await this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
+    return this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
+  }
+
+  async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
+    return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
   }
 }

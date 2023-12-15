@@ -1,25 +1,55 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { CommonService } from '../../../../../utility/services/common.service';
+import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
-import { Player } from '../models/player.model';
+import { NotParticipateBetTypeModel, NotParticipateBetTypeViewModel } from '../models/not-participate-bet-type.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterNotParticipateService {
   constructor(
-    private readonly commonService: CommonService
+    private readonly addRequestApiService: AddRequestApiService
   ) {}
 
   public initDefaultFilter(): FilterNotParticipateModel {
-    return new FilterNotParticipateModel();
+    const model = new FilterNotParticipateModel();
+    model.betTypeMultipleSelection = this.initDefaultBetTypeSelection();
+
+    return model;
   }
 
-  public async getPlayers(matchId: number): Promise<Player[]> {
-    const notParticipateBetTypes = '9650,9651,9652,9653,9654,9655,9656,9657,9658,9659,9660,9661,9668,9669,9670,9671,9672,9673,9674,9675';
-    const oddsInfo = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId?.toString(), betTypes: notParticipateBetTypes});
-    const distinctPlayerById = _.uniqBy(oddsInfo, 'playerId');
-    return distinctPlayerById as Player[];
+  public async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
+    return this.addRequestApiService.getNotParticipateBetTypes(matchId);
+  }
+
+  public renderBetTypes(models: NotParticipateBetTypeModel[]): ItemsSelect[] {
+    let items = [];
+    const groupBetTypes = _.groupBy(models, 'parentId');
+    for (const parentId in groupBetTypes) {
+      const model = groupBetTypes[parentId].map(x => new ItemsSelect(0, x.betTypeId.toString(), x.betTypeName, false, true, true, []));
+      items = items.concat(new ItemsSelect(0, parentId, groupBetTypes[parentId][0].parentName, false, true, true, model));
+    }
+
+    return items;
+  }
+
+  public initDefaultBetTypeSelection(): MultipleSelection {
+    const multipleSelection = new MultipleSelection();
+    this.initDefaultBetTypeProperties(multipleSelection);
+    multipleSelection.items = [];
+    return multipleSelection;
+  }
+
+  private initDefaultBetTypeProperties(model: MultipleSelection): void {
+    model.checkAllCheckBoxText = 'All';
+    model.allItemsCheckedText = 'All';
+    model.noneItemCheckedText = 'Select an option';
+    model.maxWidth = '300px';
+    model.numberItemsDisplay = 1;
+    model.buttonHeight = '29.5px';
+    model.isDefaultSelectAll = false;
   }
 }

@@ -1,9 +1,11 @@
+import { MultipleSelection } from "src/utility/components/multiple-selection/multiple-selection";
 
 export class FilterNotParticipateModel {
   playerId: number;
-  groupBetTypeIds: string[];
+  betTypeIds: string[];
+  betTypeMultipleSelection: MultipleSelection;
 
   constructor() {
-    this.groupBetTypeIds = [];
+    this.betTypeIds = [];
   }
 }

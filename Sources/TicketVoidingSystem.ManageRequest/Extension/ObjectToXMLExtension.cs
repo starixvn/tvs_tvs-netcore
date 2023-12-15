@@ -315,7 +315,7 @@ public static class ObjectToXMLExtension
             var line = $"<r MatchId='{model.MatchId}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"PlayerId='{model.PlayerId}' "
-                       + $"GroupBetTypeIds='{model.GroupBetTypeIds}' "
+                       + $"BetTypeIds='{model.BetTypeIds}' "
                        + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
                        + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
                        + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "

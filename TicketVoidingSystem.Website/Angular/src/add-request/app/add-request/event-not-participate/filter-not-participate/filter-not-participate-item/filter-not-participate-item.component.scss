@@ -19,9 +19,13 @@
   ::ng-deep .ng-placeholder {
     z-index: 0 !important;
   }
+
+  ::ng-deep .ng-option {
+    padding-left: 20px !important;
+  }
 }
-multiple-selection[class*='player-dropdown'] {
-  width: 200px;
+multiple-selection[class*='bet-type-dropdown'] {
+  width: 300px;
 }
 
 .cursor-not-allowed {
