@@ -32,7 +32,7 @@ public class OddsInfoValidationServiceTests
     {
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp1 = 2 };
-        var getLinkedLogModel = new GetLinkedLogModel { HomeFavorite = homeFavorite };
+        var getLinkedLogModel = new GetLinkedLogModel { HomeFavorite = homeFavorite, SubIssueTypeId = SubIssueTypeConstant.Wrong1stHDPHomeVirtualHeadReversed };
         var service = new OddsInfoValidationServiceImp();
 
         // Act
