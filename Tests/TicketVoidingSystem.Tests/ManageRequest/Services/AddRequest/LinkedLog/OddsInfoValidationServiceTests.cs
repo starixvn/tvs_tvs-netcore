@@ -18,7 +18,7 @@ public class OddsInfoValidationServiceTests
         var service = new OddsInfoValidationServiceImp();
 
         // Act
-        var actual = service.IsValidFavoriteWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
+        var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
 
         // Assert
         Assert.True(actual);
@@ -32,11 +32,11 @@ public class OddsInfoValidationServiceTests
     {
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp1 = 2 };
-        var getLinkedLogModel = new GetLinkedLogModel { HomeFavorite = homeFavorite };
+        var getLinkedLogModel = new GetLinkedLogModel { HomeFavorite = homeFavorite, SubIssueTypeId = SubIssueTypeConstant.Wrong1stHDPHomeVirtualHeadReversed };
         var service = new OddsInfoValidationServiceImp();
 
         // Act
-        var actual = service.IsValidFavoriteWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
+        var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
 
         // Assert
         Assert.False(actual);

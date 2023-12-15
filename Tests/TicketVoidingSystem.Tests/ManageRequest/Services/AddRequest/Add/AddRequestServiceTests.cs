@@ -18,11 +18,11 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
 
 public class AddRequestServiceTests
 {
+    private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly IMapper mapper;
     private readonly MarkTicketsService markTicketsService;
     private readonly IDynamicRepository repository;
-    private readonly AccountWinLostService accountWinLostService;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
     private readonly AddRequestServiceImp service;
     private readonly SessionService sessionService;

@@ -39,7 +39,7 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
         var voidPermission = await checkPermissionOnRequestService.GetVoidPermission();
 
         model.Groups = MapToGroupTicketViewModel(request, groups, match, voidPermission);
-        ticketsViewModelService.UpdateViewModel(model, data, request.IssueTypeId, request.SubIssueTypeId, voidPermission);
+        ticketsViewModelService.UpdateViewModel(model, data, request.IssueTypeId, voidPermission);
 
         return model;
     }

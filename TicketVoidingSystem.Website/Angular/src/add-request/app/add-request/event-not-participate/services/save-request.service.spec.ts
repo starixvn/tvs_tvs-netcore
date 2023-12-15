@@ -175,7 +175,8 @@ describe('SaveRequestService', () => {
   });
 
   it('#getMessageConfirmation should return expected msg', async () => {
-    const expected = '<div>There are some warnings in this request.'
+    const expected = '<div class=\"text-red\">The request has settled ticket(s).</div>'
+    + '<div>There are some warnings in this request.'
     + '</div><div>Ticket(s) on request will be unmarked.</div>'
     + '<div style=\"color:red\">Please remind this request undefined is confirmed by undefined.</div><div class=\'mg-top-10\'>'
     + '<i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>';

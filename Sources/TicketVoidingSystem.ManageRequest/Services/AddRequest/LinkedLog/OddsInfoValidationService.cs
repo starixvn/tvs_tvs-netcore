@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface OddsInfoValidationService
 {
-    bool IsValidFavoriteWrongHdp1StHdp(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel);
+    bool IsValidInputHdpForWrongHdp1StHdp(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel);
 
     bool IsContainsValue(string parent, decimal? child);
 
@@ -25,11 +25,28 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
     private const int GroupIdAio = 2;
     private const int GroupId1H1X2 = 3;
 
-    public bool IsValidFavoriteWrongHdp1StHdp(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    public bool IsValidInputHdpForWrongHdp1StHdp(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return string.IsNullOrWhiteSpace(getLinkedLogModel.HomeFavorite)
-            ? IsContainsValue(getLinkedLogModel.AwayFavorite, linkedOddsInfo.Hdp2)
-            : IsContainsValue(getLinkedLogModel.HomeFavorite, linkedOddsInfo.Hdp1);
+        switch (getLinkedLogModel.SubIssueTypeId)
+        {
+            case SubIssueTypeConstant.WrongHDP:
+            case SubIssueTypeConstant.Wrong1stHDP:
+                {
+                    return string.IsNullOrWhiteSpace(getLinkedLogModel.HomeFavorite)
+                        ? IsContainsValue(getLinkedLogModel.AwayFavorite, linkedOddsInfo.Hdp2)
+                        : IsContainsValue(getLinkedLogModel.HomeFavorite, linkedOddsInfo.Hdp1);
+                }
+            case SubIssueTypeConstant.WrongHDPHomeVirtualHeadReversed:
+            case SubIssueTypeConstant.Wrong1stHDPHomeVirtualHeadReversed:
+                return IsContainsValue(getLinkedLogModel.HdpValue, linkedOddsInfo.Hdp1);
+
+            case SubIssueTypeConstant.WrongHDPAwayVirtualHeadReversed:
+            case SubIssueTypeConstant.Wrong1stHDPAwayVirtualHeadReversed:
+                return IsContainsValue(getLinkedLogModel.HdpValue, linkedOddsInfo.Hdp2);
+
+            default:
+                return true;
+        }
     }
 
     public bool IsContainsValue(string? parent, decimal? child)

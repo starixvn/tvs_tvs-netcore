@@ -155,13 +155,27 @@ export class TemplateContentConst {
     msgChineseNewSimplified: '接受从'
   };
 
-  static readonly AIO_MESSAGE: TemplateContent = {
+  static readonly AIO_MESSAGE_1X2: TemplateContent = {
+    msgEnglish: ' (Including Affected 1X2 product)',
+    msgChineseTraditional: ' (包括有被影響獨贏盤产品)',
+    msgChineseSimplified: ' (包括有被影响独赢盘产品)',
+    msgChineseNewSimplified: ' (包括有被影响独赢盘产品)'
+  };
+
+  static readonly AIO_MESSAGE_AIO: TemplateContent = {
     msgEnglish: ' (Including Affected More Bet Types product)',
     msgChineseTraditional: ' (包括有被影響更多投註類型产品)',
     msgChineseSimplified: ' (包括有被影响更多投注类型产品)',
     msgChineseNewSimplified: ' (包括有被影响更多投注类型产品)'
   };
 
+  static readonly AIO_MESSAGE_1X2_AIO: TemplateContent = {
+    msgEnglish: ' (Including Affected More Bet Types and 1X2 products)',
+    msgChineseTraditional: ' (包括有被影響更多投注類型和獨贏盤产品)',
+    msgChineseSimplified: ' (包括有被影响更多投注类型和独赢盘产品)',
+    msgChineseNewSimplified: ' (包括有被影响更多投注类型和独赢盘产品)'
+  };
+  
   static readonly PARLAY: TemplateContent = {
     msgEnglish: '[Parlay]',
     msgChineseTraditional: '[串關]',

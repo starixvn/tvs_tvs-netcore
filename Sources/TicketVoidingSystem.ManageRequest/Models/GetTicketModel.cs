@@ -123,4 +123,6 @@ public class GetTicketModel
     public DateTime CheckTimeCancelCashOut { get; set; }
 
     public int SpecialPlatform { get; set; }
+
+    public short GroupPHAffected { get; set; }
 }

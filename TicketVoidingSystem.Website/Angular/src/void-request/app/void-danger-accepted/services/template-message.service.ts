@@ -21,6 +21,7 @@ export class TemplateMessageService {
 
   getTemplateValue(voidMatch: VoidMatch, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
+    templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
     templateValue.fromTransTime = voidMatch.voidTicketsMini.fromTime;
     templateValue.toTransTime = voidMatch.voidTicketsMini.toTime;
@@ -61,7 +62,7 @@ export class TemplateMessageService {
     templateValue.wrongMarket = wrongHdpModel.homeFavorite ?? wrongHdpModel.awayFavorite;
     templateValue.actualMarket = wrongHdpModel.actualMarket;
     templateValue.hdpValue = wrongHdpModel.hdpValue;
-    templateValue.checkAIOMessage = voidMatch.voidTicketsMini.isHasAioMessage;
+    templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
   }
 
   private initValueForWrongOu(templateValue: TemplateValue, voidMatch: VoidMatch, wrongOuModels: WrongOuModel[]): void {
@@ -72,7 +73,7 @@ export class TemplateMessageService {
     templateValue.score = _.first(liveScoreList).replace(/ /g, '');
     templateValue.wrongMarket = wrongOuModel.wrongMarket;
     templateValue.actualMarket = wrongOuModel.actualMarket;
-    templateValue.checkAIOMessage = voidMatch.voidTicketsMini.isHasAioMessage;
+    templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
   }
   private initValueForWrongScore(templateValue: TemplateValue, wrongScore: string, actualScore: string, isCheckedVar = false) {
     //// TODO

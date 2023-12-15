@@ -44,6 +44,7 @@ export class TemplateValue {
   wrongScore?: string;
   actualScore?: string;
   checkAIOMessage?: boolean;
+  groupPHAffected: number;
   isUpdateScoreHaveText?: boolean;
   filterBy?: number;
   wrongMarket?: string;

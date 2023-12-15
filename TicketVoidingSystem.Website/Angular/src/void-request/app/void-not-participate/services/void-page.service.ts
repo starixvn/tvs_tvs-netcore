@@ -52,6 +52,7 @@ export class VoidPageService {
 
   private getTemplateValue(voidPageItem: VoidNotParticipateModel, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
+    templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.playerName = {
       msgEnglish: requestDetail.messages[0].playerNamesEnglish,

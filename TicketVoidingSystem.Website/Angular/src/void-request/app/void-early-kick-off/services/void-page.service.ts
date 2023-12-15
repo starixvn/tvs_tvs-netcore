@@ -78,6 +78,7 @@ export class VoidPageService {
 
   private getTemplateValue(voidMatch: VoidPageEarlyKickOffModel): TemplateValue {
     const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
+    templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
     return templateValue;
   }

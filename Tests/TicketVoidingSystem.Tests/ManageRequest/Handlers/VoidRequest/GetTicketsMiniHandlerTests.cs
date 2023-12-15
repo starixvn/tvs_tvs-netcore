@@ -29,12 +29,12 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
             // Act
             var actual = await handler.Handle(request, CancellationToken.None);
 
-            // 
+            //
             AssertExtension.Equal(expected, actual);
             await getTicketsService.Received().GetTickets(Arg.Any<GetTicketsMiniRequest>());
             await checkPermissionOnRequestService.Received().GetVoidPermission();
             ticketsViewModelService.Received().UpdateViewModel(Arg.Any<TicketsViewModel>(), Arg.Any<IEnumerable<GetTicketModel>>(),
-                        default, default, Arg.Any<VoidPermission>());
+                        default, Arg.Any<VoidPermission>());
         }
     }
 }
