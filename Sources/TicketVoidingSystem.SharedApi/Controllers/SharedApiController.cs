@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Fanex.NAP.Client.Session;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
@@ -60,4 +61,8 @@ public class SharedApiController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CheckNegativeBalance(CheckNegativeBalanceRequest request) => Ok(await mediator.Send(request));
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> GetSportTypeName(GetSportTypeNameRequest request) => Ok(await mediator.Send(request));
 }
