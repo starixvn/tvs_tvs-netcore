@@ -38,11 +38,21 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     {
         var isHasTicketPh1X2Affected = data.Any(x => x.GroupPHAffected == 1);
         var isHasTicketPhAioAffected = data.Any(x => x.GroupPHAffected == 2);
-        if (isHasTicketPh1X2Affected && isHasTicketPhAioAffected) return GroupPHAffectedConstant.Group1X2AndAIO;
+        if (isHasTicketPh1X2Affected && isHasTicketPhAioAffected)
+        {
+            return GroupPHAffectedConstant.Group1X2AndAIO;
+        }
 
-        if (isHasTicketPh1X2Affected) return GroupPHAffectedConstant.Group1X2;
+        if (isHasTicketPh1X2Affected)
+        {
+            return GroupPHAffectedConstant.Group1X2;
+        }
 
-        if (isHasTicketPhAioAffected) return GroupPHAffectedConstant.GroupAIO;
+        if (isHasTicketPhAioAffected)
+        {
+            return GroupPHAffectedConstant.GroupAIO;
+        }
+
         return 0;
     }
 
