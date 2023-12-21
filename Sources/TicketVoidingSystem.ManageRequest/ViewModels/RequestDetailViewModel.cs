@@ -1,12 +1,11 @@
 ﻿using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models.SendMessage;
 
 namespace TicketVoidingSystem.ManageRequest.ViewModels;
 
 public class RequestDetailViewModel
 {
     public RequestDetailModel Request { get; set; }
-    public IEnumerable<Message> Messages { get; set; }
+    public IEnumerable<PlayerName> PlayerNames { get; set; }
     public RequestEventModel Event { get; set; }
     public IEnumerable<WrongScoreInfoViewModel> WrongScoreModels { get; set; }
     public IEnumerable<DangerAcceptedViewModel> DangerAcceptedModels { get; set; }

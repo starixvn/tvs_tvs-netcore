@@ -3,7 +3,6 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
@@ -26,11 +25,11 @@ public class GetRequestServiceImp : GetRequestService
 
     public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
     {
-        var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request);
+        var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request);
         var viewModel = new RequestDetailViewModel
         {
             Request = firstResultSet.First(),
-            Messages = thirdResultSet
+            PlayerNames = thirdResultSet
         };
 
         switch (firstResultSet.First().IssueTypeId)
