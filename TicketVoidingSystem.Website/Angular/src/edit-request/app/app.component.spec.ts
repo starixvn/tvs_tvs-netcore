@@ -50,7 +50,6 @@ class Helper {
     lastModifiedDate: null,
     request: Helper.fakeRequestDetailModel,
     event: null,
-    messages: [],
     wrongScoreModels: [],
     dangerAcceptedModels: [],
     redCardModels: [],
@@ -59,7 +58,8 @@ class Helper {
     wrongOddsModels: [],
     reducedOverModels: [],
     duplicateTicketsModel: null,
-    notParticipateModels: []
+    notParticipateModels: [],
+    playerNames: []
   };
 }
 

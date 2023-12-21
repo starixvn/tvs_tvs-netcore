@@ -42,7 +42,7 @@ class Helper {
     wrongOddsModels: [],
     reducedOverModels: [],
     duplicateTicketsModel: new DuplicateTicketsModel,
-    messages: []
+    playerNames: []
   };
 }
 

@@ -92,52 +92,6 @@ describe('CommonService', () => {
     expect(actual).toEqual(expectedData);
   });
 
-  // it('Get request by id', () => {
-  //   // Arrange
-  //   const requestDetailModel = {
-  //     actionId: 1,
-  //     decidedBy: null,
-  //     isTest: false,
-  //     isVoided: false,
-  //     issueTypeId: 11,
-  //     mistakenBy: null,
-  //     operators: [],
-  //     provider: null,
-  //     remark: 'test',
-  //     requestedBy: "sa",
-  //     source: null,
-  //     sportType: 2,
-  //     subIssueTypeId: 27,
-  //     voidedBy: null,
-  //   }
-  //   const requestEventModel = {
-  //     awayId: 18486,
-  //     eventDate: new Date(),
-  //     finalAwayScore: null,
-  //     finalHomeScore: null,
-  //     homeId: 1983,
-  //     htAwayScore: null,
-  //     htHomeScore: null,
-  //     kickOffTime: new Date('2020-01-16 00:00:00.000'),
-  //     leagueId: 78717,
-  //     matchId: 32784859,
-  //     parentId: 0,
-  //     transIds: '107661343669',
-  //     globalShowTime: new Date('2020-01-16 00:00:00.000')
-  //   }
-  //   const expectedData: RequestDetailViewModel = {
-  //     request: requestDetailModel,
-  //     events: [requestEventModel],
-  //     messages: []
-  //   };
-  //  httpServiceSpy.getJson.and.returnValue(Promise.resolve(Promise.resolve(expectedData)));
-  //  commonService = new CommonService(httpServiceSpy);
-  //  // Action and Assert
-  //  commonService.getRequestById(47760).then(result => {
-  //    expect(result).toEqual(expectedData);
-  //  });
-  // });
-
   it('Get Issue Info',async () => {
     // Arrange
     const expectedData:  IssueInfo = {

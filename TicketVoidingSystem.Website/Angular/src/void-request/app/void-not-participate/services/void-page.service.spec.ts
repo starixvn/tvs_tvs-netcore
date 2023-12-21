@@ -2,7 +2,7 @@ import { NotParticipateModel } from '../../../../add-request/app/add-request/mod
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel, PlayerName } from '../../../../edit-request/app/request.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
@@ -49,7 +49,7 @@ class Helper {
     lastModifiedDate: null,
     request: Helper.fakeRequestDetailModel,
     event: null,
-    messages: [new Message()],
+    playerNames: [new PlayerName()],
     notParticipateModels: [new NotParticipateModel()]
   };
 

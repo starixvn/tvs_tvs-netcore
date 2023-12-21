@@ -64,7 +64,7 @@ class Helper {
     lastModifiedDate: null,
     request: Helper.fakeRequestDetailModel,
     event: null,
-    messages: [],
+    playerNames: [],
   };
 }
 
