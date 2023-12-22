@@ -76,7 +76,7 @@ public class VoidEmailContentServiceTests
         };
         repository.FetchAsync<GetOperatorInfoModel>(Arg.Any<GetOperatorInfoCriteria>())
             .ReturnsForAnyArgs(new List<GetOperatorInfoModel> { new() { AgentId = 1, OperatorID = "11" } });
-        ticketService.GetTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), site, true)
+        ticketService.GetTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
             .ReturnsForAnyArgs(new TicketEmailViewModel());
         subjectService.CreateVoid(Arg.Any<MailVoidViewModel>(), tickets.Select(x => x.Site),
             Arg.Any<SiteEmail>(), Arg.Any<EmailGroup>(), Arg.Any<VoidType>()).ReturnsForAnyArgs("subject");

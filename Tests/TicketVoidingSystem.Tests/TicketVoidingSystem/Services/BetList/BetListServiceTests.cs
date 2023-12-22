@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Fanex.BetList.Core.Entities;
+using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
 using FizzWare.NBuilder;
 using NSubstitute;
@@ -370,6 +371,21 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     }
 
     [Fact]
+    public void GetHandicap_TicketHasBetTypeSabaPromotion_ReturnExpected()
+    {
+        // Arrange
+        var ticket = new Ticket { BetTypeId = 17003 };
+        var ticketHelper = Substitute.For<ITicketHelper>();
+        var ticketData = new List<ITicketData>();
+
+        // Act
+        var result = service.GetHandicap(ticket, ticketHelper, ticketData, true);
+
+        // Assert
+        Assert.Equal("-", result);
+    }
+
+    [Fact]
     public void GetHandicap_ReturnsEmptyString_BetTypeIdIsHideHandicap()
     {
         // Arrange
@@ -398,5 +414,27 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
 
         // Assert
         Assert.NotNull(result);
+    }
+
+    [Fact]
+    public void GetBetTeam_ReturnsExpected()
+    {
+        // Arrange
+        var choice = new Choice_Template();
+        var expected = new Choice_Template
+        {
+            ScoreMapIcon = null,
+            BetType = null,
+            Match = null,
+            League = null,
+            Handicap = null,
+            Score = null
+        }.ToString();
+
+        // Act
+        var result = service.GetBetTeam(choice);
+
+        // Assert
+        AssertExtension.Equal(expected, result);
     }
 }

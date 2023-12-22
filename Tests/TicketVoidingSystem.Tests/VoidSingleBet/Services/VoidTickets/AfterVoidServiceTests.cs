@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
@@ -34,13 +38,13 @@ public class AfterVoidServiceTests
             Validation = new VoidTicketValidation()
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();
-        var sendMessageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         sendEmailService.SendEmail(default, default).ReturnsForAnyArgs(new List<Result> { new() });
-        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageService,
+        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService, sessionService);
 
         // Act
@@ -67,12 +71,12 @@ public class AfterVoidServiceTests
             Validation = new VoidTicketValidation()
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();
-        var sendMessageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageService,
+        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService, sessionService);
 
         // Act
@@ -85,7 +89,7 @@ public class AfterVoidServiceTests
     }
 
     [Fact]
-    public async Task ExecuteWhenVoidSuccess_HasExceptionWhenSendMessage_ReturnExpected()
+    public async Task ExecuteWhenVoidSuccess_Successful_CalledExpected()
     {
         // Arrange
         var query = new VoidTicketsQuery
@@ -98,20 +102,61 @@ public class AfterVoidServiceTests
             Tickets = new List<TicketEmailModel> { new() },
             Validation = new VoidTicketValidation()
         };
+        var results = new List<Result> { new() };
         var cashOutApiService = Substitute.For<CashOutApiService>();
-        var sendMessageService = Substitute.For<SendMessageService>();
+        var mapper = Substitute.For<IMapper>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageService,
+        sendEmailService.SendEmail(Arg.Any<EmailVoidModel>(), Arg.Any<IEnumerable<TicketEmailModel>>()).ReturnsForAnyArgs(results);
+        notificationLetstalkService.SendToGroupVoidSettledBets(Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>()).ReturnsForAnyArgs(results);
+        mapper.Map<EmailVoidModel>(Arg.Any<VoidTicketsQuery>()).ReturnsForAnyArgs(new EmailVoidModel());
+        mapper.Map<TicketInfoForLetstalk>(Arg.Any<VoidTicketsQuery>()).ReturnsForAnyArgs(new TicketInfoForLetstalk());
+        var service = new AfterVoidServiceImp(mapper, cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService, sessionService);
 
         // Act
         var actual = await service.ExecuteWhenVoidSuccess(query, voidResult, "");
 
         // Assert
-        Assert.False(actual.First().IsSuccessful);
+        Assert.True(actual.First().IsSuccessful);
+        await sendMessageByPlatformService.Received(1).Execute(Arg.Any<SendMessageTargetParam>());
+        await sendEmailService.Received(1).SendEmail(Arg.Any<EmailVoidModel>(), Arg.Any<IEnumerable<TicketEmailModel>>());
+        await notificationLetstalkService.Received(1).SendToGroupVoidSettledBets(Arg.Any<TicketInfoForLetstalk>(),
+            Arg.Any<IEnumerable<TicketEmailModel>>());
+    }
+
+    [Fact]
+    public async Task ExecuteWhenVoidSuccess_HasException_CalledExpected()
+    {
+        // Arrange
+        var query = new VoidTicketsQuery
+        {
+            Message = new Message(),
+            MatchId = 1
+        };
+        var voidResult = new VoidTicketsModel
+        {
+            Tickets = new List<TicketEmailModel> { new() },
+            Validation = new VoidTicketValidation()
+        };
+        var cashOutApiService = Substitute.For<CashOutApiService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
+        var sendEmailService = Substitute.For<SendEmailService>();
+        var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
+        var loggingService = Substitute.For<LoggingService>();
+        var sessionService = Substitute.For<SessionService>();
+        var service = new AfterVoidServiceImp(null, cashOutApiService, sendMessageByPlatformService,
+            sendEmailService, notificationLetstalkService, loggingService, sessionService);
+
+        // Act
+        var actual = await service.ExecuteWhenVoidSuccess(query, voidResult, "");
+
+        // Assert
+        await loggingService.Received(1).ErrorAsync(Arg.Any<string>(), Arg.Any<Exception>());
+        Assert.Equal(ErrorCode.SendMessageOrEmailFail, actual.First().ErrorCode);
     }
 
     [Fact]
@@ -129,12 +174,12 @@ public class AfterVoidServiceTests
             Validation = new VoidTicketValidation()
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();
-        var sendMessageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageService,
+        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService, sessionService);
 
         // Act
@@ -154,12 +199,12 @@ public class AfterVoidServiceTests
             Validation = new VoidTicketValidation()
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();
-        var sendMessageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageService,
+        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService, sessionService);
 
         // Act
@@ -179,12 +224,12 @@ public class AfterVoidServiceTests
             Validation = new VoidTicketValidation { ErrorCode = 1, ErrorMsg = "Failed" }
         };
         var cashOutApiService = Substitute.For<CashOutApiService>();
-        var sendMessageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageService,
+        var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService, sessionService);
 
         // Act

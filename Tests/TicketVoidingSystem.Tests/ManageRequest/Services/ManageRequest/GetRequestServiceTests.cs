@@ -9,7 +9,6 @@ using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
 using Xunit;
 
@@ -34,7 +33,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -44,7 +43,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -55,10 +54,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongScoreModels = new List<WrongScoreInfoViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -66,7 +65,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -78,7 +77,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -88,7 +87,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -99,10 +98,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = new RequestEventModel { MatchId = 12345 },
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongScoreModels = null
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -110,7 +109,51 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
+                Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
+        Assert.Null(actualResult.WrongScoreModels);
+    }
+
+    [Fact]
+    public async Task GetRequest_IsAbnormalAccount_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData =
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+                new List<RequestDetailModel>
+                {
+                    new()
+                    {
+                        IssueTypeId = IssueTypeConstant.AbnormalAccount, SportType = 0,
+                        OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                    }
+                },
+                new List<RequestEventModel> { new() { MatchId = 12345 } },
+                new List<PlayerName> { new() }
+            );
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.AbnormalAccount,
+                SportType = 0,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+            },
+            Event = new RequestEventModel { MatchId = 12345 },
+            PlayerNames = new List<PlayerName> { new() },
+            WrongScoreModels = null
+        };
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
+            .ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1)
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.WrongScoreModels);
@@ -122,7 +165,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -132,7 +175,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -143,10 +186,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             DangerAcceptedModels = new List<DangerAcceptedViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
         remotingRefService.GetTeamName(Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
         // Act
@@ -154,7 +197,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -166,7 +209,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -176,7 +219,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345, AwayId = 1, HomeId = 1 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -187,10 +230,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             RedCardModels = new List<DangerAcceptedViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -198,7 +241,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -210,7 +253,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -220,7 +263,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -231,10 +274,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongHdpModels = new List<WrongHdpViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -242,7 +285,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -254,7 +297,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -264,7 +307,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -275,10 +318,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongHdpModels = new List<WrongHdpViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -286,7 +329,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -298,7 +341,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -308,7 +351,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -319,10 +362,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongOuModels = new List<WrongOuViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -330,7 +373,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -342,7 +385,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -352,7 +395,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -363,10 +406,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongOuModels = new List<WrongOuViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -374,7 +417,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -386,7 +429,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -396,7 +439,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -407,10 +450,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongOuModels = new List<WrongOuViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -418,7 +461,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -430,7 +473,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -440,7 +483,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -451,10 +494,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongOuModels = new List<WrongOuViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -462,7 +505,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -475,7 +518,7 @@ public class GetRequestServiceTests
     {
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -485,9 +528,9 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345, IsNeutral = isNeutral } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
         remotingRefService.GetTeamName(Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
 
@@ -506,7 +549,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -516,7 +559,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -527,10 +570,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             DuplicateTicketsModel = new DuplicateTicketsViewModel()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -538,7 +581,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
@@ -553,7 +596,7 @@ public class GetRequestServiceTests
         // Arrange
         var request = new GetRequestRequest { RequestId = 1 };
         var fakeData =
-            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<Message>>(
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
                 new List<RequestDetailModel>
                 {
                     new()
@@ -563,7 +606,7 @@ public class GetRequestServiceTests
                     }
                 },
                 new List<RequestEventModel> { new() { MatchId = 12345 } },
-                new List<Message> { new() }
+                new List<PlayerName> { new() }
             );
         var expectedResult = new RequestDetailViewModel
         {
@@ -574,10 +617,10 @@ public class GetRequestServiceTests
                 OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
             },
             Event = null,
-            Messages = new List<Message> { new() },
+            PlayerNames = new List<PlayerName> { new() },
             WrongHdpModels = new List<WrongHdpViewModel>()
         };
-        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(request)
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
             .ReturnsForAnyArgs(fakeData);
 
         // Act
@@ -585,7 +628,7 @@ public class GetRequestServiceTests
 
         // Assert
         await repository.Received(1)
-            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, Message>(
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
                 Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
