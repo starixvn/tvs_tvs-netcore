@@ -374,4 +374,36 @@
         <Setting Key="DBSIG2.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_SpecialDelete_RecoverCashOutTransaction_Update" SpName="NAP_SpecialDelete_RecoverCashOutTransaction_Update" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
     </Function>
+    <Function Name="RecoverTicket">
+        <Setting Key="DBCTG.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransSelRecoverBet" SpName="NAP_BettransSelRecoverBet" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransRecoverBet" SpName="NAP_BettransRecoverBet" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
+    <Function Name="RecoverParlayBet">
+        <Setting Key="DBCTG.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransSelRecoverParlayBet_Sub" SpName="NAP_BettransSelRecoverParlayBet_Sub" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransRecoverParlayBet_Sub" SpName="NAP_BettransRecoverParlayBet_Sub" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransSelRecoverParlayBet_Main" SpName="NAP_BettransSelRecoverParlayBet_Main" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+    </Function>
 </Functions>

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SpecialDelete.RecoverBet.Criteria;
 using SpecialDelete.RecoverBet.Models;
 using SpecialDelete.RecoverBet.Services.RecoverTickets;
 using TicketVoidingSystem.Constants;
@@ -11,7 +10,7 @@ using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.RecoverBet.Handlers;
 
-public class RecoverTicketsRequest : RecoverTicketsCriteria, IRequest<RecoverResult>
+public class RecoverTicketsRequest : IRequest<RecoverResult>
 {
     public string UsersNegativeCredit { get; set; }
 

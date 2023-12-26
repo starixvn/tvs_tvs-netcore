@@ -116,7 +116,7 @@ var recoverBet = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/RecoverBet/GetTickets",
+            url: window.rootUrl + "api/RecoverBet/GetTickets",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(dataRequest),
@@ -328,7 +328,7 @@ var recoverBet = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "Tickets/CheckNegativeBalance",
+            url: window.rootUrl + "api/SharedApi/CheckNegativeBalance",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(paramNegativeBet),
@@ -378,7 +378,7 @@ var recoverBet = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/RecoverBet/RecoverTickets",
+            url: window.rootUrl + "api/RecoverBet/RecoverTickets",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
