@@ -46,6 +46,7 @@ public static class AppSettingService
             {
                 MailingList = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.MailingList)}"),
                 AppMailId = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailId)}"),
+                AppMailJollySportsId = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailJollySportsId)}"),
                 AppMailAddress = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailAddress)}")
             },
             IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb)),

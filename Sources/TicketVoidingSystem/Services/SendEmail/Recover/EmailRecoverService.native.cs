@@ -61,7 +61,7 @@ public class EmailRecoverServiceImp<TViewModel, TModel> : EmailRecoverService<TV
         try
         {
             var mailRecord = recordService.Create(model, group);
-            fanexMailApiService.SendEmail(mailRecord);
+            fanexMailApiService.SendEmail(mailRecord, null);
         }
         catch (Exception exception)
         {

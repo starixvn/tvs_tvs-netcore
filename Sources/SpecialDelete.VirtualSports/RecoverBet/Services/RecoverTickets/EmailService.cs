@@ -28,7 +28,7 @@ public class EmailServiceImp : EmailService
         try
         {
             var mailRecord = recordService.Create(model, group, typeOfRecover);
-            fanexMailApiService.SendEmail(mailRecord);
+            fanexMailApiService.SendEmail(mailRecord, null);
         }
         catch (Exception exception)
         {

@@ -75,7 +75,7 @@ public class DuplicateTicketsEmailLicenseeServiceImp : DuplicateTicketsEmailLice
         try
         {
             var mailReCord = emailContentService.Create(mailLicenseesModel, site, groupTicketsInSite, EmailGroup.Csd);
-            fanexMailApiService.SendEmail(mailReCord);
+            fanexMailApiService.SendEmail(mailReCord, site);
             var listEmail = site.ToList.Split(';').Distinct().ToArray();
             results.Results.Add(mailResultService.CreateSuccess(site.Site, listEmail, true));
             results.SuccessfulLicensees.Add(site.Site);

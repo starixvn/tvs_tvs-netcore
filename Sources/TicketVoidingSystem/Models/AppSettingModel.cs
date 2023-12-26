@@ -64,5 +64,6 @@ public class FanexMailService
 {
     public string MailingList { get; init; }
     public string AppMailId { get; init; }
+    public string AppMailJollySportsId { get; init; }
     public string AppMailAddress { get; init; }
 }
