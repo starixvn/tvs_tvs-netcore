@@ -7,11 +7,13 @@ namespace TicketVoidingSystem.Services.SendMessage;
 public interface SpecialPlatformService
 {
     void ChangeAppMailIdForSiteJollyPlatform(SiteEmail site);
+
+    bool IsSiteJollySportsPlatform(SiteEmail site);
 }
 
 public class SpecialPlatformServiceImp : SpecialPlatformService
 {
-    private static bool IsSiteJollySportsPlatform(SiteEmail site)
+    public bool IsSiteJollySportsPlatform(SiteEmail site)
     {
         return site.SpecialPlatform >= SpecialPlatformConstant.JollySports;
     }

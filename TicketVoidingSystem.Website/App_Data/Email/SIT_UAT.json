@@ -47,5 +47,12 @@
     "ToList": "",
     "CcList": "tommy.nguyen@starixsoft.com",
     "BccList": "tommy.nguyen@starixsoft.com"
+  },
+  {
+    "SiteId": 9000000,
+    "Site": "EmailConfigurationJollySports",
+    "ToList": "",
+    "CcList": "tommy.nguyen@starixsoft.com",
+    "BccList": "tommy.nguyen@starixsoft.com"
   }
 ]
