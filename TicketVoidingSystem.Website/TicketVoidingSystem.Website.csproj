@@ -34,7 +34,7 @@
     <None Remove="Angular\**" />
   </ItemGroup>
     
-  <ItemGroup>
+    <ItemGroup>
     <PackageReference Include="Fanex.BetList.Bitcoin" Version="2.0.0.1" />
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
     <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0" />
@@ -70,6 +70,7 @@
     <ProjectReference Include="..\Sources\SpecialDelete.NumberGame\SpecialDelete.NumberGame.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.RecoverBet\SpecialDelete.RecoverBet.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj" />
+    <ProjectReference Include="..\Sources\SpecialDelete.RecoverParlayBet\SpecialDelete.RecoverParlayBet.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.VoidByBetId\SpecialDelete.VoidByBetId.csproj" />

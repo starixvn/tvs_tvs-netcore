@@ -38,6 +38,8 @@ using SpecialDelete.RecoverBet;
 using SpecialDelete.RecoverBet.Controllers;
 using SpecialDelete.RecoverByBetId;
 using SpecialDelete.RecoverByBetId.Controllers;
+using SpecialDelete.RecoverParlayBet;
+using SpecialDelete.RecoverParlayBet.Controllers;
 using SpecialDelete.UploadBatchMessage.Controllers;
 using SpecialDelete.VirtualSports;
 using SpecialDelete.VirtualSports.RecoverBet.Controllers;
@@ -233,6 +235,7 @@ public static class ServiceCollectionExtension
         services.RegisterCancelCashOutServices();
         services.RegisterRecoverCashOutServices();
         services.RegisterRecoverBetServices();
+        services.RegisterRecoverParlayBetServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -259,6 +262,8 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByBetIdController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CancelCashOutController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverBetController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverMainParlayController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverSubParlayController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
@@ -276,5 +281,6 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(VoidByBetIdProfile));
         services.AddAutoMapper(typeof(CashOutTransactionProfile));
         services.AddAutoMapper(typeof(RecoverBetProfile));
+        services.AddAutoMapper(typeof(RecoverParlayBetProfile));
     }
 }

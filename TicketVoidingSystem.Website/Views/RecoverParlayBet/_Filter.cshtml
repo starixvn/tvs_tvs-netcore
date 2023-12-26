@@ -1,0 +1,107 @@
+﻿@using SpecialDelete.RecoverParlayBet.ViewModels
+@model IndexViewModel
+
+<div class="filter-bar">
+    <div class="filter-bar-inner">
+        <div class="filter-row">
+            <div class="filter-cell">
+                <div class="span2">
+                    Ticket Type
+                </div>
+            </div>
+            @{
+            var disableSub = Model.HasSubPermission ? "" : "disabled";
+            var disableMain = Model.HasMainPermission ? "" : "disabled";
+            var checkedMain = Model.HasSubPermission ? "" : "checked";
+            <div class="filter-cell">
+                <input type="radio" class="ticket-type" name="ticket-type" id="sub-parlay" value="sub" checked @disableSub />
+            </div>
+            <div class="filter-cell">
+                <div class="span1">
+                    <label for="sub-parlay">Sub</label>
+                </div>
+            </div>
+
+            <div class="filter-cell">
+                <input type="radio" class="ticket-type" name="ticket-type" id="main-parlay" value="main" @disableMain @checkedMain />
+            </div>
+            <div class="filter-cell">
+                <div class="span1">
+                    <label for="main-parlay">Main</label>
+                </div>
+            </div>
+            }
+            <div class="filter-cell">
+                <div class="lbl-field span3">
+                    BetType
+                </div>
+                <div class="edit-field span4">
+                    @{
+                        var filterByList = new List<SelectListItem>
+                    {
+                            new SelectListItem
+                            {
+                                Text = "All",
+                                Value = "all"
+                            },
+                            new SelectListItem
+                            {
+                                Text = "Mix Parlay",
+                                Value = "Mix Parlay"
+                            },
+                            new SelectListItem
+                            {
+                                Text = "System Parlay",
+                                Value = "System Parlay"
+                            }
+                        };
+                    }
+                    @Html.DropDownList("bet-type", filterByList, new { @class = "bet-type" })
+                </div>
+            </div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-cell">
+                <div class="span2">
+                    MatchID
+                </div>
+            </div>
+            <div class="filter-cell">
+                <div class="edit-field span3">
+                    <input type="text" id="matchId" maxlength="10" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="filter-row">
+            <div class="filter-cell">
+                <div class="span2">
+                    BetID(s)
+                </div>
+            </div>
+            <div class="filter-cell">
+                <div class="edit-field span8" style="width: 670px;">
+                    <div class="span6 offset number-group" id="number-group" style="width: 670px; max-height: 478px; overflow: auto;">
+                        <input id="txtTransId" class="text-number" />
+                    </div>
+                    <span></span>
+                    <div class="float-left">
+                        <p id="errorBetId" style="margin-top: -22px;">
+                        </p>
+                        <br />
+                        Ex: 1234567890, 1223457890, 2234567890
+                    </div>
+                    <div class="float-left">
+                        <p id="error-move-bet" style="margin-top: -22px; margin-left: 10px;">
+                        </p>
+                    </div>
+                    <div class="float-right em">
+                        <p style="margin-top: 5px;">Max: 1000 bets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-row">
+            <input type="button" value="Search" class="submit" id="search" />
+        </div>
+    </div>
+</div>

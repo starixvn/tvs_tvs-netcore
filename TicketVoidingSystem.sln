@@ -43,7 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialDelete.VoidByBetId",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialDelete.CashOutTransaction", "Sources\SpecialDelete.CashOutTransaction\SpecialDelete.CashOutTransaction.csproj", "{078E2998-FC5C-4A28-BC94-2ADA0B1DA49E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecialDelete.RecoverBet", "Sources\SpecialDelete.RecoverBet\SpecialDelete.RecoverBet.csproj", "{87E19318-12EA-4413-86DC-AAABA2014C1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialDelete.RecoverBet", "Sources\SpecialDelete.RecoverBet\SpecialDelete.RecoverBet.csproj", "{87E19318-12EA-4413-86DC-AAABA2014C1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpecialDelete.RecoverParlayBet", "Sources\SpecialDelete.RecoverParlayBet\SpecialDelete.RecoverParlayBet.csproj", "{511B6D95-D2A7-4A17-88AD-F3D7AAC625B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,10 @@ Global
 		{87E19318-12EA-4413-86DC-AAABA2014C1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87E19318-12EA-4413-86DC-AAABA2014C1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87E19318-12EA-4413-86DC-AAABA2014C1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{511B6D95-D2A7-4A17-88AD-F3D7AAC625B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{511B6D95-D2A7-4A17-88AD-F3D7AAC625B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{511B6D95-D2A7-4A17-88AD-F3D7AAC625B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{511B6D95-D2A7-4A17-88AD-F3D7AAC625B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,6 +156,7 @@ Global
 		{5E79657E-C05E-4308-970B-1CCC4E3E9886} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{078E2998-FC5C-4A28-BC94-2ADA0B1DA49E} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 		{87E19318-12EA-4413-86DC-AAABA2014C1B} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
+		{511B6D95-D2A7-4A17-88AD-F3D7AAC625B8} = {1DAFDA22-5162-4A6E-B330-745C0DCB0073}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C225DEEC-3E60-478B-B241-CA1321AD50E2}
