@@ -27,7 +27,7 @@ var recoverParlayService = {
 
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "Match/GetInfo",
+            url: window.rootUrl + "api/MatchInfo/GetInfo",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             async: false,
@@ -48,7 +48,7 @@ var recoverParlayService = {
         };
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/RecoverSubParlay/GetTickets",
+            url: window.rootUrl + "api/RecoverSubParlay/GetTickets",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -75,7 +75,7 @@ var recoverParlayService = {
         };
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/RecoverMainParlay/GetTickets",
+            url: window.rootUrl + "api/RecoverMainParlay/GetTickets",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(param),
@@ -223,7 +223,7 @@ var recoverParlayService = {
         };
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/RecoverSubParlay/Recover",
+            url: window.rootUrl + "api/RecoverSubParlay/Recover",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(params),
@@ -253,7 +253,7 @@ var recoverParlayService = {
         };
         $.ajax({
             type: "POST",
-            url: window.rootUrl + "SportBook/RecoverMainParlay/Recover",
+            url: window.rootUrl + "api/RecoverMainParlay/Recover",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(params),

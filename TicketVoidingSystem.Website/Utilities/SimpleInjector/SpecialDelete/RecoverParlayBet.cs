@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SpecialDelete.RecoverParlayBet.Models;
 using SpecialDelete.RecoverParlayBet.Repositories;
+using SpecialDelete.RecoverParlayBet.Services;
 using SpecialDelete.RecoverParlayBet.Services.GetTickets;
 using SpecialDelete.RecoverParlayBet.Services.RecoverTickets;
 using SpecialDelete.RecoverParlayBet.ViewModels;
@@ -12,6 +13,7 @@ public static class RecoverParlayBet
 {
     public static void RegisterRecoverParlayBetServices(this IServiceCollection services)
     {
+        services.AddTransient<PermissionService, PermissionServiceImp>();
         services.AddTransient<Repository, RepositoryImp>();
         services.AddScoped(typeof(BetListParlayService<GetSubTicket>), typeof(BetListSubParlayServiceImp<GetSubTicket>));
         services.AddScoped(typeof(BetListParlayService<RecoverSubTicketModel>), typeof(BetListSubParlayServiceImp<RecoverSubTicketModel>));

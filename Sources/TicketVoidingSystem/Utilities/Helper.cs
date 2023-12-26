@@ -220,7 +220,7 @@ public static class Helper
     {
         string[] listNames = {"AB Exception List" , "Mark/Unmark Tickets" , "Ticket Listing" , "Void Single Bet" , "Manage Request" , "Add Request"
             , "Upload Batch Message" , "Void Parlay Sub Bet" , "Recover Virtual Sports Bet" , "Recover By Bet ID" , "Void Number Game Bet", "Void By Currency"
-            , "Void By Bet ID", "Cancel Cash Out Action", "Recover Cash Out Transaction", "Recover Sportsbook Bet"};
+            , "Void By Bet ID", "Cancel Cash Out Action", "Recover Cash Out Transaction", "Recover Sportsbook Bet", "Recover Parlay Bet"};
         return listNames.Contains(menu.Name);
     }
 }

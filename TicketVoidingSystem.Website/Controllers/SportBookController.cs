@@ -84,4 +84,14 @@ public class SportBookController : Controller
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/RecoverBet/Index.cshtml");
     }
+
+    [HttpGet]
+    [Route("[action]")]
+    [Route("[action]/Index")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverParlayBet, Policy = Constant.Policy.Read)]
+    public IActionResult RecoverParlayBet()
+    {
+        ViewBag.IsPageUsingJquery = true;
+        return View("~/Views/RecoverParlayBet/Index.cshtml");
+    }
 }

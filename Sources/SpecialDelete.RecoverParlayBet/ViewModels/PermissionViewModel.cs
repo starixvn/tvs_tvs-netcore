@@ -1,6 +1,6 @@
 ﻿namespace SpecialDelete.RecoverParlayBet.ViewModels;
 
-public class IndexViewModel
+public class PermissionViewModel
 {
     public bool HasMainPermission { get; set; }
 

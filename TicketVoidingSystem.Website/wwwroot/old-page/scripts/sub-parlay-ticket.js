@@ -38,10 +38,10 @@ var subTicketMP = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    if (BigInt(subTransId) === BigInt(row.SubTransId)) {
-                        arrChoice.push('<div class="line"><div class="selected">' + row.Choice + '</div></div>');
+                    if (BigInt(subTransId) === BigInt(row.subTransId)) {
+                        arrChoice.push('<div class="line"><div class="selected">' + row.choice + '</div></div>');
                     } else {
-                        arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
 
@@ -100,13 +100,13 @@ var subTicketMP = {
                 var arrChoice = [];
                 for (var i = 0; i < rs.length; i++) {
                     var row = rs[i];
-                    if (row.SubTransId === "") {
-                        arrChoice.push('<div>' + row.Choice + '</div>');
+                    if (row.subTransId === "") {
+                        arrChoice.push('<div>' + row.choice + '</div>');
                     }
-                    else if (BigInt(subTransId) === BigInt(row.SubTransId)) {
-                        arrChoice.push('<div class="line"><div class="selected">' + row.Choice + '</div></div>');
+                    else if (BigInt(subTransId) === BigInt(row.subTransId)) {
+                        arrChoice.push('<div class="line"><div class="selected">' + row.choice + '</div></div>');
                     } else {
-                        arrChoice.push('<div class="line">' + row.Choice + '</div>');
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
 

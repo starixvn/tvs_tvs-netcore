@@ -9,17 +9,18 @@ public static class RecoverParlayBetBundle
     public static void AddRecoverParlayBetBundle(this IAssetPipeline pipeline, CodeSettings scriptSetting)
     {
         //// style bundle
-        pipeline.AddLessBundle("/old-page/bundle/recover-cash-out-style.css", "old-page/recover-cash-out/recover-cash-out.less");
+        pipeline.AddLessBundle("/old-page/bundle/recover-parlay-bet.css", "old-page/recover-parlay-bet/recover-parlay-bet.less");
 
         //// script bundle
-        pipeline.AddJavaScriptBundle("/old-page/bundle/recover-cash-out.js", scriptSetting,
+        pipeline.AddJavaScriptBundle("/old-page/bundle/recover-parlay-bet.js", scriptSetting,
             "old-page/scripts/_libs/ContextMenu/jquery.contextMenu.js",
-            "old-page/scripts/Common/Message.Helper.js",
-            "old-page/scripts/Common/Message.Validator.js",
+            "old-page/scripts/_libs/Utils/stdlib.js",
             "old-page/scripts/Common/ContextMenu.Helper.js",
-            "old-page/recover-cash-out/scripts/recover-cash-out.directive.js",
-            "old-page/recover-cash-out/scripts/recover-cash-out.js",
-            "old-page/recover-cash-out/scripts/recover-cash-out.service.js",
-            "old-page/recover-cash-out/scripts/recover-cash-out.validation.js");
+            "old-page/scripts/Common/Message.Helper.js",
+            "old-page/recover-parlay-bet/scripts/recover-parlay-bet.js",
+            "old-page/recover-parlay-bet/scripts/recover-parlay-directive.js",
+            "old-page/recover-parlay-bet/scripts/recover-parlay-service.js",
+            "old-page/recover-parlay-bet/scripts/recover-parlay-validation.js",
+            "old-page/scripts/sub-parlay-ticket.js");
     }
 }

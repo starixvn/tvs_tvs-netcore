@@ -19,6 +19,7 @@ public static class WebOptimizerExtension
             pipeline.AddCancelCashOutBundle(scriptSetting);
             pipeline.AddRecoverCashOutBundle(scriptSetting);
             pipeline.AddRecoverBetBundle(scriptSetting);
+            pipeline.AddRecoverParlayBetBundle(scriptSetting);
         });
     }
 }
