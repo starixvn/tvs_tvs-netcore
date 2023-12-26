@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutOld.cshtml";
+    ViewBag.Title = "Recover Bet";
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/old-page/bundle/recover-bet.css" />
+}
+@section Headline {
+    <div class="title">
+        Home / Recover Bet
+    </div>
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecoverTicketForm" }))
+{
+    <div class="filter-bar">
+        <div class="filter-bar-inner">
+            <div class="filter-row">
+                <div class="filter-cell">
+                    <div class="span2">
+                        <label for="radio-by-bet">BetID(s)</label>
+                    </div>
+                </div>
+                <div class="filter-cell">
+                    <div class="edit-field span8" style="width: 670px;">
+                        <div class="span6 offset number-group" id="number-group" style="width: 670px; max-height: 478px; overflow: auto; ">
+                            <input id="txtTransId" class="text-number" />
+                        </div>
+                        <span></span>
+                        <div class="float-left">
+                            <p id="errorBetId" style="margin-top: -22px;">
+                            </p>
+                            <br />
+                            Ex: 1234567890, 1223457890, 2234567890
+                        </div>
+                        <div class="float-left">
+                            <p id="error-move-bet" style="margin-top: -22px; margin-left: 10px;">
+                            </p>
+                        </div>
+                        <div class="float-right em">
+                            <p style="margin-top: 5px;">Max: 1000 bets</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-cell">
+                </div>
+            </div>
+            <div class="filter-row">
+                <input type="button" value="Search" class="submit" id="btnSearch" />
+            </div>
+        </div>
+    </div>
+
+<div id="report-content">
+    <div class="display-none content-grid">
+        <div class="freegrid" id="ticketInfo">
+        </div>
+    </div>
+    <div class="clear-both">
+    </div>
+    <div class="row">
+        <input type="button" value="Recover" class="submitRecover" id="Recover" style="display: none" />
+    </div>
+</div>
+<div id="show-error-move-bet">
+</div>
+<div id="show-message" title="Recover Bet Result" class="display-none">
+</div>
+<div id="show-message-betTrade" class="display-none">
+</div>
+}
+@section Scripts {
+    <script src="~/old-page/bundle/recover-bet.js"></script>
+}

@@ -33,11 +33,7 @@
     <None Remove="Angular-Old\**" />
     <None Remove="Angular\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="app_data\data\NotParticipateBetTypes.json" />
-  </ItemGroup>
-
+    
   <ItemGroup>
     <PackageReference Include="Fanex.BetList.Bitcoin" Version="2.0.0.1" />
     <PackageReference Include="Fanex.BetList.CashOut" Version="2.0.0" />
@@ -72,6 +68,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sources\SpecialDelete.CashOutTransaction\SpecialDelete.CashOutTransaction.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.NumberGame\SpecialDelete.NumberGame.csproj" />
+    <ProjectReference Include="..\Sources\SpecialDelete.RecoverBet\SpecialDelete.RecoverBet.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.RecoverByBetId\SpecialDelete.RecoverByBetId.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.UploadBatchMessage\SpecialDelete.UploadBatchMessage.csproj" />
     <ProjectReference Include="..\Sources\SpecialDelete.VirtualSports\SpecialDelete.VirtualSports.csproj" />

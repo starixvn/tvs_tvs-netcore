@@ -34,6 +34,8 @@ using SpecialDelete.CashOutTransaction;
 using SpecialDelete.CashOutTransaction.CancelCashOut;
 using SpecialDelete.NumberGame;
 using SpecialDelete.NumberGame.Controllers;
+using SpecialDelete.RecoverBet;
+using SpecialDelete.RecoverBet.Controllers;
 using SpecialDelete.RecoverByBetId;
 using SpecialDelete.RecoverByBetId.Controllers;
 using SpecialDelete.UploadBatchMessage.Controllers;
@@ -230,6 +232,7 @@ public static class ServiceCollectionExtension
         services.RegisterVoidByBetIdServices();
         services.RegisterCancelCashOutServices();
         services.RegisterRecoverCashOutServices();
+        services.RegisterRecoverBetServices();
     }
 
     public static void RegisterMediatR(this IServiceCollection services)
@@ -255,6 +258,7 @@ public static class ServiceCollectionExtension
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByCurrencyController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(VoidByBetIdController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CancelCashOutController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecoverBetController).Assembly));
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)
@@ -271,5 +275,6 @@ public static class ServiceCollectionExtension
         services.AddAutoMapper(typeof(VoidByCurrencyProfile));
         services.AddAutoMapper(typeof(VoidByBetIdProfile));
         services.AddAutoMapper(typeof(CashOutTransactionProfile));
+        services.AddAutoMapper(typeof(RecoverBetProfile));
     }
 }
