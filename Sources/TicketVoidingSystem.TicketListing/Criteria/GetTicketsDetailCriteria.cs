@@ -28,8 +28,6 @@ public class GetTicketsDetailCriteria : CriteriaBase
 
     public int SecondAcceptFlag { get; set; }
 
-    public string Quarter { get; set; }
-
     public string BetTeams { get; set; }
 
     public string SingleOrSubParlay { get; set; }
@@ -37,7 +35,7 @@ public class GetTicketsDetailCriteria : CriteriaBase
     public bool IsReSettled { get; set; }
 
     public string AffectTickets { get; set; }
-    
+
     public string SelectionSubParlays { get; set; }
 
     public override string GetSettingKey() => "NAP_SpecialDelete_TicketListing_Detail";

@@ -91,14 +91,6 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
         <group-bettypes />
         <bettypes />
         <bettypes-virtualsport />
-        <advanced-mode-basketball
-          class="advanced-mode-basketball"
-        />
-        <div
-          hidden=""
-        >
-          <advanced-mode />
-        </div>
         <div
           class="search mt-2"
         >

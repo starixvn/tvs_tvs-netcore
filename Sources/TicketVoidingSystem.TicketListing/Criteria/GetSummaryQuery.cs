@@ -26,8 +26,6 @@ public class CommonQuery
 
     public int TicketType { get; set; }
 
-    public string Quarter { get; set; }
-
     public IEnumerable<BetTypeXml>? BetTeams { get; set; }
 
     public string SingleOrSubParlay { get; set; }
@@ -37,9 +35,8 @@ public class CommonQuery
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }
-    
-    public string SelectionSubParlays { get; set; }
 
+    public string SelectionSubParlays { get; set; }
 }
 
 public class GetSummaryQuery : CommonQuery

@@ -129,9 +129,7 @@
       [ballSequence]="ballSequences.value"></bettypes>
     <bettypes-virtualsport *ngIf="validBetTypesVirtualSport()" #betTypesVSComponent [groups]="groupsBetTypesVS" [sportType]="sportType"
       [product]="query.product"></bettypes-virtualsport>
-    <advanced-mode-basketball class="advanced-mode-basketball" #advancedModeBasetball
-      [checkedIds]="checkedIds"></advanced-mode-basketball>
-    <div [hidden]="isHideNormalAdvancedMode()">
+    <div *ngIf="isShowAdvancedMode()">
       <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true"
         [allBetTypes]="allBetTypes"></advanced-mode>
     </div>
