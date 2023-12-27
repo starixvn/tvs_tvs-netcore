@@ -15,6 +15,8 @@ import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from './abnormal-ac
 import { CheckTransIdsQuery, CheckTransIdsViewModel } from './event-abnormal-bet/event-abnormal-bet.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from './event-duplicate-tickets/models/check-duplicate-tickets.model';
 import { NotParticipateBetTypeViewModel } from './event-not-participate/models/not-participate-bet-type.model';
+import { CheckRecoverTicketResult } from './event-recover-ticket/models/check-recover-ticket-result.model';
+import { CheckRecoverTicketQuery } from './event-recover-ticket/models/check-recover-ticket.query';
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
@@ -131,5 +133,10 @@ export class AddRequestApiService {
 
   async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
     return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
+  }
+
+   /* istanbul ignore next */
+   async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
+    return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
   }
 }

@@ -72,6 +72,7 @@ import { OthersService } from './others/others.service';
 import { LogInfoEkoComponent } from './event-early-kick-off/log-info-eko/log-info-eko.component';
 import { ConfirmEkoComponent } from './event-early-kick-off/confirm-eko/confirm-eko.component';
 import { AccountTableComponent } from './abnormal-accounts/account-table/account-table.component';
+import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 
 @NgModule({
   declarations: [
@@ -127,7 +128,8 @@ import { AccountTableComponent } from './abnormal-accounts/account-table/account
     FilterNotParticipateItemComponent,
     LogInfoNotParticipateComponent,
     ConfirmEkoComponent,
-    AccountTableComponent
+    AccountTableComponent,
+    EventRecoverTicketComponent
   ],
   exports: [
     AddRequestComponent

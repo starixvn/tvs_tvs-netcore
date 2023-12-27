@@ -71,6 +71,8 @@ public class AddRequestQuery
 
     public DuplicateTicketsViewModel? DuplicateTicketsInfo { get; set; }
 
+    public RecoverTicketViewModel? RecoverTicketInfo { get; set; }
+
     public string TransInfoJson { get; set; }
 
     public string? SubIssueTypeName { get; set; }

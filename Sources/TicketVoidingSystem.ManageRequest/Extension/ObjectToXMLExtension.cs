@@ -373,6 +373,16 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
+    public static string ToEventRecoverTicketXml(this RecoverTicketViewModel model)
+    {
+        var stringBuilder = $"<r TransIds='{model.TransIds}' "
+                            + $"FilterBy='{model.FilterBy}' "
+                            + $"ProductIds='{model.ProductIds}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
     public static string ToRequestInfoGetVoidedTicketXml(this IEnumerable<GetRequestInfoModel> requests)
     {
         if (!requests.Any())

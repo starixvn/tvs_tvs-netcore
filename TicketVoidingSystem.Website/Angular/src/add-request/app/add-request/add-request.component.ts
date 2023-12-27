@@ -189,7 +189,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   public getEventLabel(): string {
     if (this.isAbnormalAccount()) {
       return 'Username';
-    } else if (this.isArchivedTicketIssueType()) {
+    } else if (this.isArchivedTicketIssueType() || this.isRecoverTicket()) {
       return 'Ticket Info';
     } else {
       return 'Event';
@@ -326,5 +326,9 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isNotParticipate(): boolean {
     return StaticService.isNotParticipate(this.model.filter.issueTypeId);
+  }
+
+  isRecoverTicket(): boolean {
+    return StaticService.isRecoverTicket(this.model.filter.issueTypeId);
   }
 }

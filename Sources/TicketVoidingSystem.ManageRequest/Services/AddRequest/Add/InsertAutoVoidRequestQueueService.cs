@@ -78,7 +78,8 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicyId,
             ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOffId,
-            ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId
+            ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId,
+            ActionVoidRequestConstant.AutoRecoverId
         };
 
         return actionAutoVoidInstants.Contains(actionId);

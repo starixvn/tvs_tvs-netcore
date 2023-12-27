@@ -95,4 +95,5 @@ public static class SpecialDeleteFunctionKeys
     public const string ReducedOver = "ReducedOver";
     public const string DuplicateTickets = "DuplicateTickets";
     public const string NotParticipate = "NotParticipate";
+    public const string RecoverTicket = "RecoverTicket";
 }

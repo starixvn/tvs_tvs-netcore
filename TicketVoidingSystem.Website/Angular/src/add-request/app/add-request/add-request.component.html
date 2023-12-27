@@ -182,6 +182,15 @@
             [others]="model.others"
             (updateMatchId)="updateMatchId($event)">
           </event-not-participate>
+
+          <event-recover-ticket #eventRecoverTicket
+            *ngIf="isRecoverTicket()"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [recoverTicketModel]="model.recoverTicketModel"
+            [others]="model.others">
+          </event-recover-ticket>
         </div>
       </div>
     </div>

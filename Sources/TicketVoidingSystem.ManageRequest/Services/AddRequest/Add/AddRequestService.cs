@@ -103,6 +103,7 @@ public class AddRequestServiceImp : AddRequestService
         command.RedCardInfo = query.RedCardInfo?.ToEventDangerAcceptedXml();
         command.AbnormalAccountInfo = query.AbnormalAccountInfo?.ToAbnormalAccountXml();
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
+        command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
 
         await repository.ExecuteAsync(command);

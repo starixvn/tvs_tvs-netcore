@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActionVoidByIssueTypeConst, TVSRequestActionType, AbnormalFilterBy } from '../../../../../utility/constants/config';
+import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../../utility/constants/config';
 
 @Injectable({
   providedIn: 'root'
@@ -80,5 +80,9 @@ export class ActionVoidService {
 
   public getActionVoidNotParticipate(): number[] {
     return ActionVoidByIssueTypeConst.NOT_PARTICIPATE;
+  }
+
+  public getActionRecoverTicket(): number[] {
+    return ActionVoidByIssueTypeConst.RECOVER_TICKET;
   }
 }

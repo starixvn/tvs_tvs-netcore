@@ -257,6 +257,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
       [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
       [IssueTypeConstant.NOT_PARTICIPATE]: () => this.actionVoidService.getActionVoidNotParticipate(),
+      [IssueTypeConstant.RECOVER_TICKET]: () => this.actionVoidService.getActionRecoverTicket()
     };
 
     const actionFunction = actionMapping[this.issueTypes.issueId];
@@ -421,6 +422,10 @@ export class FilterComponent implements OnInit, OnChanges {
     return StaticService.isNotParticipate(this.issueTypes.issueId?.toString());
   }
 
+  isRecoverTicket(): boolean {
+    return StaticService.isRecoverTicket(this.issueTypes.issueId?.toString());
+  }
+
   haveAbnormalBetFromPermission(): boolean {
     return _.findIndex(this.issueTypesPermission, function (o) {
       return StaticService.isAbnormalBet(o.issueTypeId.toString());
@@ -490,11 +495,11 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   public isShowSportType(): boolean {
-    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets();
+    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
   }
 
   public isShowEventDate(): boolean {
-    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets();
+    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
   }
 
   public isDisableActionVoid(): boolean {
