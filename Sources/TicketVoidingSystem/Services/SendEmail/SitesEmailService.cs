@@ -63,26 +63,26 @@ public class SitesEmailServiceImp : SitesEmailService
     {
         var jsonPath = AppSettingService.AppSetting.FanexMailService.MailingList;
         var specialSites = Helper.DeserializeJsonFileToObject<List<SiteEmail>>(jsonPath);
-        var (specialSite, specialJollySportsSite) = GetSpecialSites(specialSites);
-        UpdateBccList(sites, specialSite);
-        AddCCList(sites, specialSite, specialJollySportsSite);
-        RemoveSpecialSites(specialSites, specialSite, specialJollySportsSite);
+        var (csdNormalSite, csdJollySportSite) = GetCSDSites(specialSites);
+        UpdateBccList(sites, csdNormalSite);
+        AddCCList(sites, csdNormalSite, csdJollySportSite);
+        RemoveSpecialSites(specialSites, csdNormalSite, csdJollySportSite);
         sites.AddRange(specialSites);
     }
 
-    private static (SiteEmail, SiteEmail) GetSpecialSites(List<SiteEmail> specialSites)
+    private static (SiteEmail, SiteEmail) GetCSDSites(List<SiteEmail> specialSites)
     {
-        const int specialSiteId = 9_999_999; //9999999
-        const int specialJollySportsSiteId = 9_000_000; //9000000
-        var specialSite = specialSites.Single(x => x.SiteId == specialSiteId);
-        var specialJollySportsSite = specialSites.Single(x => x.SiteId == specialJollySportsSiteId);
-        return (specialSite, specialJollySportsSite);
+        const int csdNormalSiteId = 9_999_999; //9999999
+        const int csdJollySportsSiteId = 9_000_000; //9000000
+        var csdNormal = specialSites.Single(x => x.SiteId == csdNormalSiteId);
+        var csdJollySport = specialSites.Single(x => x.SiteId == csdJollySportsSiteId);
+        return (csdNormal, csdJollySport);
     }
 
-    private static void RemoveSpecialSites(List<SiteEmail> specialSites, SiteEmail specialSite, SiteEmail specialJollySportsSite)
+    private static void RemoveSpecialSites(List<SiteEmail> specialSites, SiteEmail csdNormalSite, SiteEmail csdJollySportSite)
     {
-        specialSites.Remove(specialSite);
-        specialSites.Remove(specialJollySportsSite);
+        specialSites.Remove(csdNormalSite);
+        specialSites.Remove(csdJollySportSite);
     }
 
     private static void UpdateBccList(List<SiteEmail> sites, SiteEmail specialSite)
@@ -90,17 +90,17 @@ public class SitesEmailServiceImp : SitesEmailService
         sites.ForEach(site => site.BccList = specialSite.BccList);
     }
 
-    private void AddCCList(List<SiteEmail> sites, SiteEmail specialSite, SiteEmail specialJollySportsSite)
+    private void AddCCList(List<SiteEmail> sites, SiteEmail csdNormalSite, SiteEmail csdJollySportSite)
     {
         sites.ForEach(site =>
         {
-            var ccListSpecialSite = specialPlatformService.IsSiteJollySportsPlatform(site) ? specialJollySportsSite.CcList : specialSite.CcList;
-            if (ccListSpecialSite == null)
+            var ccListForCSD = specialPlatformService.IsSiteJollySportsPlatform(site) ? csdJollySportSite.CcList : csdNormalSite.CcList;
+            if (string.IsNullOrWhiteSpace(ccListForCSD))
             {
                 return;
             }
 
-            site.CcList = string.IsNullOrWhiteSpace(site.CcList) ? ccListSpecialSite : $"{site.CcList};{ccListSpecialSite}";
+            site.CcList = string.IsNullOrWhiteSpace(site.CcList) ? ccListForCSD : $"{site.CcList};{ccListForCSD}";
         });
     }
 

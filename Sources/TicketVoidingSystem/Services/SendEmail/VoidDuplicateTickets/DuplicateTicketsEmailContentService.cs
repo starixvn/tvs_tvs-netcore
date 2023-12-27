@@ -48,8 +48,8 @@ public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailConte
 
     private void UpdateEmailSender(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site)
     {
-        mailVoidViewModel.CcList = specialPlatformService.IsSiteJollySportsPlatform(site) ? "cs@jollysports.com" : "cs@oneonone-solutions.com";
-        mailVoidViewModel.SenderName = specialPlatformService.IsSiteJollySportsPlatform(site) ? "CS JOLLY SPORTS" : "CS ONEONONE.SOLUTIONS";
+        mailVoidViewModel.DepartmentName = specialPlatformService.GetDepartmentNameForEmailVoidDuplicated(site);
+        mailVoidViewModel.ContactAddress = specialPlatformService.GetContactAddressForEmailVoidDuplicated(site);
     }
 
     private static MailRecordResult Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, string subject)

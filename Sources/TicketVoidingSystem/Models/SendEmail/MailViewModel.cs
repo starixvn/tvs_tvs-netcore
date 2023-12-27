@@ -54,7 +54,7 @@ public class DuplicateTicketsMailVoidViewModel
 
     public IList<DuplicateTicketsRequestInfo> DuplicateTickets { get; set; }
 
-    public string CcList { get; set; }
+    public string ContactAddress { get; set; }
 
-    public string SenderName { get; set; }
+    public string DepartmentName { get; set; }
 }
