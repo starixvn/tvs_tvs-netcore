@@ -13,6 +13,8 @@ public interface SpecialPlatformService
     void ChangeAppMailIdForSiteJollyPlatform(SiteEmail site);
 
     bool IsSiteJollySportsPlatform(SiteEmail site);
+
+    string GetTitleForMailRecord(SiteEmail site);
 }
 
 public class SpecialPlatformServiceImp : SpecialPlatformService
@@ -24,7 +26,7 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
 
     public string GetDepartmentNameForEmailVoidDuplicated(SiteEmail site)
     {
-        return IsSiteJollySportsPlatform(site) ? "CS JOLLY SPORTS" : "CS ONEONONE.SOLUTIONS";
+        return IsSiteJollySportsPlatform(site) ? "CS JollySports" : "CS ONEONONE.SOLUTIONS";
     }
 
     public string GetContactAddressForEmailVoidDuplicated(SiteEmail site)
@@ -37,5 +39,10 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
         AppSettings.AppMailId = site == null || !IsSiteJollySportsPlatform(site)
             ? AppSettingService.AppSetting.FanexMailService.AppMailId
             : AppSettingService.AppSetting.FanexMailService.AppMailJollySportsId;
+    }
+
+    public string GetTitleForMailRecord(SiteEmail site)
+    {
+        return IsSiteJollySportsPlatform(site) ? "JollySports Notice / 通知" : "沙巴体育通知 | Saba Sports Notice";
     }
 }

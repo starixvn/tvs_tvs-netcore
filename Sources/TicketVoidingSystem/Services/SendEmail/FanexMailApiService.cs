@@ -46,6 +46,7 @@ public class FanexMailApiServiceImp : FanexMailApiService
     private void SendExistEmail(MailRecord mailRecord, SiteEmail site)
     {
         specialPlatformService.ChangeAppMailIdForSiteJollyPlatform(site);
+        mailRecord.Title = specialPlatformService.GetTitleForMailRecord(site);
         using var mailClient = new MailDeliver();
         mailClient.SendMail(mailRecord);
     }

@@ -45,14 +45,14 @@
     "SiteId": 9999999,
     "Site": "EmailConfiguration",
     "ToList": "",
-    "CcList": "",
+    "CcList": "qa@starixsoft.com",
     "BccList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com"
   },
   {
     "SiteId": 9000000,
     "Site": "EmailConfigurationJollySports",
     "ToList": "",
-    "CcList": "",
+    "CcList": "mike.vu@starixsoft.com",
     "BccList": "tommy.nguyen@starixsoft.com;raymond.le@starixsoft.com;kaka.huynh@starixsoft.com;neil.dao@starixsoft.com;zane.trinh@starixsoft.com;charles.nguyen@starixsoft.com;harley.nguyen@starixsoft.com;jane.dinh@starixsoft.com;mike.vu@starixsoft.com;agnes.tran@starixsoft.com"
   }
 ]

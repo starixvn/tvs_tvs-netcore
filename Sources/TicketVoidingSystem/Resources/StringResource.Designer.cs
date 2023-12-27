@@ -124,15 +124,6 @@ namespace TicketVoidingSystem.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 沙巴体育通知 | Saba Sports Notice.
-        /// </summary>
-        public static string EmailFrom {
-            get {
-                return ResourceManager.GetString("EmailFrom", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Events.
         /// </summary>
         public static string Events {

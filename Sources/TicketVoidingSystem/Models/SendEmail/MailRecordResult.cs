@@ -1,5 +1,4 @@
 ﻿using Fanex.MailDeliver.Model;
-using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Models.SendEmail;
 
@@ -16,7 +15,6 @@ public class MailRecordResult
         MailTo = SiteEmail.ToList,
         MailCc = SiteEmail.CcList,
         MailBcc = SiteEmail.BccList,
-        Title = StringResource.EmailFrom,
         Subject = Subject
             .Replace("[IBO]", "[KZING]")
             .Replace("[BODOG]", "[HAYDOCK]")
