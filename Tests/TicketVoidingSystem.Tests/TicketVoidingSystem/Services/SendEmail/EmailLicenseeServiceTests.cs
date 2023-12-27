@@ -52,7 +52,7 @@ public class EmailLicenseeServiceTests
         _ = service.Send(mailVoidViewModel, sites, tickets, isFromAfterVoidService);
 
         // Assert
-        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>());
+        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>(), Arg.Any<SiteEmail>());
     }
 
     [Fact]

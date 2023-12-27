@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendMessage;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -14,7 +15,8 @@ public class SitesEmailServiceTests : IClassFixture<AppSettingFixture>
     public SitesEmailServiceTests()
     {
         var repository = Substitute.For<IDynamicRepository>();
-        service = new SitesEmailServiceImp(repository);
+        var specialPlatformService = Substitute.For<SpecialPlatformService>();
+        service = new SitesEmailServiceImp(repository, specialPlatformService);
     }
 
     [Fact]

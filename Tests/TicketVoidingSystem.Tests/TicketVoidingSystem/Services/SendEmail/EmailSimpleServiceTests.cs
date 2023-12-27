@@ -24,6 +24,6 @@ public class EmailSimpleServiceTests
         _ = service.Send(new MailRecord(), new EmailGroup());
 
         // Assert
-        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>());
+        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>(), Arg.Any<SiteEmail>());
     }
 }

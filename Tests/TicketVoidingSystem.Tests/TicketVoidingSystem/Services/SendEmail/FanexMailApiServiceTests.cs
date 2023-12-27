@@ -4,6 +4,7 @@ using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendMessage;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
@@ -16,7 +17,8 @@ public class FanexMailApiServiceTests : AppSettingFixture
     public FanexMailApiServiceTests()
     {
         loggingService = Substitute.For<LoggingService>();
-        service = new FanexMailApiServiceImp(loggingService);
+        var specialPlatformService = Substitute.For<SpecialPlatformService>();
+        service = new FanexMailApiServiceImp(loggingService, specialPlatformService);
     }
 
     [Fact]
