@@ -116,6 +116,50 @@ public class GetRequestServiceTests
     }
 
     [Fact]
+    public async Task GetRequest_IsAbnormalAccount_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData =
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+                new List<RequestDetailModel>
+                {
+                    new()
+                    {
+                        IssueTypeId = IssueTypeConstant.AbnormalAccount, SportType = 0,
+                        OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                    }
+                },
+                new List<RequestEventModel> { new() { MatchId = 12345 } },
+                new List<PlayerName> { new() }
+            );
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.AbnormalAccount,
+                SportType = 0,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+            },
+            Event = new RequestEventModel { MatchId = 12345 },
+            PlayerNames = new List<PlayerName> { new() },
+            WrongScoreModels = null
+        };
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
+            .ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1)
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
+                Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
+        Assert.Null(actualResult.WrongScoreModels);
+    }
+
+    [Fact]
     public async Task GetRequest_IsDangerAccepted_ReturnExpectedViewModel()
     {
         // Arrange

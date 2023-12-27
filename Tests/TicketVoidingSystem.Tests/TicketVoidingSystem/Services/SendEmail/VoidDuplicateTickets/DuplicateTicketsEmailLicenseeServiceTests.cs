@@ -6,6 +6,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.VoidDuplicateTickets;
 using TicketVoidingSystem.Services.SendMessage;
@@ -18,6 +19,7 @@ public class DuplicateTicketsEmailLicenseeServiceTests
     private readonly DuplicateTicketsEmailContentService emailContentService;
     private readonly FanexMailApiService fanexMailApiService;
     private readonly MailResultService mailResultService;
+    private readonly SpecialPlatformService specialPlatformService;
     private readonly DuplicateTicketsEmailLicenseeServiceImp service;
 
     public DuplicateTicketsEmailLicenseeServiceTests()
@@ -25,7 +27,7 @@ public class DuplicateTicketsEmailLicenseeServiceTests
         emailContentService = Substitute.For<DuplicateTicketsEmailContentService>();
         fanexMailApiService = Substitute.For<FanexMailApiService>();
         mailResultService = Substitute.For<MailResultService>();
-        var specialPlatformService = Substitute.For<SpecialPlatformService>();
+        specialPlatformService = Substitute.For<SpecialPlatformService>();
         service = new DuplicateTicketsEmailLicenseeServiceImp(emailContentService, fanexMailApiService,
             mailResultService,
             specialPlatformService);
@@ -39,8 +41,13 @@ public class DuplicateTicketsEmailLicenseeServiceTests
         var duplicateTickets = new List<DuplicateTicketsRequestInfo> { new() { EmailGroup = "1" } };
         var sites = new List<SiteEmail> { new() { Site = "1" } };
         var results = new List<Result> { new() };
+        var match = new Match();
+        var message = new Message();
         mailResultService.CreateFail("1", true).ReturnsForAnyArgs(new Result());
         mailResultService.CreateCombineResults(Arg.Any<CombineMessageModel>(), true).ReturnsForAnyArgs(results);
+        specialPlatformService.IsSiteSpecialPlatform(Arg.Any<Match>(), Arg.Any<SiteEmail>()).Returns(true);
+        specialPlatformService.RemoveSabaInMessageContent(Arg.Any<Match>(), Arg.Any<Message>()).ReturnsForAnyArgs(message);
+        specialPlatformService.RemoveSabaInMatchInfo(Arg.Any<Match>()).ReturnsForAnyArgs(match);
 
         // Act
         var actual = await service.Send(mailLicenseesModel, sites, duplicateTickets);

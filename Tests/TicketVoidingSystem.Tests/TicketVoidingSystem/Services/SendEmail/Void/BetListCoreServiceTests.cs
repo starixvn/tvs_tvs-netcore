@@ -2,6 +2,7 @@
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.BetList;
@@ -25,11 +26,13 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
         service = new BetListCoreServiceImp(mapper, betListService, specialPlatformService);
     }
 
-    [Fact]
-    public void BuildTicket_TicketEmailModelIsMainParlay_ReturnMainChoice()
+    [Theory]
+    [InlineData(29)]
+    [InlineData(1)]
+    public void BuildTicket_TicketEmailModelIsMainParlay_ReturnMainChoice(int BetTypeId)
     {
         // Arrange
-        var item = new TicketEmailModel { IsMixParlay = true, BetTypeId = 29 };
+        var item = new TicketEmailModel { IsMixParlay = true, BetTypeId = BetTypeId };
         var match = new Match();
 
         mapper.Map<Ticket>(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(new Ticket());
@@ -78,7 +81,7 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
     public void BuildTicket_HasMatchIsNull_ReturnChoiceExcel()
     {
         // Arrange
-        var item = new TicketEmailModel { IsMixParlay = false, BetTypeId = 29 };
+        var item = new TicketEmailModel { IsMixParlay = false, BetTypeId = BetTypeConstant.BitCoinOverUnder };
 
         mapper.Map<Ticket>(Arg.Any<TicketEmailModel>()).ReturnsForAnyArgs(new Ticket());
         betListService.GetOdds(Arg.Any<Ticket>(), false).ReturnsForAnyArgs("Odds");
