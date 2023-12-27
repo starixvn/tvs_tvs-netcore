@@ -8,15 +8,11 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Fanex.NAP.Client.Models;
-using Force.DeepCloner;
-using Microsoft.AspNetCore.Http;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
-using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Utilities;
 
@@ -179,48 +175,5 @@ public static class Helper
     public static bool IsMustRemoveSabaText(Match match, SiteEmail site)
     {
         return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform >= SpecialPlatformConstant.JollySports);
-    }
-
-    public static IEnumerable<MenuItem> UpdateNapMenuItem(IEnumerable<MenuItem> menuItemList, IHttpContextAccessor httpContextAccessor)
-    {
-        var menuItemsClone = menuItemList.DeepClone();
-        foreach (var item in menuItemsClone)
-        {
-            item.Url = GetMenuPath(item, httpContextAccessor);
-        }
-
-        return menuItemsClone;
-    }
-
-    private static string GetMenuPath(MenuItem menu, IHttpContextAccessor httpContextAccessor)
-    {
-        if (string.IsNullOrWhiteSpace(menu.Url))
-        {
-            return string.Empty;
-        }
-
-        if (IsMenuOfNewPage(menu))
-        {
-            return $"{httpContextAccessor.HttpContext.Request.PathBase}{menu.Url}";
-        }
-
-        if (AppSettingService.AppSetting.OldSiteRootUrl.StartsWith('/'))
-        {
-            var oldSiteAbsolutePath = $"https://{httpContextAccessor.HttpContext.Request.Host}{AppSettingService.AppSetting.OldSiteRootUrl}";
-            return $"{oldSiteAbsolutePath}{menu.Url[1..]}";
-        }
-
-        return $"{AppSettingService.AppSetting.OldSiteRootUrl}{menu.Url[1..]}";
-    }
-
-#pragma warning disable S1541 // Methods and properties should not be too complex
-
-    private static bool IsMenuOfNewPage(MenuItem menu)
-#pragma warning restore S1541 // Methods and properties should not be too complex
-    {
-        string[] listNames = {"AB Exception List" , "Mark/Unmark Tickets" , "Ticket Listing" , "Void Single Bet" , "Manage Request" , "Add Request"
-            , "Upload Batch Message" , "Void Parlay Sub Bet" , "Recover Virtual Sports Bet" , "Recover By Bet ID" , "Void Number Game Bet", "Void By Currency"
-            , "Void By Bet ID", "Cancel Cash Out Action", "Recover Cash Out Transaction", "Recover Sportsbook Bet", "Recover Parlay Bet"};
-        return listNames.Contains(menu.Name);
     }
 }

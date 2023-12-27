@@ -4,7 +4,6 @@ using Fanex.NAP.Client.Configuration;
 using Fanex.NAP.Client.Helpers.Web;
 using Fanex.NAP.SignIn.Attribute;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -57,12 +56,6 @@ builder.Services.RegisterWebOptimizer();
 
 // Build app
 var app = builder.Build();
-
-app.Use((context, next) =>
-{
-    context.Request.PathBase = new PathString(app.Configuration.GetSection("PathBase").Value);
-    return next();
-});
 
 if (app.Environment.IsDevelopment())
 {
