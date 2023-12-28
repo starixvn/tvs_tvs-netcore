@@ -170,8 +170,5 @@ public static class Helper
         return result;
     }
 
-    public static bool IsMustRemoveSabaText(Match match, SiteEmail site)
-    {
-        return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform >= SpecialPlatformConstant.JollySports);
     }
 }
