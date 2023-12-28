@@ -178,7 +178,7 @@ public static class Helper
 
     public static bool IsMustRemoveSabaText(Match match, SiteEmail site)
     {
-        return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform == SpecialPlatformConstant.JollySports);
+        return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform >= SpecialPlatformConstant.JollySports);
     }
 
     public static IEnumerable<MenuItem> UpdateNapMenuItem(IEnumerable<MenuItem> menuItemList, IHttpContextAccessor httpContextAccessor)
