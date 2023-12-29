@@ -12,6 +12,7 @@ import { EventDangerAcceptedComponent } from './event-danger-accepted/event-dang
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
+import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
@@ -55,6 +56,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
+  @ViewChild('eventRecoverTicket') eventRecoverTicketComponent: EventRecoverTicketComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -173,6 +175,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isNotParticipate()) {
       await this.eventNotParticipateComponent.saveRequest();
     }
+
+    if (this.isRecoverTicket()) {
+      await this.eventRecoverTicketComponent.saveRequest();
+    }
   }
 
   backToManagePage() {
@@ -239,7 +245,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isShowOthersFullFields(): boolean {
     return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
-      && !this.isShowOthersSimpleFields();
+      && !this.isRecoverTicket() && !this.isShowOthersSimpleFields();
   }
 
   isShowSaveAndVoidButton(): boolean {

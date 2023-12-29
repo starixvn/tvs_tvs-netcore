@@ -77,7 +77,6 @@ export class EventRecoverTicketComponent implements OnInit {
     args.primitiveProps = this.primitiveProps;
     args.requestId = this.requestId;
     args.isEdit = this.isEdit;
-    args.transIds = this.betIdsComponent.getAllBetIds();
     args.filter = this.filter;
     args.recoverTicketModel = this.recoverTicketModel;
     args.others = this.others;

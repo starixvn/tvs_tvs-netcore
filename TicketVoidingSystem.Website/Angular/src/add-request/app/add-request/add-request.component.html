@@ -206,7 +206,7 @@
       [isEdit]="isEdit"
       [model]="model.others">
     </abnormal-accounts-other>
-    <others-abnormal-mix-parlay *ngIf="isAbnormalBetMixParlay() || isArchivedTicketIssueType() || isDuplicateTickets()"
+    <others-abnormal-mix-parlay *ngIf="isAbnormalBetMixParlay() || isArchivedTicketIssueType() || isDuplicateTickets() || isRecoverTicket()"
       [isEdit]="isEdit"
       [model]="model.others">
     </others-abnormal-mix-parlay>
