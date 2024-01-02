@@ -47,5 +47,12 @@
     "ToList": "",
     "CcList": "cs@oneonone-solutions.com",
     "BccList": "automail@enpine.com"
+  },
+  {
+    "SiteId": 9000000,
+    "Site": "EmailConfigurationJollySports",
+    "ToList": "",
+    "CcList": "cs@jollysports.com",
+    "BccList": "automail@enpine.com"
   }
 ]

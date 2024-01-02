@@ -54,5 +54,12 @@
     "ToList": "",
     "CcList": "qa@starixsoft.com",
     "BccList": ""
+  },
+  {
+    "SiteId": 9000000,
+    "Site": "EmailConfigurationJollySports",
+    "ToList": "",
+    "CcList": "qa@starixsoft.com",
+    "BccList": ""
   }
 ]

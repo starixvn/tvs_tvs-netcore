@@ -76,7 +76,7 @@ public class EmailLicenseeServiceImp : EmailLicenseeService
         try
         {
             var mailRecord = await voidEmailContentService.Create(mailLicenseesModel, site, ticketsInSite, EmailGroup.Csd, isFromAfterVoidService);
-            fanexMailApiService.SendEmail(mailRecord);
+            fanexMailApiService.SendEmail(mailRecord, site);
             var listEmail = site.ToList.Split(';').Distinct().ToArray();
             results.Results.Add(mailResultService.CreateSuccess(site.Site, listEmail, isFromAfterVoidService));
             results.SuccessfulLicensees.Add(site.Site);

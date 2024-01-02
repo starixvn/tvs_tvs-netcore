@@ -6,6 +6,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.SendEmail;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail;
@@ -22,10 +23,12 @@ public interface SitesEmailService
 public class SitesEmailServiceImp : SitesEmailService
 {
     private readonly IDynamicRepository repository;
+    private readonly SpecialPlatformService specialPlatformService;
 
-    public SitesEmailServiceImp(IDynamicRepository repository)
+    public SitesEmailServiceImp(IDynamicRepository repository, SpecialPlatformService specialPlatformService)
     {
         this.repository = repository;
+        this.specialPlatformService = specialPlatformService;
     }
 
     public async Task<IEnumerable<SiteEmail>> GetSites()
@@ -56,30 +59,49 @@ public class SitesEmailServiceImp : SitesEmailService
             .ToList();
     }
 
-    private static void HandleEmailConfiguration(List<SiteEmail> sites)
+    private void HandleEmailConfiguration(List<SiteEmail> sites)
     {
         var jsonPath = AppSettingService.AppSetting.FanexMailService.MailingList;
         var specialSites = Helper.DeserializeJsonFileToObject<List<SiteEmail>>(jsonPath);
-        // 9999999 convert to hex (Underscores should be used to make large numbers readable -- code smell)
-        const int SiteId = 0x98967F;
-        var specialSite = specialSites.Single(x => x.SiteId == SiteId);
-        specialSites.Remove(specialSite);
-
-        sites.ForEach(site => site.BccList = specialSite.BccList);
-        AddCCList(sites, specialSite);
-
+        var (csdNormalSite, csdJollySportSite) = GetCSDSites(specialSites);
+        UpdateBccList(sites, csdNormalSite);
+        AddCCList(sites, csdNormalSite, csdJollySportSite);
+        RemoveSpecialSites(specialSites, csdNormalSite, csdJollySportSite);
         sites.AddRange(specialSites);
     }
 
-    private static void AddCCList(List<SiteEmail> sites, SiteEmail specialSite)
+    private static (SiteEmail, SiteEmail) GetCSDSites(List<SiteEmail> specialSites)
     {
-        if (!string.IsNullOrWhiteSpace(specialSite.CcList))
+        const int csdNormalSiteId = 9_999_999; //9999999
+        const int csdJollySportsSiteId = 9_000_000; //9000000
+        var csdNormal = specialSites.Single(x => x.SiteId == csdNormalSiteId);
+        var csdJollySport = specialSites.Single(x => x.SiteId == csdJollySportsSiteId);
+        return (csdNormal, csdJollySport);
+    }
+
+    private static void RemoveSpecialSites(List<SiteEmail> specialSites, SiteEmail csdNormalSite, SiteEmail csdJollySportSite)
+    {
+        specialSites.Remove(csdNormalSite);
+        specialSites.Remove(csdJollySportSite);
+    }
+
+    private static void UpdateBccList(List<SiteEmail> sites, SiteEmail specialSite)
+    {
+        sites.ForEach(site => site.BccList = specialSite.BccList);
+    }
+
+    private void AddCCList(List<SiteEmail> sites, SiteEmail csdNormalSite, SiteEmail csdJollySportSite)
+    {
+        sites.ForEach(site =>
         {
-            sites.ForEach(site =>
+            var ccListForCSD = specialPlatformService.IsSiteJollySportsPlatform(site) ? csdJollySportSite.CcList : csdNormalSite.CcList;
+            if (string.IsNullOrWhiteSpace(ccListForCSD))
             {
-                site.CcList = string.IsNullOrWhiteSpace(site.CcList) ? specialSite.CcList : $"{site.CcList};{specialSite.CcList}";
-            });
-        }
+                return;
+            }
+
+            site.CcList = string.IsNullOrWhiteSpace(site.CcList) ? ccListForCSD : $"{site.CcList};{ccListForCSD}";
+        });
     }
 
     public SiteEmail GetSiteByName(IEnumerable<SiteEmail> sites, string name)

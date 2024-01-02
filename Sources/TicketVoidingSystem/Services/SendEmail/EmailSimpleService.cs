@@ -23,7 +23,7 @@ public class EmailSimpleServiceImp : EmailSimpleService
     {
         try
         {
-            fanexMailApiService.SendEmail(mailRecord);
+            fanexMailApiService.SendEmail(mailRecord, null);
         }
         catch (Exception exception)
         {

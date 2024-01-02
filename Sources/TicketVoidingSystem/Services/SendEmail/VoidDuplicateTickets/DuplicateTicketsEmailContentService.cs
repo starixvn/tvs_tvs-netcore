@@ -8,6 +8,7 @@ using RazorEngine.Templating;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;
+using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.VoidDuplicateTickets;
@@ -20,10 +21,12 @@ public interface DuplicateTicketsEmailContentService
 public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailContentService
 {
     private readonly DuplicateTicketsSubjectService subjectService;
+    private readonly SpecialPlatformService specialPlatformService;
 
-    public DuplicateTicketsEmailContentServiceImp(DuplicateTicketsSubjectService subjectService)
+    public DuplicateTicketsEmailContentServiceImp(DuplicateTicketsSubjectService subjectService, SpecialPlatformService specialPlatformService)
     {
         this.subjectService = subjectService;
+        this.specialPlatformService = specialPlatformService;
     }
 
     public MailRecord Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, IEnumerable<DuplicateTicketsRequestInfo> duplicateTickets, EmailGroup emailGroup)
@@ -34,12 +37,19 @@ public class DuplicateTicketsEmailContentServiceImp : DuplicateTicketsEmailConte
             var mailVoidModelClone = mailVoidViewModel.DeepClone();
             mailVoidModelClone.DuplicateTickets = duplicateTickets.ToList();
             mailVoidModelClone.TotalOrgTransIds = duplicateTickets.Sum(x => x.TotalOrgTransIds);
+            UpdateEmailSender(mailVoidModelClone, site);
             var mailRecord = Create(mailVoidModelClone, site, subject);
 
             return mailRecord.MailRecord;
         }
 
         return new MailRecord();
+    }
+
+    private void UpdateEmailSender(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site)
+    {
+        mailVoidViewModel.DepartmentName = specialPlatformService.GetDepartmentNameForEmailVoidDuplicated(site);
+        mailVoidViewModel.ContactAddress = specialPlatformService.GetContactAddressForEmailVoidDuplicated(site);
     }
 
     private static MailRecordResult Create(DuplicateTicketsMailVoidViewModel mailVoidViewModel, SiteEmail site, string subject)

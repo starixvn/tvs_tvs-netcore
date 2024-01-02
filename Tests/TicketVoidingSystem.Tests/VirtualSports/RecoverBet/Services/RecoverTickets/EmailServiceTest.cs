@@ -10,7 +10,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTickets;
 
-
 public class EmailServiceTest
 {
     [Fact]
@@ -30,8 +29,7 @@ public class EmailServiceTest
         service.SendEmail(model, group, typeOfRecover);
 
         // Assert
-        fanexMailApiService.Received()
-            .SendEmail(mailRecord);
+        fanexMailApiService.Received().SendEmail(mailRecord, Arg.Any<SiteEmail>());
     }
 
     [Fact]

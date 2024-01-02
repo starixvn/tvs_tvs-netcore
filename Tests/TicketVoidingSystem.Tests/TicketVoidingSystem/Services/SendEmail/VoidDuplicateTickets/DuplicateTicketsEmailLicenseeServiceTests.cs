@@ -67,7 +67,7 @@ public class DuplicateTicketsEmailLicenseeServiceTests
         var actual = await service.Send(mailLicenseesModel, sites, duplicateTickets);
 
         // Assert
-        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>());
+        fanexMailApiService.Received(1).SendEmail(Arg.Any<MailRecord>(), Arg.Any<SiteEmail>());
         mailResultService.Received(1).CreateSuccess("1", Arg.Any<string[]>(), true);
         AssertExtension.Equal(results, actual);
     }

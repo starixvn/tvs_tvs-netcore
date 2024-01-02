@@ -53,4 +53,8 @@ public class DuplicateTicketsMailVoidViewModel
     public int TotalOrgTransIds { get; set; }
 
     public IList<DuplicateTicketsRequestInfo> DuplicateTickets { get; set; }
+
+    public string ContactAddress { get; set; }
+
+    public string DepartmentName { get; set; }
 }

@@ -70,6 +70,7 @@ public static class TicketVoidingSystemService
         services.AddScoped<SitesEmailService, SitesEmailServiceImp>();
         services.AddSingleton<TemplateEmailService, TemplateEmailServiceImp>();
         services.AddSingleton<LeagueNameMessageService, LeagueNameMessageServiceImp>();
+        services.AddSingleton<SpecialPlatformService, SpecialPlatformServiceImp>();
         services.AddScoped<SendEmailDuplicateTicketsService, SendEmailDuplicateTicketsServiceImp>();
         services.AddScoped<DuplicateTicketsEmailLicenseeService, DuplicateTicketsEmailLicenseeServiceImp>();
         services.AddScoped<DuplicateTicketsEmailItQaService, DuplicateTicketsEmailItQaServiceImp>();

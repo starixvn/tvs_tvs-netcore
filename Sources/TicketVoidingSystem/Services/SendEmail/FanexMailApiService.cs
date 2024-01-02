@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using Fanex.MailDeliver.MailClient.API;
 using Fanex.MailDeliver.Model;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Services.SendMessage;
 
 namespace TicketVoidingSystem.Services.SendEmail;
 
 public interface FanexMailApiService
 {
-    void SendEmail(MailRecord mailRecord);
+    void SendEmail(MailRecord mailRecord, SiteEmail site);
 
     Task WriteLog(EmailGroup group, Exception exception);
 }
@@ -17,6 +18,7 @@ public interface FanexMailApiService
 public class FanexMailApiServiceImp : FanexMailApiService
 {
     private readonly LoggingService loggingService;
+    private readonly SpecialPlatformService specialPlatformService;
 
     private static readonly IDictionary<EmailGroup, string> ErrorEmailMap = new Dictionary<EmailGroup, string>
     {
@@ -27,21 +29,24 @@ public class FanexMailApiServiceImp : FanexMailApiService
         { EmailGroup.ItSupport, ErrorSendEmail.It }
     };
 
-    public FanexMailApiServiceImp(LoggingService loggingService)
+    public FanexMailApiServiceImp(LoggingService loggingService, SpecialPlatformService specialPlatformService)
     {
         this.loggingService = loggingService;
+        this.specialPlatformService = specialPlatformService;
     }
 
-    public void SendEmail(MailRecord mailRecord)
+    public void SendEmail(MailRecord mailRecord, SiteEmail site)
     {
         if (!string.IsNullOrEmpty(mailRecord.Body))
         {
-            SendExistEmail(mailRecord);
+            SendExistEmail(mailRecord, site);
         }
     }
 
-    private static void SendExistEmail(MailRecord mailRecord)
+    private void SendExistEmail(MailRecord mailRecord, SiteEmail site)
     {
+        specialPlatformService.ChangeAppMailIdForSiteJollyPlatform(site);
+        mailRecord.Title = specialPlatformService.GetTitleForMailRecord(site);
         using var mailClient = new MailDeliver();
         mailClient.SendMail(mailRecord);
     }
