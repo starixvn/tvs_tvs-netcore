@@ -10,7 +10,7 @@ public class RemotingRefFixture
     public RemotingRefFixture()
     {
         RefDataTypeContainer
-            .ConnectTo(new Uri("http://remotingref-api.nexdev.net/main/"))
+            .ConnectTo(new Uri("http://remotingref-api-core.nexdev.net/"))
             .FromApplication("NAP-SpecialDelete-LOCAL")
             .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN");
         BetListManager.RegisterRemotingRef(new CacheRef());
