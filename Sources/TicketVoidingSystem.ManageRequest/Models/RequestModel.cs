@@ -40,6 +40,8 @@ public class RequestModel
     public string RequestExtraInfo { get; set; }
     public DateTime? CalcHalfTime { get; set; }
     public DateTime? CalcFullTime { get; set; }
+    public string Products { get; set; }
+    public int TotalResettled { get; set; }
 
     public bool IsCheckedVar
     {

@@ -28,6 +28,10 @@ public interface DescriptionElementService
     string BuildMixParlay(int totalTickets);
 
     string BuildParlay(int totalTickets);
+
+    string BuildProducts(string products);
+
+    string BuildResettled(int totalResettled);
 }
 
 public class DescriptionElementServiceImp : DescriptionElementService
@@ -121,5 +125,15 @@ public class DescriptionElementServiceImp : DescriptionElementService
     public string BuildParlay(int totalTickets)
     {
         return $"<div>Parlay: <span class=\"text-primary total-parlay\">{totalTickets}</span></div>";
+    }
+
+    public string BuildProducts(string products)
+    {
+        return $"<div>Product: <span class=\"text-primary product\">{products}</span></div>";
+    }
+
+    public string BuildResettled(int totalResettled)
+    {
+        return $"<div>Resettled: <span class=\"text-primary total-resettled\">{totalResettled}</span></div>";
     }
 }

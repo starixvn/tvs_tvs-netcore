@@ -29,4 +29,6 @@ public class RequestDescription
     public int TotalUserName { get; set; }
     public string WrongScores { get; set; }
     public bool IsCheckedVar { get; set; }
+    public string Products { get; set; }
+    public int TotalResettled { get; set; }
 }
