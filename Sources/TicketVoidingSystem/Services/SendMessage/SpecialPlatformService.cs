@@ -21,6 +21,11 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
 {
     public bool IsSiteJollySportsPlatform(SiteEmail site)
     {
+        if (site == null)
+        {
+            return false;
+        }
+
         return site.SpecialPlatform >= SpecialPlatformConstant.JollySports;
     }
 
@@ -36,9 +41,9 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
 
     public void ChangeAppMailIdForSiteJollyPlatform(SiteEmail site)
     {
-        AppSettings.AppMailId = site == null || !IsSiteJollySportsPlatform(site)
-            ? AppSettingService.AppSetting.FanexMailService.AppMailId
-            : AppSettingService.AppSetting.FanexMailService.AppMailJollySportsId;
+        AppSettings.AppMailId = IsSiteJollySportsPlatform(site)
+            ? AppSettingService.AppSetting.FanexMailService.AppMailJollySportsId
+            : AppSettingService.AppSetting.FanexMailService.AppMailId;
     }
 
     public string GetTitleForMailRecord(SiteEmail site)
