@@ -54,7 +54,7 @@ export class AddRequestQuery {
   earlyKickOffInfo: EarlyKickOffModel[];
   abnormalAccountInfo: AbnormalAccountModel;
   duplicateTicketsInfo: DuplicateTicketsModel;
-  recoverTicketsInfo: RecoverTicketModel;
+  recoverTicketInfo: RecoverTicketModel;
 
   transInfoJson: string;
   unMarkTransIds: string;

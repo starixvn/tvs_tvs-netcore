@@ -40,48 +40,35 @@ export class EventRecoverTicketComponent implements OnInit {
   async afterFocusOutBetIds(): Promise<void> {
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
-      await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.filter);
+      await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.filter, this.requestId);
       this.primitiveProps.isBlockBetIds = false;
     }
   }
 
   public async saveRequest(): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.filter.isVoided) {
-      await this.executeApiSaveRequest();
-      this.addRequestStore.changeBlockingUiStatus(false);
-
-      return;
-    }
-
-    await this.saveWhenRequestNotVoided();
-    this.addRequestStore.changeBlockingUiStatus(false);
+    this.saveRequestService.saveRequest(this.createSaveRequestArg());
   }
 
-  private async saveWhenRequestNotVoided(): Promise<void> {
-    this.isCancelAfterFocusOutBetIdsEvent = true;
-    this.betIdsComponent.triggerFocusOutBetIds();
-    this.isCancelAfterFocusOutBetIdsEvent = false;
-
-    const result = await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.filter);
-    this.primitiveProps.transInfoJson = result.transInfoJson;
-    if (result.isValid) {
-      await this.executeApiSaveRequest();
-    } else {
-      this.addRequestStore.changeSavingRequestStatus(false);
-    }
-  }
-
-  private async executeApiSaveRequest(): Promise<void> {
+  private createSaveRequestArg(): SaveRequestArg {
     const args = new SaveRequestArg();
     args.primitiveProps = this.primitiveProps;
     args.requestId = this.requestId;
     args.isEdit = this.isEdit;
     args.filter = this.filter;
-    args.recoverTicketModel = this.recoverTicketModel;
+    args.recoverTicketModel = this.createRecoverTicketModel();
+    args.betIdsComponent = this.betIdsComponent;
     args.others = this.others;
     args.addRequestStore = this.addRequestStore;
 
-    await this.saveRequestService.executeSave(args);
+    return args;
+  }
+
+  private createRecoverTicketModel(): RecoverTicketModel {
+    return {
+      transIds: this.betIdsComponent.getAllBetIds(),
+      productIds: this.recoverTicketModel.productIds,
+      filterBy: null,
+      subIssueTypeId: Number(this.filter.subIssueTypeId)
+    } as RecoverTicketModel;
   }
 }

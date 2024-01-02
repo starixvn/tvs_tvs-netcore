@@ -1,3 +1,4 @@
+import { BetIdsComponent } from "src/utility/components/bet-ids/bet-ids.component";
 import { AddRequestStore } from "../../add-request.store";
 import { FilterModel } from "../../filter/filter.model";
 import { RecoverTicketModel } from "../../models/recover-ticket.model";
@@ -12,6 +13,7 @@ export class SaveRequestArg {
   filterBy: number;
   recoverTicketModel: RecoverTicketModel;
   others: OthersModel;
+  betIdsComponent: BetIdsComponent;
   addRequestStore: AddRequestStore;
   primitiveProps: PrimitiveProperty;
 }

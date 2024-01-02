@@ -84,6 +84,8 @@ export class ObjectService {
     } else if (this.validationService.isEarlyKickOfOrWrongKickOff(args.detailViewModel)) {
       args.requestModel.earlyKickOffModels = args.detailViewModel.earlyKickOffModels;
       args.primitiveProperty.matchId = args.detailViewModel.earlyKickOffModels.find(x => x.isMainMatch).matchId;
+    } else if (this.validationService.isRecoverTicket(args.detailViewModel)) {
+      args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
     }
   }
 

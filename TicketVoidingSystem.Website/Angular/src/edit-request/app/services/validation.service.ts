@@ -99,4 +99,9 @@ export class ValidationService {
   public isAbnormalArchivedTicket(detailViewModel: RequestDetailViewModel): boolean {
     return this.isArchivedTicket(detailViewModel) && detailViewModel.event.filterBy === TVSRequestFilterBy.ABNORMAL;
   }
+
+  /* istanbul ignore next */
+  public isRecoverTicket(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isRecoverTicket(detailViewModel.request.issueTypeId.toString());
+  }
 }

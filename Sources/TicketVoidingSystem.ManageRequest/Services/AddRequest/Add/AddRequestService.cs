@@ -51,7 +51,7 @@ public class AddRequestServiceImp : AddRequestService
         try
         {
             var markTicketResults = Enumerable.Empty<Result>();
-            if (!query.IssueTypeId.IsArchivedTicket() && !string.IsNullOrWhiteSpace(query.MarkTransIds))
+            if ((!query.IssueTypeId.IsArchivedTicket() || !query.IssueTypeId.RecoverTicket()) && !string.IsNullOrWhiteSpace(query.MarkTransIds))
             {
                 markTicketResults = await markTicketsService.MarkTicketsInTVS(query.MarkTransIds, query.IssueTypeId, MarkTypeConstant.ExecuteMarkTickets);
             }

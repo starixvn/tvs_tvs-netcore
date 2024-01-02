@@ -9,7 +9,8 @@ class Helper {
   static readonly fakeCheckValidTransIdsResult: CheckRecoverTicketResult = {
     invalidTransIds: '12345',
     unsupportedDateRangeTransIds: '34567',
-    transInfoJson: ''
+    transInfoJson: '',
+    existingReqTransIds: ''
   };
 }
 

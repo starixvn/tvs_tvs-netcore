@@ -18,4 +18,5 @@ public class RequestDetailViewModel
     public IEnumerable<EarlyKickOffViewModel> EarlyKickOffModels { get; set; }
     public DuplicateTicketsViewModel DuplicateTicketsModel { get; set; }
     public AbnormalAccountViewModel AbnormalAccountModel { get; set; }
+    public RecoverTicketViewModel RecoverTicketModel { get; set; }
 }

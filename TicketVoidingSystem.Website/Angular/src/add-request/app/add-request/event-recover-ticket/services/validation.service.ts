@@ -16,14 +16,15 @@ export class ValidationService {
     private readonly addRequestApiService: AddRequestApiService,
   ) { }
 
-  public async checkBusinessRule(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel, filter: FilterModel): Promise<ValidationBusinessRuleOutput> {
+  public async checkBusinessRule(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
+    filter: FilterModel, requestId: number): Promise<ValidationBusinessRuleOutput> {
     if (!betIdsComponent.isHasBetId()) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
     betIdsComponent.groupNumber.resetAllItemsToValid();
     betIdsComponent.groupNumber.checkDuplicatedItems();
-    const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, filter);
+    const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, filter, requestId);
     if (validationResult === null) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
@@ -35,8 +36,10 @@ export class ValidationService {
      } as ValidationBusinessRuleOutput;
   }
 
-  private async checkRecoverTicket(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel, filter: FilterModel): Promise<CheckRecoverTicketResult>{
+  private async checkRecoverTicket(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
+    filter: FilterModel, requestId: number): Promise<CheckRecoverTicketResult>{
     const query: CheckRecoverTicketQuery = {
+      requestId: requestId,
       transIds: betIdsComponent.getAllBetIds(),
       filterBy: recoverTicketModel.filterBy,
       productIds: recoverTicketModel.productIds,

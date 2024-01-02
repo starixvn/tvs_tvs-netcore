@@ -107,6 +107,16 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onChangeIssueType(issueTypeId: string): void {
+    if (!this.isEdit && (StaticService.isAbnormalBet(issueTypeId)
+        || StaticService.isAbnormalBetRealMember(issueTypeId)
+        || StaticService.isAbnormalAccount(issueTypeId))) {
+      this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
+    } else {
+      this.model.others.decidedBy = '';
+    }
+  }
+
   updateMatchId(matchId: number): void {
     this.matchId = matchId;
   }
@@ -187,9 +197,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updateModel(filterModel: FilterModel): void {
     this.model.filter = _.clone(filterModel);
-    if (!this.isEdit && this.isLikelyAbnormalBetIssueType()) {
-      this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
-    }
   }
 
   public getEventLabel(): string {

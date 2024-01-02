@@ -34,7 +34,7 @@ public class EditRequestServiceImp : EditRequestService
         try
         {
             var markTicketResults = new List<Result>();
-            if (!query.IssueTypeId.IsArchivedTicket())
+            if (!query.IssueTypeId.IsArchivedTicket() && !query.IssueTypeId.RecoverTicket())
             {
                 markTicketResults = (await marketTicketsWhenEditService.Execute(query)).ToList();
             }

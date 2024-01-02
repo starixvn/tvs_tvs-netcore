@@ -1,5 +1,6 @@
 import { AbnormalAccountModel } from 'src/add-request/app/add-request/models/abnormal-account.model';
 import { EarlyKickOffModel } from 'src/add-request/app/add-request/models/event-eko.model';
+import { RecoverTicketModel } from 'src/add-request/app/add-request/models/recover-ticket.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { NotParticipateModel } from '../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
@@ -83,6 +84,7 @@ export class RequestDetailViewModel {
   notParticipateModels?: NotParticipateModel[];
   earlyKickOffModels?: EarlyKickOffModel[];
   abnormalAccountModel?: AbnormalAccountModel;
+  recoverTicketModel?: RecoverTicketModel;
 }
 
 export class PlayerName {

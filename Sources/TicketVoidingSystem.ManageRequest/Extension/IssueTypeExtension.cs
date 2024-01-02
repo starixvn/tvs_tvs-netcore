@@ -39,6 +39,11 @@ public static class IssueTypeExtension
         return id == IssueTypeConstant.ArchivedTicket;
     }
 
+    public static bool RecoverTicket(this int id)
+    {
+        return id == IssueTypeConstant.RecoverTicket;
+    }
+
     public static bool IsAbnormalBetRealMember(this int id)
     {
         return id == IssueTypeConstant.AbnormalBetRealMember;

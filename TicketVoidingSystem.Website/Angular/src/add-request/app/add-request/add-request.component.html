@@ -4,6 +4,7 @@
     [(model)]="model.filter"
     [(issueTypes)]="issueTypes"
     [isExternalUrl]="isExternalUrl"
+    (issueTypeChange)="onChangeIssueType($event)"
     (modelChange)="updateModel($event)">
   </filter>
   <div *ngIf="model.filter.issueTypeId">
