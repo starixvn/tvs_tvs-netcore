@@ -179,6 +179,11 @@
         <Setting Key="DBSIG2.TicketVoiding_VoidedTicket_Select" SpName="TicketVoiding_VoidedTicket_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG3.TicketVoiding_VoidedTicket_Select" SpName="TicketVoiding_VoidedTicket_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
 
+        <Setting Key="DBCTG.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG2.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />
+        <Setting Key="DBSIG3.TicketVoiding_RecoveredTicket_Select" SpName="TicketVoiding_RecoveredTicket_Select" DbName="DBSIG3.bodb02.bodbAdminNet" TimeOut="600" />
+
         <Setting Key="DBCTG.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBCTG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBSIG.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="DBSIG2.TicketVoiding_Queue_Insert" SpName="TicketVoiding_Queue_Insert" DbName="DBSIG2.bodb02.bodbAdminNet" TimeOut="600" />

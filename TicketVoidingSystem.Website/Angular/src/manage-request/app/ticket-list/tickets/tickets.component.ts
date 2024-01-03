@@ -13,6 +13,7 @@ export class TicketsComponent implements OnInit {
   @Output() pagingChange = new EventEmitter<PagingModel>();
   @Output() exportExcelEvent = new EventEmitter<boolean>();
   @Input() isBlock: boolean;
+  @Input() isRecoverTicket: boolean;
 
   constructor() { }
 
@@ -25,5 +26,12 @@ export class TicketsComponent implements OnInit {
 
   exportExcel() {
     this.exportExcelEvent.emit();
+  }
+
+  getTitle() {
+    if(this.isRecoverTicket){
+      return "Recovered Tickets"
+    }
+    return "Voided Tickets"
   }
 }

@@ -67,7 +67,8 @@ export class TicketListComponent implements OnInit, OnChanges {
       voidingHistoryIds: this.generalInfoViewModel.generalInfoModel.voidingHistoryIds,
       issueTypeId: this.requestDetail.request.issueTypeId,
       pageIndex: this.paging.page - 1,
-      pageSize: this.paging.pageSize
+      pageSize: this.paging.pageSize,
+      singleTransIds: this.generalInfoViewModel.generalInfoModel.singleTransIds
     };
     this.blockBetList = true;
     this.tickets = await this.appService.getVoidedTickets(this.query);
@@ -120,7 +121,12 @@ export class TicketListComponent implements OnInit, OnChanges {
     return !this.isAbnormalAccountIssueType(requestDetail)
       && !(this.isAbnormalBetIssueType(requestDetail) && requestDetail.event.filterBy === AbnormalFilterBy.MIX_PARLAY)
       && !(this.isDuplicateTickets(requestDetail) && requestDetail.duplicateTicketsModel.filterBy === AbnormalFilterBy.MIX_PARLAY)
-      && !this.isArchivedTicketIssueType();
+      && !this.isArchivedTicketIssueType()
+      && !this.isRecoverTicket(requestDetail);
+  }
+
+  isRecoverTicket(requestDetail: RequestDetailViewModel) {
+    return StaticService.isRecoverTicket(requestDetail.request?.issueTypeId.toString());
   }
 
   isAbnormalAccountIssueType(requestDetail: RequestDetailViewModel): boolean {

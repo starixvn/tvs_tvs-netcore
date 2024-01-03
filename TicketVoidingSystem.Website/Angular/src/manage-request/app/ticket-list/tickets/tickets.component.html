@@ -1,6 +1,6 @@
 <div class="tickets-list" [blockUi]="isBlock">
   <div class="title-tickets-list" *ngIf="model.groups !== undefined && model.groups.length > 0">
-    <div class="title-tickets-list-label">Voided Tickets</div>
+    <div class="title-tickets-list-label">{{getTitle()}}</div>
     <div class="title-tickets-list-toolbox">
       <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
     </div>

@@ -28,13 +28,40 @@ public class GetVoidedTicketsServiceImp : GetVoidedTicketsService
 
     public async Task<IEnumerable<VoidedTicketModel>> GetTickets(GetVoidedTicketsQuery query)
     {
-        var voidedTickets = query.IssueTypeId == IssueTypeConstant.ArchivedTicket ? await GetVoidedTickets14(query) : await GetVoidedTickets(query);
+        var voidedTickets = await GetTicketsForEachIssueType(query);
         if (query.IsCreditOnly)
         {
             voidedTickets = voidedTickets.Where(x => x.GroupName.Equals("Credit", StringComparison.OrdinalIgnoreCase));
         }
 
         return voidedTickets.OrderBy(x => x.IsMixParlay).ToList();
+    }
+
+    private async Task<IEnumerable<VoidedTicketModel>> GetTicketsForEachIssueType(GetVoidedTicketsQuery query)
+    {
+        return query.IssueTypeId switch
+        {
+            IssueTypeConstant.RecoverTicket => await GetRecoveredTickets(query),
+            IssueTypeConstant.ArchivedTicket => await GetVoidedTickets14(query),
+            _ => await GetVoidedTickets(query)
+        };
+    }
+
+    private async Task<IEnumerable<VoidedTicketModel>> GetRecoveredTickets(GetVoidedTicketsQuery query)
+    {
+        var criteria = mapper.Map<GetRecoveredTicketsCriteria>(query);
+
+        var tasks = SiteDbGroupConstant.ServerList
+            .Select(item =>
+            {
+                criteria.SiteDbGroupId = item.Id;
+                return repository.FetchAsync<VoidedTicketModel>(criteria);
+            });
+
+        var responses = await Task.WhenAll(tasks);
+        var recoveredTickets = responses.SelectMany(response => response);
+
+        return recoveredTickets;
     }
 
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets(GetVoidedTicketsQuery query)

@@ -14,6 +14,7 @@ export class GeneralInfo {
     generalBetTypeCombinations: string;
     scoreResult: string;
     reason: string;
+    singleTransIds: string;
 }
 
 export class GroupUserVoidMessage {
