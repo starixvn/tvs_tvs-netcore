@@ -46,6 +46,9 @@ export class EventRecoverTicketComponent implements OnInit {
   }
 
   public async saveRequest(): Promise<void> {
+    this.isCancelAfterFocusOutBetIdsEvent = true;
+    this.betIdsComponent.triggerFocusOutBetIds();
+    this.isCancelAfterFocusOutBetIdsEvent = false;
     this.saveRequestService.saveRequest(this.createSaveRequestArg());
   }
 

@@ -84,6 +84,7 @@ export class SaveRequestService {
   }
 
   private getMessageConfirmation(): string {
-    return `<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
+    return 'Bet ticket(s) will be recovered and resettled immediately.'
+    + `<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
 }
