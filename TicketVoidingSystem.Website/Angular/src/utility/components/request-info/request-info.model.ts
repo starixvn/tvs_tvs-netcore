@@ -3,8 +3,8 @@ export class GeneralInfo {
     kickOffTimeString?: string;
     leagueName?: string;
     matchEvent?: string;
-    totalVoidedTickets: number;
-    totalCancelCashOut: number;
+    totalTicketsProcessed: number;
+    totalCancelCashOutProcessed: number;
     decidedBy: string;
     requestedBy: string;
     negativeBalanceUsers: string;

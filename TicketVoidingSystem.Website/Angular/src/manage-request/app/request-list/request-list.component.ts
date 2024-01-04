@@ -90,7 +90,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   checkVoided(details: DetailRequestModel[]): boolean {
     let total = 0;
     details.forEach(item => {
-      total = total + item.totalVoidedSingle + item.totalVoidedParlay;
+      total = total + item.totalSingleProcessed + item.totalParlayProcessed;
     });
 
     return total > 0;
@@ -203,14 +203,14 @@ export class RequestListComponent implements OnInit, OnChanges {
           if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            detail.totalVoidedSingle = x.simpleInfo.totalVoidedSingle;
-            detail.totalVoidedParlay = x.simpleInfo.totalVoidedParlay;
-            detail.totalCancelCashOut = x.simpleInfo.totalCancelCashOut;
+            detail.totalSingleProcessed = x.simpleInfo.totalVoidedSingle;
+            detail.totalParlayProcessed = x.simpleInfo.totalVoidedParlay;
+            detail.totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOut;
           } else {
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            request.details[0].totalVoidedSingle = x.simpleInfo.totalVoidedSingle;
-            request.details[0].totalVoidedParlay = x.simpleInfo.totalVoidedParlay;
-            request.details[0].totalCancelCashOut = x.simpleInfo.totalCancelCashOut;
+            request.details[0].totalSingleProcessed = x.simpleInfo.totalVoidedSingle;
+            request.details[0].totalParlayProcessed = x.simpleInfo.totalVoidedParlay;
+            request.details[0].totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOut;
           }
         }
       }
@@ -265,11 +265,11 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];
-    info.push(`S:${detail.totalVoidedSingle}`);
-    info.push(`P:${detail.totalVoidedParlay}`);
+    info.push(`S:${detail.totalSingleProcessed}`);
+    info.push(`P:${detail.totalParlayProcessed}`);
 
     if (StaticService.isHaveCancelCashOutTicket(issueTypeId.toString())) {
-      info.push(`<span class="text-green">CC:${detail.totalCancelCashOut}</span>`);
+      info.push(`<span class="text-green">CC:${detail.totalCancelCashOutProcessed}</span>`);
     }
 
     return `(${info.join(', ')})`;

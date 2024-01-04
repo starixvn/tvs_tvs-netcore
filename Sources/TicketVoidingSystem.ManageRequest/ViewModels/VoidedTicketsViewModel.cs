@@ -10,8 +10,8 @@ public class VoidedTicketsViewModel
     }
 
     public IList<Group<VoidedTicketViewModel>> Groups { get; set; }
-    public int TotalVoidedTickets { get; set; }
-    public int TotalCancelCashOut { get; set; }
+    public int TotalTicketsProcessed { get; set; }
+    public int TotalCancelCashOutProcessed { get; set; }
     public string LicenseeNames { get; set; }
     public string CancelCashOutLicenseesName { get; set; }
     public string GeneralBetTypeCombinations { get; set; }

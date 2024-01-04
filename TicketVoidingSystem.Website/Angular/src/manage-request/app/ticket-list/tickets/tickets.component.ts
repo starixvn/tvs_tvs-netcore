@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { TicketsModel } from './tickets.model';
+import { StaticService } from 'src/utility/services/static.service';
 
 @Component({
   selector: 'tickets',
@@ -13,7 +14,7 @@ export class TicketsComponent implements OnInit {
   @Output() pagingChange = new EventEmitter<PagingModel>();
   @Output() exportExcelEvent = new EventEmitter<boolean>();
   @Input() isBlock: boolean;
-  @Input() isRecoverTicket: boolean;
+  @Input() issueTypeId: number;
 
   constructor() { }
 
@@ -28,10 +29,14 @@ export class TicketsComponent implements OnInit {
     this.exportExcelEvent.emit();
   }
 
+  isRecoverTicket() {
+    return StaticService.isRecoverTicket(this.issueTypeId.toString());
+  }
+
   getTitle() {
-    if(this.isRecoverTicket){
-      return "Recovered Tickets"
+    if(this.isRecoverTicket()){
+      return 'Recovered Tickets'
     }
-    return "Voided Tickets"
+    return 'Voided Tickets'
   }
 }

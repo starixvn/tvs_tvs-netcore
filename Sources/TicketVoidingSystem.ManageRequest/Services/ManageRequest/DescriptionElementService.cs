@@ -132,8 +132,8 @@ public class DescriptionElementServiceImp : DescriptionElementService
         return $"<div>Product: <span class=\"text-primary product\">{products}</span></div>";
     }
 
-    public string BuildResettled(int totalResettled)
+    public string BuildResettled(int totalResettleProcessed)
     {
-        return $"<div>Resettled: <span class=\"text-primary total-resettled\">{totalResettled}</span></div>";
+        return $"<div>Resettled: <span class=\"text-primary total-resettled\">{totalResettleProcessed}</span></div>";
     }
 }

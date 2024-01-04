@@ -1,8 +1,7 @@
 export class TicketsModel {
   groups: Array<GroupTickets> = [];
-  totalVoidedTickets: number;
-  totalRecoveredTickets: number;
-  totalCancelCashOut: number;
+  totalTicketsProcessed: number;
+  totalCancelCashOutProcessed: number;
   licenseeNames: string;
   cancelCashOutLicenseesName: string;
   generalBetTypeCombinations: string;

@@ -28,7 +28,7 @@ public class RequestEventViewModel
     public string SettlementStatus { get; set; }
     public int SubIssueTypeId { get; set; }
     public string Description { get; set; }
-    public int TotalVoidedSingle { get; set; }
-    public int TotalVoidedParlay { get; set; }
-    public int TotalCancelCashOut { get; set; }
+    public int TotalSingleProcessed { get; set; }
+    public int TotalParlayProcessed { get; set; }
+    public int TotalCancelCashOutProcessed { get; set; }
 }
