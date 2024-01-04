@@ -1,5 +1,5 @@
-﻿using Fanex.Data.Repository;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageVoidServices.Criteria;
 using TicketVoidingSystem.ManageVoidServices.Models;
@@ -74,7 +74,9 @@ public class AfterVoidServiceImp : AfterVoidService
             IsInsertedVoidedTransaction = model.IsInsertedVoidedTransaction,
             IsUpdatedVoidingHistory = model.IsUpdatedVoidingHistory,
             IsSentEmail = model.IsSentEmail,
-            IsSentLetsTalk = model.IsSentLetsTalk
+            IsSentLetsTalk = model.IsSentLetsTalk,
+            IsDeletedMessage = model.IsDeletedMessage,
+            IsDeletedVoidedTransaction = model.IsDeletedVoidedTransaction
         };
 
         await repository.ExecuteAsync(criteria);

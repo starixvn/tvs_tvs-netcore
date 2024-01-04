@@ -19,6 +19,8 @@ export class VoidBetAutomationModel {
     isUpdatedVoidingHistory?: boolean;
     isSentEmail?: boolean;
     isSentLetsTalk?: boolean;
+    isDeletedMessage?: boolean;
+    isDeletedVoidedTransaction?: boolean;
 }
 
 export const SELECTION_ITEM = [
