@@ -97,7 +97,9 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
-    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT) {
+    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET
+      || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT
+      || issueTypeId.toString() === IssueTypeConstant.RECOVER_TICKET) {
       return this.permission.manageRequestHost && this.isCreatedDateLessThanToday(createdDate);
     } else {
       return this.permission.manageRequestHost && new Date(eventDate) > new Date(this.moveBetDay);
@@ -253,7 +255,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       + `Start Void Time: ${moment(requestInfo.startVoidTime)
         .format(DateTimeFormat.TIME_FORMAT)} (${requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
 
-      return content;
+    return content;
   }
 
   public checkCanCopyRequestInfo(issueTypeId: number): boolean {

@@ -34,9 +34,6 @@ export class TicketsComponent implements OnInit {
   }
 
   getTitle() {
-    if(this.isRecoverTicket()){
-      return 'Recovered Tickets'
-    }
-    return 'Voided Tickets'
+    return this.isRecoverTicket() ? 'Recovered Tickets' : 'Voided Tickets';
   }
 }
