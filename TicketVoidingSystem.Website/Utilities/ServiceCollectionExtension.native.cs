@@ -46,6 +46,7 @@ using SpecialDelete.VoidByCurrency;
 using SpecialDelete.VoidByCurrency.Controllers;
 using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Controllers;
 using TicketVoidingSystem.ManageVoidServices.Controllers;
@@ -162,7 +163,7 @@ public static class ServiceCollectionExtension
         RefDataTypeContainer
             .ConnectTo(new Uri(AppSettingService.AppSetting.FanexRemotingRefServiceUrl))
             .FromApplication(AppSettingService.AppSetting.ServiceName)
-            .RegisterSupportedLanguages("en-US", "zh-TW", "zh-CN", "zh-Hans");
+            .RegisterSupportedLanguages(LanguageCode.English, LanguageCode.ChineseTraditional, LanguageCode.ChineseSimplified, LanguageCode.NewChineseSimplified);
 
         BetListManager.RegisterRemotingRef(new CacheRef());
     }
