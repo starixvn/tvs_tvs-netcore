@@ -13,14 +13,12 @@ export class MenuBarComponent implements OnInit {
   username: string;
   isBlock: boolean;
   rootUrl = '/';
-  oldSiteAbsoluteUrl = 'https://';
   
   constructor(private readonly commonService: CommonService) { }
 
   async ngOnInit(): Promise<void> {
     this.isBlock = true;
     this.rootUrl = document.body.getAttribute('root-url');
-    this.oldSiteAbsoluteUrl = this.getOldSiteAbsoluteUrl(document.body.getAttribute('old-site-root-url'));
     const model = await this.commonService.getNapUserInfo();
     this.username = model.userName;
     this.menuItems = _.orderBy(_.uniqBy(model.menuItem.filter(x => x.parentId <= 0), x => x.id), ['displayOrder'], ['asc']);
@@ -29,14 +27,5 @@ export class MenuBarComponent implements OnInit {
       t.items = _.orderBy(_.uniqBy(t.items, x => x.id), ['displayOrder'], ['asc']);
     });
     this.isBlock = false;
-  }
-
-  
-  private getOldSiteAbsoluteUrl(oldSiteRootUrl: string): string {
-    if (oldSiteRootUrl.startsWith('/')) {
-      return `${window.location.origin}${oldSiteRootUrl}`;
-    }
-
-    return oldSiteRootUrl;
   }
 }

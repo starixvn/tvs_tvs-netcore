@@ -15,8 +15,11 @@
     <link rel="shortcut icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/css/bet-list.css" />
     @await RenderSectionAsync("Head", false)
+    <script type="text/javascript">
+        window.rootUrl = '@Url.Content("~/")';
+    </script>
 </head>
-<body user-name="@userName" root-url="@Url.Content("~/")" old-site-root-url="@Configuration["OldSiteRootUrl"]">
+<body user-name="@userName" root-url="@Url.Content("~/")">
 <section id="body" user-name="@userName" user-id="@userId">
     @RenderBody()
 </section>

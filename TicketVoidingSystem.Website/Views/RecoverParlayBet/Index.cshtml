@@ -1,0 +1,38 @@
+﻿@using TicketVoidingSystem.Resources
+@using TicketVoidingSystem.Website.ViewComponents
+@{
+    Layout = "~/Views/Shared/_LayoutOld.cshtml";
+    ViewBag.Title = "Recover Parlay Bet";
+}
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/old-page/bundle/recover-parlay-bet.css" />
+}
+@section Headline {
+    <div class="title">
+        Home / Recover Parlay Bet
+    </div>
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "RecoverTicketForm" }))
+{
+    @await Component.InvokeAsync(nameof(RecoverParlayBetFilter))
+
+<div id="report-content">
+    <div class="display-none content-grid">
+        <div class="freegrid" id="ticketInfo">
+        </div>
+    </div>
+    <div class="row">
+        <input type="button" value="Recover" class="submitRecover display-none" id="recover" />
+    </div>
+</div>
+<div id="show-settle-bet" title="Caution!" class="display-none">@StringResource.SettledBet</div>
+<div id="show-error-move-bet">
+</div>
+<div id="show-message" title="Recover Parlay Bet Result" class="display-none">
+</div>
+<div id="show-message-betTrade" class="display-none">
+</div>
+}
+@section Scripts {
+    <script src="~/old-page/bundle/recover-parlay-bet.js"></script>
+}

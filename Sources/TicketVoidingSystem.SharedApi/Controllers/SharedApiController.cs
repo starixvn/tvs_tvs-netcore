@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
-using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.SharedApi.Controllers;
@@ -29,7 +28,7 @@ public class SharedApiController : ControllerBase
         var session = new NapSession(httpContextAccessor);
         var viewModel = new
         {
-            MenuItem = Helper.UpdateNapMenuItem(session.MenuItemList, httpContextAccessor),
+            MenuItem = session.MenuItemList,
             session.UserName,
             session.UserId
         };

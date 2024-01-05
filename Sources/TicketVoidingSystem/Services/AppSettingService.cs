@@ -49,8 +49,7 @@ public static class AppSettingService
                 AppMailJollySportsId = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailJollySportsId)}"),
                 AppMailAddress = configuration.GetValue<string>($"{nameof(FanexMailService)}:{nameof(FanexMailService.AppMailAddress)}")
             },
-            IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb)),
-            OldSiteRootUrl = configuration.GetValue<string>(nameof(AppSettingModel.OldSiteRootUrl))
+            IgnoreSiteDb = configuration.GetValue<string>(nameof(AppSettingModel.IgnoreSiteDb))
         };
 
         AppSetting = setting;

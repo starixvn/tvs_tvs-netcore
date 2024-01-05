@@ -1,5 +1,4 @@
-﻿@addTagHelper *, WebOptimizer.Core
-@using Fanex.NAP.Client.Session
+﻿@using Fanex.NAP.Client.Session
 @using TicketVoidingSystem.Website.ViewComponents
 @{
     var session = new NapSession(httpContextAccessor);
@@ -30,13 +29,13 @@
     }
     <script type="text/javascript">
         window.rootUrl = '@Url.Content("~/")';
-        </script>
+    </script>
 </head>
 <body user-name="@userName" root-url="@Url.Content("~/")">
-        @await Component.InvokeAsync(nameof(LogOut), new { userName })
+        @await Html.PartialAsync("_LogOut", @userName)
 
         <header>
-            @await Component.InvokeAsync(nameof(Menu))
+        @await Component.InvokeAsync(nameof(Menu), session.MenuItemList)
         </header>
 
         @if (IsSectionDefined("Headline"))
