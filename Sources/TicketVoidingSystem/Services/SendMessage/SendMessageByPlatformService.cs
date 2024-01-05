@@ -60,7 +60,7 @@ public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
         if (specialPlatformTickets.Any())
         {
             var specialMessage = specialPlatformService.RemoveSabaInMessageContent(param.Match, param.Message);
-            var specialMessageId = await sendMessageService.InsertMessage(specialMessage, 0, param.Match?.LeagueGroupId, param.IsMessageContentAbnormal);
+            var specialMessageId = await sendMessageService.InsertMessage(specialMessage, param.MatchId, param.Match?.LeagueGroupId, param.IsMessageContentAbnormal);
             await sendMessageService.SendMessage(specialPlatformTickets, specialMessageId, param.IssueTypeId, specialMessage.CreatorId);
             return specialMessageId;
         }

@@ -169,6 +169,4 @@ public static class Helper
 
         return result;
     }
-
-    }
 }
