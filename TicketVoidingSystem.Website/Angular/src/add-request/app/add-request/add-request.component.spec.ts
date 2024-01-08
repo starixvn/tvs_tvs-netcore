@@ -16,7 +16,9 @@ import { AddRequestStore } from './add-request.store';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
+import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
+import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
@@ -189,6 +191,7 @@ describe('AddRequestComponent', () => {
       FilterComponent,
       OthersComponent,
       EventRedCardComponent,
+      EventRecoverTicketComponent
     ],
     imports: [
       ToolTipModule,
@@ -248,7 +251,7 @@ describe('AddRequestComponent', () => {
     expect(component.abnormalFilterBySubscription.unsubscribe).toHaveBeenCalled();
   });
 
-  it('#updateModel should assign default data for decidedBy when is abnormal', async () => {
+  it('#updateModel should assign new object filter', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '1';
     const component = new AddRequestComponent(null, null);
@@ -257,7 +260,6 @@ describe('AddRequestComponent', () => {
 
     component.updateModel(Helper.fakeAbnormalFilterModel);
 
-    expect(component.model.others.decidedBy).toBe('sa');
     expect(component.model.filter).toStrictEqual(Helper.fakeAbnormalFilterModel);
   });
 
@@ -302,51 +304,6 @@ describe('AddRequestComponent', () => {
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
   });
 
-  it('#eventDangerAcceptedComponent.saveRequest should execute save request when isDangerAccepted', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.DANGER_ACCEPTED;
-    const mockSaveRequest = jest.fn();
-    const eventDangerAcceptedComponent = new EventDangerAcceptedComponent(null, null, null, null, null, null, null);
-    eventDangerAcceptedComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventDangerAcceptedComponent = eventDangerAcceptedComponent;
-
-    await component.saveRequest(false);
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#eventRedCardComponent.saveRequest should execute save request when isRedCard', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.RED_CARD;
-    const mockSaveRequest = jest.fn();
-    const eventRedCardComponent = new EventRedCardComponent(null, null, null, null, null, null, null);
-    eventRedCardComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventRedCardComponent = eventRedCardComponent;
-
-    await component.saveRequest(false);
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
-  it('#eventWrongScoreComponent.saveRequest should execute save request when isWrongScoreIssueType', async () => {
-    const fakeRequestModel = new RequestModel();
-    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.WRONG_SCORE;
-    const mockSaveRequest = jest.fn();
-    const eventWrongScoreComponent = new EventWrongScoreComponent(null, null, null, null, null, null, null, null);
-    eventWrongScoreComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
-    component.model = fakeRequestModel;
-    component.eventWrongScoreComponent = eventWrongScoreComponent;
-
-    await component.saveRequest(false);
-
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
   it('#eventArchivedTicket.saveRequest should execute save request when isArchivedTicketIssueType', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = IssueTypeConstant.ARCHIVED_TICKET;
@@ -356,6 +313,51 @@ describe('AddRequestComponent', () => {
     const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.eventTicket14Component = eventArchivedTicketComponent;
+
+    await component.saveRequest(false);
+
+    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('#abnormalAccountsComponent.saveRequest should execute save request when isAbnormalAccount', async () => {
+    const fakeRequestModel = new RequestModel();
+    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.ABNORMAL_ACCOUNT;
+    const mockSaveRequest = jest.fn();
+    const abnormalAccountsComponent = new AbnormalAccountsComponent(null, null, null, null);
+    abnormalAccountsComponent.saveRequest = mockSaveRequest;
+    const component = new AddRequestComponent(null, null);
+    component.model = fakeRequestModel;
+    component.abnormalAccountsComponent = abnormalAccountsComponent;
+
+    await component.saveRequest(false);
+
+    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('#eventRecoverTicketComponent.saveRequest should execute save request when isRecoverTicket', async () => {
+    const fakeRequestModel = new RequestModel();
+    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.RECOVER_TICKET;
+    const mockSaveRequest = jest.fn();
+    const eventRecoverTicketComponent = new EventRecoverTicketComponent(null, null, null);
+    eventRecoverTicketComponent.saveRequest = mockSaveRequest;
+    const component = new AddRequestComponent(null, null);
+    component.model = fakeRequestModel;
+    component.eventRecoverTicketComponent = eventRecoverTicketComponent;
+
+    await component.saveRequest(false);
+
+    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('#eventDuplicateTicketsComponent.saveRequest should execute save request when isDuplicateTickets', async () => {
+    const fakeRequestModel = new RequestModel();
+    fakeRequestModel.filter.issueTypeId = IssueTypeConstant.DUPLICATE_TICKETS;
+    const mockSaveRequest = jest.fn();
+    const eventDuplicateTicketsComponent = new EventDuplicateTicketsComponent(null, null, null, null, null);
+    eventDuplicateTicketsComponent.saveRequest = mockSaveRequest;
+    const component = new AddRequestComponent(null, null);
+    component.model = fakeRequestModel;
+    component.eventDuplicateTicketsComponent = eventDuplicateTicketsComponent;
 
     await component.saveRequest(false);
 

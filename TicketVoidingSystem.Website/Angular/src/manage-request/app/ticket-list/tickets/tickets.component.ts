@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsModel } from './tickets.model';
-import { StaticService } from 'src/utility/services/static.service';
 
 @Component({
   selector: 'tickets',

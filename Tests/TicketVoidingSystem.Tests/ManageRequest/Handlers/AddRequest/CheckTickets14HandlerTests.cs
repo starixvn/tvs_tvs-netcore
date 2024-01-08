@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
@@ -31,48 +30,16 @@ public class CheckTickets14HandlerTests
     {
         // Arrange
         var request = new CheckTickets14Request();
-        var firstResultSet = new List<CheckTickets14ViewModel>
-            { new() { InvalidTransIds = "123", UnsupportedDateRangeTransIds = "456" } };
-        var secondResultSet = new List<string> { "123" };
-        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
-            .ReturnsForAnyArgs(new List<string> { "TransInfo", "" });
-        repository.FetchMultipleAsync<CheckTickets14ViewModel, string>(Arg.Any<CheckTickets14Criteria>(),
-                CancellationToken.None)
-            .ReturnsForAnyArgs((firstResultSet, secondResultSet));
-
         var viewModel = new CheckTickets14ViewModel
         {
             InvalidTransIds = "123",
             UnsupportedDateRangeTransIds = "456",
-            TransInfoJson = secondResultSet.FirstOrDefault()
+            TransInfoJson = "12"
         };
-
-        // Act
-        var actual = await handler.Handle(request, CancellationToken.None);
-
-        // Assert
-        AssertExtension.Equal(viewModel, actual);
-    }
-
-    [Fact]
-    public async Task Handler_NoHasInvalidTransIds_ReturnModelExpected()
-    {
-        // Arrange
-        var request = new CheckTickets14Request();
-        var firstResultSet = new List<CheckTickets14ViewModel>();
-        var secondResultSet = new List<string> { "123" };
         getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
             .ReturnsForAnyArgs(new List<string> { "TransInfo", "" });
-        repository.FetchMultipleAsync<CheckTickets14ViewModel, string>(Arg.Any<CheckTickets14Criteria>(),
-                CancellationToken.None)
-            .ReturnsForAnyArgs((firstResultSet, secondResultSet));
-
-        var viewModel = new CheckTickets14ViewModel
-        {
-            InvalidTransIds = null,
-            UnsupportedDateRangeTransIds = null,
-            TransInfoJson = secondResultSet.FirstOrDefault()
-        };
+        repository.GetAsync<CheckTickets14ViewModel>(Arg.Any<CheckTickets14Criteria>(), CancellationToken.None)
+            .ReturnsForAnyArgs(viewModel);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

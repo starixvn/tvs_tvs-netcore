@@ -19,15 +19,16 @@ class Helper {
     leagueName: '',
     matchEvent: 'MU - vs Barca',
     licenseeNames: '',
-    totalVoidedTickets: 1,
+    totalTicketsProcessed: 1,
     decidedBy: '',
     requestedBy: '',
     negativeBalanceUsers: '',
     generalBetTypeCombinations: '',
     scoreResult: '',
     reason: '',
-    totalCancelCashOut: 0,
-    cancelCashOutLicenseesName: ''
+    totalCancelCashOutProcessed: 0,
+    cancelCashOutLicenseesName: '',
+    singleTransIds: ''
   };
 }
 
@@ -91,8 +92,8 @@ describe('AppService', () => {
           tickets: []
         }
       ],
-      totalVoidedTickets: 0,
-      totalCancelCashOut: 0,
+      totalTicketsProcessed: 0,
+      totalCancelCashOutProcessed: 0,
       licenseeNames: '',
       generalBetTypeCombinations: '',
       cancelCashOutLicenseesName: ''

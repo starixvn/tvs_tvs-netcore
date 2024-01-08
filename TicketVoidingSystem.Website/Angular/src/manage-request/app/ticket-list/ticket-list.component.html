@@ -19,7 +19,7 @@
           <request-info [model]="requestDetail" [issue]="issue" [generalInfoViewModel]="generalInfoViewModel"
              [isShowAbnormalAccountInfo]="false" [isShowGeneralInfo]="true"></request-info>
           <tickets [model]="tickets" [(paging)]="paging" (pagingChange)="pagingEvent()" [isBlock]="blockBetList"
-            (exportExcelEvent)="exportExcel()" [issueTypeId]="requestDetail.request.issueTypeId"></tickets>
+            (exportExcelEvent)="exportExcel()" [issueTypeId]="requestDetail.request?.issueTypeId"></tickets>
         </div>
       </div>
     </div>

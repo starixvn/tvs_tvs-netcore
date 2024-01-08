@@ -40,6 +40,7 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
     [InlineData(IssueTypeConstant.WrongOdds)]
     [InlineData(IssueTypeConstant.ReducedOver)]
     [InlineData(IssueTypeConstant.NotParticipate)]
+    [InlineData(IssueTypeConstant.RecoverTicket)]
     [InlineData(0)]
     [InlineData(99999)]
     public async Task GetTransInfoJson_ReturnsListOfTransInfoJson(int issueTypeId)
@@ -61,7 +62,8 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
             TransIds = "1",
             EarlyKickOffModels = new List<EarlyKickOffViewModel>(),
             AbnormalAccountViewModel = new AbnormalAccountViewModel(),
-            NotParticipateModels = new List<NotParticipateViewModel>()
+            NotParticipateModels = new List<NotParticipateViewModel>(),
+            RecoverTicketModel = new RecoverTicketViewModel()
         };
         repository.GetAsync<string>(Arg.Any<GetTicketSiteDbCriteria>()).ReturnsForAnyArgs("ss");
 

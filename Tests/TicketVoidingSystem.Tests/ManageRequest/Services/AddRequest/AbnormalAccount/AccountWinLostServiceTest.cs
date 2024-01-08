@@ -8,7 +8,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using Xunit;
 
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
+namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAccount;
 
 public class AccountWinLostServiceTest
 {
@@ -35,6 +35,17 @@ public class AccountWinLostServiceTest
 
         // Assert
         await repository.Received(1).ExecuteAsync(Arg.Any<SaveAccountWinLostCommand>());
+    }
+
+    [Fact]
+    public async Task SaveAccountWinLost_EmptyAccount_RepositoryHasCalledWithXmlEmpty()
+    {
+        // Arrange
+        // Act
+        await service.SaveAccountWinLost(1, 1, null);
+
+        // Assert
+        await repository.Received(1).ExecuteAsync(Arg.Is<SaveAccountWinLostCommand>(x => x.AccountWinLostXml == string.Empty));
     }
 
     [Fact]

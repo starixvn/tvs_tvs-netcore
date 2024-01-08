@@ -31,7 +31,7 @@ public interface DescriptionElementService
 
     string BuildProducts(string products);
 
-    string BuildResettled(int totalResettled);
+    string BuildResettled(int totalResettleProcessed);
 }
 
 public class DescriptionElementServiceImp : DescriptionElementService

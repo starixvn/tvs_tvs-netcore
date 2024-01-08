@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EventAbnormalBetComponent #EventDuplicateTicketsComponent init should match snapshot 1`] = `
+exports[`EventDuplicateTicketsComponent #EventDuplicateTicketsComponent init should match snapshot 1`] = `
 <ng-component
   __ngContext__={[Function LRootView]}
 >

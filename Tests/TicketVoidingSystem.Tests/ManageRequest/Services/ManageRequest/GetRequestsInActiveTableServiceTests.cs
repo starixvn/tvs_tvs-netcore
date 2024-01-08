@@ -43,7 +43,7 @@ public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixt
         mapper.Map<SelectActiveRequestsCriteria>(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs(criteriaActive);
         var requests = new List<RequestModel>
-            { new() { IssueTypeId = issueTypeId, FilterBy = null, RequestId = 2, MatchId = 1, TotalVoidedSingle = 1 } };
+            { new() { IssueTypeId = issueTypeId, FilterBy = null, RequestId = 2, MatchId = 1, TotalSingleProcessed = 1 } };
         var requestInfo = new List<GetRequestInfoModel> { new() };
         var requestInfoGetCalcTime = new List<string> { "" };
         repository

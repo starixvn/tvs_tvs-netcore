@@ -110,7 +110,8 @@ class Helper {
     others: new OthersModel(),
     duplicateTicketsModel: null,
     notParticipateModels: [],
-    earlyKickOffModels: []
+    earlyKickOffModels: [],
+    recoverTicketModel: null
   };
   static readonly fakeMapEventArg: MapEventArg = {
     primitiveProperty: Helper.fakePrimitiveProperty,

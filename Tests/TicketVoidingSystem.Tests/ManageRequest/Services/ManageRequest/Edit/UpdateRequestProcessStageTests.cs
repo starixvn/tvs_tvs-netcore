@@ -58,6 +58,7 @@ public class UpdateRequestProcessStageTests
             DuplicateTicketsInfo = new DuplicateTicketsViewModel(),
             NotParticipateInfo = new List<NotParticipateViewModel>(),
             EarlyKickOffInfo = new List<EarlyKickOffViewModel>(),
+            RecoverTicketInfo = new RecoverTicketViewModel(),
         };
         var expected = new Result
         {

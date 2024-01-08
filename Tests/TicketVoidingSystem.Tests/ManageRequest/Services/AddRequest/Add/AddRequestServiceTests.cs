@@ -101,6 +101,7 @@ public class AddRequestServiceTests
     [InlineData(IssueTypeConstant.NotParticipate, 1)]
     [InlineData(IssueTypeConstant.AbnormalAccount, 1)]
     [InlineData(IssueTypeConstant.AbnormalAccount, ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)]
+    [InlineData(IssueTypeConstant.RecoverTicket, ActionVoidRequestConstant.AutoRecoverId)]
     [InlineData(1111111, 1)]
     public void Execute_HasResultSuccessful_CalledExpected(int issueTypeId, int actionId)
     {
@@ -156,7 +157,8 @@ public class AddRequestServiceTests
             AbnormalAccountInfo = new AbnormalAccountViewModel(),
             WrongOddsInfo = new List<WrongOddsViewModel>(),
             EarlyKickOffInfo = new List<EarlyKickOffViewModel>(),
-            NotParticipateInfo = new List<NotParticipateViewModel>()
+            NotParticipateInfo = new List<NotParticipateViewModel>(),
+            RecoverTicketInfo = new RecoverTicketViewModel()
         };
         var markTicketResults = new List<Result> { new() { ErrorCode = 0 } };
         markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)

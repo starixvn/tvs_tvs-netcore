@@ -131,6 +131,7 @@ export class AddRequestApiService {
     return this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
   }
 
+  /* istanbul ignore next */
   async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
     return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
   }
