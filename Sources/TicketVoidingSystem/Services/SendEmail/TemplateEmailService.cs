@@ -11,6 +11,8 @@ public interface TemplateEmailService
     MailRecordResult Create(MailVoidViewModel mailVoidViewModel, SiteEmail site, string subject);
 
     MailRecordResult CreateForRecover<T, U>(MailRecoverModel<T, U> model, string subject);
+
+    MailRecordResult CreateForRecover(MailRecoverViewModel viewModel, SiteEmail site, string subject);
 }
 
 public class TemplateEmailServiceImp : TemplateEmailService
@@ -32,6 +34,16 @@ public class TemplateEmailServiceImp : TemplateEmailService
             SiteEmail = model.Site,
             Subject = subject,
             EmailBody = GetEmailBody(model.ViewModel.TemplatePath, model.ViewModel)
+        };
+    }
+
+    public MailRecordResult CreateForRecover(MailRecoverViewModel viewModel, SiteEmail site, string subject)
+    {
+        return new MailRecordResult
+        {
+            SiteEmail = site,
+            Subject = subject,
+            EmailBody = GetEmailBody(viewModel.TemplatePath, viewModel)
         };
     }
 

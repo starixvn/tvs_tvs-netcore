@@ -11,6 +11,8 @@ public interface SubjectService
     string CreateVoid(MailViewModel mailViewModel, IEnumerable<string> sites, SiteEmail site, EmailGroup group, VoidType type);
 
     string CreateRecover<T, U>(MailRecoverModel<T, U> model, EmailGroup group, RecoverType type);
+
+    string CreateRecover(MailRecoverViewModel viewModel, EmailGroup group, RecoverType type);
 }
 
 public class SubjectServiceImp : SubjectService
@@ -39,6 +41,19 @@ public class SubjectServiceImp : SubjectService
             EmailGroup.CashOut => string.Format(CultureInfo.InvariantCulture, labels.Licensee(), model.ViewModel.DateTime),
             EmailGroup.ItQa => string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.TestCurrency, model.ViewModel.DateTime),
             EmailGroup.ItSupport => string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.RealCurrency, model.ViewModel.DateTime),
+            _ => ExceptionGroup.WrongGroup
+        };
+    }
+
+    public string CreateRecover(MailRecoverViewModel viewModel, EmailGroup group, RecoverType type)
+    {
+        var labels = SubjectFactory.CreateRecover(type);
+        return group switch
+        {
+            EmailGroup.Recover => string.Format(CultureInfo.InvariantCulture, labels.Licensee(), viewModel.DateTime),
+            EmailGroup.CashOut => string.Format(CultureInfo.InvariantCulture, labels.Licensee(), viewModel.DateTime),
+            EmailGroup.ItQa => string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.TestCurrency, viewModel.DateTime),
+            EmailGroup.ItSupport => string.Format(CultureInfo.InvariantCulture, labels.It(), StringResource.RealCurrency, viewModel.DateTime),
             _ => ExceptionGroup.WrongGroup
         };
     }
