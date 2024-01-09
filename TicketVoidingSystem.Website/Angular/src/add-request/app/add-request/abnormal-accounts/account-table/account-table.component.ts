@@ -101,7 +101,7 @@ export class AccountTableComponent {
       return true;
     }
 
-    if (!RegexConstant.ACCOUNT_VOID_LIMIT.test(account.adjustVoidLimit?.toString())) {
+    if (!RegexConstant.ACCOUNT_VOID_LIMIT.test(account.adjustVoidLimit.toString())) {
       account.adjustVoidLimitString = account.adjustVoidLimit.toString();
       this.tooltip.display('adjust-gv' + index, 'Invalid Amount.');
       return false;

@@ -10,8 +10,7 @@ import { OperatorInfo, OperatorType } from '../others/others.model';
   providedIn: 'root'
 })
 export class CopyRequestInfoService {
-  constructor(private readonly commonService: CommonService
-    ) { }
+  constructor(private readonly commonService: CommonService) { }
 
   async copyEmailRequestInfo(requestId: number, matchId: number, operatorsList: OperatorInfo[]) {
     const query: CopyRequestInfoQuery = {
@@ -21,7 +20,7 @@ export class CopyRequestInfoService {
     const requestInfo = await this.commonService.copyRequestInfo(query);
     const emailContent = this.createContentEmail(requestInfo, operatorsList);
     const type = "text/html";
-    const blob = new Blob([emailContent], {type});
+    const blob = new Blob([emailContent], { type });
     const data = [new ClipboardItem({ [type]: blob })];
     navigator.clipboard.write(data);
   }
@@ -52,7 +51,7 @@ export class CopyRequestInfoService {
       + `${this.getVoidInfo(logInfoDetail)}\n`
       + `Details: ${requestInfo.remark}`;
 
-      return content;
+    return content;
   }
 
   private getVoidInfo(logInfoDetails: LogInfoDetail[]): string {
@@ -60,8 +59,8 @@ export class CopyRequestInfoService {
     logInfoDetails.forEach(x => {
       const minTimeValue = this.getMinTime(x);
       const item = `From: ${moment(x.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} To: ${moment(x.voidToTime).format(DateTimeFormat.TIME_FORMAT)}\n`
-      + `Live Score: ${x.liveScores}. Affected Single Count: ${x.singleCount}, Parlay Count: ${x.mainParlayCount}, Min Time: ${minTimeValue}\n`
-      + `Cancel Cash Out: ${x.cancelCashOutCount}`
+        + `Live Score: ${x.liveScores}. Affected Single Count: ${x.singleCount}, Parlay Count: ${x.mainParlayCount}, Min Time: ${minTimeValue}\n`
+        + `Cancel Cash Out: ${x.cancelCashOutCount}`
 
       voidInfo = `${voidInfo}\n${item}`;
     })
@@ -117,7 +116,7 @@ export class CopyRequestInfoService {
       + `<tr><th>19</th><th style="text-align: left">Void settled ticket</th><th style="text-align: left">${requestInfo.isHasSettledTicket ? 'Yes' : 'No'}</th></tr>`
       + `</table>`;
 
-      return content;
+    return content;
   }
 
   private getOperatorName(selectedOperator: OperatorInfo[], operatorsList: OperatorInfo[], type: number): string {

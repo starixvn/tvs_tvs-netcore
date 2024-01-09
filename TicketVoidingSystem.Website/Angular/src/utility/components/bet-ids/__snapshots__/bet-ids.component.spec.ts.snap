@@ -49,11 +49,13 @@ exports[`BetIdsComponent BetIdsComponent should init match snapshot 1`] = `
         <div
           class="flex-between"
         >
-          <span>
+          <span
+            class="example"
+          >
             Ex: 1234567890, 1223457890, 2234567890
           </span>
           <span
-            class="red"
+            class="number-item red"
           >
             Max: 2000 bets
           </span>
