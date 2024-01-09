@@ -2,7 +2,7 @@
 
 namespace TicketVoidingSystem.Models.SendEmail;
 
-public class TicketRecoverEmailModel : EmailRecoverSupport
+public class TicketRecoverEmailModel
 {
     public long TransId { get; set; }
 

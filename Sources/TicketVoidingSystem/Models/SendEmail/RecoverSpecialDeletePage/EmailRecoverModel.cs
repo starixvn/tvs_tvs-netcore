@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TicketVoidingSystem.Models.SendEmail;
+namespace TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 
 public class MailRecoverViewModel<TViewModel> : MailViewModel
 {

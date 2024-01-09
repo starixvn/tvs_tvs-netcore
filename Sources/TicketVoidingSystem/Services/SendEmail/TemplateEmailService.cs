@@ -2,6 +2,7 @@
 using RazorEngine;
 using RazorEngine.Templating;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail;

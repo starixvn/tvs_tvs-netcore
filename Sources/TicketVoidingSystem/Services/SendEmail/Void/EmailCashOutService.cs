@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Force.DeepCloner;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
-using TicketVoidingSystem.Services.SendEmail.Void;
 
-namespace TicketVoidingSystem.Services.SendEmail;
+namespace TicketVoidingSystem.Services.SendEmail.Void;
 
 public interface EmailCashOutService
 {

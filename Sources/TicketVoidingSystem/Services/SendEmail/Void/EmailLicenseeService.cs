@@ -6,10 +6,9 @@ using Force.DeepCloner;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
-using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.Services.SendMessage;
 
-namespace TicketVoidingSystem.Services.SendEmail;
+namespace TicketVoidingSystem.Services.SendEmail.Void;
 
 public interface EmailLicenseeService
 {

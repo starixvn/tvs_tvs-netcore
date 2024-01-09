@@ -8,7 +8,7 @@ using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;
 using TicketVoidingSystem.Services.Letstalk;
-using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Models;

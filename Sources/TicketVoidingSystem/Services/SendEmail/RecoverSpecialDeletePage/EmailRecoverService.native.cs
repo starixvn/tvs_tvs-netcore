@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Resources;
 
-namespace TicketVoidingSystem.Services.SendEmail.Recover;
+namespace TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 
 public interface EmailRecoverService<TViewModel, TModel>
 {

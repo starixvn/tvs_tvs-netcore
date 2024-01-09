@@ -2,6 +2,7 @@
 using System.Globalization;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Services.SendEmail.Subject;

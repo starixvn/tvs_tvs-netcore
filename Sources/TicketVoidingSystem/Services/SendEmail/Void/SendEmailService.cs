@@ -5,7 +5,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 
-namespace TicketVoidingSystem.Services.SendEmail;
+namespace TicketVoidingSystem.Services.SendEmail.Void;
 
 public interface SendEmailService
 {

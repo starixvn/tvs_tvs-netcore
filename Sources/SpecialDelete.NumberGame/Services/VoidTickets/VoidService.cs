@@ -6,7 +6,7 @@ using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.Services.SendMessage;
 
 namespace SpecialDelete.NumberGame.Services.VoidTickets;

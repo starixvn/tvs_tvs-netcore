@@ -6,9 +6,10 @@ using SpecialDelete.CashOutTransaction.RecoverTickets.Models;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.SendEmail;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using TicketVoidingSystem.Utilities;
 

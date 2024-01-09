@@ -7,7 +7,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.Services.SendMessage;
 
 namespace SpecialDelete.CashOutTransaction.CancelCashOut.Services;

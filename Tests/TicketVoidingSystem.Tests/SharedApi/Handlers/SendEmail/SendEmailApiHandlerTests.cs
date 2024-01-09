@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
-using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.SharedApi.Handlers.SendEmail;
 using TicketVoidingSystem.SharedApi.Models;
 using Xunit;
