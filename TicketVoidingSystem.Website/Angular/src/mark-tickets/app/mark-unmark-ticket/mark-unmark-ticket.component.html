@@ -17,7 +17,7 @@
             <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
             <span [hidden]="!isShowAffectLicenseees" class="affected-licensees-highlight"
                 id="affected-licensees-highlight" ngxClipboard [cbContent]="licenseesName"
-                (cbOnSuccess)="copiedAffectLicenseees()">{{licenseesName}}</span>
+                (click)="copiedAffectLicenseees()">{{licenseesName}}</span>
         </div>
     </div>
 
