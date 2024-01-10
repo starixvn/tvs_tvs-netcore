@@ -1,12 +1,15 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
+import { GroupNumber, NumberItem } from '../../../../utility/components/bet-ids/bet-ids.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalBetModel } from '../models/abnormal-bet.model';
@@ -14,13 +17,11 @@ import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { EventAbnormalBetComponent } from './event-abnormal-bet.component';
+import { AbnormalBetTicketViewModel, PrimitiveProperty } from './event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleOutput } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
-import { PrimitiveProperty, AbnormalBetTicketViewModel } from './event-abnormal-bet.model';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
   static readonly fakeTransId = '123456789';
@@ -680,13 +681,60 @@ describe('EventAbnormalBetComponent', () => {
       });
     instance.betIdsComponent = new BetIdsComponent(null);
     instance.betIdsComponent.removeTransId = jest.fn();
-    instance.exportTickets = [];
-    instance.primitiveProps.invalidTransIds = ""
+    instance.exportTickets = [{ betId: '1' } as AbnormalBetTicketViewModel, { betId: '2' } as AbnormalBetTicketViewModel];
+    instance.primitiveProps.invalidTransIds = "1,2"
 
     // Action
     instance.removeInvalidTransIds();
 
     // Assert
     expect(instance.betIdsComponent.removeTransId).toHaveBeenCalledTimes(1);
+  });
+
+  it('#exportExcel should called #validationService.exportExcelAbnormalBetTickets', async () => {
+    // Arrange
+    const mockExportExcelAbnormalBetTickets = jest.fn();
+    const { instance } = await shallow
+      .mock(ValidationService, {
+        exportExcelAbnormalBetTickets: mockExportExcelAbnormalBetTickets,
+      })
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.initCheckValidBusinessRuleQuery = jest.fn();
+    instance.primitiveProps = new PrimitiveProperty();
+
+    // Action
+    await instance.exportExcel();
+
+    // Assert
+    expect(mockExportExcelAbnormalBetTickets).toHaveBeenCalledTimes(1);
+    expect(instance.initCheckValidBusinessRuleQuery).toHaveBeenCalledTimes(1);
+  });
+
+  it('#isShowButtonExportTicket should return true', async () => {
+    // Arrange
+    const { instance } = await shallow
+      .render({
+        bind: {
+          abnormalBetModel: Helper.fakeAbnormalBetModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.betIdsComponent = new BetIdsComponent(null);
+    instance.betIdsComponent.groupNumber = new GroupNumber();
+    instance.betIdsComponent.groupNumber.items = [new NumberItem(null)];
+    instance.filter.isVoided = false;
+
+    // Action
+    const actual = instance.isShowButtonExportTicket();
+
+    // Assert
+    expect(actual).toBeTruthy();
   });
 });

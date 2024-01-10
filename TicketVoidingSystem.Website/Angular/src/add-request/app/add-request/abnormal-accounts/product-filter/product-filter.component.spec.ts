@@ -1,16 +1,17 @@
-import { ElementRef, NgModule } from '@angular/core';
+import { ElementRef, NgModule, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { ProductFilterComponent } from './product-filter.component';
 
 describe('ProductFilterComponent', () => { 
   @NgModule({
-    declarations: [      
+    declarations: [
     ],
     imports: [
       NgbModule,
@@ -97,5 +98,53 @@ describe('ProductFilterComponent', () => {
     
     expect(instance.selectedProducts.length).toBeGreaterThan(0);
     expect(instance.selectedTicketStatus.length).toBeGreaterThan(0);
+  });
+
+  it('#ngOnChanges should emit changeFilterEvent and update selectedTicketStatus of auto void', async () => {
+    const { instance } = await shallow.render();
+    const changes = {
+      'actionId': new SimpleChange('1', '10', true)
+    };
+    instance.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+    instance.changeFilterEvent.emit = jest.fn();
+
+    instance.ngOnChanges(changes);
+
+    expect(instance.selectedTicketStatus).toStrictEqual(["0,1", "112"]);
+    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnChanges should emit changeFilterEvent and update selectedTicketStatus with all items', async () => {
+    const { instance } = await shallow.render();
+    const changes = {
+      'actionId': new SimpleChange('1', '11', true)
+    };
+    instance.actionId = TVSRequestActionType.MANUAL_VOID_ID.toString();
+    instance.changeFilterEvent.emit = jest.fn();
+
+    instance.ngOnChanges(changes);
+
+    expect(instance.selectedTicketStatus).toStrictEqual(["0,1", "112", "113", "111"]);
+    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+  });
+
+  it('#ngOnChanges should not emit changeFilterEvent', async () => {
+    const { instance } = await shallow.render();
+    const changes = {};
+    instance.actionId = TVSRequestActionType.MANUAL_VOID_ID.toString();
+    instance.changeFilterEvent.emit = jest.fn();
+
+    instance.ngOnChanges(changes);
+
+    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(0);
+  });
+
+  it('#changeFilter should emit changeFilterEvent', async () => {
+    const { instance } = await shallow.render();
+    instance.changeFilterEvent.emit = jest.fn();
+
+    instance.changeFilter();
+
+    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
   });
 });

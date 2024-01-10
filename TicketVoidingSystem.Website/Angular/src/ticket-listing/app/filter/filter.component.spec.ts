@@ -9,6 +9,8 @@ import { BetTypeVirtualSport, GroupBetTypeVirtualSport } from '../../../utility/
 import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
 import { BetTypeModel, BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
 import { DateFullTimeComponent } from '../../../utility/components/date-time/date-full-time/date-full-time.component';
+import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { Product } from '../../../utility/constants/config';
@@ -648,6 +650,26 @@ describe('FilterComponent', () => {
     }
   });
 
+  it('Check filter params should return false when selection combo parlay not valid', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
+    instance.matchId = '12345';
+    instance.fromDate = '2020-08-01';
+    instance.toDate = '2020-08-02';
+    instance.disabledTransDate = true;
+    instance.sportType = 0;
+    instance.singleOrSubParlay = "SubParlay";
+    instance.getSelectionSubParlays = jest.fn().mockReturnValue('');
+    instance.tooltip = new Tooltip();
+    instance.tooltip.display = jest.fn();
+
+    // Action and Assert
+    const actual = instance.checkFilterParams();
+    expect(actual).toBeFalsy();
+    expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
+  });
+
   it('Check filter params with all checking is valid', async () => {
     // Arrange
     const { instance } = await shallow.render();
@@ -901,6 +923,7 @@ describe('FilterComponent', () => {
     .render();
     instance.query.product = Product.SPORTS_BOOK;
     instance.tooltip.display = jest.fn();
+
     // Action and Assert
     await instance.handleGroupBetTypesOfSportBook(new GetBetTypesQuery());
     expect(instance.tooltip.display).toHaveBeenCalledTimes(0);
@@ -916,6 +939,7 @@ describe('FilterComponent', () => {
     .render();
     instance.query.product = Product.SPORTS_BOOK;
     instance.tooltip.display = jest.fn();
+
     // Action and Assert
     await instance.handleGroupBetTypesOfSportBook(new GetBetTypesQuery());
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
@@ -931,6 +955,7 @@ describe('FilterComponent', () => {
     .render();
     instance.query.product = Product.SPORTS_BOOK;
     instance.tooltip.display = jest.fn();
+
     // Action and Assert
     await instance.handleGroupBetTypesOfSportBook(new GetBetTypesQuery());
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
@@ -942,6 +967,7 @@ describe('FilterComponent', () => {
     .mock(AppService, { getSelectionTypes: jest.fn().mockImplementation(() => Promise.resolve([])) })
     .render();
     instance.tooltip.display = jest.fn();
+
     // Action and Assert
     await instance.handlBetTypesOfBetBuilder(new GetBetTypesQuery());
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
@@ -955,8 +981,51 @@ describe('FilterComponent', () => {
     const { instance } = await shallow
     .mock(AppService, { getSelectionTypes: jest.fn().mockImplementation(() => Promise.resolve([selectionTypeModel])) })
     .render();
+
     // Action and Assert
     await instance.handlBetTypesOfBetBuilder(new GetBetTypesQuery());
     expect(instance.betTypes).toBeDefined();
+  });
+
+  it('resetCheckedComboParlay should checked to all items', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.comboParlay = new MultipleSelection();
+    instance.comboParlay.items = [{ checked: false } as ItemsSelect];
+
+    // Action
+    instance.resetCheckedComboParlay();
+
+    // Assert
+    expect(instance.comboParlay.items.every(x => x.checked)).toBeTruthy();
+  });
+
+  it('getSelectionSubParlays should return selectedItems', async () => {
+    const { instance } = await shallow.render();
+    const comboParlay = new MultipleSelection();
+    comboParlay.items = [{ checked: true, value: '1' } as ItemsSelect];
+    const actual = instance.getSelectionSubParlays('SubParlay', comboParlay);
+
+    expect(actual).toBe('1');
+  });
+
+  it('enableBetTypesAndAdvancedMode should update isDisabledAllBetTypes = false', async () => {
+    const { instance } = await shallow.render();
+    instance.groupBetTypesComponent = new GroupBetTypesComponent(null);
+    instance['enableBetTypesAndAdvancedMode']();
+
+    expect(instance.groupBetTypesComponent.isDisabledAllBetTypes).toBeFalsy();
+  });
+
+  it('handleBetTypesAndAdvancedMode should disabled all bettypes and update them to checked', async () => {
+    const { instance } = await shallow.render();
+    instance.isReSettled = true;
+    instance.groupBetTypes = new GroupBetTypesModel([new GroupBetType('Special', [], true)], false);
+    instance.handleBetTypesAndAdvancedMode();
+
+    expect(instance.groupBetTypesComponent.isDisabledAllBetTypes).toBeTruthy();
+    expect(instance.groupBetTypes.isChecked).toBeTruthy();
+    expect(instance.groupBetTypes.groupBetTypes.every(x => x.isChecked)).toBeTruthy();
+    expect(instance.groupBetTypes.groupBetTypes.every(x => x.betTypes.every(x => x.isChecked))).toBeTruthy();
   });
 });

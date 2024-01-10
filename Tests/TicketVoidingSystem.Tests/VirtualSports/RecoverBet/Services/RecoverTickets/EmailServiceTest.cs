@@ -5,6 +5,7 @@ using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Services.SendEmail;
 using Xunit;
 
