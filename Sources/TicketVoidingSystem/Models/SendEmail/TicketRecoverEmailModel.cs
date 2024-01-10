@@ -30,7 +30,7 @@ public class TicketRecoverEmailModel
 
     public decimal Stake { get; set; }
 
-    public string Site { get; set; }
+    public string GroupName { get; set; }
 
     public string Status { get; set; }
 
@@ -78,7 +78,7 @@ public class TicketRecoverEmailModel
 
     public string BetFrom { get; set; }
 
-    public bool IsReal { get; set; }
+    public bool IsCsd { get; set; }
 
     public bool IsItQa { get; set; }
 

@@ -49,7 +49,7 @@ public class SendEmailRecoverServiceImp : SendEmailRecoverService
     private void SendMailCSD(IEnumerable<SiteEmail> sites, IEnumerable<TicketRecoverEmailModel> tickets, MailRecoverViewModel viewModel)
     {
         var site = sitesEmailService.GetSiteByName(sites, StringResource.CsdRecovery);
-        var data = tickets.Where(t => t.IsReal).ToList();
+        var data = tickets.Where(t => t.IsCsd).ToList();
         var mailRecord = recoverEmailContentService.Create(viewModel, data, site, EmailGroup.Recover);
         emailSimpleService.Send(mailRecord, EmailGroup.Recover);
     }

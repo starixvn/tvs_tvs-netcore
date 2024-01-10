@@ -7,8 +7,6 @@ namespace TicketVoidingSystem.Services.SendEmail.Recover;
 
 public interface RecoverTicketService
 {
-    TicketRecoverEmailViewModel Render(TicketRecoverEmailModel item, bool isReadOnly);
-
     TicketRecoverEmailViewModel Render(TicketRecoverEmailModel item);
 }
 
@@ -21,19 +19,9 @@ public class RecoverTicketServiceImp : RecoverTicketService
         this.betListService = betListService;
     }
 
-    public TicketRecoverEmailViewModel Render(TicketRecoverEmailModel item, bool isReadOnly)
-    {
-        var ticket = Render(item);
-        ticket.BetType = item.BetType;
-        ticket.MainTransId = item.MainTransId.ToString();
-        ticket.IsCricket = item.IsCricket;
-        ticket.IsDisable = isReadOnly || item.MainTransId > 0 && item.MainTransId != item.TransId;
-        return ticket;
-    }
-
     public TicketRecoverEmailViewModel Render(TicketRecoverEmailModel item)
     {
-        var ticket = betListService.GetTicket(item);
+        var ticket = item.BetType.IsParlay() ? betListService.GetMainParlayTicket(item) : betListService.GetNormalTicket(item);
         ticket.SiteDbGroupId = item.SiteDbGroupId;
         ticket.BetId = item.TransId.ToString();
         ticket.Player = item.UserName;

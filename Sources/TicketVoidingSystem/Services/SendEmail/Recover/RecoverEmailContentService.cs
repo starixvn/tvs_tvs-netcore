@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Fanex.MailDeliver.Model;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
@@ -17,19 +16,14 @@ public interface RecoverEmailContentService
 
 public class RecoverEmailContentServiceImp : RecoverEmailContentService
 {
-    private readonly IMapper mapper;
     private readonly SubjectService subjectService;
     private readonly TemplateEmailService templateEmailService;
     private readonly RecoverTicketService recoverTicketService;
     private readonly PagingService pagingService;
 
-    public RecoverEmailContentServiceImp(IMapper mapper,
-        SubjectService subjectService,
-        TemplateEmailService templateEmailService,
-        RecoverTicketService recoverTicketService,
-        PagingService pagingService)
+    public RecoverEmailContentServiceImp(SubjectService subjectService, TemplateEmailService templateEmailService,
+        RecoverTicketService recoverTicketService, PagingService pagingService)
     {
-        this.mapper = mapper;
         this.subjectService = subjectService;
         this.templateEmailService = templateEmailService;
         this.recoverTicketService = recoverTicketService;
@@ -52,7 +46,7 @@ public class RecoverEmailContentServiceImp : RecoverEmailContentService
 
     private List<Group<TicketRecoverEmailViewModel>> GenerateGroups(IEnumerable<TicketRecoverEmailModel> tickets)
     {
-        var groups = pagingService.Groups(tickets, ticket => ticket.Site);
+        var groups = pagingService.Groups(tickets, ticket => ticket.GroupName);
 
         return groups.Select(MapToViewModelTickets).ToList();
     }
@@ -65,10 +59,9 @@ public class RecoverEmailContentServiceImp : RecoverEmailContentService
         {
             var ticket = recoverTicketService.Render(item);
             ticket.No = index++;
-            var mailTicket = mapper.Map<TicketRecoverEmailViewModel>(ticket);
-            mailTicket.BetFrom = Helper.GetBetFrom(item.BetFrom);
-            mailTicket.Stake = mailTicket.Stake.Replace("Rebate", "(Rebate)");
-            tickets.Add(mailTicket);
+            ticket.BetFrom = Helper.GetBetFrom(item.BetFrom);
+            ticket.Stake = ticket.Stake.Replace("Rebate", "(Rebate)");
+            tickets.Add(ticket);
         }
 
         return new Group<TicketRecoverEmailViewModel> { Name = group.Name, Tickets = tickets };

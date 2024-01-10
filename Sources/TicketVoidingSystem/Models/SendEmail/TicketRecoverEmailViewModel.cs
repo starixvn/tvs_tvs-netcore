@@ -10,7 +10,7 @@ public class TicketRecoverEmailViewModel
 
     public string TransDate { get; set; }
 
-    public int BetType { get; set; }
+    public string BetType { get; set; }
 
     public string Choice { get; set; }
 

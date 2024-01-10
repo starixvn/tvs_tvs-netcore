@@ -11,7 +11,9 @@ namespace TicketVoidingSystem.Services.SendEmail.Recover;
 
 public interface BetListCoreService
 {
-    TicketRecoverEmailViewModel GetTicket(TicketRecoverEmailModel item);
+    TicketRecoverEmailViewModel GetNormalTicket(TicketRecoverEmailModel item);
+
+    TicketRecoverEmailViewModel GetMainParlayTicket(TicketRecoverEmailModel item);
 }
 
 public class BetListCoreServiceImp : BetListCoreService
@@ -25,11 +27,12 @@ public class BetListCoreServiceImp : BetListCoreService
         this.betListService = betListService;
     }
 
-    public TicketRecoverEmailViewModel GetTicket(TicketRecoverEmailModel item)
+    public TicketRecoverEmailViewModel GetNormalTicket(TicketRecoverEmailModel item)
     {
         var viewModel = new TicketRecoverEmailViewModel();
         var ticketHelper = new TicketHelper
         {
+            ShowSystemParlayDetail = false,
             IsShowOddsWithChoice = item.BetType.IsParlay()
         };
         var ticket = SetValue(item);
@@ -45,6 +48,20 @@ public class BetListCoreServiceImp : BetListCoreService
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
 
+        return viewModel;
+    }
+
+    public TicketRecoverEmailViewModel GetMainParlayTicket(TicketRecoverEmailModel item)
+    {
+        var viewModel = new TicketRecoverEmailViewModel();
+        var ticket = SetValue(item);
+        var ticketHelper = new TicketHelper { ShowSystemParlayDetail = false };
+        viewModel.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
+        viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
+        viewModel.BetType = betListService.GetBetTypeName(ticket);
+        var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        viewModel.Choice = mainChoice + $"<div id='divEvent_{item.RefNo}'></div>";
+        viewModel.Status = item.Status;
         return viewModel;
     }
 
