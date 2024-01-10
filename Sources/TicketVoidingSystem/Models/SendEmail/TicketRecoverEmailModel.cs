@@ -54,7 +54,7 @@ public class TicketRecoverEmailModel
 
     public string TransDesc { get; set; }
 
-    public bool IsCricket { get; set; }
+    public bool IsCricket { get; set; } //sp not return
 
     public string ExtraInfo { get; set; }
 
@@ -88,5 +88,5 @@ public class TicketRecoverEmailModel
 
     public bool IsSettled { get; set; }
 
-    public string CurrencyCode { get; set; }
+    public string CurrencyName { get; set; }
 }
