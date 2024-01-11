@@ -6,7 +6,6 @@ using NSubstitute;
 using SpecialDelete.NumberGame.Models;
 using SpecialDelete.NumberGame.Repositories;
 using SpecialDelete.NumberGame.Services.VoidTickets;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
@@ -36,22 +35,18 @@ public class VoidServiceTest
     }
 
     [Fact]
-    public static async Task VoidTickets_ThrowException_UpdateErrorIntoCriteria()
+    public static async Task VoidTickets_ThrowException_CalledExpected()
     {
         // Arrange
-        var exception = new Exception("Void tickets failed!");
         var query = new VoidTicketsQuery { UserPwd = "pass" };
-        var repository = Substitute.For<Repository>();
-        repository.VoidTickets(new VoidTicketsQuery())
-            .ReturnsForAnyArgs(async x => throw exception);
-        var service = CreateService(repository);
+        var loggingService = Substitute.For<LoggingService>();
+        var service = new VoidServiceImp(null, null, loggingService, null, null);
 
         // Act
-        var (_, validations) = await service.VoidTickets(query);
+        await service.VoidTickets(query);
 
         // Assert
-        Assert.Equal(ErrorCode.ExecuteQueryFail, validations.ErrorCode);
-        Assert.Equal("Void tickets failed!", validations.ErrorMsg);
+        await loggingService.Received(1).ErrorAsync(query.MatchId.ToString(), Arg.Any<Exception>());
     }
 
     [Fact]

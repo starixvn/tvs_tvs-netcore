@@ -30,17 +30,15 @@ public class AfterVoidServiceImp : AfterVoidService
     private readonly SendEmailService sendEmailService;
     private readonly NotificationLetstalkService notificationLetstalkService;
     private readonly LoggingService loggingService;
-    private readonly SessionService sessionService;
 
     public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageByPlatformService sendMessageByPlatformService,
-        SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService, SessionService sessionService)
+        SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService)
     {
         this.cashOutApiService = cashOutApiService;
         this.sendMessageByPlatformService = sendMessageByPlatformService;
         this.sendEmailService = sendEmailService;
         this.notificationLetstalkService = notificationLetstalkService;
         this.loggingService = loggingService;
-        this.sessionService = sessionService;
         this.mapper = mapper;
     }
 

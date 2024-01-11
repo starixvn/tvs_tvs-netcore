@@ -44,7 +44,6 @@ public class InsertQueueServiceImp : InsertQueueService
         {
             var validationTickets = await validationTicketsService.RecheckTicketsStatus(query, siteDbGroupId);
             var mergeTicketsForInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
-
             var voidingHistoryId = await insertVoidingHistoryService.InsertVoidingHistory(query, siteDbGroupId, broadcastSessionId);
             await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, mergeTicketsForInsertQueue);
         }
