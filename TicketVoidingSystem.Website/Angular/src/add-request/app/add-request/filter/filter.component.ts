@@ -269,10 +269,8 @@ export class FilterComponent implements OnInit, OnChanges {
     } else {
       this.actions = this.originActions;
     }
-    this.model.action = this.isEditOrExternalUrl() ? this.model.action : this.actions[0].value;
+    this.model.action = this.isEdit || (this.isExternalUrl && this.model.action) ? this.model.action : this.actions[0].value;
   }
-
-
 
   private updateCurrentActionByIssue(actionIds: number[]): void {
     this.actions = actionIds.map((id: number) => {
