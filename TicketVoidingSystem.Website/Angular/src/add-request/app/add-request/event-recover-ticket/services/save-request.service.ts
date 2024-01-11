@@ -37,15 +37,19 @@ export class SaveRequestService {
   }
 
   private proceedSaveRequest(arg: SaveRequestArg) {
-    this.popupService.showConfirm(
-      this.getMessageConfirmation(),
-      async () => {
-        await this.onClickConfirmSave(arg);
-      },
-      () => {
-        arg.addRequestStore.changeSavingRequestStatus(false);
-      }
-    );
+    if (!arg.filter.isVoided) {
+      this.popupService.showConfirm(
+        this.getMessageConfirmation(),
+        async () => {
+          await this.onClickConfirmSave(arg);
+        },
+        () => {
+          arg.addRequestStore.changeSavingRequestStatus(false);
+        }
+      );
+    } else {
+      this.executeSaveRequestApi(arg);
+    }
   }
 
   private async onClickConfirmSave(arg: SaveRequestArg) {
@@ -85,6 +89,6 @@ export class SaveRequestService {
 
   private getMessageConfirmation(): string {
     return 'Bet ticket(s) will be recovered and resettled immediately.'
-    + `<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
+      + `<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
 }
