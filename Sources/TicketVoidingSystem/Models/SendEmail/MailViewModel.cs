@@ -61,5 +61,5 @@ public class DuplicateTicketsMailVoidViewModel
 
 public class MailRecoverViewModel : MailViewModel
 {
-    public IList<Group<TicketRecoverEmailViewModel>> GroupTickets { get; set; }
+    public IList<Group<TicketRecoverEmailViewModel>> Groups { get; set; }
 }

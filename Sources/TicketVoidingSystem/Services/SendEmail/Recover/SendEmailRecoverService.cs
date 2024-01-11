@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicketVoidingSystem.Constants;
+using Force.DeepCloner;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Resources;
 
@@ -28,22 +27,10 @@ public class SendEmailRecoverServiceImp : SendEmailRecoverService
 
     public async Task SendEmail(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets)
     {
-        //  var viewModel = emailService.CreateMailViewModel(negativeBalanceUsers);
         var sites = await sitesEmailService.GetSites();
-        SendMailCSD(sites, tickets, viewModel);
-        SendMailItQa(sites, tickets, viewModel);
-        SendMailItSupport(sites, tickets, viewModel);
-    }
-
-    public MailRecoverViewModel CreateMailViewModel(string negativeBalanceUsers)
-    {
-        return new MailRecoverViewModel
-        {
-            // ActorUsername = sessionService.UserName,
-            NegativeBalanceUsers = negativeBalanceUsers,
-            DateTime = DateTimeOffset.Now.DateTime,
-            TemplatePath = TemplateEmailPath.RecoverBet
-        };
+        SendMailCSD(sites, tickets, viewModel.DeepClone());
+        SendMailItQa(sites, tickets, viewModel.DeepClone());
+        SendMailItSupport(sites, tickets, viewModel.DeepClone());
     }
 
     private void SendMailCSD(IEnumerable<SiteEmail> sites, IEnumerable<TicketRecoverEmailModel> tickets, MailRecoverViewModel viewModel)

@@ -35,7 +35,7 @@ public class RecoverEmailContentServiceImp : RecoverEmailContentService
         if (tickets.Valid(siteEmail))
         {
             viewModel.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, viewModel.NegativeBalanceUsers);
-            viewModel.GroupTickets = GenerateGroups(tickets);
+            viewModel.Groups = GenerateGroups(tickets);
             var mailSubject = subjectService.CreateRecover(viewModel, group, RecoverType.Default);
             var mailRecord = templateEmailService.CreateForRecover(viewModel, siteEmail, mailSubject);
             return mailRecord.MailRecord;

@@ -2,9 +2,10 @@
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.ExportExcel;
+
 using TicketVoidingSystem.Services.Excel;
 
-namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
+namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.VoidRequest;
 
 public static class VoidRequest
 {
@@ -16,9 +17,9 @@ public static class VoidRequest
         services.AddTransient<BetListCoreService, BetListCoreServiceImp>();
         services.AddTransient<CheckPermissionOnRequestService, CheckPermissionOnRequestServiceImp>();
         services.AddTransient<GetTicketsService, GetTicketsServiceImp>();
-        services.AddTransient<InsertQueueService, InsertQueueServiceImp>();
         services.AddTransient<InsertVoidingHistoryService, InsertVoidingHistoryServiceImp>();
         services.AddTransient<MapTicketsService, MapTicketsServiceImp>();
         services.AddTransient<TicketsViewModelService, TicketsViewModelServiceImp>();
+        services.RegisterInsertQueueServices();
     }
 }

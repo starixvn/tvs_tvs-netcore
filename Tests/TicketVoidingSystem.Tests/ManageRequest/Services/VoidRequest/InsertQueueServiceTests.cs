@@ -6,6 +6,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using Xunit;
