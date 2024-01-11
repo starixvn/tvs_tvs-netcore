@@ -86,7 +86,7 @@ public static class IssueTypeExtension
 
     public static bool IsIssueTypeVoidMainParlay(this int id)
     {
-        return id.IsAbnormalAccount() || id.IsAbnormalBet() || id.IsDuplicateTickets();
+        return id.IsAbnormalAccount() || id.IsAbnormalBet() || id.IsDuplicateTickets() || id.RecoverTicket();
     }
 
     public static bool IsEarlyKickOffOrWrongKickOff(this int id)

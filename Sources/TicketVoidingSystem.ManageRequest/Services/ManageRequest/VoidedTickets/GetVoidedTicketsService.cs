@@ -49,7 +49,10 @@ public class GetVoidedTicketsServiceImp : GetVoidedTicketsService
 
     private async Task<IEnumerable<VoidedTicketModel>> GetRecoveredTickets(GetVoidedTicketsQuery query)
     {
-        var criteria = mapper.Map<GetRecoveredTicketsCriteria>(query);
+        var criteria = new GetRecoveredTicketsCriteria
+        {
+            SingleTransIds = query.SingleTransIds
+        };
 
         var tasks = SiteDbGroupConstant.ServerList
             .Select(item =>
