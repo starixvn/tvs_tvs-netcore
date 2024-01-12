@@ -3,9 +3,10 @@ using SpecialDelete.RecoverParlayBet.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
+#pragma warning disable S2326
+
 namespace SpecialDelete.RecoverParlayBet.Services.GetTickets;
 
-// ReSharper disable once UnusedTypeParameter
 public interface GetTicketsService<T, in U> where T : GetMainTicket
 {
     Task<TicketsViewModel> GetTickets(U query);

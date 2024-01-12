@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.ManageRequest.Constants;
 
-public static class NumberConstant
+public static class Number
 {
     public const int One = 1;
     public const int Two = 2;

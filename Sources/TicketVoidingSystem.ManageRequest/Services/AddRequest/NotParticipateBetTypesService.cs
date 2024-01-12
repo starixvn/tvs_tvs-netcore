@@ -72,9 +72,9 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
     {
         return parentId switch
         {
-            NumberConstant.One => "1 Inns",
-            NumberConstant.Two => "2 Inns",
-            NumberConstant.Three => "FT",
+            Number.One => "1 Inns",
+            Number.Two => "2 Inns",
+            Number.Three => "FT",
             _ => string.Empty
         };
     }

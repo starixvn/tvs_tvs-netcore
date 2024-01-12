@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 
@@ -69,12 +70,12 @@ public class ValidationTicketsServiceImp : ValidationTicketsService
 
         return new CheckTicketValidationOutput
         {
-            VoidSingleTickets = results[0].Cast<RequestDetailTicketModel>(),
-            VoidParlayTickets = results[2].Cast<RequestDetailTicketModel>(),
-            VoidCricketTickets = results[4].Cast<RequestDetailTicketModel>(),
-            CancelCOTickets = results[6].Cast<RequestDetailTicketModel>(),
-            VoidSingleTickets14 = results[7].Cast<RequestDetailTicketModel>(),
-            VoidParlayTickets14 = results[8].Cast<RequestDetailTicketModel>()
+            VoidSingleTickets = results[Number.Zero].Cast<RequestDetailTicketModel>(),
+            VoidParlayTickets = results[Number.Two].Cast<RequestDetailTicketModel>(),
+            VoidCricketTickets = results[Number.Four].Cast<RequestDetailTicketModel>(),
+            CancelCOTickets = results[Number.Six].Cast<RequestDetailTicketModel>(),
+            VoidSingleTickets14 = results[Number.Seven].Cast<RequestDetailTicketModel>(),
+            VoidParlayTickets14 = results[Number.Eight].Cast<RequestDetailTicketModel>()
         };
     }
 

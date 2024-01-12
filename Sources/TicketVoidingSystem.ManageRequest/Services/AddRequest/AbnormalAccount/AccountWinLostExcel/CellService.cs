@@ -19,28 +19,28 @@ public class CellServiceImp : CellService
     {
         var lastRow = worksheet.Dimension.End.Row;
         var lasCol = worksheet.Dimension.End.Column;
-        worksheet.Cells[NumberConstant.Two, NumberConstant.One, lastRow, lasCol].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells[NumberConstant.Two, NumberConstant.One, lastRow, lasCol].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells[NumberConstant.Two, NumberConstant.One, lastRow, lasCol].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells[NumberConstant.Two, NumberConstant.One, lastRow, lasCol].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-        worksheet.Cells.Style.Font.Size = NumberConstant.Eight;
+        worksheet.Cells[Number.Two, Number.One, lastRow, lasCol].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[Number.Two, Number.One, lastRow, lasCol].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[Number.Two, Number.One, lastRow, lasCol].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells[Number.Two, Number.One, lastRow, lasCol].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+        worksheet.Cells.Style.Font.Size = Number.Eight;
         worksheet.Cells.Style.Font.Name = "Tahoma";
         worksheet.Cells.Style.WrapText = true;
     }
 
     public void RenderDataWorksheet(ExcelWorksheet worksheet, IEnumerable<AccountWinlostExcelModel> models)
     {
-        var index = NumberConstant.Two;
+        var index = Number.Two;
         foreach (var model in models)
         {
-            worksheet.Cells[index, NumberConstant.One].Value = model.No;
-            worksheet.Cells[index, NumberConstant.Two].Value = model.Username;
-            worksheet.Cells[index, NumberConstant.Three].Value = CheckNumberOrDecimal(model.GivenCredit);
-            worksheet.Cells[index, NumberConstant.Four].Value = CheckNumberOrDecimal(model.AdjustVoidLimit);
-            worksheet.Cells[index, NumberConstant.Five].Value = CheckNumberOrDecimal(model.CurrentLosing);
-            worksheet.Cells[index, NumberConstant.Six].Value = CheckNumberOrDecimal(model.CurrentWinning);
-            worksheet.Cells[index, NumberConstant.Seven].Value = CheckNumberOrDecimal(model.EstimateVoidAmount);
-            worksheet.Cells[index, NumberConstant.Eight].Value = CheckNumberOrDecimal(model.WinLostAfterVoid);
+            worksheet.Cells[index, Number.One].Value = model.No;
+            worksheet.Cells[index, Number.Two].Value = model.Username;
+            worksheet.Cells[index, Number.Three].Value = CheckNumberOrDecimal(model.GivenCredit);
+            worksheet.Cells[index, Number.Four].Value = CheckNumberOrDecimal(model.AdjustVoidLimit);
+            worksheet.Cells[index, Number.Five].Value = CheckNumberOrDecimal(model.CurrentLosing);
+            worksheet.Cells[index, Number.Six].Value = CheckNumberOrDecimal(model.CurrentWinning);
+            worksheet.Cells[index, Number.Seven].Value = CheckNumberOrDecimal(model.EstimateVoidAmount);
+            worksheet.Cells[index, Number.Eight].Value = CheckNumberOrDecimal(model.WinLostAfterVoid);
 
             if (model.IsHighlight)
             {
