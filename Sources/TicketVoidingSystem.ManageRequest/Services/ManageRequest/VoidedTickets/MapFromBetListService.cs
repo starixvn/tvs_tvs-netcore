@@ -56,7 +56,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
 
         viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        viewModel.VoidTime = item.VoidedTime.ToString(FormatKey.LongDateFormatTimeWithSlash);
+        viewModel.VoidTime = item.VoidedTime?.ToString(FormatKey.LongDateFormatTimeWithSlash);
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
         viewModel.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();
         viewModel.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
