@@ -226,13 +226,13 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return isCheckedVar ? "√" : string.Empty;
     }
 
-    public string BuildProducts(string html)
+    private static string BuildProducts(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var products = doc.DocumentNode.SelectNodes("//*[@class='text-primary product']")[0].InnerText;
         var totalResettleProcessed = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-resettled']")[0].InnerText;
-        var description = $"Product:  {products}".AppendWithNewLine($"Resettled: {totalResettleProcessed}");
+        var description = $"Product: {products}".AppendWithNewLine($"Resettled: {totalResettleProcessed}");
 
         return description;
     }

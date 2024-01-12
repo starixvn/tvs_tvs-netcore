@@ -113,15 +113,18 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
         {
             new() { ErrorMsg =  StringResource.RecoverBetSuccessfully }
         };
-        if (!string.IsNullOrWhiteSpace(model.Validation.ReCalcMatches))
+
+        if (string.IsNullOrWhiteSpace(model.Validation.ReCalcMatches))
         {
-            var result = new Result
-            {
-                ErrorCode = 1,
-                ErrorMsg = string.Format(StringResource.WarningRecoverReCalcBitcoinMatchs, model.Validation.ReCalcMatches)
-            };
-            results.Add(result);
+            return results;
         }
+
+        var result = new Result
+        {
+            ErrorCode = 1,
+            ErrorMsg = string.Format(StringResource.WarningRecoverReCalcBitcoinMatchs, model.Validation.ReCalcMatches)
+        };
+        results.Add(result);
 
         return results;
     }

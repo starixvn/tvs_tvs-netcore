@@ -34,7 +34,7 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets
             var service = new ConditionServiceImp();
 
             // Act
-            var isDisable = service.IsDisableCheckBox(model.Item, model.Permission, false);
+            var isDisable = service.IsDisableCheckBox(model.Item, model.Permission, model.IsVoidByBetId);
 
             // Assert
             Assert.Equal(model.Expected, isDisable);
@@ -47,6 +47,8 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets
 
         public UserPermission Permission { get; set; }
 
+        public bool IsVoidByBetId { get; set; }
+
         public bool Expected { get; set; }
     }
 
@@ -56,63 +58,96 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets
         {
             Item = new GetTicketModel { GroupName = "phone betting", Status = "won" },
             Permission = new UserPermission { SettledTicket = true },
-            Expected = false
+            Expected = false,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel PhoneBettingLose = new()
         {
             Item = new GetTicketModel { GroupName = "phone betting", Status = "Lose" },
             Permission = new UserPermission { SettledTicket = true },
-            Expected = false
+            Expected = false,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel PhoneBettingDraw = new()
         {
             Item = new GetTicketModel { GroupName = "phone betting", Status = "DRAW" },
             Permission = new UserPermission { SettledTicket = true },
-            Expected = false
+            Expected = false,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel IsSubTicket = new()
         {
             Item = new GetTicketModel { GroupName = "credit", TransId = 321, MainTransId = 123 },
             Permission = new UserPermission { SettledTicket = true },
-            Expected = true
+            Expected = true,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel IsOnlyReadPermission = new()
         {
             Item = new GetTicketModel { GroupName = "credit", Status = "running" },
             Permission = new UserPermission { SettledTicket = false, UnSettledTicket = false },
-            Expected = true
+            Expected = true,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel IsSettledPermission = new()
         {
             Item = new GetTicketModel { GroupName = "credit", Status = "WON" },
             Permission = new UserPermission { SettledTicket = true },
-            Expected = false
+            Expected = false,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel IsUnSettledPermissionAndSettledTicket = new()
         {
             Item = new GetTicketModel { GroupName = "credit", Status = "WON" },
             Permission = new UserPermission { UnSettledTicket = true },
-            Expected = true
+            Expected = true,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel IsUnSettledPermissionAndUnsettledTicket = new()
         {
             Item = new GetTicketModel { GroupName = "credit", Status = "running" },
             Permission = new UserPermission { UnSettledTicket = true },
-            Expected = false
+            Expected = false,
+            IsVoidByBetId = false
         };
 
         private static readonly CheckBoxModel PhoneBetIsUnSettledPermission = new()
         {
+            Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
+            Permission = new UserPermission { UnSettledTicket = true },
+            Expected = true,
+            IsVoidByBetId = false
+        };
+
+        private static readonly CheckBoxModel VoidByBetIdAndSettledStatusLose = new()
+        {
             Item = new GetTicketModel { GroupName = "phone betting", Status = "Lose" },
+            Permission = new UserPermission { SettledTicket = true },
+            Expected = false,
+            IsVoidByBetId = true
+        };
+
+        private static readonly CheckBoxModel SettledTicketAndSettledStatusRunning = new()
+        {
+            Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
+            Permission = new UserPermission { SettledTicket = true },
+            Expected = true,
+            IsVoidByBetId = true
+        };
+
+        private static readonly CheckBoxModel VoidByBetIdAndSettledStatusRunning = new()
+        {
+            Item = new GetTicketModel { GroupName = "phone betting", Status = "running" },
             Permission = new UserPermission { SettledTicket = false },
-            Expected = true
+            Expected = true,
+            IsVoidByBetId = true
         };
 
         private readonly IEnumerable<object[]> testCase = new List<object[]>
@@ -125,7 +160,10 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.GetTickets
             new object[] { IsSettledPermission },
             new object[] { IsUnSettledPermissionAndSettledTicket },
             new object[] { IsUnSettledPermissionAndUnsettledTicket },
-            new object[] { PhoneBetIsUnSettledPermission }
+            new object[] { PhoneBetIsUnSettledPermission },
+            new object[] { VoidByBetIdAndSettledStatusLose },
+            new object[] { SettledTicketAndSettledStatusRunning },
+            new object[] { VoidByBetIdAndSettledStatusRunning }
         };
 
         public IEnumerator<object[]> GetEnumerator() => testCase.GetEnumerator();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -124,9 +125,13 @@ public class ConvertRequestsServiceTests
     [InlineData(IssueTypeConstant.DuplicateTickets, "<div class='text-primary total-parlay'>abc</div>", "Parlay: abc")]
     [InlineData(IssueTypeConstant.DuplicateTickets, "<div>abc</div>", "")]
     [InlineData(999, "", "")]
+    [InlineData(IssueTypeConstant.RecoverTicket,
+        "<div>Product: <span class=\"text-primary product\">Sportsbook</span></div><div>Resettled: <span class=\"text-primary total-resettled\">0</span></div>", "Product: Sportsbook\r\nResettled: 0")]
     public void GetDescription_ReturnsExpectedDescription(int issueId, string html, string description)
     {
         // Arrange
+        description = description.Replace("\r\n", Environment.NewLine);
+
         // Act
         var result = convertRequestsServiceImp.GetDescription(issueId, html);
 
