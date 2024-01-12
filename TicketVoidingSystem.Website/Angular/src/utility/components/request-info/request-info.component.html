@@ -51,7 +51,7 @@
         <span class="row no-gutters">Decided by: {{generalInfoViewModel.generalInfoModel.decidedBy}}<br/></span>
         <span class="row no-gutters">Requested by: {{generalInfoViewModel.generalInfoModel.requestedBy}}<br/></span>
          
-        <div class="mt-2" *ngIf="generalInfoViewModel.userVoidMessages?.length > 0">
+        <div class="mt-2" *ngIf="isShowVoidMessages()">
           <div class="mb-2 no-gutters" *ngFor="let userVoidMessage of generalInfoViewModel.userVoidMessages">
             <span class="row no-gutters">Voided by: {{userVoidMessage.voidedBy}}<br/></span>
             <div *ngFor="let message of userVoidMessage.messages"> 

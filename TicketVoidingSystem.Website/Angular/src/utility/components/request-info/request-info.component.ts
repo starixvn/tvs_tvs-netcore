@@ -126,4 +126,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   private isAbnormalBetRealMemberIssueType(): boolean {
     return StaticService.isAbnormalBetRealMember(this.issue.issueTypeId?.toString());
   }
+
+  isShowVoidMessages(): boolean {
+    return !this.isRecoverTicket() && this.generalInfoViewModel.userVoidMessages?.length > 0;
+  }
 }
