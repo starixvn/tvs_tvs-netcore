@@ -54,6 +54,7 @@ public class ValidationTicketsServiceImp : ValidationTicketsService
             typeof(RequestDetailTicketModel),
             typeof(RequestDetailTicketModel),
             typeof(RequestDetailTicketModel),
+            typeof(RequestDetailTicketModel),
             typeof(RequestDetailTicketModel)
         };
 
