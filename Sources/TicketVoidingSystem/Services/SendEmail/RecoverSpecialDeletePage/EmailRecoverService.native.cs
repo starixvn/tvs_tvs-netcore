@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
-using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 
@@ -18,12 +15,6 @@ public interface EmailRecoverService<TViewModel, TModel>
     MailRecoverModel<TViewModel, TModel> CreateMailModel(MailRecoverViewModel<TViewModel> viewModel, SiteEmail site, List<TModel> tickets);
 
     void Send(MailRecoverModel<TViewModel, TModel> model, EmailGroup group);
-
-    void SendToCSDRecover(List<TModel> tickets, List<SiteEmail> sites, MailRecoverViewModel<TViewModel> viewModel);
-
-    void SendToITQa(List<TModel> tickets, List<SiteEmail> sites, MailRecoverViewModel<TViewModel> viewModel);
-
-    void SendToITSupport(List<TModel> tickets, List<SiteEmail> sites, MailRecoverViewModel<TViewModel> viewModel);
 }
 
 public class EmailRecoverServiceImp<TViewModel, TModel> : EmailRecoverService<TViewModel, TModel> where TModel : EmailRecoverSupport
@@ -68,29 +59,5 @@ public class EmailRecoverServiceImp<TViewModel, TModel> : EmailRecoverService<TV
         {
             fanexMailApiService.WriteLog(group, exception);
         }
-    }
-
-    public void SendToCSDRecover(List<TModel> tickets, List<SiteEmail> sites, MailRecoverViewModel<TViewModel> viewModel)
-    {
-        var realTicket = tickets.Where(s => !s.IsItSupport || s.IsItSupport && s.CurrencyCode != CurrencyConstant.UusCode).ToList();
-        var site = GetSiteByName(sites, StringResource.CsdRecovery);
-        var model = CreateMailModel(viewModel, site, realTicket);
-        Send(model, EmailGroup.Recover);
-    }
-
-    public void SendToITQa(List<TModel> tickets, List<SiteEmail> sites, MailRecoverViewModel<TViewModel> viewModel)
-    {
-        var itQaTickets = tickets.Where(s => s.IsItSupport && s.CurrencyCode == CurrencyConstant.UusCode).ToList();
-        var site = GetSiteByName(sites, StringResource.ItQa);
-        var model = CreateMailModel(viewModel, site, itQaTickets);
-        Send(model, EmailGroup.ItQa);
-    }
-
-    public void SendToITSupport(List<TModel> tickets, List<SiteEmail> sites, MailRecoverViewModel<TViewModel> viewModel)
-    {
-        var itSupportTickets = tickets.Where(s => s.IsItSupport && s.CurrencyCode != CurrencyConstant.UusCode).ToList();
-        var Site = GetSiteByName(sites, StringResource.ItSupport);
-        var model = CreateMailModel(viewModel, Site, itSupportTickets);
-        Send(model, EmailGroup.ItSupport);
     }
 }

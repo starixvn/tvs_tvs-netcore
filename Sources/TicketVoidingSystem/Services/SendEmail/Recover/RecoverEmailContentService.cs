@@ -32,16 +32,16 @@ public class RecoverEmailContentServiceImp : RecoverEmailContentService
 
     public MailRecord Create(MailRecoverViewModel viewModel, IEnumerable<TicketRecoverEmailModel> tickets, SiteEmail siteEmail, EmailGroup group)
     {
-        if (tickets.Valid(siteEmail))
+        if (!tickets.Valid(siteEmail))
         {
-            viewModel.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, viewModel.NegativeBalanceUsers);
-            viewModel.Groups = GenerateGroups(tickets);
-            var mailSubject = subjectService.CreateRecover(viewModel, group, RecoverType.Default);
-            var mailRecord = templateEmailService.CreateForRecover(viewModel, siteEmail, mailSubject);
-            return mailRecord.MailRecord;
+            return new MailRecord();
         }
 
-        return new MailRecord();
+        viewModel.NegativeBalanceUsers = tickets.GetNegativeBalanceUsers(group, t => t.UserName, viewModel.NegativeBalanceUsers);
+        viewModel.Groups = GenerateGroups(tickets);
+        var mailSubject = subjectService.CreateRecover(viewModel, group, RecoverType.Default);
+        var mailRecord = templateEmailService.CreateForRecover(viewModel, siteEmail, mailSubject);
+        return mailRecord.MailRecord;
     }
 
     private List<Group<TicketRecoverEmailViewModel>> GenerateGroups(IEnumerable<TicketRecoverEmailModel> tickets)
