@@ -32,6 +32,8 @@ public class VoidBetAutomationModel
 
     public bool? IsSentLetsTalk { get; set; }
 
+    public bool? IsDeletedZzzBetTrans { get; set; }
+
     public bool? IsDeletedMessage { get; set; }
 
     public bool? IsDeletedVoidedTransaction { get; set; }

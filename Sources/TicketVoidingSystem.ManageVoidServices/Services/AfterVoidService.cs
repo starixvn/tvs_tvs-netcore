@@ -75,6 +75,7 @@ public class AfterVoidServiceImp : AfterVoidService
             IsUpdatedVoidingHistory = model.IsUpdatedVoidingHistory,
             IsSentEmail = model.IsSentEmail,
             IsSentLetsTalk = model.IsSentLetsTalk,
+            IsDeletedZzzBetTrans = model.IsDeletedZzzBetTrans,
             IsDeletedMessage = model.IsDeletedMessage,
             IsDeletedVoidedTransaction = model.IsDeletedVoidedTransaction
         };
