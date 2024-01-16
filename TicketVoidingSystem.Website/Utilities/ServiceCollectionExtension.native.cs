@@ -123,23 +123,13 @@ public static class ServiceCollectionExtension
                 };
             });
 
-        var redisConfig = new ConfigurationOptions();
-        redisConfig.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
-        redisConfig.Password = AppSettingService.AppSetting.RedisConfig.Password;
-        redisConfig.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
-        redisConfig.ConnectRetry = 1000;
-        redisConfig.ConnectTimeout = 300000;
-        redisConfig.SyncTimeout = 60000;
-        redisConfig.AsyncTimeout = 60000;
-        var redisMultiplexer = ConnectionMultiplexer.Connect(redisConfig);
-
         // Persist data protection keys to distributed cache
         services.AddDataProtection()
-            .PersistKeysToStackExchangeRedis(redisMultiplexer, "TicketVoidingSystem.DataProtection.Keys");
+            .PersistKeysToStackExchangeRedis(LazyRedisMultiplexer.GetDatabase, "TicketVoidingSystem.DataProtection.Keys");
         services.AddDistributedMemoryCache();
         services.AddStackExchangeRedisCache(options =>
         {
-            options.ConfigurationOptions = redisConfig;
+            options.ConfigurationOptions = LazyRedisMultiplexer.GetRedisConfig();
             options.InstanceName = "TicketVoidingSystem.Redis.Session";
         });
 
