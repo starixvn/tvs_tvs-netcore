@@ -3,29 +3,33 @@
     var session = new NapSession(httpContextAccessor);
     var userName = User.Identity?.Name;
     var userId = session.UserId;
+    var addRequestJsonData = ViewBag.AddRequestIndexViewModel as string;
 }
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <base href="@Url.Content("~/")" />
-    <meta charset="utf-8" />
-    <title>@ViewBag.Title &mdash; Ticket Voiding System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="~/favicon.ico" />
-    <link rel="stylesheet" href="~/css/bet-list.css" />
-    @await RenderSectionAsync("Head", false)
-    <script type="text/javascript">
-        window.rootUrl = '@Url.Content("~/")';
-    </script>
-</head>
-<body user-name="@userName" root-url="@Url.Content("~/")">
-<section id="body" user-name="@userName" user-id="@userId">
-    @RenderBody()
-</section>
-    <script src="~/lib/jquery/dist/jquery-1.8.2.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery-blockui.1.33.min.js"></script>
-    <script src="~/js/sub-parlay-ticket.js"></script>
-    <script src="~/nap-auth/re-checkin.js"></script>
-</body>
+        <base href="@Url.Content("~/")" />
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title &mdash; Ticket Voiding System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="~/favicon.ico" />
+        <link rel="stylesheet" href="~/css/bet-list.css" />
+        @await RenderSectionAsync("Head", false)
+        <script type="text/javascript">
+            window.rootUrl = '@Url.Content("~/")';
+        </script>
+    </head>
+    <body user-name="@userName" root-url="@Url.Content("~/")">
+        @if (!string.IsNullOrWhiteSpace(addRequestJsonData))
+        {
+            <input type="hidden" id="addrequest-init-data" value="@addRequestJsonData" />
+        }
+        <section id="body" user-name="@userName" user-id="@userId">
+            @RenderBody()
+        </section>
+        <script src="~/lib/jquery/dist/jquery-1.8.2.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery-blockui.1.33.min.js"></script>
+        <script src="~/js/sub-parlay-ticket.js"></script>
+        <script src="~/nap-auth/re-checkin.js"></script>
+    </body>
 </html>
