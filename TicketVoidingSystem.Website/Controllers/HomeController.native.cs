@@ -21,16 +21,20 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
 
+using Fanex.Caching;
+
 [SkipLogging]
 public class HomeController : Controller
 {
     private readonly INapSession session;
     private readonly IMaintenanceService maintenanceService;
+    private readonly ICache cache;
 
-    public HomeController(INapSession session, IMaintenanceService maintenanceService)
+    public HomeController(INapSession session, IMaintenanceService maintenanceService, ICache cache)
     {
         this.session = session;
         this.maintenanceService = maintenanceService;
+        this.cache = cache;
     }
 
     [HttpGet]
@@ -53,6 +57,16 @@ public class HomeController : Controller
     {
         return View();
     }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> RedisHealthCheck()
+    {
+        var cachePolicy = new CacheItemOptions().SetSlidingExpiration(TimeSpan.FromHours(1));
+        await cache.SetAsync("RedisHealthCheck", DateTimeOffset.Now.ToString(), cachePolicy);
+
+        return Ok("OK");
+    }
+
 
     [AllowAnonymous]
     [HttpGet]
