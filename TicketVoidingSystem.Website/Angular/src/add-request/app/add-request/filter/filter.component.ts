@@ -139,19 +139,28 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   async initData() {
-    const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
     if (!this.initialize) {
       this.initialize = true;
       await this.initSelections();
       await this.getIssueTypes();
       if (!this.isEdit) {
-        const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'));
-        this.issueTypes.issueId = previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
-          ? Number(previousSelectedIssueType) : this.issueTypes.issueId;
+        this.issueTypes.issueId = this.getIssueTypeIdDefault();
         this.updateSubByIssue();
         this.updateCurrentAction();
         this.updateModel();
       }
+    }
+  }
+
+  getIssueTypeIdDefault(): number {
+    const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
+    if (this.isExternalUrl) {
+      return Number(this.model.issueTypeId);
+    } else {
+      const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'));
+      return previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
+        ? Number(previousSelectedIssueType)
+        : this.issueTypes.issueId;
     }
   }
 
@@ -172,8 +181,6 @@ export class FilterComponent implements OnInit, OnChanges {
       this.actionIds[0] = this.model.action;
     }
   }
-
-
 
   updateDataAfterClosed(subIssueTypeId: number): void {
     if (this.isWrongScore()) {

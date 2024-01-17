@@ -33,5 +33,4 @@ export class AppComponent implements OnInit {
     this.model.filter.isTest = requestModel.isTest;
     this.model.abnormalBetModel.transIds = requestModel.transIds.join(',');
   }
-
 }
