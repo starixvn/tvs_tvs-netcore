@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using MediatR;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequestFromOtherSites;
@@ -22,7 +23,7 @@ public class AddRequestFromCTSHandler : IRequestHandler<AddRequestFromCTSRequest
         {
             IssueTypeId = IssueTypeConstant.AbnormalBet.ToString(),
             SubIssueTypeId = model.SubIssueTypeId,
-            ActionId = model.ActionId,
+            ActionId = string.IsNullOrWhiteSpace(model.ActionId) ? ActionVoidRequestConstant.AutoVoidWinningId.ToString() : model.ActionId,
             IsTest = model.IsTest,
             TransIds = model.TransIds
         };
