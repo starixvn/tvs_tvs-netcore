@@ -27,9 +27,8 @@ public class AddRequestFromOtherSitesController : Controller
         {
             var request = JsonSerializer.Deserialize<AddRequestFromCTSRequest>(requestJson);
             ViewBag.AddRequestIndexViewModel = await mediator.Send(request);
-            return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
         }
 
-        return View("~/Views/Auth/Error.cshtml");
+        return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
     }
 }

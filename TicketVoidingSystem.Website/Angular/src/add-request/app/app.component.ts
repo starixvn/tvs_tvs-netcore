@@ -31,6 +31,6 @@ export class AppComponent implements OnInit {
     this.model.filter.subIssueTypeId = requestModel.subIssueTypeId;
     this.model.filter.action = requestModel.actionId;
     this.model.filter.isTest = requestModel.isTest;
-    this.model.abnormalBetModel.transIds = requestModel.transIds.join(',');
+    this.model.abnormalBetModel.transIds = requestModel.transIds;
   }
 }
