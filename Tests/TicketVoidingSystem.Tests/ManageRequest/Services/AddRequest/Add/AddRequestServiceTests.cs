@@ -10,6 +10,7 @@ using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -21,7 +22,7 @@ public class AddRequestServiceTests
 {
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly IMapper mapper;
-    private readonly MarkTicketsService markTicketsService;
+    private readonly MarkTicketsWhenAddEditService markTicketsWhenAddEditService;
     private readonly IDynamicRepository repository;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
     private readonly AddRequestServiceImp service;
@@ -33,12 +34,12 @@ public class AddRequestServiceTests
         repository = Substitute.For<IDynamicRepository>();
         sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        markTicketsService = Substitute.For<MarkTicketsService>();
+        markTicketsWhenAddEditService = Substitute.For<MarkTicketsWhenAddEditService>();
         var accountWinLostService = Substitute.For<AccountWinLostService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
         service = new AddRequestServiceImp(mapper, repository, sessionService, loggingService,
-            markTicketsService, accountWinLostService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService);
+            markTicketsWhenAddEditService, accountWinLostService, insertAutoVoidRequestQueueService, sendLetstalkAfterAddService);
     }
 
     [Fact]
@@ -73,7 +74,7 @@ public class AddRequestServiceTests
         // Arrange
         var query = new AddRequestQuery { MarkTransIds = "1", IssueTypeId = 1 };
         var markTicketResults = new List<Result> { new() { ErrorCode = 1 } };
-        markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)
+        markTicketsWhenAddEditService.Execute(1, "1", "")
             .ReturnsForAnyArgs(markTicketResults);
 
         // Act
@@ -117,7 +118,7 @@ public class AddRequestServiceTests
             AbnormalAccountInfo = issueTypeId.IsAbnormalAccount() ? new AbnormalAccountViewModel() : null
         };
         var markTicketResults = new List<Result> { new() { ErrorCode = 0 } };
-        markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)
+        markTicketsWhenAddEditService.Execute(1, "1", "")
             .ReturnsForAnyArgs(markTicketResults);
         mapper.Map<AddRequestCommand>(Arg.Any<AddRequestQuery>())
             .ReturnsForAnyArgs(new AddRequestCommand { RequestId = 12345 });
@@ -161,7 +162,7 @@ public class AddRequestServiceTests
             RecoverTicketInfo = new RecoverTicketViewModel()
         };
         var markTicketResults = new List<Result> { new() { ErrorCode = 0 } };
-        markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)
+        markTicketsWhenAddEditService.Execute(1, "1", "")
             .ReturnsForAnyArgs(markTicketResults);
         mapper.Map<AddRequestCommand>(Arg.Any<AddRequestQuery>())
             .ReturnsForAnyArgs(new AddRequestCommand { RequestId = 12345 });

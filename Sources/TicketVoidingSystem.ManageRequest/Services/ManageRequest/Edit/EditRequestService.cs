@@ -13,13 +13,13 @@ public interface EditRequestService
 public class EditRequestServiceImp : EditRequestService
 {
     private readonly LoggingService loggingService;
-    private readonly MarkTicketsWhenEditService marketTicketsWhenEditService;
+    private readonly MarkTicketsWhenAddEditService marketTicketsWhenEditService;
     private readonly ReCalculateTicketsService reCalculateTicketsService;
     private readonly UpdateRequestProcessStage updateRequestProcessStage;
 
     public EditRequestServiceImp(
         LoggingService loggingService,
-        MarkTicketsWhenEditService marketTicketsWhenEditService,
+        MarkTicketsWhenAddEditService marketTicketsWhenEditService,
         ReCalculateTicketsService reCalculateTicketsService,
         UpdateRequestProcessStage updateRequestProcessStage)
     {
@@ -36,7 +36,7 @@ public class EditRequestServiceImp : EditRequestService
             var markTicketResults = new List<Result>();
             if (!query.IssueTypeId.IsArchivedTicket() && !query.IssueTypeId.RecoverTicket())
             {
-                markTicketResults = (await marketTicketsWhenEditService.Execute(query)).ToList();
+                markTicketResults = (await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds)).ToList();
             }
 
             return markTicketResults.TrueForAll(x => x.IsSuccessful)

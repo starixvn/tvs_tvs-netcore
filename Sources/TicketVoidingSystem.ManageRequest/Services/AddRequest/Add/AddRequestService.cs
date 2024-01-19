@@ -6,6 +6,7 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -22,7 +23,7 @@ public class AddRequestServiceImp : AddRequestService
     private readonly IDynamicRepository repository;
     private readonly SessionService sessionService;
     private readonly LoggingService loggingService;
-    private readonly MarkTicketsService markTicketsService;
+    private readonly MarkTicketsWhenAddEditService marketTicketsWhenEditService;
     private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly SendLetstalkAfterAddService sendLetstalkAfterAddService;
@@ -31,7 +32,7 @@ public class AddRequestServiceImp : AddRequestService
         IDynamicRepository repository,
         SessionService sessionService,
         LoggingService loggingService,
-        MarkTicketsService markTicketsService,
+        MarkTicketsWhenAddEditService marketTicketsWhenEditService,
         AccountWinLostService accountWinLostService,
         InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService,
         SendLetstalkAfterAddService sendLetstalkAfterAddService)
@@ -40,7 +41,7 @@ public class AddRequestServiceImp : AddRequestService
         this.repository = repository;
         this.sessionService = sessionService;
         this.loggingService = loggingService;
-        this.markTicketsService = markTicketsService;
+        this.marketTicketsWhenEditService = marketTicketsWhenEditService;
         this.accountWinLostService = accountWinLostService;
         this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
         this.sendLetstalkAfterAddService = sendLetstalkAfterAddService;
@@ -51,12 +52,14 @@ public class AddRequestServiceImp : AddRequestService
         try
         {
             var markTicketResults = Enumerable.Empty<Result>();
-            if ((!query.IssueTypeId.IsArchivedTicket() || !query.IssueTypeId.RecoverTicket()) && !string.IsNullOrWhiteSpace(query.MarkTransIds))
+            if (!query.IssueTypeId.IsArchivedTicket())
             {
-                markTicketResults = await markTicketsService.MarkTicketsInTVS(query.MarkTransIds, query.IssueTypeId, MarkTypeConstant.ExecuteMarkTickets);
+                markTicketResults = (await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds)).ToList();
             }
 
-            return markTicketResults.All(x => x.IsSuccessful) ? await ExecuteAddAfterMarkTickets(query) : markTicketResults.First(x => !x.IsSuccessful);
+            return markTicketResults.All(x => x.IsSuccessful)
+                ? await ExecuteAddAfterMarkTickets(query)
+                : markTicketResults.First(x => !x.IsSuccessful);
         }
         catch (Exception exception)
         {

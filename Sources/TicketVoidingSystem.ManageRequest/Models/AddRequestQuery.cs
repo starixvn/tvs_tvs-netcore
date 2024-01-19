@@ -45,6 +45,8 @@ public class AddRequestQuery
 
     public string? MarkTransIds { get; set; }
 
+    public string? UnMarkTransIds { get; set; }
+
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreInfo { get; set; }
 
     public AbnormalAccountViewModel? AbnormalAccountInfo { get; set; }
