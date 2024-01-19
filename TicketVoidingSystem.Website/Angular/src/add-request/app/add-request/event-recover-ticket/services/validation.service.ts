@@ -32,7 +32,8 @@ export class ValidationService {
     this.highlightInvalidTransIds(validationResult, betIdsComponent);
     return {
       isValid: betIdsComponent.isAllBetIdsValid(),
-      transInfoJson: validationResult.transInfoJson
+      transInfoJson: validationResult.transInfoJson,
+      unMarkTransIds: validationResult.unMarkTransIds
      } as ValidationBusinessRuleOutput;
   }
 

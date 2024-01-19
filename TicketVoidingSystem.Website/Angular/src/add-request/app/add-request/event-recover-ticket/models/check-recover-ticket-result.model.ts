@@ -3,4 +3,5 @@ export class CheckRecoverTicketResult {
   existingReqTransIds: string;
   unsupportedDateRangeTransIds: string;
   transInfoJson: string;
+  unMarkTransIds: string;
 }

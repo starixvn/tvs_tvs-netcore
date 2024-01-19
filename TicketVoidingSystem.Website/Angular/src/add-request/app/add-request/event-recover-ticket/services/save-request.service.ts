@@ -31,6 +31,7 @@ export class SaveRequestService {
     arg.addRequestStore.changeBlockingUiStatus(true);
     const result = await this.validationService.checkBusinessRule(arg.betIdsComponent, arg.recoverTicketModel, arg.filter, arg.requestId);
     arg.primitiveProps.transInfoJson = result.transInfoJson;
+    arg.primitiveProps.unMarkTransIds = result.unMarkTransIds;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
     return result.isValid;
@@ -72,6 +73,7 @@ export class SaveRequestService {
   private initAddRequestQuery(args: SaveRequestArg): AddRequestQuery {
     const query: AddRequestQuery = new AddRequestQuery();
     query.transInfoJson = args.primitiveProps.transInfoJson;
+    query.unMarkTransIds = args.primitiveProps.unMarkTransIds;
     query.issueTypeId = args.filter.issueTypeId;
     query.subIssueTypeId = args.filter.subIssueTypeId;
     query.actionId = args.filter.action;

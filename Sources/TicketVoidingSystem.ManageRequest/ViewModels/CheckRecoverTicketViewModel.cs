@@ -9,4 +9,6 @@ public class CheckRecoverTicketViewModel
     public string UnsupportedDateRangeTransIds { get; set; }
 
     public string TransInfoJson { get; set; }
+
+    public string UnMarkTransIds { get; set; }
 }
