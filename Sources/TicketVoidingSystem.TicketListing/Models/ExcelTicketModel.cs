@@ -39,4 +39,6 @@ public class ExcelTicketModel
 
     [Cell("L8")]
     public string Sa { get; set; }
+
+    public string Site { get; set; }
 }

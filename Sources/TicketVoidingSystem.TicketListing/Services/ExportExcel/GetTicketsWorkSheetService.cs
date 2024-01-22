@@ -23,7 +23,7 @@ public class GetTicketsWorkSheetService : WorkSheetService<ExportExcelQuery>
         cellService.AddMatch(worksheet, model);
         var tickets = await getTicketsService.GetTicketsForExportExcel(model);
         const int startRowIndex = 8;
-        worksheet.ApplyVertical(tickets, startRowIndex);
+        worksheet.ApplyVertical(model.Tickets, startRowIndex);
         cellService.SetStyle(worksheet, model.Product == GameType.NumberGame);
     }
 }
