@@ -48,7 +48,6 @@ using SpecialDelete.VoidByBetId;
 using SpecialDelete.VoidByBetId.Controllers;
 using SpecialDelete.VoidByCurrency;
 using SpecialDelete.VoidByCurrency.Controllers;
-using StackExchange.Redis;
 using TicketVoidingSystem.ABExceptionList.Controllers;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest;
@@ -231,6 +230,7 @@ public static class ServiceCollectionExtension
     public static void RegisterMediatR(this IServiceCollection services)
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SharedApiController).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(PermissionController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(BetTypesController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(MatchInfoController).Assembly));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ABExceptionListController).Assembly));

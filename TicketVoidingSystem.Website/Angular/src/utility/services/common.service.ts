@@ -115,7 +115,7 @@ export class CommonService {
   }
 
   async checkVoidBetPermission(query: CheckingPermissionModel): Promise<SqlResult> {
-    return this.httpService.postJson(query, `state-api/simple-data/update`);
+    return this.httpService.postJson(query, `api/Permission/CheckTicketsStatus`);
   }
 
   async getIssueTypePermissionList(): Promise<IssueType[]> {

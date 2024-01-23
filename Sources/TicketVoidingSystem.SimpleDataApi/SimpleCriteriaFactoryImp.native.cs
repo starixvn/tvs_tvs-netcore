@@ -18,7 +18,7 @@ public class SimpleCriteriaFactoryImp : SimpleCriteriaFactoryBase
     {
         CommandTypes.Add("void-by-bet-id-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidByBetIdCriteria));
         CommandTypes.Add("void-single-bet-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidSingleBetCriteria));
-        CommandTypes.Add("void-early-kick-off-bet-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidEarlyKickOffCriteria));
+        // CommandTypes.Add("void-early-kick-off-bet-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidEarlyKickOffCriteria));
         CommandTypes.Add("void-parlay-bet-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidParlayBetCriteria));
         CommandTypes.Add("void-by-currency-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidByCurrencyCriteria));
         CommandTypes.Add("void-cash-out-check-void-bet-permission", typeof(CheckVoidBetPermissionVoidCashOutTransactionCriteria));

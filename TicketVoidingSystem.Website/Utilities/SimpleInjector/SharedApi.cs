@@ -2,6 +2,7 @@
 using Olympus.SimpleDataApi;
 using TicketVoidingSystem.SharedApi.Services;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
+using TicketVoidingSystem.SharedApi.Services.Permission;
 using TicketVoidingSystem.SharedApi.Services.SubParlayTicket;
 using TicketVoidingSystem.SimpleDataApi;
 using TicketVoidingSystem.SimpleDataApi.Services;
@@ -21,5 +22,6 @@ public static class SharedApi
         services.AddTransient<BetTeamsService, BetTeamsServiceImp>();
         services.AddTransient<BalanceUpService, BalanceUpServiceImp>();
         services.AddTransient<TicketsService, TicketsServiceImp>();
+        services.AddTransient<CheckTicketsStatusService, CheckTicketsStatusServiceImp>();
     }
 }
