@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.TicketListing.Criteria;
+using TicketVoidingSystem.TicketListing.Models;
 using TicketVoidingSystem.TicketListing.Services;
 using TicketVoidingSystem.TicketListing.Services.ExportExcel;
 using Xunit;
@@ -14,7 +16,7 @@ public class GetTicketsWorkSheetServiceTests
     {
         // Arrange
         var worksheet = SetupTestingSheet.CreateTestingSheet();
-        var model = new ExportExcelQuery { MatchId = 132 };
+        var model = new ExportExcelQuery { MatchId = 132, Tickets = new List<ExcelTicketModel> { new() } };
         var cellService = Substitute.For<CellService>();
         var getTicketsService = Substitute.For<GetTicketsService>();
         var control = new GetTicketsWorkSheetService(cellService, getTicketsService);

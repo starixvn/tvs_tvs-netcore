@@ -109,7 +109,7 @@ public class VoidTicketsServiceTest
         const int reasonId = 123;
         var sessionService = Substitute.For<SessionService>();
         var messageService = Substitute.For<SendMessageService>();
-        messageService.InsertMessage(query.Message, query.MatchId, query.Match.LeagueGroupId, false)
+        messageService.InsertMessage(query.Message, query.MatchId, query.Match?.LeagueGroupId, false)
             .ReturnsForAnyArgs(messageId);
         messageService.InsertReason(query.Reason, query.ReasonSC).ReturnsForAnyArgs(reasonId);
         sessionService.UserId.ReturnsForAnyArgs(123);

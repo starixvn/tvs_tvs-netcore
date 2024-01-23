@@ -15,7 +15,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByBetId.Repositories
 {
-
     [Category("VoidByBetId")]
     public class VoidByBetIdRepositoryTest : IClassFixture<AppSettingFixture>
     {
@@ -63,6 +62,7 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Repositories
             var mapper = Substitute.For<IMapper>();
             dynamicRepository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(Arg.Any<VoidTicketsCriteria>())
                 .ReturnsForAnyArgs(fakeData);
+            sessionService.GetClientIp().ReturnsForAnyArgs("123");
             var repository = new VoidByBetIdRepositoryImp(mapper, dynamicRepository, sessionService);
 
             // Act
