@@ -1,5 +1,5 @@
-﻿using StackExchange.Redis;
-using System;
+﻿using System;
+using StackExchange.Redis;
 
 namespace TicketVoidingSystem.Website.Utilities.CustomServices;
 
@@ -64,12 +64,12 @@ public static class LazyRedisMultiplexer
 
     private static void Redis_ConfigurationChangedBroadcast(object sender, EndPointEventArgs e)
     {
-        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint.ToString());
+        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint);
     }
 
     private static void Redis_ConfigurationChanged(object sender, EndPointEventArgs e)
     {
-        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint.ToString());
+        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint);
     }
 
     private static ConnectionMultiplexer RedisMultiplexer
@@ -107,5 +107,4 @@ public static class LazyRedisMultiplexer
 
         return redisConfig;
     }
-
 }

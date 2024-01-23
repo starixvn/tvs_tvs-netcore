@@ -24,9 +24,9 @@ public class TicketsCheckPermissionServiceImp : TicketsCheckPermissionService
     {
         var tickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["tickets"].ToString());
         IEnumerable<BetId> cancelCashOutTickets = new List<BetId>();
-        if (queryModel.ContainsKey("cancelCashOutTickets"))
+        if (queryModel.TryGetValue("cancelCashOutTickets", out var value))
         {
-            cancelCashOutTickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(queryModel["cancelCashOutTickets"].ToString());
+            cancelCashOutTickets = Helper.DeserializeObjectIgnoreNullValue<IEnumerable<BetId>>(value.ToString());
         }
 
         return (tickets, cancelCashOutTickets);

@@ -54,10 +54,10 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
             {
                 criteria.SiteDbGroupId = serverId;
                 criteria.MainTransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == serverId).Select(x => x.TransId));
-                var data = await repository.RecoverTickets<RecoverSubTicketModel>(criteria);
+                var (validation, tickets) = await repository.RecoverTickets<RecoverSubTicketModel>(criteria);
 
-                validationInAllServers.AddRange(data.Validation);
-                ticketsInAllServers.AddRange(data.Tickets);
+                validationInAllServers.AddRange(validation);
+                ticketsInAllServers.AddRange(tickets);
             }
 
             RemoveMessage(ticketsInAllServers);
