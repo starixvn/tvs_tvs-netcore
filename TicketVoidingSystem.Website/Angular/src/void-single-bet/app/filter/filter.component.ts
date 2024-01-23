@@ -207,6 +207,7 @@ export class FilterComponent implements OnInit {
   }
 
   changeEventType() {
+    this.handleBetTypeOfBasketball();
     this.updateEventType.emit(this.eventType.value);
   }
 
@@ -318,36 +319,104 @@ export class FilterComponent implements OnInit {
     this.checkAndUncheckBetTypesOfBasketball();
   }
 
+  checkBetTypeForWrongHdp(){
+    if (this.issueType.value.toString() !== IssueTypeConstant.WRONG_HDP) {
+      return;
+    }
+    if (this.eventType.value === "0") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_HDP_NON_LIVE);
+      return;
+    }
+    if(this.eventType.value === "1") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_HDP_LIVE);
+      return;
+    }
+    this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_HDP);
+  }
+
+  checkBetTypeForWrong1StHdp(){
+    if (this.issueType.value.toString() !== IssueTypeConstant.WRONG_1ST_HDP) {
+      return;
+    }
+    if (this.eventType.value === "0") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_HDP_NON_LIVE);
+      return;
+    }
+    if(this.eventType.value === "1") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_HDP_LIVE);
+      return;
+    }
+    this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_HDP);
+  }
+
+  checkBetTypeForWrong1StOu(){
+    if (this.issueType.value.toString() !== IssueTypeConstant.WRONG_1ST_OU) {
+      return;
+    }
+    if (this.eventType.value === "0") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_OU_NON_LIVE);
+      return;
+    }
+    if(this.eventType.value === "1") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_OU_LIVE);
+      return;
+    }
+    this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_OU);
+  }
+
+  checkBetTypeForWrongQuarterHdp(){
+    if (this.issueType.value.toString() !== IssueTypeConstant.WRONG_QUARTER_HDP) {
+      return;
+    }
+    if (this.eventType.value === "0") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_QUARTER_HDP_NON_LIVE);
+      return;
+    }
+    if(this.eventType.value === "1") {
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_QUARTER_HDP_LIVE);
+      return;
+    }
+    this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_QUARTER_HDP);
+  }
+
+  checkBetTypeForWrongOu(){
+    if (this.issueType.value.toString() !== IssueTypeConstant.WRONG_OU) {
+      return;
+    }
+    if (this.subIssueType.value.toString() === SubIssueTypeConstant.WRONG_QUARTER_OU) {
+      if (this.eventType.value === "0") {
+        this.checkBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU_NON_LIVE);
+        return;
+      }
+      if(this.eventType.value === "1") {
+        this.checkBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU_LIVE);
+        return;
+      }
+      this.checkBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU);
+    } 
+    else {
+      if (this.eventType.value === "0") {
+        this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_OU_NON_LIVE);
+        return;
+      }
+      if(this.eventType.value === "1") {
+        this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_OU_LIVE);
+        return;
+      }
+      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_OU);
+    }
+  }
+
   private checkAndUncheckBetTypesOfBasketball(): void {
     if (this.allBetTypes.some(x => x.isChecked)) {
       this.unCheckAllBetType();
     }
 
-    if (this.issueType.value.toString() === IssueTypeConstant.WRONG_HDP) {
-      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_HDP);
-    }
-
-    if (this.issueType.value.toString() === IssueTypeConstant.WRONG_1ST_HDP) {
-      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_HDP);
-    }
-
-    if (this.issueType.value.toString() === IssueTypeConstant.WRONG_OU) {
-      if (this.subIssueType.value.toString() === SubIssueTypeConstant.WRONG_QUARTER_OU) {
-        this.checkAllBetType();
-        this.unCheckBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU);
-      }
-      if (this.subIssueType.value.toString() === SubIssueTypeConstant.WRONG_OU) {
-        this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_OU);
-      }
-    }
-
-    if (this.issueType.value.toString() === IssueTypeConstant.WRONG_1ST_OU) {
-      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_1ST_OU);
-    }
-
-    if (this.issueType.value.toString() === IssueTypeConstant.WRONG_QUARTER_HDP) {
-      this.checkBetTypeByCondition(BetTypeAutoCheckByIssue.WRONG_QUARTER_HDP);
-    }
+    this.checkBetTypeForWrongHdp();
+    this.checkBetTypeForWrong1StHdp();
+    this.checkBetTypeForWrong1StOu();
+    this.checkBetTypeForWrongQuarterHdp();
+    this.checkBetTypeForWrongOu();
 
     if (this.issueType.value.toString() === IssueTypeConstant.WRONG_SCORE) {
       this.checkAllBetType();
