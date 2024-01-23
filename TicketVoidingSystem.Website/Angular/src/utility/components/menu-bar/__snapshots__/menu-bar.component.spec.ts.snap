@@ -43,7 +43,7 @@ exports[`FilterComponent MenuBarComponent should init match snapshot 1`] = `
               <li>
                 <a
                   class="nav-link"
-                  href="https://Auth/ChangePassword"
+                  href="Auth/ChangePassword"
                 >
                   Change Password
                 </a>
@@ -51,7 +51,7 @@ exports[`FilterComponent MenuBarComponent should init match snapshot 1`] = `
               <li>
                 <a
                   class="nav-link"
-                  href="https://Auth/LogOut"
+                  href="Auth/LogOut"
                 >
                   Sign Out
                 </a>
