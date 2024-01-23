@@ -20,7 +20,7 @@ export class BetTypeAutoUnCheckByIssue {
   static readonly WRONG_SCORE = [2, 12, 611, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629];
 }
 
-export class BetTypeAutoUnCheckBySubIssue {
+export class BetTypeAutoCheckBySubIssue {
   static readonly WRONG_QUARTER_OU_LIVE = [610, 615, 616, 628, 629, 611, 650];
   static readonly WRONG_QUARTER_OU_NON_LIVE = [610, 615, 616];
   static readonly WRONG_QUARTER_OU = [610, 615, 616, 628, 629, 611, 650];

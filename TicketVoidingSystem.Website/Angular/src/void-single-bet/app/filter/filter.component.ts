@@ -12,7 +12,7 @@ import { MultipleSelection } from '../../../utility/components/multiple-selectio
 import { PagingConstant } from '../../../utility/components/paging/paging/paging.model';
 import { TemplateContent } from '../../../utility/components/template-message/template-message/template.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { BetTypeAutoCheckByIssue, BetTypeAutoUnCheckByIssue, BetTypeAutoUnCheckBySubIssue } from '../../../utility/constants/bettype-auto-check-list.constant';
+import { BetTypeAutoCheckByIssue, BetTypeAutoCheckBySubIssue, BetTypeAutoUnCheckByIssue } from '../../../utility/constants/bettype-auto-check-list.constant';
 import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { DateTimeFormat, ModeType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -385,14 +385,14 @@ export class FilterComponent implements OnInit {
     }
     if (this.subIssueType.value.toString() === SubIssueTypeConstant.WRONG_QUARTER_OU) {
       if (this.eventType.value === "0") {
-        this.checkBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU_NON_LIVE);
+        this.checkBetTypeByCondition(BetTypeAutoCheckBySubIssue.WRONG_QUARTER_OU_NON_LIVE);
         return;
       }
       if(this.eventType.value === "1") {
-        this.checkBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU_LIVE);
+        this.checkBetTypeByCondition(BetTypeAutoCheckBySubIssue.WRONG_QUARTER_OU_LIVE);
         return;
       }
-      this.checkBetTypeByCondition(BetTypeAutoUnCheckBySubIssue.WRONG_QUARTER_OU);
+      this.checkBetTypeByCondition(BetTypeAutoCheckBySubIssue.WRONG_QUARTER_OU);
     } 
     else {
       if (this.eventType.value === "0") {
