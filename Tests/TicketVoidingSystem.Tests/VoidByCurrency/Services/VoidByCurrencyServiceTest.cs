@@ -22,7 +22,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Services;
 
-
 public class VoidByCurrencyServiceTest
 {
     private readonly GetTicketsService getTicketsService;
@@ -30,8 +29,6 @@ public class VoidByCurrencyServiceTest
     private readonly VoidTicketsService voidTicketsService;
     private readonly NetPositionService netPositionService;
     private readonly PagingService pagingService;
-    private readonly NotificationLetstalkService notificationLetstalkService;
-    private readonly CashOutApiService cashOutApi;
     private readonly VoidByCurrencyServiceImp service;
 
     public VoidByCurrencyServiceTest()
@@ -41,8 +38,8 @@ public class VoidByCurrencyServiceTest
         voidTicketsService = Substitute.For<VoidTicketsService>();
         netPositionService = Substitute.For<NetPositionService>();
         pagingService = Substitute.For<PagingService>();
-        notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
-        cashOutApi = Substitute.For<CashOutApiService>();
+        var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
+        var cashOutApi = Substitute.For<CashOutApiService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<TicketInfoForLetstalk>(null).ReturnsForAnyArgs(new TicketInfoForLetstalk());
         service = new VoidByCurrencyServiceImp(

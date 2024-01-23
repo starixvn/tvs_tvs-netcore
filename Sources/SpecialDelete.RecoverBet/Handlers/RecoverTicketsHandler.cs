@@ -99,7 +99,7 @@ public class RecoverTicketsHandler : IRequestHandler<RecoverTicketsRequest, Reco
     {
         try
         {
-            var basketballCashOutTickets = tickets.Where(x => x.IsCashOut && x.SportType == SportTypeConstant.Basketball);
+            var basketballCashOutTickets = tickets.Where(x => x is { IsCashOut: true, SportType: SportTypeConstant.Basketball });
             if (basketballCashOutTickets.Any())
             {
                 var requestModel = new CashOutApiModel { VoidBetInfos = basketballCashOutTickets.Select(x => new VoidBetInfo { TransId = x.TransId.ToString(), CustId = x.CustId.ToString() }) };

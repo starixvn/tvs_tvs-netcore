@@ -64,7 +64,7 @@
                 </tr>
                     foreach (var transaction in group.Tickets)
                     {
-                        var backghroundColor = @transaction.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                        var backghroundColor = transaction.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
                         <tr valign="Middle" style="background-color: @backghroundColor; height: 25px;">
                             <td align="Center">
                                 @transaction.No

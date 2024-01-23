@@ -17,13 +17,12 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
     private readonly BetListService betListService;
     private readonly IMapper mapper;
     private readonly BetListCoreServiceImp service;
-    private readonly LeagueNameMessageService leagueNameMessageService;
 
     public BetListCoreServiceTests()
     {
         mapper = Substitute.For<IMapper>();
         betListService = Substitute.For<BetListService>();
-        leagueNameMessageService = Substitute.For<LeagueNameMessageService>();
+        var leagueNameMessageService = Substitute.For<LeagueNameMessageService>();
         service = new BetListCoreServiceImp(mapper, betListService, leagueNameMessageService);
     }
 

@@ -5,7 +5,7 @@
             <td>
                 <label for="reason">Reason (EN)</label>
             </td>
-            <td>@Html.TextArea("reason", new { @maxlength = "150", @class = "input-xlarge" })
+            <td>@Html.TextArea("reason", new { maxlength = "150", @class = "input-xlarge" })
             </td>
             <td>
                 <span class="required">&nbsp;&nbsp;(*)</span> <span id="maxChar">Max 150 characters</span>
@@ -15,7 +15,7 @@
             <td>
                 <label for="reasonSC">Reason (SC)</label>
             </td>
-            <td>@Html.TextArea("reasonSC", new { @maxlength = "150", @class = "input-xlarge" })
+            <td>@Html.TextArea("reasonSC", new { maxlength = "150", @class = "input-xlarge" })
             </td>
             <td>
                 <span class="required">&nbsp;&nbsp;(*)</span> <span id="maxCharSC">Max 150 characters</span>
@@ -25,7 +25,7 @@
             <td>
                 <label for="username">Username</label>
             </td>
-            <td>@Html.TextBox("username", ViewBag.UserName as string, new { @autocomplete = "off", @disabled = "disabled", @class = "input-medium" })
+            <td>@Html.TextBox("username", ViewBag.UserName as string, new { autocomplete = "off", disabled = "disabled", @class = "input-medium" })
             </td>
             <td></td>
         </tr>
@@ -33,7 +33,7 @@
             <td>
                 <label for="password">Password</label>
             </td>
-            <td>@Html.Password("password", "", new { @autocomplete = "new-password", @class = "input-medium" })
+            <td>@Html.Password("password", "", new { autocomplete = "new-password", @class = "input-medium" })
                 <span class="required">&nbsp;&nbsp;(*)</span>
             </td>
         </tr>
