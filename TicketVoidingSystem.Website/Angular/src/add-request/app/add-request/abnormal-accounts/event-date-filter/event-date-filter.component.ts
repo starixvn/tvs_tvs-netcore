@@ -37,7 +37,6 @@ export class EventDateFilterComponent implements OnInit {
 
   async initEventDate() {
     const currentMoment = moment.utc().tz('America/Caracas');
-
     if (this.isEdit) {
       const momentFromDate = moment(this.abnormalAccountModel.fromDate, DateTimeFormat.DATE_FORMAT);
       this.fromDate = new NgbDate(momentFromDate.year(), momentFromDate.month() + 1, momentFromDate.date());
@@ -46,11 +45,9 @@ export class EventDateFilterComponent implements OnInit {
     } else {
       this.fromDate = new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date());
       this.toDate = new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date());
-    }
-
-    const currentDate = new Date(currentMoment.utc(true).toDate());
-    const minDate = new Date(currentDate.setDate(currentDate.getDate() - 7));
-    this.minDate = { year: minDate.getFullYear(), month: minDate.getMonth() + 1, day: minDate.getDate()};
+    }   
+    const minDateMoment = currentMoment.subtract(7, "days");
+    this.minDate = { year: minDateMoment.year(), month: minDateMoment.month() + 1, day: minDateMoment.date()};
   }
 
   isValidEventDate(): boolean {
