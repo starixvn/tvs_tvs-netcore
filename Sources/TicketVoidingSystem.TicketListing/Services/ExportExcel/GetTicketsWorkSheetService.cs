@@ -9,21 +9,19 @@ namespace TicketVoidingSystem.TicketListing.Services.ExportExcel;
 public class GetTicketsWorkSheetService : WorkSheetService<ExportExcelQuery>
 {
     private readonly CellService cellService;
-    private readonly GetTicketsService getTicketsService;
 
-    public GetTicketsWorkSheetService(CellService cellService, GetTicketsService getTicketsService)
+    public GetTicketsWorkSheetService(CellService cellService)
     {
         this.cellService = cellService;
-        this.getTicketsService = getTicketsService;
     }
 
     public async Task BindingContent(ExcelWorksheet worksheet, ExportExcelQuery model)
     {
         worksheet.Cells[1, 1].Value = cellService.CreateTitle(model);
         cellService.AddMatch(worksheet, model);
-        var tickets = await getTicketsService.GetTicketsForExportExcel(model);
         const int startRowIndex = 8;
         worksheet.ApplyVertical(model.Tickets, startRowIndex);
         cellService.SetStyle(worksheet, model.Product == GameType.NumberGame);
+        await Task.CompletedTask;
     }
 }

@@ -44,8 +44,18 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
         return new Result
         {
             ErrorCode = 1,
-            ErrorMsg = "Failed to send data."
+            ErrorMsg = GetErrorMessageError(isSentDataToSiteNormal.IsSuccessful, isSentDataToSite777.IsSuccessful)
         };
+    }
+
+    private static string GetErrorMessageError(bool isSentDataToSiteNormal, bool isSentDataToSite777)
+    {
+        if (!isSentDataToSiteNormal && !isSentDataToSite777)
+        {
+            return "Failed to send data.";
+        }
+
+        return isSentDataToSite777 ? "Failed to send data of Credit site 777" : "Failed to send data of Credit site Normal";
     }
 
     private async Task<(Result isSentDataToSiteNormal, Result isSentDataToSite777)> SendToGroupTicketListing(SendCreditDataToLetstalkRequest request)
@@ -56,22 +66,23 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
         if (ticketsCreditNormal.Any())
         {
             request.TotalCreditTickets = ticketsCreditNormal.Count();
-            isSentDataToSiteNormal = await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), await CreateAttachmentForCredit(request, ticketsCreditNormal));
+            request.Tickets = ticketsCreditNormal;
+            isSentDataToSiteNormal = await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), await CreateAttachmentForCredit(request));
         }
 
         var isSentDataToSite777 = new Result();
         if (ticketsCredit777.Any())
         {
             request.TotalCreditTickets = ticketsCredit777.Count();
-            isSentDataToSite777 = await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), await CreateAttachmentForCredit777(request, ticketsCredit777));
+            request.Tickets = ticketsCredit777;
+            isSentDataToSite777 = await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), await CreateAttachmentForCredit777(request));
         }
 
         return (isSentDataToSiteNormal, isSentDataToSite777);
     }
 
-    private async Task<LetstalkAttachment> CreateAttachmentForCredit(ExportExcelQuery query, IEnumerable<ExcelTicketModel> tickets)
+    private async Task<LetstalkAttachment> CreateAttachmentForCredit(ExportExcelQuery query)
     {
-        query.Tickets = tickets;
         var excelAttachments = await excelService.GenerateContentAsByteArray(query, TemplateExcelPath.TicketListing);
         return new LetstalkAttachment
         {
@@ -80,9 +91,8 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
         };
     }
 
-    private async Task<LetstalkAttachment> CreateAttachmentForCredit777(ExportExcelQuery query, IEnumerable<ExcelTicketModel> tickets)
+    private async Task<LetstalkAttachment> CreateAttachmentForCredit777(ExportExcelQuery query)
     {
-        query.Tickets = tickets;
         var excelAttachments = await excelService.GenerateContentAsByteArray(query, TemplateExcelPath.TicketListing);
         return new LetstalkAttachment
         {
