@@ -71,12 +71,12 @@ export class AdvancedModeComponent implements OnChanges {
     this.mapList.checkAllItems(true);
   }
 
-  async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {  
+  async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (this.matchId && changes['allBetTypes']) {
       if (this.baseBetTeam.length === 0) {
         await this.getBetTeamAndRenderValue(this.matchId);
       }
-      
+
       this.changedBetTypes();
     }
     if (changes['getPlayerQuery']) {
@@ -92,7 +92,7 @@ export class AdvancedModeComponent implements OnChanges {
     this.renderBetTeams(this.baseBetTeam);
     this.renderMapAndRound();
   }
-  
+
   public async getSpecialBetTeamCricket(matchId: string): Promise<void> {
     const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
     this.updatePlayerCricket(data);
@@ -382,7 +382,7 @@ export class AdvancedModeComponent implements OnChanges {
   isSabaHDPTimeMachine(betTeam: BetTeam): boolean {
     return betTeam.name.includes('HDP');
   }
-  
+
   private updatePlayerCricket(oddsInfo: OddsInfo[]): void {
     const groupBetTypes = _.groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
@@ -393,7 +393,7 @@ export class AdvancedModeComponent implements OnChanges {
 
   private getItemsPlayerSelection(betTypeId: string, odds: OddsInfo[]): Selection[] {
     const items: Selection[] = [];
-    if (AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId)) {            
+    if (AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId)) {
       const groupsOdds = _.groupBy(odds, 'oddsId');
       for (const oddsId in groupsOdds) {
         const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');

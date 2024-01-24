@@ -273,11 +273,11 @@ export class BetTeam {
     this.isChecked = temp;
   }
 
-  enableInput() {
-    if (this.type === 1 && this.enableBetTypes !== null && this.items[0].flag === true) {
+  enableInput() { //NOSONAR
+    if ((this.type === 1 || this.type === 8) && this.enableBetTypes !== null && this.items[0].flag === true) {
       this.items[0].value = '';
     }
-    if (this.type === 1 && this.enableBetTypes !== null && this.checkedBetTypes.length > 0) {
+    if ((this.type === 1 || this.type === 8) && this.enableBetTypes !== null && this.checkedBetTypes.length > 0) {
       this.items[0].flag = true;
       const enable = this.enableBetTypes.split(',');
       const checkedIds = this.checkedBetTypes.join(',').split(',');
