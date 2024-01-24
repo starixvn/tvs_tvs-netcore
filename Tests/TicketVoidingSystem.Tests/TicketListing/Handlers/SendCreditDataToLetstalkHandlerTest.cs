@@ -16,27 +16,29 @@ namespace TicketVoidingSystem.Tests.TicketListing.Handlers;
 public class SendCreditDataToLetstalkHandlerTest
 {
     [Theory]
-    [InlineData(0, "")]
-    [InlineData(1, "Fail")]
-    public async Task Handle_ReturnResult(int errorCode, string errorMsg)
+    [InlineData(true, true, "Data of Credit are sent successfully!")]
+    [InlineData(true, false, "Failed to send data of Credit site 777!")]
+    [InlineData(false, true, "Failed to send data of Credit site Normal!")]
+    [InlineData(false, false, "Failed to send data!")]
+    public async Task Handle_ReturnMsgExpected(bool isSentDataToSiteNormal, bool isSentDataToSite777, string errorMsg)
     {
         // Arrange
-        var result = new Result
-        {
-            ErrorCode = errorCode,
-            ErrorMsg = errorMsg
-        };
         var tickets = new List<ExcelTicketModel>
         {
             new(){Site = "777", BetId = "1"},
             new(){Site = "1", BetId = "2"}
         };
+        var errorCodeSentDataToSiteNormal = isSentDataToSiteNormal ? 0 : 1;
+        var errorCodeSentDataToSite777 = isSentDataToSite777 ? 0 : 1;
+        var errorMsgSentDataToSiteNormal = isSentDataToSiteNormal ? string.Empty : "Error send Data";
+        var errorMsgSentDataToSite777 = isSentDataToSite777 ? string.Empty : "Error send Data";
         var request = new SendCreditDataToLetstalkRequest();
         var letstalkService = Substitute.For<NotificationLetstalkService>();
         var excelService = Substitute.For<ExcelService<ExportExcelQuery>>();
         var getTicketsService = Substitute.For<GetTicketsService>();
         getTicketsService.GetTicketsForExportExcel(request).ReturnsForAnyArgs(tickets);
-        letstalkService.SendToGroupTicketListing(default, default).ReturnsForAnyArgs(result);
+        letstalkService.SendToGroupTicketListing(default, default).ReturnsForAnyArgs(new Result { ErrorCode = errorCodeSentDataToSiteNormal, ErrorMsg = errorMsgSentDataToSiteNormal });
+        letstalkService.SendToGroupTicketListing777(default, default).ReturnsForAnyArgs(new Result { ErrorCode = errorCodeSentDataToSite777, ErrorMsg = errorMsgSentDataToSite777 });
         excelService.GenerateContentAsByteArray(default!, default).ReturnsForAnyArgs(new byte[] { });
 
         var handler = new SendCreditDataToLetstalkHandler(excelService, letstalkService, getTicketsService);
@@ -45,6 +47,6 @@ public class SendCreditDataToLetstalkHandlerTest
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(result.IsSuccessful, actual.IsSuccessful);
+        Assert.Equal(errorMsg, actual.ErrorMsg);
     }
 }

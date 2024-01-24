@@ -52,10 +52,10 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
     {
         if (!isSentDataToSiteNormal && !isSentDataToSite777)
         {
-            return "Failed to send data.";
+            return "Failed to send data!";
         }
 
-        return isSentDataToSite777 ? "Failed to send data of Credit site 777" : "Failed to send data of Credit site Normal";
+        return isSentDataToSite777 ? "Failed to send data of Credit site Normal!" : "Failed to send data of Credit site 777!";
     }
 
     private async Task<(Result isSentDataToSiteNormal, Result isSentDataToSite777)> SendToGroupTicketListing(ExportExcelQuery request)
