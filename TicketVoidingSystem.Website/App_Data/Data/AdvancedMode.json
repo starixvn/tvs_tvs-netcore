@@ -1248,10 +1248,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -1268,6 +1264,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -1302,7 +1299,7 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "EnableBetTypes": "609",
       "BetTypes": "609,612,617"
     },
@@ -1310,10 +1307,6 @@
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -1331,6 +1324,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -1365,7 +1359,7 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "EnableBetTypes": "613",
       "BetTypes": "613"
     },
@@ -1373,10 +1367,6 @@
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -1394,6 +1384,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -1420,17 +1411,13 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "BetTypes": "611"
     },
     {
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -1448,6 +1435,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -1481,17 +1469,13 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "BetTypes": "610,615,616"
     },
     {
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -1509,6 +1493,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -9381,10 +9366,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -9401,6 +9382,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -9469,10 +9451,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -9489,6 +9467,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -9527,10 +9506,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -9547,6 +9522,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter ",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -12101,10 +12077,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -12121,6 +12093,7 @@
               "Value": "804"
             }
           ],
+          "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
