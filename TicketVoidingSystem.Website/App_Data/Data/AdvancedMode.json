@@ -8313,10 +8313,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -8337,6 +8333,7 @@
               "Value": "805"
             }
           ],
+          "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8363,17 +8360,13 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "BetTypes": "707,708"
     },
     {
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -8395,6 +8388,7 @@
               "Value": "805"
             }
           ],
+          "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8429,7 +8423,7 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "EnableBetTypes": "712,713,3909,3912,3916",
       "BetTypes": "712,713,3909,3912,3916"
     },
@@ -8437,10 +8431,6 @@
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -8462,6 +8452,7 @@
               "Value": "805"
             }
           ],
+          "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8488,17 +8479,13 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "BetTypes": "710,3906"
     },
     {
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -8520,6 +8507,7 @@
               "Value": "805"
             }
           ],
+          "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8553,17 +8541,13 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "BetTypes": "709,220,3905,3907,3908"
     },
     {
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -8585,6 +8569,7 @@
               "Value": "805"
             }
           ],
+          "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8611,17 +8596,13 @@
       ],
       "Name": "",
       "Value": "",
-      "Type": 1,
+      "Type": 8,
       "BetTypes": "714"
     },
     {
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -8643,6 +8624,7 @@
               "Value": "805"
             }
           ],
+          "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
           "XmlAttribute": "Set"
