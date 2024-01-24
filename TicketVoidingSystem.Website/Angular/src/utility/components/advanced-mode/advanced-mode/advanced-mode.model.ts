@@ -113,20 +113,13 @@ export class BetTeam {
 
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
-      if (item.isMultiple) {
+      if (this.isHaveMultipleMapRound && (item.name === AdvancedModeConstants.MAP || item.name === AdvancedModeConstants.ROUND)) {
+        this.renderMultipleSelectWithMapAndRound(item);
+      } else if (item.isMultiple) {
         this.renderMultipleSelect(item);
       } else {
-        if (this.isHaveMultipleMapRound) {
-          if (item.name === AdvancedModeConstants.MAP || item.name === AdvancedModeConstants.ROUND) {
-            this.renderMultipleSelectWithMapAndRound(item);
-          } else {
-            const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
-            this.selections.push(selection);
-          }
-        } else {
-          const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
-          this.selections.push(selection);
-        }
+        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
+        this.selections.push(selection);
       }
     });
   }

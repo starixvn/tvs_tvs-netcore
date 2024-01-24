@@ -8865,10 +8865,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "01"
             },
@@ -8889,6 +8885,7 @@
               "Value": "05"
             }
           ],
+          "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -8927,10 +8924,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "01"
             },
@@ -8951,6 +8944,7 @@
               "Value": "05"
             }
           ],
+          "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -8989,10 +8983,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "01"
             },
@@ -9013,6 +9003,7 @@
               "Value": "05"
             }
           ],
+          "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -9047,10 +9038,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "01"
             },
@@ -9071,6 +9058,7 @@
               "Value": "05"
             }
           ],
+          "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"

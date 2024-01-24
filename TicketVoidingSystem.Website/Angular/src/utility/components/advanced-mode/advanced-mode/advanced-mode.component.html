@@ -32,6 +32,13 @@
             </div>
             <div class="right">
               <ng-container *ngIf="!isHaveMultipleMapRound">
+                <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
+                  <div>
+                    <span class="mr-2">{{betTeam.multiSelection.name}}</span>
+                    <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
+                    </multiple-select>
+                  </div>
+                </div>
                 <div *ngFor="let selection of betTeam.selections">
                   <div class="right-selection">
                     <span *ngIf="selection.name !== ''">{{selection.name}}</span>
