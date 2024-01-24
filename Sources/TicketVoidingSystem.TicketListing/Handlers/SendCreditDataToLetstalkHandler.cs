@@ -58,47 +58,48 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
         return isSentDataToSite777 ? "Failed to send data of Credit site 777" : "Failed to send data of Credit site Normal";
     }
 
-    private async Task<(Result isSentDataToSiteNormal, Result isSentDataToSite777)> SendToGroupTicketListing(SendCreditDataToLetstalkRequest request)
+    private async Task<(Result isSentDataToSiteNormal, Result isSentDataToSite777)> SendToGroupTicketListing(ExportExcelQuery request)
     {
         var tickets = await getTicketsService.GetTicketsForExportExcel(request);
         var (ticketsCredit777, ticketsCreditNormal) = GroupTicketsTicketListingAlert(tickets);
-        var isSentDataToSiteNormal = new Result();
-        if (ticketsCreditNormal.Any())
-        {
-            request.TotalCreditTickets = ticketsCreditNormal.Count();
-            request.Tickets = ticketsCreditNormal;
-            isSentDataToSiteNormal = await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), await CreateAttachmentForCredit(request));
-        }
-
-        var isSentDataToSite777 = new Result();
-        if (ticketsCredit777.Any())
-        {
-            request.TotalCreditTickets = ticketsCredit777.Count();
-            request.Tickets = ticketsCredit777;
-            isSentDataToSite777 = await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), await CreateAttachmentForCredit777(request));
-        }
+        var isSentDataToSiteNormal = await SendForCreditNormal(ticketsCreditNormal, request);
+        var isSentDataToSite777 = await SendForCredit777(ticketsCredit777, request);
 
         return (isSentDataToSiteNormal, isSentDataToSite777);
     }
 
-    private async Task<LetstalkAttachment> CreateAttachmentForCredit(ExportExcelQuery query)
+    private async Task<Result> SendForCreditNormal(IEnumerable<ExcelTicketModel> ticketsCreditNormal, ExportExcelQuery request)
     {
-        var excelAttachments = await excelService.GenerateContentAsByteArray(query, TemplateExcelPath.TicketListing);
-        return new LetstalkAttachment
+        if (ticketsCreditNormal.Any())
         {
-            FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
-            Bytes = excelAttachments
-        };
+            request.TotalCreditTickets = ticketsCreditNormal.Count();
+            request.Tickets = ticketsCreditNormal;
+            var attachment = new LetstalkAttachment
+            {
+                FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
+                Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
+            };
+            return await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), attachment);
+        }
+
+        return new Result();
     }
 
-    private async Task<LetstalkAttachment> CreateAttachmentForCredit777(ExportExcelQuery query)
+    private async Task<Result> SendForCredit777(IEnumerable<ExcelTicketModel> ticketsCredit777, ExportExcelQuery request)
     {
-        var excelAttachments = await excelService.GenerateContentAsByteArray(query, TemplateExcelPath.TicketListing);
-        return new LetstalkAttachment
+        if (ticketsCredit777.Any())
         {
-            FileName = "Ticket_Listing_for_Bettype_Credit_777.xlsx",
-            Bytes = excelAttachments
-        };
+            request.TotalCreditTickets = ticketsCredit777.Count();
+            request.Tickets = ticketsCredit777;
+            var attachment = new LetstalkAttachment
+            {
+                FileName = "Ticket_Listing_for_Bettype_Credit_777.xlsx",
+                Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
+            };
+            return await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), attachment);
+        }
+
+        return new Result();
     }
 
     private static (IEnumerable<ExcelTicketModel> ticketsCredit777, IEnumerable<ExcelTicketModel> ticketsCreditNormal) GroupTicketsTicketListingAlert(IEnumerable<ExcelTicketModel> tickets)
