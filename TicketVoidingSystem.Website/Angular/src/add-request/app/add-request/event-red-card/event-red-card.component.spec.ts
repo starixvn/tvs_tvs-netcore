@@ -89,7 +89,7 @@ class Helper {
       scoreOfMatch: '',
       scoreNormalTicket: '',
       cancelCashOutCount: 1
-    };
+    } as LogInfoDetail;
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,
@@ -211,7 +211,7 @@ describe('EventRedCardComponent', () => {
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     component.allSelectedEvents = [mainEvent];
-    
+
     // Action
     await component.ngOnInit();
 

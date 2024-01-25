@@ -58,7 +58,7 @@ class Helper {
     instantlySettleCount: 2,
     highlightMinTime: new Date(Helper.fakeEventDate),
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,

@@ -3,7 +3,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { CommonService } from '../../../../../utility/services/common.service';
 import { FilterModel } from '../../filter/filter.model';
 import { RedCardGetLogInfoQuery } from '../../models/event-red-card.model';
-import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
@@ -24,7 +24,7 @@ class Helper {
       isInvalidTotalTickets: true,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [],
     logInfoDetail: new LogInfoDetail()
   };

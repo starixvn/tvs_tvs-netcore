@@ -78,7 +78,7 @@ class Helper {
     scoreNormalTicket: '',
     instantlySettleCount: 2,
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeLogInfoRedCard: LogInfoRedCard = {
     matchId: 1111,
     isMainMatch: true,

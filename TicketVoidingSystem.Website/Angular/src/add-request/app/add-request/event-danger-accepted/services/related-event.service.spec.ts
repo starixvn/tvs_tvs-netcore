@@ -9,10 +9,10 @@ import { PrimitiveProperty } from '../../event-red-card/event-red-card.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../../filter/filter.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
@@ -75,7 +75,7 @@ class Helper {
     scoreNormalTicket: '',
     instantlySettleCount: 2,
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,

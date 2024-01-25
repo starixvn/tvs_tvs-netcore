@@ -22,7 +22,7 @@ class Helper {
       scoreNormalTicket: '',
       instantlySettleCount: 2,
       cancelCashOutCount: 1
-    };
+    } as LogInfoDetail;
 }
 
 describe('LogInfoNewComponent', () => {

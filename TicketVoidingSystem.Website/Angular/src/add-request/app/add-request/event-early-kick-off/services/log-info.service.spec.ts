@@ -7,7 +7,7 @@ import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
 import { FilterModel } from '../../filter/filter.model';
 import { EarlyKickOffModel } from '../../models/event-eko.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
@@ -55,24 +55,24 @@ class Helper {
     scoreNormalTicket: '',
     instantlySettleCount: 2,
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: 123,
     validation: {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: true,
-    },
+    } as Validation,
     ticketRequest: [{
       transIds: '123456789',
       requestId: 123
-    }],
+    } as TicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 123,
-  };
+  } as TicketRequest;
 }
 
 describe('LogInfoService', () => {

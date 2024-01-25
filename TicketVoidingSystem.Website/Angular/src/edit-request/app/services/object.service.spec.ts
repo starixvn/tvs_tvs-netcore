@@ -11,7 +11,7 @@ import { WrongHdpModel } from '../../../add-request/app/add-request/models/event
 import { WrongOddsModel } from '../../../add-request/app/add-request/models/event-wrong-odds.model';
 import { WrongOuModel } from '../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../../add-request/app/add-request/models/event-wrong-score.model';
-import { GetLogInfoModel, Validation } from '../../../add-request/app/add-request/models/get-log-info.model';
+import { GetLogInfoModel, TicketRequest, Validation } from '../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
 import { OthersModel } from '../../../add-request/app/add-request/others/others.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -86,12 +86,12 @@ class Helper {
     scoreNormalTicket: '',
     instantlySettleCount: 2,
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     scoreId: Helper.fakeScoreId,
     matchId: Helper.fakeMatchId,
     validation: new Validation(),
-    ticketRequest: [ { transIds: '123456789', requestId: 11111 }],
+    ticketRequest: [ { transIds: '123456789', requestId: 11111 } as TicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
   static readonly fakeRequestModel: RequestModel = {

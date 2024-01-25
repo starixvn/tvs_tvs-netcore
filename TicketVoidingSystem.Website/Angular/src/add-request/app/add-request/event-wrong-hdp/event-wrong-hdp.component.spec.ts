@@ -45,7 +45,7 @@ class Helper {
     scoreNormalTicket: '',
     scoreOfMatch: '',
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeFilterWithHdpModel: FilterWithHdpModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
@@ -407,8 +407,8 @@ describe('EventWrongHdpComponent', () => {
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
-    instance.logInfoComponents = logInfoComponents;    
-    
+    instance.logInfoComponents = logInfoComponents;
+
     await instance.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);

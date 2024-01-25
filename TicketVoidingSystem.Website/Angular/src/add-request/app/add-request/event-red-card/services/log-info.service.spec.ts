@@ -34,7 +34,7 @@ class Helper {
     isInvalidTotalTickets: true,
     isExistedInOtherRequest: true,
     isPoolHouseAffected: false
-  };
+  } as Validation;
   static readonly fakeAddRequestResultModel: AddRequestResultModel = {
     requestId: 1111,
     matchId: ''
@@ -78,7 +78,7 @@ class Helper {
       scoreNormalTicket: '',
       instantlySettleCount: 2,
       cancelCashOutCount: 1
-    };
+    } as LogInfoDetail;
   static readonly fakeLogInfoRedCard: LogInfoRedCard = {
     matchId: Helper.fakeFirstMatchId,
     isMainMatch: true,
@@ -110,17 +110,17 @@ class Helper {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [{
       transIds: '123456789',
       requestId: 123
-    }],
+    } as TicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: Helper.fakeRequestId,
-  };
+  } as TicketRequest;
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     getLogInfoModels: [Helper.fakeGetLogInfoModel]
@@ -396,5 +396,5 @@ describe('LogInfoService', () => {
     expect(fakeLogInfoRedCard.isCheckedVar).toBeTruthy();
     expect(fakeLogInfoRedCard.isHighLightVarCheck).toBeFalsy();
   });
-  
+
 });

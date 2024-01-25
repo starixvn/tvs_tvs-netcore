@@ -1,5 +1,5 @@
 import { EarlyKickOffModel } from '../../../../add-request/app/add-request/models/event-eko.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../../../add-request/app/add-request/models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
@@ -99,17 +99,17 @@ class Helper {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [{
       transIds: '123456789',
       requestId: 123
-    }],
+    } as TicketRequest],
     logInfoDetail: new LogInfoDetail()
   };
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 1,
-  };
+  } as TicketRequest;
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     getLogInfoModels: [Helper.fakeGetLogInfoModel],

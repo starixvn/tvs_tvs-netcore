@@ -4,7 +4,7 @@ import { Result } from '../../../../../utility/models/result';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
@@ -58,11 +58,11 @@ class Helper {
     scoreNormalTicket: '',
     scoreOfMatch: '',
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 1,
-  };
+  } as TicketRequest;
   static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
@@ -93,7 +93,7 @@ class Helper {
       isInvalidTotalTickets: true,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [Helper.fakeTicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };

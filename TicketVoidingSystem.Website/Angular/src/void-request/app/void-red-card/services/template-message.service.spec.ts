@@ -1,13 +1,13 @@
-import { DuplicateTicketsModel } from './../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
-import { TemplateMessageService } from './template-message.service';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { DuplicateTicketsModel } from './../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
+import { TemplateMessageService } from './template-message.service';
 
 class Helper {
   static readonly fakeRequestId = 50121;
@@ -92,7 +92,7 @@ class Helper {
       scoreNormalTicket: '',
       instantlySettleCount: 2,
       cancelCashOutCount: 1
-    };
+    } as LogInfoDetail;
 }
 
 describe('TemplateMessageService', () => {
