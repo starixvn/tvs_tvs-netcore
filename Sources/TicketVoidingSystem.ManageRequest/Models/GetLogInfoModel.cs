@@ -32,6 +32,8 @@ public class LogInfoDetail
     public int? HighlightAcceptType { get; set; }
     public string? ScoreNormalTicket { get; set; }
     public string? ScoreOfMatch { get; set; }
+    public string MinTransId { get; set; }
+    public string ActionType { get; set; }
 
     // Wrong HDP/1stHDP
 
@@ -53,4 +55,5 @@ public class Validation
     public bool IsInvalidTotalTickets { get; set; }
     public bool IsExistedInOtherRequest { get; set; }
     public bool IsPoolHouseAffected { get; set; }
+    public bool IsExistsSecondAccept { get; set; }
 }

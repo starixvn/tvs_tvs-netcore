@@ -154,5 +154,4 @@ export class LogInfoRedCardComponent {
     this.logInfo.isCheckedVar = isVarChecked;
     this.logInfo.isHighLightVarCheck = false;
   }
-
 }

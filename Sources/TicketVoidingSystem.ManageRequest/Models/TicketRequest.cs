@@ -9,4 +9,6 @@ public class TicketRequest
     public string TransIds { get; set; }
 
     public int RequestId { get; set; }
+
+    public string CreatedBy { get; set; }
 }

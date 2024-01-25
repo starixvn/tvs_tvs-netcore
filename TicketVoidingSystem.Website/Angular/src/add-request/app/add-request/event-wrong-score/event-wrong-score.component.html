@@ -36,7 +36,8 @@
 				<span *ngIf="isShowCountInfo(wrongScoreModels[0].logInfoDetail.cashOutCount, wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount)" class="text-red"
 				[innerHTML]="countInfoContent(wrongScoreModels[0].logInfoDetail.cashOutCount, wrongScoreModels[0].logInfoDetail.settleCount, wrongScoreModels[0].logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
 				Parlay Count: <strong>{{wrongScoreModels[0].logInfoDetail.mainParlayCount}}</strong>,
-				Min Time: <strong [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{displayMinTime(wrongScoreModels[0].logInfoDetail.highlightMinTime)}}</strong><br/>
+				Min Time: <strong [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{displayMinTime(wrongScoreModels[0].logInfoDetail.highlightMinTime)}}</strong>,
+				TransId: <strong [ngClass]="getHighlightMinTimeClass(wrongScoreModels[0].logInfoDetail.highlightMinTime)">{{wrongScoreModels[0].logInfoDetail.minTransId}}</strong>{{wrongScoreModels[0].logInfoDetail.actionType}}<br/>
 				Cancel Cash Out: <strong>{{wrongScoreModels[0].logInfoDetail.cancelCashOutCount}}</strong>
 			</div>
 			<div *ngIf="wrongScoreModels[0].messageValidationLogInfo" class="message">
