@@ -25,8 +25,8 @@ public class SendCreditDataToLetstalkHandlerTest
         // Arrange
         var tickets = new List<ExcelTicketModel>
         {
-            new(){Site = "777", BetId = "1"},
-            new(){Site = "1", BetId = "2"}
+            new(){IsSite777 = true, BetId = "1"},
+            new(){IsSite777 = false, BetId = "2"}
         };
         var errorCodeSentDataToSiteNormal = isSentDataToSiteNormal ? 0 : 1;
         var errorCodeSentDataToSite777 = isSentDataToSite777 ? 0 : 1;

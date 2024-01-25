@@ -110,4 +110,6 @@ public class DetailTicketModel : ExcelOicModel
     public byte SettlementStatus { get; set; }
 
     public bool IsMarked { get; set; }
+
+    public bool IsSite777 { get; set; }
 }

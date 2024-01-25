@@ -27,4 +27,6 @@ public class TicketViewModel
     public byte? BallSequence { get; set; }
 
     public bool IsMarked { get; set; }
+
+    public bool IsSite777 { get; set; }
 }

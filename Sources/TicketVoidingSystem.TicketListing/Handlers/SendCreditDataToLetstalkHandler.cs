@@ -104,9 +104,8 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
 
     private static (IEnumerable<ExcelTicketModel> ticketsCredit777, IEnumerable<ExcelTicketModel> ticketsCreditNormal) GroupTicketsTicketListingAlert(IEnumerable<ExcelTicketModel> tickets)
     {
-        const string site777 = "777";
-        var ticketsCredit777 = tickets.Where(x => x.Site == site777);
-        var ticketsCreditNormal = tickets.Where(x => x.Site != site777);
+        var ticketsCredit777 = tickets.Where(x => x.IsSite777);
+        var ticketsCreditNormal = tickets.Where(x => !x.IsSite777);
 
         return (ticketsCredit777, ticketsCreditNormal);
     }
