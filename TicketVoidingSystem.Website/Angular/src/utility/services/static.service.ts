@@ -314,7 +314,7 @@ export class StaticService {
       });
   }
 
-  static getValidationMessageList(logInfoModel: GetLogInfoModel, filterFromTime?: Date, secondAcceptValue?: number): ValidationMessage[] {
+  static getValidationMessageList(logInfoModel: GetLogInfoModel, filterFromTime?: string, secondAcceptValue?: number): ValidationMessage[] {
     const messageList: ValidationMessage[] = [];
     if (logInfoModel.validation.isInvalidTotalTickets) {
       messageList.push({

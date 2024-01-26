@@ -27,7 +27,7 @@ export class LogInfoService {
     const logInfoViewModel = await this.commonService.getLogInfo(getLogInfoQuery);
 
     primitiveProps.transInfoAddRequestModel = logInfoViewModel.transInfoAddRequestModel;
-    this.assignResultLogInfoToEvents(allEvents, logInfoViewModel.getLogInfoModels);
+    this.assignResultLogInfoToEvents(allEvents, logInfoViewModel.getLogInfoModels, defaultFilterTimeWithAllowance);
   }
 
   private initGetLogInfoRedCardQuery(filterBy: number, isEdit: boolean, requestId: number,
@@ -68,7 +68,7 @@ export class LogInfoService {
     });
   }
 
-  private assignResultLogInfoToEvents(allEvents: LogInfoRedCard[], logInfoModels: GetLogInfoModel[]): void {
+  private assignResultLogInfoToEvents(allEvents: LogInfoRedCard[], logInfoModels: GetLogInfoModel[], defaultFilterTimeWithAllowance: FilterTimeWithAllowance): void {
     allEvents.forEach(event => {
       const logInfo = logInfoModels.find(x => x.matchId === event.matchId);
       if (logInfo) {
@@ -77,7 +77,7 @@ export class LogInfoService {
           event.voidTimeArea.toDateTime = moment(logInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           event.voidTimeArea.fromDateTime = moment(logInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
         }
-        event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfo);
+        event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfo, defaultFilterTimeWithAllowance.fromDateTime, event.voidTimeArea.saTime);
       }
     });
   }

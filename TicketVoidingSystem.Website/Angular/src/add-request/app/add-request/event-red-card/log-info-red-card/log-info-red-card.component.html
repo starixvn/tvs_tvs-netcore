@@ -57,7 +57,7 @@
           <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
           Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong>,
-          Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{displayMinTime(logInfo.logInfoDetail.highlightMinTime)}}</strong><br/>
+          Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{displayMinTime(logInfo.logInfoDetail.highlightMinTime)}}</strong>,
           TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{logInfo.logInfoDetail.minTransId}}</strong> {{logInfo.logInfoDetail.actionType}}<br/>
           Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong>
         </div>
