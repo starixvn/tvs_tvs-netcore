@@ -49,4 +49,22 @@ public class SendCreditDataToLetstalkHandlerTest
         // Assert
         Assert.Equal(errorMsg, actual.ErrorMsg);
     }
+
+    [Fact]
+    public async Task Handle_NoHasTicket_ReturnMsgExpected()
+    {
+        // Arrange
+        var tickets = new List<ExcelTicketModel>();
+        var request = new SendCreditDataToLetstalkRequest();
+        var getTicketsService = Substitute.For<GetTicketsService>();
+        getTicketsService.GetTicketsForExportExcel(request).ReturnsForAnyArgs(tickets);
+        const string expected = "Data of Credit are sent successfully!";
+        var handler = new SendCreditDataToLetstalkHandler(null, null, getTicketsService);
+
+        // Act
+        var actual = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(expected, actual.ErrorMsg);
+    }
 }
