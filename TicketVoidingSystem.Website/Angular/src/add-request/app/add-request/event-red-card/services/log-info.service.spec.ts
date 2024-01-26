@@ -270,7 +270,7 @@ describe('LogInfoService', () => {
     const spyValidationServiceIsHasAllowanceTime = jest.spyOn(mockValidationService, 'isHasAllowanceTime').mockImplementation(() => true);
 
     // Action
-    logInfoService['assignResultLogInfoToEvents']([fakeLogInfoRedCard], [fakeGetLogInfoModel]);
+    logInfoService['assignResultLogInfoToEvents']([fakeLogInfoRedCard], [fakeGetLogInfoModel], new FilterTimeWithAllowance());
 
     // Assert
     expect(spyValidationServiceIsHasAllowanceTime).toHaveBeenCalledTimes(1);
@@ -287,7 +287,7 @@ describe('LogInfoService', () => {
     const spyValidationServiceIsHasAllowanceTime = jest.spyOn(mockValidationService, 'isHasAllowanceTime').mockImplementation(() => true);
 
     // Action
-    logInfoService['assignResultLogInfoToEvents']([fakeLogInfoRedCard], [fakeGetLogInfoModel]);
+    logInfoService['assignResultLogInfoToEvents']([fakeLogInfoRedCard], [fakeGetLogInfoModel], new FilterTimeWithAllowance());
 
     // Assert
     expect(spyValidationServiceIsHasAllowanceTime).toHaveBeenCalledTimes(0);
@@ -305,7 +305,7 @@ describe('LogInfoService', () => {
     logInfoService['getValidationMessageList'] = jest.fn();
 
     // Action
-    logInfoService['assignResultLogInfoToEvents']([fakeLogInfoRedCard], [fakeGetLogInfoModel]);
+    logInfoService['assignResultLogInfoToEvents']([fakeLogInfoRedCard], [fakeGetLogInfoModel], new FilterTimeWithAllowance());
 
     // Assert
     expect(spyValidationServiceIsHasAllowanceTime).toHaveBeenCalledTimes(0);

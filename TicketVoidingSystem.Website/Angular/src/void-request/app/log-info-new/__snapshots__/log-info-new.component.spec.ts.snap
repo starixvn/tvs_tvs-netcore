@@ -34,6 +34,7 @@ exports[`LogInfoNewComponent LogInfoNewComponent init should match snapshot 1`] 
       <strong>
         1
       </strong>
+      , 
       <br />
     </div>
   </log-info-new>
