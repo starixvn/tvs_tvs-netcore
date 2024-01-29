@@ -30,7 +30,7 @@ export class TicketsComponent implements OnInit {
   }
 
   isRecoverTicket() {
-    return StaticService.isRecoverTicket(this.issueTypeId.toString());
+    return StaticService.isRecoverTicket(this.issueTypeId?.toString());
   }
 
   getTitle() {
