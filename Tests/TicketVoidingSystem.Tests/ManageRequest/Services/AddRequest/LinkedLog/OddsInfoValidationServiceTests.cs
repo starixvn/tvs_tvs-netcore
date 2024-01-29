@@ -9,12 +9,46 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class OddsInfoValidationServiceTests
 {
+    [Theory]
+    [InlineData("", 0, "1", 1)]
+    [InlineData("1", 1, "", 0)]
+    public Task IsValidFavoriteWrongHdp1StHdp_ReturnTrue(string homeFavorite, int hdp1, string awayFavorite, int hdp2)
+    {
+        // Arrange
+        var linkedOddsInfo = new LinkedOddsInfo { Hdp2 = hdp2, Hdp1 = hdp1 };
+        var getLinkedLogModel = new GetLinkedLogModel { AwayFavorite = awayFavorite, HomeFavorite = homeFavorite, SubIssueTypeId = SubIssueTypeConstant.Wrong1stHDP };
+        var service = new OddsInfoValidationServiceImp();
+
+        // Act
+        var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
+
+        // Assert
+        Assert.True(actual);
+        return Task.CompletedTask;
+    }
+
     [Fact]
-    public Task IsValidFavoriteWrongHdp1StHdp_NoHasHomeFavorite_ReturnTrue()
+    public Task SubTypeIsWrongHDPAwayVirtualHeadReversed_ReturnTrue()
     {
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp2 = 1 };
-        var getLinkedLogModel = new GetLinkedLogModel { AwayFavorite = "1" };
+        var getLinkedLogModel = new GetLinkedLogModel { HdpValue = "1", SubIssueTypeId = SubIssueTypeConstant.WrongHDPAwayVirtualHeadReversed };
+        var service = new OddsInfoValidationServiceImp();
+
+        // Act
+        var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
+
+        // Assert
+        Assert.True(actual);
+        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public Task SubTypeIsOverUnder_ReturnTrue()
+    {
+        // Arrange
+        var linkedOddsInfo = new LinkedOddsInfo { Hdp2 = 1 };
+        var getLinkedLogModel = new GetLinkedLogModel { HdpValue = "1", SubIssueTypeId = SubIssueTypeConstant.OverUnder };
         var service = new OddsInfoValidationServiceImp();
 
         // Act

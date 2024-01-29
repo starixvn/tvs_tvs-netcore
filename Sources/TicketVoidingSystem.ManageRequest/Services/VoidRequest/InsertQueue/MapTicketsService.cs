@@ -15,13 +15,18 @@ public class MapTicketsServiceImp : MapTicketsService
 {
     public IEnumerable<RequestDetailTicketModel> MapBetIdToRequestDetailTicket(IEnumerable<BetId> tickets, int requestId, int issueTypeId)
     {
-        return tickets?.Select(x => new RequestDetailTicketModel
+        if (tickets != null && tickets.Any())
         {
-            RequestId = requestId,
-            TransId = long.Parse(x.TransId),
-            MatchId = x.MatchId ?? 0,
-            IssueTypeId = issueTypeId
-        });
+            return tickets.Select(x => new RequestDetailTicketModel
+            {
+                RequestId = requestId,
+                TransId = long.Parse(x.TransId),
+                MatchId = x.MatchId ?? 0,
+                IssueTypeId = issueTypeId
+            });
+        }
+
+        return ArraySegment<RequestDetailTicketModel>.Empty;
     }
 
     public IEnumerable<RequestDetailTicketModel> SetVoidingTypeForTickets(CheckTicketValidationOutput validation)
