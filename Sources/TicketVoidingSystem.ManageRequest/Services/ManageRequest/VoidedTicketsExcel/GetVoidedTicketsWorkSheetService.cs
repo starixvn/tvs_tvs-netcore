@@ -31,7 +31,7 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
 
     public async Task BindingContent(ExcelWorksheet worksheet, GetVoidedTicketsQuery model)
     {
-        worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId ?? 0);
+        worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId ?? 0, model.IssueTypeId);
         var match = model.IssueTypeId == IssueTypeConstant.AbnormalAccount || model.MatchId is null or 0
             ? null : await getVoidedTicketsService.GetMatchInfo(model.MatchId.Value);
         matchService.UpdateMatchInfoFromRemotingRef(match);

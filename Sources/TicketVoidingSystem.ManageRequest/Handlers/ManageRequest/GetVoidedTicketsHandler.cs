@@ -49,7 +49,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         var index = query.PageIndex * query.PageSize + 1;
         foreach (var group in groups)
         {
-            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query.IssueTypeId);
+            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query);
             viewModel.Groups.Add(currentGroup);
             index += currentGroup.Tickets.Count();
         }

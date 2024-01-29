@@ -22,10 +22,11 @@ public class ExportVoidedTicketsHandler : IRequestHandler<ExportVoidedTicketsReq
     public async Task<ExcelFileModel> Handle(ExportVoidedTicketsRequest request, CancellationToken cancellationToken)
     {
         var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
-        var fileName = $"Req.{request.RequestId}_TVS_DeleteBet_{createDate}";
+        var fileName = request.IssueTypeId != IssueTypeConstant.RecoverTicket ? $"Req.{request.RequestId}_TVS_DeleteBet_{createDate}" : $"Req.{request.RequestId}_TVS_RecoverBet_{createDate}";
+        var templatePath = request.IssueTypeId != IssueTypeConstant.RecoverTicket ? TemplateExcelPath.TicketVoiding_VoidedTickets : TemplateExcelPath.TicketVoiding_RecoveredTickets;
         return new ExcelFileModel
         {
-            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketVoiding_VoidedTickets),
+            ContentAsByteArray = await excelService.GenerateContentAsByteArray(request, templatePath),
             FileName = fileName
         };
     }

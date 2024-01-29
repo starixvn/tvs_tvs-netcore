@@ -6,4 +6,5 @@ export class TicketsQuery {
   pageIndex: number;
   pageSize: number;
   singleTransIds: string;
+  recoverTime: string;
 }

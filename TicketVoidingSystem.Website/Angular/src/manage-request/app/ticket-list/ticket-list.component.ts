@@ -68,7 +68,8 @@ export class TicketListComponent implements OnInit, OnChanges {
       issueTypeId: this.requestDetail.request.issueTypeId,
       pageIndex: this.paging.page - 1,
       pageSize: this.paging.pageSize,
-      singleTransIds: this.generalInfoViewModel.generalInfoModel.singleTransIds
+      singleTransIds: this.generalInfoViewModel.generalInfoModel.singleTransIds,
+      recoverTime: this.generalInfoViewModel.generalInfoModel.recoveredTimeString
     };
     this.blockBetList = true;
     this.tickets = await this.appService.getVoidedTickets(this.query);

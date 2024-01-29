@@ -48,8 +48,11 @@
           <th scope="col" class="col-tb-14">
             <div>HDP</div>
           </th>
-          <th scope="col" class="col-tb-void-time">
+          <th *ngIf="!isRecoverTicket()" scope="col" class="col-tb-void-time">
             <div>Void Time</div>
+          </th>
+          <th *ngIf="isRecoverTicket()" scope="col" class="col-tb-void-time">
+            <div>Recover Time</div>
           </th>
           <th scope="col" class="col-tb-15">
             <div>Choice</div>

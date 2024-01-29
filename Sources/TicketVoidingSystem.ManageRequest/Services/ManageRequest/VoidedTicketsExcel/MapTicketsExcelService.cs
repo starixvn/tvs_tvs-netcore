@@ -14,7 +14,7 @@ public interface MapTicketsExcelService
 {
     IEnumerable<Group<VoidedTicketModel>> MapToGroupVoidedTickets(IEnumerable<VoidedTicketModel> tickets);
 
-    Group<ExcelVoidedTicketModel> MapToGroupExcelVoidedTickets(Group<VoidedTicketModel> originalGroup, Match match, int startIndex, int issueTypeId);
+    Group<ExcelVoidedTicketModel> MapToGroupExcelVoidedTickets(Group<VoidedTicketModel> originalGroup, Match match, int startIndex, GetVoidedTicketsQuery query);
 }
 
 public class MapTicketsExcelServiceImp : MapTicketsExcelService
@@ -52,13 +52,13 @@ public class MapTicketsExcelServiceImp : MapTicketsExcelService
         }
     }
 
-    public Group<ExcelVoidedTicketModel> MapToGroupExcelVoidedTickets(Group<VoidedTicketModel> originalGroup, Match match, int startIndex, int issueTypeId)
+    public Group<ExcelVoidedTicketModel> MapToGroupExcelVoidedTickets(Group<VoidedTicketModel> originalGroup, Match match, int startIndex, GetVoidedTicketsQuery query)
     {
         var excelTickets = new List<ExcelVoidedTicketModel>();
         var index = startIndex;
         foreach (var ticket in originalGroup.Tickets)
         {
-            var ticketDetail = mapFromBetListService.MapToVoidedTicketViewModel(ticket, match, ChoiceType.Excel, issueTypeId);
+            var ticketDetail = mapFromBetListService.MapToVoidedTicketViewModel(ticket, match, ChoiceType.Excel, query);
             var excelTicket = mapper.Map<ExcelVoidedTicketModel>(ticketDetail);
             excelTicket.No = index++;
             excelTicket.BetId = ticketDetail.BetId.LineBreak();
@@ -66,7 +66,7 @@ public class MapTicketsExcelServiceImp : MapTicketsExcelService
             excelTicket.Odds = ticketDetail.Odds.DefaultText();
             excelTicket.Stake = ticketDetail.Stake.StakeText();
             excelTicket.Status = ticketDetail.Status.DefaultText();
-            excelTicket.Choice = BuildChoice(ticket, ticketDetail, issueTypeId);
+            excelTicket.Choice = BuildChoice(ticket, ticketDetail, query.IssueTypeId);
             excelTickets.Add(excelTicket);
         }
 

@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets
 
 public interface CellService
 {
-    string CreateTitle(int matchId);
+    string CreateTitle(int matchId, int issueTypeId);
 
     void AddMatch(ExcelWorksheet worksheet, Match? match);
 
@@ -39,9 +39,9 @@ public class CellServiceImp : CellService
         }
     }
 
-    public string CreateTitle(int matchId)
+    public string CreateTitle(int matchId, int issueTypeId)
     {
-        return $"Void Bet - MatchId: {matchId}";
+        return issueTypeId != IssueTypeConstant.RecoverTicket ? $"Void Bet - MatchId: {matchId}" : $"Recover Bet - MatchId: {matchId}";
     }
 
     public void WriteGroupHeader(ExcelWorksheet worksheet, int rowNumber, Group<ExcelVoidedTicketModel> group)

@@ -15,6 +15,7 @@ export class GeneralInfo {
     scoreResult: string;
     reason: string;
     singleTransIds: string;
+    recoveredTimeString: string;
 }
 
 export class GroupUserVoidMessage {
