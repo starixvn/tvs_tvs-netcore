@@ -56,7 +56,7 @@ public class GetGeneralInfoServiceImp : GetGeneralInfoService
         var generalInfo = generalInfoModel.FirstOrDefault() ?? new GeneralInfoModel();
         generalInfo.LeagueName = remotingRefService.GetLeagueName(generalInfo.LeagueId, LanguageCode.English);
         generalInfo.VoidedTimeString = generalInfo.VoidedTime.ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt");
-        generalInfo.RecoveredTimeString = generalInfo.RecoveredTime.ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt");
+        generalInfo.RecoveredTimeString = generalInfo.RecoveredTime.ToString(FormatKey.LongDateFormatTimeWithSlash);
         generalInfo.KickOffTimeString = generalInfo.KickOffTime.ToString("hh:mm tt");
         generalInfo.NegativeBalanceUsers = !string.IsNullOrWhiteSpace(generalInfo.NegativeBalanceUsers)
             ? string.Join(", ", generalInfo.NegativeBalanceUsers.Split(',')) : generalInfo.NegativeBalanceUsers;
