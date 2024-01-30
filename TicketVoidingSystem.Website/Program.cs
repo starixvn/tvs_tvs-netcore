@@ -51,7 +51,8 @@ builder.Services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDateTimeJsonConverter());
     options.JsonSerializerOptions.Converters.Add(new CustomIntJsonConverter());
     options.JsonSerializerOptions.Converters.Add(new CustomDecimalJsonConverter());
-});
+}).AddSessionStateTempDataProvider();
+
 builder.Services.RegisterWebOptimizer();
 
 // Build app
