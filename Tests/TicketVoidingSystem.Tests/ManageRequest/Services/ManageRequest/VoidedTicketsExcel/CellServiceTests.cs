@@ -49,7 +49,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
             const int matchId = 123;
 
             // Act
-            var title = cellService.CreateTitle(matchId);
+            var title = cellService.CreateTitle(matchId, 1);
 
             // Assert
             Assert.Equal($"Void Bet - MatchId: {matchId}", title);
@@ -84,7 +84,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedT
             sheet.Cells[10, 10].Value = "Value";
 
             // Act
-            cellService.SetStyle(sheet);
+            cellService.SetStyle(sheet, 1);
 
             // Assert
             Assert.True(sheet.Cells.Style.WrapText);

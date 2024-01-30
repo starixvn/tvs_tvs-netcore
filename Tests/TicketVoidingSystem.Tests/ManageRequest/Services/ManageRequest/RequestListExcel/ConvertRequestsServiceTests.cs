@@ -126,7 +126,7 @@ public class ConvertRequestsServiceTests
     [InlineData(IssueTypeConstant.DuplicateTickets, "<div>abc</div>", "")]
     [InlineData(999, "", "")]
     [InlineData(IssueTypeConstant.RecoverTicket,
-        "<div>Product: <span class=\"text-primary product\">Sportsbook</span></div><div>Resettled: <span class=\"text-primary total-resettled\">0</span></div>", "Product: Sportsbook\r\nResettled: 0")]
+        "<div>Product: <span class=\"text-primary product\">Sportsbook</span></div><div>Resettled: <span class=\"text-primary total-resettled\">0</span></div>", "Product: Sportsbook")]
     public void GetDescription_ReturnsExpectedDescription(int issueId, string html, string description)
     {
         // Arrange

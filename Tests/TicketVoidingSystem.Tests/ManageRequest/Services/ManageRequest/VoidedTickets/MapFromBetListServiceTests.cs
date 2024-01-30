@@ -50,7 +50,6 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
         };
         var match = new Match();
         const ChoiceType choiceType = ChoiceType.Excel;
-        const int issueTypeId = 1;
 
         var ticket = new Ticket
         {
@@ -92,7 +91,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
         mapper.Map<Ticket>(Arg.Any<VoidedTicketModel>()).ReturnsForAnyArgs(ticket);
 
         // Act
-        var result = service.MapToVoidedTicketViewModel(item, match, choiceType, issueTypeId);
+        var result = service.MapToVoidedTicketViewModel(item, match, choiceType, new GetVoidedTicketsQuery());
 
         // Assert
         AssertExtension.Equal(expected, result);
@@ -148,7 +147,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
         mapper.Map<Ticket>(Arg.Any<VoidedTicketModel>()).ReturnsForAnyArgs(ticket);
 
         // Act
-        var result = service.MapToVoidedTicketViewModel(item, null, choiceType, issueTypeId);
+        var result = service.MapToVoidedTicketViewModel(item, null, choiceType, new GetVoidedTicketsQuery { IssueTypeId = issueTypeId });
 
         // Assert
         AssertExtension.Equal(choice, result.Choice);

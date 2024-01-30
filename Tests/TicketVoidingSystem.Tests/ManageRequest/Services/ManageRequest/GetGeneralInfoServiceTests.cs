@@ -78,7 +78,6 @@ public class GetGeneralInfoServiceTests
         var succeedEmails = new List<string> { "@@" };
         var failEmails = new List<string> { "gg" };
 
-
         var request = new GetGeneralInfoCriteria
         {
             RequestId = 123,
@@ -145,7 +144,7 @@ public class GetGeneralInfoServiceTests
         var request = new GetGeneralInfoCriteria
         {
             RequestId = 123,
-            MatchId = 123
+            MatchId = 123,
         };
         repository.FetchMultipleAsync<GeneralInfoModel, UserVoidMessage, EmailResultModel>(request)
             .ReturnsForAnyArgs((item1, item2, item3));
@@ -159,6 +158,7 @@ public class GetGeneralInfoServiceTests
             GeneralInfoModel = new GeneralInfoModel
             {
                 VoidedTimeString = new DateTime().ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt"),
+                RecoveredTimeString = "01/01/0001 12:00:00 AM",
                 KickOffTimeString = new DateTime().ToString("hh:mm tt"),
                 KickOffTime = new DateTime(),
                 LeagueName = "Champion League"

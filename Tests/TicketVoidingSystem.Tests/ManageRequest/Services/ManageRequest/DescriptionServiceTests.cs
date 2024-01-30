@@ -209,12 +209,11 @@ public class DescriptionServiceTests
         // Arrange
         var request = new RequestDescription { IssueTypeId = IssueTypeConstant.RecoverTicket };
         elementService.BuildProducts(Arg.Compat.Any<string>()).ReturnsForAnyArgs("Sportsbook");
-        elementService.BuildResettled(Arg.Compat.Any<int>()).ReturnsForAnyArgs("1");
 
         // Act
         var actual = descriptionService.Build(request);
 
         // Assert
-        Assert.Equal("Sportsbook1", actual);
+        Assert.Equal("Sportsbook", actual);
     }
 }

@@ -10,6 +10,7 @@ using TicketVoidingSystem.Services;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTickets;
+
 public class MapTicketsServiceTests
 {
     private readonly MapTicketsServiceImp mapTicketsService;
@@ -81,10 +82,10 @@ public class MapTicketsServiceTests
 
         mapFromBetListService
             .MapToVoidedTicketViewModel(Arg.Any<VoidedTicketModel>(), Arg.Any<Match>(), Arg.Any<ChoiceType>(),
-                Arg.Any<int>()).Returns(new VoidedTicketViewModel());
+                Arg.Any<GetVoidedTicketsQuery>()).Returns(new VoidedTicketViewModel());
 
         // Act
-        var result = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, new Match(), 0, 0);
+        var result = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, new Match(), 0, new GetVoidedTicketsQuery());
 
         // Assert
         Assert.Equal(group.Name, result.Name);
