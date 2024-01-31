@@ -125,8 +125,7 @@ public class DescriptionServiceImp : DescriptionService
     private string BuildProducts(RequestDescription item)
     {
         var products = elementService.BuildProducts(item.Products);
-        var totalResettleProcessed = elementService.BuildResettled(item.TotalResettleProcessed);
 
-        return $"{products}{totalResettleProcessed}";
+        return $"{products}";
     }
 }

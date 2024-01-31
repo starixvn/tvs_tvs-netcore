@@ -231,9 +231,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var products = doc.DocumentNode.SelectNodes("//*[@class='text-primary product']")[0].InnerText;
-        var totalResettleProcessed = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-resettled']")[0].InnerText;
-        var description = $"Product: {products}".AppendWithNewLine($"Resettled: {totalResettleProcessed}");
 
-        return description;
+        return $"Product: {products}";
     }
 }

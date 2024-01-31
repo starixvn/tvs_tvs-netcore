@@ -274,6 +274,14 @@ export class RequestListComponent implements OnInit, OnChanges {
       info.push(`<span class="text-green">CC:${detail.totalCancelCashOutProcessed}</span>`);
     }
 
+    if (this.isRecoverTicket(issueTypeId.toString())) {
+      info.push(`RS:${detail.totalResettleProcessed}`);
+    }
+
     return `(${info.join(', ')})`;
+  }
+
+  isRecoverTicket(issueTypeId: string): boolean {
+    return StaticService.isRecoverTicket(issueTypeId);
   }
 }

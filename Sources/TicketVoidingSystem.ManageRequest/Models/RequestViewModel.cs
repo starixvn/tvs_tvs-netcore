@@ -31,4 +31,5 @@ public class RequestEventViewModel
     public int TotalSingleProcessed { get; set; }
     public int TotalParlayProcessed { get; set; }
     public int TotalCancelCashOutProcessed { get; set; }
+    public int TotalResettleProcessed { get; set; }
 }

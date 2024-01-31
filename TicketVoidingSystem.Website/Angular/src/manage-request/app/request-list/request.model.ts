@@ -27,4 +27,5 @@ export class DetailRequestModel {
   totalSingleProcessed: number;
   totalParlayProcessed: number;
   totalCancelCashOutProcessed: number;
+  totalResettleProcessed: number;
 }

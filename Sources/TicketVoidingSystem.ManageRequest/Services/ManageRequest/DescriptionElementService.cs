@@ -30,8 +30,6 @@ public interface DescriptionElementService
     string BuildParlay(int totalTickets);
 
     string BuildProducts(string products);
-
-    string BuildResettled(int totalResettleProcessed);
 }
 
 public class DescriptionElementServiceImp : DescriptionElementService
@@ -130,10 +128,5 @@ public class DescriptionElementServiceImp : DescriptionElementService
     public string BuildProducts(string products)
     {
         return $"<div>Product: <span class=\"text-primary product\">{products}</span></div>";
-    }
-
-    public string BuildResettled(int totalResettleProcessed)
-    {
-        return $"<div>Resettled: <span class=\"text-primary total-resettled\">{totalResettleProcessed}</span></div>";
     }
 }
