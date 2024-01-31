@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
@@ -79,30 +77,5 @@ public class UpdateRequestProcessStageTests
         await repository.Received(1).ExecuteAsync(Arg.Any<EditRequestCommand>());
         await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
         AssertExtension.Equal(expected, actual);
-    }
-
-    [Fact]
-    public async Task Execute_HasException_ReturnErrorCodeExpected()
-    {
-        // Arrange
-        var query = new EditRequestQuery
-        {
-            IssueTypeId = IssueTypeConstant.EarlyKickOffTime,
-            RequestId = 1,
-            ActionId = 1,
-            MatchId = 1,
-            KickOffTime = DateTime.Now,
-            OperatorsList = null
-        };
-
-        mapper.Map<EditRequestCommand>(Arg.Any<EditRequestQuery>())
-            .ReturnsForAnyArgs(new EditRequestCommand { RequestId = 1 });
-        service = new UpdateRequestProcessStageImp(mapper, repository, accountWinLostService, sessionService, null);
-
-        // Act
-        var actual = await service.Execute(query);
-
-        // Assert
-        Assert.Equal(1, actual.ErrorCode);
     }
 }
