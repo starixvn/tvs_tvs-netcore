@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SpecialDelete.RecoverParlayBet.Models;
+﻿namespace SpecialDelete.RecoverParlayBet.Models;
 
 public class InvalidTransIds
 {
@@ -11,7 +9,7 @@ public class InvalidTransIds
 
 public class InvalidTransIdsEqualityComparer : IEqualityComparer<InvalidTransIds>
 {
-    public bool Equals(InvalidTransIds x, InvalidTransIds y)
+    public bool Equals(InvalidTransIds? x, InvalidTransIds? y)
     {
         if (x == null && y == null)
         {

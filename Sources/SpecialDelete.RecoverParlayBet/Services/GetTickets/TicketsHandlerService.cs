@@ -137,7 +137,7 @@ public class MainTicketsHandlerServiceImp : TicketsHandlerService<GetMainTicket,
     }
 }
 
-internal static class ProcessOutputService
+public static class ProcessOutputService
 {
     public static IEnumerable<InvalidTransIds> CombineInvalidTransIds(IEnumerable<IEnumerable<InvalidTransIds>> invalidTransIdsInAllServers)
     {

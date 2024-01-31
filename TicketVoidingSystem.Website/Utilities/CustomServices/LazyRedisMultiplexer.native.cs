@@ -1,15 +1,18 @@
-﻿using StackExchange.Redis;
-using System;
+﻿using System;
+using Fanex.Logging;
+using StackExchange.Redis;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.Website.Utilities.CustomServices;
-
-using Fanex.Logging;
-using TicketVoidingSystem.Services;
 
 public static class LazyRedisMultiplexer
 {
     private static ConnectionMultiplexer redis;
     private static readonly object multiplexerLock = new();
+    private const int CONNECT_RETRY = 1000;
+    private const int CONNECT_TIMEOUT = 5000;
+    private const int SYNC_TIMEOUT = 30000;
+    private const int ASYNC_TIMEOUT = 30000;
 
     private static void ConnectRedis()
     {
@@ -64,12 +67,12 @@ public static class LazyRedisMultiplexer
 
     private static void Redis_ConfigurationChangedBroadcast(object sender, EndPointEventArgs e)
     {
-        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint.ToString());
+        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint);
     }
 
     private static void Redis_ConfigurationChanged(object sender, EndPointEventArgs e)
     {
-        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint.ToString());
+        Logger.Log.Error("Redis_ConfigurationChangedBroadcast:" + e.EndPoint);
     }
 
     private static ConnectionMultiplexer RedisMultiplexer
@@ -99,13 +102,12 @@ public static class LazyRedisMultiplexer
         redisConfig.EndPoints.Add(AppSettingService.AppSetting.RedisConfig.EndPoint);
         redisConfig.Password = AppSettingService.AppSetting.RedisConfig.Password;
         redisConfig.DefaultDatabase = AppSettingService.AppSetting.RedisConfig.DefaultDatabase;
-        redisConfig.ConnectRetry = 1000;
-        redisConfig.ConnectTimeout = 5000;
-        redisConfig.SyncTimeout = 30000;
-        redisConfig.AsyncTimeout = 30000;
+        redisConfig.ConnectRetry = CONNECT_RETRY;
+        redisConfig.ConnectTimeout = CONNECT_TIMEOUT;
+        redisConfig.SyncTimeout = SYNC_TIMEOUT;
+        redisConfig.AsyncTimeout = ASYNC_TIMEOUT;
         redisConfig.AbortOnConnectFail = false;
 
         return redisConfig;
     }
-
 }

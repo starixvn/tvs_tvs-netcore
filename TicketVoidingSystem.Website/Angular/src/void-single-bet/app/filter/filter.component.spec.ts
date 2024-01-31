@@ -824,7 +824,6 @@ describe('FilterComponent', () => {
     instance.allBetTypes = [];
     instance.issueType.value = IssueTypeConstant.WRONG_OU;
     instance.subIssueType.value = SubIssueTypeConstant.WRONG_QUARTER_OU;
-    instance['unCheckBetTypeByCondition'] = jest.fn();
     instance.groupBetTypes = new GroupBetTypesModel([], null);
     instance.groupBetTypes.changeCheckGroupByBetTypes = jest.fn();
     instance.groupBetTypes.changeCheckedGroupToModel = jest.fn();
@@ -833,7 +832,6 @@ describe('FilterComponent', () => {
 
     instance['checkAndUncheckBetTypesOfBasketball']();
 
-    expect(instance['unCheckBetTypeByCondition']).toHaveBeenCalledTimes(1);
     expect(instance.groupBetTypes.changeCheckGroupByBetTypes).toHaveBeenCalledTimes(1);
     expect(instance.groupBetTypes.changeCheckedGroupToModel).toHaveBeenCalledTimes(1);
     expect(instance.changeBetTypes).toHaveBeenCalledTimes(1);
