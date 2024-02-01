@@ -344,7 +344,7 @@ export class BetTeam {
 
   updateByItems(result: BetTeamResult, id: string) {
     if (this.items.length === 1) {
-      if (this.type === 1 && this.enableBetTypes !== null) {
+      if ((this.type === 1 || this.type === 8) && this.enableBetTypes !== null) {
         this.updateResultForItemOfEnableBetTypes(result, id);
       } else {
         this.updateResult(result, this.items[0].xmlAttribute, this.items[0].value);
