@@ -108,7 +108,7 @@ export class LogInfoService {
 
   public updateIsCheckedVar(events: LogInfoRedCard[], isVarChecked: boolean) {
     events.forEach(event => {
-      event.isCheckedVar = isVarChecked;
+      event.isCheckedVar = StaticService.isShowVarCheck(event.subIssueTypeId) ? isVarChecked : null;
       event.isHighLightVarCheck = false;
     });
   }
