@@ -66,10 +66,14 @@
         .right {
           display: flex;
           justify-content: flex-start;
-          min-width: 608px;
+          min-width: 675px;
 
           .input-area {
             display: contents;
+          }
+
+          .width-158 {
+            width: 158px;
           }
 
           >div {
@@ -161,7 +165,7 @@
             margin: 0px;
           }
 
-          span {
+          span.label {
             margin: 0 5px 0 10px;
           }
 
@@ -227,12 +231,17 @@
           display: flex;
           justify-content: flex-start;
 
-          span {
+          span.label {
+            margin-right: 5px;
             margin-left: 20px;
           }
 
           select {
             width: 70px;
+            margin-bottom: 0px;
+            padding: 1px 2px;
+            height: 22px;
+            border-radius: 0;
           }
         }
       }
@@ -290,7 +299,7 @@
         }
 
         .inputs {
-          min-width: 608px;
+          min-width: 675px;
         }
       }
       
@@ -305,10 +314,14 @@
         .right {
           display: flex;
           justify-content: flex-start;
-          min-width: 608px;
+          min-width: 675px;
 
           .input-area {
             display: contents;
+          }
+
+          .width-158 {
+            width: 158px;
           }
 
           >div {
@@ -324,6 +337,7 @@
               
               select {
                 @include select-style;
+                min-width: 100px;
               }
 
               .multiple-selection {

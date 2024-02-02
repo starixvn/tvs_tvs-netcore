@@ -49,7 +49,7 @@
         padding: 5px 10px;
         cursor: pointer;
         background-image: none;
-        border: 1px solid #cccccc;
+        border: 1px solid #767676;
         border-radius: 4px;
         text-align: left;
         overflow: hidden;
@@ -123,7 +123,7 @@
                 float: right;
             }
         }
-    }    
+    }
 
     .multiple-selection {
         button {
@@ -132,6 +132,13 @@
             padding: 1px 2px;
             height: 22px;
             border-radius: 0;
+            border: 1px solid #767676;
         }
-      }
+
+        .place-holder {
+            font-style: italic;
+            font-weight: 400;
+            opacity: 0.5;
+        }
+    }
 }

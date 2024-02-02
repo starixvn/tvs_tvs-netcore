@@ -113,20 +113,13 @@ export class BetTeam {
 
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
-      if (item.isMultiple) {
+      if (this.isHaveMultipleMapRound && (item.name === AdvancedModeConstants.MAP || item.name === AdvancedModeConstants.ROUND)) {
+        this.renderMultipleSelectWithMapAndRound(item);
+      } else if (item.isMultiple) {
         this.renderMultipleSelect(item);
       } else {
-        if (this.isHaveMultipleMapRound) {
-          if (item.name === AdvancedModeConstants.MAP || item.name === AdvancedModeConstants.ROUND) {
-            this.renderMultipleSelectWithMapAndRound(item);
-          } else {
-            const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
-            this.selections.push(selection);
-          }
-        } else {
-          const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
-          this.selections.push(selection);
-        }
+        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
+        this.selections.push(selection);
       }
     });
   }
@@ -273,11 +266,11 @@ export class BetTeam {
     this.isChecked = temp;
   }
 
-  enableInput() {
-    if (this.type === 1 && this.enableBetTypes !== null && this.items[0].flag === true) {
+  enableInput() { //NOSONAR
+    if ((this.type === 1 || this.type === 8) && this.enableBetTypes !== null && this.items[0].flag === true) {
       this.items[0].value = '';
     }
-    if (this.type === 1 && this.enableBetTypes !== null && this.checkedBetTypes.length > 0) {
+    if ((this.type === 1 || this.type === 8) && this.enableBetTypes !== null && this.checkedBetTypes.length > 0) {
       this.items[0].flag = true;
       const enable = this.enableBetTypes.split(',');
       const checkedIds = this.checkedBetTypes.join(',').split(',');
@@ -351,7 +344,7 @@ export class BetTeam {
 
   updateByItems(result: BetTeamResult, id: string) {
     if (this.items.length === 1) {
-      if (this.type === 1 && this.enableBetTypes !== null) {
+      if ((this.type === 1 || this.type === 8) && this.enableBetTypes !== null) {
         this.updateResultForItemOfEnableBetTypes(result, id);
       } else {
         this.updateResult(result, this.items[0].xmlAttribute, this.items[0].value);
