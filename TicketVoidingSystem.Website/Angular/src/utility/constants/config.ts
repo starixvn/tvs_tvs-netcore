@@ -32,8 +32,6 @@ export class Product {
     'Sportsbook': 0,
     'Number Game': 1,
     'Virtual Sports': 2,
-    'Virtual Sports 2': 5,
-    'Virtual Sports 3': 7,
     'Bet Builder': 8,
     'Bitcoin': 9
   };
