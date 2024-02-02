@@ -716,7 +716,7 @@ namespace TicketVoidingSystem.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can only void tickets of Normal Sportsbook, Outright, Mix Parlay (main), System Parlay (main), Number Game, Cash Out, Virtual Sports, Virtual Sports 2 (single and main Mix Parlay), Bet Builder, Saba Promotion and Bitcoin..
+        ///   Looks up a localized string similar to You can only void tickets of Normal Sportsbook, Outright, Mix Parlay (main), System Parlay (main), Number Game, Cash Out, Virtual Sports, Bet Builder, Saba Promotion and Bitcoin..
         /// </summary>
         public static string Warning_Message_VoidBetId {
             get {
