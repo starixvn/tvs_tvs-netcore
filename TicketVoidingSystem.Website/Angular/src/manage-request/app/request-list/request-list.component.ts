@@ -205,14 +205,16 @@ export class RequestListComponent implements OnInit, OnChanges {
           if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            detail.totalSingleProcessed = x.simpleInfo.totalVoidedSingle;
-            detail.totalParlayProcessed = x.simpleInfo.totalVoidedParlay;
-            detail.totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOut;
+            detail.totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
+            detail.totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
+            detail.totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
+            detail.totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
           } else {
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            request.details[0].totalSingleProcessed = x.simpleInfo.totalVoidedSingle;
-            request.details[0].totalParlayProcessed = x.simpleInfo.totalVoidedParlay;
-            request.details[0].totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOut;
+            request.details[0].totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
+            request.details[0].totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
+            request.details[0].totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
+            request.details[0].totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
           }
         }
       }

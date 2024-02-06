@@ -26,6 +26,7 @@ public class RequestModel
     public int TotalSingleProcessed { get; set; }
     public int TotalParlayProcessed { get; set; }
     public int TotalCancelCashOutProcessed { get; set; }
+    public int TotalResettleProcessed { get; set; }
     public string Status { get; set; }
     public IEnumerable<string> BettypeNames { get; set; }
     public string TransIds { get; set; }
@@ -41,7 +42,6 @@ public class RequestModel
     public DateTime? CalcHalfTime { get; set; }
     public DateTime? CalcFullTime { get; set; }
     public string Products { get; set; }
-    public int TotalResettleProcessed { get; set; }
 
     public bool IsCheckedVar
     {

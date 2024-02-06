@@ -13,6 +13,7 @@ public class GetRequestInfoModel
     public int TotalParlayProcessed { get; set; }
 
     public int TotalCancelCashOutProcessed { get; set; }
+    public int TotalResettleProcessed { get; set; }
 
     public int IssueTypeId { get; set; }
 

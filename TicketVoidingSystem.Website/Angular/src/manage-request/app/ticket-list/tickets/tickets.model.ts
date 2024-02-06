@@ -27,7 +27,7 @@ export class TicketModel {
   betType: string;
   odds: string;
   stake: string;
-  winloss: string;
+  winLoss: string;
   currency: string;
   status: string;
   creator: string;

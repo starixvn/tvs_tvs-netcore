@@ -10,9 +10,10 @@ export class RequestStatus {
 
 export class RequestSimpleInfo {
     lastPerformedBy: string;
-    totalVoidedSingle: number;
-    totalVoidedParlay: number;
-    totalCancelCashOut: number;
+    totalSingleProcessed: number;
+    totalParlayProcessed: number;
+    totalCancelCashOutProcessed: number;
+    totalResettleProcessed: number;
     matchId: number;
 }
 
