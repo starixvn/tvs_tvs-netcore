@@ -11,5 +11,5 @@ public class GetMainTicketsQuery
 
 public class GetSubTicketsQuery : GetMainTicketsQuery
 {
-    public long MatchId { get; set; }
+    public int MatchId { get; set; }
 }

@@ -20,6 +20,6 @@ public class GetSubTicketsHandler : IRequestHandler<GetSubTicketsRequest, Ticket
 
     public async Task<TicketsViewModel> Handle(GetSubTicketsRequest request, CancellationToken cancellationToken)
     {
-        return await getTicketsService.GetTickets(request);
+        return await getTicketsService.GetTickets(request, request.MatchId);
     }
 }
