@@ -10,7 +10,6 @@ public static class SharedApi
 {
     public static void RegisterSharedApiServices(this IServiceCollection services)
     {
-        services.AddTransient<BetTypesService, BetTypesServiceImp>();
         services.AddTransient<BetTypesRepository, BetTypesRepositoryImp>();
         services.AddTransient<BetTeamsService, BetTeamsServiceImp>();
         services.AddTransient<BalanceUpService, BalanceUpServiceImp>();

@@ -13,6 +13,8 @@ public interface BetTypesRepository
 {
     Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria);
 
+    Task<GroupBetTypeVirtualSport> GetBetTypesTicketListingVirtualSport(int matchId, string betTypesHaveTickets);
+
     Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
 
     Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId);
@@ -41,6 +43,26 @@ public class BetTypesRepositoryImp : BetTypesRepository
         };
     }
 
+    public async Task<GroupBetTypeVirtualSport> GetBetTypesTicketListingVirtualSport(int matchId, string betTypesHaveTickets)
+    {
+        var criteria = new GetBetTypesTicketListingVirtualSportCriteria
+        {
+            MatchId = matchId,
+            BetTypes = betTypesHaveTickets
+        };
+
+        var fullInfoBetTypes = await repository.FetchAsync<BetTypeVirtualSport>(criteria);
+        return new GroupBetTypeVirtualSport
+        {
+            BetTypes = fullInfoBetTypes,
+            Result = new Result
+            {
+                ErrorCode = criteria.ErrCode,
+                ErrorMsg = criteria.ErrMsg
+            }
+        };
+    }
+
     public async Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query)
     {
         var betTypesInAllServers = new List<int>();
@@ -50,13 +72,14 @@ public class BetTypesRepositoryImp : BetTypesRepository
             Mode = query.Mode
         };
 
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(x =>
         {
-            criteria.SiteDbGroupId = server.Id;
-            var betTypes = await repository.FetchAsync<int>(criteria);
+            criteria.SiteDbGroupId = x.Id;
+            return repository.FetchAsync<int>(criteria);
+        });
 
-            betTypesInAllServers.AddRange(betTypes);
-        }
+        var fetchedData = await Task.WhenAll(tasks);
+        betTypesInAllServers.AddRange(fetchedData.SelectMany(x => x));
 
         return betTypesInAllServers.Distinct();
     }

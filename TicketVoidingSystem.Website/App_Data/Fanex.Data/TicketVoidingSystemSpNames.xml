@@ -21,6 +21,8 @@
             <Mapping DataField="typeid" ObjectProperty="Id" />
             <Mapping DataField="bettypename" ObjectProperty="Name" />
         </Setting>
+        <Setting Key="NAP_BetTypeSel_TicketListing_VirtualSport" SpName="NAP_BetTypeSel_TicketListing_VirtualSport" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
+
         <Setting Key="NAP_SelectionTypeSel" SpName="NAP_SelectionTypeSel" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" TimeOut="600" />
         <Setting Key="TicketVoiding_SportsType_Select" SpName="TicketVoiding_SportsType_Select" DbName="DBPRO.bodb02.bodbAdminNet" TimeOut="600" />
