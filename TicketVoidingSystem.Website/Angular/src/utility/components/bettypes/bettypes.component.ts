@@ -5,8 +5,6 @@ import { TEXT } from '../../constants/text';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { BetTypesModel } from './bettypes.model';
 
-
-
 @Component({
     selector: 'bettypes',
     templateUrl: './bettypes.component.html',
@@ -22,7 +20,6 @@ export class BetTypesComponent implements OnChanges {
     tooltip = new Tooltip();
     productDisplay: number[] = [
         Product.NUMBER_GAME,
-        Product.VIRTUAL_SPORTS,
         Product.BET_BUILDER,
         Product.BITCOIN
     ];

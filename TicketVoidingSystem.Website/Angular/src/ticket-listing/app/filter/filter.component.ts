@@ -54,7 +54,7 @@ export class FilterComponent implements OnInit {
   fromDate: string;
   toDate: string;
   groupBetTypes: GroupBetTypesModel;
-  groupsBetTypesVS: Array<GroupBetTypeVirtualSport>;
+  groupsBetTypesVS: GroupBetTypeVirtualSport;
   betTypes: BetTypesModel;
   commonBetTypes: BetTypesModel;
   ballSequences = new BallSequences();
@@ -109,7 +109,6 @@ export class FilterComponent implements OnInit {
     this.renderProduct();
     this.renderEventType();
     await this.getBetTypes();
-    await this.getBetTypesVS();
   }
 
   async getLicensees() {
@@ -190,21 +189,6 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  async getBetTypesVS() {
-    this.blockUIService.start();
-    const data = await this.commonService.getBetTypesVirtualSports();
-    this.blockUIService.stop();
-    this.renderBetTypes(data);
-  }
-
-  renderBetTypes(data: Array<GroupBetTypeVirtualSport>) {
-    this.groupsBetTypesVS = [];
-    data.forEach(group => {
-      const item = new GroupBetTypeVirtualSport(group.sportTypes, group.betTypes);
-      this.groupsBetTypesVS.push(item);
-    });
-  }
-
   async blurMatchId() {
     if (_.isUndefined(this.matchId) || this.matchId === '') {
       this.sportType = 0;
@@ -229,7 +213,7 @@ export class FilterComponent implements OnInit {
   }
 
   async checkSportType() {
-    this.advancedModeComponent.resetBetTeam();
+    this.advancedModeComponent?.resetBetTeam();
     if (this.validateProduct()) {
       await this.handleByProduct();
     }
@@ -240,9 +224,7 @@ export class FilterComponent implements OnInit {
     if (this.isInvalidProduct0(product, this.sportType)
       || this.isInvalidProduct1(product, this.sportType)
       || this.isInvalidProduct2(product, this.sportType)
-      || this.isInvalidProduct5(product, this.sportType)
       || this.isInvalidProduct9(product, this.sportType)
-      || this.isInvalidProduct7(product, this.sportType)
       || this.isInvalidOtherProducts(this.sportType))
       {
       this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
@@ -252,9 +234,11 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  validBetTypesVirtualSport(){
-    return !(this.isInvalidProduct5(this.query.product, this.sportType)
-    || this.isInvalidProduct7(this.query.product, this.sportType))
+  private inValidSportTypeVirtualSport(sportType: number){
+    return (sportType < 180 || sportType > 186)   //sportTypes invalid in  Virtual Sports
+    && (sportType < 190 || sportType > 199)       //sportTypes invalid in  Virtual Sports 2
+    && (sportType !== 178 && sportType !== 179)   //sportTypes invalid in  Virtual Sports 3
+    && (sportType !== 188);                       //sportTypes invalid in  Virtual Sports 4
   }
 
   private isInvalidProduct0(product: number, sportType: number): boolean {
@@ -265,20 +249,12 @@ export class FilterComponent implements OnInit {
     return (product === 1 && sportType !== 161 && sportType !== 164);
   }
 
-  private isInvalidProduct2(product: number, sportType: number): boolean {
-    return (product === 2 && (sportType < 180 || sportType > 186));
-  }
-
-  private isInvalidProduct5(product: number, sportType: number): boolean {
-    return (product === 5 && (sportType < 190 || sportType > 199));
+  isInvalidProduct2(product: number, sportType: number): boolean {
+    return (product === 2 && this.inValidSportTypeVirtualSport(sportType));
   }
 
   private isInvalidProduct9(product: number, sportType: number): boolean {
     return (product === 9 && sportType !== 175);
-  }
-
-  private isInvalidProduct7(product: number, sportType: number): boolean {
-    return (product === 7 && sportType !== 178 && sportType !== 179);
   }
 
   private isInvalidOtherProducts(sportType: number): boolean {
@@ -296,7 +272,8 @@ export class FilterComponent implements OnInit {
       sportType !== 164 &&
       (sportType < 180 || sportType > 186) &&
       (sportType < 190 || sportType > 199) &&
-      sportType !== 178 && sportType !== 179
+      sportType !== 178 && sportType !== 179 &&
+      sportType !== 188
     );
   }
 
@@ -330,6 +307,10 @@ export class FilterComponent implements OnInit {
 
     if (this.query.product === Product.BET_BUILDER) {
       this.handlBetTypesOfBetBuilder(query);
+    }
+
+    if (this.query.product === Product.VIRTUAL_SPORTS) {
+      this.handleGroupBetTypesOfVirtualSports(query);
     }
   }
 
@@ -375,6 +356,35 @@ export class FilterComponent implements OnInit {
       betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, 8, true));
     });
     this.betTypes = new BetTypesModel(betTypes, true);
+  }
+
+  async handleGroupBetTypesOfVirtualSports(query: GetBetTypesQuery) {
+    this.blockUIService.start();
+    const data = await this.getBetTypesVS(query);
+    this.blockUIService.stop();
+    if (data.result.errorCode === 0) {
+      this.checkMatch = '';
+      if (data.betTypes.length === 0) {
+        this.tooltip.display('match-id', TEXT.NO_BETTYPE);
+        this.checkMatch = TEXT.NO_BETTYPE;
+      }
+    } else {
+      this.checkMatch = data.result.errorMsg;
+      this.tooltip.display('match-id', data.result.errorMsg);
+    }
+    this.groupsBetTypesVS = new GroupBetTypeVirtualSport(data.betTypes);
+  }
+  
+  async getBetTypesVS(query: GetBetTypesQuery) {
+    if(this.query.product !== 2){
+      return;
+    }
+    
+    this.blockUIService.start();
+    const groupsBetTypes = await this.commonService.getBetTypesVirtualSports(query);
+    this.blockUIService.stop();
+
+    return groupsBetTypes;
   }
 
   search() {
@@ -423,7 +433,7 @@ export class FilterComponent implements OnInit {
         this.tooltip.display('match-id', this.checkMatch);
         return false;
       }
-    } else if (this.query.product === Product.VIRTUAL_SPORTS_2 || this.query.product === Product.VIRTUAL_SPORTS_3) {
+    } else if (this.query.product === Product.VIRTUAL_SPORTS && this.groupsBetTypesVS.betTypes.length > 0) {
       return this.betTypesVSComponent.validate();
     } else {
       return this.betTypesComponent.validate();
@@ -469,8 +479,8 @@ export class FilterComponent implements OnInit {
   getCheckedBetTypes(): string {
     if (this.query.product === Product.SPORTS_BOOK) {
       return this.groupBetTypes.getValueCheckedBetTypes();
-    } else if (this.query.product === Product.VIRTUAL_SPORTS_2 || this.query.product === Product.VIRTUAL_SPORTS_3) {
-      return this.betTypesVSComponent.getCheckedBetTypes();
+    } else if (this.query.product === Product.VIRTUAL_SPORTS) {
+      return this.betTypesVSComponent.getCheckedBetTypes().join(',');
     } else {
       return this.betTypes.getCheckedBetTypes().join(',');
     }

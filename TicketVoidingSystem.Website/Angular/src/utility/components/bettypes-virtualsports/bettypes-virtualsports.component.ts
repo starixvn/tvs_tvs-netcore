@@ -10,32 +10,24 @@ import { GroupBetTypeVirtualSport } from './bettypes-virtualsports.model';
 })
 
 export class BetTypesVirtualSportComponent implements OnChanges {
-    @Input() groups: Array<GroupBetTypeVirtualSport>;
-    @Input() sportType: number;
+    @Input() group: GroupBetTypeVirtualSport;
     @Input() product: number;
     display: boolean;
     tooltip = new Tooltip();
+    checkAll = true;
 
     constructor(private readonly element: ElementRef) {
         this.tooltip.element = this.element;
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-        if (changes['sportType'] || changes['product']) {
-            this.changeDisplay();
+        if (changes['group']) {
+            this.display = this.changeDisplay();
         }
     }
 
     changeDisplay() {
-        this.display = false;
-        if (this.groups !== undefined && this.sportType !== undefined) {
-            this.groups.forEach(group => {
-                if (group.sportTypes.indexOf(this.sportType) > -1) {
-                    this.display = true;
-                }
-                group.changeDisplay(this.sportType);
-            });
-        }
+        return this.group?.betTypes.length > 0;
     }
 
     validate(): boolean {
@@ -47,11 +39,11 @@ export class BetTypesVirtualSportComponent implements OnChanges {
         return result;
     }
 
-    getCheckedBetTypes(): string {
-        let value = '';
-        this.groups.forEach(group => {
-            if (group.display) {
-                value = group.getCheckedBetTypes().join(',');
+    getCheckedBetTypes(): string[] {
+        let value = [];
+        this.group.betTypes.forEach(item => {
+            if (item.checked) {
+                value.push(item.id);
             }
         });
 
@@ -59,6 +51,6 @@ export class BetTypesVirtualSportComponent implements OnChanges {
     }
 
     isShowCheckedBetTypes(): boolean {
-        return (this.product === 5 || this.product === 7) && this.groups != undefined && this.display;
+        return this.product === 2 && this.display;
     }
 }

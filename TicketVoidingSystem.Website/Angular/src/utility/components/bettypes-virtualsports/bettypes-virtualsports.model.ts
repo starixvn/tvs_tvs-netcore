@@ -1,4 +1,6 @@
-﻿export class BetTypeVirtualSport {
+﻿import { Result } from './../../models/signal-r.model';
+
+export class BetTypeVirtualSport {
     id: number;
     name: string;
     checked: boolean;
@@ -6,50 +8,24 @@
     constructor(id: number, name: string) {
         this.id = id;
         this.name = name;
-        this.checked = false;
+        this.checked = true;
     }
 }
 
 export class GroupBetTypeVirtualSport {
-    sportTypes: Array<number>;
     betTypes: Array<BetTypeVirtualSport>;
+    result: Result;
     checked: boolean;
-    display: boolean;
-
-    constructor(ids: Array<number>, betTypes: Array<BetTypeVirtualSport>) {
-        this.sportTypes = ids;
+    constructor(betTypes: Array<BetTypeVirtualSport>) {
         this.betTypes = betTypes;
-        this.display = false;
-        this.checked = false;
+        this.result = new Result();
+        this.checked = betTypes?.length > 0;
+        this.changeAll();
     }
 
     changeAll() {
         this.betTypes.forEach(item => {
             item.checked = this.checked;
         });
-    }
-
-    changedItem() {
-        this.checked = true;
-        for (let i = 0; i < this.betTypes.length && this.checked; i++) {
-            this.checked = this.betTypes[i].checked;
-        }
-    }
-
-    changeDisplay(sportType: number) {
-        this.display = this.sportTypes.indexOf(sportType) > -1;
-        this.checked = this.display;
-        this.changeAll();
-    }
-
-    getCheckedBetTypes(): number[] {
-        const result = [];
-        this.betTypes.forEach(item => {
-            if (item.checked) {
-                result.push(item.id);
-            }
-        });
-
-        return result;
     }
 }
