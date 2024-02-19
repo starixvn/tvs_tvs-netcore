@@ -77,6 +77,8 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
+    saveRequestArg.filter = new FilterModel();
+    saveRequestArg.filter.isVoided = false;
     service['proceedSaveRequest'] = jest.fn();
 
     const validationService = new ValidationService(null);

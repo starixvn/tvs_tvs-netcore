@@ -29,7 +29,7 @@ exports[`TicketListComponent TicketListComponent should init match snapshot 1`] 
                 class="modal-title"
               >
                 <strong>
-                  Delete Bet Check (Request ID: 52000)
+                  Void/Recover Bet Check (Request ID: 52000)
                 </strong>
               </div>
               <button

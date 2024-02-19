@@ -19,7 +19,7 @@ class Helper {
     betType: 'Handicap',
     odds: '<span class="underdog">9.3</span> <span class="oddstype"></span>',
     stake: '<div class="stake ">10</div>',
-    winloss: '',
+    winLoss: '',
     currency: 'UUS',
     status: '<div class="status1">Running</div>',
     creator: 'AB88UUS011260',

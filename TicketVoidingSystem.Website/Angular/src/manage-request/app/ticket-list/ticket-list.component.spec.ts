@@ -158,7 +158,7 @@ class Helper {
     totalCancelCashOutProcessed: 0,
     cancelCashOutLicenseesName: '',
     singleTransIds: ''
-  };
+  } as GeneralInfo;
 }
 
 describe('TicketListComponent', () => {
@@ -332,7 +332,7 @@ describe('TicketListComponent', () => {
       pageSize: 3000,
       voidingHistoryIds: '',
       singleTransIds: undefined
-    };
+    } as TicketsQuery;
 
     // Action
     await instance.getTickets();

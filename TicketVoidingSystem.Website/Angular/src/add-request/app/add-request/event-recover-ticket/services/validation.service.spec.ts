@@ -12,7 +12,8 @@ class Helper {
     invalidTransIds: '12345',
     unsupportedDateRangeTransIds: '34567',
     transInfoJson: '',
-    existingReqTransIds: ''
+    existingReqTransIds: '',
+    unMarkTransIds: ''
   };
 }
 

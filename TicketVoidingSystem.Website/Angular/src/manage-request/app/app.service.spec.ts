@@ -29,7 +29,7 @@ class Helper {
     totalCancelCashOutProcessed: 0,
     cancelCashOutLicenseesName: '',
     singleTransIds: ''
-  };
+  } as GeneralInfo;
 }
 
 describe('AppService', () => {
