@@ -9,6 +9,7 @@ using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
@@ -18,6 +19,7 @@ public class GetTicketsServiceTests
     private readonly GetTransInfoService getTransInfoService;
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
+    private readonly LoggingService loggingService;
 
     private readonly GetTicketsServiceImp service;
 
@@ -26,7 +28,8 @@ public class GetTicketsServiceTests
         repository = Substitute.For<IDynamicRepository>();
         mapper = Substitute.For<IMapper>();
         getTransInfoService = Substitute.For<GetTransInfoService>();
-        service = new GetTicketsServiceImp(mapper, repository, getTransInfoService);
+        loggingService = Substitute.For<LoggingService>();
+        service = new GetTicketsServiceImp(mapper, repository, getTransInfoService, loggingService);
     }
 
     [Theory]

@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System.IO.Compression;
+using System.Text;
+using System.Text.Json;
+using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
@@ -6,6 +9,7 @@ using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -19,12 +23,14 @@ public class GetTicketsServiceImp : GetTicketsService
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
     private readonly GetTransInfoService getTransInfoService;
+    private readonly LoggingService loggingService;
 
-    public GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository, GetTransInfoService getTransInfoService)
+    public GetTicketsServiceImp(IMapper mapper, IDynamicRepository repository, GetTransInfoService getTransInfoService, LoggingService loggingService)
     {
         this.mapper = mapper;
         this.repository = repository;
         this.getTransInfoService = getTransInfoService;
+        this.loggingService = loggingService;
     }
 
     public async Task<IEnumerable<GetTicketModel>> GetTickets(GetTicketsQuery query)
@@ -83,10 +89,16 @@ public class GetTicketsServiceImp : GetTicketsService
     private async Task<IEnumerable<GetTicketModel>> GetTicketsDefault(GetTicketsQuery query)
     {
         var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
+        await LogSentryGetTicketsInRequest(query.RequestId, singleTickets, parlayTickets, cancelCashOutTickets);
+
         var matchId = GetMatchIdForQueryTransInfoJson(query);
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, matchId);
+        await LogSentryGetTransInfoJsonForVoid(query.RequestId, matchId, transInfoJsonList);
 
-        return await GetBetTransTicket(query, transInfoJsonList);
+        var tickets = await GetBetTransTicket(query, transInfoJsonList);
+        await LogSentryGetBetTransTicket(query.RequestId, matchId, tickets);
+
+        return tickets;
     }
 
     private async Task<IEnumerable<GetTicketModel>> GetBetTransTicket(GetTicketsQuery query, IEnumerable<string> transInfoJsonList)
@@ -122,5 +134,68 @@ public class GetTicketsServiceImp : GetTicketsService
         };
 
         return await repository.FetchMultipleAsync<BetId, BetId, BetId>(criteria);
+    }
+
+    // Log data void page to trace issue missing ticket parlay
+    private async Task LogSentryGetTicketsInRequest(int? requestId, IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"VoidPage-GetTicketsInRequest - {requestId} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine("Response:");
+        stringBuilder.AppendLine($"*CountTickets - single: {singleTickets.Count()} - parlay: {parlayTickets.Count()} - cancelCO: {cancelCashOutTickets.Count()}");
+        stringBuilder.AppendLine($"*singleTickets: {CompressTicket(singleTickets)}");
+        stringBuilder.AppendLine($"*parlayTickets: {CompressTicket(parlayTickets)}");
+        stringBuilder.AppendLine($"*cancelCashOutTickets: {CompressTicket(cancelCashOutTickets)}");
+        await loggingService.InfoAsync(stringBuilder.ToString());
+    }
+
+    private async Task LogSentryGetTransInfoJsonForVoid(int? requestId, int? matchId, IEnumerable<string> transInfoJsonList)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"VoidPage-GetTransInfoJsonForVoid - {requestId} - {matchId} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine("Response:");
+        stringBuilder.AppendLine($"{CompressTicket(transInfoJsonList)}");
+        await loggingService.InfoAsync(stringBuilder.ToString());
+    }
+
+    private async Task LogSentryGetBetTransTicket(int? requestId, int? matchId, IEnumerable<GetTicketModel> tickets)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"VoidPage-GetBetTransTicket - {requestId} - {matchId} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine("Response:");
+        stringBuilder.AppendLine($"{CompressTicket(tickets)}");
+        await loggingService.InfoAsync(stringBuilder.ToString());
+    }
+
+    private static string CompressTicket<T>(IEnumerable<T>? tickets)
+    {
+        try
+        {
+            if (tickets == null || !tickets.Any())
+            {
+                return string.Empty;
+            }
+            var ticketZipped = CompressJson(tickets);
+            var hexString = $"0x{Convert.ToHexString(ticketZipped)}";
+            return hexString;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    private static byte[] CompressJson<T>(IEnumerable<T> groups)
+    {
+        var json = JsonSerializer.Serialize(groups);
+
+        var bytes = Encoding.Unicode.GetBytes(json);
+        using var memoryStream = new MemoryStream();
+        using (var gs = new GZipStream(memoryStream, CompressionMode.Compress))
+        {
+            gs.Write(bytes, 0, bytes.Length);
+        }
+
+        return memoryStream.ToArray();
     }
 }
