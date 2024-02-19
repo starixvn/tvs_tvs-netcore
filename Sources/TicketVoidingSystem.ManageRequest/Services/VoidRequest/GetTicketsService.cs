@@ -93,10 +93,10 @@ public class GetTicketsServiceImp : GetTicketsService
 
         var matchId = GetMatchIdForQueryTransInfoJson(query);
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, matchId);
-        await LogSentryGetTransInfoJsonForVoid(matchId, transInfoJsonList, singleTickets, parlayTickets, cancelCashOutTickets);
+        await LogSentryGetTransInfoJsonForVoid(query.RequestId, matchId, transInfoJsonList);
 
         var tickets = await GetBetTransTicket(query, transInfoJsonList);
-        await LogSentryGetBetTransTicket(tickets);
+        await LogSentryGetBetTransTicket(query.RequestId, matchId, tickets);
 
         return tickets;
     }
@@ -140,41 +140,29 @@ public class GetTicketsServiceImp : GetTicketsService
     private async Task LogSentryGetTicketsInRequest(int? requestId, IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"VoidPage - GetTicketsInRequest {DateTimeOffset.Now:MM/dd/yyyy HH/mm/ss}");
-        stringBuilder.AppendLine($"Params:");
-        stringBuilder.AppendLine($"requestId: {requestId}");
-        stringBuilder.AppendLine("=============================================");
-        stringBuilder.AppendLine($"Response:");
+        stringBuilder.AppendLine($"VoidPage-GetTicketsInRequest - {requestId} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine("Response:");
+        stringBuilder.AppendLine($"*CountTickets - single: {singleTickets.Count()} - parlay: {parlayTickets.Count()} - cancelCO: {cancelCashOutTickets.Count()}");
         stringBuilder.AppendLine($"*singleTickets: {CompressTicket(singleTickets)}");
         stringBuilder.AppendLine($"*parlayTickets: {CompressTicket(parlayTickets)}");
         stringBuilder.AppendLine($"*cancelCashOutTickets: {CompressTicket(cancelCashOutTickets)}");
         await loggingService.InfoAsync(stringBuilder.ToString());
     }
 
-    private async Task LogSentryGetTransInfoJsonForVoid(int? matchId, IEnumerable<string> transInfoJsonList,
-        IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets)
+    private async Task LogSentryGetTransInfoJsonForVoid(int? requestId, int? matchId, IEnumerable<string> transInfoJsonList)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"VoidPage - GetTransInfoJsonForVoid {DateTimeOffset.Now:MM/dd/yyyy HH/mm/ss}");
-        stringBuilder.AppendLine($"Params:");
-        stringBuilder.AppendLine($"matchId: {matchId}");
-        stringBuilder.AppendLine($"singleTickets: {singleTickets.Count()} - parlayTickets: {parlayTickets.Count()} - cancelCashOutTickets: {cancelCashOutTickets.Count()}");
-        stringBuilder.AppendLine("=============================================");
-        stringBuilder.AppendLine($"Response:");
-        for (var i = 0; i < transInfoJsonList.Count(); i++)
-        {
-            stringBuilder.AppendLine($"[{i}]: {CompressTicket(transInfoJsonList.ElementAt(i))}");
-        }
+        stringBuilder.AppendLine($"VoidPage-GetTransInfoJsonForVoid - {requestId} - {matchId} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine("Response:");
+        stringBuilder.AppendLine($"{CompressTicket(transInfoJsonList)}");
         await loggingService.InfoAsync(stringBuilder.ToString());
     }
 
-    private async Task LogSentryGetBetTransTicket(IEnumerable<GetTicketModel> tickets)
+    private async Task LogSentryGetBetTransTicket(int? requestId, int? matchId, IEnumerable<GetTicketModel> tickets)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"VoidPage - GetBetTransTicket {DateTimeOffset.Now:MM/dd/yyyy HH/mm/ss}");
-        stringBuilder.AppendLine($"Params:");
-        stringBuilder.AppendLine("=============================================");
-        stringBuilder.AppendLine($"Response:");
+        stringBuilder.AppendLine($"VoidPage-GetBetTransTicket - {requestId} - {matchId} - {DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss}");
+        stringBuilder.AppendLine("Response:");
         stringBuilder.AppendLine($"{CompressTicket(tickets)}");
         await loggingService.InfoAsync(stringBuilder.ToString());
     }
