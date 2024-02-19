@@ -70,7 +70,7 @@
                 </tr>
                     foreach (var ticket in group.Tickets)
                     {
-                        var backgroundColor = @ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                        var backgroundColor = ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
                         <tr valign="Middle" style="background-color: @backgroundColor; height: 25px;">
                             <td align="Center">
                                 @ticket.No

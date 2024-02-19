@@ -55,6 +55,7 @@ public class MapTicketServiceImp : MapTicketService
         ticket.Member = item.UserName;
         ticket.BallSequence = item.BallSequence;
         ticket.IsMarked = item.IsMarked;
+        ticket.IsSite777 = item.IsSite777;
 
         return ticket;
     }
@@ -77,7 +78,8 @@ public class MapTicketServiceImp : MapTicketService
                 Currency = item.Currency,
                 BetType = item.BetType.DefaultText(),
                 Status = item.Status.DefaultText(),
-                Sa = string.IsNullOrWhiteSpace(item.SecondAcceptFlag) ? string.Empty : "√"
+                Sa = string.IsNullOrWhiteSpace(item.SecondAcceptFlag) ? string.Empty : "√",
+                IsSite777 = item.IsSite777
             };
             excelTickets.Add(ticket);
         }

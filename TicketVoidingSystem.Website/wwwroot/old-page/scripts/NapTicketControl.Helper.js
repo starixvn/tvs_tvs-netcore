@@ -869,7 +869,7 @@ NapTicketControl.Helper = (function ($) {
         checkVoidBetPermission: function (params, searchElement, voidBet) {
             $.ajax({
                 type: "POST",
-                url: window.rootUrl + "state-api/simple-data/update",
+                url: window.rootUrl + "api/Permission/CheckTicketsStatusJqueryPage",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 async: false,

@@ -2,9 +2,9 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.SimpleDataApi.Criteria;
+namespace TicketVoidingSystem.SharedApi.Criteria.Permission;
 
-public class GetTransInfoForCheckPermissionCriteria : CriteriaBase
+public class GetTransInfoForCheckVoidPermissionCriteria : CriteriaBase
 {
     public string TransIds { get; set; }
     public string CancelCashOutTransIds { get; set; }

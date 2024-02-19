@@ -26,8 +26,7 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
         groupVoidSettledBetService = Substitute.For<GroupVoidSettledBetService>();
         groupTicketListingService = Substitute.For<GroupTicketListingService>();
         groupAbnormalBetRequestService = Substitute.For<GroupAbnormalBetRequestService>();
-        service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService,
-            groupAbnormalBetRequestService);
+        service = new NotificationLetstalkServiceImp(groupVoidSettledBetService, groupTicketListingService, groupAbnormalBetRequestService);
     }
 
     [Fact]
@@ -37,17 +36,14 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
         var ticketInfo = new TicketInfoForLetstalk();
         var tickets = new List<TicketEmailModel>();
 
-        groupVoidSettledBetService.SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(), Arg.Any<TicketInfoForLetstalk>(),
-                Arg.Any<IEnumerable<TicketEmailModel>>())
-            .Returns(new List<Result>());
+        groupVoidSettledBetService.SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(), Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>()).Returns(new List<Result>());
 
         // Act
         var result = await service.SendToGroupVoidSettledBets(ticketInfo, tickets);
 
         // Assert
         Assert.Equal(new List<Result>(), result);
-        await groupVoidSettledBetService.Received(1).SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(),
-            Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>());
+        await groupVoidSettledBetService.Received(1).SendMessageWithTicketInfo(Arg.Any<LetstalkModel>(), Arg.Any<TicketInfoForLetstalk>(), Arg.Any<IEnumerable<TicketEmailModel>>());
     }
 
     [Fact]
@@ -74,7 +70,17 @@ public class NotificationLetstalkServiceTests : AppSettingFixture
         _ = await service.SendToGroupAbnormalBetRequest("", "", attachment);
 
         // Assert
-        await groupAbnormalBetRequestService.Received(1)
-            .SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());
+        await groupAbnormalBetRequestService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());
+    }
+
+    [Fact]
+    public async Task SendToGroupTicketListing777_CallExpected()
+    {
+        // Arrange
+        // Act
+        _ = await service.SendToGroupTicketListing777(default, default);
+
+        // Assert
+        await groupTicketListingService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());
     }
 }

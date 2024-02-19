@@ -22,7 +22,7 @@ public class CheckBoxServiceImp : CheckBoxService
         var disableWithSubStatus = validationService.DisableCheckboxWithPermission(item.SubStatus, userPermission, item.GroupName);
 
         var isSubTicket = item.MainTransId > 0 && item.MainTransId != item.TransId;
-        var isDisableWithSingleTicket = !item.IsMixParlay && !item.IsCashOut && disableWithStatus;
+        var isDisableWithSingleTicket = item is { IsMixParlay: false, IsCashOut: false } && disableWithStatus;
         var isDisableWithCashOutTicket = item.IsCashOut && userPermission.ReadOnly;
         var isDisableWithParlayPermission = item.IsMixParlay && disableWithSubStatus;
 

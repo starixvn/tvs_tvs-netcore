@@ -65,7 +65,7 @@
                     </tr>
                     foreach (var ticket in group.Tickets)
                     {
-                        var backghroundColor = @ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
+                        var backghroundColor = ticket.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
                         <tr valign="Middle" style="background-color: @backghroundColor; height: 25px;">
                             <td align="Center">
                                 @ticket.No
@@ -83,13 +83,13 @@
                                 @(new RawString(ticket.Odds))
                             </td>
                             <td align="Center">
-                                @(new RawString(@ticket.Stake))
+                                @(new RawString(ticket.Stake))
                             </td>
                             <td align="Right">
-                                @(new RawString(@ticket.WinLoss))
+                                @(new RawString(ticket.WinLoss))
                             </td>
                             <td align="Center">
-                                @(new RawString(@ticket.Status))
+                                @(new RawString(ticket.Status))
                             </td>
                             <td align="Right">
                                 @(new RawString(ticket.Choice))

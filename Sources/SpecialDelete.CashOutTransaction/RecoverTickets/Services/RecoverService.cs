@@ -93,7 +93,7 @@ public class RecoverServiceImp : RecoverService
 
         viewModel.NegativeBalanceUsers = negativeBalanceUsers;
         var itQaSite = emailService.GetSiteByName(sites, StringResource.ItQa);
-        var itQaTickets = tickets.Where(s => s.IsItSupport && s.CurrencyCode == CurrencyConstant.UusCode).ToList();
+        var itQaTickets = tickets.Where(s => s is { IsItSupport: true, CurrencyCode: CurrencyConstant.UusCode }).ToList();
         var itQaModel = emailService.CreateMailModel(viewModel, itQaSite, itQaTickets);
         emailService.Send(itQaModel, EmailGroup.ItQa);
 

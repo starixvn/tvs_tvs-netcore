@@ -5,6 +5,8 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.Services.Letstalk;
 using TicketVoidingSystem.TicketListing.Criteria;
+using TicketVoidingSystem.TicketListing.Models;
+using TicketVoidingSystem.TicketListing.Services;
 using Result = TicketVoidingSystem.Models.Result;
 
 namespace TicketVoidingSystem.TicketListing.Handlers;
@@ -17,17 +19,20 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
 {
     private readonly ExcelService<ExportExcelQuery> excelService;
     private readonly NotificationLetstalkService notificationLetstalkService;
+    private readonly GetTicketsService getTicketsService;
 
-    public SendCreditDataToLetstalkHandler(ExcelService<ExportExcelQuery> excelService, NotificationLetstalkService notificationLetstalkService)
+    public SendCreditDataToLetstalkHandler(ExcelService<ExportExcelQuery> excelService, NotificationLetstalkService notificationLetstalkService, GetTicketsService getTicketsService)
     {
         this.excelService = excelService;
         this.notificationLetstalkService = notificationLetstalkService;
+        this.getTicketsService = getTicketsService;
     }
 
     public async Task<Result> Handle(SendCreditDataToLetstalkRequest request, CancellationToken cancellationToken)
     {
-        var sentResult = await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), await CreateAttachment(request));
-        if (sentResult.IsSuccessful)
+        var (isSentDataToSiteNormal, isSentDataToSite777) = await SendToGroupTicketListing(request);
+
+        if (isSentDataToSiteNormal.IsSuccessful && isSentDataToSite777.IsSuccessful)
         {
             return new Result
             {
@@ -39,18 +44,70 @@ public class SendCreditDataToLetstalkHandler : IRequestHandler<SendCreditDataToL
         return new Result
         {
             ErrorCode = 1,
-            ErrorMsg = "Failed to send data."
+            ErrorMsg = GetErrorMessageError(isSentDataToSiteNormal.IsSuccessful, isSentDataToSite777.IsSuccessful)
         };
     }
 
-    private async Task<LetstalkAttachment> CreateAttachment(ExportExcelQuery query)
+    private static string GetErrorMessageError(bool isSentDataToSiteNormal, bool isSentDataToSite777)
     {
-        var excelAttachments = await excelService.GenerateContentAsByteArray(query, TemplateExcelPath.TicketListing);
-        return new LetstalkAttachment
+        if (!isSentDataToSiteNormal && !isSentDataToSite777)
         {
-            FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
-            Bytes = excelAttachments
-        };
+            return "Failed to send data!";
+        }
+
+        return isSentDataToSite777 ? "Failed to send data of Credit site Normal!" : "Failed to send data of Credit site 777!";
+    }
+
+    private async Task<(Result isSentDataToSiteNormal, Result isSentDataToSite777)> SendToGroupTicketListing(ExportExcelQuery request)
+    {
+        var tickets = await getTicketsService.GetTicketsForExportExcel(request);
+        var (ticketsCredit777, ticketsCreditNormal) = GroupTicketsTicketListingAlert(tickets);
+        var isSentDataToSiteNormal = await SendForCreditNormal(ticketsCreditNormal, request);
+        var isSentDataToSite777 = await SendForCredit777(ticketsCredit777, request);
+
+        return (isSentDataToSiteNormal, isSentDataToSite777);
+    }
+
+    private async Task<Result> SendForCreditNormal(IEnumerable<ExcelTicketModel> ticketsCreditNormal, ExportExcelQuery request)
+    {
+        if (ticketsCreditNormal.Any())
+        {
+            request.TotalCreditTickets = ticketsCreditNormal.Count();
+            request.Tickets = ticketsCreditNormal;
+            var attachment = new LetstalkAttachment
+            {
+                FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
+                Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
+            };
+            return await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), attachment);
+        }
+
+        return new Result();
+    }
+
+    private async Task<Result> SendForCredit777(IEnumerable<ExcelTicketModel> ticketsCredit777, ExportExcelQuery request)
+    {
+        if (ticketsCredit777.Any())
+        {
+            request.TotalCreditTickets = ticketsCredit777.Count();
+            request.Tickets = ticketsCredit777;
+            var attachment = new LetstalkAttachment
+            {
+                FileName = "Ticket_Listing_for_Bettype_Credit_777.xlsx",
+                Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
+            };
+            return await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), attachment);
+        }
+
+        return new Result();
+    }
+
+    private static (IEnumerable<ExcelTicketModel> ticketsCredit777, IEnumerable<ExcelTicketModel> ticketsCreditNormal) GroupTicketsTicketListingAlert(IEnumerable<ExcelTicketModel> tickets)
+    {
+        var ticketsCredit777 = tickets.Where(x => x.IsSite777);
+        var ticketsCreditNormal = tickets.Where(x => !x.IsSite777);
+
+        return (ticketsCredit777, ticketsCreditNormal);
     }
 
     private static string CreateContent(ExportExcelQuery query)

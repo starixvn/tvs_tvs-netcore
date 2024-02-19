@@ -14,7 +14,7 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 
-public class MapAbnormalBetTicketsExcelServiceTests
+public class MapAbnormalBetTicketsExcelServiceTests : RemotingRefFixture
 {
     private readonly BetListService betListService;
     private readonly IMapper mapper;

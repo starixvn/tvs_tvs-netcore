@@ -28,17 +28,17 @@ public class RecoverTicketsServiceImp<T, TU> : RecoverTicketsService<T, TU> wher
     public async Task<IEnumerable<Result>> Recover(TU query)
     {
         var results = new List<Result>();
-        var model = await ticketsHandlerService.RecoverTickets(query);
-        if (model.Tickets?.Count() > 0)
+        var (validation, tickets) = await ticketsHandlerService.RecoverTickets(query);
+        if (tickets.Any())
         {
-            results.Add(await ContactUser(model.Validation, model.Tickets));
-            results.Add(ticketsHandlerService.WarningMessage(model.Validation.SettledMainTranIds));
-            results.InsertNegativeBalance(model.Validation.NegativeBalanceUsers);
+            results.Add(await ContactUser(validation, tickets));
+            results.Add(ticketsHandlerService.WarningMessage(validation.SettledMainTranIds));
+            results.InsertNegativeBalance(validation.NegativeBalanceUsers);
         }
 
-        if (model.Validation.ErrorCode != 0)
+        if (validation.ErrorCode != 0)
         {
-            results.Add(new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg });
+            results.Add(new Result { ErrorCode = validation.ErrorCode, ErrorMsg = validation.ErrorMsg });
         }
 
         return results;

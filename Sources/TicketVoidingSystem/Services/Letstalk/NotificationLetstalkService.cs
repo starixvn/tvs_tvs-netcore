@@ -16,6 +16,8 @@ public interface NotificationLetstalkService
 
     Task<Result> SendToGroupTicketListing(string content, LetstalkAttachment attachment);
 
+    Task<Result> SendToGroupTicketListing777(string content, LetstalkAttachment attachment);
+
     Task<Result> SendToGroupAbnormalBetRequest(string subject, string content, LetstalkAttachment attachment);
 }
 
@@ -50,9 +52,22 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
         var letstalkModel = new LetstalkModel
         {
             TargetName = "Ticket-Voiding-System",
+            Content = content,
             Subject = "Result Amendment Notification - Credit",
-            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert,
-            Content = content
+            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert
+        };
+
+        return await groupTicketListingService.SendMessage(letstalkModel, attachment);
+    }
+
+    public async Task<Result> SendToGroupTicketListing777(string content, LetstalkAttachment attachment)
+    {
+        var letstalkModel = new LetstalkModel
+        {
+            TargetName = "Ticket-Voiding-System",
+            Content = content,
+            Subject = "Result Amendment Notification - Credit (777)",
+            Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert777
         };
 
         return await groupTicketListingService.SendMessage(letstalkModel, attachment);

@@ -29,10 +29,7 @@ public static class LazyRedisMultiplexer
             redis.InternalError += Redis_InternalError;
             redis.ErrorMessage += Redis_ErrorMessage;
             redis.HashSlotMoved += Redis_HashSlotMoved;
-            if (oldRedis != null)
-            {
-                oldRedis.Close();
-            }
+            oldRedis?.Close();
         }
         catch (Exception e)
         {
@@ -52,7 +49,7 @@ public static class LazyRedisMultiplexer
 
     private static void Redis_InternalError(object sender, InternalErrorEventArgs e)
     {
-        Logger.Log.Error("Redis_InternalError:" + e.Exception?.Message);
+        Logger.Log.Error("Redis_InternalError:" + e.Exception.Message);
     }
 
     private static void Redis_ConnectionRestored(object sender, ConnectionFailedEventArgs e)

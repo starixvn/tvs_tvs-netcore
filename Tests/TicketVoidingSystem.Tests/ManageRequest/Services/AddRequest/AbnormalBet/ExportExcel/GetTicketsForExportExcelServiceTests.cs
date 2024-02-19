@@ -39,7 +39,7 @@ public class GetTicketsForExportExcelServiceTests
         await service.BindingContent(worksheet, model);
 
         // Assert
-        checkValidTransIdsService.Received(1).CheckValidTransIds(model);
+        await checkValidTransIdsService.Received(1).CheckValidTransIds(model);
         cellService.Received(1).SetStyle(Arg.Any<ExcelWorksheet>());
     }
 }

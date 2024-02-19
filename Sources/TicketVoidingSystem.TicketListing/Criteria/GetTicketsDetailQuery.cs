@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.TicketListing.Criteria;
+﻿using TicketVoidingSystem.TicketListing.Models;
+
+namespace TicketVoidingSystem.TicketListing.Criteria;
 
 public class GetDetailQuery : CommonQuery
 {
@@ -36,4 +38,6 @@ public class ExportExcelQuery : SendFileQuery
     public bool IsGroup { get; set; }
 
     public int TotalCreditTickets { get; set; }
+
+    public IEnumerable<ExcelTicketModel> Tickets { get; set; }
 }

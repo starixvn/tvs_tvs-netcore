@@ -1,11 +1,9 @@
 ﻿using Fanex.Data.Repository;
 
-namespace TicketVoidingSystem.SimpleDataApi.Criteria;
+namespace TicketVoidingSystem.SharedApi.Criteria.Permission;
 
 public abstract class CheckVoidBetPermissionCriteria : NonQueryCommand
 {
-    public string TransInfo { get; set; }
-
     public int? MatchId { get; set; }
 
     public bool IsCheckForTVS { get; set; }
@@ -37,11 +35,6 @@ public class CheckVoidBetPermissionVoidByBetIdCriteria : CheckVoidBetPermissionC
 public class CheckVoidBetPermissionVoidSingleBetCriteria : CheckVoidBetPermissionCriteria
 {
     public override bool IsValid() => MatchId is > 0;
-}
-
-public class CheckVoidBetPermissionVoidEarlyKickOffCriteria : CheckVoidBetPermissionCriteria
-{
-    public override bool IsValid() => MatchId == null;
 }
 
 public class CheckVoidBetPermissionVoidParlayBetCriteria : CheckVoidBetPermissionCriteria

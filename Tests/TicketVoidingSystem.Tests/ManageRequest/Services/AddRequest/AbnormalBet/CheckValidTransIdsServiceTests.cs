@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -42,7 +41,7 @@ public class CheckValidTransIdsServiceTests
         var result = new IEnumerable<object>[5];
         var validation = new ValidationAbnormalBet();
         var transInfoAddRequestModel = new TransInfoAddRequestModel
-            { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
+        { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
         result[0] = new[] { new MatchInfoAddRequest() };
         result[1] = new[] { validation };
         result[2] = new[] { transInfoAddRequestModel };

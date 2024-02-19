@@ -18,7 +18,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.Add;
 
 public class AddRequestServiceTests
 {
-    private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly IMapper mapper;
     private readonly MarkTicketsService markTicketsService;
@@ -34,7 +33,7 @@ public class AddRequestServiceTests
         sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
         markTicketsService = Substitute.For<MarkTicketsService>();
-        accountWinLostService = Substitute.For<AccountWinLostService>();
+        var accountWinLostService = Substitute.For<AccountWinLostService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
         sendLetstalkAfterAddService = Substitute.For<SendLetstalkAfterAddService>();
         service = new AddRequestServiceImp(mapper, repository, sessionService, loggingService,

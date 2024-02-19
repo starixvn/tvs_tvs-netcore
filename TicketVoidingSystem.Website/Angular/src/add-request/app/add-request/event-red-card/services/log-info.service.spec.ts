@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { IssueType } from '../../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
@@ -385,6 +386,7 @@ describe('LogInfoService', () => {
   it('#updateIsCheckedVar should updateIsCheckedVar is expected', async () => {
     // Arrange
     const fakeLogInfoRedCard = _.clone(Helper.fakeLogInfoRedCard);
+    fakeLogInfoRedCard.subIssueTypeId = SubIssueTypeConstant.GOAL;
     logInfoService = new LogInfoService(null, null);
 
     // Action
