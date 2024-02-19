@@ -239,8 +239,8 @@ public class SpecialPlatformServiceTests
 
     [Theory]
     [InlineData(1, "CS ONEONONE.SOLUTIONS")]
-    [InlineData(2, "CS JOLLY SPORTS")]
-    [InlineData(3, "CS JOLLY SPORTS")]
+    [InlineData(2, "CS JollySports")]
+    [InlineData(3, "CS JollySports")]
     public void GetDepartmentNameForEmailVoidDuplicated_ReturnExpected(int specialPlatform, string expected)
     {
         // Arrange
