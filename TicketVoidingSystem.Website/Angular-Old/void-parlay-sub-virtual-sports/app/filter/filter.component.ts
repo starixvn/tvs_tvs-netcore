@@ -1,5 +1,4 @@
 ﻿import { Component, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
-
 import { Tooltip } from '../../../external/components/tooltip/tooltip';
 import { TEXT } from '../../../internal/shared/text';
 import { PagingText } from '../../../internal/components/paging/setting';
@@ -7,10 +6,7 @@ import { MatchViewModel } from '../../../internal/components/match-detail/match.
 import { InputBetIdsComponent } from '../../../internal/components/input-betids/input-betids.component';
 import { BetTypesVirtualSportComponent } from '../../../internal/components/bettypes-virtualsports/bettypes-virtualsports.component';
 import { GroupBetTypeVirtualSport } from '../../../internal/components/bettypes-virtualsports/bettypes-virtualsports.model';
-import { SportsType } from '../../../internal/shared/config';
-
 import { AppService } from '../app.service';
-import { GetTicketsQuery } from '../models/query.model';
 import { FilterEvent } from './filter.model';
 
 export class Mode {
@@ -86,12 +82,20 @@ export class FilterComponent {
         this.preMatchId = this.matchId;
     }
 
+    private inValidSportTypeVirtualSport2(sportType: number){
+      return (sportType < 190 || sportType > 199);
+    }
+
+    private inValidSportTypeVirtualSport4(sportType: number){
+      return sportType !== 188;
+    }
+
     checkMatch() {
         if (this.match === null) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             this.isSuccessMatch = false;
         }
-        else if (this.match.sportType < 190 || this.match.sportType > 199) {
+        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             this.isSuccessMatch = false;
         }
@@ -126,7 +130,7 @@ export class FilterComponent {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             return false;
         }
-        else if (this.sportType < 190 || this.sportType > 199) {
+        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             return false;
         }

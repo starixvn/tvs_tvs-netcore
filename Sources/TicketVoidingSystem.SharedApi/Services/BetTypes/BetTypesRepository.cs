@@ -6,6 +6,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.SharedApi.Services.BetTypes;
 
@@ -18,6 +19,8 @@ public interface BetTypesRepository
     Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
 
     Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId);
+
+    IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes();
 }
 
 public class BetTypesRepositoryImp : BetTypesRepository
@@ -104,5 +107,11 @@ public class BetTypesRepositoryImp : BetTypesRepository
     {
         criteria.SiteDbGroupId = siteDbGroupId;
         return await repository.FetchAsync<BetTypeModel>(criteria);
+    }
+
+    public IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes()
+    {
+        const string jsonPath = "App_Data/Data/VoidParlayVirtualSportsBetTypes.json";
+        return Helper.DeserializeJsonFileToObject<BetTypesVoidParlayVirtualSport>(jsonPath).Groups;
     }
 }

@@ -1,0 +1,107 @@
+{
+  "Groups": [
+    {
+      "SportTypes": [ 190, 191, 192, 194, 195, 196, 197 ],
+      "BetTypes": [
+        {
+          "Id": 2701,
+          "Name": "FT.1X2"
+        },
+        {
+          "Id": 2702,
+          "Name": "1H 1X2"
+        },
+        {
+          "Id": 2703,
+          "Name": "Over/Under"
+        },
+        {
+          "Id": 2704,
+          "Name": "1H Over/Under"
+        },
+        {
+          "Id": 2705,
+          "Name": "Handicap"
+        },
+        {
+          "Id": 2706,
+          "Name": "1H Handicap"
+        },
+        {
+          "Id": 2707,
+          "Name": "Correct Score"
+        },
+        {
+          "Id": 2799,
+          "Name": "Mix Parlay"
+        }
+      ]
+    },
+    {
+      "SportTypes": [ 193 ],
+      "BetTypes": [
+        {
+          "Id": 2801,
+          "Name": "Match Winner"
+        },
+        {
+          "Id": 2802,
+          "Name": "1H Winner"
+        },
+        {
+          "Id": 2803,
+          "Name": "Over/Under"
+        },
+        {
+          "Id": 2804,
+          "Name": "1H Over/Under"
+        },
+        {
+          "Id": 2805,
+          "Name": "Handicap"
+        },
+        {
+          "Id": 2806,
+          "Name": "1H Handicap"
+        },
+        {
+          "Id": 2807,
+          "Name": "Winning Margin 6 way"
+        },
+        {
+          "Id": 2808,
+          "Name": "Winning Margin 7 way"
+        },
+        {
+          "Id": 2809,
+          "Name": "FT Race to X Points"
+        },
+        {
+          "Id": 2811,
+          "Name": "Home Team Over/Under"
+        },
+        {
+          "Id": 2812,
+          "Name": "Away Team Over/Under"
+        },
+        {
+          "Id": 2799,
+          "Name": "Mix Parlay"
+        }
+      ]
+    },
+    {
+      "SportTypes": [ 188 ],
+      "BetTypes": [
+        {
+          "Id": 10400,
+          "Name": "Match Winner"
+        },
+        {
+          "Id": 10449,
+          "Name": "Mix Parlay"
+        }
+      ]
+    }
+  ]
+}

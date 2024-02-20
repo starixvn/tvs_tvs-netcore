@@ -20,3 +20,14 @@ public class BetTypeVirtualSport
 
     public string Name { get; set; }
 }
+
+public class GroupBetTypeVoidParlayVirtualSport
+{
+    public IEnumerable<int> SportTypes { get; set; }
+    public IEnumerable<BetTypeVirtualSport> BetTypes { get; set; }
+}
+
+public class BetTypesVoidParlayVirtualSport
+{
+    public IList<GroupBetTypeVoidParlayVirtualSport> Groups { get; set; }
+}

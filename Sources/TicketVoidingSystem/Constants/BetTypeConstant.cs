@@ -50,9 +50,9 @@ public static class BetTypeConstant
 
     public const int BitCoinOverUnder = 7901;
 
-    public const int MixParlay = 10449;
+    public const int VirtualSport4MixParlay = 10449;
 
-    public const int MatchWinner = 10400;
+    public const int VirtualSport4MatchWinner = 10400;
 
     public static readonly int[] VirtualSports = { 1231, 1232, 1233, 1237, 1238 };
 }

@@ -30,4 +30,7 @@ public class BetTypesController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> GetBetTypes(GetBetTypesRequest request) => Ok(await mediator.Send(request));
+
+    [HttpGet]
+    public async Task<IActionResult> GetVoidParlayVirtualSport() => Ok(await mediator.Send(new GetBetTypesVoidParlayVirtualSportRequest()));
 }
