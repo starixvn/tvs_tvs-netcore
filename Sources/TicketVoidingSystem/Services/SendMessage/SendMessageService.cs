@@ -23,7 +23,7 @@ public interface SendMessageService
 
     Task InsertMessageIntoAdminSite(Message message);
 
-    Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId);
+    Task InsertVoidedTransaction(InsertVoidedTransactionParam parameter);
 
     Task InsertBatchMessage(int userId, string message);
 
@@ -141,15 +141,15 @@ public class SendMessageServiceImp : SendMessageService
         await repository.ExecuteAsync(command);
     }
 
-    public async Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId)
+    public async Task InsertVoidedTransaction(InsertVoidedTransactionParam parameter)
     {
         var criteria = new InsertVoidedTransactionCommand
         {
-            MessageId = messageId,
-            ReasonId = reasonId,
-            IssueTypeId = issueTypeId,
-            SubIssueTypeId = subIssueTypeId,
-            TicketsXml = tickets.CreateTicketsXml()
+            MessageId = parameter.MessageId,
+            ReasonId = parameter.ReasonId,
+            IssueTypeId = parameter.IssueTypeId,
+            SubIssueTypeId = parameter.SubIssueTypeId,
+            TicketsXml = parameter.EmailTickets.CreateTicketsXml(parameter.IsAbnormalBet)
         };
 
         await repository.ExecuteAsync(criteria);

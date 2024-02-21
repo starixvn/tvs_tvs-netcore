@@ -72,7 +72,15 @@ public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
     {
         if (normalTickets.Any() && normalMessageId > 0)
         {
-            await sendMessageService.InsertVoidedTransaction(normalTickets, normalMessageId, reasonId, param.IssueTypeId, param.SubIssueTypeId);
+            await sendMessageService.InsertVoidedTransaction(new InsertVoidedTransactionParam
+            {
+                EmailTickets = normalTickets,
+                MessageId = normalMessageId,
+                ReasonId = reasonId,
+                IssueTypeId = param.IssueTypeId,
+                SubIssueTypeId = param.SubIssueTypeId,
+                IsAbnormalBet = !param.IsSendMessageToAdminSite
+            });
         }
     }
 
@@ -80,7 +88,15 @@ public class SendMessageByPlatformServiceImp : SendMessageByPlatformService
     {
         if (specialPlatformTickets.Any() && specialMessageId > 0)
         {
-            await sendMessageService.InsertVoidedTransaction(specialPlatformTickets, specialMessageId, reasonId, param.IssueTypeId, param.SubIssueTypeId);
+            await sendMessageService.InsertVoidedTransaction(new InsertVoidedTransactionParam
+            {
+                EmailTickets = specialPlatformTickets,
+                MessageId = specialMessageId,
+                ReasonId = reasonId,
+                IssueTypeId = param.IssueTypeId,
+                SubIssueTypeId = param.SubIssueTypeId,
+                IsAbnormalBet = !param.IsSendMessageToAdminSite
+            });
         }
     }
 }

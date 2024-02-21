@@ -80,4 +80,7 @@ public class TicketEmailModel : EmailSupport, SendMessageDbModel
     public int LeagueGroupId { get; set; }
     public bool IsChinaView { get; set; }
     public int SpecialPlatform { get; set; }
+    public DateTime? WinLostDate { get; set; }
+    public string ZzzWinlost { get; set; }
+    public int SiteDbGroupId { get; set; }
 }
