@@ -76,14 +76,9 @@ public static class BetTypeExtension
         return VirtualSports.Contains(sportTypeId);
     }
 
-    public static bool IsVirtualSportParlay(this int id)
-    {
-        return id is BetTypeConstant.VirtualSportParlay or BetTypeConstant.VirtualSport4MixParlay;
-    }
-
     public static bool IsHideHandicap(this int id)
     {
-        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3() || id.IsVirtualSportParlay();
+        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();
     }
 
     public static bool HideScore(this int id)
