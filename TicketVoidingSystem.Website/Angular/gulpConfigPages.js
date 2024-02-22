@@ -129,15 +129,15 @@ const editRequest = {
 };
 const configPages = [
   //homePage,
-  //manageVoidServices,
-  //abExceptionList,
-  //markTickets,
+  // manageVoidServices,
+  // abExceptionList,
+  // markTickets,
   //ticketListing,
-  //voidSingleBet,
-  voidRequest,
-  manageRequest,
-  addRequest,
-  editRequest
+  voidSingleBet,
+  // voidRequest,
+  // manageRequest,
+  // addRequest,
+  // editRequest
 ];
 
 module.exports = configPages;

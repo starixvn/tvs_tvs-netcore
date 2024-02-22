@@ -4,7 +4,7 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.SharedApi.Models;
 
-namespace TicketVoidingSystem.SharedApi.Services;
+namespace TicketVoidingSystem.SharedApi.Services.SharedApi;
 
 public interface BalanceUpService
 {
