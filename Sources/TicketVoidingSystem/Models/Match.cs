@@ -91,4 +91,5 @@ public class Match
 
     public string OriginLeagueNameNewSimplified { get; set; }
 
+    public string OriginLeagueNameTraditional { get; set; }
 }
