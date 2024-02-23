@@ -22,4 +22,6 @@ export class LogInfoDetail {
     poolHouseSettleCount?: number;
     poolHouseMainParlayCount?: number;
     poolHouseInstantlySettleCount?: number;
+    minTransId: string;
+    actionType: string;
 }

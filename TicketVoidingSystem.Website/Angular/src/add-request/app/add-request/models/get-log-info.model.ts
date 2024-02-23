@@ -19,12 +19,14 @@ export class Validation {
   isPoolHouseAffected: boolean;
   isInvalidTotalTickets: boolean;
   isExistedInOtherRequest: boolean;
+  isExistsSecondAccept: boolean;
 }
 
 export class TicketRequest {
   wrongScore?: string;
   transIds: string;
   requestId: number;
+  createdBy: string;
 }
 
 export class ValidationMatchModel {

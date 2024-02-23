@@ -34,6 +34,6 @@ export class DefaultSetting {
     return true;
   }
   public static get BUTTON_HEIGHT(): string {
-    return '36px';
+    return '29.5px';
   }
 }

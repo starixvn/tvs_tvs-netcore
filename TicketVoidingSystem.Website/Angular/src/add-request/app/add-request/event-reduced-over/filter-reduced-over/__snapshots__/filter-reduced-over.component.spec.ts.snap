@@ -30,7 +30,7 @@ FilterReducedOverComponent {
       "playerIds": Array [],
       "playerMultipleSelection": MultipleSelection {
         "allItemsCheckedText": "All",
-        "buttonHeight": "36px",
+        "buttonHeight": "29.5px",
         "characterText": ", ",
         "characterValue": ",",
         "checkAllCheckBoxText": "Check All Items",

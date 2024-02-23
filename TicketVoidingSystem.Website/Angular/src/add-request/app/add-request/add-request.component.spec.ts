@@ -115,7 +115,7 @@ class Helper {
       scoreOfMatch: '',
       scoreNormalTicket: '',
       instantlySettleCount: 2
-    }
+    } as LogInfoDetail
   ];
   static readonly fakeAbnormalFilterModel: FilterModel = {
     sportType: 1,

@@ -97,6 +97,8 @@ public static class ObjectToXMLExtension
                        + $"ActualScore='{SecurityElement.Escape(model.ActualScore)}' "
                        + $"FilterBy='{model.FilterBy}' "
                        + $"IsCheckedVar='{model.IsCheckedVar}' "
+                       + $"MinTransId='{model.LogInfoDetail?.MinTransId}' "
+                       + $"ActionType='{model.LogInfoDetail?.ActionType}' "
                        + $"MinTime='{model.LogInfoDetail?.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' />";
 
@@ -140,6 +142,8 @@ public static class ObjectToXMLExtension
                 + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
                 + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
                 + $"IsCheckedVar='{model.IsCheckedVar}' "
+                + $"MinTransId='{model.LogInfoDetail?.MinTransId}' "
+                + $"ActionType='{model.LogInfoDetail?.ActionType}' "
                 + $"MinTime='{model.LogInfoDetail?.HighlightMinTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"MinType='{model.LogInfoDetail?.HighlightAcceptType}' />";
             stringBuilder.AppendLine(line);

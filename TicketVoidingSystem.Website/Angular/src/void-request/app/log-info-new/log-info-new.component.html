@@ -8,7 +8,8 @@
         <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red" 
         [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
         </span>,
-        Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong><span *ngIf="logInfoDetail.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span><br/>
+        Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong><span *ngIf="logInfoDetail.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>,
+        <span *ngIf="isHaveCancelCashOut()">TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{logInfoDetail.minTransId}}</strong> {{logInfoDetail.actionType}}</span><br/>
         <span *ngIf="isHaveCancelCashOut()">Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
     </ng-container>
     <ng-container *ngIf="isShowPoolHouseTickets()">

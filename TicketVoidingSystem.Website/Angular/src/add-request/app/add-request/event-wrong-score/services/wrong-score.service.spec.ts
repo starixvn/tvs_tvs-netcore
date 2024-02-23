@@ -37,7 +37,7 @@ class Helper {
     scoreNormalTicket: '',
     instantlySettleCount: 2,
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeWrongScoreModels: WrongScoreModel[] = [{
     scoreId: 5464,
     isActive: true,

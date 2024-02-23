@@ -5,7 +5,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { CommonService } from '../../../../../utility/services/common.service';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest } from '../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../models/get-log-info.model';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -59,24 +59,24 @@ class Helper {
     scoreNormalTicket: '',
     instantlySettleCount: 2,
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: 123,
     validation: {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: true,
-    },
+    } as Validation,
     ticketRequest: [{
       transIds: '123456789',
       requestId: 123
-    }],
+    } as TicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 123,
-  };
+  } as TicketRequest;
 }
 
 describe('LogInfoService', () => {

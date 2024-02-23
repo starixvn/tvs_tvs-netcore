@@ -19,7 +19,7 @@ import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-
 import { FilterModel } from '../filter/filter.model';
 import { LeagueEventComponent } from '../league-event/league-event.component';
 import { EarlyKickOffModel } from '../models/event-eko.model';
-import { GetLogInfoModel, GetLogInfoViewModel } from '../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../models/get-log-info.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { ConfirmEkoComponent } from './confirm-eko/confirm-eko.component';
@@ -66,11 +66,11 @@ class Helper {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [{
       transIds: '123456789',
       requestId: 123
-    }],
+    } as TicketRequest],
     logInfoDetail: null
   }];
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {

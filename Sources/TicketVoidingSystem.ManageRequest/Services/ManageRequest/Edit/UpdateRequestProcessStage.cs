@@ -36,32 +36,21 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
 
     public async Task<Result> Execute(EditRequestQuery query)
     {
-        try
+        var command = CreateEditRequestCommand(query);
+        await repository.ExecuteAsync(command);
+        await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.EarlyKickOffInfo);
+        if (query.IssueTypeId.IsAbnormalAccount())
         {
-            var command = CreateEditRequestCommand(query);
-            await repository.ExecuteAsync(command);
-            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.EarlyKickOffInfo);
-            if (query.IssueTypeId.IsAbnormalAccount())
+            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+        }
+        return new Result
+        {
+            Data = new
             {
-                await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
+                query.MatchId,
+                command.RequestId
             }
-            return new Result
-            {
-                Data = new
-                {
-                    query.MatchId,
-                    command.RequestId
-                }
-            };
-        }
-        catch (Exception e)
-        {
-            return new Result
-            {
-                ErrorCode = 1,
-                ErrorMsg = e.Message
-            };
-        }
+        };
     }
 
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR

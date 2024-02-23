@@ -102,17 +102,17 @@ class Helper {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
       isPoolHouseAffected: false
-    },
+    } as Validation,
     ticketRequest: [{
       transIds: '123456789',
       requestId: 123
-    }],
+    } as TicketRequest],
     logInfoDetail: new LogInfoDetail()
   };
   static readonly fakeTicketRequest: TicketRequest = {
     transIds: '123121,123122,123123,123124,123125,123126,123127,123128,123129',
     requestId: 1,
-  };
+  } as TicketRequest;
   static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     transInfoAddRequestModel: new TransInfoAddRequestModel(),
     getLogInfoModels: [Helper.fakeGetLogInfoModel],

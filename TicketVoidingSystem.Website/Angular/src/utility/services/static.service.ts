@@ -314,7 +314,7 @@ export class StaticService {
       });
   }
 
-  static getValidationMessageList(logInfoModel: GetLogInfoModel): ValidationMessage[] {
+  static getValidationMessageList(logInfoModel: GetLogInfoModel, filterFromTime?: string, secondAcceptValue?: number): ValidationMessage[] {
     const messageList: ValidationMessage[] = [];
     if (logInfoModel.validation.isInvalidTotalTickets) {
       messageList.push({
@@ -322,21 +322,31 @@ export class StaticService {
         reason: LABELS.NO_VALID_TICKETS_IN_RANGE
       });
     }
+    if (logInfoModel.validation.isExistsSecondAccept) {
+      const toDateTimeExist = new Date(filterFromTime);
+      toDateTimeExist.setSeconds(secondAcceptValue + toDateTimeExist.getSeconds());
+      const fromTime = `${moment(logInfoModel.logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT)}`;
+      const toTime = `${moment(toDateTimeExist).format(DateTimeFormat.TIME_FORMAT)}`;
+
+      messageList.push({
+        isError: false,
+        reason: `Exist Second Accept ticket between ${fromTime} - ${toTime}`
+      });
+    }
     if (logInfoModel.validation.isExistedInOtherRequest) {
       logInfoModel.ticketRequest.forEach(request => {
+        const transIds = request.transIds.split(",");
+        const warningCreatedBy = request.createdBy ? ` - ${transIds.length} ticket(s) - By ${request.createdBy}` : '';
         const message: ValidationMessage = {
           isError: false,
-          reason: `Tickets ${request.transIds} existed in Request: ${request.requestId}`
+          reason: `Tickets ${request.transIds} existed in Request: ${request.requestId}${warningCreatedBy}`
         };
-
-        const transIds = request.transIds.split(",");
         if (transIds.length > 8) {
           message.isShowPopup = true;
-          message.reason = `Tickets ${transIds.slice(0, 8).join(",")},... existed in Request: ${request.requestId}`;
+          message.reason = `Tickets ${transIds.slice(0, 8).join(",")},... existed in Request: ${request.requestId}${warningCreatedBy}`;
           message.requestId = request.requestId;
           message.transIds = request.transIds;
         }
-
         messageList.push(message);
       });
     }

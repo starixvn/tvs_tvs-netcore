@@ -41,7 +41,7 @@ class Helper {
     scoreNormalTicket: '',
     scoreOfMatch: '',
     cancelCashOutCount: 1
-  };
+  } as LogInfoDetail;
   static readonly fakeFilterWrongOuModel: FilterWrongOuModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
@@ -123,7 +123,7 @@ describe('LogInfoWrongOuComponent', () => {
   it('initGetPoolHouseTicketQuery should update homeFavorite & awayFavorite', async () => {
     const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
     fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
-    
+
     let fakeQuery: GetPoolHouseTicketQuery = {
       matchId: 0,
       actionId: 0,

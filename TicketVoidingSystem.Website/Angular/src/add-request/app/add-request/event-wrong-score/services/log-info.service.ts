@@ -77,7 +77,7 @@ export class LogInfoService {
     wrongScoreModel.voidFromTime = moment(logInfoModel.logInfoDetail?.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     wrongScoreModel.voidToTime = moment(logInfoModel.logInfoDetail?.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     wrongScoreModel.logInfoDetail = logInfoModel.logInfoDetail;
-    wrongScoreModel.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
+    wrongScoreModel.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel, wrongScoreModel.filterFromTransTime, wrongScoreModel.saTime);
   }
 
   /* istanbul ignore next */

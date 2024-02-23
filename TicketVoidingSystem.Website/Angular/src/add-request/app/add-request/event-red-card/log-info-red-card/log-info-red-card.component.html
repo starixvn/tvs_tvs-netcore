@@ -10,16 +10,13 @@
         </div>
       </div>
 
-
       <div class="justify-content-center col-sm-2" *ngIf="isShowVarCheck()">
         <div class="d-flex justify-content-center">
           <div class="var-check-selection" [ngClass]="{'highlight': logInfo.isHighLightVarCheck}">
-
             <div class="tooltip-var-check" *ngIf="logInfo.isHighLightVarCheck">
               <em></em>
               <span>{{tooltipVarMessage}}</span>
             </div>
-
             <label class="border-radius-left" (click)="!isDisabled && changeVarCheckValue(false)"
             [ngClass]="{'bg-success':logInfo.isCheckedVar === false, 'bg-not-choose':logInfo.isCheckedVar !== false}">NO VAR
             </label>
@@ -60,7 +57,8 @@
           <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
           Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong>,
-          Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{displayMinTime(logInfo.logInfoDetail.highlightMinTime)}}</strong><br/>
+          Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{displayMinTime(logInfo.logInfoDetail.highlightMinTime)}}</strong>,
+          TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{logInfo.logInfoDetail.minTransId}}</strong> {{logInfo.logInfoDetail.actionType}}<br/>
           Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong>
         </div>
       </div>

@@ -10,6 +10,7 @@
           [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
           </span>,
           Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
+          <span *ngIf="isWrongScore()">, TransId: <strong [ngClass]="getHighlightMinTimeClass(item)">{{item.minTransId}}</strong> {{item.actionType}}</span>
           <span *ngIf="!isReducedOver()"><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
         </ng-container>
 

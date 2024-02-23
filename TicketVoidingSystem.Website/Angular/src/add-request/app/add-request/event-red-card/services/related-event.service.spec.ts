@@ -1,24 +1,23 @@
-import { EventRedCardService } from './event-red-card.service';
-import * as _ from 'lodash';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { PrimitiveProperty } from '../event-red-card.model';
-import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
+import { AddRelatedEventArg } from '../../models/add-related-event.model';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
-import { AddRelatedEventArg } from '../../models/add-related-event.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { PrimitiveProperty } from '../event-red-card.model';
+import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
+import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { EventRedCardService } from './event-red-card.service';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
-import { AddRequestStore } from '../../add-request.store';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -66,7 +65,7 @@ class Helper {
       scoreNormalTicket: '',
       instantlySettleCount: 2,
       cancelCashOutCount: 1
-    };
+    } as LogInfoDetail;
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,

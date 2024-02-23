@@ -67,7 +67,7 @@ class Helper {
       instantlySettleCount: 2,
       highlightAcceptType: AcceptType.AUTO_ACCEPT,
       highlightMinTime: new Date(Helper.fakeToDateTime)
-    };
+    } as LogInfoDetail;
   static readonly fakeValidationMessage: ValidationMessage[] = [
     {
       isError: false,
