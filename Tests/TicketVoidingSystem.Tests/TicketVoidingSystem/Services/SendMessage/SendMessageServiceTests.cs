@@ -134,9 +134,18 @@ public class SendMessageServiceTests
         // Arrange
         var tickets = new List<TicketEmailModel> { new() { TransId = 1, CustId = 1, MatchId = 1 } };
         repository.ExecuteAsync(Arg.Any<InsertVoidedTransactionCommand>()).ReturnsForAnyArgs(1);
+        var param = new InsertVoidedTransactionParam
+        {
+            EmailTickets = tickets,
+            IssueTypeId = 1,
+            SubIssueTypeId = 1,
+            MessageId = 1,
+            ReasonId = 1,
+            IsAbnormalBet = false
+        };
 
         // Act
-        _ = service.InsertVoidedTransaction(tickets, 1, 1, 1, 1);
+        _ = service.InsertVoidedTransaction(param);
 
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<InsertVoidedTransactionCommand>());
