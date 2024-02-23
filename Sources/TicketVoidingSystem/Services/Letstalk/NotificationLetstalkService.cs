@@ -26,6 +26,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     private readonly GroupVoidSettledBetService groupVoidSettledBetService;
     private readonly GroupTicketListingService groupTicketListingService;
     private readonly GroupAbnormalBetRequestService groupAbnormalBetRequestService;
+    private const string TargetName = "Ticket-Voiding-System";
 
     public NotificationLetstalkServiceImp(GroupVoidSettledBetService groupVoidSettledBetService,
         GroupTicketListingService groupTicketListingService, GroupAbnormalBetRequestService groupAbnormalBetRequestService)
@@ -39,7 +40,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     {
         var letstalkModel = new LetstalkModel
         {
-            TargetName = "Ticket-Voiding-System",
+            TargetName = TargetName,
             Subject = "Void Settled Bet Notification",
             Group = AppSettingService.AppSetting.LetstalkConfig.VoidSettledBets
         };
@@ -51,7 +52,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     {
         var letstalkModel = new LetstalkModel
         {
-            TargetName = "Ticket-Voiding-System",
+            TargetName = TargetName,
             Content = content,
             Subject = "Result Amendment Notification - Credit",
             Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert
@@ -64,7 +65,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     {
         var letstalkModel = new LetstalkModel
         {
-            TargetName = "Ticket-Voiding-System",
+            TargetName = TargetName,
             Content = content,
             Subject = "Result Amendment Notification - Credit (777)",
             Group = AppSettingService.AppSetting.LetstalkConfig.TicketListingAlert777
@@ -77,7 +78,7 @@ public class NotificationLetstalkServiceImp : NotificationLetstalkService
     {
         var letstalkModel = new LetstalkModel
         {
-            TargetName = "Ticket-Voiding-System",
+            TargetName = TargetName,
             Subject = subject,
             Group = AppSettingService.AppSetting.LetstalkConfig.AbnormalBetRequest,
             Content = content
