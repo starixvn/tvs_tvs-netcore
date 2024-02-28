@@ -36,7 +36,7 @@ describe('AppService', () => {
       lastModifiedDate: null,
       request: fakeRequestDetailModel,
       event: null,
-      messages: [],
+      playerNames: [],
       wrongScoreModels: [],
       dangerAcceptedModels: [],
       redCardModels: [],

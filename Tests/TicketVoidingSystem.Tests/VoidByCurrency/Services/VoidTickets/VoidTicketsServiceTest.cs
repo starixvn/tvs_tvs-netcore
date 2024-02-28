@@ -105,22 +105,14 @@ public class VoidTicketsServiceTest
             new TicketEmailModel { IsMixParlay = false, TransId = 1, CustId = 1, MatchId = 1 },
             new TicketEmailModel { IsMixParlay = true, TransId = 1, CustId = 1, MatchId = 1 }
         };
-        const int messageId = 111;
-        const int reasonId = 123;
-        var sessionService = Substitute.For<SessionService>();
-        var messageService = Substitute.For<SendMessageService>();
-        messageService.InsertMessage(query.Message, query.MatchId, query.Match?.LeagueGroupId, false)
-            .ReturnsForAnyArgs(messageId);
-        messageService.InsertReason(query.Reason, query.ReasonSC).ReturnsForAnyArgs(reasonId);
-        sessionService.UserId.ReturnsForAnyArgs(123);
-        var service = CreateService(sessionService, messageService);
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
+        var service = CreateService(sendMessageByPlatformService);
 
         // Act
         await service.SendMessage(query, tickets);
 
         // Assert
-        await messageService.Received(1)
-            .InsertVoidedTransaction(Arg.Any<IEnumerable<TicketEmailModel>>(), Arg.Is(111), Arg.Is(123), Arg.Is(0), Arg.Is(0));
+        await sendMessageByPlatformService.Execute(Arg.Any<SendMessageTargetParam>());
     }
 
     [Fact]
@@ -152,21 +144,18 @@ public class VoidTicketsServiceTest
     {
         var repository = Substitute.For<VoidByCurrencyRepository>();
         var loggingService = Substitute.For<LoggingService>();
-        var sessionService = Substitute.For<SessionService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var messageService = Substitute.For<SendMessageByPlatformService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             messageService,
             loggingService,
             emailService);
     }
 
-    private static VoidTicketsServiceImp CreateService(SessionService sessionService,
-        SendMessageService messageService)
+    private static VoidTicketsServiceImp CreateService(SendMessageByPlatformService messageService)
     {
         var repository = Substitute.For<VoidByCurrencyRepository>();
         var loggingService = Substitute.For<LoggingService>();
@@ -175,7 +164,6 @@ public class VoidTicketsServiceTest
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             messageService,
             loggingService,
@@ -185,14 +173,12 @@ public class VoidTicketsServiceTest
     private static VoidTicketsServiceImp CreateService(VoidByCurrencyRepository repository,
         LoggingService loggingService)
     {
-        var sessionService = Substitute.For<SessionService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var messageService = Substitute.For<SendMessageByPlatformService>();
         var emailService = Substitute.For<SendEmailService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             messageService,
             loggingService,
@@ -201,15 +187,13 @@ public class VoidTicketsServiceTest
 
     private static VoidTicketsServiceImp CreateService(VoidByCurrencyRepository repository)
     {
-        var sessionService = Substitute.For<SessionService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var messageService = Substitute.For<SendMessageByPlatformService>();
         var loggingService = Substitute.For<LoggingService>();
         var emailService = Substitute.For<SendEmailService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             messageService,
             loggingService,

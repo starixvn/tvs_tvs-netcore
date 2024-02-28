@@ -9,7 +9,7 @@ namespace TicketVoidingSystem.Services.SendEmail.Void;
 
 public interface TicketService
 {
-    TicketEmailViewModel GetTicket(TicketEmailModel item, Match match, SiteEmail site, bool isFromAfterVoidService);
+    TicketEmailViewModel GetTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService);
 }
 
 public class TicketServiceImp : TicketService
@@ -21,9 +21,9 @@ public class TicketServiceImp : TicketService
         this.betListCoreService = betListCoreService;
     }
 
-    public TicketEmailViewModel GetTicket(TicketEmailModel item, Match match, SiteEmail site, bool isFromAfterVoidService)
+    public TicketEmailViewModel GetTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService)
     {
-        var ticket = betListCoreService.BuildTicket(item, match, site, isFromAfterVoidService);
+        var ticket = betListCoreService.BuildTicket(item, match, isFromAfterVoidService);
         ticket.BetId = item.TransId.ToString();
         ticket.Member = item.UserName;
         ticket.IsVipMember = item.IsVipMember;

@@ -84,7 +84,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasRequestIsMatchId_RepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasMatchId_CalledExpected()
     {
         // Arrange
         // Act

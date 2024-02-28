@@ -74,7 +74,7 @@ class Helper {
     lastModifiedDate: null,
     request: Helper.fakeRequestDetailModel,
     event: Helper.fakeRequestEventModel,
-    messages: [],
+    playerNames: [],
     wrongScoreModels: [],
     dangerAcceptedModels: [],
     redCardModels: [],

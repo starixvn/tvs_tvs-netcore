@@ -114,7 +114,7 @@ public class MessageExtensionTests
         };
 
         // Act
-        var xmlString = emailTickets.CreateTicketsXml();
+        var xmlString = emailTickets.CreateTicketsXml(false);
 
         // Assert
         var rootElement = XElement.Parse(xmlString);

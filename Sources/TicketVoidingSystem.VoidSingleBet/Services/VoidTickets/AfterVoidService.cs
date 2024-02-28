@@ -4,6 +4,7 @@ using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.Letstalk;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;
 using TicketVoidingSystem.Services.Letstalk;
@@ -25,17 +26,17 @@ public class AfterVoidServiceImp : AfterVoidService
 {
     private readonly IMapper mapper;
     private readonly CashOutApiService cashOutApiService;
-    private readonly SendMessageService sendMessageService;
+    private readonly SendMessageByPlatformService sendMessageByPlatformService;
     private readonly SendEmailService sendEmailService;
     private readonly NotificationLetstalkService notificationLetstalkService;
     private readonly LoggingService loggingService;
     private readonly SessionService sessionService;
 
-    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageService sendMessageService,
+    public AfterVoidServiceImp(IMapper mapper, CashOutApiService cashOutApiService, SendMessageByPlatformService sendMessageByPlatformService,
         SendEmailService sendEmailService, NotificationLetstalkService notificationLetstalkService, LoggingService loggingService, SessionService sessionService)
     {
         this.cashOutApiService = cashOutApiService;
-        this.sendMessageService = sendMessageService;
+        this.sendMessageByPlatformService = sendMessageByPlatformService;
         this.sendEmailService = sendEmailService;
         this.notificationLetstalkService = notificationLetstalkService;
         this.loggingService = loggingService;
@@ -96,13 +97,20 @@ public class AfterVoidServiceImp : AfterVoidService
 
     private async Task SendMessage(VoidTicketsQuery query, VoidTicketsModel model)
     {
-        query.Message.CreatorId = sessionService.UserId;
-        query.Message.CreatorName = sessionService.UserName;
-        var messageId = await sendMessageService.InsertMessage(query.Message, query.MatchId, query.Match.LeagueGroupId, false);
-        var reasonId = await sendMessageService.InsertReason(query.Reason, query.ReasonSc);
-        await sendMessageService.SendMessage(model.Tickets, messageId, 0, query.Message.CreatorId);
-        await sendMessageService.InsertMessageIntoAdminSite(query.Message);
-        await sendMessageService.InsertVoidedTransaction(model.Tickets, messageId, reasonId, 0, 0);
+        var param = new SendMessageTargetParam
+        {
+            EmailTickets = model.Tickets,
+            MatchId = query.MatchId,
+            Match = query.Match,
+            Message = query.Message,
+            IsMessageContentAbnormal = false,
+            Reason = query.Reason,
+            ReasonSC = query.ReasonSc,
+            IssueTypeId = 0,
+            SubIssueTypeId = 0,
+            IsSendMessageToAdminSite = true
+        };
+        await sendMessageByPlatformService.Execute(param);
     }
 
     private async Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, VoidTicketsModel model)

@@ -68,7 +68,7 @@ export class RequestEventModel {
 
 export class RequestDetailViewModel {
   requestId: number;
-  messages: Message[];
+  playerNames: PlayerName[];
   lastModifiedDate: Date;
   request: RequestDetailModel;
   event?: RequestEventModel;
@@ -83,4 +83,10 @@ export class RequestDetailViewModel {
   notParticipateModels?: NotParticipateModel[];
   earlyKickOffModels?: EarlyKickOffModel[];
   abnormalAccountModel?: AbnormalAccountModel;
+}
+
+export class PlayerName {
+  playerNamesEnglish: string;
+  playerNamesChineseTraditional: string;
+  playerNamesChineseSimplified: string;
 }

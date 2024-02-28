@@ -23,7 +23,7 @@ public interface SendMessageService
 
     Task InsertMessageIntoAdminSite(Message message);
 
-    Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId);
+    Task InsertVoidedTransaction(InsertVoidedTransactionParam parameter);
 
     Task InsertBatchMessage(int userId, string message);
 
@@ -92,18 +92,12 @@ public class SendMessageServiceImp : SendMessageService
 
     public async Task SendMessage(IEnumerable<TicketEmailModel> tickets, int messageId, int issueTypeId, int creatorId)
     {
-        var excludedCN88Tickets = ExcludeCN88Tickets(tickets, Helper.IsLikelyAbnormalBet(issueTypeId));
-        var receivedUsers = GetListSendMessageDb(excludedCN88Tickets);
+        var receivedUsers = GetListSendMessageDb(tickets);
         var messageXml = messageItemService.CreateMessageItems(receivedUsers, messageId);
         if (!string.IsNullOrWhiteSpace(messageXml))
         {
             await InsertBatchMessage(creatorId, messageXml);
         }
-    }
-
-    private static IEnumerable<TicketEmailModel> ExcludeCN88Tickets(IEnumerable<TicketEmailModel> tickets, bool isAbnormalBet)
-    {
-        return isAbnormalBet ? tickets.Where(x => !x.Site.ToLowerInvariant().Equals("cn88")) : tickets;
     }
 
     private static IEnumerable<ReceivedUser> GetListSendMessageDb<T>(IEnumerable<T> tickets) where T : SendMessageDbModel
@@ -147,15 +141,15 @@ public class SendMessageServiceImp : SendMessageService
         await repository.ExecuteAsync(command);
     }
 
-    public async Task InsertVoidedTransaction(IEnumerable<TicketEmailModel> tickets, int messageId, int reasonId, int issueTypeId, int subIssueTypeId)
+    public async Task InsertVoidedTransaction(InsertVoidedTransactionParam parameter)
     {
         var criteria = new InsertVoidedTransactionCommand
         {
-            MessageId = messageId,
-            ReasonId = reasonId,
-            IssueTypeId = issueTypeId,
-            SubIssueTypeId = subIssueTypeId,
-            TicketsXml = tickets.CreateTicketsXml()
+            MessageId = parameter.MessageId,
+            ReasonId = parameter.ReasonId,
+            IssueTypeId = parameter.IssueTypeId,
+            SubIssueTypeId = parameter.SubIssueTypeId,
+            TicketsXml = parameter.EmailTickets.CreateTicketsXml(parameter.IsAbnormalBet)
         };
 
         await repository.ExecuteAsync(criteria);

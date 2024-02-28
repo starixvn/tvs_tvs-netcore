@@ -4,6 +4,7 @@ using SpecialDelete.VoidByCurrency.Repositories;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendMessage;
@@ -22,24 +23,21 @@ public interface VoidTicketsService
 public class VoidTicketsServiceImp : VoidTicketsService
 {
     private readonly IMapper mapper;
-    private readonly SessionService sessionService;
     private readonly VoidByCurrencyRepository repository;
-    private readonly SendMessageService sendMessageService;
+    private readonly SendMessageByPlatformService sendMessageByPlatformService;
     private readonly LoggingService loggingService;
     private readonly SendEmailService sendEmailService;
 
     public VoidTicketsServiceImp(
         IMapper mapper,
-        SessionService sessionService,
         VoidByCurrencyRepository repository,
-        SendMessageService sendMessageService,
+        SendMessageByPlatformService sendMessageByPlatformService,
         LoggingService loggingService,
         SendEmailService sendEmailService)
     {
         this.mapper = mapper;
-        this.sessionService = sessionService;
         this.repository = repository;
-        this.sendMessageService = sendMessageService;
+        this.sendMessageByPlatformService = sendMessageByPlatformService;
         this.loggingService = loggingService;
         this.sendEmailService = sendEmailService;
     }
@@ -72,13 +70,21 @@ public class VoidTicketsServiceImp : VoidTicketsService
 
     public async Task SendMessage(VoidTicketsQuery query, IEnumerable<TicketEmailModel> tickets)
     {
-        query.Message.CreatorName = sessionService.UserName;
-        query.Message.CreatorId = sessionService.UserId;
-        var messageId = await sendMessageService.InsertMessage(query.Message, query.MatchId, query.Match?.LeagueGroupId, false);
-        var reasonId = await sendMessageService.InsertReason(query.Reason, query.ReasonSC);
-        await sendMessageService.SendMessage(tickets, messageId, 0, query.Message.CreatorId);
-        await sendMessageService.InsertMessageIntoAdminSite(query.Message);
-        await sendMessageService.InsertVoidedTransaction(tickets, messageId, reasonId, 0, 0);
+        var param = new SendMessageTargetParam
+        {
+            EmailTickets = tickets,
+            MatchId = query.MatchId,
+            Match = query.Match,
+            Message = query.Message,
+            IsMessageContentAbnormal = false,
+            Reason = query.Reason,
+            ReasonSC = query.ReasonSC,
+            IssueTypeId = 0,
+            SubIssueTypeId = 0,
+            IsSendMessageToAdminSite = true
+        };
+
+        await sendMessageByPlatformService.Execute(param);
     }
 
     public async Task<IEnumerable<Result>> SendEmail(VoidTicketsQuery query, VoidTicketsModel model)

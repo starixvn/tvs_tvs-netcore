@@ -132,7 +132,7 @@ var VoidByBetId = {
                 }
 
                 if (rs.MatchId > 0) {
-                    VoidByBetId.getMatch({ matchId: rs.MatchId });
+                    VoidByBetId.getMatch({ matchId: rs.MatchId, isAbnormalBet: params.isAbnormalBet});
                 } else {
                     $('#matchInfo').hide();
                     VoidByBetId.loadMessageTemplate();
@@ -170,8 +170,10 @@ var VoidByBetId = {
             success: function (match) {
                 if (match !== null) {
                     VoidByBetId.matchInfo = match;
-                    VoidByBetId.loadMatchInfo(match);
-                    VoidByBetId.loadMessageTemplate();
+                    if (params.isAbnormalBet) {
+                        VoidByBetId.loadMatchInfo(match);
+                        VoidByBetId.loadMessageTemplate();
+                    }
                 }
             },
             error: function () { },

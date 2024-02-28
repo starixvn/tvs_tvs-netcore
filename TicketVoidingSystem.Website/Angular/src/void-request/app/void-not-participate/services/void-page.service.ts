@@ -55,10 +55,10 @@ export class VoidPageService {
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.playerName = {
-      msgEnglish: requestDetail.messages[0].playerNamesEnglish,
-      msgChineseTraditional: requestDetail.messages[0].playerNamesChineseTraditional,
-      msgChineseSimplified: requestDetail.messages[0].playerNamesChineseSimplified,
-      msgChineseNewSimplified: requestDetail.messages[0].playerNamesChineseSimplified
+      msgEnglish: requestDetail.playerNames[0].playerNamesEnglish,
+      msgChineseTraditional: requestDetail.playerNames[0].playerNamesChineseTraditional,
+      msgChineseSimplified: requestDetail.playerNames[0].playerNamesChineseSimplified,
+      msgChineseNewSimplified: requestDetail.playerNames[0].playerNamesChineseSimplified
     } as TemplateContent;
 
     return templateValue;

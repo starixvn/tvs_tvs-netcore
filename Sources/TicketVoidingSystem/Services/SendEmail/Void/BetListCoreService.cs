@@ -1,61 +1,62 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.SendEmail.Void;
 
 public interface BetListCoreService
 {
-    TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, SiteEmail site, bool isFromAfterVoidService);
+    TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService);
 }
 
 public class BetListCoreServiceImp : BetListCoreService
 {
     private readonly IMapper mapper;
     private readonly BetListService betListService;
-    private readonly LeagueNameMessageService leagueNameMessageService;
+    private readonly SpecialPlatformService specialPlatformService;
 
-    public BetListCoreServiceImp(IMapper mapper, BetListService betListService, LeagueNameMessageService leagueNameMessageService)
+    public BetListCoreServiceImp(IMapper mapper, BetListService betListService, SpecialPlatformService specialPlatformService)
     {
         this.mapper = mapper;
         this.betListService = betListService;
-        this.leagueNameMessageService = leagueNameMessageService;
+        this.specialPlatformService = specialPlatformService;
     }
 
-    public TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, SiteEmail site, bool isFromAfterVoidService)
+    public TicketEmailViewModel BuildTicket(TicketEmailModel item, Match match, bool isFromAfterVoidService)
     {
         var viewModel = new TicketEmailViewModel();
-        var ticket = CreateTicket(item, match, site);
+        var ticket = CreateTicket(item, match);
         var ticketHelper = new TicketHelper
         {
             IsShowOddsWithChoice = item.IsMixParlay,
             ShowSystemParlayDetail = false,
             ShowMatch = !isFromAfterVoidService,
-            ShowLeague = !isFromAfterVoidService
+            ShowLeague = !isFromAfterVoidService,
+            HideSabaText = specialPlatformService.IsTicketSpecialPlatform(item)
         };
+
         viewModel.Odds = betListService.GetOdds(ticket, item.BetTypeId.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticket);
         viewModel.BetTypeSimplified = betListService.GetBetTypeNameChineseSimplified(ticket);
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
-        viewModel.Choice = BuildChoice(ticket, ticketHelper, item, match, site);
+        viewModel.Choice = BuildChoice(ticket, ticketHelper, item);
         viewModel.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
         viewModel.Currency = ticket.Currency;
 
         return viewModel;
     }
 
-    private Ticket CreateTicket(TicketEmailModel item, Match match, SiteEmail site)
+    private Ticket CreateTicket(TicketEmailModel item, Match match)
     {
         var ticket = mapper.Map<Ticket>(item);
-        ticket.Currency = GetCurrencyName(item, site);
+        ticket.Currency = specialPlatformService.GetCurrencyNameOfSpecialPlatformTicket(item);
         ticket.Winlost = FanexCommonConverter.ToDecimal(item.Winlost);
         ticket.OddsType = item.IsMixParlay ? string.Empty : item.OddsType.ToString();
         ticket.BetId = item.IsMixParlay ? default : item.BetId;
@@ -84,25 +85,10 @@ public class BetListCoreServiceImp : BetListCoreService
         }
     }
 
-    private string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item, Match match, SiteEmail site)
+    private string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)
     {
-        if (item.IsMixParlay)
-        {
-            return BuildChoiceParlay(ticket, ticketHelper, item);
-        }
-
-        var choice = betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
-
-        return leagueNameMessageService.RemoveSabaInChoiceColumn(choice, match, site);
-    }
-
-    private static string GetCurrencyName(TicketEmailModel item, SiteEmail site)
-    {
-        if (site.SpecialPlatform != SpecialPlatformConstant.JollySports)
-        {
-            return item.CurrencyName;
-        }
-        return item.CurrencyName.Equals(CurrencyConstant.Pe4, StringComparison.InvariantCultureIgnoreCase) ? CurrencyConstant.Mp : item.CurrencyName;
+        return item.IsMixParlay ? BuildChoiceParlay(ticket, ticketHelper, item)
+            : betListService.BuildChoiceExcel(ticket, ticketHelper, null, false).Replace("\n", "<br/>");
     }
 
     private string BuildChoiceParlay(ITicket ticket, ITicketHelper ticketHelper, TicketEmailModel item)

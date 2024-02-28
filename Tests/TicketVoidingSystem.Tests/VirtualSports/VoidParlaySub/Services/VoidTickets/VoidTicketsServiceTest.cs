@@ -105,19 +105,15 @@ public class VoidTicketsServiceTest
             Reason = "Soccer - Early Kick Off",
             ReasonSC = "足球 - 由于赛事时间提前开始"
         };
-        const int messageId = 111;
-        const int reasonId = 123;
-        var messageService = Substitute.For<SendMessageService>();
-        messageService.InsertMessage(query.Message, 1, null, false).ReturnsForAnyArgs(messageId);
-        messageService.InsertReason(query.Reason, query.ReasonSC).ReturnsForAnyArgs(reasonId);
-        var service = CreateService(messageService);
+
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
+        var service = CreateService(sendMessageByPlatformService);
 
         // Act
         await service.SendMessage(query, tickets);
 
         // Assert
-        await messageService.Received(1)
-            .InsertVoidedTransaction(Arg.Any<IEnumerable<TicketEmailModel>>(), Arg.Is(111), Arg.Is(123), Arg.Is(0), Arg.Is(0));
+        await sendMessageByPlatformService.Execute(Arg.Any<SendMessageTargetParam>());
     }
 
     [Fact]
@@ -145,15 +141,13 @@ public class VoidTicketsServiceTest
 
     private static VoidTicketsServiceImp CreateService(SendEmailService emailService)
     {
-        var sessionService = Substitute.For<SessionService>();
         var repository = Substitute.For<Repository>();
         var loggingService = Substitute.For<LoggingService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var messageService = Substitute.For<SendMessageByPlatformService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
             messageService,
@@ -162,15 +156,13 @@ public class VoidTicketsServiceTest
 
     private static VoidTicketsServiceImp CreateService(Repository repository)
     {
-        var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var messageService = Substitute.For<SendMessageByPlatformService>();
         var emailService = Substitute.For<SendEmailService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
             messageService,
@@ -179,23 +171,20 @@ public class VoidTicketsServiceTest
 
     private static VoidTicketsServiceImp CreateService(Repository repository, LoggingService loggingService)
     {
-        var sessionService = Substitute.For<SessionService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var messageService = Substitute.For<SendMessageByPlatformService>();
         var emailService = Substitute.For<SendEmailService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
             messageService,
             emailService);
     }
 
-    private static VoidTicketsServiceImp CreateService(SendMessageService messageService)
+    private static VoidTicketsServiceImp CreateService(SendMessageByPlatformService messageService)
     {
-        var sessionService = Substitute.For<SessionService>();
         var repository = Substitute.For<Repository>();
         var loggingService = Substitute.For<LoggingService>();
 
@@ -204,7 +193,6 @@ public class VoidTicketsServiceTest
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidTicketsServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
             messageService,

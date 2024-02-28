@@ -60,7 +60,7 @@ describe('AppService', () => {
       requestId: 5002,
       lastModifiedDate: null,
       event: null,
-      messages: [],
+      playerNames: [],
       wrongScoreModels: [],
       dangerAcceptedModels: [],
       redCardModels: [],

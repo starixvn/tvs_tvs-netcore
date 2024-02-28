@@ -6,6 +6,7 @@ using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
@@ -83,23 +84,25 @@ public class AddRequestServiceTests
     }
 
     [Theory]
-    [InlineData(IssueTypeConstant.DangerAccepted)]
-    [InlineData(IssueTypeConstant.WrongHDP)]
-    [InlineData(IssueTypeConstant.Wrong1stHDP)]
-    [InlineData(IssueTypeConstant.WrongOU)]
-    [InlineData(IssueTypeConstant.Wrong1stOU)]
-    [InlineData(IssueTypeConstant.RedCard)]
-    [InlineData(IssueTypeConstant.WrongOdds)]
-    [InlineData(IssueTypeConstant.ReducedOver)]
-    [InlineData(IssueTypeConstant.WrongScore)]
-    [InlineData(IssueTypeConstant.EarlyKickOffTime)]
-    [InlineData(IssueTypeConstant.WrongKickOffTime)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
-    [InlineData(IssueTypeConstant.AbnormalBet)]
-    [InlineData(IssueTypeConstant.DuplicateTickets)]
-    [InlineData(IssueTypeConstant.NotParticipate)]
-    [InlineData(1111111)]
-    public void Execute_HasResultSuccessful_CalledExpected(int issueTypeId)
+    [InlineData(IssueTypeConstant.DangerAccepted, 1)]
+    [InlineData(IssueTypeConstant.WrongHDP, 1)]
+    [InlineData(IssueTypeConstant.Wrong1stHDP, 1)]
+    [InlineData(IssueTypeConstant.WrongOU, 1)]
+    [InlineData(IssueTypeConstant.Wrong1stOU, 1)]
+    [InlineData(IssueTypeConstant.RedCard, 1)]
+    [InlineData(IssueTypeConstant.WrongOdds, 1)]
+    [InlineData(IssueTypeConstant.ReducedOver, 1)]
+    [InlineData(IssueTypeConstant.WrongScore, 1)]
+    [InlineData(IssueTypeConstant.EarlyKickOffTime, 1)]
+    [InlineData(IssueTypeConstant.WrongKickOffTime, 1)]
+    [InlineData(IssueTypeConstant.AbnormalBetRealMember, 1)]
+    [InlineData(IssueTypeConstant.AbnormalBet, 1)]
+    [InlineData(IssueTypeConstant.DuplicateTickets, 1)]
+    [InlineData(IssueTypeConstant.NotParticipate, 1)]
+    [InlineData(IssueTypeConstant.AbnormalAccount, 1)]
+    [InlineData(IssueTypeConstant.AbnormalAccount, ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)]
+    [InlineData(1111111, 1)]
+    public void Execute_HasResultSuccessful_CalledExpected(int issueTypeId, int actionId)
     {
         // Arrange
         var query = new AddRequestQuery
@@ -108,8 +111,9 @@ public class AddRequestServiceTests
             IssueTypeId = issueTypeId,
             TransInfoJson = "123",
             MatchId = 1,
-            ActionId = 1,
-            OperatorsList = null
+            OperatorsList = null,
+            ActionId = actionId,
+            AbnormalAccountInfo = issueTypeId.IsAbnormalAccount() ? new AbnormalAccountViewModel() : null
         };
         var markTicketResults = new List<Result> { new() { ErrorCode = 0 } };
         markTicketsService.MarkTicketsInTVS("1", 1, MarkTypeConstant.ExecuteMarkTickets)
@@ -124,7 +128,7 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, null);
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, actionId, null);
         sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
     }
 

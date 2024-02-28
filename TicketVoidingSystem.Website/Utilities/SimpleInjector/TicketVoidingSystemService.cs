@@ -69,7 +69,6 @@ public static class TicketVoidingSystemService
         services.AddScoped<SendEmailService, SendEmailServiceImp>();
         services.AddScoped<SitesEmailService, SitesEmailServiceImp>();
         services.AddSingleton<TemplateEmailService, TemplateEmailServiceImp>();
-        services.AddSingleton<LeagueNameMessageService, LeagueNameMessageServiceImp>();
         services.AddSingleton<SpecialPlatformService, SpecialPlatformServiceImp>();
         services.AddScoped<SendEmailDuplicateTicketsService, SendEmailDuplicateTicketsServiceImp>();
         services.AddScoped<DuplicateTicketsEmailLicenseeService, DuplicateTicketsEmailLicenseeServiceImp>();
@@ -81,6 +80,8 @@ public static class TicketVoidingSystemService
         //Send Message
         services.AddSingleton<MessageItemService, MessageItemServiceImp>();
         services.AddScoped<SendMessageService, SendMessageServiceImp>();
+        services.AddScoped<SendMessageByPlatformService, SendMessageByPlatformServiceImp>();
+        services.AddSingleton<SpecialPlatformService, SpecialPlatformServiceImp>();
 
         // SignalR
         services.AddSingleton<NotificationSignalRService, NotificationSignalRServiceImp>();

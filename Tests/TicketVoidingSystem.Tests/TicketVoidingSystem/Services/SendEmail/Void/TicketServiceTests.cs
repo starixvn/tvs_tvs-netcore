@@ -26,7 +26,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             var item = new TicketEmailModel { TransDate = new DateTime(2022, 2, 2, 2, 2, 2) };
             var match = new Match();
             var site = new SiteEmail();
-            betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), Arg.Any<SiteEmail>(), true)
+            betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
                 .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
             var expected = new TicketEmailViewModel
             {
@@ -39,7 +39,7 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             };
 
             // Act
-            var actual = service.GetTicket(item, match, site, true);
+            var actual = service.GetTicket(item, match, true);
 
             // Assert
             AssertExtension.Equal(expected, actual);
@@ -52,11 +52,11 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             var item = new TicketEmailModel { TransDate = new DateTime(2022, 2, 2, 2, 2, 2), Status = TicketStatus.Running };
             var match = new Match();
             var site = new SiteEmail();
-            betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), Arg.Any<SiteEmail>(), true)
+            betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
                 .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
 
             // Act
-            var actual = service.GetTicket(item, match, site, true);
+            var actual = service.GetTicket(item, match, true);
 
             // Assert
             Assert.Equal("-", actual.WinLoss);
@@ -72,11 +72,11 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             var item = new TicketEmailModel { IsLive = isLive, BetTypeId = betTypeId, IsMixParlay = isMixParlay, LiveHomeScore = 123, LiveAwayScore = 456 };
             var match = new Match();
             var site = new SiteEmail();
-            betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), Arg.Any<SiteEmail>(), true)
+            betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
                 .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
 
             // Act
-            var actual = service.GetTicket(item, match, site, true);
+            var actual = service.GetTicket(item, match, true);
 
             // Assert
             Assert.Equal(expected, actual.Score);

@@ -17,7 +17,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.NumberGame.Services.VoidTickets;
 
-
 public class VoidServiceTest
 {
     [Fact]
@@ -56,7 +55,7 @@ public class VoidServiceTest
     }
 
     [Fact]
-    public static async Task SendMessage_Successful_CallExpectedMessageService()
+    public static async Task SendMessage_Successful_CallExpectedSendMessageByPlatformService()
     {
         // Arrange
         var query = new VoidTicketsQuery
@@ -68,19 +67,14 @@ public class VoidServiceTest
             ReasonSC = "ReasonSC"
         };
         var tickets = new List<TicketEmailModel>();
-        const int messageId = 12345;
-        const int reasonId = 111;
-        var messageService = Substitute.For<SendMessageService>();
-        messageService.InsertMessage(Arg.Any<Message>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<bool>()).ReturnsForAnyArgs(messageId);
-        messageService.InsertReason(Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(reasonId);
-        var service = CreateService(messageService);
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
+        var service = CreateService(sendMessageByPlatformService);
 
         // Act
         await service.SendMessage(query, tickets);
 
         // Assert
-        await messageService.Received(1).InsertMessage(Arg.Is<Message>(x => x.ContentEnglish == "Content english"), 111, null, false);
-        await messageService.Received(1).InsertReason("Reason", "ReasonSC");
+        await sendMessageByPlatformService.Execute(Arg.Any<SendMessageTargetParam>());
     }
 
     [Fact]
@@ -104,51 +98,45 @@ public class VoidServiceTest
 
     public VoidServiceImp CreateService(SendEmailService emailService)
     {
-        var sessionService = Substitute.For<SessionService>();
         var repository = Substitute.For<Repository>();
         var loggingService = Substitute.For<LoggingService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
-            messageService,
+            sendMessageByPlatformService,
             emailService);
     }
 
-    public static VoidServiceImp CreateService(SendMessageService messageService)
+    public static VoidServiceImp CreateService(SendMessageByPlatformService sendEmailService)
     {
-        var sessionService = Substitute.For<SessionService>();
         var repository = Substitute.For<Repository>();
         var loggingService = Substitute.For<LoggingService>();
         var emailService = Substitute.For<SendEmailService>();
         var mapper = Substitute.For<IMapper>();
         return new VoidServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
-            messageService,
+            sendEmailService,
             emailService);
     }
 
     public static VoidServiceImp CreateService(Repository repository)
     {
-        var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        var messageService = Substitute.For<SendMessageService>();
+        var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var emailService = Substitute.For<SendEmailService>();
         var mapper = Substitute.For<IMapper>();
         mapper.Map<EmailVoidModel>(null).ReturnsForAnyArgs(new EmailVoidModel());
         return new VoidServiceImp(
             mapper,
-            sessionService,
             repository,
             loggingService,
-            messageService,
+            sendMessageByPlatformService,
             emailService);
     }
 }
