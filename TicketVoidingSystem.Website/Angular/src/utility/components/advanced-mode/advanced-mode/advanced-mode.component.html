@@ -299,6 +299,12 @@
                   <input type="text" [(ngModel)]="item.value" [disabled]="item.flag" decimalOnly />
                 </div>
               </div>
+              <div class="input-area" *ngIf="betTeam.inputs.length > 0">
+                <div class="right-input mg-right-10" *ngFor="let input of betTeam.inputs">
+                  {{input.name}}
+                  <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
+                </div>
+              </div>
             </div>
           </div>
         </div>
