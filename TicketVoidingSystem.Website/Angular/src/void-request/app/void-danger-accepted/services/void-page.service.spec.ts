@@ -53,6 +53,7 @@ class Helper {
     isMainMatch: false,
     isPoolHouseAffected: false,
     jollyViewLicensee: new AffectedLicensee,
+    jollySportsCVLicensee: new AffectedLicensee,
     isAllNonLiveTickets: true
   };
   static readonly fakeSqlResultError: SqlResult = {

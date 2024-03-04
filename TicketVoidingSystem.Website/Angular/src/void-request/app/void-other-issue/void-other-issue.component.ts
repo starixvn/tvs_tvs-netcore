@@ -57,7 +57,6 @@ export class VoidOtherIssueComponent implements OnInit {
   issue = new IssueInfo();
   reason = new VoidedReason();
   templateValue = new TemplateValue();
-
   isBlockBetList: boolean;
   logInfoDetails: LogInfoDetail[] = [];
   groupBetTypes: GroupBetTypesModel;
@@ -70,15 +69,14 @@ export class VoidOtherIssueComponent implements OnInit {
   correctOdds: string = null;
   isPoolHouseAffected: boolean;
   isShowVar?: boolean;
-
   affectedLicensee = new AffectedLicensee();
   affectedInstantLicensee = new AffectedLicensee();
   chinaViewLicensee = new AffectedLicensee();
   jollyViewLicensee = new AffectedLicensee();
+  jollySportsCvLicensee = new AffectedLicensee();
   cashOutLicensee = new AffectedLicensee();
   cancelCashOutLicensee = new AffectedLicensee();
   voidQuery = new VoidTicketsQuery();
-
   uncheckedTransIds: string[] = [];
   singleTransIds: string[];
   parlayTransIds: string[];
@@ -191,8 +189,10 @@ export class VoidOtherIssueComponent implements OnInit {
       this.affectedInstantLicensee.show = true;
       this.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
       this.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
+      this.jollySportsCvLicensee.licenseesName = data.jollySportsCvLicenseesName;
       this.chinaViewLicensee.show = true;
       this.jollyViewLicensee.show = true;
+      this.jollySportsCvLicensee.show = true;
       this.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
       this.cashOutLicensee.show = true;
       this.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
@@ -485,6 +485,7 @@ export class VoidOtherIssueComponent implements OnInit {
     return this.affectedLicensee.show && this.affectedLicensee.licenseesName.length > 0
       || this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName.length > 0
       || this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName.length > 0
+      || this.jollySportsCvLicensee.show && this.jollySportsCvLicensee.licenseesName.length > 0
       || this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName.length > 0
       || this.cashOutLicensee.show && this.cashOutLicensee.licenseesName.length > 0
       || this.cancelCashOutLicensee.show && this.cancelCashOutLicensee.licenseesName.length > 0;

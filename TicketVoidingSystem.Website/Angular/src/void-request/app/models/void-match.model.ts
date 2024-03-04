@@ -17,7 +17,6 @@ export class VoidMatch {
   voidReason?: VoidedReason;
   templateValue?: TemplateValue;
   logInfoDetail?: LogInfoDetail;
-  //filterWithHdp?: FilterWithHdpModel;
   voidTicketsFull?: TicketsModel;
   pagingVoidTickets: PagingModel;
   isShowTicketFull: boolean;
@@ -27,13 +26,13 @@ export class VoidMatch {
   affectedInstantLicensee: AffectedLicensee;
   chinaViewLicensee: AffectedLicensee;
   jollyViewLicensee: AffectedLicensee;
+  jollySportsCVLicensee: AffectedLicensee;
   cashOutLicensee: AffectedLicensee;
   cancelCashOutLicensee: AffectedLicensee;
   isShowTemplateMessage: boolean;
   templateMessage?: Message;
   isAllLiveTickets: boolean;
   isAllNonLiveTickets: boolean;
-
   isCheckedEarlyEvent: boolean;
   wrongMarket?: string;
   actualMarket?: string;
@@ -49,6 +48,7 @@ export class VoidMatch {
     this.affectedInstantLicensee = new AffectedLicensee();
     this.chinaViewLicensee = new AffectedLicensee();
     this.jollyViewLicensee = new AffectedLicensee();
+    this.jollySportsCVLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
     this.cancelCashOutLicensee = new AffectedLicensee();
     this.voidReason = new VoidedReason();

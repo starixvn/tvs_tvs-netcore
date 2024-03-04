@@ -39,7 +39,7 @@ export class FilterComponent implements OnInit {
   @Input() cashOutLicensee = new AffectedLicensee();
   @Input() chinaViewLicensee = new AffectedLicensee();
   @Input() jollyViewLicensee = new AffectedLicensee();
-
+  @Input() jollySportsCvLicensee = new AffectedLicensee();
   @Output() searchEvent = new EventEmitter<GetTicketsQuery>();
   @Output() viewLogInfoEvent = new EventEmitter<GetTicketsQuery>();
   @Output() changeMatchEvent = new EventEmitter<string>();
@@ -647,6 +647,7 @@ export class FilterComponent implements OnInit {
     return this.affectedLicensee.show && this.affectedLicensee.licenseesName?.length > 0 ||
       this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName?.length > 0 ||
       this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName?.length > 0 ||
+      this.jollySportsCvLicensee.show && this.jollySportsCvLicensee.licenseesName?.length > 0 ||
       this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName?.length > 0 ||
       this.cashOutLicensee.show && this.cashOutLicensee.licenseesName?.length > 0;
   }

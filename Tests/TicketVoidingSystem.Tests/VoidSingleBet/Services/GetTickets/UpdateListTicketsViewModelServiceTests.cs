@@ -37,6 +37,7 @@ public class UpdateListTicketsViewModelServiceTests
             CashOutLicenseesName = "123, 343",
             ChinaViewLicenseesName = "343",
             JollyViewLicenseesName = "123",
+            JollySportsCvLicenseesName = "",
             BetTypeNameReplaceMessage = betTypeNameReplaceMessage,
             FromTransTime = new DateTime(2023, 5, 7, 2, 2, 2).ZoneManila(),
             ToTransTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila(),

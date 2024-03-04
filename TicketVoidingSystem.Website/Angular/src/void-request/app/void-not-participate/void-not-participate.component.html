@@ -51,6 +51,12 @@
             <span class="affected-licensees-highlight"
               (click)="onClickCopyLicenseesToClipboard(voidPageItem.jollyViewLicensee.licenseesName)">{{voidPageItem.jollyViewLicensee.licenseesName}}</span>
           </div>
+          <div class="jollysportscv-licensee"
+            *ngIf="voidPageItem.jollySportsCvLicensee.show && voidPageItem.jollySportsCvLicensee.licenseesName.length > 0">
+            <span class="note">JollySportsCV Licensee Affected List:</span><br />
+            <span class="affected-licensees-highlight"
+              (click)="onClickCopyLicenseesToClipboard(voidPageItem.jollySportsCvLicensee.licenseesName)">{{voidPageItem.jollySportsCvLicensee.licenseesName}}</span>
+          </div>
           <div class="instant-licensee"
             *ngIf="voidPageItem.affectedInstantLicensee.show && voidPageItem.affectedInstantLicensee.licenseesName.length > 0">
             <span class="note">Instant OU Licensee Affected List:</span><br />

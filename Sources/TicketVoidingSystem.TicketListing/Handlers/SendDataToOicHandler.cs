@@ -31,6 +31,7 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         await SendForNormalLicensee(request.Queries, affectedTickets, resultLicensees);
         await SendForChinaViewLicensee(request.Queries, affectedTickets, resultLicensees);
         await SendForJollySportLicensee(request.Queries, affectedTickets, resultLicensees);
+        await SendForJollySportsCvLicensee(request.Queries, affectedTickets, resultLicensees);
 
         return resultLicensees;
     }
@@ -66,6 +67,18 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
             var result = await sendDataToOicService.Send(jollySportQueries, affectedTickets);
             result.IsChinaView = false;
             result.SpecialPlatform = SpecialPlatformConstant.JollySports;
+            response.Add(result);
+        }
+    }
+
+    private async Task SendForJollySportsCvLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
+    {
+        var jollySportsCvQueries = queries.Where(x => x.SpecialPlatform == SpecialPlatformConstant.JollySportsCv).ToList();
+        if (jollySportsCvQueries.Any())
+        {
+            var result = await sendDataToOicService.Send(jollySportsCvQueries, affectedTickets);
+            result.IsChinaView = false;
+            result.SpecialPlatform = SpecialPlatformConstant.JollySportsCv;
             response.Add(result);
         }
     }

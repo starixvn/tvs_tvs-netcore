@@ -41,26 +41,21 @@ export class AppComponent implements OnInit, AfterViewInit {
   tooltip = new Tooltip();
   notification = new Notification();
   messagesResponse = new MessagesResponse();
-
   summaryItems: SummaryItem[];
   summaryItemsGroupByLicensee: SummaryItem[];
   isShowSummary: boolean;
   showSendColumn: boolean;
   betTypesAffected: string;
   isShowListBetTypeAffected: boolean;
-
   matchViewModel: MatchModel;
   isShowMatch: boolean;
-
   commonQuery = new CommonQuery();
   currentItem: SummaryItem;
   getTicketsDetailQuery: GetTicketsDetailQuery;
   ticketsModel = new TicketsModel();
   titleTicketsListing: string;
   isShowTickets: boolean;
-
   exportExcelQuery: ExportExcelQuery;
-
   sendFileQueries: SendFileQuery[];
   sendFileItems: SummaryItem[];
   licenseeFiles: LicenseeFile[];
@@ -307,6 +302,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   getPrefixLicensees(response: AmendmentReponse): string {
     if (response.isChinaView) {
       return 'China View Licensee: ';
+    }
+    if (response.specialPlatform === SpecialPlatform.Jolly_Sports_CV) {
+      return 'JollySportsCV Licensee: ';
     }
     return response.specialPlatform === SpecialPlatform.Jolly_Sports ? 'Jolly Sports Licensee: ' : 'Normal Licensee: ';
   }

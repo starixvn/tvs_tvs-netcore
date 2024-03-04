@@ -112,6 +112,7 @@ export class VoidRedCardComponent implements OnInit {
     return voidMatch.affectedLicensee.show && voidMatch.affectedLicensee.licenseesName.length > 0
       || voidMatch.chinaViewLicensee.show && voidMatch.chinaViewLicensee.licenseesName.length > 0
       || voidMatch.jollyViewLicensee.show && voidMatch.jollyViewLicensee.licenseesName.length > 0
+      || voidMatch.jollySportsCVLicensee.show && voidMatch.jollySportsCVLicensee.licenseesName.length > 0
       || voidMatch.affectedInstantLicensee.show && voidMatch.affectedInstantLicensee.licenseesName.length > 0
       || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0
       || voidMatch.cancelCashOutLicensee.show && voidMatch.cancelCashOutLicensee.licenseesName.length > 0;

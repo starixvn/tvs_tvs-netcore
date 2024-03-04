@@ -41,6 +41,7 @@ class Helper {
     isMainMatch: false,
     isPoolHouseAffected: false,
     jollyViewLicensee: new AffectedLicensee,
+    jollySportsCVLicensee: new AffectedLicensee,
     cancelCashOutLicensee: new AffectedLicensee,
     isAllNonLiveTickets: true
   };

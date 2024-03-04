@@ -17,6 +17,7 @@ public class TicketsViewModel
     public string LicenseesName { get; set; }
     public string ChinaViewLicenseesName { get; set; }
     public string JollyViewLicenseesName { get; set; }
+    public string JollySportsCvLicenseesName { get; set; }
     public string InstantLicenseesName { get; set; }
     public string CashOutLicenseesName { get; set; }
     public string CancelCashOutLicenseesName { get; set; }

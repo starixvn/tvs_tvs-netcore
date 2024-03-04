@@ -17,16 +17,15 @@ export class VoidPageCommonItem {
   affectedLicensee: AffectedLicensee;
   chinaViewLicensee: AffectedLicensee;
   jollyViewLicensee: AffectedLicensee;
+  jollySportsCvLicensee: AffectedLicensee;
   affectedInstantLicensee: AffectedLicensee;
   cashOutLicensee: AffectedLicensee;
   cancelCashOutLicensee: AffectedLicensee;
-
   subIssueType?: SubIssueType;
   displayIssueTypeName: string;
   voidReason?: VoidedReason;
   matchModel?: MatchModel;
   detailViewModel: RequestDetailViewModel;
-
   templateMessage?: Message;
   isLoadedTicketFull: boolean;
   isShowTemplateMessage: boolean;
@@ -40,6 +39,7 @@ export class VoidPageCommonItem {
     this.affectedInstantLicensee = new AffectedLicensee();
     this.chinaViewLicensee = new AffectedLicensee();
     this.jollyViewLicensee = new AffectedLicensee();
+    this.jollySportsCvLicensee = new AffectedLicensee();
     this.cashOutLicensee = new AffectedLicensee();
     this.cancelCashOutLicensee = new AffectedLicensee();
   }

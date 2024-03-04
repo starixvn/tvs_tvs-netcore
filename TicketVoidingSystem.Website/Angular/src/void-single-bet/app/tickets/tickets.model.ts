@@ -26,8 +26,8 @@ export class TicketsModel {
     cashOutLicenseesName: string;
     chinaViewLicenseesName: string;
     jollyViewLicenseesName: string;
+    jollySportsCvLicenseesName: string;
     betTypeNameReplaceMessage: Message;
-
     groups: Array<GroupModel>;
     pagingModel: PagingModel;
     iconCheckBox: IconCheckBox;

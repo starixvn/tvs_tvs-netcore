@@ -37,6 +37,7 @@ class Helper {
     chinaViewLicensee: new AffectedLicensee(),
     cashOutLicensee: new AffectedLicensee(),
     jollyViewLicensee: new AffectedLicensee(),
+    jollySportsCvLicensee: new AffectedLicensee(),
     isShowTemplateMessage: true,
     templateMessage: new Message(),
     detailViewModel: null,

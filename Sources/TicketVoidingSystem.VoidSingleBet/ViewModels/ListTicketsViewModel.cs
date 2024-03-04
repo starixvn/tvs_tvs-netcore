@@ -30,6 +30,8 @@ public class ListTicketsViewModel
 
     public string JollyViewLicenseesName { get; set; }
 
+    public string JollySportsCvLicenseesName { get; set; }
+
     public string Id { get; set; }
 
     public IEnumerable<Group<TicketViewModel>> Groups { get; set; }
