@@ -93,4 +93,7 @@ public class LanguageCacheRef : ICacheRef
 
     public string GetTableGamesBetTypeName(string tableGamesBetTypeId)
         => remotingRefService.GetTableGamesBetType(tableGamesBetTypeId, CurrentLanguage);
+
+    public string GetVirtualSportMatchCodeFormat(string matchCode, string refId)
+        => remotingRefService.GetVirtualSportMatchCodeFormat(matchCode, refId, CurrentLanguage);
 }
