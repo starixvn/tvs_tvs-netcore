@@ -83,7 +83,7 @@ public class VoidTicketsHandler : IRequestHandler<VoidTicketsRequest, List<Resul
     private async Task<IEnumerable<Result>> HandlerVoidedTickets(VoidTicketsQuery query, VoidTicketsModel model, string warningCrickets)
     {
         var results = new List<Result>();
-        if (!(model.Tickets?.Count() > 0))
+        if (!model.Tickets.Any())
         {
             return Enumerable.Empty<Result>();
         }

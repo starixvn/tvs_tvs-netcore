@@ -149,6 +149,7 @@ export class FilterComponent implements OnInit {
     data.issueTypes = data.issueTypes.filter(
       x => x.issueTypeId.toString() !== IssueTypeConstant.EARLY_KICK_OFF && x.issueTypeId.toString() !== IssueTypeConstant.WRONG_KICK_OFF
         && x.issueTypeId.toString() !== IssueTypeConstant.ABNORMAL_BET && x.issueTypeId.toString() !== IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER
+        && x.issueTypeId.toString() !== IssueTypeConstant.RECOVER_TICKET
     );
 
     this.issueTypeModel = data;

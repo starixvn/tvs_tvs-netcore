@@ -4,7 +4,7 @@ using NSubstitute;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.SharedApi.Models;
-using TicketVoidingSystem.SharedApi.Services;
+using TicketVoidingSystem.SharedApi.Services.SharedApi;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Services;

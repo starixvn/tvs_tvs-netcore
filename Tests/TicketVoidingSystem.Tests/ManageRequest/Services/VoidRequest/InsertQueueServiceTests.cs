@@ -6,9 +6,11 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using Xunit;
+using MapTicketsService = TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue.MapTicketsService;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
 
@@ -18,13 +20,17 @@ public class InsertQueueServiceTests
     private readonly IDynamicRepository repository;
     private readonly InsertQueueServiceImp service;
     private readonly SessionService sessionService;
+    private readonly MapTicketsService mapTicketsService;
+    private readonly ValidationTicketsService validationTicketsService;
 
     public InsertQueueServiceTests()
     {
         repository = Substitute.For<IDynamicRepository>();
         sessionService = Substitute.For<SessionService>();
         insertVoidingHistoryService = Substitute.For<InsertVoidingHistoryService>();
-        service = new InsertQueueServiceImp(repository, sessionService, insertVoidingHistoryService);
+        mapTicketsService = Substitute.For<MapTicketsService>();
+        validationTicketsService = Substitute.For<ValidationTicketsService>();
+        service = new InsertQueueServiceImp(repository, sessionService, mapTicketsService, validationTicketsService, insertVoidingHistoryService);
     }
 
     [Theory]
@@ -74,7 +80,7 @@ public class InsertQueueServiceTests
             validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
             validVoidCricketTickets, validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14
         };
-
+        var mergeTicketsForInsertQueue = new List<RequestDetailTicketModel>();
         insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>())
             .ReturnsForAnyArgs(1);
         repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes)
@@ -82,6 +88,8 @@ public class InsertQueueServiceTests
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
+        mapTicketsService.SetVoidingTypeForTickets(Arg.Any<CheckTicketValidationOutput>()).ReturnsForAnyArgs(mergeTicketsForInsertQueue);
+        validationTicketsService.RecheckTicketsStatus(query, default).ReturnsForAnyArgs(new CheckTicketValidationOutput());
 
         // Act
         await service.InsertTicketVoidingQueue(query);
@@ -224,7 +232,8 @@ public class InsertQueueServiceTests
             IssueTypeId = 1,
             RequestId = 123
         };
-
+        var requestDetailTicketModel = new List<RequestDetailTicketModel>();
+        mapTicketsService.MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), query.RequestId, query.IssueTypeId).ReturnsForAnyArgs(requestDetailTicketModel);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
 
         // Act

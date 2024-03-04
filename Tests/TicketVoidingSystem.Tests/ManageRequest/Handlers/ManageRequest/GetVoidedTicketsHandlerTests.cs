@@ -68,7 +68,7 @@ public class GetVoidedTicketsHandlerTests
         var groupViewModel = new Group<VoidedTicketViewModel>();
         mapTicketsService
             .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
-                request.IssueTypeId).ReturnsForAnyArgs(groupViewModel);
+                Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
         await handler.Handle(request, cancellationToken);
 
@@ -98,7 +98,7 @@ public class GetVoidedTicketsHandlerTests
         var groupViewModel = new Group<VoidedTicketViewModel>();
         mapTicketsService
             .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
-                request.IssueTypeId).ReturnsForAnyArgs(groupViewModel);
+                Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
         await handler.Handle(request, cancellationToken);
 
@@ -129,7 +129,7 @@ public class GetVoidedTicketsHandlerTests
         var groupViewModel = new Group<VoidedTicketViewModel>();
         mapTicketsService
             .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
-                request.IssueTypeId).ReturnsForAnyArgs(groupViewModel);
+                Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
         await handler.Handle(request, cancellationToken);
 

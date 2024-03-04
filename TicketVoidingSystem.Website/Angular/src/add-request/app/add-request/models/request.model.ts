@@ -4,8 +4,8 @@ import { AbnormalAccountModel } from './abnormal-account.model';
 import { AbnormalBetModel } from './abnormal-bet.model';
 import { EventDetailModel } from './event-detail.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
-import { NotParticipateModel } from './event-not-participate.model';
 import { EarlyKickOffModel } from './event-eko.model';
+import { NotParticipateModel } from './event-not-participate.model';
 import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { EventTicket14Model } from './event-ticket-14.model';
@@ -13,6 +13,7 @@ import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
+import { RecoverTicketModel } from './recover-ticket.model';
 export class RequestModel { // Rename AddRequestModel or remove this
   filter: FilterModel;
   eventDetail: EventDetailModel;
@@ -29,6 +30,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   reducedOverModels: ReducedOverModel[];
   notParticipateModels: NotParticipateModel[];
   earlyKickOffModels: EarlyKickOffModel[];
+  recoverTicketModel: RecoverTicketModel;
   others: OthersModel;
 
   constructor() {
@@ -38,6 +40,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.abnormalAccountModel = new AbnormalAccountModel();
     this.eventTicket14Model = new EventTicket14Model();
     this.duplicateTicketsModel = new DuplicateTicketsModel();
+    this.recoverTicketModel = new RecoverTicketModel();
     this.wrongScoreModels = [];
     this.dangerAcceptedModels = [];
     this.wrongHdpModels = [];

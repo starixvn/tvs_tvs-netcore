@@ -19,7 +19,7 @@ class Helper {
     betType: 'Handicap',
     odds: '<span class="underdog">9.3</span> <span class="oddstype"></span>',
     stake: '<div class="stake ">10</div>',
-    winloss: '',
+    winLoss: '',
     currency: 'UUS',
     status: '<div class="status1">Running</div>',
     creator: 'AB88UUS011260',
@@ -39,8 +39,8 @@ class Helper {
         tickets: [Helper.fakeTicketModel]
       }
     ],
-    totalVoidedTickets: 4,
-    totalCancelCashOut: 0,
+    totalTicketsProcessed: 4,
+    totalCancelCashOutProcessed: 0,
     licenseeNames: '',
     generalBetTypeCombinations: '',
     cancelCashOutLicenseesName: ''
@@ -69,7 +69,11 @@ describe('TicketsComponent', () => {
 
   it('#pagingEvent should call emit of pagingChange with expected param', async() => {
     // Arrange
-    const { instance } = await shallow.render();
+    const { instance } = await shallow.render({
+      bind: {
+        issueTypeId: 1
+      }
+    });
     instance.pagingChange.emit = jest.fn();
     instance.paging = new PagingModel();
 
@@ -82,7 +86,11 @@ describe('TicketsComponent', () => {
 
   it('#exportExcel should call emit of exportExcelEvent', async() => {
     // Arrange
-    const { instance } = await shallow.render();
+    const { instance } = await shallow.render({
+      bind: {
+        issueTypeId: 1
+      }
+    });
     instance.exportExcelEvent.emit = jest.fn();
 
     // Action
@@ -95,8 +103,9 @@ describe('TicketsComponent', () => {
   it('should display title and icon exportexcel when have tickets', async () => {
     // Arrange
     const { fixture, find } = await shallow
-      .render('<tickets [model]="tickets"></tickets>', {
+      .render('<tickets [model]="tickets" [issueTypeId]="issueTypeId"></tickets>', {
         bind: {
+          issueTypeId: 1,
           tickets: Helper.fakeTicketsModel
         }
       });
@@ -110,8 +119,9 @@ describe('TicketsComponent', () => {
   it('should display "There is no data" when have not tickets', async () => {
     // Arrange
     const { fixture, find } = await shallow
-      .render('<tickets [model]="tickets"></tickets>', {
+      .render('<tickets [model]="tickets" [issueTypeId]="issueTypeId"></tickets>', {
         bind: {
+          issueTypeId: 1,
           tickets: new TicketsModel()
         }
       });
@@ -123,7 +133,12 @@ describe('TicketsComponent', () => {
 
   it('when PagingComponent modelChange event emit, #pagingEvent should be called', async () => {
     // Arrange
-    const { fixture, findComponent, instance } = await shallow.render();
+    const { fixture, findComponent, instance } = await shallow.render({
+      bind: {
+        issueTypeId: 1,
+        model: Helper.fakeTicketsModel
+      }
+    });
     fixture.detectChanges();
     instance.pagingEvent = jest.fn();
     const pagingComponent = findComponent(PagingComponent);

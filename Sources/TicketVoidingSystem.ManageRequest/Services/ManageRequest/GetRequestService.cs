@@ -81,6 +81,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.AbnormalAccountModel = MapEventAbnormalAccount(secondResultSet);
                 break;
 
+            case IssueTypeConstant.RecoverTicket:
+                viewModel.RecoverTicketModel = MapEventRecoverTicket(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
                 break;
@@ -279,6 +283,18 @@ public class GetRequestServiceImp : GetRequestService
             StatusIds = model.StatusIds,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
+            SubIssueTypeId = model.SubIssueTypeId
+        };
+    }
+
+    private static RecoverTicketViewModel MapEventRecoverTicket(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        return new RecoverTicketViewModel
+        {
+            TransIds = model.TransIds,
+            FilterBy = model.FilterBy,
+            ProductIds = model.ProductIds,
             SubIssueTypeId = model.SubIssueTypeId
         };
     }

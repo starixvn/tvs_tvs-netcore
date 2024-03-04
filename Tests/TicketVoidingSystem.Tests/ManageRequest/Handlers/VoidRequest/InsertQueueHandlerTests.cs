@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
-using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.SignalR;

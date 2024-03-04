@@ -4,7 +4,7 @@ using SpecialDelete.RecoverByBetId.Repositories;
 using SpecialDelete.RecoverByBetId.Services.GetTickets;
 using SpecialDelete.RecoverByBetId.Services.RecoverTickets;
 using SpecialDelete.RecoverByBetId.ViewModels;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 

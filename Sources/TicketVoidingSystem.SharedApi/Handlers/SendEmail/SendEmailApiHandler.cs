@@ -6,7 +6,7 @@ using MediatR;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
-using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using TicketVoidingSystem.SharedApi.Models;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SendEmail;

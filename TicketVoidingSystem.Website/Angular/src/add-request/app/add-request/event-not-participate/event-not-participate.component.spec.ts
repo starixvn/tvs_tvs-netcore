@@ -86,6 +86,7 @@ describe('EventNotParticipateComponent', () => {
   it('ngOnInit should call #updateModelWhenChangeMatchId when isEdit', async () => {
     const { instance } = await shallow
     .mock(EventNotParticipateService, { assignModelsToEvents: jest.fn().mockReturnValue(Helper.fakeLogInfoNotParticipate) })
+    .mock(FilterNotParticipateService, { initDefaultBetTypeSelection: jest.fn().mockReturnValue(null) })
     .render({
       bind: {
         isEdit: true,

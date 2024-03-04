@@ -67,12 +67,14 @@ export class TicketListComponent implements OnInit, OnChanges {
       voidingHistoryIds: this.generalInfoViewModel.generalInfoModel.voidingHistoryIds,
       issueTypeId: this.requestDetail.request.issueTypeId,
       pageIndex: this.paging.page - 1,
-      pageSize: this.paging.pageSize
+      pageSize: this.paging.pageSize,
+      singleTransIds: this.generalInfoViewModel.generalInfoModel.singleTransIds,
+      recoverTime: this.generalInfoViewModel.generalInfoModel.recoveredTimeString
     };
     this.blockBetList = true;
     this.tickets = await this.appService.getVoidedTickets(this.query);
     this.blockBetList = false;
-    this.paging.total = this.tickets.totalVoidedTickets;
+    this.paging.total = this.tickets.totalTicketsProcessed;
   }
 
   pagingEvent() {
@@ -97,8 +99,8 @@ export class TicketListComponent implements OnInit, OnChanges {
     if (this.generalInfoViewModel.generalInfoModel && this.tickets) {
       this.generalInfoViewModel.generalInfoModel.licenseeNames = this.tickets.licenseeNames;
       this.generalInfoViewModel.generalInfoModel.cancelCashOutLicenseesName = this.tickets.cancelCashOutLicenseesName;
-      this.generalInfoViewModel.generalInfoModel.totalVoidedTickets = this.tickets.totalVoidedTickets;
-      this.generalInfoViewModel.generalInfoModel.totalCancelCashOut = this.tickets.totalCancelCashOut;
+      this.generalInfoViewModel.generalInfoModel.totalTicketsProcessed = this.tickets.totalTicketsProcessed;
+      this.generalInfoViewModel.generalInfoModel.totalCancelCashOutProcessed = this.tickets.totalCancelCashOutProcessed;
       this.generalInfoViewModel.generalInfoModel.reason = this.issue.subIssueTypeName;
       this.generalInfoViewModel.generalInfoModel.scoreResult = this.getScoreResult(this.requestDetail.event);
       this.generalInfoViewModel.generalInfoModel.generalBetTypeCombinations = this.tickets.generalBetTypeCombinations;
@@ -120,7 +122,12 @@ export class TicketListComponent implements OnInit, OnChanges {
     return !this.isAbnormalAccountIssueType(requestDetail)
       && !(this.isAbnormalBetIssueType(requestDetail) && requestDetail.event.filterBy === AbnormalFilterBy.MIX_PARLAY)
       && !(this.isDuplicateTickets(requestDetail) && requestDetail.duplicateTicketsModel.filterBy === AbnormalFilterBy.MIX_PARLAY)
-      && !this.isArchivedTicketIssueType();
+      && !this.isArchivedTicketIssueType()
+      && !this.isRecoverTicket(requestDetail);
+  }
+
+  isRecoverTicket(requestDetail: RequestDetailViewModel) {
+    return StaticService.isRecoverTicket(requestDetail.request?.issueTypeId.toString());
   }
 
   isAbnormalAccountIssueType(requestDetail: RequestDetailViewModel): boolean {

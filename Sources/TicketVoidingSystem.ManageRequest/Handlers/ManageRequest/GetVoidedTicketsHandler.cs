@@ -29,8 +29,8 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         var voidedTickets = await getVoidedTicketsService.GetTickets(request);
         var viewModel = new VoidedTicketsViewModel
         {
-            TotalVoidedTickets = voidedTickets.Count(x => !x.IsCancelCashOut),
-            TotalCancelCashOut = voidedTickets.Count(x => x.IsCancelCashOut),
+            TotalTicketsProcessed = voidedTickets.Count(x => !x.IsCancelCashOut),
+            TotalCancelCashOutProcessed = voidedTickets.Count(x => x.IsCancelCashOut),
             LicenseeNames = CombineLicensee(voidedTickets),
             CancelCashOutLicenseesName = CombineCancelCashOutLicensee(voidedTickets),
             Groups = new List<Group<VoidedTicketViewModel>>()
@@ -49,7 +49,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
         var index = query.PageIndex * query.PageSize + 1;
         foreach (var group in groups)
         {
-            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query.IssueTypeId);
+            var currentGroup = mapTicketsService.MapToGroupVoidedTicketsViewModel(group, match, index, query);
             viewModel.Groups.Add(currentGroup);
             index += currentGroup.Tickets.Count();
         }

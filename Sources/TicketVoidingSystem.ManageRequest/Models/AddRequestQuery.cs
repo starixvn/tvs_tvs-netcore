@@ -45,6 +45,8 @@ public class AddRequestQuery
 
     public string? MarkTransIds { get; set; }
 
+    public string? UnMarkTransIds { get; set; }
+
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreInfo { get; set; }
 
     public AbnormalAccountViewModel? AbnormalAccountInfo { get; set; }
@@ -70,6 +72,8 @@ public class AddRequestQuery
     public IEnumerable<NotParticipateViewModel>? NotParticipateInfo { get; set; }
 
     public DuplicateTicketsViewModel? DuplicateTicketsInfo { get; set; }
+
+    public RecoverTicketViewModel? RecoverTicketInfo { get; set; }
 
     public string TransInfoJson { get; set; }
 

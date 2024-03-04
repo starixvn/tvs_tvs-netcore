@@ -40,13 +40,18 @@
           <span class="row no-gutters">Reason: {{generalInfoViewModel.generalInfoModel.reason}}<br/></span>
           <span *ngIf="!isAbnormalBetMixParlay()" class="row no-gutters">Results: {{generalInfoViewModel.generalInfoModel.scoreResult}}<br/></span>
         </div>
-        <span class="row no-gutters">Total voided tickets: {{generalInfoViewModel.generalInfoModel.totalVoidedTickets}}<br/></span>
-        <span class="row no-gutters">Cancel cash out affected: {{generalInfoViewModel.generalInfoModel.cancelCashOutLicenseesName}}<br/></span>
-        <span class="row no-gutters">Cancel cash out: {{generalInfoViewModel.generalInfoModel.totalCancelCashOut}}<br/></span>
+        <div *ngIf="!isRecoverTicket()">
+          <span class="row no-gutters">Total voided tickets: {{generalInfoViewModel.generalInfoModel.totalTicketsProcessed}}<br/></span>
+          <span class="row no-gutters">Cancel cash out affected: {{generalInfoViewModel.generalInfoModel.cancelCashOutLicenseesName}}<br/></span>
+          <span class="row no-gutters">Cancel cash out: {{generalInfoViewModel.generalInfoModel.totalCancelCashOutProcessed}}<br/></span>
+        </div>
+        <div *ngIf="isRecoverTicket()">
+          <span class="row no-gutters">Total recovered tickets: {{generalInfoViewModel.generalInfoModel.totalTicketsProcessed}}<br/></span>
+        </div>
         <span class="row no-gutters">Decided by: {{generalInfoViewModel.generalInfoModel.decidedBy}}<br/></span>
         <span class="row no-gutters">Requested by: {{generalInfoViewModel.generalInfoModel.requestedBy}}<br/></span>
          
-        <div class="mt-2" *ngIf="generalInfoViewModel.userVoidMessages?.length > 0">
+        <div class="mt-2" *ngIf="isShowVoidMessages()">
           <div class="mb-2 no-gutters" *ngFor="let userVoidMessage of generalInfoViewModel.userVoidMessages">
             <span class="row no-gutters">Voided by: {{userVoidMessage.voidedBy}}<br/></span>
             <div *ngFor="let message of userVoidMessage.messages"> 

@@ -2,9 +2,10 @@
 using SpecialDelete.RecoverBet.ViewModels;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 
 namespace SpecialDelete.RecoverBet.Services.RecoverTickets;
 

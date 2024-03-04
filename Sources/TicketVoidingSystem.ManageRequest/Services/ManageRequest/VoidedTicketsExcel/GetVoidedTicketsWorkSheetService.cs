@@ -31,9 +31,8 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
 
     public async Task BindingContent(ExcelWorksheet worksheet, GetVoidedTicketsQuery model)
     {
-        worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId ?? 0);
-        var match = model.IssueTypeId == IssueTypeConstant.AbnormalAccount || model.MatchId is null or 0
-            ? null : await getVoidedTicketsService.GetMatchInfo(model.MatchId.Value);
+        worksheet.Cells[1, 1].Value = cellService.CreateTitle(model.MatchId ?? 0, model.IssueTypeId);
+        var match = IsNotAddMatchForExcel(model.IssueTypeId, model.MatchId) ? null : await getVoidedTicketsService.GetMatchInfo(model.MatchId.Value);
         matchService.UpdateMatchInfoFromRemotingRef(match);
         if (match != null && match.SportType.IsVirtualSport())
         {
@@ -42,7 +41,12 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
 
         AddMatchContent(worksheet, match);
         await AddTicketsContent(worksheet, model, match);
-        cellService.SetStyle(worksheet);
+        cellService.SetStyle(worksheet, model.IssueTypeId);
+    }
+
+    private static bool IsNotAddMatchForExcel(int issueTypeId, int? matchId)
+    {
+        return issueTypeId == IssueTypeConstant.AbnormalAccount || issueTypeId == IssueTypeConstant.RecoverTicket || matchId is null or 0;
     }
 
     private void AddMatchContent(ExcelWorksheet worksheet, Match? match)
@@ -52,7 +56,7 @@ public class GetVoidedTicketsWorkSheetService : WorkSheetService<GetVoidedTicket
 
     private async Task AddTicketsContent(ExcelWorksheet worksheet, GetVoidedTicketsQuery model, Match match)
     {
-        var startRow = 8;
+        var startRow = model.IssueTypeId != IssueTypeConstant.RecoverTicket ? 8 : 5;
         var groupsExcelTickets = await getVoidedTicketsForExcelService.GetGroupsExcelTickets(model, match);
         foreach (var group in groupsExcelTickets)
         {

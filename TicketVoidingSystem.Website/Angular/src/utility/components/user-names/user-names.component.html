@@ -1,6 +1,6 @@
 <div class="no-gutters" [ngClass]="usernameComponentCss">
     <div class="col-form-label">Username(s)</div>
-    <div class="col-12 col-sm-8" [ngClass]="inputUsernameCss" [ngStyle]="inputUsernameStyle">
+    <div class="col-12" [ngClass]="inputUsernameCss" [ngStyle]="inputUsernameStyle">
         <div #usernames class="input-username" [ngClass]="{'point-event-none disabled-input': disabled}"
             (click)="focusUsername()" (mousedown)="$event.preventDefault()">
             <div *ngIf="groupUsername.items.length > 0">
@@ -26,7 +26,7 @@
             <span class="note note-invalid-username">(*) Invalid Username(s) are highlighted in RED.
                 <span class="note note-moved-username mg-left-5">(*) Duplicated Usernames are highlighted in ORANGE.</span>
             </span>
-            <span class="red">Max: SMA = 50 / Member = 2000</span>
+            <span class="number-item red">Max: SMA = 50 / Member = 2000</span>
         </div>
         <div class="flex-between" *ngIf="isAbException">
             <span>
@@ -35,7 +35,7 @@
                 <span class="note note-existed-username">(*) Existed Username</span>
             </span>
 
-            <span class="red">Max: {{maxUsername}} Usernames</span>
+            <span class="number-item red">Max: {{maxUsername}} Usernames</span>
         </div>
     </div>
 </div>

@@ -29,6 +29,12 @@ public class GeneralInfoModel
     public string NegativeBalanceUsers { get; set; }
 
     public string VoidingHistoryIds { get; set; }
+
+    public string SingleTransIds { get; set; }
+
+    public DateTime RecoveredTime { get; set; }
+
+    public string RecoveredTimeString { get; set; }
 }
 
 public class GroupUserVoidMessage

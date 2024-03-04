@@ -13,12 +13,12 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
 public class MarkTicketsWhenEditServiceTests
 {
     private readonly MarkTicketsService markTicketsService;
-    private readonly MarkTicketsWhenEditServiceImp service;
+    private readonly MarkTicketsWhenAddEditServiceImp service;
 
     public MarkTicketsWhenEditServiceTests()
     {
         markTicketsService = Substitute.For<MarkTicketsService>();
-        service = new MarkTicketsWhenEditServiceImp(markTicketsService);
+        service = new MarkTicketsWhenAddEditServiceImp(markTicketsService);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class MarkTicketsWhenEditServiceTests
             .ReturnsForAnyArgs(results);
 
         // Act
-        var actual = await service.Execute(query);
+        var actual = await service.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
 
         // Assert
         AssertExtension.Equal(results, actual);

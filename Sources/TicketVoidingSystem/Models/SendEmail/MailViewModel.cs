@@ -58,3 +58,8 @@ public class DuplicateTicketsMailVoidViewModel
 
     public string DepartmentName { get; set; }
 }
+
+public class MailRecoverViewModel : MailViewModel
+{
+    public IList<Group<TicketRecoverEmailViewModel>> Groups { get; set; }
+}

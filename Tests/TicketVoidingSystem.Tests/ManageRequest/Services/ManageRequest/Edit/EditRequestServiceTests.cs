@@ -15,14 +15,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
 public class EditRequestServiceTests
 {
     private readonly LoggingService loggingService;
-    private readonly MarkTicketsWhenEditService marketTicketsWhenEditService;
+    private readonly MarkTicketsWhenAddEditService marketTicketsWhenEditService;
     private readonly EditRequestServiceImp service;
     private readonly UpdateRequestProcessStage updateRequestProcessStage;
 
     public EditRequestServiceTests()
     {
         loggingService = Substitute.For<LoggingService>();
-        marketTicketsWhenEditService = Substitute.For<MarkTicketsWhenEditService>();
+        marketTicketsWhenEditService = Substitute.For<MarkTicketsWhenAddEditService>();
         var reCalculateTicketsService = Substitute.For<ReCalculateTicketsService>();
         updateRequestProcessStage = Substitute.For<UpdateRequestProcessStage>();
         service = new EditRequestServiceImp(loggingService, marketTicketsWhenEditService, reCalculateTicketsService,
@@ -49,7 +49,7 @@ public class EditRequestServiceTests
         var markTicketResults = new List<Result> { new() };
         var expected = new Result();
 
-        marketTicketsWhenEditService.Execute(query).ReturnsForAnyArgs(markTicketResults);
+        marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).ReturnsForAnyArgs(markTicketResults);
         updateRequestProcessStage.Execute(query).ReturnsForAnyArgs(expected);
 
         // Act
@@ -70,7 +70,7 @@ public class EditRequestServiceTests
             MatchId = 1
         };
 
-        marketTicketsWhenEditService.Execute(query).Throws(new Exception());
+        marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Throws(new Exception());
 
         // Act
         var actual = await service.UpdateRequest(query);

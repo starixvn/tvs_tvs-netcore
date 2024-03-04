@@ -325,4 +325,18 @@ public class DescriptionElementServiceTests
         // Assert
         Assert.Equal(expectedResult, actual);
     }
+
+    [Fact]
+    public void BuildProducts_ReturnExpected()
+    {
+        // Arrange
+        const string expectedResult = "<div>Product: <span class=\"text-primary product\">Sportsbook</span></div>";
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildProducts("Sportsbook");
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
 }

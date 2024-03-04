@@ -24,7 +24,8 @@ export class DetailRequestModel {
   matchId: number;
   settlementStatus: string;
   description: string;
-  totalVoidedSingle: number;
-  totalVoidedParlay: number;
-  totalCancelCashOut: number;
+  totalSingleProcessed: number;
+  totalParlayProcessed: number;
+  totalCancelCashOutProcessed: number;
+  totalResettleProcessed: number;
 }

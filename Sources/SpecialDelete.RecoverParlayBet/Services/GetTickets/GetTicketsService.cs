@@ -3,12 +3,13 @@ using SpecialDelete.RecoverParlayBet.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
+#pragma warning disable S2326
+
 namespace SpecialDelete.RecoverParlayBet.Services.GetTickets;
 
-// ReSharper disable once UnusedTypeParameter
 public interface GetTicketsService<T, in U> where T : GetMainTicket
 {
-    Task<TicketsViewModel> GetTickets(U query);
+    Task<TicketsViewModel> GetTickets(U query, int matchId);
 }
 
 public class GetTicketsServiceImp<T, U> : GetTicketsService<T, U> where T : GetMainTicket
@@ -24,7 +25,7 @@ public class GetTicketsServiceImp<T, U> : GetTicketsService<T, U> where T : GetM
         this.pagingService = pagingService;
     }
 
-    public async Task<TicketsViewModel> GetTickets(U query)
+    public async Task<TicketsViewModel> GetTickets(U query, int matchId)
     {
         var model = await getTicketsService.GetTickets(query);
         var viewModel = new TicketsViewModel { InvalidTransIds = model.InvalidTransIds.ToList() };
@@ -34,7 +35,7 @@ public class GetTicketsServiceImp<T, U> : GetTicketsService<T, U> where T : GetM
             viewModel.Groups.Add(await getTicketsService.AssignData(item));
         }
 
-        viewModel.Tickets = model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), SiteDbGroupId = x.SiteDbGroupId });
+        viewModel.Tickets = model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), SiteDbGroupId = x.SiteDbGroupId, MatchId = matchId });
 
         return viewModel;
     }

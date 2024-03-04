@@ -118,4 +118,13 @@ describe('EventDateFilterComponent', () => {
     
     expect(actual).toBe(true);
   });
+
+  it('#changeFilter should emit changeFilterEvent', async () => {
+    const { instance } = await shallow.render();
+    instance.changeFilterEvent.emit = jest.fn();
+
+    instance.changeFilter();
+
+    expect(instance.changeFilterEvent.emit).toHaveBeenCalledTimes(1);
+  });
 });

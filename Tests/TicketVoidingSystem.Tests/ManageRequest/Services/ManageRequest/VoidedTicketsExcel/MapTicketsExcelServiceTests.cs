@@ -95,7 +95,7 @@ public class MapTicketsExcelServiceTests
         var excelTicket = new ExcelVoidedTicketModel { No = 1, BetId = "Bet1", Member = "Member1" };
 
         mapFromBetListService
-            .MapToVoidedTicketViewModel(Arg.Any<VoidedTicketModel>(), Arg.Any<Match>(), ChoiceType.Excel, issueTypeId)
+            .MapToVoidedTicketViewModel(Arg.Any<VoidedTicketModel>(), Arg.Any<Match>(), ChoiceType.Excel, Arg.Any<GetVoidedTicketsQuery>())
             .Returns(new VoidedTicketViewModel
             {
                 Choice = "<span>abc</span>"
@@ -104,7 +104,7 @@ public class MapTicketsExcelServiceTests
         mapper.Map<ExcelVoidedTicketModel>(Arg.Any<VoidedTicketViewModel>()).Returns(excelTicket);
 
         // Act
-        var result = service.MapToGroupExcelVoidedTickets(originalGroup, match, startIndex, issueTypeId);
+        var result = service.MapToGroupExcelVoidedTickets(originalGroup, match, startIndex, new GetVoidedTicketsQuery { IssueTypeId = issueTypeId });
 
         // Assert
         Assert.Equal(originalGroup.Name, result.Name);

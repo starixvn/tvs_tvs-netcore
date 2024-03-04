@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Services.SendEmail.Subject;
 using Xunit;
 
@@ -54,6 +56,46 @@ public class SubjectServiceTests
 
         // Act
         var actual = service.CreateRecover(model, group, RecoverType.CashOut);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData(EmailGroup.Recover, "Recovered Cash Out Transaction Report ({0})", null)]
+    [InlineData(EmailGroup.CashOut, "Recovered Cash Out Transaction Report ({0})", null)]
+    [InlineData(EmailGroup.ItQa, "{0}Recovered Cash Out Transaction Report ({1})", "Test Currency - ")]
+    [InlineData(EmailGroup.ItSupport, "{0}Recovered Cash Out Transaction Report ({1})", "Real Currency - ")]
+    public void CreateRecover_HasViewModelIsMailRecoverViewModel_ReturnExpected(EmailGroup group, string labels, string? currency)
+    {
+        // Arrange
+        var viewModel = new MailRecoverViewModel
+        {
+            DateTime = DateTimeOffset.Now.DateTime
+        };
+        var expected = string.IsNullOrEmpty(currency) ?
+            string.Format(CultureInfo.InvariantCulture, labels, viewModel.DateTime)
+            : string.Format(CultureInfo.InvariantCulture, labels, currency, viewModel.DateTime);
+
+        // Act
+        var actual = service.CreateRecover(viewModel, group, RecoverType.CashOut);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void CreateRecover_MailRecoverViewModelHasGroupIsCsd_ReturnExpected()
+    {
+        // Arrange
+        var viewModel = new MailRecoverViewModel
+        {
+            DateTime = DateTimeOffset.Now.DateTime
+        };
+        const string expected = ExceptionGroup.WrongGroup;
+
+        // Act
+        var actual = service.CreateRecover(viewModel, EmailGroup.Csd, RecoverType.CashOut);
 
         // Assert
         Assert.Equal(expected, actual);

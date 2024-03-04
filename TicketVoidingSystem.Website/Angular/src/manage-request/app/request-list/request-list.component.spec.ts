@@ -66,19 +66,21 @@ class Helper {
       subIssueTypeId: 1,
       matchId: Helper.matchId,
       description: '',
-      totalVoidedSingle: 0,
-      totalVoidedParlay: 0,
+      totalSingleProcessed: 0,
+      totalParlayProcessed: 0,
       settlementStatus: '',
-      totalCancelCashOut: 0
+      totalCancelCashOutProcessed: 0,
+      totalResettleProcessed: 0
     },
     {
       subIssueTypeId: 1,
       matchId: 99001684,
       description: '',
-      totalVoidedSingle: 1,
-      totalVoidedParlay: 1,
+      totalSingleProcessed: 1,
+      totalParlayProcessed: 1,
       settlementStatus: '',
-      totalCancelCashOut: 0
+      totalCancelCashOutProcessed: 0,
+      totalResettleProcessed: 0
     },
   ];
 
@@ -125,10 +127,11 @@ class Helper {
   };
   static readonly fakeRequestSimpleInfo: RequestSimpleInfo = {
     lastPerformedBy: 'starix',
-    totalVoidedSingle: 12,
-    totalVoidedParlay: 1,
+    totalSingleProcessed: 12,
+    totalParlayProcessed: 1,
     matchId: Helper.matchId,
-    totalCancelCashOut: 0
+    totalCancelCashOutProcessed: 0,
+    totalResettleProcessed: 0
   };
 
   static readonly fakeRequestStatus: RequestStatus[] = [{

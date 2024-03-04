@@ -58,6 +58,7 @@ public class UpdateRequestProcessStageTests
             DuplicateTicketsInfo = new DuplicateTicketsViewModel(),
             NotParticipateInfo = new List<NotParticipateViewModel>(),
             EarlyKickOffInfo = new List<EarlyKickOffViewModel>(),
+            RecoverTicketInfo = new RecoverTicketViewModel(),
         };
         var expected = new Result
         {
@@ -77,5 +78,31 @@ public class UpdateRequestProcessStageTests
         await repository.Received(1).ExecuteAsync(Arg.Any<EditRequestCommand>());
         await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
         AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public async Task Execute_IsAbnormalAccount_CalledExpected()
+    {
+        // Arrange
+        var query = new EditRequestQuery
+        {
+            RequestId = 1,
+            ActionId = 1,
+            MatchId = 1,
+            AbnormalAccountInfo = new AbnormalAccountViewModel
+            {
+                AccountWinlostModels = new List<AccountWinlostModel> { new() }
+            },
+            IssueTypeId = IssueTypeConstant.AbnormalAccount
+        };
+
+        var command = new EditRequestCommand { RequestId = 1 };
+        mapper.Map<EditRequestCommand>(Arg.Any<EditRequestQuery>()).ReturnsForAnyArgs(command);
+
+        // Act
+        _ = await service.Execute(query);
+
+        // Assert
+        await accountWinLostService.Received(1).SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
     }
 }

@@ -117,15 +117,15 @@
               </div>
             </td>
             <td class="col-tb-13">
-              <div *ngIf="item.details[0].totalVoidedSingle + item.details[0].totalVoidedParlay + item.details[0].totalCancelCashOut > 0">
+              <div *ngIf="item.details[0].totalSingleProcessed + item.details[0].totalParlayProcessed + item.details[0].totalCancelCashOutProcessed > 0">
                 <ng-container *ngIf="isShowOnlyTotalTickets(item.issueTypeId); else templateNoTickets">
-                  <div class="link" (click)="showTickets(item.requestId, item.details[0].matchId)">{{item.details[0].totalVoidedSingle +
-                    item.details[0].totalVoidedParlay}}
+                  <div class="link" (click)="showTickets(item.requestId, item.details[0].matchId)">{{item.details[0].totalSingleProcessed +
+                    item.details[0].totalParlayProcessed}}
                   </div>
                 </ng-container>
                 <ng-template #templateNoTickets>
-                  <div class="link" (click)="showTickets(item.requestId, item.details[0].matchId)">{{item.details[0].totalVoidedSingle +
-                    item.details[0].totalVoidedParlay}}</div>
+                  <div class="link" (click)="showTickets(item.requestId, item.details[0].matchId)">{{item.details[0].totalSingleProcessed +
+                    item.details[0].totalParlayProcessed}}</div>
                   <div [innerHTML]="getDetailTotalTickets(item.issueTypeId, item.details[0]) | sanitizeHtml"></div>
                 </ng-template>
               </div>
@@ -149,14 +149,14 @@
                 <div [innerHtml]="detail.description | sanitizeHtml"></div>
               </td>
               <td *ngIf="index>0" class="col-tb-13">
-                <div *ngIf="detail.totalVoidedSingle + detail.totalVoidedParlay + detail.totalCancelCashOut > 0">
+                <div *ngIf="detail.totalSingleProcessed + detail.totalParlayProcessed + detail.totalCancelCashOutProcessed > 0">
                   <ng-container *ngIf="isShowOnlyTotalTickets(item.issueTypeId); else templateNoTickets">
-                    <div class="link" (click)="showTickets(item.requestId, detail.matchId)">{{detail.totalVoidedSingle + detail.totalVoidedParlay}}
+                    <div class="link" (click)="showTickets(item.requestId, detail.matchId)">{{detail.totalSingleProcessed + detail.totalParlayProcessed}}
                     </div>
                   </ng-container>
                   <ng-template #templateNoTickets>
-                    <div class="link" (click)="showTickets(item.requestId, detail.matchId)">{{detail.totalVoidedSingle +
-                      detail.totalVoidedParlay}}</div>
+                    <div class="link" (click)="showTickets(item.requestId, detail.matchId)">{{detail.totalSingleProcessed +
+                      detail.totalParlayProcessed}}</div>
                     <div [innerHTML]="getDetailTotalTickets(item.issueTypeId, detail) | sanitizeHtml"></div>
                   </ng-template>
                 </div>

@@ -36,6 +36,8 @@ public class GetTicketSiteDbCriteria : CriteriaBase
 
     public string ArchivedTransIds { get; set; }
 
+    public string RecoverTicketInfo { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

@@ -9,6 +9,7 @@ using SpecialDelete.VirtualSports.RecoverBet.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Services.RecoverTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Subject;

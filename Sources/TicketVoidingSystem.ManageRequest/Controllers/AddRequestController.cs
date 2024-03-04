@@ -1,13 +1,12 @@
 ﻿using Fanex.NAP.Client.Attributes;
+using Fanex.NAP.Client.Helpers.Business;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Controllers;
-
-using Fanex.NAP.Client.Helpers.Business;
-using TicketVoidingSystem.Extensions;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -19,6 +18,10 @@ public class AddRequestController : ControllerBase
     {
         this.mediator = mediator;
     }
+
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
+    [HttpPost]
+    public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
     public async Task<IActionResult> GetLogInfo(GetLogInfoRequest request) => Ok(await mediator.Send(request));
@@ -81,14 +84,13 @@ public class AddRequestController : ControllerBase
         return this.ExcelFileResult(Response, model);
     }
 
-    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Policy = Constant.Policy.Host)]
-    [HttpPost]
-    public async Task<IActionResult> AddRequest(AddRequest request) => Ok(await mediator.Send(request));
-
     [HttpPost]
     public async Task<IActionResult> ExportExcelTicketAbnormalBet(ExportTicketAbnormalBet request)
     {
         var model = await mediator.Send(request);
         return this.ExcelFileResult(Response, model);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CheckRecoverTicket(CheckRecoverTicketRequest request) => Ok(await mediator.Send(request));
 }

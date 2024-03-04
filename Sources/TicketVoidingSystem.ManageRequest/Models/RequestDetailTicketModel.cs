@@ -8,4 +8,5 @@ public class RequestDetailTicketModel
     public long TransId { get; set; }
     public int MatchId { get; set; }
     public int MainTransId { get; set; }
+    public int VoidingTypeId { get; set; }
 }

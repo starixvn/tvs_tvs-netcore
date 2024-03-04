@@ -7,6 +7,7 @@ import { MatchDetailComponent } from '../../utility/components/match-detail/matc
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
+import { Notification } from '../../utility/components/notification/notification';
 import { NotificationComponent } from '../../utility/components/notification/notification.component';
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
 import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
@@ -204,14 +205,14 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(AppComponent, AppModuleTest)
-    .mock(SignalRService, { initializeConnection: jest.fn()});
+      .mock(SignalRService, { initializeConnection: jest.fn() });
   });
 
-  it('#ngAfterViewInit should call #blockUnBlockUI', async() => {
+  it('#ngAfterViewInit should call #blockUnBlockUI', async () => {
     // Arrange
     const service = new BlockUiService();
     service.blockUIEvent = new EventEmitter<boolean>();
-    const component = new AppComponent (null, service, null, null, null, null);
+    const component = new AppComponent(null, service, null, null, null, null);
     component['blockUnBlockUI'] = jest.fn();
 
     // Action
@@ -235,7 +236,7 @@ describe('AppComponent', () => {
     expect(instance.isShowTickets).toBe(false);
   });
 
-  it('#searchEvent should return expected data', async() => {
+  it('#searchEvent should return expected data', async () => {
     // Arrange
     const { instance, findComponent } = await shallow
       .mock(AppService, {
@@ -279,7 +280,7 @@ describe('AppComponent', () => {
     expect(instance.showSendColumn).toBe(true);
   });
 
-  it('#searchEvent should update isShowListBetTypeAffected to true', async() => {
+  it('#searchEvent should update isShowListBetTypeAffected to true', async () => {
     // Arrange
     const { instance, findComponent } = await shallow
       .mock(AppService, {
@@ -328,7 +329,7 @@ describe('AppComponent', () => {
     expect(instance.isShowListBetTypeAffected).toBe(true);
   });
 
-  it('#getTicketsEvent should display notification with data larger 200000', async() => {
+  it('#getTicketsEvent should display notification with data larger 200000', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.notification.open = jest.fn();
@@ -374,7 +375,7 @@ describe('AppComponent', () => {
     expect(instance.getTicketsDetail).toHaveBeenCalledTimes(1);
   });
 
-  it('#pagingSearchTicket should return expected paging info and call #getTicketsDetail', async() => {
+  it('#pagingSearchTicket should return expected paging info and call #getTicketsDetail', async () => {
     // Arrange
     const { instance } = await shallow.render();
     const pagingModel = new PagingModel();
@@ -392,7 +393,7 @@ describe('AppComponent', () => {
     expect(instance.getTicketsDetail).toHaveBeenCalledTimes(1);
   });
 
-  it('#getTicketsDetail should return expected ticketsModel', async() => {
+  it('#getTicketsDetail should return expected ticketsModel', async () => {
     // Arrange
     const { instance } = await shallow
       .mock(AppService, {
@@ -410,7 +411,7 @@ describe('AppComponent', () => {
     expect(instance.ticketsModel.pagingModel.total).toBe(Helper.fakeGetTicketsDetailModel.totalItems);
   });
 
-  it('#exportExcelEvent should display notification with data larger 100000', async() => {
+  it('#exportExcelEvent should display notification with data larger 100000', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.notification.open = jest.fn();
@@ -422,7 +423,7 @@ describe('AppComponent', () => {
     expect(instance.notification.open).toHaveBeenCalledWith('Export Excel Result', TEXT.EXPORT_EXCEL_LIMITED);
   });
 
-  it('#exportExcelEvent should call #exportExcel with expected param', async() => {
+  it('#exportExcelEvent should call #exportExcel with expected param', async () => {
     // Arrange
     const mockExportExcel = jest.fn();
     const { instance } = await shallow
@@ -511,10 +512,10 @@ describe('AppComponent', () => {
     const confirmModal = { title: 'Send Data', message: TEXT.SEND_FILE + Helper.fakeSummaryItem.licenseeName + '?', type: ModalType.Confirm };
     const mockModalServiceConfirm = jest.fn();
     const { instance } = await shallow
-    .mock(ModalService, {
-      confirm: mockModalServiceConfirm
-    })
-    .render();
+      .mock(ModalService, {
+        confirm: mockModalServiceConfirm
+      })
+      .render();
     instance.sendExcelFileEvent([Helper.fakeSummaryItem]);
 
     expect(mockModalServiceConfirm.mock.calls[0][0]).toStrictEqual(confirmModal);
@@ -526,13 +527,13 @@ describe('AppComponent', () => {
     mockModalServiceConfirm.mock.calls[0][2]();
   });
 
-  it('sendCreditToLetstalk should called expected', async () => {
+  it('sendCreditToLetstalk should called #sendCreditDataToLetstalk', async () => {
     const mockSendCreditDataToLetstalk = jest.fn().mockImplementation(() => Promise.resolve(new Result()));
     const { instance } = await shallow
-    .mock(AppService, {
-      sendCreditDataToLetstalk: mockSendCreditDataToLetstalk
-    })
-    .render();
+      .mock(AppService, {
+        sendCreditDataToLetstalk: mockSendCreditDataToLetstalk
+      })
+      .render();
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.open = jest.fn();
     instance.matchViewModel = Helper.fakeMatchModel;
@@ -541,6 +542,23 @@ describe('AppComponent', () => {
 
     expect(mockSendCreditDataToLetstalk).toHaveBeenCalledTimes(1);
     expect(instance.messagesResponse.open).toHaveBeenCalledTimes(1);
+  });
+
+  it('sendCreditToLetstalk should called #notification.open', async () => {
+    const summaryItem = _.cloneDeep(Helper.fakeSummaryItem);
+    summaryItem.total = 300000;
+    const mockSendCreditDataToLetstalk = jest.fn().mockImplementation(() => Promise.resolve(new Result()));
+    const { instance } = await shallow
+      .mock(AppService, {
+        sendCreditDataToLetstalk: mockSendCreditDataToLetstalk
+      })
+      .render();
+    instance.notification = new Notification();
+    instance.notification.open = jest.fn();
+
+    await instance.sendCreditToLetstalk(summaryItem);
+
+    expect(instance.notification.open).toHaveBeenCalledTimes(1);
   });
 
   it('sendFile should called expected', async () => {
@@ -556,10 +574,10 @@ describe('AppComponent', () => {
     fakeSummaryItem.betTypes = '29';
     const mockSendDataToOic = jest.fn().mockImplementation(() => Promise.resolve(amendmentReponse));
     const { instance } = await shallow
-    .mock(AppService, {
-      sendDataToOic: mockSendDataToOic
-    })
-    .render();
+      .mock(AppService, {
+        sendDataToOic: mockSendDataToOic
+      })
+      .render();
     instance.matchViewModel = Helper.fakeMatchModel;
     instance.sendFileItems = [Helper.fakeSummaryItem, fakeSummaryItem];
 
@@ -575,10 +593,10 @@ describe('AppComponent', () => {
   it('sendCreditToLetstalk should called expected', async () => {
     const mockSendCreditDataToLetstalk = jest.fn().mockImplementation(() => Promise.resolve(new Result()));
     const { instance } = await shallow
-    .mock(AppService, {
-      sendCreditDataToLetstalk: mockSendCreditDataToLetstalk
-    })
-    .render();
+      .mock(AppService, {
+        sendCreditDataToLetstalk: mockSendCreditDataToLetstalk
+      })
+      .render();
     instance.messagesResponse = new MessagesResponse();
     instance.messagesResponse.open = jest.fn();
     instance.matchViewModel = Helper.fakeMatchModel;
@@ -597,21 +615,22 @@ describe('AppComponent', () => {
     normalQuery.licenseeName = '';
     const chinaViewQuery = new SendFileQuery();
     chinaViewQuery.isChinaView = true;
-    normalQuery.licenseeName = '';
+    chinaViewQuery.specialPlatform = 0;
+    normalQuery.licenseeName = 'name';
     const fakeAmendmentReponseSuccessfully = _.cloneDeep(Helper.fakeAmendmentReponseSuccessfully);
     fakeAmendmentReponseSuccessfully.code = 0;
     const mockSendDataToOic = jest.fn().mockImplementation(() => Promise.resolve([fakeAmendmentReponseSuccessfully]));
     const { instance } = await shallow
-    .mock(AppService, {
-      sendDataToOic: mockSendDataToOic
-    })
-    .render();
+      .mock(AppService, {
+        sendDataToOic: mockSendDataToOic
+      })
+      .render();
     instance.sendFileQueries = [normalQuery, chinaViewQuery];
     instance.messagesResponse = new MessagesResponse();
-    instance.messagesResponse.results = [Helper.fakeAmendmentReponseSuccessfully];
+    instance.messagesResponse.results = [{ isChinaView: true, specialPlatform: 0 } as AmendmentReponse];
     instance.matchViewModel = Helper.fakeMatchModel;
-    let result: AmendmentReponse = {
-      isChinaView: false,
+    const result: AmendmentReponse = {
+      isChinaView: true,
       specialPlatform: 0,
       code: 0,
       message: '',
@@ -629,10 +648,10 @@ describe('AppComponent', () => {
     fakeAmendmentReponseSuccessfully.code = 1;
     const mockSendDataToOic = jest.fn().mockImplementation(() => Promise.resolve([fakeAmendmentReponseSuccessfully]));
     const { instance } = await shallow
-    .mock(AppService, {
-      sendDataToOic: mockSendDataToOic
-    })
-    .render();
+      .mock(AppService, {
+        sendDataToOic: mockSendDataToOic
+      })
+      .render();
     const query = new SendFileQuery();
     query.isChinaView = false;
     instance.sendFileQueries = [query];
@@ -648,10 +667,10 @@ describe('AppComponent', () => {
   it('copyClipboard should call #clipboardService.copyFromContent', async () => {
     const mockCopyFromContent = jest.fn();
     const { instance } = await shallow
-    .mock(ClipboardService, {
-      copyFromContent: mockCopyFromContent
-    })
-    .render();
+      .mock(ClipboardService, {
+        copyFromContent: mockCopyFromContent
+      })
+      .render();
     window.alert = jest.fn();
 
     instance.copyClipboard('');

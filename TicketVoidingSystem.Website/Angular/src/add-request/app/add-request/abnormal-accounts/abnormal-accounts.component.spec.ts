@@ -14,12 +14,14 @@ import { AbnormalAccountsComponent } from './abnormal-accounts.component';
 import { AccountTableComponent } from './account-table/account-table.component';
 import { ConfirmAbnormalAccountComponent } from './confirm-abnormal-account/confirm-abnormal-account.component';
 import { EventDateFilterComponent } from './event-date-filter/event-date-filter.component';
+import { AccountWinlostModel } from './models/account-winlost.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
+import { ValidationBusinessRuleOutput } from './models/validation.model';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
-class Helper{
+class Helper {
   static readonly fakeDate: string = '2020-11-09 12:08:49.737';
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
@@ -72,8 +74,8 @@ describe('AbnormalAccountsComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(AbnormalAccountsComponent, AppModuleTest)
-                  .dontMock(NgbModule)
-                  .mock(ElementRef, {});
+      .dontMock(NgbModule)
+      .mock(ElementRef, {});
   });
 
   it('#AbnormalAccountsComponent init should match snapshot', async () => {
@@ -90,14 +92,15 @@ describe('AbnormalAccountsComponent', () => {
   });
 
   it('#focusOutUsernames should return & update isCancelValidate to false when isCancelValidate true', async () => {
-    const {  instance } = await shallow
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+    const { instance } = await shallow
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(false) })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.primitiveProps = new PrimitiveProperty();
     instance.primitiveProps.isCancelValidate = true;
 
@@ -108,16 +111,16 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#focusOutUsernames should called #checkValidUsernames', async () => {
     const mockCheckValidUsernames = jest.fn().mockImplementation();
-    const {  instance } = await shallow
-    .mock(ValidationService, { checkBusinessRule: mockCheckValidUsernames })
-    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+    const { instance } = await shallow
+      .mock(ValidationService, { checkBusinessRule: mockCheckValidUsernames })
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.usernamesComponent = new UsernamesComponent(null);
     instance.usernamesComponent.groupUsername = new GroupUsername();
     instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
@@ -131,15 +134,15 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#triggerCloseEvent should called #changeSavingRequestStatus', async () => {
     const mockChangeSavingRequestStatus = jest.fn().mockImplementation();
-    const {  instance } = await shallow
-    .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+    const { instance } = await shallow
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.triggerCloseEvent();
 
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
@@ -147,15 +150,15 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#triggerCloseEvent should called #changeSavingRequestStatus', async () => {
     const mockChangeSavingRequestStatus = jest.fn().mockImplementation();
-    const {  instance } = await shallow
-    .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+    const { instance } = await shallow
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.triggerCloseEvent();
 
     expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
@@ -163,16 +166,16 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#saveRequest should called #saveRequestService.saveRequest', async () => {
     const mockSaveRequest = jest.fn().mockImplementation();
-    const {  instance } = await shallow
-    .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+    const { instance } = await shallow
+      .mock(SaveRequestService, { saveRequest: mockSaveRequest })
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(false) })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.usernamesComponent = new UsernamesComponent(null);
     instance.usernamesComponent.groupUsername = new GroupUsername();
     instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
@@ -183,16 +186,16 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#onYesConfirmWarningModal should called #saveRequestService.onYesConfirmWarningModal', async () => {
     const mockOnYesConfirmWarningModal = jest.fn().mockImplementation();
-    const {  instance } = await shallow
-    .mock(SaveRequestService, { onYesConfirmWarningModal: mockOnYesConfirmWarningModal })
-    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+    const { instance } = await shallow
+      .mock(SaveRequestService, { onYesConfirmWarningModal: mockOnYesConfirmWarningModal })
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.usernamesComponent = new UsernamesComponent(null);
     instance.usernamesComponent.groupUsername = new GroupUsername();
     instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
@@ -203,14 +206,14 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#initSaveRequestInput should return expected model', async () => {
     const { instance } = await shallow
-    .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
-    .render({
-      bind: {
-        abnormalAccountModel: Helper.fakeAbnormalAccountModel,
-        filter: Helper.fakeFilterModel,
-        isEdit: true,
-      }
-    });
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
     instance.usernamesComponent = new UsernamesComponent(null);
     instance.usernamesComponent.groupUsername = new GroupUsername();
     instance.usernamesComponent.groupUsername.getAllValue = jest.fn().mockReturnValue('1,2,3');
@@ -219,5 +222,131 @@ describe('AbnormalAccountsComponent', () => {
     expect(actual.requestId).toBe(instance.requestId);
     expect(actual.isEdit).toBe(instance.isEdit);
     expect(actual.userId).toBe(instance.userId);
+  });
+
+  it('#changeFilter should update isShowAccountWinLost and isShowError to false', async () => {
+    const { instance } = await shallow
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.changeFilter();
+
+    expect(instance.primitiveProps.isShowAccountWinLost).toBeFalsy();
+    expect(instance.primitiveProps.isShowError).toBeFalsy();
+  });
+
+  it('#hideValidationMessage should update isShowError to false', async () => {
+    const { instance } = await shallow
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.hideValidationMessage();
+
+    expect(instance.primitiveProps.isShowError).toBeFalsy();
+  });
+
+  it('#ngOnInit should called #addRequestApiService.getAccountWinLost', async () => {
+    const validAccountWinlostModels = [new AccountWinlostModel()];
+    const mockGetAccountWinLost = jest.fn().mockReturnValue(validAccountWinlostModels);
+    const { instance } = await shallow
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
+      .mock(AddRequestApiService, { getAccountWinLost: mockGetAccountWinLost })
+      .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.primitiveProps = new PrimitiveProperty();
+    await instance.ngOnInit();
+
+    expect(instance.primitiveProps.isShowAccountWinLost).toBeTruthy();
+    expect(instance.primitiveProps.validAccountWinlostModels).toEqual(validAccountWinlostModels);
+    expect(mockGetAccountWinLost).toHaveBeenCalled();
+  });
+
+  it('#saveRequest should called #saveRequestService.saveRequest when accountTableComponent is invalid', async () => {
+    const mockChangeSavingRequestStatus = jest.fn();
+    const mockSaveRequest = jest.fn();
+    const { instance } = await shallow
+      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.accountTableComponent = new AccountTableComponent(null, null, null, null);
+    instance.accountTableComponent.isValid = jest.fn().mockReturnValue(false);
+    await instance.saveRequest();
+
+    expect(mockSaveRequest).toHaveBeenCalledTimes(0);
+    expect(mockChangeSavingRequestStatus).toHaveBeenCalledTimes(1);
+  });
+
+  it('#handleSearchEvent should called #validationService.checkBusinessRule and update accountTableComponent.isCancelRecalculateAmount to true', async () => {
+    const validationOutput = {
+      accountWinlostModels:  [new AccountWinlostModel()]
+    } as ValidationBusinessRuleOutput;
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockCheckBusinessRule  = jest.fn().mockReturnValue(validationOutput);
+    const { instance } = await shallow
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(false) })
+      .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
+      .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.accountTableComponent = new AccountTableComponent(null, null, null, null);
+
+    await instance.handleSearchEvent();
+
+    expect(mockCheckBusinessRule).toHaveBeenCalledTimes(1);
+    expect(instance.accountTableComponent.isCancelRecalculateAmount).toBeTruthy();
+    expect(instance.primitiveProps.validAccountWinlostModels).toEqual(validationOutput.accountWinlostModels);
+  });
+
+  it('#handleSearchEvent should not called #validationService.checkBusinessRule', async () => {
+    const validationOutput = {
+      accountWinlostModels:  [new AccountWinlostModel()]
+    } as ValidationBusinessRuleOutput;
+    const mockChangeBlockingUiStatus = jest.fn();
+    const mockCheckBusinessRule  = jest.fn().mockReturnValue(validationOutput);
+    const { instance } = await shallow
+      .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(false) })
+      .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
+      .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    instance.primitiveProps = new PrimitiveProperty();
+    instance.accountTableComponent = new AccountTableComponent(null, null, null, null);
+    instance.accountTableComponent.isValid = jest.fn().mockReturnValue(false);
+    await instance.handleSearchEvent();
+
+    expect(mockCheckBusinessRule).toHaveBeenCalledTimes(0);
+    expect(instance.accountTableComponent.isCancelRecalculateAmount).toBeTruthy();
   });
 });

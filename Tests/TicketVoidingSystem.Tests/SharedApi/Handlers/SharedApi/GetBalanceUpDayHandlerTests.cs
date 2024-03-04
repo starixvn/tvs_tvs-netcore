@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 using TicketVoidingSystem.SharedApi.Models;
-using TicketVoidingSystem.SharedApi.Services;
+using TicketVoidingSystem.SharedApi.Services.SharedApi;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.SharedApi.Handlers.SharedApi;

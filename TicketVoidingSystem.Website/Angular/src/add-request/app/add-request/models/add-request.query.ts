@@ -1,5 +1,5 @@
-import { NotParticipateGetLogInfoQuery } from '../event-not-participate/models/get-log-info.query';
 import { EarlyKickOffGetLogInfoQuery } from '../event-early-kick-off/models/get-log-info.query';
+import { NotParticipateGetLogInfoQuery } from '../event-not-participate/models/get-log-info.query';
 import { ReducedOverGetLogInfoQuery } from '../event-reduced-over/models/get-log-info.query';
 import { WrongHdpGetLogInfoQuery } from '../event-wrong-hdp/models/get-log-info.query';
 import { WrongOddsGetLogInfoQuery } from '../event-wrong-odds/models/get-log-info.query';
@@ -8,14 +8,15 @@ import { WrongScoreGetLogInfoQuery } from '../event-wrong-score/event-wrong-scor
 import { OperatorInfo } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
-import { NotParticipateModel } from './event-not-participate.model';
 import { EarlyKickOffModel } from './event-eko.model';
+import { NotParticipateModel } from './event-not-participate.model';
 import { RedCardGetLogInfoQuery, RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
+import { RecoverTicketModel } from './recover-ticket.model';
 
 export class AddRequestQuery {
   guid: string;
@@ -53,6 +54,7 @@ export class AddRequestQuery {
   earlyKickOffInfo: EarlyKickOffModel[];
   abnormalAccountInfo: AbnormalAccountModel;
   duplicateTicketsInfo: DuplicateTicketsModel;
+  recoverTicketInfo: RecoverTicketModel;
 
   transInfoJson: string;
   unMarkTransIds: string;

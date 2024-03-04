@@ -95,7 +95,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.WrongScore, BuildVoidWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildTotalSingleAndParlay},
                 {IssueTypeConstant.AbnormalAccount, BuildVoidTimeAndTotalAccount},
-                {IssueTypeConstant.DuplicateTickets, BuildTotalSingleOrParlay}
+                {IssueTypeConstant.DuplicateTickets, BuildTotalSingleOrParlay},
+                {IssueTypeConstant.RecoverTicket, BuildProducts}
             };
 
         matchingFunctions.TryGetValue(issueId, out var function);
@@ -223,5 +224,14 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     public string GetVarCheckValue(bool isCheckedVar)
     {
         return isCheckedVar ? "√" : string.Empty;
+    }
+
+    private static string BuildProducts(string html)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        var products = doc.DocumentNode.SelectNodes("//*[@class='text-primary product']")[0].InnerText;
+
+        return $"Product: {products}";
     }
 }

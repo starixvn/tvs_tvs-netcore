@@ -108,6 +108,10 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.NotParticipateInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.RecoverTicket:
+                criteria.RecoverTicketInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
@@ -163,52 +167,23 @@ public class GetTransInfoServiceImp : GetTransInfoService
 
     private static string BuildIssueInfo(GetTransInfoQuery query) // NOSONAR
     {
-        switch (query.IssueTypeId)
+        return query.IssueTypeId switch
         {
-            case IssueTypeConstant.AbnormalBet:
-            case IssueTypeConstant.AbnormalBetRealMember:
-            case IssueTypeConstant.ArchivedTicket:
-                return query.TransIds;
-
-            case IssueTypeConstant.AbnormalAccount:
-                return query.AbnormalAccountViewModel.ToAbnormalAccountInfoXml();
-
-            case IssueTypeConstant.EarlyKickOffTime:
-            case IssueTypeConstant.WrongKickOffTime:
-                return query.EarlyKickOffModels.ToKickOffInfoXml();
-
-            case IssueTypeConstant.WrongScore:
-                return query.WrongScoreModels.ToWrongScoreInfoXml();
-
-            case IssueTypeConstant.DangerAccepted:
-                return query.DangerAcceptedModels.ToDangerAcceptedInfoXml();
-
-            case IssueTypeConstant.RedCard:
-                return query.RedCardModels.ToDangerAcceptedInfoXml();
-
-            case IssueTypeConstant.WrongHDP:
-                return query.WrongHdpModels.ToWrongHdpInfoXml();
-
-            case IssueTypeConstant.Wrong1stHDP:
-                return query.Wrong1stHdpModels.ToWrongHdpInfoXml();
-
-            case IssueTypeConstant.WrongOU:
-                return query.WrongOuModels.ToWrongOuInfoXml();
-
-            case IssueTypeConstant.Wrong1stOU:
-                return query.Wrong1stOuModels.ToWrongOuInfoXml();
-
-            case IssueTypeConstant.WrongOdds:
-                return query.WrongOddsModels.ToWrongOddsInfoXml();
-
-            case IssueTypeConstant.ReducedOver:
-                return query.ReducedOverModels.ToReducedOverInfoXml();
-
-            case IssueTypeConstant.NotParticipate:
-                return query.NotParticipateModels.ToNotParticipateInfoXml();
-
-            default:
-                return "";
-        }
+            IssueTypeConstant.AbnormalBet or IssueTypeConstant.AbnormalBetRealMember or IssueTypeConstant.ArchivedTicket => query.TransIds,
+            IssueTypeConstant.AbnormalAccount => query.AbnormalAccountViewModel.ToAbnormalAccountInfoXml(),
+            IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime => query.EarlyKickOffModels.ToKickOffInfoXml(),
+            IssueTypeConstant.WrongScore => query.WrongScoreModels.ToWrongScoreInfoXml(),
+            IssueTypeConstant.DangerAccepted => query.DangerAcceptedModels.ToDangerAcceptedInfoXml(),
+            IssueTypeConstant.RedCard => query.RedCardModels.ToDangerAcceptedInfoXml(),
+            IssueTypeConstant.WrongHDP => query.WrongHdpModels.ToWrongHdpInfoXml(),
+            IssueTypeConstant.Wrong1stHDP => query.Wrong1stHdpModels.ToWrongHdpInfoXml(),
+            IssueTypeConstant.WrongOU => query.WrongOuModels.ToWrongOuInfoXml(),
+            IssueTypeConstant.Wrong1stOU => query.Wrong1stOuModels.ToWrongOuInfoXml(),
+            IssueTypeConstant.WrongOdds => query.WrongOddsModels.ToWrongOddsInfoXml(),
+            IssueTypeConstant.ReducedOver => query.ReducedOverModels.ToReducedOverInfoXml(),
+            IssueTypeConstant.NotParticipate => query.NotParticipateModels.ToNotParticipateInfoXml(),
+            IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
+            _ => "",
+        };
     }
 }

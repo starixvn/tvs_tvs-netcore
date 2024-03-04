@@ -43,6 +43,9 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     this.tmpModel.isUpdatedVoidingHistory = this.tmpModel.isUpdatedVoidingHistory ? this.tmpModel.isUpdatedVoidingHistory : 'null';
     this.tmpModel.isSentEmail = this.tmpModel.isSentEmail ? this.tmpModel.isSentEmail : 'null';
     this.tmpModel.isSentLetsTalk = this.tmpModel.isSentLetsTalk ? this.tmpModel.isSentLetsTalk : 'null';
+    this.tmpModel.isDeletedZzzBetTrans = this.tmpModel.isDeletedZzzBetTrans ? this.tmpModel.isDeletedZzzBetTrans : 'null';
+    this.tmpModel.isDeletedMessage = this.tmpModel.isDeletedMessage ? this.tmpModel.isDeletedMessage : 'null';
+    this.tmpModel.isDeletedVoidedTransaction = this.tmpModel.isDeletedVoidedTransaction ? this.tmpModel.isDeletedVoidedTransaction : 'null';
   }
 
   async confirmUpdateAfterVoidData() {
@@ -77,7 +80,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     return `<div class="message-content">${message}</div>`;
   }
 
-  initQueryUpdate(): VoidBetAutomationModel {
+  initQueryUpdate(): VoidBetAutomationModel { //NOSONAR
     const model = new VoidBetAutomationModel();
     model.requestId = this.tmpModel.requestId;
     model.voidingHistoryId = this.tmpModel.voidingHistoryId;
@@ -92,6 +95,9 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
     model.isUpdatedVoidingHistory = this.tmpModel.isUpdatedVoidingHistory === 'null' ? null : this.tmpModel.isUpdatedVoidingHistory;
     model.isSentEmail = this.tmpModel.isSentEmail === 'null' ? null : this.tmpModel.isSentEmail;
     model.isSentLetsTalk = this.tmpModel.isSentLetsTalk === 'null' ? null : this.tmpModel.isSentLetsTalk;
+    model.isDeletedZzzBetTrans = this.tmpModel.isDeletedZzzBetTrans === 'null' ? null : this.tmpModel.isDeletedZzzBetTrans;
+    model.isDeletedMessage = this.tmpModel.isDeletedMessage === 'null' ? null : this.tmpModel.isDeletedMessage;
+    model.isDeletedVoidedTransaction = this.tmpModel.isDeletedVoidedTransaction === 'null' ? null : this.tmpModel.isDeletedVoidedTransaction;
 
     return model;
   }

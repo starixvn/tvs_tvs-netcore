@@ -12,7 +12,7 @@ import { OthersModel } from '../others/others.model';
 import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { PrimitiveProperty, AbnormalBetTicketViewModel } from './event-abnormal-bet.model';
+import { AbnormalBetTicketViewModel, PrimitiveProperty } from './event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';

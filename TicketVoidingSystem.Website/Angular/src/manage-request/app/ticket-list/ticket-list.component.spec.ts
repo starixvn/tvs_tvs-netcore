@@ -92,8 +92,8 @@ class Helper {
         tickets: []
       }
     ],
-    totalVoidedTickets: 1,
-    totalCancelCashOut: 0,
+    totalTicketsProcessed: 1,
+    totalCancelCashOutProcessed: 0,
     licenseeNames: '',
     generalBetTypeCombinations: '',
     cancelCashOutLicenseesName: ''
@@ -148,16 +148,17 @@ class Helper {
     leagueName: '',
     matchEvent: 'MU - vs Barca',
     licenseeNames: '',
-    totalVoidedTickets: 1,
+    totalTicketsProcessed: 1,
     decidedBy: '',
     requestedBy: '',
     negativeBalanceUsers: '',
     generalBetTypeCombinations: '',
     scoreResult: '',
     reason: '',
-    totalCancelCashOut: 0,
-    cancelCashOutLicenseesName: ''
-  };
+    totalCancelCashOutProcessed: 0,
+    cancelCashOutLicenseesName: '',
+    singleTransIds: ''
+  } as GeneralInfo;
 }
 
 describe('TicketListComponent', () => {
@@ -329,8 +330,9 @@ describe('TicketListComponent', () => {
       matchId: 12345,
       pageIndex: 0,
       pageSize: 3000,
-      voidingHistoryIds: ''
-    };
+      voidingHistoryIds: '',
+      singleTransIds: undefined
+    } as TicketsQuery;
 
     // Action
     await instance.getTickets();
@@ -343,7 +345,11 @@ describe('TicketListComponent', () => {
 
   it('#pagingEvent should call #getTickets', async () => {
     // Arrange
+    const mockGetRequestById = jest.fn().mockImplementation(() => Helper.fakeRequestDetailViewModel);
     const { instance } = await shallow
+      .mock(CommonService, {
+        getRequestById: mockGetRequestById,
+      })
       .render(Helper.ticketListComponentHtml, {
         bind: {
           modal: Helper.fakeTicketListModal,

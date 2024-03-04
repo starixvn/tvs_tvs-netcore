@@ -1,6 +1,6 @@
 <div class="tickets-list" [blockUi]="isBlock">
   <div class="title-tickets-list" *ngIf="model.groups !== undefined && model.groups.length > 0">
-    <div class="title-tickets-list-label">Voided Tickets</div>
+    <div class="title-tickets-list-label">{{getTitle()}}</div>
     <div class="title-tickets-list-toolbox">
       <input type="button" class="title-tickets-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
     </div>
@@ -48,8 +48,11 @@
           <th scope="col" class="col-tb-14">
             <div>HDP</div>
           </th>
-          <th scope="col" class="col-tb-void-time">
+          <th *ngIf="!isRecoverTicket()" scope="col" class="col-tb-void-time">
             <div>Void Time</div>
+          </th>
+          <th *ngIf="isRecoverTicket()" scope="col" class="col-tb-void-time">
+            <div>Recover Time</div>
           </th>
           <th scope="col" class="col-tb-15">
             <div>Choice</div>
@@ -90,7 +93,7 @@
             <div [innerHTML]="ticket.stake | sanitizeHtml"></div>
           </td>
           <td class="col-tb-9">
-            <div>{{ticket.winloss}}</div>
+            <div>{{ticket.winLoss}}</div>
           </td>
           <td class="col-tb-10">
             <div>{{ticket.currency}}</div>

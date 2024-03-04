@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title">
-            <strong>Delete Bet Check (Request ID: {{modal.requestId}})</strong>
+            <strong>Void/Recover Bet Check (Request ID: {{modal.requestId}})</strong>
           </div>
           <!-- <div class="modal-control">
             <em class="fa fa-times pointer" (click)="modal.open = !modal.open"></em>
@@ -19,7 +19,7 @@
           <request-info [model]="requestDetail" [issue]="issue" [generalInfoViewModel]="generalInfoViewModel"
              [isShowAbnormalAccountInfo]="false" [isShowGeneralInfo]="true"></request-info>
           <tickets [model]="tickets" [(paging)]="paging" (pagingChange)="pagingEvent()" [isBlock]="blockBetList"
-            (exportExcelEvent)="exportExcel()"></tickets>
+            (exportExcelEvent)="exportExcel()" [issueTypeId]="requestDetail.request?.issueTypeId"></tickets>
         </div>
       </div>
     </div>

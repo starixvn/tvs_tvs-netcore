@@ -6,6 +6,7 @@ using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
@@ -261,7 +262,6 @@ public class EmailExtensionTests
         // Assert
         Assert.Equal(string.Empty, result);
     }
-
 
     [Fact]
     public void GetNegativeBalanceUsers_EmailGroupNotCashOut_ReturnEmpty()

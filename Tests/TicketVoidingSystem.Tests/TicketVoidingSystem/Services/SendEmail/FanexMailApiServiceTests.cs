@@ -12,12 +12,13 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail;
 public class FanexMailApiServiceTests : AppSettingFixture
 {
     private readonly LoggingService loggingService;
+    private readonly SpecialPlatformService specialPlatformService;
     private readonly FanexMailApiServiceImp service;
 
     public FanexMailApiServiceTests()
     {
         loggingService = Substitute.For<LoggingService>();
-        var specialPlatformService = Substitute.For<SpecialPlatformService>();
+        specialPlatformService = Substitute.For<SpecialPlatformService>();
         service = new FanexMailApiServiceImp(loggingService, specialPlatformService);
     }
 

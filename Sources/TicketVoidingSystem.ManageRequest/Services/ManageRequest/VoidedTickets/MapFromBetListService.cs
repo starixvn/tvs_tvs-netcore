@@ -15,7 +15,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets
 
 public interface MapFromBetListService
 {
-    VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId);
+    VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, GetVoidedTicketsQuery query);
 }
 
 public class MapFromBetListServiceImp : MapFromBetListService
@@ -29,7 +29,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         this.betListService = betListService;
     }
 
-    public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
+    public VoidedTicketViewModel MapToVoidedTicketViewModel(VoidedTicketModel item, Match? match, ChoiceType choiceType, GetVoidedTicketsQuery query)
     {
         const int minBetType = 801;
         const int maxBetType = 806;
@@ -47,16 +47,16 @@ public class MapFromBetListServiceImp : MapFromBetListService
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.BetType = betListService.GetBetTypeName(ticket);
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
-        viewModel.Choice = IsGetPlainTextForExportExcel(item.BetType, choiceType, item.IsMixParlay, issueTypeId) ?
+        viewModel.Choice = IsGetPlainTextForExportExcel(item.BetType, choiceType, item.IsMixParlay, query.IssueTypeId) ?
             betListService.BuildChoiceExcel(ticket, ticketHelper, null, false) :
-            BuildChoice(ticket, ticketHelper, item, issueTypeId);
+            BuildChoice(ticket, ticketHelper, item, query.IssueTypeId);
 
         var choiceBlock = betListService.BuildChoiceBlock(ticket, ticketHelper, null, false);
         viewModel.BettypeCombination = item.BetdaqId != 1 ? CombineBetType(item.IsLiveIndicator, viewModel.BetType, choiceBlock.betTeam) : string.Empty;
 
         viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        viewModel.VoidTime = item.VoidedTime.ToString(FormatKey.LongDateFormatTimeWithSlash);
+        viewModel.VoidTime = query.IssueTypeId != IssueTypeConstant.RecoverTicket ? item.VoidedTime?.ToString(FormatKey.LongDateFormatTimeWithSlash) : query.RecoverTime;
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
         viewModel.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();
         viewModel.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");

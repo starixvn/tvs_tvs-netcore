@@ -51,7 +51,7 @@ public class GetVoidedTicketsForExcelServiceTests
                 }
             });
         mapTicketsExcelService.MapToGroupExcelVoidedTickets(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(),
-                Arg.Any<int>(), Arg.Any<int>())
+                Arg.Any<int>(), Arg.Any<GetVoidedTicketsQuery>())
             .Returns(new Group<ExcelVoidedTicketModel>
             {
                 Name = "Test",

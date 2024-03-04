@@ -90,14 +90,16 @@ export class RequestListComponent implements OnInit, OnChanges {
   checkVoided(details: DetailRequestModel[]): boolean {
     let total = 0;
     details.forEach(item => {
-      total = total + item.totalVoidedSingle + item.totalVoidedParlay;
+      total = total + item.totalSingleProcessed + item.totalParlayProcessed;
     });
 
     return total > 0;
   }
 
   checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
-    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT) {
+    if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET
+      || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT
+      || issueTypeId.toString() === IssueTypeConstant.RECOVER_TICKET) {
       return this.permission.manageRequestHost && this.isCreatedDateLessThanToday(createdDate);
     } else {
       return this.permission.manageRequestHost && new Date(eventDate) > new Date(this.moveBetDay);
@@ -203,14 +205,16 @@ export class RequestListComponent implements OnInit, OnChanges {
           if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            detail.totalVoidedSingle = x.simpleInfo.totalVoidedSingle;
-            detail.totalVoidedParlay = x.simpleInfo.totalVoidedParlay;
-            detail.totalCancelCashOut = x.simpleInfo.totalCancelCashOut;
+            detail.totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
+            detail.totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
+            detail.totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
+            detail.totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
           } else {
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
-            request.details[0].totalVoidedSingle = x.simpleInfo.totalVoidedSingle;
-            request.details[0].totalVoidedParlay = x.simpleInfo.totalVoidedParlay;
-            request.details[0].totalCancelCashOut = x.simpleInfo.totalCancelCashOut;
+            request.details[0].totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
+            request.details[0].totalParlayProcessed = x.simpleInfo.totalParlayProcessed;
+            request.details[0].totalCancelCashOutProcessed = x.simpleInfo.totalCancelCashOutProcessed;
+            request.details[0].totalResettleProcessed = x.simpleInfo.totalResettleProcessed;
           }
         }
       }
@@ -253,7 +257,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       + `Start Void Time: ${moment(requestInfo.startVoidTime)
         .format(DateTimeFormat.TIME_FORMAT)} (${requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
 
-      return content;
+    return content;
   }
 
   public checkCanCopyRequestInfo(issueTypeId: number): boolean {
@@ -265,13 +269,21 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];
-    info.push(`S:${detail.totalVoidedSingle}`);
-    info.push(`P:${detail.totalVoidedParlay}`);
+    info.push(`S:${detail.totalSingleProcessed}`);
+    info.push(`P:${detail.totalParlayProcessed}`);
 
     if (StaticService.isHaveCancelCashOutTicket(issueTypeId.toString())) {
-      info.push(`<span class="text-green">CC:${detail.totalCancelCashOut}</span>`);
+      info.push(`<span class="text-green">CC:${detail.totalCancelCashOutProcessed}</span>`);
+    }
+
+    if (this.isRecoverTicket(issueTypeId.toString())) {
+      info.push(`RS:${detail.totalResettleProcessed}`);
     }
 
     return `(${info.join(', ')})`;
+  }
+
+  isRecoverTicket(issueTypeId: string): boolean {
+    return StaticService.isRecoverTicket(issueTypeId);
   }
 }

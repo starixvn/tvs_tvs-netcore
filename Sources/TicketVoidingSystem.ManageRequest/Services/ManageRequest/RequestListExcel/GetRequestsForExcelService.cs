@@ -106,7 +106,7 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         outputRequest.BetType = string.Join(", ", param.CurrentViewModel.BettypeNames);
         outputRequest.Action = convertRequestsService.GetVoidActionName(param.CurrentViewModel.ActionId, param.VoidActions);
         outputRequest.PerformedBy = param.CurrentViewModel.LastPerformedBy;
-        outputRequest.NoOfTickets = convertRequestsService.GetNoOfTickets(param.CurrentViewModel.Details[0].TotalVoidedSingle, param.CurrentViewModel.Details[0].TotalVoidedParlay);
+        outputRequest.NoOfTickets = convertRequestsService.GetNoOfTickets(param.CurrentViewModel.Details[0].TotalSingleProcessed, param.CurrentViewModel.Details[0].TotalParlayProcessed);
         outputRequest.NumberOfRequestDetails = param.NumberOfRequestDetail;
         outputRequest.CalcFullTime = param.CurrentViewModel.CalcFullTime != null ? param.CurrentViewModel.CalcFullTime.ToString() : string.Empty;
         outputRequest.CalcHalfTime = param.CurrentViewModel.CalcHalfTime != null ? param.CurrentViewModel.CalcHalfTime.ToString() : string.Empty;

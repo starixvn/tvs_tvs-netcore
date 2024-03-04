@@ -3,8 +3,8 @@ export class GeneralInfo {
     kickOffTimeString?: string;
     leagueName?: string;
     matchEvent?: string;
-    totalVoidedTickets: number;
-    totalCancelCashOut: number;
+    totalTicketsProcessed: number;
+    totalCancelCashOutProcessed: number;
     decidedBy: string;
     requestedBy: string;
     negativeBalanceUsers: string;
@@ -14,6 +14,8 @@ export class GeneralInfo {
     generalBetTypeCombinations: string;
     scoreResult: string;
     reason: string;
+    singleTransIds: string;
+    recoveredTimeString: string;
 }
 
 export class GroupUserVoidMessage {

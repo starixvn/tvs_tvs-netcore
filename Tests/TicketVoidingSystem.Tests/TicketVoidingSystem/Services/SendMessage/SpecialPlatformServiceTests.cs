@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Fanex.MailDeliver.MailClient;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
@@ -150,23 +151,17 @@ public class SpecialPlatformServiceTests
         var message = new Message
         {
             ContentEnglish = "Saba 123 456",
-            ContentChineseSimplified = "沙巴123456",
-            ContentChineseTraditional = "沙巴123456",
-            ContentNewChineseSimplified = "沙巴123456"
+            ContentChineseSimplified = "沙巴123456"
         };
         var match = new Match
         {
             OriginLeagueName = "Saba 123",
-            OriginLeagueNameSimplified = "沙巴123",
-            OriginLeagueNameNewSimplified = "沙巴123",
-            OriginLeagueNameTraditional = "沙巴123"
+            OriginLeagueNameSimplified = "沙巴123"
         };
         var messageExpected = new Message
         {
             ContentEnglish = "123 456",
-            ContentChineseSimplified = "123456",
-            ContentNewChineseSimplified = "123456",
-            ContentChineseTraditional = "123456",
+            ContentChineseSimplified = "123456"
         };
         var service = new SpecialPlatformServiceImp();
 
@@ -315,5 +310,37 @@ public class SpecialPlatformServiceTests
 
         // Assert
         Assert.Equal(expected, AppSettings.AppMailId);
+    }
+
+    [Fact]
+    public void GetTitleForMailRecord_siteIsJollySports_ReturnExpected()
+    {
+        // Arrange
+        var site = new SiteEmail
+        {
+            SpecialPlatform = SpecialPlatformConstant.JollySports
+        };
+        const string expected = "JollySports Notice / 通知";
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.GetTitleForMailRecord(site);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GetTitleForMailRecord_siteIsNull_ReturnExpected()
+    {
+        // Arrange
+        const string expected = "沙巴体育通知 | Saba Sports Notice";
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.GetTitleForMailRecord(null);
+
+        // Assert
+        Assert.Equal(expected, actual);
     }
 }

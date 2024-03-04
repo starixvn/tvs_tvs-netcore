@@ -84,6 +84,30 @@
         </select>
       </div>
     </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsDeletedZzzBetTrans</label>
+        <select [(ngModel)]="tmpModel.isDeletedZzzBetTrans">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsDeletedMessage</label>
+        <select [(ngModel)]="tmpModel.isDeletedMessage">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsDeletedVoidedTransaction </label>
+        <select [(ngModel)]="tmpModel.isDeletedVoidedTransaction">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
   </div>  
   <div class="save-history-status mg-top-10">
     <input type="button" class="btn btn-primary btn-sm font-weight-bold" value="Save"

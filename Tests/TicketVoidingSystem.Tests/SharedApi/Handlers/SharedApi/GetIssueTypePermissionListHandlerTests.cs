@@ -40,7 +40,7 @@ public class GetIssueTypePermissionListHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(17, result.ToList().Count);
+        Assert.Equal(18, result.ToList().Count);
     }
 
     [Fact]

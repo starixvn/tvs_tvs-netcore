@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using TicketVoidingSystem.SharedApi.Models;
-using TicketVoidingSystem.SharedApi.Services;
+using TicketVoidingSystem.SharedApi.Services.SharedApi;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 

@@ -39,7 +39,8 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
                 {IssueTypeConstant.DuplicateTickets, BuildSingleOrParlay},
-                {IssueTypeConstant.NotParticipate, BuildMatchLeague}
+                {IssueTypeConstant.NotParticipate, BuildMatchLeague},
+                {IssueTypeConstant.RecoverTicket, BuildProducts}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);
@@ -119,5 +120,12 @@ public class DescriptionServiceImp : DescriptionService
     private string BuildVoidArchivedTicket(RequestDescription item)
     {
         return elementService.BuildTotal(item.TotalSingle, item.TotalParlay, Enumerable.Empty<string>());
+    }
+
+    private string BuildProducts(RequestDescription item)
+    {
+        var products = elementService.BuildProducts(item.Products);
+
+        return $"{products}";
     }
 }

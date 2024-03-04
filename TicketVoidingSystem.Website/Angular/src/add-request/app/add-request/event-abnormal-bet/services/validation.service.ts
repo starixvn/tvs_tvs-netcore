@@ -36,7 +36,7 @@ export class ValidationService {
   }
 
   async exportExcelAbnormalBetTickets(args: ValidationBusinessRuleArgs){
-    let query = this.initCheckAbnormalBetTransIdsQuery(args);
+    const query = this.initCheckAbnormalBetTransIdsQuery(args);
     await this.addRequestApiService.exportExcelAbnormalBetTickets(query);
   }
 
@@ -55,7 +55,7 @@ export class ValidationService {
     args.betIdsComponent.groupNumber.resetAllItemsToValid();
     args.betIdsComponent.groupNumber.checkDuplicatedItems();
 
-    let query = this.initCheckAbnormalBetTransIdsQuery(args);
+    const query = this.initCheckAbnormalBetTransIdsQuery(args);
     const checkTransIdViewModel = await this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);
 
     if (checkTransIdViewModel === null) {

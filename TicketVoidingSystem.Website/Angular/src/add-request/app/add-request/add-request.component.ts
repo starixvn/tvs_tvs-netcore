@@ -12,6 +12,7 @@ import { EventDangerAcceptedComponent } from './event-danger-accepted/event-dang
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
+import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
@@ -55,6 +56,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
+  @ViewChild('eventRecoverTicket') eventRecoverTicketComponent: EventRecoverTicketComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -102,6 +104,16 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isExternalUrl && this.isLikelyAbnormalBetIssueType()) {
       await new Promise(resolve => setTimeout(resolve));
       await this.eventAbnormalBetComponent.afterFocusOutBetIds();
+    }
+  }
+
+  onChangeIssueType(issueTypeId: string): void {
+    if (!this.isEdit && (StaticService.isAbnormalBet(issueTypeId)
+        || StaticService.isAbnormalBetRealMember(issueTypeId)
+        || StaticService.isAbnormalAccount(issueTypeId))) {
+      this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
+    } else {
+      this.model.others.decidedBy = '';
     }
   }
 
@@ -173,6 +185,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isNotParticipate()) {
       await this.eventNotParticipateComponent.saveRequest();
     }
+
+    if (this.isRecoverTicket()) {
+      await this.eventRecoverTicketComponent.saveRequest();
+    }
   }
 
   backToManagePage() {
@@ -181,15 +197,12 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   updateModel(filterModel: FilterModel): void {
     this.model.filter = _.clone(filterModel);
-    if (!this.isEdit && this.isLikelyAbnormalBetIssueType()) {
-      this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
-    }
   }
 
   public getEventLabel(): string {
     if (this.isAbnormalAccount()) {
       return 'Username';
-    } else if (this.isArchivedTicketIssueType()) {
+    } else if (this.isArchivedTicketIssueType() || this.isRecoverTicket()) {
       return 'Ticket Info';
     } else {
       return 'Event';
@@ -239,7 +252,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isShowOthersFullFields(): boolean {
     return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
-      && !this.isShowOthersSimpleFields();
+      && !this.isRecoverTicket() && !this.isShowOthersSimpleFields();
   }
 
   isShowSaveAndVoidButton(): boolean {
@@ -326,5 +339,9 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isNotParticipate(): boolean {
     return StaticService.isNotParticipate(this.model.filter.issueTypeId);
+  }
+
+  isRecoverTicket(): boolean {
+    return StaticService.isRecoverTicket(this.model.filter.issueTypeId);
   }
 }

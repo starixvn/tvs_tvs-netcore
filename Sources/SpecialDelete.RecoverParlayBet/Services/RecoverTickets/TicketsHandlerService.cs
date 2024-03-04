@@ -3,9 +3,10 @@ using SpecialDelete.RecoverParlayBet.ViewModels;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 using EmailSupport = SpecialDelete.RecoverParlayBet.Models.EmailSupport;
 
 namespace SpecialDelete.RecoverParlayBet.Services.RecoverTickets;

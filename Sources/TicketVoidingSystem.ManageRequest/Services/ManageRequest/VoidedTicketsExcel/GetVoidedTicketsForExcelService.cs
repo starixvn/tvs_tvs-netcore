@@ -29,7 +29,7 @@ public class GetVoidedTicketsForExcelServiceImp : GetVoidedTicketsForExcelServic
 
         foreach (var group in groupsTickets)
         {
-            var currentExcelGroup = mapTicketsExcelService.MapToGroupExcelVoidedTickets(group, match, index, query.IssueTypeId);
+            var currentExcelGroup = mapTicketsExcelService.MapToGroupExcelVoidedTickets(group, match, index, query);
             groupsExcelTickets.Add(currentExcelGroup);
             index += currentExcelGroup.Tickets.Count();
         }

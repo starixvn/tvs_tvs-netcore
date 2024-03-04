@@ -49,7 +49,7 @@ class Helper {
   };
 }
 
-describe('EventAbnormalBetComponent', () => {
+describe('EventDuplicateTicketsComponent', () => {
   @NgModule({
     declarations: [
       BetIdsComponent,

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
@@ -26,32 +28,22 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
     }
 
     [Fact]
-    public async void GetTickets_ValidQuery_ReturnVoidedTicketModel()
+    public async Task GetTickets_HasIssueTypeIsRecoverTicket_GetRecoveredTickets()
     {
         // Arrange
-        var query = new GetVoidedTicketsQuery();
-        mapper.Map<GetVoidedTicketsCriteria>(Arg.Any<GetVoidedTicketsQuery>()).Returns(new GetVoidedTicketsCriteria());
-        repository.FetchAsync<VoidedTicketModel>(Arg.Is(new GetVoidedTicketsCriteria
-        {
-            SiteDbGroupId = 1
-        })).ReturnsForAnyArgs(new List<VoidedTicketModel>
-        {
-            new()
-            {
-                TransId = 1
-            }
-        });
+        var tickets = new List<VoidedTicketModel> { new() { GroupName = "Credit" } };
+        var query = new GetVoidedTicketsQuery { IssueTypeId = IssueTypeConstant.RecoverTicket, IsCreditOnly = true };
+        repository.FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>()).ReturnsForAnyArgs(tickets);
 
-        // Act 
-        var result = await service.GetTickets(query);
+        // Act
+        _ = await service.GetTickets(query);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equal(4, result.Count());
+        await repository.Received().FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>());
     }
 
     [Fact]
-    public async void GetTickets_ValidQuery_ReturnVoidedTickets14()
+    public async Task GetTickets_HasIssueTypeIsArchivedTicket_GetVoidedTickets14()
     {
         // Arrange
         var query = new GetVoidedTicketsQuery
@@ -71,7 +63,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
             }
         });
 
-        // Act 
+        // Act
         var result = await service.GetTickets(query);
 
         // Assert
@@ -81,7 +73,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
     }
 
     [Fact]
-    public async void GetTickets_InputIsCreditOnlyTrue_ReturnVoidedTicketModel()
+    public async Task GetTickets_InputIsCreditOnlyTrue_ReturnVoidedTicketModel()
     {
         // Arrange
         var query = new GetVoidedTicketsQuery
@@ -101,7 +93,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
             }
         });
 
-        // Act 
+        // Act
         var result = await service.GetTickets(query);
 
         // Assert
@@ -109,9 +101,8 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         Assert.Equal(4, result.Count());
     }
 
-
     [Fact]
-    public async void GetMatchInfo_InputMatchId_ReturnVoidedTicketModel()
+    public async Task GetMatchInfo_InputMatchId_ReturnVoidedTicketModel()
     {
         // Arrange
 
@@ -120,7 +111,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
             MatchId = 123
         });
 
-        // Act 
+        // Act
         var result = await service.GetMatchInfo(1);
 
         // Assert

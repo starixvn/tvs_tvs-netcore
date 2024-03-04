@@ -23,7 +23,7 @@ public class DescriptionServiceTests
     public void Build_WhenCalled_ReturnStringOfBuildEKO()
     {
         // Arrange
-        var expectedResult = "123";
+        const string expectedResult = "123";
         var request = new RequestDescription { IssueTypeId = 8 };
         elementService.BuildKoTime(Arg.Compat.Any<DateTime>()).ReturnsForAnyArgs("1");
         elementService.BuildMatch(Arg.Compat.Any<string>()).ReturnsForAnyArgs("2");
@@ -40,7 +40,7 @@ public class DescriptionServiceTests
     public void Build_WhenCalled_ReturnStringOfBuildDefault()
     {
         // Arrange
-        var expectedResult = "1234";
+        const string expectedResult = "1234";
         var request = new RequestDescription { IssueTypeId = 1000 };
         elementService.BuildLogId(Arg.Compat.Any<int>(), Arg.Compat.Any<int>()).ReturnsForAnyArgs("1");
         elementService.BuildMatch(Arg.Compat.Any<string>()).ReturnsForAnyArgs("2");
@@ -59,7 +59,7 @@ public class DescriptionServiceTests
     public void Build_WhenCalled_ReturnStringOfBuildAbnormalBet()
     {
         // Arrange
-        var expectedResult = "234";
+        const string expectedResult = "234";
         var request = new RequestDescription { IssueTypeId = 11 };
         elementService.BuildMatch(Arg.Compat.Any<string>()).ReturnsForAnyArgs("2");
         elementService.BuildLeague(Arg.Compat.Any<string>(), Arg.Compat.Any<string>()).ReturnsForAnyArgs("3");
@@ -76,7 +76,7 @@ public class DescriptionServiceTests
     public void Build_WhenCalled_ReturnStringOfAbnormalBetParlay()
     {
         // Arrange
-        var expectedResult = "4";
+        const string expectedResult = "4";
         var request = new RequestDescription { IssueTypeId = IssueTypeConstant.AbnormalBet, FilterBy = 1 };
         elementService.BuildMixParlay(Arg.Compat.Any<int>()).ReturnsForAnyArgs("4");
 
@@ -109,7 +109,7 @@ public class DescriptionServiceTests
     public void Build_WhenCalled_ReturnStringOfAbnormalAccount()
     {
         // Arrange
-        var expectedResult = "2021/01/11 - 2021/01/1910";
+        const string expectedResult = "2021/01/11 - 2021/01/1910";
         var request = new RequestDescription { IssueTypeId = 13 };
         elementService.BuildVoidTimeAbnormalAccount(Arg.Compat.Any<DateTime>(), Arg.Compat.Any<DateTime>())
             .ReturnsForAnyArgs("2021/01/11 - 2021/01/19");
@@ -201,5 +201,19 @@ public class DescriptionServiceTests
 
         // Assert
         Assert.Equal(expectedResult, actual);
+    }
+
+    [Fact]
+    public void Build_WhenCalled_ReturnStringOfRecoverTicket()
+    {
+        // Arrange
+        var request = new RequestDescription { IssueTypeId = IssueTypeConstant.RecoverTicket };
+        elementService.BuildProducts(Arg.Compat.Any<string>()).ReturnsForAnyArgs("Sportsbook");
+
+        // Act
+        var actual = descriptionService.Build(request);
+
+        // Assert
+        Assert.Equal("Sportsbook", actual);
     }
 }

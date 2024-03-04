@@ -4,9 +4,10 @@ using SpecialDelete.RecoverByBetId.ViewModels;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 using TicketVoidingSystem.Services.SendMessage;
 
 namespace SpecialDelete.RecoverByBetId.Services.RecoverTickets;
@@ -112,15 +113,18 @@ public class RecoverTicketsServiceImp : RecoverTicketsService
         {
             new() { ErrorMsg =  StringResource.RecoverBetSuccessfully }
         };
-        if (!string.IsNullOrWhiteSpace(model.Validation.ReCalcMatches))
+
+        if (string.IsNullOrWhiteSpace(model.Validation.ReCalcMatches))
         {
-            var result = new Result
-            {
-                ErrorCode = 1,
-                ErrorMsg = string.Format(StringResource.WarningRecoverReCalcBitcoinMatchs, model.Validation.ReCalcMatches)
-            };
-            results.Add(result);
+            return results;
         }
+
+        var result = new Result
+        {
+            ErrorCode = 1,
+            ErrorMsg = string.Format(StringResource.WarningRecoverReCalcBitcoinMatchs, model.Validation.ReCalcMatches)
+        };
+        results.Add(result);
 
         return results;
     }

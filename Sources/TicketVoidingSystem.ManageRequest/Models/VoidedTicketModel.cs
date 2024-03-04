@@ -42,7 +42,7 @@ public class VoidedTicketModel
     public decimal SubOdds { get; set; }
     public string SubTransdesc { get; set; }
     public byte SettlementStatus { get; set; }
-    public DateTime VoidedTime { get; set; }
+    public DateTime? VoidedTime { get; set; }
     public bool IsCredit { get; set; }
     public bool IsCashOut { get; set; }
     public bool IsCancelCashOut { get; set; }

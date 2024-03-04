@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EventRecoverTicketComponent #EventRecoverTicketComponent init should match snapshot 1`] = `
+<ng-component
+  __ngContext__={[Function LRootView]}
+>
+  <event-recover-ticket>
+    <div>
+      <div
+        class="filter-product mb-3"
+      >
+        <label
+          class="col-form-label"
+        >
+          Product
+        </label>
+        <div
+          class="product-selection"
+        >
+          <ng-select
+            bindlabel="name"
+            bindvalue="value"
+            class="custom-sm ng-untouched ng-pristine"
+          />
+        </div>
+      </div>
+      <div
+        class="d-flex mb-2 header-bet-id"
+        style="max-width: 1065px;"
+      >
+        <div
+          class="mr-4"
+        >
+          Bet ID(s)
+        </div>
+      </div>
+      <div>
+        <bet-ids />
+      </div>
+    </div>
+  </event-recover-ticket>
+</ng-component>
+`;

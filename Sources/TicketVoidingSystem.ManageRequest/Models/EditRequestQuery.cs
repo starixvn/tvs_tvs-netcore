@@ -77,6 +77,8 @@ public class EditRequestQuery
 
     public DuplicateTicketsViewModel? DuplicateTicketsInfo { get; set; }
 
+    public RecoverTicketViewModel? RecoverTicketInfo { get; set; }
+
     public string? TransInfoJson { get; set; }
     public int? FilterBy { get; set; }
 }

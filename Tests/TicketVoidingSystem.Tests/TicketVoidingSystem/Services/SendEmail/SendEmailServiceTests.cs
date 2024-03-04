@@ -4,6 +4,7 @@ using NSubstitute;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail;
+using TicketVoidingSystem.Services.SendEmail.Void;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail

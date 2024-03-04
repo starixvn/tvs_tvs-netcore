@@ -5,7 +5,7 @@ using SpecialDelete.RecoverParlayBet.Services;
 using SpecialDelete.RecoverParlayBet.Services.GetTickets;
 using SpecialDelete.RecoverParlayBet.Services.RecoverTickets;
 using SpecialDelete.RecoverParlayBet.ViewModels;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 

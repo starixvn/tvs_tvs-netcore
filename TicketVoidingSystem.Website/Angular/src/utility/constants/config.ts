@@ -154,6 +154,8 @@ export class TVSRequestActionType {
   static readonly TAKE_NOTE_ID = 2;
   static readonly WAITING_ID = 3;
   static readonly AUTO_VOID_RESULT_KEYED_ID = 9;
+  static readonly AUTO_RECOVER_ID = 11;
+
   static readonly MANUAL_VOID = 'Manual Void';
 }
 
@@ -440,5 +442,8 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly RECOVER_TICKET: number[] = [
+    TVSRequestActionType.AUTO_RECOVER_ID
   ];
 }

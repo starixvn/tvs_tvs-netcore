@@ -1,8 +1,8 @@
-import { CheckValidateService } from './check-validate.service';
-import { CommonService } from '../../../utility/services/common.service';
+import { GroupBetType, GroupBetTypesModel, Result } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { Result, GroupBetTypesModel, GroupBetType } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
+import { CheckValidateService } from './check-validate.service';
 
 describe('CheckValidateService', () => {
     let mockCommonService: CommonService;
@@ -21,8 +21,8 @@ describe('CheckValidateService', () => {
 
   it('#checkValidMatch return true when MatchId is Null', async () => {
     // Arrange
-    let matchId = null;
-    let tooltip = new Tooltip();
+    const matchId = null;
+    const tooltip = new Tooltip();
 
     // Action
     const result = await service.checkValidMatch(matchId, tooltip);
@@ -33,8 +33,8 @@ describe('CheckValidateService', () => {
 
   it('#checkValidMatch return true when MatchId = 29', async () => {
     // Arrange
-    let matchId = '29';
-    let tooltip = new Tooltip();
+    const matchId = '29';
+    const tooltip = new Tooltip();
 
     // Action
     const result = await service.checkValidMatch(matchId, tooltip);
@@ -45,10 +45,10 @@ describe('CheckValidateService', () => {
 
   it('#checkValidMatch return true when MatchId is Valid', async () => {
     // Arrange
-    let matchId = '1';
-    let tooltip = new Tooltip();
-    let groups = [new GroupBetType('a',[],true)];
-    let fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+    const matchId = '1';
+    const tooltip = new Tooltip();
+    const groups = [new GroupBetType('a',[],true)];
+    const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
     fakeGroupBetTypesModel.result = new Result();
     fakeGroupBetTypesModel.result.errorCode = 0;
     mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
@@ -61,12 +61,28 @@ describe('CheckValidateService', () => {
     expect(result).toBe(true);
   });
 
+  it('#checkValidMatch return false when MatchId is Valid & groupBetTypes empty', async () => {
+    // Arrange
+    const tooltip = new Tooltip();
+    const fakeGroupBetTypesModel = new GroupBetTypesModel([], true);
+    fakeGroupBetTypesModel.result = new Result();
+    fakeGroupBetTypesModel.result.errorCode = 0;
+    mockCommonService.getGroupBetTypes = jest.fn().mockReturnValue(fakeGroupBetTypesModel);
+    tooltip.display = jest.fn();
+
+    // Action
+    const result = await service.checkValidMatch('1', tooltip);
+
+    // Assert
+    expect(result).toBeFalsy();
+  });
+
   it('#checkValidMatch return false when MatchId is inValid', async () => {
     // Arrange
-    let matchId = '1';
-    let tooltip = new Tooltip();
-    let groups = [new GroupBetType('a',[],true)];
-    let fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+    const matchId = '1';
+    const tooltip = new Tooltip();
+    const groups = [new GroupBetType('a',[],true)];
+    const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
     fakeGroupBetTypesModel.result = new Result();
     fakeGroupBetTypesModel.result.errorCode = 1;
     fakeGroupBetTypesModel.result.errorMsg = 'errorMsg' ;

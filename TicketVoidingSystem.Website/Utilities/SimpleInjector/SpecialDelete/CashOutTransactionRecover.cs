@@ -2,7 +2,7 @@
 using SpecialDelete.CashOutTransaction.Common.ViewModels;
 using SpecialDelete.CashOutTransaction.RecoverTickets.Models;
 using SpecialDelete.CashOutTransaction.RecoverTickets.Services;
-using TicketVoidingSystem.Services.SendEmail.Recover;
+using TicketVoidingSystem.Services.SendEmail.RecoverSpecialDeletePage;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.SpecialDelete;
 

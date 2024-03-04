@@ -633,4 +633,52 @@ public class GetRequestServiceTests
         Assert.Equal(expectedResult.Request.IssueTypeId, actualResult.Request.IssueTypeId);
         Assert.Null(actualResult.Event);
     }
+
+    [Fact]
+    public async Task GetRequest_IsRecoverTicket_ReturnExpectedViewModel()
+    {
+        // Arrange
+        var request = new GetRequestRequest { RequestId = 1 };
+        var fakeData =
+            new ValueTuple<IEnumerable<RequestDetailModel>, IEnumerable<RequestEventModel>, IEnumerable<PlayerName>>(
+                new List<RequestDetailModel>
+                {
+                    new()
+                    {
+                        IssueTypeId = IssueTypeConstant.RecoverTicket, SportType = 0,
+                        OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                    }
+                },
+                new List<RequestEventModel> { new() { TransIds = "1,2", FilterBy = 1, ProductIds = "0,1", SubIssueTypeId = 1 } },
+                new List<PlayerName> { new() }
+            );
+        var expectedResult = new RequestDetailViewModel
+        {
+            Request = new RequestDetailModel
+            {
+                IssueTypeId = IssueTypeConstant.RecoverTicket,
+                SportType = 0,
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+            },
+            PlayerNames = new List<PlayerName> { new() },
+            RecoverTicketModel = new RecoverTicketViewModel
+            {
+                TransIds = "1,2",
+                FilterBy = 1,
+                ProductIds = "0,1",
+                SubIssueTypeId = 1
+            }
+        };
+        repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request)
+            .ReturnsForAnyArgs(fakeData);
+
+        // Act
+        var actualResult = await service.GetRequest(request);
+
+        // Assert
+        await repository.Received(1)
+            .FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(
+                Arg.Compat.Is<GetRequestRequest>(x => x.RequestId == 1));
+        AssertExtension.Equal(expectedResult, actualResult);
+    }
 }

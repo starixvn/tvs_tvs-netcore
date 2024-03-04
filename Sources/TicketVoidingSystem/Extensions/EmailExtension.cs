@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendEmail.RecoverSpecialDeletePage;
 
 namespace TicketVoidingSystem.Extensions;
 
@@ -26,12 +27,7 @@ public static class EmailExtension
         return $"<Operators>{stringBuilder.ToString().Trim()}</Operators>";
     }
 
-    public static bool Valid(this IEnumerable<TicketEmailModel> tickets, SiteEmail site)
-    {
-        return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
-    }
-
-    public static bool Valid(this IEnumerable<DuplicateTicketsRequestInfo> tickets, SiteEmail site)
+    public static bool Valid<T>(this IEnumerable<T> tickets, SiteEmail site)
     {
         return tickets.Any() && !string.IsNullOrEmpty(site.ToList);
     }
@@ -66,7 +62,7 @@ public static class EmailExtension
         return negativeBalanceUsers.Intersected(usersInSite);
     }
 
-    public static string GetNegativeBalanceUsers(this IEnumerable<TicketEmailModel> tickets, EmailGroup group, Func<TicketEmailModel, string> filter, string negativeBalanceUsers)
+    public static string GetNegativeBalanceUsers<T>(this IEnumerable<T> tickets, EmailGroup group, Func<T, string> filter, string negativeBalanceUsers)
     {
         if (group == EmailGroup.CashOut)
         {

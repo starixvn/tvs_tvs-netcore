@@ -60,9 +60,9 @@ export class AddRequestService {
       if (isSaveAndVoid) {
         this.goToVoidPage(Number(addResult.data.requestId));
       } else {
-        StaticService.isAbnormalAccount(issueTypeId) || StaticService.isArchivedTicket(issueTypeId) ?
-        this.popupService.showAddedRequestSuccessful(addResult.data.requestId, () => this.reloadPageOrBackToManagePage(issueTypeId))
-         : this.popupService.showAddedRequestSuccessfulWithMatches(addResult.data.requestId, addResult.data.matchId, () => this.reloadPageOrBackToManagePage(issueTypeId));
+        this.isShowResultWithoutMatches(issueTypeId)
+          ? this.popupService.showAddedRequestSuccessful(addResult.data.requestId, () => this.reloadPageOrBackToManagePage(issueTypeId))
+          : this.popupService.showAddedRequestSuccessfulWithMatches(addResult.data.requestId, addResult.data.matchId, () => this.reloadPageOrBackToManagePage(issueTypeId));
       }
     } else {
       this.popupService.showSaveRequestError(addResult.errorMsg, LABELS.ADD_REQUEST_RESULT_TITLE);
@@ -91,5 +91,11 @@ export class AddRequestService {
   private reloadPageOrBackToManagePage(issueTypeId: string) {
     StaticService.isAbnormalBet(issueTypeId) || StaticService.isAbnormalBetRealMember(issueTypeId) ?
       window.location.reload() : window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
+  }
+
+  private isShowResultWithoutMatches(issueTypeId: string): boolean {
+    return StaticService.isAbnormalAccount(issueTypeId)
+      || StaticService.isArchivedTicket(issueTypeId)
+      || StaticService.isRecoverTicket(issueTypeId);
   }
 }

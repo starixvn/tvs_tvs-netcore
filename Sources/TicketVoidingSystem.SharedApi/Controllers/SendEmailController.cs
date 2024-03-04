@@ -24,4 +24,8 @@ public class SendEmailController : ControllerBase
     [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> SendEmailDuplicateTickets(SendEmailApiDuplicateTicketsRequest request) => Ok(await mediator.Send(request));
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> SendEmailRecoverTickets(SendEmailRecoverApiRequest request) => Ok(await mediator.Send(request));
 }

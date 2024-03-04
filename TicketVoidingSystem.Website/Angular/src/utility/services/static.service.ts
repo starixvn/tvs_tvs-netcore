@@ -99,6 +99,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.NOT_PARTICIPATE;
   }
 
+  static isRecoverTicket(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.RECOVER_TICKET;
+  }
+
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);
@@ -129,6 +133,8 @@ export class StaticService {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.abnormalAccountModel.subIssueTypeId;
+    }  else if (this.isRecoverTicket(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.recoverTicketModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -151,11 +157,12 @@ export class StaticService {
       return requestDetail.reducedOverModels[0].eventDate;
     } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.notParticipateModels[0].eventDate;
-    } else if (this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
-      return null;
     } else if (this.isEarlyKickOff(requestDetail.request.issueTypeId.toString()) || this.isWrongKickOff(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).eventDate;
-    } else if (this.isAbnormalAccount) {
+    } else if (
+      this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())
+      || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
+      || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {
       return requestDetail.event.eventDate;

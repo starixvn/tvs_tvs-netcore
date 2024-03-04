@@ -32,15 +32,7 @@ public class CheckTickets14Handler : IRequestHandler<CheckTickets14Request, Chec
             TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)))
         };
 
-        var (firstResultSet, secondResultSet) =
-            await repository.FetchMultipleAsync<CheckTickets14ViewModel, string>(criteria, cancellationToken);
-
-        return new CheckTickets14ViewModel
-        {
-            InvalidTransIds = firstResultSet.FirstOrDefault()?.InvalidTransIds,
-            UnsupportedDateRangeTransIds = firstResultSet.FirstOrDefault()?.UnsupportedDateRangeTransIds,
-            TransInfoJson = secondResultSet.FirstOrDefault()
-        };
+        return await repository.GetAsync<CheckTickets14ViewModel>(criteria, cancellationToken);
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(CheckTickets14Model model)

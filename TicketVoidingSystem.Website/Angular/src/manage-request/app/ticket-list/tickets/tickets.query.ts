@@ -5,4 +5,6 @@ export class TicketsQuery {
   matchId: number;
   pageIndex: number;
   pageSize: number;
+  singleTransIds: string;
+  recoverTime: string;
 }
