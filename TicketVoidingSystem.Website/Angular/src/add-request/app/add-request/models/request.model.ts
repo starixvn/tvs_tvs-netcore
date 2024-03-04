@@ -58,7 +58,7 @@ export interface InitializedRequestModel {
   subIssueTypeId: string;
   actionId: string;
   isTest: boolean;
-  transIds: string[];
+  transIds: string;
 }
 
 export class CheckValidTransIdModel {

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.Json;
+using System.Threading.Tasks;
 using Fanex.NAP.Client.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -9,8 +10,9 @@ using TicketVoidingSystem.Web;
 namespace TicketVoidingSystem.Website.Controllers;
 
 using Fanex.NAP.Client.Helpers.Business;
+using TicketVoidingSystem.ManageRequest.Models;
 
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class TicketVoidingSystemController : Controller
 {
     private readonly IMediator mediator;
@@ -21,8 +23,8 @@ public class TicketVoidingSystemController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
     public IActionResult ABExceptionList()
     {
@@ -30,7 +32,7 @@ public class TicketVoidingSystemController : Controller
     }
 
     [HttpGet]
-    [Route("[action]/Index/{id}")]
+    [Route("Index/{id}")]
     public async Task<ActionResult> VoidRequest(int id)
     {
         var isHasPermission = await mediator.Send(new CheckAccessRequestPermissionRequest { RequestId = id });
@@ -43,31 +45,48 @@ public class TicketVoidingSystemController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     public ActionResult ManageRequest()
     {
         return View("~/wwwroot/dist/ticket-voiding-system/manage-request/index.cshtml");
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     public ActionResult AddRequest()
     {
         return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
     }
 
+    [HttpPost]
+    [Route("")]
+    [AllowAnonymous]
+    public ActionResult AddRequestFromCTS(AddRequestFromCTSModel model)
+    {
+        TempData["AddRequestFromCTS"] = JsonSerializer.Serialize(model);
+        var routeValues = new
+        {
+            userId = model.UserId,
+            onuserId = model.OnUserId,
+            time = model.Time,
+            redirectUrl = "/AddRequestFromOtherSites/CTS"
+        };
+
+        return RedirectToAction("SSO", "Auth", routeValues);
+    }
+
     [HttpGet]
-    [Route("[action]/Index/{id}")]
+    [Route("Index/{id}")]
     public ActionResult EditRequest(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/edit-request/index.cshtml");
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AfterVoidHistory, Policy = Constant.Policy.Read)]
     public IActionResult ManageVoidServices()
     {
@@ -75,8 +94,8 @@ public class TicketVoidingSystemController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [AllowAnonymous]
     public IActionResult ManageVoidServicesNoAuth()
     {

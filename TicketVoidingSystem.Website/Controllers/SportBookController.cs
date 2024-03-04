@@ -6,7 +6,7 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
 
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class SportBookController : Controller
 {
     private readonly SessionService sessionService;
@@ -17,8 +17,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TicketExclusion, Policy = Constant.Policy.Read)]
     public IActionResult MarkTickets()
     {
@@ -26,8 +26,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
     public IActionResult VoidSingleBet()
     {
@@ -35,8 +35,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency, Policy = Constant.Policy.Read)]
     public IActionResult VoidByCurrency()
     {
@@ -44,8 +44,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Read)]
     public IActionResult VoidByBetId()
     {
@@ -55,8 +55,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.CancelCashOutAction)]
     public IActionResult CancelCashOut()
     {
@@ -66,8 +66,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverCashOutTransaction)]
     public IActionResult RecoverCashOut()
     {
@@ -76,8 +76,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverSportsbookBet)]
     public IActionResult RecoverBet()
     {
@@ -86,8 +86,8 @@ public class SportBookController : Controller
     }
 
     [HttpGet]
-    [Route("[action]")]
-    [Route("[action]/Index")]
+    [Route("")]
+    [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverParlayBet, Policy = Constant.Policy.Read)]
     public IActionResult RecoverParlayBet()
     {
