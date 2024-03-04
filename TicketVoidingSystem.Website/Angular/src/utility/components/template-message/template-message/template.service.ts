@@ -8,8 +8,6 @@ import { Message } from './../messages/message';
 import { Format, MessageTemplateId, TemplateContentConst, TemplateReplace } from './template.const';
 import { TemplateContent, TemplateValue } from './template.model';
 
-
-
 const NUMBER_FIVE = 5;
 const MESSAGE_TEMPLATE_IDS_HAVE_TIME_RANGE_NC = [
   MessageTemplateId.NEXT_CORNER,
@@ -93,7 +91,8 @@ export class TemplateService {
   }
 
   replaceKickOffTime(message: Message, time: string) {
-    const kickOffTime = moment(new Date(time)).format(TemplateContentConst.DATE_TIME);
+    const dateKickOffTime = new Date(time);
+    const kickOffTime = moment(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(TemplateContentConst.DATE_TIME);
     const replacedContent: TemplateContent = {
       msgEnglish: `${kickOffTime} ${TemplateContentConst.GMT_8.msgEnglish}`,
       msgChineseTraditional: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseTraditional}`,
@@ -319,7 +318,6 @@ export class TemplateService {
   private getTeamNameNewSimplified(templateValue: TemplateValue): string {
     return templateValue.betTeam === 'h' ? templateValue.match?.homeNameNewSimplified : templateValue.match?.awayNameNewSimplified;
   }
-
 
   private getOuType(templateValue: TemplateValue): string {
     return templateValue.filterOuType === 'h' ? TemplateContentConst.OVER.msgEnglish : TemplateContentConst.UNDER.msgEnglish;
