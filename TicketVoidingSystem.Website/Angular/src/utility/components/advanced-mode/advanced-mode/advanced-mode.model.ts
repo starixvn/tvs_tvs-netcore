@@ -24,6 +24,7 @@ export class Selection {
   items: Selection[];
   isMultiple: boolean;
   xmlAttribute: string;
+  multiSelection: MultiSelection;
 
   constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string) {
     this.name = name;
@@ -117,6 +118,9 @@ export class BetTeam {
         this.renderMultipleSelectWithMapAndRound(item);
       } else if (item.isMultiple) {
         this.renderMultipleSelect(item);
+        item.multiSelection = this.multiSelection;
+        delete this.multiSelection;
+        this.selections.push(item);
       } else {
         const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
         this.selections.push(selection);
@@ -318,6 +322,11 @@ export class BetTeam {
   updateBySelection(result: BetTeamResult) {
     this.selections.forEach(select => {
       this.updateResult(result, select.xmlAttribute, select.value);
+      if (select.multiSelection !== undefined && (!this.isHaveMultipleMapRound ||
+        !this.isTicketListingAndBettypeMapOrRound(select.multiSelection.name))) {
+        const value = select.multiSelection.multipleSelect.getValueItems();
+        this.updateResult(result, select.multiSelection.xmlAttribute, value);
+      }
     });
   }
 

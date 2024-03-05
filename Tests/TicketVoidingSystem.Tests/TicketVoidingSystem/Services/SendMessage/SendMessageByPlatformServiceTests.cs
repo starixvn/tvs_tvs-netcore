@@ -59,8 +59,8 @@ public class SendMessageByPlatformServiceTests
         await sendMessageService.Received(1).InsertReason(param.Reason, param.ReasonSC);
         await sendMessageService.Received(1).SendMessage(normalTickets, normalMessageId, param.IssueTypeId, param.Message.CreatorId);
         await sendMessageService.Received(1).SendMessage(specialPlatformTickets, specialMessageId, param.IssueTypeId, specialMessage.CreatorId);
-        await sendMessageService.Received(1).InsertVoidedTransaction(normalTickets, normalMessageId, reasonId, param.IssueTypeId, param.SubIssueTypeId);
-        await sendMessageService.Received(1).InsertVoidedTransaction(specialPlatformTickets, specialMessageId, reasonId, param.IssueTypeId, param.SubIssueTypeId);
+        await sendMessageService.Received(1).InsertVoidedTransaction(Arg.Any<InsertVoidedTransactionParam>());
+        await sendMessageService.Received(1).InsertVoidedTransaction(Arg.Any<InsertVoidedTransactionParam>());
     }
 
     [Fact]

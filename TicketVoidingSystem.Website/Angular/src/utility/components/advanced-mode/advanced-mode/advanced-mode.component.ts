@@ -255,6 +255,10 @@ export class AdvancedModeComponent implements OnChanges {
     return true;
   }
   checkMultiSelectionData(betTeam: BetTeam): boolean {
+    return this.checkMultiSelectionBetTeam(betTeam) || this.checkMultiSelectionInSelection(betTeam);
+  }
+
+  checkMultiSelectionBetTeam(betTeam: BetTeam): boolean {
     return (
       betTeam.multiSelection !== undefined &&
       betTeam.multiSelection.multipleSelect !== undefined &&
@@ -263,21 +267,35 @@ export class AdvancedModeComponent implements OnChanges {
     );
   }
 
+  checkMultiSelectionInSelection(betTeam: BetTeam): boolean {
+    return (
+      betTeam.selections.filter(x => x.multiSelection !== undefined && x.multiSelection.multipleSelect.items.length > 0)
+        .some(y => y.multiSelection.multipleSelect.getValueItems() === '')
+    );
+  }
+
+
   checkCheckedBetTypesWithHDPBetType(betTeam: BetTeam) {
     return betTeam.checkedBetTypes.length > 0 && betTeam.type === 1;
   }
 
-  checkEmptyCheckbox(result: boolean, i: number): boolean {
+  checkEmptyCheckbox(result: boolean, i: number): boolean { //NOSONAR
     const betTeam = this.betTeams[i];
     if (betTeam.checkedBetTypes.length > 0 && betTeam.type !== 1) {
       if (betTeam.getItemsValue() === '' && betTeam.type !== AdvancedModeConstants.BETTEAM_TYPE_4) {
         result = false;
         this.isShowContent = true;
         this.tooltip.display(`bet-team-${i}`, LABELS.NO_BET_TEAM);
-      } else if (this.checkMultiSelectionData(betTeam) && result) {
+      } else if (this.checkMultiSelectionBetTeam(betTeam) && result) {
         result = false;
         this.isShowContent = true;
         this.tooltip.display(`multiple-selection-${i}`, LABELS.NO_BET_TEAM);
+      } else if (this.checkMultiSelectionInSelection(betTeam) && result) {
+        const invalidSelection = betTeam.selections.find(x => x.multiSelection.multipleSelect.getValueItems() === '')
+
+        result = false;
+        this.isShowContent = true;
+        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.NO_BET_TEAM);
       }
     }
 
@@ -428,6 +446,8 @@ export class AdvancedModeComponent implements OnChanges {
       if (x.name === 'Player:') {
         x.isMultiple = true;
         betTeam.renderMultipleSelect(x);
+        x.multiSelection = betTeam.multiSelection;
+        delete betTeam.multiSelection;
       }
     });
   }
