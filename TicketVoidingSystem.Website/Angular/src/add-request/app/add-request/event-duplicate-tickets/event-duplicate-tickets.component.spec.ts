@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
-import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
@@ -37,15 +36,6 @@ class Helper {
     isVoided: false,
     subIssueTypes: [],
     isAbnormal: false
-  };
-  static readonly fakePermissionManage: PermissionManage = {
-    manageRequestHost: true,
-    verifyRead: true,
-    verifyHost: true,
-    voidRead: true,
-    manageRequestSettledTicketsHost: false,
-    manageRequestUnsettledTicketsHost: true,
-    isReadMarkTickets: true,
   };
 }
 

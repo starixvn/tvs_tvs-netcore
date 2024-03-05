@@ -1,13 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
-import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventAbnormalComponent } from '../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../filter/filter.model';
 import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
@@ -32,12 +32,12 @@ export class EventDuplicateTicketsComponent implements OnInit {
   @ViewChild('leagueEvent') leagueEventComponent: LeagueEventAbnormalComponent;
 
   primitiveProps = new PrimitiveProperty();
-  permission = new PermissionManage();
+  permission = new PermissionAddRequest();
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
   tooltip = new Tooltip();
   constructor(
-    private readonly commonService: CommonService,
+    private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     private readonly addRequestStore: AddRequestStore,
@@ -51,7 +51,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
       this.duplicateTicketsModel.filterBy = AbnormalFilterBy.SINGLE;
     }
     this.addRequestStore.changeAbnormalFilterBy(this.duplicateTicketsModel.filterBy);
-    this.permission = await this.commonService.getPermissionManageRequest();
+    this.permission = await this.addRequestApiService.getPermissionAddRequest();
   }
 
   async afterFocusOutBetIds(): Promise<void> {

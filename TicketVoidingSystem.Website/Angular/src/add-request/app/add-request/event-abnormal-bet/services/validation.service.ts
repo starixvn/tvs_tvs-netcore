@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { CheckTransIdsQuery, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
@@ -32,6 +32,7 @@ export class ValidationService {
       subIssueTypeId: Number(args.subIssueTypeId),
       isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
       isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
+      isAddSettledTickets: args.permission.isAddSettledTickets
     } as CheckTransIdsQuery;
   }
 
@@ -78,8 +79,8 @@ export class ValidationService {
     } as ValidationBusinessRuleOutput;
   }
 
-  public isValidationHasWarningTicket(permission: PermissionManage, confirmModel: ConfirmAbnormalBetModel): boolean {
-    return (permission.manageRequestSettledTicketsHost && confirmModel.settledTickets?.length > 0)
+  public isValidationHasWarningTicket(permission: PermissionAddRequest, confirmModel: ConfirmAbnormalBetModel): boolean {
+    return (permission.isAddSettledTickets && confirmModel.settledTickets?.length > 0)
       || (confirmModel.ticketsOfVIPCustomer?.length > 0)
       || (confirmModel.ticketsOfCustomerClass201?.length > 0)
       || (confirmModel.ticketsOfCustomerClass4K?.length > 0);
@@ -144,9 +145,8 @@ export class ValidationService {
     return StaticService.isAbnormalBet(args.issueTypeId) && args.filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 
-  private checkCanAddSettledTickets(permission: PermissionManage, actionId: string): boolean {
-    return actionId === TVSRequestActionType.TAKE_NOTE_ID.toString() ||
-      (permission.manageRequestSettledTicketsHost && (actionId === TVSRequestActionType.MANUAL_VOID_ID.toString() || actionId === TVSRequestActionType.WAITING_ID.toString()));
+  private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {
+    return actionId === TVSRequestActionType.TAKE_NOTE_ID.toString() || permission.isAddSettledTickets;
   }
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {

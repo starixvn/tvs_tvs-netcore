@@ -1,4 +1,3 @@
-import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
@@ -6,6 +5,7 @@ import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.c
 import { MatchInfo } from '../../../../../utility/models/event.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { ValidationMessage } from '../../models/get-log-info.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { CheckTransIdsViewModel, PrimitiveProperty, ValidationAbnormalBet } from '../event-abnormal-bet.model';
@@ -59,7 +59,7 @@ class Helper {
     actionId: Helper.fakeActionId,
     betIdsComponent: new BetIdsComponent(null),
     leagueEventAbnormalComponent: new LeagueEventAbnormalComponent(null, null),
-    permission: new PermissionManage(),
+    permission: new PermissionAddRequest(),
     filterBy: null,
     issueTypeId: '11',
     primitiveProps: new PrimitiveProperty(),
@@ -238,9 +238,9 @@ describe('ValidationService', () => {
 
   it('#isValidationHasWarningTicket should return false when settledTickets is null', async () => {
     // Arrange
-    const permission = new PermissionManage();
+    const permission = new PermissionAddRequest();
     const confirmModel = new ConfirmAbnormalBetModel();
-    permission.manageRequestSettledTicketsHost = true;
+    permission.isAddSettledTickets = true;
     confirmModel.settledTickets = null;
 
     // Action
@@ -252,9 +252,9 @@ describe('ValidationService', () => {
 
   it('#isValidationHasWarningTicket should return false when have not transId', async () => {
     // Arrange
-    const permission = new PermissionManage();
+    const permission = new PermissionAddRequest();
     const confirmModel = new ConfirmAbnormalBetModel();
-    permission.manageRequestSettledTicketsHost = true;
+    permission.isAddSettledTickets = true;
     confirmModel.settledTickets = '';
     confirmModel.ticketsOfVIPCustomer = '';
     confirmModel.ticketsOfCustomerClass201 = '';
@@ -271,9 +271,9 @@ describe('ValidationService', () => {
 
   it('#isValidationHasWarningTicket should return true when have settledTickets', async () => {
     // Arrange
-    const permission = new PermissionManage();
+    const permission = new PermissionAddRequest();
     const confirmModel = new ConfirmAbnormalBetModel();
-    permission.manageRequestSettledTicketsHost = true;
+    permission.isAddSettledTickets = true;
     confirmModel.settledTickets = '11111';
 
     // Action
@@ -414,8 +414,8 @@ describe('ValidationService', () => {
   });
 
   it('#checkCanAddSettledTickets should return true', async () => {
-    const permission = new PermissionManage();
-    permission.manageRequestSettledTicketsHost  = true;
+    const permission = new PermissionAddRequest();
+    permission.isAddSettledTickets  = true;
     const testCase = [
       TVSRequestActionType.MANUAL_VOID_ID.toString(),
       TVSRequestActionType.WAITING_ID.toString()

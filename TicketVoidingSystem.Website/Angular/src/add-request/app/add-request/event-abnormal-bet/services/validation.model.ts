@@ -1,9 +1,9 @@
-import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { PrimitiveProperty, AbnormalBetTicketViewModel } from '../event-abnormal-bet.model';
+import { AbnormalBetTicketViewModel, PrimitiveProperty } from '../event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 
 export class ValidationBusinessRuleArgs {
@@ -12,7 +12,7 @@ export class ValidationBusinessRuleArgs {
   betIdsComponent: BetIdsComponent;
   leagueEventAbnormalComponent: LeagueEventAbnormalComponent;
   confirmAbnormalBetComponent?: ConfirmAbnormalBetComponent;
-  permission: PermissionManage;
+  permission: PermissionAddRequest;
   issueTypeId: string;
   subIssueTypeId: string;
   filterBy: number;

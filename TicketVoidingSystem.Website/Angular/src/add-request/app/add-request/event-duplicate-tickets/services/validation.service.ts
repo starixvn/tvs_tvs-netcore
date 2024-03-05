@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel, ValidationDuplicateTickets } from '../models/check-duplicate-tickets.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -109,9 +109,8 @@ export class ValidationService {
     }
   }
 
-  private checkCanAddSettledTickets(permission: PermissionManage, actionId: string): boolean {
-    return actionId === TVSRequestActionType.TAKE_NOTE_ID.toString() ||
-      (permission.manageRequestSettledTicketsHost && (actionId === TVSRequestActionType.MANUAL_VOID_ID.toString() || actionId === TVSRequestActionType.WAITING_ID.toString()));
+  private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {
+    return actionId === TVSRequestActionType.TAKE_NOTE_ID.toString() ||  permission.isAddSettledTickets;
   }
 
   private checkCanShowButtonRemove(model: ValidationDuplicateTickets, isHasPermissionAddSettledTicket: boolean, transIdsAreNotNumber: string): boolean { // NOSONAR

@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
-import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalBetModel } from '../models/abnormal-bet.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
@@ -40,17 +40,17 @@ export class EventAbnormalBetComponent implements OnInit {
   @ViewChild('confirmAbnormalBetComponent') confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
 
   primitiveProps = new PrimitiveProperty();
-  permission = new PermissionManage();
+  permission = new PermissionAddRequest();
   confirmAbnormalBetModel = new ConfirmAbnormalBetModel();
   isCancelAfterFocusOutBetIdsEvent = false;
   abnormalFilterBy = new AbnormalFilterBy();
   exportTickets: AbnormalBetTicketViewModel[];
 
-  constructor(private readonly commonService: CommonService,
-    private readonly popupService: PopupService,
+  constructor(private readonly popupService: PopupService,
     private readonly validationService: ValidationService,
     private readonly saveRequestService: SaveRequestService,
     private readonly addRequestStore: AddRequestStore,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -58,7 +58,7 @@ export class EventAbnormalBetComponent implements OnInit {
       this.abnormalBetModel.filterBy = AbnormalFilterBy.SINGLE;
     }
     this.addRequestStore.changeAbnormalFilterBy(this.abnormalBetModel.filterBy);
-    this.permission = await this.commonService.getPermissionManageRequest();
+    this.permission = await this.addRequestApiService.getPermissionAddRequest();
   }
 
   isShowButtonExportTicket(): boolean {
