@@ -50,10 +50,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
         viewModel.Choice = IsGetPlainTextForExportExcel(item.BetType, choiceType, item.IsMixParlay, query.IssueTypeId) ?
             betListService.BuildChoiceExcel(ticket, ticketHelper, null, false) :
             BuildChoice(ticket, ticketHelper, item, query.IssueTypeId);
-
-        var choiceBlock = betListService.BuildChoiceBlock(ticket, ticketHelper, null, false);
-        viewModel.BettypeCombination = item.BetdaqId != 1 ? CombineBetType(item.IsLiveIndicator, viewModel.BetType, choiceBlock.betTeam) : string.Empty;
-
+        viewModel.BettypeCombination = CombineBetType(ticket, item, viewModel.BetType, ticketHelper);
         viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
         viewModel.VoidTime = query.IssueTypeId != IssueTypeConstant.RecoverTicket ? item.VoidedTime?.ToString(FormatKey.LongDateFormatTimeWithSlash) : query.RecoverTime;
@@ -147,10 +144,16 @@ public class MapFromBetListServiceImp : MapFromBetListService
         ticket.TransDesc = item.SubTransdesc;
     }
 
-    private static string CombineBetType(bool isLive, string betType, string betTeam)
+    private string CombineBetType(Ticket ticketFromBetList, VoidedTicketModel voidedTicketModel, string betType, TicketHelper ticketHelper)
     {
-        var trimBetTeam = betTeam.Replace("&nbsp;", " ").Trim();
-        var liveIndicator = isLive ? "Live" : "Non-Live";
+        if (voidedTicketModel.BetdaqId == 1)
+        {
+            return string.Empty;
+        }
+
+        var choiceBlock = betListService.BuildChoiceBlock(ticketFromBetList, ticketHelper, null, false);
+        var trimBetTeam = choiceBlock.betTeam.Replace("&nbsp;", " ").Trim();
+        var liveIndicator = voidedTicketModel.IsLiveIndicator ? "Live" : "Non-Live";
 
         return $"{liveIndicator} {betType} ({trimBetTeam.StripHtml()})";
     }

@@ -39,6 +39,8 @@ public interface SpecialPlatformService
 
 public class SpecialPlatformServiceImp : SpecialPlatformService
 {
+    private const string SabaReplaceText = "SABA ";
+
     public bool IsSiteSpecialPlatform(Match? match, SiteEmail site)
     {
         return match != null && match.LeagueGroupId.IsLeagueGroupIdSaBa() && (site.IsChinaView || site.SpecialPlatform >= SpecialPlatformConstant.JollySports);
@@ -65,10 +67,10 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
         }
 
         var outputMessage = message.DeepClone();
-        var leagueNameReplaced = match.OriginLeagueName.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+        var leagueNameReplaced = match.OriginLeagueName.Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
 
         var leagueNameSimplifiedReplaced = match.OriginLeagueNameSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            .Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
         outputMessage.ContentEnglish = outputMessage.ContentEnglish.Replace(match.OriginLeagueName, leagueNameReplaced, StringComparison.InvariantCultureIgnoreCase);
         var serializedContentChineseSimplified = JsonSerializer.Serialize(outputMessage.ContentChineseSimplified);
         var deSerializedContentChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentChineseSimplified);
@@ -76,14 +78,14 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
             leagueNameSimplifiedReplaced, StringComparison.InvariantCultureIgnoreCase);
 
         var leagueNameTraditionalReplaced = match.OriginLeagueNameTraditional.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            .Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
         var serializedContentChineseTraditional = JsonSerializer.Serialize(outputMessage.ContentChineseTraditional);
         var deSerializedContentChineseTraditional = JsonSerializer.Deserialize<string>(serializedContentChineseTraditional);
         outputMessage.ContentChineseTraditional = deSerializedContentChineseTraditional.Replace(match.OriginLeagueNameTraditional,
             leagueNameTraditionalReplaced, StringComparison.InvariantCultureIgnoreCase);
 
         var leagueNameNewSimplifiedReplaced = match.OriginLeagueNameNewSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            .Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
         var serializedContentNewChineseSimplified = JsonSerializer.Serialize(outputMessage.ContentNewChineseSimplified);
         var deSerializedContentNewChineseSimplified = JsonSerializer.Deserialize<string>(serializedContentNewChineseSimplified);
         outputMessage.ContentNewChineseSimplified = deSerializedContentNewChineseSimplified.Replace(match.OriginLeagueNameNewSimplified,
@@ -94,11 +96,11 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
 
     public Match RemoveSabaInMatchInfo(Match match)
     {
-        match.LeagueName = match.LeagueName.Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+        match.LeagueName = match.LeagueName.Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
         match.LeagueNameSimplified = match.LeagueNameSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            .Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
         match.LeagueNameNewSimplified = match.LeagueNameNewSimplified.Replace("沙巴", "", StringComparison.InvariantCultureIgnoreCase)
-            .Replace("SABA ", "", StringComparison.InvariantCultureIgnoreCase);
+            .Replace(SabaReplaceText, "", StringComparison.InvariantCultureIgnoreCase);
         return match;
     }
 
