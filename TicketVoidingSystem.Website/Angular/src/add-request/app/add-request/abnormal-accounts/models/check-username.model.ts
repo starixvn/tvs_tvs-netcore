@@ -9,6 +9,7 @@ export interface CheckValidUsernamesQuery {
   statusIds: string;
   fromDate: string;
   toDate: string;
+  isVoidAllArchivedTickets: boolean;
   accountWinlostModels: AccountWinlostModel[];
 }
 

@@ -3,6 +3,7 @@ import { GroupUsername } from '../../../../../utility/components/user-names/user
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { AccountTableComponent } from '../account-table/account-table.component';
 import { ConfirmAbnormalAccountModel } from '../confirm-abnormal-account/confirm-abnormal-account.model';
@@ -41,7 +42,7 @@ class Helper {
   static readonly fakeValidationBusinessRuleArgs: ValidationBusinessRuleArgs = {
     requestId: Helper.fakeRequestId,
     abnormalAccountModel: new AbnormalAccountModel(),
-    primitiveProps: new PrimitiveProperty(),
+    primitiveProps: {permission: new PermissionAddRequest()} as PrimitiveProperty,
     usernamesComponent: new UsernamesComponent(null),
     actionId: '1',
     issueTypeId: '1',

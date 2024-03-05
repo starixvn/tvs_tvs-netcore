@@ -103,6 +103,7 @@ export class ValidationService {
       statusIds: args.abnormalAccountModel.statusIds,
       fromDate: moment(args.abnormalAccountModel.fromDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
       toDate: moment(args.abnormalAccountModel.toDate).format(DateTimeFormat.FULL_DATE_TIME_FORMAT),
+      isVoidAllArchivedTickets: args.primitiveProps.permission.isVoidAllArchivedTickets,
       accountWinlostModels: this.isAutoVoidWithPolicy(args.actionId) ? args.abnormalAccountModel.accountWinlostModels : null,
     };
     const results = await this.addRequestApiService.checkValidUsernames(query);

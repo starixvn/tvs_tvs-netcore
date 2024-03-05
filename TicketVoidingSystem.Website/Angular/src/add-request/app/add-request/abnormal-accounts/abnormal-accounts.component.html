@@ -21,7 +21,7 @@
 <product-filter #products [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
   (changeFilterEvent)="changeFilter()" [actionId]="filter.action"></product-filter>
 <event-date-filter #eventDate [abnormalAccountModel]="abnormalAccountModel" [isDisabled]="isVoided" [isEdit]="isEdit"
-  (changeFilterEvent)="changeFilter()"></event-date-filter>
+  (changeFilterEvent)="changeFilter()" [minDate]="primitiveProps.minDate"></event-date-filter>
 
 <div *ngIf="isShowUserInfo()" class="mt-3">
   <div class="mb-3">

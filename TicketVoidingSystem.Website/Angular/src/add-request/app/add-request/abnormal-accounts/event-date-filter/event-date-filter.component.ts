@@ -16,11 +16,11 @@ export class EventDateFilterComponent implements OnInit {
   @Input() isDisabled: boolean;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() isEdit: boolean;
+  @Input() minDate: NgbDateStruct;
   @Output() changeFilterEvent = new EventEmitter();
 
   fromDate: NgbDate;
   toDate: NgbDate;
-  minDate: NgbDateStruct;
   tooltip = new Tooltip();
 
   private readonly TO_DATE_CLASS = 'to-date';
@@ -45,9 +45,7 @@ export class EventDateFilterComponent implements OnInit {
     } else {
       this.fromDate = new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date());
       this.toDate = new NgbDate(currentMoment.year(), currentMoment.month() + 1, currentMoment.date());
-    }   
-    const minDateMoment = currentMoment.subtract(7, "days");
-    this.minDate = { year: minDateMoment.year(), month: minDateMoment.month() + 1, day: minDateMoment.date()};
+    }
   }
 
   isValidEventDate(): boolean {
