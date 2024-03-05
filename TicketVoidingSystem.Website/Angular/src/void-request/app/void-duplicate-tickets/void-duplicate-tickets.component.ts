@@ -63,10 +63,6 @@ export class VoidDuplicateTicketsComponent implements OnInit {
     this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription);
   }
 
-  isShowAffectedLicenseeArea(voidPageItem: VoidPageDuplicateTicketsModel): boolean {
-    return this.voidPageCommonService.isShowAffectedLicenseeArea(voidPageItem);
-  }
-
   onClickCopyLicenseesToClipboard(text: string): void {
     this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
   }

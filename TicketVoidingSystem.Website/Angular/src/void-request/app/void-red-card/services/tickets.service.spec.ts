@@ -3,7 +3,6 @@ import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-req
 import { PagingConstant, PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { AffectedLicensee } from '../../../../utility/models/affected-licensee.model';
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -30,20 +29,14 @@ class Helper {
     isShowTicketFull: true,
     isLoadedTicketFull: true,
     isBlockBetList: true,
-    affectedLicensee: new AffectedLicensee(),
-    affectedInstantLicensee: new AffectedLicensee(),
-    chinaViewLicensee: new AffectedLicensee(),
-    cashOutLicensee: new AffectedLicensee(),
     isShowTemplateMessage: true,
     templateMessage: new Message(),
     isAllLiveTickets: false,
     isCheckedEarlyEvent: false,
     isMainMatch: false,
     isPoolHouseAffected: false,
-    jollyViewLicensee: new AffectedLicensee,
-    jollySportsCVLicensee: new AffectedLicensee,
-    cancelCashOutLicensee: new AffectedLicensee,
-    isAllNonLiveTickets: true
+    isAllNonLiveTickets: true,
+    licenseeAffectedList: []
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,
@@ -156,7 +149,6 @@ describe('TicketsServiceService', () => {
 
     // Assert
     expect(voidMatch.isShowTicketFull).toBeTruthy();
-    expect(voidMatch.affectedLicensee.show).toBeTruthy();
     expect(voidMatch.isShowTicketFull).toBeTruthy();
   });
 });

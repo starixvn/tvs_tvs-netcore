@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { CommonTicketsModel } from '../../../utility/models/common.tickets.model';
 import { GroupModel } from './group-tickets.model';
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 
 enum IconCheckBox {
@@ -26,13 +27,6 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   cancelCashOutTickets: BetID[];
   cricketTickets: BetID[];
   uncheckedTransIds: string[];
-  licenseesName: string;
-  instantLicenseesName: string;
-  chinaViewLicenseesName: string;
-  jollyViewLicenseesName: string;
-  jollySportsCvLicenseesName: string;
-  cashOutLicenseesName: string;
-  cancelCashOutLicenseesName: string;
   betTypes: string;
   isHasSettledTicket: boolean;
   isAllLiveTickets: boolean;
@@ -40,7 +34,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   checkPermissionTickets: BetID[];
   allCancelCashOutTickets: BetID[];
   groupPHAffected: number;
-
+  licenseeAffectedList: AffectedLicensee[]
   initData(data: TicketsModel) {
     this.total = data.total;
     this.totalSingle = data.totalSingle;

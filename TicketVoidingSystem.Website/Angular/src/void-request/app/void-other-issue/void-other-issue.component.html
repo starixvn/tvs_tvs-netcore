@@ -3,70 +3,24 @@
         <div *ngIf="isAbnormalAccount()" class="affected-username padding-2-10 alert alert-primary">
             Username: <strong>{{usernames}}</strong>
         </div>
-
         <event-info *ngIf="isHasMatchInfo()" [match]="match"></event-info>
         <request-info [model]="requestDetail" [issue]="issue" [isShowGeneralInfo]="false"
-            [isShowAbnormalAccountInfo]="isAbnormalAccount()" [isShowVar]="isShowVar"></request-info>
-
+            [isShowAbnormalAccountInfo]="isAbnormalAccount()" [isShowVar]="isShowVar">
+        </request-info>
         <log-info *ngIf="isHasLogInfo()" [logInfoDetails]="logInfoDetails" [correctOdds]="correctOdds"
             [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected">
         </log-info>
-
         <filter *ngIf="isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"
             [allBetTypes]="allBetTypes" [getPlayerQuery]="getPlayerQuery" (search)="search($event)">
         </filter>
     </div>
+    <licensee-affected-list [licenseeAffectedList]="licenseeAffectedList" [isDisplay]="isShowTicket"></licensee-affected-list>
     <div class="d-flex">
         <tickets-list *ngIf="isShowTicket" [model]="ticketsModel" [(paging)]="paging" (pagingChange)="pagingEvent()"
         (exportExcelEvent)="exportExcel()" [isBlock]="isBlockBetList" (ticketsChange)="ticketsChange()"
         [issueTypeId]="issue.issueTypeId" [isDisableCheckbox]="isReducedOver()">
         </tickets-list>
-
-        <div class="affected-licensees" *ngIf="isShowAffectedLicenseeArea()">
-            <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
-            <div *ngIf="affectedLicensee.show && affectedLicensee.licenseesName.length > 0">
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(affectedLicensee.licenseesName)">{{affectedLicensee.licenseesName}}</span>
-            </div>
-            <div class="china-view-licensee"
-                *ngIf="chinaViewLicensee.show && chinaViewLicensee.licenseesName.length > 0">
-                <span class="note">China View Licensee Affected List:</span><br />
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(chinaViewLicensee.licenseesName)">{{chinaViewLicensee.licenseesName}}</span>
-            </div>
-            <div class="jolly-view-licensee"
-                *ngIf="jollyViewLicensee.show && jollyViewLicensee.licenseesName.length > 0">
-                <span class="note">Jolly Sports Licensee Affected List:</span><br />
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(jollyViewLicensee.licenseesName)">{{jollyViewLicensee.licenseesName}}</span>
-            </div>
-            <div class="jollysportscv-licensee"
-                *ngIf="jollySportsCvLicensee.show && jollySportsCvLicensee.licenseesName.length > 0">
-                <span class="note">JollySportsCV Licensee Affected List:</span><br />
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(jollySportsCvLicensee.licenseesName)">{{jollySportsCvLicensee.licenseesName}}</span>
-            </div>
-            <div class="instant-licensee"
-                *ngIf="affectedInstantLicensee.show && affectedInstantLicensee.licenseesName.length > 0">
-                <span class="note">Instant OU Licensee Affected List:</span><br />
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(affectedInstantLicensee.licenseesName)">{{affectedInstantLicensee.licenseesName}}</span>
-            </div>
-            <div class="cash-out-licensee"
-                *ngIf="cashOutLicensee.show && cashOutLicensee.licenseesName.length > 0">
-                <span class="note">Cash Out Licensee Affected List:</span><br />
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(cashOutLicensee.licenseesName)">{{cashOutLicensee.licenseesName}}</span>
-            </div>
-            <div class="cancel-cash-out-licensee"
-                *ngIf="cancelCashOutLicensee.show && cancelCashOutLicensee.licenseesName.length > 0">
-                <span class="note">Cancel Cash Out Licensee Affected List:</span><br />
-                <span class="affected-licensees-highlight"
-                    (click)="copyClipboard(cancelCashOutLicensee.licenseesName)">{{cancelCashOutLicensee.licenseesName}}</span>
-            </div>
-        </div>
     </div>
-
     <div [ngClass]="{'display-block': paging.total > 0, 'display-none': paging.total <= 0}">
         <template-message *ngIf="!isArchivedTickets()" #messages [value]="templateValue" [issueTypeId]="issue.issueTypeId"
             [subIssueTypeId]="issue.subIssueTypeId" [voidFunction]="2">
@@ -74,6 +28,5 @@
         <confirmation #confirmation (voidAll)="voidAll()" [isDisabledButton]="isBlockBetList"></confirmation>
     </div>
 </div>
-
 
 <tooltip [tooltip]="tooltip"></tooltip>

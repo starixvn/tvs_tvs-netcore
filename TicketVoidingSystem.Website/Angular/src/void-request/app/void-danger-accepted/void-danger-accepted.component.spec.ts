@@ -11,7 +11,6 @@ import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
-import { AffectedLicensee } from '../../../utility/models/affected-licensee.model';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -84,18 +83,6 @@ class Helper {
     duplicateTicketsModel: null,
     notParticipateModels: []
   };
-  static getFakeAffectedLicensee(): AffectedLicensee {
-    return {
-      licenseesName: 'abc',
-      show: true
-    };
-  }
-  static getFakeAffectedLicenseeWithNameIsNull(): AffectedLicensee {
-    return {
-      licenseesName: '',
-      show: true
-    };
-  }
 }
 
 describe('VoidDangerAcceptedComponent', () => {
@@ -672,35 +659,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(0);
     expect(mockVoidAllMatches).toHaveBeenCalledTimes(0);
   });
-
-  it('#isShowAffectedLicenseeArea should return expected', async () => {
-    const testCase = [
-      {affectedLicensee: Helper.getFakeAffectedLicensee(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicensee(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicensee(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicensee(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: false },
-    ];
-    const voidMatch = new VoidMatch();
-    const { instance } = await shallow.render();
-    testCase.forEach(x => {
-      voidMatch.affectedLicensee = x.affectedLicensee;
-      voidMatch.chinaViewLicensee = x.chinaViewLicensee;
-      voidMatch.affectedInstantLicensee = x.affectedInstantLicensee;
-      voidMatch.cashOutLicensee = x.cashOutLicensee;
-      voidMatch.cancelCashOutLicensee = x.cashOutLicensee;
-
-      const actual = instance.isShowAffectedLicenseeArea(voidMatch);
-
-      expect(actual).toBe(x.expected);
-    });
-  });
-
+  
   it('#ChangeCheckBoxEarlyEvent should update correctly templateValue', async () => {
     // Arrange
     const { instance } = await shallow

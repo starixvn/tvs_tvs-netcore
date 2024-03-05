@@ -131,28 +131,6 @@ describe('VoidNotParticipateComponent', () => {
     expect(mockOnClickShowTemplateMessage).toHaveBeenCalledTimes(1);
   });
 
-  it('#isShowAffectedLicenseeArea should called voidPageCommonService.isShowAffectedLicenseeArea & return true', async () => {
-    const mockIsShowAffectedLicenseeArea = jest.fn().mockReturnValue(true);
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { isShowAffectedLicenseeArea: mockIsShowAffectedLicenseeArea })
-      .render();
-    const actual = instance.isShowAffectedLicenseeArea(null);
-
-    expect(mockIsShowAffectedLicenseeArea).toHaveBeenCalledTimes(1);
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowAffectedLicenseeArea should called voidPageCommonService.isShowAffectedLicenseeArea & return false', async () => {
-    const mockIsShowAffectedLicenseeArea = jest.fn().mockReturnValue(false);
-    const { instance } = await shallow
-      .mock(VoidPageCommonService, { isShowAffectedLicenseeArea: mockIsShowAffectedLicenseeArea })
-      .render();
-    const actual = instance.isShowAffectedLicenseeArea(null);
-
-    expect(mockIsShowAffectedLicenseeArea).toHaveBeenCalledTimes(1);
-    expect(actual).toBeFalsy();
-  });
-
   it('#onClickCopyLicenseesToClipboard should called voidPageCommonService.onClickCopyLicenseesToClipboard', async () => {
     const mockOnClickCopyLicenseesToClipboard = jest.fn();
     const { instance } = await shallow

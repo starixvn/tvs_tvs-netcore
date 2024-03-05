@@ -1,0 +1,12 @@
+<div class="affected-licensees area" *ngIf="isShowAffectedLicenseeArea()">
+    <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
+    <div *ngIf="affectedLicenseeNormal.length > 0">
+      <span class="affected-licensees-highlight" (click)="copyClipboard(affectedLicenseeNormal)">{{affectedLicenseeNormal}}</span>
+    </div>
+    <div *ngFor="let affectedLicensee of licenseeAffectedList" class="affectedLicensee">
+        <div *ngIf="affectedLicensee.show" [ngStyle]="{'color': affectedLicensee.color}">
+        <span class="note">{{affectedLicensee.message}}</span><br />
+            <span class="affected-licensees-highlight" (click)="copyClipboard(affectedLicensee.licenseesName)">{{affectedLicensee.licenseesName}}</span>
+        </div>
+    </div>
+</div>

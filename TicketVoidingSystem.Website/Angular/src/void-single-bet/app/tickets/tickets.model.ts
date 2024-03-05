@@ -3,6 +3,7 @@ import { PagingModel } from '../../../utility/components/paging/paging/paging.mo
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group.model';
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 enum IconCheckBox {
     none = 0,
@@ -21,12 +22,7 @@ export class TicketsModel {
     toCheckTime: Date;
     strFromTime: string;
     strToTime: string;
-    licenseesName: string;
-    instantLicenseesName: string;
-    cashOutLicenseesName: string;
-    chinaViewLicenseesName: string;
-    jollyViewLicenseesName: string;
-    jollySportsCvLicenseesName: string;
+    licenseeAffectedList: AffectedLicensee[];
     betTypeNameReplaceMessage: Message;
     groups: Array<GroupModel>;
     pagingModel: PagingModel;

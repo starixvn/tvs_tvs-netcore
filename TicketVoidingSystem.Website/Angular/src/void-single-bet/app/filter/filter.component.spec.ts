@@ -25,7 +25,6 @@ import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { AppService } from '../app.service';
-import { AffectedLicensee } from '../models/affected-licensee.model';
 import { GetTicketsQuery } from '../models/query.model';
 import { FilterComponent } from './filter.component';
 import { Type } from './filter.model';
@@ -63,20 +62,6 @@ class Helper {
       errorMsg: ''
     };
     return data;
-  }
-
-  static getFakeAffectedLicensee(): AffectedLicensee {
-    return {
-      licenseesName: 'abc',
-      show: true
-    };
-  }
-
-  static getFakeAffectedLicenseeWithNameIsNull(): AffectedLicensee {
-    return {
-      licenseesName: null,
-      show: true
-    };
   }
 
   static readonly fakeIssueTypeList: IssueType[] = [
@@ -1038,41 +1023,5 @@ describe('FilterComponent', () => {
     const actual = instance.getSelectionSubParlays('Sub Parlay', comboParlay);
 
     expect(actual).toBe(expected);
-  });
-
-  it('#isShowAffectedLicenseeArea should return expected', async () => {
-    const testCase = [
-      {
-        affectedLicensee: Helper.getFakeAffectedLicensee(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true
-      },
-      {
-        affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicensee(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true
-      },
-      {
-        affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicensee(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true
-      },
-      {
-        affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicensee(), expected: true
-      },
-      {
-        affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: false
-      },
-    ];
-    const { instance } = await shallow.render();
-    testCase.forEach(x => {
-      instance.affectedLicensee = x.affectedLicensee;
-      instance.chinaViewLicensee = x.chinaViewLicensee;
-      instance.affectedInstantLicensee = x.affectedInstantLicensee;
-      instance.cashOutLicensee = x.cashOutLicensee;
-
-      const actual = instance.isShowAffectedLicenseeArea();
-
-      expect(actual).toBe(x.expected);
-    });
   });
 });

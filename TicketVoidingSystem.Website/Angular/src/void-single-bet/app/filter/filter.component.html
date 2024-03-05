@@ -131,41 +131,8 @@
           </fieldset>
         </div>
       </div>
-      <div class="affected-licensees" *ngIf="isShowAffectedLicenseeArea()">
-        <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
-        <div *ngIf="affectedLicensee.show && affectedLicensee.licenseesName.length > 0">
-          <span class="affected-licensees-highlight" id="all-licensees-highlight"
-            (click)="copyClipboard(affectedLicensee.licenseesName)">{{affectedLicensee.licenseesName}}</span>
-        </div>
-        <div class="china-view-licensee" *ngIf="chinaViewLicensee.show && chinaViewLicensee.licenseesName.length > 0">
-          <span class="note">China View Licensee Affected List:</span><br />
-          <span class="affected-licensees-highlight" id="china-view-licensees-highlight"
-            (click)="copyClipboard(chinaViewLicensee.licenseesName)">{{chinaViewLicensee.licenseesName}}</span>
-        </div>
-        <div class="jolly-view-licensee" *ngIf="jollyViewLicensee.show && jollyViewLicensee.licenseesName.length > 0">
-          <span class="note">Jolly Sports Licensee Affected List:</span><br />
-          <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
-            (click)="copyClipboard(jollyViewLicensee.licenseesName)">{{jollyViewLicensee.licenseesName}}</span>
-        </div>
-        <div class="jollysportscv-licensee" *ngIf="jollySportsCvLicensee.show && jollySportsCvLicensee.licenseesName.length > 0">
-          <span class="note">JollySportsCV Licensee Affected List:</span><br />
-          <span class="affected-licensees-highlight" id="jolly-view-licensees-highlight"
-            (click)="copyClipboard(jollySportsCvLicensee.licenseesName)">{{jollySportsCvLicensee.licenseesName}}</span>
-        </div>
-        <div class="instant-licensee"
-          *ngIf="affectedInstantLicensee.show && affectedInstantLicensee.licenseesName.length > 0">
-          <span class="note">Instant OU Licensee Affected List:</span><br />
-          <span class="affected-licensees-highlight"
-            (click)="copyClipboard(affectedInstantLicensee.licenseesName)">{{affectedInstantLicensee.licenseesName}}</span>
-        </div>
-        <div class="cash-out-licensee" *ngIf="cashOutLicensee.show && cashOutLicensee.licenseesName.length > 0">
-          <span class="note">Cash Out Licensee Affected List:</span><br />
-          <span class="affected-licensees-highlight" id="cash-out-licensees-highlight"
-            (click)="copyClipboard(cashOutLicensee.licenseesName)">{{cashOutLicensee.licenseesName}}</span>
-        </div>
-      </div>
+      <licensee-affected-list [licenseeAffectedList]="licenseeAffectedList"></licensee-affected-list>
     </div>
-
     <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" (betTypesEvent)="changeBetTypes($event)">
     </group-bettypes>
 

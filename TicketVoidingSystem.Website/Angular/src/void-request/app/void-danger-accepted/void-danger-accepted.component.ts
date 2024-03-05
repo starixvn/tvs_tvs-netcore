@@ -16,6 +16,7 @@ import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
 import { PrimitiveProperty } from '../models/primitive-property.model';
+
 @Component({
   selector: 'void-danger-accepted',
   templateUrl: './void-danger-accepted.component.html',
@@ -31,11 +32,9 @@ export class VoidDangerAcceptedComponent implements OnInit {
   public isLoadedUnderneathData = false;
   public issueTypes: IssueTypesModel;
   public tooltip = new Tooltip();
-
   private afterLoadUnderneathDataSubscription: Subscription;
   private readonly observableTimer = timer(0, 100);
   private isRunningSubscriptionCallback = false;
-
   constructor(
     private readonly voidPageService: VoidPageService,
     private readonly ticketsService: TicketsService,
@@ -107,16 +106,6 @@ export class VoidDangerAcceptedComponent implements OnInit {
     });
   }
 
-  isShowAffectedLicenseeArea(voidMatch: VoidMatch): boolean {
-    return voidMatch.affectedLicensee.show && voidMatch.affectedLicensee.licenseesName.length > 0
-      || voidMatch.chinaViewLicensee.show && voidMatch.chinaViewLicensee.licenseesName.length > 0
-      || voidMatch.jollyViewLicensee.show && voidMatch.jollyViewLicensee.licenseesName.length > 0
-      || voidMatch.jollySportsCVLicensee.show && voidMatch.jollySportsCVLicensee.licenseesName.length > 0
-      || voidMatch.affectedInstantLicensee.show && voidMatch.affectedInstantLicensee.licenseesName.length > 0
-      || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0
-      || voidMatch.cancelCashOutLicensee.show && voidMatch.cancelCashOutLicensee.licenseesName.length > 0;
-  }
-  
   onClickCopyLicenseesToClipboard(text: string): void {
     this.clipboardService.copyFromContent(text);
     alert('The Licensee list has been copied to clipboard.');

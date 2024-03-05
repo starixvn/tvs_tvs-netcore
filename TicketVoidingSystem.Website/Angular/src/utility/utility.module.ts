@@ -42,6 +42,7 @@ import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 import { PipeModule } from './pipes/pipe.module';
 import { CommonService } from './services/common.service';
 import { HttpService } from './services/http.service';
+import { LicenseeAffectedListComponent } from './components/licensee-affected-list/licensee-affected-list.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import { HttpService } from './services/http.service';
     OnlyNumberDirective,
     BetIdsComponent,
     AutoRefreshComponent,
-    DetailNotParticipateComponent
+    DetailNotParticipateComponent,
+    LicenseeAffectedListComponent
   ],
   exports: [
     BaseTicketsListComponent,
@@ -95,7 +97,8 @@ import { HttpService } from './services/http.service';
     MenuBarComponent,
     BlockFullUiModule,
     DetailNotParticipateComponent,
-    SortingModule
+    SortingModule,
+    LicenseeAffectedListComponent
   ],
   providers: [HttpService, CommonService]
 })

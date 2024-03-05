@@ -8,6 +8,7 @@ import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { TicketsService } from '../../services/tickets.service';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,8 @@ export class VoidPageService {
       element.templateValue = this.getTemplateValue(element);
       element.templateValue.kickOffTime = requestDetail.earlyKickOffModels.find(x => x.matchId === element.matchModel.matchId).kickOffTime;
       element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
+      element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
+      element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
     }
   }
 

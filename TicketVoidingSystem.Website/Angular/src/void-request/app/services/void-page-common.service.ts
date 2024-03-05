@@ -61,16 +61,6 @@ export class VoidPageCommonService {
     alert('The Licensee list has been copied to clipboard.');
   }
 
-  isShowAffectedLicenseeArea(voidPageItem: VoidPageCommonItem): boolean {
-    return voidPageItem.affectedLicensee.show && voidPageItem.affectedLicensee.licenseesName.length > 0
-      || voidPageItem.chinaViewLicensee.show && voidPageItem.chinaViewLicensee.licenseesName.length > 0
-      || voidPageItem.jollyViewLicensee.show && voidPageItem.jollyViewLicensee.licenseesName.length > 0
-      || voidPageItem.jollySportsCvLicensee.show && voidPageItem.jollySportsCvLicensee.licenseesName.length > 0
-      || voidPageItem.affectedInstantLicensee.show && voidPageItem.affectedInstantLicensee.licenseesName.length > 0
-      || voidPageItem.cashOutLicensee.show && voidPageItem.cashOutLicensee.licenseesName.length > 0
-      || voidPageItem.cancelCashOutLicensee.show && voidPageItem.cancelCashOutLicensee.licenseesName.length > 0;
-  }
-
   onClickVoidAllMatches(voidPageItems: VoidPageCommonItem[], templateMessageViewChilds: TemplateMessageComponent[],
     afterLoadUnderneathDataSubscription: Subscription, primitiveProperty: CommonPrimitiveProperty, tooltip: Tooltip): void {
     if (!primitiveProperty.userPassword) {
