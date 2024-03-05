@@ -30,15 +30,11 @@ public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageReq
             sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Host);
         var voidRead =
             sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Constant.Policy.Read);
-        var manageRequestUnsettledTicketsHost =
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.UnsettledTickets, Constant.Policy.Host);
-        var manageRequestSettledTicketsHost =
-            sessionService.HasPermission(SpecialDeleteFunctionKeys.SettledTickets, Constant.Policy.Host);
         var isReadMarkTickets =
             sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read);
         var permissionTasks = new List<Task<bool>>
         {
-            manageRequestHost, verifyRead, verifyHost, voidRead, manageRequestUnsettledTicketsHost, manageRequestSettledTicketsHost, isReadMarkTickets
+            manageRequestHost, verifyRead, verifyHost, voidRead, isReadMarkTickets
         };
 
         await Task.WhenAll(permissionTasks);
@@ -49,8 +45,6 @@ public class GetPermissionManageHandler : IRequestHandler<GetPermissionManageReq
             VerifyRead = await verifyRead,
             VerifyHost = await verifyHost,
             VoidRead = await voidRead,
-            ManageRequestUnsettledTicketsHost = await manageRequestUnsettledTicketsHost,
-            ManageRequestSettledTicketsHost = await manageRequestSettledTicketsHost,
             IsReadMarkTickets = await isReadMarkTickets
         };
     }
