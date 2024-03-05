@@ -28,58 +28,40 @@ public class SendDataOicHandler : IRequestHandler<SendDataToOicRequest, IList<Am
         var resultLicensees = new List<AmendmentResponse>();
         var firstQuery = request.Queries[0];
         var affectedTickets = await affectTicketsFromSettlementHistoryService.GetTickets(firstQuery.IsReSettled, firstQuery.MatchId);
-        await SendForNormalLicensee(request.Queries, affectedTickets, resultLicensees);
-        await SendForChinaViewLicensee(request.Queries, affectedTickets, resultLicensees);
-        await SendForJollySportLicensee(request.Queries, affectedTickets, resultLicensees);
-        await SendForJollySportsCvLicensee(request.Queries, affectedTickets, resultLicensees);
+
+        var normalQueries = request.Queries.Where(x => !x.IsChinaView && x.SpecialPlatform
+            != SpecialPlatformConstant.JollySports && x.SpecialPlatform != SpecialPlatformConstant.JollySportsCv).ToList();
+        if (normalQueries.Any())
+        {
+            resultLicensees.Add(await SendDataLicensee(normalQueries, affectedTickets, false, SpecialPlatformConstant.NormalSite));
+        }
+
+        var chinaViewQueries = request.Queries.Where(x => x.IsChinaView).ToList();
+        if (chinaViewQueries.Any())
+        {
+            resultLicensees.Add(await SendDataLicensee(chinaViewQueries, affectedTickets, true, SpecialPlatformConstant.NormalSite));
+        }
+
+        var jollySportQueries = request.Queries.Where(x => x.SpecialPlatform == SpecialPlatformConstant.JollySports).ToList();
+        if (jollySportQueries.Any())
+        {
+            resultLicensees.Add(await SendDataLicensee(jollySportQueries, affectedTickets, false, SpecialPlatformConstant.JollySports));
+        }
+
+        var jollySportCvQueries = request.Queries.Where(x => x.SpecialPlatform == SpecialPlatformConstant.JollySportsCv).ToList();
+        if (jollySportCvQueries.Any())
+        {
+            resultLicensees.Add(await SendDataLicensee(jollySportCvQueries, affectedTickets, false, SpecialPlatformConstant.JollySportsCv));
+        }
 
         return resultLicensees;
     }
 
-    private async Task SendForNormalLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
+    private async Task<AmendmentResponse> SendDataLicensee(IList<SendFileQuery> queries, string affectedTickets, bool isChinaView, int specialPlatform)
     {
-        var normalQueries = queries.Where(x => !x.IsChinaView && x.SpecialPlatform != SpecialPlatformConstant.JollySports).ToList();
-        if (normalQueries.Any())
-        {
-            var result = await sendDataToOicService.Send(normalQueries, affectedTickets);
-            result.IsChinaView = false;
-            result.SpecialPlatform = SpecialPlatformConstant.NormalSite;
-            response.Add(result);
-        }
-    }
-
-    private async Task SendForChinaViewLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
-    {
-        var chinaViewQueries = queries.Where(x => x.IsChinaView).ToList();
-        if (chinaViewQueries.Any())
-        {
-            var result = await sendDataToOicService.Send(chinaViewQueries, affectedTickets);
-            result.IsChinaView = true;
-            response.Add(result);
-        }
-    }
-
-    private async Task SendForJollySportLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
-    {
-        var jollySportQueries = queries.Where(x => x.SpecialPlatform == SpecialPlatformConstant.JollySports).ToList();
-        if (jollySportQueries.Any())
-        {
-            var result = await sendDataToOicService.Send(jollySportQueries, affectedTickets);
-            result.IsChinaView = false;
-            result.SpecialPlatform = SpecialPlatformConstant.JollySports;
-            response.Add(result);
-        }
-    }
-
-    private async Task SendForJollySportsCvLicensee(IEnumerable<SendFileQuery> queries, string affectedTickets, ICollection<AmendmentResponse> response)
-    {
-        var jollySportsCvQueries = queries.Where(x => x.SpecialPlatform == SpecialPlatformConstant.JollySportsCv).ToList();
-        if (jollySportsCvQueries.Any())
-        {
-            var result = await sendDataToOicService.Send(jollySportsCvQueries, affectedTickets);
-            result.IsChinaView = false;
-            result.SpecialPlatform = SpecialPlatformConstant.JollySportsCv;
-            response.Add(result);
-        }
+        var result = await sendDataToOicService.Send(queries, affectedTickets);
+        result.IsChinaView = isChinaView;
+        result.SpecialPlatform = specialPlatform;
+        return result;
     }
 }

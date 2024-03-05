@@ -24,44 +24,51 @@ public class AffectedLicenseeList
                 Group = "normal",
                 Show = false,
                 Message = "Attn: system will notify affected tickets to these Licensee(s): ",
-                Color = "#0a0c0f"
+                Color = "#0a0c0f",
+                LicenseesName = ""
             },
             new()
             {
                 Group = "chinaView",
                 Show = false,
                 Message = "China View Licensee Affected List: ",
-                Color = "#dd5edd"
+                Color = "#dd5edd",
+                LicenseesName = ""
             },new()
             {
                 Group = "jollyView",
                 Show = false,
                 Message = "Jolly Sports Licensee Affected List: ",
-                Color = "goldenrod"
+                Color = "goldenrod",
+                LicenseesName = ""
             },new()
             {
                 Group = "jollySportCv",
                 Show = false,
                 Message = "JollySportsCV Licensee Affected List: ",
-                Color = "#066924"
+                Color = "#066924",
+                LicenseesName = ""
             },new()
             {
                 Group = "instant",
                 Show = false,
                 Message = "Instant OU Licensee Affected List: ",
-                Color = "#ff0000"
+                Color = "#ff0000",
+                LicenseesName = ""
             },new()
             {
                 Group = "cashOut",
                 Show = false,
                 Message = "Cash Out Licensee Affected List: ",
-                Color = "#5548cc"
+                Color = "#5548cc",
+                LicenseesName = ""
             },new()
             {
                 Group = "cancelCashOut",
                 Show = false,
                 Message = "Cancel Cash Out Licensee Affected List: ",
-                Color = "#0a0c0f"
+                Color = "#0a0c0f",
+                LicenseesName = ""
             }
         };
     }

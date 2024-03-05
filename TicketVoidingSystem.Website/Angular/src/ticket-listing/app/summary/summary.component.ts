@@ -23,14 +23,14 @@ export class SummaryComponent implements OnChanges {
   affectedLicensees = '';
   chinaViewLicensees = '';
   jollyViewLicensees = '';
-  jollySportsCvLicensees = '';
+  jollySportCvLicensees = '';
   negativeBalanceUsers = '';
   totalLicensee = 0;
   totalBetCountOfCredit = 0;
   totalBetCountOfChinaView = 0;
   totalBetCountOfLicensee = 0;
   totalBetCountOfJollyView = 0;
-  totalBetCountOfJollySportsCv = 0;
+  totalBetCountOfJollySportCv = 0;
 
   constructor(private readonly clipboardService: ClipboardService) { }
 
@@ -92,7 +92,7 @@ export class SummaryComponent implements OnChanges {
       .map(x => x.licenseeName)
       .join(', ');
 
-    this.jollySportsCvLicensees = model
+      this.jollySportCvLicensees = model
       .filter(x => x.isChecked && x.specialPlatform === SpecialPlatform.Jolly_Sports_CV)
       .map(x => x.licenseeName)
       .join(', ');
@@ -114,8 +114,8 @@ export class SummaryComponent implements OnChanges {
     const jollyViewGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 2 });
     this.totalBetCountOfJollyView = _.sumBy(jollyViewGroups, 'total');
 
-    const jollySportsCvGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 3 });
-    this.totalBetCountOfJollySportsCv = _.sumBy(jollySportsCvGroups, 'total');
+    const jollySportCvGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 3 });
+    this.totalBetCountOfJollySportCv = _.sumBy(jollySportCvGroups, 'total');
   }
 
   sendExcelFile() {
@@ -141,6 +141,6 @@ export class SummaryComponent implements OnChanges {
   }
 
   isShowAffectedLicensees(): boolean {
-    return this.isShowSend && (this.affectedLicensees.length > 0 || this.chinaViewLicensees.length > 0 || this.jollyViewLicensees.length > 0 || this.jollySportsCvLicensees.length > 0);
+    return this.isShowSend && (this.affectedLicensees.length > 0 || this.chinaViewLicensees.length > 0 || this.jollyViewLicensees.length > 0 || this.jollySportCvLicensees.length > 0);
   }
 }
