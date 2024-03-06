@@ -151,17 +151,23 @@ public class SpecialPlatformServiceTests
         var message = new Message
         {
             ContentEnglish = "Saba 123 456",
-            ContentChineseSimplified = "沙巴123456"
+            ContentChineseSimplified = "沙巴123456",
+            ContentChineseTraditional = "沙巴123456",
+            ContentNewChineseSimplified = "沙巴123456"
         };
         var match = new Match
         {
             OriginLeagueName = "Saba 123",
-            OriginLeagueNameSimplified = "沙巴123"
+            OriginLeagueNameSimplified = "沙巴123",
+            OriginLeagueNameTraditional = "沙巴123",
+            OriginLeagueNameNewSimplified = "沙巴123"
         };
         var messageExpected = new Message
         {
             ContentEnglish = "123 456",
-            ContentChineseSimplified = "123456"
+            ContentChineseSimplified = "123456",
+            ContentChineseTraditional = "123456",
+            ContentNewChineseSimplified = "123456"
         };
         var service = new SpecialPlatformServiceImp();
 

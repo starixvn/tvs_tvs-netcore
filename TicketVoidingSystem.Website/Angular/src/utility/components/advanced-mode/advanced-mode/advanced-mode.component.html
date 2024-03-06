@@ -276,14 +276,7 @@
               {{betTeam.name}}:
             </div>
             <div class="right">
-              <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
-                <div>
-                  <span class="mr-2">{{betTeam.multiSelection.name}}</span>
-                  <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
-                  </multiple-select>
-                </div>
-              </div>
-              <ng-container *ngFor="let selection of betTeam.selections">
+              <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
                 <div *ngIf="!selection.isMultiple">
                   <div class="right-selection">
                     <span *ngIf="selection.name !== ''">{{selection.name}}</span>
@@ -292,11 +285,22 @@
                     </select>
                   </div>
                 </div>
+                <div *ngIf="selection.isMultiple">
+                  <span class="mr-2">{{selection.multiSelection.name}}</span>
+                  <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                  </multiple-select>
+                </div>
               </ng-container>
               <div class="input-area" *ngIf="betTeam.items.length > 0">
                 <div class="right-input width-158" *ngFor="let item of betTeam.items">
                   {{item.name}}
                   <input type="text" [(ngModel)]="item.value" [disabled]="item.flag" decimalOnly />
+                </div>
+              </div>
+              <div class="input-area" *ngIf="betTeam.inputs.length > 0">
+                <div class="right-input mg-right-10" *ngFor="let input of betTeam.inputs">
+                  {{input.name}}
+                  <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
                 </div>
               </div>
             </div>
