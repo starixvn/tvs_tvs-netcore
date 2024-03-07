@@ -208,7 +208,8 @@ public static class LogInfoExtension
                + $"ProductIds='{model.ProductIds}' "
                + $"StatusIds='{model.StatusIds}' "
                + $"FromDate='{model.FromDate}' "
-               + $"ToDate='{model.ToDate}'/></root>";
+               + $"ToDate='{model.ToDate}' "
+               + $"IsVoidAllArchivedTickets='{model.IsVoidAllArchivedTickets}'/></root>";
     }
 
     public static string ToKickOffInfoXml(this IEnumerable<EarlyKickOffViewModel> models)

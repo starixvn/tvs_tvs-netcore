@@ -74,7 +74,8 @@ public class CheckUsernameServiceImp : CheckUsernameService
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ProductIds = model.ProductIds,
-                StatusIds = model.StatusIds
+                StatusIds = model.StatusIds,
+                IsVoidAllArchivedTickets = model.IsVoidAllArchivedTickets
             }
         };
         var transInfoJsonList = await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
