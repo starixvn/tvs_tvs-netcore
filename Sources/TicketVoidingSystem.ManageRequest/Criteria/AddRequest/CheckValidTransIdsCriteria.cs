@@ -20,6 +20,8 @@ public class CheckValidTransIdsCriteria : CriteriaBase
 
     public bool IsAddSettledTickets { get; set; }
 
+    public bool IsVoidAllArchivedTickets { get; set; }
+
     public string TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_CheckAbnormalBet";

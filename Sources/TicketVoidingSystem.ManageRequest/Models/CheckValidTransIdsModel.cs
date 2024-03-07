@@ -19,4 +19,6 @@ public class CheckValidTransIdsModel
     public bool IsRemoveCustomerClass4K { get; set; }
 
     public bool IsAddSettledTickets { get; set; }
+
+    public bool IsVoidAllArchivedTickets { get; set; }
 }

@@ -20,6 +20,7 @@ export interface CheckTransIdsQuery {
   isRemoveCustomerClass201: boolean;
   isRemoveCustomerClass4K: boolean;
   isAddSettledTickets: boolean;
+  isVoidAllArchivedTickets: boolean;
 }
 
 export class CheckTransIdsViewModel {
