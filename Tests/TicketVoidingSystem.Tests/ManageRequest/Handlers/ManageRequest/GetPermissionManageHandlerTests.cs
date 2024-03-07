@@ -10,7 +10,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;
 
 using Fanex.NAP.Client.Helpers.Business;
 
-public class GetPermissionManageHandlerTests
+public class GetPermissionVoidAllArchivedTicketHandlerTests
 {
     [Fact]
     public async Task Handler_RepositoryExecute_CallSessionHasPermission()

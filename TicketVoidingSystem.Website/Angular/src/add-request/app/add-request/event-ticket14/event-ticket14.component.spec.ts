@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Shallow } from 'shallow-render';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { EventTicket14Model } from '../models/event-ticket-14.model';
@@ -40,7 +41,8 @@ describe('EventTicket14Component', () => {
     providers: [
       ValidationService,
       SaveRequestService,
-      AddRequestStore
+      AddRequestStore,
+      AddRequestApiService
     ]
   })
   class AppModuleTest { }
@@ -69,7 +71,10 @@ describe('EventTicket14Component', () => {
     const { instance } = await shallow
     .mock(ValidationService, {
       checkBusinessRule: mockCheckBusinessRule,
-    })    
+    })
+    .mock(AddRequestApiService, {
+      getPermissionAddRequest: jest.fn(),
+    })
     .render({
       bind: {
         eventTicket14Model: Helper.fakeEventTicket14Model,
@@ -90,6 +95,9 @@ describe('EventTicket14Component', () => {
     const { instance } = await shallow
     .mock(ValidationService, {
       checkBusinessRule: mockCheckBusinessRule,
+    })
+    .mock(AddRequestApiService, {
+      getPermissionAddRequest: jest.fn(),
     })
     .render({
       bind: {

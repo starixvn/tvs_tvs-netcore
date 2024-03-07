@@ -183,7 +183,6 @@ public class AddRequestControllerTests
         await mediator.Received().Send(Arg.Any<AddRequest>());
     }
 
-
     [Fact]
     public async Task GetSubIssueTypeNote_HasRequest_CallMediatorRequest()
     {
@@ -204,5 +203,16 @@ public class AddRequestControllerTests
 
         // Assert
         await mediator.Received().Send(Arg.Any<SaveSubIssueTypeNoteRequest>());
+    }
+
+    [Fact]
+    public async Task GetPermission_HasRequest_CallMediatorRequest()
+    {
+        // Arrange
+        // Act
+        await controller.GetPermission();
+
+        // Assert
+        await mediator.Received().Send(Arg.Any<GetPermissionRequest>());
     }
 }

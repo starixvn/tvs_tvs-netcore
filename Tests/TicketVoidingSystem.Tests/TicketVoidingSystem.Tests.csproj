@@ -15,8 +15,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ManageRequest\Handlers\ManageRequest\RequestListExcel\**" />
     <Compile Remove="TicketVoidingSystem\Services\Excel\**" />
+    <EmbeddedResource Remove="ManageRequest\Handlers\ManageRequest\RequestListExcel\**" />
     <EmbeddedResource Remove="TicketVoidingSystem\Services\Excel\**" />
+    <None Remove="ManageRequest\Handlers\ManageRequest\RequestListExcel\**" />
     <None Remove="TicketVoidingSystem\Services\Excel\**" />
   </ItemGroup>
   <ItemGroup>
@@ -54,7 +57,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ManageRequest\Handlers\ManageRequest\RequestListExcel\" />
     <Folder Include="TicketVoidingSystem\Web\" />
   </ItemGroup>
 

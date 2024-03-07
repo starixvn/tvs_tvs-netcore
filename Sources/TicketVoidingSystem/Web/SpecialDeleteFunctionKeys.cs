@@ -59,6 +59,7 @@ public static class SpecialDeleteFunctionKeys
     public const string UploadBatchMsg = "UploadBatchMsg";
     public const string ViewUsernameOfSpecialSiteOnBetList = "ViewUsernameOfSpecialSiteOnBetList";
     public const string VirtualSportsSpecialDelete = "VirtualSportsSpecialDelete";
+    public const string VoidAllArchivedTickets = "VoidAllArchivedTickets";
     public const string VoidBetTradeTransaction = "VoidBetTradeTransaction";
     public const string VoidByBetID = "VoidByBetID";
     public const string VoidByCurrency = "VoidByCurrency";

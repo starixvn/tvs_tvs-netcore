@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { EventTicket14Model } from '../models/event-ticket-14.model';
@@ -25,21 +26,26 @@ export class EventTicket14Component {
 
   primitiveProps = new PrimitiveProperty();
   isCancelAfterFocusOutBetIdsEvent = false;
-  
+
   constructor(
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
     private readonly validationService: ValidationService,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
+
+  public async ngOnInit(): Promise<void> {
+    this.primitiveProps.permission = await this.addRequestApiService.getPermissionAddRequest();
+  }
 
   async afterFocusOutBetIds(): Promise<void> {
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
-      await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId);
+      await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId, this.primitiveProps.permission);
       this.primitiveProps.isBlockBetIds = false;
     }
   }
-  
+
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.filter.isVoided) {
@@ -58,7 +64,7 @@ export class EventTicket14Component {
     this.betIdsComponent.triggerFocusOutBetIds();
     this.isCancelAfterFocusOutBetIdsEvent = false;
 
-    const result = await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId);
+    const result = await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId, this.primitiveProps.permission);
     this.primitiveProps.transInfoJson = result.transInfoJson;
     if (result.isValid) {
       await this.executeApiSaveRequest();
