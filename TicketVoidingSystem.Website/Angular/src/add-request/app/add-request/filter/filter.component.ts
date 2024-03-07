@@ -351,7 +351,9 @@ export class FilterComponent implements OnInit, OnChanges {
   isShowSubType(): boolean {
     return this.issueTypes.selectedSubIssueTypes.length > 1
       && !this.isWrongOU()
-      && !this.isWrong1stOU();
+      && !this.isWrong1stOU()
+      && !this.isEarlyKickOff()
+      && !this.isWrongKickOff();
   }
 
   isShowButtonSelectSubType(): boolean {
@@ -428,6 +430,14 @@ export class FilterComponent implements OnInit, OnChanges {
   isNotParticipate(): boolean {
     return StaticService.isNotParticipate(this.issueTypes.issueId?.toString());
   }
+
+  isEarlyKickOff(): boolean {
+    return StaticService.isEarlyKickOff(this.issueTypes.issueId?.toString());
+  } 
+
+  isWrongKickOff(): boolean {
+    return StaticService.isWrongKickOff(this.issueTypes.issueId?.toString());
+  } 
 
   isRecoverTicket(): boolean {
     return StaticService.isRecoverTicket(this.issueTypes.issueId?.toString());
