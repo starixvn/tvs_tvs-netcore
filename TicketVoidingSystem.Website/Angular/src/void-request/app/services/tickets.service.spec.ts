@@ -137,6 +137,5 @@ describe('TicketsService', () => {
     ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
     await mockTicketsService['getVoidTicketsFull'](voidMatch, null);
     expect(voidMatch.isShowTicketFull).toBeTruthy();
-    expect(voidMatch.isShowTicketFull).toBeTruthy();
   });
 });

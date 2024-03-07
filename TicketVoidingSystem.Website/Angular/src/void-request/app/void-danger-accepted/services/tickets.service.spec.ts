@@ -157,6 +157,5 @@ describe('TicketsService', () => {
 
     // Assert
     expect(voidMatch.isShowTicketFull).toBeTruthy();
-\    expect(voidMatch.isShowTicketFull).toBeTruthy();
   });
 });
