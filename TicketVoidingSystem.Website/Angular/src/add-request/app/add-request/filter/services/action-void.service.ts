@@ -90,7 +90,7 @@ export class ActionVoidService {
   public getActionAbnormalBet(filterBy: number): number[] {
     return filterBy === AbnormalFilterBy.SINGLE
       ? ActionVoidByIssueTypeConst.ABNORMAL_BET_SINGLE
-      : ActionVoidByIssueTypeConst.ABNORMAL_BET_MIX_PARLAY;
+      : ActionVoidByIssueTypeConst.ABNORMAL_BET_MIX_OR_SYSTEM_PARLAY;
   }
 
   /* istanbul ignore next */

@@ -179,10 +179,12 @@ export class TeamFavorite {
 export class AbnormalFilterBy {
   static readonly SINGLE = null;
   static readonly MIX_PARLAY = 1;
+  static readonly SYSTEM_PARLAY = 2;
 
   items: Item[] = [
     { name: 'Single ticket', value: AbnormalFilterBy.SINGLE },
-    { name: 'Mix Parlay ticket', value: AbnormalFilterBy.MIX_PARLAY }
+    { name: 'Mix Parlay ticket', value: AbnormalFilterBy.MIX_PARLAY },
+    { name: 'System Parlay ticket', value: AbnormalFilterBy.SYSTEM_PARLAY }
   ];
 
   duplicateTicketsFilterItems: Item[] = [
@@ -398,7 +400,7 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];
-  static readonly ABNORMAL_BET_MIX_PARLAY: number[] = [
+  static readonly ABNORMAL_BET_MIX_OR_SYSTEM_PARLAY: number[] = [
     TVSRequestActionType.AUTO_VOID_WINNING_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.MANUAL_VOID_ID,

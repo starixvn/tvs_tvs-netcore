@@ -210,7 +210,8 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   public isShowLeagueEvent(): boolean {
-    return !(this.isAbnormalBet() && this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY);
+    return !(this.isAbnormalBet() &&
+      (this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY || this.abnormalBetModel.filterBy === AbnormalFilterBy.SYSTEM_PARLAY));
   }
 
   public async exportExcel() {
