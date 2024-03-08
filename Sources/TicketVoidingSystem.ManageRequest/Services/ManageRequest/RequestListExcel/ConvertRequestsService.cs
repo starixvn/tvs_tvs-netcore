@@ -115,8 +115,14 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         }
 
         var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
+        if (nodesParlay != null)
+        {
+            return $"Mix Parlay: {nodesParlay[0].InnerText}";
+        }
 
-        return nodesParlay != null ? $"Mix Parlay: {nodesParlay[0].InnerText}" : string.Empty;
+        var nodesSystemParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-system-parlay']");
+
+        return nodesSystemParlay != null ? $"System Parlay: {nodesParlay[0].InnerText}" : string.Empty;
     }
 
     private static string BuildTotalSingleOrParlay(string html)
