@@ -122,7 +122,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
 
         var nodesSystemParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-system-parlay']");
 
-        return nodesSystemParlay != null ? $"System Parlay: {nodesParlay[0].InnerText}" : string.Empty;
+        return nodesSystemParlay != null ? $"System Parlay: {nodesSystemParlay[0].InnerText}" : string.Empty;
     }
 
     private static string BuildTotalSingleOrParlay(string html)
