@@ -85,7 +85,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
 
   public isShowMatchInfo(): boolean {
     return !this.isAbnormalAccountIssueType()
-      && !this.isAbnormalBetMixParlay()
+      && !this.isAbnormalBetMixOrSystemParlay()
       && !this.isArchivedTicket()
       && !this.isDuplicateTicketsMixParlay()
       && !this.isRecoverTicket();;
@@ -95,8 +95,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     return StaticService.isRecoverTicket(this.issue.issueTypeId?.toString());
   }
 
-  public isAbnormalBetMixParlay(): boolean {
-    return this.isAbnormalBetIssueType() && this.model.event?.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  public isAbnormalBetMixOrSystemParlay(): boolean {
+    return this.isAbnormalBetIssueType() && StaticService.isFilterByMixOrSystemParlay(this.model.event?.filterBy);
   }
 
   public isDuplicateTicketsMixParlay(): boolean {

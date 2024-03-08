@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -19,8 +19,8 @@ export class ValidationService {
 
   initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery{
     const transIds = args.betIdsComponent.getAllBetIds();
-    const matchId = !this.isAbnormalBetMixParlay(args) ? args.leagueEventAbnormalComponent?.selectedMatchId : 29;
-    const filterBy = !this.isAbnormalBetMixParlay(args) ? null : args.filterBy;
+    const matchId = !this.isAbnormalBetMixOrSystemParlay(args) ? args.leagueEventAbnormalComponent?.selectedMatchId : 29;
+    const filterBy = !this.isAbnormalBetMixOrSystemParlay(args) ? null : args.filterBy;
 
     return {
       matchId: matchId,
@@ -44,7 +44,7 @@ export class ValidationService {
 
   public async checkValidBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     if (!args.betIdsComponent.isHasBetId()) {
-      if (args.filterBy !== AbnormalFilterBy.MIX_PARLAY) {
+      if (StaticService.isFilterByMixOrSystemParlay(args.filterBy)) {
         args.leagueEventAbnormalComponent.updateUndefinedMatchAndLeague();
       }
 
@@ -64,7 +64,7 @@ export class ValidationService {
       return { isValid: false} as ValidationBusinessRuleOutput;
     }
 
-    if (!this.isAbnormalBetMixParlay(args)) {
+    if (!this.isAbnormalBetMixOrSystemParlay(args)) {
       args.leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch(checkTransIdViewModel.match);
     }
 
@@ -142,8 +142,8 @@ export class ValidationService {
     return confirmModel;
   }
 
-  private isAbnormalBetMixParlay(args: ValidationBusinessRuleArgs): boolean {
-    return StaticService.isAbnormalBet(args.issueTypeId) && args.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  private isAbnormalBetMixOrSystemParlay(args: ValidationBusinessRuleArgs): boolean {
+    return StaticService.isAbnormalBet(args.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.filterBy);
   }
 
   private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {

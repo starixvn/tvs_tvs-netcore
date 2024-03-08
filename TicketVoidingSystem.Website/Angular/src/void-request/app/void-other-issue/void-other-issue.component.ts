@@ -17,7 +17,7 @@ import { TemplateMessageComponent } from '../../../utility/components/template-m
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../utility/components/template-message/template-message/template.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { AbnormalFilterBy, ModeType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../utility/constants/config';
+import { ModeType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { EventType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
@@ -370,7 +370,7 @@ export class VoidOtherIssueComponent implements OnInit {
           const checkingPermissionModel = new CheckingPermissionModel();
           checkingPermissionModel.setParam(this.ticketsModel.checkPermissionTickets, this.voidQuery.matchId, 'ticket-voiding-check-void-bet-permission', true,
             StaticService.checkHandlingCashOutAsUnSettledTicketByIssueTypeId(this.requestDetail.request.issueTypeId.toString()), true, this.ticketsModel.allCancelCashOutTickets);
-          if (this.isAbnormalAccount() || this.isAbnormalBetMixParlay() || this.isArchivedTickets()) {
+          if (this.isAbnormalAccount() || this.isAbnormalBetMixOrSystemParlay() || this.isArchivedTickets()) {
             checkingPermissionModel.matchId = 0;
           }
 
@@ -431,7 +431,7 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   isHasMatchInfo() {
-    return !this.isAbnormalAccount() && !this.isAbnormalBetMixParlay() && !this.isArchivedTickets();
+    return !this.isAbnormalAccount() && !this.isAbnormalBetMixOrSystemParlay() && !this.isArchivedTickets();
   }
 
   isAbnormalAccount(): boolean {
@@ -446,8 +446,8 @@ export class VoidOtherIssueComponent implements OnInit {
     return StaticService.isAbnormalBet(this.requestDetail.request.issueTypeId.toString());
   }
 
-  isAbnormalBetMixParlay(): boolean {
-    return this.isAbnormalBet() && this.requestDetail.event.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  isAbnormalBetMixOrSystemParlay(): boolean {
+    return this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.requestDetail.event.filterBy);
   }
 
   isArchivedTickets() {

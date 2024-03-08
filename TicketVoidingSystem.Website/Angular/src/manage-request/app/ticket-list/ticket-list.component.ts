@@ -120,7 +120,7 @@ export class TicketListComponent implements OnInit, OnChanges {
 
   isShowMatchInfo(requestDetail: RequestDetailViewModel) {
     return !this.isAbnormalAccountIssueType(requestDetail)
-      && !(this.isAbnormalBetIssueType(requestDetail) && requestDetail.event.filterBy === AbnormalFilterBy.MIX_PARLAY)
+      && !(this.isAbnormalBetIssueType(requestDetail) && StaticService.isFilterByMixOrSystemParlay(requestDetail.event.filterBy))
       && !(this.isDuplicateTickets(requestDetail) && requestDetail.duplicateTicketsModel.filterBy === AbnormalFilterBy.MIX_PARLAY)
       && !this.isArchivedTicketIssueType()
       && !this.isRecoverTicket(requestDetail);
