@@ -102,7 +102,7 @@ public static class BetTypeExtension
         foreach (var item in betTypes)
         {
             var betType = Environment.NewLine + string.Format(StringResource.BetTypeXml,
-                item.Id, item.BetTeam, item.Set, item.Game, item.Value, item.ValueHdp1, item.ValueHdp2, item.Goal, item.BetOption, item.OddsSpread, item.OddsId, item.Transdesc);
+                item.Id, item.BetTeam, item.Set, item.Game, item.Value, item.ValueHdp1, item.ValueHdp2, item.Goal, item.BetOption, item.OddsSpread, item.OddsId, item.Transdesc, item.VirtualHead);
             temp.Append(betType.Replace("=\"\"", "=\"All\""));
         }
 

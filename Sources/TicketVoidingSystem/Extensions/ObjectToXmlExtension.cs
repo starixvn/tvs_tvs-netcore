@@ -27,7 +27,6 @@ public static class ObjectToXmlExtension
         return $"<TransDates>{temp}{Environment.NewLine}</TransDates>";
     }
 
-
     public static string ToBetTypeXml(this IEnumerable<BetTypeXml> betTypes)
     {
         if (betTypes == null)
@@ -39,7 +38,7 @@ public static class ObjectToXmlExtension
         foreach (var item in betTypes)
         {
             var betType = Environment.NewLine + string.Format(StringResource.BetTypeXml,
-                item.Id, item.BetTeam, item.Set, item.Game, item.Value, item.ValueHdp1, item.ValueHdp2, item.Goal, item.BetOption, item.OddsSpread, item.OddsId, item.Transdesc);
+                item.Id, item.BetTeam, item.Set, item.Game, item.Value, item.ValueHdp1, item.ValueHdp2, item.Goal, item.BetOption, item.OddsSpread, item.OddsId, item.Transdesc, item.VirtualHead);
             temp.Append(betType.Replace("=\"\"", "=\"All\""));
         }
 

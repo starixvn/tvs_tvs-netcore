@@ -349,7 +349,8 @@ export class AdvancedModeComponent implements OnChanges {
         goal: '',
         oddsSpread: '',
         oddsId: '',
-        transdesc: ''
+        transdesc: '',
+        virtualHead: ''
       };
       betTypes.push(betType);
     });

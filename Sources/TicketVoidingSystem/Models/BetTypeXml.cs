@@ -25,4 +25,6 @@ public class BetTypeXml
     public string OddsId { get; set; }
 
     public string Transdesc { get; set; }
+
+    public string VirtualHead { get; set; }
 }

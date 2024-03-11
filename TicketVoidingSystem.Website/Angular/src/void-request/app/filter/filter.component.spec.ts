@@ -31,7 +31,8 @@ class Helper {
       valueHdp2: '',
       oddsSpread: '',
       oddsId: '',
-      transdesc: ''
+      transdesc: '',
+      virtualHead: ''
     },
     {
       betTeam: '',
@@ -45,7 +46,8 @@ class Helper {
       valueHdp2: '',
       oddsSpread: '',
       oddsId: '',
-      transdesc: ''
+      transdesc: '',
+      virtualHead: ''
     },
     {
       betTeam: '',
@@ -59,7 +61,8 @@ class Helper {
       valueHdp2: '',
       oddsSpread: '',
       oddsId: '',
-      transdesc: ''
+      transdesc: '',
+      virtualHead: ''
     }
   ];
 

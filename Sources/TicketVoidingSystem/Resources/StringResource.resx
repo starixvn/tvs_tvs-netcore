@@ -124,7 +124,7 @@
     <value>Bet Type</value>
   </data>
   <data name="BetTypeXml" xml:space="preserve">
-    <value>&lt;BetType Id="{0}" BetTeam="{1}" Set="{2}" Game="{3}" Value="{4}" ValueHdp1="{5}" ValueHdp2="{6}" Goal="{7}" BetOption="{8}" OddsSpread="{9}" OddsId="{10}" Transdesc="{11}" /&gt;</value>
+    <value>&lt;BetType Id="{0}" BetTeam="{1}" Set="{2}" Game="{3}" Value="{4}" ValueHdp1="{5}" ValueHdp2="{6}" Goal="{7}" BetOption="{8}" OddsSpread="{9}" OddsId="{10}" Transdesc="{11}" VirtualHead="{12}" /&gt;</value>
   </data>
   <data name="ByBetID" xml:space="preserve">
     <value>By BetID(s)</value>

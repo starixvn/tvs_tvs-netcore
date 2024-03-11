@@ -64,6 +64,7 @@ export class BetTeamResult {
   oddsSpread: string;
   oddsId: string;
   transdesc: string;
+  virtualHead: string;
 }
 
 export class CheckedBetType extends BetTeamResult {
@@ -480,6 +481,9 @@ export class BetTeam {
         break;
       case 'Transdesc':
         result.transdesc = value;
+        break;
+      case 'VirtualHead':
+        result.virtualHead = value;
         break;
     }
   }
