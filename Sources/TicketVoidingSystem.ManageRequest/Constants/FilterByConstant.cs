@@ -1,11 +1,13 @@
 ﻿namespace TicketVoidingSystem.ManageRequest.Constants;
 
-public class FilterByConstant
+public static class FilterByConstant
 {
     public const byte TransTime = 1;
 
     public const byte AcceptTime = 2;
 
+    // Abnormal bet, Duplicate tickets
+    // Single = null
     public const byte MixParlay = 1;
 
     public const byte SystemParlay = 2;

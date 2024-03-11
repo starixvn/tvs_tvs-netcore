@@ -119,7 +119,7 @@ public class DescriptionElementServiceImp : DescriptionElementService
 
     public string BuildMixParlay(int totalTickets)
     {
-        return $"<div>Mix Parlay: <span class=\"text-primary total-parlay\">{totalTickets}</span></div>";
+        return $"<div>Mix Parlay: <span class=\"text-primary total-mix-parlay\">{totalTickets}</span></div>";
     }
 
     public string BuildSystemParlay(int totalTickets)

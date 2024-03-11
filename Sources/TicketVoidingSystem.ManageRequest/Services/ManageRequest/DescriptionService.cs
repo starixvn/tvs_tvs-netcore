@@ -23,7 +23,7 @@ public class DescriptionServiceImp : DescriptionService
     {
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
             {
-                {IssueTypeConstant.AbnormalBet, BuildSingleOrMixOrSystemParlay},
+                {IssueTypeConstant.AbnormalBet, BuildAbnormalBet},
                 {IssueTypeConstant.AbnormalBetRealMember, BuildMatchLeagueTotal},
                 {IssueTypeConstant.EarlyKickOffTime, BuildEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildEKO},
@@ -38,7 +38,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
-                {IssueTypeConstant.DuplicateTickets, BuildSingleOrMixOrSystemParlay},
+                {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.NotParticipate, BuildMatchLeague},
                 {IssueTypeConstant.RecoverTicket, BuildProducts}
             };
@@ -47,12 +47,21 @@ public class DescriptionServiceImp : DescriptionService
         return function != null ? function.Invoke(item) : BuildDefault(item);
     }
 
-    private string BuildSingleOrMixOrSystemParlay(RequestDescription item)
+    private string BuildAbnormalBet(RequestDescription item)
+    {
+        return item.FilterBy switch
+        {
+            FilterByConstant.MixParlay => elementService.BuildMixParlay(item.TotalSingle),
+            FilterByConstant.SystemParlay => elementService.BuildSystemParlay(item.TotalSingle),
+            _ => BuildMatchLeagueTotal(item)
+        };
+    }
+
+    private string BuildDuplicateTickets(RequestDescription item)
     {
         return item.FilterBy switch
         {
             FilterByConstant.MixParlay => elementService.BuildParlay(item.TotalSingle),
-            FilterByConstant.SystemParlay => elementService.BuildSystemParlay(item.TotalSingle),
             _ => BuildMatchLeagueTotal(item)
         };
     }
