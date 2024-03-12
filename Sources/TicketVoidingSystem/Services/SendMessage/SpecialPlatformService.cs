@@ -125,7 +125,7 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
 
     public string GetDepartmentNameForEmailVoidDuplicated(SiteEmail site)
     {
-        return IsSiteJollySportsPlatform(site) ? "CS JollySports" : "CS ONEONONE.SOLUTIONS";
+        return "Customer Service Team";
     }
 
     public string GetContactAddressForEmailVoidDuplicated(SiteEmail site)
