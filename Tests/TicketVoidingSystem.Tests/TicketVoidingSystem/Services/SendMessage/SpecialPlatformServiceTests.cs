@@ -244,24 +244,17 @@ public class SpecialPlatformServiceTests
         Assert.Equal(expected, actual);
     }
 
-    [Theory]
-    [InlineData(1, "CS ONEONONE.SOLUTIONS")]
-    [InlineData(2, "CS JollySports")]
-    [InlineData(3, "CS JollySports")]
-    public void GetDepartmentNameForEmailVoidDuplicated_ReturnExpected(int specialPlatform, string expected)
+    [Fact]
+    public void GetDepartmentNameForEmailVoidDuplicated_ReturnExpected()
     {
         // Arrange
-        var site = new SiteEmail
-        {
-            SpecialPlatform = specialPlatform
-        };
         var service = new SpecialPlatformServiceImp();
 
         // Act
-        var actual = service.GetDepartmentNameForEmailVoidDuplicated(site);
+        var actual = service.GetDepartmentNameForEmailVoidDuplicated(new SiteEmail());
 
         // Assert
-        Assert.Equal(expected, actual);
+        Assert.Equal("Customer Service Team", actual);
     }
 
     [Theory]
