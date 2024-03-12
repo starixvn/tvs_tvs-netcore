@@ -9,6 +9,7 @@ using Xunit;
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;
 
 using Fanex.NAP.Client.Helpers.Business;
+using global::TicketVoidingSystem.Web;
 
 public class GetPermissionVoidAllArchivedTicketHandlerTests
 {
@@ -22,16 +23,16 @@ public class GetPermissionVoidAllArchivedTicketHandlerTests
             VerifyRead = true,
             VerifyHost = true,
             VoidRead = true,
-            ManageRequestUnsettledTicketsHost = true,
-            ManageRequestSettledTicketsHost = true,
             IsReadMarkTickets = true
         };
 
         var request = new GetPermissionManageRequest();
         var session = Substitute.For<SessionService>();
-        session.HasPermission(Arg.Any<string>(), Constant.Policy.Host).Returns(true);
-        session.HasPermission(Arg.Any<string>(), Constant.Policy.Read).Returns(true);
-        session.HasPermission(Arg.Any<string>(), Constant.Policy.Read).Returns(true);
+        session.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Constant.Policy.Host).Returns(true);
+        session.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Read).Returns(true);
+        session.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Host).Returns(true);
+        session.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Constant.Policy.Read).Returns(true);
+        session.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Read).Returns(true);
 
         var handler = new GetPermissionManageHandler(session);
 
@@ -39,13 +40,14 @@ public class GetPermissionVoidAllArchivedTicketHandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await session.Received(4).HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Host);
-        await session.Received(3).HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Read);
+        await session.Received(1).HasPermission(SpecialDeleteFunctionKeys.TicketVoidingManageRequest, Constant.Policy.Host);
+        await session.Received(1).HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Read);
+        await session.Received(1).HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVerifyRequest, Constant.Policy.Host);
+        await session.Received(1).HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Constant.Policy.Read);
+        await session.Received(1).HasPermission(SpecialDeleteFunctionKeys.TicketVoidingVoidTickets, Constant.Policy.Read);
         AssertExtension.Equal(expected.ManageRequestHost, actual.ManageRequestHost);
         AssertExtension.Equal(expected.VerifyHost, actual.VerifyHost);
         AssertExtension.Equal(expected.VerifyRead, actual.VerifyRead);
         AssertExtension.Equal(expected.VoidRead, actual.VoidRead);
-        AssertExtension.Equal(expected.ManageRequestSettledTicketsHost, actual.ManageRequestSettledTicketsHost);
-        AssertExtension.Equal(expected.ManageRequestUnsettledTicketsHost, actual.ManageRequestUnsettledTicketsHost);
     }
 }

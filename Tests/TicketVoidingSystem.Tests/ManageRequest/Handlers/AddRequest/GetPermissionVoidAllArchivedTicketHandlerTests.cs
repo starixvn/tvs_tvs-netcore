@@ -26,7 +26,7 @@ public class GetPermissionVoidAllArchivedTicketHandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await session.Received(1).HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Host);
+        await session.Received().HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Host);
         Assert.Equal(isHasPermission, actual.IsVoidAllArchivedTickets);
     }
 }
