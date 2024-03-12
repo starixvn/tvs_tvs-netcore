@@ -18,6 +18,8 @@ public class CheckValidUsernamesCriteria : CriteriaBase
 
     public string StatusIds { get; set; }
 
+    public bool IsVoidAllArchivedTickets { get; set; }
+
     public string? TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_CheckUserName";

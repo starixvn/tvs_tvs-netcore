@@ -81,7 +81,8 @@ describe('EventDateFilterComponent', () => {
     
     await instance.initEventDate();
     
-    expect(instance.minDate).toBeDefined();
+    expect(instance.fromDate).toBeDefined();
+    expect(instance.toDate).toBeDefined();
   });
   
   it('#isValidEventDate should return true', async () => {

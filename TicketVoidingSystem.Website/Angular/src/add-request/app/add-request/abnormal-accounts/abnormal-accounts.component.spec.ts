@@ -9,6 +9,7 @@ import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalAccountModel } from '../models/abnormal-account.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts.component';
 import { AccountTableComponent } from './account-table/account-table.component';
@@ -260,7 +261,10 @@ describe('AbnormalAccountsComponent', () => {
     const mockGetAccountWinLost = jest.fn().mockReturnValue(validAccountWinlostModels);
     const { instance } = await shallow
       .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(true) })
-      .mock(AddRequestApiService, { getAccountWinLost: mockGetAccountWinLost })
+      .mock(AddRequestApiService, {
+        getAccountWinLost: mockGetAccountWinLost,
+        getPermissionAddRequest: jest.fn().mockReturnValue(new PermissionAddRequest())
+      })
       .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
       .render({
         bind: {
@@ -348,5 +352,33 @@ describe('AbnormalAccountsComponent', () => {
 
     expect(mockCheckBusinessRule).toHaveBeenCalledTimes(0);
     expect(instance.accountTableComponent.isCancelRecalculateAmount).toBeTruthy();
+  });
+
+  it('#getMinDateByPermission should return null when have permission VoidAllArchivedTicket', async () => {
+    const { instance } = await shallow
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    const actual = instance['getMinDateByPermission'](true);
+
+    expect(actual).toBeNull();
+  });
+
+  it('#getMinDateByPermission should return one date when have not permission VoidAllArchivedTicket', async () => {
+    const { instance } = await shallow
+      .render({
+        bind: {
+          abnormalAccountModel: Helper.fakeAbnormalAccountModel,
+          filter: Helper.fakeFilterModel,
+          isEdit: true,
+        }
+      });
+    const actual = instance['getMinDateByPermission'](false);
+
+    expect(actual).not.toBeNull();
   });
 });

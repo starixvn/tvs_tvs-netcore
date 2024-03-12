@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import moment from 'moment-timezone';
 import { UsernamesComponent } from '../../../../utility/components/user-names/user-names.component';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -42,7 +45,8 @@ export class AbnormalAccountsComponent implements OnInit {
     private readonly validationService: ValidationService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
+    private readonly addRequestApiService: AddRequestApiService,
+    private readonly commonService: CommonService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -52,6 +56,8 @@ export class AbnormalAccountsComponent implements OnInit {
       this.primitiveProps.isShowAccountWinLost = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     }
+    this.primitiveProps.permission = await this.addRequestApiService.getPermissionAddRequest();
+    this.primitiveProps.minDate = await this.getMinDateByPermission(this.primitiveProps.permission.isVoidAllArchivedTickets);
   }
 
   public async focusOutUsernames(): Promise<void> {
@@ -145,5 +151,16 @@ export class AbnormalAccountsComponent implements OnInit {
   public changeFilter(): void {
     this.primitiveProps.isShowAccountWinLost = false;
     this.primitiveProps.isShowError = false;
+  }
+
+  private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {
+    if (isVoidAllArchivedTickets) {
+      return null;
+    }
+
+    const currentMoment = moment.utc().tz('America/Caracas');
+    const momentMinDate = currentMoment.subtract(7, "days");
+
+    return { year: momentMinDate.year(), month: momentMinDate.month() + 1, day: momentMinDate.date()};
   }
 }

@@ -23,6 +23,8 @@ public class CheckValidUsernamesRequest : IRequest<CheckValidUsernamesViewModel>
 
     public string StatusIds { get; set; }
 
+    public bool IsVoidAllArchivedTickets { get; set; }
+
     public IEnumerable<AccountWinlostModel>? AccountWinlostModels { get; set; }
 }
 
