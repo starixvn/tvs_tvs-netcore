@@ -21,6 +21,7 @@ import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
 import { GetChildMatchQuery } from './models/get-child-match.query';
+import { PermissionAddRequest } from './models/permission-add-request.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
 
 @Injectable({
@@ -139,5 +140,10 @@ export class AddRequestApiService {
    /* istanbul ignore next */
    async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
     return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
+  }
+
+ /* istanbul ignore next */
+  async getPermissionAddRequest(): Promise<PermissionAddRequest> {
+    return this.httpService.getJson<PermissionAddRequest>('api/AddRequest/GetPermission');
   }
 }

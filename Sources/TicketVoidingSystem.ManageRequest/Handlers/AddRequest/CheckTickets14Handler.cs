@@ -29,6 +29,7 @@ public class CheckTickets14Handler : IRequestHandler<CheckTickets14Request, Chec
         var criteria = new CheckTickets14Criteria
         {
             TransIds = request.TransIds,
+            IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
             TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)))
         };
 

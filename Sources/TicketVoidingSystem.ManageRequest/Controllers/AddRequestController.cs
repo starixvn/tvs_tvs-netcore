@@ -93,4 +93,7 @@ public class AddRequestController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CheckRecoverTicket(CheckRecoverTicketRequest request) => Ok(await mediator.Send(request));
+
+    [HttpGet]
+    public async Task<IActionResult> GetPermission() => Ok(await mediator.Send(new GetPermissionRequest()));
 }
