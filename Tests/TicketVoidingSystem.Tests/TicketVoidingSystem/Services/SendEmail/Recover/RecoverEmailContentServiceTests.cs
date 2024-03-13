@@ -33,7 +33,7 @@ public class RecoverEmailContentServiceTests
     public void Create_ValidData_ReturnExpected()
     {
         // Arrange
-        var viewModel = new MailRecoverViewModel { };
+        var viewModel = new MailRecoverViewModel();
         var siteEmail = new SiteEmail
         {
             ToList = "1, 2"

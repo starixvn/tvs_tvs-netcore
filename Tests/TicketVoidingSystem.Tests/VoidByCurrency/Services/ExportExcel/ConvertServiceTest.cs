@@ -16,8 +16,8 @@ internal class ChoiceTestCase : IEnumerable<object[]>
 {
     private static readonly ChoiceTestCaseModel Single = new()
     {
-        Html = "<div class=''><span class='underdog'>The Field<span class='handicap'> </span></span><div class='bettype'> Moneyline</div></div>",
-        Expected = "The Field \n Moneyline"
+        Html = "<div class=''><span class='underdog'>The Field<span class='handicap'> </span></span><div class='bettype'> Money line</div></div>",
+        Expected = "The Field \n Money line"
     };
 
     private static readonly ChoiceTestCaseModel Aos = new()
@@ -71,7 +71,6 @@ internal class ChoiceTestCase : IEnumerable<object[]>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
-
 
 public class ConvertServiceTest
 {

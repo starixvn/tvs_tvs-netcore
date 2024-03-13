@@ -28,10 +28,10 @@ public class VoidServiceTest
         var service = CreateService(repository);
 
         // Act
-        var actual = await service.VoidTickets(new VoidTicketsQuery { UserPwd = "asff" });
+        var (tickets, _) = await service.VoidTickets(new VoidTicketsQuery { UserPwd = "a" });
 
         // Assert
-        AssertExtension.Equal(expected, actual.Tickets);
+        AssertExtension.Equal(expected, tickets);
     }
 
     [Fact]

@@ -12,7 +12,7 @@ import { FilterComponent } from './filter.component';
 class Helper {
   static readonly searchButtonSelector = 'input[type=submit]';
 
-  static readonly fakeBettypeList: BetType[] = [
+  static readonly fakeBetTypeList: BetType[] = [
     new BetType(15, '1H 1X2', false, 0, true),
     new BetType(4, 'Correct Score', false, 0, true),
     new BetType(216, 'Goal Scorer - Anytime', false, 0, true)
@@ -67,12 +67,12 @@ class Helper {
   ];
 
   static getFakeGroupBetTypesModel(): GroupBetTypesModel {
-    const groupBettype: GroupBetType[] = [
+    const groupBetType: GroupBetType[] = [
       new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
       new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
       new GroupBetType('FT', [new BetType(216, 'Goal Scorer - Anytime', false, 0, true)], true),
     ];
-    const groupBetTypesModel = new GroupBetTypesModel(groupBettype, true);
+    const groupBetTypesModel = new GroupBetTypesModel(groupBetType, true);
     return groupBetTypesModel;
   }
 }
@@ -102,10 +102,10 @@ describe('DangerAcceptedFilterComponent', () => {
     const { instance } = await shallow.render();
 
     // Action
-    instance.changeBetTypes(Helper.fakeBettypeList);
+    instance.changeBetTypes(Helper.fakeBetTypeList);
 
     // Assert
-    expect(instance.allBetTypes).toStrictEqual(Helper.fakeBettypeList);
+    expect(instance.allBetTypes).toStrictEqual(Helper.fakeBetTypeList);
   });
 
   it('#getBetTypeModels should emit search event with expected param', async () => {

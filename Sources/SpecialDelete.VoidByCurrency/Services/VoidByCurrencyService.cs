@@ -123,7 +123,7 @@ public class VoidByCurrencyServiceImp : VoidByCurrencyService
             return Enumerable.Empty<Result>();
         }
 
-        var results = new List<Result> { new Result { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
+        var results = new List<Result> { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
         await netPositionService.RollBackNetPosition(model.TicketsRollbackNetPosition);
 
         return results;
@@ -141,7 +141,7 @@ public class VoidByCurrencyServiceImp : VoidByCurrencyService
         catch (Exception exception)
         {
             await loggingService.ErrorAsync(query.MatchId.ToString(), exception);
-            results = new List<Result> { new Result { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message } };
+            results = new List<Result> { new() { ErrorCode = ErrorCode.SendMessageOrEmailFail, ErrorMsg = exception.Message } };
         }
 
         return results;

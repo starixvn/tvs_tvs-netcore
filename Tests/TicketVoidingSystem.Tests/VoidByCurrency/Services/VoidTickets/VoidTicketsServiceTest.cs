@@ -25,8 +25,8 @@ public class VoidTicketsServiceTest
         // Arrange
         var tickets = new List<TicketEmailModel>
         {
-            new TicketEmailModel { TransId = 123 },
-            new TicketEmailModel { TransId = 456 }
+            new() { TransId = 123 },
+            new() { TransId = 456 }
         };
         var expected = new VoidTicketsModel { Tickets = tickets };
         var query = new VoidTicketsQuery
@@ -102,8 +102,8 @@ public class VoidTicketsServiceTest
         { UserName = "TEST", Message = new Message { ContentEnglish = "Content english" } };
         var tickets = new List<TicketEmailModel>
         {
-            new TicketEmailModel { IsMixParlay = false, TransId = 1, CustId = 1, MatchId = 1 },
-            new TicketEmailModel { IsMixParlay = true, TransId = 1, CustId = 1, MatchId = 1 }
+            new() { IsMixParlay = false, TransId = 1, CustId = 1, MatchId = 1 },
+            new() { IsMixParlay = true, TransId = 1, CustId = 1, MatchId = 1 }
         };
         var sendMessageByPlatformService = Substitute.For<SendMessageByPlatformService>();
         var service = CreateService(sendMessageByPlatformService);
@@ -120,8 +120,8 @@ public class VoidTicketsServiceTest
     {
         // Arrange
         var query = new VoidTicketsQuery();
-        var tickets = new List<TicketEmailModel> { new TicketEmailModel() };
-        var expected = new List<Result> { new Result { ErrorMsg = "Void Bets Successful!" } };
+        var tickets = new List<TicketEmailModel> { new() };
+        var expected = new List<Result> { new() { ErrorMsg = "Void Bets Successful!" } };
         var emailService = Substitute.For<SendEmailService>();
         emailService.SendEmail(Arg.Any<EmailVoidModel>(), tickets)
             .ReturnsForAnyArgs(expected);

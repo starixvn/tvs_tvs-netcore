@@ -13,7 +13,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Repositories;
 
-
 public class VoidByCurrencyRepositoryTest
 {
     [Fact]
@@ -52,7 +51,7 @@ public class VoidByCurrencyRepositoryTest
             new() { ErrorCode = 0, SiteDbGroupId = 1 }
         };
         var expected = new List<TicketEmailModel> { new() { TransId = 1357944 } };
-        var query = new VoidTicketsQuery { MatchId = 132465, UserPassword = "12312", Tickets = tickets };
+        var query = new VoidTicketsQuery { MatchId = 132465, UserPassword = "12312", Tickets = tickets, CricketTransIds = null };
         var dynamicRepository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
         dynamicRepository.FetchMultipleAsync<VoidTicketsValidation, TicketEmailModel>(new VoidTicketsCriteria())

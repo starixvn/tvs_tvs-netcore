@@ -29,7 +29,6 @@ public class VoidByCurrencyServiceTest
     private readonly VoidTicketsService voidTicketsService;
     private readonly NetPositionService netPositionService;
     private readonly PagingService pagingService;
-    private readonly CashOutApiService cashOutApiService;
     private readonly VoidByCurrencyServiceImp service;
 
     public VoidByCurrencyServiceTest()
@@ -58,6 +57,7 @@ public class VoidByCurrencyServiceTest
     public async Task GetTickets_SuccessfullyGetTicketsService_ReturnViewModel()
     {
         // Arrange
+        var dateTime = DateTimeOffset.Now.DateTime;
         var expected = new TicketsViewModel
         {
             Groups = new List<Group<TicketViewModel>>
@@ -65,12 +65,12 @@ public class VoidByCurrencyServiceTest
                 new() { Name = "Test" }
             },
             TotalItems = 1,
-            FromTransTime = new DateTime(2022, 2, 2, 2, 2, 2).ZoneManila(),
-            ToTransTime = new DateTime(2022, 2, 2, 2, 2, 2).ZoneManila()
+            FromTransTime = dateTime.ZoneManila(),
+            ToTransTime = dateTime.ZoneManila()
         };
         var tickets = new List<GetTicketModel>
         {
-            new() { TransDate = new DateTime(2022, 2, 2, 2, 2, 2) }
+            new() { TransDate = dateTime }
         };
         var query = new GetTicketsQuery { IsOutright = true };
         var groupViewModel = new Group<TicketViewModel> { Name = "Test" };
@@ -108,6 +108,7 @@ public class VoidByCurrencyServiceTest
             },
             TotalItems = 0
         };
+
         // Act
         var viewModel = await service.GetTickets(new GetTicketsQuery());
 

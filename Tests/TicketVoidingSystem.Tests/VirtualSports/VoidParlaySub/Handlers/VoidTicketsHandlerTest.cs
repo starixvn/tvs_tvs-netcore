@@ -15,7 +15,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.VoidParlaySub.Handlers;
 
-
 public class VoidTicketsHandlerTest
 {
     [Fact]
@@ -30,10 +29,10 @@ public class VoidTicketsHandlerTest
         var message = new VoidTicketsRequest();
         var model = new VoidTicketsModel
         {
-            Tickets = new List<TicketEmailModel> { new TicketEmailModel() },
+            Tickets = new List<TicketEmailModel> { new() },
             Validation = validation
         };
-        var expected = new List<Result> { new Result { ErrorCode = validation.ErrorCode, ErrorMsg = validation.ErrorMsg } };
+        var expected = new List<Result> { new() { ErrorCode = validation.ErrorCode, ErrorMsg = validation.ErrorMsg } };
         var voidTicketsService = Substitute.For<VoidTicketsService>();
         voidTicketsService.ExecuteQuery(message).ReturnsForAnyArgs(model);
         var loggingService = Substitute.For<LoggingService>();
@@ -54,7 +53,7 @@ public class VoidTicketsHandlerTest
         var model = new VoidTicketsModel
         {
             Validation = new VoidTicketsValidation(),
-            Tickets = new List<TicketEmailModel> { new TicketEmailModel() }
+            Tickets = new List<TicketEmailModel> { new() }
         };
         var voidTicketsService = Substitute.For<VoidTicketsService>();
         voidTicketsService.ExecuteQuery(message).ReturnsForAnyArgs(model);
@@ -98,12 +97,12 @@ public class VoidTicketsHandlerTest
         var model = new VoidTicketsModel
         {
             Validation = new VoidTicketsValidation(),
-            Tickets = new List<TicketEmailModel> { new TicketEmailModel() }
+            Tickets = new List<TicketEmailModel> { new() }
         };
 
         var voidTicketsService = Substitute.For<VoidTicketsService>();
         voidTicketsService.ExecuteQuery(message).ReturnsForAnyArgs(model);
-        voidTicketsService.SendEmail(message, model).ReturnsForAnyArgs(new List<Result> { new Result() });
+        voidTicketsService.SendEmail(message, model).ReturnsForAnyArgs(new List<Result> { new() });
         var loggingService = Substitute.For<LoggingService>();
         var handler = new VoidTicketsHandler(voidTicketsService, loggingService);
 
@@ -122,12 +121,12 @@ public class VoidTicketsHandlerTest
         var model = new VoidTicketsModel
         {
             Validation = new VoidTicketsValidation(),
-            Tickets = new List<TicketEmailModel> { new TicketEmailModel() }
+            Tickets = new List<TicketEmailModel> { new() }
         };
         var exception = new Exception("Send Email Failed");
         var expected = new List<Result>
         {
-            new Result
+            new()
             {
                 ErrorCode = ErrorCode.SendMessageOrEmailFail,
                 ErrorMsg = exception.Message
@@ -156,7 +155,7 @@ public class VoidTicketsHandlerTest
         var model = new VoidTicketsModel
         {
             Validation = new VoidTicketsValidation(),
-            Tickets = new List<TicketEmailModel> { new TicketEmailModel() }
+            Tickets = new List<TicketEmailModel> { new() }
         };
         var exception = new Exception("Send Email Failed");
         var voidTicketsService = Substitute.For<VoidTicketsService>();

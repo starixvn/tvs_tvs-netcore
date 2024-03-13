@@ -99,7 +99,7 @@ export class AdvancedModeComponent implements OnChanges {
     this.oddsInfo = data;
   }
 
-  changedBetTypes() {
+  private changedBetTypes() {
     this.isShowAdvancedMode = false;
     this.isShowContent = false;
     this.isShowAllBetType = false;
@@ -110,21 +110,21 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  handleBetTeam(betType: BetType) {
+  private handleBetTeam(betType: BetType) {
     this.betTeams.forEach(betTeam => {
       this.changeBetTeam(betType, betTeam);
       betTeam.enableInput();
     });
   }
 
-  changeBetTeam(betType: BetType, betTeam: BetTeam) {
+  private changeBetTeam(betType: BetType, betTeam: BetTeam) {
     const betTypeIdsOfBetTeam = betTeam.betTypes.split(',');
     if (betTypeIdsOfBetTeam.indexOf(betType.id.toString()) > -1) {
       this.changeCheckedBetTypes(betType, betTeam);
     }
   }
 
-  changeCheckedBetTypes(betType: BetType, betTeam: BetTeam) {
+  private changeCheckedBetTypes(betType: BetType, betTeam: BetTeam) {
     const index = betTeam.checkedBetTypes.indexOf(betType.value);
     if (betType.isChecked) {
       this.changeCheckedBetTeam(betTeam);
@@ -137,12 +137,10 @@ export class AdvancedModeComponent implements OnChanges {
       if (betTeam.multiSelectionList.length > 0) {
         this.isShowAllBetType = true;
       }
-    } else {
-      if (index !== -1) {
+    } else if (index !== -1) {
         this.removeBetTypeName(betType.name, betTeam);
         betTeam.checkedBetTypes.splice(index, 1);
       }
-    }
 
     if (AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER.split(',').includes(betType.id.toString()) && betType.isChecked) {
       betTeam.resetChecked();
@@ -150,19 +148,19 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  changeCheckedBetTeam(betTeam: BetTeam) {
+  private changeCheckedBetTeam(betTeam: BetTeam) {
     if (betTeam.checkedBetTypes.length === 0) {
       betTeam.resetChecked();
     }
   }
 
-  addBetTypeName(name: string, betTeam: BetTeam) {
+  private addBetTypeName(name: string, betTeam: BetTeam) {
     if (betTeam.type === 1 || betTeam.type === 8) {
       betTeam.name = betTeam.name === '' ? name : betTeam.name + ', ' + name;
     }
   }
 
-  removeBetTypeName(name: string, betTeam: BetTeam) {
+  private removeBetTypeName(name: string, betTeam: BetTeam) {
     if (betTeam.type === 1 || betTeam.type === 8) {
       const names = betTeam.name.split(', ');
       const index = names.indexOf(name);
@@ -178,7 +176,7 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
-  renderPlayer(players: Player[]) {
+  private renderPlayer(players: Player[]) {
     const itemSelects: Array<ItemsSelect> = [];
     for (let i = 0; i < players.length; i++) {
       const item = new ItemsSelect(i, players[i].betChoice, players[i].oddsInfo, true, true, true, []);
@@ -228,14 +226,6 @@ export class AdvancedModeComponent implements OnChanges {
     return AdvancedModeConstants.BETTYPES_MORE_HDP.split(',').includes(id.toString());
   }
 
-  private showToolTip(betTypeId: number, className: string) {
-    if (betTypeId === 228) {
-      this.tooltip.display(className, LABELS.INVALID_VALUE);
-    } else {
-      this.tooltip.display(className, LABELS.INVALID_HDP);
-    }
-  }
-
   onChangeInputMultipleDecimal(betTypeId: string, value: string, className: string) {
     if (!this.validateInputMultipleDecimal(betTypeId, value, className)) {
       return false;
@@ -245,7 +235,7 @@ export class AdvancedModeComponent implements OnChanges {
     return true;
   }
 
-  validateInputMultipleDecimal(betTypeId: string, value: string, className: string): boolean {
+  private validateInputMultipleDecimal(betTypeId: string, value: string, className: string): boolean {
     const errorText = betTypeId === '228' ? LABELS.INVALID_VALUE : LABELS.INVALID_HDP;
     if (value && !StaticService.isCorrectRegexMultipleDecimal(value)) {
       this.tooltip.display(className, errorText);
@@ -254,32 +244,26 @@ export class AdvancedModeComponent implements OnChanges {
 
     return true;
   }
-  checkMultiSelectionData(betTeam: BetTeam): boolean {
-    return this.checkMultiSelectionBetTeam(betTeam) || this.checkMultiSelectionInSelection(betTeam);
-  }
 
-  checkMultiSelectionBetTeam(betTeam: BetTeam): boolean {
+  private checkMultiSelectionBetTeam(betTeam: BetTeam): boolean {
     return (
-      betTeam.multiSelection !== undefined &&
-      betTeam.multiSelection.multipleSelect !== undefined &&
-      betTeam.multiSelection.multipleSelect.items.length > 0 &&
+      betTeam.multiSelection?.multipleSelect?.items.length > 0 &&
       betTeam.multiSelection.multipleSelect.getValueItems() === ''
     );
   }
 
-  checkMultiSelectionInSelection(betTeam: BetTeam): boolean {
+  private checkMultiSelectionInSelection(betTeam: BetTeam): boolean {
     return (
-      betTeam.selections.filter(x => x.multiSelection !== undefined && x.multiSelection.multipleSelect.items.length > 0)
+      betTeam.selections.filter(x => x.multiSelection !== undefined && x.multiSelection?.multipleSelect.items.length > 0)
         .some(y => y.multiSelection.multipleSelect.getValueItems() === '')
     );
   }
 
-
-  checkCheckedBetTypesWithHDPBetType(betTeam: BetTeam) {
+  private checkCheckedBetTypesWithHDPBetType(betTeam: BetTeam) {
     return betTeam.checkedBetTypes.length > 0 && betTeam.type === 1;
   }
 
-  checkEmptyCheckbox(result: boolean, i: number): boolean { //NOSONAR
+  private checkEmptyCheckbox(result: boolean, i: number): boolean { //NOSONAR
     const betTeam = this.betTeams[i];
     if (betTeam.checkedBetTypes.length > 0 && betTeam.type !== 1) {
       if (betTeam.getItemsValue() === '' && betTeam.type !== AdvancedModeConstants.BETTEAM_TYPE_4) {
@@ -306,10 +290,9 @@ export class AdvancedModeComponent implements OnChanges {
     return result;
   }
 
-  checkEmptyCheckboxWithTicketListing(result: boolean, i: number) {
+  private checkEmptyCheckboxWithTicketListing(result: boolean, i: number) {
     const betTeam = this.betTeams[i];
-    if (betTeam.multiSelectionList !== undefined &&
-      betTeam.multiSelectionList.length > 0) {
+    if (betTeam.multiSelectionList?.length > 0) {
       betTeam.multiSelectionList.forEach(item => {
         if (item.multipleSelect !== undefined && item.multipleSelect.getValueItems() === '' && result) {
           result = false;
@@ -396,10 +379,6 @@ export class AdvancedModeComponent implements OnChanges {
         input.flag = false;
       }
     }
-  }
-
-  isSabaHDPTimeMachine(betTeam: BetTeam): boolean {
-    return betTeam.name.includes('HDP');
   }
 
   private updatePlayerCricket(oddsInfo: OddsInfo[]): void {

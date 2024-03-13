@@ -57,7 +57,7 @@ public class SheetServiceTest
             IsOutright = false
         };
         var getTicketsService = Substitute.For<GetTicketsService>();
-        getTicketsService.GetTickets(query).ReturnsForAnyArgs(new List<GetTicketModel> { new GetTicketModel { TransId = 132 } });
+        getTicketsService.GetTickets(query).ReturnsForAnyArgs(new List<GetTicketModel> { new() { TransId = 132 } });
         var ticketHtmlService = Substitute.For<TicketService>();
         ticketHtmlService.GetTicketDetail(Arg.Any<GetTicketModel>(), Arg.Any<bool>())
             .ReturnsForAnyArgs(new TicketViewModel());

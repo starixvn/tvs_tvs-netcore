@@ -21,14 +21,13 @@ public class UpdateRequestProcessStageTests
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
-    private readonly SessionService sessionService;
     private readonly AccountWinLostService accountWinLostService;
-    private UpdateRequestProcessStageImp service;
+    private readonly UpdateRequestProcessStageImp service;
 
     public UpdateRequestProcessStageTests()
     {
         mapper = Substitute.For<IMapper>();
-        sessionService = Substitute.For<SessionService>();
+        var sessionService = Substitute.For<SessionService>();
         repository = Substitute.For<IDynamicRepository>();
         accountWinLostService = Substitute.For<AccountWinLostService>();
         insertAutoVoidRequestQueueService = Substitute.For<InsertAutoVoidRequestQueueService>();
