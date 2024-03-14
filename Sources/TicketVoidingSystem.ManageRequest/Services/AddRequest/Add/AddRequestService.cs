@@ -75,7 +75,7 @@ public class AddRequestServiceImp : AddRequestService
     private async Task<Result> ExecuteAddAfterMarkTickets(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
-        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.EarlyKickOffInfo);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.MatchId, query.EarlyKickOffInfo);
         await sendLetstalkAfterAddService.Execute(query, requestId);
         return new Result
         {
