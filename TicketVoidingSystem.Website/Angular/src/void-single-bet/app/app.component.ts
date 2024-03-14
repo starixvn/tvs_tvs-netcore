@@ -262,6 +262,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   renderTickets(data: TicketsModel) {
     this.licenseeAffectedList = data.licenseeAffectedList;
     this.licenseeAffectedList = _.clone(this.licenseeAffectedList);
+    this.ticketsModel.pagingModel = new PagingModel();
     this.ticketsModel.pagingModel.total = data.totalItems;
     this.ticketsModel.pagingModel.page = this.getTicketsQuery.pageIndex + 1;
     this.ticketsModel.pagingModel.pageSize = this.getTicketsQuery.pageSize;

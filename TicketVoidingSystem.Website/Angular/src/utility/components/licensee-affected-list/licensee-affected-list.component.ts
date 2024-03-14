@@ -26,12 +26,14 @@ export class LicenseeAffectedListComponent implements OnChanges{
   }
 
   private initFilter(){
-    this.affectedLicenseeNormal = this.licenseeAffectedList[0].licenseesName;
-    this.updateDisplayAffectedLicensee();
+    if(this.licenseeAffectedList){
+      this.affectedLicenseeNormal = this.licenseeAffectedList[0].licenseesName;
+      this.updateDisplayAffectedLicensee();
+    }
   }
   
   isShowAffectedLicenseeArea(): boolean {
-    return this.licenseeAffectedList.findIndex( x => x.licenseesName.length > 0) >= 0 && this.isDisplay;
+    return this.licenseeAffectedList?.findIndex( x => x.licenseesName.length > 0) >= 0 && this.isDisplay;
   }
 
   copyClipboard(text: string): void {
