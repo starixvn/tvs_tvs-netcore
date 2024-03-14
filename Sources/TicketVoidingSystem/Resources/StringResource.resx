@@ -359,7 +359,7 @@
     <value>Bet tickets recovered successfully! Please be noted that this action will result the automatically re-settlement of these following match(es): {0}.</value>
   </data>
   <data name="Warning_Message_VoidBetId" xml:space="preserve">
-    <value>You can only void tickets of Normal Sportsbook, Outright, Mix Parlay (main), System Parlay (main), Number Game, Cash Out, Virtual Sports, Virtual Sports 2 (single and main Mix Parlay), Bet Builder, Saba Promotion and Bitcoin.</value>
+    <value>You can only void tickets of Normal Sportsbook, Outright, Mix Parlay (main), System Parlay (main), Number Game, Cash Out, Virtual Sports, Bet Builder, Saba Promotion and Bitcoin.</value>
   </data>
   <data name="Warning_Message_VoidBetId_UnSettled" xml:space="preserve">
     <value>You can only void "Unsettled" tickets of Normal Sportsbook, Outright, Mix Parlay (main), System Parlay (main), Number Game, Cash Out, Virtual Sports, Virtual Sports 2 (single and main Mix Parlay), Bet Builder, Saba Promotion and Bitcoin.</value>

@@ -9,13 +9,13 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.BetTypes;
 
 public class GetBetTypesHandlerTests
 {
-    private readonly BetTypesService betTypeService;
+    private readonly BetTypesRepository betTypesRepository;
     private readonly GetBetTypesHandler handler;
 
     public GetBetTypesHandlerTests()
     {
-        betTypeService = Substitute.For<BetTypesService>();
-        handler = new GetBetTypesHandler(betTypeService);
+        betTypesRepository = Substitute.For<BetTypesRepository>();
+        handler = new GetBetTypesHandler(betTypesRepository);
     }
 
     [Fact]
@@ -28,6 +28,6 @@ public class GetBetTypesHandlerTests
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await betTypeService.Received().GetBetTypes(request);
+        await betTypesRepository.Received().GetBetTypes(request);
     }
 }

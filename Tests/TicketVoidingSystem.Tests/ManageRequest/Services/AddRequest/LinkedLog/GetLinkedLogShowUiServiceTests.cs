@@ -33,7 +33,7 @@ public class GetLinkedLogShowUiServiceTests
         var linkedOddsInfoDic = new Dictionary<int, LinkedOddsInfo>
         {
             { 1, new LinkedOddsInfo { BetType = betType, Hdp1 = 1 } },
-            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.MixParlay, Hdp1 = 1 } },
+            { 2, new LinkedOddsInfo { BetType = BetTypeConstant.VirtualSport4MixParlay, Hdp1 = 1 } },
             { 3, new LinkedOddsInfo { BetType = betType, Hdp1 = 2 } }
         };
         var getLinkedLogModel = new GetLinkedLogModel

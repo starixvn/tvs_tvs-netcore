@@ -2,8 +2,6 @@
 
 public static class BetTypeConstant
 {
-    public const int MixParlay = 9;
-
     public const int SystemParlay = 29;
 
     public const int Outright = 10;
@@ -51,6 +49,10 @@ public static class BetTypeConstant
     public const int SabaOUTimeMachine = 228;
 
     public const int BitCoinOverUnder = 7901;
+
+    public const int VirtualSport4MixParlay = 10449;
+
+    public const int VirtualSport4MatchWinner = 10400;
 
     public static readonly int[] VirtualSports = { 1231, 1232, 1233, 1237, 1238 };
 }

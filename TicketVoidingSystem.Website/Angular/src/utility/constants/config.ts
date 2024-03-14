@@ -23,8 +23,6 @@ export class Product {
   static readonly SPORTS_BOOK = 0;
   static readonly NUMBER_GAME = 1;
   static readonly VIRTUAL_SPORTS = 2;
-  static readonly VIRTUAL_SPORTS_2 = 5;
-  static readonly VIRTUAL_SPORTS_3 = 7;
   static readonly BET_BUILDER = 8;
   static readonly BITCOIN = 9;
 
@@ -32,16 +30,14 @@ export class Product {
     'Sportsbook': 0,
     'Number Game': 1,
     'Virtual Sports': 2,
-    'Virtual Sports 2': 5,
-    'Virtual Sports 3': 7,
     'Bet Builder': 8,
     'Bitcoin': 9
   };
 
   static readonly IS_MATCH_3RD = [Product.BITCOIN];
   static readonly SHOW_SEND_COLUMN = [Product.SPORTS_BOOK, Product.NUMBER_GAME, Product.BET_BUILDER];
-  static readonly GET_BETTYPES = [Product.SPORTS_BOOK, Product.BET_BUILDER];
-  static readonly STATIC_BETTYPES = [Product.NUMBER_GAME, Product.VIRTUAL_SPORTS, Product.BITCOIN];
+  static readonly GET_BETTYPES = [Product.SPORTS_BOOK, Product.BET_BUILDER, Product.VIRTUAL_SPORTS];
+  static readonly STATIC_BETTYPES = [Product.NUMBER_GAME, Product.BITCOIN];
 }
 
 export class ProductFilter {

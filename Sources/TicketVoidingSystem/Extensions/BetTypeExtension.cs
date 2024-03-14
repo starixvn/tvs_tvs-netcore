@@ -12,7 +12,7 @@ public static class BetTypeExtension
 {
     public static bool IsParlay(this int id)
     {
-        return id is BetTypeConstant.SystemParlay or BetTypeConstant.VirtualSportParlay;
+        return id is BetTypeConstant.SystemParlay or BetTypeConstant.VirtualSportParlay or BetTypeConstant.VirtualSport4MixParlay;
     }
 
     public static bool IsParlayAndBetBuilder(this int id)
@@ -60,24 +60,25 @@ public static class BetTypeExtension
     public static bool IsVirtualSportBetType(this int id)
     {
         return id is >= BetTypeConstant.FirstVirtualSport and <= BetTypeConstant.SecondVirtualSport
-               || id is >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType;
+                   or >= BetTypeConstant.MinVirtualSportBetType and <= BetTypeConstant.MaxVirtualSportBetType
+               || id.IsVirtualSport4BetType();
     }
 
-    private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194, 195, 196, 197, 178, 179 };
+    private static bool IsVirtualSport4BetType(this int id)
+    {
+        return id is BetTypeConstant.VirtualSport4MixParlay or BetTypeConstant.VirtualSport4MatchWinner;
+    }
+
+    private static readonly List<int> VirtualSports = new() { 190, 191, 192, 193, 194, 195, 196, 197, 178, 179, 188 };
 
     public static bool IsVirtualSport(this int sportTypeId)
     {
         return VirtualSports.Contains(sportTypeId);
     }
 
-    public static bool IsVirtualSportParlay(this int id)
-    {
-        return id is BetTypeConstant.VirtualSportParlay;
-    }
-
     public static bool IsHideHandicap(this int id)
     {
-        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3() || id.IsVirtualSportParlay();
+        return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();
     }
 
     public static bool HideScore(this int id)

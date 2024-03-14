@@ -41,7 +41,7 @@ class Helper {
     new BetTypeVirtualSport(2702, '1H 1X2'),
   ];
   static readonly fakeGroupBetTypeVirtualSportList: GroupBetTypeVirtualSport[] = [
-    new GroupBetTypeVirtualSport([190, 191, 192, 194], Helper.fakeBetTypeVirtualSportList)
+    new GroupBetTypeVirtualSport(Helper.fakeBetTypeVirtualSportList)
   ];
 
   static getFakeBetTypesModel(): BetTypesModel {
@@ -125,7 +125,6 @@ describe('FilterComponent', () => {
     expect(instance.renderProduct).toHaveBeenCalledTimes(1);
     expect(instance.renderEventType).toHaveBeenCalledTimes(1);
     expect(instance.getBetTypes).toHaveBeenCalledTimes(1);
-    expect(instance.getBetTypesVS).toHaveBeenCalledTimes(1);
   });
 
   it('#getLicensees should return expected list licensee', async() => {
@@ -171,7 +170,7 @@ describe('FilterComponent', () => {
     instance.renderProduct();
 
     // Assert
-    expect(instance.product.items.length).toBe(7);
+    expect(instance.product.items.length).toBe(5);
  });
 
  it('#renderEventType should return expected list eventtType', async() => {
@@ -238,19 +237,6 @@ describe('FilterComponent', () => {
 
     // Assert
     expect(instance.commonBetTypes.betTypes.length).toBe(1);
-  });
-
-  it('#getBetTypesVS should return expected groupsBetTypesVS', async() => {
-     // Arrange
-     const { instance } = await shallow
-     .mock(CommonService, { getBetTypesVirtualSports: jest.fn().mockImplementation(() => Helper.fakeGroupBetTypeVirtualSportList) })
-     .render();
-
-   // Action
-   await instance.getBetTypesVS();
-
-   // Assert
-   expect(instance.groupsBetTypesVS.length).toBe(1);
   });
 
   it('#blurMatchId should return sportType is 0 when matchid is undefined or null', async() => {
@@ -422,9 +408,6 @@ describe('FilterComponent', () => {
       { productId: 1, sportType: 1, expected: false },
       { productId: 2, sportType: 1, expected: false },
       { productId: 2, sportType: 187, expected: false },
-      { productId: 5, sportType: 1, expected: false },
-      { productId: 5, sportType: 200, expected: false },
-      { productId: 7, sportType: 1, expected: false },
       { productId: 9, sportType: 1, expected: false },
       { productId: 111, sportType: 200, expected: false },
       { productId: 11111, sportType: 1, expected: true },
@@ -479,7 +462,7 @@ describe('FilterComponent', () => {
     let actualResult = false;
     const testCases = [
       { product: 2, sportType: 170, expectResult: true },
-      { product: 2, sportType: 190, expectResult: true },
+      { product: 2, sportType: 200, expectResult: true },
       { product: 2, sportType: 181, expectResult: false },
     ];
     const { instance } = await shallow.render();
@@ -487,39 +470,6 @@ describe('FilterComponent', () => {
     // Action and Assert
     for (const item of testCases) {
       actualResult = instance['isInvalidProduct2'](item.product, item.sportType);
-      expect(actualResult).toBe(item.expectResult);
-    }
-  });
-
-  it('Is invalid product 5', async () => {
-    // Arrange
-    let actualResult = false;
-    const testCases = [
-      { product: 5, sportType: 180, expectResult: true },
-      { product: 5, sportType: 200, expectResult: true },
-      { product: 5, sportType: 195, expectResult: false },
-    ];
-    const { instance } = await shallow.render();
-
-    // Action and Assert
-    for (const item of testCases) {
-      actualResult = instance['isInvalidProduct5'](item.product, item.sportType);
-      expect(actualResult).toBe(item.expectResult);
-    }
-  });
-
-  it('Is invalid product 7', async () => {
-    // Arrange
-    let actualResult = false;
-    const testCases = [
-      { product: 7, sportType: 180, expectResult: true },
-      { product: 7, sportType: 178, expectResult: false },
-    ];
-    const { instance } = await shallow.render();
-
-    // Action and Assert
-    for (const item of testCases) {
-      actualResult = instance['isInvalidProduct7'](item.product, item.sportType);
       expect(actualResult).toBe(item.expectResult);
     }
   });
@@ -719,12 +669,13 @@ describe('FilterComponent', () => {
     expect(actualResult).toBe(false);
   });
 
-  it('Validate bettypes with virtual sporttype(5) product', async () => {
+  it('Validate bettypes with virtual sporttypes product', async () => {
     // Arrange
     const { instance } = await shallow.render();
     let actualResult = false;
-    instance.query.product = Product.VIRTUAL_SPORTS_2;
+    instance.query.product = Product.VIRTUAL_SPORTS;
     instance.betTypesVSComponent = new BetTypesVirtualSportComponent(null);
+    instance.groupsBetTypesVS = new GroupBetTypeVirtualSport(Helper.fakeBetTypeVirtualSportList);
     const testCases = [
       { validation: true, expectedResult: true },
       { validation: false, expectedResult: false },
@@ -801,13 +752,16 @@ describe('FilterComponent', () => {
   it('Get checked bettypes with product of virtual sports', async () => {
     // Arrange
     const { instance } = await shallow.render();
-    const checkedBettypes = '1,2,3';
-    instance.query.product = Product.VIRTUAL_SPORTS_2;
+    const checkedBettypes = ["1", "2", "3"];
+    instance.query.product = Product.VIRTUAL_SPORTS;
     instance.betTypesVSComponent = new BetTypesVirtualSportComponent(null);
     jest.spyOn(instance.betTypesVSComponent, 'getCheckedBetTypes').mockImplementation(() => checkedBettypes);
-    // Action and Assert
+
+    // Action 
     const actualResult = instance.getCheckedBetTypes();
-    expect(actualResult).toBe(checkedBettypes);
+
+    // Assert
+    expect(actualResult).toBe("1,2,3");
   });
 
   it('Get checked bettypes with anothers product', async () => {

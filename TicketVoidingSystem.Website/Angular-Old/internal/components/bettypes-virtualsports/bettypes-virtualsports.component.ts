@@ -1,10 +1,8 @@
 ﻿import { Component, ElementRef, Input } from '@angular/core';
 import { OnChanges, SimpleChange } from '@angular/core';
-
 import { Tooltip } from '../../../external/components/tooltip/tooltip';
 import { TEXT } from '../../shared/text';
 import { Product } from '../../../internal/shared/config';
-
 import { GroupBetTypeVirtualSport } from './bettypes-virtualsports.model';
 
 @Component({

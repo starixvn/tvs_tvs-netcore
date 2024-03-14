@@ -127,7 +127,7 @@
     </div>
     <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
       [ballSequence]="ballSequences.value"></bettypes>
-    <bettypes-virtualsport *ngIf="validBetTypesVirtualSport()" #betTypesVSComponent [groups]="groupsBetTypesVS" [sportType]="sportType"
+    <bettypes-virtualsport *ngIf="!isInvalidProduct2(query.product, sportType)" #betTypesVSComponent [group]="groupsBetTypesVS"
       [product]="query.product"></bettypes-virtualsport>
     <div *ngIf="isShowAdvancedMode()">
       <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true"

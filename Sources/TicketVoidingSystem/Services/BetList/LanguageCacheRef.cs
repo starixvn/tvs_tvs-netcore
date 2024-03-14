@@ -41,6 +41,9 @@ public class LanguageCacheRef : ICacheRef
     public string GetLeagueName(string leagueId)
         => remotingRefService.GetLeagueName(leagueId, CurrentLanguage);
 
+    public string GetLeagueName(string leagueId, string leagueGroupId)
+        => remotingRefService.GetLeagueName(leagueId, leagueGroupId);
+
     public string GetLeagueName3rd(string league3rdId)
         => remotingRefService.GetLeagueName3rd(league3rdId, CurrentLanguage);
 
@@ -90,4 +93,7 @@ public class LanguageCacheRef : ICacheRef
 
     public string GetTableGamesBetTypeName(string tableGamesBetTypeId)
         => remotingRefService.GetTableGamesBetType(tableGamesBetTypeId, CurrentLanguage);
+
+    public string GetVirtualSportMatchCodeFormat(string matchCode, string refId)
+        => remotingRefService.GetVirtualSportMatchCodeFormat(matchCode, refId, CurrentLanguage);
 }

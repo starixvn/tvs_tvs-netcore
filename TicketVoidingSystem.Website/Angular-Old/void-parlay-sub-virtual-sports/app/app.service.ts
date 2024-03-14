@@ -1,10 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-
 import { GroupBetTypeVirtualSport } from '../../internal/components/bettypes-virtualsports/bettypes-virtualsports.model';
 import { GetMatchQuery, MatchViewModel } from '../../internal/components/match-detail/match.viewmodel';
 import { HttpRequestService } from '../../internal/services/http-request.service';
-
 import { Result } from '../../internal/models/result';
 import { ExportExcelQuery, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { TicketsModel } from './tickets/tickets.model';
@@ -15,7 +13,7 @@ export class AppService {
     constructor(private httpRequestService: HttpRequestService) { }
 
     getBetTypes(): Observable<Array<GroupBetTypeVirtualSport>> {
-        const url = 'api/BetTypes/GetVirtualSport';
+        const url = 'api/BetTypes/GetVoidParlayVirtualSport';
         return this.httpRequestService.getJson(url);
     }
 

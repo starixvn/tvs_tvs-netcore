@@ -62,7 +62,7 @@ public class BetTypesControllerTests
         // Arrange
 
         // Act
-        await controller.GetVirtualSport();
+        await controller.GetVirtualSport(default);
 
         // Assert
         await mediator.Received().Send(Arg.Any<GetBetTypesVirtualSportRequest>());
@@ -80,5 +80,4 @@ public class BetTypesControllerTests
         // Assert
         await mediator.Received().Send(request);
     }
-
 }

@@ -165,6 +165,8 @@ public class BetTypeExtensionTests
     [InlineData(BetTypeConstant.MinVirtualSportBetType)]
     [InlineData(1208)]
     [InlineData(BetTypeConstant.MaxVirtualSportBetType)]
+    [InlineData(BetTypeConstant.VirtualSport4MatchWinner)]
+    [InlineData(BetTypeConstant.VirtualSport4MixParlay)]
     public void IsVirtualSportBetType_IdIsVirtualSportBetType_ReturnTrue(int id)
     {
         // Arrange
@@ -229,6 +231,8 @@ public class BetTypeExtensionTests
     [InlineData(BetTypeConstant.FirstLucky3)]
     [InlineData(BetTypeConstant.SecondLucky3)]
     [InlineData(1605)]
+    [InlineData(BetTypeConstant.VirtualSport4MixParlay)]
+    [InlineData(BetTypeConstant.VirtualSportParlay)]
     public void IsHideHandicap_IdIsIsHideHandicap_ReturnTrue(int id)
     {
         // Arrange

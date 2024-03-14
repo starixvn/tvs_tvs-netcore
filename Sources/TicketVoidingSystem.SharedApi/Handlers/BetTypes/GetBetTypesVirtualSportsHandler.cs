@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
@@ -7,24 +6,29 @@ using TicketVoidingSystem.SharedApi.Services.BetTypes;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 
-public class GetBetTypesVirtualSportRequest : IRequest<IList<GroupBetTypeVirtualSport>>
+public class GetBetTypesVirtualSportRequest : IRequest<GroupBetTypeVirtualSport>
 {
+    public byte Mode { get; set; }
+    public int MatchId { get; set; }
 }
 
-public class GetBetTypesVirtualSportsHandler : IRequestHandler<GetBetTypesVirtualSportRequest, IList<GroupBetTypeVirtualSport>>
+public class GetBetTypesVirtualSportsHandler : IRequestHandler<GetBetTypesVirtualSportRequest, GroupBetTypeVirtualSport>
 {
-    private readonly BetTypesService betTypesService;
+    private readonly BetTypesRepository betTypesRepository;
 
-    public GetBetTypesVirtualSportsHandler(BetTypesService betTypesService)
+    public GetBetTypesVirtualSportsHandler(BetTypesRepository betTypesRepository)
     {
-        this.betTypesService = betTypesService;
+        this.betTypesRepository = betTypesRepository;
     }
 
-    private static IList<GroupBetTypeVirtualSport> GroupBetTypes { get; set; }
-
-    public Task<IList<GroupBetTypeVirtualSport>> Handle(GetBetTypesVirtualSportRequest message, CancellationToken cancellationToken)
+    public async Task<GroupBetTypeVirtualSport> Handle(GetBetTypesVirtualSportRequest message, CancellationToken cancellationToken)
     {
-        GroupBetTypes ??= betTypesService.GetVirtualSports();
-        return Task.FromResult(GroupBetTypes);
+        var betTypesHaveTickets = string.Join(",", await betTypesRepository.GetBetTypesHaveTickets(new BetTypeQueryModel
+        {
+            Mode = message.Mode,
+            MatchId = message.MatchId
+        }));
+
+        return await betTypesRepository.GetBetTypesTicketListingVirtualSport(message.MatchId, betTypesHaveTickets);
     }
 }

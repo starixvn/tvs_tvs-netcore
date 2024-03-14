@@ -1,4 +1,4 @@
-﻿{
+{
   "Groups": [
     {
       "SportTypes": [ 190, 191, 192, 194, 195, 196, 197 ],
@@ -91,44 +91,15 @@
       ]
     },
     {
-      "SportTypes": [ 178 ],
+      "SportTypes": [ 188 ],
       "BetTypes": [
         {
-          "Id": 5302,
-          "Name": "FT.1X2"
+          "Id": 10400,
+          "Name": "Match Winner"
         },
         {
-          "Id": 5303,
-          "Name": "1H 1X2"
-        },
-        {
-          "Id": 5304,
-          "Name": "1H Over/Under"
-        }
-      ]
-    },
-    {
-      "SportTypes": [ 179 ],
-      "BetTypes": [
-        {
-          "Id": 5302,
-          "Name": "FT.1X2"
-        },
-        {
-          "Id": 5303,
-          "Name": "1H 1X2"
-        },
-        {
-          "Id": 5304,
-          "Name": "1H Over/Under"
-        },
-        {
-          "Id": 5306,
-          "Name": "Handicap"
-        },
-        {
-          "Id": 5307,
-          "Name": "Over/Under"
+          "Id": 10449,
+          "Name": "Mix Parlay"
         }
       ]
     }

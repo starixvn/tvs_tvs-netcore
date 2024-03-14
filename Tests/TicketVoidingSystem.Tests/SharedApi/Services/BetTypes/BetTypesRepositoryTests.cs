@@ -102,4 +102,28 @@ public class BetTypesRepositoryTests : AppSettingFixture, IClassFixture<Remoting
         // Assert
         await repository.Received().FetchAsync<BetTypeModel>(Arg.Any<TicketVoidingGetBetTypesHaveTicketsCriteria>());
     }
+
+    [Fact]
+    public async Task GetBetTypesTicketListingVirtualSport_returnExpected()
+    {
+        // Arrange
+        const string betTypesHaveTickets = "123,124";
+        var data = new List<BetTypeVirtualSport> { new() };
+        repository.FetchAsync<BetTypeVirtualSport>(Arg.Any<GetBetTypesTicketListingVirtualSportCriteria>()).ReturnsForAnyArgs(data);
+        var expected = new GroupBetTypeVirtualSport
+        {
+            BetTypes = data,
+            Result = new Result
+            {
+                ErrorCode = 0,
+                ErrorMsg = null
+            }
+        };
+
+        // Act
+        var actual = await service.GetBetTypesTicketListingVirtualSport(1, betTypesHaveTickets);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
 }
