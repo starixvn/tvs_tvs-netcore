@@ -114,6 +114,7 @@ export class AdvancedModeComponent implements OnChanges {
     this.betTeams.forEach(betTeam => {
       this.changeBetTeam(betType, betTeam);
       betTeam.enableInput();
+      this.handleChangeFancyBetTypeCricket(betTeam);
     });
   }
 
