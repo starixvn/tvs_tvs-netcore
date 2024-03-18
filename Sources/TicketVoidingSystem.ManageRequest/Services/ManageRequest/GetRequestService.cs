@@ -278,7 +278,7 @@ public class GetRequestServiceImp : GetRequestService
         var model = requestEventModels.First();
         return new AbnormalAccountViewModel
         {
-            Usernames = model.Usernames,
+            Usernames = model.Usernames.Replace(",", ", "),
             ProductIds = model.ProductIds,
             StatusIds = model.StatusIds,
             FromDate = model.FromDate,
