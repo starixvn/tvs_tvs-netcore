@@ -31,9 +31,6 @@ export class TemplateMessageService {
     const issueTypeId = requestDetail.request.issueTypeId.toString();
     if (StaticService.isDangerAccepted(issueTypeId)) {
       this.initValueForDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.dangerAcceptedModels[0].filterBy, voidMatch.isCheckedVar);
-    } else if (StaticService.isWrongScore(issueTypeId)) {
-      this.initValueForWrongScore(templateValue, requestDetail.wrongScoreModels[0].wrongScore,
-        requestDetail.wrongScoreModels[0].actualScore, requestDetail.wrongScoreModels[0].isCheckedVar);
     } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
       this.initValueForWrongHdp(templateValue, voidMatch, requestDetail.wrongHdpModels);
     } else if (StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId)) {
@@ -74,8 +71,5 @@ export class TemplateMessageService {
     templateValue.wrongMarket = wrongOuModel.wrongMarket;
     templateValue.actualMarket = wrongOuModel.actualMarket;
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
-  }
-  private initValueForWrongScore(templateValue: TemplateValue, wrongScore: string, actualScore: string, isCheckedVar = false) {
-    //// TODO
   }
 }
