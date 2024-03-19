@@ -22,14 +22,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Value"
-        }
-      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -57,14 +49,7 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Value"
-        }
-      ],
+
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -96,7 +81,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -139,7 +123,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -182,7 +165,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -225,7 +207,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -268,7 +249,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -311,7 +291,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1411,14 +1390,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "Goal:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Goal"
-        }
-      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -1450,14 +1421,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "Goal:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Goal"
-        }
-      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -1485,14 +1448,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Value"
-        }
-      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -1518,14 +1473,6 @@
           "Name": "",
           "Value": "All",
           "XmlAttribute": "BetTeam"
-        }
-      ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Value"
         }
       ],
       "Name": "",
@@ -1559,7 +1506,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1602,7 +1548,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1645,7 +1590,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1688,7 +1632,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1731,7 +1674,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1774,7 +1716,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1817,7 +1758,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1860,7 +1800,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1903,7 +1842,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1946,7 +1884,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -1989,7 +1926,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2032,7 +1968,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2075,7 +2010,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2118,7 +2052,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2161,7 +2094,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2204,7 +2136,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2247,7 +2178,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2290,7 +2220,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2333,7 +2262,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -2376,7 +2304,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -6288,14 +6215,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "Goal:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Goal"
-        }
-      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -8777,7 +8696,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -8820,7 +8738,6 @@
         {
           "Name": "Value:",
           "Value": "",
-          "Flag": true,
           "XmlAttribute": "Value"
         }
       ],
@@ -8859,14 +8776,6 @@
           "XmlAttribute": "BetTeam"
         }
       ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Value"
-        }
-      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -8892,14 +8801,6 @@
           "Name": "",
           "Value": "All",
           "XmlAttribute": "BetTeam"
-        }
-      ],
-      "Items": [
-        {
-          "Name": "HDP:",
-          "Value": "",
-          "Flag": true,
-          "XmlAttribute": "Value"
         }
       ],
       "Name": "",
@@ -10146,6 +10047,33 @@
       "Value": "",
       "Type": 8,
       "BetTypes": "9739"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home/Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Away/Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 1,
+      "BetTypes": "501"
     }
   ]
 }
