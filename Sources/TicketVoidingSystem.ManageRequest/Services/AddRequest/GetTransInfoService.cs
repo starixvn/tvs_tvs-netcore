@@ -28,16 +28,15 @@ public class GetTransInfoServiceImp : GetTransInfoService
 
     public async Task<IEnumerable<string>> GetTransInfoJson(GetTransInfoQuery query)
     {
-        var transInfoJsonList = new List<string>();
         var issueInfo = BuildIssueInfo(query);
-        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(i => i.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var criteria = CreateGetTicketSiteDbCriteria(siteDbGroupId, issueInfo, query);
-            var transInfoJson = await repository.GetAsync<string>(criteria);
-            transInfoJsonList.Add(transInfoJson);
-        }
+            var criteria = CreateGetTicketSiteDbCriteria(server.Id, issueInfo, query);
+            return repository.GetAsync<string>(criteria);
+        });
 
-        return transInfoJsonList;
+        var transInfoJsonInAllServers = await Task.WhenAll(tasks);
+        return transInfoJsonInAllServers;
     }
 
     private static GetTicketSiteDbCriteria CreateGetTicketSiteDbCriteria(int siteDbGroupId, string issueInfo, GetTransInfoQuery query)  // NOSONAR
@@ -122,47 +121,45 @@ public class GetTransInfoServiceImp : GetTransInfoService
 
     public async Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId)
     {
-        var transInfoJsonList = new List<string>();
-        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(i => i.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
-            var parlayTicketsInSite = parlayTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
-            var cancelCashOutTicketsInSite = cancelCashOutTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
+            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == server.Id);
+            var parlayTicketsInSite = parlayTickets.Where(x => x.SiteDbGroupId == server.Id);
+            var cancelCashOutTicketsInSite = cancelCashOutTickets.Where(x => x.SiteDbGroupId == server.Id);
 
             var criteria = new GetTransInfoForVoidCriteria
             {
-                SiteDbGroupId = siteDbGroupId,
+                SiteDbGroupId = server.Id,
                 MatchId = matchId,
                 SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite),
                 ParlayTransIds = Helper.JoinBetIdList(parlayTicketsInSite),
                 CancelCashOutTransIds = Helper.JoinBetIdList(cancelCashOutTicketsInSite)
             };
 
-            var transInfoJson = await repository.GetAsync<string>(criteria);
-            transInfoJsonList.Add(transInfoJson);
-        }
+            return repository.GetAsync<string>(criteria);
+        });
 
-        return transInfoJsonList;
+        var transInfoJsonInAllServers = await Task.WhenAll(tasks);
+        return transInfoJsonInAllServers;
     }
 
     public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets)
     {
-        var transInfoJsonList = new List<string>();
-        foreach (var siteDbGroupId in SiteDbGroupConstant.ServerList.Select(i => i.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == siteDbGroupId);
+            var singleTicketsInSite = singleTickets.Where(x => x.SiteDbGroupId == server.Id);
 
             var criteria = new GetTransInfoForVoid14Criteria
             {
-                SiteDbGroupId = siteDbGroupId,
+                SiteDbGroupId = server.Id,
                 SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite)
             };
 
-            var transInfoJson = await repository.GetAsync<string>(criteria);
-            transInfoJsonList.Add(transInfoJson);
-        }
+            return repository.GetAsync<string>(criteria);
+        });
 
-        return transInfoJsonList;
+        var transInfoJsonInAllServers = await Task.WhenAll(tasks);
+        return transInfoJsonInAllServers;
     }
 
     private static string BuildIssueInfo(GetTransInfoQuery query) // NOSONAR
