@@ -59,11 +59,9 @@ public class DescriptionServiceImp : DescriptionService
 
     private string BuildDuplicateTickets(RequestDescription item)
     {
-        return item.FilterBy switch
-        {
-            FilterByConstant.MixParlay => elementService.BuildParlay(item.TotalSingle),
-            _ => BuildMatchLeagueTotal(item)
-        };
+        return item.FilterBy == FilterByConstant.MixParlay
+            ? elementService.BuildParlay(item.TotalSingle)
+            : BuildMatchLeagueTotal(item);
     }
 
     private string BuildEKO(RequestDescription item)
