@@ -12,7 +12,6 @@ using SheetServiceImp = SpecialDelete.VirtualSports.VoidParlaySub.Services.Expor
 
 namespace TicketVoidingSystem.Tests.VirtualSports.VoidParlaySub.Services.ExportExcel;
 
-
 public class SheetServiceTest
 {
     [Fact]
@@ -63,7 +62,7 @@ public class SheetServiceTest
             MatchId = 12,
             MatchCode = "N/A",
             EventDate = new DateTime(2017, 11, 14, 13, 20, 40),
-            MatchEvent = "Russia-vs-New Zealand"
+            MatchEvent = "Russia-vs-New"
         };
         var getTicketsService = Substitute.For<GetTicketsService>();
         var ticketService = Substitute.For<TicketService>();

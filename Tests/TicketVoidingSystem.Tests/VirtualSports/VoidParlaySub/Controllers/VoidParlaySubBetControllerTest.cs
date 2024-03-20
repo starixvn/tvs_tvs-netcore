@@ -12,7 +12,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.VoidParlaySub.Controllers;
 
-
 public class VoidParlaySubBetControllerTest
 {
     [Fact]
@@ -36,9 +35,9 @@ public class VoidParlaySubBetControllerTest
         // Arrange
         var tickets = new List<BetId>
         {
-            new BetId { TransId = "123" },
-            new BetId { TransId = "124" },
-            new BetId { TransId = "125" }
+            new() { TransId = "123" },
+            new() { TransId = "124" },
+            new() { TransId = "125" }
         };
         var request = new VoidTicketsRequest { Tickets = tickets };
         var mediator = Substitute.For<IMediator>();

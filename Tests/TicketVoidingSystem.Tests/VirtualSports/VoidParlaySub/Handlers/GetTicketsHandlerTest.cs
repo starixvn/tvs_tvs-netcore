@@ -12,7 +12,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.VoidParlaySub.Handlers;
 
-
 public class GetTicketsHandlerTest
 {
     [Fact]
@@ -26,7 +25,7 @@ public class GetTicketsHandlerTest
         };
         var groupTickets = new List<Group<GetTicketModel>>
         {
-            new Group<GetTicketModel>
+            new()
             {
                 Name = "AAA",
                 Tickets = new List<GetTicketModel> { new() { GroupName = "AAA" } }

@@ -102,7 +102,7 @@ public class HandlerServiceImp : HandlerService
 
         var results = new List<Result>
         {
-            new Result
+            new()
             {
                 ErrorMsg = string.Format(StringResource.FailRecoverCashOutTransaction, invalidTransIds.Replace(",", ", ")),
                 ErrorCode = ErrorCode.Default

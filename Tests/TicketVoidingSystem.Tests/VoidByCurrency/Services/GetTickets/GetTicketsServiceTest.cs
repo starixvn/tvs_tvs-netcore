@@ -11,7 +11,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Services.GetTickets;
 
-
 public class GetTicketsServiceTest
 {
     private static GetTicketsServiceImp CreateService(VoidByCurrencyRepository repository)
@@ -56,7 +55,7 @@ public class GetTicketsServiceTest
         const int transId = 123;
         var tickets = new Group<GetTicketModel>
         {
-            Tickets = new List<GetTicketModel> { new GetTicketModel { TransId = transId } }
+            Tickets = new List<GetTicketModel> { new() { TransId = transId } }
         };
         var repository = Substitute.For<VoidByCurrencyRepository>();
         var sessionService = Substitute.For<SessionService>();

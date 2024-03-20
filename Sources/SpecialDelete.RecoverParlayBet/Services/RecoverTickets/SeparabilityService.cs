@@ -82,7 +82,7 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
                 ErrorMsg = exception.Message
             };
 
-            return (validation, null);
+            return (validation, new List<RecoverSubTicketModel>());
         }
     }
 
@@ -164,7 +164,7 @@ public class RecoverMainTicketsServiceImp : SeparabilityService<RecoverMainTicke
                 ErrorCode = ErrorCode.ExecuteQueryFail
             };
 
-            return (validation, null);
+            return (validation, new List<RecoverMainTicketModel>());
         }
     }
 

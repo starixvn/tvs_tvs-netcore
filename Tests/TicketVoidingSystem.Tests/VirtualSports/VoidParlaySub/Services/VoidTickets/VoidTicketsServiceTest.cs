@@ -126,7 +126,7 @@ public class VoidTicketsServiceTest
             Validation = new VoidTicketsValidation(),
             Tickets = new List<TicketEmailModel>()
         };
-        var expected = new List<Result> { new Result { ErrorMsg = "Void Bets Successful!" } };
+        var expected = new List<Result> { new() { ErrorMsg = "Void Bets Successful!" } };
         var emailService = Substitute.For<SendEmailService>();
         emailService.SendEmail(Arg.Any<EmailVoidModel>(), model.Tickets.ToList())
             .ReturnsForAnyArgs(expected);

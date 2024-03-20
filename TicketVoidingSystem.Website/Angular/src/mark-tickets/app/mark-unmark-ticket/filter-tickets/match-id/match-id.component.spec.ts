@@ -67,7 +67,8 @@ class Helper {
     goal: '',
     oddsSpread: '',
     oddsId: '',
-    transdesc: ''
+    transdesc: '',
+    virtualHead: ''
   };
 
   static getGroupLicensee(): GroupLicensee[] {

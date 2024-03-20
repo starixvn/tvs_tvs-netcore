@@ -344,7 +344,8 @@ describe('FilterComponent', () => {
       goal: '',
       oddsSpread: '',
       oddsId: '',
-      transdesc: '123,321'
+      transdesc: '123,321',
+      virtualHead: ''
     },
     {
       id: 9682,
@@ -358,7 +359,8 @@ describe('FilterComponent', () => {
       goal: '',
       oddsSpread: '',
       oddsId: '987',
-      transdesc: ''
+      transdesc: '',
+      virtualHead: ''
     },
     {
       id: 9650,
@@ -372,7 +374,8 @@ describe('FilterComponent', () => {
       goal: '',
       oddsSpread: '',
       oddsId: '',
-      transdesc: ''
+      transdesc: '',
+      virtualHead: ''
     }];
 
     instance.getTicketsQuery.betTypes = betTypes;

@@ -78,7 +78,7 @@ public class LetstalkServiceImp : LetstalkService
         var groupTickets = ticketsList.Where(t => !BetTypeConstant.VirtualSports.Contains(t.BetTypeId))
             .GroupBy(b => b.ParentMatchId).Select(ticket => new GroupVoidTicketsModel
             {
-                GroupName = ticket.Key.Value,
+                GroupName = ticket.Key!.Value,
                 Tickets = ticket.ToList(),
                 Type = ticket.Any(t => t.BetTypeId.IsOutright()) ? MatchInfoTypeConstant.Outright : MatchInfoTypeConstant.Normal
             });
@@ -93,7 +93,7 @@ public class LetstalkServiceImp : LetstalkService
         var groupVirtualSportTickets = ticketsList.Where(t => BetTypeConstant.VirtualSports.Contains(t.BetTypeId))
             .GroupBy(b => b.OddsId).Select(ticket => new GroupVoidTicketsModel
             {
-                GroupName = ticket.Key.Value,
+                GroupName = ticket.Key!.Value,
                 Tickets = ticket.ToList(),
                 Type = MatchInfoTypeConstant.VirtualSportOrHorseRacing
             });

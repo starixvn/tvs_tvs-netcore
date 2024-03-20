@@ -19,7 +19,6 @@ public class GetTicketsServiceTests
     private readonly GetTransInfoService getTransInfoService;
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
 
     private readonly GetTicketsServiceImp service;
 
@@ -28,7 +27,7 @@ public class GetTicketsServiceTests
         repository = Substitute.For<IDynamicRepository>();
         mapper = Substitute.For<IMapper>();
         getTransInfoService = Substitute.For<GetTransInfoService>();
-        loggingService = Substitute.For<LoggingService>();
+        var loggingService = Substitute.For<LoggingService>();
         service = new GetTicketsServiceImp(mapper, repository, getTransInfoService, loggingService);
     }
 

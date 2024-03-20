@@ -11,15 +11,9 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAc
 
 public class CalculateHaveStatusWonNotLoseServiceTests
 {
-    private readonly CombineVoidTicketsService combineVoidTicketsService;
-    private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService;
+    private readonly CombineVoidTicketsService combineVoidTicketsService = Substitute.For<CombineVoidTicketsService>();
+    private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService = Substitute.For<EstimateVoidWonTicketsService>();
     private CalculateHaveStatusWonNotLoseServiceImp service;
-
-    public CalculateHaveStatusWonNotLoseServiceTests()
-    {
-        estimateVoidWonTicketsService = Substitute.For<EstimateVoidWonTicketsService>();
-        combineVoidTicketsService = Substitute.For<CombineVoidTicketsService>();
-    }
 
     [Fact]
     public async Task ExecuteParallel_ValidRequest_ReturnResultExpected()
