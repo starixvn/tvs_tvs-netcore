@@ -68,12 +68,12 @@ public class UpdateConfirmAutoUnmarkServiceImp : UpdateConfirmAutoUnmarkService
             UserId = sessionService.UserId
         };
 
-        var tasks = SiteDbGroupConstant.ServerList.Select(async server =>
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var ticketsInCurrentServer = abnormalBetTickets.Where(x => x.SiteDbGroupId == server.Id);
             criteria.SiteDbGroupId = server.Id;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInCurrentServer);
-            return await repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(criteria);
+            return repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(criteria);
         });
 
         var validationInAllServers = await Task.WhenAll(tasks);
