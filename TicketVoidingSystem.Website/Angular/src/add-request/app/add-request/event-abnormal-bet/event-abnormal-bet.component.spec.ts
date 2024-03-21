@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
-import { PermissionManage } from '../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber, NumberItem } from '../../../../utility/components/bet-ids/bet-ids.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
@@ -13,6 +12,7 @@ import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { AbnormalBetModel } from '../models/abnormal-bet.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
@@ -43,14 +43,9 @@ class Helper {
     subIssueTypes: [],
     isAbnormal: false
   };
-  static readonly fakePermissionManage: PermissionManage = {
-    manageRequestHost: true,
-    verifyRead: true,
-    verifyHost: true,
-    voidRead: true,
-    manageRequestSettledTicketsHost: false,
-    manageRequestUnsettledTicketsHost: true,
-    isReadMarkTickets: true,
+  static readonly fakePermissionManage: PermissionAddRequest = {
+    isAddSettledTickets: false,
+    isVoidAllArchivedTicket: false
   };
   static readonly fakeValidationBusinessRule: ValidationBusinessRuleOutput = {
     isValid: true,

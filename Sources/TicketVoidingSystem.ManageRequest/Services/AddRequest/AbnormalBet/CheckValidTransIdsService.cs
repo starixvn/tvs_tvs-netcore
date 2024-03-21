@@ -5,6 +5,7 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportEx
 using TicketVoidingSystem.ManageRequest.ViewModels;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
+
 public interface CheckValidTransIdsService
 {
     Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request);
@@ -30,7 +31,7 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
     public async Task<CheckValidTransIdsViewModel> CheckValidTransIds(CheckValidTransIdsModel request)
     {
         var transInfoJsonList = await GetTransInfoJson(request);
-        var criteria = await GetCheckValidTransIdsCriteria(request, transInfoJsonList);
+        var criteria = GetCheckValidTransIdsCriteria(request, transInfoJsonList);
         var mappingTypes = new[]
         {
             typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
@@ -62,7 +63,7 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
         return viewModel;
     }
 
-    private Task<CheckValidTransIdsCriteria> GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message, IEnumerable<string> transInfoJsonList)
+    private static CheckValidTransIdsCriteria GetCheckValidTransIdsCriteria(CheckValidTransIdsModel message, IEnumerable<string> transInfoJsonList)
     {
         var criteria = new CheckValidTransIdsCriteria
         {
@@ -73,10 +74,11 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
             SubIssueTypeId = message.SubIssueTypeId,
             IsRemoveCustomerClass201 = message.IsRemoveCustomerClass201,
             IsRemoveCustomerClass4K = message.IsRemoveCustomerClass4K,
+            IsAddSettledTickets = message.IsAddSettledTickets,
             TransInfoJson = string.Join(",", transInfoJsonList)
         };
 
-        return Task.FromResult(criteria);
+        return criteria;
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(CheckValidTransIdsModel model)

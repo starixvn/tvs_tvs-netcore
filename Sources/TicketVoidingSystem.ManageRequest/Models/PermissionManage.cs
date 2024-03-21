@@ -6,7 +6,5 @@ public class PermissionManage
     public bool VerifyRead { get; set; }
     public bool VerifyHost { get; set; }
     public bool VoidRead { get; set; }
-    public bool ManageRequestUnsettledTicketsHost { get; set; }
-    public bool ManageRequestSettledTicketsHost { get; set; }
     public bool IsReadMarkTickets { get; set; }
 }

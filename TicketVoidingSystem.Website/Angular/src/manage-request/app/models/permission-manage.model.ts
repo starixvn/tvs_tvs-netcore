@@ -3,7 +3,5 @@ export class PermissionManage {
   verifyRead: boolean;
   verifyHost: boolean;
   voidRead: boolean;
-  manageRequestSettledTicketsHost: boolean;
-  manageRequestUnsettledTicketsHost: boolean;
   isReadMarkTickets: boolean;
 }

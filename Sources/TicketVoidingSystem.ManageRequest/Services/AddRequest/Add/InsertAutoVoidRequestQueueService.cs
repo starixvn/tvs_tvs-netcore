@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int actionId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
+    Task Execute(int requestId, int actionId, int? matchId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -20,7 +20,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int actionId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    public async Task Execute(int requestId, int actionId, int? matchId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
@@ -31,7 +31,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             }
             else
             {
-                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId, 0);
+                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId, matchId);
             }
         }
     }

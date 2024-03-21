@@ -26,8 +26,6 @@ class Helper {
     verifyRead: true,
     verifyHost: true,
     voidRead: true,
-    manageRequestSettledTicketsHost: true,
-    manageRequestUnsettledTicketsHost: true,
     isReadMarkTickets: true
   };
 

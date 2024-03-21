@@ -1,4 +1,3 @@
-import { PermissionManage } from '../../../../../manage-request/app/models/permission-manage.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
@@ -6,6 +5,7 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../../filter/filter.model';
 import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckDuplicateTicketsViewModel, ValidationDuplicateTickets } from '../models/check-duplicate-tickets.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -129,8 +129,8 @@ describe('ValidationService', () => {
     betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
     betIdsComponent.getAllBetIdsAreNotNumber = jest.fn();
 
-    const permissionManage = new PermissionManage();
-    permissionManage.manageRequestSettledTicketsHost = true;
+    const permissionManage = new PermissionAddRequest();
+    permissionManage.isAddSettledTickets = true;
     const leagueEventComponent = new LeagueEventAbnormalComponent(null, null);
     leagueEventComponent.updateInfoWithOnlyOneMatch = jest.fn();
     const arg = new SaveRequestArg();

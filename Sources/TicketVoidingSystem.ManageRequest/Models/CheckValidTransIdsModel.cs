@@ -15,5 +15,8 @@ public class CheckValidTransIdsModel
     public int? FilterBy { get; set; }
 
     public bool IsRemoveCustomerClass201 { get; set; }
+
     public bool IsRemoveCustomerClass4K { get; set; }
+
+    public bool IsAddSettledTickets { get; set; }
 }

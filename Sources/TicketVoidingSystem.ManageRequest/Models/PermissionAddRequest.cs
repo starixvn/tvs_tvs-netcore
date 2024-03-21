@@ -3,4 +3,5 @@
 public class PermissionAddRequest
 {
     public bool IsVoidAllArchivedTickets { get; set; }
+    public bool IsAddSettledTickets { get; set; }
 }

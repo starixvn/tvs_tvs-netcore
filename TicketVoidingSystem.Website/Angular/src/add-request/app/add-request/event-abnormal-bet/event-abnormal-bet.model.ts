@@ -19,6 +19,7 @@ export interface CheckTransIdsQuery {
   subIssueTypeId: number;
   isRemoveCustomerClass201: boolean;
   isRemoveCustomerClass4K: boolean;
+  isAddSettledTickets: boolean;
 }
 
 export class CheckTransIdsViewModel {

@@ -23,8 +23,8 @@ public class GetPermissionHandler : IRequestHandler<GetPermissionRequest, Permis
     {
         return new PermissionAddRequest
         {
-            IsVoidAllArchivedTickets =
-                await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidAllArchivedTickets, Constant.Policy.Host)
+            IsVoidAllArchivedTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidAllArchivedTickets, Constant.Policy.Host),
+            IsAddSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.SettledTickets, Constant.Policy.Host)
         };
     }
 }
