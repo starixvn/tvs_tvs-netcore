@@ -29,42 +29,41 @@ public class Repository : IRepository
 
     public async Task<GetTicketsModel> GetTickets(string transIds)
     {
-        var tickets = new List<GetTicketModel>();
         var invalidTransIdsViewModel = new List<InvalidTransIds>();
-        var validations = new List<GetTicketValidation>();
         var criteria = CreateGetTicketsCriteria(transIds.DistinctWithComma());
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            criteria.SiteDbGroupId = serverId;
-            var (validationSiteDb, ticketsSiteDb) = await repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
-            tickets.AddRange(ticketsSiteDb);
-            validations.AddRange(validationSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
+        });
+        (IEnumerable<GetTicketValidation> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.validation);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
 
-        return BuildResponseGetTickets(invalidTransIdsViewModel, tickets, validations);
+        return BuildResponseGetTickets(invalidTransIdsViewModel, ticketsInAllServers, validationInAllServers);
     }
 
     public async Task<RecoverTicketsModel> RecoverTickets(IEnumerable<BetId> tickets, IEnumerable<BetId> cricketTickets)
     {
-        var recoverTickets = new List<RecoverTicketModel>();
-        var validations = new List<RecoverTicketValidation>();
         var criteria = CreateRecoverTicketsCriteria();
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == serverId);
+            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
-                continue;
+                return Task.FromResult((Enumerable.Empty<RecoverTicketValidation>(), Enumerable.Empty<RecoverTicketModel>()));
             }
 
-            criteria.SiteDbGroupId = serverId;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            var (validationSiteDb, recoverTicketsSiteDb) = await repository.FetchMultipleAsync<RecoverTicketValidation, RecoverTicketModel>(criteria);
-            recoverTickets.AddRange(recoverTicketsSiteDb);
-            validations.AddRange(validationSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<RecoverTicketValidation, RecoverTicketModel>(criteria);
+        });
 
-        return BuildResultRecoverTickets(recoverTickets, validations, cricketTickets);
+        (IEnumerable<RecoverTicketValidation> validation, IEnumerable<RecoverTicketModel> tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.validation);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+
+        return BuildResultRecoverTickets(ticketsInAllServers, validationInAllServers, cricketTickets);
     }
 
     private RecoverTicketsCriteria CreateRecoverTicketsCriteria()
@@ -95,7 +94,7 @@ public class Repository : IRepository
         };
     }
 
-    private static GetTicketsModel BuildResponseGetTickets(List<InvalidTransIds> invalidTransIdsViewModel, List<GetTicketModel> tickets, IEnumerable<GetTicketValidation> validations)
+    private static GetTicketsModel BuildResponseGetTickets(List<InvalidTransIds> invalidTransIdsViewModel, IEnumerable<GetTicketModel> tickets, IEnumerable<GetTicketValidation> validations)
     {
         var invalidTransIds = Helper.GetIntersectTransIdString(validations.Select(y => y.InvalidTransIds));
         var movedTransIds = Helper.GetUnionTransIdString(validations.Select(x => x.MovedTransIds));
@@ -104,7 +103,7 @@ public class Repository : IRepository
 
         return new GetTicketsModel
         {
-            Tickets = tickets,
+            Tickets = tickets.ToList(),
             InvalidTrans = invalidTransIdsViewModel
         };
     }
