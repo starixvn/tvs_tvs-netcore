@@ -32,7 +32,7 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
     {
         var criteriaActive = mapper.Map<SelectActiveRequestsCriteria>(query);
         var (requests, requestInfo, requestInfoGetCalcTime) = await repository.FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(criteriaActive);
-        var totalVoidedTicketModels = GetTotalVoidedTickets(requestInfo);
+        var totalVoidedTicketModels = await GetTotalVoidedTickets(requestInfo);
         var betTypeForRequests = GetBettypeForAbnormalSingleRequest(requests);
         foreach (var request in requests)
         {
@@ -61,22 +61,20 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
         return models;
     }
 
-    private IEnumerable<GetRequestInfoModel> GetTotalVoidedTickets(IEnumerable<GetRequestInfoModel> requestInfo)
+    private async Task<IEnumerable<GetRequestInfoModel>> GetTotalVoidedTickets(IEnumerable<GetRequestInfoModel> requestInfo)
     {
-        var totalVoidedTicketModels = new List<GetRequestInfoModel>();
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var criteria = new GetTotalVoidedTicketCriteria
             {
-                SiteDbGroupId = item.Id,
+                SiteDbGroupId = server.Id,
                 RequestInfo = requestInfo.ToRequestInfoGetVoidedTicketXml()
             };
-            var response = repository.Fetch<GetRequestInfoModel>(criteria);
+            return repository.FetchAsync<GetRequestInfoModel>(criteria);
+        });
+        var results = await Task.WhenAll(tasks);
 
-            totalVoidedTicketModels.AddRange(response);
-        }
-
-        return totalVoidedTicketModels;
+        return results.SelectMany(item => item);
     }
 
     private static int GetTotalVoidedSingle(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels, int issueTypeId)
