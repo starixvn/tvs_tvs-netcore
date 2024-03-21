@@ -104,43 +104,6 @@ public class TicketsViewModelServiceTests
         Assert.Equal(uncheckedTransIds.Count, model.UncheckedTransIds.Count);
     }
 
-
-    [Fact]
-    public void UpdateViewModel_UpdateLicenseeName_ReturnCorrect()
-    {
-        // Arrange
-        var allTickets = new List<GetTicketModel>
-        {
-            new()
-            {
-                TransId = 1,
-                IsMixParlay = false,
-                IsCricket = false,
-                IsCancelCashOut = false,
-                GroupName = "123",
-                MatchId = 1,
-                SiteDbGroupId = 1,
-                LicenseeName = "AB",
-                IsInstantSettlement = true,
-                IsDeposit = true,
-                IsCashOut = true,
-                Status = TicketStatus.Draw
-            }
-        };
-        var model = new TicketsViewModel();
-        var permission = new VoidPermission
-        {
-            Settled = true
-        };
-
-        // Act
-        service.UpdateViewModel(model, allTickets, 0, permission);
-
-        // Assert
-        Assert.Equal("AB", model.LicenseesName);
-        Assert.Equal("AB", model.CashOutLicenseesName);
-    }
-
     [Fact]
     public void UpdateViewModel_UpdateBetTypes_ReturnCorrect()
     {

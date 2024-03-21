@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Fanex.BetList.Core.Entities;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.BetList;
@@ -27,21 +28,23 @@ public class UpdateListTicketsViewModelServiceTests
             ContentChineseSimplified = "ContentChineseSimplified",
             ContentNewChineseSimplified = "ContentNewChineseSimplified"
         };
+        var licenseeAffectedList = new AffectedLicenseeList();
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.Normal].LicenseesName = "12BET";
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.Instant].LicenseesName = "12BET";
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.CashOut].LicenseesName = "123, 343";
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.ChinaView].LicenseesName = "343";
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollyView].LicenseesName = "123";
         var expected = new ListTicketsViewModel
         {
             TotalItems = 5,
             SingleCount = 4,
             ParlayCount = 1,
-            LicenseesName = "12BET",
-            InstantLicenseesName = "12BET",
-            CashOutLicenseesName = "123, 343",
-            ChinaViewLicenseesName = "343",
-            JollyViewLicenseesName = "123",
             BetTypeNameReplaceMessage = betTypeNameReplaceMessage,
             FromTransTime = new DateTime(2023, 5, 7, 2, 2, 2).ZoneManila(),
             ToTransTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila(),
             FromCheckTime = new DateTime(2023, 5, 7, 2, 2, 2).ZoneManila(),
-            ToCheckTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila()
+            ToCheckTime = new DateTime(2023, 5, 9, 2, 2, 2).ZoneManila(),
+            LicenseeAffectedList = licenseeAffectedList.LicenseeAffectedList
         };
         var listTicketsViewModel = new ListTicketsViewModel();
         var tickets = new List<GetTicketModel>

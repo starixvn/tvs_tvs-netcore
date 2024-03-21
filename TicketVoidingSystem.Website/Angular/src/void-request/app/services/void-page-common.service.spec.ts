@@ -2,7 +2,6 @@ import { ClipboardService } from 'ngx-clipboard';
 import { Subscription } from 'rxjs';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { AffectedLicensee } from '../../../utility/models/affected-licensee.model';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { CheckRequestService } from './check-request.service';
@@ -90,69 +89,6 @@ describe('VoidPageCommonService', () => {
 
     expect(spyCopyFromContent).toHaveBeenCalledTimes(1);
     expect(window.alert).toHaveBeenCalledTimes(1);
-  });
-
-  it('#isShowAffectedLicenseeArea should return true when only have affectedLicensee', async () => {
-    const item = new VoidPageCommonItem();
-    item.affectedLicensee = new AffectedLicensee();
-    item.chinaViewLicensee = new AffectedLicensee();
-    item.affectedInstantLicensee = new AffectedLicensee();
-    item.cashOutLicensee = new AffectedLicensee();
-    item.affectedLicensee.show = true;
-    item.affectedLicensee.licenseesName = '123123';
-    const actual = voidPageCommonService.isShowAffectedLicenseeArea(item);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowAffectedLicenseeArea should return true when only have chinaViewLicensee', async () => {
-    const item = new VoidPageCommonItem();
-    item.affectedLicensee = new AffectedLicensee();
-    item.chinaViewLicensee = new AffectedLicensee();
-    item.affectedInstantLicensee = new AffectedLicensee();
-    item.cashOutLicensee = new AffectedLicensee();
-    item.chinaViewLicensee.show = true;
-    item.chinaViewLicensee.licenseesName = '123123';
-    const actual = voidPageCommonService.isShowAffectedLicenseeArea(item);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowAffectedLicenseeArea should return true when only have affectedInstantLicensee', async () => {
-    const item = new VoidPageCommonItem();
-    item.affectedLicensee = new AffectedLicensee();
-    item.chinaViewLicensee = new AffectedLicensee();
-    item.affectedInstantLicensee = new AffectedLicensee();
-    item.cashOutLicensee = new AffectedLicensee();
-    item.affectedInstantLicensee.show = true;
-    item.affectedInstantLicensee.licenseesName = '123123';
-    const actual = voidPageCommonService.isShowAffectedLicenseeArea(item);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowAffectedLicenseeArea should return true when only have cashOutLicensee', async () => {
-    const item = new VoidPageCommonItem();
-    item.affectedLicensee = new AffectedLicensee();
-    item.chinaViewLicensee = new AffectedLicensee();
-    item.affectedInstantLicensee = new AffectedLicensee();
-    item.cashOutLicensee = new AffectedLicensee();
-    item.cashOutLicensee.show = true;
-    item.cashOutLicensee.licenseesName = '123123';
-    const actual = voidPageCommonService.isShowAffectedLicenseeArea(item);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isShowAffectedLicenseeArea should return false', async () => {
-    const item = new VoidPageCommonItem();
-    item.affectedLicensee = new AffectedLicensee();
-    item.chinaViewLicensee = new AffectedLicensee();
-    item.affectedInstantLicensee = new AffectedLicensee();
-    item.cashOutLicensee = new AffectedLicensee();
-    const actual = voidPageCommonService.isShowAffectedLicenseeArea(item);
-
-    expect(actual).toBeFalsy();
   });
 
   it('#onClickVoidAllMatches call #tooTip.display when have not userPassword', async () => {

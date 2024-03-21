@@ -26,10 +26,10 @@ import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { Confirmation } from './confirmation/confirmation.model';
 import { FilterComponent } from './filter/filter.component';
 import { Modal } from './modal/modal.model';
-import { AffectedLicensee } from './models/affected-licensee.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { GroupModel } from './tickets/group.model';
 import { TicketsModel } from './tickets/tickets.model';
+import { AffectedLicensee } from '../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 @Component({
   selector: 'app-root',
@@ -60,15 +60,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   isShowMessages: boolean;
   isShowConfirm: boolean;
   initialized: boolean;
-  affectedLicensee = new AffectedLicensee();
-  affectedInstantLicensee = new AffectedLicensee();
-  cashOutLicensee = new AffectedLicensee();
-  chinaViewLicensee = new AffectedLicensee();
-  jollyViewLicensee = new AffectedLicensee();
   templateValue = new TemplateValue();
   isShowLogInfoOnly = false;
   issueTypeId: number;
   subIssueTypeId: number;
+  licenseeAffectedList: AffectedLicensee[] = [];
   private fromTransTime: Date = null;
   private toTransTime: Date = null;
   private fromCheckTime: Date = null;
@@ -111,11 +107,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isShowTickets = false;
     this.isShowLogInfoOnly = false;
     await this.getMatchInfo(getTicketsQuery);
-    this.affectedLicensee.show = true;
-    this.affectedInstantLicensee.show = true;
-    this.cashOutLicensee.show = true;
-    this.chinaViewLicensee.show = true;
-    this.jollyViewLicensee.show = true;
   }
 
   async viewLogInfoEvent(getTicketsQuery: GetTicketsQuery) {
@@ -123,13 +114,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isShowTickets = false;
     this.isShowLogInfoOnly = false;
     await this.getMatchInfoForViewLogInfo(getTicketsQuery);
-    this.affectedLicensee.show = false;
-    this.affectedInstantLicensee.show = false;
-    this.cashOutLicensee.show = false;
-    this.chinaViewLicensee.show = false;
-    this.jollyViewLicensee.show = false;
   }
-
 
   async getMatchInfoForViewLogInfo(query: GetTicketsQuery) {
     if (this.matchViewModel === undefined || this.matchViewModel.matchId !== query.matchId) {
@@ -165,7 +150,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.isNullCacheTransTime()) {
       this.fromTransTime = data.fromTransTime;
       this.toTransTime = data.toTransTime;
-
     }
 
     if (this.isNullCacheCheckTime()) {
@@ -187,11 +171,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.matchViewModel = match;
       this.isShowMatch = true;
       await this.searchTickets(query);
-
     } else {
       await this.searchTickets(query);
     }
-
   }
 
   async searchTickets(query: GetTicketsQuery) {
@@ -215,9 +197,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isShowMatch = true;
     this.isShowConfirm = false;
     this.isShowMessages = false;
-    this.affectedLicensee = new AffectedLicensee();
-    this.affectedInstantLicensee = new AffectedLicensee();
-    this.cashOutLicensee = new AffectedLicensee();
   }
 
   handleNoTicketLogInfo() {
@@ -228,22 +207,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ticketsModel.strToTime = '12:00:00 AM';
     this.isShowConfirm = false;
     this.isShowMessages = false;
-    this.affectedLicensee = new AffectedLicensee();
-    this.affectedInstantLicensee = new AffectedLicensee();
-    this.cashOutLicensee = new AffectedLicensee();
-    this.chinaViewLicensee = new AffectedLicensee();
-    this.jollyViewLicensee = new AffectedLicensee();
   }
 
   async pagingSearchTicket(pagingEvent: PagingModel) {
     this.getTicketsQuery.pageIndex = pagingEvent.page - 1;
     this.getTicketsQuery.pageSize = pagingEvent.pageSize;
     await this.getTickets();
-    this.affectedLicensee.show = false;
-    this.affectedInstantLicensee.show = false;
-    this.cashOutLicensee.show = false;
-    this.chinaViewLicensee.show = false;
-    this.jollyViewLicensee.show = false;
   }
 
   async exportExcel() {
@@ -291,11 +260,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   renderTickets(data: TicketsModel) {
-    this.affectedLicensee.licenseesName = data.licenseesName;
-    this.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
-    this.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
-    this.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
-    this.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
+    this.licenseeAffectedList = data.licenseeAffectedList;
+    this.licenseeAffectedList = _.clone(this.licenseeAffectedList);
     this.ticketsModel.pagingModel = new PagingModel();
     this.ticketsModel.pagingModel.total = data.totalItems;
     this.ticketsModel.pagingModel.page = this.getTicketsQuery.pageIndex + 1;
@@ -306,7 +272,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (this.isNullCacheTransTime()) {
       this.fromTransTime = data.fromTransTime;
       this.toTransTime = data.toTransTime;
-
     }
 
     if (this.isNullCacheCheckTime()) {
@@ -429,12 +394,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   async handleAfterVoid(results: Result<null>[]) {
-    this.affectedLicensee.show = false;
-    this.affectedInstantLicensee.show = false;
-    this.cashOutLicensee.show = false;
-    this.chinaViewLicensee.show = false;
-    this.jollyViewLicensee.show = false;
-
     if (results[0].errorCode <= 0) {
       await this.handleAfterVoidPaging();
     }
@@ -460,13 +419,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.getTicketsQuery.pageIndex =
           this.getTicketsQuery.pageIndex === lastPage ? this.getTicketsQuery.pageIndex - 1 : this.getTicketsQuery.pageIndex;
       }
-
       await this.getTickets();
-      this.affectedLicensee.show = false;
-      this.affectedInstantLicensee.show = false;
-      this.cashOutLicensee.show = false;
-      this.chinaViewLicensee.show = false;
-      this.jollyViewLicensee.show = false;
     }
   }
 

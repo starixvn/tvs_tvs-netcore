@@ -1,0 +1,11 @@
+@import '../../../assets/styles/mixin.scss';
+
+.affected-licensees {
+    @include affected-licensees(#b4f0c6, #0a0c0f);
+    max-height: 158px;
+    margin-left: 49px;
+}
+
+.affectedLicensee {
+    margin-top: 4px;
+}

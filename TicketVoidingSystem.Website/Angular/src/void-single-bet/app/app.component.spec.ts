@@ -195,54 +195,6 @@ describe('AppComponent', () => {
     expect(templateComponent.isShowMessages).toBe(false);
   });
 
-  it('Should get match info and return no data after emit searchEvent from <filter />', async () => {
-    // Arrange
-    const { findComponent, fixture, instance } = await shallow
-      .mock(AppService, { getMatchInfo: jest.fn().mockImplementation(() => Helper.getFakeMatchViewModel()) })
-      .render();
-    const filterComponent = findComponent(FilterComponent);
-    const getTicketsQuery = new GetTicketsQuery();
-    getTicketsQuery.matchId = 28321695;
-    getTicketsQuery.invalidTransDate = true;
-    instance.matchViewModel = new MatchModel();
-    instance.matchViewModel.matchId = 12345678;
-    instance.ticketsModel = new TicketsModel();
-    filterComponent.searchEvent.emit(getTicketsQuery);
-    await fixture.whenStable();
-
-    // Assert
-    expect(instance.ticketsModel.groups.length).toBe(0);
-    expect(instance.isShowTickets).toBe(true);
-    expect(instance.isShowMatch).toBe(true);
-    expect(instance.isShowMessages).toBe(false);
-    expect(instance.isShowConfirm).toBe(false);
-  });
-
-  it('Should return expected results after emit searchEvent from <filter />', async () => {
-    // Arrange
-    const { findComponent, fixture, instance } = await shallow
-      .mock(AppService, { getTickets: jest.fn().mockImplementation(() => Helper.getFakeTicketsModel()) })
-      .mock(TemplateService, { getTemplateValue : jest.fn().mockImplementation(() => new TemplateValue()) })
-      .render();
-    const filterComponent = findComponent(FilterComponent);
-    const getTicketsQuery = new GetTicketsQuery();
-    getTicketsQuery.matchId = 28321695;
-    getTicketsQuery.invalidTransDate = false;
-    instance.matchViewModel = Helper.getFakeMatchViewModel();
-    instance.ticketsModel = new TicketsModel();
-    filterComponent.searchEvent.emit(getTicketsQuery);
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    // Assert
-    expect(instance.ticketsModel.groups.length).toBe(1);
-    expect(instance.ticketsModel.singleCount).toBe(3);
-    expect(instance.ticketsModel.parlayCount).toBe(0);
-    expect(instance.isShowMessages).toBe(true);
-    expect(instance.isShowConfirm).toBe(true);
-    expect(instance.templateValue.totalTickets).toBe(3);
-  });
-
   it('Should call #getTickets with expected params after emit pagingSearchTicket from <tickets />', async () => {
     // Arrange
     const { findComponent, fixture, instance } = await shallow.render();
@@ -257,8 +209,6 @@ describe('AppComponent', () => {
 
     // Assert
     expect(instance.getTickets).toHaveBeenCalledTimes(1);
-    expect(instance.affectedLicensee.show).toBe(false);
-    expect(instance.affectedInstantLicensee.show).toBe(false);
     expect(instance.getTicketsQuery.pageIndex).toBe(1);
     expect(instance.getTicketsQuery.pageSize).toBe(100);
   });

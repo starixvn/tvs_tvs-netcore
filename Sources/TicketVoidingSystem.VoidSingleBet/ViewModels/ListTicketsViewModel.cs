@@ -18,19 +18,11 @@ public class ListTicketsViewModel
 
     public DateTime? ToCheckTime { get; set; }
 
-    public string LicenseesName { get; set; }
-
-    public string InstantLicenseesName { get; set; }
-
-    public string CashOutLicenseesName { get; set; }
-
     public TemplateContentModel BetTypeNameReplaceMessage { get; set; }
-
-    public string ChinaViewLicenseesName { get; set; }
-
-    public string JollyViewLicenseesName { get; set; }
 
     public string Id { get; set; }
 
     public IEnumerable<Group<TicketViewModel>> Groups { get; set; }
+
+    public List<AffectedLicensee> LicenseeAffectedList { get; set; }
 }

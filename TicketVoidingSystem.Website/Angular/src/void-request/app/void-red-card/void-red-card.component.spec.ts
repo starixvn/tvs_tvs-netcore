@@ -16,7 +16,6 @@ import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { AffectedLicensee } from './../../../void-single-bet/app/models/affected-licensee.model';
 import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
@@ -82,18 +81,6 @@ class Helper {
     duplicateTicketsModel: null,
     notParticipateModels: []
   };
-  static getFakeAffectedLicensee(): AffectedLicensee {
-    return {
-      licenseesName: 'abc',
-      show: true
-    };
-  }
-  static getFakeAffectedLicenseeWithNameIsNull(): AffectedLicensee {
-    return {
-      licenseesName: '',
-      show: true
-    };
-  }
 }
 
 describe('VoidRedCardComponent', () => {
@@ -668,33 +655,5 @@ describe('VoidRedCardComponent', () => {
     // Assert
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(0);
     expect(mockVoidAllMatches).toHaveBeenCalledTimes(0);
-  });
-
-  it('#isShowAffectedLicenseeArea should return expected', async () => {
-    const testCase = [
-      {affectedLicensee: Helper.getFakeAffectedLicensee(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicensee(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicensee(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicensee(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: true },
-      {affectedLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), chinaViewLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(),
-        affectedInstantLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cashOutLicensee: Helper.getFakeAffectedLicenseeWithNameIsNull(), cancelAnimationFrame: Helper.getFakeAffectedLicenseeWithNameIsNull(), expected: false },
-    ];
-    const voidMatch = new VoidMatch();
-    const { instance } = await shallow.render();
-    testCase.forEach(x => {
-      voidMatch.affectedLicensee = x.affectedLicensee;
-      voidMatch.chinaViewLicensee = x.chinaViewLicensee;
-      voidMatch.affectedInstantLicensee = x.affectedInstantLicensee;
-      voidMatch.cashOutLicensee = x.cashOutLicensee;
-      voidMatch.cancelCashOutLicensee = x.cancelAnimationFrame;
-
-      const actual = instance.isShowAffectedLicenseeArea(voidMatch);
-
-      expect(actual).toBe(x.expected);
-    });
   });
 });

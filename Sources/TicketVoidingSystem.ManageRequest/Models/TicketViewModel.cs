@@ -14,12 +14,7 @@ public class TicketsViewModel
     public int TotalSingle { get; set; }
     public int TotalParlay { get; set; }
     public int TotalCancelCashOut { get; set; }
-    public string LicenseesName { get; set; }
-    public string ChinaViewLicenseesName { get; set; }
-    public string JollyViewLicenseesName { get; set; }
-    public string InstantLicenseesName { get; set; }
-    public string CashOutLicenseesName { get; set; }
-    public string CancelCashOutLicenseesName { get; set; }
+    public List<AffectedLicensee> LicenseeAffectedList { get; set; }
     public bool IsAllLiveTickets { get; set; }
     public bool IsAllNonLiveTickets { get; set; }
     public string BetTypes { get; set; }

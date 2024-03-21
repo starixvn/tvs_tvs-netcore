@@ -219,6 +219,7 @@ exports[`FilterComponent FilterComponent should init match snapshot 1`] = `
               </label>
             </div>
           </div>
+          <licensee-affected-list />
         </div>
         <group-bettypes />
         <advanced-mode />

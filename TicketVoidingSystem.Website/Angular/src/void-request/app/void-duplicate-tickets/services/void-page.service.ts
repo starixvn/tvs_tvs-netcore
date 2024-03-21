@@ -10,6 +10,7 @@ import { AppService } from '../../app.service';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidPageDuplicateTicketsModel } from '../models/void-page-duplicate-tickets.model';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,8 @@ export class VoidPageService {
     voidPageItem.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
     voidPageItem.templateValue = this.getTemplateValue(voidPageItem, requestDetail);
     voidPageItem.voidReason = await this.getVoidedReason(voidPageItem);
+    voidPageItem.licenseeAffectedList = voidPageItem.voidTicketsMini.licenseeAffectedList;
+    voidPageItem.licenseeAffectedList = _.clone(voidPageItem.licenseeAffectedList);
   }
 
   private getTemplateValue(voidPageItem: VoidPageDuplicateTicketsModel, requestDetail: RequestDetailViewModel): TemplateValue {

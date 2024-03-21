@@ -76,7 +76,7 @@ public class UpdateRequestProcessStageTests
 
         // Assert
         await repository.Received(1).ExecuteAsync(Arg.Any<EditRequestCommand>());
-        await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
+        await insertAutoVoidRequestQueueService.Received(1).Execute(query.RequestId, query.ActionId, 1, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
         AssertExtension.Equal(expected, actual);
     }
 

@@ -3,7 +3,6 @@ import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-reques
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
-import { AffectedLicensee } from '../../../utility/models/affected-licensee.model';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
@@ -32,15 +31,10 @@ class Helper {
     isShowTicketFull: true,
     isLoadedTicketFull: true,
     isBlockBetList: true,
-    affectedLicensee: new AffectedLicensee(),
-    affectedInstantLicensee: new AffectedLicensee(),
-    chinaViewLicensee: new AffectedLicensee(),
-    cashOutLicensee: new AffectedLicensee(),
-    jollyViewLicensee: new AffectedLicensee(),
     isShowTemplateMessage: true,
     templateMessage: new Message(),
     detailViewModel: null,
-    cancelCashOutLicensee: new AffectedLicensee(),
+    licenseeAffectedList: []
   };
   static readonly fakeRequestDetailModel: RequestDetailModel = {
     actionId: 1,
@@ -142,9 +136,6 @@ describe('TicketsService', () => {
     const mockTicketsService = new TicketsService(appService);
     ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
     await mockTicketsService['getVoidTicketsFull'](voidMatch, null);
-
-    expect(voidMatch.isShowTicketFull).toBeTruthy();
-    expect(voidMatch.affectedLicensee.show).toBeTruthy();
     expect(voidMatch.isShowTicketFull).toBeTruthy();
   });
 });

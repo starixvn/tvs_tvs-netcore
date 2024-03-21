@@ -53,31 +53,7 @@
   .display-flex {
     display: flex;
   }
-
-  .affected-licensees {
-    @include affected-licensees(#b4f0c6, #0a0c0f);
-  }
-
-  .instant-licensee {
-    color: #ff0000;
-    padding-top: 5px;
-  }
-
-  .cash-out-licensee {
-    color: #5548cc;
-    padding-top: 5px;
-  }
-
-  .china-view-licensee {
-    color: #dd5edd;
-    padding-top: 5px;
-  }
-
-  .jolly-view-licensee {
-    color: goldenrod;
-    padding-top: 5px;
-  }
-
+  
   .line-1 {
     display: flex;
     flex-wrap: wrap;

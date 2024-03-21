@@ -7,7 +7,7 @@ import { LogInfoDetail } from "../../..//utility/models/log-info-detail.model";
 import { MatchModel } from "../../..//utility/models/match.model";
 import { VoidedReason } from "../../..//utility/models/reason.model";
 import { TicketsModel } from "../../..//void-request/app/tickets-list/tickets.model";
-import { AffectedLicensee } from "../../../utility/models/affected-licensee.model";
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 export class VoidMatch {
   subIssueType?: SubIssueType;
@@ -17,23 +17,16 @@ export class VoidMatch {
   voidReason?: VoidedReason;
   templateValue?: TemplateValue;
   logInfoDetail?: LogInfoDetail;
-  //filterWithHdp?: FilterWithHdpModel;
   voidTicketsFull?: TicketsModel;
   pagingVoidTickets: PagingModel;
   isShowTicketFull: boolean;
   isLoadedTicketFull: boolean;
   isBlockBetList: boolean;
-  affectedLicensee: AffectedLicensee;
-  affectedInstantLicensee: AffectedLicensee;
-  chinaViewLicensee: AffectedLicensee;
-  jollyViewLicensee: AffectedLicensee;
-  cashOutLicensee: AffectedLicensee;
-  cancelCashOutLicensee: AffectedLicensee;
+  licenseeAffectedList: AffectedLicensee[];
   isShowTemplateMessage: boolean;
   templateMessage?: Message;
   isAllLiveTickets: boolean;
   isAllNonLiveTickets: boolean;
-
   isCheckedEarlyEvent: boolean;
   wrongMarket?: string;
   actualMarket?: string;
@@ -44,13 +37,8 @@ export class VoidMatch {
 
   constructor() {
     this.voidTicketsFull = new TicketsModel();
-    this.pagingVoidTickets = new PagingModel();
-    this.affectedLicensee = new AffectedLicensee();
-    this.affectedInstantLicensee = new AffectedLicensee();
-    this.chinaViewLicensee = new AffectedLicensee();
-    this.jollyViewLicensee = new AffectedLicensee();
-    this.cashOutLicensee = new AffectedLicensee();
-    this.cancelCashOutLicensee = new AffectedLicensee();
+    this.pagingVoidTickets = new PagingModel();  
     this.voidReason = new VoidedReason();
+    this.licenseeAffectedList = [];
   }
 }

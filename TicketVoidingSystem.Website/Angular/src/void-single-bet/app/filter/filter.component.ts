@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import moment from "moment";
 import { ClipboardService } from 'ngx-clipboard';
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
@@ -25,21 +25,16 @@ import { CommonService } from '../../../utility/services/common.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
-import { AffectedLicensee } from './../models/affected-licensee.model';
 import { Bet, Item, Type } from './filter.model';
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 @Component({
   selector: 'filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })
-export class FilterComponent implements OnInit {
-  @Input() affectedLicensee = new AffectedLicensee();
-  @Input() affectedInstantLicensee = new AffectedLicensee();
-  @Input() cashOutLicensee = new AffectedLicensee();
-  @Input() chinaViewLicensee = new AffectedLicensee();
-  @Input() jollyViewLicensee = new AffectedLicensee();
-
+export class FilterComponent implements OnInit{
+  @Input() licenseeAffectedList: AffectedLicensee[] = [];
   @Output() searchEvent = new EventEmitter<GetTicketsQuery>();
   @Output() viewLogInfoEvent = new EventEmitter<GetTicketsQuery>();
   @Output() changeMatchEvent = new EventEmitter<string>();
@@ -52,7 +47,6 @@ export class FilterComponent implements OnInit {
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
   @ViewChild('groupBetTypesComponent') groupBetTypesComponent: GroupBetTypesComponent;
   @ViewChild('advancedMode') advancedModeComponent: AdvancedModeComponent;
-
 
   getTicketsQuery = new GetTicketsQuery();
   tooltip = new Tooltip();
@@ -87,6 +81,7 @@ export class FilterComponent implements OnInit {
   comboParlay: MultipleSelection;
   isCheckTime = true;
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
+
   constructor(
     private readonly element: ElementRef,
     private readonly appService: AppService,
@@ -99,7 +94,7 @@ export class FilterComponent implements OnInit {
   async ngOnInit() {
     await this.initFilter();
   }
-
+  
   renderComboParlay() {
     this.comboParlay = new MultipleSelection();
     this.comboParlay.checkAllCheckBoxText = 'All';
@@ -641,14 +636,6 @@ export class FilterComponent implements OnInit {
   copyClipboard(text: string) {
     this.clipboardService.copyFromContent(text);
     alert('The Licensee list has been copied to clipboard.');
-  }
-
-  public isShowAffectedLicenseeArea(): boolean {
-    return this.affectedLicensee.show && this.affectedLicensee.licenseesName?.length > 0 ||
-      this.chinaViewLicensee.show && this.chinaViewLicensee.licenseesName?.length > 0 ||
-      this.jollyViewLicensee.show && this.jollyViewLicensee.licenseesName?.length > 0 ||
-      this.affectedInstantLicensee.show && this.affectedInstantLicensee.licenseesName?.length > 0 ||
-      this.cashOutLicensee.show && this.cashOutLicensee.licenseesName?.length > 0;
   }
 
   public isCorrectFormatOdds(value: string, elementClass: string): boolean {

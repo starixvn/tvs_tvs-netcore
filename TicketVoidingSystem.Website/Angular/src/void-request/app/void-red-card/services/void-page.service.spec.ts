@@ -7,7 +7,6 @@ import { PagingModel } from '../../../../utility/components/paging/paging/paging
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { AffectedLicensee } from '../../../../utility/models/affected-licensee.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -41,19 +40,14 @@ class Helper {
         isShowTicketFull: true,
         isLoadedTicketFull: true,
         isBlockBetList: true,
-        affectedLicensee: new AffectedLicensee(),
-        affectedInstantLicensee: new AffectedLicensee(),
-        chinaViewLicensee: new AffectedLicensee(),
-        cashOutLicensee: new AffectedLicensee(),
         isShowTemplateMessage: true,
         templateMessage: new Message(),
         isAllLiveTickets: false,
         isCheckedEarlyEvent: false,
         isMainMatch: false,
         isPoolHouseAffected: false,
-        jollyViewLicensee: new AffectedLicensee,
-        cancelCashOutLicensee: new AffectedLicensee,
-        isAllNonLiveTickets: true
+        isAllNonLiveTickets: true,
+        licenseeAffectedList: []
     };
     static readonly fakeSqlResultError: SqlResult = {
         errCode: 1,

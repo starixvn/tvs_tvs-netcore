@@ -106,7 +106,7 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
 
     public string GetCurrencyNameOfSpecialPlatformTicket(TicketEmailModel ticket)
     {
-        if (ticket.SpecialPlatform != SpecialPlatformConstant.JollySports)
+        if (ticket.SpecialPlatform != SpecialPlatformConstant.JollySports && ticket.SpecialPlatform != SpecialPlatformConstant.JollySportsCv)
         {
             return ticket.CurrencyName;
         }

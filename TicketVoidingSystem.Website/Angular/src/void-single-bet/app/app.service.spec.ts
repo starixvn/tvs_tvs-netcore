@@ -107,7 +107,6 @@ describe('AppService', () => {
     const expectedTicketsModel = new TicketsModel();
     expectedTicketsModel.groups = [new GroupModel('MBC Group', [{mainTransId: '12312'} as TicketModel])];
     expectedTicketsModel.totalItems = 1;
-    expectedTicketsModel.licenseesName = 'MBC Group';
     mockHttpService.postJson.mockResolvedValue(expectedTicketsModel);
     
     // Action

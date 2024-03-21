@@ -13,6 +13,7 @@ import { CommonPrimitiveProperty } from '../../models/common-primitive-property.
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,8 @@ export class VoidPageService {
     voidPageItem.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
     voidPageItem.templateValue = this.getTemplateValue(voidPageItem, requestDetail);
     voidPageItem.voidReason = await this.getVoidedReason(voidPageItem);
+    voidPageItem.licenseeAffectedList = voidPageItem.voidTicketsMini.licenseeAffectedList;
+    voidPageItem.licenseeAffectedList = _.clone(voidPageItem.licenseeAffectedList);
   }
 
   private getTemplateValue(voidPageItem: VoidNotParticipateModel, requestDetail: RequestDetailViewModel): TemplateValue {

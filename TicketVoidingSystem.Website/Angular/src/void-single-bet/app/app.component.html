@@ -14,11 +14,7 @@
             (updateIssueTypeEvent)="updateIssueType($event)"
             (updateSubIssueTypeEvent)="updateSubIssueType($event)"
             [matchViewModel]="matchViewModel"
-            [affectedLicensee]="affectedLicensee"
-            [affectedInstantLicensee]="affectedInstantLicensee"
-            [cashOutLicensee]="cashOutLicensee"
-            [chinaViewLicensee]="chinaViewLicensee"
-            [jollyViewLicensee]="jollyViewLicensee">
+            [licenseeAffectedList]="licenseeAffectedList">
     </filter>
     <match-detail [matchDetail]="matchViewModel"
                   [isShowMatch]="isShowMatch"></match-detail>

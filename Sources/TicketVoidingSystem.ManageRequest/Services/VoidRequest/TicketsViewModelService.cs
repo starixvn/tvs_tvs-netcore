@@ -25,7 +25,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
         UpdateValidTickets(model, validTickets);
         UpdateUncheckTickets(model, allTickets);
-        UpdateLicenseeName(model, allTickets);
+        model.LicenseeAffectedList = GetLicenseeAffectedList(allTickets);
         UpdateBetTypes(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
         UpdateCheckPermissionTickets(model, allTickets);
@@ -137,33 +137,36 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         };
     }
 
-    private static void UpdateLicenseeName(TicketsViewModel model, IEnumerable<GetTicketModel> data)
+    private static List<AffectedLicensee> GetLicenseeAffectedList(IEnumerable<GetTicketModel> data)
     {
-        var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit)
+        var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var cancelCashOutLicensee = data.Where(item => item.IsCancelCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
+        var jollyViewLicensee = data.Where(item => item.SpecialPlatform == SpecialPlatformConstant.JollySports).Select(item => item.LicenseeName).Distinct().ToArray();
+        var jollySportsCvLicensee = data.Where(item => item.SpecialPlatform == SpecialPlatformConstant.JollySportsCv).Select(item => item.LicenseeName).Distinct().ToArray();
+        var licensees = data.Where(item => item.IsDeposit && !chinaViewLicensee.Contains(item.LicenseeName) &&
+                                           !jollyViewLicensee.Contains(item.LicenseeName) && !jollySportsCvLicensee.Contains(item.LicenseeName))
             .Select(item => item.LicenseeName).Distinct().ToArray();
-        var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName)
-            .Distinct().ToArray();
-        var cancelCashOutLicensee = data.Where(item => item.IsCancelCashOut && item.IsDeposit)
-            .Select(item => item.LicenseeName).Distinct().ToArray();
-        var chinaViewLicensee =
-            data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
-        var jollyViewLicensee = data.Where(item => item.SpecialPlatform == SpecialPlatformConstant.JollySports)
-            .Select(item => item.LicenseeName).Distinct().ToArray();
-        var licensees = data.Where(item =>
-                item.IsDeposit && !chinaViewLicensee.Contains(item.LicenseeName) &&
-                !jollyViewLicensee.Contains(item.LicenseeName))
-            .Select(item => item.LicenseeName).Distinct().ToArray();
+
         Array.Sort(licensees, StringComparer.InvariantCulture);
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);
         Array.Sort(cashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(cancelCashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
-        model.LicenseesName = string.Join(", ", licensees);
-        model.InstantLicenseesName = string.Join(", ", instantLicensee);
-        model.CashOutLicenseesName = string.Join(", ", cashOutLicensee);
-        model.CancelCashOutLicenseesName = string.Join(", ", cancelCashOutLicensee);
-        model.ChinaViewLicenseesName = string.Join(", ", chinaViewLicensee);
-        model.JollyViewLicenseesName = string.Join(", ", jollyViewLicensee);
+        Array.Sort(jollyViewLicensee, StringComparer.InvariantCulture);
+        Array.Sort(jollySportsCvLicensee, StringComparer.InvariantCulture);
+
+        var licenseeAffectedList = new AffectedLicenseeList();
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.Normal].LicenseesName = string.Join(", ", licensees);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.Instant].LicenseesName = string.Join(", ", instantLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.CashOut].LicenseesName = string.Join(", ", cashOutLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.ChinaView].LicenseesName = string.Join(", ", chinaViewLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollyView].LicenseesName = string.Join(", ", jollyViewLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollySportCv].LicenseesName = string.Join(", ", jollySportsCvLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.CancelCashOut].LicenseesName = string.Join(", ", cancelCashOutLicensee);
+
+        return licenseeAffectedList.LicenseeAffectedList;
     }
 
     private static void UpdateUncheckTickets(TicketsViewModel model, IEnumerable<GetTicketModel> data)

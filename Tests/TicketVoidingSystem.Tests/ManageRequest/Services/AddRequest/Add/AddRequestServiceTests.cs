@@ -130,7 +130,7 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, actionId, null);
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, actionId, 1, null);
         sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
     }
 
@@ -174,7 +174,7 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, 1, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
         sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
     }
 }

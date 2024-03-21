@@ -11,6 +11,7 @@ import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,8 @@ export class VoidPageService {
       element.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
       element.templateValue = this.templateMessageService.getTemplateValue(element, requestDetail);
       element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
+      element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
+      element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
     }
   }
 

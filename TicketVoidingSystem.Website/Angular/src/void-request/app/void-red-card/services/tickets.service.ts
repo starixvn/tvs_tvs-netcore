@@ -5,6 +5,7 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { VoidMatch } from '../../models/void-match.model';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -56,18 +57,8 @@ export class TicketsService {
     const data = await this.appService.getTickets(ticketQuery);
     voidMatch.voidTicketsFull.initData(data);
     voidMatch.pagingVoidTickets.total = data.total;
-    voidMatch.affectedLicensee.licenseesName = data.licenseesName;
-    voidMatch.affectedLicensee.show = true;
-    voidMatch.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
-    voidMatch.chinaViewLicensee.show = true;
-    voidMatch.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
-    voidMatch.jollyViewLicensee.show = true;
-    voidMatch.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
-    voidMatch.affectedInstantLicensee.show = true;    
-    voidMatch.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
-    voidMatch.cashOutLicensee.show = true;
-    voidMatch.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
-    voidMatch.cancelCashOutLicensee.show = true;
     voidMatch.isBlockBetList = false;
+    voidMatch.licenseeAffectedList = data.licenseeAffectedList;
+    voidMatch.licenseeAffectedList = _.clone(voidMatch.licenseeAffectedList);
   }
 }

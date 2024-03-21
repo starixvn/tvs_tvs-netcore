@@ -12,6 +12,7 @@ import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TemplateMessageService } from './template-message.service';
 import { TicketsService } from './tickets.service';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,8 @@ export class VoidPageService {
       element.templateValue.numberOfCorner = element.matchModel.numberOfCorner;
       const sportTypeId = StaticService.isAbnormalAccount(requestDetail.request.issueTypeId.toString()) ? 0 : element.matchModel.sportType;
       element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, sportTypeId);
+      element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
+      element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
     }
   }
 

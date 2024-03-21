@@ -31,7 +31,6 @@ export class VoidRedCardComponent implements OnInit {
   public issueTypes: IssueTypesModel;
   public tooltip = new Tooltip();
 
-
   private afterLoadUnderneathDataSubscription: Subscription;
   private readonly observableTimer = timer(0, 100);
   private isRunningSubscriptionCallback = false;
@@ -108,15 +107,6 @@ export class VoidRedCardComponent implements OnInit {
     });
   }
 
-  isShowAffectedLicenseeArea(voidMatch: VoidMatch): boolean {
-    return voidMatch.affectedLicensee.show && voidMatch.affectedLicensee.licenseesName.length > 0
-      || voidMatch.chinaViewLicensee.show && voidMatch.chinaViewLicensee.licenseesName.length > 0
-      || voidMatch.jollyViewLicensee.show && voidMatch.jollyViewLicensee.licenseesName.length > 0
-      || voidMatch.affectedInstantLicensee.show && voidMatch.affectedInstantLicensee.licenseesName.length > 0
-      || voidMatch.cashOutLicensee.show && voidMatch.cashOutLicensee.licenseesName.length > 0
-      || voidMatch.cancelCashOutLicensee.show && voidMatch.cancelCashOutLicensee.licenseesName.length > 0;
-  }
-  
   onClickCopyLicenseesToClipboard(text: string): void {
     this.clipboardService.copyFromContent(text);
     alert('The Licensee list has been copied to clipboard.');
@@ -168,5 +158,4 @@ export class VoidRedCardComponent implements OnInit {
 
     this.isRunningSubscriptionCallback = false;
   }
-
 }

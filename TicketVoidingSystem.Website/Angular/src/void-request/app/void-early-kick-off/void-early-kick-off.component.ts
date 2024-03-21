@@ -61,10 +61,6 @@ export class VoidEarlyKickOffComponent implements OnInit {
     this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidPageItems);
   }
 
-  isShowAffectedLicenseeArea(voidPageItem: VoidPageEarlyKickOffModel): boolean {
-    return this.voidPageCommonService.isShowAffectedLicenseeArea(voidPageItem);
-  }
-  
   onClickCopyLicenseesToClipboard(text: string): void {
     this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
   }

@@ -86,7 +86,6 @@ describe('AppService', () => {
     // Arrange
     const expectedData = new TicketsModel();
     expectedData.total = 1;
-    expectedData.licenseesName = '12Bet';
     mockHttpService.postJson.mockResolvedValue(expectedData);
 
     // Action
@@ -100,7 +99,6 @@ describe('AppService', () => {
     // Arrange
     const expectedData = new TicketsModel();
     expectedData.total = 1;
-    expectedData.licenseesName = '12Bet';
     mockHttpService.postJson.mockResolvedValue(expectedData);
 
     // Action

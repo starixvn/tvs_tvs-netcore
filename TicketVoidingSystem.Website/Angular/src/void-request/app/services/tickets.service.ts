@@ -6,6 +6,7 @@ import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/get-tickets.query';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { TicketsModel } from '../tickets-list/tickets.model';
+import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -63,18 +64,8 @@ export class TicketsService {
     const data = await this.appService.getTickets(ticketQuery);
     voidPageItem.voidTicketsFull.initData(data);
     voidPageItem.pagingVoidTickets.total = data.total;
-    voidPageItem.affectedLicensee.licenseesName = data.licenseesName;
-    voidPageItem.affectedLicensee.show = true;
-    voidPageItem.chinaViewLicensee.licenseesName = data.chinaViewLicenseesName;
-    voidPageItem.jollyViewLicensee.licenseesName = data.jollyViewLicenseesName;
-    voidPageItem.chinaViewLicensee.show = true;
-    voidPageItem.jollyViewLicensee.show = true;
-    voidPageItem.affectedInstantLicensee.licenseesName = data.instantLicenseesName;
-    voidPageItem.affectedInstantLicensee.show = true;
-    voidPageItem.cashOutLicensee.licenseesName = data.cashOutLicenseesName;
-    voidPageItem.cashOutLicensee.show = true;
-    voidPageItem.cancelCashOutLicensee.licenseesName = data.cancelCashOutLicenseesName;
-    voidPageItem.cancelCashOutLicensee.show = true;
     voidPageItem.isBlockBetList = false;
+    voidPageItem.licenseeAffectedList = data.licenseeAffectedList;
+    voidPageItem.licenseeAffectedList = _.clone(voidPageItem.licenseeAffectedList);
   }
 }
