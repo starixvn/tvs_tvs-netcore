@@ -13,7 +13,7 @@ namespace SpecialDelete.CashOutTransaction.CancelCashOut.Services;
 
 public interface DisplayUiService
 {
-    GetTicketsModel ExecuteQuery(GetTicketsQuery query);
+    Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query);
 
     GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query);
 
@@ -40,10 +40,10 @@ public class DisplayUiServiceImp : DisplayUiService
         this.ticketHtmlService = ticketHtmlService;
     }
 
-    public GetTicketsModel ExecuteQuery(GetTicketsQuery query)
+    public async Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);
-        return repository.GetTicketsVoidCashOut(criteria);
+        return await repository.GetTicketsVoidCashOut(criteria);
     }
 
     public GetTicketsVoidCashOutCriteria CreateCriteria(GetTicketsQuery query)
