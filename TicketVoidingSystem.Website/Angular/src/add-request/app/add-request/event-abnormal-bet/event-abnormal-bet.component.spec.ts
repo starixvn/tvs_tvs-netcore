@@ -45,7 +45,7 @@ class Helper {
   };
   static readonly fakePermissionManage: PermissionAddRequest = {
     isAddSettledTickets: false,
-    isVoidAllArchivedTicket: false
+    isVoidAllArchivedTickets: false
   };
   static readonly fakeValidationBusinessRule: ValidationBusinessRuleOutput = {
     isValid: true,
@@ -119,15 +119,11 @@ describe('EventAbnormalBetComponent', () => {
 
   it('#ngOnInit should be call #getPermissionManageRequest when edit request', async () => {
     // Arrange
-    const mockGetPermissionManageRequest = jest.fn();
+    const mockGetPermissionAddRequest = jest.fn();
     const mockChangeAbnormalFilterBy = jest.fn();
     const { instance } = await shallow
-      .mock(CommonService, {
-        getPermissionManageRequest: mockGetPermissionManageRequest,
-      })
-      .mock(AddRequestStore, {
-        changeAbnormalFilterBy: mockChangeAbnormalFilterBy,
-      })
+      .mock(AddRequestStore, {changeAbnormalFilterBy: mockChangeAbnormalFilterBy,})
+      .mock(AddRequestApiService, {getPermissionAddRequest: mockGetPermissionAddRequest})
       .render({
         bind: {
           abnormalBetModel: Helper.fakeAbnormalBetModel,
@@ -140,20 +136,17 @@ describe('EventAbnormalBetComponent', () => {
     await instance.ngOnInit();
 
     // Assert
-    expect(mockGetPermissionManageRequest).toHaveBeenCalled();
+    expect(mockChangeAbnormalFilterBy).toHaveBeenCalled();
+    expect(mockGetPermissionAddRequest).toHaveBeenCalled();
   });
 
   it('#ngOnInit should be call #getPermissionManageRequest when add request', async () => {
     // Arrange
-    const mockGetPermissionManageRequest = jest.fn();
+    const mockGetPermissionAddRequest = jest.fn();
     const mockChangeAbnormalFilterBy = jest.fn();
     const { instance } = await shallow
-      .mock(CommonService, {
-        getPermissionManageRequest: mockGetPermissionManageRequest,
-      })
-      .mock(AddRequestStore, {
-        changeAbnormalFilterBy: mockChangeAbnormalFilterBy,
-      })
+      .mock(AddRequestStore, {changeAbnormalFilterBy: mockChangeAbnormalFilterBy,})
+      .mock(AddRequestApiService, {getPermissionAddRequest: mockGetPermissionAddRequest})
       .render({
         bind: {
           abnormalBetModel: Helper.fakeAbnormalBetModel,
@@ -166,7 +159,8 @@ describe('EventAbnormalBetComponent', () => {
     await instance.ngOnInit();
 
     // Assert
-    expect(mockGetPermissionManageRequest).toHaveBeenCalled();
+    expect(mockChangeAbnormalFilterBy).toHaveBeenCalled();
+    expect(mockGetPermissionAddRequest).toHaveBeenCalled();
   });
 
   it('#focusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
@@ -380,9 +374,8 @@ describe('EventAbnormalBetComponent', () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
-      .mock(AddRequestStore, {
-        changeSavingRequestStatus: mockChangeSavingRequestStatus,
-      })
+      .mock(AddRequestStore, {changeSavingRequestStatus: mockChangeSavingRequestStatus})
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           abnormalBetModel: Helper.fakeAbnormalBetModel,
@@ -667,6 +660,7 @@ describe('EventAbnormalBetComponent', () => {
   it('#removeInvalidTransIds should call #betIdsComponent.removeTransId', async () => {
     // Arrange
     const { instance } = await shallow
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           abnormalBetModel: Helper.fakeAbnormalBetModel,

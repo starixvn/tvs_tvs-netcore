@@ -14,6 +14,7 @@ import { PopupService } from '../services/popup.service';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
   static readonly fakeTransId = '123456789';
@@ -68,6 +69,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#EventDuplicateTicketsComponent init should match snapshot', async () => {
     const { fixture, instance } = await shallow
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -86,6 +88,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const { instance } = await shallow
       .mock(CommonService, { getPermissionManageRequest: mockGetPermissionManageRequest })
       .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -102,6 +105,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#afterFocusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
     const { instance } = await shallow
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -118,6 +122,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#afterFocusOutBetIds should not call #getMatchAndCheckValidTransIds', async () => {
     const { instance } = await shallow
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -137,6 +142,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const { instance } = await shallow
       .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(true) })
       .mock(SaveRequestService, { saveRequest: mockSaveRequest })
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -156,6 +162,7 @@ describe('EventDuplicateTicketsComponent', () => {
 
   it('#removeInvalidTransIds should call #betIdsComponent.removeTransId', async () => {
     const { instance } = await shallow
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -174,6 +181,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const mockChangeSavingRequestStatus = jest.fn();
     const { instance } = await shallow
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -192,6 +200,7 @@ describe('EventDuplicateTicketsComponent', () => {
     fakeFilterModel.isVoided = false;
     const { instance } = await shallow
     .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
+    .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
     .render({
       bind: {
         duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -210,6 +219,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const { instance } = await shallow
       .mock(ValidationService, { checkValidBusinessRule: mockCheckValidBusinessRule })
       .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(false) })
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -234,6 +244,7 @@ describe('EventDuplicateTicketsComponent', () => {
     const { instance } = await shallow
       .mock(ValidationService, { checkValidBusinessRule: mockCheckValidBusinessRule })
       .mock(ValidationService, { isFilterMixParlay: jest.fn().mockReturnValue(false) })
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,

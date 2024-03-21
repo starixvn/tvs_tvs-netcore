@@ -31,7 +31,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs(1);
 
         // Act
-        _ = service.Execute(4, actionId, null);
+        _ = service.Execute(4, actionId, null, null);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -45,7 +45,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         var earlyKickOffInfo = new List<EarlyKickOffViewModel> { new() { MatchId = 1 } };
 
         // Act
-        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, earlyKickOffInfo);
+        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, 1, earlyKickOffInfo);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
