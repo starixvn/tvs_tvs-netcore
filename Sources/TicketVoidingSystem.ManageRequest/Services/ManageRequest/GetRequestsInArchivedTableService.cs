@@ -2,10 +2,8 @@
 using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.BetList;
-using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
@@ -30,29 +28,13 @@ public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableSe
     public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInArchivedTable(SelectRequestsQuery query)
     {
         var criteriaArchived = mapper.Map<SelectArchivedRequestsCriteria>(query);
-        var (models, requestInfoGetCalcTime) = await repository.FetchMultipleAsync<RequestModel, string>(criteriaArchived);
-        var bettypeForRequests = GetBettypeForAbnormalSingleRequestArchive(models);
-        foreach (var model in models)
+        var (requests, requestInfoGetCalcTime, betTypeForRequests) = await repository.FetchMultipleAsync<RequestModel, string, GetBettypeForRequestModel>(criteriaArchived);
+        foreach (var model in requests)
         {
-            model.BettypeNames = GetListBettypeName(model.RequestId, bettypeForRequests);
+            model.BettypeNames = GetListBettypeName(model.RequestId, betTypeForRequests);
         }
 
-        return (models, requestInfoGetCalcTime);
-    }
-
-    private IEnumerable<GetBettypeForRequestModel> GetBettypeForAbnormalSingleRequestArchive(IEnumerable<RequestModel> requests)
-    {
-        var requestXMLModel = requests.Where(x => Helper.IsAbnormalBetRealMember(x.IssueTypeId) || Helper.IsAbnormalBetSingleRequest(x.IssueTypeId, x.FilterBy))
-            .Select(x => new RequestXMLModel { RequestId = x.RequestId, TransIds = x.TransIds });
-
-        if (!requestXMLModel.Any())
-        {
-            return new List<GetBettypeForRequestModel>();
-        }
-
-        var criteria = new GetBettypeNamesArchiveCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
-        var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
-        return models;
+        return (requests, requestInfoGetCalcTime);
     }
 
     private IEnumerable<string> GetListBettypeName(int requestId, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)

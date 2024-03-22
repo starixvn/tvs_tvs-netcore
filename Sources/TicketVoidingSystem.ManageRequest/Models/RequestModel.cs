@@ -29,7 +29,6 @@ public class RequestModel
     public int TotalResettleProcessed { get; set; }
     public string Status { get; set; }
     public IEnumerable<string> BettypeNames { get; set; }
-    public string TransIds { get; set; }
     public int? FilterBy { get; set; }
     public DateTime VoidFromTime { get; set; }
     public DateTime VoidToTime { get; set; }
