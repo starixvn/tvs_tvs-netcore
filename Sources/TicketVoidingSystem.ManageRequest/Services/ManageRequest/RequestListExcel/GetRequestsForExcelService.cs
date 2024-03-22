@@ -31,7 +31,7 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
     public async Task<IEnumerable<ExcelRequestModel>> GetRequestsExcel(SelectRequestsQuery query)
     {
         var models = await GetRawRequestsData(query);
-        var viewModels = models.Select(renderService.RenderExportExcel);
+        var viewModels = models.Select(renderService.RenderExportExcel).ToList();
         var issueTypes = await convertRequestsService.GetAllIssueTypes();
         var subIssueTypes = await convertRequestsService.GetAllSubIssueTypes();
         var voidActions = await convertRequestsService.GetAllVoidActions();
