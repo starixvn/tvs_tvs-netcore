@@ -10,6 +10,8 @@ import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import { AccountWinlostModel } from '../models/account-winlost.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from '../services/validation.service';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 
 @Component({
   selector: 'account-table',
@@ -21,6 +23,7 @@ export class AccountTableComponent {
   @Input() requestId?: number;
   @Input() abnormalAccountModel: AbnormalAccountModel;
   @Input() accountWinlostModels: AccountWinlostModel[];
+  @Input() permission: PermissionAddRequest;
   @Output() changeTable = new EventEmitter();
   @ViewChildren('sortingComponent') sortingComponents: QueryList<SortingComponent>;
   tooltip = new Tooltip();
@@ -79,7 +82,8 @@ export class AccountTableComponent {
     arg.actionId = this.filter.action;
     arg.abnormalAccountModel = this.abnormalAccountModel;
     arg.abnormalAccountModel.accountWinlostModels = [account];
-
+    arg.primitiveProps = new PrimitiveProperty();
+    arg.primitiveProps.permission = this.permission;
     return arg;
   }
 
