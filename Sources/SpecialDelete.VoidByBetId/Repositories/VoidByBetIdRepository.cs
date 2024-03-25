@@ -31,44 +31,43 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
 
     public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query)
     {
-        var tickets = new List<GetTicketModel>();
-        var validations = new List<GetTicketValidation>();
         var criteria = mapper.Map<GetTicketsCriteria>(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            var (validationSiteDb, ticketsSiteDb) = await repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
-            tickets.AddRange(ticketsSiteDb);
-            validations.AddRange(validationSiteDb);
-        }
+            return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
+        });
+        (IEnumerable<GetTicketValidation> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.validation);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
 
-        return BuildResultGetTickets(tickets, validations);
+        return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
     public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
     {
-        var emailTickets = new List<TicketEmailModel>();
-        var validations = new List<VoidTicketValidation>();
         var criteria = CreateVoidTicketsCriteria(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
-                continue;
+                return Task.FromResult((Enumerable.Empty<VoidTicketValidation>(), Enumerable.Empty<TicketEmailModel>()));
             }
 
-            criteria.SiteDbGroupId = server.Id;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            var (validationSiteDb, emailTicketsSiteDb) = await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
-            emailTickets.AddRange(emailTicketsSiteDb);
-            validations.AddRange(validationSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
+        });
 
-        return BuildResultVoidTickets(validations, emailTickets, query);
+        (IEnumerable<VoidTicketValidation> validation, IEnumerable<TicketEmailModel> tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.validation);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+
+        return BuildResultVoidTickets(validationInAllServers, ticketsInAllServers, query);
     }
 
-    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<VoidTicketValidation> validations, List<TicketEmailModel> emailTickets, VoidTicketsQuery query)
+    private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<VoidTicketValidation> validations, IEnumerable<TicketEmailModel> emailTickets, VoidTicketsQuery query)
     {
         var failedResult = validations.FirstOrDefault(x => !x.IsSuccessful);
         var combineValidation = new VoidTicketValidation
@@ -103,7 +102,7 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
         {
             return 0;
         }
-        return (int)(matchIds.Count() == 1 ? matchIds.First() : 0) ;
+        return (int)(matchIds.Count() == 1 ? matchIds.First() : 0);
     }
 
     private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
