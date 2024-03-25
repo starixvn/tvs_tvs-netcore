@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
@@ -9,11 +10,11 @@ using TicketVoidingSystem.SharedApi.Models;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SharedApi;
 
-public class CheckNegativeBalanceRequest : CheckNegativeBetCreditCriteria, IRequest<List<NegativeBalanceModel>>
+public class CheckNegativeBalanceRequest : CheckNegativeBetCreditCriteria, IRequest<IEnumerable<NegativeBalanceModel>>
 {
 }
 
-public class CheckNegativeBalanceHandler : IRequestHandler<CheckNegativeBalanceRequest, List<NegativeBalanceModel>>
+public class CheckNegativeBalanceHandler : IRequestHandler<CheckNegativeBalanceRequest, IEnumerable<NegativeBalanceModel>>
 {
     private readonly IDynamicRepository repository;
 
@@ -22,16 +23,15 @@ public class CheckNegativeBalanceHandler : IRequestHandler<CheckNegativeBalanceR
         this.repository = repository;
     }
 
-    public async Task<List<NegativeBalanceModel>> Handle(CheckNegativeBalanceRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<NegativeBalanceModel>> Handle(CheckNegativeBalanceRequest request, CancellationToken cancellationToken)
     {
-        var model = new List<NegativeBalanceModel>();
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            request.SiteDbGroupId = item.Id;
-            var response = await repository.FetchAsync<NegativeBalanceModel>(request, cancellationToken);
-            model.AddRange(response);
-        }
+            request.SiteDbGroupId = server.Id;
+            return repository.FetchAsync<NegativeBalanceModel>(request, cancellationToken);
+        });
+        var results = await Task.WhenAll(tasks);
 
-        return model;
+        return results.SelectMany(x => x);
     }
 }
