@@ -9,6 +9,7 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VirtualSports.VoidParlaySub.Repositories;
+
 public interface Repository
 {
     Task<GetTicketsModel> GetTickets(GetTicketsQuery query);
@@ -31,45 +32,43 @@ public class RepositoryImp : Repository
 
     public async Task<GetTicketsModel> GetTickets(GetTicketsQuery query)
     {
-        var ticketsInAllSiteDb = new List<GetTicketModel>();
-        var invalidTransIdsInAllSiteDb = new List<string>();
         var criteria = CreateGetTicketsCriteria(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            var (invalidTransIdsSiteDb, ticketsInSiteDb) = await repository.FetchMultipleAsync<string, GetTicketModel>(criteria);
-            ticketsInAllSiteDb.AddRange(ticketsInSiteDb);
-            invalidTransIdsInAllSiteDb.AddRange(invalidTransIdsSiteDb);
-        }
+            return repository.FetchMultipleAsync<string, GetTicketModel>(criteria);
+        });
+        (IEnumerable<string> InvalidTransIds, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
+        var invalidTransIdsInAllServers = results.SelectMany(x => x.InvalidTransIds);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
 
         return new GetTicketsModel
         {
-            Tickets = ticketsInAllSiteDb,
-            InvalidTransIds = Helper.GetIntersectTransIdString(invalidTransIdsInAllSiteDb)
+            Tickets = ticketsInAllServers.ToList(),
+            InvalidTransIds = Helper.GetIntersectTransIdString(invalidTransIdsInAllServers)
         };
     }
 
     public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
     {
-        var emailTicketsInAllSiteDb = new List<TicketEmailModel>();
-        var validations = new List<VoidTicketsValidation>();
         var criteria = CreateVoidTicketsCriteria(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
-                continue;
+                return Task.FromResult((Enumerable.Empty<VoidTicketsValidation>(), Enumerable.Empty<TicketEmailModel>()));
             }
 
-            criteria.SiteDbGroupId = server.Id;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            var (validationSiteDb, emailTicketsSiteDb) = await repository.FetchMultipleAsync<VoidTicketsValidation, TicketEmailModel>(criteria);
-            emailTicketsInAllSiteDb.AddRange(emailTicketsSiteDb);
-            validations.AddRange(validationSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<VoidTicketsValidation, TicketEmailModel>(criteria);
+        });
+        (IEnumerable<VoidTicketsValidation> validation, IEnumerable<TicketEmailModel> tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.validation);
+        var ticketsInAllServers = results.SelectMany(x => x.tickets);
 
-        return BuildResultVoidTickets(validations, emailTicketsInAllSiteDb);
+        return BuildResultVoidTickets(validationInAllServers, ticketsInAllServers);
     }
 
     private static VoidTicketsModel BuildResultVoidTickets(IEnumerable<VoidTicketsValidation> validations, IEnumerable<TicketEmailModel> emailTickets)
