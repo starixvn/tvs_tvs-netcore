@@ -213,6 +213,10 @@ export class EventAbnormalBetComponent implements OnInit {
     return !(this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.abnormalBetModel.filterBy));
   }
 
+  public isHideDifferentMatch(): boolean {
+    return this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY || this.abnormalBetModel.filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
+  }
+
   public async exportExcel() {
     this.primitiveProps.isBlockUI = true;
     const args = this.initCheckValidBusinessRuleQuery(false);
