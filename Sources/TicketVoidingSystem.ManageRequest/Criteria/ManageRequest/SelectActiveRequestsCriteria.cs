@@ -6,7 +6,7 @@ public class SelectActiveRequestsCriteria : CriteriaBase
 {
     public string RequestId { get; set; }
 
-    public string RequestIdXml { get; set; }
+    public string RequestInfoJson { get; set; }
 
     public int? MatchId { get; set; }
 

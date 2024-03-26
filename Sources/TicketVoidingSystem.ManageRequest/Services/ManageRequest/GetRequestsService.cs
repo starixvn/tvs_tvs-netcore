@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
@@ -55,9 +54,8 @@ public class GetRequestsServiceImp : GetRequestsService
 
     private async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> HandleForActiveDataSearchByDate(SelectRequestsQuery query)
     {
-        var activeRequestDetail = await GetRequestInfoInActiveTable(query);
         var activeRequestQuery = query;
-        activeRequestQuery.RequestIdXml = activeRequestDetail.Select(x => x.RequestId).ToRequestIdXml();
+        activeRequestQuery.RequestInfoJson = await GetRequestInfoInActiveTable(query);
 
         return await getRequestsInActiveTableService.GetRequestsInActiveTable(activeRequestQuery);
     }
@@ -66,23 +64,21 @@ public class GetRequestsServiceImp : GetRequestsService
     {
         var requests = new List<RequestModel>();
         var requestInfoGetCalcTimes = new List<string>();
-        var archivedRequestDetail = await GetRequestInfoInArchivedTable(query);
-        var requestDetailHasArchivedRequest = archivedRequestDetail.Where(x => !x.IsActiveRequest);
-        var requestDetailHasActiveRequest = archivedRequestDetail.Where(x => x.IsActiveRequest);
+        var (activeRequestInfoJson, archivedRequestInfoJson) = await GetRequestInfoInArchivedTable(query);
 
-        if (requestDetailHasArchivedRequest.Any())
+        if (!string.IsNullOrWhiteSpace(archivedRequestInfoJson))
         {
             var archivedRequestQuery = query;
-            archivedRequestQuery.RequestIdXml = requestDetailHasArchivedRequest.Select(x => x.RequestId).ToRequestIdXml();
+            archivedRequestQuery.RequestInfoJson = archivedRequestInfoJson;
             var (models, requestInfoGetCalcTime) = await getRequestsInArchivedTableService.GetRequestsInArchivedTable(archivedRequestQuery);
             requests.AddRange(models);
             requestInfoGetCalcTimes.AddRange(requestInfoGetCalcTime);
         }
 
-        if (requestDetailHasActiveRequest.Any())
+        if (!string.IsNullOrWhiteSpace(activeRequestInfoJson))
         {
             var activeRequestQuery = query;
-            activeRequestQuery.RequestIdXml = requestDetailHasActiveRequest.Select(x => x.RequestId).ToRequestIdXml();
+            activeRequestQuery.RequestInfoJson = activeRequestInfoJson;
             var (models, requestInfoGetCalcTime) = await getRequestsInActiveTableService.GetRequestsInActiveTable(activeRequestQuery);
             requests.AddRange(models);
             requestInfoGetCalcTimes.AddRange(requestInfoGetCalcTime);
@@ -91,7 +87,7 @@ public class GetRequestsServiceImp : GetRequestsService
         return (requests, requestInfoGetCalcTimes);
     }
 
-    private async Task<IEnumerable<GetRequestInfoModel>> GetRequestInfoInActiveTable(SelectRequestsQuery query)
+    private async Task<string> GetRequestInfoInActiveTable(SelectRequestsQuery query)
     {
         var criteriaActive = mapper.Map<GetActiveRequestInfoCriteria>(query);
         if (query.IsFromDateBeforeBUDay == true)
@@ -99,12 +95,11 @@ public class GetRequestsServiceImp : GetRequestsService
             criteriaActive.FromDate = query.BUDay;
         }
         criteriaActive.ToDate = query.ToDate;
-        var data = await repository.FetchAsync<GetRequestInfoModel>(criteriaActive);
 
-        return data;
+        return await repository.GetAsync<string>(criteriaActive);
     }
 
-    private async Task<IEnumerable<GetRequestInfoModel>> GetRequestInfoInArchivedTable(SelectRequestsQuery query)
+    private async Task<(string, string)> GetRequestInfoInArchivedTable(SelectRequestsQuery query)
     {
         var criteriaArchived = mapper.Map<GetArchivedRequestInfoCriteria>(query);
         criteriaArchived.FromDate = query.FromDate;
@@ -113,8 +108,8 @@ public class GetRequestsServiceImp : GetRequestsService
             criteriaArchived.ToDate = query.BUDay;
         }
 
-        var data = await repository.FetchAsync<GetRequestInfoModel>(criteriaArchived);
+        var (ActiveRequestsJson, ArchivedRequestsJson) = await repository.FetchMultipleAsync<string, string>(criteriaArchived);
 
-        return data;
+        return (ActiveRequestsJson.First(), ArchivedRequestsJson.First());
     }
 }

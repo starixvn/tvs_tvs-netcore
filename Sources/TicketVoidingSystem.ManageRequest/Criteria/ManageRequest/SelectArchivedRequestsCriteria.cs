@@ -4,7 +4,7 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 
 public class SelectArchivedRequestsCriteria : CriteriaBase
 {
-    public string RequestIdXml { get; set; }
+    public string RequestInfoJson { get; set; }
 
     public int? MatchId { get; set; }
 
