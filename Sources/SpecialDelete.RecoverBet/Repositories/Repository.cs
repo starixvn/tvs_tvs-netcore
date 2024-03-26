@@ -36,9 +36,9 @@ public class Repository : IRepository
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
         });
-        (IEnumerable<GetTicketValidation> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<GetTicketValidation> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResponseGetTickets(invalidTransIdsViewModel, ticketsInAllServers, validationInAllServers);
     }
@@ -59,9 +59,9 @@ public class Repository : IRepository
             return repository.FetchMultipleAsync<RecoverTicketValidation, RecoverTicketModel>(criteria);
         });
 
-        (IEnumerable<RecoverTicketValidation> validation, IEnumerable<RecoverTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<RecoverTicketValidation> Validation, IEnumerable<RecoverTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResultRecoverTickets(ticketsInAllServers, validationInAllServers, cricketTickets);
     }

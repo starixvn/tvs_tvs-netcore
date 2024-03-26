@@ -34,9 +34,9 @@ public class RepositoryImp : Repository
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
         });
-        (IEnumerable<GetTicketValidation> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<GetTicketValidation> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
@@ -48,9 +48,9 @@ public class RepositoryImp : Repository
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
         });
-        (IEnumerable<GetTicketValidation> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<GetTicketValidation> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
@@ -71,9 +71,9 @@ public class RepositoryImp : Repository
             return repository.FetchMultipleAsync<SubmittedTicketsValidation, T>(criteria);
         });
 
-        (IEnumerable<SubmittedTicketsValidation> validation, IEnumerable<T> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<SubmittedTicketsValidation> Validation, IEnumerable<T> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResultSubmittedTickets(ticketsInAllServers, validationInAllServers);
     }

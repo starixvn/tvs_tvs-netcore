@@ -57,9 +57,9 @@ public class VoidByCurrencyRepositoryImp : VoidByCurrencyRepository
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<VoidTicketsValidation, TicketEmailModel>(criteria);
         });
-        (IEnumerable<VoidTicketsValidation> validation, IEnumerable<TicketEmailModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<VoidTicketsValidation> Validation, IEnumerable<TicketEmailModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildResultVoidTickets(ticketsInAllServers, validationInAllServers, query);
     }

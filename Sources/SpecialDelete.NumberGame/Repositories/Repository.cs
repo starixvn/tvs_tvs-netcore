@@ -39,9 +39,9 @@ public class RepositoryImp : Repository
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<string, GetTicketModel>(criteria);
         });
-        (IEnumerable<string> InvalidTransId, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
+        (IEnumerable<string> InvalidTransId, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
         var invalidTransIdsInAllServers = results.SelectMany(x => x.InvalidTransId);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return new GetTicketsModel
         {
@@ -66,9 +66,9 @@ public class RepositoryImp : Repository
             return repository.FetchMultipleAsync<Result, TicketEmailModel>(criteria);
         });
 
-        (IEnumerable<Result> validation, IEnumerable<TicketEmailModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<Result> Validation, IEnumerable<TicketEmailModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
         return BuildVoidTickets(ticketsInAllServers, validationInAllServers);
     }

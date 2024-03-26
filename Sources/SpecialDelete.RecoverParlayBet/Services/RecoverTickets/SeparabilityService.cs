@@ -53,13 +53,13 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
                 return repository.RecoverTickets<RecoverSubTicketModel>(criteria);
             });
 
-            (IEnumerable<RecoverValidationModel> validation, IEnumerable<RecoverSubTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-            var validationInAllServers = results.SelectMany(x => x.validation);
-            var ticketsInAllServers = results.SelectMany(x => x.tickets);
+            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverSubTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var validationInAllServers = results.SelectMany(x => x.Validation);
+            var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
             RemoveMessage(ticketsInAllServers);
 
-            var firstErrorResult = validationInAllServers.First(x => !x.IsSuccessful);
+            var firstErrorResult = validationInAllServers.FirstOrDefault(x => !x.IsSuccessful);
             var combineValidation = new RecoverValidationModel
             {
                 ErrorCode = firstErrorResult?.ErrorCode ?? 0,
@@ -133,13 +133,13 @@ public class RecoverMainTicketsServiceImp : SeparabilityService<RecoverMainTicke
                 return repository.RecoverTickets<RecoverMainTicketModel>(criteria);
             });
 
-            (IEnumerable<RecoverValidationModel> validation, IEnumerable<RecoverMainTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-            var validationInAllServers = results.SelectMany(x => x.validation);
-            var ticketsInAllServers = results.SelectMany(x => x.tickets);
+            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverMainTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var validationInAllServers = results.SelectMany(x => x.Validation);
+            var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
             RemoveMessage(query);
 
-            var firstErrorResult = validationInAllServers.First(x => !x.IsSuccessful);
+            var firstErrorResult = validationInAllServers.FirstOrDefault(x => !x.IsSuccessful);
             var combineValidation = new RecoverValidationModel
             {
                 ErrorMsg = firstErrorResult?.ErrorMsg ?? string.Empty,

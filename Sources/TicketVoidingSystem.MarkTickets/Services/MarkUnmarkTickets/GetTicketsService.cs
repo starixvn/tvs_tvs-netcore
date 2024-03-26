@@ -68,9 +68,9 @@ public class GetTicketsServiceImp : GetTicketsService
             return repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(criteria);
         });
 
-        (IEnumerable<GetTicketValidationModel> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<GetTicketValidationModel> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
         return (validationInAllServers, ticketsInAllServers);
     }
 
