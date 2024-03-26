@@ -44,7 +44,7 @@ export class ValidationService {
 
   public async checkValidBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     if (!args.betIdsComponent.isHasBetId()) {
-      if (StaticService.isFilterByMixOrSystemParlay(args.filterBy)) {
+      if (!StaticService.isFilterByMixOrSystemParlay(args.filterBy)) {
         args.leagueEventAbnormalComponent.updateUndefinedMatchAndLeague();
       }
 
@@ -69,7 +69,7 @@ export class ValidationService {
     }
 
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
-    this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket);
+    this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket, args.actionId);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);
 
     return {
@@ -91,12 +91,12 @@ export class ValidationService {
     return isEdit && currentActionId === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentActionId !== actionIdOfFirstTime;
   }
 
-  private highlightInvalidTransIds(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean): void {
-    this.highlightFirstGroupError(model, betIdsComponent, isHasPermissionAddSettledTicket);
+  private highlightInvalidTransIds(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, actionId: string): void {
+    this.highlightFirstGroupError(model, betIdsComponent, isHasPermissionAddSettledTicket, actionId);
     this.highlightSecondGroupError(model, betIdsComponent);
   }
 
-  private highlightFirstGroupError(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean): void {
+  private highlightFirstGroupError(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, actionId: string): void {
     if (model.invalidTransIds?.length > 0) {
       betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, LABELS.INVALID_TICKETS);
     }
@@ -106,7 +106,7 @@ export class ValidationService {
     if (model.differentMatchTransIds?.length > 0) {
       betIdsComponent.groupNumber.updateDifferent(model.differentMatchTransIds);
     }
-    if (model.settledTransIds?.length > 0 && !isHasPermissionAddSettledTicket) {
+    if (model.settledTransIds?.length > 0 && (!isHasPermissionAddSettledTicket || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID.toString())) {
       betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, LABELS.INVALID_SETTLED_TICKETS);
     }
     if (model.unsupportedTransIds?.length > 0) {
