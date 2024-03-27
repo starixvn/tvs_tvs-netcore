@@ -394,8 +394,6 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.AUTO_VOID_WINNING_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY,
-    TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID,
-    TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
