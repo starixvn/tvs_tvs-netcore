@@ -49,7 +49,7 @@ public class GetRequestsServiceImp : GetRequestsService
         var requests = activeRequests.Union(filteredArchivedRequests);
         var requestInfoGetCalcTimes = activeInfoGetCalcTimes.Union(archivedInfoGetCalcTimes);
 
-        return (requests, requestInfoGetCalcTimes);
+        return (requests.Distinct(new IgnoreDuplicateAbnormalAccountEqualityComparer()), requestInfoGetCalcTimes);
     }
 
     private async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> HandleForActiveDataSearchByDate(SelectRequestsQuery query)
@@ -84,7 +84,7 @@ public class GetRequestsServiceImp : GetRequestsService
             requestInfoGetCalcTimes.AddRange(requestInfoGetCalcTime);
         }
 
-        return (requests, requestInfoGetCalcTimes);
+        return (requests.Distinct(new IgnoreDuplicateAbnormalAccountEqualityComparer()), requestInfoGetCalcTimes);
     }
 
     private async Task<string> GetRequestInfoInActiveTable(SelectRequestsQuery query)

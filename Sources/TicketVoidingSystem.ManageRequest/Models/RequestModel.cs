@@ -1,4 +1,5 @@
-﻿using TicketVoidingSystem.Extensions;
+﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 
 namespace TicketVoidingSystem.ManageRequest.Models;
 
@@ -49,5 +50,32 @@ public class RequestModel
             var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
             return root.IsCheckedVar;
         }
+    }
+}
+
+public class IgnoreDuplicateAbnormalAccountEqualityComparer : IEqualityComparer<RequestModel>
+{
+    public bool Equals(RequestModel x, RequestModel y)
+    {
+        if (x == null && y == null)
+        {
+            return true;
+        }
+
+        if (x is null || y is null)
+        {
+            return false;
+        }
+
+        if (x.GetType() != y.GetType())
+        {
+            return false;
+        }
+        return x.RequestId == y.RequestId && x.IssueTypeId == IssueTypeConstant.AbnormalAccount;
+    }
+
+    public int GetHashCode(RequestModel obj)
+    {
+        return HashCode.Combine(obj.RequestId, obj.IssueTypeId);
     }
 }
