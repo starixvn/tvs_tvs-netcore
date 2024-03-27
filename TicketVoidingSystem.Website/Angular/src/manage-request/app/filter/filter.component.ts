@@ -60,9 +60,10 @@ export class FilterComponent implements OnInit {
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
-    await this.clickSearch();
     const balanceUp = await this.commonService.getBalanceUp();
     this.bUDay = new Date(balanceUp.balanceUpDay);
+    this.checkAutoRefresh();
+    await this.clickSearch();
   }
 
   controlFilter(value: string) {
@@ -80,7 +81,7 @@ export class FilterComponent implements OnInit {
     this.model.isExcludeTest = true;
   }
 
-  handelAutoRefresh(): void {
+  checkAutoRefresh(): void {
     const momentFrom = moment(this.getDateStringFromNgbDate(this.model.ngbFromDate), 'YYYY/M/D');
     const momentBU = moment(this.bUDay).format('YYYY/M/D');
     this.isShowAutoRefresh = !momentFrom.isBefore(moment(momentBU, SHORT_DATETIME_FORMAT)) || this.filterByMatch === false;

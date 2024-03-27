@@ -186,7 +186,7 @@ describe('FilterComponent', () => {
     instance.bUDay = new Date(Helper.fakeDate);
 
     // Action
-    instance.handelAutoRefresh();
+    instance.checkAutoRefresh();
 
     // Assert
     expect(instance.isShowAutoRefresh).toBe(false);
