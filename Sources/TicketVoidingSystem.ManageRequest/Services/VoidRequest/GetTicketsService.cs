@@ -45,14 +45,15 @@ public class GetTicketsServiceImp : GetTicketsService
                 return await GetTicketsIssueTypeArchivedTicket(query);
 
             case IssueTypeConstant.AbnormalAccount:
-                return await GetTicketsIssueTypeAbnormalAccount(query);
+            case IssueTypeConstant.AbnormalBet:
+                return await GetTicketsRangeActiveAndBackup(query);
 
             default:
                 return await GetTicketsDefault(query);
         }
     }
 
-    private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeAbnormalAccount(GetTicketsQuery query)
+    private async Task<IEnumerable<GetTicketModel>> GetTicketsRangeActiveAndBackup(GetTicketsQuery query)
     {
         var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
         var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets);
