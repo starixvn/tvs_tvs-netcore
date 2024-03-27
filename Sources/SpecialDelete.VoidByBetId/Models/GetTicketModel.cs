@@ -13,7 +13,7 @@ public class GetTicketModel
     public decimal Hdp1 { get; set; }
     public decimal Hdp2 { get; set; }
     public decimal Odds { get; set; }
-    public decimal MOdds { get; set; }
+    public decimal MasterOdds { get; set; }
     public byte OddsType { get; set; }
     public string Status { get; set; }
     public decimal Stake { get; set; }

@@ -30,7 +30,7 @@ public class GetTicketModel
 
     public decimal Odds { get; set; }
 
-    public decimal MOdds { get; set; }
+    public decimal MasterOdds { get; set; }
 
     public int OddsType { get; set; }
 

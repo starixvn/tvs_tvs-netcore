@@ -31,7 +31,7 @@ public class DetailTicketModel : ExcelOicModel
 
     public decimal Oddsspread { get; set; }
 
-    public decimal MOdds { get; set; }
+    public decimal MasterOdds { get; set; }
 
     public byte? BallSequence { get; set; }
 

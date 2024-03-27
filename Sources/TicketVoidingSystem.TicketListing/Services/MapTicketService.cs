@@ -137,7 +137,6 @@ public class MapTicketServiceImp : MapTicketService
     {
         var ticket = mapper.Map<Ticket>(item);
         ticket.TransId = item.TransId;
-        ticket.MasterOdds = item.MOdds;
         ticket.BetTypeId = item.BetType;
         ticket.Handicap1 = item.Hdp1;
         ticket.Handicap2 = item.Hdp2;
@@ -167,7 +166,6 @@ public class MapTicketServiceImp : MapTicketService
         ticket.IsLive = item.SubLiveIndicator;
         ticket.Winlost = FanexCommonConverter.ToDecimal(item.WinLost);
         ticket.Odds = item.SubOdds;
-        ticket.MasterOdds = item.MOdds;
         ticket.Handicap1 = item.SubHdp1;
         ticket.Handicap2 = item.SubHdp2;
         ticket.HomeId = item.SubHomeId;

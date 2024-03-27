@@ -106,6 +106,8 @@ public class GetTicketModel
     public decimal ActualStake { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public decimal MasterOdds { get; set; }
 }
 
 public class GetTicketValidationModel : Result

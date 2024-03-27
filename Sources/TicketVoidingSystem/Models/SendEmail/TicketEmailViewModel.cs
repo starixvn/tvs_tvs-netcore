@@ -37,4 +37,6 @@ public class TicketEmailViewModel
     public string BetFrom { get; set; }
 
     public bool IsVipMember { get; set; }
+
+    public decimal MasterOdds { get; set; }
 }

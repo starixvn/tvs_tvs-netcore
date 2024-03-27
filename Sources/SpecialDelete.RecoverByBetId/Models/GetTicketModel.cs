@@ -63,6 +63,8 @@ public class GetTicketModel
     public string CurrencyName { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public decimal MasterOdds { get; set; }
 }
 
 public class GetTicketValidation : Result

@@ -125,4 +125,6 @@ public class GetTicketModel
     public int SpecialPlatform { get; set; }
 
     public short GroupPHAffected { get; set; }
+
+    public decimal MasterOdds { get; set; }
 }

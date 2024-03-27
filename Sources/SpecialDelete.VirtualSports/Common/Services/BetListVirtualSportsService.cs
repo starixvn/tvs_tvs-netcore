@@ -49,7 +49,6 @@ public class BetListVirtualSportsServiceImp : BetListVirtualSportsService
         ticket.IsLive = item.IsLiveIndicator;
         ticket.ActualStake = item.Stake;
         ticket.Winlost = FanexCommonConverter.ToDecimal(item.WinLost);
-        ticket.MasterOdds = item.MOdds;
         ticket.OddsType = item.OddsType.ToString(CultureInfo.InvariantCulture);
         ticket.Handicap1 = item.Hdp1;
         ticket.Handicap2 = item.Hdp2;

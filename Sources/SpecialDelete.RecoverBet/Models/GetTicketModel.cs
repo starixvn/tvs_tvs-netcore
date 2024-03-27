@@ -73,6 +73,8 @@ public class GetTicketModel
     public int CustId { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public decimal MasterOdds { get; set; }
 }
 
 public class GetTicketValidation
