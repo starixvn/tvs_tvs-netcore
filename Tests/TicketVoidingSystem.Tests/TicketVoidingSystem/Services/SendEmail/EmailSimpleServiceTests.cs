@@ -1,5 +1,5 @@
 ﻿using System;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendEmail;

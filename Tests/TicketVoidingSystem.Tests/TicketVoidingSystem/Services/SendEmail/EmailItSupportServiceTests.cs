@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
@@ -152,5 +152,4 @@ public class EmailItSupportServiceTests
         // Assert
         emailSimpleService.Received(1).Send(Arg.Any<MailRecord>(), EmailGroup.ItSupport);
     }
-
 }

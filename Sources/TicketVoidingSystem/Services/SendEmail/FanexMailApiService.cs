@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.MailDeliver.MailClient.API;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services.SendMessage;
 

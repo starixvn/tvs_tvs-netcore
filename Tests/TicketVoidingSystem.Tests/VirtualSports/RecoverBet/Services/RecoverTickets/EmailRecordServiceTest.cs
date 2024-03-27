@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using NSubstitute;
 using SpecialDelete.VirtualSports.Common.Services;
 using SpecialDelete.VirtualSports.Common.ViewModels;

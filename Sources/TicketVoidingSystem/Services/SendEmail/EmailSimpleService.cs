@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using TicketVoidingSystem.Models.SendEmail;
 
 namespace TicketVoidingSystem.Services.SendEmail;

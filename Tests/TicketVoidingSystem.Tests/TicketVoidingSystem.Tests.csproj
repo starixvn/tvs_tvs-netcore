@@ -27,7 +27,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0.2-VS4-01" />
+    <PackageReference Include="Fanex.BetList.Core.RemotingRef" Version="2.0.0.1" />
     <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="NBuilder" Version="6.1.0" />

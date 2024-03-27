@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Models;
