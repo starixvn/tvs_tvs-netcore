@@ -82,6 +82,12 @@ public class ValidationTicketsServiceImp : ValidationTicketsService
 
     private static bool IsIssueTypeNeedToRecheckValidationTickets(int issueTypeId)
     {
-        return new[] { IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore, IssueTypeConstant.AbnormalAccount }.Contains(issueTypeId);
+        return new[] {
+            IssueTypeConstant.DangerAccepted,
+            IssueTypeConstant.RedCard,
+            IssueTypeConstant.WrongScore,
+            IssueTypeConstant.AbnormalAccount,
+            IssueTypeConstant.AbnormalBet
+        }.Contains(issueTypeId);
     }
 }
