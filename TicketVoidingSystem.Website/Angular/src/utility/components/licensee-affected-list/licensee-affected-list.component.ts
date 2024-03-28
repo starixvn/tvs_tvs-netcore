@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
-import * as _ from 'lodash';
-import { AffectedLicensee } from './licensee-affected-list.model';
 import { ClipboardService } from 'ngx-clipboard';
+import { AffectedLicensee } from './licensee-affected-list.model';
 
 @Component({
   selector: 'licensee-affected-list',
@@ -26,7 +25,7 @@ export class LicenseeAffectedListComponent implements OnChanges{
   }
 
   private initFilter(){
-    if(this.licenseeAffectedList){
+    if(this.licenseeAffectedList?.length > 0){
       this.affectedLicenseeNormal = this.licenseeAffectedList[0].licenseesName;
       this.updateDisplayAffectedLicensee();
     }
