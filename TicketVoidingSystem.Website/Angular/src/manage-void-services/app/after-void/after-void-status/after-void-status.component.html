@@ -62,30 +62,6 @@
     </div>
     <div class="col-sm-3">
       <div class="d-flex">
-        <label class="col-form-label">IsUpdatedVoidingHistory</label>
-        <select [(ngModel)]="tmpModel.isUpdatedVoidingHistory">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">IsSentEmail</label>
-        <select [(ngModel)]="tmpModel.isSentEmail">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="d-flex">
-        <label class="col-form-label">IsSentLetsTalk</label>
-        <select [(ngModel)]="tmpModel.isSentLetsTalk">
-          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="d-flex">
         <label class="col-form-label">IsDeletedZzzBetTrans</label>
         <select [(ngModel)]="tmpModel.isDeletedZzzBetTrans">
           <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
@@ -104,6 +80,30 @@
       <div class="d-flex">
         <label class="col-form-label">IsDeletedVoidedTransaction </label>
         <select [(ngModel)]="tmpModel.isDeletedVoidedTransaction">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsUpdatedVoidingHistory</label>
+        <select [(ngModel)]="tmpModel.isUpdatedVoidingHistory">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsSentEmail</label>
+        <select [(ngModel)]="tmpModel.isSentEmail">
+          <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="d-flex">
+        <label class="col-form-label">IsSentLetsTalk</label>
+        <select [(ngModel)]="tmpModel.isSentLetsTalk">
           <option *ngFor="let item of selectionItem" [ngValue]="item.value">{{item.name}}</option>
         </select>
       </div>
