@@ -40,12 +40,10 @@ public class GetRequestsInArchivedTableServiceTests : IClassFixture<AppSettingFi
         mapper.Map<SelectArchivedRequestsCriteria>(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs(new SelectArchivedRequestsCriteria());
         var model = new List<RequestModel>
-            { new() { IssueTypeId = issueTypeId, RequestId = 1, TransIds = "1", FilterBy = null } };
+            { new() { IssueTypeId = issueTypeId, RequestId = 1, FilterBy = null } };
         var requestInfoGetCalcTime = new List<string> { "" };
-        repository.FetchMultipleAsync<RequestModel, string>(Arg.Any<SelectArchivedRequestsCriteria>())
-            .ReturnsForAnyArgs((model, requestInfoGetCalcTime));
-        repository.Fetch<GetBettypeForRequestModel>(Arg.Any<GetBettypeNamesArchiveCriteria>())
-            .ReturnsForAnyArgs(new List<GetBettypeForRequestModel> { new() { RequestId = 1 } });
+        repository.FetchMultipleAsync<RequestModel, string, GetBettypeForRequestModel>(Arg.Any<SelectArchivedRequestsCriteria>())
+            .ReturnsForAnyArgs((model, requestInfoGetCalcTime, new List<GetBettypeForRequestModel>()));
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("aa");
 
         // Act

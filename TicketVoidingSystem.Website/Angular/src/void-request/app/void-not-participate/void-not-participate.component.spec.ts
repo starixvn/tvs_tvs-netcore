@@ -4,6 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { DuplicateTicketsModel } from '../../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { DetailNotParticipateComponent } from '../../../utility/components/log-info-detail/detail-not-participate/detail-not-participate.component';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
@@ -29,7 +30,8 @@ describe('VoidNotParticipateComponent', () => {
     declarations: [
       TicketsListComponent,
       TemplateMessageComponent,
-      DetailNotParticipateComponent
+      DetailNotParticipateComponent,
+      LicenseeAffectedListComponent
     ],
     imports: [
       FormsModule,

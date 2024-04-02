@@ -147,7 +147,7 @@ describe('FilterComponent', () => {
     instance.initDefaultFilter = jest.fn();
     instance.updateSubByIssue = jest.fn();
     instance.clickSearch = jest.fn();
-
+    instance.model.ngbFromDate = new NgbDate(2020, 9, 8);;
     // Action
     await instance.ngOnInit();
 

@@ -1,9 +1,8 @@
-import { LicenseeAffectedListComponent } from './licensee-affected-list.component';
 import { NgModule, SimpleChange } from '@angular/core';
-import { Shallow } from 'shallow-render';
-import { AffectedLicensee } from './licensee-affected-list.model';
-import _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
+import { Shallow } from 'shallow-render';
+import { LicenseeAffectedListComponent } from './licensee-affected-list.component';
+import { AffectedLicensee } from './licensee-affected-list.model';
 
 class Helper {
   static readonly fakeAffectedLicenseeNormal: AffectedLicensee = {
@@ -82,6 +81,7 @@ describe('LicenseeAffectedListComponent', () => {
         licenseeAffectedList: Helper.licenseeAffectedList
       }
     });
+    window.alert = jest.fn();
 
     // Action
     instance.copyClipboard('124');

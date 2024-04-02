@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -30,7 +31,7 @@ public class GetRequestsServiceTests
     }
 
     [Fact]
-    public void GetData_WhenRequestIdValid_HasCallGetRequestsInActiveTable()
+    public async Task GetData_WhenRequestIdValid_HasCallGetRequestsInActiveTable()
     {
         // Arrange
         var requestModel = new List<RequestModel>();
@@ -39,14 +40,14 @@ public class GetRequestsServiceTests
             .ReturnsForAnyArgs((requestModel, new List<string>()));
 
         // Act
-        _ = service.GetRequests(query);
+        _ = await service.GetRequests(query);
 
         // Assert
-        getRequestsInActiveTableService.Received().GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>());
+        await getRequestsInActiveTableService.Received().GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>());
     }
 
     [Fact]
-    public void GetData_WhenMatchIdValid_HasCallGetRequestsInActiveTable()
+    public async Task GetData_WhenMatchIdValid_HasCallGetRequestsInActiveTable()
     {
         // Arrange
         var requestModel = new List<RequestModel>();
@@ -55,14 +56,14 @@ public class GetRequestsServiceTests
             .ReturnsForAnyArgs((requestModel, new List<string>()));
 
         // Act
-        _ = service.GetRequests(query);
+        _ = await service.GetRequests(query);
 
         // Assert
-        getRequestsInActiveTableService.Received().GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>());
+        await getRequestsInActiveTableService.Received().GetRequestsInActiveTable(Arg.Any<SelectRequestsQuery>());
     }
 
     [Fact]
-    public async void GetData_WhenIsFromDateBeforeBUDayFalse_HasCallGetRequestsInActiveTable()
+    public async Task GetData_WhenIsFromDateBeforeBUDayFalse_HasCallGetRequestsInActiveTable()
     {
         // Arrange
         var requestModel = new List<RequestModel>();
@@ -81,7 +82,7 @@ public class GetRequestsServiceTests
     }
 
     [Fact]
-    public async void GetData_WhenIsToDateBeforeBUDayTrue_ReturnEmpty()
+    public async Task GetData_WhenIsToDateBeforeBUDayTrue_ReturnEmpty()
     {
         // Arrange
         var requestModel = new List<RequestModel>();
@@ -92,8 +93,8 @@ public class GetRequestsServiceTests
             .ReturnsForAnyArgs((requestModel, _));
         mapper.Map<GetArchivedRequestInfoCriteria>(Arg.Any<SelectRequestsQuery>())
             .Returns(new GetArchivedRequestInfoCriteria());
-        repository.FetchAsync<GetRequestInfoModel>(Arg.Any<GetArchivedRequestInfoCriteria>())
-            .Returns(new List<GetRequestInfoModel>());
+        repository.FetchMultipleAsync<string, string>(Arg.Any<GetArchivedRequestInfoCriteria>())
+            .ReturnsForAnyArgs((new List<string>(), new List<string>()));
         // Act
         var actual = await service.GetRequests(query);
 
@@ -102,7 +103,7 @@ public class GetRequestsServiceTests
     }
 
     [Fact]
-    public async void GetData_WhenIsToDateBeforeBUDayTrue_ReturnListRequestModel()
+    public async Task GetData_WhenIsToDateBeforeBUDayTrue_ReturnListRequestModel()
     {
         // Arrange
         var requestModel = new List<RequestModel>
@@ -135,15 +136,10 @@ public class GetRequestsServiceTests
             .ReturnsForAnyArgs((requestModel, _));
         getRequestsInArchivedTableService.GetRequestsInArchivedTable(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs((requestArchivedModel, _));
-
         mapper.Map<GetArchivedRequestInfoCriteria>(Arg.Any<SelectRequestsQuery>())
             .Returns(new GetArchivedRequestInfoCriteria());
-        repository.FetchAsync<GetRequestInfoModel>(Arg.Any<GetArchivedRequestInfoCriteria>()).Returns(
-            new List<GetRequestInfoModel>
-            {
-                new() { RequestId = 1, IsActiveRequest = true },
-                new() { RequestId = 2, IsActiveRequest = false }
-            });
+        repository.FetchMultipleAsync<string, string>(Arg.Any<GetArchivedRequestInfoCriteria>())
+            .Returns((new List<string> { "aa" }, new List<string> { "aa" }));
 
         // Act
         var actual = await service.GetRequests(query);
@@ -153,7 +149,7 @@ public class GetRequestsServiceTests
     }
 
     [Fact]
-    public async void GetData_WhenIsAnotherInput_ReturnListRequestModel()
+    public async Task GetData_WhenIsAnotherInput_ReturnListRequestModel()
     {
         // Arrange
         var requestModel = new List<RequestModel>
@@ -183,24 +179,15 @@ public class GetRequestsServiceTests
             .Returns(new GetArchivedRequestInfoCriteria());
         mapper.Map<GetActiveRequestInfoCriteria>(Arg.Any<SelectRequestsQuery>())
             .Returns(new GetActiveRequestInfoCriteria());
-        repository.FetchAsync<GetRequestInfoModel>(Arg.Any<GetArchivedRequestInfoCriteria>()).Returns(
-            new List<GetRequestInfoModel>
-            {
-                new() { RequestId = 1, IsActiveRequest = true },
-                new() { RequestId = 2, IsActiveRequest = false }
-            });
-
-        repository.FetchAsync<GetRequestInfoModel>(Arg.Any<GetActiveRequestInfoCriteria>()).Returns(
-            new List<GetRequestInfoModel>
-            {
-                new() { RequestId = 1, IsActiveRequest = true },
-                new() { RequestId = 2, IsActiveRequest = false }
-            });
+        repository.FetchMultipleAsync<string, string>(Arg.Any<GetArchivedRequestInfoCriteria>())
+            .Returns((new List<string>(), new List<string>()));
+        repository.FetchAsync<string>(Arg.Any<GetActiveRequestInfoCriteria>())
+            .Returns(new List<string>());
 
         // Act
         var actual = await service.GetRequests(query);
 
         // Assert
-        Assert.Equal(2, actual.Item1.Count());
+        Assert.Equal(1, actual.Item1.Count());
     }
 }
