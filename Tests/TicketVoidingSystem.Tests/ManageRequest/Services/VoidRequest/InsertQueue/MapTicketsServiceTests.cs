@@ -21,8 +21,8 @@ public class MapTicketsServiceTests
         };
         var expected = new List<RequestDetailTicketModel>
         {
-            new() { TransId = 1, MatchId = 1 },
-            new() { TransId = 2, MatchId = 0 }
+            new() { TransId = 1, MatchId = 1, VoidActionId = 5 },
+            new() { TransId = 2, MatchId = 0, VoidActionId = 5 }
         };
         var service = new MapTicketsServiceImp();
 

@@ -327,7 +327,7 @@ describe('ValidationService', () => {
       model.abWhiteListTransIds = x;
 
       // Action
-      validationService['highlightFirstGroupError'](Helper.fakeValidationAbnormalBet, betIdsComponent, false);
+      validationService['highlightFirstGroupError'](Helper.fakeValidationAbnormalBet, betIdsComponent, false, '');
 
       // Assert
       expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledTimes(0);
@@ -383,7 +383,7 @@ describe('ValidationService', () => {
     model.abWhiteListTransIds = Helper.fakeTransId;
 
     // Action
-    validationService['highlightInvalidTransIds'](Helper.fakeValidationAbnormalBet, betIdsComponent, false);
+    validationService['highlightInvalidTransIds'](Helper.fakeValidationAbnormalBet, betIdsComponent, false, '');
 
     // Assert
     expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalled();
@@ -408,7 +408,7 @@ describe('ValidationService', () => {
     const args = new ValidationBusinessRuleArgs();
     args.issueTypeId = IssueTypeConstant.ABNORMAL_BET;
     args.filterBy = AbnormalFilterBy.MIX_PARLAY;
-    const result = validationService['isAbnormalBetMixParlay'](args);
+    const result = validationService['isAbnormalBetMixOrSystemParlay'](args);
 
     expect(result).toBeTruthy();
   });

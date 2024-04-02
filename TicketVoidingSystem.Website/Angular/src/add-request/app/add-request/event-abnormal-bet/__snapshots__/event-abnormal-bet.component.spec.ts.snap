@@ -51,6 +51,24 @@ exports[`EventAbnormalBetComponent #EventAbnormalBetComponent init should match 
               Mix Parlay ticket
             </label>
           </div>
+          <div
+            class="form-check form-check-inline"
+          >
+            <input
+              class="form-check-input"
+              disabled=""
+              id="inlineRadio-2"
+              name="inlineRadioOptions"
+              type="radio"
+              value="2"
+            />
+            <label
+              class="form-check-label"
+              for="inlineRadio-2"
+            >
+              System Parlay ticket
+            </label>
+          </div>
         </div>
         <div
           class="flex-grow-1"
