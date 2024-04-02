@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using SpecialDelete.VirtualSports.Common.Services;
 using SpecialDelete.VirtualSports.Common.ViewModels;
 using SpecialDelete.VirtualSports.RecoverBet.Models;

@@ -7,16 +7,16 @@
     <tickets #ticket [ticketsModel]="ticketsModel"
              [isShowTickets]="isShowTickets"
              (pagingSearchTicket)="pagingSearchTicket($event)"
-             (exportExcelEvent)="exportExcel($event)"></tickets>
+             (exportExcelEvent)="exportExcel()"></tickets>
     <div *ngIf="isShowTickets" class="switch-send-message">
         <div [ngClass]="{'send-message-on':isShowMessages, 'send-message-off':!isShowMessages}"
              (click)="isShowMessages = !isShowMessages">
             <span class="send-message">Send Message</span>
         </div>
     </div>
-    
+
     <messages #messages [isShowMessages]="isShowMessages"></messages>
-    <confirmation #confirmation [isShowConfirm]="isShowConfirm" (voidEvent)="voidBet($event)"></confirmation>
+    <confirmation #confirmation [isShowConfirm]="isShowConfirm" (voidEvent)="voidBet()"></confirmation>
 </div>
 
 <modal [modal]="modal" (confirmEvent)="confirmEvent()"></modal>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using NSubstitute;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;

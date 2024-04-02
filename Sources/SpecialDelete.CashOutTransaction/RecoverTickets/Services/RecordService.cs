@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using SpecialDelete.CashOutTransaction.Common.Services;
 using SpecialDelete.CashOutTransaction.Common.ViewModels;
 using SpecialDelete.CashOutTransaction.RecoverTickets.Models;

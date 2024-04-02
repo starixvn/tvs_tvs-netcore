@@ -105,4 +105,6 @@ public class GetTicketModel
     public int SiteDbGroupId { get; set; }
 
     public int SpecialPlatform { get; set; }
+
+    public decimal MasterOdds { get; set; }
 }

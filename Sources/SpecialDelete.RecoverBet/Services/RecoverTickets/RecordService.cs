@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using SpecialDelete.RecoverBet.Models;
 using SpecialDelete.RecoverBet.Services.RenderTicket;
 using SpecialDelete.RecoverBet.ViewModels;

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using Force.DeepCloner;
 using NSubstitute;
 using TicketVoidingSystem.Constants;

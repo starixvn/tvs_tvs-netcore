@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using Force.DeepCloner;
 using TicketVoidingSystem.Criteria.SendEmail;
 using TicketVoidingSystem.Extensions;

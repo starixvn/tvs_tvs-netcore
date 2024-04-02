@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Fanex.MailDeliver.Model;
+using Fanex.MailDeliver.MailClient.Model;
 using SpecialDelete.RecoverParlayBet.Models;
 using SpecialDelete.RecoverParlayBet.Services.GetTickets;
 using SpecialDelete.RecoverParlayBet.ViewModels;

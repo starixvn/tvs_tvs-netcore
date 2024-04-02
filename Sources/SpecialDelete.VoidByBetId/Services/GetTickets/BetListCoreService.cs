@@ -10,7 +10,6 @@ using TicketVoidingSystem.Services.BetList;
 
 namespace SpecialDelete.VoidByBetId.Services.GetTickets;
 
-
 public interface BetListCoreService
 {
     TicketViewModel Create(GetTicketModel item, ChoiceType choiceType);
@@ -58,7 +57,6 @@ public class BetListCoreServiceImp : BetListCoreService
     {
         var ticket = mapper.Map<Ticket>(item);
         ticket.BetTypeId = item.BetType;
-        ticket.MasterOdds = item.MOdds;
         ticket.OddsType = item.OddsType.ToString(CultureInfo.InvariantCulture);
         ticket.Handicap1 = item.Hdp1;
         ticket.Handicap2 = item.Hdp2;
