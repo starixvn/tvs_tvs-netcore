@@ -110,6 +110,6 @@ public class GetRequestsServiceImp : GetRequestsService
 
         var (ActiveRequestsJson, ArchivedRequestsJson) = await repository.FetchMultipleAsync<string, string>(criteriaArchived);
 
-        return (ActiveRequestsJson.First(), ArchivedRequestsJson.First());
+        return (ActiveRequestsJson.FirstOrDefault(), ArchivedRequestsJson.FirstOrDefault());
     }
 }
