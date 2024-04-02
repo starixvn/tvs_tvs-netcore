@@ -5,6 +5,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { Subscription } from 'rxjs';
 import { Shallow } from 'shallow-render';
 import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -88,7 +89,8 @@ describe('VoidRedCardComponent', () => {
     declarations: [
       LogInfoNewComponent,
       TicketsListComponent,
-      TemplateMessageComponent
+      TemplateMessageComponent,
+      LicenseeAffectedListComponent
     ],
     imports: [
       FormsModule,

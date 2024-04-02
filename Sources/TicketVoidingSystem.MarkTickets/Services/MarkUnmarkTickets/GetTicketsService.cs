@@ -62,15 +62,15 @@ public class GetTicketsServiceImp : GetTicketsService
         criteria.Duration = query.Durations.ToTransDateXml();
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
 
-        var tasks = SiteDbGroupConstant.ServerList.Select(async server =>
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            return await repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(criteria);
+            return repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(criteria);
         });
 
-        (IEnumerable<GetTicketValidationModel> validation, IEnumerable<GetTicketModel> tickets)[] results = await Task.WhenAll(tasks);
-        var validationInAllServers = results.SelectMany(x => x.validation);
-        var ticketsInAllServers = results.SelectMany(x => x.tickets);
+        (IEnumerable<GetTicketValidationModel> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
         return (validationInAllServers, ticketsInAllServers);
     }
 
@@ -85,16 +85,15 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<IEnumerable<GetTicketModel>> GetDetailTickets(GetDetailTicketsQuery query)
     {
-        var ticketsInAllServers = new List<GetTicketModel>();
         var criteria = mapper.Map<GetDetailTicketsCriteria>(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            var tickets = await repository.FetchAsync<GetTicketModel>(criteria);
-            ticketsInAllServers.AddRange(tickets);
-        }
+            return repository.FetchAsync<GetTicketModel>(criteria);
+        });
+        var results = await Task.WhenAll(tasks);
 
-        return ticketsInAllServers.OrderBy(x => x.IsMixParlay);
+        return results.SelectMany(tickets => tickets).OrderBy(x => x.IsMixParlay);
     }
 
     public async Task<IEnumerable<ExcelTicketModel>> GetDetailTicketsForExportExcel(GetDetailTicketsQuery query)
@@ -108,15 +107,14 @@ public class GetTicketsServiceImp : GetTicketsService
 
     public async Task<IEnumerable<AllMarkedTicketModel>> GetAllMarkedTickets(AllMarkedTicketsQuery query)
     {
-        var dataInAllServers = new List<AllMarkedTicketModel>();
         var criteria = mapper.Map<AllMarkedTicketsCriteria>(query);
-        foreach (var server in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             criteria.SiteDbGroupId = server.Id;
-            var data = await repository.FetchAsync<AllMarkedTicketModel>(criteria);
-            dataInAllServers.AddRange(data);
-        }
+            return repository.FetchAsync<AllMarkedTicketModel>(criteria);
+        });
+        var results = await Task.WhenAll(tasks);
 
-        return dataInAllServers;
+        return results.SelectMany(tickets => tickets);
     }
 }

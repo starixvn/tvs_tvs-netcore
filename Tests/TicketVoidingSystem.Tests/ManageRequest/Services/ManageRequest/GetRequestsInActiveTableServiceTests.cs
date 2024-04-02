@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -40,19 +41,18 @@ public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixt
         // Arrange
         var query = new SelectRequestsQuery();
         var criteriaActive = new SelectActiveRequestsCriteria();
+        var result = new IEnumerable<object>[4];
+        result[0] = new[] { new RequestModel { IssueTypeId = issueTypeId, FilterBy = null, RequestId = 2, MatchId = 1, TotalSingleProcessed = 1 } };
+        result[1] = new[] { "" };
+        result[2] = new[] { "" };
+        result[3] = new[] { new GetBettypeForRequestModel() };
         mapper.Map<SelectActiveRequestsCriteria>(Arg.Any<SelectRequestsQuery>())
             .ReturnsForAnyArgs(criteriaActive);
-        var requests = new List<RequestModel>
-            { new() { IssueTypeId = issueTypeId, FilterBy = null, RequestId = 2, MatchId = 1, TotalSingleProcessed = 1 } };
-        var requestInfo = new List<GetRequestInfoModel> { new() };
-        var requestInfoGetCalcTime = new List<string> { "" };
         repository
-            .FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(Arg.Any<SelectActiveRequestsCriteria>())
-            .ReturnsForAnyArgs((requests, requestInfo, requestInfoGetCalcTime));
-        repository.Fetch<GetRequestInfoModel>(Arg.Any<GetTotalVoidedTicketCriteria>())
+            .FetchMultipleAsync(Arg.Any<SelectActiveRequestsCriteria>(), Arg.Any<Type[]>())
+            .ReturnsForAnyArgs(result);
+        repository.FetchAsync<GetRequestInfoModel>(Arg.Any<GetTotalVoidedTicketCriteria>())
             .Returns(new List<GetRequestInfoModel> { new() { RequestId = requestId, MatchId = matchId } });
-        repository.Fetch<GetBettypeForRequestModel>(Arg.Any<GetBettypeNamesCriteria>())
-            .Returns(new List<GetBettypeForRequestModel> { new() });
         betListService.GetBetTypeName(Arg.Any<Ticket>()).ReturnsForAnyArgs("aa");
         // Act
         var actual = await service.GetRequestsInActiveTable(query);

@@ -1,4 +1,4 @@
-import { NgModule, ElementRef } from '@angular/core';
+import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -7,15 +7,17 @@ import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
 import { AdvancedModeModule } from '../../../utility/components/advanced-mode/advanced-mode.module';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
-import { GetPlayersQuery, OddsInfo, CheckedBetType } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { CheckedBetType, GetPlayersQuery, OddsInfo } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { AdvancedModeService } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.service';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GroupBetType, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../utility/components/date-time/date-time.module';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
+import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../utility/constants/sport.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
@@ -28,7 +30,6 @@ import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { FilterComponent } from './filter.component';
 import { Type } from './filter.model';
-import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 
 class Helper {
   static readonly matchIdSelector = '.match-id';
@@ -110,6 +111,9 @@ class Helper {
 
 describe('FilterComponent', () => {
   @NgModule({
+    declarations: [
+      LicenseeAffectedListComponent
+    ],
     imports: [
       BrowserModule,
       FormsModule,

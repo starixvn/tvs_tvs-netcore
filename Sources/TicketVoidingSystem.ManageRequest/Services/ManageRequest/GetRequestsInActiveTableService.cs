@@ -3,10 +3,8 @@ using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
-using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services.BetList;
-using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
@@ -31,9 +29,14 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
     public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInActiveTable(SelectRequestsQuery query)
     {
         var criteriaActive = mapper.Map<SelectActiveRequestsCriteria>(query);
-        var (requests, requestInfo, requestInfoGetCalcTime) = await repository.FetchMultipleAsync<RequestModel, GetRequestInfoModel, string>(criteriaActive);
-        var totalVoidedTicketModels = GetTotalVoidedTickets(requestInfo);
-        var betTypeForRequests = GetBettypeForAbnormalSingleRequest(requests);
+        var mappingTypes = new[] { typeof(RequestModel), typeof(string), typeof(string), typeof(GetBettypeForRequestModel) };
+        var result = await repository.FetchMultipleAsync(criteriaActive, mappingTypes);
+        var requests = result[0].Cast<RequestModel>();
+        var requestInfoJson = result[1].Cast<string>();
+        var requestInfoGetCalcTime = result[2].Cast<string>();
+        var betTypeForRequests = result[3].Cast<GetBettypeForRequestModel>();
+
+        var totalVoidedTicketModels = await GetTotalVoidedTickets(requestInfoJson.First());
         foreach (var request in requests)
         {
             request.TotalSingleProcessed = GetTotalVoidedSingle(request, totalVoidedTicketModels, request.IssueTypeId);
@@ -46,37 +49,20 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
         return (requests, requestInfoGetCalcTime);
     }
 
-    private IEnumerable<GetBettypeForRequestModel> GetBettypeForAbnormalSingleRequest(IEnumerable<RequestModel> requests)
+    private async Task<IEnumerable<GetRequestInfoModel>> GetTotalVoidedTickets(string requestInfoJson)
     {
-        var requestXMLModel = requests.Where(x => Helper.IsAbnormalBetRealMember(x.IssueTypeId) || Helper.IsAbnormalBetSingleRequest(x.IssueTypeId, x.FilterBy))
-            .Select(x => new RequestXMLModel { RequestId = x.RequestId, TransIds = x.TransIds });
-
-        if (!requestXMLModel.Any())
-        {
-            return new List<GetBettypeForRequestModel>();
-        }
-
-        var criteria = new GetBettypeNamesCriteria { RequestInfo = requestXMLModel.ToRequestXml() };
-        var models = repository.Fetch<GetBettypeForRequestModel>(criteria);
-        return models;
-    }
-
-    private IEnumerable<GetRequestInfoModel> GetTotalVoidedTickets(IEnumerable<GetRequestInfoModel> requestInfo)
-    {
-        var totalVoidedTicketModels = new List<GetRequestInfoModel>();
-        foreach (var item in SiteDbGroupConstant.ServerList)
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var criteria = new GetTotalVoidedTicketCriteria
             {
-                SiteDbGroupId = item.Id,
-                RequestInfo = requestInfo.ToRequestInfoGetVoidedTicketXml()
+                SiteDbGroupId = server.Id,
+                RequestInfo = requestInfoJson
             };
-            var response = repository.Fetch<GetRequestInfoModel>(criteria);
+            return repository.FetchAsync<GetRequestInfoModel>(criteria);
+        });
+        var results = await Task.WhenAll(tasks);
 
-            totalVoidedTicketModels.AddRange(response);
-        }
-
-        return totalVoidedTicketModels;
+        return results.SelectMany(item => item);
     }
 
     private static int GetTotalVoidedSingle(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels, int issueTypeId)

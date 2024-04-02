@@ -36,9 +36,6 @@ public class SubTicketsHandlerServiceImp : TicketsHandlerService<GetSubTicket, G
 
     public async Task<GetTicketsModel<GetSubTicket>> GetTickets(GetSubTicketsQuery query)
     {
-        var ticketsInAllServers = new List<GetSubTicket>();
-        var invalidTransIdsInAllServers = new List<IEnumerable<InvalidTransIds>>();
-
         var criteria = new GetSubTicketsCriteria
         {
             BetType = query.BetType,
@@ -46,14 +43,14 @@ public class SubTicketsHandlerServiceImp : TicketsHandlerService<GetSubTicket, G
             TransIds = query.TransIds.DistinctWithComma()
         };
 
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            criteria.SiteDbGroupId = serverId;
-            var data = await repository.GetTickets<GetSubTicket>(criteria);
-
-            ticketsInAllServers.AddRange(data.Tickets);
-            invalidTransIdsInAllServers.Add(data.InvalidTransIds);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.GetTickets<GetSubTicket>(criteria);
+        });
+        var results = await Task.WhenAll(tasks);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
+        var invalidTransIdsInAllServers = results.Select(x => x.InvalidTransIds);
 
         return new GetTicketsModel<GetSubTicket>
         {
@@ -96,23 +93,19 @@ public class MainTicketsHandlerServiceImp : TicketsHandlerService<GetMainTicket,
 
     public async Task<GetTicketsModel<GetMainTicket>> GetTickets(GetMainTicketsQuery query)
     {
-        var ticketsInAllServers = new List<GetMainTicket>();
-        var invalidTransIdsInAllServers = new List<IEnumerable<InvalidTransIds>>();
-
         var criteria = new GetMainTicketsCriteria
         {
             BetType = query.BetType,
             TransIds = query.TransIds.DistinctWithComma()
         };
-
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            criteria.SiteDbGroupId = serverId;
-            var data = await repository.GetTickets<GetMainTicket>(criteria);
-
-            ticketsInAllServers.AddRange(data.Tickets);
-            invalidTransIdsInAllServers.Add(data.InvalidTransIds);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.GetTickets<GetMainTicket>(criteria);
+        });
+        var results = await Task.WhenAll(tasks);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
+        var invalidTransIdsInAllServers = results.Select(x => x.InvalidTransIds);
 
         return new GetTicketsModel<GetMainTicket>
         {

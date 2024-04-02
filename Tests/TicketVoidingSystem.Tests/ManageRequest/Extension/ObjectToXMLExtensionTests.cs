@@ -10,80 +10,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Extension;
 public class ObjectToXmlExtensionFacts
 {
     [Fact]
-    public void ToRequestXml_HasRequest_ReturnXML()
-    {
-        // Arrange
-        const string expected = "<Requests><Request RequestId='1002' TransIds='12' /></Requests>";
-
-        var model = new List<RequestXMLModel>
-        {
-            new() { RequestId = 1002, TransIds = "12" }
-        };
-
-        // Act
-        var actual = model.ToRequestXml();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestXml_RequestEmpty_ReturnEmpty()
-    {
-        // Arrange
-        var model = new List<RequestXMLModel>();
-
-        // Act
-        var actual = model.ToRequestXml();
-
-        // Assert
-        Assert.Empty(actual);
-    }
-
-    [Fact]
-    public void ToRequestIdXml_ModelHasMoreItem_ReturnXmlString()
-    {
-        // Arrange
-        var expected = $"<RequestId Id='1' />{Environment.NewLine}<RequestId Id='2' />";
-
-        var model = new List<int> { 1, 2 };
-
-        // Act
-        var actual = model.ToRequestIdXml();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestIdXml_ModelHasOneItem_ReturnXmlString()
-    {
-        // Arrange
-        const string expected = "<RequestId Id='1' />";
-
-        var model = new List<int> { 1 };
-
-        // Act
-        var actual = model.ToRequestIdXml();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestIdXml_RequestEmpty_ReturnEmpty()
-    {
-        // Arrange
-        var model = new List<int>();
-
-        // Act
-        var actual = model.ToRequestIdXml();
-
-        // Assert
-        Assert.Empty(actual);
-    }
-
-    [Fact]
     public void ToEventWrongScoreXml_HasNoData_ReturnEmpty()
     {
         // Arrange
@@ -660,42 +586,6 @@ public class ObjectToXmlExtensionFacts
 
         // Assert
         Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestInfoGetVoidedTicketXml_HasRequest_ReturnXML()
-    {
-        // Arrange
-        var requests = new List<GetRequestInfoModel>
-        {
-            new()
-            {
-                RequestId = 1,
-                VoidingHistoryId = 2,
-                IssueTypeId = 3,
-                MatchId = 4
-            }
-        };
-        const string expected = "<root><r req='1' vh='2' i='3' mid='4'/></root>";
-
-        // Act
-        var actual = requests.ToRequestInfoGetVoidedTicketXml();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
-    public void ToRequestInfoGetVoidedTicketXml_RequestEmpty_ReturnEmpty()
-    {
-        // Arrange
-        var requests = new List<GetRequestInfoModel>();
-
-        // Act
-        var actual = requests.ToRequestInfoGetVoidedTicketXml();
-
-        // Assert
-        Assert.Empty(actual);
     }
 
     [Fact]

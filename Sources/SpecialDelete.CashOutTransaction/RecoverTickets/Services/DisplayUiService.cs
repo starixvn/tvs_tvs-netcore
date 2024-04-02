@@ -13,7 +13,7 @@ namespace SpecialDelete.CashOutTransaction.RecoverTickets.Services;
 
 public interface DisplayUiService
 {
-    GetTicketsModel ExecuteQuery(GetTicketsQuery query);
+    Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query);
 
     Task<Group<TicketViewModel>> Assign(Group<GetTicketModel> groupTickets);
 }
@@ -34,10 +34,10 @@ public class DisplayUiServiceImp : DisplayUiService
         this.sessionService = sessionService;
     }
 
-    public GetTicketsModel ExecuteQuery(GetTicketsQuery query)
+    public async Task<GetTicketsModel> ExecuteQuery(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);
-        return repository.GetTicketsRecoverCashOut(criteria);
+        return await repository.GetTicketsRecoverCashOut(criteria);
     }
 
     private static GetTicketsRecoverCashOutCriteria CreateCriteria(GetTicketsQuery query)

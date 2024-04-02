@@ -50,11 +50,11 @@ public class ReCalculateTicketsServiceImp : ReCalculateTicketsService
             Ip = sessionService.GetClientIp()
         };
 
-        var tasks = SiteDbGroupConstant.ServerList.Select(async item =>
+        var tasks = SiteDbGroupConstant.ServerList.Select(item =>
         {
             command.SiteDbGroupId = item.Id;
-            await repository.ExecuteAsync(command);
-            return new Result { ErrorCode = command.ErrCode, ErrorMsg = command.ErrMsg };
+            repository.ExecuteAsync(command);
+            return Task.FromResult(new Result { ErrorCode = command.ErrCode, ErrorMsg = command.ErrMsg });
         });
 
         return await Task.WhenAll(tasks);

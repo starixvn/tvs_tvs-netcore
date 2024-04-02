@@ -5,16 +5,14 @@ import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
-import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventAbnormalComponent } from '../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
 import { FilterModel } from '../filter/filter.model';
 import { DuplicateTicketsModel } from '../models/event-duplicate-tickets.model';
-import { PopupService } from '../services/popup.service';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { AddRequestApiService } from '../add-request-api.service';
 
 class Helper {
   static readonly fakeTransId = '123456789';
@@ -55,8 +53,7 @@ describe('EventDuplicateTicketsComponent', () => {
       ValidationService,
       SaveRequestService,
       AddRequestStore,
-      PopupService,
-      CommonService,
+      AddRequestApiService
     ]
   })
   class AppModuleTest { }
@@ -86,9 +83,8 @@ describe('EventDuplicateTicketsComponent', () => {
     const mockGetPermissionManageRequest = jest.fn();
     const mockChangeAbnormalFilterBy = jest.fn();
     const { instance } = await shallow
-      .mock(CommonService, { getPermissionManageRequest: mockGetPermissionManageRequest })
       .mock(AddRequestStore, { changeAbnormalFilterBy: mockChangeAbnormalFilterBy })
-      .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestApiService, { getPermissionAddRequest: mockGetPermissionManageRequest })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,

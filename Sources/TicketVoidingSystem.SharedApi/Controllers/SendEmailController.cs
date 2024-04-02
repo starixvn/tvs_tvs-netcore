@@ -8,6 +8,7 @@ namespace TicketVoidingSystem.SharedApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
+[RequestSizeLimit(300_000_000)]
 public class SendEmailController : ControllerBase
 {
     private readonly IMediator mediator;

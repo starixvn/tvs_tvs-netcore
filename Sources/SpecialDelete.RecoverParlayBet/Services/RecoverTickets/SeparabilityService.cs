@@ -40,29 +40,26 @@ public class RecoverSubTicketsServiceImp : SeparabilityService<RecoverSubTicketM
     {
         try
         {
-            var validationInAllServers = new List<RecoverValidationModel>();
-            var ticketsInAllServers = new List<RecoverSubTicketModel>();
-
             var criteria = new RecoverSubTicketsCriteria
             {
                 UserId = sessionService.UserId,
                 MatchId = query.MatchId,
                 Ip = sessionService.GetClientIp()
             };
-
-            foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+            var tasks = SiteDbGroupConstant.ServerList.Select(server =>
             {
-                criteria.SiteDbGroupId = serverId;
-                criteria.MainTransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == serverId).Select(x => x.TransId));
-                var (validation, tickets) = await repository.RecoverTickets<RecoverSubTicketModel>(criteria);
+                criteria.SiteDbGroupId = server.Id;
+                criteria.MainTransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId));
+                return repository.RecoverTickets<RecoverSubTicketModel>(criteria);
+            });
 
-                validationInAllServers.AddRange(validation);
-                ticketsInAllServers.AddRange(tickets);
-            }
+            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverSubTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var validationInAllServers = results.SelectMany(x => x.Validation);
+            var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
             RemoveMessage(ticketsInAllServers);
 
-            var firstErrorResult = validationInAllServers.Find(x => !x.IsSuccessful);
+            var firstErrorResult = validationInAllServers.FirstOrDefault(x => !x.IsSuccessful);
             var combineValidation = new RecoverValidationModel
             {
                 ErrorCode = firstErrorResult?.ErrorCode ?? 0,
@@ -124,27 +121,25 @@ public class RecoverMainTicketsServiceImp : SeparabilityService<RecoverMainTicke
     {
         try
         {
-            var validationInAllServers = new List<RecoverValidationModel>();
-            var ticketsInAllServers = new List<RecoverMainTicketModel>();
             var criteria = new RecoverMainTicketsCriteria
             {
                 UserId = sessionService.UserId,
                 Ip = sessionService.GetClientIp()
             };
-
-            foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+            var tasks = SiteDbGroupConstant.ServerList.Select(server =>
             {
-                criteria.SiteDbGroupId = serverId;
-                criteria.TransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == serverId).Select(x => x.TransId));
-                var data = await repository.RecoverTickets<RecoverMainTicketModel>(criteria);
+                criteria.SiteDbGroupId = server.Id;
+                criteria.TransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId));
+                return repository.RecoverTickets<RecoverMainTicketModel>(criteria);
+            });
 
-                validationInAllServers.AddRange(data.Validation);
-                ticketsInAllServers.AddRange(data.Tickets);
-            }
+            (IEnumerable<RecoverValidationModel> Validation, IEnumerable<RecoverMainTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+            var validationInAllServers = results.SelectMany(x => x.Validation);
+            var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
             RemoveMessage(query);
 
-            var firstErrorResult = validationInAllServers.Find(x => !x.IsSuccessful);
+            var firstErrorResult = validationInAllServers.FirstOrDefault(x => !x.IsSuccessful);
             var combineValidation = new RecoverValidationModel
             {
                 ErrorMsg = firstErrorResult?.ErrorMsg ?? string.Empty,

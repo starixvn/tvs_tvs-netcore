@@ -9,6 +9,7 @@ import { AdvancedModeComponent } from '../../../utility/components/advanced-mode
 import { CheckedBetType, GetPlayersQuery } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
@@ -35,7 +36,6 @@ import { AppService } from './../app.service';
 import { GetTicketsQuery } from './../models/get-tickets.query';
 import { VoidTicketsQuery } from './../models/void-tickets.query';
 import { TicketsModel } from './../tickets-list/tickets.model';
-import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 @Component({
   selector: 'void-other-issue',
   templateUrl: './void-other-issue.component.html',
@@ -99,7 +99,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.paging.selection = [PagingConstant.SIZE_ONE, PagingConstant.SIZE_TWO, PagingConstant.SIZE_THREE, PagingConstant.SIZE_FOUR];
     this.paging.pageSize = PagingConstant.SIZE_ONE;
     if (this.isAbnormalAccount()) {
-      this.usernames = this.requestDetail.abnormalAccountModel.usernames;
+      this.usernames = this.requestDetail.abnormalAccountModel.usernames.split(',').join(', ');
     }
     if (this.isHasLogInfo()) {
       await this.getLogInfoModel();

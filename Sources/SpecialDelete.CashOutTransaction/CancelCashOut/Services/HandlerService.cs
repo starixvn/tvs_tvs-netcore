@@ -39,7 +39,7 @@ public class HandlerServiceImp : HandlerService
     public async Task<TicketsViewModel<TicketViewModel>> GetTickets(GetTicketsQuery query)
     {
         var viewModel = new TicketsViewModel<TicketViewModel>();
-        var model = getTicketsService.ExecuteQuery(query);
+        var model = await getTicketsService.ExecuteQuery(query);
         var ticketsPaging = getTicketsService.Paging(model.Tickets, query.PageIndex, query.PageSize);
         var groups = getTicketsService.Groups(ticketsPaging);
         foreach (var item in groups.Where(item => item.Tickets.Any()))

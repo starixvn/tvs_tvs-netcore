@@ -13,40 +13,6 @@ public static class ObjectToXMLExtension
 {
     private const int FILTER_BY_CHECK_TIME = 2;
 
-    public static string ToRequestXml(this IEnumerable<RequestXMLModel> models)
-    {
-        if (!models.Any())
-        {
-            return string.Empty;
-        }
-
-        var stringBuilder = new StringBuilder();
-        foreach (var model in models)
-        {
-            var line = $"<Request RequestId='{model.RequestId}' TransIds='{model.TransIds}' />";
-            stringBuilder.AppendLine(line);
-        }
-
-        return $"<Requests>{stringBuilder.ToString().Trim()}</Requests>";
-    }
-
-    public static string ToRequestIdXml(this IEnumerable<int> requestIds)
-    {
-        if (!requestIds.Any())
-        {
-            return string.Empty;
-        }
-
-        var stringBuilder = new StringBuilder();
-        foreach (var requestId in requestIds)
-        {
-            var line = $"<RequestId Id='{requestId}' />";
-            stringBuilder.AppendLine(line);
-        }
-
-        return $"{stringBuilder.ToString().Trim()}";
-    }
-
     public static string ToXml(this VoidDataXmlModel voidData)
     {
         var voidDataXml = $"<VoidData Reason='{SecurityElement.Escape(voidData.Reason)}' ReasonSC='{SecurityElement.Escape(voidData.ReasonSC)}'"
@@ -381,23 +347,6 @@ public static class ObjectToXMLExtension
                             + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
-    }
-
-    public static string ToRequestInfoGetVoidedTicketXml(this IEnumerable<GetRequestInfoModel> requests)
-    {
-        if (!requests.Any())
-        {
-            return string.Empty;
-        }
-
-        var stringBuilder = new StringBuilder();
-        foreach (var request in requests)
-        {
-            var line = $"<r req='{request.RequestId}' vh='{request.VoidingHistoryId}' i='{request.IssueTypeId}' mid='{request.MatchId}'/>";
-            stringBuilder.AppendLine(line);
-        }
-
-        return $"<root>{stringBuilder.ToString().Trim()}</root>";
     }
 
     public static string OperatorToXml(this List<OperatorQuery>? operators)

@@ -11,9 +11,9 @@ namespace SpecialDelete.CashOutTransaction.Common.Repositories;
 
 public interface Repository
 {
-    GetTicketsModel GetTicketsVoidCashOut(GetTicketsVoidCashOutCriteria criteria);
+    Task<GetTicketsModel> GetTicketsVoidCashOut(GetTicketsVoidCashOutCriteria criteria);
 
-    GetTicketsModel GetTicketsRecoverCashOut(GetTicketsRecoverCashOutCriteria criteria);
+    Task<GetTicketsModel> GetTicketsRecoverCashOut(GetTicketsRecoverCashOutCriteria criteria);
 
     Task<SubmittedTicketsModel<T>> SubmittedTickets<T, U>(U criteria, IEnumerable<BetId> tickets) where U : ICriteria, ExtendSubmittedTicketCriteria;
 }
@@ -27,56 +27,55 @@ public class RepositoryImp : Repository
         this.repository = repository;
     }
 
-    public GetTicketsModel GetTicketsVoidCashOut(GetTicketsVoidCashOutCriteria criteria)
+    public async Task<GetTicketsModel> GetTicketsVoidCashOut(GetTicketsVoidCashOutCriteria criteria)
     {
-        var ticketsInAllSiteDb = new List<GetTicketModel>();
-        var validationInAllSiteDb = new List<GetTicketValidation>();
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            criteria.SiteDbGroupId = serverId;
-            var (validationInSiteDb, ticketsInSiteDb) = repository.FetchMultiple<GetTicketValidation, GetTicketModel>(criteria);
-            ticketsInAllSiteDb.AddRange(ticketsInSiteDb);
-            validationInAllSiteDb.AddRange(validationInSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
+        });
+        (IEnumerable<GetTicketValidation> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
-        return BuildResultGetTickets(ticketsInAllSiteDb, validationInAllSiteDb);
+        return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public GetTicketsModel GetTicketsRecoverCashOut(GetTicketsRecoverCashOutCriteria criteria)
+    public async Task<GetTicketsModel> GetTicketsRecoverCashOut(GetTicketsRecoverCashOutCriteria criteria)
     {
-        var ticketsInAllSiteDb = new List<GetTicketModel>();
-        var validationInAllSiteDb = new List<GetTicketValidation>();
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            criteria.SiteDbGroupId = serverId;
-            var (validationInSiteDb, ticketsInSiteDb) = repository.FetchMultiple<GetTicketValidation, GetTicketModel>(criteria);
-            ticketsInAllSiteDb.AddRange(ticketsInSiteDb);
-            validationInAllSiteDb.AddRange(validationInSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<GetTicketValidation, GetTicketModel>(criteria);
+        });
+        (IEnumerable<GetTicketValidation> Validation, IEnumerable<GetTicketModel> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
-        return BuildResultGetTickets(ticketsInAllSiteDb, validationInAllSiteDb);
+        return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
     public async Task<SubmittedTicketsModel<T>> SubmittedTickets<T, U>(U criteria, IEnumerable<BetId> tickets) where U : ICriteria, ExtendSubmittedTicketCriteria
     {
-        var ticketsResponseAllSiteDb = new List<T>();
-        var validationInAllSiteDb = new List<SubmittedTicketsValidation>();
-        foreach (var serverId in SiteDbGroupConstant.ServerList.Select(x => x.Id))
+        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == serverId);
+            var ticketsInSiteDb = tickets.Where(x => x.SiteDbGroupId == server.Id);
             if (!ticketsInSiteDb.Any())
             {
-                continue;
+                IEnumerable<T> emptyList = new List<T>();
+                return Task.FromResult((Enumerable.Empty<SubmittedTicketsValidation>(), emptyList));
             }
 
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            criteria.SiteDbGroupId = serverId;
-            var (validationInSiteDb, ticketsResponseSiteDb) = await repository.FetchMultipleAsync<SubmittedTicketsValidation, T>(criteria);
-            ticketsResponseAllSiteDb.AddRange(ticketsResponseSiteDb);
-            validationInAllSiteDb.AddRange(validationInSiteDb);
-        }
+            criteria.SiteDbGroupId = server.Id;
+            return repository.FetchMultipleAsync<SubmittedTicketsValidation, T>(criteria);
+        });
 
-        return BuildResultSubmittedTickets(ticketsResponseAllSiteDb, validationInAllSiteDb);
+        (IEnumerable<SubmittedTicketsValidation> Validation, IEnumerable<T> Tickets)[] results = await Task.WhenAll(tasks);
+        var validationInAllServers = results.SelectMany(x => x.Validation);
+        var ticketsInAllServers = results.SelectMany(x => x.Tickets);
+
+        return BuildResultSubmittedTickets(ticketsInAllServers, validationInAllServers);
     }
 
     private static GetTicketsModel BuildResultGetTickets(IEnumerable<GetTicketModel> tickets, IEnumerable<GetTicketValidation> validations)

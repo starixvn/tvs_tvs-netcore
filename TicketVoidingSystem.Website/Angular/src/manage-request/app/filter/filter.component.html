@@ -4,7 +4,7 @@
     <div class="">
       <label *ngFor="let item of mode" class="form-check-label">
         <input type="radio" class="form-check-input" name="filter-control" [value]="item"
-           [(ngModel)]="filterByValue" (change)="controlFilter(item); handelAutoRefresh()" />
+           [(ngModel)]="filterByValue" (change)="controlFilter(item); checkAutoRefresh()" />
         {{item}}
       </label>
     </div>
@@ -34,7 +34,7 @@
         <div class="select-date">
           <div class="input-group">
             <input class="form-control form-control-sm bg-white" placeholder="yyyy-mm-dd" name="ngbFromDate"
-              [(ngModel)]="model.ngbFromDate" (ngModelChange)="updateModel(); handelAutoRefresh()" ngbDatepicker
+              [(ngModel)]="model.ngbFromDate" (ngModelChange)="updateModel(); checkAutoRefresh()" ngbDatepicker
               #ngbFromDate="ngbDatepicker" (click)="ngbFromDate.toggle()" [minDate]="minDate"
               [maxDate]="model.ngbToDate" [readOnly]="true">
             <div class="input-group-append pointer">

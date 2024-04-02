@@ -13,7 +13,7 @@ namespace SpecialDelete.CashOutTransaction.CancelCashOut.Services.ExportExcel;
 
 public interface SheetService
 {
-    List<ExcelTicketModel> GetTickets(GetTicketsQuery query);
+    Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query);
 
     void SetStyle(ExcelWorksheet worksheet);
 }
@@ -31,10 +31,10 @@ public class SheetServiceImp : SheetService
         this.ticketHtmlService = ticketHtmlService;
     }
 
-    public List<ExcelTicketModel> GetTickets(GetTicketsQuery query)
+    public async Task<IEnumerable<ExcelTicketModel>> GetTickets(GetTicketsQuery query)
     {
         var criteria = CreateCriteria(query);
-        var data = repository.GetTicketsVoidCashOut(criteria);
+        var data = await repository.GetTicketsVoidCashOut(criteria);
         var index = 1;
 
         return (from item in data.Tickets
