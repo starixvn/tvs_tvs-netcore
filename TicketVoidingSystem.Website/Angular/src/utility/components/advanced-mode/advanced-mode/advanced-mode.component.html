@@ -31,7 +31,7 @@
               {{betTeam.name}}:
             </div>
             <div class="right">
-              <ng-container *ngIf="!isHaveMultipleMapRound">
+              <!-- <ng-container *ngIf="!isHaveMultipleMapRound">
                 <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
                   <div>
                     <span class="mr-2">{{betTeam.multiSelection.name}}</span>
@@ -47,13 +47,33 @@
                     </select>
                   </div>
                 </div>
+              </ng-container> -->
+
+              <ng-container *ngIf="!isHaveMultipleMapRound">
+                <ng-container *ngFor="let selection of betTeam.selections; let indexSelection = index">
+                  <div class="ml-3" >
+                    <div *ngIf="!selection.isMultiple">
+                      <div class="right-selection">
+                        <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                        <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
+                          <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div *ngIf="selection.isMultiple">
+                      <span class="mr-2">{{selection.multiSelection.name}}</span>
+                      <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                      </multiple-select>
+                    </div>
+                  </div>
+                </ng-container>
               </ng-container>
 
               <ng-container *ngIf="isHaveMultipleMapRound">
-                <div *ngFor="let multiSelection of betTeam.multiSelectionList">
+                <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
                   <div class="right-selection">
                     <span>{{multiSelection.name}}</span>
-                    <multiple-select class="multiple-selection-{{index}} float-right"
+                    <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                       [multipleSelect]="multiSelection.multipleSelect">
                     </multiple-select>
                   </div>
@@ -102,13 +122,23 @@
                   class="bet-team-{{index}}" />
                 {{betTeam.name}}
               </label>
-              <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
-                <div class="float-right">
-                  <span class="label">{{betTeam.multiSelection.name}}</span>
-                  <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
-                  </multiple-select>
+              <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
+                <div class="ml-3" >
+                  <div *ngIf="!selection.isMultiple">
+                    <div class="right-selection">
+                      <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                      <select [(ngModel)]="selection.value">
+                        <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="selection.isMultiple">
+                    <span class="mr-2">{{selection.multiSelection.name}}</span>
+                    <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                    </multiple-select>
+                  </div>
                 </div>
-              </div>
+              </ng-container>
             </div>
             <table>
               <tbody>
@@ -157,16 +187,27 @@
                 </div>
               </div>
             </div>
-            <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
-              <div class="float-right">
-                <span>{{betTeam.multiSelection.name}}</span>
-                <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
-                </multiple-select>
+            <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
+              <div class="ml-3" >
+                <div *ngIf="!selection.isMultiple">
+                  <div class="right-selection">
+                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                    <select [(ngModel)]="selection.value">
+                      <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div *ngIf="selection.isMultiple">
+                  <span class="mr-2">{{selection.multiSelection.name}}</span>
+                  <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                  </multiple-select>
+                </div>
               </div>
-            </div>
+            </ng-container>
           </div>
         </div>
-        <div *ngSwitchCase="4" class="bet-team">
+        <!-- // not place bet ticket bettype 216 -->
+        <!-- <div *ngSwitchCase="4" class="bet-team">
           <div class="bet-team-4">
             <div class="left">
               {{betTeam.name}}
@@ -176,31 +217,35 @@
                 [multipleSelect]="betTeam.multiSelection.multipleSelect"></multiple-select>
             </div>
           </div>
-        </div>
+        </div> -->
         <div *ngSwitchCase="5" class="bet-team">
           <div class="bet-team-5">
             <div class="left">
               {{betTeam.name}}
             </div>
             <div class="right">
-              <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
-                <div class="float-right">
-                  <span class="label">{{betTeam.multiSelection.name}}</span>
-                  <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
-                  </multiple-select>
+              <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
+                <div class="ml-3" >
+                  <div *ngIf="!selection.isMultiple">
+                    <div class="right-selection">
+                      <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                      <select [(ngModel)]="selection.value">
+                        <ng-container *ngFor="let item of selection.items">
+                          <option [ngValue]="item.value"
+                            *ngIf="betTeam.isValidOptionForType5(item, selection.name)">
+                            {{item.name}}
+                          </option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="selection.isMultiple">
+                    <span class="mr-2">{{selection.multiSelection.name}}</span>
+                    <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                    </multiple-select>
+                  </div>
                 </div>
-              </div>
-              <div class="right-selection">
-                <span class="label">{{betTeam.selections[0].name}}</span>
-                <select [(ngModel)]="betTeam.selections[0].value">
-                  <ng-container *ngFor="let item of betTeam.selections[0].items">
-                    <option [ngValue]="item.value"
-                      *ngIf="betTeam.isValidOptionForType5(item, betTeam.selections[0].name)">
-                      {{item.name}}
-                    </option>
-                  </ng-container>
-                </select>
-              </div>
+              </ng-container>
             </div>
           </div>
         </div>
@@ -261,13 +306,15 @@
                 </div>
               </div>
             </div>
-            <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
-              <div class="float-right">
-                <span>{{betTeam.multiSelection.name}}</span>
-                <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
-                </multiple-select>
+            <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
+              <div class="ml-3" >
+                <div *ngIf="selection.isMultiple">
+                  <span class="mr-2">{{selection.multiSelection.name}}</span>
+                  <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                  </multiple-select>
+                </div>
               </div>
-            </div>
+            </ng-container>
           </div>
         </div>
         <div *ngSwitchCase="8" class="bet-team">

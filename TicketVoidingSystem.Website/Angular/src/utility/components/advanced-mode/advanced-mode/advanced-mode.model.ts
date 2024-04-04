@@ -152,7 +152,7 @@ export class BetTeam {
   renderMultipleSelect(item: Selection) {
     this.multiSelection = new MultiSelection();
     this.multiSelection.multipleSelect = new MultipleSelection();
-    this.multiSelection.multipleSelect.checkAllCheckBoxText = 'Check All';
+    this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
     this.multiSelection.multipleSelect.maxWidth = '170px';

@@ -80,6 +80,17 @@
             margin-right: 10px;
             width: 158px;
 
+            multiple-select {
+              div {
+                width: 100px !important;
+              }
+
+              tree-view {
+                .multiple-select-item {
+                  width: 50px !important;
+                }
+              }
+            }
             .right-selection {
               display: flex;
 
@@ -90,19 +101,6 @@
               
               select {
                 @include select-style;
-              }
-
-              .multiple-selection {
-                min-width: auto;
-                button {
-                  span {
-                    width: auto;
-                    margin-right: 0px;
-                  }
-                }
-                span.i-up, span.i-down {
-                    width: auto !important;
-                }
               }
             }
           }
