@@ -75,6 +75,7 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
             IsRemoveCustomerClass201 = message.IsRemoveCustomerClass201,
             IsRemoveCustomerClass4K = message.IsRemoveCustomerClass4K,
             IsAddSettledTickets = message.IsAddSettledTickets,
+            IsVoidAllArchivedTickets = message.IsVoidAllArchivedTickets,
             TransInfoJson = string.Join(",", transInfoJsonList)
         };
 

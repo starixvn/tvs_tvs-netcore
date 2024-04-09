@@ -32,7 +32,8 @@ export class ValidationService {
       subIssueTypeId: Number(args.subIssueTypeId),
       isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
       isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
-      isAddSettledTickets: args.permission.isAddSettledTickets
+      isAddSettledTickets: args.permission.isAddSettledTickets,
+      isVoidAllArchivedTickets: args.permission.isVoidAllArchivedTickets
     } as CheckTransIdsQuery;
   }
 
