@@ -1,4 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
@@ -10,7 +11,6 @@ public interface DescriptionService
 
 public class DescriptionServiceImp : DescriptionService
 {
-    private const int AB_PARLAY = 1;
     private readonly DescriptionElementService elementService;
 
     public DescriptionServiceImp(
@@ -23,7 +23,7 @@ public class DescriptionServiceImp : DescriptionService
     {
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
             {
-                {IssueTypeConstant.AbnormalBet, BuildSingleOrMixParlay},
+                {IssueTypeConstant.AbnormalBet, BuildAbnormalBet},
                 {IssueTypeConstant.AbnormalBetRealMember, BuildMatchLeagueTotal},
                 {IssueTypeConstant.EarlyKickOffTime, BuildEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildEKO},
@@ -38,7 +38,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
-                {IssueTypeConstant.DuplicateTickets, BuildSingleOrParlay},
+                {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.NotParticipate, BuildMatchLeague},
                 {IssueTypeConstant.RecoverTicket, BuildProducts}
             };
@@ -47,14 +47,21 @@ public class DescriptionServiceImp : DescriptionService
         return function != null ? function.Invoke(item) : BuildDefault(item);
     }
 
-    private string BuildSingleOrMixParlay(RequestDescription item)
+    private string BuildAbnormalBet(RequestDescription item)
     {
-        return item.FilterBy == AB_PARLAY ? elementService.BuildMixParlay(item.TotalSingle) : BuildMatchLeagueTotal(item);
+        return item.FilterBy switch
+        {
+            FilterByConstant.MixParlay => elementService.BuildMixParlay(item.TotalSingle),
+            FilterByConstant.SystemParlay => elementService.BuildSystemParlay(item.TotalSingle),
+            _ => BuildMatchLeagueTotal(item)
+        };
     }
 
-    private string BuildSingleOrParlay(RequestDescription item)
+    private string BuildDuplicateTickets(RequestDescription item)
     {
-        return item.FilterBy == AB_PARLAY ? elementService.BuildParlay(item.TotalSingle) : BuildMatchLeagueTotal(item);
+        return item.FilterBy == FilterByConstant.MixParlay
+            ? elementService.BuildParlay(item.TotalSingle)
+            : BuildMatchLeagueTotal(item);
     }
 
     private string BuildEKO(RequestDescription item)

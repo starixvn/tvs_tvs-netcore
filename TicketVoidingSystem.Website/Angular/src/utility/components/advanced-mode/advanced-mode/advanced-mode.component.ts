@@ -246,11 +246,9 @@ export class AdvancedModeComponent implements OnChanges {
     return true;
   }
 
-  private checkMultiSelectionBetTeam(betTeam: BetTeam): boolean {
-    return (
-      betTeam.multiSelection?.multipleSelect?.items.length > 0 &&
-      betTeam.multiSelection.multipleSelect.getValueItems() === ''
-    );
+  private checkMultiSelectionListBetTeam(betTeam: BetTeam): boolean {
+    return betTeam.multiSelectionList?.filter(x => x.multipleSelect.items.length > 0)
+      .some(y => y.multipleSelect.getValueItems() === '')
   }
 
   private checkMultiSelectionInSelection(betTeam: BetTeam): boolean {
@@ -266,18 +264,18 @@ export class AdvancedModeComponent implements OnChanges {
 
   private checkEmptyCheckbox(result: boolean, i: number): boolean { //NOSONAR
     const betTeam = this.betTeams[i];
-    if (betTeam.checkedBetTypes.length > 0 && betTeam.type !== 1) {
+    if (betTeam.checkedBetTypes.length > 0) {
       if (betTeam.getItemsValue() === '' && betTeam.type !== AdvancedModeConstants.BETTEAM_TYPE_4) {
         result = false;
         this.isShowContent = true;
         this.tooltip.display(`bet-team-${i}`, LABELS.NO_BET_TEAM);
-      } else if (this.checkMultiSelectionBetTeam(betTeam) && result) {
+      } else if (this.checkMultiSelectionListBetTeam(betTeam) && result) {
+        const invalidSelection = betTeam.multiSelectionList.find(x => x.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${i}`, LABELS.NO_BET_TEAM);
+        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, LABELS.NO_BET_TEAM);
       } else if (this.checkMultiSelectionInSelection(betTeam) && result) {
         const invalidSelection = betTeam.selections.find(x => x.multiSelection.multipleSelect.getValueItems() === '')
-
         result = false;
         this.isShowContent = true;
         this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.NO_BET_TEAM);
@@ -294,13 +292,13 @@ export class AdvancedModeComponent implements OnChanges {
   private checkEmptyCheckboxWithTicketListing(result: boolean, i: number) {
     const betTeam = this.betTeams[i];
     if (betTeam.multiSelectionList?.length > 0) {
-      betTeam.multiSelectionList.forEach(item => {
-        if (item.multipleSelect !== undefined && item.multipleSelect.getValueItems() === '' && result) {
+      for (let i = 0; i < betTeam.multiSelectionList.length && result; i++) {
+        if (betTeam.multiSelectionList[i].multipleSelect !== undefined && betTeam.multiSelectionList[i].multipleSelect.getValueItems() === '' && result) {
           result = false;
           this.isShowContent = true;
-          this.tooltip.display(`multiple-selection-${i}`, TEXT.NO_BET_TEAM);
+          this.tooltip.display(`multiple-selection-list-${i}`, TEXT.NO_BET_TEAM);
         }
-      });
+      }
     }
     return result;
   }

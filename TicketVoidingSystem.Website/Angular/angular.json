@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/add-request/index.html",
-            "main": "src/add-request/main.ts",
+            "index": "src/ticket-listing/index.html",
+            "main": "src/ticket-listing/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],
@@ -92,9 +92,6 @@
   },
   "defaultProject": "angular-v12",
   "cli": {
-    "analytics": false,
-    "cache": {
-      "enabled": false
-    }
+    "analytics": false
   }
 }

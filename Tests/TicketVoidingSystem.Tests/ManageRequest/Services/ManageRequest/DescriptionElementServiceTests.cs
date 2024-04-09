@@ -273,7 +273,7 @@ public class DescriptionElementServiceTests
     public void BuildMixParlay_HasTotal_ReturnString()
     {
         // Arrange
-        const string expectedResult = "<div>Mix Parlay: <span class=\"text-primary total-parlay\">1</span></div>";
+        const string expectedResult = "<div>Mix Parlay: <span class=\"text-primary total-mix-parlay\">1</span></div>";
         var descriptionService = new DescriptionElementServiceImp();
 
         // Act

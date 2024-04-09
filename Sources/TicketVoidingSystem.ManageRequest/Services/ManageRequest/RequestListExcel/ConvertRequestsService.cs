@@ -80,8 +80,8 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
     {
         var matchingFunctions = new Dictionary<int, Func<string, string>>
             {
-                {IssueTypeConstant.AbnormalBet, BuildTotalSingleOrMixParlay},
-                {IssueTypeConstant.AbnormalBetRealMember, BuildTotalSingleOrMixParlay},
+                {IssueTypeConstant.AbnormalBet, BuildTotalSingleOrParlay},
+                {IssueTypeConstant.AbnormalBetRealMember, BuildTotalSingleOrParlay},
                 {IssueTypeConstant.DangerAccepted, BuildVoidTime},
                 {IssueTypeConstant.RedCard, BuildVoidTime},
                 {IssueTypeConstant.WrongHDP, BuildVoidTime},
@@ -95,7 +95,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.WrongScore, BuildVoidWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildTotalSingleAndParlay},
                 {IssueTypeConstant.AbnormalAccount, BuildVoidTimeAndTotalAccount},
-                {IssueTypeConstant.DuplicateTickets, BuildTotalSingleOrParlay},
+                {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.RecoverTicket, BuildProducts}
             };
 
@@ -103,7 +103,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         return function != null ? function.Invoke(html) : string.Empty;
     }
 
-    private static string BuildTotalSingleOrMixParlay(string html)
+    private static string BuildTotalSingleOrParlay(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
@@ -114,12 +114,18 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
             return $"Single: {nodesSingle[0].InnerText}";
         }
 
-        var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-parlay']");
+        var nodesParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-mix-parlay']");
+        if (nodesParlay != null)
+        {
+            return $"Mix Parlay: {nodesParlay[0].InnerText}";
+        }
 
-        return nodesParlay != null ? $"Mix Parlay: {nodesParlay[0].InnerText}" : string.Empty;
+        var nodesSystemParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-system-parlay']");
+
+        return nodesSystemParlay != null ? $"System Parlay: {nodesSystemParlay[0].InnerText}" : string.Empty;
     }
 
-    private static string BuildTotalSingleOrParlay(string html)
+    private static string BuildDuplicateTickets(string html)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(html);

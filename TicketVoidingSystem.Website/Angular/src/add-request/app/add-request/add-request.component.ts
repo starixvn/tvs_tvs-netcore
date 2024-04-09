@@ -251,7 +251,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isShowOthersFullFields(): boolean {
-    return !this.isAbnormalBetMixParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
+    return !this.isAbnormalBetMixOrSystemParlay() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
       && !this.isRecoverTicket() && !this.isShowOthersSimpleFields();
   }
 
@@ -276,8 +276,8 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     return StaticService.isAbnormalBetRealMember(this.model.filter.issueTypeId);
   }
 
-  isAbnormalBetMixParlay(): boolean {
-    return this.isAbnormalBetIssueType() && this.abnormalFilterBy === AbnormalFilterBy.MIX_PARLAY;
+  isAbnormalBetMixOrSystemParlay(): boolean {
+    return this.isAbnormalBetIssueType() && StaticService.isFilterByMixOrSystemParlay(this.abnormalFilterBy);
   }
 
   isAbnormalAccount(): boolean {

@@ -10,7 +10,7 @@ public static class ActionVoidRequestConstant
     public const string QueueActionVoidResultKeyed = "VoidResultKeyed";
     public const string QueueActionRecoverInstant = "RecoverInstant";
 
-    public const byte ManualVoid = 5;
+    public const byte ManualVoidId = 5;
     public const byte AutoVoidWinningId = 1;
     public const byte AutoVoidAllInstantId = 4;
     public const byte AutoVoidAllInstantWithOutPolicyId = 8;

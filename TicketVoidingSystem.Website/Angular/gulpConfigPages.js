@@ -129,11 +129,11 @@ const editRequest = {
 };
 const configPages = [
   //homePage,
-   manageVoidServices,
+  // manageVoidServices,
   // abExceptionList,
-  // markTickets,
-  // ticketListing,
-  // voidSingleBet,
+   markTickets,
+   ticketListing,
+   voidSingleBet,
    voidRequest,
   // manageRequest,
   // addRequest,

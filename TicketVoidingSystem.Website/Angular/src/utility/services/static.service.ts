@@ -6,7 +6,7 @@ import { DateFullTimeNewComponent } from '../components/date-time/date-full-time
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { Tooltip } from '../components/tooltip/tooltip.model';
-import { DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
+import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
 import { LABELS } from '../constants/labels';
 import { RegexConstant } from '../constants/regex';
@@ -101,6 +101,10 @@ export class StaticService {
 
   static isRecoverTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.RECOVER_TICKET;
+  }
+
+  static isFilterByMixOrSystemParlay(filterBy: number): boolean {
+    return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
 
   static convertToFullDate(ngbDate: NgbDate): string {

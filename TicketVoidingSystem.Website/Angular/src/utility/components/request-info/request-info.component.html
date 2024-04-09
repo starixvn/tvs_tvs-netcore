@@ -36,9 +36,9 @@
         </div>
         <span class="row no-gutters">Affected: {{generalInfoViewModel.generalInfoModel.licenseeNames}}<br/></span>
         <div *ngIf="isLikelyAbnormalBetIssueType()">
-          <span *ngIf="!isAbnormalBetMixParlay()" class="row no-gutters">Bettype: {{generalInfoViewModel.generalInfoModel.generalBetTypeCombinations}}<br/></span>
+          <span *ngIf="!isAbnormalBetMixOrSystemParlay()" class="row no-gutters">Bettype: {{generalInfoViewModel.generalInfoModel.generalBetTypeCombinations}}<br/></span>
           <span class="row no-gutters">Reason: {{generalInfoViewModel.generalInfoModel.reason}}<br/></span>
-          <span *ngIf="!isAbnormalBetMixParlay()" class="row no-gutters">Results: {{generalInfoViewModel.generalInfoModel.scoreResult}}<br/></span>
+          <span *ngIf="!isAbnormalBetMixOrSystemParlay()" class="row no-gutters">Results: {{generalInfoViewModel.generalInfoModel.scoreResult}}<br/></span>
         </div>
         <div *ngIf="!isRecoverTicket()">
           <span class="row no-gutters">Total voided tickets: {{generalInfoViewModel.generalInfoModel.totalTicketsProcessed}}<br/></span>
@@ -50,11 +50,11 @@
         </div>
         <span class="row no-gutters">Decided by: {{generalInfoViewModel.generalInfoModel.decidedBy}}<br/></span>
         <span class="row no-gutters">Requested by: {{generalInfoViewModel.generalInfoModel.requestedBy}}<br/></span>
-         
+
         <div class="mt-2" *ngIf="isShowVoidMessages()">
           <div class="mb-2 no-gutters" *ngFor="let userVoidMessage of generalInfoViewModel.userVoidMessages">
             <span class="row no-gutters">Voided by: {{userVoidMessage.voidedBy}}<br/></span>
-            <div *ngFor="let message of userVoidMessage.messages"> 
+            <div *ngFor="let message of userVoidMessage.messages">
               <span class="row no-gutters">{{message.contentEnglish}}<br/></span>
               <span class="row no-gutters">{{message.contentChineseSimplified}}<br/></span>
             </div>

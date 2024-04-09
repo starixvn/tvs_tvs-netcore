@@ -1,8 +1,8 @@
 ﻿<ul class="multiple-select">
     <li *ngFor="let item of items">
         <div class="multiple-select-item">
-            <em *ngIf="item.items.length > 0" [ngClass]="{'i-expanded': item.expanded, 'i-collapsed': !item.expanded}"
-               (click)="item.expanded = !item.expanded"></em>
+            <i *ngIf="item.items.length > 0" class="mr-1 fa" [ngClass]="{'fa-angle-up': item.expanded, 'fa-angle-down': !item.expanded}"
+               (click)="item.expanded = !item.expanded"></i>
             <label [ngClass]="{'margin-left-13': item.items.length == 0}">
                 <input type="checkbox" [(ngModel)]="item.checked" 
                        (ngModelChange)="item.checkChilds();clickEvent(item)" 

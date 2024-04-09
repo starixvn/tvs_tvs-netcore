@@ -181,7 +181,7 @@ export class EventAbnormalBetComponent implements OnInit {
     const validation = await this.validationService.checkValidBusinessRule(args);
     this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
-    if (this.abnormalBetModel.filterBy !== AbnormalFilterBy.MIX_PARLAY) {
+    if (!StaticService.isFilterByMixOrSystemParlay(this.abnormalBetModel.filterBy)) {
       this.updateMatchId.emit(this.leagueEventAbnormalComponent.selectedMatchId);
     }
     return validation;
@@ -210,7 +210,11 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   public isShowLeagueEvent(): boolean {
-    return !(this.isAbnormalBet() && this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY);
+    return !(this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.abnormalBetModel.filterBy));
+  }
+
+  public isHideDifferentMatch(): boolean {
+    return this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY || this.abnormalBetModel.filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
 
   public async exportExcel() {

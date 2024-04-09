@@ -118,7 +118,7 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateTemplate() {
     let templateId = 0;
-    if (this.isAbnormalAccount() || this.isAbnormalBetMixParlay()) {
+    if (this.isAbnormalAccount() || this.isAbnormalBetMixOrSystemParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_37;
     } else if (this.isDuplicateTicketsMixParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_65;
@@ -390,7 +390,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateParlay() {
-    if (this.isAbnormalBetMixParlay()) {
+    if (this.isAbnormalBetMixOrSystemParlay()) {
       this.templateService.replaceEachLanguage(this.message, TemplateReplace.PARLAY, TemplateContentConst.PARLAY);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.PARLAY, '');
@@ -462,8 +462,8 @@ export class TemplateMessageComponent implements OnChanges {
     return this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU());
   }
 
-  isAbnormalBetMixParlay(): boolean {
-    return this.isAbnormalBet() && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  isAbnormalBetMixOrSystemParlay(): boolean {
+    return this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
   }
 
   isDuplicateTicketsMixParlay(): boolean {

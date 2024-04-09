@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AbnormalFilterBy } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -37,14 +36,14 @@ export class SaveRequestService {
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
     query.filterBy = args.filterBy;
-    query.sportType = this.isAbnormalBetMixParlay(args) ? null : args.leagueEventAbnormalComponent.selectedSportTypeId;
-    query.matchId = this.isAbnormalBetMixParlay(args) ? 29 : args.leagueEventAbnormalComponent.selectedMatchId;
+    query.sportType = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.leagueEventAbnormalComponent.selectedSportTypeId;
+    query.matchId = this.isAbnormalBetMixOrSystemParlay(args) ? 29 : args.leagueEventAbnormalComponent.selectedMatchId;
     query.isConfirmCalculator = args.confirmAbnormalBetComponent.isConfirmCalculator;
 
-    query.mistakenBy = this.isAbnormalBetMixParlay(args) ? null : args.others.mistakenBy;
-    query.operatorsList = this.isAbnormalBetMixParlay(args) ? null : args.others.operatorsList;
-    query.provider = this.isAbnormalBetMixParlay(args) ? null : args.others.provider;
-    query.source = this.isAbnormalBetMixParlay(args) ? null : args.others.source;
+    query.mistakenBy = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.mistakenBy;
+    query.operatorsList = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.operatorsList;
+    query.provider = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.provider;
+    query.source = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.source;
     query.decidedBy = args.others.decidedBy;
     query.remark = args.others.remark;
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
@@ -66,7 +65,7 @@ export class SaveRequestService {
     return transIdsList.join(',');
   }
 
-  private isAbnormalBetMixParlay(args: SaveRequestArg): boolean {
-    return StaticService.isAbnormalBet(args.filter.issueTypeId) && args.filterBy === AbnormalFilterBy.MIX_PARLAY;
+  private isAbnormalBetMixOrSystemParlay(args: SaveRequestArg): boolean {
+    return StaticService.isAbnormalBet(args.filter.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.filterBy);
   }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -14,7 +15,6 @@ public interface SendLetstalkAfterAddService
 
 public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
 {
-    private const int AB_MIX_PARLAY = 1;
     private readonly SessionService sessionService;
     private readonly MatchService matchService;
     private readonly NotificationLetstalkService notificationLetstalkService;
@@ -38,9 +38,12 @@ public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
 
     private static string CreateSubject(AddRequestQuery query)
     {
-        return query.FilterBy == AB_MIX_PARLAY
-             ? "Add Request Abnormal Bet Notification - Mix Parlay"
-             : "Add Request Abnormal Bet Notification";
+        return query.FilterBy switch
+        {
+            FilterByConstant.MixParlay => "Add Request Abnormal Bet Notification - Mix Parlay",
+            FilterByConstant.SystemParlay => "Add Request Abnormal Bet Notification - System Parlay",
+            _ => "Add Request Abnormal Bet Notification"
+        };
     }
 
     private async Task<string> CreateContent(AddRequestQuery query, int requestId)
@@ -49,7 +52,7 @@ public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
         var content = new StringBuilder();
         content.AppendLine($"Request ID: {requestId}");
         content.AppendLine($"Sub Issue Type: {query.SubIssueTypeName}");
-        if (query.FilterBy != AB_MIX_PARLAY)
+        if (query.FilterBy != FilterByConstant.MixParlay && query.FilterBy != FilterByConstant.SystemParlay)
         {
             content.AppendLine($"Match ID: {query.MatchId}");
             content.AppendLine($"Event Date: {matchInfo.EventDate:dd MMMM yyyy}");
