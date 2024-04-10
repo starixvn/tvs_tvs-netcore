@@ -54,37 +54,20 @@ public class GetRequestsServiceImp : GetRequestsService
 
     private async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> HandleForActiveDataSearchByDate(SelectRequestsQuery query)
     {
-        var activeRequestQuery = query;
-        activeRequestQuery.RequestInfoJson = await GetRequestInfoInActiveTable(query);
-
-        return await getRequestsInActiveTableService.GetRequestsInActiveTable(activeRequestQuery);
+        query.RequestInfoJson = await GetRequestInfoInActiveTable(query);
+        return await getRequestsInActiveTableService.GetRequestsInActiveTable(query);
     }
 
     private async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> HandleForArchivedDataSearchByDate(SelectRequestsQuery query)
     {
-        var requests = new List<RequestModel>();
-        var requestInfoGetCalcTimes = new List<string>();
-        var (activeRequestInfoJson, archivedRequestInfoJson) = await GetRequestInfoInArchivedTable(query);
-
-        if (!string.IsNullOrWhiteSpace(archivedRequestInfoJson))
+        var archivedRequestInfoJson = await GetRequestInfoInArchivedTable(query);
+        if (string.IsNullOrWhiteSpace(archivedRequestInfoJson))
         {
-            var archivedRequestQuery = query;
-            archivedRequestQuery.RequestInfoJson = archivedRequestInfoJson;
-            var (models, requestInfoGetCalcTime) = await getRequestsInArchivedTableService.GetRequestsInArchivedTable(archivedRequestQuery);
-            requests.AddRange(models);
-            requestInfoGetCalcTimes.AddRange(requestInfoGetCalcTime);
+            return (Enumerable.Empty<RequestModel>(), Enumerable.Empty<string>());
         }
 
-        if (!string.IsNullOrWhiteSpace(activeRequestInfoJson))
-        {
-            var activeRequestQuery = query;
-            activeRequestQuery.RequestInfoJson = activeRequestInfoJson;
-            var (models, requestInfoGetCalcTime) = await getRequestsInActiveTableService.GetRequestsInActiveTable(activeRequestQuery);
-            requests.AddRange(models);
-            requestInfoGetCalcTimes.AddRange(requestInfoGetCalcTime);
-        }
-
-        return (requests.Distinct(new IgnoreDuplicateAbnormalAccountEqualityComparer()), requestInfoGetCalcTimes);
+        query.RequestInfoJson = archivedRequestInfoJson;
+        return await getRequestsInArchivedTableService.GetRequestsInArchivedTable(query);
     }
 
     private async Task<string> GetRequestInfoInActiveTable(SelectRequestsQuery query)
@@ -99,7 +82,7 @@ public class GetRequestsServiceImp : GetRequestsService
         return await repository.GetAsync<string>(criteriaActive);
     }
 
-    private async Task<(string, string)> GetRequestInfoInArchivedTable(SelectRequestsQuery query)
+    private async Task<string> GetRequestInfoInArchivedTable(SelectRequestsQuery query)
     {
         var criteriaArchived = mapper.Map<GetArchivedRequestInfoCriteria>(query);
         criteriaArchived.FromDate = query.FromDate;
@@ -108,8 +91,6 @@ public class GetRequestsServiceImp : GetRequestsService
             criteriaArchived.ToDate = query.BUDay;
         }
 
-        var (ActiveRequestsJson, ArchivedRequestsJson) = await repository.FetchMultipleAsync<string, string>(criteriaArchived);
-
-        return (ActiveRequestsJson.FirstOrDefault(), ArchivedRequestsJson.FirstOrDefault());
+        return await repository.GetAsync<string>(criteriaArchived);
     }
 }

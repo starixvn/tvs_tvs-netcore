@@ -138,14 +138,14 @@ public class GetRequestsServiceTests
             .ReturnsForAnyArgs((requestArchivedModel, _));
         mapper.Map<GetArchivedRequestInfoCriteria>(Arg.Any<SelectRequestsQuery>())
             .Returns(new GetArchivedRequestInfoCriteria());
-        repository.FetchMultipleAsync<string, string>(Arg.Any<GetArchivedRequestInfoCriteria>())
-            .Returns((new List<string> { "aa" }, new List<string> { "aa" }));
+        repository.GetAsync<string>(Arg.Any<GetArchivedRequestInfoCriteria>())
+            .Returns("aaa");
 
         // Act
         var actual = await service.GetRequests(query);
 
         // Assert
-        Assert.Equal(4, actual.Item1.Count());
+        Assert.Equal(2, actual.Item1.Count());
     }
 
     [Fact]
