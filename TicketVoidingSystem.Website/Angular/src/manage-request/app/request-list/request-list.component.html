@@ -87,7 +87,7 @@
               </div>
             </td>
             <td class="col-tb-5">
-              <i [hidden]="!checkCanCopyRequestInfo(item.issueTypeId)" class="fa fa-paste copy-request-info" (click)="copyRequestInfo(item.requestId, item.details[0].matchId)" aria-hidden="true"></i>
+              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" class="fa fa-paste copy-request-info" (click)="copyRequestDescription(item.requestId, item.details[0].matchId)" aria-hidden="true"></i>
               <div class="text-right" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
             </td>
             <td class="col-tb-6" [attr.rowspan]="item.details.length">
