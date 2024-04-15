@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../../utility/components/pool-house-ticket/pool-house-ticket.model';
-import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { Result } from '../../../utility/models/result';
 import { HttpService } from '../../../utility/services/http.service';
 import { AddRequestQuery } from '../add-request/models/add-request.query';
@@ -105,16 +104,6 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async getReducedOverBetTypes(matchId: number): Promise<ReducedOverBetType[]> {
     return this.httpService.postJson<{ matchId: number }, ReducedOverBetType[]>({ matchId: matchId }, 'api/AddRequest/GetReducedOverBetTypes');
-  }
-
-  /* istanbul ignore next */
-  async copyEmailRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
-    return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyEmailRequestInfo');
-  }
-
-  /* istanbul ignore next */
-  async copyLetstalkRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
-    return this.httpService.postJson<CopyRequestInfoQuery, CopyRequestInfoResponse>(query, 'api/AddRequest/CopyLetstalkRequestInfo');
   }
 
   /* istanbul ignore next */
