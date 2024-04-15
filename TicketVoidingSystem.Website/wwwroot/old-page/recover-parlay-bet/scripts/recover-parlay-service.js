@@ -19,9 +19,14 @@ var recoverParlayService = {
     },
 
     checkMatchId: function (event) {
+        var matchId = $('#matchId').val();
+        if (!matchId) {
+            return true;
+        }
+
         var param = {
             MatchId: $('#matchId').val(),
-            IsExcludeChildMatchCricket: 1
+            IsExcludeChildMatchCricket: true
         };
         var result = true;
 
