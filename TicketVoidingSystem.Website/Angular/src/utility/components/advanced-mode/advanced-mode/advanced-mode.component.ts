@@ -22,7 +22,7 @@ export class AdvancedModeComponent implements OnChanges {
   @Input() getPlayerQuery: GetPlayersQuery;
   @Input() matchId: string;
   @Input() allBetTypes: BetType[];
-  @Input() isHaveMultipleMapRound: boolean;
+  @Input() isTicketListing: boolean;
 
   baseBetTeam: BetTeam[] = [];
   betTeams: BetTeam[] = [];
@@ -48,7 +48,7 @@ export class AdvancedModeComponent implements OnChanges {
     this.betTeams = [];
     data.forEach(item => {
       const betTeam = new BetTeam([item.name, item.value, item.type, item.enableBetTypes, item.betTypes],
-        item.selections, item.items, item.inputs, this.isHaveMultipleMapRound);
+        item.selections, item.items, item.inputs, this.isTicketListing);
       this.betTeams.push(betTeam);
     });
   }
@@ -282,7 +282,7 @@ export class AdvancedModeComponent implements OnChanges {
       }
     }
 
-    if (this.checkCheckedBetTypesWithHDPBetType(betTeam) && this.isHaveMultipleMapRound && result) {
+    if (this.checkCheckedBetTypesWithHDPBetType(betTeam) && this.isTicketListing && result) {
       return this.checkEmptyCheckboxWithTicketListing(result, i);
     }
 
@@ -384,7 +384,7 @@ export class AdvancedModeComponent implements OnChanges {
     const groupBetTypes = _.groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
       const items = this.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
-      this.baseSpecialBetTypeCricket.push(new Selection('', `${betTypeId}`, items, true, null));
+      this.baseSpecialBetTypeCricket.push(new Selection('', `${betTypeId}`, items, true, null, false, false));
     }
   }
 
@@ -396,13 +396,13 @@ export class AdvancedModeComponent implements OnChanges {
         const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');
         groupsOdds[oddsId].forEach(x => {
           items.push(
-            new Selection(`${x.playerName} - ${oddsName}`, `${x.betChoice},${x.oddsId}`, null, true, null)
+            new Selection(`${x.playerName} - ${oddsName}`, `${x.betChoice},${x.oddsId}`, null, true, null, false, false)
           );
         });
       }
     } else {
       odds.forEach(x => {
-        items.push(new Selection(x.playerName, x.playerId.toString(), null, true, null));
+        items.push(new Selection(x.playerName, x.playerId.toString(), null, true, null, false, false));
       });
     }
 

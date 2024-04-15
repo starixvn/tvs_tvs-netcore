@@ -6716,6 +6716,7 @@
               "Value": "830"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6790,6 +6791,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6871,6 +6873,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6952,6 +6955,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7026,6 +7030,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7123,6 +7128,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7220,6 +7226,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7355,6 +7362,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -7429,6 +7437,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7564,6 +7573,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -7645,6 +7655,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7780,6 +7791,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -7861,6 +7873,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7996,6 +8009,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -8070,6 +8084,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8205,6 +8220,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -8279,6 +8295,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8885,6 +8902,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -8944,6 +8962,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -9003,6 +9022,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -9058,6 +9078,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -9932,6 +9953,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10032,6 +10054,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10122,6 +10145,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10196,6 +10220,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"

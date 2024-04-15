@@ -16,6 +16,8 @@ public class Selection
     public string Name { get; set; }
     public string Value { get; set; }
     public bool IsMultiple { get; set; }
+    public bool IsCanSelectMapFromOutside { get; set; }
+    public bool IsCanSelectRoundFromOutside { get; set; }
     public string XmlAttribute { get; set; }
 }
 

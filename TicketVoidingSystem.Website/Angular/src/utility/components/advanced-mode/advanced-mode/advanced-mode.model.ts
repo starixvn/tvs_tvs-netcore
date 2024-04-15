@@ -25,20 +25,25 @@ export class Selection {
   isMultiple: boolean;
   xmlAttribute: string;
   multiSelection: MultiSelection;
+  isCanSelectMapFromOutside: boolean;
+  isCanSelectRoundFromOutside: boolean
 
-  constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string) {
+  constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string,
+    isCanSelectMapFromOutside: boolean, isCanSelectRoundFromOutside: boolean) {
     this.name = name;
     this.value = value;
     this.renderItems(items);
     this.isMultiple = isMultiple;
     this.xmlAttribute = xmlAttribute;
+    this.isCanSelectMapFromOutside = isCanSelectMapFromOutside;
+    this.isCanSelectRoundFromOutside = isCanSelectRoundFromOutside;
   }
 
   renderItems(items: Selection[]) {
     this.items = [];
     if (items !== null) {
       items.forEach(item => {
-        const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
+        const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute, item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside);
         this.items.push(temp);
       });
     }
@@ -115,7 +120,7 @@ export class BetTeam {
 
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
-      if (this.isHaveMultipleMapRound && (item.name === AdvancedModeConstants.MAP || item.name === AdvancedModeConstants.ROUND)) {
+      if (this.isHaveMultipleMapRound && (item.isCanSelectMapFromOutside || item.isCanSelectRoundFromOutside)) {
         this.renderMultipleSelectWithMapAndRound(item);
       } else if (item.isMultiple) {
         this.renderMultipleSelect(item);
@@ -123,7 +128,7 @@ export class BetTeam {
         delete this.multiSelection;
         this.selections.push(item);
       } else {
-        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
+        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute, item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside);
         this.selections.push(selection);
       }
     });

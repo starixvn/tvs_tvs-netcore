@@ -49,7 +49,7 @@
                 </div>
               </ng-container> -->
 
-              <ng-container *ngIf="!isHaveMultipleMapRound">
+              <ng-container *ngIf="!isTicketListing">
                 <ng-container *ngFor="let selection of betTeam.selections; let indexSelection = index">
                   <div class="ml-3" >
                     <div *ngIf="!selection.isMultiple">
@@ -69,7 +69,7 @@
                 </ng-container>
               </ng-container>
 
-              <ng-container *ngIf="isHaveMultipleMapRound">
+              <ng-container *ngIf="isTicketListing">
                 <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
                   <div class="right-selection">
                     <span>{{multiSelection.name}}</span>
