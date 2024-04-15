@@ -20,7 +20,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
         public async Task Handler_ServiceExecute_ReturnExactModel(int filterBy)
         {
             // Arrange
-            var copyRequestInfoModel = new CopyRequestInfoModel
+            var copyRequestInfoModel = new RequestInfoForCopy
             {
                 GlobalShowTime = new DateTime(2022, 2, 2, 2, 2, 2),
                 MatchId = 123,
@@ -34,14 +34,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var request = new CopyRequestInfoRequest { RequestId = 123 };
             var repository = Substitute.For<IDynamicRepository>();
             var matchService = Substitute.For<MatchService>();
-            repository.GetAsync<CopyRequestInfoModel>(Arg.Any<CopyRequestInfoRequest>(), CancellationToken.None).ReturnsForAnyArgs(copyRequestInfoModel);
+            repository.GetAsync<RequestInfoForCopy>(Arg.Any<CopyRequestInfoRequest>(), CancellationToken.None).ReturnsForAnyArgs(copyRequestInfoModel);
             var handler = new CopyRequestInfoHandler(repository, matchService);
 
             // Act
             var actual = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            await repository.Received().GetAsync<CopyRequestInfoModel>(Arg.Any<CopyRequestInfoRequest>(), CancellationToken.None);
+            await repository.Received().GetAsync<RequestInfoForCopy>(Arg.Any<CopyRequestInfoRequest>(), CancellationToken.None);
             Assert.Equal(copyRequestInfoModel, actual);
         }
     }

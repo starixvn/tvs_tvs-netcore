@@ -2,7 +2,14 @@
 
 namespace TicketVoidingSystem.ManageRequest.Models;
 
-public class CopyRequestInfoModel
+public class CopyRequestInfoResponse
+{
+    public RequestInfoForCopy RequestInfo { get; set; }
+
+    public IEnumerable<BetTypeTicketsInfo> BetTypeTickets { get; set; }
+}
+
+public class RequestInfoForCopy
 {
     public string RequestId { get; set; }
 
@@ -23,8 +30,6 @@ public class CopyRequestInfoModel
     public DateTime GlobalShowTime { get; set; }
 
     public int FilterBy { get; set; }
-
-    public DateTime StartVoidTime { get; set; }
 
     public string IssueTypeName { get; set; }
 
@@ -63,4 +68,25 @@ public class CopyRequestInfoModel
     public bool IsHasSettledTicket { get; set; }
 
     public string Remark { get; set; }
+
+    public int IssueTypeId { get; set; }
+
+    public DateTime VoidFromTime { get; set; }
+
+    public DateTime VoidToTime { get; set; }
+
+    public string LiveStatus { get; set; }
+
+    public int TotalSingleCount { get; set; }
+
+    public int TotalParlayCount { get; set; }
+}
+
+public class BetTypeTicketsInfo
+{
+    public int BetTypeId { get; set; }
+    public string BetTypeName { get; set; }
+    public string InputtedRuns { get; set; }
+    public string PlayerName { get; set; }
+    public int TicketsCount { get; set; }
 }

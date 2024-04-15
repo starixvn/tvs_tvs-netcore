@@ -8,11 +8,11 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<CopyRequestInfoModel>
+public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<CopyRequestInfoResponse>
 {
 }
 
-public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoModel>
+public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
 {
     private readonly IDynamicRepository repository;
     private readonly MatchService matchService;
@@ -23,22 +23,33 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, Co
         this.matchService = matchService;
     }
 
-    public async Task<CopyRequestInfoModel> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
+    public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
-        var model = await repository.GetAsync<CopyRequestInfoModel>(request, cancellationToken);
+        var (requestInfoList, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request, cancellationToken);
+        var requestInfo = requestInfoList.First();
+        UpdateMatchInfo(request.MatchId, requestInfo);
+        requestInfo.GlobalShowTime = requestInfo.GlobalShowTime.ZoneManila();
+
+        return new CopyRequestInfoResponse
+        {
+            RequestInfo = requestInfo,
+            BetTypeTickets = betTypeTickets
+        };
+    }
+
+    private void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo)
+    {
         var match = new Match
         {
-            MatchId = request.MatchId,
-            HomeId = model.HomeId,
-            AwayId = model.AwayId,
-            LeagueId = model.LeagueId,
-            IsNeutral = model.IsNeutral
+            MatchId = matchId,
+            HomeId = requestInfo.HomeId,
+            AwayId = requestInfo.AwayId,
+            LeagueId = requestInfo.LeagueId,
+            IsNeutral = requestInfo.IsNeutral
         };
         matchService.UpdateMatchInfoFromRemotingRef(match);
-        model.MatchEvent = match.MatchEvent;
-        model.LeagueName = match.LeagueName;
-        model.GlobalShowTime = model.GlobalShowTime.ZoneManila();
 
-        return model;
+        requestInfo.MatchEvent = match.MatchEvent;
+        requestInfo.LeagueName = match.LeagueName;
     }
 }
