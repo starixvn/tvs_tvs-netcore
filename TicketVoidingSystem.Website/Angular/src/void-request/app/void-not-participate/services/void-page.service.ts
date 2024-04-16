@@ -14,6 +14,7 @@ import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 import _ from 'lodash';
+import { EventType } from '../../../../utility/constants/sport.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,7 @@ export class VoidPageService {
     const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
+    templateValue.eventType = voidPageItem.voidTicketsMini.isAllLiveTickets ? EventType.LIVE : null;
     templateValue.playerName = {
       msgEnglish: requestDetail.playerNames[0].playerNamesEnglish,
       msgChineseTraditional: requestDetail.playerNames[0].playerNamesChineseTraditional,
