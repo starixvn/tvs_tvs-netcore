@@ -26,10 +26,11 @@ export class Selection {
   xmlAttribute: string;
   multiSelection: MultiSelection;
   isCanSelectMapFromOutside: boolean;
-  isCanSelectRoundFromOutside: boolean
+  isCanSelectRoundFromOutside: boolean;
+  isCanSelectQuarterFromOutside: boolean;
 
-  constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string,
-    isCanSelectMapFromOutside: boolean, isCanSelectRoundFromOutside: boolean) {
+  constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string, //NOSONAR
+    isCanSelectMapFromOutside: boolean, isCanSelectRoundFromOutside: boolean, isCanSelectQuarterFromOutside: boolean) {
     this.name = name;
     this.value = value;
     this.renderItems(items);
@@ -37,13 +38,15 @@ export class Selection {
     this.xmlAttribute = xmlAttribute;
     this.isCanSelectMapFromOutside = isCanSelectMapFromOutside;
     this.isCanSelectRoundFromOutside = isCanSelectRoundFromOutside;
+    this.isCanSelectQuarterFromOutside = isCanSelectQuarterFromOutside;
   }
 
   renderItems(items: Selection[]) {
     this.items = [];
     if (items !== null) {
       items.forEach(item => {
-        const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute, item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside);
+        const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
+          item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside, item.isCanSelectQuarterFromOutside);
         this.items.push(temp);
       });
     }
@@ -55,6 +58,7 @@ export class MultiSelection {
   value: string;
   xmlAttribute: string;
   multipleSelect: MultipleSelection;
+  type: string;
 }
 
 export class BetTeamResult {
@@ -89,20 +93,20 @@ export class BetTeam {
   inputs: Item[];
   checkedBetTypes: string[];
   isChecked: boolean;
-  isHaveMultipleMapRound: boolean;
+  isTicketListing: boolean;
 
   constructor(
     commonInfo: [string, string, number, string, string],
     selections: Selection[],
     items: Item[],
     inputs: Item[],
-    isHaveMultipleMapRound: boolean) {
+    isTicketListing: boolean) {
     this.name = commonInfo[0];
     this.value = commonInfo[1];
     this.type = commonInfo[2];
     this.enableBetTypes = commonInfo[3];
     this.betTypes = commonInfo[4];
-    this.isHaveMultipleMapRound = isHaveMultipleMapRound;
+    this.isTicketListing = isTicketListing;
     this.renderSelections(selections);
     this.renderItems(items);
     this.renderInputs(inputs);
@@ -120,7 +124,7 @@ export class BetTeam {
 
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
-      if (this.isHaveMultipleMapRound && (item.isCanSelectMapFromOutside || item.isCanSelectRoundFromOutside)) {
+      if (this.isTicketListing && (item.isCanSelectMapFromOutside || item.isCanSelectRoundFromOutside || item.isCanSelectQuarterFromOutside)) {
         this.renderMultipleSelectWithMapAndRound(item);
       } else if (item.isMultiple) {
         this.renderMultipleSelect(item);
@@ -128,7 +132,8 @@ export class BetTeam {
         delete this.multiSelection;
         this.selections.push(item);
       } else {
-        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute, item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside);
+        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
+          item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside, item.isCanSelectQuarterFromOutside);
         this.selections.push(selection);
       }
     });
@@ -170,7 +175,7 @@ export class BetTeam {
     this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '92px';
+    this.multiSelection.multipleSelect.maxWidth = '100px';
     this.renderItemsMultipleSelectWithMapAndRound(item);
   }
 
@@ -202,6 +207,13 @@ export class BetTeam {
         this.multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, []));
       }
     });
+    if (multi.isCanSelectMapFromOutside) {
+      this.multiSelection.type = "map";
+    } else if (multi.isCanSelectRoundFromOutside) {
+      this.multiSelection.type = "round";
+    } else if (multi.isCanSelectQuarterFromOutside) {
+      this.multiSelection.type = "quarter";
+    }
 
     this.multiSelectionList.push(this.multiSelection);
   }
@@ -315,7 +327,7 @@ export class BetTeam {
   }
 
   isTicketListingAndBettypeMapOrRound(name: string): boolean {
-    if (this.isHaveMultipleMapRound) {
+    if (this.isTicketListing) {
       if (name === AdvancedModeConstants.MAP || name === AdvancedModeConstants.ROUND) {
         return true;
       } else {
@@ -328,7 +340,7 @@ export class BetTeam {
   updateBySelection(result: BetTeamResult) {
     this.selections.forEach(select => {
       this.updateResult(result, select.xmlAttribute, select.value);
-      if (select.multiSelection !== undefined && (!this.isHaveMultipleMapRound ||
+      if (select.multiSelection !== undefined && (!this.isTicketListing ||
         !this.isTicketListingAndBettypeMapOrRound(select.multiSelection.name))) {
         const value = select.multiSelection.multipleSelect.getValueItems();
         this.updateResult(result, select.multiSelection.xmlAttribute, value);
@@ -337,7 +349,7 @@ export class BetTeam {
   }
 
   updateByMultipleSelection(result: BetTeamResult) {
-    if (this.multiSelection !== undefined && (!this.isHaveMultipleMapRound ||
+    if (this.multiSelection !== undefined && (!this.isTicketListing ||
       !this.isTicketListingAndBettypeMapOrRound(this.multiSelection.name))) {
       const value = this.multiSelection.multipleSelect.getValueItems();
       this.updateResult(result, this.multiSelection.xmlAttribute, value);
@@ -345,7 +357,7 @@ export class BetTeam {
   }
 
   updateByMultipleSelectionWithTicketListing(result: BetTeamResult) {
-    if (this.multiSelectionList !== undefined && this.isHaveMultipleMapRound) {
+    if (this.multiSelectionList !== undefined && this.isTicketListing) {
       this.multiSelectionList.forEach(item => {
         let value = item.multipleSelect.getValueItems();
         if (item.multipleSelect.selectionTitle === 'All' && (item.name === AdvancedModeConstants.MAP
@@ -412,6 +424,20 @@ export class BetTeam {
           }
         });
       }
+      this.changeItemsOfMultipleSelection(itemMultiSelection.multipleSelect);
+    });
+  }
+
+  updateItemQuarter(itemList: string[]) {
+    this.multiSelectionList.forEach(itemMultiSelection => {
+      itemMultiSelection.multipleSelect.items.forEach(item => {
+        const object = itemList.find(f => f === item.value);
+        if (object !== undefined) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      });
       this.changeItemsOfMultipleSelection(itemMultiSelection.multipleSelect);
     });
   }
@@ -587,7 +613,7 @@ export class BetTeam {
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY
     if (AdvancedModeConstants.BETTYPE_MAP_X_FIRST_TO_Y_OVER_UNDER.split(',').includes(betTypeId)) {
-      if (this.isHaveMultipleMapRound) {
+      if (this.isTicketListing) {
         this.updateForBetType9089MultipleMapAndRound(result, betTypeId);
       } else {
         this.updateForBetType9089SingleMapAndRound(result, betTypeId);

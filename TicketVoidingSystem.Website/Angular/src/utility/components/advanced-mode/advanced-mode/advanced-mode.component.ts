@@ -28,11 +28,13 @@ export class AdvancedModeComponent implements OnChanges {
   betTeams: BetTeam[] = [];
   mapList: MultipleSelection;
   roundList: MultipleSelection;
+  quarterList: MultipleSelection;
   betTypesMoreHDP = AdvancedModeConstants.BETTYPES_MORE_HDP;
   baseSpecialBetTypeCricket: Selection[] = [];
   isShowAdvancedMode: boolean;
   isShowContent: boolean;
-  isShowAllBetType: boolean;
+  isShowAllBetTypeMapRound: boolean;
+  isShowAllBetTypeQuarter: boolean;
   tooltip = new Tooltip();
   oddsInfo: OddsInfo[];
 
@@ -69,6 +71,14 @@ export class AdvancedModeComponent implements OnChanges {
     this.roundList.maxWidth = '90px';
     this.roundList.items = AdvancedModeConstants.ROUND_LIST;
     this.mapList.checkAllItems(true);
+
+    this.quarterList = new MultipleSelection();
+    this.quarterList.checkAllCheckBoxText = 'All';
+    this.quarterList.allItemsCheckedText = 'All';
+    this.quarterList.noneItemCheckedText = 'Select options';
+    this.quarterList.maxWidth = '90px';
+    this.quarterList.items = AdvancedModeConstants.QUARTER_LIST;
+    this.quarterList.checkAllItems(true);
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -102,7 +112,8 @@ export class AdvancedModeComponent implements OnChanges {
   private changedBetTypes() {
     this.isShowAdvancedMode = false;
     this.isShowContent = false;
-    this.isShowAllBetType = false;
+    this.isShowAllBetTypeMapRound = false;
+    this.isShowAllBetTypeQuarter = false;
     if (this.allBetTypes !== undefined) {
       this.allBetTypes.forEach(betType => {
         this.handleBetTeam(betType);
@@ -135,9 +146,8 @@ export class AdvancedModeComponent implements OnChanges {
         this.addBetTypeName(betType.name, betTeam);
         betTeam.checkedBetTypes.push(betType.value);
       }
-      if (betTeam.multiSelectionList.length > 0) {
-        this.isShowAllBetType = true;
-      }
+      this.isShowAllBetTypeMapRound = betTeam.multiSelectionList.filter(x => x.type ==='map' || x.type ==='round').length > 0;
+      this.isShowAllBetTypeQuarter = betTeam.multiSelectionList.filter(x => x.type ==='quarter').length > 0;
     } else if (index !== -1) {
         this.removeBetTypeName(betType.name, betTeam);
         betTeam.checkedBetTypes.splice(index, 1);
@@ -350,6 +360,14 @@ export class AdvancedModeComponent implements OnChanges {
     }
   }
 
+  updateAllQuarter(itemList: string[]) {
+    if (this.betTeams.length > 0) {
+      this.betTeams.forEach(item => {
+        item.updateItemQuarter(itemList);
+      });
+    }
+  }
+
   checkBetTypesMoreHDP(betTeam: BetTeam, isDivOfBetTypesMoreHDP: boolean) {
     if (betTeam.items.length > 0 && ((betTeam.enableBetTypes === this.betTypesMoreHDP && isDivOfBetTypesMoreHDP)
       || (betTeam.enableBetTypes !== this.betTypesMoreHDP && !isDivOfBetTypesMoreHDP))) {
@@ -384,7 +402,7 @@ export class AdvancedModeComponent implements OnChanges {
     const groupBetTypes = _.groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
       const items = this.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
-      this.baseSpecialBetTypeCricket.push(new Selection('', `${betTypeId}`, items, true, null, false, false));
+      this.baseSpecialBetTypeCricket.push(new Selection('', `${betTypeId}`, items, true, null, false, false, false));
     }
   }
 
@@ -396,13 +414,13 @@ export class AdvancedModeComponent implements OnChanges {
         const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');
         groupsOdds[oddsId].forEach(x => {
           items.push(
-            new Selection(`${x.playerName} - ${oddsName}`, `${x.betChoice},${x.oddsId}`, null, true, null, false, false)
+            new Selection(`${x.playerName} - ${oddsName}`, `${x.betChoice},${x.oddsId}`, null, true, null, false, false, false)
           );
         });
       }
     } else {
       odds.forEach(x => {
-        items.push(new Selection(x.playerName, x.playerId.toString(), null, true, null, false, false));
+        items.push(new Selection(x.playerName, x.playerId.toString(), null, true, null, false, false, false));
       });
     }
 

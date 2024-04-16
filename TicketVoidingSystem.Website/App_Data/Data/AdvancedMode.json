@@ -1264,6 +1264,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1324,6 +1325,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1384,6 +1386,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1435,6 +1438,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1493,6 +1497,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -9373,6 +9378,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -9458,6 +9464,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -9513,8 +9520,9 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
-          "Name": "Quarter ",
+          "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
         }
@@ -11336,6 +11344,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
