@@ -38,6 +38,7 @@ public class CheckRecoverTicketServiceImp : CheckRecoverTicketService
             RequestId = message.RequestId,
             FilterBy = message.FilterBy,
             ProductIds = message.ProductIds,
+            IsVoidAllArchivedTickets = message.IsVoidAllArchivedTickets,
             TransInfoJson = string.Join(",", transInfoJsonList)
         };
 

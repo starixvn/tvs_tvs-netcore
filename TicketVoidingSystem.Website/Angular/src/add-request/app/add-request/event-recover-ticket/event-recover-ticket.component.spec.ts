@@ -7,6 +7,7 @@ import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { CommonService } from '../../../../utility/services/common.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RecoverTicketModel } from '../models/recover-ticket.model';
@@ -63,6 +64,7 @@ describe('EventRecoverTicketComponent', () => {
       AddRequestStore,
       PopupService,
       CommonService,
+      AddRequestApiService
     ]
   })
   class AppModuleTest { }
