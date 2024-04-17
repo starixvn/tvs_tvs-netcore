@@ -6206,6 +6206,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6271,6 +6273,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6336,6 +6340,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6394,6 +6400,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6500,6 +6508,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8355,6 +8365,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
@@ -8410,6 +8421,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
@@ -8474,6 +8487,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
@@ -8529,6 +8544,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
@@ -8591,6 +8608,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
@@ -8646,6 +8664,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
@@ -10291,6 +10310,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10360,6 +10381,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10489,6 +10512,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple":  true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10844,6 +10869,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"

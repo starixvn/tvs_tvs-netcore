@@ -4,20 +4,20 @@
       <em class="font-small fa"
         [ngClass]="{'fa-minus-circle': isShowContent, 'fa-plus-circle': !isShowContent}"></em>Advanced mode
     </legend>
-    <div *ngIf="isShowAllBetTypeMapRound || isShowAllBetTypeQuarter" [hidden]="!isShowContent" class="all-bet-types">
+    <div *ngIf="isShowAllBetTypeMapRound || isShowAllBetTypeQuarter || isShowAllBetTypeSet || isShowAllBetTypeGame" [hidden]="!isShowContent" class="all-bet-types">
       <div class="bet-team-1">
         <div class="left"><b>All bet types: </b></div>
         <div class="right" *ngIf="isShowAllBetTypeMapRound">
           <div class="right-selection">
             <span><b>Map:</b></span>
             <multiple-select class="multiple-selection-map float-right" [multipleSelect]="mapList"
-              (checkedItems)="updateAllMapAndRoundItemsSelection($event, 'Map:')">
+              (checkedItems)="updateByControlAllBetType($event, 'map')">
             </multiple-select>
           </div>
           <div class="right-selection">
             <span><b>Round:</b></span>
             <multiple-select class="multiple-selection-round float-right" [multipleSelect]="roundList"
-              (checkedItems)="updateAllMapAndRoundItemsSelection($event, 'Round:')">
+              (checkedItems)="updateByControlAllBetType($event, 'round')">
             </multiple-select>
           </div>
         </div>
@@ -25,7 +25,23 @@
           <div class="right-selection">
             <span><b>Quarter:</b></span>
             <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
-              (checkedItems)="updateAllQuarter($event)">
+              (checkedItems)="updateByControlAllBetType($event, 'quarter')">
+            </multiple-select>
+          </div>
+        </div>
+        <div class="right" *ngIf="isShowAllBetTypeSet">
+          <div class="right-selection">
+            <span><b>Set:</b></span>
+            <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
+              (checkedItems)="updateByControlAllBetType($event, 'set')">
+            </multiple-select>
+          </div>
+        </div>
+        <div class="right" *ngIf="isShowAllBetTypeGame">
+          <div class="right-selection">
+            <span><b>Game:</b></span>
+            <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
+              (checkedItems)="updateByControlAllBetType($event, 'game')">
             </multiple-select>
           </div>
         </div>

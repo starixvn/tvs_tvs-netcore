@@ -83,6 +83,13 @@ export class AdvancedModeConstants {
         new ItemsSelect(0, '808', '8', true, true, true, []),
         new ItemsSelect(0, '809', '9', true, true, true, [])
     ];
+    static readonly SET_LIST = [
+        new ItemsSelect(0, '801', '1', true, true, true, []),
+        new ItemsSelect(0, '802', '2', true, true, true, []),
+        new ItemsSelect(0, '803', '3', true, true, true, []),
+        new ItemsSelect(0, '804', '4', true, true, true, []),
+        new ItemsSelect(0, '805', '5', true, true, true, [])
+    ];
 
     static readonly ATTRIBUTE_HDP = 'ATTRIBUTE_HDP';
     static readonly ATTRIBUTE_ODDS_SPREAD = 'ATTRIBUTE_ODDS_SPREAD';
