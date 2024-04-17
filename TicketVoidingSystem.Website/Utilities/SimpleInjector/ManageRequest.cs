@@ -42,5 +42,6 @@ public static class ManageRequest
         services.AddTransient<MarkTicketsWhenAddEditService, MarkTicketsWhenAddEditServiceImp>();
         services.AddTransient<ReCalculateTicketsService, ReCalculateTicketsServiceImp>();
         services.AddTransient<UpdateRequestProcessStage, UpdateRequestProcessStageImp>();
+        services.AddTransient<OWPDataService, OWPDataServiceImp>();
     }
 }

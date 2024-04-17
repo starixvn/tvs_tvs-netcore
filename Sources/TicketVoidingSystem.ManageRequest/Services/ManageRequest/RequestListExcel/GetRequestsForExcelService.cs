@@ -84,7 +84,7 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         foreach (var request in inputRequests)
         {
             AssignCalcTime(request, calculateTimeSets, requestIds);
-            AssignIPTV(request, owpData, owpMatchIds);
+            AssignTVAndIPTV(request, owpData, owpMatchIds);
 
             yield return request;
         }
@@ -100,11 +100,17 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         }
     }
 
-    private static void AssignIPTV(RequestModel request, IEnumerable<OWPData> owpData, IEnumerable<int> matchIdsHaveData)
+    private static void AssignTVAndIPTV(RequestModel request, IEnumerable<OWPData> owpData, IEnumerable<int> matchIdsHaveData)
     {
-        if (request.MatchId is not null && matchIdsHaveData.Contains(request.MatchId.Value))
+        var owpDataOfCurrentMatch = request.MatchId is not null && matchIdsHaveData.Contains(request.MatchId.Value)
+            ? owpData.First(x => x.MatchId == request.MatchId.Value) : null;
+        var owpDataOfParentMatch = request.ParentMatchId is not null && request.ParentMatchId > 0 && matchIdsHaveData.Contains(request.ParentMatchId.Value)
+            ? owpData.First(x => x.MatchId == request.ParentMatchId.Value) : null;
+
+        var currentOWPdata = owpDataOfCurrentMatch ?? owpDataOfParentMatch;
+        if (currentOWPdata is not null)
         {
-            request.IPTV = owpData.First(x => x.MatchId == request.MatchId.Value).IPTV;
+            request.TVAndIPTV = $"{currentOWPdata.TV}\n{currentOWPdata.IPTV}";
         }
     }
 
@@ -112,19 +118,33 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
     {
         var outputRequest = mapper.Map<ExcelRequestModel>(param.CurrentViewModel);
         outputRequest.MatchId = param.CurrentViewModel.Details[0].MatchId?.ToString();
+        if (param.CurrentViewModel.Details[0].MatchId is not null && param.CurrentViewModel.Details[0].MatchId != BetTypeConstant.SystemParlay)
+        {
+            outputRequest.EventDateMatch = param.CurrentViewModel.Details[0].EventDateMatch.ToString(FormatKey.ShortDateFormatWithHyphen);
+            outputRequest.KickOffTimeMatch = param.CurrentViewModel.Details[0].KickOffTimeMatch.ToString(FormatKey.OnlyTimeWithPeriodFormat);
+        }
+
+        outputRequest.Trader = param.CurrentViewModel.Details[0].Trader;
+        outputRequest.LA = param.CurrentViewModel.Details[0].LA;
+        outputRequest.Remark = param.CurrentViewModel.Details[0].Remark;
+        outputRequest.TVAndIPTV = param.CurrentViewModel.Details[0].TVAndIPTV;
+        outputRequest.Provider = param.CurrentViewModel.Details[0].Provider;
+        outputRequest.Source = param.CurrentViewModel.Details[0].Source;
+        outputRequest.Message = param.CurrentViewModel.Details[0].Message;
+
         outputRequest.CalculatedScore = param.CurrentViewModel.Details[0].SettlementStatus;
         outputRequest.Description = convertRequestsService.GetDescription(param.CurrentViewModel.IssueTypeId, param.CurrentViewModel.Details[0].Description);
-        outputRequest.CreatedTime = param.CurrentViewModel.CreatedDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        outputRequest.IssueType = convertRequestsService.GetIssueTypeName(param.CurrentViewModel.IssueTypeId, param.IssueTypes);
-        outputRequest.SubIssueType = convertRequestsService.GetSubIssueTypeName(param.CurrentViewModel.SubIssueTypeId, param.SubIssueTypes);
         outputRequest.Sport = convertRequestsService.GetSportName(param.CurrentViewModel.Details[0].Description);
         outputRequest.Event = convertRequestsService.GetEvent(param.CurrentViewModel.Details[0].Description);
         outputRequest.League = convertRequestsService.GetLeague(param.CurrentViewModel.Details[0].Description);
+        outputRequest.NoOfTickets = convertRequestsService.GetNoOfTickets(param.CurrentViewModel.Details[0].TotalSingleProcessed, param.CurrentViewModel.Details[0].TotalParlayProcessed);
+        outputRequest.CreatedTime = param.CurrentViewModel.CreatedDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
+        outputRequest.IssueType = convertRequestsService.GetIssueTypeName(param.CurrentViewModel.IssueTypeId, param.IssueTypes);
+        outputRequest.SubIssueType = convertRequestsService.GetSubIssueTypeName(param.CurrentViewModel.SubIssueTypeId, param.SubIssueTypes);
         outputRequest.VarCheck = convertRequestsService.GetVarCheckValue(param.CurrentViewModel.IsCheckedVar);
         outputRequest.BetType = string.Join(", ", param.CurrentViewModel.BettypeNames);
         outputRequest.Action = convertRequestsService.GetVoidActionName(param.CurrentViewModel.ActionId, param.VoidActions);
         outputRequest.PerformedBy = param.CurrentViewModel.LastPerformedBy;
-        outputRequest.NoOfTickets = convertRequestsService.GetNoOfTickets(param.CurrentViewModel.Details[0].TotalSingleProcessed, param.CurrentViewModel.Details[0].TotalParlayProcessed);
         outputRequest.NumberOfRequestDetails = param.NumberOfRequestDetail;
         outputRequest.CalcFullTime = param.CurrentViewModel.CalcFullTime != null ? param.CurrentViewModel.CalcFullTime.ToString() : string.Empty;
         outputRequest.CalcHalfTime = param.CurrentViewModel.CalcHalfTime != null ? param.CurrentViewModel.CalcHalfTime.ToString() : string.Empty;

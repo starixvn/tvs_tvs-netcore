@@ -6,7 +6,7 @@ public class GetIPTVFromOWPCriteria : CriteriaBase
 {
     public string MatchInfoJson { get; set; }
 
-    public override string GetSettingKey() => "OWP";
+    public override string GetSettingKey() => "OWP_TVSSupport_GetIptvInfo";
 
     public override bool IsValid() => true;
 }

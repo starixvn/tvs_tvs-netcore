@@ -40,6 +40,6 @@ public class RequestEventViewModel
     public string Remark { get; set; }
     public string Trader { get; set; }
     public string LA { get; set; }
-    public string IPTV { get; set; }
+    public string TVAndIPTV { get; set; }
     public string Message { get; set; }
 }
