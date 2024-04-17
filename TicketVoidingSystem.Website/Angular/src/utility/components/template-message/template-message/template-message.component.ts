@@ -216,12 +216,12 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.RED_CARD,
       IssueTypeId.WRONG_MARKET_OFFERED,
       IssueTypeId.REDUCED_OVER,
+      IssueTypeId.ABANDONED,
       IssueTypeId.MATCH_COMPLETED,
       IssueTypeId.NOT_PARTICIPATE,
       IssueTypeId.WRONG_QUARTER_HDP
     ];
     const subIssueTypeS = [
-      SubIssueTypeId.ABANDONED,
       SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
       SubIssueTypeId.TECHNICAL_ERROR
     ];

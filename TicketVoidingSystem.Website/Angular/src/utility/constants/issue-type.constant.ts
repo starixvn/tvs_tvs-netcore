@@ -19,4 +19,5 @@ export class IssueTypeConstant {
   static readonly DUPLICATE_TICKETS = '20';
   static readonly NOT_PARTICIPATE = '21';
   static readonly RECOVER_TICKET = '22';
+  static readonly ABANDONED = '23';
 }

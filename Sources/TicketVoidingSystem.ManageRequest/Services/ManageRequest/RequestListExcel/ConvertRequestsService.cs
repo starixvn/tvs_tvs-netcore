@@ -90,6 +90,7 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
                 {IssueTypeConstant.Wrong1stOU, BuildVoidTime},
                 {IssueTypeConstant.WrongOdds, BuildVoidTime},
                 {IssueTypeConstant.ReducedOver, _ => string.Empty},
+                {IssueTypeConstant.Abandoned, _ => string.Empty},
                 {IssueTypeConstant.EarlyKickOffTime, BuildKickOffTime},
                 {IssueTypeConstant.WrongKickOffTime, BuildKickOffTime},
                 {IssueTypeConstant.WrongScore, BuildVoidWrongScore},

@@ -174,7 +174,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       await this.eventWrongOddsComponent.saveRequest();
     }
 
-    if (this.isReducedOver()) {
+    if (this.isReducedOver() || this.isAbandoned()) {
       await this.eventReducedOverComponent.saveRequest();
     }
 
@@ -244,6 +244,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.WRONG_1ST_OU,
       IssueTypeConstant.WRONG_ODDS,
       IssueTypeConstant.REDUCED_OVER,
+      IssueTypeConstant.ABANDONED,
       IssueTypeConstant.NOT_PARTICIPATE
     ]
 
@@ -325,10 +326,18 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     return StaticService.isWrongOdds(this.model.filter.issueTypeId);
   }
 
+  isEventReducedOver(): boolean {
+    return StaticService.isReducedOver(this.model.filter.issueTypeId) || StaticService.isAbandoned(this.model.filter.issueTypeId);
+  }
+
   isReducedOver(): boolean {
     return StaticService.isReducedOver(this.model.filter.issueTypeId);
   }
 
+  isAbandoned(): boolean {
+    return StaticService.isAbandoned(this.model.filter.issueTypeId);
+  }
+  
   isDuplicateTickets(): boolean {
     return StaticService.isDuplicateTickets(this.model.filter.issueTypeId);
   }

@@ -91,6 +91,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.REDUCED_OVER;
   }
 
+  static isAbandoned(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.ABANDONED;
+  }
+
   static isDuplicateTickets(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DUPLICATE_TICKETS;
   }
@@ -127,7 +131,7 @@ export class StaticService {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOddsModels[0].subIssueTypeId;
-    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString()) || this.isAbandoned(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.reducedOverModels[0].subIssueTypeId;
     } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.notParticipateModels[0].subIssueTypeId;
@@ -157,7 +161,7 @@ export class StaticService {
       return requestDetail.wrongOuModels.find(x => x.isMainMatch).eventDate;
     } else if (this.isWrongOdds(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongOddsModels[0].eventDate;
-    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isReducedOver(requestDetail.request.issueTypeId.toString()) || this.isAbandoned(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.reducedOverModels[0].eventDate;
     } else if (this.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.notParticipateModels[0].eventDate;
@@ -191,15 +195,15 @@ export class StaticService {
   }
 
   static isShowCashOutCount(cashOutCount: number): boolean {
-    return (cashOutCount > 0) ? true : false;
+    return (cashOutCount > 0);
   }
 
   static isShowSettleCount(settleCount: number): boolean {
-    return (settleCount > 0) ? true : false;
+    return (settleCount > 0);
   }
 
   static isShowInstantlySettleIncluded(instantlySettleCount: number): boolean {
-    return (instantlySettleCount > 0) ? true : false;
+    return (instantlySettleCount > 0);
   }
 
   static countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {

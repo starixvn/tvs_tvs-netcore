@@ -88,6 +88,6 @@ export class LogInfoComponent {
   }
 
   isReducedOver(): boolean {
-    return this.issueTypeId === Number(IssueTypeConstant.REDUCED_OVER);
+    return this.issueTypeId === Number(IssueTypeConstant.REDUCED_OVER) || this.issueTypeId === Number(IssueTypeConstant.ABANDONED) ;
   }
 }

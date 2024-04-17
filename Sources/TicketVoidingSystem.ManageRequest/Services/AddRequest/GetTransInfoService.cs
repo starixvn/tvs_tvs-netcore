@@ -100,6 +100,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 break;
 
             case IssueTypeConstant.ReducedOver:
+            case IssueTypeConstant.Abandoned:
                 criteria.ReducedOverInfo = issueInfo;
                 break;
 
@@ -178,6 +179,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.Wrong1stOU => query.Wrong1stOuModels.ToWrongOuInfoXml(),
             IssueTypeConstant.WrongOdds => query.WrongOddsModels.ToWrongOddsInfoXml(),
             IssueTypeConstant.ReducedOver => query.ReducedOverModels.ToReducedOverInfoXml(),
+            IssueTypeConstant.Abandoned => query.ReducedOverModels.ToReducedOverInfoXml(),
             IssueTypeConstant.NotParticipate => query.NotParticipateModels.ToNotParticipateInfoXml(),
             IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
             _ => "",

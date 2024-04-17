@@ -130,6 +130,7 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.RedCard => string.Join(", ", query.RedCardInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongOdds => string.Join(", ", query.WrongOddsInfo.Select(x => x.MatchId)),
             IssueTypeConstant.ReducedOver => query.ReducedOverInfo.First().MatchId.ToString(),
+            IssueTypeConstant.Abandoned => query.ReducedOverInfo.First().MatchId.ToString(),
             IssueTypeConstant.NotParticipate => query.NotParticipateInfo.First().MatchId.ToString(),
             IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
