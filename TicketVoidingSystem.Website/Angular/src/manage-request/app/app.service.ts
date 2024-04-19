@@ -21,9 +21,9 @@ export class AppService {
     return this.httpService.postJson(query, 'api/ManageRequest/GetRequests');
   }
 
-  async exportRequest(query: GetRequestsQuery) {
+  async exportRequest(query: GetRequestsQuery, timeoutEvent?: () => void) {
     const url = 'api/ManageRequest/ExportRequest';
-    return this.httpService.downloadFile(query, url);
+    return this.httpService.downloadFile(query, url, timeoutEvent);
   }
 
   async getVoidedTickets(query: TicketsQuery): Promise<TicketsModel> {

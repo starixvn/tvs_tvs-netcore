@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { ModalType } from 'src/utility/components/modal/modal.model';
 import { AutoRefreshMode } from '../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { LABELS } from '../../utility/constants/labels';
@@ -127,7 +128,7 @@ export class AppComponent implements OnInit {
   async exportExcel() {
     const query = await this.getQuery();
     this.isBlock = true;
-    await this.appService.exportRequest(query);
+    await this.appService.exportRequest(query, () => this.timeoutEvent());
     this.isBlock = false;
   }
 
@@ -166,5 +167,14 @@ export class AppComponent implements OnInit {
 
   getDateStringFromNgbDate(date: NgbDate): string {
     return `${date.year}/${date.month}/${date.day}`;
+  }
+
+  private timeoutEvent(): void {
+    this.modalService.open(
+      {
+        title: 'Warning!',
+        message: 'Export Excel timeout. Please try again!!',
+        type: ModalType.Warning
+      });
   }
 }
