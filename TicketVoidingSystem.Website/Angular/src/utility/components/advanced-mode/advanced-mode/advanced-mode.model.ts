@@ -174,7 +174,7 @@ export class BetTeam {
     this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '170px';
+    this.multiSelection.multipleSelect.maxWidth = '120px';
     this.renderItemsMultipleSelect(item);
   }
 

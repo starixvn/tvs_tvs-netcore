@@ -9,13 +9,13 @@
         <div class="left"><b>All bet types: </b></div>
         <div class="right" *ngIf="isShowAllBetTypeMapRound">
           <div class="right-selection">
-            <span><b>Map:</b></span>
+            <span class="mr-1"><b>Map:</b></span>
             <multiple-select class="multiple-selection-map float-right" [multipleSelect]="mapList"
               (checkedItems)="updateByControlAllBetType($event, 'map')">
             </multiple-select>
           </div>
           <div class="right-selection">
-            <span><b>Round:</b></span>
+            <span class="mr-1"><b>Round:</b></span>
             <multiple-select class="multiple-selection-round float-right" [multipleSelect]="roundList"
               (checkedItems)="updateByControlAllBetType($event, 'round')">
             </multiple-select>
@@ -23,7 +23,7 @@
         </div>
         <div class="right" *ngIf="isShowAllBetTypeQuarter">
           <div class="right-selection">
-            <span><b>Quarter:</b></span>
+            <span class="mr-1"><b>Quarter:</b></span>
             <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
               (checkedItems)="updateByControlAllBetType($event, 'quarter')">
             </multiple-select>
@@ -31,7 +31,7 @@
         </div>
         <div class="right" *ngIf="isShowAllBetTypeSet">
           <div class="right-selection">
-            <span><b>Set:</b></span>
+            <span class="mr-1"><b>Set:</b></span>
             <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
               (checkedItems)="updateByControlAllBetType($event, 'set')">
             </multiple-select>
@@ -39,7 +39,7 @@
         </div>
         <div class="right" *ngIf="isShowAllBetTypeGame">
           <div class="right-selection">
-            <span><b>Game:</b></span>
+            <span class="mr-1"><b>Game:</b></span>
             <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
               (checkedItems)="updateByControlAllBetType($event, 'game')">
             </multiple-select>
@@ -78,14 +78,14 @@
                   <div class="ml-3" >
                     <div *ngIf="!selection.isMultiple">
                       <div class="right-selection">
-                        <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                        <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
                         <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
                           <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                         </select>
                       </div>
                     </div>
                     <div *ngIf="selection.isMultiple">
-                      <span class="mr-2">{{selection.multiSelection.name}}</span>
+                      <span class="mr-1">{{selection.multiSelection.name}}</span>
                       <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                       </multiple-select>
                     </div>
@@ -96,7 +96,7 @@
               <ng-container *ngIf="isTicketListing">
                 <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
                   <div class="right-selection">
-                    <span>{{multiSelection.name}}</span>
+                    <span class="mr-1">{{multiSelection.name}}</span>
                     <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                       [multipleSelect]="multiSelection.multipleSelect">
                     </multiple-select>
@@ -104,7 +104,7 @@
                 </div>
                 <div *ngFor="let selection of betTeam.selections">
                   <div class="right-selection">
-                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                    <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
                     <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
                       <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                     </select>
@@ -114,13 +114,13 @@
 
               <div *ngIf="checkBetTypesMoreHDP(betTeam, false)">
                 <div class="right-input width-158" *ngFor="let item of betTeam.items">
-                  {{item.name}}
+                  <span class="mr-1">{{item.name}}</span>
                   <input type="text" [(ngModel)]="item.value" [disabled]="item.flag" decimalOnly />
                 </div>
               </div>
               <div *ngIf="checkBetTypesMoreHDP(betTeam, true)" class="width-280">
                 <div class="right-input width-158" *ngFor="let item of betTeam.items">
-                  {{item.name}}
+                  <span class="mr-1">{{item.name}}</span>
                   <input class="bet-type-more-hdp" type="text" [(ngModel)]="item.value" [disabled]="item.flag"
                     (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-more-hdp')"
                     triggers="manual" multipleDecimal />
@@ -131,7 +131,7 @@
               </div>
               <div class="input-area" *ngIf="isShowTextBox(betTeam)">
                 <div class="right-input width-158" *ngFor="let input of betTeam.inputs">
-                  {{input.name}}
+                  <span class="mr-1">{{input.name}}</span>
                   <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
                 </div>
               </div>
@@ -143,7 +143,7 @@
             <div class="flex-start">
               <label class="mr-3">
                 <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="betTeam.checkItems()"
-                  class="bet-team-{{index}}" />
+                  class="mr-1 bet-team-{{index}}" />
                 {{betTeam.name}}
               </label>
               <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
@@ -178,7 +178,7 @@
                   <ng-template ngFor let-item [ngForOf]="betTeam.items" let-e="even">
                     <td *ngIf="e || item.flag" [attr.rowspan]="item.flag?2:1">
                       <label>
-                        <input type="checkbox" [(ngModel)]="item.isChecked"
+                        <input class="mr-1" type="checkbox" [(ngModel)]="item.isChecked"
                           (ngModelChange)="betTeam.controlIsChecked()" />
                         {{item.name}}
                       </label>
@@ -189,7 +189,7 @@
                   <ng-template ngFor let-item [ngForOf]="betTeam.items" let-e="even">
                     <td *ngIf="!e && !item.flag">
                       <label>
-                        <input type="checkbox" [(ngModel)]="item.isChecked"
+                        <input class="mr-1" type="checkbox" [(ngModel)]="item.isChecked"
                           (ngModelChange)="betTeam.controlIsChecked()" />
                         {{item.name}}
                       </label>
@@ -364,24 +364,22 @@
             </div>
             <div class="right">
               <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
-                <div class="mr-3">
-                  <span class="mr-1">{{multiSelection.name}}</span>
+                <span class="mr-1">{{multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                     [multipleSelect]="multiSelection.multipleSelect">
                   </multiple-select>
-                </div>
               </div>
               <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
                 <div *ngIf="!selection.isMultiple">
                   <div class="right-selection">
-                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                    <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
                     <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
                       <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                     </select>
                   </div>
                 </div>
                 <div *ngIf="selection.isMultiple">
-                  <span class="mr-2">{{selection.multiSelection.name}}</span>
+                  <span class="mr-1">{{selection.multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                   </multiple-select>
                 </div>

@@ -1,6 +1,6 @@
 ﻿<div class="multiple-selection" [style.width]="multipleSelect.maxWidth">
     <button type="button" readonly (click)="dropdownToggle = !dropdownToggle" [disabled]="isDisabled">
-        <span [ngClass]="{'place-holder': multipleSelect.isShowPlaceHolder}">{{multipleSelect.selectionTitle }}</span>
+        <div [ngClass]="{'place-holder': multipleSelect.isShowPlaceHolder}">{{multipleSelect.selectionTitle }}</div>
         <i class="fa fa-angle-down"></i>
     </button>
     <div class="show-tree-view" *ngIf="multipleSelect.items != undefined && dropdownToggle">
