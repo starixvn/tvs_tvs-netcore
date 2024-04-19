@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
 import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
 import { StaticService } from 'src/utility/services/static.service';
@@ -42,18 +43,22 @@ export class RequestDescriptionService {
       .map(element => {
         const inputtedRunsText = element.inputtedRuns ? ` - ${element.inputtedRuns} and above should be voided` : '';
         return `${element.betTypeName}${inputtedRunsText}\n`
-          + `${element.ticketsCount} tickets\n\n`;
+          + `${element.ticketsCount} ticket(s)\n\n`;
       }).join('');
 
     return this.createCommonContent(copyInfoResponse, betTypeContent);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const betTypeContent = copyInfoResponse.betTypeTickets
-      .map(element => {
-        return `${element.betTypeName}\n`
-          + `${element.playerName} - ${element.ticketsCount} tickets\n\n`;
-      }).join('');
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
+    let betTypeContent = '';
+    
+    for (let key in groupBetTypes) {
+      const values = groupBetTypes[key];
+      let currentContent = `${values[0].betTypeName}\n`;
+      var playerContent = values.map(element => `${element.playerName} - ${element.ticketsCount} ticket(s)\n`).join('');
+      betTypeContent += `${currentContent}${playerContent}\n`;
+    }
 
     return this.createCommonContent(copyInfoResponse, betTypeContent);
   }
