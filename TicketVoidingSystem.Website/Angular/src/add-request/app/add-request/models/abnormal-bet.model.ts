@@ -1,5 +1,5 @@
 export class AbnormalBetModel {
-  matchId: number;
+  matchIds: number[];
   transIds: string;
   filterBy: number;
 }

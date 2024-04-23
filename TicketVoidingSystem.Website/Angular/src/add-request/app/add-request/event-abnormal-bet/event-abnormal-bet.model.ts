@@ -25,7 +25,7 @@ export interface CheckTransIdsQuery {
 
 export class CheckTransIdsViewModel {
   transInfoAddRequestModel: TransInfoAddRequestModel;
-  match: MatchInfo;
+  matches: MatchInfo[];
   validation: ValidationAbnormalBet;
   abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
 }

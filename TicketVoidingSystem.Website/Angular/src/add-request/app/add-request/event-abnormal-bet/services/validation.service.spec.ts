@@ -158,7 +158,7 @@ describe('ValidationService', () => {
     const expected: CheckTransIdsViewModel = {
       abnormalBetTicketRequests: [],
       transInfoAddRequestModel: new TransInfoAddRequestModel,
-      match: new MatchInfo,
+      matches: new MatchInfo,
       validation: undefined
     };
     const args = Helper.fakeValidationBusinessRuleArgs;
@@ -204,7 +204,7 @@ describe('ValidationService', () => {
     const expected: CheckTransIdsViewModel = {
       abnormalBetTicketRequests: [],
       transInfoAddRequestModel: new TransInfoAddRequestModel,
-      match: new MatchInfo,
+      matches: new MatchInfo,
       validation: undefined
     };
     mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));

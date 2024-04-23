@@ -65,7 +65,7 @@ export class ValidationService {
     }
 
     if (!this.isAbnormalBetMixOrSystemParlay(args)) {
-      args.leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch(checkTransIdViewModel.match);
+      args.leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch(checkTransIdViewModel.matches);
     }
 
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
