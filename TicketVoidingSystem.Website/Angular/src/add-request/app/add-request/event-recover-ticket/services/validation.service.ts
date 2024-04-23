@@ -62,7 +62,7 @@ export class ValidationService {
     }
 
     if (validationResult.unsupportedDateRangeTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+      betIdsComponent.groupNumber.updateMoved(validationResult.unsupportedDateRangeTransIds);
     }
   }
 }

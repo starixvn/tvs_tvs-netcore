@@ -14,7 +14,7 @@ public class CheckRecoverTicketCriteria : CriteriaBase
 
     public string TransInfoJson { get; set; }
 
-    public string IsVoidAllArchivedTickets { get; set; }
+    public bool IsVoidAllArchivedTickets { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_CheckRecoverTicket";
 

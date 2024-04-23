@@ -12,5 +12,5 @@ public class CheckRecoverTicketModel
 
     public int SubIssueTypeId { get; set; }
 
-    public string IsVoidAllArchivedTickets { get; set; }
+    public bool IsVoidAllArchivedTickets { get; set; }
 }
