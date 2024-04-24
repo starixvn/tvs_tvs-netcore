@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using Xunit;
@@ -72,16 +73,22 @@ public class DescriptionServiceTests
         Assert.Equal(expectedResult, actual);
     }
 
-    [Fact]
-    public void Build_WhenCalled_ReturnStringOfAbnormalBetParlay()
+    [Theory]
+    [InlineData(FilterByConstant.SystemParlay)]
+    [InlineData(FilterByConstant.MixParlay)]
+    public void Build_WhenCalled_ReturnStringOfAbnormalBetParlay(int filterBy)
     {
         // Arrange
         const string expectedResult = "4";
-        var request = new RequestDescription { IssueTypeId = IssueTypeConstant.AbnormalBet, FilterBy = 1 };
-        elementService.BuildMixParlay(Arg.Compat.Any<int>()).ReturnsForAnyArgs("4");
-
+        var item = new RequestDescription { IssueTypeId = IssueTypeConstant.AbnormalBet, FilterBy = filterBy };
+        elementService.BuildMixParlay(Arg.Compat.Any<int>()).ReturnsForAnyArgs(expectedResult);
+        elementService.BuildSystemParlay(Arg.Compat.Any<int>()).ReturnsForAnyArgs(expectedResult);
+        elementService.BuildLogId(item.FromLogId, item.ToLogId).ReturnsForAnyArgs("1");
+        elementService.BuildMatch(item.MatchEvent).ReturnsForAnyArgs("b");
+        elementService.BuildLeague(item.SportTypeName, item.LeagueName).ReturnsForAnyArgs("a");
+        elementService.BuildTotal(item.TotalSingle, item.TotalParlay, item.BettypeNames).ReturnsForAnyArgs("4");
         // Act
-        var actual = descriptionService.Build(request);
+        var actual = descriptionService.Build(item);
 
         // Assert
         Assert.Equal(expectedResult, actual);
