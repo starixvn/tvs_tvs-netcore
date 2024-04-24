@@ -65,8 +65,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   isSettlementHT(settlementStatus: string): boolean {
-    const isHT = settlementStatus.charAt(0).toUpperCase() === 'H' ? true : false;
-    return isHT;
+    return settlementStatus.charAt(0).toUpperCase() === 'H' ? true : false;
   }
 
   getIssueTypeName(subIssueTypeId: number): string {
@@ -241,7 +240,7 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
     return StaticService.isDangerAccepted(issueTypeId.toString()) || StaticService.isRedCard(issueTypeId.toString()) || StaticService.isWrongScore(issueTypeId.toString())
-      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isNotParticipate(issueTypeId.toString());
+      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isAbandoned(issueTypeId.toString()) ||StaticService.isNotParticipate(issueTypeId.toString());
   }
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {

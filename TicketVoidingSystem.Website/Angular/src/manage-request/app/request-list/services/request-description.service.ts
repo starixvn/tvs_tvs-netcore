@@ -27,7 +27,7 @@ export class RequestDescriptionService {
   }
 
   private createContentCopy(copyInfoResponse: CopyRequestInfoResponse): string {
-    if (StaticService.isReducedOver(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+    if (StaticService.isReducedOver(copyInfoResponse.requestInfo.issueTypeId.toString()) || StaticService.isAbandoned(copyInfoResponse.requestInfo.issueTypeId.toString())) {
       return this.createReducedOversOrAbandonedContent(copyInfoResponse);
     }
 
