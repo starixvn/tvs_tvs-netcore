@@ -17,8 +17,8 @@ export class CopyRequestInfoService {
       requestId: requestId,
       matchId: matchId
     };
-    const requestInfo = await this.commonService.copyRequestInfo(query);
-    const emailContent = this.createContentEmail(requestInfo, operatorsList);
+    const copyRequestResponse = await this.commonService.copyRequestInfo(query);
+    const emailContent = this.createContentEmail(copyRequestResponse, operatorsList);
     const type = "text/html";
     const blob = new Blob([emailContent], { type });
     const data = [new ClipboardItem({ [type]: blob })];
@@ -31,25 +31,25 @@ export class CopyRequestInfoService {
       matchId: matchId,
       logInfoDetails: logInfoDetail
     };
-    const requestInfo = await this.commonService.copyRequestInfo(query);
-    navigator.clipboard.writeText(this.createContentLetstalk(requestInfo, logInfoDetail, operatorsList));
+    const copyRequestResponse = await this.commonService.copyRequestInfo(query);
+    navigator.clipboard.writeText(this.createContentLetstalk(copyRequestResponse, logInfoDetail, operatorsList));
   }
 
-  private createContentLetstalk(requestInfo: CopyRequestInfoResponse, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]): string {
-    const momentGlobalShowTime = moment(requestInfo.globalShowTime);
+  private createContentLetstalk(copyRequestResponse: CopyRequestInfoResponse, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]): string {
+    const momentGlobalShowTime = moment(copyRequestResponse.requestInfo.globalShowTime);
     const content = `Date: ${momentGlobalShowTime.format(DateTimeFormat.DATE_MONTH_YEAR)}\n`
       + `Time (GMT+8): ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`
-      + `League: ${requestInfo.leagueName}\n`
-      + `Match: ${requestInfo.matchEvent}\n`
-      + `Trader: ${this.getOperatorName(requestInfo.operators, operatorsList, OperatorType.TRADER)}\n`
-      + `Suspender: ${this.getOperatorName(requestInfo.operators, operatorsList, OperatorType.SUSPENDER)}\n`
-      + `Provider: ${requestInfo.provider}\n`
-      + `Issue Type: ${requestInfo.issueTypeName} - ${requestInfo.subIssueTypeName}\n`
-      + `Handle by: ${requestInfo.requestedBy}\n`
-      + `Void settled ticket: ${requestInfo.isHasSettledTicket ? 'Yes' : 'No'}\n`
+      + `League: ${copyRequestResponse.requestInfo.leagueName}\n`
+      + `Match: ${copyRequestResponse.requestInfo.matchEvent}\n`
+      + `Trader: ${this.getOperatorName(copyRequestResponse.requestInfo.operators, operatorsList, OperatorType.TRADER)}\n`
+      + `Suspender: ${this.getOperatorName(copyRequestResponse.requestInfo.operators, operatorsList, OperatorType.SUSPENDER)}\n`
+      + `Provider: ${copyRequestResponse.requestInfo.provider}\n`
+      + `Issue Type: ${copyRequestResponse.requestInfo.issueTypeName} - ${copyRequestResponse.requestInfo.subIssueTypeName}\n`
+      + `Handle by: ${copyRequestResponse.requestInfo.requestedBy}\n`
+      + `Void settled ticket: ${copyRequestResponse.requestInfo.isHasSettledTicket ? 'Yes' : 'No'}\n`
       + `Void Info:`
       + `${this.getVoidInfo(logInfoDetail)}\n`
-      + `Details: ${requestInfo.remark}`;
+      + `Details: ${copyRequestResponse.requestInfo.remark}`;
 
     return content;
   }
@@ -90,30 +90,30 @@ export class CopyRequestInfoService {
     return '';
   }
 
-  private createContentEmail(requestInfo: CopyRequestInfoResponse, operatorsList: OperatorInfo[]): string {
-    const momentGlobalShowTime = moment(requestInfo.globalShowTime);
+  private createContentEmail(copyRequestResponse: CopyRequestInfoResponse, operatorsList: OperatorInfo[]): string {
+    const momentGlobalShowTime = moment(copyRequestResponse.requestInfo.globalShowTime);
     const content =
       `<table border=\"1\" style=\"border-collapse: collapse;\">`
       + `<tr><th>No.</th><th>Label</th><th>Info</th></tr>`
       + `<tr><th>1</th><th style="text-align: left">Title</th><th style="text-align: left"></th></tr>`
       + `<tr><th>2</th><th style="text-align: left">Date<th style="text-align: left">${momentGlobalShowTime.format(DateTimeFormat.DATE_MONTH_YEAR)}</th></tr>`
       + `<tr><th>3</th><th style="text-align: left">Time (GMT+8)</th><th style="text-align: left">${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}</th></tr>`
-      + `<tr><th>4</th><th style="text-align: left">League</th><th style="text-align: left">${requestInfo.leagueName}</th></tr>`
-      + `<tr><th>5</th><th style="text-align: left">Match</th><th style="text-align: left">${requestInfo.matchEvent}</th></tr>`
+      + `<tr><th>4</th><th style="text-align: left">League</th><th style="text-align: left">${copyRequestResponse.requestInfo.leagueName}</th></tr>`
+      + `<tr><th>5</th><th style="text-align: left">Match</th><th style="text-align: left">${copyRequestResponse.requestInfo.matchEvent}</th></tr>`
       + `<tr><th>6</th><th style="text-align: left">Maxbet</th><th style="text-align: left"></th></tr>`
-      + `<tr><th>7</th><th style="text-align: left">Trader</th><th style="text-align: left">${this.getOperatorName(requestInfo.operators, operatorsList, OperatorType.TRADER)}</th></tr>`
-      + `<tr><th>8</th><th style="text-align: left">Suspender</th><th style="text-align: left">${this.getOperatorName(requestInfo.operators, operatorsList, OperatorType.SUSPENDER)}</th></tr>`
-      + `<tr><th>9</th><th style="text-align: left">Provider</th><th style="text-align: left">${requestInfo.provider}</th></tr>`
-      + `<tr><th>10</th><th style="text-align: left">Issue Type</th><th style="text-align: left">${requestInfo.issueTypeName} - ${requestInfo.subIssueTypeName}</th></tr>`
+      + `<tr><th>7</th><th style="text-align: left">Trader</th><th style="text-align: left">${this.getOperatorName(copyRequestResponse.requestInfo.operators, operatorsList, OperatorType.TRADER)}</th></tr>`
+      + `<tr><th>8</th><th style="text-align: left">Suspender</th><th style="text-align: left">${this.getOperatorName(copyRequestResponse.requestInfo.operators, operatorsList, OperatorType.SUSPENDER)}</th></tr>`
+      + `<tr><th>9</th><th style="text-align: left">Provider</th><th style="text-align: left">${copyRequestResponse.requestInfo.provider}</th></tr>`
+      + `<tr><th>10</th><th style="text-align: left">Issue Type</th><th style="text-align: left">${copyRequestResponse.requestInfo.issueTypeName} - ${copyRequestResponse.requestInfo.subIssueTypeName}</th></tr>`
       + `<tr><th>11</th><th style="text-align: left">Problem</th><th style="text-align: left"></th></tr>`
-      + `<tr><th>12</th><th style="text-align: left">Handle by</th><th style="text-align: left">${requestInfo.requestedBy}</th></tr>`
+      + `<tr><th>12</th><th style="text-align: left">Handle by</th><th style="text-align: left">${copyRequestResponse.requestInfo.requestedBy}</th></tr>`
       + `<tr><th>13</th><th style="text-align: left">Market</th><th style="text-align: left"></th></tr>`
       + `<tr><th>14</th><th style="text-align: left">Suspender info</th><th style="text-align: left"></th></tr>`
       + `<tr><th>15</th><th style="text-align: left">Supervisor</th><th style="text-align: left"></th></tr>`
       + `<tr><th>16</th><th style="text-align: left">S&V</th><th style="text-align: left"></th></tr>`
       + `<tr><th>17</th><th style="text-align: left">CSD</th><th style="text-align: left"></th></tr>`
       + `<tr><th>18</th><th style="text-align: left">Source download</th><th style="text-align: left"></th></tr>`
-      + `<tr><th>19</th><th style="text-align: left">Void settled ticket</th><th style="text-align: left">${requestInfo.isHasSettledTicket ? 'Yes' : 'No'}</th></tr>`
+      + `<tr><th>19</th><th style="text-align: left">Void settled ticket</th><th style="text-align: left">${copyRequestResponse.requestInfo.isHasSettledTicket ? 'Yes' : 'No'}</th></tr>`
       + `</table>`;
 
     return content;

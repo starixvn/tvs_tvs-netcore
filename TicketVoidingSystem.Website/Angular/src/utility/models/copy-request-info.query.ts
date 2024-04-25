@@ -8,12 +8,16 @@ export class CopyRequestInfoQuery {
 }
 
 export class CopyRequestInfoResponse {
+  requestInfo: RequestInfoForCopy;
+  betTypeTickets: BetTypeTicketsInfo[];
+}
+
+export class RequestInfoForCopy {
   requestId: number;
   matchId: number;
   //IsNeutral: boolean;
   globalShowTime: Date;
   filterBy: number;
-  startVoidTime: Date;
   issueTypeName: string;
   subIssueTypeName: string;
   isCheckedVar: boolean;
@@ -24,4 +28,19 @@ export class CopyRequestInfoResponse {
   matchEvent: string;
   leagueName: string;
   operators: OperatorInfo[];
+  issueTypeId: number;
+  voidFromTime: Date;
+  voidToTime: Date;
+  liveStatus: string;
+  totalSingleCount: number;
+  totalParlayCount: number;
+}
+
+export class BetTypeTicketsInfo {
+  betTypeId: number;
+  betTypeName: string;
+  inputtedRuns: string;
+  wicketOver: string;
+  playerName: string;
+  ticketsCount: number;
 }

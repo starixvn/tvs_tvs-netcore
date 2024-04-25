@@ -87,7 +87,7 @@
               </div>
             </td>
             <td class="col-tb-5">
-              <i [hidden]="!checkCanCopyRequestInfo(item.issueTypeId)" class="fa fa-paste copy-request-info" (click)="copyRequestInfo(item.requestId, item.details[0].matchId)" aria-hidden="true"></i>
+              <i [hidden]="!isCanCopyRequestDescription(item.issueTypeId)" class="fa fa-paste copy-request-info" (click)="copyRequestDescription(item.requestId, item.details[0].matchId)" aria-hidden="true"></i>
               <div class="text-right" [innerHtml]="item.details[0].description | sanitizeHtml"></div>
             </td>
             <td class="col-tb-6" [attr.rowspan]="item.details.length">
@@ -145,7 +145,7 @@
                 </div>
               </td>
               <td *ngIf="index>0" class="text-right">
-                <i *ngIf="checkCanCopyRequestInfo(item.issueTypeId)" class="fa fa-paste copy-request-info" (click)="copyRequestInfo(item.requestId, detail.matchId)" aria-hidden="true"></i>
+                <i *ngIf="isCanCopyRequestDescription(item.issueTypeId)" class="fa fa-paste copy-request-info" (click)="copyRequestDescription(item.requestId, detail.matchId)" aria-hidden="true"></i>
                 <div [innerHtml]="detail.description | sanitizeHtml"></div>
               </td>
               <td *ngIf="index>0" class="col-tb-13">

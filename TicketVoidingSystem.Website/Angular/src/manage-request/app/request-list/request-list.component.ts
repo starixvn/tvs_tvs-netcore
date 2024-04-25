@@ -1,15 +1,12 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { ClipboardService } from 'ngx-clipboard';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
-import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestStatus } from '../../../utility/models/signal-r.model';
@@ -19,6 +16,7 @@ import { CommonService } from './../../../utility/services/common.service';
 import { AppService } from './../app.service';
 import { PermissionManage } from './../models/permission-manage.model';
 import { DetailRequestModel, RequestModel } from './request.model';
+import { RequestDescriptionService } from './services/request-description.service';
 
 @Component({
   selector: 'request-list',
@@ -46,7 +44,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     private readonly appService: AppService,
     private readonly element: ElementRef,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly clipboardService: ClipboardService
+    private readonly requestDescriptionService :RequestDescriptionService
   ) {
     this.tooltip.element = this.element;
   }
@@ -237,38 +235,14 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongKickOff(issueTypeId.toString());
   }
 
-  public async copyRequestInfo(requestId: number, matchId: number): Promise<void> {
-    const query: CopyRequestInfoQuery = {
-      requestId: requestId,
-      matchId: matchId
-    };
-    const requestInfo = await this.commonService.copyRequestInfo(query);
-    this.clipboardService.copyFromContent(this.createContentCopy(requestInfo));
-    alert(`Request No.${requestId} has been copied to clipboard.`);
+  public async copyRequestDescription(requestId: number, matchId: number): Promise<void> {
+    await this.requestDescriptionService.copyToClipboard(requestId, matchId);  
   }
 
-  private createContentCopy(requestInfo: CopyRequestInfoResponse): string {
-    const momentGlobalShowTime = moment(requestInfo.globalShowTime);
-    const content = `K.O Time: ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`
-      + `League: ${requestInfo.leagueName}\n`
-      + `Match: ${requestInfo.matchEvent}\n`
-      + `Match ID: ${requestInfo.matchId}\n`
-      + `Request No: ${requestInfo.requestId}\n`
-      + `Issue Type: ${requestInfo.issueTypeName} - ${requestInfo.subIssueTypeName}\n`
-      + `VAR: ${requestInfo.isCheckedVar ? 'YES' : 'NO'}\n`
-      + `Provider: ${requestInfo.provider}\n`
-      + `Start Void Time: ${moment(requestInfo.startVoidTime)
-        .format(DateTimeFormat.TIME_FORMAT)} (${requestInfo.filterBy === TVSRequestFilterBy.CHECK_TIME ? "Accept time" : "Trans time"})`
-
-    return content;
+  public isCanCopyRequestDescription(issueTypeId: number): boolean {
+    return StaticService.isDangerAccepted(issueTypeId.toString()) || StaticService.isRedCard(issueTypeId.toString()) || StaticService.isWrongScore(issueTypeId.toString())
+      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isNotParticipate(issueTypeId.toString());
   }
-
-  public checkCanCopyRequestInfo(issueTypeId: number): boolean {
-    return StaticService.isDangerAccepted(issueTypeId.toString())
-      || StaticService.isRedCard(issueTypeId.toString())
-      || StaticService.isWrongScore(issueTypeId.toString());
-  }
-
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];
