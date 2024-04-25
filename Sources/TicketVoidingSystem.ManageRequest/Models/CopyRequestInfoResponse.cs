@@ -87,6 +87,7 @@ public class BetTypeTicketsInfo
     public int BetTypeId { get; set; }
     public string BetTypeName { get; set; }
     public string InputtedRuns { get; set; }
+    public string WicketOver { get; set; }
     public string PlayerName { get; set; }
     public int TicketsCount { get; set; }
 }

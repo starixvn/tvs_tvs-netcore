@@ -42,7 +42,8 @@ export class RequestDescriptionService {
     const betTypeContent = copyInfoResponse.betTypeTickets
       .map(element => {
         const inputtedRunsText = element.inputtedRuns ? ` - ${element.inputtedRuns} and above should be voided` : '';
-        return `${element.betTypeName}${inputtedRunsText}\n`
+        const betTypeName = element.wicketOver ? element.betTypeName.replaceAll('X', `${element.wicketOver}`) : element.betTypeName;
+        return `${betTypeName}${inputtedRunsText}\n`
           + `${element.ticketsCount} ticket(s)\n\n`;
       }).join('');
 
@@ -56,7 +57,7 @@ export class RequestDescriptionService {
     for (let key in groupBetTypes) {
       const values = groupBetTypes[key];
       let currentContent = `${values[0].betTypeName}\n`;
-      var playerContent = values.map(element => `${element.playerName} - ${element.ticketsCount} ticket(s)\n`).join('');
+      let playerContent = values.map(element => `${element.playerName} - ${element.ticketsCount} ticket(s)\n`).join('');
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
