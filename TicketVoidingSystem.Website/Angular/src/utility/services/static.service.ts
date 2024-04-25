@@ -335,7 +335,7 @@ export class StaticService {
     }
     if (logInfoModel.validation.isExistsSecondAccept) {
       const toDateTimeExist = new Date(filterFromTime);
-      toDateTimeExist.setSeconds(secondAcceptValue + toDateTimeExist.getSeconds());
+      toDateTimeExist.setSeconds(Number(secondAcceptValue) + toDateTimeExist.getSeconds());
       const fromTime = `${moment(logInfoModel.logInfoDetail.highlightMinTime).format(DateTimeFormat.TIME_FORMAT)}`;
       const toTime = `${moment(toDateTimeExist).format(DateTimeFormat.TIME_FORMAT)}`;
 
