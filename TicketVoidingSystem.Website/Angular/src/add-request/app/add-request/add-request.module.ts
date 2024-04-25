@@ -20,6 +20,7 @@ import { PoolHouseTicketModule } from './../../../utility/components/pool-house-
 import { ToolTipModule } from './../../../utility/components/tooltip/tooltip.module';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
+import { AccountTableComponent } from './abnormal-accounts/account-table/account-table.component';
 import { ConfirmAbnormalAccountComponent } from './abnormal-accounts/confirm-abnormal-account/confirm-abnormal-account.component';
 import { EventDateFilterComponent } from './abnormal-accounts/event-date-filter/event-date-filter.component';
 import { ProductFilterComponent } from './abnormal-accounts/product-filter/product-filter.component';
@@ -27,16 +28,19 @@ import { AddRequestComponent } from './add-request.component';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
 import { LeagueEventAbnormalComponent } from './event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
-import { OthersAbnormalMixParlayComponent } from './event-abnormal-bet/others-abnormal-mix-parlay/others-abnormal-mix-parlay.component';
+import { OthersAbnormalBetComponent } from './event-abnormal-bet/others-abnormal-bet/others-abnormal-bet.component';
 import { ConfirmDangerAcceptedComponent } from './event-danger-accepted/confirm-danger-accepted/confirm-danger-accepted.component';
 import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
+import { ConfirmEkoComponent } from './event-early-kick-off/confirm-eko/confirm-eko.component';
 import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
+import { LogInfoEkoComponent } from './event-early-kick-off/log-info-eko/log-info-eko.component';
 import { TicketsListComponent } from './event-early-kick-off/tickets-list/tickets-list.component';
 import { EventNotParticipateComponent } from './event-not-participate/event-not-participate.component';
 import { FilterNotParticipateItemComponent } from './event-not-participate/filter-not-participate/filter-not-participate-item/filter-not-participate-item.component';
 import { FilterNotParticipateComponent } from './event-not-participate/filter-not-participate/filter-not-participate.component';
 import { LogInfoNotParticipateComponent } from './event-not-participate/log-info-not-participate/log-info-not-participate.component';
+import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 import { ConfirmRedCardComponent } from './event-red-card/confirm-red-card/confirm-red-card.component';
 import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { FilterTimeAreaComponent } from './event-red-card/filter-time-area/filter-time-area.component';
@@ -69,10 +73,6 @@ import { SubIssueTypeDialogComponent } from './filter/sub-issue-type-dialog/sub-
 import { LeagueEventComponent } from './league-event/league-event.component';
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
-import { LogInfoEkoComponent } from './event-early-kick-off/log-info-eko/log-info-eko.component';
-import { ConfirmEkoComponent } from './event-early-kick-off/confirm-eko/confirm-eko.component';
-import { AccountTableComponent } from './abnormal-accounts/account-table/account-table.component';
-import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
 
 @NgModule({
   declarations: [
@@ -103,7 +103,7 @@ import { EventRecoverTicketComponent } from './event-recover-ticket/event-recove
     LogInfoRedCardComponent,
     ConfirmRedCardComponent,
     ConfirmDangerAcceptedComponent,
-    OthersAbnormalMixParlayComponent,
+    OthersAbnormalBetComponent,
     EventTicket14Component,
     FilterWrongScoreComponent,
     EventWrongHdpComponent,

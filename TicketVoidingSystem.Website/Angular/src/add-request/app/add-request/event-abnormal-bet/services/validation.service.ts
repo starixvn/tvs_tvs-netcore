@@ -19,17 +19,13 @@ export class ValidationService {
 
   initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery{
     const transIds = args.betIdsComponent.getAllBetIds();
-    const matchId = !this.isAbnormalBetMixOrSystemParlay(args) ? args.leagueEventAbnormalComponent?.selectedMatchId : 29;
-    const filterBy = !this.isAbnormalBetMixOrSystemParlay(args) ? null : args.filterBy;
-
     return {
-      matchId: matchId,
       transIds: transIds,
       requestId: args.requestId,
       actionId: args.actionId,
-      filterBy: filterBy,
+      filterBy: args.abnormalBetModel.filterBy,
       issueTypeId: Number(args.issueTypeId),
-      subIssueTypeId: Number(args.subIssueTypeId),
+      subIssueTypeId: Number(args.abnormalBetModel.subIssueTypeId),
       isRemoveCustomerClass201: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass201 : false,
       isRemoveCustomerClass4K: args.isValidateFromConfirmPopup ? args.confirmAbnormalBetComponent.isRemoveCustomerClass4K : false,
       isAddSettledTickets: args.permission.isAddSettledTickets,
@@ -44,10 +40,6 @@ export class ValidationService {
 
   public async checkValidBusinessRule(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
     if (!args.betIdsComponent.isHasBetId()) {
-      if (!StaticService.isFilterByMixOrSystemParlay(args.filterBy)) {
-        args.leagueEventAbnormalComponent.updateUndefinedMatchAndLeague();
-      }
-
       const transIdAreNotNumber = args.betIdsComponent.getAllBetIdsAreNotNumber();
       args.primitiveProps.isShowButtonRemoveInvalid = transIdAreNotNumber.length > 0;
       args.primitiveProps.invalidTransIds = transIdAreNotNumber;
@@ -59,13 +51,13 @@ export class ValidationService {
 
     const query = this.initCheckAbnormalBetTransIdsQuery(args);
     const checkTransIdViewModel = await this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);
-
+    args.abnormalBetModel.sendLetstalkModels = checkTransIdViewModel.sendLetstalkModels;
     if (checkTransIdViewModel === null) {
       return { isValid: false} as ValidationBusinessRuleOutput;
     }
 
-    if (!this.isAbnormalBetMixOrSystemParlay(args)) {
-      args.leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch(checkTransIdViewModel.matches);
+    if (StaticService.isFilterBySingle(args.abnormalBetModel.filterBy)) {
+      args.abnormalBetModel.matches = checkTransIdViewModel.matches;
     }
 
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
@@ -136,14 +128,14 @@ export class ValidationService {
     confirmModel.ticketsOfCustomerClass201 = result.transIdsOfCustomerClass201;
     confirmModel.ticketsOfCustomerClass4K = result.transIdsOfCustomerClass4K;
     confirmModel.isHasWarningRemovedTickets = result.isHasWarningRemovedTickets;
-    confirmModel.listBettype = result.listBettype;
-    confirmModel.listBetteam = result.listBetteam;
+    confirmModel.listBetType = result.listBettype;
+    confirmModel.listBetTeam = result.listBetteam;
 
     return confirmModel;
   }
 
   private isAbnormalBetMixOrSystemParlay(args: ValidationBusinessRuleArgs): boolean {
-    return StaticService.isAbnormalBet(args.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.filterBy);
+    return StaticService.isAbnormalBet(args.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.abnormalBetModel.filterBy);
   }
 
   private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {

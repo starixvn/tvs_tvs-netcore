@@ -45,8 +45,8 @@ class Helper {
     isHasWarningRemovedTickets: false,
     requestId: 0,
     requestedBy: '',
-    listBetteam: 'aa',
-    listBettype: 'bb'
+    listBetTeam: 'aa',
+    listBetType: 'bb'
   };
   static readonly fakeValidationBusinessRuleOutput: ValidationBusinessRuleOutput = {
     isValid: false,
@@ -259,8 +259,8 @@ describe('ValidationService', () => {
     confirmModel.ticketsOfVIPCustomer = '';
     confirmModel.ticketsOfCustomerClass201 = '';
     confirmModel.ticketsOfCustomerClass4K = '';
-    confirmModel.listBetteam = '';
-    confirmModel.listBettype = '';
+    confirmModel.listBetTeam = '';
+    confirmModel.listBetType = '';
 
     // Action
     const result = validationService.isValidationHasWarningTicket(permission, confirmModel);
@@ -400,8 +400,8 @@ describe('ValidationService', () => {
     expect(result.ticketsOfVIPCustomer).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfVIPCustomer);
     expect(result.ticketsOfCustomerClass201).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfCustomerClass201);
     expect(result.ticketsOfCustomerClass4K).toEqual(Helper.fakeValidationAbnormalBet.transIdsOfCustomerClass4K);
-    expect(result.listBettype).toEqual(Helper.fakeValidationAbnormalBet.listBettype);
-    expect(result.listBetteam).toEqual(Helper.fakeValidationAbnormalBet.listBetteam);
+    expect(result.listBetType).toEqual(Helper.fakeValidationAbnormalBet.listBettype);
+    expect(result.listBetTeam).toEqual(Helper.fakeValidationAbnormalBet.listBetteam);
   });
 
   it('#isAbnormalBetMixParlay should return true', async () => {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
-import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { MapEventArg } from '../models/map-event.model';
@@ -57,8 +56,9 @@ export class ObjectService {
       args.requestModel.redCardModel = args.detailViewModel.redCardModels;
       args.primitiveProperty.matchId = args.detailViewModel.redCardModels.find(x => x.isMainMatch).matchId;
     } else if (this.validationService.isLikelyAbnormalBet(args.detailViewModel)) {
-      args.requestModel.abnormalBetModel = this.createEventForAbnormalBet(args.detailViewModel);
-      args.primitiveProperty.matchId = args.requestModel.abnormalBetModel.matchId;
+      args.requestModel.abnormalBetModel = args.detailViewModel.abnormalBetModel;
+      // args.requestModel.abnormalBetModel = this.createEventForAbnormalBet(args.detailViewModel);
+      // args.primitiveProperty.matchId = args.requestModel.abnormalBetModel.matchId;
     } else if (this.validationService.isArchivedTicket(args.detailViewModel)) {
       args.requestModel.eventTicket14Model = { transIds: args.detailViewModel.event.transIds };
     } else if (this.validationService.isWrongHdp(args.detailViewModel) || this.validationService.isWrong1stHdp(args.detailViewModel)) {
@@ -107,13 +107,5 @@ export class ObjectService {
     args.detailViewModel = detailViewModel;
 
     return args;
-  }
-
-  private createEventForAbnormalBet(detailViewModel: RequestDetailViewModel): AbnormalBetModel {
-    const abModel = new AbnormalBetModel();
-    abModel.matchId = detailViewModel.event.matchId;
-    abModel.transIds = detailViewModel.event.transIds;
-    abModel.filterBy = detailViewModel.event.filterBy;
-    return abModel;
   }
 }

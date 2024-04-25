@@ -111,6 +111,10 @@ export class StaticService {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
 
+  static isFilterBySingle(filterBy: number): boolean {
+    return filterBy === AbnormalFilterBy.SINGLE;
+  }
+
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);

@@ -14,7 +14,7 @@ export class OthersService {
     return this.httpService.postJson({ matchIds }, 'api/AddRequest/GetOperators');
   }
 
-  async getProvider(matchId: number): Promise<Provider> {
-    return this.httpService.postJson({ matchId }, 'api/AddRequest/GetProvider');
+  async getProvider(matchIds: string): Promise<Provider> {
+    return this.httpService.postJson({ matchIds }, 'api/AddRequest/GetProvider');
   }
 }

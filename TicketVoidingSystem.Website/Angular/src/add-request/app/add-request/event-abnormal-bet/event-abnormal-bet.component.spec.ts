@@ -66,8 +66,8 @@ class Helper {
     isEditingByAnotherUser: false,
     requestId: 1,
     requestedBy: '',
-    listBettype: '',
-    listBetteam: ''
+    listBetType: '',
+    listBetTeam: ''
   };
 }
 

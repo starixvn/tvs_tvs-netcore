@@ -17,4 +17,6 @@ public class MatchInfoAddRequest
     public int MatchType { get; set; }
     public int ParentId { get; set; }
     public bool IsOutright { get; set; }
+    public DateTime EventDate { get; set; }
+    public DateTime GlobalShowTime { get; set; }
 }

@@ -1,4 +1,3 @@
-import { SubIssueType } from './../../../../../utility/models/issue-type.model';
 import * as _ from 'lodash';
 import { AbnormalFilterBy } from '../../../../../utility/constants/config';
 import { AddRequestService } from '../../add-request.service';
@@ -6,14 +5,15 @@ import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { AddRequestQuery } from '../../models/add-request.query';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { PrimitiveProperty } from '../event-abnormal-bet.model';
 import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
+import { SubIssueType } from './../../../../../utility/models/issue-type.model';
 import { SaveRequestArg } from './save-request.model';
 import { SaveRequestService } from './save-request.service';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -43,8 +43,8 @@ class Helper {
     ticketsOfCustomerClass201: '2123122',
     ticketsOfCustomerClass4K: '2123122',
     isHasWarningRemovedTickets: false,
-    listBettype : 'aa',
-    listBetteam : 'bb'
+    listBetType : 'aa',
+    listBetTeam : 'bb'
   };
   static readonly fakeSaveRequestArg: SaveRequestArg = {
     requestId: Helper.fakeRequestId,

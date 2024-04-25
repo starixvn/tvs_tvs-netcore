@@ -13,7 +13,6 @@ import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { AbnormalBetTicketViewModel, PrimitiveProperty } from './event-abnormal-bet.model';
-import { LeagueEventAbnormalComponent } from './league-event-abnormal/league-event-abnormal.component';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
@@ -36,7 +35,6 @@ export class EventAbnormalBetComponent implements OnInit {
   @Output() updateMatchId = new EventEmitter<number>();
 
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
-  @ViewChild('leagueEventAbnormal') leagueEventAbnormalComponent: LeagueEventAbnormalComponent;
   @ViewChild('confirmAbnormalBetComponent') confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
 
   primitiveProps = new PrimitiveProperty();
@@ -66,6 +64,7 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   async afterFocusOutBetIds(): Promise<void> {
+    this.updateAbnormalBetModel();
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
       await this.checkValidBusinessRule(false);
@@ -87,6 +86,7 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   async saveRequest(): Promise<void> {
+    this.updateAbnormalBetModel();
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.filter.isVoided) {
       await this.checkIfRequestHasWarning(new ConfirmAbnormalBetModel());
@@ -102,7 +102,7 @@ export class EventAbnormalBetComponent implements OnInit {
   public removeInvalidTransIds(): void {
     this.betIdsComponent.removeTransId(this.primitiveProps.invalidTransIds);
     this.primitiveProps.isShowButtonRemoveInvalid = false;
-    let invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
+    const invalidTransIds = this.primitiveProps.invalidTransIds.split(',');
     this.exportTickets = this.exportTickets.filter(x => !(invalidTransIds.includes(x.betId)));
   }
 
@@ -113,6 +113,9 @@ export class EventAbnormalBetComponent implements OnInit {
   changeFilterBy(filterBy: number) {
     this.abnormalBetModel.filterBy = filterBy;
     this.addRequestStore.changeAbnormalFilterBy(filterBy);
+    if (!StaticService.isFilterBySingle(filterBy)) {
+      this.abnormalBetModel.matches = [];
+    }
   }
 
   private async saveWhenRequestNotVoided(): Promise<void> {
@@ -165,10 +168,8 @@ export class EventAbnormalBetComponent implements OnInit {
     args.requestId = this.requestId;
     args.permission = this.permission;
     args.betIdsComponent = this.betIdsComponent;
-    args.filterBy = this.abnormalBetModel.filterBy;
     args.issueTypeId = this.filter.issueTypeId;
-    args.subIssueTypeId = this.filter.subIssueTypeId;
-    args.leagueEventAbnormalComponent = this.leagueEventAbnormalComponent;
+    args.abnormalBetModel = this.abnormalBetModel;
     args.confirmAbnormalBetComponent = this.confirmAbnormalBetComponent;
     args.primitiveProps = this.primitiveProps;
     args.isValidateFromConfirmPopup = isValidateFromConfirmPopup;
@@ -182,7 +183,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
     if (!StaticService.isFilterByMixOrSystemParlay(this.abnormalBetModel.filterBy)) {
-      this.updateMatchId.emit(this.leagueEventAbnormalComponent.selectedMatchId);
+      //this.updateMatchId.emit(1);
     }
     return validation;
   }
@@ -192,13 +193,10 @@ export class EventAbnormalBetComponent implements OnInit {
     args.primitiveProps = this.primitiveProps;
     args.requestId = this.requestId;
     args.isEdit = this.isEdit;
-    args.transIds = this.betIdsComponent.getAllBetIds();
     args.filter = this.filter;
-    args.filterBy = this.abnormalBetModel.filterBy;
     args.abnormalBetModel = this.abnormalBetModel;
     args.others = this.others;
     args.confirmAbnormalBetModel = this.confirmAbnormalBetModel;
-    args.leagueEventAbnormalComponent = this.leagueEventAbnormalComponent;
     args.confirmAbnormalBetComponent = this.confirmAbnormalBetComponent;
     args.addRequestStore = this.addRequestStore;
 
@@ -209,12 +207,8 @@ export class EventAbnormalBetComponent implements OnInit {
     return StaticService.isAbnormalBet(this.filter.issueTypeId);
   }
 
-  public isShowLeagueEvent(): boolean {
-    return !(this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.abnormalBetModel.filterBy));
-  }
-
-  public isHideDifferentMatch(): boolean {
-    return this.abnormalBetModel.filterBy === AbnormalFilterBy.MIX_PARLAY || this.abnormalBetModel.filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
+  public isFilterBySingle(): boolean {
+    return StaticService.isFilterBySingle(this.abnormalBetModel.filterBy);
   }
 
   public async exportExcel() {
@@ -222,5 +216,10 @@ export class EventAbnormalBetComponent implements OnInit {
     const args = this.initCheckValidBusinessRuleQuery(false);
     await this.validationService.exportExcelAbnormalBetTickets(args)
     this.primitiveProps.isBlockUI = false;
+  }
+
+  private updateAbnormalBetModel() {
+    this.abnormalBetModel.transIds = this.betIdsComponent.getAllBetIds();
+    this.abnormalBetModel.subIssueTypeId = Number(this.filter.subIssueTypeId)
   }
 }

@@ -35,19 +35,49 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
         var mappingTypes = new[]
         {
             typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string),
-            typeof(GetAbnormalBetTicketModel)
+            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
         };
         var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var match = result[0].Cast<MatchInfoAddRequest>().FirstOrDefault();
+        var matches = result[0].Cast<MatchInfoAddRequest>().ToList();
         var validation = result[1].Cast<ValidationAbnormalBet>().FirstOrDefault();
         var transInfoAddRequestModel = result[2].Cast<TransInfoAddRequestModel>().FirstOrDefault();
         var transInfoJson = result[3].Cast<string>().FirstOrDefault();
         var abnormalBetTicketRequests = result[4].Cast<GetAbnormalBetTicketModel>();
+        var sendLetstalkModels = result[5].Cast<SendLetstalkModel>().ToList();
 
+        sendLetstalkModels.Add(new SendLetstalkModel
+        {
+            MatchId = 83528627,
+            IsHasUusTickets = false,
+            ListBetTeam = "a,b,v",
+            ListBetType = "Handicap, Over"
+        });
+        sendLetstalkModels.Add(new SendLetstalkModel
+        {
+            MatchId = 83528624,
+            IsHasUusTickets = true,
+            ListBetTeam = "a",
+            ListBetType = "Handicap"
+        });
+        var x = new MatchInfoAddRequest
+        {
+            MatchId = 83528627,
+            LeagueId = 771,
+            HomeId = 815040,
+            AwayId = 519954
+        };
+        var y = new MatchInfoAddRequest
+        {
+            MatchId = 83528624,
+            LeagueId = 99008,
+            HomeId = 866830,
+            AwayId = 874504
+        };
+        matches.Add(x);
+        matches.Add(y);
         var viewModel = new CheckValidTransIdsViewModel
         {
-            Match = matchInfoAddRequestService.UpdateDataFromRemotingRef(match),
+            Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matches),
             Validation = validation,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
@@ -56,8 +86,8 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
                 MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
                 TransInfoJson = transInfoJson
             },
-            AbnormalBetTicketRequests =
-                mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests)
+            AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests),
+            SendLetstalkModels = sendLetstalkModels
         };
 
         return viewModel;

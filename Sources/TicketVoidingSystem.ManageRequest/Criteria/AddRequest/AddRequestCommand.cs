@@ -21,6 +21,7 @@ public class AddRequestCommand : NonQueryCommand
     public int RequestId { get; set; }
     public string TransIds { get; set; }
     public int? FilterBy { get; set; }
+    public string TransInfoJson { get; set; }
 
     public string AbnormalAccountInfo { get; set; }
     public string WrongScoreInfo { get; set; }
@@ -36,7 +37,7 @@ public class AddRequestCommand : NonQueryCommand
     public string KickOffInfo { get; set; }
     public string DuplicateTicketsInfo { get; set; }
     public string RecoverTicketInfo { get; set; }
-    public string TransInfoJson { get; set; }
+    public string AbnormalBetInfo { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_Insert";
 

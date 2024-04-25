@@ -74,6 +74,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
+        command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
 
         return command;
     }

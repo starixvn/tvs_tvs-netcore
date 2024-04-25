@@ -43,13 +43,15 @@ public class EditRequestQuery
 
     public bool IsVoided { get; set; }
 
-    public bool? IsConfirmCalculator { get; set; }
-
     public string? UnMarkTransIds { get; set; }
 
     public string? MarkTransIds { get; set; }
 
     public string? RemoveTransIds { get; set; }
+
+    public string? TransInfoJson { get; set; }
+
+    public int? FilterBy { get; set; }
 
     public AbnormalAccountViewModel? AbnormalAccountInfo { get; set; }
 
@@ -79,6 +81,5 @@ public class EditRequestQuery
 
     public RecoverTicketViewModel? RecoverTicketInfo { get; set; }
 
-    public string? TransInfoJson { get; set; }
-    public int? FilterBy { get; set; }
+    public AbnormalBetViewModel? AbnormalBetInfo { get; set; }
 }

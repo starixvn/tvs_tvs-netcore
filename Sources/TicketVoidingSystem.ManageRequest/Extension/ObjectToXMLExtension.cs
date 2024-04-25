@@ -349,6 +349,15 @@ public static class ObjectToXMLExtension
         return $"<root>{stringBuilder.Trim()}</root>";
     }
 
+    public static string ToEventAbnormalBetXml(this AbnormalBetViewModel model)
+    {
+        var stringBuilder = $"<r TransIds='{model.TransIds}' "
+                            + $"FilterBy='{model.FilterBy}' "
+                            + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
     public static string OperatorToXml(this List<OperatorQuery>? operators)
     {
         if (operators is null || operators.Count <= 0)

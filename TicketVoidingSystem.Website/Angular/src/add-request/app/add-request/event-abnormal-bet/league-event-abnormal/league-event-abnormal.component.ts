@@ -14,6 +14,7 @@ export class LeagueEventAbnormalComponent implements OnInit {
   @Input() actionId: string;
   @Input() initSportType: number;
   @Input() initMatchId: number;
+  @Input() isShowLabel = true;
   leagues: LeagueInfo[];
   leagueId: number;
   matches: MatchInfo[];

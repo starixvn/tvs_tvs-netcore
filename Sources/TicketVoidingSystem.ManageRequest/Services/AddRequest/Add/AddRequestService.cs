@@ -76,7 +76,7 @@ public class AddRequestServiceImp : AddRequestService
     {
         var requestId = await ExecuteAddRequest(query);
         await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.MatchId, query.EarlyKickOffInfo);
-        await sendLetstalkAfterAddService.Execute(query, requestId);
+        await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
         return new Result
         {
             Data = new AddRequestResultData
@@ -108,6 +108,7 @@ public class AddRequestServiceImp : AddRequestService
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
+        command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)

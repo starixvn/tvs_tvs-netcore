@@ -7,6 +7,7 @@ import { WrongOuGetLogInfoQuery } from '../event-wrong-ou/models/get-log-info.qu
 import { WrongScoreGetLogInfoQuery } from '../event-wrong-score/event-wrong-score.model';
 import { OperatorInfo } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
+import { AbnormalBetModel } from './abnormal-bet.model';
 import { DuplicateTicketsModel } from './event-duplicate-tickets.model';
 import { EarlyKickOffModel } from './event-eko.model';
 import { NotParticipateModel } from './event-not-participate.model';
@@ -38,8 +39,6 @@ export class AddRequestQuery {
   kickOffTime: string;
   filterBy?: number;
   transIds: string;
-  isHasUusTickets: boolean;
-  isConfirmCalculator: boolean;
 
   wrongScoreInfo: WrongScoreModel[];
   dangerAcceptedInfo: RedCardModel[];
@@ -55,15 +54,12 @@ export class AddRequestQuery {
   abnormalAccountInfo: AbnormalAccountModel;
   duplicateTicketsInfo: DuplicateTicketsModel;
   recoverTicketInfo: RecoverTicketModel;
+  abnormalBetInfo: AbnormalBetModel;
 
   transInfoJson: string;
   unMarkTransIds: string;
   markTransIds: string;
   removeTransIds: string;
-
-  subIssueTypeName: string;
-  listBetteam: string;
-  listBettype: string;
 }
 
 export interface CheckValidTransIdQuery {
