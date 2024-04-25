@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { ModalType } from 'src/utility/components/modal/modal.model';
+import { ModalType } from '../../utility/components/modal/modal.model';
 import { AutoRefreshMode } from '../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { LABELS } from '../../utility/constants/labels';

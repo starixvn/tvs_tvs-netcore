@@ -75,10 +75,10 @@ describe('AppService', () => {
     mockHttpService.downloadFile = jest.fn();
 
     // Action
-   await appService.exportRequest(query);
+   await appService.exportRequest(query, null);
 
     // Assert
-    expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url);
+    expect(mockHttpService.downloadFile).toHaveBeenCalledWith(query, url, null);
   });
 
   it('#getVoidedTickets should return expected data', async() => {

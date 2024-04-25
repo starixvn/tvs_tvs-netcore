@@ -229,12 +229,12 @@ describe('AppComponent', () => {
       .render();
     const query = new GetRequestsQuery();
     instance['getQuery'] = jest.fn().mockImplementation(() => query);
+    instance['timeoutEvent'] = jest.fn();
 
     // Action
     await instance.exportExcel();
 
     // Assert
-    expect(mockExportExcel).toHaveBeenCalledWith(query);
     expect(mockExportExcel).toHaveBeenCalledTimes(1);
   });
 

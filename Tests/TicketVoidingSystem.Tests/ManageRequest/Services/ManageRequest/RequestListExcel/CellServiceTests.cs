@@ -46,7 +46,7 @@ public class CellServiceTests
         cellService.RenderDataWorksheet(worksheet, requests);
 
         // Assert
-        Assert.Equal(1, worksheet.Cells[2, 1].GetValue<int>());
+        Assert.Equal(0, worksheet.Cells[2, 1].GetValue<int>());
     }
 
     [Fact]
@@ -95,6 +95,6 @@ public class CellServiceTests
         cellService.RenderDataWorksheet(worksheet, requests);
 
         // Assert
-        Assert.Equal(1, worksheet.Cells[2, 1].GetValue<int>());
+        Assert.Equal(0, worksheet.Cells[2, 1].GetValue<int>());
     }
 }

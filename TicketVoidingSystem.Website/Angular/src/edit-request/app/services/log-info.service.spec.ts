@@ -81,14 +81,14 @@ class Helper {
     instantlySettleCount: 2,
     cancelCashOutCount: 1
   } as LogInfoDetail;
-  static fakeGetLogInfoModel: GetLogInfoModel = {
+  static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     scoreId: Helper.fakeScoreId,
     matchId: Helper.fakeMatchId,
     validation: new Validation(),
     ticketRequest: [ { transIds: '123456789', requestId: 11111 } as TicketRequest],
     logInfoDetail: Helper.fakeLogInfoDetail
   };
-  static fakeGetLogInfoViewModel: GetLogInfoViewModel = {
+  static readonly fakeGetLogInfoViewModel: GetLogInfoViewModel = {
     getLogInfoModels: [Helper.fakeGetLogInfoModel],
     transInfoAddRequestModel: new TransInfoAddRequestModel()
   };
@@ -267,6 +267,7 @@ describe('LogInfoService', () => {
     const spyIsWrongOdds = jest.spyOn(validationService, 'isWrongOdds').mockImplementation(() => false);
     const spyIsReducedOver = jest.spyOn(validationService, 'isReducedOver').mockImplementation(() => false);
     const spyIsNotParticipate = jest.spyOn(validationService, 'isNotParticipate').mockImplementation(() => false);
+    const spyIsAbandoned = jest.spyOn(validationService, 'isAbandoned').mockImplementation(() => false);
 
     logInfoService['createLogInfoArg'] = jest.fn();
     logInfoService['getLogInfoDangerAccepted'] = jest.fn();
@@ -278,6 +279,7 @@ describe('LogInfoService', () => {
     logInfoService['isWrong1stOu'] = jest.fn();
     logInfoService['isReducedOver'] = jest.fn();
     logInfoService['isNotParticipate'] = jest.fn();
+    logInfoService['isAbandoned'] = jest.fn();
 
     // Action
     await logInfoService.getLogInfo(null, null);
@@ -297,6 +299,7 @@ describe('LogInfoService', () => {
     expect(spyIsWrongOdds).toHaveBeenCalledTimes(1);
     expect(spyIsReducedOver).toHaveBeenCalledTimes(1);
     expect(spyIsNotParticipate).toHaveBeenCalledTimes(1);
+    expect(spyIsAbandoned).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfoRedCard should get correct info', async () => {

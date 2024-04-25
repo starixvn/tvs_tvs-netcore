@@ -3,14 +3,12 @@ import { FormsModule } from '@angular/forms';
 import '@angular/localize/init';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { ClipboardService } from 'ngx-clipboard';
 import { Shallow } from 'shallow-render';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingComponent } from '../../../utility/components/paging/paging/paging.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LABELS } from '../../../utility/constants/labels';
-import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
@@ -23,6 +21,7 @@ import { PermissionManage } from '../models/permission-manage.model';
 import { TicketListComponent } from '../ticket-list/ticket-list.component';
 import { RequestListComponent } from './request-list.component';
 import { DetailRequestModel, RequestModel } from './request.model';
+import { RequestDescriptionService } from './services/request-description.service';
 
 class Helper {
   static readonly titleSelector = '.title-request-list-label';
@@ -726,19 +725,17 @@ describe('RequestListComponent', () => {
     expect(actual).toBeFalsy();
   });
 
-  it('#copyRequestInfo should call #commonService.copyRequestInfo', async () => {
+  it('#copyRequestDescription should call #requestDescriptionService.copyToClipboard', async () => {
     // Arrange
-    const mockCopyRequestInfo = jest.fn().mockReturnValue(new CopyRequestInfoResponse());
+    const mockCopyToClipboard = jest.fn();
     const { instance } = await shallow
-    .mock(CommonService, { copyRequestInfo: mockCopyRequestInfo })
-    .mock(ClipboardService, { copyFromContent: jest.fn() })
+    .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
     .render();
-    window.alert = jest.fn();
 
     // Action
-    await instance.copyRequestInfo(1212, 1212);
+    await instance.copyRequestDescription(1212, 1212);
 
     // Assert
-    expect(mockCopyRequestInfo).toHaveBeenCalledTimes(1);
+    expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);
   });
 });
