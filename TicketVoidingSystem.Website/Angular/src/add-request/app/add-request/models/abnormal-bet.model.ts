@@ -7,9 +7,6 @@ export class AbnormalBetModel {
   transIds: string;
   filterBy: number;
   subIssueTypeId: number;
-  isHasUusTickets: boolean;
   isConfirmCalculator: boolean;
   subIssueTypeName: string;
-  listBetTeam: string;
-  listBetType: string;
 }

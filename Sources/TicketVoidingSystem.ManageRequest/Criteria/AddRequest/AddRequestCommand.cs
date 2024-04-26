@@ -17,7 +17,6 @@ public class AddRequestCommand : NonQueryCommand
     public string IP { get; set; }
     public bool IsTest { get; set; }
     public int IssueTypeId { get; set; }
-    public int MatchId { get; set; }
     public int RequestId { get; set; }
     public string TransIds { get; set; }
     public int? FilterBy { get; set; }

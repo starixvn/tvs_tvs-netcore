@@ -12,12 +12,6 @@ public class AbnormalBetViewModel
 
     public string SubIssueTypeName { get; set; }
 
-    public string ListBetTeam { get; set; }
-
-    public string ListBetType { get; set; }
-
-    public bool IsHasUusTickets { get; set; }
-
     public bool IsConfirmCalculator { get; set; }
 
     public IEnumerable<MatchInfoAddRequest> Matches { get; set; }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
@@ -32,7 +32,6 @@ export class EventAbnormalBetComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() abnormalBetModel = new AbnormalBetModel();
-  @Output() updateMatchId = new EventEmitter<number>();
 
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
   @ViewChild('confirmAbnormalBetComponent') confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
@@ -182,9 +181,7 @@ export class EventAbnormalBetComponent implements OnInit {
     const validation = await this.validationService.checkValidBusinessRule(args);
     this.exportTickets = validation.abnormalBetTicketRequests;
     this.primitiveProps.transInfoAddRequestModel = validation.transInfoAddRequestModel;
-    if (!StaticService.isFilterByMixOrSystemParlay(this.abnormalBetModel.filterBy)) {
-      //this.updateMatchId.emit(1);
-    }
+
     return validation;
   }
 

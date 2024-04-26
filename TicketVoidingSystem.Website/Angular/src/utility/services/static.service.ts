@@ -145,8 +145,10 @@ export class StaticService {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.abnormalAccountModel.subIssueTypeId;
-    }  else if (this.isRecoverTicket(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isRecoverTicket(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.recoverTicketModel.subIssueTypeId;
+    } else if (this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.abnormalBetModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -174,7 +176,8 @@ export class StaticService {
     } else if (
       this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())
       || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
-      || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
+      || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())
+      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {
       return requestDetail.event.eventDate;

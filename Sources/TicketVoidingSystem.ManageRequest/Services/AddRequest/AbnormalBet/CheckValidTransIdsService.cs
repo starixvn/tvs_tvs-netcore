@@ -38,43 +38,13 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
             typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
         };
         var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var matches = result[0].Cast<MatchInfoAddRequest>().ToList();
+        var matches = result[0].Cast<MatchInfoAddRequest>();
         var validation = result[1].Cast<ValidationAbnormalBet>().FirstOrDefault();
         var transInfoAddRequestModel = result[2].Cast<TransInfoAddRequestModel>().FirstOrDefault();
         var transInfoJson = result[3].Cast<string>().FirstOrDefault();
         var abnormalBetTicketRequests = result[4].Cast<GetAbnormalBetTicketModel>();
-        var sendLetstalkModels = result[5].Cast<SendLetstalkModel>().ToList();
+        var sendLetstalkModels = result[5].Cast<SendLetstalkModel>();
 
-        sendLetstalkModels.Add(new SendLetstalkModel
-        {
-            MatchId = 83528627,
-            IsHasUusTickets = false,
-            ListBetTeam = "a,b,v",
-            ListBetType = "Handicap, Over"
-        });
-        sendLetstalkModels.Add(new SendLetstalkModel
-        {
-            MatchId = 83528624,
-            IsHasUusTickets = true,
-            ListBetTeam = "a",
-            ListBetType = "Handicap"
-        });
-        var x = new MatchInfoAddRequest
-        {
-            MatchId = 83528627,
-            LeagueId = 771,
-            HomeId = 815040,
-            AwayId = 519954
-        };
-        var y = new MatchInfoAddRequest
-        {
-            MatchId = 83528624,
-            LeagueId = 99008,
-            HomeId = 866830,
-            AwayId = 874504
-        };
-        matches.Add(x);
-        matches.Add(y);
         var viewModel = new CheckValidTransIdsViewModel
         {
             Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matches),

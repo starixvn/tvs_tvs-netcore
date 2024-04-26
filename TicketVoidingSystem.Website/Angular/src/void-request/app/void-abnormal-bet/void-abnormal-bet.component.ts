@@ -16,15 +16,14 @@ import { VoidPageService } from './services/void-page.service';
   styleUrls: ['./void-abnormal-bet.component.scss']
 })
 export class VoidAbnormalBetComponent implements OnInit {
-
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
   @ViewChild("templateMessage") templateMessageViewChild: TemplateMessageComponent;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItems: VoidAbnormalBetModel[] = [];
   public issueTypes: IssueTypesModel;
-  private readonly afterLoadUnderneathDataSubscription: Subscription;
   public tooltip = new Tooltip();
+  private readonly afterLoadUnderneathDataSubscription: Subscription;
   constructor(
     private readonly element: ElementRef,
     private readonly ticketsService: TicketsService,

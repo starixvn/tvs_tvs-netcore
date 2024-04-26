@@ -50,7 +50,7 @@ export class SaveRequestService {
 
   private getSportType(matches: MatchInfo[]): number {
     if (matches?.length > 0) {
-      return new Set(matches).size === 1 ? matches[0].sportType : null;
+      return new Set(matches.map(x => x.sportType)).size === 1 ? matches[0].sportType : null;
     }
 
     return null;
@@ -74,9 +74,6 @@ export class SaveRequestService {
   private createAbnormalBetModel(args: SaveRequestArg): AbnormalBetModel {
     const model = args.abnormalBetModel;
     model.transIds = this.getTransIdsForSaveRequest(args.confirmAbnormalBetModel, args.confirmAbnormalBetComponent, args.abnormalBetModel.transIds);
-    model.isHasUusTickets = args.primitiveProps.isHasUusTickets;
-    model.listBetTeam = args.confirmAbnormalBetModel.listBetTeam;
-    model.listBetType = args.confirmAbnormalBetModel.listBetType;
     model.isConfirmCalculator = args.confirmAbnormalBetComponent.isConfirmCalculator;
     model.subIssueTypeName = args.filter.subIssueTypes
       ? args.filter.subIssueTypes.find(x => x.subIssueTypeId.toString() === args.filter.subIssueTypeId).subIssueTypeName : null;
