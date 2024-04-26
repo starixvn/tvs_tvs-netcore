@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
+import { IssueTypesModel, SubIssueType } from 'src/utility/models/issue-type.model';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -75,5 +76,13 @@ export class VoidPageCommonService {
     afterLoadUnderneathDataSubscription = this.observableTimer.subscribe(async () => {
       await this.checkLoadedFullDataBeforeVoid(voidPageItems, templateMessageViewChilds, primitiveProperty, afterLoadUnderneathDataSubscription);
     });
+  }
+
+  getDisplayIssueTypeName(issueTypeId: number, subIssueTypeModel: SubIssueType, issueTypes: IssueTypesModel): string {
+    const currentIssueType = issueTypes.issueTypes.find(x => x.issueTypeId === issueTypeId);
+    const displayName = currentIssueType.issueTypeName === subIssueTypeModel.subIssueTypeName ? currentIssueType.issueTypeName
+      : `${currentIssueType.issueTypeName} - ${subIssueTypeModel.subIssueTypeName}`;
+
+    return displayName;
   }
 }
