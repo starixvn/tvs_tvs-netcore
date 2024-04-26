@@ -231,12 +231,6 @@ export class VoidOtherIssueComponent implements OnInit {
     }
   }
 
-  updateTemplateValueForAbnormalBet() {
-    if (this.isAbnormalBet()) {
-      this.templateValue.filterBy = this.requestDetail.event.filterBy;
-    }
-  }
-
   updateTemplateValueForWrongOdds() {
     if (this.isWrongOdds()) {
       this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
@@ -259,7 +253,6 @@ export class VoidOtherIssueComponent implements OnInit {
     this.templateValue.toTransTime = this.ticketsModel.toTime;
     this.templateValue.eventType = this.ticketsModel.isAllLiveTickets ? EventType.LIVE : null;
     this.templateValue.isAllNonLiveTickets = this.ticketsModel.isAllNonLiveTickets;
-    this.updateTemplateValueForAbnormalBet();
     this.updateTemplateValueForWrongScore();
     this.updateTemplateValueForWrongOdds();
     this.templateValue.totalTickets = this.ticketsModel.total;
@@ -371,7 +364,7 @@ export class VoidOtherIssueComponent implements OnInit {
           const checkingPermissionModel = new CheckingPermissionModel();
           checkingPermissionModel.setParam(this.ticketsModel.checkPermissionTickets, this.voidQuery.matchId, 'ticket-voiding-check-void-bet-permission', true,
             StaticService.checkHandlingCashOutAsUnSettledTicketByIssueTypeId(this.requestDetail.request.issueTypeId.toString()), true, this.ticketsModel.allCancelCashOutTickets);
-          if (this.isAbnormalAccount() || this.isAbnormalBetMixOrSystemParlay() || this.isArchivedTickets()) {
+          if (this.isAbnormalAccount() || this.isArchivedTickets()) {
             checkingPermissionModel.matchId = 0;
           }
 
@@ -432,7 +425,7 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   isHasMatchInfo() {
-    return !this.isAbnormalAccount() && !this.isAbnormalBetMixOrSystemParlay() && !this.isArchivedTickets();
+    return !this.isAbnormalAccount() && !this.isArchivedTickets();
   }
 
   isAbnormalAccount(): boolean {
@@ -441,14 +434,6 @@ export class VoidOtherIssueComponent implements OnInit {
 
   isWrongScore(): boolean {
     return StaticService.isWrongScore(this.requestDetail.request.issueTypeId.toString());
-  }
-
-  isAbnormalBet(): boolean {
-    return StaticService.isAbnormalBet(this.requestDetail.request.issueTypeId.toString());
-  }
-
-  isAbnormalBetMixOrSystemParlay(): boolean {
-    return this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.requestDetail.event.filterBy);
   }
 
   isArchivedTickets() {
