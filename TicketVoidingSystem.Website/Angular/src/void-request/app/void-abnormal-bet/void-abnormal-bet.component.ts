@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
@@ -17,7 +17,7 @@ import { VoidPageService } from './services/void-page.service';
 })
 export class VoidAbnormalBetComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChild("templateMessage") templateMessageViewChild: TemplateMessageComponent;
+  @ViewChildren("templateMessage") templateMessageViewChildren: QueryList<TemplateMessageComponent>;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItems: VoidAbnormalBetModel[] = [];
@@ -46,7 +46,7 @@ export class VoidAbnormalBetComponent implements OnInit {
   }
 
   async onClickShowVoidTickets(voidPageItem: VoidAbnormalBetModel): Promise<void> {
-    this.voidPageCommonService.onClickShowVoidTickets(voidPageItem, this.requestDetail, this.primitiveProperty);
+    this.voidPageCommonService.onClickShowVoidTickets(voidPageItem, this.requestDetail, this.primitiveProperty, this.voidPageItems);
   }
 
   async onPagingTicketsChange(voidPageItem: VoidAbnormalBetModel): Promise<void> {
@@ -58,7 +58,7 @@ export class VoidAbnormalBetComponent implements OnInit {
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidAbnormalBetModel): Promise<void> {
-    this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription);
+    this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidPageItems);
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {
@@ -66,6 +66,6 @@ export class VoidAbnormalBetComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, [this.templateMessageViewChild], this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.templateMessageViewChildren.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 }

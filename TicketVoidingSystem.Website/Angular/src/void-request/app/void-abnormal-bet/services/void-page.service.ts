@@ -59,7 +59,7 @@ export class VoidPageService {
   private getTemplateValue(voidPageItem: VoidAbnormalBetModel, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
-    templateValue.filterBy = requestDetail.event.filterBy;
+    templateValue.filterBy = requestDetail.abnormalBetModel.filterBy;
 
     return templateValue;
   }
