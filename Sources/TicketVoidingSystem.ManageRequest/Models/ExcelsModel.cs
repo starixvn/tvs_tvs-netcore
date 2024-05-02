@@ -137,67 +137,94 @@ public class ExcelVoidedTicketModel
 public class ExcelRequestModel
 {
     [Cell("A2")]
-    public int RequestId { get; set; }
+    public string EventDateMatch { get; set; }
 
     [Cell("B2")]
-    public string Sport { get; set; }
+    public string KickOffTimeMatch { get; set; }
 
     [Cell("C2")]
-    public string IssueType { get; set; }
-
-    [Cell("D2")]
-    public string SubIssueType { get; set; }
-
-    [Cell("E2")]
-    public string MatchId { get; set; }
-
-    [Cell("F2")]
-    public string CalculatedScore { get; set; }
-
-    [Cell("G2")]
-    public string Description { get; set; }
-
-    [Cell("H2")]
-    public string Event { get; set; }
-
-    [Cell("I2")]
     public string League { get; set; }
 
+    [Cell("D2")]
+    public string Event { get; set; }
+
+    [Cell("E2")]
+    public string Trader { get; set; }
+
+    [Cell("F2")]
+    public string LA { get; set; }
+
+    [Cell("G2")]
+    public string Remark { get; set; }
+
+    [Cell("H2")]
+    public string TVAndIPTV { get; set; }
+
+    [Cell("I2")]
+    public string Provider { get; set; }
+
     [Cell("J2")]
-    public string VarCheck { get; set; }
+    public string Source { get; set; }
 
     [Cell("K2")]
-    public string BetType { get; set; }
+    public string VarCheck { get; set; }
 
     [Cell("L2")]
-    public string NoOfTickets { get; set; }
+    public string Action { get; set; }
 
     [Cell("M2")]
-    public string Action { get; set; }
+    public string MistakenBy { get; set; }
 
     [Cell("N2")]
     public string CreatedBy { get; set; }
 
     [Cell("O2")]
-    public string CreatedTime { get; set; }
-
-    [Cell("P2")]
-    public string CalcHalfTime { get; set; }
-
-    [Cell("Q2")]
-    public string CalcFullTime { get; set; }
-
-    [Cell("R2")]
-    public string MistakenBy { get; set; }
-
-    [Cell("S2")]
-    public string DecidedBy { get; set; }
-
-    [Cell("T2")]
     public string PerformedBy { get; set; }
 
-    [Cell("U2")]
+    [Cell("P2")]
+    public string DecidedBy { get; set; }
+
+    [Cell("Q2")]
     public string CheckedBy { get; set; }
+
+    [Cell("R2")]
+    public string Message { get; set; }
+
+    [Cell("S2")]
+    public int RequestId { get; set; }
+
+    [Cell("T2")]
+    public string Sport { get; set; }
+
+    [Cell("U2")]
+    public string IssueType { get; set; }
+
+    [Cell("V2")]
+    public string SubIssueType { get; set; }
+
+    [Cell("W2")]
+    public string MatchId { get; set; }
+
+    [Cell("X2")]
+    public string CalculatedScore { get; set; }
+
+    [Cell("Y2")]
+    public string Description { get; set; }
+
+    [Cell("Z2")]
+    public string BetType { get; set; }
+
+    [Cell("AA2")]
+    public string NoOfTickets { get; set; }
+
+    [Cell("AB2")]
+    public string CreatedTime { get; set; }
+
+    [Cell("AC2")]
+    public string CalcHalfTime { get; set; }
+
+    [Cell("AD2")]
+    public string CalcFullTime { get; set; }
 
     public int? NumberOfRequestDetails { get; set; }
 

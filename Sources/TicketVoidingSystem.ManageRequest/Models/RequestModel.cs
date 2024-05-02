@@ -51,6 +51,17 @@ public class RequestModel
             return root.IsCheckedVar;
         }
     }
+
+    public DateTime KickOffTimeMatch { get; set; }
+    public DateTime EventDateMatch { get; set; }
+    public string Provider { get; set; }
+    public string Source { get; set; }
+    public string Remark { get; set; }
+    public string Trader { get; set; }
+    public string LA { get; set; }
+    public string TVAndIPTV { get; set; }
+    public string Message { get; set; }
+    public int? ParentMatchId { get; set; }
 }
 
 public class IgnoreDuplicateAbnormalAccountEqualityComparer : IEqualityComparer<RequestModel>
