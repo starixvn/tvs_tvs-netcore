@@ -210,7 +210,6 @@ describe('ObjectService', () => {
   it('#mapEvent should update correct model when isLikelyAbnormalBet', async () => {
     const args = _.clone(Helper.fakeMapEventArg);
     const abnormalBetModel = new AbnormalBetModel();
-    abnormalBetModel.matchId = Helper.fakeMatchId;
     args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
     objectService['createEventForAbnormalBet'] = jest.fn().mockImplementation(() => abnormalBetModel);
 

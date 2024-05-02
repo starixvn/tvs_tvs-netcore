@@ -70,11 +70,6 @@ export class ActionVoidService {
   }
 
   /* istanbul ignore next */
-  public getActionVoidAbnormalBetRealMember(): number[] {
-    return ActionVoidByIssueTypeConst.ABNORMAL_BET_REAL_MEMBER;
-  }
-
-  /* istanbul ignore next */
   public getActionVoidArchivedTicket(): number[] {
     return ActionVoidByIssueTypeConst.ARCHIVED_TICKET;
   }

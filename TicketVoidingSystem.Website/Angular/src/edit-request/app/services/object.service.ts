@@ -55,7 +55,7 @@ export class ObjectService {
     } else if (this.validationService.isRedCard(args.detailViewModel)) {
       args.requestModel.redCardModel = args.detailViewModel.redCardModels;
       args.primitiveProperty.matchId = args.detailViewModel.redCardModels.find(x => x.isMainMatch).matchId;
-    } else if (this.validationService.isLikelyAbnormalBet(args.detailViewModel)) {
+    } else if (this.validationService.isAbnormalBet(args.detailViewModel)) {
       args.requestModel.abnormalBetModel = args.detailViewModel.abnormalBetModel;
     } else if (this.validationService.isArchivedTicket(args.detailViewModel)) {
       args.requestModel.eventTicket14Model = { transIds: args.detailViewModel.event.transIds };

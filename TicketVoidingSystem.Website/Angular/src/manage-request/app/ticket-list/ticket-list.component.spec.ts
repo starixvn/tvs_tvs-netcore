@@ -6,7 +6,6 @@ import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '.
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
 import { RequestInfoComponent } from '../../../utility/components/request-info/request-info.component';
 import { GeneralInfo } from '../../../utility/components/request-info/request-info.model';
-import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -456,7 +455,7 @@ describe('TicketListComponent', () => {
         }
       });
     instance['isAbnormalAccountIssueType'] = jest.fn().mockImplementation(() => false);
-    instance['isAbnormalBetIssueType'] = jest.fn().mockImplementation(() => false);
+    instance['isAbnormalBet'] = jest.fn().mockImplementation(() => false);
     instance['isArchivedTicketIssueType'] = jest.fn().mockImplementation(() => true);
     const actual = instance.isShowMatchInfo(Helper.fakeRequestDetailViewModel);
 
@@ -544,57 +543,5 @@ describe('TicketListComponent', () => {
     await instance.ngOnChanges({});
 
     expect(instance.getTickets).toHaveBeenCalledTimes(0);
-  });
-
-  it('#isAbnormalBetRealMemberIssueType should return false when requestDetail have not request', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const requestDetail = new RequestDetailViewModel();
-    requestDetail.request = null;
-
-    const actual = instance['isAbnormalBetRealMemberIssueType'](requestDetail);
-
-    expect(actual).toBe(false);
-  });
-
-  it('#isAbnormalBetRealMemberIssueType should return true', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    const requestDetail = new RequestDetailViewModel();
-    requestDetail.request = new RequestDetailModel;
-    requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER);
-
-    const actual = instance['isAbnormalBetRealMemberIssueType'](requestDetail);
-
-    expect(actual).toBeTruthy();
-  });
-
-  it('#isLikelyAbnormalBetIssueType should return true', async () => {
-    const { instance } = await shallow
-      .render(Helper.ticketListComponentHtml, {
-        bind: {
-          modal: Helper.fakeTicketListModal,
-        }
-      });
-    [
-      IssueTypeConstant.ABNORMAL_BET,
-      IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER
-    ].forEach(x => {
-      const requestDetail = new RequestDetailViewModel();
-      requestDetail.request = new RequestDetailModel;
-      requestDetail.request.issueTypeId = Number(x);
-
-      const actual = instance['isLikelyAbnormalBetIssueType'](requestDetail);
-
-      expect(actual).toBeTruthy();
-    });
   });
 });

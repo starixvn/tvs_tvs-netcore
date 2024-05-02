@@ -81,7 +81,6 @@ public class ConvertRequestsServiceImp : ConvertRequestsService
         var matchingFunctions = new Dictionary<int, Func<string, string>>
             {
                 {IssueTypeConstant.AbnormalBet, BuildTotalSingleOrParlay},
-                {IssueTypeConstant.AbnormalBetRealMember, BuildTotalSingleOrParlay},
                 {IssueTypeConstant.DangerAccepted, BuildVoidTime},
                 {IssueTypeConstant.RedCard, BuildVoidTime},
                 {IssueTypeConstant.WrongHDP, BuildVoidTime},

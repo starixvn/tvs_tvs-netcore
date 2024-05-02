@@ -32,7 +32,7 @@
           </event-early-kick-off>
 
           <event-abnormal-bet #eventAbnormalBet
-            *ngIf="isLikelyAbnormalBetIssueType()"
+            *ngIf="isAbnormalBet()"
             [userId]="userId"
             [requestedBy]="requestedBy"
             [isEdit]="isEdit"
@@ -206,7 +206,7 @@
       [isEdit]="isEdit"
       [model]="model.others">
     </abnormal-accounts-other>
-    <others-abnormal-bet *ngIf="isAbnormalBetIssueType() || isArchivedTicketIssueType() || isDuplicateTickets() || isRecoverTicket()"
+    <others-abnormal-bet *ngIf="isAbnormalBet() || isArchivedTicketIssueType() || isDuplicateTickets() || isRecoverTicket()"
       [isEdit]="isEdit"
       [model]="model.others">
     </others-abnormal-bet>

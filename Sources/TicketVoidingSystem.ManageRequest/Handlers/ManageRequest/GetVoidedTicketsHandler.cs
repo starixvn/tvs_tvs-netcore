@@ -73,7 +73,7 @@ public class GetVoidedTicketsHandler : IRequestHandler<GetVoidedTicketsRequest, 
 
     private static void UpdateGeneralBetType(GetVoidedTicketsQuery query, VoidedTicketsViewModel viewModel)
     {
-        if (query.IssueTypeId.IsLikelyAbnormalBet())
+        if (query.IssueTypeId.IsAbnormalBet())
         {
             viewModel.GeneralBetTypeCombinations = CombineBettype(viewModel.Groups);
         }

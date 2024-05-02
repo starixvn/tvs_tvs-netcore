@@ -121,12 +121,7 @@ public static class Helper
         return messageContent.ToLowerInvariant().Contains("kindly double check your statement again") ? MessageContentType.VoidSettled : MessageContentType.VoidUnsettled;
     }
 
-    public static bool IsLikelyAbnormalBet(int issueTypeId)
-    {
-        return IsAbnormalBet(issueTypeId) || IsAbnormalBetRealMember(issueTypeId);
-    }
-
-    private static bool IsAbnormalBet(int issueTypeId)
+    public static bool IsAbnormalBet(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalBet == issueTypeId;
     }
@@ -139,11 +134,6 @@ public static class Helper
     public static bool IsAbnormalAccount(int issueTypeId)
     {
         return IssueTypeConstant.AbnormalAccount == issueTypeId;
-    }
-
-    public static bool IsAbnormalBetRealMember(int issueTypeId)
-    {
-        return IssueTypeConstant.AbnormalBetRealMember == issueTypeId;
     }
 
     public static string GetBetFrom(string betFrom)

@@ -19,11 +19,6 @@ public static class IssueTypeExtension
         return id == IssueTypeConstant.DangerAccepted;
     }
 
-    public static bool IsLikelyAbnormalBet(this int id)
-    {
-        return id.IsAbnormalBet() || id.IsAbnormalBetRealMember();
-    }
-
     public static bool IsAbnormalBet(this int id)
     {
         return id == IssueTypeConstant.AbnormalBet;
@@ -42,11 +37,6 @@ public static class IssueTypeExtension
     public static bool RecoverTicket(this int id)
     {
         return id == IssueTypeConstant.RecoverTicket;
-    }
-
-    public static bool IsAbnormalBetRealMember(this int id)
-    {
-        return id == IssueTypeConstant.AbnormalBetRealMember;
     }
 
     public static bool IsWrongKickOffTime(this int id)

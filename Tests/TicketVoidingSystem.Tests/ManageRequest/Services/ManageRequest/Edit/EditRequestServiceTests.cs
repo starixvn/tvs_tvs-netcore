@@ -6,6 +6,7 @@ using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
+using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using Xunit;
@@ -32,9 +33,6 @@ public class EditRequestServiceTests
     [Theory]
     [InlineData(IssueTypeConstant.ArchivedTicket, "1", true)]
     [InlineData(IssueTypeConstant.AbnormalBet, "1", true)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "1", true)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "", true)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "1", false)]
     public async Task UpdateRequest_ValidData_ReturnExpected(int issueTypeId, string removeTransIds,
         bool isConfirmCalculator)
     {
@@ -43,7 +41,7 @@ public class EditRequestServiceTests
         {
             IssueTypeId = issueTypeId,
             RemoveTransIds = removeTransIds,
-            IsConfirmCalculator = isConfirmCalculator,
+            AbnormalBetInfo = new AbnormalBetViewModel { IsConfirmCalculator = isConfirmCalculator },
             MatchId = 1
         };
         var markTicketResults = new List<Result> { new() };

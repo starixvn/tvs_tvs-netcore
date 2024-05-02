@@ -71,7 +71,7 @@ public static class CheckBoxExtension
 
     private static bool IsRequiredPermissionSettledTickets(int issueTypeId)
     {
-        return issueTypeId.IsAbnormalAccount() || issueTypeId.IsLikelyAbnormalBet() || issueTypeId.IsArchivedTicket();
+        return issueTypeId.IsAbnormalAccount() || issueTypeId.IsAbnormalBet() || issueTypeId.IsArchivedTicket();
     }
 
     private static bool CheckStatus(GetTicketModel item)

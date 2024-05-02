@@ -102,9 +102,6 @@ public class ConvertRequestsServiceTests
 
     [Theory]
     [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-single'>abc</div>", "Single: abc")]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary total-mix-parlay'>abc</div>",
-        "Mix Parlay: abc")]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, "<div class='text-primary'>abc</div>", "")]
     [InlineData(IssueTypeConstant.DangerAccepted, "<div class='void-time'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.RedCard, "<div class='void-time'>abc</div>", "abc")]
     [InlineData(IssueTypeConstant.WrongHDP, "<div class='void-time'>abc</div>", "abc")]

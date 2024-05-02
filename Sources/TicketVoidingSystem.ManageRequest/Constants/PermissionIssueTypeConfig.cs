@@ -14,7 +14,6 @@ public static class PermissionIssueTypeConfig
                     new() { FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, IssueTypeId = IssueTypeConstant.EarlyKickOffTime },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, IssueTypeId = IssueTypeConstant.WrongKickOffTime },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.AbnormalBet, IssueTypeId = IssueTypeConstant.AbnormalBet },
-                    new() { FunctionKey = SpecialDeleteFunctionKeys.AbnormalBetRealMember, IssueTypeId = IssueTypeConstant.AbnormalBetRealMember },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.DangerAccepted, IssueTypeId = IssueTypeConstant.DangerAccepted },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.RedCard, IssueTypeId = IssueTypeConstant.RedCard },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.AbnormalAccount, IssueTypeId = IssueTypeConstant.AbnormalAccount },

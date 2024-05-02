@@ -40,7 +40,7 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
         if (tickets.Valid(site))
         {
             var transformGroupTickets = await AssignGroupTickets(mailVoidViewModel, tickets, isFromAfterVoidService);
-            var voidType = IsLikelyAbnormalBet(mailVoidViewModel.IssueTypeId)
+            var voidType = IsAbnormalBet(mailVoidViewModel.IssueTypeId)
                            || IsAbnormalAccount(mailVoidViewModel.IssueTypeId)
                            || mailVoidViewModel.IsFilterByUserName
                 ? VoidType.Abnormal : VoidType.None;

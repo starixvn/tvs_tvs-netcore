@@ -30,7 +30,6 @@ public class GetRequestsInArchivedTableServiceTests : IClassFixture<AppSettingFi
 
     [Theory]
     [InlineData(IssueTypeConstant.DangerAccepted)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
     [InlineData(IssueTypeConstant.AbnormalBet)]
     [InlineData(0)]
     public async Task GetRequestsInArchivedTable_ValidData_ReturnListRequestModel(int issueTypeId)

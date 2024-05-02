@@ -130,22 +130,6 @@ public class DescriptionServiceTests
     }
 
     [Fact]
-    public void Build_WhenCalled_ReturnStringOfAbnormalBetRealMember()
-    {
-        // Arrange
-        var request = new RequestDescription { IssueTypeId = IssueTypeConstant.AbnormalBetRealMember };
-        elementService.BuildMatch(Arg.Compat.Any<string>()).ReturnsForAnyArgs("2");
-        elementService.BuildLeague(Arg.Compat.Any<string>(), Arg.Compat.Any<string>()).ReturnsForAnyArgs("3");
-        elementService.BuildTotal(Arg.Compat.Any<int>(), null, Arg.Compat.Any<List<string>>()).ReturnsForAnyArgs("4");
-
-        // Act
-        var actual = descriptionService.Build(request);
-
-        // Assert
-        Assert.Equal("234", actual);
-    }
-
-    [Fact]
     public void Build_WhenCalled_ReturnStringOfWrongScore()
     {
         // Arrange

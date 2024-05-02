@@ -25,7 +25,6 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
 
     [Theory]
     [InlineData(IssueTypeConstant.AbnormalBet)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
     [InlineData(IssueTypeConstant.WrongKickOffTime)]
     [InlineData(IssueTypeConstant.AbnormalAccount)]
     [InlineData(IssueTypeConstant.EarlyKickOffTime)]

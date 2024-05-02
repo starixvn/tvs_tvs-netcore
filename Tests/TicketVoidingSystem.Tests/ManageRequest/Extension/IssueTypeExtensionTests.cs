@@ -52,7 +52,7 @@ public class IssueTypeExtensionTests
     {
         // Arrange
         // Act
-        var actual = issueTypeId.IsLikelyAbnormalBet();
+        var actual = issueTypeId.IsAbnormalBet();
 
         // Assert
         Assert.Equal(result, actual);

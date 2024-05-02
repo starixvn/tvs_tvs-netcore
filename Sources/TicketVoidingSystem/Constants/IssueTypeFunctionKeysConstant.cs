@@ -29,11 +29,6 @@ public static class IssueTypeFunctionKeysConstant
                     },
                     new()
                     {
-                        FunctionKey = SpecialDeleteFunctionKeys.AbnormalBetRealMember,
-                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.AbnormalBetRealMember, IssueTypeName = "AB (Real Member)" }
-                    },
-                    new()
-                    {
                         FunctionKey = SpecialDeleteFunctionKeys.DangerAccepted,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.DangerAccepted, IssueTypeName = "Danger Accepted" }
                     },

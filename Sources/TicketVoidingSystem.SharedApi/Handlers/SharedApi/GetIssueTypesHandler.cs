@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.ViewModels;
@@ -30,7 +29,7 @@ public class GetIssueTypesHandler : IRequestHandler<GetIssueTypesRequest, IssueT
 
         return new IssueTypesViewModel
         {
-            IssueTypes = issueTypes.Where(x => x.IssueTypeId != IssueTypeConstant.AbnormalBetRealMember).ToList(),
+            IssueTypes = issueTypes.ToList(),
             SubIssueTypes = subIssueTypes.ToList()
         };
     }

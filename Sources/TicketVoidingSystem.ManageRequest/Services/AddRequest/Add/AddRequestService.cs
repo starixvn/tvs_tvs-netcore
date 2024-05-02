@@ -136,7 +136,6 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
-            IssueTypeConstant.AbnormalBetRealMember => query.MatchId.ToString(),
             IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo.Matches?.Count() > 0
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
                 : "29",

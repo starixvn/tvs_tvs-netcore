@@ -101,7 +101,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.filterComponent.checkValidSubIssueType();
     });
 
-    if (this.isExternalUrl && this.isLikelyAbnormalBetIssueType()) {
+    if (this.isExternalUrl && this.isAbnormalBet()) {
       await new Promise(resolve => setTimeout(resolve));
       await this.eventAbnormalBetComponent.afterFocusOutBetIds();
     }
@@ -109,7 +109,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onChangeIssueType(issueTypeId: string): void {
     if (!this.isEdit && (StaticService.isAbnormalBet(issueTypeId)
-        || StaticService.isAbnormalBetRealMember(issueTypeId)
         || StaticService.isAbnormalAccount(issueTypeId))) {
       this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
     } else {
@@ -134,7 +133,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.isDisabledSaveButton = true;
 
-    if (this.isLikelyAbnormalBetIssueType()) {
+    if (this.isAbnormalBet()) {
       await this.eventAbnormalBetComponent.saveRequest();
     }
 
@@ -252,7 +251,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isShowOthersFullFields(): boolean {
-    return !this.isAbnormalBetIssueType() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
+    return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
       && !this.isRecoverTicket() && !this.isShowOthersSimpleFields();
   }
 
@@ -265,20 +264,12 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.model.filter.isVoided && (this.isDangerAccepted() || this.isRedCard() || this.isWrongScoreIssueType());
   }
 
-  isLikelyAbnormalBetIssueType(): boolean {
-    return this.isAbnormalBetIssueType() || this.isAbnormalBetRealMemberIssueType();
-  }
-
-  public isAbnormalBetIssueType(): boolean {
+  public isAbnormalBet(): boolean {
     return StaticService.isAbnormalBet(this.model.filter.issueTypeId);
   }
 
-  private isAbnormalBetRealMemberIssueType(): boolean {
-    return StaticService.isAbnormalBetRealMember(this.model.filter.issueTypeId);
-  }
-
   isAbnormalBetMixOrSystemParlay(): boolean {
-    return this.isAbnormalBetIssueType() && StaticService.isFilterByMixOrSystemParlay(this.abnormalFilterBy);
+    return this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.abnormalFilterBy);
   }
 
   isAbnormalAccount(): boolean {

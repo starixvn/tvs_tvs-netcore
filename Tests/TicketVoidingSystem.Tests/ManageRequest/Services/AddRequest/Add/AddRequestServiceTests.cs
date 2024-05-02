@@ -96,7 +96,6 @@ public class AddRequestServiceTests
     [InlineData(IssueTypeConstant.WrongScore, 1)]
     [InlineData(IssueTypeConstant.EarlyKickOffTime, 1)]
     [InlineData(IssueTypeConstant.WrongKickOffTime, 1)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, 1)]
     [InlineData(IssueTypeConstant.AbnormalBet, 1)]
     [InlineData(IssueTypeConstant.DuplicateTickets, 1)]
     [InlineData(IssueTypeConstant.NotParticipate, 1)]

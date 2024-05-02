@@ -27,10 +27,6 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.ABNORMAL_BET;
   }
 
-  static isAbnormalBetRealMember(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER;
-  }
-
   static isDangerAccepted(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED;
   }

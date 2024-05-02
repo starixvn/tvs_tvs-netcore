@@ -1,6 +1,5 @@
 export class IssueTypeConstant {
   static readonly ABNORMAL_BET = '11';
-  static readonly ABNORMAL_BET_REAL_MEMBER = '15';
   static readonly ABNORMAL_ACCOUNT = '13';
   static readonly EARLY_KICK_OFF = '8';
   static readonly WRONG_KICK_OFF = '9';

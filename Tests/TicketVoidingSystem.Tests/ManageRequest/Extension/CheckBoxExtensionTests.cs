@@ -76,7 +76,6 @@ public class CheckBoxExtensionTests
     [InlineData(true, IssueTypeConstant.AbnormalAccount, true, false, true)]
     [InlineData(true, IssueTypeConstant.ArchivedTicket, true, false, true)]
     [InlineData(true, IssueTypeConstant.AbnormalBet, true, false, true)]
-    [InlineData(true, IssueTypeConstant.AbnormalBetRealMember, false, false, true)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, false, false, true)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, true, false, false)]
     [InlineData(true, IssueTypeConstant.DangerAccepted, false, true, false)]
