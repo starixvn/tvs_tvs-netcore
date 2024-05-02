@@ -57,8 +57,6 @@ export class ObjectService {
       args.primitiveProperty.matchId = args.detailViewModel.redCardModels.find(x => x.isMainMatch).matchId;
     } else if (this.validationService.isLikelyAbnormalBet(args.detailViewModel)) {
       args.requestModel.abnormalBetModel = args.detailViewModel.abnormalBetModel;
-      // args.requestModel.abnormalBetModel = this.createEventForAbnormalBet(args.detailViewModel);
-      // args.primitiveProperty.matchId = args.requestModel.abnormalBetModel.matchId;
     } else if (this.validationService.isArchivedTicket(args.detailViewModel)) {
       args.requestModel.eventTicket14Model = { transIds: args.detailViewModel.event.transIds };
     } else if (this.validationService.isWrongHdp(args.detailViewModel) || this.validationService.isWrong1stHdp(args.detailViewModel)) {

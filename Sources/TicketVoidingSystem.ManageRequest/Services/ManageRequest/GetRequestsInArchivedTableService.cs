@@ -29,17 +29,17 @@ public class GetRequestsInArchivedTableServiceImp : GetRequestsInArchivedTableSe
     {
         var criteriaArchived = mapper.Map<SelectArchivedRequestsCriteria>(query);
         var (requests, requestInfoGetCalcTime, betTypeForRequests) = await repository.FetchMultipleAsync<RequestModel, string, GetBettypeForRequestModel>(criteriaArchived);
-        foreach (var model in requests)
+        foreach (var request in requests)
         {
-            model.BettypeNames = GetListBettypeName(model.RequestId, betTypeForRequests);
+            request.BettypeNames = GetListBettypeName(request, betTypeForRequests);
         }
 
         return (requests, requestInfoGetCalcTime);
     }
 
-    private IEnumerable<string> GetListBettypeName(int requestId, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)
+    private IEnumerable<string> GetListBettypeName(RequestModel request, IEnumerable<GetBettypeForRequestModel> bettypeForRequests)
     {
-        return bettypeForRequests.Where(x => x.RequestId == requestId)
+        return bettypeForRequests.Where(x => x.RequestId == request.RequestId && x.MatchId == request.MatchId)
             .Select(x => betListService.GetBetTypeName(new Ticket { BetId = x.BetId, BetTypeId = x.Bettype }));
     }
 }

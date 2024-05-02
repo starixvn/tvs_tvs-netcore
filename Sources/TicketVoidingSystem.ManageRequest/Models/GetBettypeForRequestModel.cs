@@ -7,4 +7,6 @@ public class GetBettypeForRequestModel
     public int Bettype { get; set; }
 
     public int RequestId { get; set; }
+
+    public int MatchId { get; set; }
 }

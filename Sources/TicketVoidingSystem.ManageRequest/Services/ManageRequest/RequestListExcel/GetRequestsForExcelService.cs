@@ -94,7 +94,7 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
     {
         if (requestIdsHaveData.Contains(request.RequestId))
         {
-            var calcTime = calculateTimeSets.First(model => model.RequestId == request.RequestId);
+            var calcTime = calculateTimeSets.FirstOrDefault(model => model.RequestId == request.RequestId && model.MatchId == request.MatchId);
             request.CalcHalfTime = calcTime.CalcHalfTime;
             request.CalcFullTime = calcTime.CalcFullTime;
         }
