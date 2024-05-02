@@ -31,28 +31,27 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             }
             else
             {
-                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId, matchId);
+                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId);
             }
         }
     }
 
     private async Task ExecuteForAutoVoidInstantMultipleMatches(int requestId, int actionId, IEnumerable<int> matchIds)
     {
-        foreach (var matchId in matchIds)
+        foreach (var _ in matchIds)
         {
             var broadcastSessionId = Guid.NewGuid().ToString();
-            await InsertAutoVoidRequestQueueForAllServer(broadcastSessionId, requestId, actionId, matchId);
+            await InsertAutoVoidRequestQueueForAllServer(broadcastSessionId, requestId, actionId);
         }
     }
 
-    private async Task InsertAutoVoidRequestQueueForAllServer(string broadcastSessionId, int requestId, int actionId, int? matchId)
+    private async Task InsertAutoVoidRequestQueueForAllServer(string broadcastSessionId, int requestId, int actionId)
     {
         var command = new InsertAutoVoidRequestQueueCommand
         {
             RequestIds = requestId.ToString(),
             StatusId = ExecuteStatus.New,
             Action = ActionVoidRequestConstant.QueueAutoVoidList.First(x => x.Id == actionId).Name,
-            MatchId = matchId,
             BroadcastSessionId = broadcastSessionId
         };
 

@@ -14,8 +14,6 @@ public class InsertAutoVoidRequestQueueCommand : NonQueryCommand
 
     public string BroadcastSessionId { get; set; }
 
-    public int? MatchId { get; set; }
-
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

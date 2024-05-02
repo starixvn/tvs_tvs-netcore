@@ -4,7 +4,7 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 
 public class InsertVoidingHistoryCriteria : CriteriaBase
 {
-    public string RequestIds { get; set; }
+    public string RequestsJson { get; set; }
 
     public int UserId { get; set; }
 
