@@ -9,6 +9,32 @@
 .advanced-mode {
   margin-bottom: 10px;
 
+  .dropdown-item-adv {
+    display: flex;
+    width: 175px;
+    margin-right: 10px;
+    >select {
+      @include select-style;
+    }
+    >multiple-select {
+      width: 100%;
+    }
+  }
+
+  .input-item-adv {
+    display: flex;
+    justify-content: end;
+    width: 175px;
+    margin-right: 10px;
+    input {
+      width: 80px;
+      margin-bottom: 0px;
+      height: 20px;
+      padding: 1px 2px;
+      border-radius: 0;
+    }
+  }
+
   .fieldset-collapse {
     height: 0px;
     border-bottom: none !important;
@@ -59,32 +85,6 @@
         border-top-color: #ee0101;
       }
 
-      .dropdown-item-adv {
-        display: flex;
-        width: 175px;
-        margin-right: 10px;
-        >select {
-          @include select-style;
-        }
-        >multiple-select {
-          width: 100%;
-        }
-      }
-
-      .input-item-adv {
-        display: flex;
-        justify-content: end;
-        width: 175px;
-        margin-right: 10px;
-        input {
-          width: 80px;
-          margin-bottom: 0px;
-          height: 20px;
-          padding: 1px 2px;
-          border-radius: 0;
-        }
-      }
-
       &-1 {
         display: flex;
         justify-content: space-between;
@@ -96,20 +96,6 @@
 
           .input-area {
             display: contents;
-          }
-
-          >div {
-            multiple-select {
-              div {
-                width: 100px !important;
-              }
-
-              tree-view {
-                .multiple-select-item {
-                  width: 50px !important;
-                }
-              }
-            }
           }
 
           >div.width-280 {

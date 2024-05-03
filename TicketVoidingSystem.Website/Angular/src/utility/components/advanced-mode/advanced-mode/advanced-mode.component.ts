@@ -70,7 +70,7 @@ export class AdvancedModeComponent implements OnChanges {
     multiSelect.checkAllCheckBoxText = 'All';
     multiSelect.allItemsCheckedText = 'All';
     multiSelect.noneItemCheckedText = 'Select options';
-    multiSelect.maxWidth = '90px';
+    multiSelect.maxWidth = '100%';
     multiSelect.items = items;
     multiSelect.checkAllItems(true);
 
