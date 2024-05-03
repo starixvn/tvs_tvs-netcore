@@ -32,24 +32,27 @@ public class MapTicketsExcelServiceImp : MapTicketsExcelService
 
     public IEnumerable<Group<VoidedTicketModel>> MapToGroupVoidedTickets(IEnumerable<VoidedTicketModel> tickets)
     {
-        var groups = new List<Group<VoidedTicketModel>>();
-        if (tickets.Any())
+        if (!tickets.Any())
         {
-            var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
-            groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-            AddParlayGroup(tickets, groups);
+            return Enumerable.Empty<Group<VoidedTicketModel>>();
+        }
+
+        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
+
+        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
+        {
+            groups.Add(new Group<VoidedTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<VoidedTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
         }
 
         return groups;
-    }
-
-    private static void AddParlayGroup(IEnumerable<VoidedTicketModel> tickets, ICollection<Group<VoidedTicketModel>> groups)
-    {
-        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay).OrderBy(ticket => ticket.TransId);
-        if (parlayTickets.Any())
-        {
-            groups.Add(new Group<VoidedTicketModel> { Name = "Parlay", Tickets = parlayTickets });
-        }
     }
 
     public Group<ExcelVoidedTicketModel> MapToGroupExcelVoidedTickets(Group<VoidedTicketModel> originalGroup, Match match, int startIndex, GetVoidedTicketsQuery query)

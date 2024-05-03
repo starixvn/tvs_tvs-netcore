@@ -49,26 +49,27 @@ public class GetTicketsForExportExcelServiceImp : GetTicketsForExportExcelServic
 
     private IEnumerable<Group<GetTicketModel>> GenerateGroupsTickets(IEnumerable<GetTicketModel> tickets)
     {
-        if (tickets.Any())
+        if (!tickets.Any())
         {
-            var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay).ToList();
-            var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-            UpdateGroupsForParlay(tickets, groups);
-
-            return groups;
+            return Enumerable.Empty<Group<GetTicketModel>>();
         }
 
-        return Enumerable.Empty<Group<GetTicketModel>>();
-    }
+        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
 
-    private void UpdateGroupsForParlay(IEnumerable<GetTicketModel> tickets, List<Group<GetTicketModel>> groups)
-    {
-        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay)
-                        .OrderBy(ticket => ticket.TransId).ToList();
-        if (parlayTickets.Any())
+        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
         {
-            groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
+            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
         }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
+
+        return groups;
     }
 
     private Group<ExcelTicketModel> TransformIntoGroupExcelTickets(Group<GetTicketModel> originalGroup, Match? match, int startIndex, int issueTypeId)

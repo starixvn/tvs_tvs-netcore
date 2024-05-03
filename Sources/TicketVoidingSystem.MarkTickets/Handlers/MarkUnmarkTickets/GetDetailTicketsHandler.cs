@@ -69,14 +69,21 @@ public class GetDetailTicketsHandler : IRequestHandler<GetDetailTicketsRequest, 
     private async Task<IEnumerable<Group<TicketViewModel>>> CreateGroupTicketsViewModel(IEnumerable<GetTicketModel> pagingTickets)
     {
         var userPermission = await userPermissionService.GetUserPermission();
+        var parlayTickets = pagingTickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
         var singleTickets = pagingTickets.Where(ticket => !ticket.IsMixParlay);
-        var parlayTickets = pagingTickets.Where(ticket => ticket.IsMixParlay)
-            .OrderBy(ticket => ticket.TransId);
-        var groupsTickets = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        groupsTickets.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
 
-        return groupsTickets.Where(item => item.Tickets.Any())
-            .Select(item => mapTicketService.MapToGroupTicketViewModel(item, userPermission));
+        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
+        return groups.Where(item => item.Tickets.Any()).Select(item => mapTicketService.MapToGroupTicketViewModel(item, userPermission));
     }
 
     private static string GetLicenseesName(IEnumerable<GetTicketModel> tickets)

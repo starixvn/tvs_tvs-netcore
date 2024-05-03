@@ -42,25 +42,28 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
 
     private IEnumerable<Group<GetTicketModel>> GenerateGroup(IReadOnlyCollection<GetTicketModel> tickets)
     {
-        var groups = new List<Group<GetTicketModel>>();
-        if (tickets.Any())
+        if (!tickets.Any())
         {
-            var parlayTickets = tickets.Where(ticket => ticket.BetType.IsParlayAndBetBuilder())
-                .OrderBy(ticket => ticket.TransId).ToList();
-            var singleTickets = tickets.Where(ticket => !ticket.BetType.IsParlayAndBetBuilder()).ToList();
-            groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-            AddParlayGroup(groups, parlayTickets);
+            return Enumerable.Empty<Group<GetTicketModel>>();
+        }
+
+        var parlayTickets = tickets.Where(ticket => ticket.BetType.IsParlayAndBetBuilder())
+            .OrderBy(ticket => ticket.TransId).ToList();
+        var singleTickets = tickets.Where(ticket => !ticket.BetType.IsParlayAndBetBuilder()).ToList();
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+
+        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
         }
 
         return groups;
-    }
-
-    private static void AddParlayGroup(List<Group<GetTicketModel>> groups, List<GetTicketModel> parlayTickets)
-    {
-        if (parlayTickets.Count > 0)
-        {
-            groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
-        }
     }
 
     private static void UpdateViewModel(TicketsViewModel viewModel, IEnumerable<GetTicketModel> tickets, string invalidTransIds, string movedTransIds)
