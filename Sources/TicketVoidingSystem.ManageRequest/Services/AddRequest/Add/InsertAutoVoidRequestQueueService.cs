@@ -76,8 +76,6 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             ActionVoidRequestConstant.AutoVoidAllInstantId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicyId,
-            ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOffId,
-            ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId,
             ActionVoidRequestConstant.AutoRecoverId
         };
 

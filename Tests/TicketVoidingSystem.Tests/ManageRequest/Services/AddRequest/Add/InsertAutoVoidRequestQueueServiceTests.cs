@@ -23,8 +23,6 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
     [Theory]
     [InlineData(ActionVoidRequestConstant.AutoVoidAllInstantId)]
     [InlineData(ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicyId)]
-    [InlineData(ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOffId)]
-    [InlineData(ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId)]
     public void GetData_Successful_CalledExpected(int actionId)
     {
         // Arrange

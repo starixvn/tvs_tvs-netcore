@@ -143,8 +143,6 @@ export class TVSRequestActionType {
   static readonly AUTO_VOID_WINNING_ID = 1;
   static readonly AUTO_VOID_INSTANT_ID = 4;
   static readonly AUTO_VOID_INSTANT_WITH_POLICY_ID = 10;
-  static readonly AUTO_VOID_5M_BEFORE_KO_ID = 6;
-  static readonly AUTO_VOID_10M_BEFORE_KO_ID = 7;
   static readonly AUTO_VOID_INSTANT_WITHOUT_POLICY = 8;
   static readonly MANUAL_VOID_ID = 5;
   static readonly TAKE_NOTE_ID = 2;

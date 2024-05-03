@@ -16,8 +16,6 @@ export class StaticService {
     return actionId === TVSRequestActionType.MANUAL_VOID_ID
       || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID
       || actionId === TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID;
