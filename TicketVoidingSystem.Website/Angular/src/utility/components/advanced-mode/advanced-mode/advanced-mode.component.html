@@ -10,13 +10,13 @@
         <div class="right" *ngIf="isShowAllBetTypeMapRound">
           <div class="right-selection">
             <span class="mr-1"><b>Map:</b></span>
-            <multiple-select class="multiple-selection-map float-right" [multipleSelect]="mapList"
+            <multiple-select class="multiple-selection-map" [multipleSelect]="mapList"
               (checkedItems)="updateByControlAllBetType($event, 'map')">
             </multiple-select>
           </div>
           <div class="right-selection">
             <span class="mr-1"><b>Round:</b></span>
-            <multiple-select class="multiple-selection-round float-right" [multipleSelect]="roundList"
+            <multiple-select class="multiple-selection-round" [multipleSelect]="roundList"
               (checkedItems)="updateByControlAllBetType($event, 'round')">
             </multiple-select>
           </div>
@@ -24,7 +24,7 @@
         <div class="right" *ngIf="isShowAllBetTypeQuarter">
           <div class="right-selection">
             <span class="mr-1"><b>Quarter:</b></span>
-            <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
+            <multiple-select class="multiple-selection-quarter" [multipleSelect]="quarterList"
               (checkedItems)="updateByControlAllBetType($event, 'quarter')">
             </multiple-select>
           </div>
@@ -32,7 +32,7 @@
         <div class="right" *ngIf="isShowAllBetTypeSet">
           <div class="right-selection">
             <span class="mr-1"><b>Set:</b></span>
-            <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
+            <multiple-select class="multiple-selection-quarter" [multipleSelect]="quarterList"
               (checkedItems)="updateByControlAllBetType($event, 'set')">
             </multiple-select>
           </div>
@@ -40,7 +40,7 @@
         <div class="right" *ngIf="isShowAllBetTypeGame">
           <div class="right-selection">
             <span class="mr-1"><b>Game:</b></span>
-            <multiple-select class="multiple-selection-quarter float-right" [multipleSelect]="quarterList"
+            <multiple-select class="multiple-selection-quarter" [multipleSelect]="quarterList"
               (checkedItems)="updateByControlAllBetType($event, 'game')">
             </multiple-select>
           </div>
@@ -55,40 +55,20 @@
               {{betTeam.name}}:
             </div>
             <div class="right">
-              <!-- <ng-container *ngIf="!isHaveMultipleMapRound">
-                <div class="multiple-selection-area" *ngIf="betTeam.multiSelection !== undefined">
-                  <div>
-                    <span class="mr-2">{{betTeam.multiSelection.name}}</span>
-                    <multiple-select class="multiple-selection-{{index}}" [multipleSelect]="betTeam.multiSelection.multipleSelect">
-                    </multiple-select>
-                  </div>
-                </div>
-                <div *ngFor="let selection of betTeam.selections">
-                  <div class="right-selection">
-                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
-                    <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
-                      <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
-                    </select>
-                  </div>
-                </div>
-              </ng-container> -->
-
               <ng-container *ngIf="!isTicketListing">
                 <ng-container *ngFor="let selection of betTeam.selections; let indexSelection = index">
-                  <div class="ml-3" >
-                    <div *ngIf="!selection.isMultiple">
-                      <div class="right-selection">
-                        <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
-                        <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
-                          <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
-                        </select>
-                      </div>
+                  <div *ngIf="!selection.isMultiple">
+                    <div class="dropdown-item-adv">
+                      <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
+                      <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
+                        <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                      </select>
                     </div>
-                    <div *ngIf="selection.isMultiple">
-                      <span class="mr-1">{{selection.multiSelection.name}}</span>
-                      <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
-                      </multiple-select>
-                    </div>
+                  </div>
+                  <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
+                    <span class="mr-1">{{selection.multiSelection.name}}</span>
+                    <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                    </multiple-select>
                   </div>
                 </ng-container>
               </ng-container>
@@ -113,13 +93,13 @@
               </ng-container>
 
               <div *ngIf="checkBetTypesMoreHDP(betTeam, false)">
-                <div class="right-input width-158" *ngFor="let item of betTeam.items">
+                <div class="input-item-adv" *ngFor="let item of betTeam.items">
                   <span class="mr-1">{{item.name}}</span>
                   <input type="text" [(ngModel)]="item.value" [disabled]="item.flag" decimalOnly />
                 </div>
               </div>
-              <div *ngIf="checkBetTypesMoreHDP(betTeam, true)" class="width-280">
-                <div class="right-input width-158" *ngFor="let item of betTeam.items">
+              <div class="d-flex" *ngIf="checkBetTypesMoreHDP(betTeam, true)">
+                <div class="input-item-adv" *ngFor="let item of betTeam.items">
                   <span class="mr-1">{{item.name}}</span>
                   <input class="bet-type-more-hdp" type="text" [(ngModel)]="item.value" [disabled]="item.flag"
                     (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-more-hdp')"
@@ -130,7 +110,7 @@
                 </div>
               </div>
               <div class="input-area" *ngIf="isShowTextBox(betTeam)">
-                <div class="right-input width-158" *ngFor="let input of betTeam.inputs">
+                <div class="input-item-adv" *ngFor="let input of betTeam.inputs">
                   <span class="mr-1">{{input.name}}</span>
                   <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
                 </div>
@@ -147,7 +127,7 @@
                 {{betTeam.name}}
               </label>
               <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
-                <div class="mr-3">
+                <div class="dropdown-item-adv">
                   <span class="mr-1">{{multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                     [multipleSelect]="multiSelection.multipleSelect">
@@ -156,15 +136,13 @@
               </div>
               <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
                 <div class="ml-3" >
-                  <div *ngIf="!selection.isMultiple">
-                    <div class="right-selection">
-                      <span *ngIf="selection.name !== ''">{{selection.name}}</span>
-                      <select [(ngModel)]="selection.value">
-                        <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
-                      </select>
-                    </div>
+                  <div class="dropdown-item-adv" *ngIf="!selection.isMultiple">
+                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                    <select [(ngModel)]="selection.value">
+                      <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                    </select>
                   </div>
-                  <div *ngIf="selection.isMultiple">
+                  <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
                     <span class="mr-2">{{selection.multiSelection.name}}</span>
                     <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                     </multiple-select>
@@ -222,15 +200,15 @@
             <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
               <div class="ml-3" >
                 <div *ngIf="!selection.isMultiple">
-                  <div class="right-selection">
-                    <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                  <div class="right-selection dropdown-item-adv">
+                    <label *ngIf="selection.name !== ''">{{selection.name}}</label>
                     <select [(ngModel)]="selection.value">
                       <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                     </select>
                   </div>
                 </div>
-                <div *ngIf="selection.isMultiple">
-                  <span class="mr-2">{{selection.multiSelection.name}}</span>
+                <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
+                  <label class="mr-1">{{selection.multiSelection.name}}</label>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                   </multiple-select>
                 </div>
@@ -268,7 +246,7 @@
                 <div class="ml-3" >
                   <div *ngIf="!selection.isMultiple">
                     <div class="right-selection">
-                      <span *ngIf="selection.name !== ''">{{selection.name}}</span>
+                      <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
                       <select [(ngModel)]="selection.value">
                         <ng-container *ngFor="let item of selection.items">
                           <option [ngValue]="item.value"
@@ -279,8 +257,8 @@
                       </select>
                     </div>
                   </div>
-                  <div *ngIf="selection.isMultiple">
-                    <span class="mr-2">{{selection.multiSelection.name}}</span>
+                  <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
+                    <span class="mr-1">{{selection.multiSelection.name}}</span>
                     <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                     </multiple-select>
                   </div>
@@ -337,19 +315,19 @@
                   </label>
                 </div>
               </div>
-              <div class="right-input d-flex" *ngFor="let input of betTeam.inputs">
-                {{input.name}}
+             <div class="d-flex">
+              <div class="input-item-adv" *ngFor="let input of betTeam.inputs">
+                <label class="mr-1">{{input.name}}</label>
                 <input type="text" class="mg-right-10" [ngClass]="'bet-type-saba' + betTeam.checkedBetTypes[0]" [(ngModel)]="input.value" multipleDecimal
                   (ngModelChange)="onChangeInputMultipleDecimal(betTeam.checkedBetTypes[0],$event,'bet-type-saba' + betTeam.checkedBetTypes[0])" triggers="manual" />
-                <div>
-                  Ex: 0.75&1&1.25
-                </div>
               </div>
+              <div>Ex: 0.75&1&1.25</div>
+             </div>
             </div>
             <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
               <div class="ml-3" >
-                <div *ngIf="selection.isMultiple">
-                  <span class="mr-2">{{selection.multiSelection.name}}</span>
+                <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
+                  <label class="mr-1">{{selection.multiSelection.name}}</label>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                   </multiple-select>
                 </div>
@@ -363,35 +341,35 @@
               {{betTeam.name}}:
             </div>
             <div class="right">
-              <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
+              <div class="dropdown-item-adv" *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
                 <span class="mr-1">{{multiSelection.name}}</span>
-                  <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
-                    [multipleSelect]="multiSelection.multipleSelect">
-                  </multiple-select>
+                <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
+                  [multipleSelect]="multiSelection.multipleSelect">
+                </multiple-select>
               </div>
               <ng-container *ngFor="let selection of betTeam.selections; ; let indexSelection = index">
                 <div *ngIf="!selection.isMultiple">
-                  <div class="right-selection">
+                  <div class="dropdown-item-adv">
                     <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
                     <select [(ngModel)]="selection.value" (change)="handleChangeFancyBetTypeCricket(betTeam)">
                       <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                     </select>
                   </div>
                 </div>
-                <div *ngIf="selection.isMultiple">
+                <div *ngIf="selection.isMultiple" class="dropdown-item-adv">
                   <span class="mr-1">{{selection.multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                   </multiple-select>
                 </div>
               </ng-container>
               <div class="input-area" *ngIf="betTeam.items.length > 0">
-                <div class="right-input width-158" *ngFor="let item of betTeam.items">
+                <div class="input-item-adv" *ngFor="let item of betTeam.items">
                   <span class="mr-1">{{item.name}}</span>
                   <input type="text" [(ngModel)]="item.value" [disabled]="item.flag" decimalOnly />
                 </div>
               </div>
               <div class="input-area" *ngIf="betTeam.inputs.length > 0">
-                <div class="right-input mg-right-10" *ngFor="let input of betTeam.inputs">
+                <div class="input-item-adv" *ngFor="let input of betTeam.inputs">
                   <span class="mr-1">{{input.name}}</span>
                   <input type="text" [(ngModel)]="input.value" [disabled]="input.flag" decimalOnly />
                 </div>

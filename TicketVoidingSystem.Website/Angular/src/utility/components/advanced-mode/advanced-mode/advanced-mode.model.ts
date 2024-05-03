@@ -174,7 +174,7 @@ export class BetTeam {
     this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '120px';
+    this.multiSelection.multipleSelect.maxWidth = '100%';
     this.renderItemsMultipleSelect(item);
   }
 
@@ -184,7 +184,7 @@ export class BetTeam {
     this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '100px';
+    this.multiSelection.multipleSelect.maxWidth = '100%';
     this.renderItemsMultipleSelectWithAllBetType(item);
   }
 
