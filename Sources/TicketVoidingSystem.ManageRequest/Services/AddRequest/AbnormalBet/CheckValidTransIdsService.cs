@@ -87,7 +87,7 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
         var getTransInfoQuery = new GetTransInfoQuery
         {
             IssueTypeId = model.IssueTypeId,
-            TransIds = model.TransIds
+            AbnormalBetModel = new AbnormalBetViewModel { TransIds = model.TransIds }
         };
         var transInfoJsonList = await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
 
