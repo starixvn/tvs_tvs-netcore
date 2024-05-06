@@ -13,15 +13,19 @@ export class ModalContentComponent {
   @Output() confirmYes = new EventEmitter();
   @Output() confirmNo = new EventEmitter();
   @Output() close = new EventEmitter();
+  isProcessingOkCallback: boolean = false;
+  isProcessingYesCallback: boolean = false;
 
   constructor(public activeModal: NgbActiveModal) { }
 
-  confirmClick() {
+  confirmClickOk() {
+    this.isProcessingOkCallback = true;
     this.confirm.emit();
     this.activeModal.close('Confirm Click');
   }
 
   confirmClickYes() {
+    this.isProcessingYesCallback = true;
     this.confirmYes.emit();
     this.activeModal.close('Confirm Click Yes');
   }
