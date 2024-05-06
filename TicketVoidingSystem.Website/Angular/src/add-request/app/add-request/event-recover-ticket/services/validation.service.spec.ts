@@ -6,6 +6,7 @@ import { FilterModel } from '../../filter/filter.model';
 import { RecoverTicketModel } from '../../models/recover-ticket.model';
 import { CheckRecoverTicketResult } from '../models/check-recover-ticket-result.model';
 import { ValidationService } from './validation.service';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
 
 class Helper {
   static readonly fakeCheckRecoverTicketResult: CheckRecoverTicketResult = {
@@ -31,7 +32,7 @@ describe('ValidationService', () => {
     const betIdsComponent = new BetIdsComponent(null);
     betIdsComponent.isHasBetId = mockIsHasBetId;
     validationService['highlightInvalidTransIds'] = jest.fn();
-    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1);
+    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
@@ -53,7 +54,7 @@ describe('ValidationService', () => {
     validationService = new ValidationService(addRequestApiService);
     validationService['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1);
+    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
@@ -82,7 +83,7 @@ describe('ValidationService', () => {
     validationService = new ValidationService(addRequestApiService);
     validationService['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1);
+    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
@@ -111,7 +112,7 @@ describe('ValidationService', () => {
     validationService = new ValidationService(addRequestApiService);
     validationService['highlightInvalidTransIds'] = jest.fn();
 
-    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1);
+    const result = await validationService.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), new FilterModel(), 1, new PermissionAddRequest());
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);

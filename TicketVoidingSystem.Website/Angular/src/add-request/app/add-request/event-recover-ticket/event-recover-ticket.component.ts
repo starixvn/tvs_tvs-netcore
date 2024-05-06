@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BetIdsComponent } from 'src/utility/components/bet-ids/bet-ids.component';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RecoverTicketModel } from '../models/recover-ticket.model';
@@ -31,16 +32,18 @@ export class EventRecoverTicketComponent implements OnInit {
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
     private readonly validationService: ValidationService,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.recoverTicketModel.productIds = ProductFilterRecoverTicket.SELECTION_ITEMS[0].value;
+    this.primitiveProps.permission = await this.addRequestApiService.getPermissionAddRequest();
   }
 
   async afterFocusOutBetIds(): Promise<void> {
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
-      await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.filter, this.requestId);
+      await this.validationService.checkBusinessRule(this.betIdsComponent, this.recoverTicketModel, this.filter, this.requestId, this.primitiveProps.permission);
       this.primitiveProps.isBlockBetIds = false;
     }
   }
