@@ -32,7 +32,7 @@
         <div class="right" *ngIf="isShowAllBetTypeSet">
           <div class="dropdown-item-adv">
             <span class="mr-1"><b>Set:</b></span>
-            <multiple-select class="multiple-selection-quarter" [multipleSelect]="quarterList"
+            <multiple-select class="multiple-selection-set" [multipleSelect]="setList"
               (checkedItems)="updateByControlAllBetType($event, 'set')">
             </multiple-select>
           </div>
@@ -40,7 +40,7 @@
         <div class="right" *ngIf="isShowAllBetTypeGame">
           <div class="dropdown-item-adv">
             <span class="mr-1"><b>Game:</b></span>
-            <multiple-select class="multiple-selection-quarter" [multipleSelect]="quarterList"
+            <multiple-select class="multiple-selection-game" [multipleSelect]="gameList"
               (checkedItems)="updateByControlAllBetType($event, 'game')">
             </multiple-select>
           </div>
@@ -235,7 +235,7 @@
             </div>
             <div class="right">
               <div *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
-                <div class="ml-3">
+                <div class="ml-3 dropdown-item-adv">
                   <span class="mr-1">{{multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                     [multipleSelect]="multiSelection.multipleSelect">

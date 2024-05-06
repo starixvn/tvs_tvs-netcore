@@ -373,8 +373,12 @@ export class BetTeam {
     if (this.multiSelectionList !== undefined && this.isTicketListing) {
       this.multiSelectionList.forEach(item => {
         let value = item.multipleSelect.getValueItems();
-        if (item.multipleSelect.selectionTitle === 'All' && (item.name === AdvancedModeConstants.MAP
-          || this.multiSelection.name === AdvancedModeConstants.ROUND)) {
+        if (item.multipleSelect.selectionTitle === 'All' &&
+          (item.name === AdvancedModeConstants.MAP
+          || item.name === AdvancedModeConstants.ROUND
+          || item.name === AdvancedModeConstants.QUARTER
+          || item.name === AdvancedModeConstants.SET
+          || item.name === AdvancedModeConstants.GAME)) {
           value = 'All';
         }
         this.updateResult(result, item.xmlAttribute, value);

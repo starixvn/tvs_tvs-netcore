@@ -30,6 +30,7 @@ export class AdvancedModeComponent implements OnChanges {
   roundList: MultipleSelection;
   quarterList: MultipleSelection;
   setList: MultipleSelection;
+  gameList: MultipleSelection;
   betTypesMoreHDP = AdvancedModeConstants.BETTYPES_MORE_HDP;
   baseSpecialBetTypeCricket: Selection[] = [];
   isShowAdvancedMode: boolean;
@@ -62,7 +63,8 @@ export class AdvancedModeComponent implements OnChanges {
     this.mapList = this.initSelectionAllBetType(AdvancedModeConstants.MAP_LIST);
     this.roundList = this.initSelectionAllBetType(AdvancedModeConstants.ROUND_LIST);
     this.quarterList = this.initSelectionAllBetType(AdvancedModeConstants.QUARTER_LIST);
-    this.quarterList = this.initSelectionAllBetType(AdvancedModeConstants.SET_LIST);
+    this.setList = this.initSelectionAllBetType(AdvancedModeConstants.SET_LIST);
+    this.gameList = this.initSelectionAllBetType(AdvancedModeConstants.GAME_LIST);
   }
 
   initSelectionAllBetType(items: ItemsSelect[]): MultipleSelection {

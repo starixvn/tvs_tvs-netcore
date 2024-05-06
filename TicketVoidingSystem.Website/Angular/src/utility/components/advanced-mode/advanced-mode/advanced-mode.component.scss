@@ -12,6 +12,7 @@
   .dropdown-item-adv {
     display: flex;
     width: 175px;
+    height: fit-content;
     margin-right: 10px;
     >select {
       @include select-style;
