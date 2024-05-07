@@ -234,6 +234,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrong1stHDP(issueTypeId.toString()) ||
       StaticService.isRedCard(issueTypeId.toString()) ||
       StaticService.isEarlyKickOff(issueTypeId.toString()) ||
+      StaticService.isAbnormalBet(issueTypeId.toString()) ||
       StaticService.isWrongKickOff(issueTypeId.toString());
   }
 
