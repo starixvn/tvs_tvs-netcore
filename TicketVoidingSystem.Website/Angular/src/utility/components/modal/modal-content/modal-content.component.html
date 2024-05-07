@@ -16,12 +16,12 @@
   </div>
 </div>
 <div class="modal-footer" *ngIf="data.type == 3">
-  <button type="button" class="btn confirm" (click)="confirmClick()">Ok</button>
+  <button type="button" class="btn confirm" (click)="confirmClickOk()" [disabled]="isProcessingOkCallback">Ok</button>
   <button type="button" class="btn cancel" (click)="closeClick()">Cancel</button>
 </div>
 
 <div class="modal-footer" *ngIf="data.type == 4">
-  <button type="button" class="btn confirm" (click)="confirmClickYes()">Yes</button>
+  <button type="button" class="btn confirm" (click)="confirmClickYes()" [disabled]="isProcessingYesCallback">Yes</button>
   <button type="button" class="btn confirm" (click)="confirmClickNo()">No</button>
   <button type="button" class="btn cancel" (click)="closeClick()">Cancel</button>
 </div>
