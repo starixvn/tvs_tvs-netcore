@@ -70,7 +70,7 @@ export class ObjectService {
     } else if (this.validationService.isWrongOdds(args.detailViewModel)) {
       args.requestModel.wrongOddsModels = args.detailViewModel.wrongOddsModels;
       args.primitiveProperty.matchId = args.detailViewModel.wrongOddsModels[0].matchId;
-    } else if (this.validationService.isReducedOver(args.detailViewModel)) {
+    } else if (this.validationService.isReducedOver(args.detailViewModel) || this.validationService.isAbandoned(args.detailViewModel)) {
       args.requestModel.reducedOverModels = args.detailViewModel.reducedOverModels;
       args.primitiveProperty.matchId = args.detailViewModel.reducedOverModels[0].matchId;
     } else if (this.validationService.isNotParticipate(args.detailViewModel)) {

@@ -35,6 +35,7 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.Wrong1stOU, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.WrongOdds, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.ReducedOver, BuildMatchLeague},
+                {IssueTypeConstant.Abandoned, BuildMatchLeague},
                 {IssueTypeConstant.WrongScore, BuildWrongScore},
                 {IssueTypeConstant.ArchivedTicket, BuildVoidArchivedTicket},
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},

@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { AcceptType } from "../../../../utility/constants/config";
-import { CopyRequestInfoResponse } from "../../../../utility/models/copy-request-info.query";
+import { CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
 import { CommonService } from "../../../../utility/services/common.service";
 import { OperatorInfo, OperatorType } from "../others/others.model";
@@ -63,15 +63,39 @@ describe('CopyRequestInfoService', () => {
     copyRequestInfoService = new CopyRequestInfoService(null);
   });
 
-  it('#copyLetstalkRequestInfo should call #commonService.copyRequestInfo', async () => {
-    const copyRequestInfoResponse = new CopyRequestInfoResponse();
-    copyRequestInfoResponse.operators = [Helper.fakeOperatorInfo[0]];
+  it('#copyLetsTalkRequestInfo should call #commonService.copyRequestInfo', async () => {
+    let requestInfo : RequestInfoForCopy = {
+      requestId: 0,
+      matchId: 0,
+      globalShowTime: undefined,
+      filterBy: 0,
+      issueTypeName: "",
+      subIssueTypeName: "",
+      isCheckedVar: false,
+      provider: "",
+      requestedBy: "",
+      isHasSettledTicket: false,
+      remark: "",
+      matchEvent: "",
+      leagueName: "",
+      operators: [],
+      issueTypeId: 0,
+      voidFromTime: undefined,
+      voidToTime: undefined,
+      liveStatus: "",
+      totalSingleCount: 0,
+      totalParlayCount: 0
+    }; 
+    const copyRequestInfoResponse : CopyRequestInfoResponse = {
+      requestInfo: requestInfo,
+      betTypeTickets: []
+    } ;
     const mockClipboard = jest.fn();
     const mockWriteText = jest.fn();
     Object.defineProperty(navigator, 'clipboard', {value: mockClipboard});
     Object.defineProperty(navigator.clipboard, 'writeText', {value: mockWriteText});
     [true, false].forEach(async x => {
-      copyRequestInfoResponse.isHasSettledTicket = x;
+      copyRequestInfoResponse.requestInfo.isHasSettledTicket = x;
       const commonService = new CommonService(null);
       commonService.copyRequestInfo = jest.fn().mockReturnValue(copyRequestInfoResponse);
       copyRequestInfoService = new CopyRequestInfoService(commonService);
@@ -80,19 +104,4 @@ describe('CopyRequestInfoService', () => {
       expect(commonService.copyRequestInfo).toHaveBeenCalledTimes(1);
     })
   });
-
-  // it('#copyLetstalkRequestInfo should call #commonService.copyRequestInfo', async () => {
-  //   const copyRequestInfoResponse = new CopyRequestInfoResponse();
-  //   copyRequestInfoResponse.operators = [Helper.fakeOperatorInfo[0]];
-  //   const mockClipboard = jest.fn();
-  //   const mockWriteText = jest.fn();
-  //   Object.defineProperty(navigator, 'clipboard', {value: mockClipboard});
-  //   Object.defineProperty(navigator.clipboard, 'writeText', {value: mockWriteText});
-  //   const commonService = new CommonService(null);
-  //   commonService.copyRequestInfo = jest.fn().mockReturnValue(copyRequestInfoResponse);
-  //   copyRequestInfoService = new CopyRequestInfoService(commonService);
-  //   await copyRequestInfoService.copyEmailRequestInfo(1, 1, Helper.fakeOperatorInfo);
-
-  //   expect(commonService.copyRequestInfo).toHaveBeenCalledTimes(1);
-  // });
 });

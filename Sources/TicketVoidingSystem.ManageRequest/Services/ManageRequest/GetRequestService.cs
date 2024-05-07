@@ -61,6 +61,7 @@ public class GetRequestServiceImp : GetRequestService
                 break;
 
             case IssueTypeConstant.ReducedOver:
+            case IssueTypeConstant.Abandoned:
                 viewModel.ReducedOverModels = MapEventReducedOver(secondResultSet);
                 break;
 

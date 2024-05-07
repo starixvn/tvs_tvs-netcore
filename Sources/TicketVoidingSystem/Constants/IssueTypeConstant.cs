@@ -20,4 +20,5 @@ public static class IssueTypeConstant
     public const int DuplicateTickets = 20;
     public const int NotParticipate = 21;
     public const int RecoverTicket = 22;
+    public const int Abandoned = 23;
 }

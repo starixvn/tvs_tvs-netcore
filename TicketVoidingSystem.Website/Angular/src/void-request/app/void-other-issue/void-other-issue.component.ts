@@ -460,7 +460,8 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   isReducedOver() {
-    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId.toString());
+    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId.toString()) 
+    || StaticService.isAbandoned(this.requestDetail.request.issueTypeId.toString());
   }
 
   async getGroupBetTypes(): Promise<void> {

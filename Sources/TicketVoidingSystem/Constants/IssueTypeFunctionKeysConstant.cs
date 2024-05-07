@@ -101,6 +101,11 @@ public static class IssueTypeFunctionKeysConstant
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.RecoverTicket,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.RecoverTicket, IssueTypeName = "Recover Ticket" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.Abandoned,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.Abandoned, IssueTypeName = "Abandoned" }
                     }
                 };
 

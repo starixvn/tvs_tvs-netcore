@@ -32,7 +32,7 @@ export class LogInfoService {
       await this.getLogInfoWrongOu(args);
     } else if (this.validationService.isWrongOdds(detailViewModel)) {
       await this.getLogInfoWrongOdds(args);
-    } else if (this.validationService.isReducedOver(detailViewModel)) {
+    } else if (this.validationService.isReducedOver(detailViewModel) || this.validationService.isAbandoned(detailViewModel)) {
       await this.getLogInfoReducedOver(args);
     } else if (this.validationService.isNotParticipate(detailViewModel)) {
       await this.getLogInfoNotParticipate(args);

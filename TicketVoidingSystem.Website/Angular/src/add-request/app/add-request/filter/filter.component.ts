@@ -201,7 +201,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   onChangeIssueType(): void {
     this.addRequestStore.changeSavingRequestStatus(false);
-    if (this.isReducedOver()) {
+    if (this.isReducedOver() || this.isAbandoned()) {
       this.model.sportType = SportType.CRICKET;
     } else {
       this.model.sportType = SportType.SOCCER;
@@ -235,6 +235,7 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
       [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200, sport: 150 },
+      [IssueTypeConstant.ABANDONED]: { issueType: 180, action: 200, sport: 150 },
       [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170, sport: 150 },
       [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200, sport: 150 }
     };
@@ -250,6 +251,7 @@ export class FilterComponent implements OnInit, OnChanges {
   private updateCurrentAction(): void {
     const actionMapping: { [key: string]: () => number[] } = {
       [IssueTypeConstant.REDUCED_OVER]: () => this.actionVoidService.getActionVoidReducedOver(),
+      [IssueTypeConstant.ABANDONED]: () => this.actionVoidService.getActionVoidReducedOver(),
       [IssueTypeConstant.WRONG_ODDS]: () => this.actionVoidService.getActionVoidWrongOdds(),
       [IssueTypeConstant.DANGER_ACCEPTED]: () => this.actionVoidService.getActionVoidDangerAccepted(),
       [IssueTypeConstant.WRONG_SCORE]: () => this.actionVoidService.getActionVoidWrongScore(),
@@ -325,7 +327,7 @@ export class FilterComponent implements OnInit, OnChanges {
     if (this.isLikelyDangerAccepted() || this.isWrongScore()) {
       this.model.sportType = SportType.SOCCER;
     }
-    if (this.isReducedOver() || this.isNotParticipate()) {
+    if (this.isReducedOver() || this.isNotParticipate() || this.isAbandoned()) {
       this.model.sportType = SportType.CRICKET;
     }
     this.modelChange.emit(this.model);
@@ -342,7 +344,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_1ST_OU,
       IssueTypeConstant.WRONG_ODDS,
       IssueTypeConstant.REDUCED_OVER,
-      IssueTypeConstant.NOT_PARTICIPATE
+      IssueTypeConstant.NOT_PARTICIPATE,
+      IssueTypeConstant.ABANDONED,
     ];
 
     return this.isEdit || issuTypeDisableSportControl.includes(this.issueTypes.issueId?.toString());
@@ -421,6 +424,10 @@ export class FilterComponent implements OnInit, OnChanges {
 
   isReducedOver(): boolean {
     return StaticService.isReducedOver(this.issueTypes.issueId?.toString());
+  }
+
+  isAbandoned(): boolean {
+    return StaticService.isAbandoned(this.issueTypes.issueId?.toString());
   }
 
   isDuplicateTickets(): boolean {

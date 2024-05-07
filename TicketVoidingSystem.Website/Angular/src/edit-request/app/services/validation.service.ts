@@ -80,6 +80,11 @@ export class ValidationService {
   }
 
   /* istanbul ignore next */
+  public isAbandoned(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isAbandoned(detailViewModel.request.issueTypeId.toString());
+  }
+
+  /* istanbul ignore next */
   public isNotParticipate(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isNotParticipate(detailViewModel.request.issueTypeId.toString());
   }

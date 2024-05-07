@@ -66,6 +66,7 @@ public class LogInfoServiceImp : LogInfoService
             IssueTypeConstant.Wrong1stOU => GetLogInfoViewModelWrong1stOu(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongOdds => GetLogInfoViewModelWrongOdds(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.ReducedOver => GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.Abandoned => GetLogInfoViewModelReducedOver(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.NotParticipate => GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.EarlyKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),

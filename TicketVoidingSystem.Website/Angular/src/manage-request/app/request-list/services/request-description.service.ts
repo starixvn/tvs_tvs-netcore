@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
-import { StaticService } from 'src/utility/services/static.service';
+import { StaticService } from '../../../../utility/services/static.service';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -27,7 +27,7 @@ export class RequestDescriptionService {
   }
 
   private createContentCopy(copyInfoResponse: CopyRequestInfoResponse): string {
-    if (StaticService.isReducedOver(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+    if (StaticService.isReducedOver(copyInfoResponse.requestInfo.issueTypeId.toString()) || StaticService.isAbandoned(copyInfoResponse.requestInfo.issueTypeId.toString())) {
       return this.createReducedOversOrAbandonedContent(copyInfoResponse);
     }
 

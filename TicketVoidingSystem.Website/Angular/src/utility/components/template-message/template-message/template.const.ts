@@ -40,6 +40,7 @@ export class IssueTypeId {
   static readonly NOT_PARTICIPATE = 21;
   static readonly OTHER_ISSUES = 18;
   static readonly WRONG_QUARTER_HDP = 16;
+  static readonly ABANDONED = 23;
 }
 
 export class SubIssueTypeId {
@@ -47,7 +48,6 @@ export class SubIssueTypeId {
   static readonly NO_ONWARDS = 34;
   static readonly TECHNICAL_ERROR = 108;
   static readonly GAME_CRASHED_VOID_LIVE = 109;
-  static readonly ABANDONED = 110;
 }
 
 export class TemplateReplace {

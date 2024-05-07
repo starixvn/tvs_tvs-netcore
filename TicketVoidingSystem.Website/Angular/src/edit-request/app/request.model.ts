@@ -10,7 +10,6 @@ import { WrongOddsModel } from '../../add-request/app/add-request/models/event-w
 import { WrongOuModel } from '../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../add-request/app/add-request/models/event-wrong-score.model';
 import { OperatorInfo } from '../../add-request/app/add-request/others/others.model';
-import { Message } from '../../utility/components/template-message/messages/message';
 
 export class RequestDetailModel {
   requestId: number;

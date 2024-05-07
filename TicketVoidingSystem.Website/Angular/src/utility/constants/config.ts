@@ -334,8 +334,8 @@ export class SiteDbGroupConstant {
 
 export class ActionVoidByIssueTypeConst {
   static readonly REDUCED_OVER: number[] = [
-    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly WRONG_ODDS: number[] = [
