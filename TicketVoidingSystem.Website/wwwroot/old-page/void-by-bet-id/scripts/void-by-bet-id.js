@@ -132,7 +132,7 @@ var VoidByBetId = {
                 }
 
                 if (rs.MatchId > 0) {
-                    VoidByBetId.getMatch({ matchId: rs.MatchId, isAbnormalBet: params.isAbnormalBet});
+                    VoidByBetId.getMatch({ matchId: rs.MatchId, isAbnormalBet: params.isAbnormalBet });
                 } else {
                     $('#matchInfo').hide();
                     VoidByBetId.loadMessageTemplate();
@@ -456,7 +456,7 @@ var VoidByBetId = {
         var rows = [];
         for (var index = 0; index < groups.length; index++) {
             var group = groups[index];
-            var groupName = group.Name.toLowerCase().replace(/ /g, '-').replace(/\//g, '-');
+            var groupName = group.Name.toLowerCase().replace(/ /g, '-').replace(/\//g, '-').replace('(', '').replace(')', '');
             rows.push(
                 {
                     Columns: [

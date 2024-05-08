@@ -634,7 +634,7 @@ NapTicketControl.Helper = (function ($) {
             for (var index = 0; index < groups.length; index++) {
                 var group = groups[index];
                 var groupName = group.Name.toLowerCase()
-                    .replace(/ /g, '-').replace('(', '').replace(')', '').replace(/\//g, '-');
+                    .replace(/ /g, '-').replace(/\//g, '-').replace('(', '').replace(')', '');
 
                 NapTicketControl.Helper.checkOrUnCheckGroup(groupName);
             }
