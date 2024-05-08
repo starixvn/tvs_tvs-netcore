@@ -38,7 +38,7 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
     {
         var command = CreateEditRequestCommand(query);
         await repository.ExecuteAsync(command);
-        await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.MatchId, query.EarlyKickOffInfo);
+        await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
         if (query.IssueTypeId.IsAbnormalAccount())
         {
             await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);

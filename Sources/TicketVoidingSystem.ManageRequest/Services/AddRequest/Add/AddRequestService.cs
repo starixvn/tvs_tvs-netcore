@@ -75,7 +75,7 @@ public class AddRequestServiceImp : AddRequestService
     private async Task<Result> ExecuteAddAfterMarkTickets(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
-        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.MatchId, query.EarlyKickOffInfo);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
         await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
         return new Result
         {
@@ -136,9 +136,9 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
-            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo.Matches?.Count() > 0
+            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Count() > 0
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
-                : "29",
+                : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),
             _ => string.Empty
         };

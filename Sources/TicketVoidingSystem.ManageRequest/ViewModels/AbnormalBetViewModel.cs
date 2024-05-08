@@ -14,7 +14,7 @@ public class AbnormalBetViewModel
 
     public bool IsConfirmCalculator { get; set; }
 
-    public IEnumerable<MatchInfoAddRequest> Matches { get; set; }
+    public IEnumerable<MatchInfoAddRequest>? Matches { get; set; }
 
     public IEnumerable<SendLetstalkModel> SendLetstalkModels { get; set; }
 }
