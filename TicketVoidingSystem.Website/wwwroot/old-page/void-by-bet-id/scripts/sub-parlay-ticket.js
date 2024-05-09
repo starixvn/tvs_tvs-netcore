@@ -151,7 +151,7 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
         type: "POST",
         url: window.rootUrl + "api/SubParlayTicket/GetSelectionsSMP",
         contentType: "application/json; charset=utf-8",
-        dataType: "json",
+        dataType: "text",
         data: JSON.stringify(param),
         beforeSend: function () {
             NapTicketControl.disableInput();
