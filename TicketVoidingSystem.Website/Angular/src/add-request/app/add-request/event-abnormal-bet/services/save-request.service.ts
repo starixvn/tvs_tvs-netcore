@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatchInfo } from 'src/utility/models/event.model';
+import { MatchInfo } from '../../../../../utility/models/event.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';

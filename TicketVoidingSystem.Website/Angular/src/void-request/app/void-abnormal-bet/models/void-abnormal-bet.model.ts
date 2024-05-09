@@ -1,5 +1,5 @@
-import { PagingModel } from "src/utility/components/paging/paging/paging.model";
-import { VoidedReason } from "src/utility/models/reason.model";
+import { PagingModel } from "../../../../utility/components/paging/paging/paging.model";
+import { VoidedReason } from "../../../../utility/models/reason.model";
 import { VoidPageCommonItem } from "../../models/void-page-common-item.model";
 import { TicketsModel } from "../../tickets-list/tickets.model";
 

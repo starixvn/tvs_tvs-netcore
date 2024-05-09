@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { BetIdsComponent } from 'src/utility/components/bet-ids/bet-ids.component';
+import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';

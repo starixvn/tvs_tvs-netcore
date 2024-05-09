@@ -1,12 +1,12 @@
 import * as _ from "lodash";
-import { EarlyKickOffGetLogInfoQuery } from "src/add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
-import { EarlyKickOffModel } from "src/add-request/app/add-request/models/event-eko.model";
+import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
 import { WrongHdpGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-hdp/models/get-log-info.query";
 import { WrongOddsGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
 import { WrongOuGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-ou/models/get-log-info.query";
 import { WrongScoreGetLogInfoQuery } from "../../add-request/app/add-request/event-wrong-score/event-wrong-score.model";
+import { EarlyKickOffModel } from "../../add-request/app/add-request/models/event-eko.model";
 import { NotParticipateModel } from "../../add-request/app/add-request/models/event-not-participate.model";
 import { RedCardGetLogInfoQuery, RedCardModel } from "../../add-request/app/add-request/models/event-red-card.model";
 import { ReducedOverModel } from "../../add-request/app/add-request/models/event-reduced-over.model";

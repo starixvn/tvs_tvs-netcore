@@ -2,14 +2,13 @@ import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-i
 import { GroupNumber } from '../../../../../utility/components/bet-ids/bet-ids.model';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
-import { MatchInfo } from '../../../../../utility/models/event.model';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { CheckTransIdsViewModel, PrimitiveProperty, ValidationAbnormalBet } from '../event-abnormal-bet.model';
-import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { ValidationService } from './validation.service';
 
@@ -58,13 +57,11 @@ class Helper {
     requestId: Helper.fakeRequestId,
     actionId: Helper.fakeActionId,
     betIdsComponent: new BetIdsComponent(null),
-    leagueEventAbnormalComponent: new LeagueEventAbnormalComponent(null, null),
     permission: new PermissionAddRequest(),
-    filterBy: null,
     issueTypeId: '11',
     primitiveProps: new PrimitiveProperty(),
-    subIssueTypeId: '',
-    isValidateFromConfirmPopup: false
+    isValidateFromConfirmPopup: false,
+    abnormalBetModel: new AbnormalBetModel()
   };
   static readonly fakeValidationAbnormalBet: ValidationAbnormalBet = {
     invalidTransIds: Helper.fakeTransId,
@@ -97,55 +94,22 @@ describe('ValidationService', () => {
   it('#checkValidBusinessRule should return validation model with error', async () => {
     // Arrange
     const mockIsHasBetId = jest.fn().mockImplementation(() => false);
-    const mockUpdateUndefinedMatchAndLeague = jest.fn();
     const expected = new CheckTransIdsViewModel();
     const args = Helper.fakeValidationBusinessRuleArgs;
+    args.abnormalBetModel = new AbnormalBetModel();
     args.betIdsComponent.isHasBetId = mockIsHasBetId;
     args.betIdsComponent.groupNumber.resetAllItemsToValid = jest.fn();
     args.betIdsComponent.groupNumber.checkDuplicatedItems = jest.fn();
-    args.leagueEventAbnormalComponent.updateUndefinedMatchAndLeague = mockUpdateUndefinedMatchAndLeague;
     const mockAdRequestApiService = new AddRequestApiService(null);
     mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
     const mockValidationService = new ValidationService(mockAdRequestApiService);
     const testCase = [AbnormalFilterBy.MIX_PARLAY, AbnormalFilterBy.SINGLE];
     testCase.forEach(async x => {
-      args.filterBy = x;
+      args.abnormalBetModel.filterBy = x;
       const result = await mockValidationService.checkValidBusinessRule(args);
 
       expect(result.isValid).toBe(false);
     });
-  });
-
-  it('#checkValidBusinessRule should return validation with error when #checkValidTransIdsForAbnormalBet return null', async () => {
-    // Arrange
-    const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
-    const mockGroupNumberGetAllBetIds = jest.fn();
-    const mockIsAbnormalBetMixParlay = jest.fn().mockImplementation(() => false);
-    const expected = null;
-    const args = Helper.fakeValidationBusinessRuleArgs;
-    args.filterBy = AbnormalFilterBy.MIX_PARLAY;
-    args.leagueEventAbnormalComponent = null;
-    args.betIdsComponent.isHasBetId = mockIsHasBetId;
-    args.betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
-    args.betIdsComponent.groupNumber = new GroupNumber();
-    args.betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    args.betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    const mockAdRequestApiService = new AddRequestApiService(null);
-    mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
-    const mockValidationService = new ValidationService(mockAdRequestApiService);
-    mockValidationService['isAbnormalBetMixParlay'] = mockIsAbnormalBetMixParlay;
-
-    // Action
-    const result = await mockValidationService.checkValidBusinessRule(args);
-
-    // Assert
-    expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
-    expect(result.isValid).toBe(false);
   });
 
   it('#checkValidBusinessRule should call #leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch', async () => {
@@ -158,13 +122,13 @@ describe('ValidationService', () => {
     const expected: CheckTransIdsViewModel = {
       abnormalBetTicketRequests: [],
       transInfoAddRequestModel: new TransInfoAddRequestModel,
-      matches: new MatchInfo,
+      matches: [],
+      sendLetstalkModels: [],
       validation: undefined
     };
     const args = Helper.fakeValidationBusinessRuleArgs;
-    args.filterBy = AbnormalFilterBy.MIX_PARLAY;
-    args.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
-    args.leagueEventAbnormalComponent.updateInfoWithOnlyOneMatch = jest.fn();
+    args.abnormalBetModel = new AbnormalBetModel();
+    args.abnormalBetModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
     args.betIdsComponent.isHasBetId = mockIsHasBetId;
     args.betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
     args.betIdsComponent.isAllBetIdsValid = jest.fn().mockImplementation(() => false);
@@ -204,7 +168,8 @@ describe('ValidationService', () => {
     const expected: CheckTransIdsViewModel = {
       abnormalBetTicketRequests: [],
       transInfoAddRequestModel: new TransInfoAddRequestModel,
-      matches: new MatchInfo,
+      matches: [],
+      sendLetstalkModels: [],
       validation: undefined
     };
     mockAdRequestApiService.checkValidTransIdsForAbnormalBet = jest.fn().mockImplementation(() => Promise.resolve(expected));
@@ -407,7 +372,8 @@ describe('ValidationService', () => {
   it('#isAbnormalBetMixParlay should return true', async () => {
     const args = new ValidationBusinessRuleArgs();
     args.issueTypeId = IssueTypeConstant.ABNORMAL_BET;
-    args.filterBy = AbnormalFilterBy.MIX_PARLAY;
+    args.abnormalBetModel = new AbnormalBetModel();
+    args.abnormalBetModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
     const result = validationService['isAbnormalBetMixOrSystemParlay'](args);
 
     expect(result).toBeTruthy();

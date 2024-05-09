@@ -6,7 +6,6 @@ import { Shallow } from 'shallow-render';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber, NumberItem } from '../../../../utility/components/bet-ids/bet-ids.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -28,9 +27,11 @@ class Helper {
   static readonly fakeMatchId = 90000000;
 
   static readonly fakeAbnormalBetModel: AbnormalBetModel = {
-    matchId: Helper.fakeMatchId,
     transIds: Helper.fakeTransId,
     filterBy: null,
+    subIssueTypeId: 1,
+    isConfirmCalculator: true,
+    subIssueTypeName: ''
   };
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
@@ -175,6 +176,7 @@ describe('EventAbnormalBetComponent', () => {
       });
     instance.isCancelAfterFocusOutBetIdsEvent = false;
     instance['checkValidBusinessRule'] = jest.fn();
+    instance['updateAbnormalBetModel'] = jest.fn();
 
     // Action
     await instance.afterFocusOutBetIds();
@@ -195,6 +197,7 @@ describe('EventAbnormalBetComponent', () => {
       });
     instance.isCancelAfterFocusOutBetIdsEvent = true;
     instance['checkValidBusinessRule'] = jest.fn();
+    instance['updateAbnormalBetModel'] = jest.fn();
 
     // Action
     await instance.afterFocusOutBetIds();
@@ -310,6 +313,7 @@ describe('EventAbnormalBetComponent', () => {
         }
       });
     instance['checkIfRequestHasWarning'] = jest.fn();
+    instance['updateAbnormalBetModel'] = jest.fn();
 
     // Action
     await instance.saveRequest();
@@ -336,6 +340,7 @@ describe('EventAbnormalBetComponent', () => {
           isEdit: true,
         }
       });
+    instance['updateAbnormalBetModel'] = jest.fn();
     instance['saveWhenRequestNotVoided'] = jest.fn();
 
     // Action
@@ -588,8 +593,6 @@ describe('EventAbnormalBetComponent', () => {
           isEdit: true,
         }
       });
-    instance.updateMatchId.emit = jest.fn();
-    instance.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
     instance.primitiveProps = new PrimitiveProperty();
 
     // Action
@@ -626,35 +629,6 @@ describe('EventAbnormalBetComponent', () => {
     // Assert
     expect(mockExecuteSave).toHaveBeenCalledTimes(1);
     expect(instance.filter).toBe(Helper.fakeFilterModel);
-  });
-
-  it('#checkValidBusinessRule should emit updateMatchId', async () => {
-    // Arrange
-    const fakeValidationBusinessRule = Helper.fakeValidationBusinessRule;
-    const mockCheckValidBusinessRule = jest.fn().mockImplementation(() => fakeValidationBusinessRule);
-    const { instance } = await shallow
-      .mock(ValidationService, {
-        checkValidBusinessRule: mockCheckValidBusinessRule,
-      })
-      .render({
-        bind: {
-          abnormalBetModel: Helper.fakeAbnormalBetModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true,
-        }
-      });
-    instance.betIdsComponent = new BetIdsComponent(null);
-    instance.betIdsComponent.removeTransId = jest.fn();
-    instance.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
-    instance.updateMatchId.emit = jest.fn();
-    instance.abnormalBetModel.filterBy = AbnormalFilterBy.SINGLE;
-    instance.primitiveProps = new PrimitiveProperty();
-
-    // Action
-    await instance['checkValidBusinessRule'](false);
-
-    // Assert
-    expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
   });
 
   it('#removeInvalidTransIds should call #betIdsComponent.removeTransId', async () => {

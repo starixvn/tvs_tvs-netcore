@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
-import { IssueTypesModel, SubIssueType } from 'src/utility/models/issue-type.model';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
+import { IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { CheckRequestService } from '../services/check-request.service';

@@ -1,4 +1,4 @@
-import { BetIdsComponent } from "src/utility/components/bet-ids/bet-ids.component";
+import { BetIdsComponent } from "../../../../../utility/components/bet-ids/bet-ids.component";
 import { AddRequestStore } from "../../add-request.store";
 import { FilterModel } from "../../filter/filter.model";
 import { RecoverTicketModel } from "../../models/recover-ticket.model";

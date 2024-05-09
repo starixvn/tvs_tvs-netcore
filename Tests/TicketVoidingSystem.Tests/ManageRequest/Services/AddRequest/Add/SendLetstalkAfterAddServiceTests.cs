@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSubstitute;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
+using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.Letstalk;
@@ -26,18 +27,21 @@ public class SendLetstalkAfterAddServiceTests
     }
 
     [Theory]
-    [InlineData(1, 1, 31)]
-    [InlineData(2, null, 38)]
-    public void Execute_Successful_CalledExpected(int filterBy, int? matchId, int subIssueTypeId)
+    [InlineData(1, 31)]
+    [InlineData(2, 38)]
+    public void Execute_Successful_CalledExpected(int filterBy, int subIssueTypeId)
     {
         // Arrange
-        var query = new AddRequestQuery
+        var model = new AbnormalBetViewModel
         {
-            MatchId = matchId,
             FilterBy = filterBy,
-            IsHasUusTickets = false,
-            IssueTypeId = IssueTypeConstant.AbnormalBet,
-            SubIssueTypeId = subIssueTypeId
+            Matches = new List<MatchInfoAddRequest> { new() { MatchId = 1 } },
+            SubIssueTypeId = subIssueTypeId,
+            SendLetstalkModels = new List<SendLetstalkModel>
+            {
+                new (){ IsHasUusTickets = false, MatchId = 1 },
+                new (){ IsHasUusTickets = true, MatchId = 1 }
+            }
         };
         var match = new Match
         {
@@ -50,13 +54,11 @@ public class SendLetstalkAfterAddServiceTests
         matchService.UpdateMatchInfoFromRemotingRef(Arg.Any<Match>()).ReturnsForAnyArgs(match);
 
         // Act
-        _ = service.Execute(query, 1223);
+        _ = service.Execute(model, 1223);
 
         // Assert
         notificationLetstalkService.Received(1)
             .SendToGroupAbnormalBetRequest(Arg.Any<string>(), Arg.Any<string>(), null);
-        matchService.Received(1).GetMatch(Arg.Any<int>());
-        matchService.Received(1).UpdateMatchInfoFromRemotingRef(Arg.Any<Match>());
     }
 
     [Fact]
@@ -66,7 +68,7 @@ public class SendLetstalkAfterAddServiceTests
         var query = new AddRequestQuery();
 
         // Act
-        _ = service.Execute(query, 1223);
+        _ = service.Execute(new AbnormalBetViewModel(), 1223);
 
         // Assert
         notificationLetstalkService.Received(0)

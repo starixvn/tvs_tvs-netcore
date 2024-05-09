@@ -30,7 +30,7 @@ export class CheckTransIdsViewModel {
   sendLetstalkModels: SendLetstalkModel[];
 }
 
-export interface ValidationAbnormalBet {
+export class ValidationAbnormalBet {
   invalidTransIds: string;
   movedTransIds: string;
   differentMatchTransIds: string;

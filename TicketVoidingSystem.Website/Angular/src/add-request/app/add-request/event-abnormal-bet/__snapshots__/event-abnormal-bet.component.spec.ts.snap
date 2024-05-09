@@ -80,7 +80,8 @@ exports[`EventAbnormalBetComponent #EventAbnormalBetComponent init should match 
       </div>
       <bet-ids />
     </div>
-    <league-event-abnormal />
+    <div>
+    </div>
     <confirm-abnormal-bet />
   </event-abnormal-bet>
 </ng-component>

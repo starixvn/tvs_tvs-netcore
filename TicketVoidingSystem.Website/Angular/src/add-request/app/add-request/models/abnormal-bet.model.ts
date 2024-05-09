@@ -3,7 +3,7 @@ import { SendLetstalkModel } from "../event-abnormal-bet/event-abnormal-bet.mode
 
 export class AbnormalBetModel {
   matches?: MatchInfo[];
-  sendLetstalkModels: SendLetstalkModel[];
+  sendLetstalkModels?: SendLetstalkModel[];
   transIds: string;
   filterBy: number;
   subIssueTypeId: number;

@@ -55,11 +55,7 @@ export class ValidationService {
     if (checkTransIdViewModel === null) {
       return { isValid: false} as ValidationBusinessRuleOutput;
     }
-
-    if (StaticService.isFilterBySingle(args.abnormalBetModel.filterBy)) {
-      args.abnormalBetModel.matches = checkTransIdViewModel.matches;
-    }
-
+    args.abnormalBetModel.matches = checkTransIdViewModel.matches;
     const isHasPermissionAddSettledTicket = this.checkCanAddSettledTickets(args.permission, args.actionId);
     this.highlightInvalidTransIds(checkTransIdViewModel.validation, args.betIdsComponent, isHasPermissionAddSettledTicket, args.actionId);
     this.updateValidation(args, checkTransIdViewModel.validation, isHasPermissionAddSettledTicket);

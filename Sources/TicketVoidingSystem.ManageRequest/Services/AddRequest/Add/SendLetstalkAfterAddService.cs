@@ -61,7 +61,7 @@ public class SendLetstalkAfterAddServiceImp : SendLetstalkAfterAddService
         content.AppendLine($"Sub Issue Type: {model.SubIssueTypeName}");
         if (model.FilterBy != FilterByConstant.MixParlay && model.FilterBy != FilterByConstant.SystemParlay)
         {
-            var matchInfo = model.Matches.FirstOrDefault(x => x.MatchId == sendLetstalkModel.MatchId);
+            var matchInfo = model.Matches.First(x => x.MatchId == sendLetstalkModel.MatchId);
             content.AppendLine($"Match ID: {matchInfo.MatchId}");
             content.AppendLine($"Event Date: {matchInfo.EventDate:dd MMMM yyyy}");
             content.AppendLine($"League: {matchInfo.LeagueName}");

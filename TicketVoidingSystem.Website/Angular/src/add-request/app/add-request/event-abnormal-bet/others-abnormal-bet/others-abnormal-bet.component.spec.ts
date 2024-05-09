@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { OthersModel } from '../../others/others.model';
-import { OthersAbnormalComponent } from './others-abnormal-bet.component';
+import { OthersAbnormalBetComponent } from './others-abnormal-bet.component';
 
 describe('OthersAbnormalMixParlayComponent', () => {
   @NgModule({
@@ -17,10 +17,10 @@ describe('OthersAbnormalMixParlayComponent', () => {
   })
   class AppModuleTest { }
 
-  let shallow: Shallow<OthersAbnormalComponent>;
+  let shallow: Shallow<OthersAbnormalBetComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(OthersAbnormalComponent, AppModuleTest).dontMock(NgbModule);
+    shallow = new Shallow(OthersAbnormalBetComponent, AppModuleTest).dontMock(NgbModule);
   });
 
   it('OthersAbnormalMixParlayComponent should init match snapshot', async () => {
