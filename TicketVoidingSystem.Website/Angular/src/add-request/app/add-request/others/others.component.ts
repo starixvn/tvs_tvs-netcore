@@ -34,11 +34,11 @@ export class OthersComponent implements OnChanges, OnInit {
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (changes['matchIds']) {
+    if (changes['matchId']) {
       if (this.matchId) {
         this.addRequestStore.changeBlockingUiStatus(true);
         this.operators = await this.othersService.getOperators(this.matchId?.toString());
-        await this.initProvider(this.isEdit, this.matchId?.toString(), this.parentMatchId);
+        await this.initProvider(this.isEdit, this.matchId, this.parentMatchId);
         this.addRequestStore.changeBlockingUiStatus(false);
       } else {
         this.ngOnInit();
@@ -100,11 +100,11 @@ export class OthersComponent implements OnChanges, OnInit {
     this.model.operatorsList = operatorList.filter(x => x.operatorId !== 0);
   }
 
-  private async initProvider(isEdit: boolean, matchIds: string, parentMatchId: number) {
+  private async initProvider(isEdit: boolean, matchId: number, parentMatchId: number) {
     if ((StaticService.isDangerAccepted(this.issueTypeId) || StaticService.isRedCard(this.issueTypeId) || StaticService.isWrongScore)
       && !isEdit) {
-      const id = parentMatchId ? parentMatchId : matchIds;
-      const provider = await this.othersService.getProvider(id?.toString());
+      const id = parentMatchId ? parentMatchId : matchId;
+      const provider = await this.othersService.getProvider(id);
       this.model.provider = provider?.providerName;
     }
   }
