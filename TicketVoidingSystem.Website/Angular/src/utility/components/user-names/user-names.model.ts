@@ -45,6 +45,10 @@ export class GroupUsername {
         return result;
     }
 
+    removeInvalidUsernames() {
+        this.items = this.items.filter(x => x.isValid)
+    }
+
     checkValidItems(): number {
         if (this.items.length === 0) {
             return 1;

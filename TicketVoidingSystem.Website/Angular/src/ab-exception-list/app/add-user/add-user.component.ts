@@ -46,4 +46,12 @@ export class AddUserComponent implements OnChanges {
   closeModal() {
     this.model.isOpen = false;
   }
+
+  async afterFocusOutBetIds(): Promise<void> {
+    this.abWhiteListStore.changeBlockingUiStatus(true);
+    const usernames = this.usernamesComponent.groupUsername.getAllValue();
+    await this.validationService.validateUsernames(usernames, this.usernamesComponent);
+    this.abWhiteListStore.changeBlockingUiStatus(false);
+  }
+
 }
