@@ -36,7 +36,28 @@ export class AdvancedModeConstants {
         new ItemsSelect(0, '806', '6', true, true, true, []),
         new ItemsSelect(0, '807', '7', true, true, true, []),
         new ItemsSelect(0, '808', '8', true, true, true, []),
-        new ItemsSelect(0, '809', '9', true, true, true, [])
+        new ItemsSelect(0, '809', '9', true, true, true, []),
+        new ItemsSelect(0, '810', '10', true, true, true, []),
+        new ItemsSelect(0, '811', '11', true, true, true, []),
+        new ItemsSelect(0, '812', '12', true, true, true, []),
+        new ItemsSelect(0, '813', '13', true, true, true, []),
+        new ItemsSelect(0, '814', '14', true, true, true, []),
+        new ItemsSelect(0, '815', '15', true, true, true, []),
+        new ItemsSelect(0, '816', '16', true, true, true, []),
+        new ItemsSelect(0, '817', '17', true, true, true, []),
+        new ItemsSelect(0, '818', '18', true, true, true, []),
+        new ItemsSelect(0, '819', '19', true, true, true, []),
+        new ItemsSelect(0, '820', '20', true, true, true, []),
+        new ItemsSelect(0, '821', '21', true, true, true, []),
+        new ItemsSelect(0, '822', '22', true, true, true, []),
+        new ItemsSelect(0, '823', '23', true, true, true, []),
+        new ItemsSelect(0, '824', '24', true, true, true, []),
+        new ItemsSelect(0, '825', '25', true, true, true, []),
+        new ItemsSelect(0, '826', '26', true, true, true, []),
+        new ItemsSelect(0, '827', '27', true, true, true, []),
+        new ItemsSelect(0, '828', '28', true, true, true, []),
+        new ItemsSelect(0, '829', '29', true, true, true, []),
+        new ItemsSelect(0, '830', '30', true, true, true, [])
     ];
 
     static readonly ROUND_LIST = [
@@ -72,11 +93,34 @@ export class AdvancedModeConstants {
         new ItemsSelect(0, '30', '30', true, true, true, []),
         new ItemsSelect(0, '>30', 'Others', true, true, true, [])
     ];
+    static readonly QUARTER_LIST = [
+        new ItemsSelect(0, '801', '1', true, true, true, []),
+        new ItemsSelect(0, '802', '2', true, true, true, []),
+        new ItemsSelect(0, '803', '3', true, true, true, []),
+        new ItemsSelect(0, '804', '4', true, true, true, [])
+    ];
+    static readonly SET_LIST = [
+        new ItemsSelect(0, '801', '1', true, true, true, []),
+        new ItemsSelect(0, '802', '2', true, true, true, []),
+        new ItemsSelect(0, '803', '3', true, true, true, []),
+        new ItemsSelect(0, '804', '4', true, true, true, []),
+        new ItemsSelect(0, '805', '5', true, true, true, [])
+    ];
+    static readonly GAME_LIST = [
+        new ItemsSelect(0, '801', '1', true, true, true, []),
+        new ItemsSelect(0, '802', '2', true, true, true, []),
+        new ItemsSelect(0, '803', '3', true, true, true, []),
+        new ItemsSelect(0, '804', '4', true, true, true, []),
+        new ItemsSelect(0, '805', '5', true, true, true, [])
+    ];
     static readonly ATTRIBUTE_HDP = 'ATTRIBUTE_HDP';
     static readonly ATTRIBUTE_ODDS_SPREAD = 'ATTRIBUTE_ODDS_SPREAD';
 
     static readonly MAP = 'Map:';
     static readonly ROUND = 'Round:';
+    static readonly GAME = 'Game:';
+    static readonly SET = 'Set:';
+    static readonly QUARTER = 'Quarter:';
     static readonly BETTYPES_SABA_TIME_MACHINE = '228,229';
     static readonly BETTYPES_MORE_HDP = '1,7,1303,3,8,183,153,1308,1306,17,701,704,637';
     static readonly BETTYPES_UPDATE_ONLY_GAME_ATTRIBUTE = '613,712,713,3909,3912,3916';

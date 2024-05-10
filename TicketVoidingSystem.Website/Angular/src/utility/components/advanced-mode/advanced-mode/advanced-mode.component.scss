@@ -9,6 +9,33 @@
 .advanced-mode {
   margin-bottom: 10px;
 
+  .dropdown-item-adv {
+    display: flex;
+    width: 175px;
+    height: fit-content;
+    margin-right: 10px;
+    >select {
+      @include select-style;
+    }
+    >multiple-select {
+      width: 100%;
+    }
+  }
+
+  .input-item-adv {
+    display: flex;
+    justify-content: end;
+    width: 175px;
+    margin-right: 10px;
+    input {
+      width: 80px;
+      margin-bottom: 0px;
+      height: 20px;
+      padding: 1px 2px;
+      border-radius: 0;
+    }
+  }
+
   .fieldset-collapse {
     height: 0px;
     border-bottom: none !important;
@@ -47,11 +74,11 @@
 
     .bet-team {
       padding: 2px 0 2px 5px;
-      border-bottom: 1px solid #c8c8c8;   
+      border-bottom: 1px solid #c8c8c8;
       input[type=text] {
         border: 1px solid #767676;
       }
-      
+
       .tooltip-invalid-value .tooltip-inner {
         background-color: #ee0101;
       }
@@ -66,76 +93,22 @@
         .right {
           display: flex;
           justify-content: flex-start;
-          min-width: 675px;
+          min-width: 750px;
 
           .input-area {
             display: contents;
           }
 
-          .width-158 {
-            width: 158px;
-          }
-
-          >div {
-            margin-right: 10px;
-            width: 158px;
-
-            multiple-select {
-              div {
-                width: 100px !important;
-              }
-
-              tree-view {
-                .multiple-select-item {
-                  width: 50px !important;
-                }
-              }
-            }
-            .right-selection {
-              display: flex;
-
-              span {
-                margin-right: 5px;
-                width: 70px;
-              }
-              
-              select {
-                @include select-style;
-              }
-            }
-          }
-
           >div.width-280 {
             width:280px;
-          }
-
-          >div div.width-158 {
-            width:163px;
-            float:left;
-            margin-right:10px;
-          }
-
-          &-input {
-            display: flex;
-            justify-content: space-between;
-
-            input {
-              width: 80px;
-              margin-bottom: 0px;
-              margin-left: 5px;
-              height: 20px;
-              padding: 1px 2px;
-              border-radius: 0;
-            }
           }
         }
       }
 
       &-2 {
         label {
-          input[type="checkbox"] {
-            margin-top: -3px;
-          }
+          display: flex;
+          align-items: center;
         }
 
         table {
@@ -166,11 +139,7 @@
           span.label {
             margin: 0 5px 0 10px;
           }
-
-          select {
-            @include select-style;
-          }
-        } 
+        }
       }
 
       &-3 {
@@ -183,6 +152,14 @@
 
           input[type="checkbox"] {
             margin-top: -1px;
+          }
+        }
+
+        .dropdown-item-adv {
+          width: 220px !important;
+
+          label {
+            white-space: nowrap;
           }
         }
 
@@ -202,13 +179,7 @@
             }
           }
           input[type="text"] {
-            width: 100px;
-            height: 20px;
-          }
-        }
-        .multiple-selection-area {
-          .margin-left-13 {
-            display: block !important;
+            width: 100px !important;
           }
         }
       }
@@ -229,11 +200,6 @@
           display: flex;
           justify-content: flex-start;
 
-          span.label {
-            margin-right: 5px;
-            margin-left: 20px;
-          }
-
           select {
             width: 70px;
             margin-bottom: 0px;
@@ -243,10 +209,11 @@
           }
         }
       }
-      
+
       &-6 {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
 
         .bet-team-checkbox {
           display: flex;
@@ -254,7 +221,7 @@
         .left {
           min-width: 200px;
         }
-        
+
         .right {
           display: flex;
 
@@ -265,7 +232,7 @@
 
           &-input {
             display: flex;
-            justify-content: space-between;
+            justify-content: end;
 
             input {
               width: 80px;
@@ -280,16 +247,10 @@
 
         >div {
           margin-right: 10px;
-          width: 158px;
 
           .right-selection {
             display: flex;
 
-            span {
-              margin-right: 5px;
-              width: 70px;
-            }
-            
             select {
               @include select-style;
             }
@@ -297,80 +258,23 @@
         }
 
         .inputs {
-          min-width: 675px;
+          min-width: 750px;
         }
       }
-      
+
       &-8 {
         display: flex;
         justify-content: space-between;
 
-        .multiple-selection-area {
-          min-width: auto !important;
-        }
-        
         .right {
           display: flex;
           justify-content: flex-start;
-          min-width: 675px;
+          min-width: 750px;
 
           .input-area {
             display: contents;
           }
-
-          .width-158 {
-            width: 158px;
-          }
-
-          >div {
-            margin-right: 10px;
-
-            .right-selection {
-              display: flex;
-
-              span {
-                margin-right: 5px;
-                width: 70px;
-              }
-              
-              select {
-                @include select-style;
-                min-width: 100px;
-              }
-
-              .multiple-selection {
-                min-width: auto;
-                button {
-                  span {
-                    width: auto;
-                    margin-right: 0px;
-                  }
-                }
-                span.i-up, span.i-down {
-                    width: auto !important;
-                }
-              }
-            }
-          }
-
-          &-input {
-            display: flex;
-            justify-content: space-between;
-
-            input {
-              width: 80px;
-              margin-bottom: 0px;
-              margin-left: 5px;
-              height: 20px;
-              padding: 1px 2px;
-              border-radius: 0;
-            }
-          }
         }
-      }
-
-      .multiple-selection-area {
-        min-width: 270px;
       }
     }
   }

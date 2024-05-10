@@ -16,6 +16,11 @@ public class Selection
     public string Name { get; set; }
     public string Value { get; set; }
     public bool IsMultiple { get; set; }
+    public bool IsCanSelectMapFromOutside { get; set; }
+    public bool IsCanSelectRoundFromOutside { get; set; }
+    public bool IsCanSelectQuarterFromOutside { get; set; }
+    public bool IsCanSelectSetFromOutside { get; set; }
+    public bool IsCanSelectGameFromOutside { get; set; }
     public string XmlAttribute { get; set; }
 }
 

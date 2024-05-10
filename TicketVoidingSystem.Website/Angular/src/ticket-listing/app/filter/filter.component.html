@@ -130,7 +130,7 @@
     <bettypes-virtualsport *ngIf="!isInvalidProduct2(query.product, sportType)" #betTypesVSComponent [group]="groupsBetTypesVS"
       [product]="query.product"></bettypes-virtualsport>
     <div *ngIf="isShowAdvancedMode()">
-      <advanced-mode #advancedMode [matchId]="matchId" [isHaveMultipleMapRound]="true"
+      <advanced-mode #advancedMode [matchId]="matchId" [isTicketListing]="true"
         [allBetTypes]="allBetTypes"></advanced-mode>
     </div>
     <div class="search mt-2">

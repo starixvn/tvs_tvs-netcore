@@ -25,20 +25,34 @@ export class Selection {
   isMultiple: boolean;
   xmlAttribute: string;
   multiSelection: MultiSelection;
+  isCanSelectMapFromOutside: boolean;
+  isCanSelectRoundFromOutside: boolean;
+  isCanSelectQuarterFromOutside: boolean;
+  isCanSelectSetFromOutside: boolean;
+  isCanSelectGameFromOutside: boolean;
 
-  constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string) {
+  constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string, //NOSONAR
+    isCanSelectMapFromOutside: boolean, isCanSelectRoundFromOutside: boolean, isCanSelectQuarterFromOutside: boolean,
+    isCanSelectSetFromOutside: boolean, isCanSelectGameFromOutside: boolean) {
     this.name = name;
     this.value = value;
     this.renderItems(items);
     this.isMultiple = isMultiple;
     this.xmlAttribute = xmlAttribute;
+    this.isCanSelectMapFromOutside = isCanSelectMapFromOutside;
+    this.isCanSelectRoundFromOutside = isCanSelectRoundFromOutside;
+    this.isCanSelectQuarterFromOutside = isCanSelectQuarterFromOutside;
+    this.isCanSelectSetFromOutside = isCanSelectSetFromOutside;
+    this.isCanSelectGameFromOutside = isCanSelectGameFromOutside;
   }
 
   renderItems(items: Selection[]) {
     this.items = [];
     if (items !== null) {
       items.forEach(item => {
-        const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
+        const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
+          item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside, item.isCanSelectQuarterFromOutside,
+          item.isCanSelectSetFromOutside, item.isCanSelectGameFromOutside);
         this.items.push(temp);
       });
     }
@@ -50,6 +64,7 @@ export class MultiSelection {
   value: string;
   xmlAttribute: string;
   multipleSelect: MultipleSelection;
+  type: string;
 }
 
 export class BetTeamResult {
@@ -84,20 +99,20 @@ export class BetTeam {
   inputs: Item[];
   checkedBetTypes: string[];
   isChecked: boolean;
-  isHaveMultipleMapRound: boolean;
+  isTicketListing: boolean;
 
   constructor(
     commonInfo: [string, string, number, string, string],
     selections: Selection[],
     items: Item[],
     inputs: Item[],
-    isHaveMultipleMapRound: boolean) {
+    isTicketListing: boolean) {
     this.name = commonInfo[0];
     this.value = commonInfo[1];
     this.type = commonInfo[2];
     this.enableBetTypes = commonInfo[3];
     this.betTypes = commonInfo[4];
-    this.isHaveMultipleMapRound = isHaveMultipleMapRound;
+    this.isTicketListing = isTicketListing;
     this.renderSelections(selections);
     this.renderItems(items);
     this.renderInputs(inputs);
@@ -115,15 +130,19 @@ export class BetTeam {
 
   renderValidSelection(selections: Selection[]) {
     selections.forEach(item => {
-      if (this.isHaveMultipleMapRound && (item.name === AdvancedModeConstants.MAP || item.name === AdvancedModeConstants.ROUND)) {
-        this.renderMultipleSelectWithMapAndRound(item);
+      if (this.isTicketListing &&
+        (item.isCanSelectMapFromOutside || item.isCanSelectRoundFromOutside ||item.isCanSelectQuarterFromOutside
+          || item.isCanSelectSetFromOutside || item.isCanSelectGameFromOutside)) {
+        this.renderMultipleSelectWithAllBetType(item);
       } else if (item.isMultiple) {
         this.renderMultipleSelect(item);
         item.multiSelection = this.multiSelection;
         delete this.multiSelection;
         this.selections.push(item);
       } else {
-        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute);
+        const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
+          item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside, item.isCanSelectQuarterFromOutside,
+          item.isCanSelectSetFromOutside, item.isCanSelectGameFromOutside);
         this.selections.push(selection);
       }
     });
@@ -155,18 +174,18 @@ export class BetTeam {
     this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '170px';
+    this.multiSelection.multipleSelect.maxWidth = '100%';
     this.renderItemsMultipleSelect(item);
   }
 
-  renderMultipleSelectWithMapAndRound(item: Selection) {
+  renderMultipleSelectWithAllBetType(item: Selection) {
     this.multiSelection = new MultiSelection();
     this.multiSelection.multipleSelect = new MultipleSelection();
     this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
     this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
     this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '92px';
-    this.renderItemsMultipleSelectWithMapAndRound(item);
+    this.multiSelection.multipleSelect.maxWidth = '100%';
+    this.renderItemsMultipleSelectWithAllBetType(item);
   }
 
   renderItemsMultipleSelect(multi: Selection) {
@@ -187,7 +206,7 @@ export class BetTeam {
     this.multiSelection.multipleSelect.selectionTitle = this.multiSelection.multipleSelect.getDisplayedItems();
   }
 
-  renderItemsMultipleSelectWithMapAndRound(multi: Selection) {
+  renderItemsMultipleSelectWithAllBetType(multi: Selection) {
     this.multiSelection.name = multi.name;
     this.multiSelection.value = multi.value;
     this.multiSelection.xmlAttribute = multi.xmlAttribute;
@@ -197,6 +216,17 @@ export class BetTeam {
         this.multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, []));
       }
     });
+    if (multi.isCanSelectMapFromOutside) {
+      this.multiSelection.type = "map";
+    } else if (multi.isCanSelectRoundFromOutside) {
+      this.multiSelection.type = "round";
+    } else if (multi.isCanSelectQuarterFromOutside) {
+      this.multiSelection.type = "quarter";
+    } else if (multi.isCanSelectSetFromOutside) {
+      this.multiSelection.type = "set";
+    } else if (multi.isCanSelectGameFromOutside) {
+      this.multiSelection.type = "game";
+    }
 
     this.multiSelectionList.push(this.multiSelection);
   }
@@ -310,7 +340,7 @@ export class BetTeam {
   }
 
   isTicketListingAndBettypeMapOrRound(name: string): boolean {
-    if (this.isHaveMultipleMapRound) {
+    if (this.isTicketListing) {
       if (name === AdvancedModeConstants.MAP || name === AdvancedModeConstants.ROUND) {
         return true;
       } else {
@@ -323,7 +353,7 @@ export class BetTeam {
   updateBySelection(result: BetTeamResult) {
     this.selections.forEach(select => {
       this.updateResult(result, select.xmlAttribute, select.value);
-      if (select.multiSelection !== undefined && (!this.isHaveMultipleMapRound ||
+      if (select.multiSelection !== undefined && (!this.isTicketListing ||
         !this.isTicketListingAndBettypeMapOrRound(select.multiSelection.name))) {
         const value = select.multiSelection.multipleSelect.getValueItems();
         this.updateResult(result, select.multiSelection.xmlAttribute, value);
@@ -332,7 +362,7 @@ export class BetTeam {
   }
 
   updateByMultipleSelection(result: BetTeamResult) {
-    if (this.multiSelection !== undefined && (!this.isHaveMultipleMapRound ||
+    if (this.multiSelection !== undefined && (!this.isTicketListing ||
       !this.isTicketListingAndBettypeMapOrRound(this.multiSelection.name))) {
       const value = this.multiSelection.multipleSelect.getValueItems();
       this.updateResult(result, this.multiSelection.xmlAttribute, value);
@@ -340,11 +370,15 @@ export class BetTeam {
   }
 
   updateByMultipleSelectionWithTicketListing(result: BetTeamResult) {
-    if (this.multiSelectionList !== undefined && this.isHaveMultipleMapRound) {
+    if (this.multiSelectionList !== undefined && this.isTicketListing) {
       this.multiSelectionList.forEach(item => {
         let value = item.multipleSelect.getValueItems();
-        if (item.multipleSelect.selectionTitle === 'All' && (item.name === AdvancedModeConstants.MAP
-          || this.multiSelection.name === AdvancedModeConstants.ROUND)) {
+        if (item.multipleSelect.selectionTitle === 'All' &&
+          (item.name === AdvancedModeConstants.MAP
+          || item.name === AdvancedModeConstants.ROUND
+          || item.name === AdvancedModeConstants.QUARTER
+          || item.name === AdvancedModeConstants.SET
+          || item.name === AdvancedModeConstants.GAME)) {
           value = 'All';
         }
         this.updateResult(result, item.xmlAttribute, value);
@@ -395,18 +429,17 @@ export class BetTeam {
     }
   }
 
-  updateItemListMapAndRound(itemList: string[], type: string) {
-    this.multiSelectionList.forEach(itemMultiSelection => {
-      if (itemMultiSelection.name === type) {
-        itemMultiSelection.multipleSelect.items.forEach(item => {
-          const object = itemList.find(f => f === item.value);
-          if (object !== undefined) {
-            item.checked = true;
-          } else {
-            item.checked = false;
-          }
-        });
-      }
+  updateItemByControlAllBetType(itemList: string[], type: string) {
+    const multiSelectOfType =  this.multiSelectionList.filter(x => x.type === type);
+    multiSelectOfType.forEach(itemMultiSelection => {
+      itemMultiSelection.multipleSelect.items.forEach(item => {
+        const object = itemList.find(f => f === item.value);
+        if (object !== undefined) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      });
       this.changeItemsOfMultipleSelection(itemMultiSelection.multipleSelect);
     });
   }
@@ -582,7 +615,7 @@ export class BetTeam {
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY
     if (AdvancedModeConstants.BETTYPE_MAP_X_FIRST_TO_Y_OVER_UNDER.split(',').includes(betTypeId)) {
-      if (this.isHaveMultipleMapRound) {
+      if (this.isTicketListing) {
         this.updateForBetType9089MultipleMapAndRound(result, betTypeId);
       } else {
         this.updateForBetType9089SingleMapAndRound(result, betTypeId);

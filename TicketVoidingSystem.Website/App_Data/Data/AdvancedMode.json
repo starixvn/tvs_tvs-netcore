@@ -1264,6 +1264,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1324,6 +1325,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1384,6 +1386,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1435,6 +1438,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -1493,6 +1497,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -6177,10 +6182,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6201,6 +6202,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6242,10 +6245,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6266,6 +6265,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6307,10 +6308,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6331,6 +6328,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6365,10 +6364,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6389,6 +6384,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6471,10 +6468,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6495,6 +6488,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6716,6 +6711,7 @@
               "Value": "830"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6790,6 +6786,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6871,6 +6868,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6952,6 +6950,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7026,6 +7025,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7123,6 +7123,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7220,6 +7221,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7355,6 +7357,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -7429,6 +7432,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7564,6 +7568,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -7645,6 +7650,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7780,6 +7786,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -7861,6 +7868,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -7996,6 +8004,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -8070,6 +8079,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8205,6 +8215,7 @@
               "Value": ">30"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "Name": "Round:",
           "Value": "All",
           "XmlAttribute": "Game"
@@ -8279,6 +8290,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -8333,6 +8345,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
@@ -8388,6 +8401,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
@@ -8424,8 +8438,8 @@
       "Name": "",
       "Value": "",
       "Type": 8,
-      "EnableBetTypes": "712,713,3909,3912,3916",
-      "BetTypes": "712,713,3909,3912,3916"
+      "EnableBetTypes": "712,713",
+      "BetTypes": "712,713"
     },
     {
       "Selections": [
@@ -8452,6 +8466,72 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
+          "Name": "Game/Set:",
+          "Value": "All",
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "H"
+            },
+            {
+              "Name": "Away",
+              "Value": "A"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Items": [
+        {
+          "Name": "Y Value:",
+          "Value": "",
+          "Flag": true,
+          "XmlAttribute": "Game"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "EnableBetTypes": "3909,3912,3916",
+      "BetTypes": "3909,3912,3916"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            }
+          ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
@@ -8480,7 +8560,7 @@
       "Name": "",
       "Value": "",
       "Type": 8,
-      "BetTypes": "710,3906"
+      "BetTypes": "710"
     },
     {
       "Selections": [
@@ -8507,6 +8587,63 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
+          "Name": "Game/Set:",
+          "Value": "All",
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "O"
+            },
+            {
+              "Name": "Even",
+              "Value": "E"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "3906"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            }
+          ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
@@ -8542,7 +8679,7 @@
       "Name": "",
       "Value": "",
       "Type": 8,
-      "BetTypes": "709,220,3905,3907,3908"
+      "BetTypes": "709"
     },
     {
       "Selections": [
@@ -8569,6 +8706,70 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
+          "Name": "Game/Set:",
+          "Value": "All",
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "O"
+            },
+            {
+              "Name": "Under",
+              "Value": "U"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Items": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "Value"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "220,3905,3907,3908"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            }
+          ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
@@ -8624,6 +8825,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectGameFromOutside": true,
           "IsMultiple": true,
           "Name": "Game:",
           "Value": "All",
@@ -8885,6 +9087,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -8944,6 +9147,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -9003,6 +9207,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -9058,6 +9263,7 @@
               "Value": "05"
             }
           ],
+          "IsCanSelectRoundFromOutside": true,
           "IsMultiple": true,
           "Name": "Round:",
           "Value": "All",
@@ -9352,6 +9558,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -9437,6 +9644,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",
@@ -9492,8 +9700,9 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
-          "Name": "Quarter ",
+          "Name": "Quarter:",
           "Value": "All",
           "XmlAttribute": "Set"
         }
@@ -9932,6 +10141,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10032,6 +10242,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10122,6 +10333,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10196,6 +10408,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectMapFromOutside": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10234,10 +10447,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10258,6 +10467,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10303,10 +10514,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10327,6 +10534,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10432,10 +10641,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10456,6 +10661,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10787,10 +10994,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10811,6 +11014,8 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectSetFromOutside": true,
+          "IsMultiple": true,
           "Name": "Game/Set:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -11311,6 +11516,7 @@
               "Value": "804"
             }
           ],
+          "IsCanSelectQuarterFromOutside": true,
           "IsMultiple": true,
           "Name": "Quarter:",
           "Value": "All",

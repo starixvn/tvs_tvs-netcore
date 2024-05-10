@@ -38,10 +38,8 @@
 
         label {
             margin-bottom: 0px;
-
-            input {
-                margin-top: -3px;
-            }
+            display: flex;
+            align-items: center;
         }
 
         tr {
@@ -53,6 +51,8 @@
 
             label {
                 font-weight: bold;
+                display: flex;
+                align-items: center;
             }
 
             div {
