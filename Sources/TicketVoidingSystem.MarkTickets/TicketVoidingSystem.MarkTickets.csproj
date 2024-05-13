@@ -17,7 +17,6 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Epplus.Mapper" Version="6.0.0" />
     <PackageReference Include="Fanex.BetList.Core" Version="3.0.2.6" />
-    <PackageReference Include="Fanex.Data.Repository" Version="4.2.5.3" />
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
