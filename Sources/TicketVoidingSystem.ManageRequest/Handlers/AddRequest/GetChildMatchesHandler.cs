@@ -23,7 +23,7 @@ public class GetChildMatchesHandler : IRequestHandler<GetChildMatchesRequest, IE
 
     public async Task<IEnumerable<MatchInfoAddRequest>> Handle(GetChildMatchesRequest request, CancellationToken cancellationToken)
     {
-        var matches = await repository.FetchAsync<MatchInfoAddRequest>(request, cancellationToken);
+        var matches = await repository.FetchAsync<MatchInfoAddRequest>(request);
         return matchInfoAddRequestService.UpdateDataFromRemotingRef(matches);
     }
 }

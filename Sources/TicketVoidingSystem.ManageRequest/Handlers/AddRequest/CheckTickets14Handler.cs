@@ -33,7 +33,7 @@ public class CheckTickets14Handler : IRequestHandler<CheckTickets14Request, Chec
             TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)))
         };
 
-        return await repository.GetAsync<CheckTickets14ViewModel>(criteria, cancellationToken);
+        return await repository.GetAsync<CheckTickets14ViewModel>(criteria);
     }
 
     private async Task<IEnumerable<string>> GetTransInfoJson(CheckTickets14Model model)

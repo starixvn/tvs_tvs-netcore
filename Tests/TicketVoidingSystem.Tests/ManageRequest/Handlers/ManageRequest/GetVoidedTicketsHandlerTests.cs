@@ -24,7 +24,7 @@ public class GetVoidedTicketsHandlerTests
         var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
 
         // Act
-        var result = await handler.Handle(request, cancellationToken);
+        var result = await handler.Handle(request);
 
         // Assert
         Assert.IsType<VoidedTicketsViewModel>(result);
@@ -41,7 +41,7 @@ public class GetVoidedTicketsHandlerTests
         var handler = new GetVoidedTicketsHandler(getVoidedTicketsService, mapTicketsService);
 
         // Act
-        await handler.Handle(request, cancellationToken);
+        await handler.Handle(request);
 
         // Assert
         await getVoidedTicketsService.Received(1).GetTickets(request);
@@ -70,7 +70,7 @@ public class GetVoidedTicketsHandlerTests
             .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
                 Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
-        await handler.Handle(request, cancellationToken);
+        await handler.Handle(request);
 
         // Assert
         mapTicketsService.Received()
@@ -100,7 +100,7 @@ public class GetVoidedTicketsHandlerTests
             .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
                 Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
-        await handler.Handle(request, cancellationToken);
+        await handler.Handle(request);
 
         // Assert
         await getVoidedTicketsService.Received(1).GetTickets(request);
@@ -131,7 +131,7 @@ public class GetVoidedTicketsHandlerTests
             .MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
                 Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
-        await handler.Handle(request, cancellationToken);
+        await handler.Handle(request);
 
         // Assert
         mapTicketsService.Received()

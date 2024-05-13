@@ -21,6 +21,6 @@ public class GetLicenseesHandler : IRequestHandler<GetLicenseesRequest, IEnumera
     public async Task<IEnumerable<Licensee>> Handle(GetLicenseesRequest request, CancellationToken cancellationToken)
     {
         var criteria = new GetLicenseesCriteria();
-        return await repository.FetchAsync<Licensee>(criteria, cancellationToken);
+        return await repository.FetchAsync<Licensee>(criteria);
     }
 }

@@ -34,9 +34,9 @@ public class GetTemplateAbnormalBetHandlerTests
         _ = await handler.Handle(null, CancellationToken.None);
 
         // Assert
-        await repository.Received(1).FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>(), cancellationToken);
+        await repository.Received(1).FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>());
         await repository.Received(1)
-            .FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>(), cancellationToken);
-        await repository.Received(1).FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>(), cancellationToken);
+            .FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>());
+        await repository.Received(1).FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>());
     }
 }

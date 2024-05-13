@@ -28,7 +28,7 @@ public class CheckNegativeBalanceHandler : IRequestHandler<CheckNegativeBalanceR
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             request.SiteDbGroupId = server.Id;
-            return repository.FetchAsync<NegativeBalanceModel>(request, cancellationToken);
+            return repository.FetchAsync<NegativeBalanceModel>(request);
         });
         var results = await Task.WhenAll(tasks);
 

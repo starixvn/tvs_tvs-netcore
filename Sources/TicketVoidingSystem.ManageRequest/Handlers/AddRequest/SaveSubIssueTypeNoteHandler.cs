@@ -25,7 +25,7 @@ public class SaveSubIssueTypeNoteHandler : IRequestHandler<SaveSubIssueTypeNoteR
     {
         try
         {
-            await repository.ExecuteAsync(request, cancellationToken);
+            await repository.ExecuteAsync(request);
             return new Result();
         }
         catch (Exception e)

@@ -24,7 +24,7 @@ public class GetOperatorsHandler : IRequestHandler<GetOperatorsRequest, IEnumera
         var operators = new List<OperatorInfo?>();
         if (!string.IsNullOrWhiteSpace(request.MatchIds))
         {
-            var data = await repository.FetchAsync<OperatorInfoModel>(request, cancellationToken);
+            var data = await repository.FetchAsync<OperatorInfoModel>(request);
             operators = UpdateViewModel(data).ToList();
         }
 

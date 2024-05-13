@@ -29,8 +29,8 @@ public class GetTemplateSettingHandler : IRequestHandler<GetTemplateSettingReque
 
     public async Task<TemplateSettingViewModel> Handle(GetTemplateSettingRequest request, CancellationToken cancellationToken)
     {
-        var templateModels = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria(), cancellationToken);
-        var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria(), cancellationToken);
+        var templateModels = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria());
+        var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria());
         var messageTemplates = templateModels.Select(MapToMessageTemplateViewModels);
 
         return new TemplateSettingViewModel
