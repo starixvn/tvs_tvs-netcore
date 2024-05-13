@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 
@@ -46,18 +45,6 @@ public class ValidationTicketsServiceImp : ValidationTicketsService
 
     private async Task<CheckTicketValidationOutput> ReCheckTicketsStatus(CheckTicketValidationOutput inputTickets, int siteDbGroupId)  // NOSONAR
     {
-        var mappingTypes = new[] {
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel)
-        };
-
         var criteria = new CheckTicketsAllowToVoidCriteria
         {
             SiteDbGroupId = siteDbGroupId,
@@ -67,16 +54,22 @@ public class ValidationTicketsServiceImp : ValidationTicketsService
             CancelCashOutTicketsJson = JsonSerializer.Serialize(inputTickets.CancelCOTickets)
         };
 
-        var results = await repository.FetchMultipleAsync(criteria, mappingTypes);
+        var results = (await repository.FetchAsync<RequestDetailTicketModel>(criteria)).ToList();
+        var voidSingleTickets = results.Where(x => x.ValidationType == 1);
+        var voidParlayTickets = results.Where(x => x.ValidationType == 3);
+        var voidCricketTickets = results.Where(x => x.ValidationType == 5);
+        var cancelCOTickets = results.Where(x => x.ValidationType == 7);
+        var voidSingleTickets14 = results.Where(x => x.ValidationType == 8);
+        var voidParlayTickets14 = results.Where(x => x.ValidationType == 9);
 
         return new CheckTicketValidationOutput
         {
-            VoidSingleTickets = results[Number.Zero].Cast<RequestDetailTicketModel>(),
-            VoidParlayTickets = results[Number.Two].Cast<RequestDetailTicketModel>(),
-            VoidCricketTickets = results[Number.Four].Cast<RequestDetailTicketModel>(),
-            CancelCOTickets = results[Number.Six].Cast<RequestDetailTicketModel>(),
-            VoidSingleTickets14 = results[Number.Seven].Cast<RequestDetailTicketModel>(),
-            VoidParlayTickets14 = results[Number.Eight].Cast<RequestDetailTicketModel>()
+            VoidSingleTickets = voidSingleTickets,
+            VoidParlayTickets = voidParlayTickets,
+            VoidCricketTickets = voidCricketTickets,
+            CancelCOTickets = cancelCOTickets,
+            VoidSingleTickets14 = voidSingleTickets14,
+            VoidParlayTickets14 = voidParlayTickets14
         };
     }
 

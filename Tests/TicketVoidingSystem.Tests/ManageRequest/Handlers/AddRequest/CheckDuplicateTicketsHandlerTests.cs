@@ -30,19 +30,11 @@ public class CheckDuplicateTicketsHandlerTests
     {
         // Arrange
         var request = new CheckDuplicateTicketsRequest { IssueTypeId = 1 };
-        var result = new IEnumerable<object>[3];
-        result[0] = new[] { new MatchInfoAddRequest() };
-        result[1] = new[] { new ValidationDuplicateTickets() };
-        result[2] = new[] { new TransInfoAddRequestModel() };
+        var result = (new[] { new MatchInfoAddRequest() }, new[] { new ValidationDuplicateTickets() },
+            new[] { new TransInfoAddRequestModel() }, new List<string>());
 
-        var mappingTypes = new[]
-        {
-            typeof(MatchInfoAddRequest), typeof(ValidationDuplicateTickets), typeof(TransInfoAddRequestModel),
-            typeof(string)
-        };
         repository.GetAsync<string>(Arg.Any<GetTransInfoDuplicateTicketsCriteria>()).ReturnsForAnyArgs("TransInfo");
-        repository.FetchMultipleAsync(Arg.Any<CheckDuplicateTicketsCriteria>(), mappingTypes,
-            CancellationToken.None).ReturnsForAnyArgs(result);
+        repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationDuplicateTickets, TransInfoAddRequestModel, string>(Arg.Any<CheckDuplicateTicketsCriteria>()).ReturnsForAnyArgs(result);
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
             .ReturnsForAnyArgs(new MatchInfoAddRequest());
         var viewModel = new CheckDuplicateTicketsViewModel

@@ -36,17 +36,15 @@ public class CheckDuplicateTicketsHandler : IRequestHandler<CheckDuplicateTicket
     public async Task<CheckDuplicateTicketsViewModel> Handle(CheckDuplicateTicketsRequest request, CancellationToken cancellationToken)
     {
         var criteria = await GetCheckDuplicateTicketsCriteria(request);
-        var mappingTypes = new[] { typeof(MatchInfoAddRequest), typeof(ValidationDuplicateTickets), typeof(TransInfoAddRequestModel), typeof(string) };
-        var result = await repository.FetchMultipleAsync(criteria, mappingTypes, cancellationToken);
-        var match = result[0].Cast<MatchInfoAddRequest>().FirstOrDefault();
-        var validation = result[1].Cast<ValidationDuplicateTickets>().FirstOrDefault();
-        var transInfoAddRequestModel = result[2].Cast<TransInfoAddRequestModel>().FirstOrDefault();
+
+        var (match, validation, transInfoAddRequestModel, _) =
+            await repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationDuplicateTickets, TransInfoAddRequestModel, string>(criteria);
 
         var viewModel = new CheckDuplicateTicketsViewModel
         {
-            Match = matchInfoAddRequestService.UpdateDataFromRemotingRef(match),
-            Validation = validation,
-            TransInfoAddRequestModel = transInfoAddRequestModel
+            Match = matchInfoAddRequestService.UpdateDataFromRemotingRef(match.FirstOrDefault()),
+            Validation = validation.FirstOrDefault(),
+            TransInfoAddRequestModel = transInfoAddRequestModel.FirstOrDefault()
         };
 
         return viewModel;

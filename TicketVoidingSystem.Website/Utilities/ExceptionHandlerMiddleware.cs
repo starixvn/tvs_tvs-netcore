@@ -39,7 +39,7 @@ public class ExceptionHandlerMiddleware
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        var errorMessage = $"<b>Exception Error: {exception.Message} </b> {exception.StackTrace}";
+        var errorMessage = $"Exception Error: {exception.Message} {exception.StackTrace}";
         await context.Response.WriteAsync(errorMessage).ConfigureAwait(false);
     }
 }
