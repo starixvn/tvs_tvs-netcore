@@ -7,6 +7,7 @@ import { IssueTypes } from '../../filter/issue-types.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { LogInfoService } from '../services/log-info.service';
+import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 
 @Component({
   selector: 'log-info-eko',
@@ -70,5 +71,9 @@ export class LogInfoEkoComponent implements OnInit {
 
   public isEarlyKickOff(): boolean {
     return StaticService.isEarlyKickOff(this.filter.issueTypeId);
+  }
+
+  public getIssueTypeId(): number {
+    return Number(this.filter.issueTypeId);
   }
 }

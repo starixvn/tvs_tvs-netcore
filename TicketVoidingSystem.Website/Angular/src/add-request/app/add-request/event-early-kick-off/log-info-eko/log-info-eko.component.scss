@@ -98,3 +98,18 @@
 .sub-type-select {
   width: 150px;
 }
+
+.list-group {
+  .messages {
+    margin-left: 0px;
+  }
+} 
+
+.log-info{
+  position: relative;
+}
+
+.log-info .messages{
+  position: absolute;
+  margin-left: 0px;
+}

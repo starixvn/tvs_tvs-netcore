@@ -28,6 +28,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from 'src/utility/models/match.model';
 
 @Component({
   selector: 'event-red-card',
@@ -46,7 +47,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() redCardModels: RedCardModel[] = [];
 
   @Output() redCardModelsChange = new EventEmitter<RedCardModel[]>();
-  @Output() updateMatchId = new EventEmitter<MatchInfo>();
+  @Output() updateMatchId = new EventEmitter<MatchModel>();
 
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') leagueEventRedCardComponent: LeagueEventRedCardComponent;

@@ -26,6 +26,7 @@ import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { MatchModel } from 'src/utility/models/match.model';
 
 @Component({
   selector: 'event-wrong-score',
@@ -43,7 +44,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongScoreModels: WrongScoreModel[] = [];
-  @Output() updateMatchId = new EventEmitter<MatchInfo>();
+  @Output() updateMatchId = new EventEmitter<MatchModel>();
   @ViewChild('leagueEvent') leagueEventWrongScoreComponent: LeagueEventRedCardComponent;
   @ViewChildren('wrongScoreInfo') wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>;
   @ViewChild('filterWrongScore') filterWrongScoreComponent: FilterWrongScoreComponent;
@@ -146,7 +147,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
   }
 
-  public changeMatchEvent(matchInfo: MatchInfo) {
+  public changeMatchEvent(matchInfo: MatchModel) {
     if (matchInfo) {
       this.resetData();
       this.matchId = matchInfo.matchId;

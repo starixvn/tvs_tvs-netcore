@@ -11,7 +11,6 @@ import { DateFullTimeNewComponent } from '../../../../utility/components/date-ti
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
@@ -31,6 +30,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -109,6 +109,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.matchCode = this.leagueEventComponent?.selectedMatch.matchCode;
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.leagueEventComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
+    this.mainEvent.matchModel = this.leagueEventComponent?.selectedMatch;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -137,6 +138,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     await this.getTicketsMainEvent();
+    this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this.mainEvent);
     this.primitiveProps.isShowLogInfoEvents = true;
 
     this.addRequestStore.changeBlockingUiStatus(false);
@@ -253,7 +255,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     return this.relatedEvents.filter(x => x.matchType === MatchType.CHILD).length;
   }
 
-  private updateKickOffTime(matchInfo: MatchInfo): string {
+  private updateKickOffTime(matchInfo: MatchModel): string {
     if (matchInfo?.matchId && !this.isEdit) {
       return moment(matchInfo.kickOffTime, DateTimeFormat.FULL_DATE_TIME_FORMAT).format('YYYY-MM-DD HH:mm:ss.SSS');
     }

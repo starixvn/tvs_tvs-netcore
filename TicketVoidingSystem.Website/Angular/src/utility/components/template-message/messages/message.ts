@@ -13,4 +13,5 @@
     playerNamesEnglish: string;
     playerNamesChineseTraditional: string;
     playerNamesChineseSimplified: string;
+    isNotShowOtherLanguage: boolean;
 }

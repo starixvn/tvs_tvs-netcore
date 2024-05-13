@@ -36,6 +36,8 @@ export class MatchModel {
   sportTypeNameSimplified: string;
   sportTypeNameTraditional: string;
   numberOfCorner?: number;
+  name?: string;
+  parentId?: number;
 }
 
 export class CheckMatchWithRefNoQuery {

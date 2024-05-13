@@ -309,6 +309,7 @@ export class FunctionConst {
   static readonly EARLY_KICK_OFF = 1;
   static readonly TVS_VOID_PAGE = 2;
   static readonly MARK_TICKETS = 3;
+  static readonly TVS_ADD_PAGE = 4;
 }
 
 export class PoolHouseTicketValue {

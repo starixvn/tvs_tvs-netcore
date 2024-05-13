@@ -6,6 +6,7 @@ import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LeagueInfo, MatchInfo } from '../../../../utility/models/event.model';
 import { LeagueEventService } from './league-event.service';
+import { MatchModel } from 'src/utility/models/match.model';
 
 @Component({
   selector: 'league-event',
@@ -22,7 +23,7 @@ export class LeagueEventComponent implements OnChanges {
 
   @Output() matchIdChange = new EventEmitter<number>();
   @Output() changeEvent = new EventEmitter();
-  @Output() changeMatchInfo = new EventEmitter<MatchInfo>();
+  @Output() changeMatchInfo = new EventEmitter<MatchModel>();
   @Output() changeSportTypeAbnormal = new EventEmitter<number>();
 
   leagues: LeagueInfo[];
@@ -31,6 +32,7 @@ export class LeagueEventComponent implements OnChanges {
   isBlock: boolean;
   tooltip = new Tooltip();
   validationMessage: string;
+  matchModel: MatchModel;
   
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);
@@ -65,8 +67,9 @@ export class LeagueEventComponent implements OnChanges {
         this.validationMessage = '';
       } else if (isNumeric(keyword.term)) {
         const viewModel = await this.leagueEventService.getMatch(this.sportType, this.eventDate, null, null, Number(keyword.term), null);
+
         if(viewModel.errorCode === 0) {
-          this.matches = [viewModel.match];
+          this.matches = [this.getMatchInfo(viewModel.match)];
         } else {
           this.matches = [];
           this.validationMessage = viewModel.errorMsg;
@@ -84,7 +87,7 @@ export class LeagueEventComponent implements OnChanges {
     this.validationMessage = '';
   }
 
-  onChangeMatchEvent(match: MatchInfo) {
+  onChangeMatchEvent(match: MatchModel) {
     this.updateLeagueInfo(match.leagueId, match.leagueName);
     this.changeMatchInfo.emit(match);
     this.matchIdChange.emit(match.matchId);
@@ -95,7 +98,7 @@ export class LeagueEventComponent implements OnChanges {
     const viewModel = await this.leagueEventService.getMatch(this.sportType, this.eventDate, null, this.isEdit,
       this.matchId, Number(this.actionId));
     this.changeMatchInfo.emit(viewModel.match);
-    this.updateInfoWithOnlyOneMatch(viewModel.match);
+    this.updateInfoWithOnlyOneMatch(this.getMatchInfo(viewModel.match));
   }
 
   async getMatchFromTransIds(transIds: string): Promise<void> {
@@ -103,7 +106,7 @@ export class LeagueEventComponent implements OnChanges {
     const viewModel = await this.leagueEventService.getMatch(null, defaultDate, transIds, this.isEdit, null,
       Number(this.actionId));
     this.changeMatchInfo.emit(viewModel.match);
-    this.updateInfoWithOnlyOneMatch(viewModel.match);
+    this.updateInfoWithOnlyOneMatch(this.getMatchInfo(viewModel.match));
   }
 
   private updateInfoWithOnlyOneMatch(match: MatchInfo): void { 
@@ -144,5 +147,19 @@ export class LeagueEventComponent implements OnChanges {
     } else {
       return true;
     }
+  }
+
+  getMatchInfo(match: MatchModel): MatchInfo {
+    var matchInfo = new MatchInfo();
+    matchInfo.matchId = match.matchId;
+    matchInfo.name = match.name;
+    matchInfo.sportType = match.sportType;
+    matchInfo.matchCode = match.matchCode;
+    matchInfo.parentId = match.parentId;
+    matchInfo.kickOffTime = match.kickOffTime;
+    matchInfo.leagueId = match.leagueId;
+    matchInfo.leagueName = match.leagueName;
+
+    return matchInfo;
   }
 }

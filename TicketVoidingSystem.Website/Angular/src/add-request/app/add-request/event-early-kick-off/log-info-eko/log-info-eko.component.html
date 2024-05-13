@@ -52,5 +52,9 @@
           </ng-container>
         </div>
       </div>
+      <template-message #templateMessage [value]="logInfo.templateValue"
+          [issueTypeId]="getIssueTypeId()" [subIssueTypeId]="logInfo.subIssueTypeId"
+          [voidFunction]="4">
+      </template-message>
   </div>
 </div>

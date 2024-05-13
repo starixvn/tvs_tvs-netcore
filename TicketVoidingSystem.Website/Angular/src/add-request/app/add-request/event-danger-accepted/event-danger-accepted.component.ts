@@ -28,6 +28,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from 'src/utility/models/match.model';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -46,7 +47,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Input() dangerAcceptedModels: RedCardModel[] = [];
   
   @Output() dangerAcceptedModelsChange = new EventEmitter<RedCardModel[]>();
-  @Output() updateMatchId = new EventEmitter<MatchInfo>();
+  @Output() updateMatchId = new EventEmitter<MatchModel>();
 
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') leagueEventDangerAcceptedComponent: LeagueEventRedCardComponent;

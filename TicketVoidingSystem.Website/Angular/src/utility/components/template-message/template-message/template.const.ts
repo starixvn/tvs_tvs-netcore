@@ -8,6 +8,7 @@ export class VoidFunction {
   static readonly SINGLE = 0;
   static readonly EARLY_KICK_OFF = 1;
   static readonly TVS_VOID_PAGE = 2;
+  static readonly TVS_ADD_PAGE = 4;
 }
 
 export class MessageTemplateId {

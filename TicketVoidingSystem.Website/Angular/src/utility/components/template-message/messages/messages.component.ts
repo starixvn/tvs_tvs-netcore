@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/cor
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { Message } from './message';
+import { VoidFunction } from '../template-message/template.const';
 
 @Component({
   selector: 'messages',
@@ -15,9 +16,9 @@ export class MessagesComponent {
   @Output() messageChange = new EventEmitter<Message>();
   tooltip = new Tooltip();
   isShowOtherLanguage= false;
+  marginX = 10;
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
-
   }
 
   checkValidationForMainLanguage(): boolean {
@@ -108,5 +109,9 @@ export class MessagesComponent {
 
   changedMessage() {
     this.messageChange.emit(this.message);
+  }
+
+  getStyles() {
+    return this.message.isNotShowOtherLanguage ? "" : "margin: 0 10px;";
   }
 }

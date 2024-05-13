@@ -1,4 +1,4 @@
-﻿<div class="messages" *ngIf="isShowMessages">
+﻿<div class="messages" *ngIf="isShowMessages" [style]="getStyles()">
   <div class="gray-header">
     Message
   </div>
@@ -41,7 +41,7 @@
             (change)="changedMessage()"></textarea>
         </td>
       </tr>
-      <tr>
+      <tr *ngIf="!message.isNotShowOtherLanguage">
         <th scope="col" colspan="4" class="header-other-language" (click)="isShowOtherLanguage = !isShowOtherLanguage">
           <span>
             Other languages

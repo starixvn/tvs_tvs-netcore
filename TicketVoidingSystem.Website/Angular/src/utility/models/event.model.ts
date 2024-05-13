@@ -1,3 +1,4 @@
+import { MatchModel } from "./match.model";
 
 export class SportInfo {
   sportType: number;
@@ -22,7 +23,7 @@ export class MatchInfo extends LeagueInfo {
 }
 
 export class MatchInfoViewModel {
-  match: MatchInfo;
+  match: MatchModel;
   errorCode: number;
   errorMsg: string;
 }
