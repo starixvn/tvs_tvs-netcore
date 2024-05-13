@@ -15,6 +15,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Epplus.Mapper" Version="6.0.0" />
+    <PackageReference Include="Fanex.Data.ProxyClient" Version="0.0.3-alpha02" />
     <PackageReference Include="MediatR" Version="12.1.1" />
   </ItemGroup>
 
