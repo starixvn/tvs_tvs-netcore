@@ -46,7 +46,8 @@ public class MapTicketsServiceTests
         var originalTickets = new List<VoidedTicketModel>
         {
             new()  { IsMixParlay = false, GroupName = "Group1" },
-            new()  { IsMixParlay = false, GroupName = "Group2" },
+            new()  { IsMixParlay = true, GroupName = "Group2", IsDeposit = true},
+            new()  { IsMixParlay = true, GroupName = "Group2", IsDeposit = false},
         };
         var allGroups = new List<Group<VoidedTicketModel>>
         {
@@ -60,11 +61,10 @@ public class MapTicketsServiceTests
         pagingService.Paging(Arg.Any<IEnumerable<VoidedTicketModel>>(), Arg.Any<int>(), Arg.Any<int>())
             .Returns(originalTickets);
 
-        var result = mapTicketsService.MapToGroupVoidedTickets(originalTickets, query);
+        var result = mapTicketsService.MapToGroupVoidedTickets(originalTickets, query).ToList();
 
         // Assert
-        var iEnumerable = result.ToList();
-        Assert.Equal(2, iEnumerable.Count);
+        Assert.Equal(3, result.Count);
     }
 
     [Fact]

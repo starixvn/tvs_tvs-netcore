@@ -58,7 +58,7 @@ var ContextMenu = (function () {
         ContextMenu.Helper.ChangeCheckBoxAll();
         for (var index = 0; index < ContextMenu.Helper.groups.length; index++) {
             var group = ContextMenu.Helper.groups[index];
-            var groupName = group.Name.toLowerCase().replace(/ /g, '-').replace('(', '').replace(')', '').replace(/\//g, '-');
+            var groupName = group.Name.toLowerCase().replace(/ /g, '-').replace(/\//g, '-').replace('(', '').replace(')', '');
             var isChecked = $("input[type=checkbox].chk-ticket-" + groupName).prop('checked');
             var subTickets = $('input[main-trans-id].chk-ticket-all:disabled:not([main-trans-id="0"])');
             subTickets.each(function () {
@@ -142,7 +142,7 @@ ContextMenu.Helper = (function ($) {
             ContextMenu.LastedTicket = lastedTicket;
             ContextMenu.LastedGroup = lastedGroup;
             var isShowWarningBetTradePaging = lastedTicket.Status.toLowerCase() !== 'sold' && !NapTicketControl.Helper.isSettledTicket(lastedTicket.Status) &&
-                                                                    lastedTicket.Player.toLowerCase().indexOf('bettrade') !== -1;
+                lastedTicket.Player.toLowerCase().indexOf('bettrade') !== -1;
             if (isShowWarningBetTradePaging) {
                 var listTicket = $('.checkBoxItem');
                 var lastedItem = listTicket[listTicket.length - 1];
@@ -155,7 +155,7 @@ ContextMenu.Helper = (function ($) {
 
             for (var index = 0; index < lengthGroup; index++) {
                 var group = ContextMenu.Helper.groups[index];
-                var groupName = group.Name.toLowerCase().replace(/ /g, '-').replace('(', '').replace(')', '').replace(/\//g, '-');
+                var groupName = group.Name.toLowerCase().replace(/ /g, '-').replace(/\//g, '-').replace('(', '').replace(')', '');
                 var isChecked = $("input[type=checkbox].chk-ticket-" + groupName).prop('checked');
                 var subTickets = $('input[main-trans-id].chk-ticket-all:disabled:not([main-trans-id="0"])');
                 subTickets.each(function () {
@@ -170,7 +170,7 @@ ContextMenu.Helper = (function ($) {
             if ($('#lastedItem').is(':checked')) {
                 if ($('#show-message-betTrade').length > 0) {
                     $('#show-message-betTrade').html(tooltip.show('pagination',
-                            'Let it be noted that this BetTrade ticket has a "SOLD" ticket on the next page which will be voided also.')).show();
+                        'Let it be noted that this BetTrade ticket has a "SOLD" ticket on the next page which will be voided also.')).show();
                 }
             }
             else {
@@ -182,7 +182,8 @@ ContextMenu.Helper = (function ($) {
             var lengthGroup = ContextMenu.Helper.groups.length;
             for (var index = 0; index < lengthGroup; index++) {
                 var groupItem = ContextMenu.Helper.groups[index];
-                var groupName = 'group-' + groupItem.Name.toLowerCase();
+                var groupName = 'group-' + groupItem.Name.toLowerCase().replace(/ /g, '-').replace(/\//g, '-').replace('(', '').replace(')', '');
+                console.log()
                 if ($(group).hasClass(groupName)) {
                     return groupItem.Name.toLowerCase();
                 }

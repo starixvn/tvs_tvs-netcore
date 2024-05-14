@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Epplus.Mapper.Extensions;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using SpecialDelete.VoidByBetId.Models;
 using SpecialDelete.VoidByBetId.Services.GetTickets;
 using TicketVoidingSystem.Constants;
@@ -59,8 +60,20 @@ public class SheetServiceImp : SheetService
     {
         var lastRow = worksheet.Dimension.End.Row;
         worksheet.HighlightFont($"H5:H{lastRow}", "LEFT(H5,1)=\"-\"", Color.Red);
-        worksheet.HighlightBackground($"A5:I{lastRow}", "MOD(ROW(),2)>0", Color.LemonChiffon);
         worksheet.HighlightFont($"F5:F{lastRow}", "LEFT(F5,1)=\"-\"", Color.Red);
         worksheet.Cells.Style.WrapText = true;
+        HighlightBackground(worksheet, lastRow);
+    }
+
+    private static void HighlightBackground(ExcelWorksheet worksheet, int lastRow)
+    {
+        const int two = 2;
+        const int startRow = 5;
+        for (var row = startRow; row <= lastRow; row += two)
+        {
+            var range = worksheet.Cells[$"A{row}:I{row}"];
+            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+            range.Style.Fill.BackgroundColor.SetColor(Color.LemonChiffon);
+        }
     }
 }

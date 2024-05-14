@@ -73,14 +73,16 @@ public class GetPoolHouseTicketServiceTests
         // Arrange
         var afterPagingTickets = new List<GetTicketModel>
         {
-            new() { IsMixParlay = true, GroupName = "Parlay" },
+            new() { IsMixParlay = true, GroupName = "Credit (Parlay)" },
+            new() { IsMixParlay = true, GroupName = "Deposit (Parlay)", IsDeposit = true},
             new() { IsMixParlay = true, GroupName = "1" },
             new() { IsMixParlay = false, GroupName = "Others" },
             new() { IsMixParlay = false, GroupName = "1" }
         };
         var originTickets = new List<GetTicketModel>
         {
-            new() { IsMixParlay = true, GroupName = "Parlay" },
+            new() { IsMixParlay = true, GroupName = "Credit (Parlay)" },
+            new() { IsMixParlay = true, GroupName = "Deposit (Parlay)", IsDeposit = true},
             new() { IsMixParlay = true, GroupName = "1" },
             new() { IsMixParlay = false, GroupName = "Others" },
             new() { IsMixParlay = false, GroupName = "1" }
@@ -99,17 +101,21 @@ public class GetPoolHouseTicketServiceTests
             .ReturnsForAnyArgs(new TicketViewModel());
         var expectedGroups = new List<Group<TicketViewModel>>
         {
-            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 3 } }, DisplayTotalTickets = 2 },
+            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 2 },
             new()
             {
-                Name = "Parlay", Tickets = new List<TicketViewModel> { new() { No = 3 } }, DisplayTotalTickets = 1
+                Name = "Credit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1
             },
-            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 3 } }, DisplayTotalTickets = 1 }
+            new()
+            {
+                Name = "Deposit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1
+            },
+            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1 }
         };
         var expected = new TicketsViewModel
         {
             TotalSingle = 2,
-            TotalParlay = 2,
+            TotalParlay = 3,
             Groups = expectedGroups
         };
 

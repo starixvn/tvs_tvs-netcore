@@ -27,18 +27,27 @@ public class MapTicketsServiceImp : MapTicketsService
     public IEnumerable<Group<VoidedTicketModel>> MapToGroupVoidedTickets(IEnumerable<VoidedTicketModel> originalTickets, GetVoidedTicketsQuery query)
     {
         var tickets = pagingService.Paging(originalTickets, query.PageIndex, query.PageSize);
-        if (tickets.Any())
+        if (!tickets.Any())
         {
-            var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay).OrderBy(ticket => ticket.TransId);
-            var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
-            var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-            groups.Add(new Group<VoidedTicketModel> { Name = "Parlay", Tickets = parlayTickets });
-
-            UpdateCountTicketsByGroup(originalTickets, groups);
-            return groups;
+            return Enumerable.Empty<Group<VoidedTicketModel>>();
         }
 
-        return Enumerable.Empty<Group<VoidedTicketModel>>();
+        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
+        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
+        {
+            groups.Add(new Group<VoidedTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<VoidedTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
+
+        UpdateCountTicketsByGroup(originalTickets, groups);
+        return groups;
     }
 
     public Group<VoidedTicketViewModel> MapToGroupVoidedTicketsViewModel(Group<VoidedTicketModel> group, Match? match, int startIndex, GetVoidedTicketsQuery query)
@@ -63,10 +72,19 @@ public class MapTicketsServiceImp : MapTicketsService
 
     private void UpdateCountTicketsByGroup(IEnumerable<VoidedTicketModel> originalTickets, IEnumerable<Group<VoidedTicketModel>> outputGroups)
     {
-        var parlayTickets = originalTickets.Where(ticket => ticket.IsMixParlay).OrderBy(ticket => ticket.TransId);
+        var parlayTickets = originalTickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
         var singleTickets = originalTickets.Where(ticket => !ticket.IsMixParlay);
         var allGroups = pagingService.Groups(singleTickets, t => t.GroupName).ToList();
-        allGroups.Add(new Group<VoidedTicketModel> { Name = "Parlay", Tickets = parlayTickets });
+        if (creditParlayTickets.Any())
+        {
+            allGroups.Add(new Group<VoidedTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            allGroups.Add(new Group<VoidedTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
 
         foreach (var group in outputGroups)
         {

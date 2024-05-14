@@ -29,20 +29,25 @@ public class GroupTicketServiceImp : GroupTicketService
     public IEnumerable<Group<GetTicketModel>> CreateGroupsGetTicketModel(IEnumerable<GetTicketModel> data, GetTicketsQuery query)
     {
         var tickets = pagingService.Paging(data, query.PageIndex, query.PageSize).ToList();
-        if (!tickets.Any())
-        {
-            return new List<Group<GetTicketModel>>();
-        }
-
-        return CreateGroupsGetTicketModel(tickets);
+        return !tickets.Any() ? new List<Group<GetTicketModel>>() : CreateGroupsGetTicketModel(tickets);
     }
 
     private IEnumerable<Group<GetTicketModel>> CreateGroupsGetTicketModel(IEnumerable<GetTicketModel> tickets)
     {
-        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay).OrderBy(ticket => ticket.TransId);
+        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
         var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
+
         var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-        groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
+        if (creditParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
 
         return groups;
     }

@@ -52,7 +52,8 @@ public class GroupTicketServiceTests
         var tickets = new List<GetTicketModel>
         {
             new() { IsMixParlay = false, TransId = 1, GroupName = "1" },
-            new() { IsMixParlay = true, TransId = 2 },
+            new() { IsMixParlay = true, TransId = 2, IsDeposit = true},
+            new() { IsMixParlay = true, TransId = 4, IsDeposit = false},
             new() { IsMixParlay = false, TransId = 3, GroupName = "1" }
         };
         var singleTickets = new List<GetTicketModel>
@@ -66,11 +67,18 @@ public class GroupTicketServiceTests
             new() { Name = "1", Tickets = singleTickets },
             new()
             {
-                Name = "Parlay", Tickets = new List<GetTicketModel>
+                Name = "Credit (Parlay)", Tickets = new List<GetTicketModel>
                 {
-                    new() { IsMixParlay = true, TransId = 2 }
+                    new() { IsMixParlay = true, TransId = 4 }
                 }
+            },
+            new()
+            {
+            Name = "Deposit (Parlay)", Tickets = new List<GetTicketModel>
+            {
+                new() { IsMixParlay = true, TransId = 2, IsDeposit = true}
             }
+        }
         };
         pagingService.Paging(data, query.PageIndex, query.PageSize).ReturnsForAnyArgs(tickets);
         pagingService.Groups(singleTickets, ticket => ticket.GroupName).ReturnsForAnyArgs(singleTicketGroups);

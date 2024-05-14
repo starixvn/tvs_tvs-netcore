@@ -47,28 +47,47 @@ public class GetTicketsHandler : IRequestHandler<GetTicketsRequest, TicketsViewM
     private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> data, GetTicketsRequest message)
     {
         var tickets = pagingService.Paging(data, message.PageIndex, message.PageSize);
-        if (tickets.Any())
+        if (!tickets.Any())
         {
-            var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay)
-                .OrderBy(ticket => ticket.TransId).ToList();
-            var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
-            var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
-            groups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
-            CountAllTicketsForGroup(data, groups);
-
-            return groups;
+            return Enumerable.Empty<Group<GetTicketModel>>();
         }
 
-        return Enumerable.Empty<Group<GetTicketModel>>();
+        var parlayTickets = tickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var singleTickets = tickets.Where(ticket => !ticket.IsMixParlay);
+
+        var groups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            groups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
+
+        CountAllTicketsForGroup(data, groups);
+
+        return groups;
     }
 
     private void CountAllTicketsForGroup(IEnumerable<GetTicketModel> originalTickets, IEnumerable<Group<GetTicketModel>> outputGroups)
     {
-        var parlayTickets = originalTickets.Where(ticket => ticket.IsMixParlay)
-            .OrderBy(ticket => ticket.TransId).ToList();
+        var parlayTickets = originalTickets.Where(ticket => ticket.IsMixParlay);
+        var creditParlayTickets = parlayTickets.Where(ticket => !ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
+        var depositParlayTickets = parlayTickets.Where(ticket => ticket.IsDeposit).OrderBy(ticket => ticket.TransId).ToList();
         var singleTickets = originalTickets.Where(ticket => !ticket.IsMixParlay);
-        var allGroups = pagingService.Groups(singleTickets, t => t.GroupName).ToList();
-        allGroups.Add(new Group<GetTicketModel> { Name = "Parlay", Tickets = parlayTickets });
+
+        var allGroups = pagingService.Groups(singleTickets, ticket => ticket.GroupName).ToList();
+        if (creditParlayTickets.Any())
+        {
+            allGroups.Add(new Group<GetTicketModel> { Name = "Credit (Parlay)", Tickets = creditParlayTickets });
+        }
+        if (depositParlayTickets.Any())
+        {
+            allGroups.Add(new Group<GetTicketModel> { Name = "Deposit (Parlay)", Tickets = depositParlayTickets });
+        }
 
         foreach (var group in outputGroups)
         {
