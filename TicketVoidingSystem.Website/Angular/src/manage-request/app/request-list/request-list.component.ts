@@ -44,7 +44,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     private readonly appService: AppService,
     private readonly element: ElementRef,
     private readonly changeDetectorRef: ChangeDetectorRef,
-    private readonly requestDescriptionService :RequestDescriptionService
+    private readonly requestDescriptionService: RequestDescriptionService
   ) {
     this.tooltip.element = this.element;
   }
@@ -116,6 +116,10 @@ export class RequestListComponent implements OnInit, OnChanges {
     }
   }
 
+  isCanClickNoOfTickets(): boolean {
+    return this.permission.voidRead || this.permission.verifyRead;
+  }
+
   private isCreatedDateLessThanToday(createdDate: Date): boolean {
     const currentDate = new Date(moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS'));
     currentDate.setDate(currentDate.getDate() - 1);
@@ -136,7 +140,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   showTickets(requestId: number, matchId: number) {
-    if (this.permission.voidRead || this.permission.verifyRead) {
+    if (this.isCanClickNoOfTickets()) {
       this.ticketListModal = { open: true, minimize: false, requestId, matchId };
     }
   }
@@ -235,12 +239,12 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   public async copyRequestDescription(requestId: number, matchId: number): Promise<void> {
-    await this.requestDescriptionService.copyToClipboard(requestId, matchId);  
+    await this.requestDescriptionService.copyToClipboard(requestId, matchId);
   }
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
     return StaticService.isDangerAccepted(issueTypeId.toString()) || StaticService.isRedCard(issueTypeId.toString()) || StaticService.isWrongScore(issueTypeId.toString())
-      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isAbandoned(issueTypeId.toString()) ||StaticService.isNotParticipate(issueTypeId.toString());
+      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isAbandoned(issueTypeId.toString()) || StaticService.isNotParticipate(issueTypeId.toString());
   }
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
