@@ -110,6 +110,8 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.leagueEventComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
     this.mainEvent.matchModel = this.leagueEventComponent?.selectedMatch;
+    this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this.mainEvent);
+
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -133,12 +135,11 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
     this.primitiveProps.isShowLogInfoEvents = false;
     this.addRequestStore.changeBlockingUiStatus(true);
-
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     await this.getTicketsMainEvent();
-    this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this.mainEvent);
+    this.mainEvent.templateValue.checkSettled = this.mainEvent.tableTicketsModel.isHasSettledTicket;
     this.primitiveProps.isShowLogInfoEvents = true;
 
     this.addRequestStore.changeBlockingUiStatus(false);

@@ -26,22 +26,22 @@
       <tr>
         <td>
           <textarea rows="1" [(ngModel)]="message.contentEnglish" class="english"
-            (change)="changedMessage()"></textarea>
+            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
         </td>
         <td>
           <textarea rows="1" [(ngModel)]="message.contentChineseTraditional" class="chinese-traditional"
-            (change)="changedMessage()"></textarea>
+            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
         </td>
         <td>
           <textarea rows="1" [(ngModel)]="message.contentChineseSimplified" class="chinese-simplified"
-            (change)="changedMessage()"></textarea>
+            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
         </td>
         <td>
           <textarea rows="1" [(ngModel)]="message.contentNewChineseSimplified" class="new-chinese-simplified"
-            (change)="changedMessage()"></textarea>
+            (change)="changedMessage()" [disabled]="message.isTVSAddOrEditPage"></textarea>
         </td>
       </tr>
-      <tr *ngIf="!message.isNotShowOtherLanguage">
+      <tr *ngIf="!message.isTVSAddOrEditPage">
         <th scope="col" colspan="4" class="header-other-language" (click)="isShowOtherLanguage = !isShowOtherLanguage">
           <span>
             Other languages

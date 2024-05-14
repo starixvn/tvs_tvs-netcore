@@ -170,7 +170,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.updateAIOMessage();
     this.updateSpecialBetType();
     this.updateActualMarketTvsWrongOdds();
-    this.message.isNotShowOtherLanguage = this.isTVSAddOrEditPage();
+    this.message.isTVSAddOrEditPage = this.isTVSAddOrEditPage();
   }
 
   resetMessage() {

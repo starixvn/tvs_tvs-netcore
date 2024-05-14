@@ -1,9 +1,5 @@
-export class ChildMatchModel {
-  matchId: number;
-  matchCode: string;
-  matchEvent: string;
-  leagueName: string;
-  name: string;
+import { MatchModel } from '../../../../utility/models/match.model';
+export class ChildMatchModel extends MatchModel{
   isChecked: boolean;
   matchType: number;
 }

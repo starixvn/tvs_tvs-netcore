@@ -112,6 +112,6 @@ export class MessagesComponent {
   }
 
   getStyles() {
-    return this.message.isNotShowOtherLanguage ? "" : "margin: 0 10px;";
+    return this.message.isTVSAddOrEditPage ? "" : "margin: 0 10px;";
   }
 }

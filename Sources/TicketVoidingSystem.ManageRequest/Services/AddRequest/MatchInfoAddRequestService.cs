@@ -1,4 +1,5 @@
-﻿using TicketVoidingSystem.Constants;
+﻿using AutoMapper;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 
@@ -13,11 +14,13 @@ public interface MatchInfoAddRequestService
 
 public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
 {
-    private readonly RemotingRefWrapperService remotingRefService;
+    private readonly RemotingRefWrapperService remotingRefWrapperService;
+    private readonly IMapper mapper;
 
-    public MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRefService)
+    public MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRefWrapperService, IMapper mapper)
     {
-        this.remotingRefService = remotingRefService;
+        this.remotingRefWrapperService = remotingRefWrapperService;
+        this.mapper = mapper;
     }
 
     public MatchInfoAddRequest UpdateDataFromRemotingRef(MatchInfoAddRequest? matchInfo)
@@ -27,10 +30,10 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
             return null;
         }
 
-        matchInfo.LeagueName = remotingRefService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English);
+        matchInfo.LeagueName = remotingRefWrapperService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English);
         matchInfo.HomeName = matchInfo.IsNeutral ?
-            remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English) + " (N)" : remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English);
-        matchInfo.AwayName = remotingRefService.GetTeamName(matchInfo.AwayId, LanguageCode.English);
+            remotingRefWrapperService.GetTeamName(matchInfo.HomeId, LanguageCode.English) + " (N)" : remotingRefWrapperService.GetTeamName(matchInfo.HomeId, LanguageCode.English);
+        matchInfo.AwayName = remotingRefWrapperService.GetTeamName(matchInfo.AwayId, LanguageCode.English);
         matchInfo.MatchEvent = GetMatchEvent(matchInfo);
         matchInfo.Name = $"{matchInfo.MatchId} - {matchInfo.MatchEvent}";
 
@@ -49,7 +52,7 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
             SportTypeConstant.Lucky3Game => $"Lucky 3 Game No.{match.MatchCode}",
             SportTypeConstant.NumberGame => $"Number Game No.{match.MatchCode}",
             SportTypeConstant.Happy5 => $"Happy 5 No.{match.MatchCode}",
-            SportTypeConstant.Bullfighting => $"{remotingRefService.GetBFName(match.HomeId)} - vs - {remotingRefService.GetBFName(match.AwayId)}",
+            SportTypeConstant.Bullfighting => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
             _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };
     }

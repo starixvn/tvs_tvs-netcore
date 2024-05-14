@@ -93,9 +93,10 @@ export class LeagueEventRedCardComponent implements OnChanges {
 
   private updateInfoWithOnlyOneMatch(match: MatchModel): void {
     if (match) {
-      this.matches = [];
+      this.matches = [match];
       this.selectedMatch = match;
       this.updateLeagueInfo(match.leagueId, match.leagueName);
+      this.changeEvent.emit(match);
     } else {
       this.updateUndefinedMatchAndLeague();
     }
