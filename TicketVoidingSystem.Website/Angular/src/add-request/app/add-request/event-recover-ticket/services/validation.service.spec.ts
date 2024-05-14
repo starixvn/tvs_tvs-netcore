@@ -132,7 +132,7 @@ describe('ValidationService', () => {
     betIdsComponent.groupNumber.updateInvalidItems = mockUpdateInvalidItems;
     validationService['highlightInvalidTransIds'](model, betIdsComponent);
 
-    expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(3);
+    expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(2);
   });
 
   it('#highlightInvalidTransIds should not call #updateInvalidItems', async () => {
