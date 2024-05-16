@@ -12,7 +12,7 @@ public class SiteEmail
 
     public string BccList { get; set; }
 
-    public int IsAvailabe { get; set; }
+    public bool IsAvailabe { get; set; }
 
     public bool IsChinaView { get; set; }
 
