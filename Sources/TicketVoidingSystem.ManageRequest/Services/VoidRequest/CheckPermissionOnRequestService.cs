@@ -33,10 +33,11 @@ public class CheckPermissionOnRequestServiceImp : CheckPermissionOnRequestServic
         {
             RequestId = requestId
         };
-        var request = await repository.GetAsync<RequestModel>(criteria);
-        if (request != null)
+        var (firstResultSet, _, _) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(criteria);
+
+        if (firstResultSet.Any())
         {
-            var issueTypeId = request.IssueTypeId;
+            var issueTypeId = firstResultSet.First().IssueTypeId;
             var permissionConfig = PermissionIssueTypeConfig.MappingList.First(x => x.IssueTypeId == issueTypeId);
 
             return await sessionService.HasPermission(permissionConfig.FunctionKey, Constant.Policy.Read);
