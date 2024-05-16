@@ -1,5 +1,8 @@
 <div class="no-gutters" [ngClass]="usernameComponentCss">
-    <div class="col-form-label">Username(s)</div>
+    <div class="d-flex block-username">
+        <div class="col-form-label">Username(s)</div>
+        <button type="submit" class="btn btn-danger btn-sm btn-remove-usernames" *ngIf="isShowButtonRemoveInvalid()" (click)="removeInvalidUserNames()">Remove Invalid</button>
+    </div>
     <div class="col-12" [ngClass]="inputUsernameCss" [ngStyle]="inputUsernameStyle">
         <div #usernames class="input-username" [ngClass]="{'point-event-none disabled-input': disabled}"
             (click)="focusUsername()" (mousedown)="$event.preventDefault()">
@@ -19,7 +22,7 @@
             </div>
             <input #input class="username" type="text" [(ngModel)]="username" (keydown)="onKey($event)"
                 (blur)="addItem(username, false)" (paste)="pasteItem($event)" (keyup.shift)="shiftKey=false"
-                (keydown.shift)="shiftKey=true" maxlength="30"/>
+                (keydown.shift)="shiftKey=true" maxlength="30" (blur)="onBlurBetIdInput(username)"/>
         </div>
         <span class="invalid-data"></span>
         <div class="flex-between" *ngIf="!isAbException">

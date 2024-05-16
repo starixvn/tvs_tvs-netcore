@@ -21,6 +21,8 @@ export class UsernamesComponent implements OnChanges {
   @Output() focusOutUsernames = new EventEmitter();
   @Output() change = new EventEmitter();
   @Output() modelChange = new EventEmitter<string>();
+  @Output() afterFocusOutBetIds = new EventEmitter<string>();
+
   maxLengthOneUsername = 30;
   groupUsername = new GroupUsername();
   username: string;
@@ -49,6 +51,11 @@ export class UsernamesComponent implements OnChanges {
   focusUsername() {
     this.input.nativeElement.focus();
     this.isFocusingUsernames = true;
+  }
+
+  onBlurBetIdInput(value: string) {
+    this.addItem(value, true);
+    this.afterFocusOutBetIds.emit(value);
   }
 
   addItem(value: string, preventEmitChange: boolean) {
@@ -194,5 +201,14 @@ export class UsernamesComponent implements OnChanges {
     this.model = this.groupUsername.getAllValue();
     this.modelChange.emit(this.groupUsername.getAllValue());
     this.change.emit();
+  }
+
+  isShowButtonRemoveInvalid(){
+    const validIndex = this.groupUsername.checkValidItems();
+    return this.isAbException && validIndex == 2; 
+  }
+
+  removeInvalidUserNames(){
+    this.groupUsername.removeInvalidUsernames();
   }
 }

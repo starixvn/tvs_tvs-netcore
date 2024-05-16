@@ -12,7 +12,7 @@
           </button>
         </div>
         <div class="modal-body wrapper-tooltip">
-          <user-names #usernames [isAbException]="true"></user-names>
+          <user-names #usernames [isAbException]="true" (afterFocusOutBetIds)="afterFocusOutBetIds()"></user-names>
           <div>
             <label class="col-form-label col-form-label-sm mr-2">Sub Type</label>
             <ng-select class="sub-type" [items]="subTypeSelection" [multiple]="true" bindLabel="name" groupBy="group"
