@@ -209,6 +209,10 @@ export class UsernamesComponent implements OnChanges {
   }
 
   removeInvalidUserNames(){
+    this.groupUsername.removeExistedUsernames();
+    var usernames = this.groupUsername.getAllValue();
+    var duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
     this.groupUsername.removeInvalidUsernames();
+    duplicatedItems.forEach(x => this.addItem(x, true))
   }
 }
