@@ -18,30 +18,32 @@ using TicketVoidingSystem.Website.Utilities;
 using TicketVoidingSystem.Website.Utilities.WebOptimizer;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var configuration = builder.Configuration;
 
 // Add services to the container.
-builder.Services.LoadAppSetting(builder.Configuration);
-builder.Services.AddRazorPages();
-builder.Services.RegisterAuthentication();
-builder.Services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpClientServiceImp>();
-builder.Services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
-builder.Services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
-builder.Services.AddFanexData(builder.Configuration);
-builder.Services.RegisterFanexExceptionHandler();
-builder.Services.RegisterSentry();
-builder.Services.RegisterOneBookUM(builder.Configuration);
-builder.Services.RegisterRemotingRef();
-builder.Services.RegisterLetstalk();
-builder.Services.RegisterCoreServices(builder.Configuration);
-builder.Services.RegisterBusinessServices();
-builder.Services.RegisterFanexCaching(builder.Configuration);
-builder.Services.RegisterFanexMailService();
-builder.Services.RegisterMediatR();
-builder.Services.RegisterAutoMapper();
-builder.Services.RegisterSignalR();
-builder.Services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
-builder.Services.AddRazorPages();
-builder.Services.AddControllersWithViews(options =>
+services.LoadAppSetting(configuration);
+services.AddRazorPages();
+services.RegisterAuthentication();
+services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpClientServiceImp>();
+services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
+services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
+services.RegisterFanexData(configuration);
+services.RegisterFanexExceptionHandler();
+services.RegisterSentry();
+services.RegisterOneBookUM(configuration);
+services.RegisterRemotingRef();
+services.RegisterLetstalk();
+services.RegisterCoreServices(configuration);
+services.RegisterBusinessServices();
+services.RegisterFanexCaching(configuration);
+services.RegisterFanexMailService();
+services.RegisterMediatR();
+services.RegisterAutoMapper();
+services.RegisterSignalR();
+services.AddResponseCompression(options => { options.MimeTypes = new[] { "text/html", "text/css", "application/javascript", "application/json" }; });
+services.AddRazorPages();
+services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new SessionAuthorizeAttribute());
     options.Filters.Add(new ServiceFilterAttribute(typeof(CheckUMFilterAttribute)) { Order = 0 });
@@ -53,7 +55,7 @@ builder.Services.AddControllersWithViews(options =>
     options.JsonSerializerOptions.Converters.Add(new CustomDecimalJsonConverter());
 }).AddSessionStateTempDataProvider();
 
-builder.Services.RegisterWebOptimizer();
+services.RegisterWebOptimizer();
 
 // Build app
 var app = builder.Build();
