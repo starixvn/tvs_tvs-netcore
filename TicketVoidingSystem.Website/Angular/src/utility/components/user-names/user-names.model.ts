@@ -45,6 +45,10 @@ export class GroupUsername {
         return result;
     }
 
+    removeExistedUsernames(){
+        this.items = this.items.filter(x => x.defaultClass !== CSSCLASS.EXISTED)
+    }
+
     removeInvalidUsernames() {
         this.items = this.items.filter(x => x.isValid)
     }

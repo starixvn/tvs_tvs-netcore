@@ -51,6 +51,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
     {
         var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId);
         var results = allBetTypesOfMatch
+            .DistinctBy(x => new { x.Id, x.TransDesc })
             .Where(x => betTypes.Any(t => t.BetTypeId == int.Parse(x.Id)))
             .Select(x =>
             {
