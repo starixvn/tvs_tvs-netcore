@@ -6,7 +6,6 @@ import { ModalService } from '../../../../utility/components/modal/modal.service
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -26,7 +25,7 @@ import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { MatchModel } from 'src/utility/models/match.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-wrong-score',

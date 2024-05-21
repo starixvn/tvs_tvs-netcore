@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -28,7 +27,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from 'src/utility/models/match.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-red-card',

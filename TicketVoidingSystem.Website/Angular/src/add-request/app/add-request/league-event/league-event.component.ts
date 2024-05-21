@@ -6,7 +6,7 @@ import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LeagueInfo, MatchInfo } from '../../../../utility/models/event.model';
 import { LeagueEventService } from './league-event.service';
-import { MatchModel } from 'src/utility/models/match.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'league-event',

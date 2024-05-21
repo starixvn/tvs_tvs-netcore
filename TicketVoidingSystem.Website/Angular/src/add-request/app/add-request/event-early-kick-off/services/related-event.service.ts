@@ -12,7 +12,7 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
-import { MatchModel } from 'src/utility/models/match.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 @Injectable({
   providedIn: 'root'

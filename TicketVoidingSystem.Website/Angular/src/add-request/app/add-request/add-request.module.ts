@@ -104,7 +104,7 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         LogInfoRedCardComponent,
         ConfirmRedCardComponent,
         ConfirmDangerAcceptedComponent,
-        OthersAbnormalMixParlayComponent,
+        OthersAbnormalBetComponent,
         EventTicket14Component,
         FilterWrongScoreComponent,
         EventWrongHdpComponent,
