@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Fanex.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -26,10 +27,10 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         this.logger = logger;
     }
 
-    public override void OnActionExecuting(ActionExecutingContext context)
+    public override async void OnActionExecuting(ActionExecutingContext context)
     {
         var httpContext = context.HttpContext;
-        if (IsSkipAction(context.ActionDescriptor, httpContext))
+        if (await IsSkipAction(context.ActionDescriptor, httpContext))
         {
             return;
         }
@@ -45,7 +46,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         base.OnActionExecuting(context);
     }
 
-    private bool IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext)
+    private async Task<bool> IsSkipAction(ActionDescriptor actionDescriptor, HttpContext httpContext)
     {
         if (actionDescriptor is ControllerActionDescriptor descriptor)
         {
@@ -53,7 +54,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
             var attrsInController =
                 descriptor.ControllerTypeInfo.GetCustomAttributes(typeof(SkipLoggingAttribute), true);
 
-            if (attrsInAction.Any() || attrsInController.Any() || IsExcluded(httpContext.Request.GetDisplayUrl()))
+            if (attrsInAction.Any() || attrsInController.Any() || await IsExcluded(httpContext.Request.GetDisplayUrl()))
             {
                 return true;
             }
@@ -64,7 +65,7 @@ public class LogActionFilterAttribute : ActionFilterAttribute
     public override async void OnActionExecuted(ActionExecutedContext context)
     {
         var httpContext = context.HttpContext;
-        if (IsSkipAction(context.ActionDescriptor, httpContext))
+        if (await IsSkipAction(context.ActionDescriptor, httpContext))
         {
             return;
         }
@@ -89,9 +90,17 @@ public class LogActionFilterAttribute : ActionFilterAttribute
         base.OnActionExecuted(context);
     }
 
-    private bool IsExcluded(string url)
+    private async Task<bool> IsExcluded(string url)
     {
-        return excludePatterns.Exists(pattern => new Regex(pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100)).IsMatch(url));
+        try
+        {
+            return excludePatterns.Exists(pattern => new Regex(pattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100)).IsMatch(url));
+        }
+        catch (Exception ex)
+        {
+            await logger.InfoAsync(ex.Message);
+            return true;
+        }
     }
 }
 
