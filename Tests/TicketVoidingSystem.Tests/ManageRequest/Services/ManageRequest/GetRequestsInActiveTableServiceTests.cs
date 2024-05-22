@@ -31,9 +31,14 @@ public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixt
 
     [Theory]
     [InlineData(IssueTypeConstant.DangerAccepted, 2, 1)]
-    [InlineData(IssueTypeConstant.DangerAccepted, 1, 1)]
-    [InlineData(IssueTypeConstant.DangerAccepted, 2, 2)]
+    [InlineData(IssueTypeConstant.EarlyKickOffTime, 1, 1)]
+    [InlineData(IssueTypeConstant.WrongKickOffTime, 2, 2)]
     [InlineData(IssueTypeConstant.AbnormalBet, 2, 1)]
+    [InlineData(IssueTypeConstant.WrongHDP, 2, 1)]
+    [InlineData(IssueTypeConstant.Wrong1stHDP, 1, 1)]
+    [InlineData(IssueTypeConstant.WrongOU, 2, 2)]
+    [InlineData(IssueTypeConstant.Wrong1stOU, 2, 1)]
+    [InlineData(IssueTypeConstant.RedCard, 2, 1)]
     [InlineData(0, 2, 1)]
     public async Task GetRequestsInActiveTable_ValidData_ReturnListRequestModel(int issueTypeId, int requestId, int matchId)
     {

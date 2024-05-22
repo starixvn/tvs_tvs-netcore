@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using Xunit;
@@ -44,6 +45,38 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
 
         // Act
         _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, null, earlyKickOffInfo);
+
+        // Assert
+        repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
+    }
+
+    [Theory]
+    [InlineData(FilterByConstant.MixParlay)]
+    [InlineData(FilterByConstant.SystemParlay)]
+    public void Execute_AbnormalBetIsParlay_CalledExpected(int filterBy)
+    {
+        // Arrange
+        const int actionId = ActionVoidRequestConstant.AutoVoidAllInstantId;
+        const int requestId = 123;
+        var abnormalBetInfo = new AbnormalBetViewModel { FilterBy = filterBy };
+
+        // Act
+        _ = service.Execute(requestId, actionId, abnormalBetInfo, null);
+
+        // Assert
+        repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
+    }
+
+    [Fact]
+    public void Execute_AbnormalBetHasMultipleMatches_CalledExpected()
+    {
+        // Arrange
+        const int actionId = ActionVoidRequestConstant.AutoVoidAllInstantId;
+        const int requestId = 123;
+        var abnormalBetInfo = new AbnormalBetViewModel { Matches = new List<MatchInfoAddRequest> { new() { MatchId = 1 } } };
+
+        // Act
+        _ = service.Execute(requestId, actionId, abnormalBetInfo, null);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());

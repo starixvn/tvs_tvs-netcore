@@ -1080,4 +1080,23 @@ public class ObjectToXmlExtensionFacts
         // Assert
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public void ToEventAbnormalBetXml_ValidData_ReturnExpected()
+    {
+        // Arrange
+        var models = new AbnormalBetViewModel
+        {
+            TransIds = "123",
+            FilterBy = 0,
+            SubIssueTypeId = 1
+        };
+        const string expected = "<root><r TransIds='123' FilterBy='0' SubIssueTypeId='1' /></root>";
+
+        // Act
+        var actual = models.ToEventAbnormalBetXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
 }

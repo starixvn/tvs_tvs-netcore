@@ -100,7 +100,7 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
         repository.GetAsync<string>(Arg.Compat.Any<GetTransInfoForVoid14Criteria>()).ReturnsForAnyArgs("");
 
         // Act
-        var actual = await service.GetTransInfoJsonForVoid14(singleTickets);
+        var actual = await service.GetTransInfoJsonForVoid14(singleTickets, null);
 
         // Assert
         Assert.NotNull(actual);
