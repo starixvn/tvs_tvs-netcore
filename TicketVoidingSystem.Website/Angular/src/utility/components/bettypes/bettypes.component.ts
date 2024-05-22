@@ -23,6 +23,7 @@ export class BetTypesComponent implements OnChanges {
         Product.BET_BUILDER,
         Product.BITCOIN
     ];
+    isDisabledAllBetTypes: boolean;
 
     constructor(private readonly element: ElementRef) {
         this.tooltip.element = this.element;

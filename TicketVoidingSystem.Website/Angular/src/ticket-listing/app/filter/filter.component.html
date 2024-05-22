@@ -4,7 +4,7 @@
       <label class="match">
         Match ID
         <input maxlength="10" class="match-id form-control" type="text" only-number [(ngModel)]="matchId"
-          (change)="handleBetTypesAndAdvancedMode();unCheckAffectedTickets()" (blur)="blurMatchId()" autofocus />
+          (change)="unCheckAffectedTickets()" (blur)="blurMatchId()" autofocus />
       </label>
       <label class="licensees">
         LicenseeId
@@ -120,15 +120,15 @@
     </div>
     <group-bettypes #groupBetTypesComponent [model]="groupBetTypes" [product]="query.product"
       (betTypesEvent)="changeBetTypes($event)"></group-bettypes>
-    <div *ngIf="isShowCheckboxAffected()" class="mg-bottom-10 d-flex align-items-center">
-      <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled"
-        (change)="handleBetTypesAndAdvancedMode()" />
-      <label for="checkbox-resettle" class="ml-1">Get affected tickets of Result Amendment</label>
-    </div>
     <bettypes #bettypesComponent [model]="betTypes" [product]="query.product" [sportType]="sportType"
       [ballSequence]="ballSequences.value"></bettypes>
     <bettypes-virtualsport *ngIf="!isInvalidProduct2(query.product, sportType)" #betTypesVSComponent [group]="groupsBetTypesVS"
       [product]="query.product"></bettypes-virtualsport>
+      <div *ngIf="isShowCheckboxAffected()" class="mg-bottom-10 d-flex align-items-center">
+        <input type="checkbox" id="checkbox-resettle" [(ngModel)]="isReSettled"
+          (change)="handleBetTypesAndAdvancedMode()" />
+        <label for="checkbox-resettle" class="ml-1">Get affected tickets of Result Amendment</label>
+      </div>
     <div *ngIf="isShowAdvancedMode()">
       <advanced-mode #advancedMode [matchId]="matchId" [isTicketListing]="true"
         [allBetTypes]="allBetTypes"></advanced-mode>
