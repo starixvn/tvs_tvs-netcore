@@ -8,6 +8,7 @@ import { WrongOuModel } from '../../models/event-wrong-ou.model';
 import { PopupService } from '../../services/popup.service';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOuService } from './event-wrong-ou.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
@@ -21,6 +22,7 @@ export class SaveRequestService {
     private readonly logInfoWrongOuService: LogInfoService,
     private readonly popupService: PopupService,
     private readonly addRequestService: AddRequestService,
+    private readonly eventWrongOuService: EventWrongOuService,
   ) { }
 
   async saveRequest(arg: SaveRequestArg): Promise<void> {
@@ -43,6 +45,7 @@ export class SaveRequestService {
       return false;
     }
 
+    arg.mainEvent.linkedLogsViewModel = await this.eventWrongOuService.getLinkedLog(arg.mainEvent, arg.filter);
     arg.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoWrongOuService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     arg.logInfoComponents.forEach(x => {
@@ -81,7 +84,7 @@ export class SaveRequestService {
 
     if (saveRequestArg.isEdit && saveRequestArg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
       && saveRequestArg.filter.action !== saveRequestArg.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;      
+      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
     }
 
     if (saveRequestArg.isEdit && saveRequestArg.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
@@ -90,12 +93,12 @@ export class SaveRequestService {
 
     return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
-  
+
   private async executeSaveRequestApi(saveRequestArg: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(saveRequestArg);
     await this.addRequestService.executeSaveRequest(saveRequestArg.isEdit, saveRequestArg.requestId, query, saveRequestArg.addRequestStore);
   }
-  
+
   private async onClickConfirmSave(saveRequestArg: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = saveRequestArg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(saveRequestArg);

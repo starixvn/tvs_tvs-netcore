@@ -8,6 +8,7 @@ import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
 import { PopupService } from '../../services/popup.service';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
@@ -20,7 +21,8 @@ export class SaveRequestService {
     private readonly validationService: ValidationService,
     private readonly logInfoService: LogInfoService,
     private readonly popupService: PopupService,
-    private readonly addRequestService: AddRequestService
+    private readonly addRequestService: AddRequestService,
+    private readonly eventWrongHdpService: EventWrongHdpService
   ) { }
 
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
@@ -33,6 +35,7 @@ export class SaveRequestService {
     }
 
     arg.addRequestStore.changeBlockingUiStatus(true);
+    arg.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(arg.mainEvent, arg.filter);
     await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     arg.logInfoComponents.forEach(x => x.showValidationDetail());
     arg.primitiveProps.isShowRelatedEvents = true;

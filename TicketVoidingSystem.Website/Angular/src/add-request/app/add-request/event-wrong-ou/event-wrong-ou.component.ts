@@ -139,13 +139,12 @@ export class EventWrongOuComponent implements OnInit {
   public handleDeleteEvent(matchId: number): void {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
   }
-  
+
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoComponents.forEach(x => x.hideValidationDetail());
-    this.mainEvent.linkedLogsViewModel = await this.eventWrongOuService.getLinkedLog(this.mainEvent, this.filter);
-    this.addRequestStore.changeBlockingUiStatus(false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
+    this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   public async handleClickAddRelatedEvent(): Promise<void> {
@@ -170,6 +169,7 @@ export class EventWrongOuComponent implements OnInit {
     arg.leagueEventWrongOuComponent = this.leagueEventWrongOuComponent;
     arg.logInfoComponents = this.logInfoComponents.toArray();
     arg.allEvents = this.allSelectedEvents;
+    arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;
 
     return arg;

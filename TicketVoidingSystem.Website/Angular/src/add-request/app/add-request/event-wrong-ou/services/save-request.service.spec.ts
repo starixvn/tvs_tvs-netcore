@@ -13,6 +13,7 @@ import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOuService } from './event-wrong-ou.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
@@ -54,7 +55,7 @@ describe('SaveRequestService', () => {
   let service: SaveRequestService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null);
+    service = new SaveRequestService(null, null, null, null, null);
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
@@ -70,7 +71,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => false);
 
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -79,13 +80,13 @@ describe('SaveRequestService', () => {
     expect(validationService.validateCommonData).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
   });
-  
+
   it('#recheckLogInfoBeforeSaveRequest should return false when have event invalid', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    saveRequestArg.mainEvent = new LogInfoWrongOu();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -97,7 +98,9 @@ describe('SaveRequestService', () => {
     const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null);
     logInfoWrongOuComponent.showValidationDetail = jest.fn();
     saveRequestArg.logInfoComponents = [logInfoWrongOuComponent];
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const eventWrongOuService = new EventWrongOuService(null);
+    eventWrongOuService.getLinkedLog = jest.fn();
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOuService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -108,13 +111,13 @@ describe('SaveRequestService', () => {
     expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(actual).toBeFalsy();
   });
-  
+
   it('#recheckLogInfoBeforeSaveRequest should return true', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    saveRequestArg.mainEvent = new LogInfoWrongOu();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -126,7 +129,9 @@ describe('SaveRequestService', () => {
     const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null);
     logInfoWrongOuComponent.showValidationDetail = jest.fn();
     saveRequestArg.logInfoComponents = [logInfoWrongOuComponent];
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const eventWrongOuService = new EventWrongOuService(null);
+    eventWrongOuService.getLinkedLog = jest.fn();
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOuService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -137,7 +142,7 @@ describe('SaveRequestService', () => {
     expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(actual).toBeTruthy();
   });
-  
+
   it('#saveRequest should not called #proceedSaveRequest', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
@@ -155,7 +160,7 @@ describe('SaveRequestService', () => {
     expect(service['proceedSaveRequest']).toHaveBeenCalledTimes(0);
 
   });
-  
+
   it('#saveRequest should called #proceedSaveRequest', async () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
@@ -183,7 +188,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
 
-    const saveRequestService = new SaveRequestService(validationService, null, popupService, null);
+    const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
     saveRequestService['getMessageConfirmationWrongOu'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
@@ -192,7 +197,7 @@ describe('SaveRequestService', () => {
 
     expect(validationService.checkCanShowConfirmationWrongOu).toHaveBeenCalledTimes(1);
     expect(saveRequestService['getMessageConfirmationWrongOu']).toHaveBeenCalledTimes(1);
-    
+
     expect(spyShowConfirm.mock.calls[0][0]).toEqual('aaa');
     expect(spyShowConfirm.mock.calls[0][1]).toBeInstanceOf(Function);
     expect(spyShowConfirm.mock.calls[0][2]).toBeInstanceOf(Function);
@@ -209,7 +214,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.checkCanShowConfirmationWrongOu = jest.fn().mockImplementation(() => false);
 
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
     saveRequestService['executeSaveRequestApi'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
@@ -250,18 +255,18 @@ describe('SaveRequestService', () => {
 
     expect(actual).toBe(expected);
   });
-  
+
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
     const addRequestService = new AddRequestService(null, null, null);
     const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService);
+    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
     saveRequestService['initAddRequestQuery'] = jest.fn();
 
     await saveRequestService['executeSaveRequestApi'](new SaveRequestArg());
 
     expect(spyExecuteSaveRequest).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#onClickConfirmSave should not called #executeSaveRequestApi', async () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
@@ -272,7 +277,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
 
-    const saveRequestService = new SaveRequestService(null, null, popupService, null);
+    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
     saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
 
     await saveRequestService['onClickConfirmSave'](arg);
@@ -280,7 +285,7 @@ describe('SaveRequestService', () => {
     expect(spyShowError).toHaveBeenCalledTimes(1);
     expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
-  
+
   it('#onClickConfirmSave should called #executeSaveRequestApi', async () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
@@ -293,7 +298,7 @@ describe('SaveRequestService', () => {
 
     expect(arg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
   });
-  
+
   it('#initAddRequestQuery should return expected model when request is voided', async () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
@@ -308,7 +313,7 @@ describe('SaveRequestService', () => {
     expect(actual).toBeDefined();
     expect(service['getWrongOuInfo']).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#initAddRequestQuery should return expected model when is WrongOU issueType', async () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
@@ -323,7 +328,7 @@ describe('SaveRequestService', () => {
     expect(actual).toBeDefined();
     expect(service['getWrongOuInfo']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#initAddRequestQuery should return expected model when is Wrong1stOU issueType', async () => {
     const arg = new SaveRequestArg();
     arg.filter = new FilterModel();
@@ -338,7 +343,7 @@ describe('SaveRequestService', () => {
     expect(actual).toBeDefined();
     expect(service['getWrongOuInfo']).toHaveBeenCalledTimes(1);
   });
-  
+
   it('#getWrongOuInfo should return expected', async () => {
     const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
     fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
@@ -349,13 +354,13 @@ describe('SaveRequestService', () => {
     arg.allEvents = [fakeLogInfoWrongOu];
 
     const validationService = new ValidationService();
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
 
     const actual = saveRequestService['getWrongOuInfo'](fakeLogInfoWrongOu, '1');
 
     expect(actual).toBeDefined();
   });
-  
+
   it('#getWrongOuInfo should return expected', async () => {
     const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
     fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
@@ -366,7 +371,7 @@ describe('SaveRequestService', () => {
     arg.allEvents = [fakeLogInfoWrongOu];
 
     const validationService = new ValidationService();
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
 
     const actual = saveRequestService['getWrongOuInfo'](fakeLogInfoWrongOu, '1');
 

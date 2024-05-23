@@ -92,7 +92,7 @@ export class EventWrongHdpComponent implements OnInit {
     if (!this.validationService.validateCommonData(this.leagueEventWrongHdpComponent, [mainLogInfo])) {
       return;
     }
-    
+
     mainLogInfo.isBlock = true;
     this.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.mainEvent, this.filter);
     await this.logInfoService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
@@ -124,7 +124,7 @@ export class EventWrongHdpComponent implements OnInit {
 
   public async saveRelatedEvent(selectedRelatedEvents: ChildMatchModel[]): Promise<void> {
     this.primitiveProps.isBlock = true;
-    this.allSelectedEvents = this.allSelectedEvents.filter(x => 
+    this.allSelectedEvents = this.allSelectedEvents.filter(x =>
       (selectedRelatedEvents.some(y => y.matchId === x.matchId)
       || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
@@ -139,17 +139,16 @@ export class EventWrongHdpComponent implements OnInit {
   public handleDeleteEvent(matchId: number): void {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
   }
-  
+
   public async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
   }
-  
+
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoComponents.forEach(x => x.hideValidationDetail());
-    this.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.mainEvent, this.filter);
-    this.addRequestStore.changeBlockingUiStatus(false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
+    this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   private resetLogInfoAndHideEvents() {
@@ -161,7 +160,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = [];
   }
-  
+
   private initSaveRequestInput() {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
@@ -173,15 +172,16 @@ export class EventWrongHdpComponent implements OnInit {
     arg.others = this.others;
     arg.primitiveProps = this.primitiveProps;
     arg.allEvents = this.allSelectedEvents;
+    arg.mainEvent = this.mainEvent;
     arg.leagueEventWrongHdpComponent = this.leagueEventWrongHdpComponent;
     arg.logInfoComponents = this.logInfoComponents.toArray();
     arg.addRequestStore = this.addRequestStore;
 
     return arg;
   }
-  
+
   private initAddRelatedEventArgs() {
-    const arg = new AddRelatedEventArg(); 
+    const arg = new AddRelatedEventArg();
     arg.tooltip = this.tooltip;
     arg.requestId = this.requestId;
     arg.isEdit = this.isEdit;
@@ -193,7 +193,7 @@ export class EventWrongHdpComponent implements OnInit {
     arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
     arg.originalRelatedEvents = this.relatedEvents;
     arg.defaultFilterWithHdpModel = this.mainEvent.filterWithHdp;
-    
+
     return arg;
   }
 
