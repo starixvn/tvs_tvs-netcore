@@ -135,9 +135,7 @@ export class BetTeam {
           || item.isCanSelectSetFromOutside || item.isCanSelectGameFromOutside)) {
         this.renderMultipleSelectWithAllBetType(item);
       } else if (item.isMultiple) {
-        this.renderMultipleSelect(item);
-        item.multiSelection = this.multiSelection;
-        delete this.multiSelection;
+        item.multiSelection = this.renderMultipleSelect(item);
         this.selections.push(item);
       } else {
         const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
@@ -168,67 +166,70 @@ export class BetTeam {
     }
   }
 
-  renderMultipleSelect(item: Selection) {
-    this.multiSelection = new MultiSelection();
-    this.multiSelection.multipleSelect = new MultipleSelection();
-    this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
-    this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
-    this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '100%';
-    this.renderItemsMultipleSelect(item);
+  renderMultipleSelect(item: Selection): MultiSelection {
+    const multiSelection = new MultiSelection();
+    multiSelection.multipleSelect = new MultipleSelection();
+    multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
+    multiSelection.multipleSelect.allItemsCheckedText = 'All';
+    multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
+    multiSelection.multipleSelect.maxWidth = '100%';
+    return this.renderItemsMultipleSelect(multiSelection, item);
   }
 
   renderMultipleSelectWithAllBetType(item: Selection) {
-    this.multiSelection = new MultiSelection();
-    this.multiSelection.multipleSelect = new MultipleSelection();
-    this.multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
-    this.multiSelection.multipleSelect.allItemsCheckedText = 'All';
-    this.multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
-    this.multiSelection.multipleSelect.maxWidth = '100%';
-    this.renderItemsMultipleSelectWithAllBetType(item);
+    const multiSelection = new MultiSelection();
+    multiSelection.multipleSelect = new MultipleSelection();
+    multiSelection.multipleSelect.checkAllCheckBoxText = 'All';
+    multiSelection.multipleSelect.allItemsCheckedText = 'All';
+    multiSelection.multipleSelect.noneItemCheckedText = 'Select options';
+    multiSelection.multipleSelect.maxWidth = '100%';
+    const model = this.renderItemsMultipleSelectWithAllBetType(multiSelection, item);
+    this.multiSelectionList.push(model);
   }
 
-  renderItemsMultipleSelect(multi: Selection) {
-    this.multiSelection.name = multi.name;
-    this.multiSelection.value = multi.value;
-    this.multiSelection.xmlAttribute = multi.xmlAttribute;
-    this.multiSelection.multipleSelect.items = [];
-    multi.items.forEach(item => {
+  renderItemsMultipleSelect(multiSelection: MultiSelection, selection: Selection): MultiSelection {
+    multiSelection.name = selection.name;
+    multiSelection.value = selection.value;
+    multiSelection.xmlAttribute = selection.xmlAttribute;
+    multiSelection.multipleSelect.items = [];
+    selection.items.forEach(item => {
       const temp = [];
       if (item.items !== null && item.items !== undefined) {
         item.items.forEach(itemSelect => {
           temp.push(new ItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
         });
       }
-      this.multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, temp));
+      multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, temp));
     });
-    this.multiSelection.multipleSelect.isCheckAll = this.multiSelection.multipleSelect.items.every(x => x.checked);
-    this.multiSelection.multipleSelect.selectionTitle = this.multiSelection.multipleSelect.getDisplayedItems();
+    multiSelection.multipleSelect.isCheckAll = multiSelection.multipleSelect.items.every(x => x.checked);
+    multiSelection.multipleSelect.selectionTitle = multiSelection.multipleSelect.getDisplayedItems();
+
+    return multiSelection;
   }
 
-  renderItemsMultipleSelectWithAllBetType(multi: Selection) {
-    this.multiSelection.name = multi.name;
-    this.multiSelection.value = multi.value;
-    this.multiSelection.xmlAttribute = multi.xmlAttribute;
-    this.multiSelection.multipleSelect.items = [];
+  renderItemsMultipleSelectWithAllBetType(multiSelection: MultiSelection, multi: Selection): MultiSelection {
+    multiSelection.name = multi.name;
+    multiSelection.value = multi.value;
+    multiSelection.xmlAttribute = multi.xmlAttribute;
+    multiSelection.multipleSelect.items = [];
     multi.items.forEach(item => {
       if (item.name !== 'All' || item.value !== 'All') {
-        this.multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, []));
+        multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, []));
       }
     });
     if (multi.isCanSelectMapFromOutside) {
-      this.multiSelection.type = "map";
+      multiSelection.type = "map";
     } else if (multi.isCanSelectRoundFromOutside) {
-      this.multiSelection.type = "round";
+      multiSelection.type = "round";
     } else if (multi.isCanSelectQuarterFromOutside) {
-      this.multiSelection.type = "quarter";
+      multiSelection.type = "quarter";
     } else if (multi.isCanSelectSetFromOutside) {
-      this.multiSelection.type = "set";
+      multiSelection.type = "set";
     } else if (multi.isCanSelectGameFromOutside) {
-      this.multiSelection.type = "game";
+      multiSelection.type = "game";
     }
 
-    this.multiSelectionList.push(this.multiSelection);
+    return multiSelection;
   }
 
   resetChecked() {
@@ -318,7 +319,6 @@ export class BetTeam {
   getResult(id: string): BetTeamResult {
     const result = new BetTeamResult();
     this.updateBySelection(result);
-    this.updateByMultipleSelection(result);
     this.updateByMultipleSelectionWithTicketListing(result);
     this.updateByItems(result, id);
     this.updateByInputs(result, id);
@@ -359,14 +359,6 @@ export class BetTeam {
         this.updateResult(result, select.multiSelection.xmlAttribute, value);
       }
     });
-  }
-
-  updateByMultipleSelection(result: BetTeamResult) {
-    if (this.multiSelection !== undefined && (!this.isTicketListing ||
-      !this.isTicketListingAndBettypeMapOrRound(this.multiSelection.name))) {
-      const value = this.multiSelection.multipleSelect.getValueItems();
-      this.updateResult(result, this.multiSelection.xmlAttribute, value);
-    }
   }
 
   updateByMultipleSelectionWithTicketListing(result: BetTeamResult) {
@@ -694,7 +686,7 @@ export class BetTeam {
 
   private updateForBetTypesCricketNextManOut(result: BetTeamResult, betTypeId: string): void {
     if (AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId)) {
-      const items = this.multiSelection.multipleSelect.getValueCheckedItemsList();
+      const items = this.selections[0].multiSelection.multipleSelect.getValueCheckedItemsList();
       if (items.length > 0) {
         result.betTeam = items.map(x => x.split(',')[0]).join(',');
         result.oddsId = items.map(x => x.split(',')[1]).join(',');
