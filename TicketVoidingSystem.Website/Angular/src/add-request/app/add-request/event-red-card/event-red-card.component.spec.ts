@@ -31,6 +31,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -104,7 +105,34 @@ class Helper {
       isChecked: true,
       matchType: 1,
       leagueName: '',
-      name: ''
+      name: '',
+      homeId: 0,
+      homeName: '',
+      homeNameNewSimplified: '',
+      homeNameSimplified: '',
+      homeNameTraditional: '',
+      awayId: 0,
+      awayName: '',
+      awayNameNewSimplified: '',
+      awayNameSimplified: '',
+      awayNameTraditional: '',
+      eventDate: undefined,
+      dateTime: undefined,
+      leagueId: 0,
+      leagueGroupId: 0,
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      startTime: undefined,
+      endTime: undefined,
+      sportType: 0,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: ''
     }
   ];
   static readonly fakeLogInfoRedCard: LogInfoRedCard = {
@@ -125,16 +153,69 @@ class Helper {
     isChecked: true,
     matchType: MatchType.LINK,
     leagueName: '',
-    name: ''
+    name: '',
+    homeId: 0,
+    homeName: '',
+    homeNameNewSimplified: '',
+    homeNameSimplified: '',
+    homeNameTraditional: '',
+    awayId: 0,
+    awayName: '',
+    awayNameNewSimplified: '',
+    awayNameSimplified: '',
+    awayNameTraditional: '',
+    eventDate: undefined,
+    dateTime: undefined,
+    leagueId: 0,
+    leagueGroupId: 0,
+    leagueNameNewSimplified: '',
+    leagueNameSimplified: '',
+    leagueNameTraditional: '',
+    matchEventSimplified: '',
+    matchEventNewSimplified: '',
+    kickOffTime: '',
+    startTime: undefined,
+    endTime: undefined,
+    sportType: 0,
+    sportTypeName: '',
+    sportTypeNameNewSimplified: '',
+    sportTypeNameSimplified: '',
+    sportTypeNameTraditional: ''
   };
 
-  static readonly fakeSelectedMatch: MatchInfo = {
+  static readonly fakeSelectedMatch: MatchModel = {
     matchId: 1,
     matchCode: '1',
     leagueName: 'leagueName',
     leagueId: 1,
     name: 'name',
-    kickOffTime: ''
+    kickOffTime: '',
+    homeId: 0,
+    homeName: '',
+    homeNameNewSimplified: '',
+    homeNameSimplified: '',
+    homeNameTraditional: '',
+    awayId: 0,
+    awayName: '',
+    awayNameNewSimplified: '',
+    awayNameSimplified: '',
+    awayNameTraditional: '',
+    eventDate: undefined,
+    dateTime: undefined,
+    leagueGroupId: 0,
+    leagueNameNewSimplified: '',
+    leagueNameSimplified: '',
+    leagueNameTraditional: '',
+    matchEvent: '',
+    matchEventSimplified: '',
+    matchEventNewSimplified: '',
+    startTime: undefined,
+    endTime: undefined,
+    sportType: 0,
+    sportTypeName: '',
+    sportTypeNameNewSimplified: '',
+    sportTypeNameSimplified: '',
+    sportTypeNameTraditional: ''
   };
 
 }
@@ -722,6 +803,33 @@ describe('EventRedCardComponent', () => {
       matchId: 1111,
       leagueName: '',
       matchCode: "1111",
+      homeId: 0,
+      homeName: '',
+      homeNameNewSimplified: '',
+      homeNameSimplified: '',
+      homeNameTraditional: '',
+      awayId: 0,
+      awayName: '',
+      awayNameNewSimplified: '',
+      awayNameSimplified: '',
+      awayNameTraditional: '',
+      eventDate: undefined,
+      dateTime: undefined,
+      leagueId: 0,
+      leagueGroupId: 0,
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      startTime: undefined,
+      endTime: undefined,
+      sportType: 0,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: ''
     }
 
     instance.relatedEvents = [childMatchModel];

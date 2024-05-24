@@ -9,7 +9,6 @@ import { BlockFullUiModule } from '../../../../utility/components/block-full-ui/
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestStore } from '../add-request.store';
@@ -27,6 +26,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -294,7 +294,7 @@ describe('EventWrongHdpComponent', () => {
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
     const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.selectedMatch = new MatchInfo();
+    leagueEventWrongHdpComponent.selectedMatch = new MatchModel();
     instance.leagueEventWrongHdpComponent = leagueEventWrongHdpComponent;
     instance.updateMatchId.emit = jest.fn();
 

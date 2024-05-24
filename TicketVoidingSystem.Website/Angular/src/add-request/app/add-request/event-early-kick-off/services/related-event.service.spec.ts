@@ -84,7 +84,34 @@ class Helper {
     isChecked: true,
     matchType: MatchType.LINK,
     leagueName: '',
-    name: ''
+    name: '',
+    homeId: 0,
+    homeName: '',
+    homeNameNewSimplified: '',
+    homeNameSimplified: '',
+    homeNameTraditional: '',
+    awayId: 0,
+    awayName: '',
+    awayNameNewSimplified: '',
+    awayNameSimplified: '',
+    awayNameTraditional: '',
+    eventDate: undefined,
+    dateTime: undefined,
+    leagueId: 0,
+    leagueGroupId: 0,
+    leagueNameNewSimplified: '',
+    leagueNameSimplified: '',
+    leagueNameTraditional: '',
+    matchEventSimplified: '',
+    matchEventNewSimplified: '',
+    kickOffTime: '',
+    startTime: undefined,
+    endTime: undefined,
+    sportType: 0,
+    sportTypeName: '',
+    sportTypeNameNewSimplified: '',
+    sportTypeNameSimplified: '',
+    sportTypeNameTraditional: ''
   };
 }
 
@@ -177,7 +204,7 @@ describe('RelatedEventService', () => {
     arg.addRequestStore.changeBlockingUiStatus = jest.fn();
     const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
-    const logInfoService = new LogInfoService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null, null);
     logInfoService.getLogInfo = jest.fn();
     const mockRelatedEventService = new RelatedEventService(null, validationService, logInfoService);
     mockRelatedEventService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([new ChildMatchModel()]));
@@ -230,7 +257,7 @@ describe('RelatedEventService', () => {
 
   it('#getDataWhenSearch should called expected method', async () => {
     const args = new AddRelatedEventArg();
-    const logInfoService = new LogInfoService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null, null);
     logInfoService.getLogInfo = jest.fn().mockImplementation();
     const mockRelatedEventService = new RelatedEventService(null, null, logInfoService);
     mockRelatedEventService['preparingModelGetLogInfo'] = jest.fn();

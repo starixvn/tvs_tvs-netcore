@@ -3,9 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { MatchInfo, MatchInfoViewModel } from '../../../../utility/models/event.model';
+import { MatchInfo, MatchInfoViewModel, LeagueInfo } from '../../../../utility/models/event.model';
 import { HttpService } from '../../../../utility/services/http.service';
 import { LeagueEventComponent } from './league-event.component';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { LeagueEventService } from './league-event.service';
+import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
+import { Console } from 'console';
 
 class Helper {
 
@@ -17,9 +21,19 @@ class Helper {
     sportType: 1,
     kickOffTime: ''
   }
-  
+  static readonly fakeMatchModel: MatchModel = {
+    leagueId: 80714,
+    leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
+    matchId: 70000364,
+    name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
+    sportType: 1,
+    kickOffTime: '',
+    matchCode: '',
+    matchEvent: '',
+    parentId: 1
+  }
   static readonly fakeMatchViewModel: MatchInfoViewModel = {
-    match: Helper.fakeMatches,
+    match: Helper.fakeMatchModel,
     errorCode: 0,
     errorMsg: ''
   };
@@ -41,7 +55,8 @@ describe('LeagueEventComponent', () => {
   let shallow: Shallow<LeagueEventComponent>;
 
   beforeEach(() => {
-    shallow = new Shallow(LeagueEventComponent, AppModuleTest);
+    shallow = new Shallow(LeagueEventComponent, AppModuleTest)
+    .mock(LeagueEventService, { getMatch: jest.fn().mockImplementation(() => Helper.fakeMatchViewModel)})
   });
 
   it('LeagueEventComponent should init match snapshot', async () => {
@@ -53,91 +68,152 @@ describe('LeagueEventComponent', () => {
     expect(fixture).toMatchSnapshot();
   });
 
-  // it('LeagueEventComponent should return expected data when change model', async () => {
-  //   const { findComponent, fixture, instance } = await shallow.dontMock(NgSelectComponent)
-  //     .mock(LeagueEventService, {
-  //       getMatch: jest.fn().mockImplementation(() => Helper.fakeMatchViewModel)
-  //     })
-  //     .render();
-  //   instance.isAbnormal = true;
-  //   instance.isEdit = false;
-  //   const changes = {
-  //     'isAbnormal': new SimpleChange(false, true, true)
-  //   };
-  //   await instance.ngOnChanges(changes);
-  //   fixture.detectChanges();
-  //   const selectComponent = findComponent(NgSelectComponent);
-  //   const leagueElement = selectComponent[0];
-  //   const eventElement = selectComponent[1];
-  //   expect(instance.matchId).toBeUndefined();
-  //   expect(instance.leagueId).toBeUndefined();
-  //   expect(leagueElement.items).toStrictEqual([]);
-  //   expect(eventElement.items).toStrictEqual([]);
+  it('#getMatchInfo should return matchInfoModel expected', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    let match = Helper.fakeMatchModel;
+    let matchInfoExpected: MatchInfo = {
+      matchId: 70000364,
+      name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
+      kickOffTime: '',
+      leagueId: 80714,
+      sportType: 1, 
+      matchCode: '',
+      leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
+      parentId: 1
+    }; 
 
-  //   instance.isEdit = true;
-  //   instance.sportType = 1;
-  //   instance.eventDate = '2019-11-18 10:20:30.737';
-  //   const sportTypeChanges = {
-  //     'sportType': new SimpleChange(0, 1, false)
-  //   };
-  //   await instance.ngOnChanges(sportTypeChanges);
-  //   fixture.detectChanges();
-  //   expect(instance.leagues.length).toBe(1);
-  // });
+    // Action
+    const actual = instance['getMatchInfo'](match);
 
-  // it('#onChangeMatchEvent should call #updateLeagueInfo and emit changeEvent', async () => {
-  //   const { instance } = await shallow.dontMock(NgSelectComponent).render();
-  //   instance['updateLeagueInfo'] = jest.fn();
+    // Assert
+    expect(actual).toEqual(matchInfoExpected);
+  });
+  
+  it('#isMatchIdValid should return false when LeagueEventComponent has not matchId', async () => {
+    // Arrange
+    let fakeTooltipDisplay = jest.fn();
+    const { instance } = await shallow.render();
+    instance.tooltip.display = fakeTooltipDisplay;
 
-  //   instance.onChangeMatchEvent(Helper.fakeMatchViewModel.match);
+    // Action
+    const actual = instance['isMatchIdValid']();
 
-  //   expect(instance['updateLeagueInfo']).toHaveBeenCalledWith(80714, 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS');
-  //   expect(instance.changeEvent.emit).toHaveBeenCalledTimes(1);
-  // });
+    // Assert
+    expect(actual).toBeFalsy();
+    expect(fakeTooltipDisplay).toHaveBeenCalledTimes(1);
+  });
+  
+  it('#isMatchIdValid should return true when LeagueEventComponent has matchId', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.matchId = 753535;
 
-  // it('#getMatchFromMatchId should call #updateUndefinedMatchAndLeague', async () => {
-  //   const { instance } = await shallow.dontMock(NgSelectComponent)
-  //   .mock(LeagueEventService, {
-  //     getMatch: jest.fn().mockImplementation(() => new MatchInfoViewModel())
-  //   })
-  //   .render();
-  //   instance['updateInfoWithOnlyOneMatch'] = jest.fn();
+    // Action
+    const actual = instance['isMatchIdValid']();
 
-  //   await instance.getMatchFromTransIds('123456789');
+    // Assert
+    expect(actual).toBeTruthy();
+  });
+  
+  it('#updateUndefinedMatchAndLeague should reSetValue Matches And Leagues', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    const fakeFunction = jest.fn();
+    instance.leagues = [new LeagueInfo()];
+    instance.matches = [new MatchInfo()];
+    instance.matchId = 8573647;
+    instance.leagueId = 1;
+    instance.matchIdChange.emit = fakeFunction;
 
-  //   expect(instance['updateInfoWithOnlyOneMatch']).toHaveBeenCalledTimes(1);
-  // });
+    // Action
+    instance['updateUndefinedMatchAndLeague']();
 
-  // it('#isMatchIdValid should return false and display tooltip', async () => {
-  //   const { instance } = await shallow.dontMock(NgSelectComponent).render();
-  //   instance.matchId = undefined;
-  //   instance.tooltip.display = jest.fn();
+    // Assert
+    expect(instance.leagues).toHaveLength(0);
+    expect(instance.matches).toHaveLength(0);
+    expect(instance.matchId).toBeUndefined();
+    expect(instance.leagueId).toBeUndefined();
+    expect(fakeFunction).toHaveBeenCalledTimes(1);
+  });
 
-  //   const actual = instance.isMatchIdValid();
+  it('#updateLeagueInfo should update leagues according to input', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    instance.leagues = [new LeagueInfo()];
+    instance.leagueId = 11111;
+    const leagueId = 1;
+    const leagueName = "AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS"
+    const leaguesExpected: LeagueInfo[] = [{
+      leagueId: leagueId,
+      leagueName: leagueName
+    }];
+    // Action
+    instance['updateLeagueInfo'](leagueId, leagueName);
 
-  //   expect(actual).toBe(false);
-  //   expect(instance.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.REQUIRED_MATCHID);
-  // });
+    // Assert
+    expect(instance.leagues).toEqual(leaguesExpected);
+    expect(instance.leagueId).toEqual(leagueId);
+  });
+  
+  it('#updateInfoWithOnlyOneMatch should update matches with input MatchValue', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    const fakeEventChangeSportTypeAbnormal = jest.fn();
+    const fakeEventMatchIdChange = jest.fn();
+    const fakeFunctionUpdateLeagueInfo = jest.fn();
+    instance.changeSportTypeAbnormal.emit = fakeEventChangeSportTypeAbnormal;
+    instance.matchIdChange.emit = fakeEventMatchIdChange;
+    instance.matches = [new MatchInfo()];
+    instance.matchId = 654346;
+    instance['updateLeagueInfo'] = fakeFunctionUpdateLeagueInfo;
+    const matchesExpected: MatchInfo[] = [Helper.fakeMatches]
 
-  // it('#isMatchIdValid should return true', async () => {
-  //   const { instance } = await shallow.dontMock(NgSelectComponent).render();
-  //   instance.matchId = 12345;
+    // Action
+    instance['updateInfoWithOnlyOneMatch'](Helper.fakeMatches);
 
-  //   const actual = instance.isMatchIdValid();
+    // Assert
+    expect(instance.matches).toEqual(matchesExpected);
+    expect(instance.matchId).toEqual(Helper.fakeMatches.matchId);
+    expect(fakeEventChangeSportTypeAbnormal).toHaveBeenCalledTimes(1);
+    expect(fakeEventMatchIdChange).toHaveBeenCalledTimes(1);
+    expect(fakeFunctionUpdateLeagueInfo).toHaveBeenCalledTimes(1);
+  });
 
-  //   expect(actual).toBe(true);
-  // });
+  it('#updateInfoWithOnlyOneMatch should has call updateUndefinedMatchAndLeague with input Match is Undefined', async () => {
+    // Arrange
+    const { instance } = await shallow.render();
+    const fakeFunctionUpdateUndefinedMatchAndLeague = jest.fn();
+    instance.matches = [new MatchInfo()];
+    instance.matchId = 654346;
+    instance['updateUndefinedMatchAndLeague'] = fakeFunctionUpdateUndefinedMatchAndLeague;
+    let matchInput: MatchInfo;
 
-  // it('#getMatchFromMatchId should call #updateUndefinedMatchAndLeague', async () => {
-  //   const { instance } = await shallow.dontMock(NgSelectComponent)
-  //   .mock(LeagueEventService, {
-  //     getMatch: jest.fn().mockImplementation(() => null)
-  //   })
-  //   .render();
-  //   instance['updateUndefinedMatchAndLeague'] = jest.fn();
+    // Action
+    instance['updateInfoWithOnlyOneMatch'](matchInput);
 
-  //   await instance.getMatchFromTransIds('123456789');
+    // Assert
+    expect(fakeFunctionUpdateUndefinedMatchAndLeague).toHaveBeenCalledTimes(1);
+  });
 
-  //   expect(instance['updateUndefinedMatchAndLeague']).toHaveBeenCalledTimes(1);
-  // });
+  it('#getMatchFromMatchId should has call getMatch and updateMatchInfo', async () => {
+    // Arrange
+    const fakeFunctionGetMatch = jest.fn().mockReturnValue(Helper.fakeMatchViewModel);
+    const fakeEventChangeMatchInfo = jest.fn();
+    const fakeFunctionUpdateInfoWithOnlyOneMatch = jest.fn();
+
+    const { instance } = await shallow
+    .mock(LeagueEventService, {getMatch: fakeFunctionGetMatch})
+    .render();
+    instance.changeMatchInfo.emit = fakeEventChangeMatchInfo;
+    instance['updateInfoWithOnlyOneMatch'] = fakeFunctionUpdateInfoWithOnlyOneMatch;
+
+    // Action
+    await instance['getMatchFromMatchId']();
+    
+    // Assert
+    expect(fakeFunctionGetMatch).toHaveBeenCalledTimes(1);
+    expect(fakeEventChangeMatchInfo).toHaveBeenCalledTimes(1);
+    expect(fakeFunctionUpdateInfoWithOnlyOneMatch).toHaveBeenCalledTimes(1);
+  });
 });

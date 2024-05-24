@@ -6,16 +6,19 @@ import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip
 import { LeagueInfo, MatchInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
 import { LeagueEventService } from '../../league-event/league-event.service';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal.component';
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeEventDate = '2020-11-06 09:44:46.361 PM';
-  static readonly fakeMatch: MatchInfo = {
+  static readonly fakeMatch: MatchModel = {
     leagueId: 80714,
     leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
     matchId: 70000364,
     name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
     sportType: 1,
-    kickOffTime: ''
+    kickOffTime: '',
+    matchCode: '',
+    matchEvent: ''
   };
   static readonly fakeMatchViewModel: MatchInfoViewModel = {
     match: Helper.fakeMatch,
@@ -93,7 +96,7 @@ describe('LeagueEventAbnormalComponent', () => {
     instance['updateLeagueInfo'] = jest.fn();
 
     // Action
-    instance['updateInfoWithOnlyOneMatch'](Helper.fakeMatch);
+    instance['updateInfoWithOnlyOneMatch'](new MatchInfo());
 
     // Assert
     expect(instance['updateLeagueInfo']).toHaveBeenCalledTimes(1);

@@ -132,7 +132,7 @@ export class LeagueEventComponent implements OnChanges {
     this.leagueId = league.leagueId;
   }
 
-  updateUndefinedMatchAndLeague() {
+  private updateUndefinedMatchAndLeague() {
     this.leagues = [];
     this.matches = [];
     this.matchId = undefined;

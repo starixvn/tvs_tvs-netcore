@@ -15,6 +15,9 @@ import { ValidationMessage } from '../../models/get-log-info.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../models/sub-type-link-match.model';
 import { EventDangerAcceptedService } from './event-danger-accepted.service';
+import { LogInfoEarlyKickOff } from '../../event-early-kick-off/models/log-info-eko.model';
+import { TableTicketsModel } from '../../event-early-kick-off/tickets-list/table-tickets.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -97,7 +100,34 @@ class Helper {
     isChecked: true,
     matchType: MatchType.LINK,
     leagueName: '',
-    name: ''
+    name: '',
+    homeId: 0,
+    homeName: '',
+    homeNameNewSimplified: '',
+    homeNameSimplified: '',
+    homeNameTraditional: '',
+    awayId: 0,
+    awayName: '',
+    awayNameNewSimplified: '',
+    awayNameSimplified: '',
+    awayNameTraditional: '',
+    eventDate: undefined,
+    dateTime: undefined,
+    leagueId: 0,
+    leagueGroupId: 0,
+    leagueNameNewSimplified: '',
+    leagueNameSimplified: '',
+    leagueNameTraditional: '',
+    matchEventSimplified: '',
+    matchEventNewSimplified: '',
+    kickOffTime: '',
+    startTime: undefined,
+    endTime: undefined,
+    sportType: 0,
+    sportTypeName: '',
+    sportTypeNameNewSimplified: '',
+    sportTypeNameSimplified: '',
+    sportTypeNameTraditional: ''
   };
   static readonly fakeSubIssueTypeLinkMatch: SubIssueTypeLinkMatch = {
     matchId: Helper.fakeMatchId,
@@ -116,6 +146,54 @@ class Helper {
     note: '',
     noteEditable: false
   };
+  static readonly fakeMatchModel:MatchModel = {
+    matchId: 0,
+    homeId: 0,
+    homeName: '',
+    homeNameNewSimplified: '',
+    homeNameSimplified: '',
+    homeNameTraditional: '',
+    awayId: 0,
+    awayName: '',
+    awayNameNewSimplified: '',
+    awayNameSimplified: '',
+    awayNameTraditional: '',
+    matchCode: '',
+    eventDate: undefined,
+    dateTime: undefined,
+    leagueId: 0,
+    leagueGroupId: 0,
+    leagueName: '',
+    leagueNameNewSimplified: '',
+    leagueNameSimplified: '',
+    leagueNameTraditional: '',
+    matchEvent: '',
+    matchEventSimplified: '',
+    matchEventNewSimplified: '',
+    kickOffTime: '',
+    startTime: undefined,
+    endTime: undefined,
+    sportType: 0,
+    sportTypeName: '',
+    sportTypeNameNewSimplified: '',
+    sportTypeNameSimplified: '',
+    sportTypeNameTraditional: ''
+  }
+  static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
+    matchId: 0,
+    leagueName: '',
+    subIssueTypeId: 0,
+    isMainMatch: false,
+    kickOffTime: '',
+    eventName: '',
+    tableTicketsModel: new TableTicketsModel,
+    matchModel: Helper.fakeMatchModel,
+    isCollapse: false,
+    pagingModel: undefined,
+    isInvalidTotalTickets: false,
+    isShowValidation: false
+  }
+  
 }
 
 describe('EventDangerAcceptedService', () => {

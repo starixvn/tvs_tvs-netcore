@@ -4,7 +4,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { NgSelectMixtureModel } from '../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
@@ -22,6 +21,7 @@ import { FilterReducedOverService } from './services/filter-reduced-over.service
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from '../../../../utility/models/match.model';
 class Helper {
   static readonly fromDate = '2021-12-18 12:08:49.737';
   static readonly toDate = '2021-12-21 12:08:49.737';
@@ -244,7 +244,7 @@ describe('EventReducedOverComponent', () => {
       }
     });
     instance.leagueEventReducedOverComponent = new LeagueEventRedCardComponent(null, null);
-    instance.leagueEventReducedOverComponent.selectedMatch = new MatchInfo();
+    instance.leagueEventReducedOverComponent.selectedMatch = new MatchModel();
     instance.leagueEventReducedOverComponent.selectedMatch.matchId = 1;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
     instance.logInfoEvent = Helper.fakeLogInfoReducedOver;
