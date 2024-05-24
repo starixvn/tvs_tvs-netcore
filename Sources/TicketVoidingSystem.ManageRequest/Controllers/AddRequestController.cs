@@ -36,7 +36,7 @@ public class AddRequestController : ControllerBase
     public async Task<IActionResult> GetChildMatches(GetChildMatchesRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
-    public async Task<IActionResult> GetChildMatchesInfo(GetChildMatchesInfoRequest request) => Ok(await mediator.Send(request));
+    public async Task<IActionResult> GetChildMatchesEKO(GetChildMatchesEKORequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
     public async Task<IActionResult> GetSubIssueTypeLinkMatch(GetSubIssueTypeLinkMatchRequest request) => Ok(await mediator.Send(request));

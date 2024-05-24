@@ -57,7 +57,7 @@ export class AddRequestApiService {
   }
 
   async getChildMatchesInfo(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
-    return this.httpService.postJson<GetChildMatchQuery, ChildMatchModel[]>(query, 'api/AddRequest/GetChildMatchesInfo');
+    return this.httpService.postJson<GetChildMatchQuery, ChildMatchModel[]>(query, 'api/AddRequest/GetChildMatchesEKO');
   }
   /* istanbul ignore next */
   async getSubIssueTypeLinkMatch(query: SubIssueTypeLinkMatchQuery): Promise<SubIssueTypeLinkMatch[]> {

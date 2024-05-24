@@ -6,22 +6,22 @@ using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetChildMatchesInfoRequest : GetRelatedMatchCriteria, IRequest<IEnumerable<Match>>
+public class GetChildMatchesEKORequest : GetRelatedMatchCriteria, IRequest<IEnumerable<Match>>
 {
 }
 
-public class GetChildMatchesInfoRequestHandler : IRequestHandler<GetChildMatchesInfoRequest, IEnumerable<Match>>
+public class GetChildMatchesEKORequestHandler : IRequestHandler<GetChildMatchesEKORequest, IEnumerable<Match>>
 {
     private readonly IDynamicRepository repository;
     private readonly MatchService matchService;
 
-    public GetChildMatchesInfoRequestHandler(IDynamicRepository repository, MatchService matchService)
+    public GetChildMatchesEKORequestHandler(IDynamicRepository repository, MatchService matchService)
     {
         this.repository = repository;
         this.matchService = matchService;
     }
 
-    public async Task<IEnumerable<Match>> Handle(GetChildMatchesInfoRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Match>> Handle(GetChildMatchesEKORequest request, CancellationToken cancellationToken)
     {
         var matches = await repository.FetchAsync<Match>(request, cancellationToken);
         return matches.Select(matchService.UpdateMatchInfoFromRemotingRef);
