@@ -1,8 +1,8 @@
 ﻿<div class="messages" *ngIf="isShowMessages" [style]="getStyles()">
-  <div class="gray-header">
+  <div class="gray-header" (click)="changedShowContentMessage()">
     Message
   </div>
-  <table>
+  <table *ngIf="!message.isTVSAddOrEditPage || isShowContentMessage" >
     <tbody>
       <tr>
         <th scope="col" colspan="4">

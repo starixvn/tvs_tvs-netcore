@@ -15,7 +15,6 @@ import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
-import { LeagueEventComponent } from '../league-event/league-event.component';
 import { EarlyKickOffModel } from '../models/event-eko.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../models/get-log-info.model';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -212,7 +211,6 @@ class Helper {
 describe('EventEarlyKickOffComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventComponent,
       TicketsListComponent,
       LeagueEventRedCardComponent,
       AddChildMatchComponent,

@@ -69,10 +69,6 @@ export class LogInfoEkoComponent implements OnInit {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);
   }
 
-  public isEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.filter.issueTypeId);
-  }
-
   public getIssueTypeId(): number {
     return Number(this.filter.issueTypeId);
   }

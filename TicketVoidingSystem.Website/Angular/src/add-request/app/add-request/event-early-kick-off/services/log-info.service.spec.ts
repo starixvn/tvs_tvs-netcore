@@ -79,7 +79,7 @@ describe('LogInfoService', () => {
   let service: LogInfoService;
 
   beforeEach(() => {
-    service = new LogInfoService(null, null, null);
+    service = new LogInfoService(null, null, null, null);
   });
 
   it('#getLogInfo should call expected method', async () => {
@@ -87,7 +87,7 @@ describe('LogInfoService', () => {
     commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(new GetLogInfoViewModel()));
     const eventEarlyKickOffService = new EventEarlyKickOffService();
     eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
-    const logInfoService = new LogInfoService(null, commonService, eventEarlyKickOffService);
+    const logInfoService = new LogInfoService(null, commonService, eventEarlyKickOffService, null);
     logInfoService['initGetLogInfoEarlyKickOffQuery'] = jest.fn();
     logInfoService['assignResultLogInfoToEvents'] = jest.fn();
 
@@ -104,7 +104,7 @@ describe('LogInfoService', () => {
     filter.issueTypeId = IssueTypeConstant.WRONG_HDP;
     const eventEarlyKickOffService = new EventEarlyKickOffService();
     eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
-    const logInfoService = new LogInfoService(null, null, eventEarlyKickOffService);
+    const logInfoService = new LogInfoService(null, null, eventEarlyKickOffService, null);
     logInfoService['getTransInfo'] = jest.fn();
 
     const actual = logInfoService['initGetLogInfoEarlyKickOffQuery'](true, 123, filter, [Helper.fakeLogInfoEarlyKickOff]);
@@ -117,7 +117,7 @@ describe('LogInfoService', () => {
     filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
     const eventEarlyKickOffService = new EventEarlyKickOffService();
     eventEarlyKickOffService.getEarlyKickOffModel = jest.fn();
-    const logInfoService = new LogInfoService(null, null, eventEarlyKickOffService);
+    const logInfoService = new LogInfoService(null, null, eventEarlyKickOffService, null);
     logInfoService['getTransInfo'] = jest.fn();
 
     const actual = logInfoService['initGetLogInfoEarlyKickOffQuery'](false, 123, filter, [Helper.fakeLogInfoEarlyKickOff]);
@@ -132,7 +132,7 @@ describe('LogInfoService', () => {
     const logInfoModels = _.cloneDeep([Helper.fakeGetLogInfoModel]);
     logInfoModels[0].matchId = 11111;
     logInfoModels[0].logInfoDetail.matchId = 11111;
-    const logInfoService = new LogInfoService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null, null);
 
     logInfoService['assignResultLogInfoToEvents'](events, logInfoModels);
 
@@ -156,7 +156,7 @@ describe('LogInfoService', () => {
     logInfoModelsChild.matchId = childMatchId;
     logInfoModelsChild.logInfoDetail.matchId = childMatchId;
     logInfoModelsChild.validation.isInvalidTotalTickets = true
-    const logInfoService = new LogInfoService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null, null);
 
     logInfoService['assignResultLogInfoToEvents'](events, [logInfoModelsMain, logInfoModelsChild]);
 
@@ -176,7 +176,7 @@ describe('LogInfoService', () => {
     primitiveProperty.transInfoAddRequestModel = new TransInfoAddRequestModel();
     const httpService = new HttpService(null);
     httpService.postJson = jest.fn().mockReturnValue(new TableTicketsModel());
-    const mockService = new LogInfoService(httpService, null, null);
+    const mockService = new LogInfoService(httpService, null, null, null);
     mockService.getLogInfo = jest.fn();
 
     mockService.getTickets(new GetTicketsQuery(), event, true, 1, new FilterModel(), primitiveProperty);

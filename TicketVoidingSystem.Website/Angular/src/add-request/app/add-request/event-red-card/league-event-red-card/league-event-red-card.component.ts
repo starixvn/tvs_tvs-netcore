@@ -5,7 +5,7 @@ import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { LeagueInfo } from '../../../../../utility/models/event.model';
-import { LeagueEventService } from '../../league-event/league-event.service';
+import { LeagueEventService } from '../../services/league-event.service';
 import { MatchModel } from '../../../../../utility/models/match.model';
 
 @Component({

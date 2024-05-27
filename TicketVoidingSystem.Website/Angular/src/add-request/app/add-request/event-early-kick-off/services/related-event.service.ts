@@ -61,31 +61,42 @@ export class RelatedEventService {
   }
 
   private updateTemplateForEvents(events: LogInfoEarlyKickOff[]){
-    events.forEach(x => x.templateValue = this.logInfoService.getTemplateValue(x));
+    events.forEach(x => {
+      x.templateValue = this.logInfoService.getTemplateValue(x);
+      x.templateValue.kickOffTime = x.kickOffTime}
+    );
   }
-  private mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
+  
+  public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
     return {
+      sportType: childMatch.sportType,
       sportTypeName: childMatch.sportTypeName,
       sportTypeNameTraditional: childMatch.sportTypeNameTraditional,
       sportTypeNameSimplified: childMatch.sportTypeNameSimplified,
       sportTypeNameNewSimplified: childMatch.sportTypeNameNewSimplified,
+      homeId: childMatch.homeId,
       homeName: childMatch.homeName,
       homeNameTraditional: childMatch.homeNameTraditional,
       homeNameSimplified: childMatch.homeNameSimplified,
       homeNameNewSimplified: childMatch.homeNameNewSimplified,
+      awayId: childMatch.awayId,
       awayName: childMatch.awayName,
       awayNameTraditional: childMatch.awayNameTraditional,
       awayNameSimplified: childMatch.awayNameSimplified,
       awayNameNewSimplified: childMatch.awayNameNewSimplified,
+      leagueId: childMatch.leagueId,
       leagueName: childMatch.leagueName,
       leagueNameTraditional: childMatch.leagueNameTraditional,
       leagueNameSimplified: childMatch.leagueNameSimplified,
       leagueNameNewSimplified: childMatch.leagueNameNewSimplified,
-      sportType: childMatch.sportType,
+      kickOffTime: eventDate,
       matchId: childMatch.matchId,
-      kickOffTime: eventDate
-    } as MatchModel;
+      matchCode: childMatch.matchCode,
+      leagueGroupId: childMatch.leagueGroupId,
+      parentId: childMatch.parentId
+      } as MatchModel;
   }
+  
 
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {

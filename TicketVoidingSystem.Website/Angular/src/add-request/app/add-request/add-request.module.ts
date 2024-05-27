@@ -70,7 +70,6 @@ import { WrongScoreInfoComponent } from './event-wrong-score/wrong-score-info/wr
 import { FilterComponent } from './filter/filter.component';
 import { FilterService } from './filter/filter.service';
 import { SubIssueTypeDialogComponent } from './filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
-import { LeagueEventComponent } from './league-event/league-event.component';
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
 import { TemplateMessageModule } from "../../../utility/components/template-message/template-message.module";
@@ -81,7 +80,6 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         FilterComponent,
         OthersComponent,
         TicketsListComponent,
-        LeagueEventComponent,
         EventEarlyKickOffComponent,
         EventAbnormalBetComponent,
         EventDangerAcceptedComponent,

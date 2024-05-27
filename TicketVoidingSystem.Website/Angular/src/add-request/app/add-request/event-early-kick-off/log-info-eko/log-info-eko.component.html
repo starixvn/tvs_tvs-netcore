@@ -11,23 +11,9 @@
       </div>
       <div class="col-sm-5 p-0">
         <div class="float-right d-flex" *ngIf="!isMainMatch">
-          <div class="sub-type d-flex" *ngIf="isEarlyKickOff()">
-            <label class="col-form-label text-right nowrap mr-1">Sub Type:</label>
-            <div class="align-items-center">
-              <ng-select class="sub-type-select mr-2"
-                [items]="issueTypes.selectedSubIssueTypes"
-                bindLabel="subIssueTypeName"
-                bindValue="subIssueTypeId"
-                [(ngModel)]="logInfo.subIssueTypeId"
-                [clearable]="false"
-                [searchable]="false"
-                [disabled]="filter.isVoided">
-              </ng-select>
-            </div>
-          </div>
           <i class="fa-solid fa-trash-can fa-sm delete-event-icon pointer" [ngClass]="{'delete-event-icon-disabled': filter.isVoided}"
               aria-hidden="true" (click)="handleDeleteEvent(logInfo.matchId)">
-            </i>
+          </i>
         </div>
       </div>
     </div>

@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/cor
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { Message } from './message';
-import { VoidFunction } from '../template-message/template.const';
 
 @Component({
   selector: 'messages',
@@ -15,8 +14,10 @@ export class MessagesComponent {
   @Input() message = new Message();
   @Output() messageChange = new EventEmitter<Message>();
   tooltip = new Tooltip();
-  isShowOtherLanguage= false;
+  isShowOtherLanguage = false;
   marginX = 10;
+  isShowContentMessage = false;
+
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
   }
@@ -113,5 +114,9 @@ export class MessagesComponent {
 
   getStyles() {
     return this.message.isTVSAddOrEditPage ? "" : "margin: 0 10px;";
+  }
+
+  public changedShowContentMessage() {
+    this.isShowContentMessage = !this.isShowContentMessage;
   }
 }

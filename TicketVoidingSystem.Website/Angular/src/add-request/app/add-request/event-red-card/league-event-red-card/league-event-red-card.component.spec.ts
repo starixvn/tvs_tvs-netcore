@@ -5,8 +5,9 @@ import { Shallow } from 'shallow-render';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { LeagueInfo, MatchInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
-import { LeagueEventService } from '../../league-event/league-event.service';
 import { LeagueEventRedCardComponent } from './league-event-red-card.component';
+import { LeagueEventService } from '../../services/league-event.service';
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeEventDate = '2020-11-06 09:44:46.361 PM';
@@ -16,11 +17,22 @@ class Helper {
     matchId: 70000364,
     name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
     sportType: 1,
-    kickOffTime: ''
+    kickOffTime: '',
+    matchCode: '',
+    matchEvent: ''
   };
-  
+  static readonly fakeMatchModel: MatchModel = {
+    leagueId: 80714,
+    leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
+    matchId: 70000364,
+    name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
+    sportType: 1,
+    kickOffTime: '',
+    matchCode: '',
+    matchEvent: ''
+  };
   static readonly fakeMatchViewModel: MatchInfoViewModel = {
-    match: Helper.fakeMatches,
+    match: Helper.fakeMatchModel,
     errorCode: 0,
     errorMsg: ''
   };
@@ -105,7 +117,7 @@ describe('LeagueEventRedCardComponent', () => {
     });
     instance['updateLeagueInfo'] = jest.fn();
 
-    instance.onChangeMatchEvent(Helper.fakeMatches);
+    instance.onChangeMatchEvent(Helper.fakeMatchModel);
 
     expect(instance['updateLeagueInfo']).toHaveBeenCalledWith(80714, 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS');
     expect(instance.changeEvent.emit).toHaveBeenCalledTimes(1);
@@ -164,7 +176,7 @@ describe('LeagueEventRedCardComponent', () => {
     instance.changeEvent.emit = jest.fn();
 
     // Action
-    instance.onChangeMatchEvent(Helper.fakeMatches);
+    instance.onChangeMatchEvent(Helper.fakeMatchModel);
 
     // Assert
     expect(instance['updateLeagueInfo']).toHaveBeenCalledTimes(1);
@@ -178,7 +190,7 @@ describe('LeagueEventRedCardComponent', () => {
     instance['updateLeagueInfo'] = jest.fn();
 
     // Action
-    instance['updateInfoWithOnlyOneMatch'](Helper.fakeMatches);
+    instance['updateInfoWithOnlyOneMatch'](Helper.fakeMatchModel);
 
     // Assert
     expect(instance['updateLeagueInfo']).toHaveBeenCalledTimes(1);
@@ -223,7 +235,7 @@ describe('LeagueEventRedCardComponent', () => {
     // Assert
     expect(instance.leagues).toEqual([]);
     expect(instance.matches).toEqual([]);
-    expect(instance.selectedMatch).toStrictEqual(new MatchInfo());
+    expect(instance.selectedMatch).toStrictEqual(new MatchModel());
     expect(instance.leagueId).toBeUndefined();
   });
   

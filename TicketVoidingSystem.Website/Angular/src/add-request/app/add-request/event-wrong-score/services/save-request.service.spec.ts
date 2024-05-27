@@ -1,5 +1,5 @@
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { MatchInfo } from '../../../../../utility/models/event.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from "../../add-request.store";
 import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
@@ -102,7 +102,7 @@ describe('SaveRequestService', () => {
   it('#checkValidationBeforeSaveRequest should return false when have not actual score', async () => {
     // Arrange
     const fakeLeagueEventComponent = new LeagueEventRedCardComponent(null, null);
-    fakeLeagueEventComponent.selectedMatch = new MatchInfo();
+    fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const fakeValidationBusinessRuleArgs = {
@@ -123,7 +123,7 @@ describe('SaveRequestService', () => {
   it('#checkValidationBeforeSaveRequest should return false', async () => {
     // Arrange
     const fakeLeagueEventComponent = new LeagueEventRedCardComponent(null, null);
-    fakeLeagueEventComponent.selectedMatch = new MatchInfo();
+    fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const fakeValidationBusinessRuleArgs = {
@@ -148,7 +148,7 @@ describe('SaveRequestService', () => {
   it('#checkValidationBeforeSaveRequest should return true', async () => {
     // Arrange
     const fakeLeagueEventComponent = new LeagueEventRedCardComponent(null, null);
-    fakeLeagueEventComponent.selectedMatch = new MatchInfo();
+    fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const fakeValidationBusinessRuleArgs = {
