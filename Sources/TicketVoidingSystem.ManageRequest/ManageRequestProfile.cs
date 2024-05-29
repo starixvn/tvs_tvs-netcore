@@ -43,5 +43,6 @@ public class ManageRequestProfile : Profile
         CreateMap<SubIssueType, IssueInfo>();
         CreateMap<GetLogInfoQuery, GetLogInfoCriteria>();
         CreateMap<MatchInfoAddRequest, Match>();
+        CreateMap<RequestEventModel, Match>();
     }
 }

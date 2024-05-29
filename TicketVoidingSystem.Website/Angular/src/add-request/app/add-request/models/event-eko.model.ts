@@ -1,3 +1,4 @@
+import { MatchModel } from '../../../../utility/models/match.model';
 
 export class EarlyKickOffModel {
   matchId: number;
@@ -8,4 +9,5 @@ export class EarlyKickOffModel {
   name?: string;
   eventDate: Date;
   kickOffTime: string;
+  match?: MatchModel
 }

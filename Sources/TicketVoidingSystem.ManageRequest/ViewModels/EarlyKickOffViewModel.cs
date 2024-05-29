@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Web.JsonConverter;
 
 namespace TicketVoidingSystem.ManageRequest.ViewModels;
@@ -23,4 +24,6 @@ public class EarlyKickOffViewModel
     public DateTime? KickOffTime { get; set; }
 
     public DateTime? EventDate { get; set; }
+
+    public Match Match { get; set; }
 }

@@ -1,8 +1,10 @@
-﻿using Fanex.Data.Repository;
+﻿using AutoMapper;
+using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
@@ -16,11 +18,15 @@ public class GetRequestServiceImp : GetRequestService
 {
     private readonly IDynamicRepository repository;
     private readonly RemotingRefWrapperService remotingRefService;
+    private readonly MatchService matchService;
+    private readonly IMapper mapper;
 
-    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService)
+    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, MatchService matchService, IMapper mapper)
     {
         this.repository = repository;
         this.remotingRefService = remotingRefService;
+        this.matchService = matchService;
+        this.mapper = mapper;
     }
 
     public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
@@ -71,7 +77,7 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet);
+                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, firstResultSet.First().SportType);
                 break;
 
             case IssueTypeConstant.DuplicateTickets:
@@ -250,7 +256,7 @@ public class GetRequestServiceImp : GetRequestService
         });
     }
 
-    private IEnumerable<EarlyKickOffViewModel> MapEventEarlyKickOff(IEnumerable<RequestEventModel> requestEventModels)
+    private IEnumerable<EarlyKickOffViewModel> MapEventEarlyKickOff(IEnumerable<RequestEventModel> requestEventModels, int sportType)
     {
         return requestEventModels.Select(model => new EarlyKickOffViewModel
         {
@@ -261,8 +267,16 @@ public class GetRequestServiceImp : GetRequestService
             IsMainMatch = model.IsMainMatch,
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
-            KickOffTime = model.KickOffTime
+            KickOffTime = model.KickOffTime,
+            Match = GetMatchModel(model, sportType)
         });
+    }
+
+    private Match GetMatchModel(RequestEventModel eventModel, int sportType)
+    {
+        var match = mapper.Map<Match>(eventModel);
+        match.SportType = sportType;
+        return matchService.UpdateMatchInfoFromRemotingRef(match);
     }
 
     private static DuplicateTicketsViewModel MapEventDuplicateTickets(IEnumerable<RequestEventModel> requestEventModels)

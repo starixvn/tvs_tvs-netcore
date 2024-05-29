@@ -84,6 +84,10 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   public async ngOnInit(): Promise<void> {
     if (this.isEdit) {
       this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels, this.filter);
+      this.allSelectedEvents.forEach(x => {
+        x.templateValue = this.logInfoService.getTemplateValue(x);
+        x.templateValue.kickOffTime = x.kickOffTime;
+      });
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.addRequestStore.changeBlockingUiStatus(true);
       if (!this.filter.isVoided) {
@@ -92,11 +96,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
       }
       
       this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-      this.allSelectedEvents.forEach(x => {
-        if(!x.isMainMatch){
-          this.updateTemplateForEvents(x, this.relatedEvents.find(event => event.matchId === x.matchId));
-        };
-      });
+      
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
@@ -105,13 +105,11 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     }
   }
 
-  private updateTemplateForEvents(event: LogInfoEarlyKickOff, relatedEvent: ChildMatchModel){
-    event.matchModel = this.relatedEventService.mapChildMatchToMatchModel(relatedEvent, this.mainEvent.kickOffTime);
-    event.templateValue = this.logInfoService.getTemplateValue(event);
-    event.templateValue.kickOffTime = this.mainEvent.kickOffTime;
-  }
-
   public changeMatchEvent(): void {
+    this.primitiveProps.isShowLogInfoEvents = false;
+    this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
+    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
+
     this.mainEvent.leagueName = this.leagueEventComponent?.selectedMatch.leagueName;
     this.mainEvent.matchId = this.leagueEventComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.leagueEventComponent?.selectedMatch.name;
@@ -119,14 +117,12 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.leagueEventComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
     this.mainEvent.matchModel = this.leagueEventComponent?.selectedMatch;
-    this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this.mainEvent);
-    this.mainEvent.templateValue.kickOffTime = this.mainEvent.kickOffTime;
-    if(!this.isEdit){
-      this.primitiveProps.isShowLogInfoEvents = false;
-      this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
-      this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);  
-      this.updateMatchId.emit(this.mainEvent.matchId);
+    if(this.mainEvent.matchModel){
+      this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
+      this.mainEvent.templateValue.kickOffTime = this.mainEvent.kickOffTime;  
     }
+  
+    this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
   public changeKickOffTime(): void {
@@ -271,7 +267,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   private updateKickOffTime(matchInfo: MatchModel): string {
-    if (matchInfo?.matchId) {
+    if (matchInfo?.matchId && !this.isEdit) {
       return moment(matchInfo.kickOffTime, DateTimeFormat.FULL_DATE_TIME_FORMAT).format('YYYY-MM-DD HH:mm:ss.SSS');
     }
 
