@@ -1,5 +1,5 @@
 ﻿<div class="multiple-selection" [style.width]="multipleSelect.maxWidth">
-    <button type="button" readonly (click)="dropdownToggle = !dropdownToggle" [disabled]="isDisabled">
+    <button class="button" type="button" readonly (click)="dropdownToggle = !dropdownToggle" [disabled]="isDisabled">
         <div [ngClass]="{'place-holder': multipleSelect.isShowPlaceHolder}">{{multipleSelect.selectionTitle }}</div>
         <i class="fa fa-angle-down"></i>
     </button>

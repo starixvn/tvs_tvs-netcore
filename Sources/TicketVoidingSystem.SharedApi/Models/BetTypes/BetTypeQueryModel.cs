@@ -1,4 +1,6 @@
-﻿namespace TicketVoidingSystem.SharedApi.Models.BetTypes;
+﻿using System;
+
+namespace TicketVoidingSystem.SharedApi.Models.BetTypes;
 
 public class BetTypeQueryModel
 {
@@ -7,4 +9,8 @@ public class BetTypeQueryModel
     public int MatchId { get; set; }
 
     public string BetTypes { get; set; }
+
+    public DateTime? FromTransDate { get; set; }
+
+    public DateTime? ToTransDate { get; set; }
 }

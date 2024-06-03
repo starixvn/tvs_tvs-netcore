@@ -1,4 +1,5 @@
-﻿using Fanex.Data;
+﻿using System;
+using Fanex.Data;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Utilities;
 
@@ -7,6 +8,10 @@ namespace TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 public class TicketVoidingGetBetTypesHaveTicketsCriteria : CriteriaBase
 {
     public int MatchId { get; set; }
+
+    public DateTime? FromTransDate { get; set; }
+
+    public DateTime? ToTransDate { get; set; }
 
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }

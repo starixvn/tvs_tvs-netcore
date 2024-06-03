@@ -16,6 +16,7 @@ import { EventRedCardComponent } from './event-red-card/event-red-card.component
 import { EventReducedOverComponent } from './event-reduced-over/event-reduced-over.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
+import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
@@ -57,6 +58,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
   @ViewChild('eventRecoverTicket') eventRecoverTicketComponent: EventRecoverTicketComponent;
+  @ViewChild('eventWrongMarketOffered') eventWrongMarketOfferedComponent: EventWrongMarketOfferedComponent;
 
   isCollapse: boolean;
   isBlock: boolean;
@@ -188,6 +190,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isRecoverTicket()) {
       await this.eventRecoverTicketComponent.saveRequest();
     }
+
+    if (this.isLikelyWrongMarketOffered()) {
+      await this.eventWrongMarketOfferedComponent.saveRequest();
+    }
   }
 
   backToManagePage() {
@@ -244,7 +250,9 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       IssueTypeConstant.WRONG_ODDS,
       IssueTypeConstant.REDUCED_OVER,
       IssueTypeConstant.ABANDONED,
-      IssueTypeConstant.NOT_PARTICIPATE
+      IssueTypeConstant.NOT_PARTICIPATE,
+      IssueTypeConstant.WRONG_MARKET_OFFERED,
+      IssueTypeConstant.TECHNICAL_ERROR
     ]
 
     return issueTypesHasSimpleFields.includes(this.model.filter.issueTypeId);
@@ -343,5 +351,9 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isRecoverTicket(): boolean {
     return StaticService.isRecoverTicket(this.model.filter.issueTypeId);
+  }
+
+  isLikelyWrongMarketOffered(): boolean {
+    return StaticService.isLikelyWrongMarketOffered(this.model.filter.issueTypeId);
   }
 }

@@ -111,6 +111,14 @@ public class GetTransInfoServiceImp : GetTransInfoService
                 criteria.RecoverTicketInfo = issueInfo;
                 break;
 
+            case IssueTypeConstant.WrongMarketOffered:
+                criteria.WrongMarketOfferedInfo = issueInfo;
+                break;
+
+            case IssueTypeConstant.TechnicalError:
+                criteria.TechnicalErrorInfo = issueInfo;
+                break;
+
             default:
                 criteria.IssueTypeId = query.IssueTypeId;
                 break;
@@ -183,6 +191,8 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.Abandoned => query.ReducedOverModels.ToReducedOverInfoXml(),
             IssueTypeConstant.NotParticipate => query.NotParticipateModels.ToNotParticipateInfoXml(),
             IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
+            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModel.ToEventWrongMarketOfferedXml(),
+            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedModel.ToEventWrongMarketOfferedXml(),
             _ => "",
         };
     }

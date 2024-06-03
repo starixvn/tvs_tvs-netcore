@@ -97,4 +97,14 @@ export class ActionVoidService {
   public getActionRecoverTicket(): number[] {
     return ActionVoidByIssueTypeConst.RECOVER_TICKET;
   }
+
+  /* istanbul ignore next */
+  public getActionVoidWrongMarketOffered(): number[] {
+    return ActionVoidByIssueTypeConst.WRONG_MARKET_OFFERED;
+  }
+
+  /* istanbul ignore next */
+  public getActionVoidTechnicalError(): number[] {
+    return ActionVoidByIssueTypeConst.TECHNICAL_ERROR;
+  }
 }

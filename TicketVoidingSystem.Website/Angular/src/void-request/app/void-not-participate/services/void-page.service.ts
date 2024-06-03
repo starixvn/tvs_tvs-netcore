@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
+import { EventType } from '../../../../utility/constants/sport.constant';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
+import { StaticService } from '../../../../utility/services/static.service';
 import { AppService } from '../../app.service';
 import { CommonPrimitiveProperty } from '../../models/common-primitive-property.model';
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
-import _ from 'lodash';
-import { EventType } from '../../../../utility/constants/sport.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class VoidPageService {
     private readonly commonService: CommonService,
     private readonly ticketsService: TicketsService,
     private readonly templateService: TemplateService
-    ) {
+  ) {
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
@@ -59,23 +60,39 @@ export class VoidPageService {
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.eventType = voidPageItem.voidTicketsMini.isAllLiveTickets ? EventType.LIVE : null;
-    templateValue.playerName = {
-      msgEnglish: requestDetail.playerNames[0].playerNamesEnglish,
-      msgChineseTraditional: requestDetail.playerNames[0].playerNamesChineseTraditional,
-      msgChineseSimplified: requestDetail.playerNames[0].playerNamesChineseSimplified,
-      msgChineseNewSimplified: requestDetail.playerNames[0].playerNamesChineseSimplified
-    } as TemplateContent;
+    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      templateValue.playerName = {
+        msgEnglish: requestDetail.playerNames[0].playerNamesEnglish,
+        msgChineseTraditional: requestDetail.playerNames[0].playerNamesChineseTraditional,
+        msgChineseSimplified: requestDetail.playerNames[0].playerNamesChineseSimplified,
+        msgChineseNewSimplified: requestDetail.playerNames[0].playerNamesChineseSimplified
+      } as TemplateContent;
+    }
+
+    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+      templateValue.isCheckedSpecialBetType = true;
+      templateValue.betTypeNameReplaceMessage = voidPageItem.voidTicketsMini.betTypeNameReplaceMessage;      
+    }
 
     return templateValue;
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {
-    const basicRequestInfo: BasicRequestInfo = {
-      matchId: requestDetail.notParticipateModels[0].matchId,
-      subIssueTypeId: requestDetail.notParticipateModels[0].subIssueTypeId,
-    };
+    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      const basicRequestInfo: BasicRequestInfo = {
+        matchId: requestDetail.notParticipateModels[0].matchId,
+        subIssueTypeId: requestDetail.notParticipateModels[0].subIssueTypeId,
+      };
 
-    return basicRequestInfo;
+      return basicRequestInfo;
+    }
+
+    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+      return {
+        matchId: requestDetail.wrongMarketOfferedModel[0].matchId,
+        subIssueTypeId: requestDetail.wrongMarketOfferedModel[0].subIssueTypeId
+      } as BasicRequestInfo;
+    }
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {
@@ -100,7 +117,14 @@ export class VoidPageService {
     query.requestId = requestDetail.requestId;
     query.isShowLogOnly = true;
     query.issueTypeId = requestDetail.request.issueTypeId;
-    query.notParticipateModels = MappingModelStaticService.buildNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
+
+    if (StaticService.isNotParticipate(requestDetail.request.issueTypeId.toString())) {
+      query.notParticipateModels = MappingModelStaticService.buildNotParticipateGetLogInfoModel(requestDetail.notParticipateModels);
+    }
+
+    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+      // query.wrongMarketOfferedModel = MappingModelStaticService.buildWr
+    }
 
     const viewModel = await this.commonService.getLogInfo(query);
     primitiveProperty.isBlockUI = false;

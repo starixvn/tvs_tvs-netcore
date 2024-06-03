@@ -9,15 +9,20 @@ import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
 import { AdvancedModeService } from './advanced-mode/advanced-mode.service';
 import { GroupBetTypesComponent } from './group-bettypes/group-bettypes.component';
 import { MultipleSelectComponent } from './multiple-selection/multiple-select.component';
-import { TreeViewComponent } from './multiple-selection/tree-view.component';
+import { MultipleSelectAdvancedModeModule } from './multiple-selection/multiple-select.module';
 
 @NgModule({
-  imports: [CommonModule, BrowserModule, FormsModule, NgbModule, ToolTipModule],
+  imports: [
+    MultipleSelectAdvancedModeModule,
+    CommonModule,
+    BrowserModule,
+    FormsModule,
+    NgbModule,
+    ToolTipModule
+  ],
   declarations: [
     AdvancedModeComponent,
     GroupBetTypesComponent,
-    MultipleSelectComponent,
-    TreeViewComponent,
     DecimalOnlyDirective,
     MultipleDecimalDirective,
   ],
@@ -25,7 +30,6 @@ import { TreeViewComponent } from './multiple-selection/tree-view.component';
     AdvancedModeComponent,
     GroupBetTypesComponent,
     MultipleSelectComponent,
-    TreeViewComponent,
     MultipleDecimalDirective
   ],
   providers: [AdvancedModeService]

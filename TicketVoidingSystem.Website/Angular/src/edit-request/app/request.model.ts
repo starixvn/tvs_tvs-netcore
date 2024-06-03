@@ -1,15 +1,16 @@
-import { AbnormalBetModel } from '../../add-request/app/add-request/models/abnormal-bet.model';
-import { EarlyKickOffModel } from '../../add-request/app/add-request/models/event-eko.model';
-import { RecoverTicketModel } from '../../add-request/app/add-request/models/recover-ticket.model';
 import { AbnormalAccountModel } from '../../add-request/app/add-request/models/abnormal-account.model';
+import { AbnormalBetModel } from '../../add-request/app/add-request/models/abnormal-bet.model';
 import { DuplicateTicketsModel } from '../../add-request/app/add-request/models/event-duplicate-tickets.model';
+import { EarlyKickOffModel } from '../../add-request/app/add-request/models/event-eko.model';
 import { NotParticipateModel } from '../../add-request/app/add-request/models/event-not-participate.model';
 import { RedCardModel } from '../../add-request/app/add-request/models/event-red-card.model';
 import { ReducedOverModel } from '../../add-request/app/add-request/models/event-reduced-over.model';
 import { WrongHdpModel } from '../../add-request/app/add-request/models/event-wrong-hdp.model';
+import { WrongMarketOfferedModel } from '../../add-request/app/add-request/models/event-wrong-market-offered.model';
 import { WrongOddsModel } from '../../add-request/app/add-request/models/event-wrong-odds.model';
 import { WrongOuModel } from '../../add-request/app/add-request/models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../add-request/app/add-request/models/event-wrong-score.model';
+import { RecoverTicketModel } from '../../add-request/app/add-request/models/recover-ticket.model';
 import { OperatorInfo } from '../../add-request/app/add-request/others/others.model';
 
 export class RequestDetailModel {
@@ -86,6 +87,7 @@ export class RequestDetailViewModel {
   abnormalAccountModel?: AbnormalAccountModel;
   recoverTicketModel?: RecoverTicketModel;
   abnormalBetModel?: AbnormalBetModel;
+  wrongMarketOfferedModel?: WrongMarketOfferedModel;
 }
 
 export class PlayerName {

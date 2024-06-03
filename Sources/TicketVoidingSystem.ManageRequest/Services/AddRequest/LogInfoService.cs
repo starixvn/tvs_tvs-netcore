@@ -32,14 +32,14 @@ public class LogInfoServiceImp : LogInfoService
     {
         var criteria = await GetLogInfoCriteria(query);
 
-        var (validations, ticketRequests, logInfoDetails, transInfoAddRequestModels, transInfoJsonList) =
-            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string>(criteria);
+        var (validations, ticketRequests, logInfoDetails, transInfoAddRequestModels, transInfoJsonList, betTypeCounts) =
+            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeCount>(criteria);
         var transInfoAddRequest = transInfoAddRequestModels.FirstOrDefault();
         var transInfoJson = transInfoJsonList.FirstOrDefault();
 
         return new GetLogInfoViewModel
         {
-            GetLogInfoModels = GetLogInfoModels(query, validations, ticketRequests, logInfoDetails),
+            GetLogInfoModels = GetLogInfoModels(query, validations, ticketRequests, logInfoDetails, betTypeCounts),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 RemoveTransIds = transInfoAddRequest?.RemoveTransIds,
@@ -51,7 +51,7 @@ public class LogInfoServiceImp : LogInfoService
     }
 
     private static IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
-        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCount> betTypeCount)
     {
         return query.IssueTypeId switch
         {
@@ -68,6 +68,8 @@ public class LogInfoServiceImp : LogInfoService
             IssueTypeConstant.NotParticipate => GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.EarlyKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
+            IssueTypeConstant.WrongMarketOffered => GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
+            IssueTypeConstant.TechnicalError => GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
             _ => GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail)
         };
     }
@@ -204,6 +206,22 @@ public class LogInfoServiceImp : LogInfoService
         });
     }
 
+    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCount> betTypeCount)
+    {
+        return new List<GetLogInfoModel>
+        {
+            new()
+            {
+                MatchId = query.WrongMarketOfferedModel.MatchId,
+                Validation = validation.FirstOrDefault(),
+                TicketRequest = ticketRequest,
+                LogInfoDetail = logInfoDetail.FirstOrDefault(),
+                BetTypeCount = betTypeCount
+            }
+        };
+    }
+
     private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail)
     {
@@ -234,6 +252,8 @@ public class LogInfoServiceImp : LogInfoService
         criteria.WrongOddsInfo = query.WrongOddsModels?.ToWrongOddsInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
         criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
+        criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;
+        criteria.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;
@@ -254,6 +274,7 @@ public class LogInfoServiceImp : LogInfoService
             ReducedOverModels = query.ReducedOverModels,
             NotParticipateModels = query.NotParticipateModels,
             EarlyKickOffModels = query.EarlyKickOffModels,
+            WrongMarketOfferedModel = query.WrongMarketOfferedModel,
             MatchId = query.MatchId,
             IssueTypeId = query.IssueTypeId
         };

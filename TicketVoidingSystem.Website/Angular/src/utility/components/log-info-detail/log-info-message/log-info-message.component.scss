@@ -1,0 +1,22 @@
+span {
+  .icon-warning-message {
+    color: #cfb107;
+  }
+
+  .warning-text {
+    color: #856404;
+  }
+
+  .warning-text-shorten {
+    color: #856404;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  .error-text {
+    color: #ed1c24;
+  }
+}

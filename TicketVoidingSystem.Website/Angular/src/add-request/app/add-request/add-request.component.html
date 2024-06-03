@@ -191,6 +191,19 @@
             [recoverTicketModel]="model.recoverTicketModel"
             [others]="model.others">
           </event-recover-ticket>
+
+          <event-wrong-market-offered #eventWrongMarketOffered
+            *ngIf="isLikelyWrongMarketOffered()"
+            [userId]="userId"
+            [requestedBy]="requestedBy"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [wrongMarketOfferedModel]="model.wrongMarketOfferedModel"
+            [others]="model.others"
+            (updateMatchId)="updateMatchId($event)">
+          </event-wrong-market-offered>
         </div>
       </div>
     </div>

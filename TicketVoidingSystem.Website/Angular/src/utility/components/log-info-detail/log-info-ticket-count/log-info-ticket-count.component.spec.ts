@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DetailNotParticipateComponent } from './detail-not-participate.component';
+import { LogInfoTicketCountComponent } from './log-info-ticket-count.component';
 
 describe('LogInfoDetailComponent', () => {
-  let component: DetailNotParticipateComponent;
-  let fixture: ComponentFixture<DetailNotParticipateComponent>;
+  let component: LogInfoTicketCountComponent;
+  let fixture: ComponentFixture<LogInfoTicketCountComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DetailNotParticipateComponent ]
+      declarations: [ LogInfoTicketCountComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DetailNotParticipateComponent);
+    fixture = TestBed.createComponent(LogInfoTicketCountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,132 @@
+import { Injectable } from '@angular/core';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TEXT } from '../../../../../utility/constants/text';
+import { AddRequestService } from '../../add-request.service';
+import { AddRequestQuery } from '../../models/add-request.query';
+import { PopupService } from '../../services/popup.service';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongMarketOfferedService } from './event-wrong-market-offfered.service';
+import { LogInfoService } from './log-info.service';
+import { ValidationService } from './validation.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class SaveRequestService {
+  constructor(
+    private readonly validationService: ValidationService,
+    private readonly logInfoWrongMarketOfferedService: LogInfoService,
+    private readonly popupService: PopupService,
+    private readonly addRequestService: AddRequestService,
+    private readonly eventWrongMarketOfferedService: EventWrongMarketOfferedService
+  ) { }
+
+  async saveRequest(argWrongMarketOffered: SaveRequestArg): Promise<void> {
+    const isDataValid = argWrongMarketOffered.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongMarketOffered);
+    argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
+    if (isDataValid) {
+      this.proceedSaveRequest(argWrongMarketOffered);
+    } else {
+      argWrongMarketOffered.addRequestStore.changeSavingRequestStatus(false);
+    }
+    argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  async recheckLogInfoBeforeSaveRequest(argWrongMarketOffered: SaveRequestArg): Promise<boolean> {
+    argWrongMarketOffered.addRequestStore.changeSavingRequestStatus(true);
+    this.logInfoWrongMarketOfferedService.resetLogInfoOfEvent(argWrongMarketOffered.logInfoEvent);
+
+    if (!this.validationService.validateCommonData(argWrongMarketOffered.eventLeagueComponent, argWrongMarketOffered.filterTimeComponent, argWrongMarketOffered.advancedModeComponent)) {
+      return false;
+    }
+
+    argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
+    argWrongMarketOffered.primitiveProps.isShowValidation = false;
+    await this.logInfoWrongMarketOfferedService.getLogInfo(argWrongMarketOffered.logInfoEvent, argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, argWrongMarketOffered.filter, argWrongMarketOffered.primitiveProps);
+    argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
+    argWrongMarketOffered.primitiveProps.isShowValidation = true;
+
+    if (this.validationService.isValidLogInfoEvent(argWrongMarketOffered.logInfoEvent)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private proceedSaveRequest(arg: SaveRequestArg) {
+    if (this.validationService.checkCanShowConfirmationWrongMarketOffered(arg)) {
+      this.popupService.showConfirm(
+        this.getMessageConfirmationWrongMarketOffered(arg),
+        async () => {
+          await this.onClickConfirmSave(arg);
+        },
+        () => {
+          arg.addRequestStore.changeSavingRequestStatus(false);
+        });
+    } else {
+      this.executeSaveRequestApi(arg);
+    }
+  }
+
+  private getMessageConfirmationWrongMarketOffered(argWrongMarketOffered: SaveRequestArg): string {
+    let message = '';
+    if (argWrongMarketOffered.logInfoEvent.logInfoDetail.settleCount > 0) {
+      message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
+    }
+
+    if (argWrongMarketOffered.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
+      message = `${message}<div>There are some warnings in this request.</div>`;
+    }
+
+    if (argWrongMarketOffered.isEdit && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
+      && argWrongMarketOffered.filter.action !== argWrongMarketOffered.actionIdOfFirstTimeAccess) {
+      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
+    }
+
+    if (argWrongMarketOffered.isEdit && argWrongMarketOffered.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
+      message = `${message}<div style="color:red">Please remind this request ${argWrongMarketOffered.requestId} is confirmed by ${argWrongMarketOffered.requestedBy}.</div>`;
+    }
+
+    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
+  }
+
+  private async executeSaveRequestApi(argWrongMarketOffered: SaveRequestArg): Promise<void> {
+    const query = this.initAddRequestQuery(argWrongMarketOffered);
+    await this.addRequestService.executeSaveRequest(argWrongMarketOffered.isEdit, argWrongMarketOffered.requestId, query, argWrongMarketOffered.addRequestStore);
+  }
+
+  private async onClickConfirmSave(argWrongMarketOffered: SaveRequestArg) {
+    // validate again for make sure
+    const isDataValidAgain = argWrongMarketOffered.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongMarketOffered);
+    argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(true);
+    if (isDataValidAgain) {
+      await this.executeSaveRequestApi(argWrongMarketOffered);
+    } else {
+      this.popupService.showError(TEXT.INVALID_DATA_IN_REQUEST);
+    }
+    argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  private initAddRequestQuery(argWrongMarketOffered: SaveRequestArg): AddRequestQuery {
+    const query: AddRequestQuery = new AddRequestQuery();
+    query.transInfoJson = argWrongMarketOffered.primitiveProps.transInfoAddRequestModel?.transInfoJson;
+    query.unMarkTransIds = argWrongMarketOffered.primitiveProps.transInfoAddRequestModel?.unMarkTransIds;
+    query.markTransIds = argWrongMarketOffered.primitiveProps.transInfoAddRequestModel?.markTransIds;
+    query.issueTypeId = argWrongMarketOffered.filter.issueTypeId;
+    query.isTest = argWrongMarketOffered.filter.isTest;
+    query.actionId = argWrongMarketOffered.filter.action;
+    query.sportType = argWrongMarketOffered.filter.sportType;
+    query.isVoided = argWrongMarketOffered.filter.isVoided;
+
+    query.mistakenBy = argWrongMarketOffered.others.mistakenBy;
+    query.decidedBy = argWrongMarketOffered.others.decidedBy;
+    query.remark = argWrongMarketOffered.others.remark;
+
+    if (!argWrongMarketOffered.filter.isVoided) {
+      query.WrongMarketOfferedInfo = this.eventWrongMarketOfferedService.getWrongMarketOfferedModel(Number(argWrongMarketOffered.filter.subIssueTypeId), argWrongMarketOffered.logInfoEvent);
+    }
+
+    return query;
+  }
+}

@@ -40,7 +40,9 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.AbnormalAccount, BuildAbnormalAccount},
                 {IssueTypeConstant.DuplicateTickets, BuildDuplicateTickets},
                 {IssueTypeConstant.NotParticipate, BuildMatchLeague},
-                {IssueTypeConstant.RecoverTicket, BuildProducts}
+                {IssueTypeConstant.RecoverTicket, BuildProducts},
+                {IssueTypeConstant.WrongMarketOffered, BuildMatchLeague},
+                {IssueTypeConstant.TechnicalError, BuildMatchLeague}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);

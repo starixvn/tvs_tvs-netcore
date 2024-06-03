@@ -37,6 +37,9 @@ public class AddRequestCommand : NonQueryCommand
     public string DuplicateTicketsInfo { get; set; }
     public string RecoverTicketInfo { get; set; }
     public string AbnormalBetInfo { get; set; }
+    public string WrongMarketOfferedInfo { get; set; }
+    public string TechnicalErrorInfo { get; set; }
+
 
     public override string GetSettingKey() => "TicketVoiding_Request_Insert";
 

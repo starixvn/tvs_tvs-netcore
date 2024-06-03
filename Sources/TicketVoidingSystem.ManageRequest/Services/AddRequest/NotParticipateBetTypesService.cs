@@ -49,7 +49,7 @@ public class NotParticipateBetTypesServiceImp : NotParticipateBetTypesService
 
     public async Task<IEnumerable<NotParticipateBetTypesModel>> GetNotParticipateBetTypesHavesTickets(IEnumerable<NotParticipateBetTypesModel> betTypes, int matchId)
     {
-        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId);
+        var allBetTypesOfMatch = await betTypesRepository.GetBetTypesHaveTicketsForTvs(matchId, null, null);
         var results = allBetTypesOfMatch
             .DistinctBy(x => new { x.Id, x.TransDesc })
             .Where(x => betTypes.Any(t => t.BetTypeId == int.Parse(x.Id)))

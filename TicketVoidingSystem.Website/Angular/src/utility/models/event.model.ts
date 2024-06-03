@@ -14,6 +14,7 @@ export class MatchInfo extends LeagueInfo {
   matchId: number;
   name: string;
   sportType?: number;
+  sportTypeName?: string;
   matchCode?: string;
   parentId?: number;
   kickOffTime: string;

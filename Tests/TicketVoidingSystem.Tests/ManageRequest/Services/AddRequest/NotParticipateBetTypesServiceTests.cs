@@ -11,6 +11,7 @@ using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest;
+
 public class NotParticipateBetTypesServiceTests
 {
     private readonly BetTypesRepository betTypesRepository;
@@ -49,13 +50,13 @@ public class NotParticipateBetTypesServiceTests
             new () { BetTypeId = 3, ParentId = 3, ParentName = "FT" },
             new () { BetTypeId = 4, ParentId = 4, ParentName = "" }
         };
-        betTypesRepository.GetBetTypesHaveTicketsForTvs(Arg.Any<int>()).ReturnsForAnyArgs(data);
+        betTypesRepository.GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), null, null).ReturnsForAnyArgs(data);
 
         // Act
         var actual = await service.GetNotParticipateBetTypesHavesTickets(models, 1);
 
         // Assert
-        await betTypesRepository.Received(1).GetBetTypesHaveTicketsForTvs(Arg.Any<int>());
+        await betTypesRepository.Received(1).GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), null, null);
         AssertExtension.Equal(expected, actual);
     }
 

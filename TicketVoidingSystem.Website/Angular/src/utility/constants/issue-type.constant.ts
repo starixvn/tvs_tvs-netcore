@@ -19,4 +19,6 @@ export class IssueTypeConstant {
   static readonly NOT_PARTICIPATE = '21';
   static readonly RECOVER_TICKET = '22';
   static readonly ABANDONED = '23';
+  static readonly WRONG_MARKET_OFFERED = '12';
+  static readonly TECHNICAL_ERROR = '24';
 }

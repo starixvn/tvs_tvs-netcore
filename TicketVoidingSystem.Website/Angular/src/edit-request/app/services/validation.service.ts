@@ -99,4 +99,9 @@ export class ValidationService {
   public isRecoverTicket(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isRecoverTicket(detailViewModel.request.issueTypeId.toString());
   }
+
+  /* istanbul ignore next */
+  public isLikelyWrongMarketOffered(detailViewModel: RequestDetailViewModel): boolean {
+    return StaticService.isLikelyWrongMarketOffered(detailViewModel.request.issueTypeId.toString());
+  }
 }

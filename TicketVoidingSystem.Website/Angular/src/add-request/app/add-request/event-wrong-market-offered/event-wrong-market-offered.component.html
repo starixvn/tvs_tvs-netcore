@@ -1,0 +1,32 @@
+<event-league #eventLeague
+  [isEdit]="isEdit"
+  [matchId]="logInfoEvent.matchId"
+  (changeEvent)="changeMatchEvent()">
+</event-league>
+<filter-time #filter
+  class="mb-1"
+  [filterWrongMarketOfferedModel]="logInfoEvent.filterWrongMarketOfferedModel"
+  (changeFilterEvent)="changeFilter()"
+  (refreshEvent)="refreshEvent()">
+</filter-time>
+<advanced-mode-add-request #advancedMode
+  [matchId]="this.logInfoEvent.matchId"
+  [groupBetTypes]="groupBetTypesModel"
+  [isShowAdvancedModeFilter]="isEdit"
+  (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
+  [model]="advancedModeAddRequestModel">
+</advanced-mode-add-request>
+<div class="mb-3 d-flex mt-1" *ngIf="groupBetTypesModel.groupBetTypes.length > 0">
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+    (click)="clickSearch()">
+    Search
+  </button>
+</div>
+<log-info-wrong-market-offered #logInfo
+  [primitiveProps]="primitivePropertyEvent"
+  [logInfo]="logInfoEvent">
+</log-info-wrong-market-offered>
+<div class="no-ticket mt-2" *ngIf="primitivePropertyEvent.isShowErrorNoBetType">
+  <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+  No valid tickets found in the current range
+</div>

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
-import { StaticService } from '../../../../utility/services/static.service';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
+import { StaticService } from '../../../../utility/services/static.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,10 @@ export class RequestDescriptionService {
 
     if (StaticService.isNotParticipate(copyInfoResponse.requestInfo.issueTypeId.toString())) {
       return this.createNotParticipateContent(copyInfoResponse);
+    }
+
+    if (StaticService.isLikelyWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+      return this.createWrongMarketOfferedLikelyContent(copyInfoResponse);
     }
 
     return this.createOthersIssueTypeContent(copyInfoResponse);
@@ -63,6 +67,18 @@ export class RequestDescriptionService {
 
     return this.createCommonContent(copyInfoResponse, betTypeContent);
   }
+
+  private createWrongMarketOfferedLikelyContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const betTypeContent = copyInfoResponse.betTypeTickets
+      .map(element => {       
+        const betTypeName = element.wicketOver ? element.betTypeName.replaceAll('X', `${element.wicketOver}`) : element.betTypeName;
+        return `${betTypeName}\n`
+          + `${element.ticketsCount} ticket(s)\n\n`;
+      }).join('');
+
+    return this.createCommonContent(copyInfoResponse, betTypeContent);
+  }
+
 
   private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string): string {
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`

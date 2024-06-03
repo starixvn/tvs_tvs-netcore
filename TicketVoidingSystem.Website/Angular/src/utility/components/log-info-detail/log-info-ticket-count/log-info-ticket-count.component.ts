@@ -5,12 +5,12 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { StaticService } from '../../../../utility/services/static.service';
 
 @Component({
-  selector: 'detail-not-participate',
-  templateUrl: './detail-not-participate.component.html',
-  styleUrls: ['./detail-not-participate.component.scss']
+  selector: 'log-info-ticket-count',
+  templateUrl: './log-info-ticket-count.component.html',
+  styleUrls: ['./log-info-ticket-count.component.scss']
 })
-export class DetailNotParticipateComponent {
-  @Input() logInfoDetail: LogInfoDetail;
+export class LogInfoTicketCountComponent {
+  @Input() model: LogInfoDetail;
 
   public displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);

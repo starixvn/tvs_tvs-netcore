@@ -1,4 +1,6 @@
 import * as _ from "lodash";
+import { WrongMarketOfferedGetLogInfoQuery } from "src/add-request/app/add-request/event-wrong-market-offered/models/get-log-info.query";
+import { WrongMarketOfferedModel } from "src/add-request/app/add-request/models/event-wrong-market-offered.model";
 import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
@@ -156,5 +158,18 @@ export class MappingModelStaticService {
       isMainMatch: x.isMainMatch,
       kickOffTime: x.kickOffTime
     } as EarlyKickOffGetLogInfoQuery));
+  }
+
+  static buildWrongMarketOfferedGetLogInfoModel(model:  WrongMarketOfferedModel): WrongMarketOfferedGetLogInfoQuery {
+    if (_.isNull(model) || _.isUndefined(model)) {
+      return null;
+    }
+
+    return {
+      matchId: model.matchId,
+      subIssueTypeId: model.subIssueTypeId,
+      filterFromTransTime: model.voidFromTime,
+      filterToTransTime: model.voidToTime
+    } as WrongMarketOfferedGetLogInfoQuery;
   }
 }

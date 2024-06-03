@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
-import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
@@ -416,9 +415,8 @@ export class TemplateMessageComponent implements OnChanges {
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() &&
-      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
-        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
-        || (this.isOtherIssues() && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
+      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
+        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 
   checkValidation(): boolean {
@@ -441,14 +439,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowCheckBoxSpecialBetType(): boolean {
-    return this.isShowMessages && this.isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet();
-  }
-
-  isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() &&
-      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
-        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
-        || (this.isOtherIssues && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
+    return this.isShowMessages && this.issueTypeUpdateSpecialBetTypeVoidSingleBet();
   }
 
   isShowAioCheckBoxMessage(): boolean {
@@ -456,10 +447,10 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowEarlyEventCheckBoxMessage(): boolean {
-    return this.isShowMessages && (this.isssueTypeShowEarlyEventCheckBoxMessageVoidSingleBet() || this.isWrongOdds());
+    return this.isShowMessages && (this.issueTypeShowEarlyEventCheckBox() || this.isWrongOdds());
   }
 
-  isssueTypeShowEarlyEventCheckBoxMessageVoidSingleBet(): boolean {
+  issueTypeShowEarlyEventCheckBox(): boolean {
     return this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU());
   }
 
@@ -525,5 +516,9 @@ export class TemplateMessageComponent implements OnChanges {
 
   isOtherIssues(): boolean {
     return StaticService.isOtherIssues(this.issueTypeId?.toString());
+  }
+
+  isLikelyWrongMarketOffered(): boolean {
+    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString());
   }
 }

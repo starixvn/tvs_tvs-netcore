@@ -1,0 +1,108 @@
+@import '../../../../assets/styles/mixin.scss';
+
+.group-bettypes {
+  box-shadow: none;
+  .collapse {
+    max-height: 85px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    @include scroll-style();
+  }
+
+  .icon- {
+    width: 18px !important;
+    margin-top: 3px;
+
+    &plus-bettypes {
+      background: url(../../../../assets/images/sprite.png) no-repeat -7px -142px;
+    }
+
+    &minus-bettypes {
+      background: url(../../../../assets/images/sprite.png) no-repeat -25px -142px;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    label {
+      margin-bottom: 0px;
+      display: flex;
+      align-items: center;
+    }
+
+    tr {
+      border-bottom: 1px solid #c8c8c8;
+    }
+
+    th {
+      text-align: left;
+
+      label {
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+      }
+
+      div {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    thead {
+      display: block;
+
+      tr {
+        display: block;
+
+        th {
+          display: block;
+        }
+      }
+    }
+
+    tbody {
+      display: block;
+      max-height: 195px;
+      overflow-y: scroll;
+      @include scroll-style();
+    }
+
+    td {
+      .display-flex {
+        display: flex;
+        flex-wrap: wrap;
+
+        .bet-type {
+          width: 240px;
+          display: flex;
+
+          input {
+            align-self: flex-start;
+            height: 19.5px;
+          }
+
+          label {
+            align-self: flex-start;
+          }
+        }
+      }
+    }
+
+    td:first-child {
+      width: 80px;
+
+      label {
+        font-weight: bold;
+        width: 80px;
+      }
+    }
+
+    .last-group {
+      border-bottom: none;
+    }
+  }
+}

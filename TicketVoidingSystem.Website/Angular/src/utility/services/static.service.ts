@@ -101,6 +101,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.RECOVER_TICKET;
   }
 
+  static isLikelyWrongMarketOffered(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED || issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
+  }
+
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
@@ -143,6 +147,8 @@ export class StaticService {
       return requestDetail.recoverTicketModel.subIssueTypeId;
     } else if (this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.abnormalBetModel.subIssueTypeId;
+    } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -171,7 +177,8 @@ export class StaticService {
       this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())
       || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
       || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())
-      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
+      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())
+      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {
       return requestDetail.event.eventDate;

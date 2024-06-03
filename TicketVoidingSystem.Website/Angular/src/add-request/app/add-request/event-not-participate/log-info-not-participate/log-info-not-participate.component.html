@@ -2,7 +2,7 @@
   <strong>Main Event - Log Info</strong>
   <div class="log-info">
     <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
-      <detail-not-participate [logInfoDetail]="logInfo.logInfoDetail"></detail-not-participate>
+      <log-info-ticket-count [model]="logInfo.logInfoDetail"></log-info-ticket-count>
       <ng-container *ngIf="logInfo.messageValidationLogInfo?.length > 0">
         <div class="message">
           <span *ngFor="let msg of logInfo.messageValidationLogInfo">

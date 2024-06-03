@@ -41,13 +41,13 @@ public class ReducedOverBetTypesServiceTests
             new () { BetTypeId = 1 },
             new () { BetTypeId = 2 }
         };
-        repository.GetBetTypesHaveTicketsForTvs(Arg.Any<int>())
+        repository.GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), null, null)
             .ReturnsForAnyArgs(data);
         // Act
         var actual = await service.GetReducedOverBetTypesHavesTickets(models, 1);
 
         // Assert
-        await repository.Received(1).GetBetTypesHaveTicketsForTvs(Arg.Any<int>());
+        await repository.Received(1).GetBetTypesHaveTicketsForTvs(Arg.Any<int>(), null, null);
         AssertExtension.Equal(expected, actual);
     }
 }

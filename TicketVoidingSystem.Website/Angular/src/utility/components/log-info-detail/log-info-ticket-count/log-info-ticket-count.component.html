@@ -1,0 +1,7 @@
+<div *ngIf="model">
+  Void time: <strong>{{displayFullDateTimeFormat(model.voidFromTime)}} - {{displayFullDateTimeFormat(model.voidToTime)}}</strong><br />
+  Affected Single Count: <strong>{{model.singleCount}}</strong>
+  <span *ngIf="isShowCountInfo(model.cashOutCount, model.settleCount, model.instantlySettleCount)" class="text-red"
+  [innerHTML]="countInfoContent(model.cashOutCount, model.settleCount, model.instantlySettleCount) | sanitizeHtml"></span>,
+  Parlay Count: <strong>{{model.mainParlayCount}}</strong><br />
+</div>

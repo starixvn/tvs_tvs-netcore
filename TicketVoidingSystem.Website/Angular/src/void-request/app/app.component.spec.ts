@@ -111,7 +111,7 @@ describe('AppComponent', () => {
     instance.requestDetail = Helper.fakeRequestDetailViewModel;
     instance.requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
 
-    const actual = instance.isShowVoidDangerAccepted();
+    const actual = instance.isLikelyVoidDangerAccepted();
 
     expect(actual).toBeFalsy();
   });
@@ -121,7 +121,7 @@ describe('AppComponent', () => {
     instance.requestDetail = Helper.fakeRequestDetailViewModel;
     instance.requestDetail.request = null;
 
-    const actual = instance.isShowVoidDangerAccepted();
+    const actual = instance.isLikelyVoidDangerAccepted();
 
     expect(actual).toBeFalsy();
   });

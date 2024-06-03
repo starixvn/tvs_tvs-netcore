@@ -101,6 +101,16 @@ public static class IssueTypeFunctionKeysConstant
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.Abandoned,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.Abandoned, IssueTypeName = "Abandoned" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.WrongMarketOffered,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.WrongMarketOffered, IssueTypeName = "Wrong Market Offered" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.TechnicalError,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.TechnicalError, IssueTypeName = "Technical Error" }
                     }
                 };
 

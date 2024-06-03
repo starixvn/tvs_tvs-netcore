@@ -7,6 +7,7 @@ public class GetLogInfoModel
     public LogInfoDetail? LogInfoDetail { get; set; }
     public Validation? Validation { get; set; }
     public IEnumerable<TicketRequest>? TicketRequest { get; set; }
+    public IEnumerable<BetTypeCount>? BetTypeCount { get; set; }
 }
 
 public class GetLogInfoViewModel
@@ -56,4 +57,10 @@ public class Validation
     public bool IsExistedInOtherRequest { get; set; }
     public bool IsPoolHouseAffected { get; set; }
     public bool IsExistsSecondAccept { get; set; }
+}
+
+public class BetTypeCount
+{
+    public string Name { get; set; }
+    public int Count { get; set; }
 }

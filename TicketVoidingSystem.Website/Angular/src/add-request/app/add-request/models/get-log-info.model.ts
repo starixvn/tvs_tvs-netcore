@@ -12,6 +12,7 @@ export class GetLogInfoModel {
   validation: Validation;
   ticketRequest: TicketRequest[];
   logInfoDetail: LogInfoDetail;
+  betTypeCount: BetTypeCount[];
 }
 
 export class Validation {
@@ -27,6 +28,11 @@ export class TicketRequest {
   transIds: string;
   requestId: number;
   createdBy: string;
+}
+
+export class BetTypeCount {
+  name: string;
+  count: number;
 }
 
 export class ValidationMatchModel {
