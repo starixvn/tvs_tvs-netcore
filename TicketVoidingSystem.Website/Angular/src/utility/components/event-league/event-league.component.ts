@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCh
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { MatchModel } from 'src/utility/models/match.model';
 import { LABELS } from '../../../utility/constants/labels';
-import { MatchInfo } from '../../../utility/models/event.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { Tooltip } from '../tooltip/tooltip.model';
 
@@ -16,10 +16,10 @@ import { Tooltip } from '../tooltip/tooltip.model';
 export class EventLeagueComponent implements OnChanges {
   @Input() isEdit: boolean;
   @Input() matchId: number;
-  @Output() changeEvent = new EventEmitter<MatchInfo>();
+  @Output() changeEvent = new EventEmitter<MatchModel>();
 
-  selectedMatch = new MatchInfo();
-  matches: MatchInfo[];
+  selectedMatch = new MatchModel();
+  matches: MatchModel[];
   isBlock: boolean;
   tooltip = new Tooltip();
   validationMessage: string;
@@ -75,12 +75,12 @@ export class EventLeagueComponent implements OnChanges {
     this.validationMessage = '';
   }
 
-  onChangeMatchEvent(match: MatchInfo) {
+  onChangeMatchEvent(match: MatchModel) {
     this.selectedMatch = match;
     this.changeEvent.emit(match);
   }
 
-  private updateInfoWithOnlyOneMatch(match: MatchInfo): void {
+  private updateInfoWithOnlyOneMatch(match: MatchModel): void {
     if (match) {
       this.matches = [match];
       this.selectedMatch = match;
@@ -91,7 +91,7 @@ export class EventLeagueComponent implements OnChanges {
 
   updateUndefinedMatchAndLeague() {
     this.matches = [];
-    this.selectedMatch = new MatchInfo();
+    this.selectedMatch = new MatchModel();
   }
 
   isMatchIdValid(): boolean {

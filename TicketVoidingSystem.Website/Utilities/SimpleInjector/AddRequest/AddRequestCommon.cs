@@ -28,7 +28,6 @@ public static class AddRequestCommon
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
         services.AddTransient<NotParticipateBetTypesService, NotParticipateBetTypesServiceImp>();
         services.AddTransient<WrongMarketOfferedService, WrongMarketOfferedServiceImp>();
-        services.AddTransient<AdvancedModeService, AdvancedModeServiceImp>();
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }
