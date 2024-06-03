@@ -66,7 +66,6 @@ public class SendLetstalkAfterAddServiceTests
     public void Execute_InValidQuery_NotCalledExpected()
     {
         // Arrange
-        var query = new AddRequestQuery();
 
         // Act
         _ = service.Execute(new AbnormalBetViewModel(), 1223);

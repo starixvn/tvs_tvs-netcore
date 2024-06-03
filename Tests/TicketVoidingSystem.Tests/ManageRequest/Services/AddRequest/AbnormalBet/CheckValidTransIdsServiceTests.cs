@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -38,31 +37,25 @@ public class CheckValidTransIdsServiceTests
     {
         // Arrange
         var request = new CheckValidTransIdsRequest();
-        var result = new IEnumerable<object>[6];
         var validation = new ValidationAbnormalBet();
-        var transInfoAddRequestModel = new TransInfoAddRequestModel
-        { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
-        result[0] = new[] { new MatchInfoAddRequest() };
-        result[1] = new[] { validation };
-        result[2] = new[] { transInfoAddRequestModel };
-        result[3] = new[] { "123" };
-        result[4] = new[] { new GetAbnormalBetTicketModel() };
-        result[5] = new[] { new SendLetstalkModel() };
+        var transInfoAddRequestModel = new TransInfoAddRequestModel { UnMarkTransIds = "123", RemoveTransIds = "123", MarkTransIds = "456" };
+        var matchInfoAddRequests = new[] { new MatchInfoAddRequest() };
+        var validationAbnormalBets = new[] { validation };
+        var transInfoAddRequestModels = new[] { transInfoAddRequestModel };
+        var transInfoJsonOutputList = new[] { "123" };
+        var abnormalBetTicketRequests = new[] { new GetAbnormalBetTicketModel() };
+        var sendLetstalkModels = new[] { new SendLetstalkModel() };
+        var abnormalBetTicketModels = new List<AbnormalBetTicketViewModel> { new() };
         var match = new MatchInfoAddRequest();
-        var abnormalBetTicketRequests = new List<AbnormalBetTicketViewModel>();
-        var mappingTypes = new[]
-        {
-            typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
-        };
+
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
             .ReturnsForAnyArgs(match);
-        repository.FetchMultipleAsync(Arg.Any<CheckValidTransIdsCriteria>(), mappingTypes)
-            .ReturnsForAnyArgs(result);
+        repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, string, GetAbnormalBetTicketModel, SendLetstalkModel>(Arg.Any<CheckValidTransIdsCriteria>())
+            .ReturnsForAnyArgs((matchInfoAddRequests, validationAbnormalBets, transInfoAddRequestModels, transInfoJsonOutputList, abnormalBetTicketRequests, sendLetstalkModels));
         getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
             .ReturnsForAnyArgs(new List<string> { "123", "" });
         mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>())
-            .ReturnsForAnyArgs(abnormalBetTicketRequests);
+            .ReturnsForAnyArgs(abnormalBetTicketModels);
 
         var viewModel = new CheckValidTransIdsViewModel
         {
@@ -75,8 +68,8 @@ public class CheckValidTransIdsServiceTests
                 MarkTransIds = "456",
                 TransInfoJson = "123"
             },
-            AbnormalBetTicketRequests = abnormalBetTicketRequests,
-            SendLetstalkModels = (IEnumerable<SendLetstalkModel>)result[5]
+            AbnormalBetTicketRequests = abnormalBetTicketModels,
+            SendLetstalkModels = sendLetstalkModels
         };
 
         // Act
@@ -91,29 +84,24 @@ public class CheckValidTransIdsServiceTests
     {
         // Arrange
         var request = new CheckValidTransIdsRequest();
-        var result = new IEnumerable<object>[6];
         var validation = new ValidationAbnormalBet();
-        result[0] = new[] { new MatchInfoAddRequest() };
-        result[1] = new[] { validation };
-        result[2] = Array.Empty<object>();
-        result[3] = new[] { "123" };
-        result[4] = new[] { new GetAbnormalBetTicketModel() };
-        result[5] = new[] { new SendLetstalkModel() };
+        var matchInfoAddRequests = new[] { new MatchInfoAddRequest() };
+        var validationAbnormalBets = new[] { validation };
+        var transInfoAddRequestModels = new[] { new TransInfoAddRequestModel() };
+        var transInfoJsonOutputList = new[] { "123" };
+        var abnormalBetTicketRequests = new[] { new GetAbnormalBetTicketModel() };
+        var sendLetstalkModels = new[] { new SendLetstalkModel() };
+        var abnormalBetTicketModels = new List<AbnormalBetTicketViewModel>();
         var match = new MatchInfoAddRequest();
-        var abnormalBetTicketRequests = new List<AbnormalBetTicketViewModel>();
-        var mappingTypes = new[]
-        {
-            typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
-        };
+
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
             .ReturnsForAnyArgs(match);
-        repository.FetchMultipleAsync(Arg.Any<CheckValidTransIdsCriteria>(), mappingTypes)
-            .ReturnsForAnyArgs(result);
+        repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, string, GetAbnormalBetTicketModel, SendLetstalkModel>(Arg.Any<CheckValidTransIdsCriteria>())
+            .ReturnsForAnyArgs((matchInfoAddRequests, validationAbnormalBets, transInfoAddRequestModels, transInfoJsonOutputList, abnormalBetTicketRequests, sendLetstalkModels));
         getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
             .ReturnsForAnyArgs(new List<string> { "123", "" });
         mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(Arg.Any<IEnumerable<GetAbnormalBetTicketModel>>())
-            .ReturnsForAnyArgs(abnormalBetTicketRequests);
+            .ReturnsForAnyArgs(abnormalBetTicketModels);
 
         var viewModel = new CheckValidTransIdsViewModel
         {
@@ -126,8 +114,8 @@ public class CheckValidTransIdsServiceTests
                 MarkTransIds = null,
                 TransInfoJson = "123"
             },
-            AbnormalBetTicketRequests = abnormalBetTicketRequests,
-            SendLetstalkModels = (IEnumerable<SendLetstalkModel>)result[5]
+            AbnormalBetTicketRequests = abnormalBetTicketModels,
+            SendLetstalkModels = sendLetstalkModels
         };
 
         // Act

@@ -61,7 +61,7 @@ public class VoidTicketsServiceTest
         var repository = Substitute.For<VoidByCurrencyRepository>();
         repository
             .When(x => x.VoidTickets(Arg.Any<VoidTicketsQuery>()))
-            .Do(y => throw exception);
+            .Do(_ => throw exception);
         var service = CreateService(repository);
 
         // Act
@@ -82,7 +82,7 @@ public class VoidTicketsServiceTest
         var loggingService = Substitute.For<LoggingService>();
         repository
             .When(x => x.VoidTickets(Arg.Any<VoidTicketsQuery>()))
-            .Do(y => throw exception);
+            .Do(_ => throw exception);
         var service = CreateService(repository, loggingService);
 
         // Act

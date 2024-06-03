@@ -14,7 +14,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.NumberGame.Handlers;
 
-
 public class VoidTicketsHandlerTest
 {
     [Fact]
@@ -115,7 +114,7 @@ public class VoidTicketsHandlerTest
         var loggingService = Substitute.For<LoggingService>();
         voidService.VoidTickets(message).ReturnsForAnyArgs((emailTickets, new Result()));
         voidService.When(x => x.SendEmail(message, emailTickets))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var handler = new VoidTicketsHandler(voidService, loggingService);
 
         // Act

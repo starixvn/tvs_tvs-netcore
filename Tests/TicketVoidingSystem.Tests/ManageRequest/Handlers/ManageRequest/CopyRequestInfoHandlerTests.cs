@@ -33,14 +33,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
             var matchService = Substitute.For<MatchService>();
             var requestInfoList = new List<RequestInfoForCopy> { copyRequestInfoModel };
             var betTypeTickets = new List<BetTypeTicketsInfo> { new() };
-            repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request, CancellationToken.None).ReturnsForAnyArgs((requestInfoList, betTypeTickets));
+            repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request).ReturnsForAnyArgs((requestInfoList, betTypeTickets));
             var handler = new CopyRequestInfoHandler(repository, matchService);
 
             // Act
             _ = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            await repository.Received(1).FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request, CancellationToken.None);
+            await repository.Received(1).FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request);
             matchService.Received(1).UpdateMatchInfoFromRemotingRef(Arg.Any<Match>());
         }
     }

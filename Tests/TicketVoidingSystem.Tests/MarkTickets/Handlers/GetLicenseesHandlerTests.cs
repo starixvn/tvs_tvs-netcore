@@ -27,8 +27,7 @@ public class GetLicenseesHandlerTests
 
         // Assert
         var groupLicensee = actual.FirstOrDefault();
-        await repository.Received(1).FetchAsync<Licensee>(Arg.Any<GetLicenseesRequest>(),
-            Arg.Any<CancellationToken>());
+        await repository.Received(1).FetchAsync<Licensee>(Arg.Any<GetLicenseesRequest>());
         Assert.Equal("Credit", groupLicensee.GroupName);
         Assert.Equal(licensees, groupLicensee.Licensees);
     }

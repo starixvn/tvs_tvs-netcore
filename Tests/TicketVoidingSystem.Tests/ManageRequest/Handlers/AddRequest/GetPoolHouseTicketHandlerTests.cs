@@ -62,14 +62,11 @@ public class GetPoolHouseTicketHandlerTests
         var betTypes = new List<BetTypeModel> { new() { GroupName = "1" }, new() { GroupName = "2" } };
         var tickets = new List<GetTicketModel> { new() { GroupName = "1" }, new() { GroupName = "2" } };
         var ticketsViewModel = new TicketsViewModel();
-        repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(Arg.Any<GetPoolHouseTicketCriteria>(),
-                CancellationToken.None)
+        repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(Arg.Any<GetPoolHouseTicketCriteria>())
             .ReturnsForAnyArgs((betTypes, tickets));
-        getPoolHouseTicketService
-            .GetTicketsViewModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<GetPoolHouseTicketRequest>())
+        getPoolHouseTicketService.GetTicketsViewModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<GetPoolHouseTicketRequest>())
             .ReturnsForAnyArgs(ticketsViewModel);
-        mapper.Map<GetPoolHouseTicketCriteria>(Arg.Any<GetPoolHouseTicketQuery>())
-            .ReturnsForAnyArgs(new GetPoolHouseTicketCriteria());
+        mapper.Map<GetPoolHouseTicketCriteria>(Arg.Any<GetPoolHouseTicketQuery>()).ReturnsForAnyArgs(new GetPoolHouseTicketCriteria());
         var viewModel = new GetPoolHouseTicketViewModel
         {
             GroupBetTypes = new List<GroupBetTypeModel>
@@ -101,8 +98,7 @@ public class GetPoolHouseTicketHandlerTests
         var betTypes = new List<BetTypeModel> { new() { GroupName = "1" }, new() { GroupName = "2" } };
         var tickets = new List<GetTicketModel> { new() { GroupName = "1" }, new() { GroupName = "2" } };
         var ticketsViewModel = new TicketsViewModel();
-        repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(Arg.Any<GetPoolHouseTicketCriteria>(),
-                CancellationToken.None)
+        repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(Arg.Any<GetPoolHouseTicketCriteria>())
             .ReturnsForAnyArgs((betTypes, tickets));
         getPoolHouseTicketService
             .GetTicketsViewModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<GetPoolHouseTicketRequest>())

@@ -49,21 +49,13 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var logInfos = new List<LogInfoDetail> { logInfo };
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>();
         var transInfoModels = new List<string> { "123" };
-        var mappingTypes = new[]
-        {
-            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
-            typeof(string)
-        };
-
-        IEnumerable<object>[] fakeData =
-            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
 
         var viewModel = new WrongScoreInfoViewModel
         {
             ActualScore = "1-1",
-            EventDate = new DateTime(2020, 06, 16),
-            FilterFromTransTime = new DateTime(2020, 06, 15),
-            FilterToTransTime = new DateTime(2020, 06, 17),
+            EventDate = DateTimeOffset.Now.DateTime,
+            FilterFromTransTime = DateTimeOffset.Now.DateTime,
+            FilterToTransTime = DateTimeOffset.Now.DateTime,
             MatchId = matchId,
             SubIssueTypeId = 7,
             ScoreId = scoreId,
@@ -76,7 +68,8 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             MatchId = matchId,
             KickOffTime = DateTime.Now
         };
-        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
         var transInfoJson = new List<string> { issueTypeId.ToString() };
@@ -121,14 +114,6 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
             { new() { MarkTransIds = "1232" } };
         var transInfoModels = new List<string> { "123" };
-        var mappingTypes = new[]
-        {
-            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
-            typeof(string)
-        };
-
-        IEnumerable<object>[] fakeData =
-            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
 
         var request = new GetLogInfoRequest
         {
@@ -146,7 +131,8 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             RedCardModels = new List<DangerAcceptedViewModel> { new() { MatchId = matchId } },
             DangerAcceptedModels = new List<DangerAcceptedViewModel> { new() { MatchId = matchId } }
         };
-        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
         var transInfoJson = new List<string> { issueTypeId.ToString() };
@@ -179,14 +165,6 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
         var transInfoAddRequestModels = new List<TransInfoAddRequestModel>
             { new() { MarkTransIds = "1232" } };
         var transInfoModels = new List<string> { "123" };
-        var mappingTypes = new[]
-        {
-            typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel),
-            typeof(string)
-        };
-
-        IEnumerable<object>[] fakeData =
-            { validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels };
 
         var request = new GetLogInfoRequest
         {
@@ -196,7 +174,8 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
             EarlyKickOffModels = new List<EarlyKickOffViewModel> { new() { MatchId = matchId } },
             NotParticipateModels = new List<NotParticipateViewModel> { new() { MatchId = matchId } }
         };
-        repository.FetchMultipleAsync(Arg.Any<GetLogInfoCriteria>(), mappingTypes).ReturnsForAnyArgs(fakeData);
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string>(Arg.Any<GetLogInfoCriteria>())
+            .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, transInfoModels));
         session.UserId.ReturnsForAnyArgs(userId);
         mapper.Map<GetLogInfoCriteria>(Arg.Any<GetLogInfoQuery>()).ReturnsForAnyArgs(new GetLogInfoCriteria());
         var transInfoJson = new List<string> { issueTypeId.ToString() };

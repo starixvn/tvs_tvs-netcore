@@ -65,7 +65,7 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.VoidTickets
             var repository = Substitute.For<VoidByBetIdRepository>();
             repository
                 .When(x => x.VoidTickets(Arg.Any<VoidTicketsQuery>()))
-                .Do(y => throw exception);
+                .Do(_ => throw exception);
             var service = CreateService(repository);
 
             // Act
@@ -90,7 +90,7 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Services.VoidTickets
             var loggingService = Substitute.For<LoggingService>();
             repository
                 .When(x => x.VoidTickets(Arg.Any<VoidTicketsQuery>()))
-                .Do(y => throw exception);
+                .Do(_ => throw exception);
             var service = CreateService(repository, loggingService);
 
             // Act

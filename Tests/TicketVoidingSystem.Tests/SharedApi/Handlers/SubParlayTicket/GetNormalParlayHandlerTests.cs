@@ -29,7 +29,7 @@ public class GetNormalParlayHandlerTests
         var request = new GetNormalParlayRequest();
         var expected = new List<TicketViewModel>();
         var tickets = new List<TicketModel>();
-        ticketsService.GetTickets(request.RefNo, CancellationToken.None).ReturnsForAnyArgs(tickets);
+        ticketsService.GetTickets(request.RefNo).ReturnsForAnyArgs(tickets);
         ticketsService.GetTickets(tickets).ReturnsForAnyArgs(expected);
 
         // Act

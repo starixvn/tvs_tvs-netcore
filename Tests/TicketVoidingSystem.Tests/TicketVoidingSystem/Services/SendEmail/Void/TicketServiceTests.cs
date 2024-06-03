@@ -25,7 +25,6 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             // Arrange
             var item = new TicketEmailModel { TransDate = new DateTime(2022, 2, 2, 2, 2, 2) };
             var match = new Match();
-            var site = new SiteEmail();
             betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
                 .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
             var expected = new TicketEmailViewModel
@@ -51,7 +50,6 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             // Arrange
             var item = new TicketEmailModel { TransDate = new DateTime(2022, 2, 2, 2, 2, 2), Status = TicketStatus.Running };
             var match = new Match();
-            var site = new SiteEmail();
             betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
                 .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
 
@@ -71,7 +69,6 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.SendEmail.Void
             // Arrange
             var item = new TicketEmailModel { IsLive = isLive, BetTypeId = betTypeId, IsMixParlay = isMixParlay, LiveHomeScore = 123, LiveAwayScore = 456 };
             var match = new Match();
-            var site = new SiteEmail();
             betListCoreService.BuildTicket(Arg.Any<TicketEmailModel>(), Arg.Any<Match>(), true)
                 .ReturnsForAnyArgs(new TicketEmailViewModel { Stake = "Rebate1" });
 

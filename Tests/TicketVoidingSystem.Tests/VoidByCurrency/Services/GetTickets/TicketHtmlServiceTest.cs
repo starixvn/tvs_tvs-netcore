@@ -7,7 +7,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Services.GetTickets;
 
-
 public class TicketHtmlServiceTest
 {
     [Theory]
@@ -20,7 +19,7 @@ public class TicketHtmlServiceTest
         {
             IsSecondAcceptFlag = true,
             Status = string.Empty,
-            TransDate = new DateTime(2020, 08, 20, 10, 000, 000)
+            TransDate = DateTimeOffset.Now.DateTime
         };
         var userPermission = new UserPermission { SettledTicket = true };
         var checkBoxService = Substitute.For<CheckBoxService>();
@@ -37,18 +36,15 @@ public class TicketHtmlServiceTest
         Assert.Equal(expected, actual.IsDisable);
     }
 
-    [Theory]
-    [InlineData("running", "1.98", "0")]
-    [InlineData("waiting", "1.98", "0")]
-    [InlineData("WON", "1.98", "0")]
-    public void GetTicketDetail_TicketIsRunningOrWaiting_WinLossDisplayHyphen(string status, string winlost, string expected)
+    [Fact]
+    public void GetTicketDetail_TicketIsRunningOrWaiting_WinLossDisplayHyphen()
     {
         // Arrange
         var item = new GetTicketModel
         {
             IsSecondAcceptFlag = true,
             Status = string.Empty,
-            TransDate = new DateTime(2020, 08, 20, 10, 000, 000)
+            TransDate = DateTimeOffset.Now.DateTime
         };
         var userPermission = new UserPermission { SettledTicket = true };
         var betListCoreService = Substitute.For<BetListCoreService>();
@@ -61,7 +57,7 @@ public class TicketHtmlServiceTest
         var actual = service.GetTicketDetail(item, userPermission, true);
 
         // Assert
-        Assert.Equal(expected, actual.WinLoss);
+        Assert.Equal("0", actual.WinLoss);
     }
 
     [Theory]
@@ -74,7 +70,7 @@ public class TicketHtmlServiceTest
         {
             IsSecondAcceptFlag = isSecondAcceptFlag,
             Status = string.Empty,
-            TransDate = new DateTime(2020, 08, 20, 10, 000, 000)
+            TransDate = DateTimeOffset.Now.DateTime
         };
         var userPermission = new UserPermission { SettledTicket = true };
         var betListCoreService = Substitute.For<BetListCoreService>();
@@ -100,7 +96,7 @@ public class TicketHtmlServiceTest
         {
             IsSecondAcceptFlag = true,
             Status = string.Empty,
-            TransDate = new DateTime(2020, 08, 20, 10, 000, 000)
+            TransDate = DateTimeOffset.Now.DateTime
         };
         var betListCoreService = Substitute.For<BetListCoreService>();
         betListCoreService.GetOutrightTicket(Arg.Any<GetTicketModel>()).ReturnsForAnyArgs(new TicketViewModel());

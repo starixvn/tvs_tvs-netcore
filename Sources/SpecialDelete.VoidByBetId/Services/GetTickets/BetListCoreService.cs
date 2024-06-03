@@ -48,9 +48,9 @@ public class BetListCoreServiceImp : BetListCoreService
     private string GetChoiceHtml(Ticket ticket, TicketHelper ticketHelper, GetTicketModel item)
     {
         var choiceBlock = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        var choiceWithRefnoInEvent = choiceBlock.Replace("divEvent_0", $"divEvent_{item.RefNo}");
-        var choiceWithRefnoInOfferName = choiceWithRefnoInEvent.Replace("combinationOfferName_0", $"combinationOfferName_{item.RefNo}");
-        return choiceWithRefnoInOfferName + $"<div id='divEvent_{item.RefNo}'></div>";
+        var choiceWithRefNoInEvent = choiceBlock.Replace("divEvent_0", $"divEvent_{item.RefNo}");
+        var choiceWithRefNoInOfferName = choiceWithRefNoInEvent.Replace("combinationOfferName_0", $"combinationOfferName_{item.RefNo}");
+        return choiceWithRefNoInOfferName + $"<div id='divEvent_{item.RefNo}'></div>";
     }
 
     private Ticket SetValue(GetTicketModel item)

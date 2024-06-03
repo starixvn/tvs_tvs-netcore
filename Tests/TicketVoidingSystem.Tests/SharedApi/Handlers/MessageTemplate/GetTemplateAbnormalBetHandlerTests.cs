@@ -22,21 +22,16 @@ public class GetTemplateAbnormalBetHandlerTests
     {
         // Arrange
         handler = new GetTemplateAbnormalBetHandler(repository);
-        var cancellationToken = CancellationToken.None;
-        repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), cancellationToken)
-            .Returns(new List<SubIssueType>());
-        repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria(), cancellationToken)
-            .Returns(new List<TemplateSetting>());
-        repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria(), cancellationToken)
-            .Returns(new List<TemplateModel>());
+        repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria()).Returns(new List<SubIssueType>());
+        repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria()).Returns(new List<TemplateSetting>());
+        repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria()).Returns(new List<TemplateModel>());
 
         // Act
         _ = await handler.Handle(null, CancellationToken.None);
 
         // Assert
         await repository.Received(1).FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>());
-        await repository.Received(1)
-            .FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>());
+        await repository.Received(1).FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>());
         await repository.Received(1).FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>());
     }
 }

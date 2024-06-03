@@ -30,6 +30,6 @@ public class GetOddsInfoHandlerTests
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await repository.Received().FetchAsync<OddsInfoViewModel>(Arg.Any<GetOddsInfoCriteria>(), CancellationToken.None);
+        await repository.Received().FetchAsync<OddsInfoViewModel>(Arg.Any<GetOddsInfoCriteria>());
     }
 }

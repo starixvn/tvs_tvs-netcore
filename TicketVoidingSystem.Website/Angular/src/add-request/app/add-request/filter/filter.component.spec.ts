@@ -18,6 +18,7 @@ import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
 import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 
 class Helper {
   static readonly urlNotAuthorizedPage = 'Home/NotAuthorized';
@@ -903,7 +904,12 @@ describe('FilterComponent', () => {
         }
       });
 
-    [1, 8, 9, 13, 10, 4, 5, 6, 7, 11, 15, 3, 17, 19].forEach(issueId => {
+    [IssueTypeConstant.DANGER_ACCEPTED, IssueTypeConstant.EARLY_KICK_OFF, IssueTypeConstant.WRONG_KICK_OFF, 
+      IssueTypeConstant.ABNORMAL_ACCOUNT, IssueTypeConstant.RED_CARD, IssueTypeConstant.WRONG_HDP, 
+      IssueTypeConstant.WRONG_1ST_HDP, IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU, 
+      IssueTypeConstant.ABNORMAL_BET, IssueTypeConstant.WRONG_SCORE, IssueTypeConstant.WRONG_ODDS, 
+      IssueTypeConstant.ABANDONED, IssueTypeConstant.DUPLICATE_TICKETS, IssueTypeConstant.NOT_PARTICIPATE, 
+      IssueTypeConstant.ARCHIVED_TICKET, IssueTypeConstant.REDUCED_OVER].forEach(issueId => {
       instance.model.issueTypeId = issueId.toString();
 
       instance['setWidthControlByIssueType']();

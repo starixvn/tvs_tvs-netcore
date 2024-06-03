@@ -13,7 +13,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.UploadBatchMessage.Services;
 
-
 public class BatchMessageServiceTest
 {
     private static BatchMessageServiceImp CreateService(UploadBatchMessageRepository repository)
@@ -98,7 +97,7 @@ public class BatchMessageServiceTest
         var messageItemService = Substitute.For<MessageItemService>();
         messageItemService
             .When(x => x.CreateMessageItems(Arg.Any<IEnumerable<ReceivedUser>>(), Arg.Any<int>()))
-            .Do(y => throw exception);
+            .Do(_ => throw exception);
         var loggingService = Substitute.For<LoggingService>();
         var service = new BatchMessageServiceImp(
             repository,

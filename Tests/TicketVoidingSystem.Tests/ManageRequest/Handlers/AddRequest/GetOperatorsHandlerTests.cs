@@ -34,8 +34,7 @@ public class GetOperatorsHandlerTests
             new() { MatchId = 1, TraderID = 1, TraderName = "1", SuspenderID = 2, SuspenderName = "2" },
             new()
         };
-        repository.FetchAsync<OperatorInfoModel>(Arg.Any<GetOperatorsRequest>(), CancellationToken.None)
-            .ReturnsForAnyArgs(data);
+        repository.FetchAsync<OperatorInfoModel>(Arg.Any<GetOperatorsRequest>()).ReturnsForAnyArgs(data);
         var viewModel = new List<OperatorInfo>
         {
             new()
@@ -72,8 +71,7 @@ public class GetOperatorsHandlerTests
             MatchIds = "1"
         };
         var data = new List<OperatorInfoModel>();
-        repository.FetchAsync<OperatorInfoModel>(Arg.Any<GetOperatorsRequest>(), CancellationToken.None)
-            .ReturnsForAnyArgs(data);
+        repository.FetchAsync<OperatorInfoModel>(Arg.Any<GetOperatorsRequest>()).ReturnsForAnyArgs(data);
         var viewModel = new List<OperatorInfo>();
         viewModel.Insert(0, OperatorConstant.SuspenderNA);
         viewModel.Insert(0, OperatorConstant.TraderNA);

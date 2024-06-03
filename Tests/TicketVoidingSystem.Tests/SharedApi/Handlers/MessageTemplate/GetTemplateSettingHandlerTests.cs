@@ -44,14 +44,9 @@ public class GetTemplateSettingHandlerTests
             TemplateSettings = templateSettings
         };
 
-        repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>(), Arg.Any<CancellationToken>())
-            .Returns(templateModels);
-
-        repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>(), Arg.Any<CancellationToken>())
-            .Returns(templateSettings);
-
-        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>())
-            .Returns(new MessageTemplateViewModel());
+        repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>()).Returns(templateModels);
+        repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>()).Returns(templateSettings);
+        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>()).Returns(new MessageTemplateViewModel());
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -97,14 +92,9 @@ public class GetTemplateSettingHandlerTests
             TemplateSettings = templateSettings
         };
 
-        repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>(), Arg.Any<CancellationToken>())
-            .Returns(templateModels);
-
-        repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>(), Arg.Any<CancellationToken>())
-            .Returns(templateSettings);
-
-        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>())
-            .Returns(new MessageTemplateViewModel());
+        repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>()).Returns(templateModels);
+        repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>()).Returns(templateSettings);
+        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>()).Returns(new MessageTemplateViewModel());
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);

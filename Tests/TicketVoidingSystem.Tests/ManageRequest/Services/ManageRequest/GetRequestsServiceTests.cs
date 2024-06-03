@@ -188,6 +188,6 @@ public class GetRequestsServiceTests
         var actual = await service.GetRequests(query);
 
         // Assert
-        Assert.Equal(1, actual.Item1.Count());
+        Assert.Single(actual.Item1);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -30,31 +29,12 @@ public class ValidationTicketsServiceTests
             CricketTickets = new List<BetId> { new() { TransId = "5" }, new() { TransId = "6", SiteDbGroupId = 1 } },
             CancelCashOutTickets = new List<BetId> { new() { TransId = "7" }, new() { TransId = "8", SiteDbGroupId = 1 } },
         };
-        var mappingTypes = new[] {
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel)
-        };
-        IEnumerable<object>[] results = {
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()}
-        };
+
+        var results = new List<RequestDetailTicketModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();
         var mapTicketsService = Substitute.For<MapTicketsService>();
-        repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes).ReturnsForAnyArgs(results);
+        repository.FetchAsync<RequestDetailTicketModel>(Arg.Any<CheckTicketsAllowToVoidCriteria>())
+            .ReturnsForAnyArgs(results);
         mapTicketsService.MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), 0, issueTypeId).ReturnsForAnyArgs(new List<RequestDetailTicketModel>());
         var service = new ValidationTicketsServiceImp(repository, mapTicketsService);
 
@@ -63,7 +43,7 @@ public class ValidationTicketsServiceTests
 
         // Assert
         mapTicketsService.Received(4).MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), 0, issueTypeId);
-        await repository.Received().FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), Arg.Any<Type[]>());
+        await repository.Received(1).FetchAsync<RequestDetailTicketModel>(Arg.Any<CheckTicketsAllowToVoidCriteria>());
     }
 
     [Fact]
@@ -72,43 +52,32 @@ public class ValidationTicketsServiceTests
         // Arrange
         var query = new InsertQueueQuery
         {
+            RequestId = 73642,
             IssueTypeId = IssueTypeConstant.EarlyKickOffTime,
             SingleTickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2", SiteDbGroupId = 1 } },
             ParlayTickets = new List<BetId> { new() { TransId = "3" }, new() { TransId = "4", SiteDbGroupId = 1 } },
             CricketTickets = new List<BetId> { new() { TransId = "5" }, new() { TransId = "6", SiteDbGroupId = 1 } },
             CancelCashOutTickets = new List<BetId> { new() { TransId = "7" }, new() { TransId = "8", SiteDbGroupId = 1 } },
         };
-        var mappingTypes = new[] {
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel)
-        };
-        IEnumerable<object>[] results = {
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()},
-            new List<RequestDetailTicketModel>{new()}
-        };
+        var tickets = new List<RequestDetailTicketModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();
         var mapTicketsService = Substitute.For<MapTicketsService>();
-        repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes).ReturnsForAnyArgs(results);
+        var expected = new CheckTicketValidationOutput
+        {
+            VoidSingleTickets = tickets,
+            VoidParlayTickets = tickets,
+            VoidCricketTickets = tickets,
+            CancelCOTickets = tickets
+        };
+        mapTicketsService
+            .MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), 73642, IssueTypeConstant.EarlyKickOffTime)
+            .ReturnsForAnyArgs(tickets);
         var service = new ValidationTicketsServiceImp(repository, mapTicketsService);
 
         // Act
-        await service.RecheckTicketsStatus(query, 0);
+        var actual = await service.RecheckTicketsStatus(query, 0);
 
         // Assert
-        await repository.Received(0).FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), Arg.Any<Type[]>());
+        AssertExtension.Equal(expected, actual);
     }
 }

@@ -18,14 +18,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest
             var request = new SaveSubIssueTypeNoteRequest { IssueTypeId = 1 };
             var repository = Substitute.For<IDynamicRepository>();
             var loggingService = Substitute.For<LoggingService>();
-            repository.ExecuteAsync(Arg.Any<SaveSubIssueTypeNoteRequest>(), Arg.Any<CancellationToken>()).ReturnsForAnyArgs(1);
+            repository.ExecuteAsync(Arg.Any<SaveSubIssueTypeNoteRequest>()).ReturnsForAnyArgs(1);
             var handler = new SaveSubIssueTypeNoteHandler(repository, loggingService);
 
             // Act
             var actual = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            await repository.Received(1).ExecuteAsync(Arg.Any<SaveSubIssueTypeNoteCommand>(), Arg.Any<CancellationToken>());
+            await repository.Received(1).ExecuteAsync(Arg.Any<SaveSubIssueTypeNoteCommand>());
             Assert.True(actual.IsSuccessful);
         }
 
@@ -36,7 +36,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest
             var request = new SaveSubIssueTypeNoteRequest { IssueTypeId = 1 };
             var repository = Substitute.For<IDynamicRepository>();
             var loggingService = Substitute.For<LoggingService>();
-            repository.When(x => x.ExecuteAsync(Arg.Any<SaveSubIssueTypeNoteRequest>(), Arg.Any<CancellationToken>())).Throw(_ => exception);
+            repository.When(x => x.ExecuteAsync(Arg.Any<SaveSubIssueTypeNoteRequest>())).Throw(_ => exception);
             var handler = new SaveSubIssueTypeNoteHandler(repository, loggingService);
 
             // Act

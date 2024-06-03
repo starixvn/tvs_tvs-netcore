@@ -17,7 +17,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest
             var request = new GetLastModifiedDateRequest();
             var repository = Substitute.For<IDynamicRepository>();
             var expected = new RequestLastModifiedDate();
-            repository.GetAsync<RequestLastModifiedDate>(Arg.Any<GetLastModifiedDateRequest>(), CancellationToken.None).ReturnsForAnyArgs(expected);
+            repository.GetAsync<RequestLastModifiedDate>(Arg.Any<GetLastModifiedDateRequest>()).ReturnsForAnyArgs(expected);
 
             var handler = new GetLastModifiedDateHandler(repository);
 

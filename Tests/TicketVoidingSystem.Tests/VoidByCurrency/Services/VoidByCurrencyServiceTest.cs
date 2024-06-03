@@ -271,12 +271,11 @@ public class VoidByCurrencyServiceTest
             new() { TransId = "124" },
             new() { TransId = "125" }
         };
-        var model = new VoidTicketsModel { Validation = validation };
+        var model = new VoidTicketsModel { Validation = validation, Tickets = Enumerable.Empty<TicketEmailModel>() };
         var expected = new List<Result>
             { new() { ErrorCode = model.Validation.ErrorCode, ErrorMsg = model.Validation.ErrorMsg } };
-        var query = new VoidTicketsQuery
-        { CricketTransIds = new List<BetId> { new() { TransId = "123" } }, Tickets = tickets };
-        netPositionService.UpdateNetPosition(query.CricketTransIds, "").ReturnsForAnyArgs(true);
+        var query = new VoidTicketsQuery { CricketTransIds = new List<BetId> { new() { TransId = "123" } }, Tickets = tickets };
+        netPositionService.UpdateNetPosition(query.CricketTransIds, NetPositionConstant.ActionVoid).ReturnsForAnyArgs(true);
         voidTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
 
         // Act
@@ -303,7 +302,8 @@ public class VoidByCurrencyServiceTest
         };
         var model = new VoidTicketsModel
         {
-            Validation = validation
+            Validation = validation,
+            Tickets = Enumerable.Empty<TicketEmailModel>()
         };
         var query = new VoidTicketsQuery
         { CricketTransIds = new List<BetId> { new() { TransId = "123" } }, Tickets = tickets };
@@ -370,7 +370,7 @@ public class VoidByCurrencyServiceTest
             });
         voidTicketsService
             .When(x => x.SendMessage(query, Arg.Any<List<TicketEmailModel>>()))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
 
         // Act
         var actual = await service.VoidBet(query);
@@ -402,7 +402,7 @@ public class VoidByCurrencyServiceTest
             });
         voidTicketsService
             .When(x => x.SendMessage(query, Arg.Any<List<TicketEmailModel>>()))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
 
         // Act
         await service.VoidBet(query);

@@ -44,7 +44,6 @@ public class InsertQueueServiceTests
         // Arrange
         var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1, MatchId = 1 };
         var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
-
         var query = new InsertQueueQuery
         {
             SingleTickets = new List<BetId> { betId1, betId2 },
@@ -53,38 +52,9 @@ public class InsertQueueServiceTests
             CricketTickets = new List<BetId> { betId1 },
             IssueTypeId = issueTypeId
         };
-
-        var mappingTypes = new[]
-        {
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel)
-        };
-        var requestDetailTicketModel = new RequestDetailTicketModel { TransId = 123, SiteDbGroupId = 1, RequestId = 1 };
-        var validVoidSingleTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
-        var validVoidParlayTickets = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel };
-        var validVoidCricketTickets = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel, requestDetailTicketModel };
-        var validCancelCOTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
-        var validVoidSingleTickets14 = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel };
-
-        IEnumerable<object>[] expectedTicketTypeModel =
-        {
-            validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
-            validVoidCricketTickets, validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14
-        };
         var mergeTicketsForInsertQueue = new List<RequestDetailTicketModel>();
         insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>())
             .ReturnsForAnyArgs(1);
-        repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes)
-            .ReturnsForAnyArgs(expectedTicketTypeModel);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
@@ -115,37 +85,7 @@ public class InsertQueueServiceTests
             RequestId = 1
         };
 
-        var mappingTypes = new[]
-        {
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel)
-        };
-        var requestDetailTicketModel = new RequestDetailTicketModel { TransId = 123, SiteDbGroupId = 1, RequestId = 1 };
-        var validVoidSingleTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
-        var validVoidParlayTickets = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel };
-        var validVoidCricketTickets = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel, requestDetailTicketModel };
-        var validCancelCOTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
-        var validVoidSingleTickets14 = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel };
-
-        IEnumerable<object>[] expectedTicketTypeModel =
-        {
-            validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
-            validVoidCricketTickets, validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14
-        };
-
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>())
-            .ReturnsForAnyArgs(1);
-        repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes)
-            .ReturnsForAnyArgs(expectedTicketTypeModel);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
@@ -163,7 +103,6 @@ public class InsertQueueServiceTests
         // Arrange
         var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1 };
         var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
-
         var query = new InsertQueueQuery
         {
             SingleTickets = new List<BetId>(),
@@ -174,37 +113,7 @@ public class InsertQueueServiceTests
             RequestId = 1
         };
 
-        var mappingTypes = new[]
-        {
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel),
-            typeof(RequestDetailTicketModel)
-        };
-        var requestDetailTicketModel = new RequestDetailTicketModel { TransId = 123, SiteDbGroupId = 1, RequestId = 1 };
-        var validVoidSingleTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
-        var validVoidParlayTickets = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel };
-        var validVoidCricketTickets = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel, requestDetailTicketModel };
-        var validCancelCOTickets = new List<RequestDetailTicketModel> { requestDetailTicketModel };
-        var validVoidSingleTickets14 = new List<RequestDetailTicketModel>
-            { requestDetailTicketModel, requestDetailTicketModel };
-
-        IEnumerable<object>[] expectedTicketTypeModel =
-        {
-            validVoidSingleTickets, validVoidSingleTickets, validVoidParlayTickets, validVoidParlayTickets,
-            validVoidCricketTickets, validVoidCricketTickets, validCancelCOTickets, validVoidSingleTickets14
-        };
-
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>())
-            .ReturnsForAnyArgs(1);
-        repository.FetchMultipleAsync(Arg.Any<CheckTicketsAllowToVoidCriteria>(), mappingTypes)
-            .ReturnsForAnyArgs(expectedTicketTypeModel);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>()).ReturnsForAnyArgs(1);
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);

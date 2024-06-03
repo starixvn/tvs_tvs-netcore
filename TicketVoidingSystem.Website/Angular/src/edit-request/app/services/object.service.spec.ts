@@ -161,7 +161,8 @@ describe('ObjectService', () => {
       fakeRequestDetailViewModel.event = new RequestEventModel();
       fakeRequestDetailViewModel.event.subIssueTypeId = 11;
       fakeRequestDetailViewModel.event.eventDate = item;
-
+      fakeRequestDetailViewModel.abnormalBetModel = new AbnormalBetModel();
+      fakeRequestDetailViewModel.abnormalBetModel.subIssueTypeId = 1;
       objectService['mapFilter'](requestModel, fakeRequestDetailViewModel);
 
       expect(requestModel.filter.sportType).toEqual(Helper.fakeRequestDetailViewModel.request.sportType);
@@ -211,12 +212,10 @@ describe('ObjectService', () => {
     const args = _.clone(Helper.fakeMapEventArg);
     const abnormalBetModel = new AbnormalBetModel();
     args.detailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
-    objectService['createEventForAbnormalBet'] = jest.fn().mockImplementation(() => abnormalBetModel);
-
+    args.detailViewModel.abnormalBetModel = abnormalBetModel;
     objectService['mapEvent'](args);
 
     expect(args.requestModel.abnormalBetModel).toStrictEqual(abnormalBetModel);
-    expect(args.primitiveProperty.matchId).toBe(Helper.fakeMatchId);
   });
 
   it('#mapEvent should update correct model when isArchivedTicket', async () => {
@@ -359,10 +358,4 @@ describe('ObjectService', () => {
     expect(results.detailViewModel).toStrictEqual(Helper.fakeRequestDetailViewModel);
   });
 
-  it('#createEventForAbnormalBet should return correct model', async () => {
-    const results = objectService['createEventForAbnormalBet'](Helper.fakeRequestDetailViewModel);
-
-    expect(results.matchId).toBe(Helper.fakeRequestDetailViewModel.event.matchId);
-    expect(results.transIds).toBe(Helper.fakeRequestDetailViewModel.event.transIds);
-  });
 });
