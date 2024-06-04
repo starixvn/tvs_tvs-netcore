@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -16,11 +16,12 @@ import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advance
   templateUrl: './advanced-mode.component.html',
   styleUrls: ['./advanced-mode.component.scss']
 })
-export class AdvancedModeComponent implements OnInit {
+export class AdvancedModeComponent {
   @Input() matchId: number;
   @Input() isShowAdvancedModeFilter: boolean;
   @Input() allBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
+  @Output() changeFilterEvent = new EventEmitter();
   betTeams: BetTeamAddRequest[] = [];
   isShowContent = true;
   tooltip = new Tooltip();
@@ -56,14 +57,12 @@ export class AdvancedModeComponent implements OnInit {
     this.baseBetTeams.forEach(x => {
       x.isChecked = this.allBetTypes.some(y => y.id.toString() === x.betTypes);
     })
-    if (matchId) {
-      await this.getSpecialBetTeamCricket(matchId);
-    }
+    await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
   }
 
-  async ngOnInit() {
-    await this.getBetTeam();
+  changeFilter() {
+    this.changeFilterEvent.emit();
   }
 
   async getBetTeam() {
@@ -85,8 +84,10 @@ export class AdvancedModeComponent implements OnInit {
   }
 
   public async getSpecialBetTeamCricket(matchId: number): Promise<void> {
-    const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
-    this.updatePlayerCricket(data);
+    if (this.matchId && (this.baseSpecialBetTypeCricket === undefined || this.baseSpecialBetTypeCricket.length === 0)) {
+      const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
+      this.updatePlayerCricket(data);
+    }
   }
 
   private updateBetTeamByCheckedValue(checkedBetTypesAddRequest: BetTeamAddRequestResult[]) {
@@ -171,12 +172,9 @@ export class AdvancedModeComponent implements OnInit {
   private async changeCheckedBetTypes(betType: BetTypeAddRequest, betTeam: BetTeamAddRequest) {
     this.isShowAdvancedModeFilter = true;
     this.isShowContent = true;
-    //betTeam.resetChecked();
     betTeam.name = betType.name;
     if (AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER.split(',').includes(betType.id.toString()) && betType.isChecked) {
-      if (this.baseSpecialBetTypeCricket === undefined || this.baseSpecialBetTypeCricket.length === 0 ) {
-        await this.getSpecialBetTeamCricket(this.matchId);
-      }
+      await this.getSpecialBetTeamCricket(this.matchId);
       this.renderSelectionCricketWithPlayer(betTeam, this.baseSpecialBetTypeCricket);
     }
   }

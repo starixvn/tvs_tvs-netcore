@@ -67,6 +67,8 @@ export class EventWrongMarketOfferedComponent implements OnInit {
         betTeamsResult: this.wrongMarketOfferedModel.betTeamsResult,
         checkedBetTypes: checkedBetTypes
       };
+      this.primitivePropertyEvent.isShowFilterArea = true;
+      this.primitivePropertyEvent.isShowValidation = true;
     } else {
       this.initDefaultTime(this.logInfoEvent.filterWrongMarketOfferedModel);
     }
@@ -107,6 +109,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
   changeFilter(): void {
     this.primitivePropertyEvent.isShowErrorNoBetType = false;
+    this.primitivePropertyEvent.isShowValidation = false;
   }
 
   async refreshEvent() {

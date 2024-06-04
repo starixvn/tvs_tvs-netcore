@@ -23,13 +23,6 @@ export class GroupBetTypesComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.model = new GroupBetTypesAddRequestModel(new Array<GroupBetTypeAddRequest>(), false);
-    // const x1 = new BetTypeAddRequest(1, '1', true, false);
-    // const x2 = new BetTypeAddRequest(7, 'Map X Total Gold(In Thousands) Handicap', true, false);
-    // const x3 = new BetTypeAddRequest(154, 'MPAAAA ', true, false);
-
-    // const x = new GroupBetTypeAddRequest('1H', [x1, x2, x3], true, false);
-    // this.model = new GroupBetTypesAddRequestModel([x], false, '', false);
     this.changedBetTypes();
   }
 

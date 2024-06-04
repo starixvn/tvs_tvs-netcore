@@ -352,7 +352,7 @@ public class GetRequestServiceImp : GetRequestService
     private async Task<WrongMarketOfferedViewModel> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
     {
         var model = requestEventModels.First();
-        var betTypesAdvancedMode = wrongMarketOfferedService.GetBetTypesAdvancedMode(model.BetTypesAdvancedMode);
+        var betTypesAdvancedMode = wrongMarketOfferedService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
         var groupBetTypes = await wrongMarketOfferedService.GetGroupBetTypes(model.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
         return new WrongMarketOfferedViewModel

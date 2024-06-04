@@ -13,6 +13,7 @@
   [matchId]="this.logInfoEvent.matchId"
   [groupBetTypes]="groupBetTypesModel"
   [isShowAdvancedModeFilter]="isEdit"
+  (changeFilterEvent)="changeFilter()"
   (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
   [model]="advancedModeAddRequestModel">
 </advanced-mode-add-request>

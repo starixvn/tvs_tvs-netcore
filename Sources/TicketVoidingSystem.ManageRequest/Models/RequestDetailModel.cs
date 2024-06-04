@@ -395,7 +395,7 @@ public class RequestEventModel
         }
     }
 
-    public string BetTypesAdvancedMode { get; set; }
+    public string AdvancedExtraInfo { get; set; }
     public string RequestExtraInfo { get; set; }
 
     public string Usernames { get; set; }

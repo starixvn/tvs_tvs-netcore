@@ -244,7 +244,6 @@ public static class LogInfoExtension
                 + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
-                + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTypeCount, options))}' "
                 + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}'/></root>";
     }
 }

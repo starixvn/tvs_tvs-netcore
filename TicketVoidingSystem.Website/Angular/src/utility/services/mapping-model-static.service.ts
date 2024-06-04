@@ -169,7 +169,8 @@ export class MappingModelStaticService {
       matchId: model.matchId,
       subIssueTypeId: model.subIssueTypeId,
       filterFromTransTime: model.voidFromTime,
-      filterToTransTime: model.voidToTime
+      filterToTransTime: model.voidToTime,
+      betTeamsResult: model.betTeamsResult
     } as WrongMarketOfferedGetLogInfoQuery;
   }
 }

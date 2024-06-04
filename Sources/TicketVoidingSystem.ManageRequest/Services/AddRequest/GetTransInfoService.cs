@@ -191,8 +191,8 @@ public class GetTransInfoServiceImp : GetTransInfoService
             IssueTypeConstant.Abandoned => query.ReducedOverModels.ToReducedOverInfoXml(),
             IssueTypeConstant.NotParticipate => query.NotParticipateModels.ToNotParticipateInfoXml(),
             IssueTypeConstant.RecoverTicket => query.RecoverTicketModel.ToEventRecoverTicketXml(),
-            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModel.ToEventWrongMarketOfferedXml(),
-            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedModel.ToEventWrongMarketOfferedXml(),
+            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
+            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedModel.ToWrongMarketOfferedInfoXml(),
             _ => "",
         };
     }

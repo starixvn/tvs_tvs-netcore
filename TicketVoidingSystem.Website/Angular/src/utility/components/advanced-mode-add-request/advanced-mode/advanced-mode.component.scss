@@ -51,7 +51,7 @@
   }
 
   fieldset {
-    max-height: 293px;
+    //max-height: 293px;
     overflow-y: scroll;
     border: 1px solid #c8c8c8 !important;
     @include scroll-style();

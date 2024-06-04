@@ -197,7 +197,7 @@ export class BetTeamAddRequest {
   updateByInputs(result: BetTeamAddRequestResult) {
     if (this.inputs.length > 0) {
       this.inputs.forEach(input => {
-        this.updateResult(result, input.xmlAttribute, input.value ? input.value : 'All');
+        this.updateResult(result, input.xmlAttribute, input.value ? input.value : '');
       });
     }
   }

@@ -370,7 +370,10 @@ public static class ObjectToXMLExtension
         var stringBuilder = $"<r MatchId = '{model.MatchId}' "
                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+               + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTypeCount, options))}' "
                + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";

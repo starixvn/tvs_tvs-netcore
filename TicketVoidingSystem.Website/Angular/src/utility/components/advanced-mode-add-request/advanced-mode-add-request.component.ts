@@ -16,6 +16,7 @@ export class AdvancedModeAddRequestComponent implements OnInit {
   @Input() model: AdvancedModeAddRequestModel;
   @Input() groupBetTypes = new GroupBetTypesAddRequestModel([], false, '', false);
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
+  @Output() changeFilterEvent = new EventEmitter();
   @ViewChild('groupBetTypesComponent') groupBetTypesComponent: GroupBetTypesComponent;
   @ViewChild('advancedMode') advancedModeComponent: AdvancedModeComponent;
   allBetTypes: BetTypeAddRequest[] = [];
@@ -28,6 +29,10 @@ export class AdvancedModeAddRequestComponent implements OnInit {
 
   changeBetTypes(betTypes: BetTypeAddRequest[]) {
     this.allBetTypes = betTypes;
+  }
+
+  changeFilter() {
+    this.changeFilterEvent.emit();
   }
 
   getCheckedBetTypes(): BetTeamAddRequestResult[] {
