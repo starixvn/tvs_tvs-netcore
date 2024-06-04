@@ -80,6 +80,8 @@ public class RequestInfoForCopy
     public int TotalSingleCount { get; set; }
 
     public int TotalParlayCount { get; set; }
+
+    public int TotalCancelCashOutCount { get; set; }
 }
 
 public class BetTypeTicketsInfo

@@ -89,8 +89,8 @@ export class VoidPageService {
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
       return {
-        matchId: requestDetail.wrongMarketOfferedModel[0].matchId,
-        subIssueTypeId: requestDetail.wrongMarketOfferedModel[0].subIssueTypeId
+        matchId: requestDetail.wrongMarketOfferedModel.matchId,
+        subIssueTypeId: requestDetail.wrongMarketOfferedModel.subIssueTypeId
       } as BasicRequestInfo;
     }
   }
@@ -123,7 +123,7 @@ export class VoidPageService {
     }
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
-      // query.wrongMarketOfferedModel = MappingModelStaticService.buildWr
+       query.wrongMarketOfferedModel = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(requestDetail.wrongMarketOfferedModel);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);

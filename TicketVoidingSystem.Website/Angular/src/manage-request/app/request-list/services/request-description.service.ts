@@ -81,6 +81,7 @@ export class RequestDescriptionService {
 
 
   private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string): string {
+    const cancelCashOutCount = copyInfoResponse.requestInfo.totalCancelCashOutCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}`: '';
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
@@ -89,7 +90,7 @@ export class RequestDescriptionService {
       + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n\n`
       + betTypeContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
-      + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount})\n`
+      + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
       + `${copyInfoResponse.requestInfo.remark}`
 
     return content;
