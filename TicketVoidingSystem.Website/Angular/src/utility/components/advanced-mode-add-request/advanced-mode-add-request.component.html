@@ -2,7 +2,8 @@
   <group-bet-types #groupBetTypesComponent
     (checkExistBetTypeEvent)="handleNoBetTypeEvent($event)"
     [model]="groupBetTypes"
-    (betTypesEvent)="changeBetTypes($event);changeFilter()">
+    (changeFilterEvent)="changeFilter()"
+    (betTypesEvent)="changeBetTypes($event)">
   </group-bet-types>
   <advanced-mode #advancedMode
     (changeFilterEvent)="changeFilter()"

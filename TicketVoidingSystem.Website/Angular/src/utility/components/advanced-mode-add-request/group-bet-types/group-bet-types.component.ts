@@ -12,6 +12,7 @@ export class GroupBetTypesComponent implements OnInit {
   @Input() model: GroupBetTypesAddRequestModel;
   @Output() betTypesEvent = new EventEmitter<BetTypeAddRequest[]>();
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
+  @Output() changeFilterEvent = new EventEmitter();
   tooltip = new Tooltip();
   isDisabledAllBetTypes: boolean;
 
@@ -23,7 +24,7 @@ export class GroupBetTypesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.changedBetTypes();
+    this.betTypesEvent.emit(this.model.getAllBetTypes());
   }
 
   displayGroup(groups: string[]) {
@@ -39,6 +40,7 @@ export class GroupBetTypesComponent implements OnInit {
   }
 
   changedBetTypes() {
+    this.changeFilterEvent.emit();
     this.betTypesEvent.emit(this.model.getAllBetTypes());
   }
 
