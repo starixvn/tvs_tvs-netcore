@@ -39,9 +39,9 @@ export class RequestInfoForCopy {
 
 export class BetTypeTicketsInfo {
   betTypeId: number;
+  betId: number;
   betTypeName: string;
   inputtedRuns: string;
-  wicketOver: string;
   playerName: string;
   ticketsCount: number;
 }

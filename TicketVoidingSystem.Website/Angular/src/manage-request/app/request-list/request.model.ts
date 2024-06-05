@@ -17,6 +17,7 @@ export class RequestModel {
   eventDate: Date;
   status: string;
   details: DetailRequestModel[];
+  isProcessingCopyDescription?: boolean;
 }
 
 export class DetailRequestModel {

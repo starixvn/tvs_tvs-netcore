@@ -158,6 +158,10 @@
             -webkit-transform: rotate(30deg);
             transform: rotate(30deg);
           }
+
+          .disable-icon {
+            pointer-events: none;
+          }
         }
       }
     }

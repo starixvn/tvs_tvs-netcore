@@ -46,8 +46,7 @@ export class RequestDescriptionService {
     const betTypeContent = copyInfoResponse.betTypeTickets
       .map(element => {
         const inputtedRunsText = element.inputtedRuns ? ` - ${element.inputtedRuns} and above should be voided` : '';
-        const betTypeName = element.wicketOver ? element.betTypeName.replaceAll('X', `${element.wicketOver}`) : element.betTypeName;
-        return `${betTypeName}${inputtedRunsText}\n`
+        return `${element.betTypeName}${inputtedRunsText}\n`
           + `${element.ticketsCount} ticket(s)\n\n`;
       }).join('');
 
@@ -57,7 +56,7 @@ export class RequestDescriptionService {
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
     let betTypeContent = '';
-    
+
     for (let key in groupBetTypes) {
       const values = groupBetTypes[key];
       let currentContent = `${values[0].betTypeName}\n`;
@@ -69,19 +68,21 @@ export class RequestDescriptionService {
   }
 
   private createWrongMarketOfferedLikelyContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const betTypeContent = copyInfoResponse.betTypeTickets
-      .map(element => {       
-        const betTypeName = element.wicketOver ? element.betTypeName.replaceAll('X', `${element.wicketOver}`) : element.betTypeName;
-        return `${betTypeName}\n`
-          + `${element.ticketsCount} ticket(s)\n\n`;
-      }).join('');
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    let betTypeContent = '';
+
+    for (let key in groupBetTypes) {
+      const values = groupBetTypes[key];
+      let currentContent = `${values[0].betTypeName}\n`;
+      let playerContent = values.map(element => `${element.playerName ? (element.playerName + ' - ') : ''}${element.ticketsCount} ticket(s)\n`).join('');
+      betTypeContent += `${currentContent}${playerContent}\n`;
+    }
 
     return this.createCommonContent(copyInfoResponse, betTypeContent, true);
   }
 
-
   private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, isShowCancelCOCount: boolean): string {
-    const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}`: '';
+    const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`

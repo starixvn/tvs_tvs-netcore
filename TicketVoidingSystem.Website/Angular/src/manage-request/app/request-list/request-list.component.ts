@@ -238,8 +238,10 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongKickOff(issueTypeId.toString());
   }
 
-  public async copyRequestDescription(requestId: number, matchId: number): Promise<void> {
-    await this.requestDescriptionService.copyToClipboard(requestId, matchId);
+  public async copyRequestDescription(item: RequestModel): Promise<void> {
+    item.isProcessingCopyDescription = true;
+    await this.requestDescriptionService.copyToClipboard(item.requestId, item.details[0].matchId);
+    item.isProcessingCopyDescription = false;
   }
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
@@ -266,5 +268,14 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   isRecoverTicket(issueTypeId: string): boolean {
     return StaticService.isRecoverTicket(issueTypeId);
+  }
+
+  getHtmlClassForCopyDescriptionIcon(isProcessingCopyDescription?: boolean): string {
+    if (isProcessingCopyDescription) {
+      return 'fas fa-spinner fa-spin copy-request-info disable-icon';
+    } else {
+      return 'fa fa-paste copy-request-info';
+    }
+
   }
 }

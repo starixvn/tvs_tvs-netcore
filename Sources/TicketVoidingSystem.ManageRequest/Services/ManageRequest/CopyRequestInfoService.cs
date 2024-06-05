@@ -1,0 +1,107 @@
+﻿using Fanex.BetList.Core.Entities;
+using Fanex.Data.Repository;
+using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
+using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
+using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
+
+namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
+
+public interface CopyRequestInfoService
+{
+    Task<(IEnumerable<RequestInfoForCopy>, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId);
+
+    void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo);
+
+    void UpdateBetTypeName(IEnumerable<BetTypeTicketsInfo> betTypeTickets);
+
+    Task UpdatePlayerNameForBetTypeNextManOut(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets);
+}
+
+public class CopyRequestInfoServiceImp : CopyRequestInfoService
+{
+    private readonly IDynamicRepository repository;
+    private readonly MatchService matchService;
+    private readonly BetListService betListService;
+
+    public CopyRequestInfoServiceImp(IDynamicRepository repository, MatchService matchService, BetListService betListService)
+    {
+        this.repository = repository;
+        this.matchService = matchService;
+        this.betListService = betListService;
+    }
+
+    public async Task<(IEnumerable<RequestInfoForCopy>, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId)
+    {
+        var criteria = new CopyRequestInfoCriteria
+        {
+            MatchId = matchId,
+            RequestId = requestId
+        };
+
+        return await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);
+    }
+
+    public void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo)
+    {
+        var match = new Match
+        {
+            MatchId = matchId,
+            HomeId = requestInfo.HomeId,
+            AwayId = requestInfo.AwayId,
+            LeagueId = requestInfo.LeagueId,
+            IsNeutral = requestInfo.IsNeutral
+        };
+        matchService.UpdateMatchInfoFromRemotingRef(match);
+
+        requestInfo.MatchEvent = match.MatchEvent;
+        requestInfo.LeagueName = match.LeagueName;
+    }
+
+    public void UpdateBetTypeName(IEnumerable<BetTypeTicketsInfo> betTypeTickets)
+    {
+        foreach (var betType in betTypeTickets)
+        {
+            var ticket = new Ticket
+            {
+                BetId = betType.BetId,
+                BetTypeId = betType.BetTypeId
+            };
+
+            betType.BetTypeName = betListService.GetBetTypeName(ticket);
+        }
+    }
+
+    public async Task UpdatePlayerNameForBetTypeNextManOut(int matchId, IEnumerable<BetTypeTicketsInfo> betTypeTickets)
+    {
+        var betTypesHavePlayerOdds = betTypeTickets.Where(x => !string.IsNullOrWhiteSpace(x.PlayerAndOdds)).ToList();
+        var oddsInfo = await GetOddsInfo(matchId, betTypesHavePlayerOdds);
+        var groupByOddsId = oddsInfo.GroupBy(x => x.OddsId)
+            .ToDictionary(x => x.Key, x => x.ToList());
+
+        foreach (var betType in betTypesHavePlayerOdds)
+        {
+            var playerAndOdds = betType.PlayerAndOdds.Split("$");
+            var betChoice = playerAndOdds[0];
+            var oddsId = playerAndOdds[1];
+            var currentPlayer = groupByOddsId[oddsId].First(x => x.BetChoice == betChoice);
+            var comboPlayersText = string.Join(" & ", groupByOddsId[oddsId].Select(x => x.PlayerName));
+
+            betType.PlayerName = $"{currentPlayer.PlayerName} - {comboPlayersText}";
+        }
+    }
+
+    private async Task<IEnumerable<OddsInfoViewModel>> GetOddsInfo(int matchId, IEnumerable<BetTypeTicketsInfo> betTypesHavePlayerOdds)
+    {
+        var betTypeIds = string.Join(",", betTypesHavePlayerOdds.Select(x => x.BetTypeId));
+        var criteria = new GetOddsInfoCriteria
+        {
+            MatchId = matchId,
+            BetTypes = betTypeIds
+        };
+        return await repository.FetchAsync<OddsInfoViewModel>(criteria);
+    }
+}
