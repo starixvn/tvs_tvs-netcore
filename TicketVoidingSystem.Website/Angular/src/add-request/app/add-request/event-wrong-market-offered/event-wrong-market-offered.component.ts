@@ -8,7 +8,6 @@ import { GetBetTypesQuery } from '../../../../utility/components/advanced-mode/g
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { DateTimeFormat, ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
-import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { WrongMarketOfferedModel } from '../models/event-wrong-market-offered.model';
@@ -43,7 +42,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
   @ViewChild('filter') filterTimeComponent: FilterTimeComponent;
   constructor(
-    private readonly addRequestApiService: AddRequestApiService,
     private readonly logInfoService: LogInfoService,
     private readonly commonService: CommonService,
     private readonly addRequestStore: AddRequestStore,
