@@ -373,6 +373,8 @@ public static class ObjectToXMLExtension
                + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+               + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+               + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
                + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTypeCount, options))}' "
                + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
 
