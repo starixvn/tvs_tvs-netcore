@@ -161,28 +161,6 @@ export class TemplateService {
     }
   }
 
-  replaceScoreOfWrongMarketOffered(message: Message, score: string, isOnwardsSubtype: boolean) {
-    const replacedContent: TemplateContent = {
-      msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
-      msgChineseTraditional:
-        `(${TemplateContentConst.SCORE.msgChineseTraditional} ${score} ${TemplateContentConst.ONWARDS.msgChineseTraditional}) `,
-      msgChineseSimplified:
-        `(${TemplateContentConst.SCORE.msgChineseSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseSimplified}) `,
-      msgChineseNewSimplified:
-        `(${TemplateContentConst.SCORE.msgChineseNewSimplified} ${score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}) `
-    };
-    if (!isOnwardsSubtype) {
-      replacedContent.msgEnglish = replacedContent.msgEnglish.replace(' ' + TemplateContentConst.ONWARDS.msgEnglish, '');
-      replacedContent.msgChineseTraditional =
-        replacedContent.msgChineseTraditional.replace(' ' + TemplateContentConst.ONWARDS.msgChineseTraditional, '');
-      replacedContent.msgChineseSimplified =
-        replacedContent.msgChineseSimplified.replace(' ' + TemplateContentConst.ONWARDS.msgChineseSimplified, '');
-      replacedContent.msgChineseNewSimplified =
-        replacedContent.msgChineseNewSimplified.replace(' ' + TemplateContentConst.ONWARDS.msgChineseNewSimplified, '');
-    }
-    this.replaceEachLanguage(message, TemplateReplace.SCORE, replacedContent);
-  }
-
   replaceWrongScoreOfWrongScoreIssueType(message: Message, score: string) {
     if (score?.length > 0) {
       const replacedContent: TemplateContent = {

@@ -244,7 +244,8 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
     return StaticService.isDangerAccepted(issueTypeId.toString()) || StaticService.isRedCard(issueTypeId.toString()) || StaticService.isWrongScore(issueTypeId.toString())
-      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isAbandoned(issueTypeId.toString()) || StaticService.isNotParticipate(issueTypeId.toString());
+      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isAbandoned(issueTypeId.toString()) || StaticService.isNotParticipate(issueTypeId.toString())
+      || StaticService.isLikelyWrongMarketOffered(issueTypeId.toString());
   }
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {

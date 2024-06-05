@@ -51,7 +51,7 @@ export class RequestDescriptionService {
           + `${element.ticketsCount} ticket(s)\n\n`;
       }).join('');
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, false);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
@@ -65,7 +65,7 @@ export class RequestDescriptionService {
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, false);
   }
 
   private createWrongMarketOfferedLikelyContent(copyInfoResponse: CopyRequestInfoResponse): string {
@@ -76,12 +76,12 @@ export class RequestDescriptionService {
           + `${element.ticketsCount} ticket(s)\n\n`;
       }).join('');
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, true);
   }
 
 
-  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string): string {
-    const cancelCashOutCount = copyInfoResponse.requestInfo.totalCancelCashOutCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}`: '';
+  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, isShowCancelCOCount: boolean): string {
+    const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}`: '';
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`

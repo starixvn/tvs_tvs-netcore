@@ -225,9 +225,8 @@ export class TemplateMessageComponent implements OnChanges {
       SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
       SubIssueTypeId.TECHNICAL_ERROR
     ];
-    if((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
-      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE))
-    {
+    if ((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
+      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE)) {
       return false;
     };
 
@@ -243,28 +242,21 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateInputs() {
-    if (this.issueTypeId === IssueTypeId.WRONG_MARKET_OFFERED
-      && this.selectedTemplated.inputTexts[0].msgEnglishValue.length > 0) {
-      const isOnwardsSubtype = this.subIssueTypeId === SubIssueTypeId.ONWARDS;
-      this.templateService.replaceScoreOfWrongMarketOffered(this.message,
-        this.selectedTemplated.inputTexts[0].msgEnglishValue, isOnwardsSubtype);
+    if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
+      this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
+        this.selectedTemplated.inputTexts[0].msgEnglishValue);
+      this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
+        this.selectedTemplated.inputTexts[1].msgEnglishValue);
     } else {
-      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
-        this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
-          this.selectedTemplated.inputTexts[0].msgEnglishValue);
-        this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
-          this.selectedTemplated.inputTexts[1].msgEnglishValue);
-      } else {
-        this.selectedTemplated.inputTexts.forEach(item => {
-          const text: TemplateContent = {
-            msgEnglish: item.msgEnglishValue,
-            msgChineseTraditional: item.msgChineseTraditionalValue,
-            msgChineseSimplified: item.msgChineseSimplifiedValue,
-            msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
-          };
-          this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
-        });
-      }
+      this.selectedTemplated.inputTexts.forEach(item => {
+        const text: TemplateContent = {
+          msgEnglish: item.msgEnglishValue,
+          msgChineseTraditional: item.msgChineseTraditionalValue,
+          msgChineseSimplified: item.msgChineseSimplifiedValue,
+          msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
+        };
+        this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
+      });
     }
   }
 
@@ -382,7 +374,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateAIOMessage() {
-    if((this.isVoidSinglePage() && this.value.checkAIOMessage) || this.value.groupPHAffected !== 0){
+    if ((this.isVoidSinglePage() && this.value.checkAIOMessage) || this.value.groupPHAffected !== 0) {
       this.templateService.replaceAOIMessage(this.message, this.value.groupPHAffected);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.AOI_MESSAGE, '');
