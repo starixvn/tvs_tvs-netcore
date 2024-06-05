@@ -50,11 +50,24 @@
     border-right: none !important;
   }
 
-  fieldset {
-    //max-height: 293px;
+  .scroll-stype{
+    max-height: 293px;
     overflow-y: scroll;
+  }
+  .advanced-mode-header {
+    padding: 5px;
+    background-color: #e7f1ff;
+    border: 1px solid rgba(0,0,0,.125);
+    cursor: pointer;
+  }
+
+  .advanced-mode-body {
+    padding: 5px;
+    border: 1px solid rgba(0,0,0,.125);
+  }
+
+  .advanced-mode-body {
     border: 1px solid #c8c8c8 !important;
-    @include scroll-style();
 
     legend {
       font-style: italic;

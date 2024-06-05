@@ -1,10 +1,10 @@
 <div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
-  <fieldset [ngClass]="{'fieldset-collapse': !isShowContent}">
-    <legend title="Collapse advanced mode" (click)="isShowContent = !isShowContent">
-      <em class="font-small fa"
-        [ngClass]="{'fa-minus-circle': isShowContent, 'fa-plus-circle': !isShowContent}"></em>Advanced mode
-    </legend>
-    <div [hidden]="!isShowContent" *ngFor="let betTeam of betTeams">
+  <div class="advanced-mode-header" (click)="isShowContent = !isShowContent"
+    [attr.aria-expanded]="!isShowContent">
+    <strong>Advanced mode</strong>
+  </div>
+  <div class="advanced-mode-body" #collapse="ngbCollapse" [(ngbCollapse)]="isShowContent">
+    <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isChecked">
         <div *ngSwitchCase="1" class="bet-team">
           <div class="bet-team-1">
@@ -45,6 +45,6 @@
         </div>
       </div>
     </div>
-  </fieldset>
+  </div>
 </div>
 <tooltip [tooltip]="tooltip"></tooltip>

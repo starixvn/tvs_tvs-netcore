@@ -298,4 +298,8 @@ export class AdvancedModeComponent {
       ? selection.multiSelection.multipleSelect.getValueItems() !== ''
       : selection.value !== '';
   }
+
+  public isScrollStype(): boolean {
+    return this.betTeams.filter(x => x.isChecked).length > 10;
+  }
 }

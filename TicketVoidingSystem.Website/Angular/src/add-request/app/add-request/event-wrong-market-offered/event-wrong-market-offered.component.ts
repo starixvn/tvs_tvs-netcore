@@ -113,6 +113,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   }
 
   async refreshEvent() {
+    this.primitivePropertyEvent.isShowValidation = false;
     await this.getGroupBetTypes();
     const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
     this.advancedMode?.changeBetTypes(allBetTypes);
@@ -152,7 +153,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeague?.selectedMatch.matchId) {
       this.logInfoEvent.matchId = this.eventLeague.selectedMatch.matchId;
-      //await this.getGroupBetTypes();
       this.advancedMode.resetBetTeam();
       this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
       this.primitivePropertyEvent.isShowFilterArea = true;

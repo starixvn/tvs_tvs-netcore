@@ -3,9 +3,11 @@
   <div class="log-info">
     <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
       <log-info-ticket-count [model]="logInfo.logInfoDetail"></log-info-ticket-count>
-      <ng-container *ngFor="let item of logInfo.betTypeCount">
-        <span class="ml-4">{{item.name}} - {{item.count}} ticket(s)</span><br/>
-      </ng-container>
+      <div class="bet-type-count pl-4">
+        <ng-container *ngFor="let item of logInfo.betTypeCount">
+          <span>{{item.name}} - {{item.count}} ticket(s)</span><br/>
+        </ng-container>
+      </div>
       <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
     </div>
   </div>
