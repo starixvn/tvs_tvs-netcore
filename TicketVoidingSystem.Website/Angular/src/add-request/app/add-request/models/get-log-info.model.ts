@@ -12,7 +12,7 @@ export class GetLogInfoModel {
   validation: Validation;
   ticketRequest: TicketRequest[];
   logInfoDetail: LogInfoDetail;
-  betTypeCount: BetTypeCount[];
+  betTypeCount?: BetTypeCount[];
 }
 
 export class Validation {

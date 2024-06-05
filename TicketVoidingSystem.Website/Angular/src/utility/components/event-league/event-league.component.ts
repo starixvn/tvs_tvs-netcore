@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCh
 import * as _ from 'lodash';
 import { Subscription, timer } from 'rxjs';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
-import { MatchModel } from 'src/utility/models/match.model';
 import { LABELS } from '../../../utility/constants/labels';
+import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { Tooltip } from '../tooltip/tooltip.model';
 

@@ -2,9 +2,11 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
+import { AdvancedModeAddRequestComponent } from '../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
@@ -26,7 +28,7 @@ class Helper {
     fromDateTime: Helper.fromDate,
     toDateTime: Helper.toDate
   };
-  static readonly fakeWrongMarketOfferedModels: WrongMarketOfferedModel = {
+  static readonly fakeWrongMarketOfferedModel: WrongMarketOfferedModel = {
     betTypeCount: [],
     filterFromTransTime: Helper.fromDate,
     filterToTransTime: Helper.toDate,
@@ -49,7 +51,9 @@ describe('EventWrongMarketOfferedComponent', () => {
     declarations: [
       FilterTimeComponent,
       LeagueEventRedCardComponent,
-      LogInfoWrongMarketOfferedComponent
+      LogInfoWrongMarketOfferedComponent,
+      AdvancedModeAddRequestComponent,
+      EventLeagueComponent
     ],
     imports: [
       NgbModule,
@@ -60,6 +64,7 @@ describe('EventWrongMarketOfferedComponent', () => {
       ValidationService,
       LogInfoService,
       SaveRequestService,
+      CommonService,
       EventWrongMarketOfferedService
     ]
   })
@@ -75,29 +80,9 @@ describe('EventWrongMarketOfferedComponent', () => {
 
   it('EventWrongMarketOfferedComponent init should match snapshot', async () => {
     const component = new EventWrongMarketOfferedComponent(null, null, null, null, null, null);
-    component.wrongMarketOfferedModel = Helper.fakeWrongMarketOfferedModels;
+    component.wrongMarketOfferedModel = Helper.fakeWrongMarketOfferedModel;
 
     expect(component).toMatchSnapshot();
-  });
-
-  it('ngOnInit should call #updateModelWhenChangeMatchId when isEdit', async () => {
-    const { instance } = await shallow
-    .mock(EventWrongMarketOfferedService, { assignModelsToEvents: jest.fn().mockReturnValue(Helper.fakeLogInfoWrongMarketOffered) })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: new FilterModel(),
-        WrongMarketOfferedModels: Helper.fakeWrongMarketOfferedModels,
-      }
-    });
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    instance.logInfoEvent.filterWrongMarketOfferedModel = Helper.fakeFilterWrongMarketOfferedModel;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
-
-    instance.ngOnInit();
-
-    expect(instance['updateModelWhenChangeMatchId']).toHaveBeenCalledTimes(1);
   });
 
   it('clickSearch should call #logInfoService.getLogInfo', async () => {
@@ -112,10 +97,12 @@ describe('EventWrongMarketOfferedComponent', () => {
     .render({
       bind: {
         filter: new FilterModel(),
-        WrongMarketOfferedModels: Helper.fakeWrongMarketOfferedModels,
+        wrongMarketOfferedModel: Helper.fakeWrongMarketOfferedModel,
       }
     });
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+    instance.advancedMode = new AdvancedModeAddRequestComponent();
+    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
 
     await instance.clickSearch();
 
@@ -134,10 +121,12 @@ describe('EventWrongMarketOfferedComponent', () => {
     .render({
       bind: {
         filter: new FilterModel(),
-        WrongMarketOfferedModels: Helper.fakeWrongMarketOfferedModels,
+        wrongMarketOfferedModel: Helper.fakeWrongMarketOfferedModel,
       }
     });
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
+    instance.advancedMode = new AdvancedModeAddRequestComponent();
+    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
 
     await instance.clickSearch();
 
@@ -155,9 +144,11 @@ describe('EventWrongMarketOfferedComponent', () => {
     .render({
       bind: {
         filter: new FilterModel(),
-        WrongMarketOfferedModels: Helper.fakeWrongMarketOfferedModels,
+        wrongMarketOfferedModel: Helper.fakeWrongMarketOfferedModel,
       }
     });
+    instance.advancedMode = new AdvancedModeAddRequestComponent();
+    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
 
     await instance.saveRequest();
@@ -179,29 +170,12 @@ describe('EventWrongMarketOfferedComponent', () => {
     instance.eventLeague.selectedMatch.matchId = 1;
     instance.primitivePropertyEvent = new PrimitivePropertyEvent();
     instance.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
+    instance.advancedMode = new AdvancedModeAddRequestComponent();
+    instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
+    instance.advancedMode.resetBetTeam = jest.fn();
 
     await instance.changeMatchEvent();
 
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
-  });
-
-  it('#changeMatchEvent should not call #updateModelWhenChangeMatchId when leagueEventWrongOddsComponent null', async () => {
-    const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        filter: new FilterModel(),
-      }
-    });
-    instance.eventLeague = new EventLeagueComponent(null, null);
-    instance.eventLeague = null;
-    instance.primitivePropertyEvent = new PrimitivePropertyEvent();
-    instance.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
-    instance['updateModelWhenChangeMatchId'] = jest.fn();
-    await instance.changeMatchEvent();
-
-    expect(instance['updateModelWhenChangeMatchId']).toHaveBeenCalledTimes(0);
   });
 });

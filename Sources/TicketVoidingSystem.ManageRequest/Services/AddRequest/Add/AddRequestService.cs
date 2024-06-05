@@ -109,7 +109,8 @@ public class AddRequestServiceImp : AddRequestService
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
         command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
-        command.WrongMarketOfferedInfo = query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml();
+        command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
+        command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)

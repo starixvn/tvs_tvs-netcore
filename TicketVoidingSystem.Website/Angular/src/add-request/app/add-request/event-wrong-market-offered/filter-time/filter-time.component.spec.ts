@@ -2,7 +2,7 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { DateFullTimeNewComponent } from 'src/utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { FilterWrongMarketOfferedModel } from '../models/filter-wrong-market-offered.model';
 import { FilterTimeComponent } from './filter-time.component';
 class Helper {
@@ -50,7 +50,7 @@ describe('FilterTimeComponent', () => {
   });
   it('#emitRefreshEvent should emit #refreshEvent', async () => {
     const component = new FilterTimeComponent(null);
-    component.changeFilterEvent.emit = jest.fn();
+    component.refreshEvent.emit = jest.fn();
     component.emitRefreshEvent();
 
     expect(component.refreshEvent.emit).toHaveBeenCalledTimes(1);

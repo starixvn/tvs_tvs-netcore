@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
+using TicketVoidingSystem.Services.BetList;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
 
 public class TicketsViewModelServiceTests
 {
-    private readonly TicketsViewModelServiceImp service = new();
+    private static TicketsViewModelServiceImp CreateService()
+    {
+        var betListService = Substitute.For<BetListService>();
+        return new TicketsViewModelServiceImp(betListService);
+    }
+
+    private readonly TicketsViewModelServiceImp service = CreateService();
 
     [Fact]
     public void UpdateViewModel_UpdateValidTickets_ReturnCorrect()
