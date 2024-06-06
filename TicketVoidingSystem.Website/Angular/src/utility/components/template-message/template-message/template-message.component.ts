@@ -390,7 +390,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateSpecialBetType() {
-    if (this.value.isCheckedSpecialBetType && this.issueTypeUpdateSpecialBetTypeVoidSingleBet()) {
+    if (this.value.isCheckedSpecialBetType && (this.isLikelyWrongMarketOffered() || this.issueTypeUpdateSpecialBetTypeVoidSingleBet())) {
       this.templateService.replaceSpecialBetType(this.message, this.value.betTypeNameReplaceMessage);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.SPECIAL_BET_TYPE, '');
@@ -406,8 +406,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() &&
-      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
+    return this.isVoidSinglePage() && 
+        (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
         || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 
