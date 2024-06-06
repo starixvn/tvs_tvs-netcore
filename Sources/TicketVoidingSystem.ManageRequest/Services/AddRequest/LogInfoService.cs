@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.BetList;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
@@ -19,12 +21,14 @@ public class LogInfoServiceImp : LogInfoService
     private readonly IDynamicRepository repository;
     private readonly SessionService session;
     private readonly GetTransInfoService getTransInfoService;
+    private readonly BetListService betListService;
 
-    public LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, SessionService session, GetTransInfoService getTransInfoService)
+    public LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, SessionService session, GetTransInfoService getTransInfoService, BetListService betListService)
     {
         this.mapper = mapper;
         this.repository = repository;
         this.session = session;
+        this.betListService = betListService;
         this.getTransInfoService = getTransInfoService;
     }
 
@@ -50,7 +54,7 @@ public class LogInfoServiceImp : LogInfoService
         };
     }
 
-    private static IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
+    private IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCount> betTypeCount)
     {
         return query.IssueTypeId switch
@@ -206,9 +210,17 @@ public class LogInfoServiceImp : LogInfoService
         });
     }
 
-    private static IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
+    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
         IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCount> betTypeCount)
     {
+        foreach (var item in betTypeCount)
+        {
+            item.Name = betListService.GetBetTypeName(new Ticket
+            {
+                BetTypeId = item.BetTypeId,
+                BetId = item.BetId,
+            });
+        }
         return new List<GetLogInfoModel>
         {
             new()

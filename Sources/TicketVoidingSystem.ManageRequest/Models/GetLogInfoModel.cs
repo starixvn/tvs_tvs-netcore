@@ -63,4 +63,6 @@ public class BetTypeCount
 {
     public string Name { get; set; }
     public int Count { get; set; }
+    public int BetTypeId { get; set; }
+    public long? BetId { get; set; }
 }
