@@ -6,8 +6,8 @@
           <div>
             <label>
               <input type="checkbox" class="group-bettypes-all-checkbox mr-1" [(ngModel)]="model.isChecked"
-              [disabled]="isDisabledAllBetTypes"
-                (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
+              [disabled]="model.isDisable"
+              (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
               All Bet types
             </label>
             <label *ngIf="scroll" (click)="collapse = !collapse">
@@ -24,7 +24,7 @@
           <label>
             <input class="mr-1" type="checkbox" [(ngModel)]="group.isChecked"
             (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();
-                              changedBetTypes()" [disabled]="isDisabledAllBetTypes" />
+                              changedBetTypes()" [disabled]="group.isDisable"/>
             {{group.groupName}}
           </label>
         </td>
@@ -32,9 +32,8 @@
           <div class="display-flex">
             <div class="bet-type" *ngFor="let betType of group.betTypes">
               <label>
-                <input class="mr-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="isDisabledAllBetTypes"
-                (ngModelChange)="group.changeCheckedBetTypeToGroup();
-                                  model.changeCheckedGroupToModel(); changedBetTypes()" />
+                <input class="mr-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="betType.isDisable"
+                (ngModelChange)="group.changeCheckedBetTypeToGroup(); model.changeCheckedGroupToModel(); changedBetTypes()" />
                 {{betType.name}}
               </label>
             </div>

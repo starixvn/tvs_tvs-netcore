@@ -22,6 +22,7 @@ export class LogInfoService {
     const getLogInfoQuery = this.initWrongMarketOfferedGetLogInfoQuery(isEdit, requestId, filter, logInfoEvent);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
+    primitiveProps.isShowBetTypeCount = false;
     this.assignResultLogInfoToEvents(logInfoEvent, viewModel.getLogInfoModels);
   }
 

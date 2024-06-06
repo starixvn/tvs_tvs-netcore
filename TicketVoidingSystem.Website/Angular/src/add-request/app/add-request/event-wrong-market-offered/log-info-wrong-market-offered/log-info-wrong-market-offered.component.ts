@@ -12,6 +12,7 @@ import { PrimitivePropertyEvent } from '../models/primitive-property-event.model
   styleUrls: ['./log-info-wrong-market-offered.component.scss']
 })
 export class LogInfoWrongMarketOfferedComponent {
+  @Input() isVoided: boolean;
   @Input() logInfo: LogInfoWrongMarketOffered;
   @Input() primitiveProps = new PrimitivePropertyEvent();
 

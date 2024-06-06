@@ -3,14 +3,15 @@
   [matchId]="logInfoEvent.matchId"
   (changeEvent)="changeMatchEvent()">
 </event-league>
-<filter-time #filter
+<filter-time #filterTime
   class="mb-1"
+  [isVoided]="filter.isVoided"
   [filterWrongMarketOfferedModel]="logInfoEvent.filterWrongMarketOfferedModel"
   (changeFilterEvent)="changeFilter()"
   (refreshEvent)="refreshEvent()">
 </filter-time>
 <advanced-mode-add-request #advancedMode
-  [matchId]="this.logInfoEvent.matchId"
+  [matchId]="logInfoEvent.matchId"
   [groupBetTypes]="groupBetTypesModel"
   [isShowAdvancedModeFilter]="isEdit"
   (changeFilterEvent)="changeFilter()"
@@ -24,6 +25,7 @@
   </button>
 </div>
 <log-info-wrong-market-offered #logInfo
+  [isVoided]="filter.isVoided"
   [primitiveProps]="primitivePropertyEvent"
   [logInfo]="logInfoEvent">
 </log-info-wrong-market-offered>

@@ -33,6 +33,8 @@ export class EventWrongMarketOfferedService {
     logInfo.matchId = inputModel.matchId;
     logInfo.logInfoDetail = inputModel.logInfoDetail;
     logInfo.filterWrongMarketOfferedModel = this.createFilterWrongMarketOfferedModel(inputModel);
+    logInfo.betTypeCount = inputModel.betTypeCount;
+    logInfo.betTeamsResult = inputModel.betTeamsResult;
 
     return logInfo;
   }

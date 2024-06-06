@@ -195,6 +195,7 @@ export class LogInfoService {
     const data = await this.commonService.getLogInfo(query);
     data.getLogInfoModels.forEach(x => {
       args.detailViewModel.wrongMarketOfferedModel.logInfoDetail = x.logInfoDetail;
+      args.detailViewModel.wrongMarketOfferedModel.betTypeCount = x.betTypeCount;
     });
   }
 

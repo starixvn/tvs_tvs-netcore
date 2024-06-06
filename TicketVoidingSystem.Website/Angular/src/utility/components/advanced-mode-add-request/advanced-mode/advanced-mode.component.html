@@ -1,7 +1,7 @@
 <div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
   <div class="advanced-mode-header" (click)="isShowContent = !isShowContent"
     [attr.aria-expanded]="!isShowContent">
-    <strong>Advanced mode</strong>
+    <strong>Advanced Mode</strong>
   </div>
   <div class="advanced-mode-body" #collapse="ngbCollapse" [(ngbCollapse)]="isShowContent">
     <div *ngFor="let betTeam of betTeams">

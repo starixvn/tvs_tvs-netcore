@@ -40,7 +40,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('eventLeague') eventLeague: EventLeagueComponent;
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
-  @ViewChild('filter') filterTimeComponent: FilterTimeComponent;
+  @ViewChild('filterTime') filterTimeComponent: FilterTimeComponent;
   constructor(
     private readonly logInfoService: LogInfoService,
     private readonly commonService: CommonService,
@@ -56,20 +56,26 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit)  {
-      const groupBetTypes = this.wrongMarketOfferedModel.groupBetTypes;
-      groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
-      const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
-      this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModel);
-      this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', false);
-      this.advancedModeAddRequestModel = {
-        betTeamsResult: this.wrongMarketOfferedModel.betTeamsResult,
-        checkedBetTypes: checkedBetTypes
-      };
-      this.primitivePropertyEvent.isShowFilterArea = true;
-      this.primitivePropertyEvent.isShowValidation = true;
+      this.updateDataWhenEditRequest();
     } else {
       this.initDefaultTime(this.logInfoEvent.filterWrongMarketOfferedModel);
     }
+  }
+
+  public updateDataWhenEditRequest(): void {
+    const groupBetTypes = this.wrongMarketOfferedModel.groupBetTypes;
+    groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
+    const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
+    this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModel);
+    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    const betTeamsResult = this.wrongMarketOfferedModel.betTeamsResult;
+    betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
+    this.advancedModeAddRequestModel = {
+      betTeamsResult: betTeamsResult,
+      checkedBetTypes: checkedBetTypes
+    };
+    this.primitivePropertyEvent.isShowFilterArea = true;
+    this.primitivePropertyEvent.isShowValidation = true;
   }
 
   async getGroupBetTypes() {
@@ -158,7 +164,9 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     }
   }
   private initSaveRequestInput() {
-    this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
+    if (!this.filter.isVoided) {
+      this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
+    }
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;

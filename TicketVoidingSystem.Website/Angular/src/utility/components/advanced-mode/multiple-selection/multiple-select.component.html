@@ -1,12 +1,12 @@
 ﻿<div class="multiple-selection" [style.width]="multipleSelect.maxWidth">
-    <button class="button" type="button" readonly (click)="dropdownToggle = !dropdownToggle" [disabled]="isDisabled">
+    <button class="button" type="button" readonly (click)="dropdownToggle = !dropdownToggle">
         <div [ngClass]="{'place-holder': multipleSelect.isShowPlaceHolder}">{{multipleSelect.selectionTitle }}</div>
         <i class="fa fa-angle-down"></i>
     </button>
     <div class="show-tree-view" *ngIf="multipleSelect.items != undefined && dropdownToggle">
         <div class="dropdown-header" *ngIf="multipleSelect.showHeader">
             <label class="d-flex">
-                <input class="mr-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll"
+                <input class="mr-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="multipleSelect.isDisabled"
                     (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" />
                 {{multipleSelect.checkAllCheckBoxText}}
             </label>

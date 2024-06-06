@@ -19,6 +19,7 @@ export class MultipleSelection {
     buttonHeight: string = DefaultSetting.BUTTON_HEIGHT;
     isShowPlaceHolder = false;
     isDefaultSelectAll = true;
+    isDisabled = false;
 
     getValueItems() {
         let value = '';
@@ -83,5 +84,11 @@ export class MultipleSelection {
             item.checked = checkedItems.includes(item.value);
         });
         this.selectionTitle = this.getDisplayedItems();
+    }
+
+    updateDisableStatus(isDisabled: boolean) {
+        this.items.forEach(item => {
+            item.enable = !isDisabled;
+        });
     }
 }

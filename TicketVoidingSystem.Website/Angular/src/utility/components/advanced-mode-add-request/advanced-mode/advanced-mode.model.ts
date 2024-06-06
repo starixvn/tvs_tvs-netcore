@@ -29,6 +29,7 @@ export class Selection {
   multiSelection: MultiSelection;
   isMultiple: boolean;
   xmlAttribute: string;
+  isDisabled: boolean;
 
   constructor(index: number,name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string) {
     this.index = index;
@@ -59,9 +60,15 @@ export class MultiSelection {
   updateItemChecked(checkedItems: string[]) {
     this.multipleSelect.updateItemChecked(checkedItems);
   }
+
+  updateDisabledStatus(isDisabled: boolean) {
+    this.multipleSelect.updateDisableStatus(isDisabled);
+    this.multipleSelect.isDisabled = isDisabled;
+  }
 }
 
 export class BetTeamAddRequestResult {
+  isDisabled: boolean;
   id: string;
   team: string;
   hdp: string;

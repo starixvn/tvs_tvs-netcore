@@ -14,7 +14,6 @@ export class GroupBetTypesComponent implements OnInit {
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();
   @Output() changeFilterEvent = new EventEmitter();
   tooltip = new Tooltip();
-  isDisabledAllBetTypes: boolean;
 
   @Input() scroll: boolean;
   collapse = true;
@@ -25,18 +24,6 @@ export class GroupBetTypesComponent implements OnInit {
 
   ngOnInit() {
     this.betTypesEvent.emit(this.model.getAllBetTypes());
-  }
-
-  displayGroup(groups: string[]) {
-    this.model.groupBetTypes.forEach(group => {
-      group.isShow = groups.indexOf(group.groupName) > -1;
-      if (!group.isShow) {
-        group.isChecked = false;
-        group.changeCheckedGroupToBetType();
-      }
-    });
-    this.changedBetTypes();
-    this.model.changeCheckedGroupToModel();
   }
 
   changedBetTypes() {

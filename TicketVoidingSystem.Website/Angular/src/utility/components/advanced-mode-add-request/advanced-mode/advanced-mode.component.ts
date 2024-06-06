@@ -45,7 +45,7 @@ export class AdvancedModeComponent {
       await this.changedBetTypes();
     }
     if (this.advancedModeAddRequestModel !== undefined && changes['advancedModeAddRequestModel']) {
-    await this.getBetTeamAndRenderValue(this.matchId);
+      await this.getBetTeamAndRenderValue(this.matchId);
       this.allBetTypes = this.advancedModeAddRequestModel.checkedBetTypes;
       await this.changedBetTypes();
       this.updateBetTeamByCheckedValue(this.advancedModeAddRequestModel.betTeamsResult);
@@ -93,16 +93,23 @@ export class AdvancedModeComponent {
   private updateBetTeamByCheckedValue(checkedBetTypesAddRequest: BetTeamAddRequestResult[]) {
     checkedBetTypesAddRequest.forEach(x => {
       const betTeam = this.betTeams.find(y => y.betTypes === x.id);
-      betTeam.isChecked = true;
-      betTeam.selections.forEach(y => {
-        if(y.isMultiple) {
-          const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
-          y.multiSelection.updateItemChecked(value.split(','));
-        } else {
-          y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x);
-        }
-      });
-      betTeam.inputs.forEach(y => y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x));
+      if (betTeam) {
+        betTeam.isChecked = true;
+        betTeam.selections.forEach(y => {
+          y.isDisabled = x.isDisabled;
+          if(y.isMultiple) {
+            const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
+            y.multiSelection.updateItemChecked(value.split(','));
+            y.multiSelection.updateDisabledStatus(x.isDisabled);
+          } else {
+            y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x);
+          }
+        });
+        betTeam.inputs.forEach(y => {
+          y.isDisabled = x.isDisabled;
+          y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
+        });
+      }
     })
   }
 
