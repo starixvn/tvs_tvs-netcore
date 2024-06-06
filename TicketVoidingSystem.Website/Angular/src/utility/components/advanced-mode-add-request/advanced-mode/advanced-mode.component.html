@@ -1,9 +1,8 @@
 <div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
-  <div class="advanced-mode-header" (click)="isShowContent = !isShowContent"
-    [attr.aria-expanded]="!isShowContent">
+  <div class="advanced-mode-header" (click)="collapse.toggle()">
     <strong>Advanced Mode</strong>
   </div>
-  <div class="advanced-mode-body" #collapse="ngbCollapse" [(ngbCollapse)]="isShowContent">
+  <div class="advanced-mode-body" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapse">
     <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isChecked">
         <div *ngSwitchCase="1" class="bet-team">

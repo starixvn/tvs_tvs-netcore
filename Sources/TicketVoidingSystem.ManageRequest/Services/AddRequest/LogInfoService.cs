@@ -37,7 +37,7 @@ public class LogInfoServiceImp : LogInfoService
         var criteria = await GetLogInfoCriteria(query);
 
         var (validations, ticketRequests, logInfoDetails, transInfoAddRequestModels, transInfoJsonList, betTypeCounts) =
-            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeCount>(criteria);
+            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeCountModel>(criteria);
         var transInfoAddRequest = transInfoAddRequestModels.FirstOrDefault();
         var transInfoJson = transInfoJsonList.FirstOrDefault();
 
@@ -55,7 +55,7 @@ public class LogInfoServiceImp : LogInfoService
     }
 
     private IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
-        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCount> betTypeCount)
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCountModel> betTypeCount)
     {
         return query.IssueTypeId switch
         {
@@ -211,11 +211,11 @@ public class LogInfoServiceImp : LogInfoService
     }
 
     private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
-        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCount> betTypeCount)
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCountModel> betTypeCount)
     {
         foreach (var item in betTypeCount)
         {
-            item.Name = betListService.GetBetTypeName(new Ticket
+            item.BetTypeName = betListService.GetBetTypeName(new Ticket
             {
                 BetTypeId = item.BetTypeId,
                 BetId = item.BetId,

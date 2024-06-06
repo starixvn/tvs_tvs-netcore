@@ -23,7 +23,7 @@ export class AdvancedModeComponent {
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
   betTeams: BetTeamAddRequest[] = [];
-  isShowContent = true;
+  isCollapse = true;
   tooltip = new Tooltip();
   betTypesMoreHDP = AdvancedModeConstants.BETTYPES_MORE_HDP;
   baseSpecialBetTypeCricket: Selection[] = [];
@@ -73,7 +73,7 @@ export class AdvancedModeComponent {
 
   resetBetTeam() {
     this.isShowAdvancedModeFilter = false;
-    this.isShowContent = false;
+    this.isCollapse = true;
     this.betTeams = [];
   }
 
@@ -178,7 +178,6 @@ export class AdvancedModeComponent {
 
   private async changeCheckedBetTypes(betType: BetTypeAddRequest, betTeam: BetTeamAddRequest) {
     this.isShowAdvancedModeFilter = true;
-    this.isShowContent = true;
     betTeam.name = betType.name;
     if (AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER.split(',').includes(betType.id.toString()) && betType.isChecked) {
       await this.getSpecialBetTeamCricket(this.matchId);

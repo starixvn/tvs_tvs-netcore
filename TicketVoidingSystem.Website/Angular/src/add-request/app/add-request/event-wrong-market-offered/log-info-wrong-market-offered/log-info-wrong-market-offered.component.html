@@ -6,7 +6,7 @@
       <span *ngIf="!isVoided" class="btn-bet-type-count" (click)="primitiveProps.isShowBetTypeCount = !primitiveProps.isShowBetTypeCount">Details</span>
       <div class="bet-type-count pl-4" *ngIf="primitiveProps.isShowBetTypeCount">
         <ng-container *ngFor="let item of logInfo.betTypeCount">
-          <span>{{item.name}} - {{item.count}} ticket(s)</span><br/>
+          <span>{{item.betTypeName}} - {{item.betTypeCount}} ticket(s)</span><br/>
         </ng-container>
       </div>
       <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
