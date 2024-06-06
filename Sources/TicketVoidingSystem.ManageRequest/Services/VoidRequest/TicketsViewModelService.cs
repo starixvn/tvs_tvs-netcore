@@ -4,7 +4,8 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -16,11 +17,11 @@ public interface TicketsViewModelService
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
-    private readonly BetListService betListService;
+    private readonly SpecialBetTypeContentService specialBetTypeContentService;
 
-    public TicketsViewModelServiceImp(BetListService betListService)
+    public TicketsViewModelServiceImp(SpecialBetTypeContentService specialBetTypeContentService)
     {
-        this.betListService = betListService;
+        this.specialBetTypeContentService = specialBetTypeContentService;
     }
 
     public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
@@ -34,7 +35,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateValidTickets(model, validTickets);
         UpdateUncheckTickets(model, allTickets);
         model.LicenseeAffectedList = GetLicenseeAffectedList(allTickets);
-        UpdateBetTypesAndSpecialBetTypeName(model, allTickets);
+        UpdateBetTypeIdsAndSpecialBetType(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
         UpdateCheckPermissionTickets(model, allTickets);
         UpdateTotalCounts(model, allTickets, ticketsByGroup);
@@ -184,19 +185,30 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
             .Select(item => item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString()).ToList();
     }
 
-    private void UpdateBetTypesAndSpecialBetTypeName(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets)
+    private void UpdateBetTypeIdsAndSpecialBetType(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets)
     {
-        var betTypes = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
-        model.BetTypes = string.Join(",", betTypes);
-        model.BetTypeNameReplaceMessage = new TemplateContentModel();
-        if (betTypes.Count() == 1)
+        var betTypeIds = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
+        model.BetTypes = string.Join(",", betTypeIds);
+        model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(betTypeIds, allTickets);
+    }
+
+    private TemplateContentModel GetSpecialBetTypeContent(IEnumerable<int> betTypeIds, IEnumerable<GetTicketModel> allTickets)
+    {
+        if (betTypeIds.Count() == 1)
         {
-            var specialBetTypeId = betTypes.First();
-            model.BetTypeNameReplaceMessage.ContentEnglish = betListService.GetBetType(specialBetTypeId, LanguageCode.English);
-            model.BetTypeNameReplaceMessage.ContentChineseTraditional = betListService.GetBetType(specialBetTypeId, LanguageCode.ChineseTraditional);
-            model.BetTypeNameReplaceMessage.ContentChineseSimplified = betListService.GetBetType(specialBetTypeId, LanguageCode.ChineseSimplified);
-            model.BetTypeNameReplaceMessage.ContentNewChineseSimplified = betListService.GetBetType(specialBetTypeId, LanguageCode.NewChineseSimplified);
+            var emailTickets = allTickets.Select(x => new TicketEmailModel
+            {
+                IsMixParlay = x.IsMixParlay,
+                BetTypeId = x.BetType,
+                BetId = x.BetId,
+                SubBetType = x.SubBetType,
+                SubBetCheck = x.SubBetCheck
+            });
+
+            return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
         }
+
+        return new TemplateContentModel();
     }
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)

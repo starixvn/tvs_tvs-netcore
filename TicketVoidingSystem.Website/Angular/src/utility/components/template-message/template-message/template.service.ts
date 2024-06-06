@@ -220,18 +220,18 @@ export class TemplateService {
 
     return {
       msgEnglish: `${TemplateContentConst.AIO_MESSAGE_AIO.msgEnglish}`,
-        msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseTraditional}`,
-        msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseSimplified}`,
-        msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseNewSimplified}`
+      msgChineseTraditional: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseTraditional}`,
+      msgChineseSimplified: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseSimplified}`,
+      msgChineseNewSimplified: `${TemplateContentConst.AIO_MESSAGE_AIO.msgChineseNewSimplified}`
     } as TemplateContent;
   }
 
   replaceSpecialBetType(message: Message, betTypeNameReplaceMessage: Message) {
     const replacedContent: TemplateContent = {
-      msgEnglish: `"${betTypeNameReplaceMessage.contentEnglish}" `,
-      msgChineseTraditional: `"${betTypeNameReplaceMessage.contentChineseTraditional}" `,
-      msgChineseSimplified: `"${betTypeNameReplaceMessage.contentChineseSimplified}" `,
-      msgChineseNewSimplified: `"${betTypeNameReplaceMessage.contentNewChineseSimplified}" `
+      msgEnglish: betTypeNameReplaceMessage.contentEnglish ? `"${betTypeNameReplaceMessage.contentEnglish}" ` : '',
+      msgChineseTraditional: betTypeNameReplaceMessage.contentChineseTraditional ? `"${betTypeNameReplaceMessage.contentChineseTraditional}" ` : '',
+      msgChineseSimplified: betTypeNameReplaceMessage.contentChineseSimplified ? `"${betTypeNameReplaceMessage.contentChineseSimplified}" ` : '',
+      msgChineseNewSimplified: betTypeNameReplaceMessage.contentNewChineseSimplified ? `"${betTypeNameReplaceMessage.contentNewChineseSimplified}" ` : ''
     };
 
     this.replaceEachLanguage(message, TemplateReplace.SPECIAL_BET_TYPE, replacedContent);

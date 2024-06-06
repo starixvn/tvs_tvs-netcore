@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.SharedApi.Handlers.MessageTemplate;
 
@@ -21,4 +22,8 @@ public class MessageTemplateController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetTemplateAbnormalBet() => Ok(await mediator.Send(new GetTemplateAbnormalBetRequest()));
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> GetSpecialBetTypeContent(GetSpecialBetTypeContentRequest request) => Ok(await mediator.Send(request));
 }
