@@ -10,10 +10,6 @@
               (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
               All Bet types
             </label>
-            <label *ngIf="scroll" (click)="collapse = !collapse">
-              <em [ngClass]="{'icon-plus-bettypes': collapse, 'icon-minus-bettypes': !collapse}"></em>
-              Show All Bet types
-            </label>
           </div>
         </th>
       </tr>

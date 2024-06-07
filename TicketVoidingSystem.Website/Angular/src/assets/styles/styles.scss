@@ -322,3 +322,13 @@ input[type=radio],
       color: #fff;
   }
 }
+
+.border-top-radius {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.border-bottom-radius {
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}

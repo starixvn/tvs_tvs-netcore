@@ -1,8 +1,10 @@
 <div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
-  <div class="advanced-mode-header" (click)="collapse.toggle()">
+  <div class="advanced-mode-header border-top-radius" [ngClass]="{'border-bottom-radius':isCollapse}"
+    (click)="isCollapse=!isCollapse">
+    <em class="fa mr-1" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
     <strong>Advanced Mode</strong>
   </div>
-  <div class="advanced-mode-body" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapse">
+  <div class="advanced-mode-body border-bottom-radius" [hidden]="isCollapse">
     <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isChecked">
         <div *ngSwitchCase="1" class="bet-team">
@@ -14,7 +16,7 @@
               <ng-container *ngFor="let selection of betTeam.selections">
                 <div class="dropdown-item-adv" *ngIf="!selection.isMultiple">
                   <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
-                  <select [(ngModel)]="selection.value" (ngModelChange)="changeFilter()"
+                  <select [(ngModel)]="selection.value" (ngModelChange)="changeFilter()" [disabled]="selection.isDisabled"
                     class="bet-team-{{betTeam.index}}-selection-{{selection.index}}">
                     <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                   </select>

@@ -2,11 +2,12 @@
 
 .group-bettypes {
   box-shadow: none;
+  border-radius: 0.25rem;
+
   .collapse {
-    max-height: 85px;
+    max-height: 220px;
     overflow-y: auto;
     overflow-x: hidden;
-
     @include scroll-style();
   }
 
@@ -66,9 +67,6 @@
 
     tbody {
       display: block;
-      max-height: 195px;
-      overflow-y: scroll;
-      @include scroll-style();
     }
 
     td {
