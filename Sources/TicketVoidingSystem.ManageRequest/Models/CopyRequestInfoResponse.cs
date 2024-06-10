@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.Extensions;
-
-namespace TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class CopyRequestInfoResponse
 {
@@ -37,29 +35,11 @@ public class RequestInfoForCopy
 
     public string RequestExtraInfo { get; set; }
 
-    public bool IsCheckedVar
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsCheckedVar;
-        }
-    }
+    public bool IsCheckedVar { get; set; }
 
     public string OperatorInfo { get; set; }
 
-    public List<OperatorInfo> Operators
-    {
-        get
-        {
-            var root = OperatorInfo.ParseXmlToObject<RootOperators>();
-            var operators = root.OperatorXmls;
-            var result = operators.Count > 0 ? operators.Select(x =>
-                new OperatorInfo { OperatorId = x.OperatorId, OperatorType = x.TypeId }
-            ).ToList() : new List<OperatorInfo>();
-            return result;
-        }
-    }
+    public IEnumerable<OperatorInfo> Operators { get; set; }
 
     public string Provider { get; set; }
 

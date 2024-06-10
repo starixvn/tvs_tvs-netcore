@@ -21,31 +21,34 @@ public class GetRequestServiceImp : GetRequestService
     private readonly RemotingRefWrapperService remotingRefService;
     private readonly MatchService matchService;
     private readonly WrongMarketOfferedService wrongMarketOfferedService;
-    private readonly RenderRequestService renderRequestService;
+    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly IMapper mapper;
 
     public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, MatchService matchService
-        , IMapper mapper, WrongMarketOfferedService wrongMarketOfferedService, RenderRequestService renderRequestService)
+        , IMapper mapper, WrongMarketOfferedService wrongMarketOfferedService, RequestExtraInfoXmlService requestExtraInfoXmlService)
     {
         this.repository = repository;
         this.remotingRefService = remotingRefService;
         this.matchService = matchService;
         this.wrongMarketOfferedService = wrongMarketOfferedService;
         this.mapper = mapper;
-        this.renderRequestService = renderRequestService;
+        this.requestExtraInfoXmlService = requestExtraInfoXmlService;
     }
 
     public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
     {
         var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request);
-        renderRequestService.UpdateRequestDetailProperties(firstResultSet.First().IssueTypeId, secondResultSet);
+        var requestInfo = firstResultSet.First();
+        requestInfo.Operators = requestExtraInfoXmlService.ParseXmlToOperators(requestInfo.OperatorInfo);
+        requestExtraInfoXmlService.UpdateRequestDetailProperties(requestInfo.IssueTypeId, secondResultSet);
+
         var viewModel = new RequestDetailViewModel
         {
-            Request = firstResultSet.First(),
+            Request = requestInfo,
             PlayerNames = thirdResultSet
         };
 
-        switch (firstResultSet.First().IssueTypeId)
+        switch (requestInfo.IssueTypeId)
         {
             case IssueTypeConstant.WrongScore:
                 viewModel.WrongScoreModels = MapEventWrongScores(secondResultSet);
@@ -84,7 +87,7 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, firstResultSet.First().SportType);
+                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, requestInfo.SportType);
                 break;
 
             case IssueTypeConstant.DuplicateTickets:
@@ -355,7 +358,6 @@ public class GetRequestServiceImp : GetRequestService
 
     private async Task<WrongMarketOfferedViewModel> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
     {
-        var x = requestEventModels.ToList();
         var model = requestEventModels.First();
         var betTypesAdvancedMode = wrongMarketOfferedService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
         var groupBetTypes = await wrongMarketOfferedService.GetGroupBetTypes(model.MatchId,

@@ -44,5 +44,6 @@ public static class ManageRequest
         services.AddTransient<UpdateRequestProcessStage, UpdateRequestProcessStageImp>();
         services.AddTransient<OWPDataService, OWPDataServiceImp>();
         services.AddTransient<CopyRequestInfoService, CopyRequestInfoServiceImp>();
+        services.AddTransient<RequestExtraInfoXmlService, RequestExtraInfoXmlServiceImp>();
     }
 }

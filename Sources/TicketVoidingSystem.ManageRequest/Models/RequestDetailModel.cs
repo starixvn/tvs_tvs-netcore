@@ -1,6 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using System.Xml.Serialization;
-using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Web.JsonConverter;
 
 namespace TicketVoidingSystem.ManageRequest.Models;
@@ -20,46 +18,13 @@ public class RequestDetailModel
     public bool IsTest { get; set; }
     public bool IsVoided { get; set; }
 
-    public List<OperatorInfo> Operators
-    {
-        get
-        {
-            var root = OperatorInfo.ParseXmlToObject<RootOperators>();
-            var operators = root.OperatorXmls;
-            var result = operators.Count > 0 ? operators.Select(x =>
-                new OperatorInfo { OperatorId = x.OperatorId, OperatorType = x.TypeId }
-            ).ToList() : new List<OperatorInfo>();
-            return result;
-        }
-    }
+    public IEnumerable<OperatorInfo> Operators { get; set; }
 
     public string RequestedBy { get; set; }
 
     public int UserId { get; set; }
 
     public string VoidedBy { get; set; }
-}
-
-[XmlRoot(ElementName = "r")]
-public class OperatorXml
-{
-    [XmlAttribute(AttributeName = "OperatorId")]
-    public int OperatorId { get; set; }
-
-    [XmlAttribute(AttributeName = "TypeId")]
-    public byte TypeId { get; set; }
-}
-
-[XmlRoot(ElementName = "root")]
-public class RootOperators
-{
-    public RootOperators()
-    {
-        OperatorXmls = new List<OperatorXml>();
-    }
-
-    [XmlElement(ElementName = "r")]
-    public List<OperatorXml> OperatorXmls { get; set; }
 }
 
 public class RequestEventModel

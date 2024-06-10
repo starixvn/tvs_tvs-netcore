@@ -23,8 +23,7 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, Co
 
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
-        var (requestInfoList, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId);
-        var requestInfo = requestInfoList.First();
+        var (requestInfo, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId);
         requestInfo.GlobalShowTime = requestInfo.GlobalShowTime.ZoneManila();
         copyRequestInfoService.UpdateMatchInfo(request.MatchId, requestInfo);
         copyRequestInfoService.UpdateBetTypeName(betTypeTickets);

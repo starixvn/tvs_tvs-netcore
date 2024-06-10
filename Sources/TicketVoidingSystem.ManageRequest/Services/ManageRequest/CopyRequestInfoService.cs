@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 public interface CopyRequestInfoService
 {
-    Task<(IEnumerable<RequestInfoForCopy>, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId);
+    Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId);
 
     void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo);
 
@@ -26,15 +26,17 @@ public class CopyRequestInfoServiceImp : CopyRequestInfoService
     private readonly IDynamicRepository repository;
     private readonly MatchService matchService;
     private readonly BetListService betListService;
+    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
 
-    public CopyRequestInfoServiceImp(IDynamicRepository repository, MatchService matchService, BetListService betListService)
+    public CopyRequestInfoServiceImp(IDynamicRepository repository, MatchService matchService, BetListService betListService, RequestExtraInfoXmlService requestExtraInfoXmlService)
     {
         this.repository = repository;
         this.matchService = matchService;
         this.betListService = betListService;
+        this.requestExtraInfoXmlService = requestExtraInfoXmlService;
     }
 
-    public async Task<(IEnumerable<RequestInfoForCopy>, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId)
+    public async Task<(RequestInfoForCopy, IEnumerable<BetTypeTicketsInfo>)> GetCopyInfo(int matchId, int requestId)
     {
         var criteria = new CopyRequestInfoCriteria
         {
@@ -42,7 +44,11 @@ public class CopyRequestInfoServiceImp : CopyRequestInfoService
             RequestId = requestId
         };
 
-        return await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);
+        var (requestInfos, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(criteria);
+        var firstRequest = requestInfos.First();
+        firstRequest.Operators = requestExtraInfoXmlService.ParseXmlToOperators(firstRequest.OperatorInfo);
+        firstRequest.IsCheckedVar = requestExtraInfoXmlService.ParseXmlToIsCheckVar(firstRequest.IssueTypeId, firstRequest.RequestExtraInfo);
+        return (firstRequest, betTypeTickets);
     }
 
     public void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo)
