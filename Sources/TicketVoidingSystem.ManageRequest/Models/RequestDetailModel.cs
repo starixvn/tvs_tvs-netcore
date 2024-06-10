@@ -91,309 +91,69 @@ public class RequestEventModel
     public string FilterToBetId { get; set; }
     public int? FilterBy { get; set; }
 
-    public int? AATime
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            if (root == null || string.IsNullOrWhiteSpace(root.AATime))
-            {
-                return null;
-            }
-            return int.Parse(root.AATime);
-        }
-    }
+    public int? AATime { get; set; }
 
-    public int? PATime
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            if (root == null || string.IsNullOrWhiteSpace(root.PATime))
-            {
-                return null;
-            }
-            return int.Parse(root.PATime);
-        }
-    }
+    public int? PATime { get; set; }
 
-    public int? SATime
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            if (root == null || string.IsNullOrWhiteSpace(root.SATime))
-            {
-                return null;
-            }
-            return int.Parse(root.SATime);
-        }
-    }
+    public int? SATime { get; set; }
 
-    public int ScoreId
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            if (root == null || string.IsNullOrWhiteSpace(root.ScoreId))
-            {
-                return 0;
-            }
-            return int.Parse(root.ScoreId);
-        }
-    }
+    public int ScoreId { get; set; }
 
-    public bool IsMainMatch
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsMainMatch;
-        }
-    }
+    public bool IsMainMatch { get; set; }
 
-    public string HomeFavorite
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.HomeFavorite;
-        }
-    }
+    public string HomeFavorite { get; set; }
 
-    public string AwayFavorite
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.AwayFavorite;
-        }
-    }
+    public string AwayFavorite { get; set; }
 
-    public string ActualMarket
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.ActualMarket;
-        }
-    }
+    public string ActualMarket { get; set; }
 
-    public string WrongMarket
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.WrongMarket;
-        }
-    }
+    public string WrongMarket { get; set; }
 
-    public string HdpValue
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.HdpValue;
-        }
-    }
+    public string HdpValue { get; set; }
 
-    public bool IsCheckedVar
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsCheckedVar;
-        }
-    }
+    public bool IsCheckedVar { get; set; }
 
-    public string PoolHouseCheckedBetTypes
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.PoolHouseCheckedBetTypes;
-        }
-    }
+    public string PoolHouseCheckedBetTypes { get; set; }
 
-    public bool IsLinkGroup1X2
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsLinkGroup1X2;
-        }
-    }
+    public bool IsLinkGroup1X2 { get; set; }
 
-    public bool IsLinkGroupAIO
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsLinkGroupAIO;
-        }
-    }
+    public bool IsLinkGroupAIO { get; set; }
 
-    public int LiveIndicator
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.LiveIndicator;
-        }
-    }
+    public int LiveIndicator { get; set; }
 
-    public string FilterOddsType
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.FilterOddsType;
-        }
-    }
+    public string FilterOddsType { get; set; }
 
-    public string FilterFavoriteType
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.FilterFavoriteType;
-        }
-    }
+    public string FilterFavoriteType { get; set; }
 
-    public string FilterOuType
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.FilterOuType;
-        }
-    }
+    public string FilterOuType { get; set; }
 
-    public string OddsValue
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.OddsValue;
-        }
-    }
+    public string OddsValue { get; set; }
 
-    public string FromOdds
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.FromOdds;
-        }
-    }
+    public string FromOdds { get; set; }
 
-    public string ToOdds
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.ToOdds;
-        }
-    }
+    public string ToOdds { get; set; }
 
-    public string CorrectOdds
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.CorrectOdds;
-        }
-    }
+    public string CorrectOdds { get; set; }
 
-    public string BetTeam
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.BetTeam;
-        }
-    }
+    public string BetTeam { get; set; }
 
-    public string OuValue
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.OuValue;
-        }
-    }
+    public string OuValue { get; set; }
 
-    public string FavoriteValue
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.FavoriteValue;
-        }
-    }
+    public string FavoriteValue { get; set; }
 
-    public string BetTypeIds
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.BetTypeIds;
-        }
-    }
+    public string BetTypeIds { get; set; }
 
-    public string WicketOver
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.WicketOver;
-        }
-    }
+    public string WicketOver { get; set; }
 
-    public string PlayerIds
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.PlayerIds;
-        }
-    }
+    public string PlayerIds { get; set; }
 
-    public string Runs
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.Runs;
-        }
-    }
+    public string Runs { get; set; }
 
-    public bool Live
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.Live;
-        }
-    }
+    public bool Live { get; set; }
 
-    public bool NonLive
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.NonLive;
-        }
-    }
+    public bool NonLive { get; set; }
 
-    public int PlayerId
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.PlayerId;
-        }
-    }
+    public int PlayerId { get; set; }
 
     public string AdvancedExtraInfo { get; set; }
     public string RequestExtraInfo { get; set; }
