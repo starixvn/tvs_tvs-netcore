@@ -39,32 +39,7 @@
               [voidFunction]="2"
               >
             </template-message>
-            <div *ngIf="voidPageItem.voidReason" class="reason-area">
-              <div class="gray-header">
-                Reason
-              </div>
-              <table>
-                <tr class="header-language">
-                  <td>
-                    <span class="required">&nbsp;&nbsp;*</span> <span>English (Max {{150 -
-                      voidPageItem.voidReason.reasonEnglish?.length}} characters)</span>
-                  </td>
-                  <td>
-                    <span class="required">&nbsp;&nbsp;*</span> <span>Chinese Simplified (Max {{150 -
-                      voidPageItem.voidReason.reasonChineseSimplified?.length}} characters)</span>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <textarea maxlength="150" class="reason" [(ngModel)]="voidPageItem.voidReason.reasonEnglish"></textarea>
-                  </td>
-                  <td>
-                    <textarea maxlength="150" class="reasonSC"
-                      [(ngModel)]="voidPageItem.voidReason.reasonChineseSimplified"></textarea>
-                  </td>
-                </tr>
-              </table>
-            </div>
+            <void-reason [voidReason]="voidPageItem.voidReason" *ngIf="voidPageItem.voidReason"></void-reason>
           </ng-container>
 
           <ng-container *ngIf="voidPageItem.voidTicketsMini?.total === 0">

@@ -28,6 +28,7 @@ import { VoidNotParticipateComponent } from './void-not-participate/void-not-par
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
 import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
+import { VoidReasonComponent } from './void-reason/void-reason.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.
     VoidRedCardComponent,
     VoidNotParticipateComponent,
     VoidEarlyKickOffComponent,
-    VoidAbnormalBetComponent
+    VoidAbnormalBetComponent,
+    VoidReasonComponent
   ],
   imports: [
     AdvancedModeModule,

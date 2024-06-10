@@ -1,4 +1,5 @@
 @import '../../../assets/styles/mixin.scss';
+@import '../../../void-request/app/void-reason/void-reason.component.scss';
 
 .display-none {
   display: none;
@@ -118,64 +119,6 @@
   span {
     display: inline-block;
     vertical-align: middle;
-  }
-}
-
-.gray-header {
-  background: gray;
-  color: white;
-  font-weight: bold;
-  padding: 0 10px;
-  margin-bottom: 5px;
-  width: 50%;
-}
-
-.reason-area {
-  margin: 10px;
-
-  table {
-    width: 50%;
-    font-size: 9pt;
-    border-spacing: 1px;
-    background-color: white;
-    text-align: center;
-    font-weight: bold;
-
-    tr {
-      th {
-        background-color: #4e71bb;
-        color: white;
-      }
-
-      td {
-        width: 25%;
-
-        textarea {
-          width: 100%;
-          padding: 0px;
-          margin: 0px;
-          font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-          resize: vertical;
-        }
-      }
-    }
-
-    .header-language {
-      background-color: #cccccc;
-    }
-
-    .header-other-language {
-      color: #ffcc00;
-      cursor: pointer;
-    }
-  }
-
-  .no-data-text {
-    width: 50%;
-    padding: 0px;
-    margin: 0px;
-    resize: none;
-    color: #ed1c24;
   }
 }
 
