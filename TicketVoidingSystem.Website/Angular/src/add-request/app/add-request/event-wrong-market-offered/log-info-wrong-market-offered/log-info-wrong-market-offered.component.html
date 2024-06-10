@@ -1,13 +1,12 @@
 <div *ngIf="primitiveProps.isShowValidation">
   <strong>Main Event - Log Info</strong>
   <div class="log-info list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
-    <log-info-ticket-count [model]="logInfo.logInfoDetail"></log-info-ticket-count>
-    <span class="btn-bet-type-count" (click)="primitiveProps.isShowBetTypeCount = !primitiveProps.isShowBetTypeCount">Details</span>
-    <div class="bet-type-count pl-4" *ngIf="primitiveProps.isShowBetTypeCount">
-      <ng-container *ngFor="let item of logInfo.betTypeCount">
-        <span>{{item.betTypeName}} - {{item.betTypeCount}} ticket(s)</span><br/>
-      </ng-container>
-    </div>
+    <log-info-ticket-count
+      [model]="logInfo.logInfoDetail"
+      [betTypesCount]="logInfo.betTypeCount"
+      [isShowBetTypeCount]="true"
+      [isShowCancelCashOut]="true">
+    </log-info-ticket-count>
     <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
   </div>
 </div>
