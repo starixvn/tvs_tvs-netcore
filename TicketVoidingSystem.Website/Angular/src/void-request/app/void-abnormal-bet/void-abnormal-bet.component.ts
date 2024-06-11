@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
@@ -9,6 +8,7 @@ import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidAbnormalBetModel } from './models/void-abnormal-bet.model';
 import { VoidPageService } from './services/void-page.service';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-abnormal-bet',
@@ -17,7 +17,7 @@ import { VoidPageService } from './services/void-page.service';
 })
 export class VoidAbnormalBetComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChildren("templateMessage") templateMessageViewChildren: QueryList<TemplateMessageComponent>;
+  @ViewChildren("messageArea") messageAreaViewChildren: QueryList<MessageAreaComponent>;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItems: VoidAbnormalBetModel[] = [];
@@ -66,6 +66,7 @@ export class VoidAbnormalBetComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.templateMessageViewChildren.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    let templateMessageViewChildren = this.messageAreaViewChildren.map(x => x.templateMessageViewChildren.toArray()).flat();
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, templateMessageViewChildren, this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 }

@@ -25,8 +25,7 @@
           <div class="area-icon">
             <em [ngClass]="voidPageItem.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
               (click)="onClickShowVoidTickets(voidPageItem)"></em>
-            <em
-              [ngClass]="voidPageItem.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
+            <em [ngClass]="voidPageItem.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
               (click)="onClickShowTemplateMessage(voidPageItem)"></em>
           </div>
         </div>
@@ -38,68 +37,13 @@
           [isBlock]="voidPageItem.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
           [isDisableCheckbox]="true">
         </tickets-list>
-        <div [ngClass]="voidPageItem.isShowTemplateMessage ? 'display-block' : 'display-none'">
-          <ng-container *ngIf="voidPageItem.voidTicketsMini?.total > 0">
-            <template-message #templateMessage [value]="voidPageItem.templateValue"
-              [issueTypeId]="requestDetail.request.issueTypeId" [subIssueTypeId]="voidPageItem.subIssueType.subIssueTypeId"
-              [voidFunction]="2"
-              >
-            </template-message>
-            <void-reason [voidReason]="voidPageItem.voidReason" *ngIf="voidPageItem.voidReason"></void-reason>
-          </ng-container>
-
-          <ng-container *ngIf="voidPageItem.voidTicketsMini?.total === 0">
-            <div class="reason-area">
-              <div class="gray-header">
-                Message
-              </div>
-              <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
-            </div>
-            <div class="reason-area">
-              <div class="gray-header">
-                Reason
-              </div>
-              <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
-            </div>
-          </ng-container>
-        </div>
+        <message-area #messageArea [isShowTemplateMessage]="voidPageItem.isShowTemplateMessage" [totalVoidTickets]="voidPageItem.voidTicketsMini?.total" 
+          [templateValue]="voidPageItem.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" 
+          [subIssueTypeId]="voidPageItem.subIssueType.subIssueTypeId" [voidReason]="voidPageItem.voidReason">
+        </message-area>
       </div>
     </div>
-    <fieldset class="confirm-delete">
-      <legend>Confirmation</legend>
-      <table>
-        <tr>
-          <td>
-            <label>Username</label>
-          </td>
-          <td>
-            <input class="form-control form-control-sm" type="text" disabled value="{{primitiveProperty.userName}}" />
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>
-            <label>Password</label>
-          </td>
-          <td>
-            <input autocomplete="new-password" type="password" class="password form-control form-control-sm"
-              [(ngModel)]="primitiveProperty.userPassword" />
-          </td>
-          <td><span>&nbsp;&nbsp;(*)</span></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <input type="button" class="btn btn-success btn-sm font-weight-bold btn-void-all-matches"
-              value="Void All" [disabled]="primitiveProperty.isBlockUI" (click)="onClickVoidAllMatches()" />
-          </td>
-        </tr>
-      </table>
-    </fieldset>
-    <div *ngIf="primitiveProperty.errorMessage" class="error-text error-color">
-      <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{primitiveProperty.errorMessage}}
-    </div>
-
+    <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
     <tooltip [tooltip]="tooltip"></tooltip>
   </ng-container>
 </div>

@@ -45,7 +45,6 @@ import { HttpService } from './services/http.service';
     ToolTipModule,
     NgSelectModule,
     PipeModule,
-    // TemplateMessageModule,
     AdvancedModeModule,
     DateTimeModule,
     BlockUiModule,

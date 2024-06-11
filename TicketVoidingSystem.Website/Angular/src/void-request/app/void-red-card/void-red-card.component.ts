@@ -2,18 +2,18 @@ import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { CommonService } from '../../../utility/services/common.service';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
 import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
+import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-red-card',
@@ -22,9 +22,9 @@ import { VoidPageService } from './services/void-page.service';
 })
 export class VoidRedCardComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChildren("templateMessage") templateMessageViewChildren: QueryList<TemplateMessageComponent>;
+  @ViewChildren("messageArea") messageAreaViewChildren: QueryList<MessageAreaComponent>;
 
-  public primitiveProperty = new PrimitiveProperty();
+  public primitiveProperty = new CommonPrimitiveProperty();
   public voidMatches: VoidMatch[] = [];
   public isLoadedBasicData = false;
   public isLoadedUnderneathData = false;
@@ -150,7 +150,8 @@ export class VoidRedCardComponent implements OnInit {
 
     this.isRunningSubscriptionCallback = true;
     this.primitiveProperty.isBlockUI = true;
-    const templateMessageComponents = this.templateMessageViewChildren.toArray();
+
+    const templateMessageComponents = this.messageAreaViewChildren.map(x => x.templateMessageViewChildren.toArray()).flat();
     if (this.isLoadedUnderneathData && templateMessageComponents.every(x => x.initialize)) {
       await this.submitVoidService.voidAllMatches(templateMessageComponents, this.voidMatches, this.requestDetail, this.primitiveProperty);
       this.afterLoadUnderneathDataSubscription.unsubscribe();

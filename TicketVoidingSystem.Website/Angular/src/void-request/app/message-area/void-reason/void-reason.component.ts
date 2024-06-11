@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { VoidedReason } from '../../../utility/models/reason.model';
+import { VoidedReason } from '../../../../utility/models/reason.model';
 
 @Component({
   selector: 'void-reason',

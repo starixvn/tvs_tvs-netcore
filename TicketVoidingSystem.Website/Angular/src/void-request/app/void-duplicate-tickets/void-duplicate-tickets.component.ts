@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
@@ -11,6 +10,7 @@ import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageDuplicateTicketsModel } from './models/void-page-duplicate-tickets.model';
 import { VoidPageService } from './services/void-page.service';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-duplicate-tickets',
@@ -19,7 +19,7 @@ import { VoidPageService } from './services/void-page.service';
 })
 export class VoidDuplicateTicketsComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChild("templateMessage") templateMessageViewChild: TemplateMessageComponent;
+  @ViewChild("messageArea") messageAreaViewChildren: MessageAreaComponent;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItem: VoidPageDuplicateTicketsModel;
@@ -68,7 +68,8 @@ export class VoidDuplicateTicketsComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    this.voidPageCommonService.onClickVoidAllMatches([this.voidPageItem], [this.templateMessageViewChild], this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    let templateMessageViewChildren = this.messageAreaViewChildren.templateMessageViewChildren.toArray();
+    this.voidPageCommonService.onClickVoidAllMatches([this.voidPageItem], templateMessageViewChildren, this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 
   public isDuplicateTicketsMixParlay(): boolean {

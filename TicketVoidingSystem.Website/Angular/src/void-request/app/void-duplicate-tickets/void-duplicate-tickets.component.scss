@@ -1,13 +1,4 @@
 @import '../../../assets/styles/mixin.scss';
-@import '../../../void-request/app/void-reason/void-reason.component.scss';
-
-.display-none {
-  display: none;
-}
-
-.display-block {
-  display: block;
-}
 
 .void-page-item {
   margin: 0 10px 5px 10px;
@@ -126,50 +117,6 @@
   }
 }
 
-.confirm-delete {
-  margin: 10px;
-  padding: 10px;
-  float: left;
-  border-width: 2px;
-  border-style: groove;
-  border-image: initial;
-
-  legend {
-    font-weight: bold;
-    width: auto;
-  }
-
-  table {
-    tr {
-      td:first-child {
-        min-width: 140px;
-      }
-
-      textarea {
-        width: 500px;
-        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      }
-
-      input[disabled] {
-        cursor: not-allowed;
-      }
-    }
-  }
-}
-
-
-.error-text {
-  margin-top: 30px;
-  color: #ed1c24;
-
-  .icon-error-message {
-    padding-top: 1px;
-    width: 19px;
-  }
-}
-
-//////////////@at-root
-
 .spinner-overlay {
   background-color: white;
 }
@@ -183,7 +130,6 @@
   text-align: center;
   z-index: 10001;
 }
-
 
 .loading-message {
   .loading {
