@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using Xunit;
 using Substitute = NSubstitute.Substitute;
 
@@ -29,19 +27,17 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
                 Provider = "Provider",
             };
             var request = new CopyRequestInfoRequest { RequestId = 123, MatchId = 1 };
-            var repository = Substitute.For<IDynamicRepository>();
-            var matchService = Substitute.For<MatchService>();
-            var requestInfoList = new List<RequestInfoForCopy> { copyRequestInfoModel };
+            var copyRequestInfoService = Substitute.For<CopyRequestInfoService>();
             var betTypeTickets = new List<BetTypeTicketsInfo> { new() };
-            repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request).ReturnsForAnyArgs((requestInfoList, betTypeTickets));
-            var handler = new CopyRequestInfoHandler(repository, matchService);
+            copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId).ReturnsForAnyArgs((copyRequestInfoModel, betTypeTickets));
+            var handler = new CopyRequestInfoHandler(copyRequestInfoService);
 
             // Act
             _ = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            await repository.Received(1).FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request);
-            matchService.Received(1).UpdateMatchInfoFromRemotingRef(Arg.Any<Match>());
+            await copyRequestInfoService.Received(1).GetCopyInfo(request.MatchId, request.RequestId);
+            copyRequestInfoService.Received(1).UpdateMatchInfo(Arg.Any<int>(), Arg.Any<RequestInfoForCopy>());
         }
     }
 }

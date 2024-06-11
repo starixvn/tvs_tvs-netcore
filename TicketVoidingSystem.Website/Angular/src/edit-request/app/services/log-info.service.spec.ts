@@ -268,6 +268,7 @@ describe('LogInfoService', () => {
     const spyIsReducedOver = jest.spyOn(validationService, 'isReducedOver').mockImplementation(() => false);
     const spyIsNotParticipate = jest.spyOn(validationService, 'isNotParticipate').mockImplementation(() => false);
     const spyIsAbandoned = jest.spyOn(validationService, 'isAbandoned').mockImplementation(() => false);
+    const spyIsLikelyWrongMarketOffered = jest.spyOn(validationService, 'isLikelyWrongMarketOffered').mockImplementation(() => false);
 
     logInfoService['createLogInfoArg'] = jest.fn();
     logInfoService['getLogInfoDangerAccepted'] = jest.fn();
@@ -280,6 +281,7 @@ describe('LogInfoService', () => {
     logInfoService['isReducedOver'] = jest.fn();
     logInfoService['isNotParticipate'] = jest.fn();
     logInfoService['isAbandoned'] = jest.fn();
+    logInfoService['isLikelyWrongMarketOffered'] = jest.fn();
 
     // Action
     await logInfoService.getLogInfo(null, null);
@@ -300,6 +302,7 @@ describe('LogInfoService', () => {
     expect(spyIsReducedOver).toHaveBeenCalledTimes(1);
     expect(spyIsNotParticipate).toHaveBeenCalledTimes(1);
     expect(spyIsAbandoned).toHaveBeenCalledTimes(1);
+    expect(spyIsLikelyWrongMarketOffered).toHaveBeenCalledTimes(1);
   });
 
   it('#getLogInfoRedCard should get correct info', async () => {

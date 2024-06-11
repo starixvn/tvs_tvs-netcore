@@ -11,8 +11,12 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { RequestLastModifiedDate } from './models/request-last-modified-date.model';
+import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
+import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
+import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
+import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
@@ -57,6 +61,11 @@ describe('AppComponent', () => {
     declarations: [
       MenuBarComponent,
       VoidDangerAcceptedComponent,
+      VoidOtherIssueComponent,
+      VoidAbnormalBetComponent,
+      VoidRedCardComponent,
+      VoidNotParticipateComponent,
+      VoidDuplicateTicketsComponent,
       VoidOtherIssueComponent
     ],
     imports: [

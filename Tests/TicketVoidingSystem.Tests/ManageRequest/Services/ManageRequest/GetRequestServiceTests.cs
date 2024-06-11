@@ -24,6 +24,7 @@ public class GetRequestServiceTests
     private readonly MatchService matchService;
     private readonly IMapper mapper;
     private readonly WrongMarketOfferedService wrongMarketOfferedService;
+    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly GetRequestServiceImp service;
 
     public GetRequestServiceTests()
@@ -33,7 +34,8 @@ public class GetRequestServiceTests
         matchService = Substitute.For<MatchService>();
         mapper = Substitute.For<IMapper>();
         wrongMarketOfferedService = Substitute.For<WrongMarketOfferedService>();
-        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, wrongMarketOfferedService);
+        requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
+        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, wrongMarketOfferedService, requestExtraInfoXmlService);
     }
 
     [Fact]
@@ -639,7 +641,8 @@ public class GetRequestServiceTests
             {
                 IssueTypeId = IssueTypeConstant.RecoverTicket,
                 SportType = 0,
-                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>",
+                Operators = new List<OperatorInfo>()
             },
             PlayerNames = new List<PlayerName> { new() },
             RecoverTicketModel = new RecoverTicketViewModel

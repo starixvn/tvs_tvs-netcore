@@ -5,7 +5,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
-using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
@@ -14,8 +14,8 @@ public class TicketsViewModelServiceTests
 {
     private static TicketsViewModelServiceImp CreateService()
     {
-        var betListService = Substitute.For<BetListService>();
-        return new TicketsViewModelServiceImp(betListService);
+        var specialBetTypeContentService = Substitute.For<SpecialBetTypeContentService>();
+        return new TicketsViewModelServiceImp(specialBetTypeContentService);
     }
 
     private readonly TicketsViewModelServiceImp service = CreateService();

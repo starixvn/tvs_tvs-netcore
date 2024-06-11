@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -23,14 +24,16 @@ public class WrongMarketOfferedServiceTests
     public void GetBetTypesAdvancedMode_ValidRequest_ReturnListBetType()
     {
         // Arrange
-        var models = new List<BetTeamAddRequestResult> { new() { Id = "" }, new() { Id = "" } };
+        var models = new List<BetTeamAddRequestResult> { new() { Id = "1" }, new() { Id = "2" } };
         var json = JsonSerializer.Serialize(models);
 
         // Act
-        var actual = service.GetBetTypesAdvancedMode(json);
+        var actual = service.GetBetTypesAdvancedMode(json).ToList();
 
         // Assert
 
-        AssertExtension.Equal("", actual);
+        AssertExtension.Equal("1", actual[0].Id);
+        AssertExtension.Equal("2", actual[1].Id);
+        AssertExtension.Equal(2, actual.Count);
     }
 }

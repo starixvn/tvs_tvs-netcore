@@ -45,6 +45,7 @@ FilterReducedOverItemComponent {
       "checkAllCheckBoxText": "Check All Items",
       "isCheckAll": false,
       "isDefaultSelectAll": true,
+      "isDisabled": false,
       "isShowPlaceHolder": false,
       "items": Array [],
       "maxHeight": "350px",

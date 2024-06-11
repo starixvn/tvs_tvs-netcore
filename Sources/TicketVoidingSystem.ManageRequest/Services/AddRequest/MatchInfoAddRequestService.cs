@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using TicketVoidingSystem.Constants;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 
@@ -15,12 +14,10 @@ public interface MatchInfoAddRequestService
 public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
 {
     private readonly RemotingRefWrapperService remotingRefWrapperService;
-    private readonly IMapper mapper;
 
-    public MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRefWrapperService, IMapper mapper)
+    public MatchInfoAddRequestServiceImp(RemotingRefWrapperService remotingRefWrapperService)
     {
         this.remotingRefWrapperService = remotingRefWrapperService;
-        this.mapper = mapper;
     }
 
     public MatchInfoAddRequest UpdateDataFromRemotingRef(MatchInfoAddRequest? matchInfo)
