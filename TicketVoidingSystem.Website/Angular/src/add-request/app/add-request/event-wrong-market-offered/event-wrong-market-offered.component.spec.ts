@@ -159,6 +159,10 @@ describe('EventWrongMarketOfferedComponent', () => {
   it('#changeMatchEvent should emit updateMatchId when leagueEventWrongOddsComponent not null', async () => {
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+    .mock(AddRequestStore, {
+      changeBlockingUiStatus: jest.fn(),
+      changeSavingRequestStatus: jest.fn()
+     })
     .render({
       bind: {
         isEdit: false,

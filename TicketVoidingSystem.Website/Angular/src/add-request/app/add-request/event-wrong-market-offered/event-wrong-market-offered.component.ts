@@ -111,19 +111,26 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     filterTime.toDateTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 
-  changeFilter(): void {
+  changeFilterTime(): void {
+    this.addRequestStore.changeSavingRequestStatus(true);
+    this.resetBetTypeAndAdvancedMode();
+    this.resetLogInfo();
+  }
+
+  resetLogInfo(): void {
     this.primitivePropertyEvent.isShowErrorNoBetType = false;
     this.primitivePropertyEvent.isShowValidation = false;
   }
 
   async refreshEvent() {
-    this.primitivePropertyEvent.isShowValidation = false;
+    this.resetLogInfo();
     await this.getGroupBetTypes();
     const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
     this.advancedMode?.changeBetTypes(allBetTypes);
     if (allBetTypes.length === 0) {
       this.primitivePropertyEvent.isShowErrorNoBetType = true;
     }
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 
   async clickSearch(): Promise<void> {
@@ -157,11 +164,16 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeague?.selectedMatch.matchId) {
       this.logInfoEvent.matchId = this.eventLeague.selectedMatch.matchId;
-      this.advancedMode.resetBetTeam();
-      this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+      this.addRequestStore.changeSavingRequestStatus(true);
+      this.resetBetTypeAndAdvancedMode();
       this.primitivePropertyEvent.isShowFilterArea = true;
       this.primitivePropertyEvent.isShowErrorNoBetType = false;
     }
+  }
+
+  private resetBetTypeAndAdvancedMode() {
+    this.advancedMode?.resetBetTeam();
+    this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
   }
   private initSaveRequestInput() {
     if (!this.filter.isVoided) {

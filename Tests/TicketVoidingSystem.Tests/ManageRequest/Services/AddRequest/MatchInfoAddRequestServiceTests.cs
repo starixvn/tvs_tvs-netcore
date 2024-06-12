@@ -16,7 +16,7 @@ public class MatchInfoAddRequestServiceTests
     public MatchInfoAddRequestServiceTests()
     {
         remotingRefService = Substitute.For<RemotingRefWrapperService>();
-        service = new MatchInfoAddRequestServiceImp(remotingRefService, null);
+        service = new MatchInfoAddRequestServiceImp(remotingRefService);
     }
 
     [Fact]
