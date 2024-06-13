@@ -176,7 +176,7 @@ describe('EventWrongMarketOfferedComponent', () => {
     instance.logInfoEvent = Helper.fakeLogInfoWrongMarketOffered;
     instance.advancedMode = new AdvancedModeAddRequestComponent();
     instance.advancedMode.getCheckedBetTypes = jest.fn().mockReturnValue([]);
-    instance.advancedMode.resetBetTeam = jest.fn();
+    instance.advancedMode.clearBetTeam = jest.fn();
 
     await instance.changeMatchEvent();
 

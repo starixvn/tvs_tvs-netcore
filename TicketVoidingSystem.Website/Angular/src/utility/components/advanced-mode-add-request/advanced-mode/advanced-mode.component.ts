@@ -19,7 +19,7 @@ import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advance
 export class AdvancedModeComponent {
   @Input() matchId: number;
   @Input() isShowAdvancedModeFilter: boolean;
-  @Input() allBetTypes: BetTypeAddRequest[] = [];
+  @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
   betTeams: BetTeamAddRequest[] = [];
@@ -38,16 +38,16 @@ export class AdvancedModeComponent {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (this.matchId && changes['allBetTypes']) {
+    if (this.matchId && changes['changedBetTypes']) {
       if (this.betTeams.length === 0) {
         await this.getBetTeamAndRenderValue(this.matchId);
       }
-      await this.changedBetTypes();
+      await this.handleChangedBetTypes();
     }
     if (this.advancedModeAddRequestModel !== undefined && changes['advancedModeAddRequestModel']) {
       await this.getBetTeamAndRenderValue(this.matchId);
-      this.allBetTypes = this.advancedModeAddRequestModel.checkedBetTypes;
-      await this.changedBetTypes();
+      this.changedBetTypes = this.advancedModeAddRequestModel.checkedBetTypes;
+      await this.handleChangedBetTypes();
       this.updateBetTeamByCheckedValue(this.advancedModeAddRequestModel.betTeamsResult);
     }
   }
@@ -55,7 +55,7 @@ export class AdvancedModeComponent {
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
-      x.isChecked = this.allBetTypes.some(y => y.id.toString() === x.betTypes);
+      x.isChecked = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
@@ -71,7 +71,7 @@ export class AdvancedModeComponent {
       : await this.service.getBetTeamsAddRequest();
   }
 
-  resetBetTeam() {
+  clearBetTeam() {
     this.isShowAdvancedModeFilter = false;
     this.isCollapse = true;
     this.betTeams = [];
@@ -150,10 +150,9 @@ export class AdvancedModeComponent {
     }
   }
 
-  private async changedBetTypes() {
-    this.unckeckedAllBetTeam();
-    if (this.allBetTypes?.length > 0) {
-      for (const betType of this.allBetTypes) {
+  private async handleChangedBetTypes() {
+    if (this.changedBetTypes?.length > 0) {
+      for (const betType of this.changedBetTypes) {
         await this.handleBetTeam(betType);
       }
     }

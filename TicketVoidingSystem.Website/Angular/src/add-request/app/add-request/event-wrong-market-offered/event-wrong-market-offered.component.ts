@@ -172,7 +172,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   }
 
   private resetBetTypeAndAdvancedMode() {
-    this.advancedMode?.resetBetTeam();
+    this.advancedMode?.clearBetTeam();
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
   }
   private initSaveRequestInput() {

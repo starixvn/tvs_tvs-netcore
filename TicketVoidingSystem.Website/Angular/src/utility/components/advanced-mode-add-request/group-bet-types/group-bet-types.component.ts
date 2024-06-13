@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
-import { BetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
+import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
 
 @Component({
   selector: 'group-bet-types',
@@ -23,10 +23,25 @@ export class GroupBetTypesComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  changeAllBetTypes() {
+    this.changeFilterEvent.emit();
     this.betTypesEvent.emit(this.model.getAllBetTypes());
   }
 
-  changedBetTypes() {
+  changeGroupBetTypes(group: GroupBetTypeAddRequest) {
+    this.changeFilterEvent.emit();
+    this.betTypesEvent.emit(group.betTypes);
+  }
+
+
+  changeBetTypeItem(item: BetTypeAddRequest) {
+    this.changeFilterEvent.emit();
+    this.betTypesEvent.emit([item]);
+  }
+
+  changeBetTypes() {
     this.changeFilterEvent.emit();
     this.betTypesEvent.emit(this.model.getAllBetTypes());
   }
