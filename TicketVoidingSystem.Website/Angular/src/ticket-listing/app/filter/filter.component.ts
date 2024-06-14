@@ -13,7 +13,6 @@ import { MultipleSelection } from '../../../utility/components/multiple-selectio
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ComboParlayConstants } from '../../../utility/constants/combo-parlay.constant';
 import { DateTimeFormat, ModeType, Product } from '../../../utility/constants/config';
-import { SportType } from '../../../utility/constants/sport.constant';
 import { TEXT } from '../../../utility/constants/text';
 import { BallSequences } from '../../../utility/models/ball-sequences';
 import { MatchModel } from '../../../utility/models/match.model';
@@ -153,7 +152,7 @@ export class FilterComponent implements OnInit {
     this.query.product = value;
     this.isMatch3rd = Product.IS_MATCH_3RD.indexOf(value) > -1;
     this.switchMatch3rd = this.switchMatch3rd !== this.isMatch3rd;
-    this.isReSettled = false;
+    this.unCheckAffectedTickets()
     if (value !== Product.SPORTS_BOOK) {
       this.disabledTransDate = true;
       this.singleOrSubParlay = 'All';
@@ -306,7 +305,7 @@ export class FilterComponent implements OnInit {
     }
 
     if (this.query.product === Product.BET_BUILDER) {
-      this.handlBetTypesOfBetBuilder(query);
+      this.handleBetTypesOfBetBuilder(query);
     }
 
     if (this.query.product === Product.VIRTUAL_SPORTS) {
@@ -344,7 +343,7 @@ export class FilterComponent implements OnInit {
     this.changeBetTypes(this.groupBetTypes.getAllBetType());
   }
 
-  async handlBetTypesOfBetBuilder(query: GetBetTypesQuery) {
+  async handleBetTypesOfBetBuilder(query: GetBetTypesQuery) {
     const data = await this.appService.getSelectionTypes(query);
     if (data.length === 0) {
       this.tooltip.display('match-id', TEXT.NO_BETTYPE);
@@ -461,6 +460,9 @@ export class FilterComponent implements OnInit {
       const betTeams = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
       this.query.betTeams = betTeams;
     }
+    else{
+      this.query.betTeams = undefined;
+    }
     return this.query;
   }
 
@@ -486,21 +488,16 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  resetFilter() {
-    this.matchId = '';
-    this.preMatchId = '';
-    this.groupBetTypes = new GroupBetTypesModel([], false);
-    this.advancedModeComponent.resetBetTeam();
-  }
-
   changeBetTypes(betTypes: BetType[]) {
     this.allBetTypes = betTypes;
   }
 
   isShowCheckboxAffected(): boolean {
-    if (this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0 && this.query.product === Product.SPORTS_BOOK
-      && this.sportType === SportType.SOCCER) {
-      return true;
+    if(this.query.product === Product.SPORTS_BOOK){
+        return this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0;
+    }
+    if(this.query.product === Product.BET_BUILDER){
+      return this.betTypes && this.betTypes.betTypes.length > 0;
     }
 
     return false;
@@ -509,24 +506,49 @@ export class FilterComponent implements OnInit {
   unCheckAffectedTickets(): void {
     this.isReSettled = false;
     this.enableBetTypesAndAdvancedMode();
+    this.handleBetTypesAndAdvancedMode();
   }
 
-  private enableBetTypesAndAdvancedMode(): void {
+  private enableGroupBetTypesAndAdvancedMode(): void {
     this.groupBetTypesComponent.isDisabledAllBetTypes = false;
   }
 
-  handleBetTypesAndAdvancedMode(): void {
-    if (this.isReSettled) {
-      this.groupBetTypesComponent.isDisabledAllBetTypes = true;
-      this.groupBetTypes.isChecked = true;
-      this.groupBetTypes.groupBetTypes.forEach(x => {
-        x.isChecked = true;
-        x.betTypes.forEach(y => y.isChecked = true);
-      });
-    } else {
-      this.enableBetTypesAndAdvancedMode();
-    }
+  private enableBetTypesAndAdvancedMode(): void {
+    this.betTypesComponent.isDisabledAllBetTypes = false;
+  }
 
+  private checkAndDisabledAllBetTypes(): void {
+    if(this.query.product === Product.BET_BUILDER){
+      if (this.isReSettled) {
+        this.betTypesComponent.isDisabledAllBetTypes = true;
+        this.betTypes.isChecked = true;
+        this.betTypes.betTypes.forEach(x => {
+          x.isChecked = true;
+        });
+      } else {
+        this.enableBetTypesAndAdvancedMode();
+      }
+    }
+  }
+
+  private checkAndDisabledAllGroupBetTypes(): void {
+    if(this.query.product === Product.SPORTS_BOOK){
+      if (this.isReSettled) {
+        this.groupBetTypesComponent.isDisabledAllBetTypes = true;
+        this.groupBetTypes.isChecked = true;
+        this.groupBetTypes.groupBetTypes.forEach(x => {
+          x.isChecked = true;
+          x.betTypes.forEach(y => y.isChecked = true);
+        });
+      } else {
+        this.enableGroupBetTypesAndAdvancedMode();
+      }
+    }
+  }
+  
+  public handleBetTypesAndAdvancedMode(): void {
+    this.checkAndDisabledAllBetTypes();
+    this.checkAndDisabledAllGroupBetTypes();
   }
 
   isShowAdvancedMode(): boolean {
