@@ -59,7 +59,7 @@
                             编码<br />
                             Code
                         </td>
-                        @if (Helper.IsLikelyAbnormalBet(Model.IssueTypeId))
+                        @if (Helper.IsAbnormalBet(Model.IssueTypeId))
                         {
                             <td width="250">
                                 联赛<br />
@@ -79,7 +79,7 @@
                         <td>
                             @Model.Match.MatchCode
                         </td>
-                        @if (Helper.IsLikelyAbnormalBet(Model.IssueTypeId))
+                        @if (Helper.IsAbnormalBet(Model.IssueTypeId))
                         {
                             <td>
                                 @if (!string.IsNullOrEmpty(Model.Match.LeagueNameSimplified))
@@ -196,7 +196,7 @@
                                 @ticket.TransDate
                             </td>
                             <td align="Center">
-                                @if ((Helper.IsLikelyAbnormalBet(Model.IssueTypeId) || Helper.IsAbnormalAccount(Model.IssueTypeId)) && ticket.IsVipMember)
+                                @if ((Helper.IsAbnormalBet(Model.IssueTypeId) || Helper.IsAbnormalAccount(Model.IssueTypeId)) && ticket.IsVipMember)
                                 {
                                     <span style="color: red">@(new RawString(ticket.Member))</span>
                                 }
@@ -253,7 +253,7 @@
                 </table>
                 <br />
             }
-            @if (Helper.IsLikelyAbnormalBet(Model.IssueTypeId) || Helper.IsAbnormalAccount(Model.IssueTypeId) || Model.IsFilterByUserName)
+            @if (Helper.IsAbnormalBet(Model.IssueTypeId) || Helper.IsAbnormalAccount(Model.IssueTypeId) || Model.IsFilterByUserName)
             {
                 <p style="color: red">(*) VIP 会员以红色标注 - VIP Customer is highlighted in RED</p>
             }

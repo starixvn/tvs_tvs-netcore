@@ -64,14 +64,16 @@ public class GetRequestsForExcelServiceTests
         var query = new SelectRequestsQuery();
         var models = new List<RequestModel>
         {
-            new() { RequestId = 1 },
-            new() { RequestId = 2 },
-            new() { RequestId = 1 }
+            new() { RequestId = 1, MatchId = 1 },
+            new() { RequestId = 2, MatchId = 2 },
+            new() { RequestId = 3, MatchId = 3 }
         };
 
         var calculateTimeSets = new List<GetCalculateTimeModel>
         {
-            new() { RequestId = 1 }
+            new() { RequestId = 1, MatchId = 1 },
+            new() { RequestId = 2, MatchId = 2 },
+            new() { RequestId = 3, MatchId = 3 },
         };
         var renderedViewModels = new RequestViewModel
         {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import moment from "moment";
 import { ClipboardService } from 'ngx-clipboard';
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
@@ -7,6 +7,7 @@ import { CheckedBetType, GetPlayersQuery, OddsInfo } from '../../../utility/comp
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { PagingConstant } from '../../../utility/components/paging/paging/paging.model';
@@ -26,7 +27,6 @@ import { StaticService } from '../../../utility/services/static.service';
 import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { Bet, Item, Type } from './filter.model';
-import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 @Component({
   selector: 'filter',
@@ -143,8 +143,7 @@ export class FilterComponent implements OnInit{
     const data = await this.commonService.getIssueTypes();
     data.issueTypes = data.issueTypes.filter(
       x => x.issueTypeId.toString() !== IssueTypeConstant.EARLY_KICK_OFF && x.issueTypeId.toString() !== IssueTypeConstant.WRONG_KICK_OFF
-        && x.issueTypeId.toString() !== IssueTypeConstant.ABNORMAL_BET && x.issueTypeId.toString() !== IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER
-        && x.issueTypeId.toString() !== IssueTypeConstant.RECOVER_TICKET
+        && x.issueTypeId.toString() !== IssueTypeConstant.ABNORMAL_BET && x.issueTypeId.toString() !== IssueTypeConstant.RECOVER_TICKET
     );
 
     this.issueTypeModel = data;

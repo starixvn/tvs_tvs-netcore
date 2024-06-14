@@ -14,7 +14,7 @@ public interface GetTransInfoService
 
     Task<IEnumerable<string>> GetTransInfoJsonForVoid(IEnumerable<BetId> singleTickets, IEnumerable<BetId> parlayTickets, IEnumerable<BetId> cancelCashOutTickets, int? matchId);
 
-    Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets);
+    Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, int? matchId);
 }
 
 public class GetTransInfoServiceImp : GetTransInfoService
@@ -50,7 +50,6 @@ public class GetTransInfoServiceImp : GetTransInfoService
         switch (query.IssueTypeId)
         {
             case IssueTypeConstant.AbnormalBet:
-            case IssueTypeConstant.AbnormalBetRealMember:
                 criteria.AbnormalBetTransIds = issueInfo;
                 break;
 
@@ -144,7 +143,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
         return transInfoJsonInAllServers;
     }
 
-    public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets)
+    public async Task<IEnumerable<string>> GetTransInfoJsonForVoid14(IEnumerable<BetId> singleTickets, int? matchId)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
@@ -153,6 +152,7 @@ public class GetTransInfoServiceImp : GetTransInfoService
             var criteria = new GetTransInfoForVoid14Criteria
             {
                 SiteDbGroupId = server.Id,
+                MatchId = matchId,
                 SingleTransIds = Helper.JoinBetIdList(singleTicketsInSite)
             };
 
@@ -167,7 +167,8 @@ public class GetTransInfoServiceImp : GetTransInfoService
     {
         return query.IssueTypeId switch
         {
-            IssueTypeConstant.AbnormalBet or IssueTypeConstant.AbnormalBetRealMember or IssueTypeConstant.ArchivedTicket => query.TransIds,
+            IssueTypeConstant.ArchivedTicket => query.TransIds,
+            IssueTypeConstant.AbnormalBet => query.AbnormalBetModel.TransIds,
             IssueTypeConstant.AbnormalAccount => query.AbnormalAccountViewModel.ToAbnormalAccountInfoXml(),
             IssueTypeConstant.EarlyKickOffTime or IssueTypeConstant.WrongKickOffTime => query.EarlyKickOffModels.ToKickOffInfoXml(),
             IssueTypeConstant.WrongScore => query.WrongScoreModels.ToWrongScoreInfoXml(),

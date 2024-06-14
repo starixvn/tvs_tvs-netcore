@@ -28,3 +28,9 @@ public class InsertQueueQuery
     public string UserName { get; set; }
     public string UserPassword { get; set; }
 }
+
+public class RequestInsertQueueJson
+{
+    public int RequestId { get; set; }
+    public int MatchId { get; set; }
+}

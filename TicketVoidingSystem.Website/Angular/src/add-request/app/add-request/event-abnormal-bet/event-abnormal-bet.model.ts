@@ -10,7 +10,6 @@ export class PrimitiveProperty {
   isBlockUI = false;
 }
 export interface CheckTransIdsQuery {
-  matchId: number;
   transIds: string;
   requestId?: number;
   actionId: string;
@@ -25,12 +24,13 @@ export interface CheckTransIdsQuery {
 
 export class CheckTransIdsViewModel {
   transInfoAddRequestModel: TransInfoAddRequestModel;
-  match: MatchInfo;
+  matches: MatchInfo[];
   validation: ValidationAbnormalBet;
   abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
+  sendLetstalkModels: SendLetstalkModel[];
 }
 
-export interface ValidationAbnormalBet {
+export class ValidationAbnormalBet {
   invalidTransIds: string;
   movedTransIds: string;
   differentMatchTransIds: string;
@@ -44,6 +44,14 @@ export interface ValidationAbnormalBet {
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;
   isHasWarningRemovedTickets: boolean;
+  isHasUusTickets: boolean;
+  listBetteam: string;
+  listBettype: string;
+}
+
+
+export interface SendLetstalkModel {
+  matchId: number;
   isHasUusTickets: boolean;
   listBetteam: string;
   listBettype: string;

@@ -921,7 +921,6 @@ describe('FilterComponent', () => {
           issueTypes: Helper.fakeIssueTypes
         }
       });
-    instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => true);
     instance.isAbnormalBet = jest.fn().mockImplementation(() => true);
     instance.abnormalFilterBy = AbnormalFilterBy.MIX_PARLAY;
     instance.originActions = Helper.getFakeActions();
@@ -940,7 +939,6 @@ describe('FilterComponent', () => {
           issueTypes: Helper.fakeIssueTypes
         }
       });
-    instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => true);
     instance.abnormalFilterBy = null;
     instance.originActions = Helper.getFakeActions();
 
@@ -958,7 +956,7 @@ describe('FilterComponent', () => {
           issueTypes: Helper.fakeIssueTypes
         }
       });
-    instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => false);
+    instance.isAbnormalBet = jest.fn().mockImplementation(() => false);
     instance.isArchivedTicket = jest.fn().mockImplementation(() => true);
     instance.originActions = Helper.getFakeActions();
 
@@ -976,7 +974,7 @@ describe('FilterComponent', () => {
           issueTypes: Helper.fakeIssueTypes
         }
       });
-    instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => false);
+    instance.isAbnormalBet = jest.fn().mockImplementation(() => false);
     instance.isArchivedTicket = jest.fn().mockImplementation(() => false);
     instance.isAbnormalAccount = jest.fn().mockImplementation(() => true);
     instance.originActions = Helper.getFakeActions();
@@ -995,7 +993,7 @@ describe('FilterComponent', () => {
           issueTypes: Helper.fakeIssueTypes
         }
       });
-    instance.isLikelyAbnormalBet = jest.fn().mockImplementation(() => false);
+    instance.isAbnormalBet = jest.fn().mockImplementation(() => false);
     instance.isArchivedTicket = jest.fn().mockImplementation(() => false);
     instance.isAbnormalAccount = jest.fn().mockImplementation(() => true);
     instance.originActions = Helper.getFakeActions();

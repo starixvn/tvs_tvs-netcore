@@ -50,18 +50,8 @@ export class ValidationService {
   }
 
   /* istanbul ignore next */
-  public isLikelyAbnormalBet(detailViewModel: RequestDetailViewModel): boolean {
-    return this.isAbnormalBet(detailViewModel) || this.isAbnormalBetRealMember(detailViewModel);
-  }
-
-  /* istanbul ignore next */
-  private isAbnormalBet(detailViewModel: RequestDetailViewModel): boolean {
+  public isAbnormalBet(detailViewModel: RequestDetailViewModel): boolean {
     return StaticService.isAbnormalBet(detailViewModel.request.issueTypeId.toString());
-  }
-
-  /* istanbul ignore next */
-  private isAbnormalBetRealMember(detailViewModel: RequestDetailViewModel): boolean {
-    return StaticService.isAbnormalBetRealMember(detailViewModel.request.issueTypeId.toString());
   }
   
   /* istanbul ignore next */

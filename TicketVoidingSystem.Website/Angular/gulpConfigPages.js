@@ -131,11 +131,11 @@ const configPages = [
   //homePage,
   // manageVoidServices,
   // abExceptionList,
-   markTickets,
-   ticketListing,
-   voidSingleBet,
-   voidRequest,
-  // manageRequest,
+  // markTickets,
+  // ticketListing,
+  // voidSingleBet,
+  // voidRequest,
+   manageRequest,
   // addRequest,
   // editRequest
 ];

@@ -75,8 +75,8 @@ public class AddRequestServiceImp : AddRequestService
     private async Task<Result> ExecuteAddAfterMarkTickets(AddRequestQuery query)
     {
         var requestId = await ExecuteAddRequest(query);
-        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.MatchId, query.EarlyKickOffInfo);
-        await sendLetstalkAfterAddService.Execute(query, requestId);
+        await insertAutoVoidRequestQueueService.Execute(requestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
+        await sendLetstalkAfterAddService.Execute(query.AbnormalBetInfo, requestId);
         return new Result
         {
             Data = new AddRequestResultData
@@ -108,6 +108,7 @@ public class AddRequestServiceImp : AddRequestService
         command.DuplicateTicketsInfo = query.DuplicateTicketsInfo?.ToDuplicateTicketsXml();
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
+        command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
@@ -135,8 +136,9 @@ public class AddRequestServiceImp : AddRequestService
             IssueTypeConstant.WrongScore => query.WrongScoreInfo.First().MatchId.ToString(),
             IssueTypeConstant.EarlyKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
             IssueTypeConstant.WrongKickOffTime => string.Join(", ", query.EarlyKickOffInfo.Select(x => x.MatchId)),
-            IssueTypeConstant.AbnormalBetRealMember => query.MatchId.ToString(),
-            IssueTypeConstant.AbnormalBet => query.MatchId.ToString(),
+            IssueTypeConstant.AbnormalBet => query.AbnormalBetInfo?.Matches?.Count() > 0
+                ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
+                : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),
             _ => string.Empty
         };

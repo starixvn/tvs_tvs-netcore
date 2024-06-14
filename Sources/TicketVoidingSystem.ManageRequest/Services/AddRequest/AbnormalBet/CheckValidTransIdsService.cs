@@ -35,19 +35,19 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
         var mappingTypes = new[]
         {
             typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string),
-            typeof(GetAbnormalBetTicketModel)
+            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
         };
         var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var match = result[0].Cast<MatchInfoAddRequest>().FirstOrDefault();
+        var matches = result[0].Cast<MatchInfoAddRequest>();
         var validation = result[1].Cast<ValidationAbnormalBet>().FirstOrDefault();
         var transInfoAddRequestModel = result[2].Cast<TransInfoAddRequestModel>().FirstOrDefault();
         var transInfoJson = result[3].Cast<string>().FirstOrDefault();
         var abnormalBetTicketRequests = result[4].Cast<GetAbnormalBetTicketModel>();
+        var sendLetstalkModels = result[5].Cast<SendLetstalkModel>();
 
         var viewModel = new CheckValidTransIdsViewModel
         {
-            Match = matchInfoAddRequestService.UpdateDataFromRemotingRef(match),
+            Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matches),
             Validation = validation,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
@@ -56,8 +56,8 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
                 MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
                 TransInfoJson = transInfoJson
             },
-            AbnormalBetTicketRequests =
-                mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests)
+            AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests),
+            SendLetstalkModels = sendLetstalkModels
         };
 
         return viewModel;
@@ -87,7 +87,7 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
         var getTransInfoQuery = new GetTransInfoQuery
         {
             IssueTypeId = model.IssueTypeId,
-            TransIds = model.TransIds
+            AbnormalBetModel = new AbnormalBetViewModel { TransIds = model.TransIds }
         };
         var transInfoJsonList = await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
 

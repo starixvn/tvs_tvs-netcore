@@ -35,7 +35,7 @@
           <span class="row no-gutters">Match: {{generalInfoViewModel.generalInfoModel.matchEvent}}<br/></span>
         </div>
         <span class="row no-gutters">Affected: {{generalInfoViewModel.generalInfoModel.licenseeNames}}<br/></span>
-        <div *ngIf="isLikelyAbnormalBetIssueType()">
+        <div *ngIf="isAbnormalBetIssueType()">
           <span *ngIf="!isAbnormalBetMixOrSystemParlay()" class="row no-gutters">Bettype: {{generalInfoViewModel.generalInfoModel.generalBetTypeCombinations}}<br/></span>
           <span class="row no-gutters">Reason: {{generalInfoViewModel.generalInfoModel.reason}}<br/></span>
           <span *ngIf="!isAbnormalBetMixOrSystemParlay()" class="row no-gutters">Results: {{generalInfoViewModel.generalInfoModel.scoreResult}}<br/></span>

@@ -5,19 +5,15 @@ import { OthersModel } from '../../others/others.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { PrimitiveProperty } from '../event-abnormal-bet.model';
-import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
 
 export class SaveRequestArg {
   requestId?: number;
   isEdit: boolean;
-  transIds: string;
   filter: FilterModel;
-  filterBy: number;
   primitiveProps: PrimitiveProperty;
   abnormalBetModel: AbnormalBetModel;
   others: OthersModel;
   confirmAbnormalBetModel: ConfirmAbnormalBetModel;
-  leagueEventAbnormalComponent: LeagueEventAbnormalComponent;
   confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
   addRequestStore: AddRequestStore;
 }

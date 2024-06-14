@@ -55,7 +55,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
         this.isAbnormalAccount = true;
       }
 
-      if (this.isLikelyAbnormalBetIssueType()) {
+      if (this.isAbnormalBetIssueType()) {
         this.isAbnormalBet = true;
       }
     }
@@ -96,7 +96,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   public isAbnormalBetMixOrSystemParlay(): boolean {
-    return this.isAbnormalBetIssueType() && StaticService.isFilterByMixOrSystemParlay(this.model.event?.filterBy);
+    return this.isAbnormalBetIssueType() && StaticService.isFilterByMixOrSystemParlay(this.model.abnormalBetModel?.filterBy);
   }
 
   public isDuplicateTicketsMixParlay(): boolean {
@@ -115,16 +115,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     return StaticService.isAbnormalAccount(this.issue.issueTypeId?.toString());
   }
 
-  isLikelyAbnormalBetIssueType(): boolean {
-    return this.isAbnormalBetIssueType() || this.isAbnormalBetRealMemberIssueType();
-  }
-
-  private isAbnormalBetIssueType(): boolean {
+  isAbnormalBetIssueType(): boolean {
     return StaticService.isAbnormalBet(this.issue.issueTypeId?.toString());
-  }
-
-  private isAbnormalBetRealMemberIssueType(): boolean {
-    return StaticService.isAbnormalBetRealMember(this.issue.issueTypeId?.toString());
   }
 
   isShowVoidMessages(): boolean {

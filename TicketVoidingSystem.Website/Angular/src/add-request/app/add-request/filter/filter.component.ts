@@ -230,7 +230,6 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_OU]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
       [IssueTypeConstant.WRONG_1ST_OU]: { issueType: 180, subIssueType: 220, action: 150, sport: 150 },
       [IssueTypeConstant.ABNORMAL_BET]: { issueType: 180, subIssueType: 170, action: 250, sport: 150 },
-      [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: { issueType: 180, subIssueType: 170, action: 250, sport: 150 },
       [IssueTypeConstant.WRONG_SCORE]: { issueType: 180, subIssueType: 380, action: 150, sport: 150 },
       [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
       [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
@@ -264,7 +263,6 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.RED_CARD]: () => this.actionVoidService.getActionVoidRedCard(),
       [IssueTypeConstant.ABNORMAL_ACCOUNT]: () => this.actionVoidService.getActionVoidAbnormalAccount(),
       [IssueTypeConstant.ABNORMAL_BET]: () => this.actionVoidService.getActionAbnormalBet(this.abnormalFilterBy),
-      [IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER]: () => this.actionVoidService.getActionVoidAbnormalBetRealMember(),
       [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
       [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
       [IssueTypeConstant.NOT_PARTICIPATE]: () => this.actionVoidService.getActionVoidNotParticipate(),
@@ -365,16 +363,8 @@ export class FilterComponent implements OnInit, OnChanges {
       || StaticService.isWrongScore(this.issueTypes.issueId?.toString());
   }
 
-  isLikelyAbnormalBet(): boolean {
-    return this.isAbnormalBet() || this.isAbnormalBetRealMember();
-  }
-
   isAbnormalBet(): boolean {
     return StaticService.isAbnormalBet(this.issueTypes.issueId?.toString());
-  }
-
-  private isAbnormalBetRealMember(): boolean {
-    return StaticService.isAbnormalBetRealMember(this.issueTypes.issueId?.toString());
   }
 
   isAbnormalAccount(): boolean {
@@ -440,11 +430,11 @@ export class FilterComponent implements OnInit, OnChanges {
 
   isEarlyKickOff(): boolean {
     return StaticService.isEarlyKickOff(this.issueTypes.issueId?.toString());
-  } 
+  }
 
   isWrongKickOff(): boolean {
     return StaticService.isWrongKickOff(this.issueTypes.issueId?.toString());
-  } 
+  }
 
   isRecoverTicket(): boolean {
     return StaticService.isRecoverTicket(this.issueTypes.issueId?.toString());
@@ -476,7 +466,7 @@ export class FilterComponent implements OnInit, OnChanges {
   updateSubByIssue() {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
     //TODO: only remove subtype on UI - feat: 173229
-    if (this.isLikelyAbnormalBet() || this.isAbnormalAccount()) {
+    if (this.isAbnormalBet() || this.isAbnormalAccount()) {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.selectedSubIssueTypes.filter(x => x.subIssueTypeId !== 27 && x.subIssueTypeId !== 39 && x.subIssueTypeId !== 41);
     }
 
@@ -494,7 +484,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
 
     //TODO: only remove subtype on UI - feat: 173229
-    if (this.isLikelyAbnormalBet() || this.isAbnormalAccount()) {
+    if (this.isAbnormalBet() || this.isAbnormalAccount()) {
       this.issueTypes.selectedSubIssueTypes = this.issueTypes.selectedSubIssueTypes.filter(x => x.subIssueTypeId !== 27 && x.subIssueTypeId !== 39 && x.subIssueTypeId !== 41);
     }
   }
@@ -519,11 +509,11 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   public isShowSportType(): boolean {
-    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
+    return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
   }
 
   public isShowEventDate(): boolean {
-    return !this.isLikelyAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
+    return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
   }
 
   public isDisableActionVoid(): boolean {

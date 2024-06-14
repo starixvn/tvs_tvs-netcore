@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { MatchInfo } from '../../../../../utility/models/event.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
+import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
@@ -25,20 +27,15 @@ export class SaveRequestService {
     query.unMarkTransIds = args.primitiveProps.transInfoAddRequestModel?.unMarkTransIds;
     query.markTransIds = args.primitiveProps.transInfoAddRequestModel?.markTransIds;
     query.removeTransIds = args.primitiveProps.transInfoAddRequestModel?.removeTransIds;
-    query.isHasUusTickets = args.primitiveProps.isHasUusTickets;
-    query.transIds = this.getTransIdsForSaveRequest(args.confirmAbnormalBetModel, args.confirmAbnormalBetComponent, args.transIds);
     query.issueTypeId = args.filter.issueTypeId;
     query.subIssueTypeId = args.filter.subIssueTypeId;
-    query.subIssueTypeName = args.filter.subIssueTypes ? args.filter.subIssueTypes.find(x => x.subIssueTypeId.toString() === query.subIssueTypeId).subIssueTypeName : null;
-
 
     query.actionId = args.filter.action;
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
-    query.filterBy = args.filterBy;
-    query.sportType = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.leagueEventAbnormalComponent.selectedSportTypeId;
-    query.matchId = this.isAbnormalBetMixOrSystemParlay(args) ? 29 : args.leagueEventAbnormalComponent.selectedMatchId;
-    query.isConfirmCalculator = args.confirmAbnormalBetComponent.isConfirmCalculator;
+    query.matchId = this.isAbnormalBetMixOrSystemParlay(args) ? 29 : null;
+    query.sportType = this.getSportType(args.abnormalBetModel.matches);
+    query.abnormalBetInfo = this.createAbnormalBetModel(args);
 
     query.mistakenBy = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.mistakenBy;
     query.operatorsList = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.operatorsList;
@@ -48,10 +45,15 @@ export class SaveRequestService {
     query.remark = args.others.remark;
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
 
-    query.listBetteam = args.confirmAbnormalBetModel.listBetteam;
-    query.listBettype = args.confirmAbnormalBetModel.listBettype;
-
     return query;
+  }
+
+  private getSportType(matches: MatchInfo[]): number {
+    if (matches?.length > 0) {
+      return new Set(matches.map(x => x.sportType)).size === 1 ? matches[0].sportType : null;
+    }
+
+    return null;
   }
 
   private getTransIdsForSaveRequest(confirmAbnormalBetModel: ConfirmAbnormalBetModel, confirmAbnormalBetComponent: ConfirmAbnormalBetComponent, transIds: string): string {
@@ -66,6 +68,16 @@ export class SaveRequestService {
   }
 
   private isAbnormalBetMixOrSystemParlay(args: SaveRequestArg): boolean {
-    return StaticService.isAbnormalBet(args.filter.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.filterBy);
+    return StaticService.isAbnormalBet(args.filter.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.abnormalBetModel.filterBy);
+  }
+
+  private createAbnormalBetModel(args: SaveRequestArg): AbnormalBetModel {
+    const model = args.abnormalBetModel;
+    model.transIds = this.getTransIdsForSaveRequest(args.confirmAbnormalBetModel, args.confirmAbnormalBetComponent, args.abnormalBetModel.transIds);
+    model.isConfirmCalculator = args.confirmAbnormalBetComponent.isConfirmCalculator;
+    model.subIssueTypeName = args.filter.subIssueTypes
+      ? args.filter.subIssueTypes.find(x => x.subIssueTypeId.toString() === args.filter.subIssueTypeId).subIssueTypeName : null;
+
+    return model;
   }
 }

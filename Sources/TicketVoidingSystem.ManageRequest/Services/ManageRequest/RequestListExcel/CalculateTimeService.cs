@@ -24,10 +24,11 @@ public class CalculateTimeServiceImp : CalculateTimeService
         calculateTime.AddRange(await GetCalculateTimeActive(query));
         calculateTime.AddRange(await GetCalculateTimeArchived(query));
 
-        return calculateTime.GroupBy(model => model.RequestId)
+        return calculateTime.GroupBy(model => new { model.RequestId, model.MatchId })
             .Select(g => new GetCalculateTimeModel
             {
-                RequestId = g.Key,
+                RequestId = g.Key.RequestId,
+                MatchId = g.Key.MatchId,
                 CalcHalfTime = g.Min(model => model.CalcHalfTime),
                 CalcFullTime = g.Min(model => model.CalcFullTime)
             });

@@ -185,8 +185,7 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   isShowOnlyTotalTickets(issueTypeId: number) {
     return (issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET)
-      || (issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT)
-      || (issueTypeId.toString() === IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER);
+      || (issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT);
   }
 
   isVoidAction(actionId: number): boolean {
@@ -235,6 +234,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrong1stHDP(issueTypeId.toString()) ||
       StaticService.isRedCard(issueTypeId.toString()) ||
       StaticService.isEarlyKickOff(issueTypeId.toString()) ||
+      StaticService.isAbnormalBet(issueTypeId.toString()) ||
       StaticService.isWrongKickOff(issueTypeId.toString());
   }
 

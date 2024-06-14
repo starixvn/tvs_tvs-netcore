@@ -24,7 +24,6 @@ public class DescriptionServiceImp : DescriptionService
         var matchingFunctions = new Dictionary<int, Func<RequestDescription, string>>
             {
                 {IssueTypeConstant.AbnormalBet, BuildAbnormalBet},
-                {IssueTypeConstant.AbnormalBetRealMember, BuildMatchLeagueTotal},
                 {IssueTypeConstant.EarlyKickOffTime, BuildEKO},
                 {IssueTypeConstant.WrongKickOffTime, BuildEKO},
                 {IssueTypeConstant.DangerAccepted, BuildVoidTimeMatchLeague},

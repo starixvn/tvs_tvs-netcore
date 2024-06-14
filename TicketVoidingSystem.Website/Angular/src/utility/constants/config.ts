@@ -143,8 +143,6 @@ export class TVSRequestActionType {
   static readonly AUTO_VOID_WINNING_ID = 1;
   static readonly AUTO_VOID_INSTANT_ID = 4;
   static readonly AUTO_VOID_INSTANT_WITH_POLICY_ID = 10;
-  static readonly AUTO_VOID_5M_BEFORE_KO_ID = 6;
-  static readonly AUTO_VOID_10M_BEFORE_KO_ID = 7;
   static readonly AUTO_VOID_INSTANT_WITHOUT_POLICY = 8;
   static readonly MANUAL_VOID_ID = 5;
   static readonly TAKE_NOTE_ID = 2;
@@ -409,16 +407,6 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID,
-    TVSRequestActionType.TAKE_NOTE_ID,
-    TVSRequestActionType.WAITING_ID
-  ];
-  static readonly ABNORMAL_BET_REAL_MEMBER: number[] = [
-    TVSRequestActionType.AUTO_VOID_WINNING_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY,
-    TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID,
-    TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID,
-    TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];

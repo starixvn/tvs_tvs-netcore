@@ -1,4 +1,3 @@
-import { SubIssueType } from './../../../../../utility/models/issue-type.model';
 import * as _ from 'lodash';
 import { AbnormalFilterBy } from '../../../../../utility/constants/config';
 import { AddRequestService } from '../../add-request.service';
@@ -6,14 +5,14 @@ import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { AddRequestQuery } from '../../models/add-request.query';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
 import { PrimitiveProperty } from '../event-abnormal-bet.model';
-import { LeagueEventAbnormalComponent } from '../league-event-abnormal/league-event-abnormal.component';
+import { SubIssueType } from './../../../../../utility/models/issue-type.model';
 import { SaveRequestArg } from './save-request.model';
 import { SaveRequestService } from './save-request.service';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -43,22 +42,19 @@ class Helper {
     ticketsOfCustomerClass201: '2123122',
     ticketsOfCustomerClass4K: '2123122',
     isHasWarningRemovedTickets: false,
-    listBettype : 'aa',
-    listBetteam : 'bb'
+    listBetType : 'aa',
+    listBetTeam : 'bb'
   };
   static readonly fakeSaveRequestArg: SaveRequestArg = {
     requestId: Helper.fakeRequestId,
     isEdit: false,
-    transIds: '',
     filter: Helper.fakeFilterModel,
     abnormalBetModel: new AbnormalBetModel(),
     others: new OthersModel(),
     confirmAbnormalBetModel: Helper.fakeConfirmAbnormalBetModel,
-    leagueEventAbnormalComponent: null,
     confirmAbnormalBetComponent: null,
     addRequestStore: new AddRequestStore(),
-    filterBy: null,
-    primitiveProps: new PrimitiveProperty
+    primitiveProps: new PrimitiveProperty,
   };
 }
 
@@ -93,7 +89,7 @@ describe('SaveRequestService', () => {
     };
     args.filter.subIssueTypes = [mockSubIssueType];
     args.abnormalBetModel = new AbnormalBetModel();
-    args.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
+    args.abnormalBetModel.transIds = '1,2';
     args.confirmAbnormalBetComponent = new ConfirmAbnormalBetComponent();
     args.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     mockSaveRequestService = new SaveRequestService(null);
@@ -102,7 +98,6 @@ describe('SaveRequestService', () => {
     expect(result.issueTypeId).toEqual(args.filter.issueTypeId);
     expect(result.actionId).toEqual(args.filter.action);
     expect(result.isTest).toEqual(args.filter.isTest);
-    expect(result.sportType).toEqual(args.leagueEventAbnormalComponent.selectedSportTypeId);
     expect(result.isVoided).toEqual(args.filter.isVoided);
     expect(result.mistakenBy).toEqual(args.others.mistakenBy);
   });
@@ -112,9 +107,9 @@ describe('SaveRequestService', () => {
     args.filter.isVoided = false;
     args.filter.issueTypeId = '11';
     args.filter.subIssueTypeId = '1';
-    args.filterBy = AbnormalFilterBy.MIX_PARLAY;
     args.abnormalBetModel = new AbnormalBetModel();
-    args.leagueEventAbnormalComponent = new LeagueEventAbnormalComponent(null, null);
+    args.abnormalBetModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
+    args.abnormalBetModel.transIds = '1,2';
     args.confirmAbnormalBetComponent = new ConfirmAbnormalBetComponent();
     args.primitiveProps.transInfoAddRequestModel = null;
     mockSaveRequestService = new SaveRequestService(null);

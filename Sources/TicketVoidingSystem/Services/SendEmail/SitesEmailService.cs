@@ -43,7 +43,7 @@ public class SitesEmailServiceImp : SitesEmailService
 
     public async Task<IEnumerable<SiteEmail>> GetSitesByCategory(int issueTypeId)
     {
-        var category = Helper.IsLikelyAbnormalBet(issueTypeId) ? CategoryEmail.AbNormalBet : CategoryEmail.BetDeletionReport;
+        var category = Helper.IsAbnormalBet(issueTypeId) ? CategoryEmail.AbNormalBet : CategoryEmail.BetDeletionReport;
         var mailingListCriteria = new MailingListCriteria { CategoryId = category };
         var sites = (await repository.FetchAsync<SiteEmail>(mailingListCriteria)).ToList();
         sites = ExcludeTestSites(sites);

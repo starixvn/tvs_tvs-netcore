@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int actionId, int? matchId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
+    Task Execute(int requestId, int actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -20,18 +20,18 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int actionId, int? matchId, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    public async Task Execute(int requestId, int actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
-            var matchIds = GetMatchIdsInRequest(earlyKickOffInfo);
+            var matchIds = GetMatchIdsInRequest(abnormalBetInfo, earlyKickOffInfo);
             if (matchIds.Any())
             {
                 await ExecuteForAutoVoidInstantMultipleMatches(requestId, actionId, matchIds);
             }
             else
             {
-                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId, matchId);
+                await InsertAutoVoidRequestQueueForAllServer(Guid.NewGuid().ToString(), requestId, actionId, null);
             }
         }
     }
@@ -50,9 +50,9 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         var command = new InsertAutoVoidRequestQueueCommand
         {
             RequestIds = requestId.ToString(),
+            MatchId = matchId,
             StatusId = ExecuteStatus.New,
             Action = ActionVoidRequestConstant.QueueAutoVoidList.First(x => x.Id == actionId).Name,
-            MatchId = matchId,
             BroadcastSessionId = broadcastSessionId
         };
 
@@ -65,9 +65,21 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         await Task.WhenAll(tasks);
     }
 
-    private static IEnumerable<int> GetMatchIdsInRequest(IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    private static IEnumerable<int> GetMatchIdsInRequest(AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
     {
-        return earlyKickOffInfo != null ? earlyKickOffInfo.Select(x => x.MatchId) : Enumerable.Empty<int>();
+        if (abnormalBetInfo != null)
+        {
+            return abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay
+                ? new List<int> { BetTypeConstant.SystemParlay }
+                : abnormalBetInfo.Matches?.Select(x => x.MatchId);
+        }
+
+        if (earlyKickOffInfo != null)
+        {
+            return earlyKickOffInfo.Select(x => x.MatchId);
+        }
+
+        return Enumerable.Empty<int>();
     }
 
     private static bool CheckCanInsertAutoVoidRequestQueue(int actionId)
@@ -77,8 +89,6 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
             ActionVoidRequestConstant.AutoVoidAllInstantId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithOutPolicyId,
-            ActionVoidRequestConstant.AutoVoidAll5mBeforeKickOffId,
-            ActionVoidRequestConstant.AutoVoidAll10mBeforeKickOffId,
             ActionVoidRequestConstant.AutoRecoverId
         };
 

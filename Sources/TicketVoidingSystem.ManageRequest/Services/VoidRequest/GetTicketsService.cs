@@ -56,7 +56,7 @@ public class GetTicketsServiceImp : GetTicketsService
     private async Task<IEnumerable<GetTicketModel>> GetTicketsRangeActiveAndBackup(GetTicketsQuery query)
     {
         var (singleTickets, parlayTickets, cancelCashOutTickets) = await GetTicketsInRequest(query.RequestId);
-        var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets);
+        var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets, GetMatchIdForQueryTransInfoJson(query));
         var transInfoJsonList = await getTransInfoService.GetTransInfoJsonForVoid(singleTickets, parlayTickets, cancelCashOutTickets, GetMatchIdForQueryTransInfoJson(query));
         var void14Tickets = await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
         var voidBetTransTickets = await GetBetTransTicket(query, transInfoJsonList);
@@ -67,7 +67,7 @@ public class GetTicketsServiceImp : GetTicketsService
     private async Task<IEnumerable<GetTicketModel>> GetTicketsIssueTypeArchivedTicket(GetTicketsQuery query)
     {
         var (singleTickets, _, _) = await GetTicketsInRequest(query.RequestId);
-        var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets);
+        var transInfoJsonVoid14List = await getTransInfoService.GetTransInfoJsonForVoid14(singleTickets, GetMatchIdForQueryTransInfoJson(query));
 
         return await GetBetTrans14Ticket(query, transInfoJsonVoid14List);
     }

@@ -1,5 +1,6 @@
 using TicketVoidingSystem.ManageRequest.Extension;
 using Xunit;
+
 namespace TicketVoidingSystem.Tests.ManageRequest.Extension;
 
 public class IssueTypeExtensionTests
@@ -47,12 +48,11 @@ public class IssueTypeExtensionTests
     [Theory]
     [InlineData(10, false)]
     [InlineData(11, true)]
-    [InlineData(15, true)]
     public void IsAbnormalBet_ValidParams_ReturnResult(int issueTypeId, bool result)
     {
         // Arrange
         // Act
-        var actual = issueTypeId.IsLikelyAbnormalBet();
+        var actual = issueTypeId.IsAbnormalBet();
 
         // Assert
         Assert.Equal(result, actual);

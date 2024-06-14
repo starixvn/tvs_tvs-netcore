@@ -1,4 +1,5 @@
-﻿using TicketVoidingSystem.ManageRequest.Extension;
+﻿using TicketVoidingSystem.ManageRequest.Constants;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -58,10 +59,10 @@ public class EditRequestServiceImp : EditRequestService
     private async Task<Result> ExecuteReCalculateAndUpdateRequest(EditRequestQuery query)
     {
         var reCalcTicketsAbnormalResults = Enumerable.Empty<Result>();
-        if (!string.IsNullOrWhiteSpace(query.RemoveTransIds) && query.IsConfirmCalculator == true &&
-            (query.IssueTypeId.IsAbnormalBet() || query.IssueTypeId.IsAbnormalBetRealMember()))
+        if (query.IssueTypeId.IsAbnormalBet() && !string.IsNullOrWhiteSpace(query.RemoveTransIds) && query.AbnormalBetInfo.IsConfirmCalculator)
         {
-            reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(query.MatchId, query.RemoveTransIds);
+            var matchId = query.AbnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay ? 29 : 0;
+            reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(matchId, query.RemoveTransIds);
         }
 
         return reCalcTicketsAbnormalResults.All(x => x.IsSuccessful)

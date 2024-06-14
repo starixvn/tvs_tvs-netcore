@@ -89,15 +89,6 @@ public class CellServiceImp : CellService
         worksheet.Cells[$"S{rowStart}:S{rowEnd}"].Merge = true;
         worksheet.Cells[$"T{rowStart}:T{rowEnd}"].Merge = true;
         worksheet.Cells[$"U{rowStart}:U{rowEnd}"].Merge = true;
-        //worksheet.Cells[$"M{rowStart}:M{rowEnd}"].Value = true;
-        //worksheet.Cells[$"N{rowStart}:N{rowEnd}"].Value = true;
-        //worksheet.Cells[$"O{rowStart}:O{rowEnd}"].Value = true;
-        //worksheet.Cells[$"P{rowStart}:P{rowEnd}"].Value = true;
-        //worksheet.Cells[$"Q{rowStart}:Q{rowEnd}"].Value = true;
-        //worksheet.Cells[$"R{rowStart}:R{rowEnd}"].Value = true;
-        //worksheet.Cells[$"S{rowStart}:S{rowEnd}"].Value = true;
-        //worksheet.Cells[$"T{rowStart}:T{rowEnd}"].Value = true;
-        //worksheet.Cells[$"U{rowStart}:U{rowEnd}"].Value = true;
     }
 
     private static void SetValueMergeCells(ExcelWorksheet worksheet, int rowStart, int rowEnd, ExcelRequestModel model)

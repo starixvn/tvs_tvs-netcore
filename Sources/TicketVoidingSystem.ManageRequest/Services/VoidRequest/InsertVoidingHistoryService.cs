@@ -33,7 +33,7 @@ public class InsertVoidingHistoryServiceImp : InsertVoidingHistoryService
     {
         var command = new InsertVoidingHistoryCriteria
         {
-            RequestIds = query.RequestId.ToString(),
+            RequestsJson = CreateRequestsJson(query.RequestId),
             UserId = sessionService.UserId,
             SiteDbGroupId = siteDbGroupId,
             BroadcastSessionId = broadcastSessionId,
@@ -44,6 +44,17 @@ public class InsertVoidingHistoryServiceImp : InsertVoidingHistoryService
         var model = await repository.GetAsync<VoidingHistoryModel>(command);
 
         return model.VoidingHistoryId;
+    }
+
+    private static string CreateRequestsJson(int requestId)
+    {
+        var requests = new List<RequestInsertQueueJson>{
+            new () {
+                RequestId = requestId,
+                MatchId = 0
+            }};
+
+        return JsonSerializer.Serialize(requests);
     }
 
     private VoidDataXmlModel CreateVoidDataXmlModel(InsertQueueQuery query)

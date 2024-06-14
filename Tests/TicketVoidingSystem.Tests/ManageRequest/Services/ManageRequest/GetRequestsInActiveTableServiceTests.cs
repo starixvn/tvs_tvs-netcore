@@ -33,7 +33,6 @@ public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixt
     [InlineData(IssueTypeConstant.DangerAccepted, 2, 1)]
     [InlineData(IssueTypeConstant.DangerAccepted, 1, 1)]
     [InlineData(IssueTypeConstant.DangerAccepted, 2, 2)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, 2, 1)]
     [InlineData(IssueTypeConstant.AbnormalBet, 2, 1)]
     [InlineData(0, 2, 1)]
     public async Task GetRequestsInActiveTable_ValidData_ReturnListRequestModel(int issueTypeId, int requestId, int matchId)

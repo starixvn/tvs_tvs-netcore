@@ -1,52 +1,93 @@
 ::ng-deep bet-ids label {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 :host::ng-deep league-event .ng-select .ng-select-container .ng-value-container .ng-placeholder {
-    color: #e9ecef !important;
+  color: #e9ecef !important;
 }
 
 .header-bet-id {
-    height: 31px;
-    display: flex;
-    align-items: center;
+  height: 31px;
+  display: flex;
+  align-items: center;
 }
 
 .modal-backdrop.in {
-    filter: alpha(opacity=10);
-    opacity: .2;
-  }
-  
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1040;
-    background-color: #000;
-  }
+  filter: alpha(opacity=10);
+  opacity: .2;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
 
 .spinner-overlay {
-    background-color: white;
+  background-color: white;
 }
-  
+
 .spinner-message-container {
-    position: fixed;
-    top: 45%;
-    left: 0;
-    right: 0;
-    height: 0;
-    text-align: center;
-    z-index: 10001;
+  position: fixed;
+  top: 45%;
+  left: 0;
+  right: 0;
+  height: 0;
+  text-align: center;
+  z-index: 10001;
 }
 
 .loading-message {
-    .loading {
-      margin: 0 auto;
-      width: 32px;
-      height: 32px;
-      background: url('../../../../assets/images/loading.gif') no-repeat scroll 0 0 transparent;
+  .loading {
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+    background: url('../../../../assets/images/loading.gif') no-repeat scroll 0 0 transparent;
+  }
+}
+
+.match {
+  display: flex;
+  flex-wrap: wrap;
+
+  input {
+    text-overflow: ellipsis;
+  }
+}
+
+@media only screen and (max-width: 1134px) {
+  .match {
+    margin-left: -15px;
+    margin-right: -15px;
+
+    .event {
+      width: 50%;
+    }
+
+    .league {
+      width: 50%;
     }
   }
-  
+}
+
+@media only screen and (min-width: 1134px) {
+  .match {
+    width: 1095px;
+    margin-left: -15px;
+
+    .event {
+      width: 520px;
+      padding: 0 15px;
+    }
+
+    .league {
+      width: 520px;
+      padding: 0 15px;
+    }
+  }
+}
+

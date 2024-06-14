@@ -25,7 +25,6 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
 
     [Theory]
     [InlineData(IssueTypeConstant.AbnormalBet)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember)]
     [InlineData(IssueTypeConstant.WrongKickOffTime)]
     [InlineData(IssueTypeConstant.AbnormalAccount)]
     [InlineData(IssueTypeConstant.EarlyKickOffTime)]
@@ -63,7 +62,8 @@ public class GetTransInfoServiceTests : IClassFixture<AppSettingFixture>, IClass
             EarlyKickOffModels = new List<EarlyKickOffViewModel>(),
             AbnormalAccountViewModel = new AbnormalAccountViewModel(),
             NotParticipateModels = new List<NotParticipateViewModel>(),
-            RecoverTicketModel = new RecoverTicketViewModel()
+            RecoverTicketModel = new RecoverTicketViewModel(),
+            AbnormalBetModel = new AbnormalBetViewModel()
         };
         repository.GetAsync<string>(Arg.Any<GetTicketSiteDbCriteria>()).ReturnsForAnyArgs("ss");
 

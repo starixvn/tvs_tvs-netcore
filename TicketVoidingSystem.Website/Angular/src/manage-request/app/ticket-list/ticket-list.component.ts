@@ -120,7 +120,7 @@ export class TicketListComponent implements OnInit, OnChanges {
 
   isShowMatchInfo(requestDetail: RequestDetailViewModel) {
     return !this.isAbnormalAccountIssueType(requestDetail)
-      && !(this.isAbnormalBetIssueType(requestDetail) && StaticService.isFilterByMixOrSystemParlay(requestDetail.event.filterBy))
+      && !(this.isAbnormalBet(requestDetail) && StaticService.isFilterByMixOrSystemParlay(requestDetail.abnormalBetModel.filterBy))
       && !(this.isDuplicateTickets(requestDetail) && requestDetail.duplicateTicketsModel.filterBy === AbnormalFilterBy.MIX_PARLAY)
       && !this.isArchivedTicketIssueType()
       && !this.isRecoverTicket(requestDetail);
@@ -138,28 +138,12 @@ export class TicketListComponent implements OnInit, OnChanges {
     return false;
   }
 
-  isLikelyAbnormalBetIssueType(requestDetail: RequestDetailViewModel): boolean {
-    return this.isAbnormalBetIssueType(requestDetail) || this.isAbnormalBetRealMemberIssueType(requestDetail);
-  }
-
   isDuplicateTickets(requestDetail: RequestDetailViewModel): boolean {
     return StaticService.isDuplicateTickets(requestDetail.request?.issueTypeId.toString());
   }
 
-  isAbnormalBetIssueType(requestDetail: RequestDetailViewModel): boolean {
-    if (requestDetail.request?.issueTypeId) {
-      return StaticService.isAbnormalBet(requestDetail.request.issueTypeId.toString());
-    }
-
-    return false;
-  }
-
-  private isAbnormalBetRealMemberIssueType(requestDetail: RequestDetailViewModel): boolean {
-    if (requestDetail.request?.issueTypeId) {
-      return StaticService.isAbnormalBetRealMember(requestDetail.request.issueTypeId.toString());
-    }
-
-    return false;
+  isAbnormalBet(requestDetail: RequestDetailViewModel): boolean {
+    return StaticService.isAbnormalBet(requestDetail.request?.issueTypeId.toString())
   }
 
   private isArchivedTicketIssueType(): boolean {

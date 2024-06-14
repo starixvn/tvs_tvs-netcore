@@ -2,13 +2,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { DuplicateTicketsModel } from '../../../add-request/app/add-request/models/event-duplicate-tickets.model';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { DetailNotParticipateComponent } from '../../../utility/components/log-info-detail/detail-not-participate/detail-not-participate.component';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
-import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
@@ -65,9 +63,7 @@ describe('VoidNotParticipateComponent', () => {
   it('#ngOnInit should called voidPageService.getBasicVoidPageItemsData', async () => {
     const requestDetail = new RequestDetailViewModel();
     requestDetail.request = new RequestDetailModel();
-    requestDetail.request.issueTypeId = Number(IssueTypeConstant.RED_CARD);
-    requestDetail.duplicateTicketsModel = new DuplicateTicketsModel();
-    requestDetail.duplicateTicketsModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
+    requestDetail.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
     const voidItem = new VoidNotParticipateModel();
     voidItem.matchModel = new MatchModel();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');

@@ -9,7 +9,7 @@ public class GetTransInfoQuery
     public string TransIds { get; set; }
 
     public AbnormalAccountViewModel? AbnormalAccountViewModel { get; set; }
-    public RecoverTicketViewModel RecoverTicketModel { get; set; }
+    public RecoverTicketViewModel? RecoverTicketModel { get; set; }
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreModels { get; set; }
     public IEnumerable<DangerAcceptedViewModel>? DangerAcceptedModels { get; set; }
     public IEnumerable<DangerAcceptedViewModel>? RedCardModels { get; set; }
@@ -21,4 +21,5 @@ public class GetTransInfoQuery
     public IEnumerable<ReducedOverViewModel>? ReducedOverModels { get; set; }
     public IEnumerable<NotParticipateViewModel>? NotParticipateModels { get; set; }
     public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffModels { get; set; }
+    public AbnormalBetViewModel? AbnormalBetModel { get; set; }
 }

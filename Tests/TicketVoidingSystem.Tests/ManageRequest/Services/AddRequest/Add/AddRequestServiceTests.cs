@@ -96,7 +96,6 @@ public class AddRequestServiceTests
     [InlineData(IssueTypeConstant.WrongScore, 1)]
     [InlineData(IssueTypeConstant.EarlyKickOffTime, 1)]
     [InlineData(IssueTypeConstant.WrongKickOffTime, 1)]
-    [InlineData(IssueTypeConstant.AbnormalBetRealMember, 1)]
     [InlineData(IssueTypeConstant.AbnormalBet, 1)]
     [InlineData(IssueTypeConstant.DuplicateTickets, 1)]
     [InlineData(IssueTypeConstant.NotParticipate, 1)]
@@ -130,8 +129,8 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, actionId, 1, null);
-        sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, actionId, Arg.Any<AbnormalBetViewModel>(), null);
+        sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AbnormalBetViewModel>(), 12345);
     }
 
     [Fact]
@@ -174,7 +173,7 @@ public class AddRequestServiceTests
         // Assert
         repository.Received(1).ExecuteAsync(Arg.Any<AddRequestCommand>());
         sessionService.Received(1).GetClientIp();
-        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, 1, Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
-        sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AddRequestQuery>(), 12345);
+        insertAutoVoidRequestQueueService.Received(1).Execute(12345, 1, Arg.Any<AbnormalBetViewModel>(), Arg.Any<IEnumerable<EarlyKickOffViewModel>>());
+        sendLetstalkAfterAddService.Received(1).Execute(Arg.Any<AbnormalBetViewModel>(), 12345);
     }
 }

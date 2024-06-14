@@ -5,9 +5,10 @@ namespace TicketVoidingSystem.ManageRequest.ViewModels;
 public class CheckValidTransIdsViewModel
 {
     public ValidationAbnormalBet Validation { get; set; }
-    public MatchInfoAddRequest Match { get; set; }
+    public IEnumerable<MatchInfoAddRequest> Matches { get; set; }
     public TransInfoAddRequestModel TransInfoAddRequestModel { get; set; }
     public IEnumerable<AbnormalBetTicketViewModel> AbnormalBetTicketRequests { get; set; }
+    public IEnumerable<SendLetstalkModel> SendLetstalkModels { get; set; }
 }
 
 public class ValidationAbnormalBet
@@ -36,8 +37,15 @@ public class ValidationAbnormalBet
     public string ABWhiteListTransIds { get; set; }
 
     public bool IsHasWarningRemovedTickets { get; set; }
+}
+
+public class SendLetstalkModel
+{
+    public int MatchId { get; set; }
 
     public bool IsHasUusTickets { get; set; }
-    public string ListBettype { get; set; }
-    public string ListBetteam { get; set; }
+
+    public string ListBetType { get; set; }
+
+    public string ListBetTeam { get; set; }
 }

@@ -16,8 +16,6 @@ export class StaticService {
     return actionId === TVSRequestActionType.MANUAL_VOID_ID
       || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_5M_BEFORE_KO_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_10M_BEFORE_KO_ID
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY
       || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID
       || actionId === TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID;
@@ -25,10 +23,6 @@ export class StaticService {
 
   static isAbnormalBet(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.ABNORMAL_BET;
-  }
-
-  static isAbnormalBetRealMember(issueTypeId: string): boolean {
-    return issueTypeId === IssueTypeConstant.ABNORMAL_BET_REAL_MEMBER;
   }
 
   static isDangerAccepted(issueTypeId: string): boolean {
@@ -111,6 +105,10 @@ export class StaticService {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
 
+  static isFilterBySingle(filterBy: number): boolean {
+    return filterBy === AbnormalFilterBy.SINGLE;
+  }
+
   static convertToFullDate(ngbDate: NgbDate): string {
     const transformMonth = `0${ngbDate.month}`.slice(-2);
     const transformDay = `0${ngbDate.day}`.slice(-2);
@@ -141,8 +139,10 @@ export class StaticService {
       return requestDetail.earlyKickOffModels.find(x => x.isMainMatch).subIssueTypeId;
     } else if (this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.abnormalAccountModel.subIssueTypeId;
-    }  else if (this.isRecoverTicket(requestDetail.request.issueTypeId.toString())) {
+    } else if (this.isRecoverTicket(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.recoverTicketModel.subIssueTypeId;
+    } else if (this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.abnormalBetModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -170,7 +170,8 @@ export class StaticService {
     } else if (
       this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())
       || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
-      || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())) {
+      || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())
+      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {
       return requestDetail.event.eventDate;

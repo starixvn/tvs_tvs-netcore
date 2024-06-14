@@ -89,8 +89,9 @@ export class AddRequestService {
   }
 
   private reloadPageOrBackToManagePage(issueTypeId: string) {
-    StaticService.isAbnormalBet(issueTypeId) || StaticService.isAbnormalBetRealMember(issueTypeId) ?
-      window.location.reload() : window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
+    StaticService.isAbnormalBet(issueTypeId)
+      ? window.location.reload()
+      : window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
   }
 
   private isShowResultWithoutMatches(issueTypeId: string): boolean {

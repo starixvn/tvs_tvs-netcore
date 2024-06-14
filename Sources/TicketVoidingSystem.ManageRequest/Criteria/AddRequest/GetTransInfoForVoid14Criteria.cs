@@ -8,6 +8,8 @@ public class GetTransInfoForVoid14Criteria : CriteriaBase
 {
     public string SingleTransIds { get; set; }
 
+    public int? MatchId { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

@@ -39,13 +39,13 @@ public class AddRequestQuery
 
     public string? TransIds { get; set; }
 
-    public bool? IsHasUusTickets { get; set; }
-
     public int? FilterBy { get; set; }
 
     public string? MarkTransIds { get; set; }
 
     public string? UnMarkTransIds { get; set; }
+
+    public string TransInfoJson { get; set; }
 
     public IEnumerable<WrongScoreInfoViewModel>? WrongScoreInfo { get; set; }
 
@@ -75,11 +75,5 @@ public class AddRequestQuery
 
     public RecoverTicketViewModel? RecoverTicketInfo { get; set; }
 
-    public string TransInfoJson { get; set; }
-
-    public string? SubIssueTypeName { get; set; }
-
-    public string? ListBetteam { get; set; }
-
-    public string? ListBettype { get; set; }
+    public AbnormalBetViewModel? AbnormalBetInfo { get; set; }
 }

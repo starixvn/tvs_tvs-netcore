@@ -38,7 +38,7 @@ public class CheckValidTransIdsServiceTests
     {
         // Arrange
         var request = new CheckValidTransIdsRequest();
-        var result = new IEnumerable<object>[5];
+        var result = new IEnumerable<object>[6];
         var validation = new ValidationAbnormalBet();
         var transInfoAddRequestModel = new TransInfoAddRequestModel
         { RemoveTransIds = "123", UnMarkTransIds = "123", MarkTransIds = "456" };
@@ -47,12 +47,13 @@ public class CheckValidTransIdsServiceTests
         result[2] = new[] { transInfoAddRequestModel };
         result[3] = new[] { "123" };
         result[4] = new[] { new GetAbnormalBetTicketModel() };
+        result[5] = new[] { new SendLetstalkModel() };
         var match = new MatchInfoAddRequest();
         var abnormalBetTicketRequests = new List<AbnormalBetTicketViewModel>();
         var mappingTypes = new[]
         {
             typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string), typeof(GetAbnormalBetTicketModel)
+            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
         };
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
             .ReturnsForAnyArgs(match);
@@ -65,7 +66,7 @@ public class CheckValidTransIdsServiceTests
 
         var viewModel = new CheckValidTransIdsViewModel
         {
-            Match = matchInfoAddRequestService.UpdateDataFromRemotingRef(match),
+            Matches = new List<MatchInfoAddRequest>(),
             Validation = validation,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
@@ -74,7 +75,8 @@ public class CheckValidTransIdsServiceTests
                 MarkTransIds = "456",
                 TransInfoJson = "123"
             },
-            AbnormalBetTicketRequests = abnormalBetTicketRequests
+            AbnormalBetTicketRequests = abnormalBetTicketRequests,
+            SendLetstalkModels = (IEnumerable<SendLetstalkModel>)result[5]
         };
 
         // Act
@@ -89,19 +91,20 @@ public class CheckValidTransIdsServiceTests
     {
         // Arrange
         var request = new CheckValidTransIdsRequest();
-        var result = new IEnumerable<object>[5];
+        var result = new IEnumerable<object>[6];
         var validation = new ValidationAbnormalBet();
         result[0] = new[] { new MatchInfoAddRequest() };
         result[1] = new[] { validation };
         result[2] = Array.Empty<object>();
         result[3] = new[] { "123" };
         result[4] = new[] { new GetAbnormalBetTicketModel() };
+        result[5] = new[] { new SendLetstalkModel() };
         var match = new MatchInfoAddRequest();
         var abnormalBetTicketRequests = new List<AbnormalBetTicketViewModel>();
         var mappingTypes = new[]
         {
             typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string), typeof(GetAbnormalBetTicketModel)
+            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
         };
         matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<MatchInfoAddRequest>())
             .ReturnsForAnyArgs(match);
@@ -114,7 +117,7 @@ public class CheckValidTransIdsServiceTests
 
         var viewModel = new CheckValidTransIdsViewModel
         {
-            Match = matchInfoAddRequestService.UpdateDataFromRemotingRef(match),
+            Matches = new List<MatchInfoAddRequest>(),
             Validation = validation,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
@@ -123,7 +126,8 @@ public class CheckValidTransIdsServiceTests
                 MarkTransIds = null,
                 TransInfoJson = "123"
             },
-            AbnormalBetTicketRequests = abnormalBetTicketRequests
+            AbnormalBetTicketRequests = abnormalBetTicketRequests,
+            SendLetstalkModels = (IEnumerable<SendLetstalkModel>)result[5]
         };
 
         // Act

@@ -8,7 +8,6 @@ public static class SpecialDeleteFunctionKeys
     public const string ABExceptionList = "ABExceptionList";
     public const string AbnormalAccount = "AbnormalAccount";
     public const string AbnormalBet = "AbnormalBet";
-    public const string AbnormalBetRealMember = "AbnormalBetRealMember";
     public const string Administration = "Administration";
     public const string AfterVoidHistory = "AfterVoidHistory";
     public const string ArchivedTicket = "ArchivedTicket";

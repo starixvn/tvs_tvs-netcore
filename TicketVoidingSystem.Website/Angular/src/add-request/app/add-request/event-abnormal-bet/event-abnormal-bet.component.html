@@ -3,7 +3,7 @@
     <div class="mr-4">Bet ID(s)</div>
     <div *ngIf="isAbnormalBet()" >
       <div class="form-check form-check-inline" *ngFor="let item of abnormalFilterBy.items">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" [attr.value]="item.value" 
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" [attr.value]="item.value"
           [checked]="item.value === abnormalBetModel.filterBy" id="inlineRadio-{{item.value}}"
           (change)="changeFilterBy(item.value)" [disabled]="filter.isVoided || isEdit"/>
         <label *ngIf="!item.hidden" class="form-check-label" for="inlineRadio-{{item.value}}">{{item.name}}</label>
@@ -18,16 +18,25 @@
 
   <bet-ids #betIds [leftBetIdCss]="'col-form-label'" [rightBetIdCss]="'col-sm-8'"
     [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
-    [hideDifferentMatch]="isHideDifferentMatch()" [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds"
+    [hideDifferentMatch]="true" [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds"
     (afterFocusOutBetIds)="afterFocusOutBetIds()"
     [isShowLabel]="false"
     [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
   </bet-ids>
 </div>
 
-<league-event-abnormal *ngIf="isShowLeagueEvent()" #leagueEventAbnormal [isEdit]="isEdit" [initSportType]="filter.sportType"
-  [eventDate]="filter.eventDate" [initMatchId]="abnormalBetModel.matchId" [actionId]="filter.action">
-</league-event-abnormal>
+<div *ngIf="isFilterBySingle()">
+  <div class="mb-2 match" *ngFor="let match of abnormalBetModel.matches; let first = first">
+    <div class="event col-md-6 col-sm-6 col-12">
+      <label *ngIf="first" class="col-form-label">Event</label>
+      <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="match.name">
+    </div>
+    <div class="league col-md-6 col-sm-6 col-12">
+      <label *ngIf="first" class="col-form-label">League</label>
+      <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="match.leagueName">
+    </div>
+  </div>
+</div>
 
 <confirm-abnormal-bet #confirmAbnormalBetComponent [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()" [isEdit]="isEdit">

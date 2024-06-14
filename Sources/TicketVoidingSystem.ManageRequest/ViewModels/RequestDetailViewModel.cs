@@ -19,4 +19,5 @@ public class RequestDetailViewModel
     public DuplicateTicketsViewModel DuplicateTicketsModel { get; set; }
     public AbnormalAccountViewModel AbnormalAccountModel { get; set; }
     public RecoverTicketViewModel RecoverTicketModel { get; set; }
+    public AbnormalBetViewModel AbnormalBetModel { get; set; }
 }

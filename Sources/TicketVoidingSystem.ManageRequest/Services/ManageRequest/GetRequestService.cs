@@ -86,6 +86,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.RecoverTicketModel = MapEventRecoverTicket(secondResultSet);
                 break;
 
+            case IssueTypeConstant.AbnormalBet:
+                viewModel.AbnormalBetModel = MapEventAbnormalBet(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
                 break;
@@ -297,6 +301,28 @@ public class GetRequestServiceImp : GetRequestService
             FilterBy = model.FilterBy,
             ProductIds = model.ProductIds,
             SubIssueTypeId = model.SubIssueTypeId
+        };
+    }
+
+    private AbnormalBetViewModel MapEventAbnormalBet(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var firstModel = requestEventModels.First();
+        var matches = requestEventModels.Select(x => new MatchInfoAddRequest
+        {
+            MatchId = x.MatchId,
+            HomeId = x.HomeId,
+            AwayId = x.AwayId,
+            LeagueId = x.LeagueId,
+            MatchCode = x.MatchCode,
+            Name = GetMatchName(x),
+            LeagueName = remotingRefService.GetLeagueName(x.LeagueId, LanguageCode.English)
+        });
+        return new AbnormalBetViewModel
+        {
+            TransIds = firstModel.TransIds,
+            FilterBy = firstModel.FilterBy,
+            SubIssueTypeId = firstModel.SubIssueTypeId,
+            Matches = matches
         };
     }
 

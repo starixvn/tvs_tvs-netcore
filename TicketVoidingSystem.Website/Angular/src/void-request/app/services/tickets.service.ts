@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { PagingConstant } from '../../../utility/components/paging/paging/paging.model';
 import { MatchModel } from '../../../utility/models/match.model';
@@ -6,7 +7,6 @@ import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/get-tickets.query';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { TicketsModel } from '../tickets-list/tickets.model';
-import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
