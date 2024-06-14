@@ -48,6 +48,7 @@ export class LogInfoEkoComponent implements OnInit {
       this.isBlock = true;
       const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.logInfo, this.filter);
       await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      this.logInfo.templateValue.checkSettled = this.logInfo.tableTicketsModel.isHasSettledTicket;
       this.isBlock = false;
     }
   }
@@ -68,7 +69,12 @@ export class LogInfoEkoComponent implements OnInit {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);
   }
 
-  public isEarlyKickOff(): boolean {
-    return StaticService.isEarlyKickOff(this.filter.issueTypeId);
+  public getIssueTypeId(): number {
+    return Number(this.filter.issueTypeId);
+  }
+
+  public isNotShowTemplateMessage(){
+    return this.logInfo.tableTicketsModel.groups === undefined || this.logInfo.tableTicketsModel.groups.length == 0 
+    || this.logInfo.tableTicketsModel.groups == null
   }
 }

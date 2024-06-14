@@ -10,7 +10,6 @@ import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../add-request.store';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
@@ -31,6 +30,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -115,7 +115,34 @@ class Helper {
       isChecked: true,
       matchType: 1,
       leagueName: '',
-      name: ''
+      name: '',
+      homeId: 0,
+      homeName: '',
+      homeNameNewSimplified: '',
+      homeNameSimplified: '',
+      homeNameTraditional: '',
+      awayId: 0,
+      awayName: '',
+      awayNameNewSimplified: '',
+      awayNameSimplified: '',
+      awayNameTraditional: '',
+      eventDate: undefined,
+      dateTime: undefined,
+      leagueId: 0,
+      leagueGroupId: 0,
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      startTime: undefined,
+      endTime: undefined,
+      sportType: 0,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: ''
     }
   ];
 }
@@ -358,7 +385,7 @@ describe('EventDangerAcceptedComponent', () => {
       });
     instance.primitiveProps = new PrimitiveProperty();
     instance.mainEvent =  new LogInfoRedCard();
-    instance.leagueEventDangerAcceptedComponent.selectedMatch = new MatchInfo();
+    instance.leagueEventDangerAcceptedComponent.selectedMatch = new MatchModel();
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.isMainMatch = true;
     instance.allSelectedEvents = [mainEvent];
@@ -912,6 +939,33 @@ describe('EventDangerAcceptedComponent', () => {
       matchId: 1111,
       leagueName: '',
       matchCode: "1111",
+      homeId: 0,
+      homeName: '',
+      homeNameNewSimplified: '',
+      homeNameSimplified: '',
+      homeNameTraditional: '',
+      awayId: 0,
+      awayName: '',
+      awayNameNewSimplified: '',
+      awayNameSimplified: '',
+      awayNameTraditional: '',
+      eventDate: undefined,
+      dateTime: undefined,
+      leagueId: 0,
+      leagueGroupId: 0,
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      startTime: undefined,
+      endTime: undefined,
+      sportType: 0,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: ''
     }
 
     instance.relatedEvents = [childMatchModel];

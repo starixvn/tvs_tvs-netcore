@@ -11,6 +11,8 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
+import { TemplateService } from '../../../../../utility/components/template-message/template-message/template.service';
+import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,8 @@ export class LogInfoService {
   constructor(
     private readonly httpService: HttpService,
     private readonly commonService: CommonService,
-    private readonly eventEarlyKickOffService: EventEarlyKickOffService) {
+    private readonly eventEarlyKickOffService: EventEarlyKickOffService,
+    private readonly templateService: TemplateService) {
   }
 
   public async getTickets(query: GetTicketsQuery, logInfo: LogInfoEarlyKickOff, isEdit: boolean,
@@ -86,5 +89,12 @@ export class LogInfoService {
     allSelectedEvents.forEach(event => {
       event.messageValidationLogInfo = null;
     });
+  }
+
+  public getTemplateValue(match: LogInfoEarlyKickOff): TemplateValue {
+    const templateValue = this.templateService.getTemplateValue(match.matchModel);
+    templateValue.groupPHAffected = match.tableTicketsModel.groupPHAffected;
+    templateValue.checkSettled = match.tableTicketsModel.isHasSettledTicket;
+    return templateValue;
   }
 }

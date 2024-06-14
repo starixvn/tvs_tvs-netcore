@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { MatchInfo } from '../../../utility/models/event.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
 import { AddRequestStore } from './add-request.store';
@@ -25,6 +24,7 @@ import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { RequestModel } from './models/request.model';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
+import { MatchModel } from '../../../utility/models/match.model';
 
 @Component({
   selector: 'add-request',
@@ -120,7 +120,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.matchId = matchId;
   }
 
-  updateMatchInfo(match: MatchInfo): void {
+  updateMatchInfo(match: MatchModel): void {
     this.matchId = match?.matchId;
     this.parentMatchId = match?.parentId;
   }

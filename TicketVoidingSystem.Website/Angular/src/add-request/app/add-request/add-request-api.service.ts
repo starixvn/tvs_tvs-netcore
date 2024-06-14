@@ -56,6 +56,9 @@ export class AddRequestApiService {
     return this.httpService.postJson<GetChildMatchQuery, ChildMatchModel[]>(query, 'api/AddRequest/GetChildMatches');
   }
 
+  async getChildMatchesInfo(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
+    return this.httpService.postJson<GetChildMatchQuery, ChildMatchModel[]>(query, 'api/AddRequest/GetChildMatchesEKO');
+  }
   /* istanbul ignore next */
   async getSubIssueTypeLinkMatch(query: SubIssueTypeLinkMatchQuery): Promise<SubIssueTypeLinkMatch[]> {
     return this.httpService.postJson<SubIssueTypeLinkMatchQuery, SubIssueTypeLinkMatch[]>(query, 'api/AddRequest/GetSubIssueTypeLinkMatch');

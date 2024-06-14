@@ -4,18 +4,21 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { Shallow } from 'shallow-render';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LeagueInfo, MatchInfo, MatchInfoViewModel } from '../../../../../utility/models/event.model';
-import { LeagueEventService } from '../../league-event/league-event.service';
 import { LeagueEventAbnormalComponent } from './league-event-abnormal.component';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { LeagueEventService } from '../../services/league-event.service';
 
 class Helper {
   static readonly fakeEventDate = '2020-11-06 09:44:46.361 PM';
-  static readonly fakeMatch: MatchInfo = {
+  static readonly fakeMatch: MatchModel = {
     leagueId: 80714,
     leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
     matchId: 70000364,
     name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
     sportType: 1,
-    kickOffTime: ''
+    kickOffTime: '',
+    matchCode: '',
+    matchEvent: ''
   };
   static readonly fakeMatchViewModel: MatchInfoViewModel = {
     match: Helper.fakeMatch,
@@ -75,7 +78,8 @@ describe('LeagueEventAbnormalComponent', () => {
     // Arrange
     const { instance } = await shallow
       .mock(LeagueEventService, {
-        getMatch: jest.fn().mockImplementation(() => Helper.fakeMatchViewModel)
+        getMatch: jest.fn().mockImplementation(() => Helper.fakeMatchViewModel),
+        getMatchInfo: jest.fn().mockReturnValue(Helper.fakeMatch)
       })
       .render();
     instance['updateInfoWithOnlyOneMatch'] = jest.fn();
@@ -91,13 +95,23 @@ describe('LeagueEventAbnormalComponent', () => {
     // Arrange
     const { instance } = await shallow.render();
     instance['updateLeagueInfo'] = jest.fn();
-
+    let matchInfo: MatchInfo = {
+      leagueId: 80714,
+      leagueName: 'AFC ASIAN CUP 2019 (IN UAE) - SPECIFIC 15 MINS',
+      matchId: 70000364,
+      name: '70000364 - Deportivo Alaves 5th Corner - vs - Zvezda Irkutsk',
+      sportType: 1,
+      kickOffTime: '',
+      matchCode: '',
+      matchEvent: ''
+    };
+  
     // Action
-    instance['updateInfoWithOnlyOneMatch'](Helper.fakeMatch);
+    instance['updateInfoWithOnlyOneMatch'](matchInfo);
 
     // Assert
     expect(instance['updateLeagueInfo']).toHaveBeenCalledTimes(1);
-    expect(instance.matches).toEqual([Helper.fakeMatch]);
+    expect(instance.matches).toEqual([matchInfo]);
   });
   
   it('#updateInfoWithOnlyOneMatch should call #updateUndefinedMatchAndLeague', async () => {

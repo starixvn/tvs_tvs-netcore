@@ -309,6 +309,7 @@ export class FunctionConst {
   static readonly EARLY_KICK_OFF = 1;
   static readonly TVS_VOID_PAGE = 2;
   static readonly MARK_TICKETS = 3;
+  static readonly TVS_ADD_PAGE = 4;
 }
 
 export class PoolHouseTicketValue {
@@ -372,14 +373,14 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.WAITING_ID
   ];
   static readonly EARLY_KICK_OFF: number[] = [
-    TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];
   static readonly WRONG_KICK_OFF: number[] = [
-    TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID,
     TVSRequestActionType.WAITING_ID
   ];

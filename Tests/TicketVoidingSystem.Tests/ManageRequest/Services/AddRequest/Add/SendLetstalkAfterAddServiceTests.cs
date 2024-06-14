@@ -29,6 +29,7 @@ public class SendLetstalkAfterAddServiceTests
     [Theory]
     [InlineData(1, 31)]
     [InlineData(2, 38)]
+    [InlineData(3, 31)]
     public void Execute_Successful_CalledExpected(int filterBy, int subIssueTypeId)
     {
         // Arrange

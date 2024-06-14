@@ -23,7 +23,7 @@ export class EventEarlyKickOffService {
       event.kickOffTime = x.kickOffTime;
       event.subIssueTypeId = x.subIssueTypeId;
       event.isCollapse = filter.isVoided || !x.isMainMatch;
-
+      event.matchModel = x.match;
       allEvents.push(event);
     });
   }

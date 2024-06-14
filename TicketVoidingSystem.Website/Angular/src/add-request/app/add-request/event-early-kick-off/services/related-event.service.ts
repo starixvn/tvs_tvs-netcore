@@ -12,6 +12,7 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,12 +32,13 @@ export class RelatedEventService {
     query.isMainMatch = isMainMatch;
     query.sportType = filterModel.sportType;
 
-    return this.addRequestApiService.getChildMatches(query);
+    return this.addRequestApiService.getChildMatchesInfo(query);
   }
 
   updateEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
     const newEvents = models
       .map(x => {
+        var matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
         return  {
           matchId: x.matchId,
           matchCode: x.matchCode,
@@ -49,12 +51,52 @@ export class RelatedEventService {
           isCollapse: true,
           isShowValidation: false,
           pagingModel: new PagingModel(),
-          tableTicketsModel: new TableTicketsModel()
+          tableTicketsModel: new TableTicketsModel(),
+          matchModel: matchModel,
         } as LogInfoEarlyKickOff;
       });
-
+      this.updateTemplateForEvents(newEvents);
+      
       return newEvents;
   }
+
+  private updateTemplateForEvents(events: LogInfoEarlyKickOff[]){
+    events.forEach(x => {
+      x.templateValue = this.logInfoService.getTemplateValue(x);
+      x.templateValue.kickOffTime = x.kickOffTime}
+    );
+  }
+  
+  public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
+    return {
+      sportType: childMatch.sportType,
+      sportTypeName: childMatch.sportTypeName,
+      sportTypeNameTraditional: childMatch.sportTypeNameTraditional,
+      sportTypeNameSimplified: childMatch.sportTypeNameSimplified,
+      sportTypeNameNewSimplified: childMatch.sportTypeNameNewSimplified,
+      homeId: childMatch.homeId,
+      homeName: childMatch.homeName,
+      homeNameTraditional: childMatch.homeNameTraditional,
+      homeNameSimplified: childMatch.homeNameSimplified,
+      homeNameNewSimplified: childMatch.homeNameNewSimplified,
+      awayId: childMatch.awayId,
+      awayName: childMatch.awayName,
+      awayNameTraditional: childMatch.awayNameTraditional,
+      awayNameSimplified: childMatch.awayNameSimplified,
+      awayNameNewSimplified: childMatch.awayNameNewSimplified,
+      leagueId: childMatch.leagueId,
+      leagueName: childMatch.leagueName,
+      leagueNameTraditional: childMatch.leagueNameTraditional,
+      leagueNameSimplified: childMatch.leagueNameSimplified,
+      leagueNameNewSimplified: childMatch.leagueNameNewSimplified,
+      kickOffTime: eventDate,
+      matchId: childMatch.matchId,
+      matchCode: childMatch.matchCode,
+      leagueGroupId: childMatch.leagueGroupId,
+      parentId: childMatch.parentId
+      } as MatchModel;
+  }
+  
 
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {

@@ -170,6 +170,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.updateAIOMessage();
     this.updateSpecialBetType();
     this.updateActualMarketTvsWrongOdds();
+    this.message.isTVSAddOrEditPage = this.isTVSAddOrEditPage();
   }
 
   resetMessage() {
@@ -484,6 +485,10 @@ export class TemplateMessageComponent implements OnChanges {
 
   isTVSVoidPage(): boolean {
     return this.voidFunction === FunctionConst.TVS_VOID_PAGE;
+  }
+
+  isTVSAddOrEditPage(): boolean {
+    return this.voidFunction === FunctionConst.TVS_ADD_PAGE;
   }
 
   isVoidSinglePage(): boolean {

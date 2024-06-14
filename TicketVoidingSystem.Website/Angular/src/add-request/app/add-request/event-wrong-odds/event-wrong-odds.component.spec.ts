@@ -4,7 +4,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { LinkedLogsViewModel } from '../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -20,6 +19,7 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { MatchModel } from '../../../../utility/models/match.model';
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
@@ -265,7 +265,7 @@ describe('EventWrongOddsComponent', () => {
       }
     });
     instance.leagueEventWrongOddsComponent = new LeagueEventRedCardComponent(null, null);
-    instance.leagueEventWrongOddsComponent.selectedMatch = new MatchInfo();
+    instance.leagueEventWrongOddsComponent.selectedMatch = new MatchModel();
     instance.primitiveProps = new PrimitiveProperty();
     instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
 

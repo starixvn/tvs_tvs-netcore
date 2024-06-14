@@ -1,3 +1,4 @@
+import { TemplateValue } from './../../../../../utility/components/template-message/template-message/template.model';
 import * as _ from 'lodash';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -84,7 +85,34 @@ class Helper {
     isChecked: true,
     matchType: MatchType.LINK,
     leagueName: '',
-    name: ''
+    name: '',
+    homeId: 0,
+    homeName: '',
+    homeNameNewSimplified: '',
+    homeNameSimplified: '',
+    homeNameTraditional: '',
+    awayId: 0,
+    awayName: '',
+    awayNameNewSimplified: '',
+    awayNameSimplified: '',
+    awayNameTraditional: '',
+    eventDate: undefined,
+    dateTime: undefined,
+    leagueId: 0,
+    leagueGroupId: 0,
+    leagueNameNewSimplified: '',
+    leagueNameSimplified: '',
+    leagueNameTraditional: '',
+    matchEventSimplified: '',
+    matchEventNewSimplified: '',
+    kickOffTime: '',
+    startTime: undefined,
+    endTime: undefined,
+    sportType: 0,
+    sportTypeName: '',
+    sportTypeNameNewSimplified: '',
+    sportTypeNameSimplified: '',
+    sportTypeNameTraditional: ''
   };
 }
 
@@ -97,19 +125,21 @@ describe('RelatedEventService', () => {
 
   it('#getChildMatches should call #getChildMatches', async () => {
     const addRequestApiService = new AddRequestApiService(null);
-    addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
+    addRequestApiService.getChildMatchesInfo = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
     const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, null);
 
     const actual = await mockRelatedEventService.getChildMatches(1, new FilterModel(), true);
 
     expect(actual.length).toBe(1);
-    expect(addRequestApiService.getChildMatches).toHaveBeenCalledTimes(1);
+    expect(addRequestApiService.getChildMatchesInfo).toHaveBeenCalledTimes(1);
   });
 
   it('#assignChildMatchToLogInfoModel should return expected model', async () => {
     const addRequestApiService = new AddRequestApiService(null);
+    const logInfoService = new LogInfoService(null, null, null,null);
+    logInfoService.getTemplateValue = jest.fn().mockReturnValue(new TemplateValue())
     addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
-    const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, null);
+    const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, logInfoService);
 
     const actual = mockRelatedEventService.updateEvents([Helper.fakeChildMatchModel], Helper.fakeLogInfoEarlyKickOff, '1');
 
@@ -177,7 +207,7 @@ describe('RelatedEventService', () => {
     arg.addRequestStore.changeBlockingUiStatus = jest.fn();
     const validationService = new ValidationService();
     validationService.isValidInputRelatedEvent = jest.fn().mockImplementation(() => true);
-    const logInfoService = new LogInfoService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null, null);
     logInfoService.getLogInfo = jest.fn();
     const mockRelatedEventService = new RelatedEventService(null, validationService, logInfoService);
     mockRelatedEventService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([new ChildMatchModel()]));
@@ -220,7 +250,9 @@ describe('RelatedEventService', () => {
     args.filter = new FilterModel();
     args.mainEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
     args.allEvents = _.cloneDeep([Helper.fakeLogInfoEarlyKickOff]);
-    const mockRelatedEventService = new RelatedEventService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null,null);
+    logInfoService.getTemplateValue = jest.fn().mockReturnValue(new TemplateValue())
+    const mockRelatedEventService = new RelatedEventService(null, null, logInfoService);
     mockRelatedEventService['assignChildMatchToLogInfoModel'] = jest.fn().mockImplementation(() => [new LogInfoRedCard()]);
 
     const actual = await mockRelatedEventService['preparingModelGetLogInfo']([childMatchModel], args);
@@ -230,7 +262,7 @@ describe('RelatedEventService', () => {
 
   it('#getDataWhenSearch should called expected method', async () => {
     const args = new AddRelatedEventArg();
-    const logInfoService = new LogInfoService(null, null, null);
+    const logInfoService = new LogInfoService(null, null, null, null);
     logInfoService.getLogInfo = jest.fn().mockImplementation();
     const mockRelatedEventService = new RelatedEventService(null, null, logInfoService);
     mockRelatedEventService['preparingModelGetLogInfo'] = jest.fn();

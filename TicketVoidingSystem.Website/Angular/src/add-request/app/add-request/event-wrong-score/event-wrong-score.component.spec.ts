@@ -8,7 +8,6 @@ import { ModalService } from '../../../../utility/components/modal/modal.service
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AcceptType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -29,6 +28,7 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
+import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeTransId = '111102';
@@ -1130,7 +1130,7 @@ describe('EventWrongScoreComponent', () => {
     instance.resetData = jest.fn();
     instance.updateMatchId.emit = jest.fn();
 
-    instance.changeMatchEvent(new MatchInfo());
+    instance.changeMatchEvent(new MatchModel());
 
     expect(instance.resetData).toHaveBeenCalledTimes(1);
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);

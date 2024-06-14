@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LeagueInfo, MatchInfo } from '../../../../../utility/models/event.model';
-import { LeagueEventService } from '../../league-event/league-event.service';
+import { LeagueEventService } from '../../services/league-event.service';
 
 @Component({
   selector: 'league-event-abnormal',
@@ -38,15 +38,8 @@ export class LeagueEventAbnormalComponent implements OnInit {
 
   async getMatchInEditPage(sportType: number, eventDate: string, isEdit: boolean, matchId: number, actionId: string): Promise<void> {
     const viewModel = await this.leagueEventService.getMatch(sportType, eventDate, null, isEdit, matchId, Number(actionId));
-    this.updateInfoWithOnlyOneMatch(viewModel.match);
+    this.updateInfoWithOnlyOneMatch(this.leagueEventService.getMatchInfo(viewModel.match));
   }
-
-  // async getMatchFromTransIds(transIds: string): Promise<void> {
-  //   const defaultDate = '2001/1/1';
-  //   const viewModel = await this.leagueEventService.getMatch(null, defaultDate, transIds, this.isEdit, null,
-  //     Number(this.actionId));
-  //   this.updateInfoWithOnlyOneMatch(viewModel.match);
-  // }
 
   updateUndefinedMatchAndLeague(): void {
     this.leagues = [];

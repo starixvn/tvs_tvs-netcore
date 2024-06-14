@@ -4,8 +4,9 @@ import { Subscription, timer } from 'rxjs';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { LeagueInfo, MatchInfo } from '../../../../../utility/models/event.model';
-import { LeagueEventService } from '../../league-event/league-event.service';
+import { LeagueInfo } from '../../../../../utility/models/event.model';
+import { LeagueEventService } from '../../services/league-event.service';
+import { MatchModel } from '../../../../../utility/models/match.model';
 
 @Component({
   selector: 'league-event-red-card',
@@ -18,12 +19,12 @@ export class LeagueEventRedCardComponent implements OnChanges {
   @Input() actionId: string;
   @Input() initSportType: number;
   @Input() initMatchId: number;
-  @Output() changeEvent = new EventEmitter<MatchInfo>();
+  @Output() changeEvent = new EventEmitter<MatchModel>();
 
-  selectedMatch = new MatchInfo();
+  selectedMatch = new MatchModel();
   leagues: LeagueInfo[];
   leagueId: number;
-  matches: MatchInfo[];
+  matches: MatchModel[];
   isBlock: boolean;
   tooltip = new Tooltip();
   validationMessage: string;
@@ -64,6 +65,7 @@ export class LeagueEventRedCardComponent implements OnChanges {
         this.validationMessage = '';
       } else if (isNumeric(keyword.term)) {
         const model = await this.leagueEventService.getMatch(this.initSportType, this.eventDate, null, this.isEdit, Number(keyword.term), null);
+
         if (model.errorCode === 0) {
           this.matches = [model.match];
         } else {
@@ -83,13 +85,13 @@ export class LeagueEventRedCardComponent implements OnChanges {
     this.validationMessage = '';
   }
 
-  onChangeMatchEvent(match: MatchInfo) {
+  onChangeMatchEvent(match: MatchModel) {
     this.updateLeagueInfo(match.leagueId, match.leagueName);
     this.selectedMatch = match;
     this.changeEvent.emit(match);
   }
 
-  private updateInfoWithOnlyOneMatch(match: MatchInfo): void {
+  private updateInfoWithOnlyOneMatch(match: MatchModel): void {
     if (match) {
       this.matches = [match];
       this.selectedMatch = match;
@@ -113,7 +115,7 @@ export class LeagueEventRedCardComponent implements OnChanges {
   updateUndefinedMatchAndLeague() {
     this.leagues = [];
     this.matches = [];
-    this.selectedMatch = new MatchInfo();
+    this.selectedMatch = new MatchModel();
     this.leagueId = undefined;
   }
 

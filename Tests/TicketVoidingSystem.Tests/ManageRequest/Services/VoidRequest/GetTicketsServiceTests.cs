@@ -52,7 +52,7 @@ public class GetTicketsServiceTests
             .ReturnsForAnyArgs(new List<string> { "1" });
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
-        getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>()).Returns(new List<string> { "2" });
+        getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>(), matchId).Returns(new List<string> { "2" });
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
         mapper.Map<GetBetTrans14TicketsCriteria>(Arg.Any<GetTicketsQuery>())
             .Returns(new GetBetTrans14TicketsCriteria());
@@ -80,7 +80,7 @@ public class GetTicketsServiceTests
             .ReturnsForAnyArgs(new List<string> { "1" });
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
-        getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>()).Returns(new List<string> { "1" });
+        getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>(), matchId).Returns(new List<string> { "1" });
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
 
         // Act
@@ -105,7 +105,7 @@ public class GetTicketsServiceTests
             .ReturnsForAnyArgs(new List<string> { "1" });
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetTicketsCriteria>()).Returns(ticketModels);
-        getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>()).Returns(new List<string> { "1" });
+        getTransInfoService.GetTransInfoJsonForVoid14(Arg.Any<List<BetId>>(), null).Returns(new List<string> { "1" });
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetBetTrans14TicketsCriteria>()).Returns(ticketModels);
 
         // Act

@@ -8,16 +8,13 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { HttpService } from '../../../../utility/services/http.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
-import { LeagueEventComponent } from '../league-event/league-event.component';
 import { EarlyKickOffModel } from '../models/event-eko.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../models/get-log-info.model';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -34,6 +31,7 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { TableTicketsModel } from './tickets-list/table-tickets.model';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 
 class Helper {
   static readonly hourSelector = 'input.hour';
@@ -49,6 +47,11 @@ class Helper {
     matchId: 1,
     subIssueTypeId: 1
   }
+  static readonly fakeTemplateValue: TemplateValue = {
+    matchId: 0,
+    groupPHAffected: 0, 
+    checkSettled: false
+  };
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
       matchId: 12345,
@@ -57,7 +60,34 @@ class Helper {
       isChecked: true,
       matchType: 1,
       leagueName: '',
-      name: ''
+      name: '',
+      homeId: 0,
+      homeName: '',
+      homeNameNewSimplified: '',
+      homeNameSimplified: '',
+      homeNameTraditional: '',
+      awayId: 0,
+      awayName: '',
+      awayNameNewSimplified: '',
+      awayNameSimplified: '',
+      awayNameTraditional: '',
+      eventDate: undefined,
+      dateTime: undefined,
+      leagueId: 0,
+      leagueGroupId: 0,
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      startTime: undefined,
+      endTime: undefined,
+      sportType: 0,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: ''
     }
   ];
   static readonly fakeGetLogInfoModelList: GetLogInfoModel[] = [{
@@ -162,31 +192,29 @@ class Helper {
     };
   }
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
-    matchId: 1,
-    messageValidationLogInfo: [],
-    eventName: '',
-    isCollapse: false,
     isMainMatch: true,
-    isShowValidation: false,
     kickOffTime: '',
-    leagueName: '',
-    matchModel: new MatchModel(),
-    pagingModel: new PagingModel(),
+    matchId: 1,
     subIssueTypeId: 1,
+    leagueName: '',
+    eventName: '',
+    tableTicketsModel: new TableTicketsModel,
+    matchModel: Helper.getFakeMatchInfo(),
+    isCollapse: false,
+    pagingModel: undefined,
     isInvalidTotalTickets: false,
-    tableTicketsModel: new TableTicketsModel()
-  };
+    isShowValidation: false,
+    templateValue: Helper.fakeTemplateValue
+  }
 }
 
 describe('EventEarlyKickOffComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventComponent,
       TicketsListComponent,
       LeagueEventRedCardComponent,
       AddChildMatchComponent,
       ConfirmEkoComponent
-
     ],
     imports: [
       BlockUiModule,
@@ -206,6 +234,7 @@ describe('EventEarlyKickOffComponent', () => {
 
   beforeEach(() => {
     shallow = new Shallow(EventEarlyKickOffComponent, AppModuleTest)
+              .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn(), })
               .dontMock(DateTimeModule)
               .dontMock(NgbModule);
   });
@@ -218,9 +247,10 @@ describe('EventEarlyKickOffComponent', () => {
 
   it('changeMatchEvent should call expected method when have not league event', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
+    const mockGetTemplateValue = jest.fn();
     const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
     const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(LogInfoService, { getTemplateValue: mockGetTemplateValue, resetLogInfoOfEvent: mockResetLogInfoOfEvent})
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
     .render({
       bind: {
@@ -237,6 +267,7 @@ describe('EventEarlyKickOffComponent', () => {
     instance.changeMatchEvent();
 
     expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
+    expect(mockGetTemplateValue).toHaveBeenCalledTimes(1);
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
   });
 
@@ -244,7 +275,7 @@ describe('EventEarlyKickOffComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
     const { instance } = await shallow
-    .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(LogInfoService, { getTemplateValue: jest.fn(), resetLogInfoOfEvent: mockResetLogInfoOfEvent })
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
     .render({
       bind: {
@@ -256,7 +287,7 @@ describe('EventEarlyKickOffComponent', () => {
     instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff];
     instance.mainEvent = Helper.fakeLogInfoEarlyKickOff;
     const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.selectedMatch = new MatchInfo();
+    leagueEventWrongHdpComponent.selectedMatch = new MatchModel();
     instance.leagueEventComponent = leagueEventWrongHdpComponent;
     instance.updateMatchId.emit = jest.fn();
 
@@ -449,6 +480,33 @@ describe('EventEarlyKickOffComponent', () => {
       matchId: 1111,
       leagueName: '',
       matchCode: "1111",
+      homeId: 0,
+      homeName: '',
+      homeNameNewSimplified: '',
+      homeNameSimplified: '',
+      homeNameTraditional: '',
+      awayId: 0,
+      awayName: '',
+      awayNameNewSimplified: '',
+      awayNameSimplified: '',
+      awayNameTraditional: '',
+      eventDate: undefined,
+      dateTime: undefined,
+      leagueId: 0,
+      leagueGroupId: 0,
+      leagueNameNewSimplified: '',
+      leagueNameSimplified: '',
+      leagueNameTraditional: '',
+      matchEventSimplified: '',
+      matchEventNewSimplified: '',
+      kickOffTime: '',
+      startTime: undefined,
+      endTime: undefined,
+      sportType: 0,
+      sportTypeName: '',
+      sportTypeNameNewSimplified: '',
+      sportTypeNameSimplified: '',
+      sportTypeNameTraditional: ''
     }
     instance.relatedEvents = [childMatchModel];
     await instance.saveRelatedEvent(Helper.fakeChildMatches);
@@ -646,7 +704,7 @@ describe('EventEarlyKickOffComponent', () => {
         isEdit: false
       }
     });
-    const matchInfo = new MatchInfo();
+    const matchInfo = new MatchModel();
     matchInfo.matchId = 1;
     matchInfo.kickOffTime = '2023/11/18 12:08:49.737';
     instance.isEdit = false;
@@ -658,7 +716,6 @@ describe('EventEarlyKickOffComponent', () => {
   it('#handleSearchEvent should be return when inValidateCommonData', async () => {
     const mockValidateCommonData = jest.fn().mockImplementation(() => false);
     const { instance } = await shallow
-      .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn(), })
       .mock(ValidationService, { validateCommonData: mockValidateCommonData })
       .render({
         bind: {
@@ -701,7 +758,8 @@ describe('EventEarlyKickOffComponent', () => {
     instance.logInfoComponents.reset([...logInfoComponents.toArray(), logInfoRedCardComponent]);
     instance.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
     instance.getTicketsMainEvent = jest.fn();
-
+    instance.mainEvent = Helper.fakeLogInfoEarlyKickOff ;
+    instance.mainEvent.templateValue = Helper.fakeTemplateValue;
     await instance.handleSearchEvent();
 
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);

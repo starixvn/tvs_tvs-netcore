@@ -12,6 +12,8 @@ export class TableTicketsModel {
   toTime: Date;
   strFromTime: string;
   strToTime: string;
+  isHasSettledTicket: boolean;
+  groupPHAffected: number;
 
   initData(data: TableTicketsModel) {
     this.total = data.total;
@@ -23,6 +25,8 @@ export class TableTicketsModel {
     this.strFromTime = moment(new Date(data.fromTime)).format('hh:mm:ss A');
     this.strToTime = moment(new Date(data.toTime)).format('hh:mm:ss A');
     this.mapGroups(data.groups);
+    this.isHasSettledTicket = data.isHasSettledTicket;
+    this.groupPHAffected = data.groupPHAffected;
   }
 
   private mapGroups(groups: Array<GroupModel>): void {
