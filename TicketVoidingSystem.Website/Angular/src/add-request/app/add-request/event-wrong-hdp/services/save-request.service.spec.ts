@@ -12,6 +12,7 @@ import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
@@ -62,7 +63,8 @@ class Helper {
     allEvents: [],
     leagueEventWrongHdpComponent: undefined,
     logInfoComponents: [],
-    addRequestStore: new AddRequestStore
+    addRequestStore: new AddRequestStore,
+    mainEvent: new LogInfoWrongHdp()
   }
 }
 
@@ -72,20 +74,22 @@ describe('SaveRequestService', () => {
   let logInfoService: LogInfoService;
   let popupService: PopupService;
   let addRequestService: AddRequestService;
+  let eventWrongHdpService: EventWrongHdpService;
 
   beforeEach(() => {
     validationService = new ValidationService();
     logInfoService = new LogInfoService(null, null);
     popupService = new PopupService(null);
     addRequestService = new AddRequestService(null, null, null);
-    service = new SaveRequestService(validationService, logInfoService, popupService, addRequestService);
+    eventWrongHdpService = new EventWrongHdpService(null, null);
+    service = new SaveRequestService(validationService, logInfoService, popupService, addRequestService, eventWrongHdpService);
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
     logInfoService.resetLogInfoOfEvent = jest.fn();
-    let logInfoComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
     logInfoComponent.hideValidationDetail = jest.fn().mockReturnValue(true);
-    let arg = Helper.fakeSaveRequestArg;
+    const arg = Helper.fakeSaveRequestArg;
     arg.logInfoComponents = [logInfoComponent];
     validationService.validateCommonData = jest.fn().mockReturnValue(false);
     arg.addRequestStore = new AddRequestStore();
@@ -102,7 +106,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    saveRequestArg.mainEvent = new LogInfoWrongHdp();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -114,7 +118,9 @@ describe('SaveRequestService', () => {
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponent.showValidationDetail = jest.fn();
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponent];
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const eventWrongHdpService = new EventWrongHdpService(null, null);
+    eventWrongHdpService.getLinkedLog = jest.fn();
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongHdpService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -131,7 +137,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    saveRequestArg.mainEvent = new LogInfoWrongHdp();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -143,7 +149,9 @@ describe('SaveRequestService', () => {
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponent.showValidationDetail = jest.fn();
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponent];
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const eventWrongHdpService = new EventWrongHdpService(null, null);
+    eventWrongHdpService.getLinkedLog = jest.fn();
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongHdpService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -200,7 +208,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => { });
 
-    const saveRequestService = new SaveRequestService(validationService, null, popupService, null);
+    const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
     saveRequestService['getMessageConfirmation'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
@@ -226,7 +234,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.checkCanShowConfirmation = jest.fn().mockImplementation(() => false);
 
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
     saveRequestService['executeSaveRequestApi'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
@@ -272,7 +280,7 @@ describe('SaveRequestService', () => {
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
     const addRequestService = new AddRequestService(null, null, null);
     const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService);
+    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
     saveRequestService['initAddRequestQuery'] = jest.fn();
 
     await saveRequestService['executeSaveRequestApi'](new SaveRequestArg());
@@ -290,7 +298,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => { });
 
-    const saveRequestService = new SaveRequestService(null, null, popupService, null);
+    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
     saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
 
     await saveRequestService['onClickConfirmSave'](arg);
@@ -366,7 +374,7 @@ describe('SaveRequestService', () => {
 
     const validationService = new ValidationService();
     validationService.isSubTypeWrongHdpOrWrong1stHdp = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
 
     const actual = saveRequestService['getWrongHdpInfo'](Helper.fakeLogInfoWrongHdp, '1');
 
@@ -383,7 +391,7 @@ describe('SaveRequestService', () => {
 
     const validationService = new ValidationService();
     validationService.isSubTypeWrongHdpOrWrong1stHdp = jest.fn().mockImplementation(() => false);
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
 
     const actual = saveRequestService['getWrongHdpInfo'](Helper.fakeLogInfoWrongHdp, '1');
 

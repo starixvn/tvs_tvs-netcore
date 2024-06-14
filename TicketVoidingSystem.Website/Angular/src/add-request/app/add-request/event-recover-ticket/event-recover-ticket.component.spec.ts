@@ -77,6 +77,7 @@ describe('EventRecoverTicketComponent', () => {
 
   it('#EventRecoverTicketComponent init should match snapshot', async () => {
     const { fixture, instance } = await shallow
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           recoverTicketModel: Helper.fakeRecoverTicketModel,
@@ -91,6 +92,7 @@ describe('EventRecoverTicketComponent', () => {
 
   it('#ngOnInit should update productIds to default', async () => {
     const { instance } = await shallow
+      .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
       .render({
         bind: {
           recoverTicketModel: Helper.fakeRecoverTicketModel,

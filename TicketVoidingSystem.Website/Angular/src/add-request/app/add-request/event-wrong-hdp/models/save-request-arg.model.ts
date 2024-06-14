@@ -16,6 +16,7 @@ export class SaveRequestArg {
   others: OthersModel;
   primitiveProps: PrimitiveProperty;
   allEvents: LogInfoWrongHdp[];
+  mainEvent: LogInfoWrongHdp;
   leagueEventWrongHdpComponent: LeagueEventRedCardComponent;
   logInfoComponents: LogInfoWrongHdpComponent[];
   addRequestStore: AddRequestStore;

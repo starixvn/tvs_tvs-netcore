@@ -8,6 +8,7 @@ import { PopupService } from '../../services/popup.service';
 import { FilterOddsTypeConstant } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 
@@ -21,6 +22,7 @@ export class SaveRequestService {
     private readonly logInfoWrongOddsService: LogInfoService,
     private readonly popupService: PopupService,
     private readonly addRequestService: AddRequestService,
+    private readonly eventWrongOddsService: EventWrongOddsService,
   ) { }
 
 
@@ -45,6 +47,7 @@ export class SaveRequestService {
     }
 
     argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
+    argWrongOdds.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(argWrongOdds.logInfoEvent, argWrongOdds.filter);
     await this.logInfoWrongOddsService.getLogInfo(argWrongOdds.logInfoEvent, argWrongOdds.isEdit, argWrongOdds.requestId, argWrongOdds.filter, argWrongOdds.primitiveProps);
     argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
     argWrongOdds.primitiveProps.isShowValidation = true;

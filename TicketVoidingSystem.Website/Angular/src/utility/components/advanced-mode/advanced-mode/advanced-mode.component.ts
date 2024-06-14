@@ -435,9 +435,7 @@ export class AdvancedModeComponent implements OnChanges {
     betTeam.selections.forEach(x => {
       if (x.name === 'Player:') {
         x.isMultiple = true;
-        betTeam.renderMultipleSelect(x);
-        x.multiSelection = betTeam.multiSelection;
-        delete betTeam.multiSelection;
+        x.multiSelection = betTeam.renderMultipleSelect(x);
       }
     });
   }

@@ -14,6 +14,7 @@ import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-w
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
@@ -113,7 +114,7 @@ describe('SaveRequestService', () => {
   let service: SaveRequestService;
 
   beforeEach(() => {
-    service = new SaveRequestService(null, null, null, null);
+    service = new SaveRequestService(null, null, null, null, null);
   });
 
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
@@ -126,7 +127,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => false);
 
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, null);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -141,7 +142,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    saveRequestArg.logInfoEvent = new LogInfoWrongOdds();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -149,7 +150,9 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const eventWrongOddsService = new EventWrongOddsService(null);
+    eventWrongOddsService.getLinkedLog = jest.fn();
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOddsService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -165,7 +168,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.primitiveProps = new PrimitiveProperty();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-
+    saveRequestArg.logInfoEvent = new LogInfoWrongOdds();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     logInfoService.getLogInfo = jest.fn();
@@ -173,7 +176,9 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => false);
-    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null);
+    const eventWrongOddsService = new EventWrongOddsService(null);
+    eventWrongOddsService.getLinkedLog = jest.fn();
+    const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOddsService);
 
     const actual = await saveRequestService.recheckLogInfoBeforeSaveRequest(saveRequestArg);
 
@@ -228,7 +233,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowConfirm = jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
 
-    const saveRequestService = new SaveRequestService(validationService, null, popupService, null);
+    const saveRequestService = new SaveRequestService(validationService, null, popupService, null, null);
     saveRequestService['getMessageConfirmationWrongOdds'] = jest.fn().mockImplementation(() => 'aaa');
     saveRequestService['onClickConfirmSave'] = jest.fn();
 
@@ -253,7 +258,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.checkCanShowConfirmationWrongOdds = jest.fn().mockImplementation(() => false);
 
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
     saveRequestService['executeSaveRequestApi'] = jest.fn();
 
     saveRequestService['proceedSaveRequest'](saveRequestArg);
@@ -300,7 +305,7 @@ describe('SaveRequestService', () => {
   it('#executeSaveRequestApi should called #executeSaveRequest', async () => {
     const addRequestService = new AddRequestService(null, null, null);
     const spyExecuteSaveRequest = jest.spyOn(addRequestService, 'executeSaveRequest').mockImplementation();
-    const saveRequestService = new SaveRequestService(null, null, null, addRequestService);
+    const saveRequestService = new SaveRequestService(null, null, null, addRequestService, null);
     saveRequestService['initAddRequestQuery'] = jest.fn();
 
     await saveRequestService['executeSaveRequestApi'](new SaveRequestArg());
@@ -318,7 +323,7 @@ describe('SaveRequestService', () => {
     const popupService = new PopupService(null);
     const spyShowError = jest.spyOn(popupService, 'showError').mockImplementation(() => {});
 
-    const saveRequestService = new SaveRequestService(null, null, popupService, null);
+    const saveRequestService = new SaveRequestService(null, null, popupService, null, null);
     saveRequestService['recheckLogInfoBeforeSaveRequest'] = jest.fn().mockImplementation(() => Promise.resolve(false));
 
     await saveRequestService['onClickConfirmSave'](arg);
@@ -381,7 +386,7 @@ describe('SaveRequestService', () => {
     arg.logInfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.VALUE;
     const validationService = new ValidationService();
     validationService.isSubTypeOuOr1stOu = jest.fn().mockImplementation(() => true);
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
 
     const actual = saveRequestService['getWrongOddsInfo'](Helper.fakeLogInfoWrongOdds, '1');
 
@@ -397,26 +402,10 @@ describe('SaveRequestService', () => {
     arg.logInfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.RANGE;
     const validationService = new ValidationService();
     validationService.isSubTypeOuOr1stOu = jest.fn().mockImplementation(() => false);
-    const saveRequestService = new SaveRequestService(validationService, null, null, null);
+    const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
 
     const actual = saveRequestService['getWrongOddsInfo'](Helper.fakeLogInfoWrongOdds, '1');
 
     expect(actual).toBeDefined();
   });
-  // it('#getWrongHdpInfo should return expected', async () => {
-  //   const arg = new SaveRequestArg();
-  //   arg.filter = new FilterModel();
-  //   arg.others = new OthersModel();
-  //   arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
-  //   arg.allEvents = [Helper.fakeLogInfoWrongHdp];
-
-  //   const validationService = new ValidationService();
-  //   validationService.isSubTypeWrongHdpOrWrong1stHdp = jest.fn().mockImplementation(() => false);
-  //   const saveRequestService = new SaveRequestService(validationService, null, null, null);
-
-  //   const actual = saveRequestService['getWrongHdpInfo'](Helper.fakeLogInfoWrongHdp, '1');
-
-  //   expect(actual).toBeDefined();
-  //   expect(validationService.isSubTypeWrongHdpOrWrong1stHdp).toHaveBeenCalledTimes(1);
-  // });
 });

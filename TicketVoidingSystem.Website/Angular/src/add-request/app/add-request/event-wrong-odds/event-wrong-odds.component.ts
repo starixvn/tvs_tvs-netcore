@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { PoolHouseTicketValue } from '../../../../utility/constants/config';
-import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
@@ -40,8 +39,7 @@ export class EventWrongOddsComponent implements OnInit {
     private readonly eventWrongOddsService: EventWrongOddsService,
     private readonly logInfoService: LogInfoService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService,
-    private readonly addRequestApiService: AddRequestApiService
+    private readonly saveRequestService: SaveRequestService
 
     ) { }
 
@@ -77,7 +75,6 @@ export class EventWrongOddsComponent implements OnInit {
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.primitiveProps.isShowValidation = false;
-    this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }
