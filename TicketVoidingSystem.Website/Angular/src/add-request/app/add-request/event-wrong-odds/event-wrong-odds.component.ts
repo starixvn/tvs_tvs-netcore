@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { PoolHouseTicketValue } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
@@ -13,6 +12,7 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -29,7 +29,7 @@ export class EventWrongOddsComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOddsModels: WrongOddsModel[] = [];
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventWrongOddsComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('filterWrongOdds') filterWrongOddsComponent: FilterWrongOddsComponent;
   logInfoEvent = new LogInfoWrongOdds();
   primitiveProps = new PrimitiveProperty();
@@ -60,7 +60,7 @@ export class EventWrongOddsComponent implements OnInit {
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
-    if (!this.validationService.validateCommonData(this.leagueEventWrongOddsComponent, this.filterWrongOddsComponent)) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsComponent)) {
       return;
     }
 
@@ -90,7 +90,7 @@ export class EventWrongOddsComponent implements OnInit {
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
     arg.filterWrongOddsComponent = this.filterWrongOddsComponent;
-    arg.leagueEventWrongOddsComponent = this.leagueEventWrongOddsComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
 
@@ -108,4 +108,5 @@ export class EventWrongOddsComponent implements OnInit {
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
+
 }

@@ -42,7 +42,7 @@ export class SaveRequestService {
     this.logInfoWrongOddsService.resetLogInfoOfEvent(argWrongOdds.logInfoEvent);
     argWrongOdds.primitiveProps.isShowValidation = false;
 
-    if (!this.validationService.validateCommonData(argWrongOdds.leagueEventWrongOddsComponent, argWrongOdds.filterWrongOddsComponent)) {
+    if (!this.validationService.validateCommonData(argWrongOdds.eventLeagueComponent, argWrongOdds.filterWrongOddsComponent)) {
       return false;
     }
 

@@ -1,11 +1,9 @@
 <div class="mb-3">
-  <league-event-red-card #leagueEvent
-    [isEdit]="isEdit"
-    [initSportType]="filter.sportType"
-    [eventDate]="filter.eventDate"
-    [initMatchId]="logInfoEvent.matchId"
-    (changeEvent)="changeMatchEvent()">
-  </league-event-red-card>
+  <event-league #leagueEvent
+  [isEdit]="isEdit"
+  [matchId]="logInfoEvent.matchId"
+  (changeEvent)="changeMatchEvent()">
+  </event-league>
 </div>
 
 <filter-wrong-odds #filterWrongOdds

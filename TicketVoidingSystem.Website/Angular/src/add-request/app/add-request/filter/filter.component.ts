@@ -535,7 +535,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.DUPLICATE_TICKETS,
       IssueTypeConstant.RECOVER_TICKET,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
-      IssueTypeConstant.TECHNICAL_ERROR
+      IssueTypeConstant.TECHNICAL_ERROR,
+      IssueTypeConstant.WRONG_ODDS
     ];
     return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
@@ -548,7 +549,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.DUPLICATE_TICKETS,
       IssueTypeConstant.RECOVER_TICKET,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
-      IssueTypeConstant.TECHNICAL_ERROR
+      IssueTypeConstant.TECHNICAL_ERROR,
+      IssueTypeConstant.WRONG_ODDS
     ];
     return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }

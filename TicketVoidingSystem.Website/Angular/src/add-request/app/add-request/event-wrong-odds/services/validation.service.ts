@@ -5,11 +5,11 @@ import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
 import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +28,8 @@ export class ValidationService {
   constructor() {
   }
 
-  public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, filterWrongOddsComponent: FilterWrongOddsComponent): boolean {
-    if (!leagueEventComponent.isMatchIdValid()) {
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterWrongOddsComponent: FilterWrongOddsComponent): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 
