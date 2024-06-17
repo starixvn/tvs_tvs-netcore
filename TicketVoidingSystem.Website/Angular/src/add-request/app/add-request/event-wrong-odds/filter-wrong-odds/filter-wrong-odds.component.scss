@@ -30,8 +30,6 @@
       width: 170px;
     }
   }
-
-  .filter-correct-odds,
   .filter-favorite-type,
   .filter-ou-type {
     display: flex;
@@ -50,6 +48,20 @@
     }
   }
 
+  .malay-odds,
+  .spread,
+  .allowance-rate{
+    .div-input {
+      width: 170px !important;
+    }
+    .input-correct-odds{
+      padding: 2px 0px;
+    }
+    .disabled {
+      background-color: #e9ecef;
+    }
+  }
+
   .filter-favorite-type,
   .filter-ou-type {
     margin-right: 37px;
@@ -65,7 +77,8 @@
 }
 
 @media only screen and (max-width: 1134px) {
-  .filter {
+  .filter,
+  .filter-correct-odds {
       width: 100%;
   }
 }
@@ -74,4 +87,9 @@
   .filter {
       width: 1065px;
   }
+}
+
+.input-group-text{
+  padding: 4px 8px;
+  width: 130px;
 }
