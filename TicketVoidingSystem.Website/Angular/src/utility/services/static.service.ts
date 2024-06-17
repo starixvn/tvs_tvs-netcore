@@ -327,6 +327,24 @@ export class StaticService {
     return `${PREFIX}${value}`;
   }
 
+  static undoConvertStringToBetId8xxx(text: string): string {
+    if (!text) {
+      return null;
+    }
+
+    // Remove the prefix '8'
+    if (text.startsWith('8')) {
+      text = text.substring(1);
+    }
+
+    // Remove leading '0's
+    while (text.startsWith('0')) {
+      text = text.substring(1);
+    }
+
+    return text;
+}
+
   static openPopupTransIds(requestId: number, transIds: string, modalService: ModalService): void {
     modalService.open(
       {

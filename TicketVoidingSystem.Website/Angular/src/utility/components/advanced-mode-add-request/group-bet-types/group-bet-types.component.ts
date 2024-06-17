@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as _ from 'lodash';
 import { LABELS } from '../../../../utility/constants/labels';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
@@ -32,7 +33,7 @@ export class GroupBetTypesComponent implements OnInit {
 
   changeGroupBetTypes(group: GroupBetTypeAddRequest) {
     this.changeFilterEvent.emit();
-    this.betTypesEvent.emit(group.betTypes);
+    this.betTypesEvent.emit(_.cloneDeep(group.betTypes));
   }
 
 

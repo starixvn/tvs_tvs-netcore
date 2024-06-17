@@ -96,7 +96,9 @@
         .right {
           display: flex;
           justify-content: flex-start;
-          min-width: 465px;
+          width: 555px;
+          flex-wrap: wrap;
+          row-gap: 3px;
 
           .input-area {
             display: contents;

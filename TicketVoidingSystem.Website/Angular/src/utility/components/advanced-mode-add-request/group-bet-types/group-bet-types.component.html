@@ -19,8 +19,8 @@
         <td *ngIf="group.isShow && group.betTypes.length > 0">
           <label>
             <input class="mr-1" type="checkbox" [(ngModel)]="group.isChecked"
-            (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();
-                              changeGroupBetTypes(group)" [disabled]="group.isDisable"/>
+            (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();changeGroupBetTypes(group)"
+              [disabled]="group.isDisable"/>
             {{group.groupName}}
           </label>
         </td>

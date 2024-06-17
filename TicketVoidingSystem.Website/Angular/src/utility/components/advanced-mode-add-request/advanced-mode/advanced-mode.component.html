@@ -33,12 +33,9 @@
                   <span class="mr-1">{{item.name}}</span>
                   <input class="bet-team-{{betTeam.index}}-input-{{item.index}}" type="text" [(ngModel)]="item.value"
                     [disabled]="item.isDisabled"
-                    (ngModelChange)="onChangeInputMultipleDecimal(betTeam.betTypes,
-                      betTeam.index, item.index, item.isMultiple, $event); changeFilter()"
+                    (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, item.index,
+                      item.isMultiple, $event); changeFilter()"
                     triggers="manual" multipleDecimal />
-                </div>
-                <div>
-                  Ex: 0.75&1
                 </div>
               </div>
             </div>

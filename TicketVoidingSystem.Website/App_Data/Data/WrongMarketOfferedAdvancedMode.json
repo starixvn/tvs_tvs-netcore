@@ -372,7 +372,7 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "BetTypes": "156"
+      "BetTypes": "220"
     },
     {
       "Selections": [
@@ -13598,6 +13598,26 @@
       "Value": "",
       "Type": 1,
       "BetTypes": "9490"
+    },
+    {
+      "Inputs": [
+        {
+          "Name": "Over:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Over"
+        },
+        {
+          "Name": "Ball:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Ball"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 1,
+      "BetTypes": "9491"
     },
     {
       "Inputs": [

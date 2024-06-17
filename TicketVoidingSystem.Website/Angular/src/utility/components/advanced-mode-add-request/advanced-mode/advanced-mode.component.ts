@@ -119,6 +119,8 @@ export class AdvancedModeComponent {
         return checkedBetType.team;
       case 'hdp':
         return checkedBetType.hdp;
+      case 'wicket':
+        return StaticService.undoConvertStringToBetId8xxx(checkedBetType.wicket);
       case 'over':
         return checkedBetType.over;
       case 'player':
@@ -193,8 +195,8 @@ export class AdvancedModeComponent {
     }
   }
 
-  onChangeInputMultipleDecimal(betTypeId: string, betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string) {
-    if (!this.isValidInputWithToolTip(betTypeId, betTeamIndex, inputIndex, isMultiple, value)) {
+  onChangeInputMultipleDecimal(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string) {
+    if (!this.isValidInputWithToolTip(betTeamIndex, inputIndex, isMultiple, value)) {
       return false;
     }
     this.tooltip.hide();
@@ -268,7 +270,7 @@ export class AdvancedModeComponent {
   }
 
   isValidInputs(betTeam: BetTeamAddRequest): boolean {
-    return betTeam.inputs.every(x => this.isValidInputWithToolTip(betTeam.betTypes, betTeam.index, x.index, x.isMultiple, x.value));
+    return betTeam.inputs.every(x => this.isValidInputWithToolTip(betTeam.index, x.index, x.isMultiple, x.value));
   }
 
   private isValidSelectionWithToolTip(betTeamIndex: number, selection: Selection): boolean {
@@ -281,11 +283,10 @@ export class AdvancedModeComponent {
     return true;
   }
 
-  private isValidInputWithToolTip(betTypeId: string, betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
-    const errorText = betTypeId === '228' ? LABELS.INVALID_VALUE : LABELS.INVALID_HDP;
+  private isValidInputWithToolTip(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
     if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
       const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
-      this.tooltip.display(className, errorText);
+      this.tooltip.display(className, LABELS.INVALID_VALUE);
       return false;
     }
 

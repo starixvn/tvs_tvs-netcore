@@ -1,3 +1,4 @@
+import { StaticService } from '../../../../utility/services/static.service';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 
@@ -217,6 +218,9 @@ export class BetTeamAddRequest {
       case 'hdp':
         result.hdp = value;
         break;
+      case 'wicket':
+        result.wicket = this.getWicketValue(value);
+        break;
       case 'over':
         result.over = value;
         break;
@@ -260,5 +264,14 @@ export class BetTeamAddRequest {
         result.playerAndOdds = value;
         break;
     }
+  }
+
+  getWicketValue(text: string): string {
+    if (!text) {
+        return '';
+    }
+
+    let values = text.split('&').map(x => StaticService.convertStringToBetId8xxx(x));
+    return values.join('&');
   }
 }
