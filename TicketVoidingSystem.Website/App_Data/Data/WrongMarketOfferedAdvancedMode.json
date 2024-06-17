@@ -1633,10 +1633,10 @@
               "Value": "804"
             }
           ],
-          "Name": "Set:",
+          "Name": "Quarter:",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "Set"
+          "XmlAttribute": "Quarter"
         }
       ],
       "Name": "",
@@ -2062,6 +2062,41 @@
       "Name": "",
       "Value": "",
       "Type": 1,
+      "BetTypes": "1303"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Hdp:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 1,
       "BetTypes": "1308"
     },
     {
@@ -2180,10 +2215,10 @@
               "Value": "805"
             }
           ],
-          "Name": "Quarter:",
+          "Name": "Set:",
           "Value": "All",
           "IsMultiple": true,
-          "XmlAttribute": "Quarter"
+          "XmlAttribute": "Set"
         }
       ],
       "Inputs": [
@@ -2609,6 +2644,14 @@
           "XmlAttribute": "Set"
         }
       ],
+      "Inputs": [
+        {
+          "Name": "Point:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Point"
+        }
+      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -2717,6 +2760,14 @@
           "XmlAttribute": "Set"
         }
       ],
+      "Inputs": [
+        {
+          "Name": "Point:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Point"
+        }
+      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -2789,6 +2840,14 @@
           "XmlAttribute": "Set"
         }
       ],
+      "Inputs": [
+        {
+          "Name": "Point:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Point"
+        }
+      ],
       "Name": "",
       "Value": "",
       "Type": 1,
@@ -2823,6 +2882,14 @@
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "Set"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Point:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Point"
         }
       ],
       "Name": "",
