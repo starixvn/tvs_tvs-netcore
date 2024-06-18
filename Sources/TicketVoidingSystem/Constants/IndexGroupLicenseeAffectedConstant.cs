@@ -9,4 +9,5 @@ public static class IndexGroupLicenseeAffectedConstant
     public const int Instant = 4;
     public const int CashOut = 5;
     public const int CancelCashOut = 6;
+    public const int TimeMachine = 7;
 }

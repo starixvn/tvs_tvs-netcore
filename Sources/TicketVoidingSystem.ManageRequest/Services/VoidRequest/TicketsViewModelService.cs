@@ -149,6 +149,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     private static List<AffectedLicensee> GetLicenseeAffectedList(IEnumerable<GetTicketModel> data)
     {
         var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var timeMachineLicensee = data.Where(item => Convert.ToInt32(item.BetType).IsSabaTimeMachine() && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cancelCashOutLicensee = data.Where(item => item.IsCancelCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
@@ -160,6 +161,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
         Array.Sort(licensees, StringComparer.InvariantCulture);
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);
+        Array.Sort(timeMachineLicensee, StringComparer.InvariantCulture);
         Array.Sort(cashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(cancelCashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
@@ -174,6 +176,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollyView].LicenseesName = string.Join(", ", jollyViewLicensee);
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollySportCv].LicenseesName = string.Join(", ", jollySportsCvLicensee);
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.CancelCashOut].LicenseesName = string.Join(", ", cancelCashOutLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.TimeMachine].LicenseesName = string.Join(", ", timeMachineLicensee);
 
         return licenseeAffectedList.LicenseeAffectedList;
     }
