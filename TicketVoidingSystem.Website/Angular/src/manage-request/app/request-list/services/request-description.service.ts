@@ -45,7 +45,7 @@ export class RequestDescriptionService {
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const betTypeContent = copyInfoResponse.betTypeTickets
       .map(element => {
-        const inputtedRunsText = element.inputtedRuns ? ` - ${element.inputtedRuns} and above should be voided` : '';
+        const inputtedRunsText = element.inputtedRuns ? ` - Above ${element.inputtedRuns} should be voided` : '';
         return `${element.betTypeName}${inputtedRunsText}\n`
           + `${element.ticketsCount} ticket(s)\n\n`;
       }).join('');
