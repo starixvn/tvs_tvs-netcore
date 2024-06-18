@@ -1,9 +1,7 @@
-import { PrimaryBetType } from "../../advanced-mode/group-bettypes/group-bettypes.model";
 
 export class BetTypeAddRequest {
   id: number;
   name: string;
-  value: string;
   isChecked: boolean;
   isDisable: boolean;
 
@@ -12,7 +10,6 @@ export class BetTypeAddRequest {
     this.name = name;
     this.isChecked = isChecked;
     this.isDisable = isDisable;
-    this.value = PrimaryBetType.ROOT[this.id] === undefined ? this.id.toString() : PrimaryBetType.ROOT[this.id];
   }
 }
 

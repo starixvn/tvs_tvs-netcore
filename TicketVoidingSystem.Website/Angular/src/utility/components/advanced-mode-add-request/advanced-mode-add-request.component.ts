@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { PrimaryBetType } from '../advanced-mode/group-bettypes/group-bettypes.model';
 import { AdvancedModeAddRequestModel } from './advanced-mode-add-request.model';
 import { AdvancedModeComponent } from './advanced-mode/advanced-mode.component';
 import { BetTeamAddRequestResult } from './advanced-mode/advanced-mode.model';
@@ -38,14 +39,25 @@ export class AdvancedModeAddRequestComponent implements OnInit {
   getCheckedBetTypes(): BetTeamAddRequestResult[] {
     const checkedBetTypes = this.groupBetTypes.getCheckedBetTypes();
     const betTypesHaveAdvancedMode = this.advancedModeComponent.getCheckedBetTypeModels();
-    const betTypesHaveNotAdvancedMode = checkedBetTypes.filter(x => !betTypesHaveAdvancedMode.some(y => y.id === x.id.toString()))
-      .map(x => {
-        return {
-          id: x.id.toString()
-        } as BetTeamAddRequestResult;
-      });
+    const advancedModeIds = new Set(betTypesHaveAdvancedMode.map(betType => betType.id));
 
-    return betTypesHaveAdvancedMode.concat(betTypesHaveNotAdvancedMode);
+    const betTypesHaveNotAdvancedMode = checkedBetTypes
+        .filter(betType => !advancedModeIds.has(betType.id.toString()))
+        .map(betType => ({ id: betType.id.toString() } as BetTeamAddRequestResult));
+
+    return this.getMoreBetTypeSameDisplayedId([...betTypesHaveAdvancedMode, ...betTypesHaveNotAdvancedMode]);
+}
+
+  getMoreBetTypeSameDisplayedId(inputModels: BetTeamAddRequestResult[]): BetTeamAddRequestResult[] {
+    return inputModels.flatMap(x => this.getMoreBetTypeSameDisplayedIdByItem(x));
+  }
+
+  getMoreBetTypeSameDisplayedIdByItem(inputModel: BetTeamAddRequestResult): BetTeamAddRequestResult[] {
+    const affectedBetTypes = PrimaryBetType.ROOT[inputModel.id] ?? inputModel.id;
+    return affectedBetTypes.split(',').map(childId => ({
+      ...inputModel,
+      id: childId
+    }));
   }
 
   handleNoBetTypeEvent(isHaveBetType: boolean) {

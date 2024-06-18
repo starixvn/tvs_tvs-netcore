@@ -69,8 +69,8 @@ export class MultiSelection {
 }
 
 export class BetTeamAddRequestResult {
-  isDisabled: boolean;
   id: string;
+  isDisabled: boolean;
   team: string;
   hdp: string;
   wicket: string;
@@ -185,11 +185,11 @@ export class BetTeamAddRequest {
     });
   }
 
-  getResult(betTypeId: string): BetTeamAddRequestResult {
+  getResult(betTypes: string): BetTeamAddRequestResult {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
-    result.id = betTypeId;
+    result.id = betTypes;
     return result;
   }
 
