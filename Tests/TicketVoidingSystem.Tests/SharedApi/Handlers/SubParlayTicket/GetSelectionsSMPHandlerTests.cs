@@ -26,7 +26,7 @@ public class GetSelectionsSMPHandlerTests
         // Arrange
         var request = new GetSelectionsSMPRequest();
         var selections = new List<SelectionsSMP>();
-        repository.FetchAsync<SelectionsSMP>(request, CancellationToken.None).ReturnsForAnyArgs(selections);
+        repository.FetchAsync<SelectionsSMP>(request).ReturnsForAnyArgs(selections);
         const string expected = "<div class=\"smp-group-selections\"></div>";
 
         // Act
@@ -41,9 +41,8 @@ public class GetSelectionsSMPHandlerTests
     {
         // Arrange
         var request = new GetSelectionsSMPRequest();
-        var selections = new List<SelectionsSMP>
-            { new() { Result = "", SelectionName = "11" }, new() { Result = "1", SelectionName = "11" } };
-        repository.FetchAsync<SelectionsSMP>(request, CancellationToken.None).ReturnsForAnyArgs(selections);
+        var selections = new List<SelectionsSMP> { new() { Result = "", SelectionName = "11" }, new() { Result = "1", SelectionName = "11" } };
+        repository.FetchAsync<SelectionsSMP>(request).ReturnsForAnyArgs(selections);
         const string result = "<div><span class=\"selection-smp\">11</span></div><div><span class=\"selection-smp\">11</span> - <span class=\"selection-result\">1</span></div>";
         const string expected = $"<div class=\"smp-group-selections\">{result}</div>";
 

@@ -23,7 +23,7 @@ public class GetNormalParlayHandler : IRequestHandler<GetNormalParlayRequest, IL
 
     public async Task<IList<TicketViewModel>> Handle(GetNormalParlayRequest message, CancellationToken cancellationToken)
     {
-        var tickets = await ticketsService.GetTickets(message.RefNo, cancellationToken);
+        var tickets = await ticketsService.GetTickets(message.RefNo);
         return ticketsService.GetTickets(tickets);
     }
 }

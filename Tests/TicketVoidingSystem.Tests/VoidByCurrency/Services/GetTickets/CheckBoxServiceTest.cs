@@ -5,13 +5,11 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VoidByCurrency.Services.GetTickets;
 
-
 public class CheckBoxServiceTest
 {
     [Theory]
     [InlineData(123, 123, true)]
     [InlineData(0, 1234, true)]
-    [InlineData(null, 1234, true)]
     [InlineData(123, 1234, true)]
     public void IsDisable_HasMainCashOutIdThatNotEqualToTransId_ReturnTrue(long mainTransId, long transId, bool expected)
     {

@@ -32,28 +32,23 @@ public class CheckValidTransIdsServiceImp : CheckValidTransIdsService
     {
         var transInfoJsonList = await GetTransInfoJson(request);
         var criteria = GetCheckValidTransIdsCriteria(request, transInfoJsonList);
-        var mappingTypes = new[]
-        {
-            typeof(MatchInfoAddRequest), typeof(ValidationAbnormalBet), typeof(TransInfoAddRequestModel),
-            typeof(string), typeof(GetAbnormalBetTicketModel), typeof(SendLetstalkModel)
-        };
-        var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var matches = result[0].Cast<MatchInfoAddRequest>();
-        var validation = result[1].Cast<ValidationAbnormalBet>().FirstOrDefault();
-        var transInfoAddRequestModel = result[2].Cast<TransInfoAddRequestModel>().FirstOrDefault();
-        var transInfoJson = result[3].Cast<string>().FirstOrDefault();
-        var abnormalBetTicketRequests = result[4].Cast<GetAbnormalBetTicketModel>();
-        var sendLetstalkModels = result[5].Cast<SendLetstalkModel>();
+
+        var (matchInfoAddRequests, validationAbnormalBets, transInfoAddRequestModels, transInfoJsonOutputList, abnormalBetTicketRequests, sendLetstalkModels) =
+            await repository.FetchMultipleAsync<MatchInfoAddRequest, ValidationAbnormalBet, TransInfoAddRequestModel, string, GetAbnormalBetTicketModel, SendLetstalkModel>(criteria);
+
+        var validation = validationAbnormalBets.FirstOrDefault();
+        var transInfoAddRequest = transInfoAddRequestModels.FirstOrDefault();
+        var transInfoJson = transInfoJsonOutputList.FirstOrDefault();
 
         var viewModel = new CheckValidTransIdsViewModel
         {
-            Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matches),
+            Matches = matchInfoAddRequestService.UpdateDataFromRemotingRef(matchInfoAddRequests),
             Validation = validation,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
-                RemoveTransIds = transInfoAddRequestModel?.RemoveTransIds,
-                UnMarkTransIds = transInfoAddRequestModel?.UnMarkTransIds,
-                MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
+                RemoveTransIds = transInfoAddRequest?.RemoveTransIds,
+                UnMarkTransIds = transInfoAddRequest?.UnMarkTransIds,
+                MarkTransIds = transInfoAddRequest?.MarkTransIds,
                 TransInfoJson = transInfoJson
             },
             AbnormalBetTicketRequests = mapTicketsExcelService.MapDataToAbnormalBetTicketViewModel(abnormalBetTicketRequests),

@@ -22,6 +22,6 @@ public class CheckUsernamesHandler : IRequestHandler<CheckUsernamesRequest, Chec
 
     public async Task<CheckUsernamesModel> Handle(CheckUsernamesRequest request, CancellationToken cancellationToken)
     {
-        return await repository.GetAsync<CheckUsernamesModel>(request, cancellationToken);
+        return await repository.GetAsync<CheckUsernamesModel>(request);
     }
 }

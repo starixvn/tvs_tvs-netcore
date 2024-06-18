@@ -23,6 +23,6 @@ public class AddUsersHandlerTests
         _ = await handler.Handle(request, default);
 
         // Assert
-        await repository.Received(1).ExecuteAsync(Arg.Any<AddUsersCommand>(), default);
+        await repository.Received(1).ExecuteAsync(Arg.Any<AddUsersCommand>());
     }
 }

@@ -24,13 +24,12 @@ public class GetSubIssueTypeLinkMatchHandlerTests
     public async Task Handler_Successful_HasCallExpected()
     {
         // Arrange
-        repository.FetchAsync<SubIssueTypeLinkMatch>(Arg.Any<GetSubIssueTypeLinkMatchRequest>(), CancellationToken.None)
-            .ReturnsForAnyArgs(new List<SubIssueTypeLinkMatch>());
+        repository.FetchAsync<SubIssueTypeLinkMatch>(Arg.Any<GetSubIssueTypeLinkMatchRequest>()).ReturnsForAnyArgs(new List<SubIssueTypeLinkMatch>());
+
         // Act
         _ = await handler.Handle(null, CancellationToken.None);
 
         // Assert
-        await repository.Received(1).FetchAsync<SubIssueTypeLinkMatch>(Arg.Any<GetSubIssueTypeLinkMatchRequest>(),
-            CancellationToken.None);
+        await repository.Received(1).FetchAsync<SubIssueTypeLinkMatch>(Arg.Any<GetSubIssueTypeLinkMatchRequest>());
     }
 }

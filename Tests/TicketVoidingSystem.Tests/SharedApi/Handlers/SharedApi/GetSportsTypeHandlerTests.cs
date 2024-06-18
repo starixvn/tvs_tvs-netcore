@@ -27,8 +27,7 @@ public class GetSportsTypeHandlerTests
         // Arrange
         var request = new GetSportsTypeRequest();
         var expected = new List<SportInfo>();
-        repository.FetchAsync<SportInfo>(new GetSportsTypeCriteria(), CancellationToken.None)
-            .ReturnsForAnyArgs(expected);
+        repository.FetchAsync<SportInfo>(new GetSportsTypeCriteria()).ReturnsForAnyArgs(expected);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

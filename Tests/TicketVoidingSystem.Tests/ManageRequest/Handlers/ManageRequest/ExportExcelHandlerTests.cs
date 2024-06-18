@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -15,7 +14,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest
         public async Task ExportExcel_SetDateTimeNow_ReturnFileNameWithDateTime()
         {
             var request = new ExportExcelRequest { RequestId = "12345" };
-            var createDate = $"{DateTimeOffset.Now:yyyy_MM_dd_HH_mm_ss}";
             var excelService = Substitute.For<ExcelService<SelectRequestsQuery>>();
             var handler = new ExportExcelHandler(excelService);
 

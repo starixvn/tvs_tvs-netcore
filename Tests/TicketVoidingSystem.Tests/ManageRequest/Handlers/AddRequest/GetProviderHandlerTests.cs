@@ -26,8 +26,7 @@ public class GetProviderHandlerTests
         // Arrange
         var request = new GetProviderRequest { MatchId = 1 };
         var provider = new Provider();
-        repository.GetAsync<Provider>(Arg.Any<GetProviderCriteria>(), CancellationToken.None)
-            .ReturnsForAnyArgs(provider);
+        repository.GetAsync<Provider>(Arg.Any<GetProviderCriteria>()).ReturnsForAnyArgs(provider);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

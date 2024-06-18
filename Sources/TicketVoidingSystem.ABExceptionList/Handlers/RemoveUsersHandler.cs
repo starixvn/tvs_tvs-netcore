@@ -32,7 +32,7 @@ public class RemoveUsersHandler : IRequestHandler<RemoveUsersRequest, Result>
             IP = session.GetClientIp()
         };
 
-        await repository.ExecuteAsync(command, cancellationToken);
+        await repository.ExecuteAsync(command);
 
         return new Result();
     }

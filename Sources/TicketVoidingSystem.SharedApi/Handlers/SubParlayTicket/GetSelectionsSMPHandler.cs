@@ -26,7 +26,7 @@ public class GetSelectionsSMPHandler : IRequestHandler<GetSelectionsSMPRequest, 
     public async Task<string> Handle(GetSelectionsSMPRequest message, CancellationToken cancellationToken)
     {
         var result = new StringBuilder();
-        var selections = await repository.FetchAsync<SelectionsSMP>(message, cancellationToken);
+        var selections = await repository.FetchAsync<SelectionsSMP>(message);
         foreach (var item in selections)
         {
             var selection = item.Result.IsRunningOrEmpty() ?

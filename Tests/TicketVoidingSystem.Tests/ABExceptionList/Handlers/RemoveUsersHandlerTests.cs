@@ -23,6 +23,6 @@ public class RemoveUsersHandlerTests
         _ = await handler.Handle(request, default);
 
         // Assert
-        await repository.Received(1).ExecuteAsync(Arg.Any<RemoveUsersCommand>(), default);
+        await repository.Received(1).ExecuteAsync(Arg.Any<RemoveUsersCommand>());
     }
 }

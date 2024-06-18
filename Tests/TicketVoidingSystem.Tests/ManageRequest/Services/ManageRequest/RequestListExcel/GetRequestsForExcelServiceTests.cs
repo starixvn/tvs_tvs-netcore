@@ -19,7 +19,6 @@ public class GetRequestsForExcelServiceTests
     private readonly GetRequestsService getRequestsService;
     private readonly IMapper mapper;
     private readonly RenderRequestService renderService;
-    private readonly OWPDataService owpDataService;
 
     private readonly GetRequestsForExcelServiceImp service;
 
@@ -30,7 +29,7 @@ public class GetRequestsForExcelServiceTests
         calculateTimeService = Substitute.For<CalculateTimeService>();
         renderService = Substitute.For<RenderRequestService>();
         convertRequestsService = Substitute.For<ConvertRequestsService>();
-        owpDataService = Substitute.For<OWPDataService>();
+        var owpDataService = Substitute.For<OWPDataService>();
 
         service = new GetRequestsForExcelServiceImp(mapper, getRequestsService, calculateTimeService, renderService,
             convertRequestsService, owpDataService);

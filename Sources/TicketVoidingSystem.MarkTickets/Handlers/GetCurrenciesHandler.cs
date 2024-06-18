@@ -23,6 +23,6 @@ public class GetCurrenciesHandler : IRequestHandler<GetCurrenciesRequest, IEnume
 
     public async Task<IEnumerable<Currency>> Handle(GetCurrenciesRequest request, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<Currency>(request, cancellationToken);
+        return await repository.FetchAsync<Currency>(request);
     }
 }

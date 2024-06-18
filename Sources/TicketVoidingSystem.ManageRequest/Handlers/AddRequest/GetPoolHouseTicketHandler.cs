@@ -35,7 +35,7 @@ public class GetPoolHouseTicketHandler : IRequestHandler<GetPoolHouseTicketReque
     public async Task<GetPoolHouseTicketViewModel> Handle(GetPoolHouseTicketRequest request, CancellationToken cancellationToken)
     {
         var criteria = await CreateGetPoolHouseTicketCriteria(request);
-        var (betTypes, tickets) = await repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria, cancellationToken);
+        var (betTypes, tickets) = await repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria);
 
         return new GetPoolHouseTicketViewModel
         {

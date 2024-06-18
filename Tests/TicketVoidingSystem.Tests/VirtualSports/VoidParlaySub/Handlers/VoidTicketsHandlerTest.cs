@@ -136,7 +136,7 @@ public class VoidTicketsHandlerTest
         voidTicketsService.ExecuteQuery(message).ReturnsForAnyArgs(model);
         voidTicketsService
             .When(x => x.SendEmail(message, model))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var loggingService = Substitute.For<LoggingService>();
         var handler = new VoidTicketsHandler(voidTicketsService, loggingService);
 
@@ -163,7 +163,7 @@ public class VoidTicketsHandlerTest
         voidTicketsService.ExecuteQuery(message).ReturnsForAnyArgs(model);
         voidTicketsService
             .When(x => x.SendEmail(message, model))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var handler = new VoidTicketsHandler(voidTicketsService, loggingService);
 
         // Act

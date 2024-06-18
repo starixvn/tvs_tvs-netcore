@@ -23,7 +23,7 @@ public class GetChildMatchesEKORequestHandler : IRequestHandler<GetChildMatchesE
 
     public async Task<IEnumerable<Match>> Handle(GetChildMatchesEKORequest request, CancellationToken cancellationToken)
     {
-        var matches = await repository.FetchAsync<Match>(request, cancellationToken);
+        var matches = await repository.FetchAsync<Match>(request);
         return matches.Select(matchService.UpdateMatchInfoFromRemotingRef);
     }
 }

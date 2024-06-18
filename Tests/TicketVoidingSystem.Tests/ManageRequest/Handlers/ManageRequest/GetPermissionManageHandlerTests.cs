@@ -9,7 +9,7 @@ using Xunit;
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;
 
 using Fanex.NAP.Client.Helpers.Business;
-using global::TicketVoidingSystem.Web;
+using Web;
 
 public class GetPermissionVoidAllArchivedTicketHandlerTests
 {

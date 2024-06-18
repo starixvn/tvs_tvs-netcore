@@ -20,6 +20,6 @@ public class GetSubIssueTypeLinkMatchHandler : IRequestHandler<GetSubIssueTypeLi
 
     public async Task<IEnumerable<SubIssueTypeLinkMatch>> Handle(GetSubIssueTypeLinkMatchRequest request, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<SubIssueTypeLinkMatch>(request, cancellationToken);
+        return await repository.FetchAsync<SubIssueTypeLinkMatch>(request);
     }
 }

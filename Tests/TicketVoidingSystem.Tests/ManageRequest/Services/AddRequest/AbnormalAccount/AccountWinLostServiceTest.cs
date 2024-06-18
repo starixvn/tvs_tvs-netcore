@@ -76,10 +76,10 @@ public class AccountWinLostServiceTest
         };
 
         // Act
-        var actual = service.GetAccountWinLostExcel(models);
+        var actual = service.GetAccountWinLostExcel(models).ToList();
 
         // Assert
-        Assert.Equal(1, actual.First().No);
+        Assert.Equal(1, actual[0].No);
         Assert.Single(actual);
     }
 }

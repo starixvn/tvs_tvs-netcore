@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Fanex.BetList.Core;
 using Fanex.BetList.Core.RemotingRef;
 using Fanex.Caching.Redis;
+using Fanex.Data;
 using Fanex.Data.Repository;
 using Fanex.LetstalkService.Core.Services;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.AspNetCore;
-using Fanex.Logging.Extensions.Database;
 using Fanex.Logging.Sentry.RavenClient;
 using Fanex.MailDeliver.MailClient;
 using Fanex.NAP.Client.Configuration;
@@ -96,8 +96,7 @@ public static class ServiceCollectionExtension
     {
         var configuration = new LoggingConfiguration()
             .GetHttpHeaderInfo()
-            .GetHttpSessionInfo()
-            .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
+            .GetHttpSessionInfo();
         ExceptionHandler.UseConfig(configuration);
     }
 
@@ -201,7 +200,12 @@ public static class ServiceCollectionExtension
     public static void RegisterFanexMailService(this IServiceCollection services)
     {
         AppSettings.AppMailId = AppSettingService.AppSetting.FanexMailService.AppMailId;
-        AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;
+        AppSettings.AppMailAddress = AppSettingService.AppSetting.FanexMailService.AppMailAddress;     
+    }
+
+    public static void RegisterFanexData(this IServiceCollection services, IConfiguration configuration)
+    {
+        DbSettingProviderManager.StartNewSession().Register(configuration, true).Run();        
     }
 
     public static void RegisterBusinessServices(this IServiceCollection services)

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
@@ -15,7 +14,7 @@ namespace TicketVoidingSystem.SharedApi.Services.SubParlayTicket;
 
 public interface TicketsService
 {
-    Task<IList<TicketModel>> GetTickets(string refNo, CancellationToken cancellationToken);
+    Task<IList<TicketModel>> GetTickets(string refNo);
 
     IList<TicketViewModel> GetTickets(IList<TicketModel> tickets);
 
@@ -35,7 +34,7 @@ public class TicketsServiceImp : TicketsService
         this.betListService = betListService;
     }
 
-    public async Task<IList<TicketModel>> GetTickets(string refNo, CancellationToken cancellationToken)
+    public async Task<IList<TicketModel>> GetTickets(string refNo)
     {
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
@@ -44,7 +43,7 @@ public class TicketsServiceImp : TicketsService
                 SiteDbGroupId = server.Id,
                 RefNo = refNo
             };
-            return repository.FetchAsync<TicketModel>(criteria, cancellationToken);
+            return repository.FetchAsync<TicketModel>(criteria);
         });
         var results = await Task.WhenAll(tasks);
         var tickets = results.SelectMany(result => result).ToList();

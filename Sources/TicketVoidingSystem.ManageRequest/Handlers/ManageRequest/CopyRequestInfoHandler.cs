@@ -25,7 +25,7 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, Co
 
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
-        var (requestInfoList, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request, cancellationToken);
+        var (requestInfoList, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request);
         var requestInfo = requestInfoList.First();
         UpdateMatchInfo(request.MatchId, requestInfo);
         requestInfo.GlobalShowTime = requestInfo.GlobalShowTime.ZoneManila();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
-using Fanex.Logging.Extensions.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 
@@ -49,7 +48,6 @@ public class LoggingServiceImp : LoggingService
     {
         var logMessage = new LogMessage(exception.Message)
             .AddSection("Request Info", GetRequestInfo(context))
-            .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
             .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
             .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException ?? exception))
             .ToString();
@@ -59,7 +57,6 @@ public class LoggingServiceImp : LoggingService
     private static async Task HandleException(Exception exception)
     {
         var logMessage = new LogMessage(exception.Message)
-            .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
             .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
             .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception.InnerException ?? exception))
             .ToString();

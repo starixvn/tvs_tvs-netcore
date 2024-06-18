@@ -31,6 +31,6 @@ public class GetOddsInfoHandler : IRequestHandler<GetOddsInfoRequest, IEnumerabl
             MatchId = request.MatchId,
             BetTypes = request.BetTypes
         };
-        return await repository.FetchAsync<OddsInfoViewModel>(criteria, cancellationToken);
+        return await repository.FetchAsync<OddsInfoViewModel>(criteria);
     }
 }

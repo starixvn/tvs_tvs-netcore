@@ -123,7 +123,7 @@ public class SpecialPlatformServiceTests
         var (normalTickets, specialPlatformTickets) = service.GroupTicketSaba(tickets);
 
         // Assert
-        Assert.Equal(1, normalTickets.Count());
+        Assert.Single(normalTickets);
         Assert.Equal(3, specialPlatformTickets.Count());
     }
 

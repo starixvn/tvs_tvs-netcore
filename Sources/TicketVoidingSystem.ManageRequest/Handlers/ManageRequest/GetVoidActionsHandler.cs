@@ -20,7 +20,7 @@ public class GetVoidActionsHandler : IRequestHandler<GetVoidActionsRequest, IEnu
 
     public async Task<IEnumerable<VoidActionSelection>> Handle(GetVoidActionsRequest request, CancellationToken cancellationToken)
     {
-        var data = await repository.FetchAsync<VoidAction>(request, cancellationToken);
+        var data = await repository.FetchAsync<VoidAction>(request);
         return data
             .Select(x => new VoidActionSelection { Name = x.ActionName, Value = x.ActionId });
     }

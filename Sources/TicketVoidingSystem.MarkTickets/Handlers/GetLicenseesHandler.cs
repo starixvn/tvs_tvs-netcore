@@ -24,7 +24,7 @@ public class GetLicenseesHandler : IRequestHandler<GetLicenseesRequest, IEnumera
 
     public async Task<IEnumerable<GroupLicensee>> Handle(GetLicenseesRequest request, CancellationToken cancellationToken)
     {
-        var licensees = await repository.FetchAsync<Licensee>(request, cancellationToken);
+        var licensees = await repository.FetchAsync<Licensee>(request);
         return licensees.GroupBy(b => b.GroupName)
             .Select(group => new GroupLicensee { GroupName = group.Key, Licensees = group });
     }

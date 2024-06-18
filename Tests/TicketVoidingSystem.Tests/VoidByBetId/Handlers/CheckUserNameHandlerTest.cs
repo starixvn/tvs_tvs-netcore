@@ -20,8 +20,7 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Handlers
             const string expected = "0";
             var request = new CheckUserNameRequest { UserName = "ABC" };
             var repository = Substitute.For<IDynamicRepository>();
-            repository.Fetch<CustomerInfo>(request)
-                .ReturnsForAnyArgs(new List<CustomerInfo>());
+            repository.Fetch<CustomerInfo>(request).ReturnsForAnyArgs(new List<CustomerInfo>());
             var handler = new CheckUserNameHandler(repository);
 
             // Act
@@ -39,8 +38,7 @@ namespace TicketVoidingSystem.Tests.VoidByBetId.Handlers
             var request = new CheckUserNameRequest { UserName = "ABC" };
             var customer = new CustomerInfo { CustId = 123, Currency = 20, RoleID = 1 };
             var repository = Substitute.For<IDynamicRepository>();
-            repository.FetchAsync<CustomerInfo>(request, Arg.Any<CancellationToken>())
-                .ReturnsForAnyArgs(new List<CustomerInfo> { customer });
+            repository.FetchAsync<CustomerInfo>(request).ReturnsForAnyArgs(new List<CustomerInfo> { customer });
             var handler = new CheckUserNameHandler(repository);
 
             // Act

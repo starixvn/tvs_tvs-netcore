@@ -45,7 +45,7 @@ public class EmailServiceTest
         var emailRecordService = Substitute.For<EmailRecordService>();
         emailRecordService
             .When(x => x.Create(model, group, typeOfRecover))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var service = new EmailServiceImp(fanexMailApiService, emailRecordService);
 
         // Act

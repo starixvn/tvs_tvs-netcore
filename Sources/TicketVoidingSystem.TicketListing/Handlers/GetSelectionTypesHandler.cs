@@ -20,6 +20,6 @@ public class GetSelectionTypesHandler : IRequestHandler<GetSelectionTypesRequest
 
     public async Task<IEnumerable<SelectionTypeModel>> Handle(GetSelectionTypesRequest message, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<SelectionTypeModel>(message, cancellationToken);
+        return await repository.FetchAsync<SelectionTypeModel>(message);
     }
 }

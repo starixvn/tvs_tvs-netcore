@@ -27,13 +27,8 @@ public class CheckUsernameServiceImp : CheckUsernameService
     {
         var transInfoJsonList = await GetTransInfoJson(request);
         var criteria = CreateCriteria(request, transInfoJsonList);
-        var mappingTypes = new[] { typeof(CheckUsernamesModel), typeof(TransInfoAddRequestModel), typeof(string), typeof(TicketCalculateWinLostAccount), typeof(AccountWinlostModel) };
-        var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var checkUsernamesModel = result[0].Cast<CheckUsernamesModel>();
-        var transInfoValidation = result[1].Cast<TransInfoAddRequestModel>();
-        var transInfoJsonCompress = result[2].Cast<string>();
-        var ticketCalculateWinLostAccount = result[3].Cast<TicketCalculateWinLostAccount>();
-        var accounts = result[4].Cast<AccountWinlostModel>();
+        var (checkUsernamesModel, transInfoValidation, transInfoJsonCompress, ticketCalculateWinLostAccount, accounts) =
+            await repository.FetchMultipleAsync<CheckUsernamesModel, TransInfoAddRequestModel, string, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
 
         return new CheckUsernamesInDatabaseResult
         {

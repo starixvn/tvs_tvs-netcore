@@ -36,10 +36,8 @@ public class CheckTickets14HandlerTests
             UnsupportedDateRangeTransIds = "456",
             TransInfoJson = "12"
         };
-        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>())
-            .ReturnsForAnyArgs(new List<string> { "TransInfo", "" });
-        repository.GetAsync<CheckTickets14ViewModel>(Arg.Any<CheckTickets14Criteria>(), CancellationToken.None)
-            .ReturnsForAnyArgs(viewModel);
+        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(new List<string> { "TransInfo", "" });
+        repository.GetAsync<CheckTickets14ViewModel>(Arg.Any<CheckTickets14Criteria>()).ReturnsForAnyArgs(viewModel);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);

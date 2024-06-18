@@ -24,7 +24,7 @@ public class GetSportsTypeHandler : IRequestHandler<GetSportsTypeRequest, IEnume
 
     public async Task<IEnumerable<SportInfo>> Handle(GetSportsTypeRequest request, CancellationToken cancellationToken)
     {
-        var sport = await repository.FetchAsync<SportInfo>(new GetSportsTypeCriteria(), cancellationToken);
+        var sport = await repository.FetchAsync<SportInfo>(new GetSportsTypeCriteria());
         return sport.OrderBy(x => x.SportType);
     }
 }

@@ -30,10 +30,8 @@ public class GetIssueTypesHandlerTests
         var request = new GetIssueTypesRequest();
         var issueTypes = new List<IssueType>();
         var subIssueTypes = new List<SubIssueType>();
-        repository.FetchAsync<IssueType>(new GetIssueTypeCriteria(), CancellationToken.None)
-            .ReturnsForAnyArgs(issueTypes);
-        repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), CancellationToken.None)
-            .ReturnsForAnyArgs(subIssueTypes);
+        repository.FetchAsync<IssueType>(new GetIssueTypeCriteria()).ReturnsForAnyArgs(issueTypes);
+        repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria()).ReturnsForAnyArgs(subIssueTypes);
         var expected = new IssueTypesViewModel
         {
             IssueTypes = issueTypes,

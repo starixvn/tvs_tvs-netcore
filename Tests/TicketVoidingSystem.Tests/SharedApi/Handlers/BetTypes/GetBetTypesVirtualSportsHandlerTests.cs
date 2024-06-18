@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.Tests.SharedApi.Handlers.BetTypes;
 public class GetBetTypesVirtualSportsHandlerTests
 {
     private readonly GetBetTypesVirtualSportsHandler handler;
-    private BetTypesRepository betTypesRepository;
+    private readonly BetTypesRepository betTypesRepository;
 
     public GetBetTypesVirtualSportsHandlerTests()
     {

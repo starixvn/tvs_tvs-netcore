@@ -33,7 +33,7 @@ public class AddUsersHandler : IRequestHandler<AddUsersRequest, Result>
             VoidVIP = request.VoidVIP,
             IP = session.GetClientIp()
         };
-        await repository.ExecuteAsync(criteria, cancellationToken);
+        await repository.ExecuteAsync(criteria);
 
         return new Result();
     }

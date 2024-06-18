@@ -25,7 +25,7 @@ public class GetProviderHandler : IRequestHandler<GetProviderRequest, Provider>
         {
             MatchId = request.MatchId
         };
-        var provider = await repository.GetAsync<Provider>(criteria, cancellationToken);
+        var provider = await repository.GetAsync<Provider>(criteria);
         return provider;
     }
 }

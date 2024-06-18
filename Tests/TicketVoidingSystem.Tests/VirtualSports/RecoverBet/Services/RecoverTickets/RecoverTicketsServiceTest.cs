@@ -17,7 +17,6 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTickets;
 
-
 public class RecoverTicketsServiceTest
 {
     private static RecoverTicketsServiceImp CreateService(Repository repository)
@@ -74,7 +73,7 @@ public class RecoverTicketsServiceTest
         var repository = Substitute.For<Repository>();
         repository
             .When(x => x.RecoverTickets(Arg.Any<Query>()))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var service = CreateService(repository);
 
         // Act
@@ -110,7 +109,7 @@ public class RecoverTicketsServiceTest
         var repository = Substitute.For<Repository>();
         repository
             .When(x => x.RecoverTickets(Arg.Any<Query>()))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var loggingService = Substitute.For<LoggingService>();
         var service = CreateService(repository, loggingService);
 

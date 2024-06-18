@@ -24,16 +24,13 @@ public class CheckNegativeBalanceHandlerTests : IClassFixture<RemotingRefFixture
     public async Task Handle_HasRequest_HasCalledExpected()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
         var request = new CheckNegativeBalanceRequest();
-        repository.FetchAsync<NegativeBalanceModel>(Arg.Any<CheckNegativeBalanceRequest>(), cancellationToken)
-            .Returns(new List<NegativeBalanceModel>());
+        repository.FetchAsync<NegativeBalanceModel>(Arg.Any<CheckNegativeBalanceRequest>()).Returns(new List<NegativeBalanceModel>());
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await repository.Received().FetchAsync<NegativeBalanceModel>(Arg.Any<CheckNegativeBalanceRequest>(),
-            cancellationToken);
+        await repository.Received().FetchAsync<NegativeBalanceModel>(Arg.Any<CheckNegativeBalanceRequest>());
     }
 }

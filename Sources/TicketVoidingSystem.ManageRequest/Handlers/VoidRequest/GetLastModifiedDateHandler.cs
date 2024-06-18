@@ -20,6 +20,6 @@ public class GetLastModifiedDateHandler : IRequestHandler<GetLastModifiedDateReq
 
     public async Task<RequestLastModifiedDate> Handle(GetLastModifiedDateRequest request, CancellationToken cancellationToken)
     {
-        return await repository.GetAsync<RequestLastModifiedDate>(request, cancellationToken);
+        return await repository.GetAsync<RequestLastModifiedDate>(request);
     }
 }

@@ -27,18 +27,14 @@ public class GetChildMatchesHandlerTests
     public async Task Handler_Always_CalledExpected()
     {
         // Arrange
-        repository.FetchAsync<MatchInfoAddRequest>(Arg.Any<GetChildMatchesRequest>(), CancellationToken.None)
-            .ReturnsForAnyArgs(new List<MatchInfoAddRequest>());
-        matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>())
-            .ReturnsForAnyArgs(new List<MatchInfoAddRequest>());
+        repository.FetchAsync<MatchInfoAddRequest>(Arg.Any<GetChildMatchesRequest>()).ReturnsForAnyArgs(new List<MatchInfoAddRequest>());
+        matchInfoAddRequestService.UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>()).ReturnsForAnyArgs(new List<MatchInfoAddRequest>());
 
         // Act
         _ = await handler.Handle(null, CancellationToken.None);
 
         // Assert
-        await repository.Received(1)
-            .FetchAsync<MatchInfoAddRequest>(Arg.Any<GetChildMatchesRequest>(), CancellationToken.None);
-        matchInfoAddRequestService.Received(1)
-            .UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>());
+        await repository.Received(1).FetchAsync<MatchInfoAddRequest>(Arg.Any<GetChildMatchesRequest>());
+        matchInfoAddRequestService.Received(1).UpdateDataFromRemotingRef(Arg.Any<IEnumerable<MatchInfoAddRequest>>());
     }
 }

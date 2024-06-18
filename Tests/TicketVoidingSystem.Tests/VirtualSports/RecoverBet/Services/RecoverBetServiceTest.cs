@@ -205,7 +205,7 @@ public class RecoverBetServiceTest
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
         recoverTicketsService
             .When(x => x.SendEmail(Arg.Any<RecoverTicketsModel>(), query.TypeOfRecover))
-            .Do(x => throw exception);
+            .Do(_ => throw exception);
         var service = CreateService(recoverTicketsService);
 
         // Act
@@ -249,9 +249,8 @@ public class RecoverBetServiceTest
         var exception = new Exception("Send Email fail");
         var recoverTicketsService = Substitute.For<RecoverTicketsService>();
         recoverTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(model);
-        recoverTicketsService
-            .When(x => x.SendEmail(Arg.Any<RecoverTicketsModel>(), query.TypeOfRecover))
-            .Do(x => throw exception);
+        recoverTicketsService.When(x => x.SendEmail(Arg.Any<RecoverTicketsModel>(), query.TypeOfRecover))
+            .Do(_ => throw exception);
         var loggingService = Substitute.For<LoggingService>();
         var service = CreateService(recoverTicketsService, loggingService);
 
@@ -308,8 +307,7 @@ public class RecoverBetServiceTest
         await service.RecoverTickets(query);
 
         // Assert
-        notificationService.Received()
-            .WarningMessage(format, model.Validation.CompletedMatchIds);
+        notificationService.Received().WarningMessage(format, model.Validation.CompletedMatchIds);
     }
 
     [Fact]
@@ -343,8 +341,7 @@ public class RecoverBetServiceTest
         await service.RecoverTickets(query);
 
         // Assert
-        notificationService.Received()
-            .WarningMessage(format, model.Validation.ReCalculatedMainTransIds);
+        notificationService.Received().WarningMessage(format, model.Validation.ReCalculatedMainTransIds);
     }
 
     [Fact]
@@ -378,7 +375,6 @@ public class RecoverBetServiceTest
         await service.RecoverTickets(query);
 
         // Assert
-        notificationService.Received()
-            .WarningMessage(format, model.Validation.ReCalculatedMainTransIds);
+        notificationService.Received().WarningMessage(format, model.Validation.ReCalculatedMainTransIds);
     }
 }

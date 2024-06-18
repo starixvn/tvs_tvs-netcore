@@ -10,4 +10,5 @@ public class RequestDetailTicketModel
     public int MainTransId { get; set; }
     public int VoidingTypeId { get; set; }
     public int VoidActionId { get; set; }
+    public int ValidationType { get; set; }
 }

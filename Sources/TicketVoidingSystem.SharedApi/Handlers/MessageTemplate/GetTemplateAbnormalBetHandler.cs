@@ -26,9 +26,9 @@ public class GetTemplateAbnormalBetHandler : IRequestHandler<GetTemplateAbnormal
 
     public async Task<object> Handle(GetTemplateAbnormalBetRequest request, CancellationToken cancellationToken)
     {
-        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), cancellationToken).ConfigureAwait(false);
-        var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria(), cancellationToken).ConfigureAwait(false);
-        var templates = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria(), cancellationToken).ConfigureAwait(false);
+        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria()).ConfigureAwait(false);
+        var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria()).ConfigureAwait(false);
+        var templates = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria()).ConfigureAwait(false);
 
         var abnormalIssueType = new IssueType { IssueTypeId = IssueTypeConstant.AbnormalBet };
         var abnormalSubIssueTypes = subIssueTypes.Where(x => x.IssueTypeId == IssueTypeConstant.AbnormalBet);

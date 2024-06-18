@@ -17,14 +17,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest
             var subTypeNotes = new List<SubIssueTypeNoteModel> { new() };
             var request = new GetSubIssueTypeNoteRequest { IssueTypeId = 1 };
             var repository = Substitute.For<IDynamicRepository>();
-            repository.FetchAsync<SubIssueTypeNoteModel>(Arg.Any<GetSubIssueTypeNoteRequest>(), CancellationToken.None).ReturnsForAnyArgs(subTypeNotes);
+            repository.FetchAsync<SubIssueTypeNoteModel>(Arg.Any<GetSubIssueTypeNoteRequest>()).ReturnsForAnyArgs(subTypeNotes);
             var handler = new GetSubIssueTypeNoteHandler(repository);
 
             // Act
             var actual = await handler.Handle(request, CancellationToken.None);
 
             // Assert
-            await repository.Received(1).FetchAsync<SubIssueTypeNoteModel>(Arg.Any<GetSubIssueTypeNoteRequest>(), Arg.Any<CancellationToken>());
+            await repository.Received(1).FetchAsync<SubIssueTypeNoteModel>(Arg.Any<GetSubIssueTypeNoteRequest>());
             AssertExtension.Equal(subTypeNotes, actual);
         }
     }

@@ -29,8 +29,7 @@ public class GetFirstTimeAndKickOffTimeHandlerTests
     {
         // Arrange
         var ticketTime = new FirstTicketTime { MinTransDate = DateTime.UtcNow, KickOffTime = DateTime.UtcNow };
-        repository.GetAsync<FirstTicketTime>(Arg.Any<GetFirstTicketTimeCriteria>(), Arg.Any<CancellationToken>())
-            .ReturnsForAnyArgs(ticketTime);
+        repository.GetAsync<FirstTicketTime>(Arg.Any<GetFirstTicketTimeCriteria>()).ReturnsForAnyArgs(ticketTime);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -41,15 +40,13 @@ public class GetFirstTimeAndKickOffTimeHandlerTests
         Assert.Equal(ticketTime.KickOffTime.ZoneManila(), result.KickOffTime);
     }
 
-
     [Fact]
     public async Task Handle_Returns_FirstTicketTime_With_Year_Prefix()
     {
         // Arrange
         var ticketTime = new FirstTicketTime { MinTransDate = default, KickOffTime = DateTime.UtcNow };
         var expectMinTransDate = new DateTime(ticketTime.MinTransDate.Year + 2000, ticketTime.MinTransDate.Month, ticketTime.MinTransDate.Day).ZoneManila();
-        repository.GetAsync<FirstTicketTime>(Arg.Any<GetFirstTicketTimeCriteria>(), Arg.Any<CancellationToken>())
-            .ReturnsForAnyArgs(ticketTime);
+        repository.GetAsync<FirstTicketTime>(Arg.Any<GetFirstTicketTimeCriteria>()).ReturnsForAnyArgs(ticketTime);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);

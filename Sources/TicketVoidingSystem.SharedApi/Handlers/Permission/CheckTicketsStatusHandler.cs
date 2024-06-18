@@ -50,7 +50,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             criteria.TransInfoJson = await checkTicketsStatusService.GetTransInfoJsonForCheckPermission(request);
             criteria.IsHostVoidSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledTickets, Constant.Policy.Host);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledTickets, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 
@@ -61,7 +61,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             criteria.IsHostVoidSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledSingleBet, Constant.Policy.Host);
             criteria.IsHostVoidInstantlySettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledAndInstantlySettledSingleBet, Constant.Policy.Host);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledSingleBet, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 
@@ -71,7 +71,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             criteria.TransInfoJson = await checkTicketsStatusService.GetTransInfoJsonForCheckPermission(request);
             criteria.IsHostVoidSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledParlayBet, Constant.Policy.Host);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnSettledParlayBet, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 
@@ -81,7 +81,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             criteria.TransInfoJson = await checkTicketsStatusService.GetTransInfoJsonForCheckPermission(request);
             criteria.IsHostVoidSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidSettledCurrencyBet, Constant.Policy.Host);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.VoidUnsettledCurrencyBet, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 
@@ -91,7 +91,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             criteria.TransInfoJson = await checkTicketsStatusService.GetTransInfoJsonForCheckPermission(request);
             criteria.IsHostVoidSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelSettledCashOut, Constant.Policy.Host);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.CancelUnSettledCashOut, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 
@@ -102,7 +102,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             criteria.IsHostVoidSettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingSettledTickets, Constant.Policy.Host);
             criteria.IsHostVoidInstantlySettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingInstantlySettled, Constant.Policy.Host);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.TicketVoidingUnsettledTickets, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 
@@ -111,7 +111,7 @@ public class CheckTicketsStatusHandler : IRequestHandler<CheckTicketsStatusReque
             var criteria = mapper.Map<CheckPermissionMarkTicketsCriteria>(request);
             criteria.TransInfoJson = await checkTicketsStatusService.GetTransInfoJsonForCheckPermission(request);
             criteria.IsHostVoidUnsettledTickets = await sessionService.HasPermission(SpecialDeleteFunctionKeys.MarkTickets, Constant.Policy.Host);
-            await repository.ExecuteAsync(criteria, cancellationToken);
+            await repository.ExecuteAsync(criteria);
             return CreateSqlResult(criteria);
         }
 

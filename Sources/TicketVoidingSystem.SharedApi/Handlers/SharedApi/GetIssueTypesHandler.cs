@@ -24,8 +24,8 @@ public class GetIssueTypesHandler : IRequestHandler<GetIssueTypesRequest, IssueT
 
     public async Task<IssueTypesViewModel> Handle(GetIssueTypesRequest request, CancellationToken cancellationToken)
     {
-        var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria(), cancellationToken);
-        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria(), cancellationToken);
+        var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());
+        var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria());
 
         return new IssueTypesViewModel
         {

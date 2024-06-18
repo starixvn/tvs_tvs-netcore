@@ -119,7 +119,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.matchModel = this.leagueEventComponent?.selectedMatch;
     if(this.mainEvent.matchModel){
       this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
-      this.mainEvent.templateValue.kickOffTime = this.mainEvent.kickOffTime;  
     }
   
     this.updateMatchId.emit(this.mainEvent.matchId);
@@ -128,8 +127,11 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   public changeKickOffTime(): void {
     this.primitiveProps.isShowLogInfoEvents = false;
     if (this.kickOffTimeComponent.isTimeValid()) {
-      this.allSelectedEvents.forEach(x => x.kickOffTime = this.kickOffTimeComponent.getDateTime());
-    }
+      this.allSelectedEvents.forEach(x => {
+        let dateTime = this.kickOffTimeComponent.getDateTime();
+        x.kickOffTime = dateTime;
+        x.templateValue.kickOffTime = dateTime;
+      });    }
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 

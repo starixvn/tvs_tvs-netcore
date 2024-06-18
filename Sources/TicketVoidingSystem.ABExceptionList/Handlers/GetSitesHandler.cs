@@ -24,7 +24,7 @@ public class GetSitesHandler : IRequestHandler<GetSitesRequest, IEnumerable<Grou
 
     public async Task<IEnumerable<GroupLicenseeSiteViewModel>> Handle(GetSitesRequest request, CancellationToken cancellationToken)
     {
-        var data = await repository.FetchAsync<LicenseeSite>(request, cancellationToken);
+        var data = await repository.FetchAsync<LicenseeSite>(request);
         return data.GroupBy(b => b.GroupName).Select(group => new GroupLicenseeSiteViewModel { GroupName = group.Key, Sites = group });
     }
 }

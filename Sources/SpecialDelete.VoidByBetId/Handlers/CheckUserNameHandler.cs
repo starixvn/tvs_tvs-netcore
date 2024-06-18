@@ -21,7 +21,7 @@ public class CheckUserNameHandler : IRequestHandler<CheckUserNameRequest, string
     public async Task<string> Handle(CheckUserNameRequest request, CancellationToken cancellationToken)
     {
         const string invalidCustomer = "0";
-        var customerInfoList = await repository.FetchAsync<CustomerInfo>(request, cancellationToken);
+        var customerInfoList = await repository.FetchAsync<CustomerInfo>(request);
         return customerInfoList.Any() ? string.Join(",", customerInfoList.Select(x => x.CustId)) : invalidCustomer;
     }
 }

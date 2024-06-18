@@ -29,7 +29,7 @@ public class GetFirstTimeAndKickOffTimeHandler : IRequestHandler<GetFirstTimeAnd
         {
             MatchId = request.MatchId
         };
-        var ticketTime = await repository.GetAsync<FirstTicketTime>(criteria, cancellationToken);
+        var ticketTime = await repository.GetAsync<FirstTicketTime>(criteria);
         ticketTime.MinTransDate = GetMinTransDate(ticketTime);
 
         return new FirstTicketTime

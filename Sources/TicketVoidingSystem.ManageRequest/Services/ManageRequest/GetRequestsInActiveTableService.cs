@@ -29,12 +29,8 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
     public async Task<(IEnumerable<RequestModel>, IEnumerable<string>)> GetRequestsInActiveTable(SelectRequestsQuery query)
     {
         var criteriaActive = mapper.Map<SelectActiveRequestsCriteria>(query);
-        var mappingTypes = new[] { typeof(RequestModel), typeof(string), typeof(string), typeof(GetBettypeForRequestModel) };
-        var result = await repository.FetchMultipleAsync(criteriaActive, mappingTypes);
-        var requests = result[0].Cast<RequestModel>();
-        var requestInfoJson = result[1].Cast<string>();
-        var requestInfoGetCalcTime = result[2].Cast<string>();
-        var betTypeForRequests = result[3].Cast<GetBettypeForRequestModel>();
+        var (requests, requestInfoJson, requestInfoGetCalcTime, betTypeForRequests) =
+            await repository.FetchMultipleAsync<RequestModel, string, string, GetBettypeForRequestModel>(criteriaActive);
 
         var totalVoidedTicketModels = await GetTotalVoidedTickets(requestInfoJson.First());
         foreach (var request in requests)

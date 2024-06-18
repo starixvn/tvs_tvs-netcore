@@ -23,6 +23,6 @@ public class GetSubTypeHandler : IRequestHandler<GetSubTypeRequest, IEnumerable<
 
     public async Task<IEnumerable<AbExceptionSubTypeViewModel>> Handle(GetSubTypeRequest request, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<AbExceptionSubTypeViewModel>(request, cancellationToken);
+        return await repository.FetchAsync<AbExceptionSubTypeViewModel>(request);
     }
 }

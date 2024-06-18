@@ -20,6 +20,6 @@ public class GetSubIssueTypeNoteHandler : IRequestHandler<GetSubIssueTypeNoteReq
 
     public async Task<IEnumerable<SubIssueTypeNoteModel>> Handle(GetSubIssueTypeNoteRequest request, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<SubIssueTypeNoteModel>(request, cancellationToken);
+        return await repository.FetchAsync<SubIssueTypeNoteModel>(request);
     }
 }

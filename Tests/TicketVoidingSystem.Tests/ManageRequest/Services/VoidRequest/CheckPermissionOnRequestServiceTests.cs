@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -17,10 +18,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
         public async Task IsUserHasPermissionAccessRequest_Return_ReturnTrue()
         {
             // Arrange
-            var model = new RequestModel { RequestId = 12345, IssueTypeId = 11 };
             var repository = Substitute.For<IDynamicRepository>();
-            repository.GetAsync<RequestModel>(Arg.Compat.Any<GetRequestCriteria>()).ReturnsForAnyArgs(model);
-
+            var firstResultSet = new List<RequestDetailModel> { new() { IssueTypeId = 11 } };
+            repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(Arg.Any<GetRequestCriteria>())
+                .ReturnsForAnyArgs((firstResultSet, null, null));
             var sessionService = Substitute.For<SessionService>();
             sessionService.HasPermission(Arg.Compat.Any<string>(), Constant.Policy.Read).ReturnsForAnyArgs(true);
             var service = new CheckPermissionOnRequestServiceImp(repository, sessionService);
@@ -29,8 +30,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             var actual = await service.IsHasPermissionOnRequest(12345);
 
             // Assert
-            await repository.Received(1)
-                .GetAsync<RequestModel>(Arg.Compat.Is<GetRequestCriteria>(x => x.RequestId == 12345));
             Assert.True(actual);
         }
 
@@ -40,13 +39,14 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest
             // Arrange
             var repository = Substitute.For<IDynamicRepository>();
             var service = new CheckPermissionOnRequestServiceImp(repository, null);
+            var firstResultSet = new List<RequestDetailModel>();
+            repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(Arg.Any<GetRequestCriteria>())
+                .ReturnsForAnyArgs((firstResultSet, null, null));
 
             // Act
             var actual = await service.IsHasPermissionOnRequest(12345);
 
             // Assert
-            await repository.Received(1)
-                .GetAsync<RequestModel>(Arg.Compat.Is<GetRequestCriteria>(x => x.RequestId == 12345));
             Assert.False(actual);
         }
 

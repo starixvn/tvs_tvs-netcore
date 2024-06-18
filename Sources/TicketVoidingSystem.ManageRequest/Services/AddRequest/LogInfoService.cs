@@ -31,23 +31,21 @@ public class LogInfoServiceImp : LogInfoService
     public async Task<GetLogInfoViewModel> GetLogInfo(GetLogInfoQuery query)
     {
         var criteria = await GetLogInfoCriteria(query);
-        var mappingTypes = new[] { typeof(Validation), typeof(TicketRequest), typeof(LogInfoDetail), typeof(TransInfoAddRequestModel), typeof(string) };
-        var result = await repository.FetchMultipleAsync(criteria, mappingTypes);
-        var validation = result[0].Cast<Validation>();
-        var ticketRequest = result[1].Cast<TicketRequest>();
-        var logInfoDetail = result[2].Cast<LogInfoDetail>();
-        var transInfoAddRequestModel = result[3].Cast<TransInfoAddRequestModel>().FirstOrDefault();
-        var transInfoJson = result[4].Cast<string>();
+
+        var (validations, ticketRequests, logInfoDetails, transInfoAddRequestModels, transInfoJsonList) =
+            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string>(criteria);
+        var transInfoAddRequest = transInfoAddRequestModels.FirstOrDefault();
+        var transInfoJson = transInfoJsonList.FirstOrDefault();
 
         return new GetLogInfoViewModel
         {
-            GetLogInfoModels = GetLogInfoModels(query, validation, ticketRequest, logInfoDetail),
+            GetLogInfoModels = GetLogInfoModels(query, validations, ticketRequests, logInfoDetails),
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
-                RemoveTransIds = transInfoAddRequestModel?.RemoveTransIds,
-                UnMarkTransIds = transInfoAddRequestModel?.UnMarkTransIds,
-                MarkTransIds = transInfoAddRequestModel?.MarkTransIds,
-                TransInfoJson = transInfoJson.FirstOrDefault()
+                RemoveTransIds = transInfoAddRequest?.RemoveTransIds,
+                UnMarkTransIds = transInfoAddRequest?.UnMarkTransIds,
+                MarkTransIds = transInfoAddRequest?.MarkTransIds,
+                TransInfoJson = transInfoJson
             }
         };
     }

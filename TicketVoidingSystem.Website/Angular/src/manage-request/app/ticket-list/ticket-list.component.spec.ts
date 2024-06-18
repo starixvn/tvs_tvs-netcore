@@ -17,6 +17,7 @@ import { TicketListModal } from './ticket-list.modal';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
 import { TicketsQuery } from './tickets/tickets.query';
+import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 
 class Helper {
   static readonly fakeDate = '2019-11-18 12:08:49.737';
@@ -184,6 +185,7 @@ describe('TicketListComponent', () => {
 
   it('#ngOnChanges should call expected function', async () => {
     // Arrange
+    Helper.fakeRequestDetailViewModel.abnormalBetModel = new AbnormalBetModel();
     const mockGetMatch = jest.fn();
     const mockGetRequestById = jest.fn().mockImplementation(() => Helper.fakeRequestDetailViewModel);
     const mockGetIssueInfo = jest.fn().mockImplementation(() => Helper.fakeIssueInfo);
@@ -262,13 +264,13 @@ describe('TicketListComponent', () => {
     expect(instance.paging.pageSize).toBe(500);
   });
 
-
   it('#ngOnChanges should call expected function when #getScoreResult return N/A ', async () => {
     // Arrange
     const requestDetailModel = Helper.fakeRequestDetailModel;
     requestDetailModel.issueTypeId = 11;
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
     fakeRequestDetailViewModel.event = new RequestEventModel();
+    fakeRequestDetailViewModel.abnormalBetModel = new AbnormalBetModel(); 
     const mockGetMatch = jest.fn();
     const mockGetRequestById = jest.fn().mockImplementation(() => fakeRequestDetailViewModel);
     const mockGetIssueInfo = jest.fn().mockImplementation(() => Helper.fakeIssueInfo);

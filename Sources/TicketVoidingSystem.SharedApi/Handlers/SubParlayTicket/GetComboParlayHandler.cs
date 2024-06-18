@@ -25,7 +25,7 @@ public class GetComboParlayHandler : IRequestHandler<GetComboParlayRequest, ILis
 
     public async Task<IList<TicketViewModel>> Handle(GetComboParlayRequest message, CancellationToken cancellationToken)
     {
-        var tickets = await ticketsService.GetTickets(message.RefNo, cancellationToken);
+        var tickets = await ticketsService.GetTickets(message.RefNo);
         var viewModels = new List<TicketViewModel>
         {
             new()

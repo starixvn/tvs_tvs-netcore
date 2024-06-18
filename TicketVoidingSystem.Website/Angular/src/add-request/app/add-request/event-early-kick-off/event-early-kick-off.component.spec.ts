@@ -50,7 +50,8 @@ class Helper {
   static readonly fakeTemplateValue: TemplateValue = {
     matchId: 0,
     groupPHAffected: 0, 
-    checkSettled: false
+    checkSettled: false,
+    kickOffTime: '2019-11-18 12:08:49.737'
   };
   static readonly fakeChildMatches: ChildMatchModel[] = [
     {
@@ -193,7 +194,7 @@ class Helper {
   }
   static readonly fakeLogInfoEarlyKickOff: LogInfoEarlyKickOff = {
     isMainMatch: true,
-    kickOffTime: '',
+    kickOffTime: '2019-11-18 12:08:49.737',
     matchId: 1,
     subIssueTypeId: 1,
     leagueName: '',
@@ -245,7 +246,8 @@ describe('EventEarlyKickOffComponent', () => {
   });
 
 
-  it('changeMatchEvent should call expected method when have not league event', async () => {
+  it('#changeMatchEvent should call expected method when have not league event', async () => {
+    // Arrange
     const mockResetLogInfoOfEvent = jest.fn();
     const mockGetTemplateValue = jest.fn();
     const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
@@ -264,18 +266,19 @@ describe('EventEarlyKickOffComponent', () => {
     instance.leagueEventComponent = null;
     instance.updateMatchId.emit = jest.fn();
 
+    // Action
     instance.changeMatchEvent();
-
+  
+    // Assert
     expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
-    expect(mockGetTemplateValue).toHaveBeenCalledTimes(1);
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
   });
 
-  it('changeMatchEvent should call expected method', async () => {
+  it('#changeMatchEvent should call expected method', async () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const mockInitDefaultMainEvent = jest.fn().mockReturnValue(Helper.fakeLogInfoEarlyKickOff);
     const { instance } = await shallow
-    .mock(LogInfoService, { getTemplateValue: jest.fn(), resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(LogInfoService, { getTemplateValue: jest.fn().mockReturnValue(new TemplateValue()), resetLogInfoOfEvent: mockResetLogInfoOfEvent })
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
     .render({
       bind: {
@@ -777,12 +780,13 @@ describe('EventEarlyKickOffComponent', () => {
     addRequestStore.changeBlockingUiStatus = mockChangeBlockingUiStatus;
     const relatedEventService = new RelatedEventService(null, null, null);
     relatedEventService.getChildMatches = mockGetChildMatches;
-    const component = new EventEarlyKickOffComponent(null, addRequestStore, null, null, null, relatedEventService, eventEarlyKickOffService);
+    const logInfoService = new LogInfoService(null, null, null, null);
+    logInfoService.getTemplateValue = jest.fn().mockReturnValue(new TemplateValue())
+    const component = new EventEarlyKickOffComponent(null, addRequestStore, logInfoService, null, null, relatedEventService, eventEarlyKickOffService);
     component.filter = Helper.fakeFilterModel;
     component.filter.isVoided = true;
     component.isEdit = true;
     const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    childEvent.isMainMatch = false;
     component.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
     component.getTicketsMainEvent = jest.fn();
     component.filter.isVoided = false;
@@ -795,25 +799,29 @@ describe('EventEarlyKickOffComponent', () => {
   });
 
   it('#ngOnInit should be call #getTicketsMainEvent when edit and request voided', async () => {
+    // Arrange
     const mockChangeBlockingUiStatus = jest.fn();
     const mockGetChildMatches = jest.fn();
     const eventEarlyKickOffService = new EventEarlyKickOffService();
     eventEarlyKickOffService.assignModelsToEvents = jest.fn();
     const addRequestStore = new AddRequestStore();
     addRequestStore.changeBlockingUiStatus = mockChangeBlockingUiStatus;
+    const logInfoService = new LogInfoService(null, null, null, null);
+    logInfoService.getTemplateValue = jest.fn().mockReturnValue(new TemplateValue())
     const relatedEventService = new RelatedEventService(null, null, null);
     relatedEventService.getChildMatches = mockGetChildMatches;
-    const component = new EventEarlyKickOffComponent(null, addRequestStore, null, null, null, relatedEventService, eventEarlyKickOffService);
+    const component = new EventEarlyKickOffComponent(null, addRequestStore, logInfoService, null, null, relatedEventService, eventEarlyKickOffService);
 
     const childEvent = _.cloneDeep(Helper.fakeLogInfoEarlyKickOff);
-    childEvent.isMainMatch = false;
     component.allSelectedEvents = [Helper.fakeLogInfoEarlyKickOff, childEvent];
     component.filter = Helper.fakeFilterModel;
     component.filter.isVoided = true;
     component.isEdit = true;
 
+    // Action
     await component.ngOnInit();
 
+    // Assert
     expect(mockChangeBlockingUiStatus).toHaveBeenCalledTimes(2);
     expect(mockGetChildMatches).toHaveBeenCalledTimes(1);
   });

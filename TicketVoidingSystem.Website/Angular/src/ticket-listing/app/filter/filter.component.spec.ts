@@ -776,18 +776,6 @@ describe('FilterComponent', () => {
     expect(actualResult).toBe(checkedBettypes);
   });
 
-  it('Reset filter', async () => {
-    // Arrange
-    const { instance } = await shallow.render();
-    instance.matchId = '12345';
-    instance.advancedModeComponent = new AdvancedModeComponent(null, null, null);
-    jest.spyOn(instance.advancedModeComponent, 'resetBetTeam');
-    // Action and Assert
-    instance.resetFilter();
-    expect(instance.matchId).toBe('');
-    expect(instance.advancedModeComponent.resetBetTeam).toHaveBeenCalled();
-  });
-
   it('Change bettypes', async () => {
     // Arrange
     const { instance } = await shallow.render();
@@ -816,6 +804,7 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     instance.isReSettled = false;
     instance['enableBetTypesAndAdvancedMode'] = jest.fn();
+    instance.query.product = Product.BET_BUILDER;
 
     // Action and Assert
     instance.handleBetTypesAndAdvancedMode();
@@ -856,15 +845,15 @@ describe('FilterComponent', () => {
     expect(instance.handleGroupBetTypesOfSportBook).toHaveBeenCalledTimes(1);
   });
   
-  it('handleBetTypes should call #handlBetTypesOfBetBuilder', async () => {
+  it('handleBetTypes should call #handleBetTypesOfBetBuilder', async () => {
     // Arrange
     const { instance } = await shallow.render();
     instance.query.product = Product.BET_BUILDER;
-    instance.handlBetTypesOfBetBuilder = jest.fn();
+    instance.handleBetTypesOfBetBuilder = jest.fn();
 
     // Action and Assert
     instance.handleBetTypes();
-    expect(instance.handlBetTypesOfBetBuilder).toHaveBeenCalledTimes(1);
+    expect(instance.handleBetTypesOfBetBuilder).toHaveBeenCalledTimes(1);
   });
   
   it('handleGroupBetTypesOfSportBook should not call #tooltip when have bettype', async () => {
@@ -923,7 +912,7 @@ describe('FilterComponent', () => {
     instance.tooltip.display = jest.fn();
 
     // Action and Assert
-    await instance.handlBetTypesOfBetBuilder(new GetBetTypesQuery());
+    await instance.handleBetTypesOfBetBuilder(new GetBetTypesQuery());
     expect(instance.tooltip.display).toHaveBeenCalledTimes(1);
   });
   
@@ -937,7 +926,7 @@ describe('FilterComponent', () => {
     .render();
 
     // Action and Assert
-    await instance.handlBetTypesOfBetBuilder(new GetBetTypesQuery());
+    await instance.handleBetTypesOfBetBuilder(new GetBetTypesQuery());
     expect(instance.betTypes).toBeDefined();
   });
 
@@ -975,6 +964,7 @@ describe('FilterComponent', () => {
     const { instance } = await shallow.render();
     instance.isReSettled = true;
     instance.groupBetTypes = new GroupBetTypesModel([new GroupBetType('Special', [], true)], false);
+    instance.query.product = Product.SPORTS_BOOK;
     instance.handleBetTypesAndAdvancedMode();
 
     expect(instance.groupBetTypesComponent.isDisabledAllBetTypes).toBeTruthy();

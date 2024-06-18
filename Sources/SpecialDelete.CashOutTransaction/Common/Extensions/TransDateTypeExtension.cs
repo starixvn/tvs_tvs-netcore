@@ -19,8 +19,8 @@ public static class TransDateTypeExtension
         {
             var from = item.FromTransDate.ZoneCanada();
             var to = item.ToTransDate.ZoneCanada();
-            var transdateType = Environment.NewLine + string.Format(StringResource.TransDateTypeXml, from, to);
-            temp.Append(transdateType.Replace("=\"\"", "=\"All\""));
+            var transDateType = Environment.NewLine + string.Format(StringResource.TransDateTypeXml, from, to);
+            temp.Append(transDateType.Replace("=\"\"", "=\"All\""));
         }
 
         return $"<TransDates>{temp}{Environment.NewLine}</TransDates>";

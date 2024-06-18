@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
@@ -35,17 +34,15 @@ public class TicketsServiceTests : AppSettingFixture, IClassFixture<RemotingRefF
         // Arrange
         var expected = new List<TicketModel> { new(), new(), new(), new() };
         var ticketModels = new List<TicketModel> { new() };
-        repository.FetchAsync<TicketModel>(Arg.Any<GetParlaySubBetCriteria>(), CancellationToken.None)
-            .ReturnsForAnyArgs(ticketModels);
+        repository.FetchAsync<TicketModel>(Arg.Any<GetParlaySubBetCriteria>()).ReturnsForAnyArgs(ticketModels);
 
         // Act
-        var result = await service.GetTickets("123", CancellationToken.None);
+        var result = await service.GetTickets("123");
 
         // Assert
         Assert.NotNull(result);
         AssertExtension.Equal(expected, result);
     }
-
 
     [Theory]
     [InlineData(TicketStatus.VoidId, "<div class='strikethrough'>choice</div>")]
@@ -78,8 +75,7 @@ public class TicketsServiceTests : AppSettingFixture, IClassFixture<RemotingRefF
             Handicap1 = 1,
             Handicap2 = 2
         };
-        betListService.GetComboName(query.BetTeam, query.BetCheck, query.Handicap1, query.Handicap2)
-            .ReturnsForAnyArgs(expected);
+        betListService.GetComboName(query.BetTeam, query.BetCheck, query.Handicap1, query.Handicap2).ReturnsForAnyArgs(expected);
 
         // Act
         var result = service.GetComboName(query);

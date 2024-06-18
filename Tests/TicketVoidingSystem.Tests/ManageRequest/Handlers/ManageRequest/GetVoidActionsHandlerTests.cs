@@ -19,8 +19,7 @@ public class GetVoidActionsHandlerTests
         var repository = Substitute.For<IDynamicRepository>();
         var expected = new List<VoidActionSelection> { new() { Name = "123", Value = "1" } };
         var data = new List<VoidAction> { new() { ActionName = "123", ActionId = "1" } };
-        repository.FetchAsync<VoidAction>(Arg.Any<GetVoidActionsRequest>(), CancellationToken.None)
-            .ReturnsForAnyArgs(data);
+        repository.FetchAsync<VoidAction>(Arg.Any<GetVoidActionsRequest>()).ReturnsForAnyArgs(data);
         var handler = new GetVoidActionsHandler(repository);
 
         // Act
