@@ -25,19 +25,18 @@ public class OWPMaxBetAndSpreadServiceImp : OWPMaxBetAndSpreadService
         this.httpClient.DefaultRequestHeaders.Add("Accept", MediaTypeNames.Application.Json);
     }
 
-    public async Task<OddsInfoModel> GetMaxBetAndSpread(OddsInfoRequest query)
+    public async Task<OddsInfoModel> GetMaxBetAndSpread(OddsInfoRequest request)
     {
-        query.SubType = 2101;
-        query.SubIssueTypeId = SubIssueTypeConstant.Handicap;
-        var actionName = query.MatchId.Equals(query.ParentId)
-            ? $"api/maxbet/{query.ParentId}"
-            : $"api/maxbet/{query.ParentId}/{query.SubType}";
+        request.SubType = 2000;
+        var actionName = request.MatchId.Equals(request.ParentId)
+            ? $"api/maxbet/{request.ParentId}"
+            : $"api/maxbet/{request.ParentId}/{request.SubType}";
 
         var response = await httpClient.GetAsync(actionName);
-        var maxBetInfo = await Helper.DeserializeResponseStream<OWPMaxBetAndSpreadInfo>(response);
         if (response.IsSuccessStatusCode)
         {
-            return GetOddsInfoViewModel(maxBetInfo, query.SubIssueTypeId);
+            var maxBetInfo = await Helper.DeserializeResponseStream<OWPMaxBetAndSpreadInfo>(response);
+            return GetOddsInfoViewModel(maxBetInfo, request.SubIssueTypeId);
         }
 
         await loggingService.ErrorAsync($"URL: {AppSettingService.AppSetting.OWPUrl}{actionName}{Environment.NewLine}Response:{Environment.NewLine}{response}");
@@ -48,7 +47,7 @@ public class OWPMaxBetAndSpreadServiceImp : OWPMaxBetAndSpreadService
     {
         return new OddsInfoModel
         {
-            MatchId = maxBetInfo.AdminSiteID,
+            ParentId = maxBetInfo.AdminSiteID,
             Spread = GetMaxBetForSubIssueType(maxBetInfo.Spread, subIssueTypeId),
             MaxBet = (int)GetMaxBetForSubIssueType(maxBetInfo.Maxbet, subIssueTypeId)
         };

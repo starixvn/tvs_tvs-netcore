@@ -14,6 +14,7 @@ export class FilterWrongOddsModel {
   ouValue: string;
   favoriteValue: string;
   liveIndicator: number;
+  oddsInfo: OddsInfoModel;
 }
 
 export class FilterOddsType {
@@ -55,4 +56,20 @@ export class FilterOuTypeConstant {
 export class FilterBetTeamConstant {
   static readonly HOME = 'h';
   static readonly AWAY = 'a';
+}
+
+export class OddsInfoModel {
+  matchId: number;
+  parentId: number;
+  subtype: number;
+  subIssueTypeId: number;
+  spread: number;
+  maxBet?: number;
+  allowanceRate?: string;
+  correctOddsHomeOver?: number;
+  correctOddsAwayUnder?: number;
+  fromOddsNotVoidHomeOver?: number;
+  toOddsNotVoidHomeOver?: number;
+  fromOddsNotVoidAwayUnder?: number;
+  toOddsNotVoidAwayUnder?: number;
 }

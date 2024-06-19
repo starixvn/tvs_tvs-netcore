@@ -2,7 +2,7 @@
 
 public class OddsInfoModel
 {
-    public int MatchId { get; set; }
+    public int ParentId { get; set; }
 
     public int MaxBet { get; set; }
 

@@ -3,8 +3,9 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { FilterFavoriteType, FilterOddsType, FilterOuType, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
+import { FilterFavoriteType, FilterOddsType, FilterOuType, FilterWrongOddsModel, OddsInfoModel } from '../models/filter-wrong-odds.model';
 import { ValidationService } from '../services/validation.service';
+import { AllowanceRate } from '../../../../../utility/constants/config';
 
 @Component({
   selector: 'filter-wrong-odds',
@@ -26,7 +27,8 @@ export class FilterWrongOddsComponent {
   filterOddsType = new FilterOddsType();
   filterFavoriteType = new FilterFavoriteType();
   filterOuType = new FilterOuType();
-
+  allowanceRates = AllowanceRate.ALLOWANCE_RATE;
+  
   constructor(
     private readonly element: ElementRef,
     private readonly validationService: ValidationService) {

@@ -92,4 +92,6 @@ public class Match
     public string OriginLeagueNameNewSimplified { get; set; }
 
     public string OriginLeagueNameTraditional { get; set; }
+
+    public int Subtype { get; set; }
 }

@@ -23,6 +23,7 @@ import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models
 import { Result, SqlResult } from '../models/result';
 import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { HttpService } from './http.service';
+import { OddsInfoModel } from '../../add-request/app/add-request/event-wrong-odds/models/filter-wrong-odds.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -159,8 +160,8 @@ export class CommonService {
     return this.httpService.postJson({ matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
   
-  async getMaxBetAndSpreadOfEvent(matchId: number, parentId: number, subIssueTypeId?: number): Promise<MatchInfoViewModel> {
-    return this.httpService.postJson({ matchId, parentId, subIssueTypeId }, 'api/AddRequest/GetMaxBetAndSpread');
+  async getMaxBetAndSpreadOfEvent(query: OddsInfoModel): Promise<OddsInfoModel> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
   }
 
   async logAccessFunction(functionName: string): Promise<boolean> {

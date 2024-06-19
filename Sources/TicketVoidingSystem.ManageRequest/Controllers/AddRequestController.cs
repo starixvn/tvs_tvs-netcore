@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.SharedApi.Handlers.MatchInfo;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Controllers;

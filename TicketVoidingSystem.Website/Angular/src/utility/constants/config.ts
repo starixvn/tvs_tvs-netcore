@@ -441,4 +441,21 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
+  static readonly ALLOWANCE_RATE: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+}
+
+export class AllowanceRate {
+  static readonly Twenty = '20';
+  static readonly Twenty_Five = '25';
+  static readonly Thirty = '30';
+  
+  static readonly ALLOWANCE_RATE: Selection[] = [
+    { value: AllowanceRate.Twenty, name: '20' },
+    { value: AllowanceRate.Twenty_Five, name: '25' },
+    { value: AllowanceRate.Thirty, name: '30' }
+  ];
 }

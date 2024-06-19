@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from "../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model";
-import { DateTimeFormat, PoolHouseTicketValue } from "../../../../../utility/constants/config";
+import { AllowanceRate, DateTimeFormat, PoolHouseTicketValue } from "../../../../../utility/constants/config";
 import { AddRequestApiService } from "../../add-request-api.service";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongOddsModel } from "../../models/event-wrong-odds.model";
-import { FilterBetTeamConstant, FilterFavoriteTypeConstant, FilterOddsTypeConstant, FilterOuTypeConstant, FilterWrongOddsModel } from "../models/filter-wrong-odds.model";
+import { FilterBetTeamConstant, FilterFavoriteTypeConstant, FilterOddsTypeConstant, FilterOuTypeConstant, FilterWrongOddsModel, OddsInfoModel } from "../models/filter-wrong-odds.model";
 import { WrongOddsGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOdds } from "../models/log-info-wrong-odds.model";
 
@@ -24,7 +24,8 @@ export class EventWrongOddsService {
     loginfoEvent.filterWrongOdds.filterFavoriteType = FilterFavoriteTypeConstant.HOME;
     loginfoEvent.filterWrongOdds.filterOuType = FilterOuTypeConstant.OVER;
     loginfoEvent.filterWrongOdds.betTeam = FilterBetTeamConstant.HOME;
-
+    loginfoEvent.filterWrongOdds.oddsInfo = new OddsInfoModel();
+    loginfoEvent.filterWrongOdds.oddsInfo.allowanceRate = AllowanceRate.ALLOWANCE_RATE[0].value;
     const currentMoment = moment.utc().tz('America/Caracas');
     loginfoEvent.filterWrongOdds.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     loginfoEvent.filterWrongOdds.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);

@@ -11,17 +11,4 @@ export class LogInfoWrongOdds {
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
   linkedLogsViewModel: LinkedLogsViewModel;
-  oddsInfo: OddsInfoModel;
-}
-
-export class OddsInfoModel {
-  matchId: number;
-  spread: number;
-  allowanceRate: number;
-  correctOddsHomeOver: number;
-  correctOddsAwayUnder: number;
-  fromOddsNotVoidHomeOver: number;
-  toOddsNotVoidHomeOver	: number;
-  fromOddsNotVoidAwayUnder: number;
-  toOddsNotVoidAwayUnder: number;
 }

@@ -109,22 +109,25 @@
         <span class="input-group-text">Spread</span>
       </div>
       <div class="input-group-sm div-input correct-odds-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.correctOdds" (ngModelChange)="changeFilter();isCorrectFormatMultipleDecimal($event, 'correct-odds-input')"
+        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.spread" (ngModelChange)="changeFilter();isCorrectFormatMultipleDecimal($event, 'correct-odds-input')"
           class="form-control border-radius-left-0" [disabled]="isDisabled">
       </div>
     </div>
   </div>
+
   <div class="allowance-rate ml-3 pl-3">
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
         <span class="input-group-text">Allowance Rate</span>
       </div>
-      <div class="input-group-sm div-input correct-odds-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.correctOdds" (ngModelChange)="changeFilter();isCorrectFormatMultipleDecimal($event, 'correct-odds-input')"
-          class="form-control border-radius-left-0" [disabled]="isDisabled">
-      </div>
+      <ng-select class="input-group-sm div-input correct-odds-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value"
+          [(ngModel)]="filterWrongOddsModel.oddsInfo.allowanceRate" [clearable]="false"
+          (change)="changeFilter()"[searchable]="false">
+  </ng-select>
     </div>
   </div>
+  
+  
 </div>
 <div class="filter-correct-odds input-group input-group-sm d-flex mr-2">
   <div class="malay-odds">
