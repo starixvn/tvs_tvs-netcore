@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TicketVoidingSystem.SharedApi.Services.Analytics;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 using TicketVoidingSystem.SharedApi.Services.Permission;
@@ -17,5 +18,6 @@ public static class SharedApi
         services.AddTransient<TicketsService, TicketsServiceImp>();
         services.AddTransient<CheckTicketsStatusService, CheckTicketsStatusServiceImp>();
         services.AddTransient<SpecialBetTypeContentService, SpecialBetTypeContentServiceImp>();
+        services.AddTransient<UserActionLogService, UserActionLogServiceImp>();
     }
 }

@@ -32,6 +32,7 @@
         <Setting Key="TicketVoiding_CheckVoidBetPermission" SpName="TicketVoiding_CheckVoidBetPermission" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Email_OperatorInfo_Select" SpName="TicketVoiding_Email_OperatorInfo_Select" DbName="DBCUST.SiteConfig.wsv_nap" TimeOut="600" />
         <Setting Key="SpecialDelete_MailingList_Select" SpName="SpecialDelete_MailingList_Select" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_UserActionLog_Update" SpName="TicketVoiding_UserActionLog_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
@@ -413,7 +414,6 @@
         <Setting Key="DBSIG.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSIG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSIG2.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSIG2.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSIG3.NAP_BettransRecoverParlayBet_Main" SpName="NAP_BettransRecoverParlayBet_Main" DbName="DBSIG3.bodb02.wsv_nap" TimeOut="600" />
-
 
         <Setting Key="TicketVoiding_Json_Test" SpName="TicketVoiding_Json_Test" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
     </Function>
