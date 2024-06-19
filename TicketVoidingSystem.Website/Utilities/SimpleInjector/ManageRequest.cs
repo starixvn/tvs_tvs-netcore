@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListExcel;
@@ -45,5 +46,6 @@ public static class ManageRequest
         services.AddTransient<OWPDataService, OWPDataServiceImp>();
         services.AddTransient<CopyRequestInfoService, CopyRequestInfoServiceImp>();
         services.AddTransient<RequestExtraInfoXmlService, RequestExtraInfoXmlServiceImp>();
+        services.AddTransient<OWPMaxBetAndSpreadService, OWPMaxBetAndSpreadServiceImp>();
     }
 }

@@ -3,8 +3,8 @@
 public class OWPMaxBetAndSpreadInfo
 {
     public int AdminSiteID { get; set; }
-    public IEnumerable<SubIssueTypeWrongOdds> Spreads { get; set; }
-    public IEnumerable<SubIssueTypeWrongOdds> MaxBets { get; set; }
+    public SubIssueTypeWrongOdds Spread { get; set; }
+    public SubIssueTypeWrongOdds Maxbet { get; set; }
 }
 
 public class SubIssueTypeWrongOdds

@@ -19,6 +19,8 @@ public class AppSettingModel
 
     public string AmendmentApi { get; init; }
 
+    public string OWPUrl { get; init; }
+
     public string EnvironmentName { get; init; }
 
     public string IgnoreSiteDb { get; init; }

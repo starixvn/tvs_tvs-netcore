@@ -13,6 +13,7 @@ import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { CommonService } from '../../../../utility/services/common.service';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -39,8 +40,8 @@ export class EventWrongOddsComponent implements OnInit {
     private readonly eventWrongOddsService: EventWrongOddsService,
     private readonly logInfoService: LogInfoService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService
-
+    private readonly saveRequestService: SaveRequestService,
+    private readonly commonService: CommonService
     ) { }
 
   ngOnInit(): void {
@@ -97,9 +98,9 @@ export class EventWrongOddsComponent implements OnInit {
     return arg;
   }
 
-  public changeMatchEvent(): void {
+  public async changeMatchEvent(): Promise<void>  {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-    this.logInfoEvent.matchId = this.leagueEventWrongOddsComponent?.selectedMatch.matchId;
+    this.logInfoEvent.matchId = this.leagueEventWrongOddsComponent?.selectedMatch.matchId;    
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.updateMatchId.emit(this.logInfoEvent.matchId);
   }
