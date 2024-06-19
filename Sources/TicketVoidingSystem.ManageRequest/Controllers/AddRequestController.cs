@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
+using TicketVoidingSystem.SharedApi.Handlers.MatchInfo;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.ManageRequest.Controllers;
@@ -102,4 +103,7 @@ public class AddRequestController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetBetTeams() => Ok(await mediator.Send(new GetBetTeamsRequest()));
+
+    [HttpPost]
+    public async Task<IActionResult> GetMaxBetAndSpread(GetMaxBetAndSpreadRequest request) => Ok(await mediator.Send(request));
 }

@@ -38,6 +38,8 @@ export class MatchModel {
   numberOfCorner?: number;
   name?: string;
   parentId?: number;
+  spread?: number;
+  maxBet?: number;
 }
 
 export class CheckMatchWithRefNoQuery {

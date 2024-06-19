@@ -158,6 +158,10 @@ export class CommonService {
   async getMatchInfoAddRequestTvs(matchId: number): Promise<MatchInfoViewModel> {
     return this.httpService.postJson({ matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
+  
+  async getMaxBetAndSpreadOfEvent(matchId: number, subIssueType: number): Promise<MatchInfoViewModel> {
+    return this.httpService.postJson({ matchId, subIssueType }, 'api/MatchInfo/GetMaxBetAndSpread');
+  }
 
   async logAccessFunction(functionName: string): Promise<boolean> {
     try {

@@ -54,4 +54,9 @@ export class LogInfoService {
     logInfoEvent.logInfoDetail = null;
     logInfoEvent.messageValidationLogInfo = null;
   }
+
+  getMaxBetAndSpreadOfEvent(matchId: number, subIssueType: number): void {
+    logInfoEvent.logInfoDetail = null;
+    logInfoEvent.messageValidationLogInfo = null;
+  }
 }

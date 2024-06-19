@@ -21,6 +21,8 @@ public interface MatchService
     Task<Match> GetMatchVoidByCurrency(int matchId);
 
     Match UpdateMatchInfoFromRemotingRef(Match match);
+
+    Task<Match> GetMatch(GetMaxBetAndSpreadCriteria criteria);
 }
 
 public class MatchServiceImp : MatchService
