@@ -229,7 +229,7 @@ public class LogInfoServiceImp : LogInfoService
                 Validation = validation.FirstOrDefault(),
                 TicketRequest = ticketRequest,
                 LogInfoDetail = logInfoDetail.FirstOrDefault(),
-                BetTypeCount = betTypeCount
+                BetTypeCount = betTypeCount.OrderBy(x => x.BetTypeName)
             }
         };
     }
