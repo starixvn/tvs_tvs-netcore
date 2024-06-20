@@ -125,30 +125,15 @@ export class AdvancedModeComponent {
         return checkedBetType.over;
       case 'player':
         return checkedBetType.player;
-      case 'quarter':
-        return checkedBetType.quarter;
-      case 'set':
-        return checkedBetType.set;
-      case 'game':
-        return checkedBetType.game;
-      case 'map':
-        return checkedBetType.map;
-      case 'round':
-        return checkedBetType.round;
-      case 'point':
-        return checkedBetType.point;
-      case 'kill':
-        return checkedBetType.kill;
-      case 'tower':
-        return checkedBetType.tower;
-      case 'turret':
-        return checkedBetType.turret;
-      case 'ball':
-        return checkedBetType.ball;
-      case 'delivery':
-        return checkedBetType.delivery;
       case 'playerandodds':
         return checkedBetType.playerAndOdds;
+      case '_xxx':
+      case '_xx':
+      case 'betidx':
+        return checkedBetType.betIdX;
+      case 'yy':
+      case 'betidy':
+        return checkedBetType.betIdY;
     }
   }
 

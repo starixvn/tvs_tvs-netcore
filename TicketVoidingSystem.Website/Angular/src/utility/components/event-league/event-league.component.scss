@@ -25,19 +25,12 @@
   }
 }
 
-
-
 .text-red {
   color: red !important;
 }
 
-.sport-event-date {
-  display: flex;
-  width: 500px;
-  justify-content: space-between;
-  .sport-name, .event-date {
-    width: 230px;
-  }
+.sport-name {
+  width: 100%;
 }
 
 .disabled {

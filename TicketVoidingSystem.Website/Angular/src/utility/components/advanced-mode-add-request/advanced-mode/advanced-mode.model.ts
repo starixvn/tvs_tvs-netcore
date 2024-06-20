@@ -1,4 +1,3 @@
-import { StaticService } from '../../../../utility/services/static.service';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 
@@ -10,8 +9,9 @@ export class Item {
   isChecked: boolean;
   isMultiple: boolean;
   xmlAttribute: string;
+  format: string;
 
-  constructor(index: number, name: string, value: string, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string) {
+  constructor(index: number, name: string, value: string, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string) {
     this.index = index;
     this.name = name;
     this.value = value;
@@ -19,6 +19,7 @@ export class Item {
     this.isMultiple = isMultiple;
     this.isChecked = false;
     this.xmlAttribute = xmlAttribute;
+    this.format = format;
   }
 }
 
@@ -32,7 +33,7 @@ export class Selection {
   xmlAttribute: string;
   isDisabled: boolean;
 
-  constructor(index: number,name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string) {
+  constructor(index: number, name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string) {
     this.index = index;
     this.name = name;
     this.value = value;
@@ -76,18 +77,11 @@ export class BetTeamAddRequestResult {
   wicket: string;
   over: string;
   player: string;
-  quarter: string;
-  set: string;
-  game: string;
-  map: string;
-  round: string;
-  point: string;
-  kill: string;
-  tower: string;
-  turret: string;
-  ball: string;
-  delivery: string;
   playerAndOdds: string;
+  betIdX: string;
+  betIdY: string;
+  filterBetIdX: string;
+  filterBetIdY: string;
 }
 
 export class BetTeamAddRequest {
@@ -169,7 +163,7 @@ export class BetTeamAddRequest {
     this.inputs = [];
     if (inputs !== null) {
       for (const [index, input] of inputs.entries()) {
-        const temp = new Item(index, input.name, input.value, input.isDisabled, input.isMultiple, input.xmlAttribute);
+        const temp = new Item(index, input.name, input.value, input.isDisabled, input.isMultiple, input.xmlAttribute, input.format);
         this.inputs.push(temp);
       }
     }
@@ -205,7 +199,7 @@ export class BetTeamAddRequest {
   updateByInputs(result: BetTeamAddRequestResult) {
     if (this.inputs.length > 0) {
       this.inputs.forEach(input => {
-        this.updateResult(result, input.xmlAttribute, input.value ? input.value : '');
+        this.updateResult(result, input.xmlAttribute, input.value ?? '');
       });
     }
   }
@@ -218,60 +212,64 @@ export class BetTeamAddRequest {
       case 'hdp':
         result.hdp = value;
         break;
-      case 'wicket':
-        result.wicket = this.getWicketValue(value);
-        break;
-      case 'over':
-        result.over = value;
-        break;
       case 'player':
         result.player = value;
-        break;
-      case 'quarter':
-        result.quarter = value;
-        break;
-      case 'set':
-        result.set = value;
-        break;
-      case 'game':
-        result.game = value;
-        break;
-      case 'map':
-        result.map = value;
-        break;
-      case 'round':
-        result.round = value;
-        break;
-      case 'point':
-        result.point = value;
-        break;
-      case 'kill':
-        result.kill = value;
-        break;
-      case 'tower':
-        result.tower = value;
-        break;
-      case 'turret':
-        result.turret = value;
-        break;
-      case 'ball':
-        result.ball = value;
-        break;
-      case 'delivery':
-        result.delivery = value;
         break;
       case 'playerandodds':
         result.playerAndOdds = value;
         break;
+      case '_xxx':
+        result.betIdX = this.getValueBetIdTypeXxx(value);
+        break;
+      case '_xx':
+        result.betIdX = value;
+        result.filterBetIdX = this.getValueBetIdTypeXx(value);
+        break;
+      case 'yy':
+        result.betIdY = value;
+        result.filterBetIdY = this.getValueBetIdTypeYy(value);
+        break;
+      case 'betidx':
+        result.betIdX = value;
+        result.filterBetIdX = value;
+        break;
+      case 'betidy':
+        result.betIdY = value;
+        result.filterBetIdY = value;
+        break;
     }
   }
 
-  getWicketValue(text: string): string {
-    if (!text) {
-        return '';
+  getValueBetIdTypeXxx(value: string): string {
+    if (!value) {
+      return '____';
     }
 
-    let values = text.split('&').map(x => StaticService.convertStringToBetId8xxx(x));
-    return values.join('&');
+    return value.split('&')
+      .filter(Boolean)
+      .map(x => `_${x.padStart(3, '0')}`)
+      .join('&');
+  }
+
+  getValueBetIdTypeXx(value: string): string {
+    if (!value) {
+      return '___';
+    }
+
+    return value.split('&')
+      .filter(Boolean)
+      .map(x => `_${x.padStart(2, '0')}`)
+      .join('&');
+  }
+
+  getValueBetIdTypeYy(value: string): string {
+    if (!value) {
+      return '';
+    }
+
+    return value.split('&')
+      .filter(Boolean)
+      .map(y => y ? y.padStart(2, '0') : '__')
+      .join('&');
   }
 }

@@ -13,7 +13,7 @@ export class ValidationService {
   private readonly PLAYER_CLASS = 'player-dropdown';
   private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';
 
-  public validateCommonData(eventLeague: EventLeagueComponent, filterTimeComponent: FilterTimeComponent, advancedMode: AdvancedModeAddRequestComponent): boolean {
+  public validateCommonData(eventLeague: EventLeagueComponent, filterTimeComponent: FilterTimeComponent, advancedMode?: AdvancedModeAddRequestComponent): boolean {
     if (!eventLeague.isMatchIdValid()) {
       return false;
     }
@@ -22,7 +22,7 @@ export class ValidationService {
       return false;
     }
 
-    if (!advancedMode.isValidity()) {
+    if (advancedMode && !advancedMode.isValidity()) {
       return false;
     }
 

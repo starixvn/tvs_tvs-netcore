@@ -123,6 +123,10 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   }
 
   async refreshEvent() {
+    if (!this.validationService.validateCommonData(this.eventLeague, this.filterTimeComponent)) {
+      return;
+    }
+
     this.resetLogInfo();
     await this.getGroupBetTypes();
     const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
