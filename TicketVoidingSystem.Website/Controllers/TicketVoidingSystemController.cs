@@ -11,23 +11,27 @@ namespace TicketVoidingSystem.Website.Controllers;
 
 using Fanex.NAP.Client.Helpers.Business;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.SharedApi.Services.Analytics;
 
 [Route("[controller]/[action]")]
 public class TicketVoidingSystemController : Controller
 {
     private readonly IMediator mediator;
+    private readonly UserActionLogService userActionLogService;
 
-    public TicketVoidingSystemController(IMediator mediator)
+    public TicketVoidingSystemController(IMediator mediator, UserActionLogService userActionLogService)
     {
         this.mediator = mediator;
+        this.userActionLogService = userActionLogService;
     }
 
     [HttpGet]
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ABExceptionList, Policy = Constant.Policy.Read)]
-    public IActionResult ABExceptionList()
+    public async Task<IActionResult> ABExceptionList()
     {
+        await userActionLogService.LogAccessFunction(nameof(ABExceptionList));
         return View("~/wwwroot/dist/ab-exception-list/index.cshtml");
     }
 
@@ -38,6 +42,7 @@ public class TicketVoidingSystemController : Controller
         var isHasPermission = await mediator.Send(new CheckAccessRequestPermissionRequest { RequestId = id });
         if (isHasPermission)
         {
+            await userActionLogService.LogAccessFunction(nameof(VoidRequest));
             return View("~/wwwroot/dist/ticket-voiding-system/void-request/index.cshtml");
         }
 
@@ -47,24 +52,27 @@ public class TicketVoidingSystemController : Controller
     [HttpGet]
     [Route("")]
     [Route("Index")]
-    public ActionResult ManageRequest()
+    public async Task<ActionResult> ManageRequest()
     {
+        await userActionLogService.LogAccessFunction(nameof(ManageRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/manage-request/index.cshtml");
     }
 
     [HttpGet]
     [Route("")]
     [Route("Index")]
-    public ActionResult AddRequest()
+    public async Task<ActionResult> AddRequest()
     {
+        await userActionLogService.LogAccessFunction(nameof(AddRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
     }
 
     [HttpPost]
     [Route("")]
     [AllowAnonymous]
-    public ActionResult AddRequestFromCTS(AddRequestFromCTSModel model)
+    public async Task<ActionResult> AddRequestFromCTS(AddRequestFromCTSModel model)
     {
+        await userActionLogService.LogAccessFunction(nameof(AddRequestFromCTS));
         TempData["AddRequestFromCTS"] = JsonSerializer.Serialize(model);
         var routeValues = new
         {
@@ -79,8 +87,9 @@ public class TicketVoidingSystemController : Controller
 
     [HttpGet]
     [Route("Index/{id}")]
-    public ActionResult EditRequest(int id)
+    public async Task<ActionResult> EditRequest(int id)
     {
+        await userActionLogService.LogAccessFunction(nameof(EditRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/edit-request/index.cshtml");
     }
 
@@ -99,6 +108,7 @@ public class TicketVoidingSystemController : Controller
     [AllowAnonymous]
     public IActionResult ManageVoidServicesNoAuth()
     {
+        ViewBag.IsAllowAnonymousPage = true;
         return View("~/wwwroot/dist/manage-void-services/index.cshtml");
     }
 }

@@ -1,7 +1,9 @@
-﻿using Fanex.NAP.Client.Attributes;
+﻿using System.Threading.Tasks;
+using Fanex.NAP.Client.Attributes;
 using Fanex.NAP.Client.Helpers.Business;
 using Microsoft.AspNetCore.Mvc;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.SharedApi.Services.Analytics;
 using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
@@ -10,10 +12,12 @@ namespace TicketVoidingSystem.Website.Controllers;
 public class SportBookController : Controller
 {
     private readonly SessionService sessionService;
+    private readonly UserActionLogService userActionLogService;
 
-    public SportBookController(SessionService sessionService)
+    public SportBookController(SessionService sessionService, UserActionLogService userActionLogService)
     {
         this.sessionService = sessionService;
+        this.userActionLogService = userActionLogService;
     }
 
     [HttpGet]
@@ -29,8 +33,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidSingleBet, Policy = Constant.Policy.Read)]
-    public IActionResult VoidSingleBet()
+    public async Task<IActionResult> VoidSingleBet()
     {
+        await userActionLogService.LogAccessFunction(nameof(VoidSingleBet));
         return View("~/wwwroot/dist/void-single-bet/index.cshtml");
     }
 
@@ -38,8 +43,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByCurrency, Policy = Constant.Policy.Read)]
-    public IActionResult VoidByCurrency()
+    public async Task<IActionResult> VoidByCurrency()
     {
+        await userActionLogService.LogAccessFunction(nameof(VoidByCurrency));
         return View("~/wwwroot/dist/old-page/void-by-currency/index.cshtml");
     }
 
@@ -47,8 +53,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.VoidByBetID, Policy = Constant.Policy.Read)]
-    public IActionResult VoidByBetId()
+    public async Task<IActionResult> VoidByBetId()
     {
+        await userActionLogService.LogAccessFunction(nameof(VoidByBetId));
         ViewBag.UserName = sessionService.UserName;
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/VoidByBetId/Index.cshtml");
@@ -58,8 +65,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.CancelCashOutAction)]
-    public IActionResult CancelCashOut()
+    public async Task<IActionResult> CancelCashOut()
     {
+        await userActionLogService.LogAccessFunction(nameof(SpecialDeleteFunctionKeys.CancelCashOutAction));
         ViewBag.UserName = sessionService.UserName;
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/CancelCashOut/Index.cshtml");
@@ -69,8 +77,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverCashOutTransaction)]
-    public IActionResult RecoverCashOut()
+    public async Task<IActionResult> RecoverCashOut()
     {
+        await userActionLogService.LogAccessFunction(nameof(SpecialDeleteFunctionKeys.RecoverCashOutTransaction));
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/RecoverCashOut/Index.cshtml");
     }
@@ -79,8 +88,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverSportsbookBet)]
-    public IActionResult RecoverBet()
+    public async Task<IActionResult> RecoverBet()
     {
+        await userActionLogService.LogAccessFunction(nameof(SpecialDeleteFunctionKeys.RecoverSportsbookBet));
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/RecoverBet/Index.cshtml");
     }
@@ -89,8 +99,9 @@ public class SportBookController : Controller
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverParlayBet, Policy = Constant.Policy.Read)]
-    public IActionResult RecoverParlayBet()
+    public async Task<IActionResult> RecoverParlayBet()
     {
+        await userActionLogService.LogAccessFunction(nameof(RecoverParlayBet));
         ViewBag.IsPageUsingJquery = true;
         return View("~/Views/RecoverParlayBet/Index.cshtml");
     }

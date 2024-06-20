@@ -30,6 +30,11 @@
         <script src="~/lib/jquery/dist/jquery-1.8.2.min.js"></script>
         <script src="~/lib/jquery/dist/jquery-blockui.1.33.min.js"></script>
         <script src="~/js/sub-parlay-ticket.js"></script>
-        <script src="~/nap-auth/re-checkin.js"></script>
+
+        @if (ViewBag.IsAllowAnonymousPage == null || !ViewBag.IsAllowAnonymousPage)
+        {
+            <script src="~/nap-auth/re-checkin.js"></script>
+        }
+
     </body>
 </html>
