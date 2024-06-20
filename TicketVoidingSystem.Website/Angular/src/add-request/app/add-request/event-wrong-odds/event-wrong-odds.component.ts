@@ -13,8 +13,7 @@ import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { CommonService } from '../../../../utility/services/common.service';
-import { OddsInfoModel } from './models/filter-wrong-odds.model';
+import { CalculateOddsService } from './services/calculate-odds.service';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -42,7 +41,7 @@ export class EventWrongOddsComponent implements OnInit {
     private readonly logInfoService: LogInfoService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
-    private readonly commonService: CommonService
+    private readonly calculateOddsService: CalculateOddsService
     ) { }
 
   ngOnInit(): void {
@@ -101,8 +100,9 @@ export class EventWrongOddsComponent implements OnInit {
 
   public async changeMatchEvent(): Promise<void> {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-    this.logInfoEvent.matchId = this.leagueEventWrongOddsComponent?.selectedMatch.matchId;    
-    await this.updateOddsInfoOffFilter();
+    this.logInfoEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds,   
+      this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.updateMatchId.emit(this.logInfoEvent.matchId)
   }
@@ -110,18 +110,5 @@ export class EventWrongOddsComponent implements OnInit {
   public resetLogInfoOfEvent(): void {
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
-  }
-
-  private async updateOddsInfoOffFilter(): Promise<void> {
-    if(this.eventLeagueComponent?.selectedMatch){
-      this.logInfoEvent.filterWrongOdds.oddsInfo.matchId = this.eventLeagueComponent?.selectedMatch.matchId,
-      this.logInfoEvent.filterWrongOdds.oddsInfo.parentId = this.eventLeagueComponent?.selectedMatch.parentId,
-      this.logInfoEvent.filterWrongOdds.oddsInfo.subtype = this.eventLeagueComponent?.selectedMatch.subtype ?? 0,
-      this.logInfoEvent.filterWrongOdds.oddsInfo.subIssueTypeId = parseInt(this.filter?.subIssueTypeId)
-      const maxBetAndSpread =  await this.commonService.getMaxBetAndSpreadOfEvent(this.logInfoEvent.filterWrongOdds.oddsInfo);
-      this.logInfoEvent.filterWrongOdds.oddsInfo.maxBet = maxBetAndSpread.maxBet;
-      this.logInfoEvent.filterWrongOdds.oddsInfo.spread = maxBetAndSpread.spread;
-    }
-    
   }
 }

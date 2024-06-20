@@ -62,12 +62,12 @@ export class OddsInfoModel {
   matchId: number;
   parentId: number;
   subtype: number;
-  subIssueTypeId: number;
-  spread: number;
+  subIssueTypeId: string;
+  spread: string;
   maxBet?: number;
   allowanceRate?: string;
-  correctOddsHomeOver?: number;
-  correctOddsAwayUnder?: number;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
   fromOddsNotVoidHomeOver?: number;
   toOddsNotVoidHomeOver?: number;
   fromOddsNotVoidAwayUnder?: number;

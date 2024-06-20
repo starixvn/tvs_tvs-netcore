@@ -15,11 +15,10 @@
   }
 
   ::ng-deep .ng-select .ng-select-container {
-    width: 130px;
     min-height: auto;
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
-    border-right: 0;
+    border-radius: 2px;
   }
 
   .filter-odds-type {
@@ -62,6 +61,9 @@
     }
   }
 
+  .filter-spread{
+    padding-top: 3px;
+  }
   .filter-favorite-type,
   .filter-ou-type {
     margin-right: 37px;
@@ -91,5 +93,9 @@
 
 .input-group-text{
   padding: 4px 8px;
+  width: 130px;
+}
+
+.custom-sm{
   width: 130px;
 }

@@ -6,6 +6,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterFavoriteType, FilterOddsType, FilterOuType, FilterWrongOddsModel, OddsInfoModel } from '../models/filter-wrong-odds.model';
 import { ValidationService } from '../services/validation.service';
 import { AllowanceRate } from '../../../../../utility/constants/config';
+import { CalculateOddsService } from '../services/calculate-odds.service';
 
 @Component({
   selector: 'filter-wrong-odds',
@@ -31,7 +32,8 @@ export class FilterWrongOddsComponent {
   
   constructor(
     private readonly element: ElementRef,
-    private readonly validationService: ValidationService) {
+    private readonly validationService: ValidationService,
+    private readonly calculateOddsService: CalculateOddsService) {
       this.tooltip.element = this.element;
     }
 
@@ -41,22 +43,6 @@ export class FilterWrongOddsComponent {
 
   public getDurationTime(): string {
     return StaticService.getDurationTime(this.fromTimeComponent, this.toTimeComponent, this.filterWrongOddsModel.filterFromTransTime, this.filterWrongOddsModel.filterToTransTime);
-  }
-
-  public isValidMultipleOdds(value: string, elementClass: string): boolean {
-    if(!StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
-      return false;
-    }
-
-    return this.validationService.isValidOddsValueHaveNotZero(value, this.tooltip, elementClass);
-  }
-
-  public isValidSingleOdds(value: string, elementClass: string): boolean {
-    if(!StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
-      return false;
-    }
-
-    return this.validationService.isValidOddsValueHaveNotZero(value, this.tooltip, elementClass);
   }
 
   public isCorrectFormatMultipleDecimal(value: string, elementClass: string): boolean {
@@ -83,5 +69,16 @@ export class FilterWrongOddsComponent {
 
   private isValidFilter(): boolean {
     return this.validationService.isValidFilterWrongOdds(this.filterWrongOddsModel, this.tooltip, this.subIssueTypeId);
+  }
+
+  public changeCorrectOdds(): void {
+
+  }
+
+  public changeSpread(): void {
+    const isValidSpread = this.validationService.isValidSpread(this.filterWrongOddsModel.oddsInfo.spread, this.tooltip);
+    if(isValidSpread){
+      this.calculateOddsService.updateAllowanceRate(this.filterWrongOddsModel.oddsInfo);
+    }
   }
 }

@@ -10,6 +10,7 @@ import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-w
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { Type } from '../../../../../ticket-listing/app/filter/filter.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ValidationService {
   private readonly OU_INPUT_CLASS = 'ou-input';
   private readonly FILTER_LIVE_INDICATOR_CLASS = 'filter-live-indicator';
   private readonly FILTER_BET_TEAM_CLASS = 'filter-bet-team';
-
+  private readonly SPREAD_INPUT_CLASS = 'spread-input';
   constructor() {
   }
 
@@ -46,14 +47,6 @@ export class ValidationService {
   }
 
   public isValidFilterWrongOdds(filterWrongOddsModel: FilterWrongOddsModel, tooltip: Tooltip, subIssueTypeId: string): boolean {
-    if (!this.isValidFilterOddsType(filterWrongOddsModel, tooltip)) {
-      return false;
-    }
-
-    if (!this.isValidFilterCorrectValue(filterWrongOddsModel, tooltip)) {
-      return false;
-    }
-
     if (!this.isSubTypeOuOr1stOu(subIssueTypeId) && !this.isValidFilterFavorite(filterWrongOddsModel, tooltip)) {
       return false;
     }
@@ -67,6 +60,14 @@ export class ValidationService {
     }
 
     if (!this.isSubTypeOuOr1stOu(subIssueTypeId) && !this.isValidFilterBetTeam(filterWrongOddsModel, tooltip)) {
+      return false;
+    }
+
+    if (!this.isValidSpread(filterWrongOddsModel.oddsInfo.spread, tooltip)){
+      return false;
+    }
+
+    if (!this.isValidFilterCorrectOddsValue(filterWrongOddsModel.oddsInfo.correctOddsHomeOver, filterWrongOddsModel.oddsInfo.spread, tooltip)) {
       return false;
     }
 
@@ -113,73 +114,6 @@ export class ValidationService {
     return StaticService.isCorrectFormatMultipleDecimal(filter.favoriteValue, this.FAVORITE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS);
   }
 
-  private isValidFilterCorrectValue(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
-    if (!filter.correctOdds) {
-      tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    return StaticService.isCorrectFormatMultipleDecimal(filter.correctOdds, this.CORRECT_ODDS_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS);
-  }
-
-  private isValidFilterOddsType(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
-   return (filter.filterOddsType === FilterOddsTypeConstant.VALUE && this.isValidFilterOddsValue(filter.oddsValue, tooltip))
-    || (filter.filterOddsType === FilterOddsTypeConstant.RANGE && this.isValidFilterOddsRange(filter.fromOdds, filter.toOdds, tooltip));
-  }
-
-  private isValidFilterOddsValue(oddsValue: string, tooltip: Tooltip): boolean {
-    if (!oddsValue) {
-      tooltip.display(this.ODDS_VALUE_INPUT_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    if(!StaticService.isCorrectFormatMultipleDecimal(oddsValue, this.ODDS_VALUE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS)) {
-      return false;
-    }
-
-    if (this.isValidOddsValueHaveNotZero(oddsValue, tooltip, this.ODDS_VALUE_INPUT_CLASS)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  public isValidOddsValueHaveNotZero(oddsValue: string, tooltip: Tooltip, elementClass: string): boolean {
-    if (oddsValue.split('&').some(x => Number(x) === 0)) {
-      tooltip.display(elementClass, TEXT.INVALID_ODDS);
-      return true;
-    }
-
-    return false;
-  }
-
-  private isValidFilterOddsRange(fromOdds: string, toOdds: string, tooltip: Tooltip): boolean {
-    if (!fromOdds) {
-      tooltip.display(this.FROM_ODDS_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    if (!toOdds) {
-      tooltip.display(this.TO_ODDS_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    if (!StaticService.isCorrectFormatSingleDecimal(fromOdds, this.FROM_ODDS_CLASS, tooltip, TEXT.INVALID_ODDS) ||
-      !StaticService.isCorrectFormatSingleDecimal(toOdds, this.TO_ODDS_CLASS, tooltip, TEXT.INVALID_ODDS)) {
-        return false;
-    }
-
-    if (this.isValidOddsValueHaveNotZero(fromOdds, tooltip, this.FROM_ODDS_CLASS)) {
-      return false;
-    }
-
-    if (this.isValidOddsValueHaveNotZero(toOdds, tooltip, this.TO_ODDS_CLASS)) {
-      return false;
-    }
-
-    return true;
-  }
-
   public isSubTypeOuOr1stOu(subIssueTypeId: string): boolean {
     return this.isSubTypeOu(subIssueTypeId) || this.isSubType1stOu(subIssueTypeId);
   }
@@ -200,4 +134,35 @@ export class ValidationService {
 
     return isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
+
+  public isValidSpread(spread: string, tooltip: Tooltip){
+    if (_.isNull(spread) || _.isEmpty(spread.trim())) {
+      tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
+      return false;
+    }
+
+    const spreadValue = Number(spread);
+    if(!isNaN(spreadValue) && spreadValue >= 0 && spreadValue <= 1){
+      return true;
+    }
+
+    tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
+      return false;
+  }
+  
+  private isValidFilterCorrectOddsValue(homeCorrectOdds: string, spread: string, tooltip: Tooltip): boolean {
+    if (_.isNull(homeCorrectOdds) || _.isEmpty(homeCorrectOdds.trim())) {
+      tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_CORRECT_ODDS);
+      return false;
+    }
+    const homeCorrectOddsValue = Number(homeCorrectOdds);
+    const spreadValue = Number(spread);
+    if (isNaN(homeCorrectOddsValue) || Math.abs(Number(homeCorrectOddsValue)) < spreadValue || Math.abs(Number(homeCorrectOddsValue)) > 1) {
+      tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_CORRECT_ODDS);
+      return false;
+    }
+
+    return true;
+  }
+
 }
