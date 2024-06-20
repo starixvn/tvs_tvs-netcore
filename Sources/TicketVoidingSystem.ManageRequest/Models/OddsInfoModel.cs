@@ -8,14 +8,3 @@ public class OddsInfoModel
 
     public decimal Spread { get; set; }
 }
-
-public class OddsInfoRequest
-{
-    public int MatchId { get; set; }
-
-    public int ParentId { get; set; }
-
-    public int SubType { get; set; }
-
-    public int SubIssueTypeId { get; set; }
-}

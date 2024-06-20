@@ -3,11 +3,11 @@
 public class OWPMaxBetAndSpreadInfo
 {
     public int AdminSiteID { get; set; }
-    public SubIssueTypeWrongOdds Spread { get; set; }
-    public SubIssueTypeWrongOdds Maxbet { get; set; }
+    public MaxbetSpreadByBetType Spread { get; set; }
+    public MaxbetSpreadByBetType Maxbet { get; set; }
 }
 
-public class SubIssueTypeWrongOdds
+public class MaxbetSpreadByBetType
 {
     public decimal Handicap { get; set; }
     public decimal OverUnder { get; set; }
