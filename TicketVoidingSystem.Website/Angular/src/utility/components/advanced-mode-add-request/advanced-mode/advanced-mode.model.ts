@@ -219,7 +219,8 @@ export class BetTeamAddRequest {
         result.playerAndOdds = value;
         break;
       case '_xxx':
-        result.betIdX = this.getValueBetIdTypeXxx(value);
+        result.betIdX = value;
+        result.filterBetIdX = this.getValueBetIdTypeXxx(value);
         break;
       case '_xx':
         result.betIdX = value;

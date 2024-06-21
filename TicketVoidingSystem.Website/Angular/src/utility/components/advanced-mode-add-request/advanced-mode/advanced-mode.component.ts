@@ -226,22 +226,24 @@ export class AdvancedModeComponent {
   }
 
   private renderSelectionCricketWithPlayer(betTeam: BetTeamAddRequest, baseBetType: Selection[]): void {
-    const items: Selection[] = [];
-    baseBetType.forEach(x => {
-      if (betTeam.betTypes.includes(x.value)) {
-        items.push(...x.items);
-      }
-    });
     const playerSelection = betTeam.selections.find(x => x.name === 'Player:');
-    if (playerSelection) {
-      playerSelection.items = [];
-      playerSelection.items.push(..._.uniqWith(items, _.isEqual));
-    }
-    betTeam.selections.forEach(x => {
-      if (x.name === 'Player:') {
-        x.multiSelection = betTeam.renderMultipleSelection(x);
+    if (playerSelection.multiSelection?.multipleSelect.items.length === 0) {
+      const items: Selection[] = [];
+      baseBetType.forEach(x => {
+        if (betTeam.betTypes.includes(x.value)) {
+          items.push(...x.items);
+        }
+      });
+      if (playerSelection) {
+        playerSelection.items = [];
+        playerSelection.items.push(..._.uniqWith(items, _.isEqual));
       }
-    });
+      betTeam.selections.forEach(x => {
+        if (x.name === 'Player:') {
+          x.multiSelection = betTeam.renderMultipleSelection(x);
+        }
+      });
+    }
   }
 
   isValidity(): boolean {
