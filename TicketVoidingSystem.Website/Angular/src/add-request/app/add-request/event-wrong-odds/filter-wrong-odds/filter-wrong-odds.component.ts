@@ -83,6 +83,11 @@ export class FilterWrongOddsComponent {
     const isValidSpread = this.validationService.isValidSpread(this.filterWrongOddsModel.oddsInfo.spread, this.tooltip);
     if(isValidSpread){
       this.calculateOddsService.updateAllowanceRate(this.filterWrongOddsModel.oddsInfo);
+      this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel.oddsInfo);
     }
+  }
+
+  public changeAllowanceRate(): void{
+    this.calculateOddsService.calculateOddsRange(this.filterWrongOddsModel.oddsInfo);
   }
 }
