@@ -17,5 +17,8 @@ public class AnalyticsController : ControllerBase
     }
 
     [HttpPost]
+    public async Task<IActionResult> LogAccessFunction(LogAccessFunctionRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
     public async Task<IActionResult> LogChangeContent(LogChangeContentRequest request) => Ok(await mediator.Send(request));
 }
