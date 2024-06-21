@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
 import { AddRequestStore } from './add-request.store';
@@ -25,7 +26,7 @@ import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { RequestModel } from './models/request.model';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
-import { MatchModel } from '../../../utility/models/match.model';
+import { LogAccessIssueTypeService } from './services/log-access-issue-type.service';
 
 @Component({
   selector: 'add-request',
@@ -71,10 +72,12 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   abnormalFilterBySubscription = new Subscription();
   abnormalFilterBy: number;
   parentMatchId: number = null;
+  accessIssueTypeCount = new Map<string,number>();
 
   constructor(
     private readonly addRequestStore: AddRequestStore,
-    private readonly copyRequestInfoService: CopyRequestInfoService
+    private readonly copyRequestInfoService: CopyRequestInfoService,
+    private readonly logAccessIssueTypeService:LogAccessIssueTypeService
   ) { }
 
   ngOnInit(): void {
@@ -109,13 +112,15 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onChangeIssueType(issueTypeId: string): void {
+  async onChangeIssueType(issueTypeId: string): Promise<void> {
     if (!this.isEdit && (StaticService.isAbnormalBet(issueTypeId)
         || StaticService.isAbnormalAccount(issueTypeId))) {
       this.model.others.decidedBy = document.getElementById('body').getAttribute('user-name');
     } else {
       this.model.others.decidedBy = '';
     }
+
+    await this.logAccessIssueTypeService.writeLog(this.isEdit, issueTypeId, this.accessIssueTypeCount);
   }
 
   updateMatchId(matchId: number): void {
