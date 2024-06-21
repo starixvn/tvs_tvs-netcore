@@ -129,7 +129,8 @@
 
 <div class="filter-correct-odds input-group input-group-sm d-flex mr-2">
   <div class="malay-odds">
-    <span>Home Team (Malay Odds)</span>
+    <span *ngIf="!isSubTypeOuOr1stOu()">Home Team (Malay Odds)</span>
+    <span *ngIf="isSubTypeOuOr1stOu()">Over (Malay Odds)</span>
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
         <span class="input-group-text">
@@ -143,7 +144,8 @@
     </div>
   </div>
   <div class="malay-odds ml-3 pl-3">
-    <span>Away Team</span>
+    <span *ngIf="!isSubTypeOuOr1stOu()">Away Team</span>
+    <span *ngIf="isSubTypeOuOr1stOu()">Under</span>
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
         <span class="input-group-text">

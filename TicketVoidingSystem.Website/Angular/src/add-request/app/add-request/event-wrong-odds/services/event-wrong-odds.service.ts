@@ -18,17 +18,17 @@ export class EventWrongOddsService {
     private readonly addRequestApiService: AddRequestApiService,
   ) {}
 
-  public initDefaultFilter(loginfoEvent: LogInfoWrongOdds): void {
-    loginfoEvent.filterWrongOdds = new FilterWrongOddsModel();
-    loginfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.VALUE;
-    loginfoEvent.filterWrongOdds.filterFavoriteType = FilterFavoriteTypeConstant.HOME;
-    loginfoEvent.filterWrongOdds.filterOuType = FilterOuTypeConstant.OVER;
-    loginfoEvent.filterWrongOdds.betTeam = FilterBetTeamConstant.HOME;
-    loginfoEvent.filterWrongOdds.oddsInfo = new OddsInfoModel();
-    loginfoEvent.filterWrongOdds.oddsInfo.allowanceRate = AllowanceRate.ALLOWANCE_RATE[0].value;
+  public initDefaultFilter(logInfoEvent: LogInfoWrongOdds): void {
+    logInfoEvent.filterWrongOdds = new FilterWrongOddsModel();
+    logInfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.VALUE;
+    logInfoEvent.filterWrongOdds.filterFavoriteType = FilterFavoriteTypeConstant.HOME;
+    logInfoEvent.filterWrongOdds.filterOuType = FilterOuTypeConstant.OVER;
+    logInfoEvent.filterWrongOdds.betTeam = FilterBetTeamConstant.HOME;
+    logInfoEvent.filterWrongOdds.oddsInfo = new OddsInfoModel();
+    logInfoEvent.filterWrongOdds.oddsInfo.allowanceRate = AllowanceRate.ALLOWANCE_RATE[0].value;
     const currentMoment = moment.utc().tz('America/Caracas');
-    loginfoEvent.filterWrongOdds.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    loginfoEvent.filterWrongOdds.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    logInfoEvent.filterWrongOdds.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    logInfoEvent.filterWrongOdds.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
 
   public initDefaultLogInfoWrongOdds(): LogInfoWrongOdds {

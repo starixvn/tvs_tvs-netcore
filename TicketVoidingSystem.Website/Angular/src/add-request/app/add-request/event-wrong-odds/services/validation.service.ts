@@ -10,7 +10,6 @@ import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-w
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { Type } from '../../../../../ticket-listing/app/filter/filter.model';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +66,7 @@ export class ValidationService {
       return false;
     }
 
-    if (!this.isValidFilterCorrectOddsValue(filterWrongOddsModel.oddsInfo.correctOddsHomeOver, filterWrongOddsModel.oddsInfo.spread, tooltip)) {
+    if (!this.isValidFilterCorrectOdds(filterWrongOddsModel.oddsInfo.correctOddsHomeOver, filterWrongOddsModel.oddsInfo.spread, tooltip)) {
       return false;
     }
 
@@ -136,7 +135,7 @@ export class ValidationService {
   }
 
   public isValidSpread(spread: string, tooltip: Tooltip){
-    if (_.isNull(spread) || _.isEmpty(spread.trim())) {
+    if (!spread || _.isEmpty(spread.trim())) {
       tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
       return false;
     }
@@ -147,11 +146,11 @@ export class ValidationService {
     }
 
     tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
-      return false;
+    return false;
   }
   
-  private isValidFilterCorrectOddsValue(homeCorrectOdds: string, spread: string, tooltip: Tooltip): boolean {
-    if (_.isNull(homeCorrectOdds) || _.isEmpty(homeCorrectOdds.trim())) {
+  public isValidFilterCorrectOdds(homeCorrectOdds: string, spread: string, tooltip: Tooltip): boolean {
+    if (!homeCorrectOdds || _.isEmpty(homeCorrectOdds.trim())) {
       tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_CORRECT_ODDS);
       return false;
     }

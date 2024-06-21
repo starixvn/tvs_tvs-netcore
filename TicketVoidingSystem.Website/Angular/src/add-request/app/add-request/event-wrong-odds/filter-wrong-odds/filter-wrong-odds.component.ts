@@ -72,7 +72,11 @@ export class FilterWrongOddsComponent {
   }
 
   public changeCorrectOdds(): void {
-
+    const isValidCorrectOdds = this.validationService.isValidFilterCorrectOdds(this.filterWrongOddsModel.oddsInfo.correctOddsHomeOver, 
+      this.filterWrongOddsModel.oddsInfo.spread, this.tooltip);
+    if(isValidCorrectOdds){
+      this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel.oddsInfo);
+    }
   }
 
   public changeSpread(): void {
