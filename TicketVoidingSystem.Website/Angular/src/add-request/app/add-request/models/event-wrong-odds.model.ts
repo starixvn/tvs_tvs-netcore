@@ -1,4 +1,5 @@
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
+import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 
 export class WrongOddsModel {
   matchId: number;
@@ -16,7 +17,7 @@ export class WrongOddsModel {
   toOdds: string;
   correctOdds: string;
   betTeam: string;
-  ouValue: string;
+  wrongOU: string;
   favoriteValue: string;
   logInfoDetail: LogInfoDetail;
   poolHouseCheckedBetTypes : string;
@@ -24,4 +25,5 @@ export class WrongOddsModel {
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
   liveIndicator: number;
+  oddsInfo: OddsInfo;
 }

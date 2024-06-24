@@ -26,5 +26,14 @@ public class WrongOddsViewModel
     public string? PoolHouseCheckedBetTypes { get; set; }
     public bool IsLinkGroup1X2 { get; set; }
     public bool IsLinkGroupAIO { get; set; }
+    public string? WrongOU { get; set; }
+    public string? Spread { get; set; }
+    public string? AllowanceRate { get; set; }
+    public string? CorrectOddsHomeOver { get; set; }
+    public string? CorrectOddsAwayUnder { get; set; }
+    public string? FromOddsNotVoidHomeOver { get; set; }
+    public string? ToOddsNotVoidHomeOver { get; set; }
+    public string? FromOddsNotVoidAwayUnder { get; set; }
+    public string? ToOddsNotVoidAwayUnder { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
 }

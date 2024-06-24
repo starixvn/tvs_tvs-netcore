@@ -111,7 +111,7 @@ export class MappingModelStaticService {
       toOdds: x.toOdds,
       correctOdds: x.correctOdds,
       betTeam: x.betTeam,
-      ouValue: x.ouValue,
+      wrongOU: x.wrongOU,
       favoriteValue: x.favoriteValue
     } as WrongOddsGetLogInfoQuery));
   }

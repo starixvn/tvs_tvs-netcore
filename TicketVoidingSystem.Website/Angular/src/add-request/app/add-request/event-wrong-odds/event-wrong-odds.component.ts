@@ -67,6 +67,8 @@ export class EventWrongOddsComponent implements OnInit {
 
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
+    this.logInfoEvent.linkedLogsViewModel.isLinkGroup1X2 = true;
+    this.logInfoEvent.linkedLogsViewModel.isLinkGroupAIO = true;
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
     this.primitiveProps.isShowValidation = true;
     this.addRequestStore.changeBlockingUiStatus(false);

@@ -29,14 +29,16 @@ export class GetLinkedLogQuery {
   wrongMarket: string;
   liveIndicator: number;
 
-  filterOddsType: string;
   filterFavoriteType: string;
-  filterOuType: string;
-  oddsValue: string;
-  fromOdds: string;
-  toOdds: string;
-  betTeam: string;
-  ouValue: string;
   favoriteValue: string;
-  correctOdds: string;
+  wrongOU : string;
+
+  spread: string;
+  allowanceRate?: string;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
+  fromOddsNotVoidHomeOver?: string;
+  toOddsNotVoidHomeOver?: string;
+  fromOddsNotVoidAwayUnder?: string;
+  toOddsNotVoidAwayUnder?: string;
 }

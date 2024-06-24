@@ -96,12 +96,12 @@ export class ValidationService {
   }
 
   private isValidFilterOu(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
-    if (!filter.ouValue) {
+    if (!filter.wrongOU) {
       tooltip.display(this.OU_INPUT_CLASS, TEXT.REQUIRED_FIELD);
       return false;
     }
 
-    return StaticService.isCorrectFormatMultipleDecimal(filter.ouValue, this.OU_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS);
+    return StaticService.isCorrectFormatMultipleDecimal(filter.wrongOU, this.OU_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS);
   }
 
   private isValidFilterFavorite(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {

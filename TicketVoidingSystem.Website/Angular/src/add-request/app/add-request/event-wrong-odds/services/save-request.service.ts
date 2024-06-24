@@ -157,7 +157,7 @@ export class SaveRequestService {
     }
 
     if (this.validationService.isSubTypeOuOr1stOu(subIssueTypeId)) {
-      model.ouValue = logInfoWrongOdds.filterWrongOdds.ouValue;
+      model.wrongOU = logInfoWrongOdds.filterWrongOdds.wrongOU;
     } else {
       model.betTeam = logInfoWrongOdds.filterWrongOdds.betTeam;
       model.favoriteValue = logInfoWrongOdds.filterWrongOdds.favoriteValue;

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { OddsInfoModel } from '../models/filter-wrong-odds.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
-import { isEmpty } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +32,10 @@ export class CalculateOddsService {
   }
   
   public updateMaxBetAbsSpread(oddsInfo: OddsInfoModel, subIssueTypeId: string){
+    if(!oddsInfo.maxBetAndSpreadInfo){
+      return;
+    }
+
     oddsInfo.subIssueTypeId = subIssueTypeId;
     oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.maxBet ?? 0;
     oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.spread ?? "0";
@@ -54,7 +57,7 @@ export class CalculateOddsService {
 
   public updateCorrectOddsAwayUnder(oddsInfo: OddsInfoModel): void {
     const precision = 2; // Define the number of decimal places
-    if(isEmpty(oddsInfo.correctOddsHomeOver) || isEmpty(oddsInfo.spread)){
+    if(!oddsInfo.correctOddsHomeOver || !oddsInfo.spread){
       return;
     }
 
@@ -70,7 +73,7 @@ export class CalculateOddsService {
 
   public calculateOddsRange(oddsInfo: OddsInfoModel): void {
     const precision = 2;
-    if(isEmpty(oddsInfo.correctOddsHomeOver) || isEmpty(oddsInfo.correctOddsAwayUnder)){
+    if(!oddsInfo.correctOddsHomeOver || !oddsInfo.correctOddsAwayUnder){
       return;
     }
 
@@ -80,17 +83,17 @@ export class CalculateOddsService {
 
     const aboveHomeOver = correctOddsHomeOverNum + allowanceRateNum;
     const aboveAwayUnder = correctOddsAwayUnderNum + allowanceRateNum;
-    oddsInfo.toOddsNotVoidHomeOver = aboveHomeOver >= 1 ? -2 + aboveHomeOver : aboveHomeOver;
-    oddsInfo.toOddsNotVoidAwayUnder = aboveAwayUnder >= 1 ? -2 + aboveAwayUnder : aboveAwayUnder;
+    oddsInfo.toOddsNotVoidHomeOver = (aboveHomeOver >= 1 ? -2 + aboveHomeOver : aboveHomeOver).toFixed(precision);
+    oddsInfo.toOddsNotVoidAwayUnder = (aboveAwayUnder >= 1 ? -2 + aboveAwayUnder : aboveAwayUnder).toFixed(precision);
 
     const belowHomeOver = correctOddsHomeOverNum - allowanceRateNum;
     const belowAwayUnder = correctOddsAwayUnderNum - allowanceRateNum;
-    oddsInfo.fromOddsNotVoidHomeOver = belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver;
-    oddsInfo.fromOddsNotVoidAwayUnder = belowAwayUnder <= -1 ? 2 + belowAwayUnder: belowAwayUnder;
+    oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver).toFixed(precision);
+    oddsInfo.fromOddsNotVoidAwayUnder = (belowAwayUnder <= -1 ? 2 + belowAwayUnder: belowAwayUnder).toFixed(precision);
     
-    console.log(oddsInfo.toOddsNotVoidHomeOver.toFixed(precision));
-    console.log(oddsInfo.toOddsNotVoidAwayUnder.toFixed(precision));
-    console.log(oddsInfo.fromOddsNotVoidHomeOver.toFixed(precision));
-    console.log(oddsInfo.fromOddsNotVoidAwayUnder.toFixed(precision));
+    console.log("toOddsNotVoidHomeOver: " + oddsInfo.toOddsNotVoidHomeOver);
+    console.log("toOddsNotVoidAwayUnder: " + oddsInfo.toOddsNotVoidAwayUnder);
+    console.log("fromOddsNotVoidHomeOver: " + oddsInfo.fromOddsNotVoidHomeOver);
+    console.log("fromOddsNotVoidAwayUnder: " + oddsInfo.fromOddsNotVoidAwayUnder);
   }
 }

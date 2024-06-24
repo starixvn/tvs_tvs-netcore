@@ -47,16 +47,17 @@ export class EventWrongOddsService {
       filterFromTransTime: logInfoEvent.filterWrongOdds.filterFromTransTime,
       filterToTransTime: logInfoEvent.filterWrongOdds.filterToTransTime,
       liveIndicator: logInfoEvent.filterWrongOdds.liveIndicator,
-      filterOddsType: logInfoEvent.filterWrongOdds.filterOddsType,
       filterFavoriteType: logInfoEvent.filterWrongOdds.filterFavoriteType,
-      filterOuType: logInfoEvent.filterWrongOdds.filterOuType,
       favoriteValue: logInfoEvent.filterWrongOdds.favoriteValue,
-      oddsValue: logInfoEvent.filterWrongOdds.oddsValue,
-      fromOdds: logInfoEvent.filterWrongOdds.fromOdds,
-      toOdds: logInfoEvent.filterWrongOdds.toOdds,
-      betTeam: logInfoEvent.filterWrongOdds.betTeam,
-      ouValue: logInfoEvent.filterWrongOdds.ouValue,
-      correctOdds: logInfoEvent.filterWrongOdds.correctOdds
+      wrongOU: logInfoEvent.filterWrongOdds.wrongOU,
+      spread: logInfoEvent.filterWrongOdds.oddsInfo.spread.toString(),
+      allowanceRate: logInfoEvent.filterWrongOdds.oddsInfo.allowanceRate,
+      correctOddsAwayUnder: logInfoEvent.filterWrongOdds.oddsInfo.correctOddsAwayUnder,
+      correctOddsHomeOver: logInfoEvent.filterWrongOdds.oddsInfo.correctOddsHomeOver,
+      fromOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidAwayUnder,
+      fromOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidHomeOver,
+      toOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidAwayUnder,
+      toOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidHomeOver      
     } as GetLinkedLogQuery;
 
     return this.addRequestApiService.getLinkedLogs(query);
@@ -72,16 +73,19 @@ export class EventWrongOddsService {
       logInfoQuery.liveIndicator = logInfoEvent.filterWrongOdds.liveIndicator;
       logInfoQuery.isLinkGroup1X2 = logInfoEvent.linkedLogsViewModel.isLinkGroup1X2;
       logInfoQuery.isLinkGroupAIO = logInfoEvent.linkedLogsViewModel.isLinkGroupAIO;
+      
       logInfoQuery.filterFavoriteType = logInfoEvent.filterWrongOdds.filterFavoriteType;
-      logInfoQuery.filterOddsType = logInfoEvent.filterWrongOdds.filterOddsType;
-      logInfoQuery.filterOuType = logInfoEvent.filterWrongOdds.filterOuType;
-      logInfoQuery.oddsValue = logInfoEvent.filterWrongOdds.oddsValue;
-      logInfoQuery.fromOdds = logInfoEvent.filterWrongOdds.fromOdds;
-      logInfoQuery.toOdds = logInfoEvent.filterWrongOdds.toOdds;
-      logInfoQuery.correctOdds = logInfoEvent.filterWrongOdds.correctOdds;
-      logInfoQuery.betTeam = logInfoEvent.filterWrongOdds.betTeam;
-      logInfoQuery.ouValue = logInfoEvent.filterWrongOdds.ouValue;
+      logInfoQuery.wrongOU = logInfoEvent.filterWrongOdds.wrongOU;
       logInfoQuery.favoriteValue = logInfoEvent.filterWrongOdds.favoriteValue;
+
+      logInfoQuery.spread = logInfoEvent.filterWrongOdds.oddsInfo.spread.toString();
+      logInfoQuery.allowanceRate = logInfoEvent.filterWrongOdds.oddsInfo.allowanceRate;
+      logInfoQuery.correctOddsAwayUnder = logInfoEvent.filterWrongOdds.oddsInfo.correctOddsAwayUnder;
+      logInfoQuery.correctOddsHomeOver = logInfoEvent.filterWrongOdds.oddsInfo.correctOddsHomeOver;
+      logInfoQuery.fromOddsNotVoidAwayUnder = logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidAwayUnder;
+      logInfoQuery.fromOddsNotVoidHomeOver = logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidHomeOver;
+      logInfoQuery.toOddsNotVoidAwayUnder = logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidAwayUnder;
+      logInfoQuery.toOddsNotVoidHomeOver = logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidHomeOver;
 
       return logInfoQuery;
   }
@@ -109,7 +113,7 @@ export class EventWrongOddsService {
       betTeam: inputModels.betTeam,
       correctOdds: inputModels.correctOdds,
       favoriteValue: inputModels.favoriteValue,
-      ouValue: inputModels.ouValue,
+      wrongOU: inputModels.wrongOU,
       liveIndicator: inputModels.liveIndicator
     } as FilterWrongOddsModel;
 

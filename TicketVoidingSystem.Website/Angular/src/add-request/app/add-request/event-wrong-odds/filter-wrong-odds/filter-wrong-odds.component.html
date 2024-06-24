@@ -62,7 +62,7 @@
   <div class="filter-ou-type" *ngIf="isSubTypeOuOr1stOu()">
     <span class="input-group-text">Wrong OU</span>
     <div class="input-group input-group-sm div-input ou-input">
-      <input type="text" [(ngModel)]="filterWrongOddsModel.ouValue" (ngModelChange)="changeFilter();isCorrectFormatMultipleDecimal($event, 'ou-input')"
+      <input type="text" [(ngModel)]="filterWrongOddsModel.wrongOU" (ngModelChange)="changeFilter();isCorrectFormatMultipleDecimal($event, 'ou-input')"
         class="form-control border-radius-left-0" [disabled]="isDisabled">
     </div>
   </div>

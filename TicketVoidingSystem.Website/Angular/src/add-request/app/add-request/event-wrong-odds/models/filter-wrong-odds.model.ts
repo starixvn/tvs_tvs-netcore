@@ -11,7 +11,7 @@ export class FilterWrongOddsModel {
   toOdds: string;
   correctOdds: string;
   betTeam: string;
-  ouValue: string;
+  wrongOU: string;
   favoriteValue: string;
   liveIndicator: number;
   oddsInfo: OddsInfoModel;
@@ -68,10 +68,10 @@ export class OddsInfoModel {
   allowanceRate?: string;
   correctOddsHomeOver?: string;
   correctOddsAwayUnder?: string;
-  fromOddsNotVoidHomeOver?: number;
-  toOddsNotVoidHomeOver?: number;
-  fromOddsNotVoidAwayUnder?: number;
-  toOddsNotVoidAwayUnder?: number;
+  fromOddsNotVoidHomeOver?: string;
+  toOddsNotVoidHomeOver?: string;
+  fromOddsNotVoidAwayUnder?: string;
+  toOddsNotVoidAwayUnder?: string;
   maxBetAndSpreadInfo: MaxBetAndSpread[]
 }
 
