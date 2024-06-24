@@ -2,9 +2,9 @@
 
 public class OddsInfoModel
 {
-    public int ParentId { get; set; }
+    public int SubIssueTypeId { get; set; }
 
-    public int MaxBet { get; set; }
+    public decimal MaxBet { get; set; }
 
     public decimal Spread { get; set; }
 }

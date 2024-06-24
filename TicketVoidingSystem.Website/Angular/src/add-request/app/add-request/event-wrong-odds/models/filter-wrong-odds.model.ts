@@ -72,4 +72,11 @@ export class OddsInfoModel {
   toOddsNotVoidHomeOver?: number;
   fromOddsNotVoidAwayUnder?: number;
   toOddsNotVoidAwayUnder?: number;
+  maxBetAndSpreadInfo: MaxBetAndSpread[]
+}
+
+export class MaxBetAndSpread {
+  subIssueTypeId: string;
+  spread: string;
+  maxBet?: number;
 }

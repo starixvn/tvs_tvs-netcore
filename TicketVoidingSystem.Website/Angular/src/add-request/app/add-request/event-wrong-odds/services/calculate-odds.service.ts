@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { OddsInfoModel } from '../models/filter-wrong-odds.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
+import { isEmpty } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -17,18 +18,30 @@ export class CalculateOddsService {
       oddsInfo.matchId = match.matchId;
       oddsInfo.parentId = match.parentId;
       oddsInfo.subtype = match.subtype ?? 0;
-      oddsInfo.subIssueTypeId = subIssueTypeId;
-      const maxBetAndSpread =  await this.commonService.getMaxBetAndSpreadOfEvent(oddsInfo);
-      oddsInfo.maxBet = maxBetAndSpread.maxBet;
-      oddsInfo.spread = maxBetAndSpread.spread;
+      const maxBetAndSpreads =  await this.commonService.getMaxBetAndSpreadOfEvent(oddsInfo);
+      oddsInfo.maxBetAndSpreadInfo = maxBetAndSpreads;
+      this.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
       this.updateAllowanceRate(oddsInfo);
     };
+  }
+
+  public resetOddsInfo(oddsInfo: OddsInfoModel, subIssueTypeId: string){
+    this.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
+    this.updateAllowanceRate(oddsInfo);
+    oddsInfo.correctOddsHomeOver = "";
+    oddsInfo.correctOddsAwayUnder = "";
+  }
+  
+  public updateMaxBetAbsSpread(oddsInfo: OddsInfoModel, subIssueTypeId: string){
+    oddsInfo.subIssueTypeId = subIssueTypeId;
+    oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.maxBet ?? 0;
+    oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.spread ?? "0";
   }
 
   public updateAllowanceRate(oddsInfo: OddsInfoModel): void {
     const maxBetDefault = 80000;
     const spreadDefault = 0.15;
-    if(oddsInfo.maxBet >= maxBetDefault){
+    if(oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) == 0 && oddsInfo.maxBet == 0)){
       oddsInfo.allowanceRate = "20";
     }
     else if(Number(oddsInfo.spread) > spreadDefault){
@@ -41,6 +54,10 @@ export class CalculateOddsService {
 
   public updateCorrectOddsAwayUnder(oddsInfo: OddsInfoModel): void {
     const precision = 2; // Define the number of decimal places
+    if(isEmpty(oddsInfo.correctOddsHomeOver) || isEmpty(oddsInfo.spread)){
+      return;
+    }
+
     const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
     const spreadNum = Number(oddsInfo.spread);
 
@@ -53,6 +70,10 @@ export class CalculateOddsService {
 
   public calculateOddsRange(oddsInfo: OddsInfoModel): void {
     const precision = 2;
+    if(isEmpty(oddsInfo.correctOddsHomeOver) || isEmpty(oddsInfo.correctOddsAwayUnder)){
+      return;
+    }
+
     const allowanceRateNum = Number(oddsInfo.allowanceRate)/100; 
     const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
     const correctOddsAwayUnderNum = Number(oddsInfo.correctOddsAwayUnder);

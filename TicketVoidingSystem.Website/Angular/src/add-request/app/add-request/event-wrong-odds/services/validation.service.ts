@@ -135,28 +135,22 @@ export class ValidationService {
   }
 
   public isValidSpread(spread: string, tooltip: Tooltip){
-    if (!spread || _.isEmpty(spread.trim())) {
+    const isCorrectFormatMultipleDecimal = StaticService.isCorrectFormatMultipleDecimal(spread, this.SPREAD_INPUT_CLASS, tooltip, TEXT.REQUIRED_SPREAD);
+    
+    const spreadValue = Number(spread);
+    if(!isCorrectFormatMultipleDecimal || spreadValue < 0 || spreadValue > 1){
       tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
       return false;
     }
 
-    const spreadValue = Number(spread);
-    if(!isNaN(spreadValue) && spreadValue >= 0 && spreadValue <= 1){
-      return true;
-    }
-
-    tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
-    return false;
+    return true;
   }
   
   public isValidFilterCorrectOdds(homeCorrectOdds: string, spread: string, tooltip: Tooltip): boolean {
-    if (!homeCorrectOdds || _.isEmpty(homeCorrectOdds.trim())) {
-      tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_CORRECT_ODDS);
-      return false;
-    }
+    const isCorrectFormatMultipleDecimal = StaticService.isCorrectFormatMultipleDecimal(homeCorrectOdds, this.CORRECT_ODDS_INPUT_CLASS, tooltip, TEXT.REQUIRED_CORRECT_ODDS);
     const homeCorrectOddsValue = Number(homeCorrectOdds);
     const spreadValue = Number(spread);
-    if (isNaN(homeCorrectOddsValue) || Math.abs(Number(homeCorrectOddsValue)) < spreadValue || Math.abs(Number(homeCorrectOddsValue)) > 1) {
+    if (!isCorrectFormatMultipleDecimal || Math.abs(Number(homeCorrectOddsValue)) < spreadValue || Math.abs(Number(homeCorrectOddsValue)) > 1) {
       tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_CORRECT_ODDS);
       return false;
     }

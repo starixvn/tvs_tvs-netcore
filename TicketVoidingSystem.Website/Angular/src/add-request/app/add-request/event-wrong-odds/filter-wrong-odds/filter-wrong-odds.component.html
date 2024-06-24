@@ -107,7 +107,7 @@
         <span class="input-group-text">Spread</span>
       </div>
       <div class="input-group-sm div-input spread-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.spread" (change)="changeSpread()"
+        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.spread" (ngModelChange)="changeFilter();changeSpread()"
           class="form-control border-radius-left-0" [disabled]="isDisabled">
       </div>
     </div>
@@ -117,9 +117,9 @@
       <div class="input-group-prepend">
         <span class="input-group-text filter-right">Allowance Rate</span>
       </div>
-      <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" (change)="changeAllowanceRate()"
-          [(ngModel)]="filterWrongOddsModel.oddsInfo.allowanceRate" [clearable]="false"
-          [searchable]="false">
+      <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" 
+      (ngModelChange)="changeFilter();changeAllowanceRate()"
+          [(ngModel)]="filterWrongOddsModel.oddsInfo.allowanceRate" [clearable]="false" [searchable]="false">
       </ng-select>
     </div>
   </div>
@@ -136,7 +136,8 @@
         </span>
       </div>
       <div class="input-group-sm div-input correct-odds-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.correctOddsHomeOver" (change)="changeFilter();changeCorrectOdds()"
+        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.correctOddsHomeOver" 
+        (ngModelChange)="changeFilter();changeCorrectOdds()"
           class="form-control border-radius-left-0">
       </div>
     </div>

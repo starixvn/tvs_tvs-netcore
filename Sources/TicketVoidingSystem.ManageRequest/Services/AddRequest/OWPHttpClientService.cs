@@ -38,6 +38,6 @@ public class OWPHttpClientServiceImp : OWPHttpClientService
         }
 
         await loggingService.ErrorAsync($"URL: {AppSettingService.AppSetting.OWPUrl}{actionName}{Environment.NewLine}Response:{Environment.NewLine}{response}");
-        return new OWPMaxBetAndSpreadInfo();
+        return null;
     }
 }

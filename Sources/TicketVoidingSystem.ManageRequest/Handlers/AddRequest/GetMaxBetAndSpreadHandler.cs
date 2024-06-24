@@ -5,18 +5,16 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetMaxBetAndSpreadRequest : IRequest<OddsInfoModel>
+public class GetMaxBetAndSpreadRequest : IRequest<IEnumerable<OddsInfoModel>>
 {
     public int MatchId { get; set; }
 
     public int ParentId { get; set; }
 
     public int SubType { get; set; }
-
-    public int SubIssueTypeId { get; set; }
 }
 
-public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadRequest, OddsInfoModel>
+public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadRequest, IEnumerable<OddsInfoModel>>
 {
     private readonly OWPHttpClientService owpHttpClientService;
 
@@ -25,20 +23,28 @@ public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadReque
         this.owpHttpClientService = owpHttpClientService;
     }
 
-    public async Task<OddsInfoModel> Handle(GetMaxBetAndSpreadRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OddsInfoModel>> Handle(GetMaxBetAndSpreadRequest request,
+        CancellationToken cancellationToken)
     {
         var maxBetSpreadInfo = await owpHttpClientService.GetMaxBetAndSpread(request.MatchId, request.ParentId, request.SubType);
 
-        return GetOddsInfo(maxBetSpreadInfo, request.SubIssueTypeId);
+        if (maxBetSpreadInfo == null)
+        {
+            return Enumerable.Empty<OddsInfoModel>();
+        }
+
+        int[] subIssueTypeIdsWrongOdds = { SubIssueTypeConstant.Handicap, SubIssueTypeConstant.FirstHalfHandicap, SubIssueTypeConstant.OverUnder, SubIssueTypeConstant.FirstHalfOverUnder };
+
+        return subIssueTypeIdsWrongOdds.Select(subIssueTypeId => GetOddsInfo(maxBetSpreadInfo, subIssueTypeId)).ToList();
     }
 
     private static OddsInfoModel GetOddsInfo(OWPMaxBetAndSpreadInfo maxBetSpreadInfo, int subIssueTypeId)
     {
         return new OddsInfoModel
         {
-            ParentId = maxBetSpreadInfo.AdminSiteID,
+            SubIssueTypeId = subIssueTypeId,
             Spread = GetMaxBetSpreadBySubIssueType(maxBetSpreadInfo.Spread, subIssueTypeId),
-            MaxBet = (int)GetMaxBetSpreadBySubIssueType(maxBetSpreadInfo.Maxbet, subIssueTypeId)
+            MaxBet = GetMaxBetSpreadBySubIssueType(maxBetSpreadInfo.Maxbet, subIssueTypeId)
         };
     }
 

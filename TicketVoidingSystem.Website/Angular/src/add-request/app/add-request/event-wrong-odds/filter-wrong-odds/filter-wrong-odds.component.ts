@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../../../utility/constants/text';
@@ -13,7 +13,7 @@ import { CalculateOddsService } from '../services/calculate-odds.service';
   templateUrl: './filter-wrong-odds.component.html',
   styleUrls: ['./filter-wrong-odds.component.scss']
 })
-export class FilterWrongOddsComponent {
+export class FilterWrongOddsComponent implements OnChanges {
   @Input() filterWrongOddsModel: FilterWrongOddsModel;
   @Input() isEdit: boolean;
   @Input() matchId: number;
@@ -37,6 +37,12 @@ export class FilterWrongOddsComponent {
       this.tooltip.element = this.element;
     }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['subIssueTypeId']) {
+        this.calculateOddsService.resetOddsInfo(this.filterWrongOddsModel.oddsInfo, this.subIssueTypeId);
+    }
+  } 
+ 
   public changeFilter(): void {
     this.changeFilterEvent.emit();
   }
@@ -76,6 +82,9 @@ export class FilterWrongOddsComponent {
       this.filterWrongOddsModel.oddsInfo.spread, this.tooltip);
     if(isValidCorrectOdds){
       this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel.oddsInfo);
+    }
+    else{
+      this.filterWrongOddsModel.oddsInfo.correctOddsAwayUnder = '';
     }
   }
 
