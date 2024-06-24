@@ -62,11 +62,12 @@ public class Validation
 public class BetTypeCountModel : BetTypeCountJsonModel
 {
     public string BetTypeName { get; set; }
+
+    public string OriginalBetTypeName { get; set; }
 }
 
 public class BetTypeCountJsonModel
 {
-    public string BetTypeName { get; set; }
     public int BetTypeCount { get; set; }
     public int BetTypeId { get; set; }
     public long? BetId { get; set; }

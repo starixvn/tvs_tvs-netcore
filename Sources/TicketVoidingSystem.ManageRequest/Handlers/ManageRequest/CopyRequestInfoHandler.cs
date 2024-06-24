@@ -32,7 +32,7 @@ public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, Co
         return new CopyRequestInfoResponse
         {
             RequestInfo = requestInfo,
-            BetTypeTickets = betTypeTickets
+            BetTypeTickets = betTypeTickets.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
         };
     }
 }
