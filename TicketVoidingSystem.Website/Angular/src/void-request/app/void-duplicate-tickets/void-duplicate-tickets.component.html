@@ -31,9 +31,9 @@
           [isBlock]="voidPageItem.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
           [isDisableCheckbox]="true">
         </tickets-list>
-        <message-area #messageArea [isShowTemplateMessage]="voidPageItem.isShowTemplateMessage" [totalVoidTickets]="voidPageItem.voidTicketsMini?.total" 
-          [templateValue]="voidPageItem.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" 
-          [subIssueTypeId]="voidPageItem.subIssueType.subIssueTypeId" [voidReason]="voidPageItem.voidReason">
+        <message-area #messageArea [isShowTemplateMessage]="voidPageItem.isShowTemplateMessage" [totalVoidTickets]="voidPageItem.voidTicketsMini?.total"
+          [templateValue]="voidPageItem.templateValue" [issueTypeId]="requestDetail.request.issueTypeId"
+          [subIssueTypeId]="voidPageItem.subIssueType.subIssueTypeId" [voidReason]="voidPageItem.voidReason" [requestId]="requestDetail.request.requestId">
         </message-area>
       </div>
     </div>

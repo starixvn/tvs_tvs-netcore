@@ -5,7 +5,7 @@
         <div class="index-of-match d-flex align-items-center">
           <div class="number-circle"><span><strong>{{id + 1}}</strong></span></div>
         </div>
-        <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">      
+        <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
           <div class="alert alert-dark p-1 m-0 mb-1"><span>
             Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
           </div>
@@ -18,7 +18,7 @@
         </div>
         <div class="col-sm-3 m-0 pd-right-0 pd-left-5">
           <div class="kick-off-time alert alert-dark p-1 m-0">
-              <span>KO Time (GMT+8): </span><strong>{{getKickOffDate(item.matchModel.matchId) | date:'yyyy/MM/dd HH:mm:ss'}}</strong>            
+              <span>KO Time (GMT+8): </span><strong>{{getKickOffDate(item.matchModel.matchId) | date:'yyyy/MM/dd HH:mm:ss'}}</strong>
           </div>
         </div>
         <div class="flex-grow-1">
@@ -37,9 +37,9 @@
           [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
           [isDisableCheckbox]="true">
         </tickets-list>
-        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total" 
-          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" 
-          [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason">
+        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
+          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId"
+          [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
         </message-area>
       </div>
     </div>

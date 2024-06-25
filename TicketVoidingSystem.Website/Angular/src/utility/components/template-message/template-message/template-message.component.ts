@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, ViewChild } from '@angular/core';
 import moment from 'moment-timezone';
 import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
@@ -37,7 +37,7 @@ export class TemplateMessageComponent implements OnChanges {
   @Input() issueTypeId: number;
   @Input() isShowMessages = true;
   @Input() voidFunction?: number;
-
+  @Output() messageChange = new EventEmitter();
   @ViewChild('messages') messagesComponent: MessagesComponent;
 
   templates: TemplateModel[] = [];
@@ -413,6 +413,10 @@ export class TemplateMessageComponent implements OnChanges {
 
   checkValidation(): boolean {
     return this.messagesComponent.checkValidation();
+  }
+
+  changeMessage() {
+    this.messageChange.emit();
   }
 
   public isHasWarningForDynamicInput(): boolean {

@@ -40,5 +40,5 @@
 </div>
 
 <div class="message">
-  <messages #messages [isShowMessages]="isShowMessages" [(message)]="message"></messages>
+  <messages #messages [isShowMessages]="isShowMessages" [(message)]="message" (messageChange)="changeMessage()"></messages>
 </div>

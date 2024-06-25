@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 
 @Component({
@@ -8,8 +8,13 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
 })
 export class VoidReasonComponent implements OnInit {
   @Input('voidReason') voidReason: VoidedReason;
+  @Output() voidReasonChange = new EventEmitter();
 
   constructor() { }
   ngOnInit(): void {
+  }
+
+  changeReason() {
+    this.voidReasonChange.emit(this.voidReason);
   }
 }

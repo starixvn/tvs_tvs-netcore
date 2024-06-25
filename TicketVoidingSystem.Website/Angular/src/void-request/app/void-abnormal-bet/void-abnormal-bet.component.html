@@ -34,9 +34,9 @@
           (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
           [isDisableCheckbox]="true">
         </tickets-list>
-        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total" 
-          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" 
-          [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason">
+        <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total"
+          [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId"
+          [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason" [requestId]="requestDetail.request.requestId">
         </message-area>
       </div>
     </div>
