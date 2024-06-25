@@ -27,7 +27,6 @@ export class EventDuplicateTicketsComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() duplicateTicketsModel = new DuplicateTicketsModel();
   @Output() updateMatchId = new EventEmitter<number>();
-
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
   @ViewChild('leagueEvent') leagueEventComponent: LeagueEventAbnormalComponent;
 
@@ -55,6 +54,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
   }
 
   async afterFocusOutBetIds(): Promise<void> {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
       await this.checkValidBusinessRule();

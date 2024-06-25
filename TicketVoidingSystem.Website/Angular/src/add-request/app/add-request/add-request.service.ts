@@ -8,6 +8,7 @@ import { AddRequestApiService } from './add-request-api.service';
 import { AddRequestStore } from './add-request.store';
 import { AddRequestQuery } from './models/add-request.query';
 import { AddRequestResultModel } from './models/request.model';
+import { LogAnalysisService } from './services/log-analysis.service';
 import { PopupService } from './services/popup.service';
 
 @Injectable({
@@ -17,37 +18,38 @@ export class AddRequestService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly popupService: PopupService,
-    private readonly commonService: CommonService
+    private readonly commonService: CommonService,
+    private readonly logAnalysisService: LogAnalysisService
   ) { }
 
-  async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid?: boolean): Promise<void> {
+  async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid = false): Promise<void> {
     if (isEdit) {
       query.requestId = requestId;
       await this.editRequest(query, addRequestStore, isSaveAndVoid);
     } else {
-      await this.addRequest(query, query.issueTypeId, addRequestStore, isSaveAndVoid);
+      await this.addRequest(query, isEdit, addRequestStore, isSaveAndVoid);
     }
   }
 
-  private async addRequest(query: AddRequestQuery, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
+  private async addRequest(query: AddRequestQuery, isEdit: boolean, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
     addRequestStore.changeSavingRequestStatus(true);
     query.guid = `AddRequest-${Guid.create().toString()}`;
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
-      this.handleAfterAddRequest(result, issueTypeId, addRequestStore, isSaveAndVoid);
+      this.handleAfterAddRequest(isEdit, result, query.issueTypeId, addRequestStore, isSaveAndVoid);
     } else {
-      this.getAddResultCache(query.guid, issueTypeId, addRequestStore, isSaveAndVoid);
+      this.getAddResultCache(isEdit, query, addRequestStore, isSaveAndVoid);
     }
   }
 
-  private getAddResultCache(guid: string, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private getAddResultCache(isEdit: boolean, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
     let isChecking = false;
     const interval = setInterval(async () => {
       if (!isChecking) {
         isChecking = true;
-        const result = await this.commonService.getResultCache<AddRequestResultModel>(guid);
+        const result = await this.commonService.getResultCache<AddRequestResultModel>(query.guid);
         if (result) {
-          this.handleAfterAddRequest(result, issueTypeId, addRequestStore, isSaveAndVoid);
+          this.handleAfterAddRequest(isEdit, result, query.issueTypeId, addRequestStore, isSaveAndVoid);
           clearInterval(interval);
         }
         isChecking = false;
@@ -55,8 +57,9 @@ export class AddRequestService {
     }, 2000);
   }
 
-  private handleAfterAddRequest(addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private handleAfterAddRequest(isEdit, addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
     if (addResult.isSuccessful) {
+      this.logAnalysisService.writeLogCalculateTimeFilterTickets(isEdit, issueTypeId, addRequestStore.getStartTimeFilterTicket, new Date(), addResult.data.requestId);
       if (isSaveAndVoid) {
         this.goToVoidPage(Number(addResult.data.requestId));
       } else {

@@ -57,7 +57,7 @@ export class AbnormalAccountsComponent implements OnInit {
       this.addRequestStore.changeBlockingUiStatus(false);
     }
     this.primitiveProps.permission = await this.addRequestApiService.getPermissionAddRequest();
-    this.primitiveProps.minDate = await this.getMinDateByPermission(this.primitiveProps.permission.isVoidAllArchivedTickets);
+    this.primitiveProps.minDate = this.getMinDateByPermission(this.primitiveProps.permission.isVoidAllArchivedTickets);
   }
 
   public async focusOutUsernames(): Promise<void> {
@@ -151,6 +151,7 @@ export class AbnormalAccountsComponent implements OnInit {
   public changeFilter(): void {
     this.primitiveProps.isShowAccountWinLost = false;
     this.primitiveProps.isShowError = false;
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
   }
 
   private getMinDateByPermission(isVoidAllArchivedTickets: boolean): NgbDateStruct {

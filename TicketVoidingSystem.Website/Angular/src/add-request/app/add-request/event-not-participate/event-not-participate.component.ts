@@ -106,6 +106,7 @@ export class EventNotParticipateComponent implements OnInit {
   }
 
   public async changeMatchEvent(): Promise<void> {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitivePropertyEvent.isShowFilterArea = false;
     this.primitivePropertyEvent.isShowValidation = false;
     this.updateMatchId.emit(this.logInfoEvent.matchId);

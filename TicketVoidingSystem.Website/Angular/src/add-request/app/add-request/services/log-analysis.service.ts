@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
+import moment from 'moment-timezone';
 import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
+import { LogAnalysisConstant } from 'src/utility/constants/log-analysis.constant';
 import { CommonService } from '../../../../utility/services/common.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LogAccessIssueTypeService {
+export class LogAnalysisService {
 
   constructor(
     private readonly commonService: CommonService
   ) { }
 
-  async writeLog(isEditRequestPage: boolean, issueTypeId: string, accessIssueTypeCount: Map<string, number>): Promise<void> {
+  async writeLogAccessFunction(isEditRequestPage: boolean, issueTypeId: string, accessIssueTypeCount: Map<string, number>): Promise<void> {
     if (isEditRequestPage) {
       return;
     }
@@ -24,5 +26,14 @@ export class LogAccessIssueTypeService {
         accessIssueTypeCount.set(issueTypeId, currentAccessCount);
       }
     }
+  }
+
+  async writeLogCalculateTimeFilterTickets(isEditRequestPage: boolean, issueTypeId: string, fromTime: Date, toTime: Date, requestId: number): Promise<void> {
+    if (isEditRequestPage) {
+      return;
+    }
+
+    this.commonService.logChangeContent(LogAnalysisConstant[issueTypeId],
+      `RequestId-${requestId};Time-${moment(toTime).diff(moment(fromTime), 'seconds')}s`);
   }
 }

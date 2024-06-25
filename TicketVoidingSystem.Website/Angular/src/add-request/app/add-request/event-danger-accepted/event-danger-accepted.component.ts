@@ -5,6 +5,7 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
@@ -27,7 +28,6 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -44,10 +44,8 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() dangerAcceptedModels: RedCardModel[] = [];
-  
   @Output() dangerAcceptedModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
-
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') leagueEventDangerAcceptedComponent: LeagueEventRedCardComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
@@ -138,6 +136,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   }
 
   changeMatchEvent(): void {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);

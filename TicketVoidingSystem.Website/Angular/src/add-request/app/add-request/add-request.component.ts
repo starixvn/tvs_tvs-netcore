@@ -26,7 +26,7 @@ import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { RequestModel } from './models/request.model';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
-import { LogAccessIssueTypeService } from './services/log-access-issue-type.service';
+import { LogAnalysisService } from './services/log-analysis.service';
 
 @Component({
   selector: 'add-request',
@@ -66,7 +66,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   issueTypes = new IssueTypes();
   isDisabledSaveButton = false;
   checkValidSubIssueTypeInFilterSubscription: Subscription;
-
   savingRequestSubscription: Subscription;
   blockingUiSubscription: Subscription;
   abnormalFilterBySubscription = new Subscription();
@@ -77,7 +76,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly addRequestStore: AddRequestStore,
     private readonly copyRequestInfoService: CopyRequestInfoService,
-    private readonly logAccessIssueTypeService:LogAccessIssueTypeService
+    private readonly logAnalysisService:LogAnalysisService
   ) { }
 
   ngOnInit(): void {
@@ -120,7 +119,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
       this.model.others.decidedBy = '';
     }
 
-    await this.logAccessIssueTypeService.writeLog(this.isEdit, issueTypeId, this.accessIssueTypeCount);
+    await this.logAnalysisService.writeLogAccessFunction(this.isEdit, issueTypeId, this.accessIssueTypeCount);
   }
 
   updateMatchId(matchId: number): void {
@@ -131,7 +130,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.matchId = match?.matchId;
     this.parentMatchId = match?.parentId;
   }
-
   async saveRequest(isSaveAndVoid: boolean): Promise<void> { // NOSONAR
     if (!this.isEdit) {
       const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
@@ -341,7 +339,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   isAbandoned(): boolean {
     return StaticService.isAbandoned(this.model.filter.issueTypeId);
   }
-  
+
   isDuplicateTickets(): boolean {
     return StaticService.isDuplicateTickets(this.model.filter.issueTypeId);
   }

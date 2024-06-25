@@ -32,7 +32,6 @@ export class EventAbnormalBetComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() abnormalBetModel = new AbnormalBetModel();
-
   @ViewChild('betIds') betIdsComponent: BetIdsComponent;
   @ViewChild('confirmAbnormalBetComponent') confirmAbnormalBetComponent: ConfirmAbnormalBetComponent;
 
@@ -63,6 +62,7 @@ export class EventAbnormalBetComponent implements OnInit {
   }
 
   async afterFocusOutBetIds(): Promise<void> {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.updateAbnormalBetModel();
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
