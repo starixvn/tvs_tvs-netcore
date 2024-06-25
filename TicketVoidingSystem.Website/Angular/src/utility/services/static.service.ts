@@ -249,7 +249,9 @@ export class StaticService {
   static isHaveCancelCashOutTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
       issueTypeId === IssueTypeConstant.RED_CARD ||
-      issueTypeId === IssueTypeConstant.WRONG_SCORE;
+      issueTypeId === IssueTypeConstant.WRONG_SCORE ||
+      issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED ||
+      issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
   static getDurationTime(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, filterFromTransTime: string, filterToTransTime: string): string {
