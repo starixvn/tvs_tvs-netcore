@@ -86,26 +86,6 @@ public class RequestEventModel
 
     public int LiveIndicator { get; set; }
 
-    public string FilterOddsType { get; set; }
-
-    public string FilterFavoriteType { get; set; }
-
-    public string FilterOuType { get; set; }
-
-    public string OddsValue { get; set; }
-
-    public string FromOdds { get; set; }
-
-    public string ToOdds { get; set; }
-
-    public string CorrectOdds { get; set; }
-
-    public string BetTeam { get; set; }
-
-    public string OuValue { get; set; }
-
-    public string FavoriteValue { get; set; }
-
     public string BetTypeIds { get; set; }
 
     public string WicketOver { get; set; }
@@ -130,8 +110,22 @@ public class RequestEventModel
     public DateTime? ToDate { get; set; }
 
     // event wrong score
-
     public string WrongScore { get; set; }
+
     public string ActualScore { get; set; }
     public int SubIssueTypeId { get; set; }
+
+    //event wrong odds
+    public string FilterFavoriteType { get; set; }
+
+    public string FavoriteValue { get; set; }
+    public string WrongOU { get; set; }
+    public string Spread { get; set; }
+    public string AllowanceRate { get; set; }
+    public string CorrectOddsHomeOver { get; set; }
+    public string CorrectOddsAwayUnder { get; set; }
+    public string FromOddsNotVoidHomeOver { get; set; }
+    public string ToOddsNotVoidHomeOver { get; set; }
+    public string FromOddsNotVoidAwayUnder { get; set; }
+    public string ToOddsNotVoidAwayUnder { get; set; }
 }

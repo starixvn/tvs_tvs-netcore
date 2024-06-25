@@ -8,9 +8,9 @@ export class WrongOddsGetLogInfoQuery {
   isLinkGroupAIO: boolean;
   liveIndicator: number;
 
-  filterFavoriteType: string;  
-  favoriteValue: string;
-  wrongOU : string;
+  filterFavoriteType?: string;  
+  favoriteValue?: string;
+  wrongOU?: string;
 
   spread?: string;
   allowanceRate?: string;

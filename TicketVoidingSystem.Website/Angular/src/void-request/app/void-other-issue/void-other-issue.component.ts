@@ -146,7 +146,7 @@ export class VoidOtherIssueComponent implements OnInit {
     }
 
     if (this.isWrongOdds()) {
-      this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+      // this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
     }
   }
 
@@ -157,7 +157,7 @@ export class VoidOtherIssueComponent implements OnInit {
     }
 
     if (this.isWrongOdds()) {
-      this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+      // this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
     }
   }
 
@@ -235,10 +235,10 @@ export class VoidOtherIssueComponent implements OnInit {
 
   updateTemplateValueForWrongOdds() {
     if (this.isWrongOdds()) {
-      this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
-      this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
+      // this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
+      // this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
       this.templateValue.ouValue = this.requestDetail.wrongOddsModels[0].wrongOU;
-      this.templateValue.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+      // this.templateValue.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
       this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
       this.templateValue.eventType = this.ticketsModel.isAllLiveTickets ? EventType.LIVE : null;
     }

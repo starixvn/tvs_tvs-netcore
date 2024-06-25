@@ -138,7 +138,6 @@ public static class LogInfoExtension
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"LiveIndicator='{model.LiveIndicator}' "
                        + $"FilterFavoriteType='{SecurityElement.Escape(model.FilterFavoriteType)}' "
-                       + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
                        + $"FavoriteValue='{SecurityElement.Escape(model.FavoriteValue)}' "
                        + $"PoolHouseCheckedBetTypes='{model.PoolHouseCheckedBetTypes}' "
                        + $"IsLinkGroup1X2='{model.IsLinkGroup1X2}' "

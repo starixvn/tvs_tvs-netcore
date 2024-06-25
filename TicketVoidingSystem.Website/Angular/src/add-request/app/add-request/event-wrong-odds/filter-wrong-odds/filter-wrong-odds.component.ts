@@ -3,7 +3,7 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { FilterFavoriteType, FilterOddsType, FilterOuType, FilterWrongOddsModel, OddsInfoModel } from '../models/filter-wrong-odds.model';
+import { FilterFavoriteType, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { ValidationService } from '../services/validation.service';
 import { AllowanceRate } from '../../../../../utility/constants/config';
 import { CalculateOddsService } from '../services/calculate-odds.service';
@@ -25,9 +25,7 @@ export class FilterWrongOddsComponent implements OnChanges {
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
 
   tooltip = new Tooltip();
-  filterOddsType = new FilterOddsType();
   filterFavoriteType = new FilterFavoriteType();
-  filterOuType = new FilterOuType();
   allowanceRates = AllowanceRate.ALLOWANCE_RATE;
   
   constructor(
@@ -39,7 +37,7 @@ export class FilterWrongOddsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['subIssueTypeId']) {
-        this.calculateOddsService.resetOddsInfo(this.filterWrongOddsModel.oddsInfo, this.subIssueTypeId);
+        this.calculateOddsService.resetOddsInfo(this.filterWrongOddsModel, this.subIssueTypeId);
     }
   } 
  
@@ -53,10 +51,6 @@ export class FilterWrongOddsComponent implements OnChanges {
 
   public isCorrectFormatMultipleDecimal(value: string, elementClass: string): boolean {
     return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS);
-  }
-
-  public setFilterOddsType(type: string): void {
-    this.filterWrongOddsModel.filterOddsType = type;
   }
 
   public isSubTypeOuOr1stOu(): boolean {
@@ -78,25 +72,25 @@ export class FilterWrongOddsComponent implements OnChanges {
   }
 
   public changeCorrectOdds(): void {
-    const isValidCorrectOdds = this.validationService.isValidFilterCorrectOdds(this.filterWrongOddsModel.oddsInfo.correctOddsHomeOver, 
-      this.filterWrongOddsModel.oddsInfo.spread, this.tooltip);
+    const isValidCorrectOdds = this.validationService.isValidFilterCorrectOdds(this.filterWrongOddsModel.correctOddsHomeOver, 
+      this.filterWrongOddsModel.spread, this.tooltip);
     if(isValidCorrectOdds){
-      this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel.oddsInfo);
+      this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel);
     }
     else{
-      this.filterWrongOddsModel.oddsInfo.correctOddsAwayUnder = '';
+      this.filterWrongOddsModel.correctOddsAwayUnder = '';
     }
   }
 
   public changeSpread(): void {
-    const isValidSpread = this.validationService.isValidSpread(this.filterWrongOddsModel.oddsInfo.spread, this.tooltip);
+    const isValidSpread = this.validationService.isValidSpread(this.filterWrongOddsModel.spread, this.tooltip);
     if(isValidSpread){
-      this.calculateOddsService.updateAllowanceRate(this.filterWrongOddsModel.oddsInfo);
-      this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel.oddsInfo);
+      this.calculateOddsService.updateAllowanceRate(this.filterWrongOddsModel);
+      this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel);
     }
   }
 
   public changeAllowanceRate(): void{
-    this.calculateOddsService.calculateOddsRange(this.filterWrongOddsModel.oddsInfo);
+    this.calculateOddsService.calculateOddsRange(this.filterWrongOddsModel);
   }
 }

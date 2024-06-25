@@ -231,16 +231,17 @@ public class GetRequestServiceImp : GetRequestService
             VoidFromTime = model.VoidFromTime,
             VoidToTime = model.VoidToTime,
             LiveIndicator = model.LiveIndicator,
-            FilterOddsType = model.FilterOddsType,
             FilterFavoriteType = model.FilterFavoriteType,
-            FilterOuType = model.FilterOuType,
-            OddsValue = model.OddsValue,
-            FromOdds = model.FromOdds,
-            ToOdds = model.ToOdds,
-            CorrectOdds = model.CorrectOdds,
-            BetTeam = model.BetTeam,
-            OuValue = model.OuValue,
-            FavoriteValue = model.FavoriteValue
+            FavoriteValue = model.FavoriteValue,
+            WrongOU = model.WrongOU,
+            Spread = model.Spread,
+            AllowanceRate = model.AllowanceRate,
+            CorrectOddsHomeOver = model.CorrectOddsHomeOver,
+            CorrectOddsAwayUnder = model.CorrectOddsAwayUnder,
+            FromOddsNotVoidHomeOver = model.FromOddsNotVoidHomeOver,
+            ToOddsNotVoidHomeOver = model.ToOddsNotVoidHomeOver,
+            FromOddsNotVoidAwayUnder = model.FromOddsNotVoidAwayUnder,
+            ToOddsNotVoidAwayUnder = model.ToOddsNotVoidAwayUnder
         });
     }
 

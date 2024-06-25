@@ -6,7 +6,7 @@ import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
-import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
+import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
@@ -16,24 +16,16 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 })
 export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
-  private readonly ODDS_VALUE_INPUT_CLASS = 'odds-value-input';
   private readonly CORRECT_ODDS_INPUT_CLASS = 'correct-odds-input';
-  private readonly FROM_ODDS_CLASS = 'from-odds';
-  private readonly TO_ODDS_CLASS = 'to-odds';
   private readonly FAVORITE_INPUT_CLASS = 'favorite-input';
   private readonly OU_INPUT_CLASS = 'ou-input';
   private readonly FILTER_LIVE_INDICATOR_CLASS = 'filter-live-indicator';
-  private readonly FILTER_BET_TEAM_CLASS = 'filter-bet-team';
   private readonly SPREAD_INPUT_CLASS = 'spread-input';
   constructor() {
   }
 
   public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterWrongOddsComponent: FilterWrongOddsComponent): boolean {
-    if (!eventLeagueComponent.isMatchIdValid()) {
-      return false;
-    }
-
-    if (!filterWrongOddsComponent.isValid()) {
+    if (!eventLeagueComponent.isMatchIdValid() || !filterWrongOddsComponent.isValid()) {
       return false;
     }
 
@@ -42,7 +34,6 @@ export class ValidationService {
 
   public isFromTimeSameOrBeforeToTime(filterWrongOddsModel: FilterWrongOddsModel, tooltip: Tooltip): boolean {
     return StaticService.isFromTimeSameOrBeforeToTime(filterWrongOddsModel.filterFromTransTime, filterWrongOddsModel.filterFromTransTime, tooltip, this.FROM_DATE_TIME_CLASS);
-
   }
 
   public isValidFilterWrongOdds(filterWrongOddsModel: FilterWrongOddsModel, tooltip: Tooltip, subIssueTypeId: string): boolean {
@@ -58,15 +49,11 @@ export class ValidationService {
       return false;
     }
 
-    if (!this.isSubTypeOuOr1stOu(subIssueTypeId) && !this.isValidFilterBetTeam(filterWrongOddsModel, tooltip)) {
+    if (!this.isValidSpread(filterWrongOddsModel.spread, tooltip)){
       return false;
     }
 
-    if (!this.isValidSpread(filterWrongOddsModel.oddsInfo.spread, tooltip)){
-      return false;
-    }
-
-    if (!this.isValidFilterCorrectOdds(filterWrongOddsModel.oddsInfo.correctOddsHomeOver, filterWrongOddsModel.oddsInfo.spread, tooltip)) {
+    if (!this.isValidFilterCorrectOdds(filterWrongOddsModel.correctOddsHomeOver, filterWrongOddsModel.spread, tooltip)) {
       return false;
     }
 
@@ -75,15 +62,6 @@ export class ValidationService {
 
   public isValidLogInfoEvent(logInfoWrongOdds: LogInfoWrongOdds): boolean {
     return !logInfoWrongOdds.messageValidationLogInfo.some(y => y.isError);
-  }
-
-  private isValidFilterBetTeam(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
-    if (_.isNull(filter.betTeam) || _.isUndefined(filter.betTeam) || _.isEmpty(filter.betTeam)) {
-      tooltip.display(this.FILTER_BET_TEAM_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    return true;
   }
 
   private isValidFilterLiveIndicator(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
@@ -136,7 +114,6 @@ export class ValidationService {
 
   public isValidSpread(spread: string, tooltip: Tooltip){
     const isCorrectFormatMultipleDecimal = StaticService.isCorrectFormatMultipleDecimal(spread, this.SPREAD_INPUT_CLASS, tooltip, TEXT.REQUIRED_SPREAD);
-    
     const spreadValue = Number(spread);
     if(!isCorrectFormatMultipleDecimal || spreadValue < 0 || spreadValue > 1){
       tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);

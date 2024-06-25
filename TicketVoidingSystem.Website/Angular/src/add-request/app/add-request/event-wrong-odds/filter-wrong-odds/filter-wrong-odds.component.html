@@ -27,28 +27,6 @@
       </div>
     </div>
   </div>
-
-  <!-- <div class="d-flex line-1 mb-2">
-  
-    <div class="filter-odds-type">
-    <ng-select class="custom-sm" [items]="filterOddsType.items" bindLabel="name" bindValue="value" [disabled]="isDisabled"
-      [(ngModel)]="filterWrongOddsModel.filterOddsType" [clearable]="false" (ngModelChange)="changeFilter()">
-    </ng-select>
-    <div class="input-group input-group-sm d-flex">
-      <div *ngIf="filterWrongOddsModel.filterOddsType === 'value'" class="input-group input-group-sm filter-odds-type-input">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsValue" (ngModelChange)="changeFilter();isValidMultipleOdds($event, 'filter-odds-type-input')"
-        class="form-control border-radius-left-0 odds-value-input" placeholder="Ex: 0.75&1&1.25" [disabled]="isDisabled">
-      </div>
-      <div *ngIf="filterWrongOddsModel.filterOddsType === 'range'" class="input-group input-group-sm filter-odds-type-input">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.fromOdds" (ngModelChange)="changeFilter();isValidSingleOdds($event, 'from-odds')" class="form-control border-radius-left-0 from-odds" [disabled]="isDisabled">
-        <div class="input-group-prepend">
-          <span class="input-group-text">-</span>
-        </div>
-        <input type="text" [(ngModel)]="filterWrongOddsModel.toOdds" (ngModelChange)="changeFilter();isValidSingleOdds($event, 'to-odds')" class="form-control to-odds" [disabled]="isDisabled">
-      </div>
-    </div>
-  </div> -->
-
 <div class="d-flex line-2 mb-2">
   <div class="filter-favorite-type" *ngIf="!isSubTypeOuOr1stOu()">
     <ng-select class="custom-sm" [items]="filterFavoriteType.items" bindLabel="name" bindValue="value" [disabled]="isDisabled"
@@ -66,22 +44,6 @@
         class="form-control border-radius-left-0" [disabled]="isDisabled">
     </div>
   </div>
-  <!-- <div class="filter-bet-team mr-3" *ngIf="!isSubTypeOuOr1stOu()">
-    <div class="form-check mr-3">
-      <input class="form-check-input" type="radio" name="radio-bet-team" id="h-team" [disabled]="isDisabled"
-      [(ngModel)]="filterWrongOddsModel.betTeam" [value]="'h'" (ngModelChange)="changeFilter()">
-      <label class="form-check-label" for="h-team">
-        Home Team
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="radio-bet-team" id="a-team"  [disabled]="isDisabled"
-      [(ngModel)]="filterWrongOddsModel.betTeam" [value]="'a'" (ngModelChange)="changeFilter()">
-      <label class="form-check-label" for="a-team">
-        Away Team
-      </label>
-    </div>
-  </div> -->
   <div class="filter-live-indicator filter-right">
     <div class="form-check mr-3">
       <input class="form-check-input" type="radio" name="radio-live-indicator" id="none-live" [disabled]="isDisabled"
@@ -107,7 +69,7 @@
         <span class="input-group-text">Spread</span>
       </div>
       <div class="input-group-sm div-input spread-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.spread" (ngModelChange)="changeFilter();changeSpread()"
+        <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (ngModelChange)="changeFilter();changeSpread()"
           class="form-control border-radius-left-0" [disabled]="isDisabled">
       </div>
     </div>
@@ -119,7 +81,7 @@
       </div>
       <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" 
       (ngModelChange)="changeFilter();changeAllowanceRate()"
-          [(ngModel)]="filterWrongOddsModel.oddsInfo.allowanceRate" [clearable]="false" [searchable]="false">
+          [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
       </ng-select>
     </div>
   </div>
@@ -136,7 +98,7 @@
         </span>
       </div>
       <div class="input-group-sm div-input correct-odds-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.correctOddsHomeOver" 
+        <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsHomeOver" 
         (ngModelChange)="changeFilter();changeCorrectOdds()"
           class="form-control border-radius-left-0">
       </div>
@@ -152,7 +114,7 @@
         </span>
       </div>
       <div class="input-group-sm div-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.oddsInfo.correctOddsAwayUnder"
+        <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsAwayUnder"
           class="form-control border-radius-left-0 disabled" [disabled]="true">
       </div>
     </div>

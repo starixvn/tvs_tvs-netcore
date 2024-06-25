@@ -7,18 +7,6 @@ export class WrongOddsModel {
   eventDate?: Date;
   filterFromTransTime: string;
   filterToTransTime: string;
-  voidFromTime?: string;
-  voidToTime?: string;
-  filterOddsType: string;
-  filterFavoriteType: string;
-  filterOuType: string;
-  oddsValue: string;
-  fromOdds: string;
-  toOdds: string;
-  correctOdds: string;
-  betTeam: string;
-  wrongOU: string;
-  favoriteValue: string;
   logInfoDetail: LogInfoDetail;
   poolHouseCheckedBetTypes : string;
   isPoolHouseAffected: boolean;
@@ -26,4 +14,18 @@ export class WrongOddsModel {
   isLinkGroupAIO: boolean;
   liveIndicator: number;
   oddsInfo: OddsInfo;
+  filterFavoriteType?: string;
+  wrongOU?: string;
+  favoriteValue?: string;
+  spread?: string;
+  allowanceRate?: string;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
+  fromOddsNotVoidHomeOver?: string;
+  toOddsNotVoidHomeOver?: string;
+  fromOddsNotVoidAwayUnder?: string;
+  toOddsNotVoidAwayUnder?: string;
+
+  voidFromTime?: string;
+  voidToTime?: string;
 }

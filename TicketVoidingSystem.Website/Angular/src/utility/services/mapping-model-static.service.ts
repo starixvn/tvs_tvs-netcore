@@ -103,14 +103,16 @@ export class MappingModelStaticService {
       isLinkGroup1X2: x.isLinkGroup1X2,
       isLinkGroupAIO: x.isLinkGroupAIO,
       liveIndicator: x.liveIndicator,
-      filterOddsType: x.filterOddsType,
+      spread: x.spread,
+      allowanceRate: x.allowanceRate,
+      correctOddsHomeOver: x.correctOddsHomeOver,
+      correctOddsAwayUnder:x.correctOddsAwayUnder,
+      fromOddsNotVoidHomeOver: x.fromOddsNotVoidHomeOver,
+      toOddsNotVoidHomeOver: x.toOddsNotVoidHomeOver,
+      fromOddsNotVoidAwayUnder: x.fromOddsNotVoidAwayUnder,
+      toOddsNotVoidAwayUnder: x.toOddsNotVoidAwayUnder,
+
       filterFavoriteType: x.filterFavoriteType,
-      filterOuType: x.filterOuType,
-      oddsValue: x.oddsValue,
-      fromOdds: x.fromOdds,
-      toOdds: x.toOdds,
-      correctOdds: x.correctOdds,
-      betTeam: x.betTeam,
       wrongOU: x.wrongOU,
       favoriteValue: x.favoriteValue
     } as WrongOddsGetLogInfoQuery));

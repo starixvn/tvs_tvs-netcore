@@ -29,9 +29,9 @@ export class GetLinkedLogQuery {
   wrongMarket: string;
   liveIndicator: number;
 
-  filterFavoriteType: string;
-  favoriteValue: string;
-  wrongOU : string;
+  filterFavoriteType?: string;
+  favoriteValue?: string;
+  wrongOU?: string;
 
   spread: string;
   allowanceRate?: string;

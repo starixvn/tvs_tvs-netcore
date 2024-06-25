@@ -227,16 +227,17 @@ public static class ObjectToXMLExtension
                        + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"LiveIndicator='{model.LiveIndicator}' "
-                       + $"FilterOddsType='{SecurityElement.Escape(model.FilterOddsType)}' "
                        + $"FilterFavoriteType='{SecurityElement.Escape(model.FilterFavoriteType)}' "
-                       + $"FilterOuType='{SecurityElement.Escape(model.FilterOuType)}' "
-                       + $"OddsValue='{SecurityElement.Escape(model.OddsValue)}' "
-                       + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
-                       + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
-                       + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
-                       + $"BetTeam='{SecurityElement.Escape(model.BetTeam)}' "
-                       + $"OuValue='{SecurityElement.Escape(model.OuValue)}' "
-                       + $"FavoriteValue='{SecurityElement.Escape(model.FavoriteValue)}' />";
+                       + $"FavoriteValue='{SecurityElement.Escape(model.FavoriteValue)}' "
+                       + $"WrongOU='{SecurityElement.Escape(model.WrongOU)}' "
+                       + $"Spread='{SecurityElement.Escape(model.Spread)}' "
+                       + $"AllowanceRate='{SecurityElement.Escape(model.AllowanceRate)}' "
+                       + $"CorrectOddsHomeOver='{SecurityElement.Escape(model.CorrectOddsHomeOver)}' "
+                       + $"CorrectOddsAwayUnder='{SecurityElement.Escape(model.CorrectOddsAwayUnder)}' "
+                       + $"FromOddsNotVoidHomeOver='{SecurityElement.Escape(model.FromOddsNotVoidHomeOver)}' "
+                       + $"ToOddsNotVoidHomeOver='{SecurityElement.Escape(model.ToOddsNotVoidHomeOver)}' "
+                       + $"FromOddsNotVoidAwayUnder='{SecurityElement.Escape(model.FromOddsNotVoidAwayUnder)}' "
+                       + $"ToOddsNotVoidAwayUnder='{SecurityElement.Escape(model.ToOddsNotVoidAwayUnder)}' />";
 
             stringBuilder.AppendLine(line);
         }

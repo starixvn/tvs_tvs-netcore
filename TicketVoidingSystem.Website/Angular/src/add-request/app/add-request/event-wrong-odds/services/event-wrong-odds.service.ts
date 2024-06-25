@@ -5,9 +5,10 @@ import { AllowanceRate, DateTimeFormat, PoolHouseTicketValue } from "../../../..
 import { AddRequestApiService } from "../../add-request-api.service";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongOddsModel } from "../../models/event-wrong-odds.model";
-import { FilterBetTeamConstant, FilterFavoriteTypeConstant, FilterOddsTypeConstant, FilterOuTypeConstant, FilterWrongOddsModel, OddsInfoModel } from "../models/filter-wrong-odds.model";
+import { FilterFavoriteTypeConstant, FilterWrongOddsModel } from "../models/filter-wrong-odds.model";
 import { WrongOddsGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOdds } from "../models/log-info-wrong-odds.model";
+import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +17,13 @@ import { LogInfoWrongOdds } from "../models/log-info-wrong-odds.model";
 export class EventWrongOddsService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
+    private readonly validationService: ValidationService
   ) {}
 
   public initDefaultFilter(logInfoEvent: LogInfoWrongOdds): void {
     logInfoEvent.filterWrongOdds = new FilterWrongOddsModel();
-    logInfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.VALUE;
     logInfoEvent.filterWrongOdds.filterFavoriteType = FilterFavoriteTypeConstant.HOME;
-    logInfoEvent.filterWrongOdds.filterOuType = FilterOuTypeConstant.OVER;
-    logInfoEvent.filterWrongOdds.betTeam = FilterBetTeamConstant.HOME;
-    logInfoEvent.filterWrongOdds.oddsInfo = new OddsInfoModel();
-    logInfoEvent.filterWrongOdds.oddsInfo.allowanceRate = AllowanceRate.ALLOWANCE_RATE[0].value;
+    logInfoEvent.filterWrongOdds.allowanceRate = AllowanceRate.ALLOWANCE_RATE[0].value;
     const currentMoment = moment.utc().tz('America/Caracas');
     logInfoEvent.filterWrongOdds.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
     logInfoEvent.filterWrongOdds.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
@@ -47,18 +45,22 @@ export class EventWrongOddsService {
       filterFromTransTime: logInfoEvent.filterWrongOdds.filterFromTransTime,
       filterToTransTime: logInfoEvent.filterWrongOdds.filterToTransTime,
       liveIndicator: logInfoEvent.filterWrongOdds.liveIndicator,
-      filterFavoriteType: logInfoEvent.filterWrongOdds.filterFavoriteType,
-      favoriteValue: logInfoEvent.filterWrongOdds.favoriteValue,
-      wrongOU: logInfoEvent.filterWrongOdds.wrongOU,
-      spread: logInfoEvent.filterWrongOdds.oddsInfo.spread.toString(),
-      allowanceRate: logInfoEvent.filterWrongOdds.oddsInfo.allowanceRate,
-      correctOddsAwayUnder: logInfoEvent.filterWrongOdds.oddsInfo.correctOddsAwayUnder,
-      correctOddsHomeOver: logInfoEvent.filterWrongOdds.oddsInfo.correctOddsHomeOver,
-      fromOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidAwayUnder,
-      fromOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidHomeOver,
-      toOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidAwayUnder,
-      toOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidHomeOver      
+      spread: logInfoEvent.filterWrongOdds.spread.toString(),
+      allowanceRate: logInfoEvent.filterWrongOdds.allowanceRate,
+      correctOddsAwayUnder: logInfoEvent.filterWrongOdds.correctOddsAwayUnder,
+      correctOddsHomeOver: logInfoEvent.filterWrongOdds.correctOddsHomeOver,
+      fromOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.fromOddsNotVoidAwayUnder,
+      fromOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.fromOddsNotVoidHomeOver,
+      toOddsNotVoidAwayUnder: logInfoEvent.filterWrongOdds.toOddsNotVoidAwayUnder,
+      toOddsNotVoidHomeOver: logInfoEvent.filterWrongOdds.toOddsNotVoidHomeOver      
     } as GetLinkedLogQuery;
+
+    if (this.validationService.isSubTypeOuOr1stOu(filter.subIssueTypeId)) {
+      query.wrongOU = logInfoEvent.filterWrongOdds.wrongOU;
+    } else {
+      query.filterFavoriteType = logInfoEvent.filterWrongOdds.filterFavoriteType;
+      query.favoriteValue = logInfoEvent.filterWrongOdds.favoriteValue;
+    }
 
     return this.addRequestApiService.getLinkedLogs(query);
   }
@@ -73,19 +75,21 @@ export class EventWrongOddsService {
       logInfoQuery.liveIndicator = logInfoEvent.filterWrongOdds.liveIndicator;
       logInfoQuery.isLinkGroup1X2 = logInfoEvent.linkedLogsViewModel.isLinkGroup1X2;
       logInfoQuery.isLinkGroupAIO = logInfoEvent.linkedLogsViewModel.isLinkGroupAIO;
-      
-      logInfoQuery.filterFavoriteType = logInfoEvent.filterWrongOdds.filterFavoriteType;
-      logInfoQuery.wrongOU = logInfoEvent.filterWrongOdds.wrongOU;
-      logInfoQuery.favoriteValue = logInfoEvent.filterWrongOdds.favoriteValue;
+      logInfoQuery.spread = logInfoEvent.filterWrongOdds.spread.toString();
+      logInfoQuery.allowanceRate = logInfoEvent.filterWrongOdds.allowanceRate;
+      logInfoQuery.correctOddsAwayUnder = logInfoEvent.filterWrongOdds.correctOddsAwayUnder;
+      logInfoQuery.correctOddsHomeOver = logInfoEvent.filterWrongOdds.correctOddsHomeOver;
+      logInfoQuery.fromOddsNotVoidAwayUnder = logInfoEvent.filterWrongOdds.fromOddsNotVoidAwayUnder;
+      logInfoQuery.fromOddsNotVoidHomeOver = logInfoEvent.filterWrongOdds.fromOddsNotVoidHomeOver;
+      logInfoQuery.toOddsNotVoidAwayUnder = logInfoEvent.filterWrongOdds.toOddsNotVoidAwayUnder;
+      logInfoQuery.toOddsNotVoidHomeOver = logInfoEvent.filterWrongOdds.toOddsNotVoidHomeOver;
 
-      logInfoQuery.spread = logInfoEvent.filterWrongOdds.oddsInfo.spread.toString();
-      logInfoQuery.allowanceRate = logInfoEvent.filterWrongOdds.oddsInfo.allowanceRate;
-      logInfoQuery.correctOddsAwayUnder = logInfoEvent.filterWrongOdds.oddsInfo.correctOddsAwayUnder;
-      logInfoQuery.correctOddsHomeOver = logInfoEvent.filterWrongOdds.oddsInfo.correctOddsHomeOver;
-      logInfoQuery.fromOddsNotVoidAwayUnder = logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidAwayUnder;
-      logInfoQuery.fromOddsNotVoidHomeOver = logInfoEvent.filterWrongOdds.oddsInfo.fromOddsNotVoidHomeOver;
-      logInfoQuery.toOddsNotVoidAwayUnder = logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidAwayUnder;
-      logInfoQuery.toOddsNotVoidHomeOver = logInfoEvent.filterWrongOdds.oddsInfo.toOddsNotVoidHomeOver;
+      if (this.validationService.isSubTypeOuOr1stOu(filter.subIssueTypeId)) {
+        logInfoQuery.wrongOU = logInfoEvent.filterWrongOdds.wrongOU;
+      } else {
+        logInfoQuery.filterFavoriteType = logInfoEvent.filterWrongOdds.filterFavoriteType;
+        logInfoQuery.favoriteValue = logInfoEvent.filterWrongOdds.favoriteValue;
+      }
 
       return logInfoQuery;
   }
@@ -101,21 +105,27 @@ export class EventWrongOddsService {
       isLinkGroupAIO: inputModels.isLinkGroupAIO,
       result: null
     } as LinkedLogsViewModel;
+
     event.filterWrongOdds = {
       filterFromTransTime: inputModels.filterFromTransTime,
       filterToTransTime: inputModels.filterToTransTime,
-      filterOddsType: inputModels.filterOddsType,
-      filterOuType: inputModels.filterOuType,
-      filterFavoriteType: inputModels.filterFavoriteType,
-      oddsValue: inputModels.oddsValue,
-      fromOdds: inputModels.fromOdds,
-      toOdds: inputModels.toOdds,
-      betTeam: inputModels.betTeam,
-      correctOdds: inputModels.correctOdds,
-      favoriteValue: inputModels.favoriteValue,
-      wrongOU: inputModels.wrongOU,
-      liveIndicator: inputModels.liveIndicator
+      liveIndicator: inputModels.liveIndicator,
+      spread: inputModels.spread,
+      allowanceRate: inputModels.allowanceRate,
+      correctOddsHomeOver: inputModels.correctOddsHomeOver,
+      correctOddsAwayUnder: inputModels.correctOddsAwayUnder,
+      fromOddsNotVoidHomeOver: inputModels.fromOddsNotVoidHomeOver,
+      toOddsNotVoidHomeOver: inputModels.toOddsNotVoidHomeOver,
+      fromOddsNotVoidAwayUnder: inputModels.fromOddsNotVoidAwayUnder,
+      toOddsNotVoidAwayUnder: inputModels.toOddsNotVoidAwayUnder
     } as FilterWrongOddsModel;
+
+    if (this.validationService.isSubTypeOuOr1stOu(inputModels.subIssueTypeId.toString())) {
+      event.filterWrongOdds.wrongOU = inputModels.wrongOU;
+    } else {
+      event.filterWrongOdds.filterFavoriteType = inputModels.filterFavoriteType;
+      event.filterWrongOdds.favoriteValue = inputModels.favoriteValue;
+    }
 
     return event;
   }
