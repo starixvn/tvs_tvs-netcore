@@ -9,6 +9,7 @@ import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.mo
 import { AcceptType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -28,7 +29,6 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeTransId = '111102';
@@ -1120,7 +1120,10 @@ describe('EventWrongScoreComponent', () => {
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
       })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .mock(AddRequestStore, {
+        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+        changeStartTimeFilterAnalysis: jest.fn()
+      })
       .render({
         bind: {
           wrongScoreModels: Helper.fakeWrongScoreModel,
@@ -1139,14 +1142,16 @@ describe('EventWrongScoreComponent', () => {
   it('#changeMatchEvent should not emit updateMatchId', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
-
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
       })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
+      .mock(AddRequestStore, {
+        changeSavingRequestStatus: mockChangeSavingRequestStatus,
+        changeStartTimeFilterAnalysis: jest.fn()
+      })
       .render({
         bind: {
           wrongScoreModels: Helper.fakeWrongScoreModel,

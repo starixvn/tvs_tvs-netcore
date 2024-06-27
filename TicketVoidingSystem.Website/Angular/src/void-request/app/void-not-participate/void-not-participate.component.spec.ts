@@ -8,7 +8,9 @@ import { LogInfoTicketCountComponent } from '../../../utility/components/log-inf
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
@@ -19,6 +21,7 @@ import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { VoidNotParticipateModel } from './models/void-page-not-participate.model';
 import { VoidPageService } from './services/void-page.service';
 import { VoidNotParticipateComponent } from './void-not-participate.component';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 
 class Helper {
 }
@@ -29,7 +32,9 @@ describe('VoidNotParticipateComponent', () => {
       TicketsListComponent,
       TemplateMessageComponent,
       LogInfoTicketCountComponent,
-      LicenseeAffectedListComponent
+      LicenseeAffectedListComponent,
+      MessageAreaComponent,
+      PasswordAreaComponent
     ],
     imports: [
       FormsModule,
@@ -66,6 +71,7 @@ describe('VoidNotParticipateComponent', () => {
     requestDetail.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
     const voidItem = new VoidNotParticipateModel();
     voidItem.matchModel = new MatchModel();
+    voidItem.subIssueType = new SubIssueType();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');
     const mockLoadUnderneathVoidPageItemsData = jest.fn();
     const mockGetBasicVoidPageItemsData = jest.fn().mockReturnValue(voidItem);

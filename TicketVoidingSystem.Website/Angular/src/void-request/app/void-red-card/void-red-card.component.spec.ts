@@ -12,8 +12,10 @@ import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
-import { PrimitiveProperty } from '../models/primitive-property.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
+import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
@@ -90,7 +92,9 @@ describe('VoidRedCardComponent', () => {
       LogInfoNewComponent,
       TicketsListComponent,
       TemplateMessageComponent,
-      LicenseeAffectedListComponent
+      LicenseeAffectedListComponent,
+      MessageAreaComponent,
+      PasswordAreaComponent
     ],
     imports: [
       FormsModule,
@@ -143,7 +147,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     const element = document.createElement('user-name');
     element.setAttribute('id', 'user-name');
     element.setAttribute('user-name', 'name');
@@ -177,7 +181,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -200,7 +204,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -228,7 +232,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -254,7 +258,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -344,7 +348,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
@@ -367,7 +371,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
@@ -426,7 +430,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance.primitiveProperty.userPassword = null;
     instance.tooltip = new Tooltip();
     instance.tooltip.display = jest.fn();
@@ -448,7 +452,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance.primitiveProperty.userPassword = '123123';
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
 
@@ -467,7 +471,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance.primitiveProperty.userPassword = '123123';
     instance['afterLoadUnderneathDataSubscription'] = null;
 
@@ -514,7 +518,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
@@ -541,7 +545,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = false;
 
@@ -564,7 +568,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = true;
 
     // Action
@@ -586,7 +590,7 @@ describe('VoidRedCardComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = true;
     instance['isLoadedUnderneathData'] = false;
 
@@ -613,9 +617,11 @@ describe('VoidRedCardComponent', () => {
       });
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.initialize = true;
-    const templateMessageComponentQueryList = new QueryList<TemplateMessageComponent>();
-    instance.templateMessageViewChildren.reset([...templateMessageComponentQueryList.toArray(), templateMessageComponent]);
-    instance.primitiveProperty = new PrimitiveProperty();
+    const messageAreaComponents = new QueryList<MessageAreaComponent>();
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
+    instance.messageAreaViewChildren.reset([...messageAreaComponents.toArray(), messageAreaComponent]);
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
@@ -644,9 +650,11 @@ describe('VoidRedCardComponent', () => {
       });
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.initialize = false;
-    const templateMessageComponentQueryList = new QueryList<TemplateMessageComponent>();
-    instance.templateMessageViewChildren.reset([...templateMessageComponentQueryList.toArray(), templateMessageComponent]);
-    instance.primitiveProperty = new PrimitiveProperty();
+    const messageAreaComponents = new QueryList<MessageAreaComponent>();
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
+    instance.messageAreaViewChildren.reset([...messageAreaComponents.toArray(), messageAreaComponent]);
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;

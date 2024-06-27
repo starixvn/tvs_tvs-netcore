@@ -7,7 +7,9 @@ import { LicenseeAffectedListComponent } from '../../../utility/components/licen
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
@@ -18,6 +20,7 @@ import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { VoidAbnormalBetModel } from './models/void-abnormal-bet.model';
 import { VoidPageService } from './services/void-page.service';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet.component';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 
 class Helper {
 }
@@ -27,7 +30,9 @@ describe('VoidNotParticipateComponent', () => {
     declarations: [
       TicketsListComponent,
       TemplateMessageComponent,
-      LicenseeAffectedListComponent
+      LicenseeAffectedListComponent,
+      MessageAreaComponent,
+      PasswordAreaComponent
     ],
     imports: [
       FormsModule,
@@ -64,6 +69,7 @@ describe('VoidNotParticipateComponent', () => {
     requestDetail.request.issueTypeId = Number(IssueTypeConstant.ABNORMAL_BET);
     const voidItem = new VoidAbnormalBetModel();
     voidItem.matchModel = new MatchModel();
+    voidItem.subIssueType = new SubIssueType();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');
     const mockLoadUnderneathVoidPageItemsData = jest.fn();
     const mockGetBasicVoidPageItemsData = jest.fn().mockReturnValue([voidItem]);

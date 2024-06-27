@@ -51,8 +51,8 @@ describe('ConfirmationComponent', () => {
     component.tooltip.display = jest.fn();
     // Action and Asert
     testCases.forEach(item => {
-        component.confirmation.reason = item.reason;
-        component.confirmation.reasonSC = item.reasonSC;
+        component.confirmation.voidReason.reasonEnglish = item.reason;
+        component.confirmation.voidReason.reasonChineseSimplified = item.reasonSC;
         component.confirmation.userPassword = item.userPassword;
         actualValue = component.checkValidation();
         expect(actualValue).toBe(item.expectedValue);
@@ -66,8 +66,8 @@ describe('ConfirmationComponent', () => {
     // Arrange
     // Action and Asert
     component.clearData();
-    expect(component.confirmation.reason).toBe('');
-    expect(component.confirmation.reasonSC).toBe('');
+    expect(component.confirmation.voidReason.reasonEnglish).toBe('');
+    expect(component.confirmation.voidReason.reasonChineseSimplified).toBe('');
     expect(component.confirmation.userPassword).toBe('');
   });
 });

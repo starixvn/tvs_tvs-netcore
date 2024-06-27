@@ -239,6 +239,7 @@ describe('EventWrongOddsComponent', () => {
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
     .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: false,
@@ -258,6 +259,7 @@ describe('EventWrongOddsComponent', () => {
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
     .mock(EventWrongOddsService, { initDefaultLogInfoWrongOdds: jest.fn().mockImplementation(() => new LogInfoWrongOdds()) })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: false,

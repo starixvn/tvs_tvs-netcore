@@ -9,8 +9,8 @@ import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
-import { MatchInfo } from '../../../../utility/models/event.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { RedCardModel } from '../models/event-red-card.model';
@@ -31,7 +31,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -551,7 +550,7 @@ describe('EventRedCardComponent', () => {
     // Arrange
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
-
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .mock(LogInfoService, {
         resetLogInfoOfEvent: mockResetLogInfoOfEvent,
         resetVoidTimeArea: jest.fn(),
@@ -589,6 +588,7 @@ describe('EventRedCardComponent', () => {
         resetVoidTimeArea: jest.fn(),
         resetIsCheckedVar: jest.fn(),
       })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,

@@ -102,6 +102,7 @@ describe('EventDuplicateTicketsComponent', () => {
   it('#afterFocusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
     const { instance } = await shallow
       .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,
@@ -119,6 +120,7 @@ describe('EventDuplicateTicketsComponent', () => {
   it('#afterFocusOutBetIds should not call #getMatchAndCheckValidTransIds', async () => {
     const { instance } = await shallow
       .mock(AddRequestApiService, {getPermissionAddRequest: jest.fn()})
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           duplicateTicketsModel: Helper.fakeDuplicateTicketsModel,

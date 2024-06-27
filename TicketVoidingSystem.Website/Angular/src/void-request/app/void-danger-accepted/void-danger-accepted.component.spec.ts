@@ -14,8 +14,10 @@ import { IssueTypeConstant } from '../../../utility/constants/issue-type.constan
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
-import { PrimitiveProperty } from '../models/primitive-property.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
+import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 import { CheckRequestService } from '../services/check-request.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { PopupService } from './services/popup.service';
@@ -92,7 +94,9 @@ describe('VoidDangerAcceptedComponent', () => {
       LogInfoNewComponent,
       TicketsListComponent,
       TemplateMessageComponent,
-      LicenseeAffectedListComponent
+      LicenseeAffectedListComponent,
+      MessageAreaComponent,
+      PasswordAreaComponent
     ],
     imports: [
       FormsModule,
@@ -139,7 +143,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     const element = document.createElement('user-name');
     element.setAttribute('id', 'user-name');
     element.setAttribute('user-name', 'name');
@@ -173,7 +177,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -196,7 +200,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -224,7 +228,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -250,7 +254,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowVoidTickets(voidMatch);
@@ -340,7 +344,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
@@ -363,7 +367,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
 
     // Action
     await instance.onClickShowTemplateMessage(voidMatch);
@@ -429,7 +433,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance.primitiveProperty.userPassword = null;
     instance.tooltip = new Tooltip();
     instance.tooltip.display = jest.fn();
@@ -451,7 +455,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance.primitiveProperty.userPassword = '123123';
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
 
@@ -470,7 +474,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance.primitiveProperty.userPassword = '123123';
     instance['afterLoadUnderneathDataSubscription'] = null;
 
@@ -517,7 +521,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
@@ -544,7 +548,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = false;
 
@@ -567,7 +571,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = true;
 
     // Action
@@ -589,7 +593,7 @@ describe('VoidDangerAcceptedComponent', () => {
           requestDetail: Helper.fakeRequestDetailViewModel
         }
       });
-    instance.primitiveProperty = new PrimitiveProperty();
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = true;
     instance['isLoadedUnderneathData'] = false;
 
@@ -616,9 +620,11 @@ describe('VoidDangerAcceptedComponent', () => {
       });
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.initialize = true;
-    const templateMessageComponentQueryList = new QueryList<TemplateMessageComponent>();
-    instance.templateMessageViewChildren.reset([...templateMessageComponentQueryList.toArray(), templateMessageComponent]);
-    instance.primitiveProperty = new PrimitiveProperty();
+    const messageAreaComponents = new QueryList<MessageAreaComponent>();
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
+    instance.messageAreaComponents.reset([...messageAreaComponents.toArray(), messageAreaComponent]);
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
@@ -647,9 +653,11 @@ describe('VoidDangerAcceptedComponent', () => {
       });
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.initialize = false;
-    const templateMessageComponentQueryList = new QueryList<TemplateMessageComponent>();
-    instance.templateMessageViewChildren.reset([...templateMessageComponentQueryList.toArray(), templateMessageComponent]);
-    instance.primitiveProperty = new PrimitiveProperty();
+    const messageAreaComponents = new QueryList<MessageAreaComponent>();
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
+    instance.messageAreaComponents.reset([...messageAreaComponents.toArray(), messageAreaComponent]);
+    instance.primitiveProperty = new CommonPrimitiveProperty();
     instance['isRunningSubscriptionCallback'] = false;
     instance['isLoadedUnderneathData'] = true;
     instance['afterLoadUnderneathDataSubscription'] = afterLoadUnderneathDataSubscription;
@@ -661,7 +669,7 @@ describe('VoidDangerAcceptedComponent', () => {
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(0);
     expect(mockVoidAllMatches).toHaveBeenCalledTimes(0);
   });
-  
+
   it('#ChangeCheckBoxEarlyEvent should update correctly templateValue', async () => {
     // Arrange
     const { instance } = await shallow

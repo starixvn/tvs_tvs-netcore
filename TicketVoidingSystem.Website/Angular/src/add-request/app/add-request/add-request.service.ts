@@ -26,30 +26,30 @@ export class AddRequestService {
       query.requestId = requestId;
       await this.editRequest(query, addRequestStore, isSaveAndVoid);
     } else {
-      await this.addRequest(query, isEdit, addRequestStore, isSaveAndVoid);
+      await this.addRequest(query, addRequestStore, isSaveAndVoid);
     }
   }
 
-  private async addRequest(query: AddRequestQuery, isEdit: boolean, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
+  private async addRequest(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
     addRequestStore.changeSavingRequestStatus(true);
     query.guid = `AddRequest-${Guid.create().toString()}`;
     query.sessionTime = this.getTimeFilterTicket(addRequestStore);
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
-      this.handleAfterAddRequest(isEdit, result, query.issueTypeId, addRequestStore, isSaveAndVoid);
+      this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore, isSaveAndVoid);
     } else {
-      this.getAddResultCache(isEdit, query, addRequestStore, isSaveAndVoid);
+      this.getAddResultCache(query, addRequestStore, isSaveAndVoid);
     }
   }
 
-  private getAddResultCache(isEdit: boolean, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private getAddResultCache(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
     let isChecking = false;
     const interval = setInterval(async () => {
       if (!isChecking) {
         isChecking = true;
         const result = await this.commonService.getResultCache<AddRequestResultModel>(query.guid);
         if (result) {
-          this.handleAfterAddRequest(isEdit, result, query.issueTypeId, addRequestStore, isSaveAndVoid);
+          this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore, isSaveAndVoid);
           clearInterval(interval);
         }
         isChecking = false;
@@ -57,7 +57,7 @@ export class AddRequestService {
     }, 2000);
   }
 
-  private handleAfterAddRequest(isEdit, addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private handleAfterAddRequest(addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
     if (addResult.isSuccessful) {
       if (isSaveAndVoid) {
         this.goToVoidPage(Number(addResult.data.requestId));

@@ -59,20 +59,20 @@ describe('AppService', () => {
     const mockAddRequestStore = new AddRequestStore();
     mockAddRequestStore.changeSavingRequestStatus = jest.fn();
     const spyAddRequestServiceAddRequest = jest.spyOn(mockAddRequestApiService, 'addRequest').mockImplementation(() => Promise.resolve(Helper.fakeResultSuccessful));
-    const spyPopupServiceShowAddedRequestSuccessful = jest.spyOn(mockPopupService, 'showAddedRequestSuccessful').mockImplementation();
+    const spyPopupServiceShowAddedRequestSuccessful = jest.spyOn(mockPopupService, 'showAddedRequestSuccessfulWithMatches').mockImplementation();
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
     });
     window.location.reload = jest.fn();
     window.location.assign = jest.fn();
     mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
-    await mockAddRequestService['addRequest'](new AddRequestQuery(), '17', mockAddRequestStore, false);
+    await mockAddRequestService['addRequest'](new AddRequestQuery(), mockAddRequestStore, false);
 
     expect(spyAddRequestServiceAddRequest).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowAddedRequestSuccessful).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][0]).toEqual(Helper.fakeResultSuccessful.data.requestId);
-    expect(spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][1]).toBeInstanceOf(Function);
-    spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][1]();
+    expect(spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][2]).toBeInstanceOf(Function);
+    spyPopupServiceShowAddedRequestSuccessful.mock.calls[0][2]();
     expect(window.location.assign).toHaveBeenCalledTimes(1);
   });
 
@@ -87,7 +87,7 @@ describe('AppService', () => {
     window.location.reload = jest.fn();
     mockAddRequestService = new AddRequestService(mockAddRequestApiService, mockPopupService, mockCommonService);
 
-    await mockAddRequestService['addRequest'](new AddRequestQuery(), '1', mockAddRequestStore, false);
+    await mockAddRequestService['addRequest'](new AddRequestQuery(), mockAddRequestStore, false);
 
     expect(spyAddRequestServiceAddRequest).toHaveBeenCalledTimes(1);
     expect(spyPopupServiceShowSaveRequestError).toHaveBeenCalledTimes(1);

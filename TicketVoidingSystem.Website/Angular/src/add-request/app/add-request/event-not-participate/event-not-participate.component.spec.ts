@@ -197,6 +197,7 @@ describe('EventNotParticipateComponent', () => {
     const { instance } = await shallow
     .mock(FilterNotParticipateService, { initDefaultFilter: jest.fn().mockReturnValue(new FilterNotParticipateModel()) })
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: false,
@@ -218,6 +219,7 @@ describe('EventNotParticipateComponent', () => {
   it('#changeMatchEvent should not call #updateModelWhenChangeMatchId when leagueEventWrongOddsComponent null', async () => {
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: false,

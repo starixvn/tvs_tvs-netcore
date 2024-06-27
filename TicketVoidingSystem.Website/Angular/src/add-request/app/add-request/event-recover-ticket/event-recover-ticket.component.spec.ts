@@ -107,6 +107,7 @@ describe('EventRecoverTicketComponent', () => {
     const mockCheckBusinessRule = jest.fn();
     const { instance } = await shallow
       .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           recoverTicketModel: Helper.fakeRecoverTicketModel,
@@ -124,6 +125,7 @@ describe('EventRecoverTicketComponent', () => {
     const mockCheckBusinessRule = jest.fn();
     const { instance } = await shallow
       .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           recoverTicketModel: Helper.fakeRecoverTicketModel,

@@ -9,8 +9,11 @@ import { TemplateMessageComponent } from '../../../utility/components/template-m
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
 import { SubmitVoidService } from '../services/submit-void.service';
@@ -26,7 +29,9 @@ describe('VoidDuplicateTicketsComponent', () => {
     declarations: [
       TicketsListComponent,
       TemplateMessageComponent,
-      LicenseeAffectedListComponent
+      LicenseeAffectedListComponent,
+      MessageAreaComponent,
+      PasswordAreaComponent
     ],
     imports: [
       FormsModule,
@@ -65,6 +70,7 @@ describe('VoidDuplicateTicketsComponent', () => {
     requestDetail.duplicateTicketsModel.filterBy = AbnormalFilterBy.MIX_PARLAY;
     const voidItem = new VoidPageDuplicateTicketsModel();
     voidItem.matchModel = new MatchModel();
+    voidItem.subIssueType = new SubIssueType();
     document.body.getAttribute = jest.fn().mockReturnValue('sa');
     const mockLoadUnderneathVoidPageItemsData = jest.fn();
     const mockGetBasicVoidPageItemsData = jest.fn().mockReturnValue(voidItem);

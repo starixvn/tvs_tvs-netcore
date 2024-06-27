@@ -237,6 +237,7 @@ describe('EventReducedOverComponent', () => {
     const { instance } = await shallow
     .mock(FilterReducedOverService, { initDefaultFilter: jest.fn().mockReturnValue(new FilterReducedOverModel()) })
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: false,
@@ -258,6 +259,7 @@ describe('EventReducedOverComponent', () => {
   it('#changeMatchEvent should not call #updateModelWhenChangeMatchId when leagueEventWrongOddsComponent null', async () => {
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: false,
