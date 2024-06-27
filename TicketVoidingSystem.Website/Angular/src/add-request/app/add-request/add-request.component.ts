@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchModel } from '../../../utility/models/match.model';
@@ -26,7 +27,6 @@ import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { RequestModel } from './models/request.model';
 import { CopyRequestInfoService } from './services/copy-request-info.service';
-import { LogAnalysisService } from './services/log-analysis.service';
 
 @Component({
   selector: 'add-request',

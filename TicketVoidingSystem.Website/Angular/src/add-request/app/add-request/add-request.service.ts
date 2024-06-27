@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
+import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
@@ -8,7 +9,6 @@ import { AddRequestApiService } from './add-request-api.service';
 import { AddRequestStore } from './add-request.store';
 import { AddRequestQuery } from './models/add-request.query';
 import { AddRequestResultModel } from './models/request.model';
-import { LogAnalysisService } from './services/log-analysis.service';
 import { PopupService } from './services/popup.service';
 
 @Injectable({

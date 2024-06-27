@@ -8,14 +8,14 @@ import { LABELS } from '../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { StaticService } from '../../../utility/services/static.service';
+import { MessageAreaComponent } from '../message-area/message-area.component';
+import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from './services/popup.service';
 import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
-import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
-import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-danger-accepted',
@@ -24,7 +24,7 @@ import { MessageAreaComponent } from '../message-area/message-area.component';
 })
 export class VoidDangerAcceptedComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChildren("messageArea") messageAreaViewChildren: QueryList<MessageAreaComponent>;
+  @ViewChildren("messageArea") messageAreaComponents: QueryList<MessageAreaComponent>;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidMatches: VoidMatch[] = [];
@@ -149,9 +149,8 @@ export class VoidDangerAcceptedComponent implements OnInit {
 
     this.isRunningSubscriptionCallback = true;
     this.primitiveProperty.isBlockUI = true;
-    const templateMessageComponents = this.messageAreaViewChildren.map(x => x.templateMessageViewChildren.toArray()).flat();
-    if (this.isLoadedUnderneathData && templateMessageComponents.every(x => x.initialize)) {
-      await this.submitVoidService.voidAllMatches(templateMessageComponents, this.voidMatches, this.requestDetail, this.primitiveProperty);
+    if (this.isLoadedUnderneathData && this.messageAreaComponents.toArray().every(x => x.templateMessageComponent.initialize)) {
+      await this.submitVoidService.voidAllMatches(this.messageAreaComponents.toArray(), this.voidMatches, this.requestDetail, this.primitiveProperty);
       this.afterLoadUnderneathDataSubscription.unsubscribe();
     }
 

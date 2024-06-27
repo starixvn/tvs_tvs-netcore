@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
+import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { TemplateMessageComponent } from '../../../../utility/components/template-message/template-message/template-message.component';
 import { Result } from '../../../../utility/models/result';
 import { PasswordService } from '../../../../utility/services/password.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { AppService } from '../../app.service';
+import { MessageAreaComponent } from '../../message-area/message-area.component';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { VoidTicketsQuery } from '../../models/void-tickets.query';
 import { CheckRequestService } from '../../services/check-request.service';
-import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { PopupService } from './popup.service';
 import { ValidationService } from './validation.service';
 
@@ -23,35 +24,38 @@ export class SubmitVoidService {
     private readonly popupService: PopupService,
     private readonly checkRequestService: CheckRequestService,
     private readonly appService: AppService,
-    private readonly passwordService: PasswordService) { }
+    private readonly passwordService: PasswordService,
+    private readonly logAnalysisService: LogAnalysisService) { }
 
-  public async voidAllMatches(templateMessageComponents: TemplateMessageComponent[], voidMatches: VoidMatch[],
+  public async voidAllMatches(messageAreaComponents: MessageAreaComponent[], voidMatches: VoidMatch[],
     requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<void> {
     primitiveProperty.isBlockUI = true;
     const matchHasTickets = voidMatches.filter(item => item.voidTicketsMini.total > 0);
-    
-    const validation = this.validationService.checkValidationBeforeVoid(matchHasTickets, templateMessageComponents);
+    const validation = this.validationService.checkValidationBeforeVoid(matchHasTickets, messageAreaComponents);
     primitiveProperty.errorMessage = validation.errorMsg;
     if (validation.isSuccessful) {
-      this.popupService.showVoidBetConfirm(matchHasTickets, templateMessageComponents,
-        async () => { this.checkRequestModified(matchHasTickets, requestDetail, primitiveProperty); });
+      this.popupService.showVoidBetConfirm(matchHasTickets, messageAreaComponents.map(x => x.templateMessageComponent),
+        async () => { this.checkRequestModified(matchHasTickets, requestDetail, primitiveProperty, messageAreaComponents); });
     }
 
     primitiveProperty.isBlockUI = false;
   }
 
-  private async checkRequestModified(matchHasTickets: VoidMatch[], requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<void> {
+  private async checkRequestModified(matchHasTickets: VoidMatch[], requestDetail: RequestDetailViewModel,
+    primitiveProperty: PrimitiveProperty, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     primitiveProperty.isBlockUI = true;
     const isRequestModified = await this.checkRequestService.isRequestModified(requestDetail.requestId, requestDetail.lastModifiedDate);
     if (!isRequestModified) {
-      await this.reCheckVoidBetPermission(matchHasTickets, requestDetail, primitiveProperty);
+      await this.reCheckVoidBetPermission(matchHasTickets, requestDetail, primitiveProperty, messageAreaComponents);
     }
     primitiveProperty.isBlockUI = false;
   }
 
-  private async reCheckVoidBetPermission(matchHasTickets: VoidMatch[], requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<void> {
+  private async reCheckVoidBetPermission(matchHasTickets: VoidMatch[], requestDetail: RequestDetailViewModel,
+    primitiveProperty: PrimitiveProperty, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     const validation = await this.validationService.checkVoidBetPermission(matchHasTickets, requestDetail.request.issueTypeId);
     if (validation.isSuccessful) {
+      await this.logAnalysisService.writeLogVoidPage(requestDetail.request.requestId, messageAreaComponents)
       await this.processVoid(matchHasTickets, requestDetail, primitiveProperty);
     } else {
       this.popupService.showWarningVoidBetPermission(validation.errorMsg);

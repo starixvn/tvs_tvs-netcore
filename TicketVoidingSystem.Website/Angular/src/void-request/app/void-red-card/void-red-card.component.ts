@@ -6,14 +6,14 @@ import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { CommonService } from '../../../utility/services/common.service';
+import { MessageAreaComponent } from '../message-area/message-area.component';
+import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
 import { SubmitVoidService } from './services/submit-void.service';
 import { TicketsService } from './services/tickets.service';
 import { VoidPageService } from './services/void-page.service';
-import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
-import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-red-card',
@@ -151,7 +151,7 @@ export class VoidRedCardComponent implements OnInit {
     this.isRunningSubscriptionCallback = true;
     this.primitiveProperty.isBlockUI = true;
 
-    const templateMessageComponents = this.messageAreaViewChildren.map(x => x.templateMessageViewChildren.toArray()).flat();
+    const templateMessageComponents = this.messageAreaViewChildren.map(x => x.templateMessageComponent).flat();
     if (this.isLoadedUnderneathData && templateMessageComponents.every(x => x.initialize)) {
       await this.submitVoidService.voidAllMatches(templateMessageComponents, this.voidMatches, this.requestDetail, this.primitiveProperty);
       this.afterLoadUnderneathDataSubscription.unsubscribe();

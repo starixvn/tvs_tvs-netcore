@@ -3,12 +3,12 @@ import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidAbnormalBetModel } from './models/void-abnormal-bet.model';
 import { VoidPageService } from './services/void-page.service';
-import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-abnormal-bet',
@@ -17,7 +17,7 @@ import { MessageAreaComponent } from '../message-area/message-area.component';
 })
 export class VoidAbnormalBetComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChildren("messageArea") messageAreaViewChildren: QueryList<MessageAreaComponent>;
+  @ViewChildren("messageArea") messageAreaComponents: QueryList<MessageAreaComponent>;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItems: VoidAbnormalBetModel[] = [];
@@ -66,7 +66,6 @@ export class VoidAbnormalBetComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    let templateMessageViewChildren = this.messageAreaViewChildren.map(x => x.templateMessageViewChildren.toArray()).flat();
-    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, templateMessageViewChildren, this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 }

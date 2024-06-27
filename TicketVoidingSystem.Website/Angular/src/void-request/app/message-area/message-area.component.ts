@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
-import { UserBehavior } from '../models/user-behavior.module';
+import { VoidReasonComponent } from './void-reason/void-reason.component';
 
 @Component({
   selector: 'message-area',
@@ -17,19 +17,10 @@ export class MessageAreaComponent implements OnInit {
   @Input('issueTypeId') issueTypeId: number;
   @Input('subIssueTypeId') subIssueTypeId: number;
   @Input('voidReason') voidReason: VoidedReason;
-  userBehavior = new UserBehavior();
-  @ViewChildren("templateMessage") templateMessageViewChildren: QueryList<TemplateMessageComponent>;
-  
+  @ViewChild("templateMessage") templateMessageComponent: TemplateMessageComponent;
+  @ViewChild("reason") reasonComponent: VoidReasonComponent;
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  changeMessage() {
-    this.userBehavior.isEditMessage = true;
-  }
-
-  changeReason() {
-    this.userBehavior.isEditReason = true;
   }
 }

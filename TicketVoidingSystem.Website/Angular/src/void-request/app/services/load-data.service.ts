@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { CheckRequestService } from '../services/check-request.service';
@@ -52,7 +53,7 @@ export class LoadDataService {
     primitiveProperty.isRunningSubscriptionCallback = false;
   }
 
-  async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], templateMessageViewChilds: TemplateMessageComponent[], primitiveProperty: CommonPrimitiveProperty,
+  async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[], primitiveProperty: CommonPrimitiveProperty,
     afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
     if (primitiveProperty.isRunningSubscriptionCallback) {
       return;
@@ -60,9 +61,9 @@ export class LoadDataService {
 
     primitiveProperty.isRunningSubscriptionCallback = true;
     primitiveProperty.isBlockUI = true;
-    if (primitiveProperty.isLoadedUnderneathData && templateMessageViewChilds.every(x => this.isValidTemplcateMessage(x))) {
+    if (primitiveProperty.isLoadedUnderneathData && messageAreaComponents.every(x => this.isValidTemplcateMessage(x.templateMessageComponent))) {
       const voidPageItemsHaveTickets = voidPageItems.filter(item => item.voidTicketsMini.total > 0);
-      await this.submitVoidService.submitVoid(templateMessageViewChilds, voidPageItemsHaveTickets, primitiveProperty);
+      await this.submitVoidService.submitVoid(messageAreaComponents, voidPageItemsHaveTickets, primitiveProperty);
       afterLoadUnderneathDataSubscription.unsubscribe();
     }
     primitiveProperty.isBlockUI = false;

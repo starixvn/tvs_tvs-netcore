@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import * as _ from 'lodash';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 
 @Component({
@@ -6,15 +7,15 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
   templateUrl: './void-reason.component.html',
   styleUrls: ['./void-reason.component.scss']
 })
-export class VoidReasonComponent implements OnInit {
+export class VoidReasonComponent implements OnChanges {
   @Input('voidReason') voidReason: VoidedReason;
-  @Output() voidReasonChange = new EventEmitter();
+  initialReason: VoidedReason;
 
   constructor() { }
-  ngOnInit(): void {
-  }
 
-  changeReason() {
-    this.voidReasonChange.emit(this.voidReason);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['voidReason']) {
+      this.initialReason = this.initialReason ?? _.cloneDeep(this.voidReason);
+    }
   }
 }

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { ResultModelService } from '../../../utility/services/result-model.service';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { CheckRequestService } from '../services/check-request.service';
@@ -18,37 +20,39 @@ export class SubmitVoidService {
     private readonly popupService: PopupService,
     private readonly insertQueueService: InsertQueueService,
     private readonly checkRequestService: CheckRequestService,
-    private readonly checkVoidPermissionService: CheckVoidPermissionService
+    private readonly checkVoidPermissionService: CheckVoidPermissionService,
+    private readonly logAnalysisService: LogAnalysisService
   ) { }
 
-  public async submitVoid(templateMessageComponents: TemplateMessageComponent[], voidPageItems: VoidPageCommonItem[],
+  public async submitVoid(messageAreaComponents: MessageAreaComponent[], voidPageItems: VoidPageCommonItem[],
     primitiveProperty: CommonPrimitiveProperty): Promise<void> {
     primitiveProperty.isBlockUI = true;
-    const validation = this.checkValidationBeforeVoid(voidPageItems, templateMessageComponents);
+    const validation = this.checkValidationBeforeVoid(voidPageItems, messageAreaComponents);
     primitiveProperty.errorMessage = validation.errorMsg;
     if (validation.isSuccessful) {
       this.popupService.showVoidBetConfirm(
         `<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`,
         async () => {
-          this.checkRequestModified(voidPageItems, primitiveProperty);
+          this.checkRequestModified(voidPageItems, primitiveProperty, messageAreaComponents);
         });
     }
 
     primitiveProperty.isBlockUI = false;
   }
 
-  private async checkRequestModified(voidPageItem: VoidPageCommonItem[], primitiveProperty: CommonPrimitiveProperty): Promise<void> {
+  private async checkRequestModified(voidPageItem: VoidPageCommonItem[], primitiveProperty: CommonPrimitiveProperty, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     primitiveProperty.isBlockUI = true;
     const isRequestModified = await this.checkRequestService.isRequestModified(voidPageItem[0].detailViewModel.requestId, voidPageItem[0].detailViewModel.lastModifiedDate);
     if (!isRequestModified) {
-      await this.reCheckVoidBetPermission(voidPageItem, primitiveProperty);
+      await this.reCheckVoidBetPermission(voidPageItem, primitiveProperty, messageAreaComponents);
     }
     primitiveProperty.isBlockUI = false;
   }
 
-  private async reCheckVoidBetPermission(voidPageItems: VoidPageCommonItem[], primitiveProperty: CommonPrimitiveProperty): Promise<void> {
+  private async reCheckVoidBetPermission(voidPageItems: VoidPageCommonItem[], primitiveProperty: CommonPrimitiveProperty, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     const validation = await this.checkVoidPermissionService.checkVoidBetPermission(voidPageItems);
     if (validation.isSuccessful) {
+      await this.logAnalysisService.writeLogVoidPage(voidPageItems[0].detailViewModel.request.requestId, messageAreaComponents)
       await this.processVoid(voidPageItems, primitiveProperty);
     } else {
       this.popupService.showWarningVoidBetPermission(validation.errorMsg);
@@ -64,13 +68,15 @@ export class SubmitVoidService {
     }
   }
 
-  private checkValidationBeforeVoid(voidPageItems: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): Result<null> {
+  private checkValidationBeforeVoid(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[]): Result<null> {
     if (voidPageItems.every(x => x.voidTicketsMini.total === 0)) {
       return ResultModelService.createFailResult(LABELS.ALL_TICKETS_VOIDED, 1);
     }
 
     for (const item of voidPageItems) {
-      const messageComponent = item.matchModel ? templateMessageComponents.find(x => x.value.matchId === item.matchModel.matchId) : templateMessageComponents[0];
+      const messageComponent = item.matchModel
+        ? messageAreaComponents.map(x => x.templateMessageComponent).find(x => x.value.matchId === item.matchModel.matchId)
+        : messageAreaComponents[0].templateMessageComponent;
       const textInvalidMatch = item.matchModel ? ` (MatchId: ${item.matchModel.matchId})` : '';
 
       if (!messageComponent.checkValidation()) {

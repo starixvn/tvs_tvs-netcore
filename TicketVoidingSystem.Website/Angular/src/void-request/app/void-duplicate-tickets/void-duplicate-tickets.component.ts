@@ -5,12 +5,12 @@ import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { StaticService } from '../../../utility/services/static.service';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageDuplicateTicketsModel } from './models/void-page-duplicate-tickets.model';
 import { VoidPageService } from './services/void-page.service';
-import { MessageAreaComponent } from '../message-area/message-area.component';
 
 @Component({
   selector: 'void-duplicate-tickets',
@@ -19,7 +19,7 @@ import { MessageAreaComponent } from '../message-area/message-area.component';
 })
 export class VoidDuplicateTicketsComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
-  @ViewChild("messageArea") messageAreaViewChildren: MessageAreaComponent;
+  @ViewChild("messageArea") messageAreaComponent: MessageAreaComponent;
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidPageItem: VoidPageDuplicateTicketsModel;
@@ -68,8 +68,7 @@ export class VoidDuplicateTicketsComponent implements OnInit {
   }
 
   onClickVoidAllMatches(): void {
-    let templateMessageViewChildren = this.messageAreaViewChildren.templateMessageViewChildren.toArray();
-    this.voidPageCommonService.onClickVoidAllMatches([this.voidPageItem], templateMessageViewChildren, this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
+    this.voidPageCommonService.onClickVoidAllMatches([this.voidPageItem], [this.messageAreaComponent], this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 
   public isDuplicateTicketsMixParlay(): boolean {

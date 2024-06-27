@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
 import { Subscription, timer } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { CheckRequestService } from '../services/check-request.service';
@@ -47,9 +47,9 @@ export class VoidPageCommonService {
     this.loadDataService.onClickShowVoidTickets(voidPageItem, requestDetail, primitiveProperty, allVoidPageItems);
   }
 
-  async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], templateMessageViewChilds: TemplateMessageComponent[], primitiveProperty: CommonPrimitiveProperty,
+  async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[], primitiveProperty: CommonPrimitiveProperty,
     afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
-      this.loadDataService.checkLoadedFullDataBeforeVoid(voidPageItems, templateMessageViewChilds, primitiveProperty, afterLoadUnderneathDataSubscription);
+      this.loadDataService.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
@@ -62,7 +62,7 @@ export class VoidPageCommonService {
     alert('The Licensee list has been copied to clipboard.');
   }
 
-  onClickVoidAllMatches(voidPageItems: VoidPageCommonItem[], templateMessageViewChilds: TemplateMessageComponent[],
+  onClickVoidAllMatches(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[],
     afterLoadUnderneathDataSubscription: Subscription, primitiveProperty: CommonPrimitiveProperty, tooltip: Tooltip): void {
     if (!primitiveProperty.userPassword) {
       tooltip.display('password', LABELS.INPUT_PASSWORD);
@@ -74,7 +74,7 @@ export class VoidPageCommonService {
     }
 
     afterLoadUnderneathDataSubscription = this.observableTimer.subscribe(async () => {
-      await this.checkLoadedFullDataBeforeVoid(voidPageItems, templateMessageViewChilds, primitiveProperty, afterLoadUnderneathDataSubscription);
+      await this.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
     });
   }
 

@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
+import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
@@ -37,12 +38,12 @@ export class TemplateMessageComponent implements OnChanges {
   @Input() issueTypeId: number;
   @Input() isShowMessages = true;
   @Input() voidFunction?: number;
-  @Output() messageChange = new EventEmitter();
   @ViewChild('messages') messagesComponent: MessagesComponent;
 
   templates: TemplateModel[] = [];
   selectedTemplated = new TemplateModel();
   message = new Message();
+  initialMessage = new Message();
   templateSettings: TemplateSetting[];
   private readonly hideInputChineseForTemplateId = [
     MESSAGE_TEMPLATE_ID_8,
@@ -78,6 +79,7 @@ export class TemplateMessageComponent implements OnChanges {
     await this.init();
     if ((changes['subIssueTypeId'] || changes['value']) && this.subIssueTypeId) {
       this.updateTemplate();
+      this.initialMessage = _.cloneDeep(this.message);
     }
   }
 
@@ -413,10 +415,6 @@ export class TemplateMessageComponent implements OnChanges {
 
   checkValidation(): boolean {
     return this.messagesComponent.checkValidation();
-  }
-
-  changeMessage() {
-    this.messageChange.emit();
   }
 
   public isHasWarningForDynamicInput(): boolean {
