@@ -4,6 +4,7 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
 public class AddRequestCommand : NonQueryCommand
 {
+    public int SessionTime { get; set; }
     public int SportType { get; set; }
     public int SubIssueTypeId { get; set; }
     public int ActionId { get; set; }
@@ -39,7 +40,6 @@ public class AddRequestCommand : NonQueryCommand
     public string AbnormalBetInfo { get; set; }
     public string WrongMarketOfferedInfo { get; set; }
     public string TechnicalErrorInfo { get; set; }
-
 
     public override string GetSettingKey() => "TicketVoiding_Request_Insert";
 

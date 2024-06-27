@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
+import moment from 'moment-timezone';
 import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
@@ -34,6 +35,7 @@ export class AddRequestService {
   private async addRequest(query: AddRequestQuery, isEdit: boolean, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
     addRequestStore.changeSavingRequestStatus(true);
     query.guid = `AddRequest-${Guid.create().toString()}`;
+    query.sessionTime = this.getTimeFilterTicket(addRequestStore);
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
       this.handleAfterAddRequest(isEdit, result, query.issueTypeId, addRequestStore, isSaveAndVoid);
@@ -59,7 +61,6 @@ export class AddRequestService {
 
   private handleAfterAddRequest(isEdit, addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
     if (addResult.isSuccessful) {
-      this.logAnalysisService.writeLogCalculateTimeFilterTickets(isEdit, issueTypeId, addRequestStore.getStartTimeFilterTicket, new Date(), addResult.data.requestId);
       if (isSaveAndVoid) {
         this.goToVoidPage(Number(addResult.data.requestId));
       } else {
@@ -101,5 +102,10 @@ export class AddRequestService {
     return StaticService.isAbnormalAccount(issueTypeId)
       || StaticService.isArchivedTicket(issueTypeId)
       || StaticService.isRecoverTicket(issueTypeId);
+  }
+
+  private getTimeFilterTicket(addRequestStore: AddRequestStore): number {
+    const startTime = addRequestStore.getStartTimeFilterTicket;
+    return moment(new Date()).diff(moment(startTime), 'seconds');
   }
 }
