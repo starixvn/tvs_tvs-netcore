@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
-import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { Result } from '../../../../utility/models/result';
 import { PasswordService } from '../../../../utility/services/password.service';
@@ -12,6 +11,7 @@ import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { VoidTicketsQuery } from '../../models/void-tickets.query';
 import { CheckRequestService } from '../../services/check-request.service';
+import { LogChangeContentService } from '../../services/log-change-content.service';
 import { PopupService } from './popup.service';
 import { ValidationService } from './validation.service';
 
@@ -25,7 +25,7 @@ export class SubmitVoidService {
     private readonly checkRequestService: CheckRequestService,
     private readonly appService: AppService,
     private readonly passwordService: PasswordService,
-    private readonly logAnalysisService: LogAnalysisService) { }
+    private readonly logChangeContentService: LogChangeContentService) { }
 
   public async voidAllMatches(messageAreaComponents: MessageAreaComponent[], voidMatches: VoidMatch[],
     requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<void> {
@@ -55,7 +55,7 @@ export class SubmitVoidService {
     primitiveProperty: PrimitiveProperty, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     const validation = await this.validationService.checkVoidBetPermission(matchHasTickets, requestDetail.request.issueTypeId);
     if (validation.isSuccessful) {
-      await this.logAnalysisService.writeLogVoidPage(requestDetail.request.requestId, messageAreaComponents)
+      await this.logChangeContentService.writeLog(requestDetail.request.requestId, messageAreaComponents)
       await this.processVoid(matchHasTickets, requestDetail, primitiveProperty);
     } else {
       this.popupService.showWarningVoidBetPermission(validation.errorMsg);

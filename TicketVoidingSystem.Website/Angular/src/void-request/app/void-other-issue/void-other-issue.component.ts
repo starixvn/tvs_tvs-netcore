@@ -3,7 +3,6 @@ import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
-import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { GetLogInfoQuery } from '../../../add-request/app/add-request/models/add-request.query';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
@@ -31,6 +30,7 @@ import { MappingModelStaticService } from '../../../utility/services/mapping-mod
 import { PasswordService } from '../../../utility/services/password.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { CheckRequestService } from '../services/check-request.service';
+import { LogChangeContentService } from '../services/log-change-content.service';
 import { ConfirmationComponent } from './../../../utility/components/confirmation/confirmation.component';
 import { IssueInfo } from './../../../utility/models/issue-type.model';
 import { AppService } from './../app.service';
@@ -88,7 +88,7 @@ export class VoidOtherIssueComponent implements OnInit {
     private readonly clipboardService: ClipboardService,
     private readonly element: ElementRef,
     private readonly passwordService: PasswordService,
-    private readonly logAnalysisService: LogAnalysisService
+    private readonly logChangeContentService: LogChangeContentService
   ) {
     this.tooltip.element = this.element;
   }
@@ -392,7 +392,7 @@ export class VoidOtherIssueComponent implements OnInit {
   async insertQueue() {
     const WRONG_PASSWORD_CODE = 121;
     this.isBlockBetList = true;
-    await this.logAnalysisService.writeLogEditVoidReason(this.requestDetail.requestId,
+    await this.logChangeContentService.writeLogEditVoidReason(this.requestDetail.requestId,
       this.confirmationComponent.initialVoidReason, this.confirmationComponent.confirmation.voidReason);
     const result = await this.appService.insertQueue(this.voidQuery);
     this.isBlockBetList = false;

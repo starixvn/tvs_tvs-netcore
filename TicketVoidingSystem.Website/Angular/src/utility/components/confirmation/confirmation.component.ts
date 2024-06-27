@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { VoidedReason } from 'src/utility/models/reason.model';
 import { LABELS } from '../../../utility/constants/labels';
+import { VoidedReason } from '../../../utility/models/reason.model';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { Confirmation } from './confirmation';
 

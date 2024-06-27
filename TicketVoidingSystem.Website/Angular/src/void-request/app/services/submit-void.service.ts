@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
@@ -11,6 +10,7 @@ import { CheckRequestService } from '../services/check-request.service';
 import { PopupService } from '../services/popup.service';
 import { CheckVoidPermissionService } from './check-void-permission.service';
 import { InsertQueueService } from './insert-queue.service';
+import { LogChangeContentService } from './log-change-content.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class SubmitVoidService {
     private readonly insertQueueService: InsertQueueService,
     private readonly checkRequestService: CheckRequestService,
     private readonly checkVoidPermissionService: CheckVoidPermissionService,
-    private readonly logAnalysisService: LogAnalysisService
+    private readonly logChangeContentService: LogChangeContentService
   ) { }
 
   public async submitVoid(messageAreaComponents: MessageAreaComponent[], voidPageItems: VoidPageCommonItem[],
@@ -52,7 +52,7 @@ export class SubmitVoidService {
   private async reCheckVoidBetPermission(voidPageItems: VoidPageCommonItem[], primitiveProperty: CommonPrimitiveProperty, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     const validation = await this.checkVoidPermissionService.checkVoidBetPermission(voidPageItems);
     if (validation.isSuccessful) {
-      await this.logAnalysisService.writeLogVoidPage(voidPageItems[0].detailViewModel.request.requestId, messageAreaComponents)
+      await this.logChangeContentService.writeLog(voidPageItems[0].detailViewModel.request.requestId, messageAreaComponents)
       await this.processVoid(voidPageItems, primitiveProperty);
     } else {
       this.popupService.showWarningVoidBetPermission(validation.errorMsg);

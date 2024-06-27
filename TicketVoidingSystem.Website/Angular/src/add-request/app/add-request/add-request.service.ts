@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
 import moment from 'moment-timezone';
-import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
@@ -19,8 +18,7 @@ export class AddRequestService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly popupService: PopupService,
-    private readonly commonService: CommonService,
-    private readonly logAnalysisService: LogAnalysisService
+    private readonly commonService: CommonService
   ) { }
 
   async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid = false): Promise<void> {

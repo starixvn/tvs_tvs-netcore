@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
-import { MessageAreaComponent } from 'src/void-request/app/message-area/message-area.component';
-import { Message } from '../components/template-message/messages/message';
-import { VoidedReason } from '../models/reason.model';
+import { IssueTypeConstant } from '../constants/issue-type.constant';
 import { CommonService } from './common.service';
 
 @Injectable({
@@ -27,38 +24,5 @@ export class LogAnalysisService {
         accessIssueTypeCount.set(issueTypeId, currentAccessCount);
       }
     }
-  }
-
-  async writeLogVoidPage(requestId: number, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
-    messageAreaComponents.forEach(x => {
-      if(x.reasonComponent.initialReason.reasonEnglish !== x.voidReason.reasonEnglish) {
-        this.writeLogEditVoidReason(requestId, x.reasonComponent.initialReason, x.voidReason);
-      }
-
-      if(x.templateMessageComponent.initialMessage.contentEnglish !== x.templateMessageComponent.message.contentEnglish) {
-        this.writeLogEditVoidMessage(requestId, x.templateMessageComponent.initialMessage, x.templateMessageComponent.message);
-      }
-    });
-  }
-
-  async writeLogEditVoidReason(requestId: number, oldValue: VoidedReason, newValue: VoidedReason): Promise<void> {
-    if (oldValue.reasonEnglish !== newValue.reasonEnglish || oldValue.reasonChineseSimplified !== newValue.reasonChineseSimplified) {
-      const logContent = JSON.stringify({
-        RequestId: `${requestId}`,
-        OldValue: JSON.stringify(oldValue),
-        NewValue: JSON.stringify(newValue)
-      });
-      await this.commonService.logChangeContent('Void Request - Change Reason', logContent);
-    }
-  }
-
-  async writeLogEditVoidMessage(requestId: number, oldValue: Message, newValue: Message): Promise<void> {
-    const logContent = JSON.stringify({
-      RequestId: `${requestId}`,
-      OldValue: JSON.stringify(oldValue),
-      NewValue: JSON.stringify(newValue)
-    });
-
-    await this.commonService.logChangeContent('Void Request - Change Message', logContent);
   }
 }
