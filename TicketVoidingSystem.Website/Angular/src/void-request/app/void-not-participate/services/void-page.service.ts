@@ -71,7 +71,10 @@ export class VoidPageService {
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
       templateValue.isCheckedSpecialBetType = true;
-      templateValue.betTypeNameReplaceMessage = voidPageItem.voidTicketsMini.betTypeNameReplaceMessage;      
+      templateValue.betTypeNameReplaceMessage = voidPageItem.voidTicketsMini.betTypeNameReplaceMessage;
+      templateValue.totalTickets = voidPageItem.voidTicketsMini.total;
+      templateValue.fromTransTime = voidPageItem.voidTicketsMini.fromTime;
+      templateValue.toTransTime = voidPageItem.voidTicketsMini.toTime;
     }
 
     return templateValue;
@@ -123,7 +126,7 @@ export class VoidPageService {
     }
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
-       query.wrongMarketOfferedModel = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(requestDetail.wrongMarketOfferedModel);
+      query.wrongMarketOfferedModel = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(requestDetail.wrongMarketOfferedModel);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);

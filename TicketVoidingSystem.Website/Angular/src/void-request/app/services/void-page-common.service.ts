@@ -39,7 +39,7 @@ export class VoidPageCommonService {
     if (voidPageItem.pagingVoidTickets.total > maxPagingItems) {
       this.showWarningExportExcel();
     } else {
-      await this.ticketsService.exportTicketsAsExcelFile(voidPageItem, requestDetail, voidPageItem.matchModel);
+      await this.ticketsService.exportTicketsAsExcelFile(voidPageItem, requestDetail);
     }
   }
 
