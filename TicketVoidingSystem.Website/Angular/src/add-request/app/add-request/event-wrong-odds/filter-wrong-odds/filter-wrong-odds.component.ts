@@ -13,7 +13,7 @@ import { CalculateOddsService } from '../services/calculate-odds.service';
   templateUrl: './filter-wrong-odds.component.html',
   styleUrls: ['./filter-wrong-odds.component.scss']
 })
-export class FilterWrongOddsComponent implements OnChanges {
+export class FilterWrongOddsComponent {
   @Input() filterWrongOddsModel: FilterWrongOddsModel;
   @Input() isEdit: boolean;
   @Input() matchId: number;
@@ -35,12 +35,6 @@ export class FilterWrongOddsComponent implements OnChanges {
       this.tooltip.element = this.element;
     }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['subIssueTypeId']) {
-        this.calculateOddsService.resetOddsInfo(this.filterWrongOddsModel, this.subIssueTypeId);
-    }
-  } 
- 
   public changeFilter(): void {
     this.changeFilterEvent.emit();
   }
@@ -71,10 +65,13 @@ export class FilterWrongOddsComponent implements OnChanges {
     return this.validationService.isValidFilterWrongOdds(this.filterWrongOddsModel, this.tooltip, this.subIssueTypeId);
   }
 
-  public changeCorrectOdds(): void {
-    const isValidCorrectOdds = this.validationService.isValidFilterCorrectOdds(this.filterWrongOddsModel.correctOddsHomeOver, 
+  public isValidFilterCorrectOdds(): boolean {
+    return this.validationService.isValidFilterCorrectOdds(this.filterWrongOddsModel.correctOddsHomeOver, 
       this.filterWrongOddsModel.spread, this.tooltip);
-    if(isValidCorrectOdds){
+  }
+
+  public changeCorrectOdds(): void {
+    if(this.isValidFilterCorrectOdds()){
       this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel);
     }
     else{
@@ -82,9 +79,12 @@ export class FilterWrongOddsComponent implements OnChanges {
     }
   }
 
+  public isValidSpread(): boolean{
+    return this.validationService.isValidSpread(this.filterWrongOddsModel.spread, this.tooltip);
+  }
+
   public changeSpread(): void {
-    const isValidSpread = this.validationService.isValidSpread(this.filterWrongOddsModel.spread, this.tooltip);
-    if(isValidSpread){
+    if(this.isValidSpread()){
       this.calculateOddsService.updateAllowanceRate(this.filterWrongOddsModel);
       this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel);
     }

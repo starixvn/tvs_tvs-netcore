@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { PoolHouseTicketValue } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
@@ -14,6 +14,8 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { CalculateOddsService } from './services/calculate-odds.service';
+import { CommonService } from '../../../../utility/services/common.service';
+import { MaxBetAndSpread } from './models/filter-wrong-odds.model';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -41,7 +43,8 @@ export class EventWrongOddsComponent implements OnInit {
     private readonly logInfoService: LogInfoService,
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
-    private readonly calculateOddsService: CalculateOddsService
+    private readonly calculateOddsService: CalculateOddsService,
+    private readonly commonService: CommonService
     ) { }
 
   ngOnInit(): void {
@@ -50,6 +53,21 @@ export class EventWrongOddsComponent implements OnInit {
     } else {
       this.logInfoEvent = this.eventWrongOddsService.initDefaultLogInfoWrongOdds();
     }
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if (changes['filter'] && this.filter.isChangeSubTypeManual) {
+      if(!this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo){
+        this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = await this.GetMaxBetAndSpreadOfEvent();
+      }
+
+      this.calculateOddsService.resetOddsInfo(this.filterWrongOddsComponent.filterWrongOddsModel, this.filter.subIssueTypeId);
+    }
+  }
+
+  public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpread[]>{
+    const query = this.calculateOddsService.createMaxBetAndSpreadQuery(this.eventLeagueComponent.selectedMatch);
+    return await this.commonService.getMaxBetAndSpreadOfEvent(query);
   }
 
   public async clickSearch(): Promise<void> {

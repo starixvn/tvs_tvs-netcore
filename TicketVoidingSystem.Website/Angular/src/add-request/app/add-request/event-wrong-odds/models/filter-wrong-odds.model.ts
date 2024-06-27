@@ -8,14 +8,14 @@ export class FilterWrongOddsModel {
   favoriteValue?: string;
   wrongOU?: string;
   spread: string;
-  maxBet?: number;
-  allowanceRate?: string;
-  correctOddsHomeOver?: string;
-  correctOddsAwayUnder?: string;
-  fromOddsNotVoidHomeOver?: string;
-  toOddsNotVoidHomeOver?: string;
-  fromOddsNotVoidAwayUnder?: string;
-  toOddsNotVoidAwayUnder?: string;
+  maxBet: number;
+  allowanceRate: string;
+  correctOddsHomeOver: string;
+  correctOddsAwayUnder: string;
+  fromOddsNotVoidHomeOver: string;
+  toOddsNotVoidHomeOver: string;
+  fromOddsNotVoidAwayUnder: string;
+  toOddsNotVoidAwayUnder: string;
   maxBetAndSpreadInfo: MaxBetAndSpread[]
 }
 

@@ -55,7 +55,7 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
                 model.FromOddsNotVoidHomeOver = root.FromOddsNotVoidHomeOver;
                 model.ToOddsNotVoidHomeOver = root.ToOddsNotVoidHomeOver;
                 model.FromOddsNotVoidAwayUnder = root.FromOddsNotVoidAwayUnder;
-                model.ToOddsNotVoidAwayUnder = root.FromOddsNotVoidAwayUnder;
+                model.ToOddsNotVoidAwayUnder = root.ToOddsNotVoidAwayUnder;
             }
         }
     }

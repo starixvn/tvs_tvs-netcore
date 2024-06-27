@@ -21,7 +21,7 @@ export class CalculateOddsService {
     };
   }
 
-  private createMaxBetAndSpreadQuery(match: MatchModel): MaxBetAndSpreadQuery{
+  public createMaxBetAndSpreadQuery(match: MatchModel): MaxBetAndSpreadQuery{
     return {
       matchId: match.matchId,
       parentId: match.parentId,
