@@ -43,14 +43,21 @@ export class RequestDescriptionService {
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const betTypeContent = copyInfoResponse.betTypeTickets
-      .map(element => {
-        const inputtedRunsText = element.inputtedRuns ? ` - Above ${element.inputtedRuns} should be voided` : '';
-        return `${element.betTypeName}${inputtedRunsText}\n`
-          + `${element.ticketsCount} ticket(s)\n\n`;
-      }).join('');
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
+    let outputContent = '';
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent, false);
+    for (let key in groupBetTypes) {
+      const values = groupBetTypes[key];
+      const inputtedRunsText = values[0].inputtedRuns ? ` - Above ${values[0].inputtedRuns} should be voided` : '';
+      const betTypeContent = `${values[0].betTypeName}${inputtedRunsText}\n`;
+
+      let playerContent = values.map(element => element.playerName ? `${element.playerName} - ${element.ticketsCount} ticket(s)\n`
+        : `${element.ticketsCount} ticket(s)\n`).join('');
+      outputContent += `${betTypeContent}${playerContent}\n`;
+
+    }
+
+    return this.createCommonContent(copyInfoResponse, outputContent, false);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
