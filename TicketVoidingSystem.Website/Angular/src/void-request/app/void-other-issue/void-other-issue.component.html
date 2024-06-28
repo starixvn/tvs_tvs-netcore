@@ -7,7 +7,7 @@
         <request-info [model]="requestDetail" [issue]="issue" [isShowGeneralInfo]="false"
             [isShowAbnormalAccountInfo]="isAbnormalAccount()" [isShowVar]="isShowVar">
         </request-info>
-        <log-info *ngIf="isHasLogInfo()" [logInfoDetails]="logInfoDetails" [correctOdds]="correctOdds"
+        <log-info *ngIf="isHasLogInfo()" [logInfoDetails]="logInfoDetails" [correctOddsHomeOver]="correctOddsHomeOver"
             [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected">
         </log-info>
         <filter *ngIf="isWrongScore() || isWrongOdds()" [groupBetTypes]="groupBetTypes" [match]="match"

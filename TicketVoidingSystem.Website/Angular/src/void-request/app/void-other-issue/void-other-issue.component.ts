@@ -67,7 +67,7 @@ export class VoidOtherIssueComponent implements OnInit {
   isShowTicket = true;
   filterBy: number;
   actualScore: string = null;
-  correctOdds: string = null;
+  correctOddsHomeOver: string = null;
   isPoolHouseAffected: boolean;
   isShowVar?: boolean;
   voidQuery = new VoidTicketsQuery();
@@ -146,7 +146,7 @@ export class VoidOtherIssueComponent implements OnInit {
     }
 
     if (this.isWrongOdds()) {
-      // this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+       this.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
     }
   }
 
@@ -157,7 +157,7 @@ export class VoidOtherIssueComponent implements OnInit {
     }
 
     if (this.isWrongOdds()) {
-      // this.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+       this.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
     }
   }
 
@@ -235,10 +235,9 @@ export class VoidOtherIssueComponent implements OnInit {
 
   updateTemplateValueForWrongOdds() {
     if (this.isWrongOdds()) {
-      // this.templateValue.betTeam = this.requestDetail.wrongOddsModels[0].betTeam;
-      // this.templateValue.filterOuType = this.requestDetail.wrongOddsModels[0].filterOuType;
-      this.templateValue.ouValue = this.requestDetail.wrongOddsModels[0].wrongOU;
-      // this.templateValue.correctOdds = this.requestDetail.wrongOddsModels[0].correctOdds;
+      this.templateValue.filterFavoriteType = this.requestDetail.wrongOddsModels[0].filterFavoriteType;
+      this.templateValue.wrongOU = this.requestDetail.wrongOddsModels[0].wrongOU;
+      this.templateValue.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
       this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
       this.templateValue.eventType = this.ticketsModel.isAllLiveTickets ? EventType.LIVE : null;
     }
