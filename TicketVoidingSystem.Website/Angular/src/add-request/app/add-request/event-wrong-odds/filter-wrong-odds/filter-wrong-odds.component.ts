@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../../../utility/constants/text';
@@ -88,9 +88,5 @@ export class FilterWrongOddsComponent {
       this.calculateOddsService.updateAllowanceRate(this.filterWrongOddsModel);
       this.calculateOddsService.updateCorrectOddsAwayUnder(this.filterWrongOddsModel);
     }
-  }
-
-  public changeAllowanceRate(): void{
-    this.calculateOddsService.calculateOddsRange(this.filterWrongOddsModel);
   }
 }

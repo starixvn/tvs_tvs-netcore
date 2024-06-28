@@ -1,6 +1,7 @@
-div.log-info {
+div.log-info,
+.correct-odds-input,
+.actual-score-input {
   background-color: #dbeef4;
-  // width: 730px;
   border: 1px solid #c6c8ca;
 }
 
@@ -26,4 +27,8 @@ div.log-info {
 
 .highlight-min-pa {
   color: #00d943;
+}
+
+.col-form-label {
+  width: 82px;
 }

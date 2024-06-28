@@ -1,7 +1,7 @@
   <div class="row no-gutters mt-2">
-    <label class="col-form-label col-form-label-sm log-info-label">Log Info </label>
+    <label class="col-form-label col-form-label-sm log-info-label mr-3">Log Info </label>
     <div class="col-sm-6 pd-top-8 remark-content">
-      <div *ngFor="let item of logInfoDetails" class="log-info p-2 mb-3">
+      <div *ngFor="let item of logInfoDetails" class="log-info p-2">
         <span *ngIf="!isReducedOver()">{{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.</span>
         {{displayVoidTimeLabel(filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
         <ng-container *ngIf="!isWrongOdds()">
@@ -28,15 +28,16 @@
           </div>
           <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
         </ng-container>
-      </div>
-
-      <div *ngIf="isWrongScore()" class="d-flex">
-        <label class="col-form-label col-form-label-sm mr-3">Actual Score</label>
-        <div><input class="input-actual-score form-control form-control-sm" type="text" [(ngModel)]="actualScore" disabled/></div>
-      </div>
-      <div *ngIf="isWrongOdds()" class="d-flex">
-        <label class="col-form-label col-form-label-sm mr-3">Correct Odds</label>
-        <div><input class="input-actual-score form-control form-control-sm" type="text" [(ngModel)]="correctOddsHomeOver" disabled/></div>
-      </div>
+      </div> 
+    </div>
+  </div>
+  <div class="row no-gutters mt-2">
+    <div *ngIf="isWrongScore()" class="d-flex">
+      <span class="col-form-label col-form-label-sm mr-3">Actual Score</span>
+      <span class="input-actual-score form-control form-control-sm actual-score-input"><b>{{actualScore}}</b></span>
+    </div>
+    <div *ngIf="isWrongOdds()" class="d-flex">
+      <span class="col-form-label col-form-label-sm mr-3">Correct Odds</span>
+      <span class="input-actual-score form-control form-control-sm correct-odds-input">Home: <b>{{correctOddsHomeOver}}</b>, Away: <b>{{correctOddsAwayUnder}}</b></span>
     </div>
   </div>

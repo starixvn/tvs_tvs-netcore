@@ -111,7 +111,6 @@ export class MappingModelStaticService {
       toOddsNotVoidHomeOver: x.toOddsNotVoidHomeOver,
       fromOddsNotVoidAwayUnder: x.fromOddsNotVoidAwayUnder,
       toOddsNotVoidAwayUnder: x.toOddsNotVoidAwayUnder,
-
       filterFavoriteType: x.filterFavoriteType,
       wrongOU: x.wrongOU,
       favoriteValue: x.favoriteValue

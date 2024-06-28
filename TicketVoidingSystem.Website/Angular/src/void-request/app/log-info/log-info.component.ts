@@ -17,6 +17,7 @@ export class LogInfoComponent {
   @Input() actualScore: string;
   @Input() filterBy: number;
   @Input() correctOddsHomeOver: string;
+  @Input() correctOddsAwayUnder: string;
   @Input() isPoolHouseAffected: boolean;
 
   acceptTypeName = "";

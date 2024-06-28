@@ -67,12 +67,10 @@ export class CalculateOddsService {
 
     const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
     const spreadNum = Number(oddsInfo.spread);
-
     const sum = correctOddsHomeOverNum + spreadNum;
     const correctOddsAwayUnderNum = sum >= 1 ? 2 - sum : -sum;
     
     oddsInfo.correctOddsAwayUnder = correctOddsAwayUnderNum.toFixed(precision);
-    this.calculateOddsRange(oddsInfo);
   }
 
   public calculateOddsRange(oddsInfo: FilterWrongOddsModel): void {
@@ -94,10 +92,5 @@ export class CalculateOddsService {
     const belowAwayUnder = correctOddsAwayUnderNum - allowanceRateNum;
     oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver).toFixed(precision);
     oddsInfo.fromOddsNotVoidAwayUnder = (belowAwayUnder <= -1 ? 2 + belowAwayUnder: belowAwayUnder).toFixed(precision);
-    
-    console.log("toOddsNotVoidHomeOver: " + oddsInfo.toOddsNotVoidHomeOver);
-    console.log("toOddsNotVoidAwayUnder: " + oddsInfo.toOddsNotVoidAwayUnder);
-    console.log("fromOddsNotVoidHomeOver: " + oddsInfo.fromOddsNotVoidHomeOver);
-    console.log("fromOddsNotVoidAwayUnder: " + oddsInfo.fromOddsNotVoidAwayUnder);
   }
 }

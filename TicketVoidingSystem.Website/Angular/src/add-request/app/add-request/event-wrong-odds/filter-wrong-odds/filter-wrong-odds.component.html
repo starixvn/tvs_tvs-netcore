@@ -80,8 +80,7 @@
         <span class="input-group-text filter-right">Allowance Rate</span>
       </div>
       <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" 
-      (ngModelChange)="changeFilter()" (change)="changeAllowanceRate()"
-          [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
+      (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
       </ng-select>
     </div>
   </div>

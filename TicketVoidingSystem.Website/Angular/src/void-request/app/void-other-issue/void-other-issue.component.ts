@@ -68,6 +68,7 @@ export class VoidOtherIssueComponent implements OnInit {
   filterBy: number;
   actualScore: string = null;
   correctOddsHomeOver: string = null;
+  correctOddsAwayUnder: string = null;
   isPoolHouseAffected: boolean;
   isShowVar?: boolean;
   voidQuery = new VoidTicketsQuery();
@@ -147,6 +148,7 @@ export class VoidOtherIssueComponent implements OnInit {
 
     if (this.isWrongOdds()) {
        this.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
+       this.correctOddsAwayUnder = this.requestDetail.wrongOddsModels[0].correctOddsAwayUnder;
     }
   }
 
@@ -154,10 +156,6 @@ export class VoidOtherIssueComponent implements OnInit {
     if (this.paging.total > 0) {
       this.updateTemplateValue();
       this.updateVoidedReason();
-    }
-
-    if (this.isWrongOdds()) {
-       this.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
     }
   }
 

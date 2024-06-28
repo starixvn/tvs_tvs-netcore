@@ -83,6 +83,7 @@ export class EventWrongOddsComponent implements OnInit {
       return;
     }
 
+    this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
     this.logInfoEvent.linkedLogsViewModel.isLinkGroup1X2 = true;
@@ -96,6 +97,7 @@ export class EventWrongOddsComponent implements OnInit {
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.primitiveProps.isShowValidation = false;
+    this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }

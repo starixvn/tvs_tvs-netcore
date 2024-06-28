@@ -198,13 +198,6 @@ export class TemplateContentConst {
     msgChineseNewSimplified: '大盘'
   };
 
-  static readonly UNDER: TemplateContent = {
-    msgEnglish: 'Under',
-    msgChineseTraditional: '小盤',
-    msgChineseSimplified: '小盘',
-    msgChineseNewSimplified: '小盘'
-  };
-
   static readonly ODDS: TemplateContent = {
     msgEnglish: 'Odds',
     msgChineseTraditional: '賠率',
