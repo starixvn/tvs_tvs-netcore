@@ -103,7 +103,7 @@ export class MappingModelStaticService {
       isLinkGroup1X2: x.isLinkGroup1X2,
       isLinkGroupAIO: x.isLinkGroupAIO,
       liveIndicator: x.liveIndicator,
-      spread: x.spread,
+      spread: x.spread.toString(),
       allowanceRate: x.allowanceRate,
       correctOddsHomeOver: x.correctOddsHomeOver,
       correctOddsAwayUnder:x.correctOddsAwayUnder,

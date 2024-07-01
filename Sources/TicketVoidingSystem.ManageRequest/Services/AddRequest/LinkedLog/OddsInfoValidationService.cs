@@ -1,4 +1,5 @@
 ﻿using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
@@ -83,30 +84,35 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
         {
             SubIssueTypeConstant.Handicap => CheckHdpWrongOddsByFavoriteType(linkedOddsInfo, getLinkedLogModel),
             SubIssueTypeConstant.FirstHalfHandicap => CheckHdpWrongOddsByFavoriteType(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.OverUnder => CheckHdpWrongOdds(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.FirstHalfOverUnder => CheckHdpWrongOdds(linkedOddsInfo, getLinkedLogModel),
+            SubIssueTypeConstant.OverUnder => CheckHdpWrongOddsByWrongOu(linkedOddsInfo, getLinkedLogModel),
+            SubIssueTypeConstant.FirstHalfOverUnder => CheckHdpWrongOddsByWrongOu(linkedOddsInfo, getLinkedLogModel),
             _ => false
         };
     }
 
     public bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return CheckOddsWrongOddsByOddsType(getLinkedLogModel, linkedOddsInfo.Odds1a) || CheckOddsWrongOddsByOddsType(getLinkedLogModel, linkedOddsInfo.Odds2a);
+        return CheckWrongOddsByRangeOdds(getLinkedLogModel, linkedOddsInfo.Odds1a) || CheckWrongOddsByRangeOdds(getLinkedLogModel, linkedOddsInfo.Odds2a);
     }
 
     private bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp1) || IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp2);
+        return getLinkedLogModel.FilterFavoriteType switch
+        {
+            FilterTypeWrongOddsConstant.FilterFavoriteTypeHome => IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp1),
+            FilterTypeWrongOddsConstant.FilterFavoriteTypeAway => IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp2),
+            _ => false
+        };
     }
 
-    private bool CheckHdpWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return IsContainsValue(getLinkedLogModel.WrongOU, linkedOddsInfo.Hdp1) || IsContainsValue(getLinkedLogModel.WrongOU, linkedOddsInfo.Hdp2);
+        return IsContainsValue(getLinkedLogModel.WrongOU, linkedOddsInfo.Hdp1);
     }
 
-    private static bool CheckOddsWrongOddsByOddsType(GetLinkedLogModel getLinkedLogModel, decimal? oddsFromApi)
+    private static bool CheckWrongOddsByRangeOdds(GetLinkedLogModel getLinkedLogModel, decimal? oddsFromApi)
     {
-        return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) <= oddsFromApi && decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) >= oddsFromApi
-            || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) <= oddsFromApi && decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) >= oddsFromApi;
+        return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) > oddsFromApi || decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) < oddsFromApi
+            || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) > oddsFromApi || decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) < oddsFromApi;
     }
 }

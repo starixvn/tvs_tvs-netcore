@@ -142,7 +142,7 @@ export class SaveRequestService {
     model.isLinkGroup1X2 = logInfoWrongOdds.linkedLogsViewModel.isLinkGroup1X2;
     model.isLinkGroupAIO = logInfoWrongOdds.linkedLogsViewModel.isLinkGroupAIO;
 
-    model.spread = logInfoWrongOdds.filterWrongOdds.spread;
+    model.spread = logInfoWrongOdds.filterWrongOdds.spread.toString();
     model.allowanceRate = logInfoWrongOdds.filterWrongOdds.allowanceRate;
     model.correctOddsHomeOver = logInfoWrongOdds.filterWrongOdds.correctOddsHomeOver;
     model.correctOddsAwayUnder = logInfoWrongOdds.filterWrongOdds.correctOddsAwayUnder;
