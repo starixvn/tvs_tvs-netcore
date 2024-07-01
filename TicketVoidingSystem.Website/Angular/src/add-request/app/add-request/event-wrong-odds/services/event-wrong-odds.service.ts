@@ -122,6 +122,7 @@ export class EventWrongOddsService {
 
     if (this.validationService.isSubTypeOuOr1stOu(inputModels.subIssueTypeId.toString())) {
       event.filterWrongOdds.wrongOU = inputModels.wrongOU;
+      event.filterWrongOdds.filterFavoriteType = FilterFavoriteTypeConstant.HOME;
     } else {
       event.filterWrongOdds.filterFavoriteType = inputModels.filterFavoriteType;
       event.filterWrongOdds.favoriteValue = inputModels.favoriteValue;

@@ -92,7 +92,8 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
 
     public bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return CheckWrongOddsByRangeOdds(getLinkedLogModel, linkedOddsInfo.Odds1a) || CheckWrongOddsByRangeOdds(getLinkedLogModel, linkedOddsInfo.Odds2a);
+        return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) < linkedOddsInfo.Odds2a
+            || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) < linkedOddsInfo.Odds2a;
     }
 
     private bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
@@ -108,11 +109,5 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
     private bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return IsContainsValue(getLinkedLogModel.WrongOU, linkedOddsInfo.Hdp1);
-    }
-
-    private static bool CheckWrongOddsByRangeOdds(GetLinkedLogModel getLinkedLogModel, decimal? oddsFromApi)
-    {
-        return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) > oddsFromApi || decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) < oddsFromApi
-            || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) > oddsFromApi || decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) < oddsFromApi;
     }
 }

@@ -236,6 +236,7 @@ export class VoidOtherIssueComponent implements OnInit {
       this.templateValue.filterFavoriteType = this.requestDetail.wrongOddsModels[0].filterFavoriteType;
       this.templateValue.wrongOU = this.requestDetail.wrongOddsModels[0].wrongOU;
       this.templateValue.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
+      this.templateValue.correctOddsAwayUnder = this.requestDetail.wrongOddsModels[0].correctOddsAwayUnder;
       this.templateValue.score = this.getLiveScoreForTemplateMessage(this.logInfoDetails[0].scoreNormalTicket, this.logInfoDetails[0].scoreOfMatch);
       this.templateValue.eventType = this.ticketsModel.isAllLiveTickets ? EventType.LIVE : null;
     }

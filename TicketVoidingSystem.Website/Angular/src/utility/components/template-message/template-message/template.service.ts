@@ -248,10 +248,10 @@ export class TemplateService {
   private replaceActualMarketSubTypeHdp(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
     const prfixSubType = this.getPrefixSubType(subIssueTypeId);
     const replacedContent: TemplateContent = {
-      msgEnglish: `${prfixSubType.msgEnglish}${this.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOddsHomeOver}`,
-      msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOddsHomeOver}`,
-      msgChineseSimplified: `${prfixSubType.msgChineseSimplified}${this.getTeamNameSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseSimplified} ${templateValue.correctOddsHomeOver}`,
-      msgChineseNewSimplified: `${prfixSubType.msgChineseNewSimplified}${this.getTeamNameNewSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${templateValue.correctOddsHomeOver}`
+      msgEnglish: `${prfixSubType.msgEnglish}${this.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${this.getCorrectOdds(templateValue)}`,
+      msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${this.getCorrectOdds(templateValue)}`,
+      msgChineseSimplified: `${prfixSubType.msgChineseSimplified}${this.getTeamNameSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseSimplified} ${this.getCorrectOdds(templateValue)}`,
+      msgChineseNewSimplified: `${prfixSubType.msgChineseNewSimplified}${this.getTeamNameNewSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${this.getCorrectOdds(templateValue)}`
     };
 
     this.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);
@@ -267,6 +267,10 @@ export class TemplateService {
     };
 
     this.replaceEachLanguage(message, TemplateReplace.ACTUAL_MARKET, replacedContent);
+  }
+
+  private getCorrectOdds(templateValue: TemplateValue){
+    return templateValue.filterFavoriteType === 'h' ? templateValue.correctOddsHomeOver : templateValue.correctOddsAwayUnder;
   }
 
   private getPrefixSubType(subIssueTypeId: number): TemplateContent {

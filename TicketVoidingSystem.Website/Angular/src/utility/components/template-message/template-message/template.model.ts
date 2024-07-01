@@ -56,6 +56,7 @@ export class TemplateValue {
   match?: MatchModel;
   filterFavoriteType?: string;
   correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
   wrongOU?: string;
   isCheckedVar?: boolean;
   playerName?: TemplateContent;
