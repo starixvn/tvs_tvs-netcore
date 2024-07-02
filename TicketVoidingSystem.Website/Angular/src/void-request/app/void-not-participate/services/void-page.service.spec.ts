@@ -2,8 +2,7 @@ import { NotParticipateModel } from '../../../../add-request/app/add-request/mod
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { RequestDetailModel, RequestDetailViewModel, PlayerName } from '../../../../edit-request/app/request.model';
-import { Message } from '../../../../utility/components/template-message/messages/message';
+import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
@@ -58,7 +57,8 @@ class Helper {
     { issueTypeId: 11, issueTypeName: 'Abnormal Bet'},
     { issueTypeId: 13, issueTypeName: 'Abnormal Account'},
     { issueTypeId: 8, issueTypeName: 'Early Kick Off'},
-    { issueTypeId: 20, issueTypeName: 'Duplicate Tickets'}
+    { issueTypeId: 20, issueTypeName: 'Duplicate Tickets'},
+    { issueTypeId: 21, issueTypeName: 'Not Participate'}
   ];
   static readonly fakeSubIssueTypeList: SubIssueType[] = [
     {
@@ -89,6 +89,18 @@ class Helper {
       subIssueTypeId: 14,
       issueTypeId: 9,
       subIssueTypeName: 'Wrong Kick Off Time',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 21,
+      subIssueTypeName: 'Wrong Kick Off Time',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 12,
+      subIssueTypeName: 'WMO',
       subIssueTypeNameCS: ''
     }
   ];
@@ -153,7 +165,7 @@ describe('VoidPageService', () => {
     const dangerAcceptedModel = new RedCardModel();
     dangerAcceptedModel.matchId = Helper.fakeMatchId;
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
-    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.DUPLICATE_TICKETS);
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
     fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
     fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
     const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));
@@ -176,7 +188,7 @@ describe('VoidPageService', () => {
     const dangerAcceptedModel = new RedCardModel();
     dangerAcceptedModel.matchId = Helper.fakeMatchId;
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
-    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.DUPLICATE_TICKETS);
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
     fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
     fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
     const spyGetMatch = jest.spyOn(commonService, 'getMatch').mockImplementation(() => Promise.resolve(new MatchModel()));

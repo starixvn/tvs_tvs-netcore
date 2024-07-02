@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
@@ -6,19 +7,22 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
+using TicketVoidingSystem.SharedApi.ViewModels.BetTypes;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.SharedApi.Services.BetTypes;
 
 public interface BetTypesRepository
 {
+    Task<GroupBetTypesViewModel> GetGroupBetTypes(string betTypesHaveTickets, int matchId, byte mode);
+
     Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria);
 
     Task<GroupBetTypeVirtualSport> GetBetTypesTicketListingVirtualSport(int matchId, string betTypesHaveTickets);
 
     Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query);
 
-    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId);
+    Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, DateTime? fromTransDate, DateTime? toTransDate);
 
     IList<GroupBetTypeVoidParlayVirtualSport> GetVoidParlayVirtualSportsBetTypes();
 }
@@ -30,6 +34,29 @@ public class BetTypesRepositoryImp : BetTypesRepository
     public BetTypesRepositoryImp(IDynamicRepository repository)
     {
         this.repository = repository;
+    }
+
+    public async Task<GroupBetTypesViewModel> GetGroupBetTypes(string betTypesHaveTickets, int matchId, byte mode)
+    {
+        var criteria = new GetBetTypesCriteria
+        {
+            MatchId = matchId,
+            Mode = mode,
+            BetTypes = betTypesHaveTickets
+        };
+
+        var betTypes = await GetBetTypes(criteria);
+
+        return new GroupBetTypesViewModel
+        {
+            Result = betTypes.Result,
+            GroupBetTypes = betTypes.Result.IsSuccessful ? betTypes.BetTypes
+                    .GroupBy(b => b.GroupName)
+                    .Select(group => new GroupBetTypeModel { GroupName = group.Key, BetTypes = group.ToList() })
+                    .OrderBy(gr => gr.GroupName)
+                    .ToList()
+                : new List<GroupBetTypeModel>()
+        };
     }
 
     public async Task<BetTypesViewModel> GetBetTypes(GetBetTypesCriteria criteria)
@@ -87,11 +114,13 @@ public class BetTypesRepositoryImp : BetTypesRepository
         return betTypesInAllServers.Distinct();
     }
 
-    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId)
+    public async Task<IEnumerable<BetTypeModel>> GetBetTypesHaveTicketsForTvs(int matchId, DateTime? fromTransDate, DateTime? toTransDate)
     {
         var criteria = new TicketVoidingGetBetTypesHaveTicketsCriteria
         {
-            MatchId = matchId
+            MatchId = matchId,
+            FromTransDate = fromTransDate,
+            ToTransDate = toTransDate
         };
         var betTypesAllServers = new List<BetTypeModel>();
         var fetchTasks = SiteDbGroupConstant.ServerList

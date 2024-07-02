@@ -84,7 +84,8 @@ describe('CopyRequestInfoService', () => {
       voidToTime: undefined,
       liveStatus: "",
       totalSingleCount: 0,
-      totalParlayCount: 0
+      totalParlayCount: 0,
+      totalCancelCashOutCount: 0
     }; 
     const copyRequestInfoResponse : CopyRequestInfoResponse = {
       requestInfo: requestInfo,

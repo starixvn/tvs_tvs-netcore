@@ -1,13 +1,5 @@
 @import '../../../assets/styles/mixin.scss';
 
-.display-none {
-  display: none;
-}
-
-.display-block {
-  display: block;
-}
-
 .void-page-item {
   margin: 0 10px 5px 10px;
   padding: 5px 0 2px 0;
@@ -125,108 +117,6 @@
   }
 }
 
-.gray-header {
-  background: gray;
-  color: white;
-  font-weight: bold;
-  padding: 0 10px;
-  margin-bottom: 5px;
-  width: 50%;
-}
-
-.reason-area {
-  margin: 10px;
-
-  table {
-    width: 50%;
-    font-size: 9pt;
-    border-spacing: 1px;
-    background-color: white;
-    text-align: center;
-    font-weight: bold;
-
-    tr {
-      th {
-        background-color: #4e71bb;
-        color: white;
-      }
-
-      td {
-        width: 25%;
-
-        textarea {
-          width: 100%;
-          padding: 0px;
-          margin: 0px;
-          font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-          resize: vertical;
-        }
-      }
-    }
-
-    .header-language {
-      background-color: #cccccc;
-    }
-
-    .header-other-language {
-      color: #ffcc00;
-      cursor: pointer;
-    }
-  }
-
-  .no-data-text {
-    width: 50%;
-    padding: 0px;
-    margin: 0px;
-    resize: none;
-    color: #ed1c24;
-  }
-}
-
-.confirm-delete {
-  margin: 10px;
-  padding: 10px;
-  float: left;
-  border-width: 2px;
-  border-style: groove;
-  border-image: initial;
-
-  legend {
-    font-weight: bold;
-    width: auto;
-  }
-
-  table {
-    tr {
-      td:first-child {
-        min-width: 140px;
-      }
-
-      textarea {
-        width: 500px;
-        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      }
-
-      input[disabled] {
-        cursor: not-allowed;
-      }
-    }
-  }
-}
-
-
-.error-text {
-  margin-top: 30px;
-  color: #ed1c24;
-
-  .icon-error-message {
-    padding-top: 1px;
-    width: 19px;
-  }
-}
-
-//////////////@at-root
-
 .spinner-overlay {
   background-color: white;
 }
@@ -240,7 +130,6 @@
   text-align: center;
   z-index: 10001;
 }
-
 
 .loading-message {
   .loading {

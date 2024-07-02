@@ -101,6 +101,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.RECOVER_TICKET;
   }
 
+  static isLikelyWrongMarketOffered(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED || issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
+  }
+
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }
@@ -143,6 +147,8 @@ export class StaticService {
       return requestDetail.recoverTicketModel.subIssueTypeId;
     } else if (this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.abnormalBetModel.subIssueTypeId;
+    } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
@@ -171,7 +177,8 @@ export class StaticService {
       this.isAbnormalAccount(requestDetail.request.issueTypeId.toString())
       || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
       || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())
-      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())) {
+      || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())
+      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {
       return requestDetail.event.eventDate;
@@ -242,7 +249,9 @@ export class StaticService {
   static isHaveCancelCashOutTicket(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED ||
       issueTypeId === IssueTypeConstant.RED_CARD ||
-      issueTypeId === IssueTypeConstant.WRONG_SCORE;
+      issueTypeId === IssueTypeConstant.WRONG_SCORE ||
+      issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED ||
+      issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
   static getDurationTime(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, filterFromTransTime: string, filterToTransTime: string): string {
@@ -319,6 +328,24 @@ export class StaticService {
 
     return `${PREFIX}${value}`;
   }
+
+  static undoConvertStringToBetId8xxx(text: string): string {
+    if (!text) {
+      return null;
+    }
+
+    // Remove the prefix '8'
+    if (text.startsWith('8')) {
+      text = text.substring(1);
+    }
+
+    // Remove leading '0's
+    while (text.startsWith('0')) {
+      text = text.substring(1);
+    }
+
+    return text;
+}
 
   static openPopupTransIds(requestId: number, transIds: string, modalService: ModalService): void {
     modalService.open(

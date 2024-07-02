@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -19,26 +20,35 @@ public class GetRequestServiceImp : GetRequestService
     private readonly IDynamicRepository repository;
     private readonly RemotingRefWrapperService remotingRefService;
     private readonly MatchService matchService;
+    private readonly WrongMarketOfferedService wrongMarketOfferedService;
+    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly IMapper mapper;
 
-    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, MatchService matchService, IMapper mapper)
+    public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, MatchService matchService
+        , IMapper mapper, WrongMarketOfferedService wrongMarketOfferedService, RequestExtraInfoXmlService requestExtraInfoXmlService)
     {
         this.repository = repository;
         this.remotingRefService = remotingRefService;
         this.matchService = matchService;
+        this.wrongMarketOfferedService = wrongMarketOfferedService;
         this.mapper = mapper;
+        this.requestExtraInfoXmlService = requestExtraInfoXmlService;
     }
 
     public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
     {
         var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request);
+        var requestInfo = firstResultSet.First();
+        requestInfo.Operators = requestExtraInfoXmlService.ParseXmlToOperators(requestInfo.OperatorInfo);
+        requestExtraInfoXmlService.UpdateRequestDetailProperties(requestInfo.IssueTypeId, secondResultSet);
+
         var viewModel = new RequestDetailViewModel
         {
-            Request = firstResultSet.First(),
+            Request = requestInfo,
             PlayerNames = thirdResultSet
         };
 
-        switch (firstResultSet.First().IssueTypeId)
+        switch (requestInfo.IssueTypeId)
         {
             case IssueTypeConstant.WrongScore:
                 viewModel.WrongScoreModels = MapEventWrongScores(secondResultSet);
@@ -77,7 +87,7 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, firstResultSet.First().SportType);
+                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, requestInfo.SportType);
                 break;
 
             case IssueTypeConstant.DuplicateTickets:
@@ -96,8 +106,14 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.AbnormalBetModel = MapEventAbnormalBet(secondResultSet);
                 break;
 
+            case IssueTypeConstant.WrongMarketOffered:
+            case IssueTypeConstant.TechnicalError:
+                viewModel.WrongMarketOfferedModel = await MapEventWrongMarketOffered(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
+
                 break;
         }
 
@@ -337,6 +353,25 @@ public class GetRequestServiceImp : GetRequestService
             FilterBy = firstModel.FilterBy,
             SubIssueTypeId = firstModel.SubIssueTypeId,
             Matches = matches
+        };
+    }
+
+    private async Task<WrongMarketOfferedViewModel> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        var betTypesAdvancedMode = wrongMarketOfferedService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
+        var groupBetTypes = await wrongMarketOfferedService.GetGroupBetTypes(model.MatchId,
+            string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
+        return new WrongMarketOfferedViewModel
+        {
+            MatchId = model.MatchId,
+            FilterFromTransTime = model.FilterFromTransTime,
+            FilterToTransTime = model.FilterToTransTime,
+            VoidFromTime = model.VoidFromTime,
+            VoidToTime = model.VoidToTime,
+            SubIssueTypeId = model.SubIssueTypeId,
+            BetTeamsResult = betTypesAdvancedMode,
+            GroupBetTypes = groupBetTypes
         };
     }
 

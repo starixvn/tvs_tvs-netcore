@@ -307,3 +307,28 @@ input[type=radio],
 .text-red {
   color: red;
 }
+
+.btn-reload {
+  justify-content: center;
+  align-items: center;
+  button {
+      width: 30px;
+      height: 30px;
+      margin-left: 8px;
+      background: #4e71bb;
+      padding: 0;
+      background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+      background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+      color: #fff;
+  }
+}
+
+.border-top-radius {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.border-bottom-radius {
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}

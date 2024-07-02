@@ -1,0 +1,48 @@
+<div class="advanced-mode" *ngIf="isShowAdvancedModeFilter">
+  <div class="advanced-mode-header border-top-radius" [ngClass]="{'border-bottom-radius':isCollapse}"
+    (click)="isCollapse=!isCollapse">
+    <em class="fa mr-1" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
+    <strong>Advanced Mode</strong>
+  </div>
+  <div class="advanced-mode-body border-bottom-radius" [hidden]="isCollapse">
+    <div *ngFor="let betTeam of betTeams">
+      <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isChecked">
+        <div *ngSwitchCase="1" class="bet-team">
+          <div class="bet-team-1">
+            <div class="left mg-right-10">
+              {{betTeam.name}}
+            </div>
+            <div class="right">
+              <ng-container *ngFor="let selection of betTeam.selections">
+                <div class="dropdown-item-adv" *ngIf="!selection.isMultiple">
+                  <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
+                  <select [(ngModel)]="selection.value" (ngModelChange)="changeFilter()" [disabled]="selection.isDisabled"
+                    class="bet-team-{{betTeam.index}}-selection-{{selection.index}}">
+                    <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
+                  </select>
+                </div>
+                <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
+                  <span class="mr-1">{{selection.multiSelection.name}}</span>
+                  <multiple-select class="multiple-selection bet-team-{{betTeam.index}}-selection-{{selection.index}}"
+                    [multipleSelect]="selection.multiSelection.multipleSelect" (checkedItems)="changeFilter()">
+                  </multiple-select>
+                </div>
+              </ng-container>
+              <div class="d-flex" *ngIf="betTeam.inputs?.length > 0">
+                <div class="input-item-adv" *ngFor="let item of betTeam.inputs">
+                  <span class="mr-1">{{item.name}}</span>
+                  <input class="bet-team-{{betTeam.index}}-input-{{item.index}}" type="text" [(ngModel)]="item.value"
+                    [disabled]="item.isDisabled"
+                    (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, item.index,
+                      item.isMultiple, $event); changeFilter()"
+                    triggers="manual" multipleDecimal />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

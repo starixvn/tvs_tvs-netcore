@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
-using TicketVoidingSystem.SharedApi.Criteria.BetTypes;
 using TicketVoidingSystem.SharedApi.Handlers.BetTypes;
 using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
@@ -29,19 +28,14 @@ public class GetGroupBetTypesHandlerTests
         {
             BetTypes = null
         };
-        var betTypes = new BetTypesViewModel
-        {
-            BetTypes = new List<BetTypeModel> { new() }
-        };
         betTypesRepository.GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>()).ReturnsForAnyArgs(new List<int> { 1234 });
-        betTypesRepository.GetBetTypes(Arg.Any<GetBetTypesCriteria>()).ReturnsForAnyArgs(betTypes);
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await betTypesRepository.Received(1).GetBetTypes(Arg.Any<GetBetTypesCriteria>());
-        await betTypesRepository.Received(1).GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>());
+        await betTypesRepository.Received(1).GetBetTypesHaveTickets(Arg.Any<BetTypeQueryModel>());
+        await betTypesRepository.Received(1).GetGroupBetTypes(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<byte>());
     }
 
     [Fact]
@@ -52,17 +46,13 @@ public class GetGroupBetTypesHandlerTests
         {
             BetTypes = "1234"
         };
-        var betTypes = new BetTypesViewModel
-        {
-            BetTypes = new List<BetTypeModel> { new() }
-        };
-        betTypesRepository.GetBetTypes(Arg.Any<GetBetTypesCriteria>()).ReturnsForAnyArgs(betTypes);
+        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>()).ReturnsForAnyArgs(new List<int> { 1234 });
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await betTypesRepository.Received(1).GetBetTypes(Arg.Any<GetBetTypesCriteria>());
-        await betTypesRepository.Received(0).GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>());
+        await betTypesRepository.Received(0).GetBetTypesHaveTickets(Arg.Any<BetTypeQueryModel>());
+        await betTypesRepository.Received(1).GetGroupBetTypes(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<byte>());
     }
 }

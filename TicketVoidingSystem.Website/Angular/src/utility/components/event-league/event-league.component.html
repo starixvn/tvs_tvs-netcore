@@ -1,0 +1,29 @@
+<div class="event-leage">
+  <div class="d-flex flex-wrap justify-content-between">
+    <div class="event col-md-8 col-sm-8 col-12">
+      <label class="col-form-label">Event</label>
+      <div>
+        <ng-select class="custom-sm match-id" [disabled]="isEdit" [items]="matches" bindLabel="name"
+          (blur)="blurMatchSelect()" bindValue="matchId" [(ngModel)]="selectedMatch.matchId" [clearable]="false"
+          (change)="onChangeMatchEvent($event)" (search)="onSearchMatch($event)" [notFoundText]="validationMessage"
+          [loading]="isBlock" placeholder="Input MatchID">
+          <ng-template ng-option-tmp let-item="item" class="text-red" let-index="index">
+            {{item.name}}
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="sport-name col-md-3 col-sm-3">
+      <label class="col-form-label">Sport</label>
+      <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.sportTypeName}}</span>
+    </div>
+  </div>
+
+  <div class="league col-md-12 col-sm-12 col-12">
+    <label class="col-form-label">League</label>
+    <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.leagueName}}</span>
+  </div>
+</div>
+
+<tooltip [tooltip]="tooltip"></tooltip>

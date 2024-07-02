@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Fanex.MailDeliver.MailClient.Model;
 using Force.DeepCloner;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.SendEmail;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models;
@@ -59,9 +60,12 @@ public class VoidEmailContentServiceImp : VoidEmailContentService
     private async Task<IList<Group<TicketEmailViewModel>>> AssignGroupTickets(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var groups = new List<Group<TicketEmailViewModel>>();
-        if (mailVoidViewModel.IssueTypeId.IsDangerAccepted() ||
-            mailVoidViewModel.IssueTypeId.IsRedCard() ||
-            mailVoidViewModel.IssueTypeId.IsWrongScore())
+        var issueTypesHasCancelCO = new List<int>
+        {
+            IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore,
+            IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError
+        };
+        if (issueTypesHasCancelCO.Exists(x => x == mailVoidViewModel.IssueTypeId))
         {
             var voidTickets = tickets.Where(x => !x.IsCancelCashOut).ToList();
             var cancelCashOutTickets = tickets.Where(x => x.IsCancelCashOut).ToList();

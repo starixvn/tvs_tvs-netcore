@@ -34,13 +34,14 @@ export class RequestInfoForCopy {
   liveStatus: string;
   totalSingleCount: number;
   totalParlayCount: number;
+  totalCancelCashOutCount: number;
 }
 
 export class BetTypeTicketsInfo {
   betTypeId: number;
+  betId: number;
   betTypeName: string;
   inputtedRuns: string;
-  wicketOver: string;
   playerName: string;
   ticketsCount: number;
 }

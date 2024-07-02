@@ -6,10 +6,12 @@ import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { GetPoolHouseTicketQuery, PoolHouseTicketsModel, PoolHouseTicketViewModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
+import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { PoolHouseTicketModule } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.module';
+import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
@@ -20,8 +22,6 @@ import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
-import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -132,7 +132,7 @@ describe('LogInfoWrongHdpComponent', () => {
       }
     });
 
-    await instance.ngOnInit();
+    instance.ngOnInit();
 
     expect(instance.isShowValidation).toBeTruthy();
   });

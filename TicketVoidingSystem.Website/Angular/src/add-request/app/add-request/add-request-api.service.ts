@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BetTeamAddRequest } from '../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { Result } from '../../../utility/models/result';
@@ -118,7 +119,7 @@ export class AddRequestApiService {
   async exportAccount(models: AccountWinlostModel[]): Promise<void> {
     return this.httpService.downloadFile({ accounts: models }, 'api/AddRequest/ExportExcelAccount');
   }
-  
+
   /* istanbul ignore next */
   async exportExcelAbnormalBetTickets(query: CheckTransIdsQuery) {
     return this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
@@ -137,5 +138,9 @@ export class AddRequestApiService {
  /* istanbul ignore next */
   async getPermissionAddRequest(): Promise<PermissionAddRequest> {
     return this.httpService.getJson<PermissionAddRequest>('api/AddRequest/GetPermission');
+  }
+
+  async getBetTeams(): Promise<BetTeamAddRequest[]> {
+    return this.httpService.getJson<BetTeamAddRequest[]>('api/AddRequest/GetBetTeams');
   }
 }

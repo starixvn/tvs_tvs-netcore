@@ -6,7 +6,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { UtilityModule } from '../../utility/utility.module';
 import { AddRequestModule } from './add-request/add-request.module';
 import { AppComponent } from './app.component';
-import { TemplateMessageModule } from '../../utility/components/template-message/template-message.module';
 
 @NgModule({
   declarations: [
@@ -18,8 +17,7 @@ import { TemplateMessageModule } from '../../utility/components/template-message
     FormsModule,
     AddRequestModule,
     ToastrModule.forRoot(),
-    UtilityModule,
-    TemplateMessageModule
+    UtilityModule
   ],
   bootstrap: [AppComponent]
 })

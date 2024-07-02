@@ -101,18 +101,28 @@ public class GetRequestsInActiveTableServiceImp : GetRequestsInActiveTableServic
 
     private static bool IsHaveMultipleMatches(RequestModel request)
     {
-        return request.IssueTypeId switch
-        {
-            IssueTypeConstant.DangerAccepted => true,
-            IssueTypeConstant.WrongHDP => true,
-            IssueTypeConstant.Wrong1stHDP => true,
-            IssueTypeConstant.WrongOU => true,
-            IssueTypeConstant.Wrong1stOU => true,
-            IssueTypeConstant.RedCard => true,
-            IssueTypeConstant.EarlyKickOffTime => true,
-            IssueTypeConstant.WrongKickOffTime => true,
-            IssueTypeConstant.AbnormalBet => request.FilterBy is null,
-            _ => false
-        };
+        return IsSimpleMatch(request.IssueTypeId) || IsConditionalMatch(request.IssueTypeId, request.FilterBy);
     }
+
+    private static bool IsSimpleMatch(int issueTypeId)
+    {
+        return SimpleMatchIssueTypes.Contains(issueTypeId);
+    }
+
+    private static bool IsConditionalMatch(int issueTypeId, object filterBy)
+    {
+        return issueTypeId == IssueTypeConstant.AbnormalBet && filterBy is null;
+    }
+
+    private static readonly HashSet<int> SimpleMatchIssueTypes = new()
+    {
+        IssueTypeConstant.DangerAccepted,
+        IssueTypeConstant.WrongHDP,
+        IssueTypeConstant.Wrong1stHDP,
+        IssueTypeConstant.WrongOU,
+        IssueTypeConstant.Wrong1stOU,
+        IssueTypeConstant.RedCard,
+        IssueTypeConstant.EarlyKickOffTime,
+        IssueTypeConstant.WrongKickOffTime
+    };
 }

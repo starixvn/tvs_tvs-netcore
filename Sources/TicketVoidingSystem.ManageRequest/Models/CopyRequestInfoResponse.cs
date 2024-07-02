@@ -1,6 +1,4 @@
-﻿using TicketVoidingSystem.Extensions;
-
-namespace TicketVoidingSystem.ManageRequest.Models;
+﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
 public class CopyRequestInfoResponse
 {
@@ -37,29 +35,11 @@ public class RequestInfoForCopy
 
     public string RequestExtraInfo { get; set; }
 
-    public bool IsCheckedVar
-    {
-        get
-        {
-            var root = RequestExtraInfo.ParseXmlToObject<RequestExtraInfoXml>();
-            return root.IsCheckedVar;
-        }
-    }
+    public bool IsCheckedVar { get; set; }
 
     public string OperatorInfo { get; set; }
 
-    public List<OperatorInfo> Operators
-    {
-        get
-        {
-            var root = OperatorInfo.ParseXmlToObject<RootOperators>();
-            var operators = root.OperatorXmls;
-            var result = operators.Count > 0 ? operators.Select(x =>
-                new OperatorInfo { OperatorId = x.OperatorId, OperatorType = x.TypeId }
-            ).ToList() : new List<OperatorInfo>();
-            return result;
-        }
-    }
+    public IEnumerable<OperatorInfo> Operators { get; set; }
 
     public string Provider { get; set; }
 
@@ -80,14 +60,18 @@ public class RequestInfoForCopy
     public int TotalSingleCount { get; set; }
 
     public int TotalParlayCount { get; set; }
+
+    public int TotalCancelCashOutCount { get; set; }
 }
 
 public class BetTypeTicketsInfo
 {
     public int BetTypeId { get; set; }
     public string BetTypeName { get; set; }
+    public string OriginalBetTypeName { get; set; }
+    public long? BetId { get; set; }
     public string InputtedRuns { get; set; }
-    public string WicketOver { get; set; }
     public string PlayerName { get; set; }
+    public string PlayerAndOdds { get; set; }
     public int TicketsCount { get; set; }
 }

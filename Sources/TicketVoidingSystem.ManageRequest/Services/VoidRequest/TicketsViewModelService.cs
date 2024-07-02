@@ -4,6 +4,8 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -15,6 +17,13 @@ public interface TicketsViewModelService
 
 public class TicketsViewModelServiceImp : TicketsViewModelService
 {
+    private readonly SpecialBetTypeContentService specialBetTypeContentService;
+
+    public TicketsViewModelServiceImp(SpecialBetTypeContentService specialBetTypeContentService)
+    {
+        this.specialBetTypeContentService = specialBetTypeContentService;
+    }
+
     public void UpdateViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets, int issueTypeId,
         VoidPermission voidPermission)
     {
@@ -26,7 +35,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         UpdateValidTickets(model, validTickets);
         UpdateUncheckTickets(model, allTickets);
         model.LicenseeAffectedList = GetLicenseeAffectedList(allTickets);
-        UpdateBetTypes(model, allTickets);
+        UpdateBetTypeIdsAndSpecialBetType(model, allTickets);
         UpdateTimeViewModel(model, allTickets);
         UpdateCheckPermissionTickets(model, allTickets);
         UpdateTotalCounts(model, allTickets, ticketsByGroup);
@@ -140,6 +149,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
     private static List<AffectedLicensee> GetLicenseeAffectedList(IEnumerable<GetTicketModel> data)
     {
         var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var timeMachineLicensee = data.Where(item => Convert.ToInt32(item.BetType).IsSabaTimeMachine() && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cancelCashOutLicensee = data.Where(item => item.IsCancelCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
@@ -151,6 +161,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
 
         Array.Sort(licensees, StringComparer.InvariantCulture);
         Array.Sort(instantLicensee, StringComparer.InvariantCulture);
+        Array.Sort(timeMachineLicensee, StringComparer.InvariantCulture);
         Array.Sort(cashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(cancelCashOutLicensee, StringComparer.InvariantCulture);
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
@@ -165,6 +176,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollyView].LicenseesName = string.Join(", ", jollyViewLicensee);
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollySportCv].LicenseesName = string.Join(", ", jollySportsCvLicensee);
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.CancelCashOut].LicenseesName = string.Join(", ", cancelCashOutLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.TimeMachine].LicenseesName = string.Join(", ", timeMachineLicensee);
 
         return licenseeAffectedList.LicenseeAffectedList;
     }
@@ -176,10 +188,30 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
             .Select(item => item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString()).ToList();
     }
 
-    private static void UpdateBetTypes(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets)
+    private void UpdateBetTypeIdsAndSpecialBetType(TicketsViewModel model, IEnumerable<GetTicketModel> allTickets)
     {
-        var betTypes = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
-        model.BetTypes = string.Join(",", betTypes);
+        var betTypeIds = allTickets.Select(ticket => ticket.IsMixParlay ? ticket.SubBetType : ticket.BetType).Distinct();
+        model.BetTypes = string.Join(",", betTypeIds);
+        model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(betTypeIds, allTickets);
+    }
+
+    private TemplateContentModel GetSpecialBetTypeContent(IEnumerable<int> betTypeIds, IEnumerable<GetTicketModel> allTickets)
+    {
+        if (betTypeIds.Count() == 1)
+        {
+            var emailTickets = allTickets.Select(x => new TicketEmailModel
+            {
+                IsMixParlay = x.IsMixParlay,
+                BetTypeId = x.BetType,
+                BetId = x.BetId,
+                SubBetType = x.SubBetType,
+                SubBetCheck = x.SubBetCheck
+            });
+
+            return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
+        }
+
+        return new TemplateContentModel();
     }
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)

@@ -10,6 +10,7 @@ import { RedCardModel } from './event-red-card.model';
 import { ReducedOverModel } from './event-reduced-over.model';
 import { EventTicket14Model } from './event-ticket-14.model';
 import { WrongHdpModel } from './event-wrong-hdp.model';
+import { WrongMarketOfferedModel } from './event-wrong-market-offered.model';
 import { WrongOddsModel } from './event-wrong-odds.model';
 import { WrongOuModel } from './event-wrong-ou.model';
 import { WrongScoreModel } from './event-wrong-score.model';
@@ -29,6 +30,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
   wrongOddsModels: WrongOddsModel[];
   reducedOverModels: ReducedOverModel[];
   notParticipateModels: NotParticipateModel[];
+  wrongMarketOfferedModel: WrongMarketOfferedModel;
   earlyKickOffModels: EarlyKickOffModel[];
   recoverTicketModel: RecoverTicketModel;
   others: OthersModel;
@@ -49,6 +51,7 @@ export class RequestModel { // Rename AddRequestModel or remove this
     this.reducedOverModels = [];
     this.earlyKickOffModels = [];
     this.notParticipateModels = [];
+    this.wrongMarketOfferedModel = new WrongMarketOfferedModel();
     this.others = new OthersModel();
   }
 }

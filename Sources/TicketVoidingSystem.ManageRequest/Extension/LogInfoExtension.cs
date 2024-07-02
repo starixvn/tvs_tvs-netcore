@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Security;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -229,5 +231,19 @@ public static class LogInfoExtension
         }
 
         return $"<root>{stringBuilder.ToString().Trim()}</root>";
+    }
+
+    public static string ToWrongMarketOfferedInfoXml(this WrongMarketOfferedViewModel model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true
+        };
+        return $"<root><r MatchId = '{model.MatchId}' "
+                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+                + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}'/></root>";
     }
 }

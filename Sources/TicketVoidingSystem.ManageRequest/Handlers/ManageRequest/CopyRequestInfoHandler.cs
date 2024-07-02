@@ -1,55 +1,38 @@
-﻿using Fanex.Data.Repository;
-using MediatR;
+﻿using MediatR;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
+using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 
-public class CopyRequestInfoRequest : CopyRequestInfoCriteria, IRequest<CopyRequestInfoResponse>
+public class CopyRequestInfoRequest : IRequest<CopyRequestInfoResponse>
 {
+    public int RequestId { get; set; }
+
+    public int MatchId { get; set; }
 }
 
 public class CopyRequestInfoHandler : IRequestHandler<CopyRequestInfoRequest, CopyRequestInfoResponse>
 {
-    private readonly IDynamicRepository repository;
-    private readonly MatchService matchService;
+    private readonly CopyRequestInfoService copyRequestInfoService;
 
-    public CopyRequestInfoHandler(IDynamicRepository repository, MatchService matchService)
+    public CopyRequestInfoHandler(CopyRequestInfoService copyRequestInfoService)
     {
-        this.repository = repository;
-        this.matchService = matchService;
+        this.copyRequestInfoService = copyRequestInfoService;
     }
 
     public async Task<CopyRequestInfoResponse> Handle(CopyRequestInfoRequest request, CancellationToken cancellationToken)
     {
-        var (requestInfoList, betTypeTickets) = await repository.FetchMultipleAsync<RequestInfoForCopy, BetTypeTicketsInfo>(request);
-        var requestInfo = requestInfoList.First();
-        UpdateMatchInfo(request.MatchId, requestInfo);
+        var (requestInfo, betTypeTickets) = await copyRequestInfoService.GetCopyInfo(request.MatchId, request.RequestId);
         requestInfo.GlobalShowTime = requestInfo.GlobalShowTime.ZoneManila();
+        copyRequestInfoService.UpdateMatchInfo(request.MatchId, requestInfo);
+        copyRequestInfoService.UpdateBetTypeName(betTypeTickets);
+        await copyRequestInfoService.UpdatePlayerNameForBetTypeNextManOut(request.MatchId, betTypeTickets);
 
         return new CopyRequestInfoResponse
         {
             RequestInfo = requestInfo,
-            BetTypeTickets = betTypeTickets
+            BetTypeTickets = betTypeTickets.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
         };
-    }
-
-    private void UpdateMatchInfo(int matchId, RequestInfoForCopy requestInfo)
-    {
-        var match = new Match
-        {
-            MatchId = matchId,
-            HomeId = requestInfo.HomeId,
-            AwayId = requestInfo.AwayId,
-            LeagueId = requestInfo.LeagueId,
-            IsNeutral = requestInfo.IsNeutral
-        };
-        matchService.UpdateMatchInfoFromRemotingRef(match);
-
-        requestInfo.MatchEvent = match.MatchEvent;
-        requestInfo.LeagueName = match.LeagueName;
     }
 }

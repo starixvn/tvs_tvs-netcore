@@ -7,6 +7,7 @@ import { NgbCollapseModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AutosizeModule } from 'ngx-autosize';
 import { AddChildMatchComponent } from '../../../utility/components/add-child-match/add-child-match.component';
+import { AdvancedModeAddRequestModule } from '../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.module';
 import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
 import { DateTimeModule } from '../../../utility/components/date-time/date-time.module';
@@ -56,6 +57,9 @@ import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.compon
 import { FilterWithHdpComponent } from './event-wrong-hdp/filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdpComponent } from './event-wrong-hdp/log-info-wrong-hdp/log-info-wrong-hdp.component';
 import { OthersWrongHdpComponent } from './event-wrong-hdp/others-wrong-hdp/others-wrong-hdp.component';
+import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
+import { FilterTimeComponent } from './event-wrong-market-offered/filter-time/filter-time.component';
+import { LogInfoWrongMarketOfferedComponent } from './event-wrong-market-offered/log-info-wrong-market-offered/log-info-wrong-market-offered.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { FilterWrongOddsComponent } from './event-wrong-odds/filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './event-wrong-odds/log-info-wrong-odds/log-info-wrong-odds.component';
@@ -128,7 +132,10 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         LogInfoNotParticipateComponent,
         ConfirmEkoComponent,
         AccountTableComponent,
-        EventRecoverTicketComponent
+        EventRecoverTicketComponent,
+        EventWrongMarketOfferedComponent,
+        FilterTimeComponent,
+        LogInfoWrongMarketOfferedComponent
     ],
     exports: [
         AddRequestComponent
@@ -159,7 +166,8 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         NgSelectMixtureModule,
         MultipleSelectionModule,
         AutosizeModule,
-        TemplateMessageModule
+        TemplateMessageModule,
+        AdvancedModeAddRequestModule
     ]
 })
 export class AddRequestModule { }

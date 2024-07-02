@@ -731,9 +731,12 @@ describe('RequestListComponent', () => {
     const { instance } = await shallow
     .mock(RequestDescriptionService, { copyToClipboard: mockCopyToClipboard })
     .render();
+    const requestModel = new RequestModel();
+    requestModel.details = [new DetailRequestModel()];
+    requestModel.details[0].matchId = 1;
 
     // Action
-    await instance.copyRequestDescription(1212, 1212);
+    await instance.copyRequestDescription(requestModel);
 
     // Assert
     expect(mockCopyToClipboard).toHaveBeenCalledTimes(1);

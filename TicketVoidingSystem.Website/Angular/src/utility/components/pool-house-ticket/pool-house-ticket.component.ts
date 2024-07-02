@@ -38,7 +38,7 @@ export class PoolHouseTicketComponent implements OnChanges {
     });
     this.paging.total = this.model.tickets.totalParlay + this.model.tickets.totalSingle;
     this.affectedGroupBetTypesModel = new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName !== 'Others'), true, 'Affected Bet Types', false);
-    this.othersGroupBetTypesModel = new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName === 'Others'), false, 'Others Bet Types', true);
+    this.othersGroupBetTypesModel = new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName === 'Others'), false, 'Other Bet Types', true);
     this.tickets.initData(this.model.tickets);
     this.changeCheckBetTypeAndTicket();
   }

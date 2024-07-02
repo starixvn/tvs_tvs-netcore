@@ -2,6 +2,7 @@
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
 
@@ -26,6 +27,7 @@ public static class AddRequestCommon
         services.AddTransient<MatchInfoAddRequestService, MatchInfoAddRequestServiceImp>();
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
         services.AddTransient<NotParticipateBetTypesService, NotParticipateBetTypesServiceImp>();
+        services.AddTransient<WrongMarketOfferedService, WrongMarketOfferedServiceImp>();
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }

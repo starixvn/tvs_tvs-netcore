@@ -36,20 +36,20 @@ export class AppComponent implements OnInit {
     await this.signalRService.initializeConnection();
   }
 
-  isShowVoidDangerAccepted(): boolean {
-    return StaticService.isDangerAccepted(this.requestDetail.request?.issueTypeId.toString())
-      || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId.toString())
-      || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId.toString())
-      || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId.toString())
-      || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId.toString());
-  }
-
   updateBlockUI(isBlock: boolean): void {
     this.isBlockUI = isBlock;
   }
 
   isValidRequest(): boolean {
     return this.isReadyRender && StaticService.isVoidAction(this.requestDetail.request.actionId);
+  }
+
+  isLikelyVoidDangerAccepted(): boolean {
+    return StaticService.isDangerAccepted(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId.toString());
   }
 
   isShowVoidDuplicateTickets(): boolean {
@@ -60,20 +60,21 @@ export class AppComponent implements OnInit {
     return StaticService.isRedCard(this.requestDetail.request?.issueTypeId.toString());
   }
 
-  isShowVoidNotParticipate(): boolean {
-    return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId.toString());
+  isLikelyVoidNotParticipate(): boolean {
+    return StaticService.isNotParticipate(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isLikelyWrongMarketOffered(this.requestDetail.request?.issueTypeId.toString());
   }
 
-  isShowVoidEarlyKickOff(): boolean {
+  isLikelyVoidEarlyKickOff(): boolean {
     return StaticService.isEarlyKickOff(this.requestDetail.request?.issueTypeId.toString()) || StaticService.isWrongKickOff(this.requestDetail.request?.issueTypeId.toString());
   }
-  
+
   isShowVoidAbnormalBet(): boolean {
     return StaticService.isAbnormalBet(this.requestDetail.request?.issueTypeId.toString());
   }
 
-   isShowVoidOtherIssue(): boolean {
-    return !this.isShowVoidDuplicateTickets() && !this.isShowVoidDangerAccepted() && !this.isShowVoidRedCard()
-      && !this.isShowVoidNotParticipate() && !this.isShowVoidEarlyKickOff() && !this.isShowVoidAbnormalBet();
+  isShowVoidOtherIssue(): boolean {
+    return !this.isShowVoidDuplicateTickets() && !this.isLikelyVoidDangerAccepted() && !this.isShowVoidRedCard()
+      && !this.isLikelyVoidNotParticipate() && !this.isLikelyVoidEarlyKickOff() && !this.isShowVoidAbnormalBet();
   }
 }

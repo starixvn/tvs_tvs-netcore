@@ -1,0 +1,38 @@
+@media only screen and (min-width: 1134px) {
+  .event-leage {
+    width: 1065px;
+  }
+}
+
+.event,
+.league,
+.sport-name,
+.event-date {
+  padding: 0;
+}
+
+.event-leage .event {
+  ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
+    color: red;
+  }
+
+  ::ng-deep .league .ng-arrow-wrapper {
+    display: none;
+  }
+
+  ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+    font-style: italic;
+  }
+}
+
+.text-red {
+  color: red !important;
+}
+
+.sport-name {
+  width: 100%;
+}
+
+.disabled {
+  background-color: #e9ecef;
+}

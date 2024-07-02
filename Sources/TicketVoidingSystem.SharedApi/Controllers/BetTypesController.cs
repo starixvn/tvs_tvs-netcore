@@ -19,6 +19,9 @@ public class BetTypesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> GetGroupBetTypesNg(GetGroupBetTypesRequest request) => Ok(await mediator.Send(request));
 
+    [HttpPost]
+    public async Task<IActionResult> GetGroupBetTypesTvsNg(GetGroupBetTypesTvsRequest request) => Ok(await mediator.Send(request));
+
     [HttpGet]
     public async Task<IActionResult> GetBetTeams() => Ok(await mediator.Send(new GetBetTeamsRequest()));
 

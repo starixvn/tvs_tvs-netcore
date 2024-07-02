@@ -43,6 +43,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
     private static List<AffectedLicensee> GetLicenseeAffectedList(IList<GetTicketModel> data)
     {
         var instantLicensee = data.Where(item => item.IsInstantSettlement && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
+        var timeMachineLicensee = data.Where(item => item.BetType.IsSabaTimeMachine() && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var cashOutLicensee = data.Where(item => item.IsCashOut && item.IsDeposit).Select(item => item.LicenseeName).Distinct().ToArray();
         var chinaViewLicensee = data.Where(item => item.IsChinaView).Select(item => item.LicenseeName).Distinct().ToArray();
         var jollyViewLicensee = data.Where(item => item.SpecialPlatform == SpecialPlatformConstant.JollySports).Select(item => item.LicenseeName).Distinct().ToArray();
@@ -56,6 +57,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         Array.Sort(chinaViewLicensee, StringComparer.InvariantCulture);
         Array.Sort(jollyViewLicensee, StringComparer.InvariantCulture);
         Array.Sort(jollySportsCvLicensee, StringComparer.InvariantCulture);
+        Array.Sort(timeMachineLicensee, StringComparer.InvariantCulture);
 
         var licenseeAffectedList = new AffectedLicenseeList();
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.Normal].LicenseesName = string.Join(", ", licensees);
@@ -64,6 +66,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.ChinaView].LicenseesName = string.Join(", ", chinaViewLicensee);
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollyView].LicenseesName = string.Join(", ", jollyViewLicensee);
         licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.JollySportCv].LicenseesName = string.Join(", ", jollySportsCvLicensee);
+        licenseeAffectedList.LicenseeAffectedList[IndexGroupLicenseeAffectedConstant.TimeMachine].LicenseesName = string.Join(", ", timeMachineLicensee);
 
         return licenseeAffectedList.LicenseeAffectedList;
     }

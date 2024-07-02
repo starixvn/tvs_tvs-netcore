@@ -6,11 +6,9 @@
             <div class="number-circle"><span><strong>{{id + 1}}</strong></span></div>
           </div>
           <div class="col-sm-3 d-flex flex-column pd-right-0 pd-left-10">
-            <div>
-              <div class="alert alert-dark p-1 m-0 mb-1"><span>
-                <span *ngIf="item.isCheckedVar" class="alert padding-2-10 text-white bg-danger">VAR</span>
-                Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
-              </div>
+            <div class="alert alert-dark p-1 m-0 mb-1"><span>
+              <span *ngIf="item.isCheckedVar" class="alert padding-2-10 text-white bg-danger">VAR</span>
+              Issue Type: <strong>{{item.displayIssueTypeName}}</strong></span>
             </div>
             <div class="alert alert-dark match-info p-1 m-0 flex-grow-1">
               <span>Match Code/ID:
@@ -28,8 +26,7 @@
             <div class="area-icon">
               <em [ngClass]="item.isShowTicketFull ? 'icon-show-tickets-expanded': 'icon-show-tickets'"
                 (click)="onClickShowVoidTickets(item)"></em>
-              <em
-                [ngClass]="item.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
+              <em [ngClass]="item.isShowTemplateMessage ? 'icon-show-template-message-expanded' : 'icon-show-template-message'"
                 (click)="onClickShowTemplateMessage(item)"></em>
             </div>
           </div>
@@ -41,96 +38,13 @@
             [isBlock]="item.isBlockBetList" (ticketsChange)="null" [issueTypeId]="requestDetail.request.issueTypeId"
             [isDisableCheckbox]="true">
           </tickets-list>
-  
-          <div [ngClass]="item.isShowTemplateMessage ? 'display-block' : 'display-none'">
-            <ng-container *ngIf="item.voidTicketsMini?.total > 0">
-              <template-message #templateMessage [value]="item.templateValue"
-                [issueTypeId]="requestDetail.request.issueTypeId" [subIssueTypeId]="item.subIssueType.subIssueTypeId"
-                [voidFunction]="2"
-                >
-              </template-message>
-  
-              <div class="reason-area">
-                <div class="gray-header">
-                  Reason
-                </div>
-                <table>
-                  <tr class="header-language">
-                    <td>
-                      <span class="required">&nbsp;&nbsp;*</span> <span>English (Max {{150 -
-                        item.voidReason.reasonEnglish?.length}} characters)</span>
-                    </td>
-                    <td>
-                      <span class="required">&nbsp;&nbsp;*</span> <span>Chinese Simplified (Max {{150 -
-                        item.voidReason.reasonChineseSimplified?.length}} characters)</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <textarea maxlength="150" class="reason" [(ngModel)]="item.voidReason.reasonEnglish"></textarea>
-                    </td>
-                    <td>
-                      <textarea maxlength="150" class="reasonSC"
-                        [(ngModel)]="item.voidReason.reasonChineseSimplified"></textarea>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </ng-container>
-  
-            <ng-container *ngIf="item.voidTicketsMini?.total === 0">
-              <div class="reason-area">
-                <div class="gray-header">
-                  Message
-                </div>
-                <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
-              </div>
-              <div class="reason-area">
-                <div class="gray-header">
-                  Reason
-                </div>
-                <textarea class="no-data-text" rows="1" readonly>There is no data</textarea>
-              </div>
-            </ng-container>
-          </div>
+          <message-area #messageArea [isShowTemplateMessage]="item.isShowTemplateMessage" [totalVoidTickets]="item.voidTicketsMini?.total" 
+            [templateValue]="item.templateValue" [issueTypeId]="requestDetail.request.issueTypeId" 
+            [subIssueTypeId]="item.subIssueType.subIssueTypeId" [voidReason]="item.voidReason">
+          </message-area>     
         </div>
       </div>
-  
-      <fieldset class="confirm-delete">
-        <legend>Confirmation</legend>
-        <table>
-          <tr>
-            <td>
-              <label>Username</label>
-            </td>
-            <td>
-              <input class="form-control form-control-sm" type="text" disabled value="{{primitiveProperty.userName}}" />
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>
-              <label>Password</label>
-            </td>
-            <td>
-              <input autocomplete="new-password" type="password" class="password form-control form-control-sm"
-                [(ngModel)]="primitiveProperty.userPassword" />
-            </td>
-            <td><span>&nbsp;&nbsp;(*)</span></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <input type="button" class="btn btn-success btn-sm font-weight-bold btn-void-all-matches"
-                value="Void All" [disabled]="primitiveProperty.isBlockUI" (click)="onClickVoidAllMatches()" />
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-      <div *ngIf="primitiveProperty.errorMessage" class="error-text error-color">
-        <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{primitiveProperty.errorMessage}}
-      </div>
-  
+      <password-area [primitiveProperty]="primitiveProperty" (clickVoidAllEvent)="onClickVoidAllMatches()"></password-area>
       <tooltip [tooltip]="tooltip"></tooltip>
     </ng-container>
   </div>

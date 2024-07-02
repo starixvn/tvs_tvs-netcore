@@ -84,6 +84,8 @@ export class ObjectService {
       args.primitiveProperty.matchId = args.detailViewModel.earlyKickOffModels.find(x => x.isMainMatch).matchId;
     } else if (this.validationService.isRecoverTicket(args.detailViewModel)) {
       args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
+    } else if (this.validationService.isLikelyWrongMarketOffered(args.detailViewModel)) {
+      args.requestModel.wrongMarketOfferedModel = args.detailViewModel.wrongMarketOfferedModel;
     }
   }
 

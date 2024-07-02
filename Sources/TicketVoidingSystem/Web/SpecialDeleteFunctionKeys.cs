@@ -97,4 +97,6 @@ public static class SpecialDeleteFunctionKeys
     public const string NotParticipate = "NotParticipate";
     public const string RecoverTicket = "RecoverTicket";
     public const string Abandoned = "Abandoned";
+    public const string WrongMarketOffered = "WrongMarketOffered";
+    public const string TechnicalError = "TechnicalError";
 }

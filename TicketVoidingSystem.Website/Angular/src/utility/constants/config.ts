@@ -431,4 +431,14 @@ export class ActionVoidByIssueTypeConst {
   static readonly RECOVER_TICKET: number[] = [
     TVSRequestActionType.AUTO_RECOVER_ID
   ];
+  static readonly WRONG_MARKET_OFFERED: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly TECHNICAL_ERROR: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
 }

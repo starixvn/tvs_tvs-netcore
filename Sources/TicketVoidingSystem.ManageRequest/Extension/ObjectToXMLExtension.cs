@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Security;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -354,6 +356,33 @@ public static class ObjectToXMLExtension
         var stringBuilder = $"<r TransIds='{model.TransIds}' "
                             + $"FilterBy='{model.FilterBy}' "
                             + $"SubIssueTypeId='{model.SubIssueTypeId}' />";
+
+        return $"<root>{stringBuilder.Trim()}</root>";
+    }
+
+    public static string ToEventWrongMarketOfferedXml(this WrongMarketOfferedViewModel model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true
+        };
+        var betTypeCountJson = model.BetTypeCount.Select(x => new BetTypeCountJsonModel
+        {
+            BetTypeId = x.BetTypeId,
+            BetTypeCount = x.BetTypeCount,
+            BetId = x.BetId
+        });
+        var stringBuilder = $"<r MatchId = '{model.MatchId}' "
+               + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"VoidToTime='{model.LogInfoDetail.VoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+               + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+               + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
+               + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
+               + $"BetTypeCount='{SecurityElement.Escape(JsonSerializer.Serialize(betTypeCountJson, options))}' "
+               + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }

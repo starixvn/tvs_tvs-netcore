@@ -4,7 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
 import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
-import { DetailNotParticipateComponent } from '../../../utility/components/log-info-detail/detail-not-participate/detail-not-participate.component';
+import { LogInfoTicketCountComponent } from '../../../utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -28,7 +28,7 @@ describe('VoidNotParticipateComponent', () => {
     declarations: [
       TicketsListComponent,
       TemplateMessageComponent,
-      DetailNotParticipateComponent,
+      LogInfoTicketCountComponent,
       LicenseeAffectedListComponent
     ],
     imports: [

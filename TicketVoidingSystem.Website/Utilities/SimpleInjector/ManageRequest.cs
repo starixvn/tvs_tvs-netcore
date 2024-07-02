@@ -43,5 +43,7 @@ public static class ManageRequest
         services.AddTransient<ReCalculateTicketsService, ReCalculateTicketsServiceImp>();
         services.AddTransient<UpdateRequestProcessStage, UpdateRequestProcessStageImp>();
         services.AddTransient<OWPDataService, OWPDataServiceImp>();
+        services.AddTransient<CopyRequestInfoService, CopyRequestInfoServiceImp>();
+        services.AddTransient<RequestExtraInfoXmlService, RequestExtraInfoXmlServiceImp>();
     }
 }

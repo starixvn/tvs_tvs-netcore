@@ -76,6 +76,11 @@ public static class BetTypeExtension
         return VirtualSports.Contains(sportTypeId);
     }
 
+    public static bool IsSabaTimeMachine(this int betTypeId)
+    {
+        return betTypeId is BetTypeConstant.SabaOUTimeMachine or BetTypeConstant.SabaHdpTimeMachine;
+    }
+
     public static bool IsHideHandicap(this int id)
     {
         return id.IsParlayAndBetBuilder() || id.IsNumberGame() || id.IsLucky3();

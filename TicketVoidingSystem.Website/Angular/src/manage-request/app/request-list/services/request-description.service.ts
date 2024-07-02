@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import moment from 'moment';
 import { ClipboardService } from 'ngx-clipboard';
-import { StaticService } from '../../../../utility/services/static.service';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
 import { CommonService } from '../../../../utility/services/common.service';
+import { StaticService } from '../../../../utility/services/static.service';
 
 @Injectable({
   providedIn: 'root'
@@ -35,25 +35,35 @@ export class RequestDescriptionService {
       return this.createNotParticipateContent(copyInfoResponse);
     }
 
+    if (StaticService.isLikelyWrongMarketOffered(copyInfoResponse.requestInfo.issueTypeId.toString())) {
+      return this.createWrongMarketOfferedLikelyContent(copyInfoResponse);
+    }
+
     return this.createOthersIssueTypeContent(copyInfoResponse);
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const betTypeContent = copyInfoResponse.betTypeTickets
-      .map(element => {
-        const inputtedRunsText = element.inputtedRuns ? ` - ${element.inputtedRuns} and above should be voided` : '';
-        const betTypeName = element.wicketOver ? element.betTypeName.replaceAll('X', `${element.wicketOver}`) : element.betTypeName;
-        return `${betTypeName}${inputtedRunsText}\n`
-          + `${element.ticketsCount} ticket(s)\n\n`;
-      }).join('');
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
+    let outputContent = '';
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent);
+    for (let key in groupBetTypes) {
+      const values = groupBetTypes[key];
+      const inputtedRunsText = values[0].inputtedRuns ? ` - Above ${values[0].inputtedRuns} should be voided` : '';
+      const betTypeContent = `${values[0].betTypeName}${inputtedRunsText}\n`;
+
+      let playerContent = values.map(element => element.playerName ? `${element.playerName} - ${element.ticketsCount} ticket(s)\n`
+        : `${element.ticketsCount} ticket(s)\n`).join('');
+      outputContent += `${betTypeContent}${playerContent}\n`;
+
+    }
+
+    return this.createCommonContent(copyInfoResponse, outputContent, false);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
     const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, "betTypeId");
     let betTypeContent = '';
-    
+
     for (let key in groupBetTypes) {
       const values = groupBetTypes[key];
       let currentContent = `${values[0].betTypeName}\n`;
@@ -61,10 +71,25 @@ export class RequestDescriptionService {
       betTypeContent += `${currentContent}${playerContent}\n`;
     }
 
-    return this.createCommonContent(copyInfoResponse, betTypeContent);
+    return this.createCommonContent(copyInfoResponse, betTypeContent, false);
   }
 
-  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string): string {
+  private createWrongMarketOfferedLikelyContent(copyInfoResponse: CopyRequestInfoResponse): string {
+    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    let betTypeContent = '';
+
+    for (let key in groupBetTypes) {
+      const values = groupBetTypes[key];
+      let currentContent = `${values[0].betTypeName}\n`;
+      let playerContent = values.map(element => `${element.playerName ? (element.playerName + ' - ') : ''}${element.ticketsCount} ticket(s)\n`).join('');
+      betTypeContent += `${currentContent}${playerContent}\n`;
+    }
+
+    return this.createCommonContent(copyInfoResponse, betTypeContent, true);
+  }
+
+  private createCommonContent(copyInfoResponse: CopyRequestInfoResponse, betTypeContent: string, isShowCancelCOCount: boolean): string {
+    const cancelCashOutCount = isShowCancelCOCount ? `, Cancel Cash Out: ${copyInfoResponse.requestInfo.totalCancelCashOutCount}` : '';
     const content = `Hi CSD, please void${copyInfoResponse.requestInfo.liveStatus}tickets for us\n`
       + `League: ${copyInfoResponse.requestInfo.leagueName}\n`
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
@@ -73,7 +98,7 @@ export class RequestDescriptionService {
       + `Issue Type: ${copyInfoResponse.requestInfo.issueTypeName}\n\n`
       + betTypeContent
       + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
-      + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount})\n`
+      + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
       + `${copyInfoResponse.requestInfo.remark}`
 
     return content;

@@ -52,7 +52,7 @@ public class AffectedLicenseeList
             {
                 Group = "instant",
                 Show = false,
-                Message = "Instant OU Licensee Affected List: ",
+                Message = "Instant Payout Licensee Affected List: ",
                 Color = "#ff0000",
                 LicenseesName = ""
             },new()
@@ -68,6 +68,14 @@ public class AffectedLicenseeList
                 Show = false,
                 Message = "Cancel Cash Out Licensee Affected List: ",
                 Color = "#0a0c0f",
+                LicenseesName = ""
+            }
+            ,new()
+            {
+                Group = "timeMachine",
+                Show = false,
+                Message = "Time Machine Licensee Affected List: ",
+                Color = "#6f3096",
                 LicenseesName = ""
             }
         };

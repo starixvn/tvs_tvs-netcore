@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
-import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
@@ -226,9 +225,8 @@ export class TemplateMessageComponent implements OnChanges {
       SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
       SubIssueTypeId.TECHNICAL_ERROR
     ];
-    if((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
-      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE))
-    {
+    if ((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
+      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE)) {
       return false;
     };
 
@@ -244,28 +242,21 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateInputs() {
-    if (this.issueTypeId === IssueTypeId.WRONG_MARKET_OFFERED
-      && this.selectedTemplated.inputTexts[0].msgEnglishValue.length > 0) {
-      const isOnwardsSubtype = this.subIssueTypeId === SubIssueTypeId.ONWARDS;
-      this.templateService.replaceScoreOfWrongMarketOffered(this.message,
-        this.selectedTemplated.inputTexts[0].msgEnglishValue, isOnwardsSubtype);
+    if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
+      this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
+        this.selectedTemplated.inputTexts[0].msgEnglishValue);
+      this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
+        this.selectedTemplated.inputTexts[1].msgEnglishValue);
     } else {
-      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
-        this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
-          this.selectedTemplated.inputTexts[0].msgEnglishValue);
-        this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
-          this.selectedTemplated.inputTexts[1].msgEnglishValue);
-      } else {
-        this.selectedTemplated.inputTexts.forEach(item => {
-          const text: TemplateContent = {
-            msgEnglish: item.msgEnglishValue,
-            msgChineseTraditional: item.msgChineseTraditionalValue,
-            msgChineseSimplified: item.msgChineseSimplifiedValue,
-            msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
-          };
-          this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
-        });
-      }
+      this.selectedTemplated.inputTexts.forEach(item => {
+        const text: TemplateContent = {
+          msgEnglish: item.msgEnglishValue,
+          msgChineseTraditional: item.msgChineseTraditionalValue,
+          msgChineseSimplified: item.msgChineseSimplifiedValue,
+          msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
+        };
+        this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
+      });
     }
   }
 
@@ -383,7 +374,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateAIOMessage() {
-    if((this.isVoidSinglePage() && this.value.checkAIOMessage) || this.value.groupPHAffected !== 0){
+    if ((this.isVoidSinglePage() && this.value.checkAIOMessage) || this.value.groupPHAffected !== 0) {
       this.templateService.replaceAOIMessage(this.message, this.value.groupPHAffected);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.AOI_MESSAGE, '');
@@ -399,7 +390,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateSpecialBetType() {
-    if (this.value.isCheckedSpecialBetType && this.issueTypeUpdateSpecialBetTypeVoidSingleBet()) {
+    if (this.value.isCheckedSpecialBetType && (this.isLikelyWrongMarketOffered() || this.issueTypeUpdateSpecialBetTypeVoidSingleBet())) {
       this.templateService.replaceSpecialBetType(this.message, this.value.betTypeNameReplaceMessage);
     } else {
       this.templateService.replaceAll(this.message, TemplateReplace.SPECIAL_BET_TYPE, '');
@@ -415,10 +406,9 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() &&
-      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
-        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
-        || (this.isOtherIssues() && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
+    return this.isVoidSinglePage() && 
+        (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
+        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 
   checkValidation(): boolean {
@@ -441,14 +431,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowCheckBoxSpecialBetType(): boolean {
-    return this.isShowMessages && this.isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet();
-  }
-
-  isssueTypeShowCheckBoxSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() &&
-      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds()
-        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38)
-        || (this.isOtherIssues && this.subIssueTypeId === SubIssueTypeConstant.TECHNICAL_ERROR));
+    return this.isShowMessages && this.issueTypeUpdateSpecialBetTypeVoidSingleBet();
   }
 
   isShowAioCheckBoxMessage(): boolean {
@@ -456,10 +439,10 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowEarlyEventCheckBoxMessage(): boolean {
-    return this.isShowMessages && (this.isssueTypeShowEarlyEventCheckBoxMessageVoidSingleBet() || this.isWrongOdds());
+    return this.isShowMessages && (this.issueTypeShowEarlyEventCheckBox() || this.isWrongOdds());
   }
 
-  isssueTypeShowEarlyEventCheckBoxMessageVoidSingleBet(): boolean {
+  issueTypeShowEarlyEventCheckBox(): boolean {
     return this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU());
   }
 
@@ -525,5 +508,9 @@ export class TemplateMessageComponent implements OnChanges {
 
   isOtherIssues(): boolean {
     return StaticService.isOtherIssues(this.issueTypeId?.toString());
+  }
+
+  isLikelyWrongMarketOffered(): boolean {
+    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString());
   }
 }

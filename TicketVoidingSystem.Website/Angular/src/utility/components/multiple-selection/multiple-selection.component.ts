@@ -38,14 +38,14 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.isExpanded = true;
-    this.checkBySelectedItem();
+    this.checkBySelectedItem(this.selectedItems);
     this.getTitle();
     this.clickToBody();
   }
 
-  private checkBySelectedItem(): void {
+  public checkBySelectedItem(selectedItems: string[]): void {
     this.multipleSelect.items.forEach(x => {
-      x.checkBySelectedItem(this.selectedItems);
+      x.checkBySelectedItem(selectedItems);
       x.checkFromChilds();
     });
   }

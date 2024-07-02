@@ -42,16 +42,16 @@ export class TicketsService {
     voidPageItem.isLoadedTicketFull = true;
   }
 
-  async loadVoidTicketsFullOnPagingChange(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, matchModel?: MatchModel): Promise<void> {
-    const query = this.initTicketQuery(requestDetail, matchModel);
+  async loadVoidTicketsFullOnPagingChange(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel): Promise<void> {
+    const query = this.initTicketQuery(requestDetail, voidPageItem.matchModel);
     query.pageIndex = voidPageItem.pagingVoidTickets.page - 1;
     query.pageSize = voidPageItem.pagingVoidTickets.pageSize;
     await this.getVoidTicketsFull(voidPageItem, query);
   }
 
-  async exportTicketsAsExcelFile(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, matchModel?: MatchModel): Promise<void> {
+  async exportTicketsAsExcelFile(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel): Promise<void> {
     voidPageItem.isBlockBetList = true;
-    const query = this.initTicketQuery(requestDetail, matchModel);
+    const query = this.initTicketQuery(requestDetail, voidPageItem.matchModel);
     query.pageIndex = voidPageItem.pagingVoidTickets.page - 1;
     query.pageSize = voidPageItem.pagingVoidTickets.pageSize;
     await this.appService.exportExcel(query);

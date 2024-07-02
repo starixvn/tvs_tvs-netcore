@@ -28,7 +28,9 @@ public static class PermissionIssueTypeConfig
                     new() { FunctionKey = SpecialDeleteFunctionKeys.Abandoned, IssueTypeId = IssueTypeConstant.Abandoned },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.DuplicateTickets, IssueTypeId = IssueTypeConstant.DuplicateTickets },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.NotParticipate, IssueTypeId = IssueTypeConstant.NotParticipate },
-                    new() { FunctionKey = SpecialDeleteFunctionKeys.RecoverTicket, IssueTypeId = IssueTypeConstant.RecoverTicket }
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.RecoverTicket, IssueTypeId = IssueTypeConstant.RecoverTicket },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.WrongMarketOffered, IssueTypeId = IssueTypeConstant.WrongMarketOffered },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.TechnicalError, IssueTypeId = IssueTypeConstant.TechnicalError }
                 };
             return permission;
         }

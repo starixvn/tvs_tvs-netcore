@@ -38,6 +38,10 @@ public class GetTicketSiteDbCriteria : CriteriaBase
 
     public string RecoverTicketInfo { get; set; }
 
+    public string WrongMarketOfferedInfo { get; set; }
+
+    public string TechnicalErrorInfo { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

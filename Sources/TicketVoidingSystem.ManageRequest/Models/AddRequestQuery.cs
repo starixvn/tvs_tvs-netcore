@@ -76,4 +76,6 @@ public class AddRequestQuery
     public RecoverTicketViewModel? RecoverTicketInfo { get; set; }
 
     public AbnormalBetViewModel? AbnormalBetInfo { get; set; }
+
+    public WrongMarketOfferedViewModel? WrongMarketOfferedInfo { get; set; }
 }

@@ -99,4 +99,7 @@ public class AddRequestController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetPermission() => Ok(await mediator.Send(new GetPermissionRequest()));
+
+    [HttpGet]
+    public async Task<IActionResult> GetBetTeams() => Ok(await mediator.Send(new GetBetTeamsRequest()));
 }

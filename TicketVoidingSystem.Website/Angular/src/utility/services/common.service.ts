@@ -17,7 +17,7 @@ import { Tooltip } from '../components/tooltip/tooltip.model';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../models/copy-request-info.query';
-import { SportInfo } from '../models/event.model';
+import { MatchInfoViewModel, SportInfo } from '../models/event.model';
 import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
 import { Result, SqlResult } from '../models/result';
@@ -45,6 +45,10 @@ export class CommonService {
 
   async getGroupBetTypes(query: GetBetTypesQuery): Promise<GroupBetTypesModel> {
     return this.httpService.postJson(query, `api/BetTypes/GetGroupBetTypesNg`);
+  }
+
+  async getGroupBetTypesTvs(query: GetBetTypesQuery): Promise<GroupBetTypesModel> {
+    return this.httpService.postJson(query, `api/BetTypes/GetGroupBetTypesTvsNg`);
   }
 
   async getBetTypesVirtualSports(query: GetBetTypesQuery): Promise<GroupBetTypeVirtualSport> {
@@ -145,6 +149,14 @@ export class CommonService {
 
   async copyRequestInfo(query: CopyRequestInfoQuery): Promise<CopyRequestInfoResponse> {
     return this.httpService.postJson(query, `api/ManageRequest/CopyRequestInfo`);
+  }
+
+  async getMatchInfoAddRequest(sportType: number, eventDate: string, transIds: string, isUpdRequest: boolean, matchId: number): Promise<MatchInfoViewModel> {
+    return this.httpService.postJson({ sportType, eventDate, transIds, isUpdRequest, matchId }, 'api/MatchInfo/GetInfoForAddRequest');
+  }
+
+  async getMatchInfoAddRequestTvs(matchId: number): Promise<MatchInfoViewModel> {
+    return this.httpService.postJson({ matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 }
 

@@ -40,6 +40,7 @@
     
   <ItemGroup>
     <Content Remove="App_Data\Data\VoidParlayVirtualSportsBetTypes.json" />
+    <Content Remove="App_Data\Data\WrongMarketOfferedAdvancedMode.json" />
   </ItemGroup>
     
     <ItemGroup>

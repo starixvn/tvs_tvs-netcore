@@ -8,6 +8,7 @@ using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
@@ -22,6 +23,8 @@ public class GetRequestServiceTests
     private readonly IDynamicRepository repository;
     private readonly MatchService matchService;
     private readonly IMapper mapper;
+    private readonly WrongMarketOfferedService wrongMarketOfferedService;
+    private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly GetRequestServiceImp service;
 
     public GetRequestServiceTests()
@@ -30,7 +33,9 @@ public class GetRequestServiceTests
         repository = Substitute.For<IDynamicRepository>();
         matchService = Substitute.For<MatchService>();
         mapper = Substitute.For<IMapper>();
-        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper);
+        wrongMarketOfferedService = Substitute.For<WrongMarketOfferedService>();
+        requestExtraInfoXmlService = Substitute.For<RequestExtraInfoXmlService>();
+        service = new GetRequestServiceImp(repository, remotingRefService, matchService, mapper, wrongMarketOfferedService, requestExtraInfoXmlService);
     }
 
     [Fact]
@@ -636,7 +641,8 @@ public class GetRequestServiceTests
             {
                 IssueTypeId = IssueTypeConstant.RecoverTicket,
                 SportType = 0,
-                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>"
+                OperatorInfo = "<root><r OperatorId='1' TypeId='8'/><r OperatorId='1' TypeId='8'/></root>",
+                Operators = new List<OperatorInfo>()
             },
             PlayerNames = new List<PlayerName> { new() },
             RecoverTicketModel = new RecoverTicketViewModel

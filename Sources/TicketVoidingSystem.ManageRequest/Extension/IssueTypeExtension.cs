@@ -88,4 +88,19 @@ public static class IssueTypeExtension
     {
         return id == IssueTypeConstant.DuplicateTickets;
     }
+
+    public static bool IsLikelyWrongMarketOffered(this int id)
+    {
+        return id is IssueTypeConstant.WrongMarketOffered or IssueTypeConstant.TechnicalError;
+    }
+
+    public static bool IsWrongMarketOffered(this int id)
+    {
+        return id is IssueTypeConstant.WrongMarketOffered;
+    }
+
+    public static bool IsTechnicalError(this int id)
+    {
+        return id is IssueTypeConstant.TechnicalError;
+    }
 }

@@ -109,6 +109,8 @@ public class AddRequestServiceImp : AddRequestService
         command.RecoverTicketInfo = query.RecoverTicketInfo?.ToEventRecoverTicketXml();
         command.KickOffInfo = query.EarlyKickOffInfo?.ToEventKickOffXml();
         command.AbnormalBetInfo = query.AbnormalBetInfo?.ToEventAbnormalBetXml();
+        command.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
+        command.TechnicalErrorInfo = query.IssueTypeId.IsTechnicalError() ? query.WrongMarketOfferedInfo?.ToEventWrongMarketOfferedXml() : null;
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
@@ -140,6 +142,8 @@ public class AddRequestServiceImp : AddRequestService
                 ? string.Join(", ", query.AbnormalBetInfo.Matches.Select(x => x.MatchId))
                 : BetTypeConstant.SystemParlay.ToString(),
             IssueTypeConstant.DuplicateTickets => query.DuplicateTicketsInfo?.MatchId.ToString(),
+            IssueTypeConstant.WrongMarketOffered => query.WrongMarketOfferedInfo?.MatchId.ToString(),
+            IssueTypeConstant.TechnicalError => query.WrongMarketOfferedInfo?.MatchId.ToString(),
             _ => string.Empty
         };
     }

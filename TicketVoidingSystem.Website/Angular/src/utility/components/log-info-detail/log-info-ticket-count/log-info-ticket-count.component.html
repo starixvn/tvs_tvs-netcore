@@ -1,0 +1,16 @@
+<div *ngIf="model">
+  Void time: <strong>{{displayFullDateTimeFormat(model.voidFromTime)}} - {{displayFullDateTimeFormat(model.voidToTime)}}</strong><br />
+  Affected Single Count: <strong>{{model.singleCount}}</strong>
+  <span *ngIf="isShowCountInfo(model.cashOutCount, model.settleCount, model.instantlySettleCount)" class="text-red"
+  [innerHTML]="countInfoContent(model.cashOutCount, model.settleCount, model.instantlySettleCount) | sanitizeHtml"></span>,
+  Parlay Count: <strong>{{model.mainParlayCount}}</strong><br />
+  <div *ngIf="isShowBetTypeCount">
+    <span class="btn-bet-type-count" (click)="isShowDetaiBetTypeCount = !isShowDetaiBetTypeCount">Details</span>
+    <div class="bet-type-count pl-4" *ngIf="isShowDetaiBetTypeCount">
+      <ng-container *ngFor="let item of betTypesCount">
+        <span>{{item.betTypeName}} - {{item.betTypeCount}} ticket(s)</span><br/>
+      </ng-container>
+    </div>
+  </div>
+  <span *ngIf="isShowCancelCashOut && model.cancelCashOutCount > 0">Cancel Cash Out: <strong>{{model.cancelCashOutCount}}</strong></span>
+</div>

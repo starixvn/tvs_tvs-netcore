@@ -1,0 +1,26 @@
+<div class="reason-area" *ngIf="voidReason">
+    <div class="gray-header">
+      Reason
+    </div>
+    <table>
+      <tr class="header-language">
+        <td>
+          <span class="required">&nbsp;&nbsp;*</span> <span>English (Max {{150 -
+            voidReason.reasonEnglish?.length}} characters)</span>
+        </td>
+        <td>
+          <span class="required">&nbsp;&nbsp;*</span> <span>Chinese Simplified (Max {{150 -
+            voidReason.reasonChineseSimplified?.length}} characters)</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <textarea maxlength="150" class="reason" [(ngModel)]="voidReason.reasonEnglish"></textarea>
+        </td>
+        <td>
+          <textarea maxlength="150" class="reasonSC"
+            [(ngModel)]="voidReason.reasonChineseSimplified"></textarea>
+        </td>
+      </tr>
+    </table>
+</div>

@@ -36,6 +36,8 @@ export class LogInfoService {
       await this.getLogInfoReducedOver(args);
     } else if (this.validationService.isNotParticipate(detailViewModel)) {
       await this.getLogInfoNotParticipate(args);
+    } else if (this.validationService.isLikelyWrongMarketOffered(detailViewModel)) {
+      await this.getLogInfoWrongMarketOffered(args);
     }
   }
 
@@ -178,6 +180,22 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.notParticipateModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
+    });
+  }
+
+  private async getLogInfoWrongMarketOffered(args: LogInfoArg): Promise<void> {
+    const models = MappingModelStaticService.buildWrongMarketOfferedGetLogInfoModel(args.detailViewModel.wrongMarketOfferedModel);
+    const query = new GetLogInfoQuery();
+    query.requestId = args.primitiveProperty.requestId;
+    query.isShowLogOnly = true;
+    query.issueTypeId = args.detailViewModel.request.issueTypeId;
+    query.actionId = args.detailViewModel.request.actionId;
+    query.wrongMarketOfferedModel = models;
+
+    const data = await this.commonService.getLogInfo(query);
+    data.getLogInfoModels.forEach(x => {
+      args.detailViewModel.wrongMarketOfferedModel.logInfoDetail = x.logInfoDetail;
+      args.detailViewModel.wrongMarketOfferedModel.betTypeCount = x.betTypeCount;
     });
   }
 

@@ -48,6 +48,8 @@ public static class BetTypeConstant
 
     public const int SabaOUTimeMachine = 228;
 
+    public const int SabaHdpTimeMachine = 229;
+
     public const int BitCoinOverUnder = 7901;
 
     public const int VirtualSport4MixParlay = 10449;

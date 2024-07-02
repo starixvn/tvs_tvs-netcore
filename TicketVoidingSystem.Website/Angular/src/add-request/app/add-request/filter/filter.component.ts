@@ -236,7 +236,9 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200, sport: 150 },
       [IssueTypeConstant.ABANDONED]: { issueType: 180, action: 200, sport: 150 },
       [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170, sport: 150 },
-      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200, sport: 150 }
+      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200, sport: 150 },
+      [IssueTypeConstant.WRONG_MARKET_OFFERED]: { issueType: 180, action: 170 },
+      [IssueTypeConstant.TECHNICAL_ERROR]: { issueType: 180, action: 170 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -266,7 +268,9 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
       [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
       [IssueTypeConstant.NOT_PARTICIPATE]: () => this.actionVoidService.getActionVoidNotParticipate(),
-      [IssueTypeConstant.RECOVER_TICKET]: () => this.actionVoidService.getActionRecoverTicket()
+      [IssueTypeConstant.RECOVER_TICKET]: () => this.actionVoidService.getActionRecoverTicket(),
+      [IssueTypeConstant.WRONG_MARKET_OFFERED]: () => this.actionVoidService.getActionVoidWrongMarketOffered(),
+      [IssueTypeConstant.TECHNICAL_ERROR]: () => this.actionVoidService.getActionVoidTechnicalError()
     };
 
     const actionFunction = actionMapping[this.issueTypes.issueId];
@@ -347,14 +351,6 @@ export class FilterComponent implements OnInit, OnChanges {
     ];
 
     return this.isEdit || issuTypeDisableSportControl.includes(this.issueTypes.issueId?.toString());
-  }
-
-  isShowSubType(): boolean {
-    return this.issueTypes.selectedSubIssueTypes.length > 1
-      && !this.isWrongOU()
-      && !this.isWrong1stOU()
-      && !this.isEarlyKickOff()
-      && !this.isWrongKickOff();
   }
 
   isShowButtonSelectSubType(): boolean {
@@ -508,12 +504,43 @@ export class FilterComponent implements OnInit, OnChanges {
     return false;
   }
 
+  public isShowSubType(): boolean {
+    const issueTypeNotShowSubType = [
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.EARLY_KICK_OFF,
+      IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.WRONG_MARKET_OFFERED,
+      IssueTypeConstant.TECHNICAL_ERROR
+    ]
+    return this.issueTypes.selectedSubIssueTypes.length > 1
+      && !issueTypeNotShowSubType.includes(this.issueTypes.issueId?.toString());
+  }
+
   public isShowSportType(): boolean {
-    return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
+    const issueTypeNotShowSportType = [
+      IssueTypeConstant.ABNORMAL_BET,
+      IssueTypeConstant.ABNORMAL_ACCOUNT,
+      IssueTypeConstant.ARCHIVED_TICKET,
+      IssueTypeConstant.DUPLICATE_TICKETS,
+      IssueTypeConstant.RECOVER_TICKET,
+      IssueTypeConstant.WRONG_MARKET_OFFERED,
+      IssueTypeConstant.TECHNICAL_ERROR
+    ];
+    return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
 
   public isShowEventDate(): boolean {
-    return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicket() && !this.isDuplicateTickets() && !this.isRecoverTicket();
+    const issueTypeNotShowEventDate = [
+      IssueTypeConstant.ABNORMAL_BET,
+      IssueTypeConstant.ABNORMAL_ACCOUNT,
+      IssueTypeConstant.ARCHIVED_TICKET,
+      IssueTypeConstant.DUPLICATE_TICKETS,
+      IssueTypeConstant.RECOVER_TICKET,
+      IssueTypeConstant.WRONG_MARKET_OFFERED,
+      IssueTypeConstant.TECHNICAL_ERROR
+    ];
+    return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }
 
   public isDisableActionVoid(): boolean {

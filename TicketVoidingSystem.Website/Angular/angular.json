@@ -18,8 +18,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist",
-            "index": "src/void-single-bet/index.html",
-            "main": "src/void-single-bet/main.ts",
+            "index": "src/edit-request/index.html",
+            "main": "src/edit-request/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

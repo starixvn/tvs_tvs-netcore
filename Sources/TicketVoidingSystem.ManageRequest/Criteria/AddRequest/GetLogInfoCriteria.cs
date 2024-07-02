@@ -38,6 +38,10 @@ public class GetLogInfoCriteria : CriteriaBase
 
     public string NotParticipateInfo { get; set; }
 
+    public string WrongMarketOfferedInfo { get; set; }
+
+    public string TechnicalErrorInfo { get; set; }
+
     public string? TransInfoJson { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_LogInfo_Select";
