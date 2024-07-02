@@ -25,6 +25,7 @@ Thumbs.db
 *.lib
 *.sbr
 .vs
+.vscode
 ipch/
 obj/
 [Bb]in
