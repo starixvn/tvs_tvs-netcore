@@ -49,7 +49,6 @@ public class GetRequestsForExcelServiceTests
         convertRequestsService.GetAllVoidActions().Returns(new List<VoidAction> { new() });
 
         // Act
-
         var result = await service.GetRequestsExcel(query);
 
         // Assert

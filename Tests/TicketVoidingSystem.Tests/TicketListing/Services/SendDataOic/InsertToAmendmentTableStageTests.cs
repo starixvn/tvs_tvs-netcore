@@ -14,13 +14,12 @@ namespace TicketVoidingSystem.Tests.TicketListing.Services.SendDataOic;
 public class InsertToAmendmentTableStageTests
 {
     private readonly IDynamicRepository repository;
-    private readonly LoggingService loggingService;
     private readonly InsertToAmendmentTableStageImp service;
 
     public InsertToAmendmentTableStageTests()
     {
         repository = Substitute.For<IDynamicRepository>();
-        loggingService = Substitute.For<LoggingService>();
+        var loggingService = Substitute.For<LoggingService>();
         service = new InsertToAmendmentTableStageImp(repository, loggingService);
     }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -589,36 +590,6 @@ public class ObjectToXmlExtensionFacts
     }
 
     [Fact]
-    public void ToWrongOddsInfoXml_HasNotRequest_ReturnEmpty()
-    {
-        // Arrange
-
-        // Act
-        var actual = new List<WrongOddsViewModel>().ToWrongOddsInfoXml();
-
-        // Assert
-        Assert.Equal("", actual);
-    }
-
-    [Fact]
-    public void ToWrongOddsInfoXml_HasRequest_ReturnExpected()
-    {
-        // Arrange
-        var models = new List<WrongOddsViewModel> { new() { MatchId = 1 } };
-        const string expected =
-            "<root><r MatchId='1' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' "
-            + "SubIssueTypeId='0' LiveIndicator='0' FilterOddsType='' FilterFavoriteType='' FilterOuType='' OddsValue='' FromOdds='' "
-            + "ToOdds='' CorrectOdds='' BetTeam='' OuValue='' FavoriteValue='' PoolHouseCheckedBetTypes='' IsLinkGroup1X2='False' "
-            + "IsLinkGroupAIO ='False' /></root>";
-
-        // Act
-        var actual = models.ToWrongOddsInfoXml();
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
     public void ToWrongOuInfoXml_HasNotRequest_ReturnEmpty()
     {
         // Arrange
@@ -969,6 +940,14 @@ public class ObjectToXmlExtensionFacts
         {
             new()
             {
+                Spread = "0.8",
+                AllowanceRate="25",
+                CorrectOddsHomeOver="0.8",
+                CorrectOddsAwayUnder="-0.9",
+                FromOddsNotVoidHomeOver="0.65",
+                ToOddsNotVoidHomeOver="0.9",
+                FromOddsNotVoidAwayUnder="0.45",
+                ToOddsNotVoidAwayUnder="0.8",
                 MatchId = 1,
                 SubIssueTypeId = 1,
                 FilterToTransTime = new DateTime(2022, 2, 2, 2, 2, 2),
@@ -977,15 +956,7 @@ public class ObjectToXmlExtensionFacts
                 IsLinkGroupAIO = false,
                 PoolHouseCheckedBetTypes = "1",
                 LiveIndicator = 1,
-                FilterOddsType = "1",
-                FilterFavoriteType = "1",
-                FilterOuType = "1",
-                OddsValue = "1",
-                FromOdds = "1",
-                ToOdds = "1",
-                CorrectOdds = "1",
-                BetTeam = "1",
-                OuValue = "1",
+                FilterFavoriteType = "h",
                 FavoriteValue = "1",
                 LogInfoDetail = new LogInfoDetail
                 {
@@ -1004,35 +975,37 @@ public class ObjectToXmlExtensionFacts
             }
         };
 
-        const string expected = "<root><r MatchId='1' "
-                                + "LiveScores='1' "
-                                + "SubIssueTypeId='1' "
-                                + "FilterToTransTime='2022-02-02 02:02:02.000' "
-                                + "FilterFromTransTime='2022-02-02 02:02:02.000' "
-                                + "IsLinkGroup1X2='True' "
-                                + "IsLinkGroupAIO ='False' "
-                                + "LiveGameEarlySingleCount ='1' "
-                                + "LiveGameEarlyCashOutCount='1' "
-                                + "LiveGameEarlySettleCount='1' "
-                                + "LiveGameEarlyInstantlySettleCount='1' "
-                                + "PoolHouseSingleCount='1' "
-                                + "PoolHouseCashOutCount='1' "
-                                + "PoolHouseMainParlayCount='1' "
-                                + "PoolHouseInstantlySettleCount='1' "
-                                + "PoolHouseCheckedBetTypes='1' "
-                                + "VoidToTime='2022-02-02 02:02:02.000' "
-                                + "VoidFromTime='2022-02-02 02:02:02.000' "
-                                + "LiveIndicator='1' "
-                                + "FilterOddsType='1' "
-                                + "FilterFavoriteType='1' "
-                                + "FilterOuType='1' "
-                                + "OddsValue='1' "
-                                + "FromOdds='1' "
-                                + "ToOdds='1' "
-                                + "CorrectOdds='1' "
-                                + "BetTeam='1' "
-                                + "OuValue='1' "
-                                + "FavoriteValue='1' /></root>";
+        const string expected = "<root><r MatchId='1' " +
+                                "LiveScores='1' " +
+                                "SubIssueTypeId='1' " +
+                                "FilterToTransTime='2022-02-02 02:02:02.000' " +
+                                "FilterFromTransTime='2022-02-02 02:02:02.000' " +
+                                "IsLinkGroup1X2='True' " +
+                                "IsLinkGroupAIO ='False' " +
+                                "LiveGameEarlySingleCount ='1' " +
+                                "LiveGameEarlyCashOutCount='1' " +
+                                "LiveGameEarlySettleCount='1' " +
+                                "LiveGameEarlyInstantlySettleCount='1' " +
+                                "PoolHouseSingleCount='1' " +
+                                "PoolHouseCashOutCount='1' " +
+                                "PoolHouseMainParlayCount='1' " +
+                                "PoolHouseInstantlySettleCount='1' " +
+                                "PoolHouseCheckedBetTypes='1' " +
+                                "VoidToTime='2022-02-02 02:02:02.000' " +
+                                "VoidFromTime='2022-02-02 02:02:02.000' " +
+                                "LiveIndicator='1' " +
+                                "FilterFavoriteType='h' " +
+                                "FavoriteValue='1' " +
+                                "WrongOU='' " +
+                                "Spread='0.8' " +
+                                "AllowanceRate='25' " +
+                                "CorrectOddsHomeOver='0.8' " +
+                                "CorrectOddsAwayUnder='-0.9' " +
+                                "FromOddsNotVoidHomeOver='0.65' " +
+                                "ToOddsNotVoidHomeOver='0.9' " +
+                                "FromOddsNotVoidAwayUnder='0.45' " +
+                                "ToOddsNotVoidAwayUnder='0.8' /></root>";
+
         // Act
         var actual = models.ToEventWrongOddsXml();
 
@@ -1095,6 +1068,30 @@ public class ObjectToXmlExtensionFacts
 
         // Act
         var actual = models.ToEventAbnormalBetXml();
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void ToWrongMarketOfferedInfoXml_ValidData_ReturnExpected()
+    {
+        // Arrange
+        var model = new WrongMarketOfferedViewModel
+        {
+            MatchId = 8462745,
+            IssueTypeId = IssueTypeConstant.WrongMarketOffered,
+            SubIssueTypeId = 2,
+            FilterFromTransTime = new DateTime(2024, 7, 2, 2, 2, 2),
+            FilterToTransTime = new DateTime(2024, 7, 2, 2, 2, 2),
+            VoidFromTime = new DateTime(2024, 7, 2, 2, 2, 2),
+            VoidToTime = new DateTime(2024, 7, 2, 2, 2, 2),
+        };
+        const string expected = "<root><r MatchId = '8462745' FilterFromTransTime='2024-07-02 02:02:02.000' " +
+                                "FilterToTransTime='2024-07-02 02:02:02.000' SubIssueTypeId='2' AdvancedExtraInfo='null'/></root>";
+
+        // Act
+        var actual = model.ToWrongMarketOfferedInfoXml();
 
         // Assert
         Assert.Equal(expected, actual);

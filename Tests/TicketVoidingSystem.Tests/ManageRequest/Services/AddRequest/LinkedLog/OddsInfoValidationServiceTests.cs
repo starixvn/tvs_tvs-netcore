@@ -162,8 +162,6 @@ public class OddsInfoValidationServiceTests
             SubIssueTypeId = subIssueTypeId,
             FilterFavoriteType = filterFavoriteType,
             FavoriteValue = "9",
-            OddsValue = "8",
-            FilterOuType = filterOuType
         };
         var service = new OddsInfoValidationServiceImp();
 
@@ -174,42 +172,17 @@ public class OddsInfoValidationServiceTests
         Assert.False(actual);
     }
 
-    [Theory]
-    [InlineData(SubIssueTypeConstant.Handicap, "", FilterTypeWrongOddsConstant.BetTeamHome,
-        FilterTypeWrongOddsConstant.FilterOddsTypeValue)]
-    [InlineData(SubIssueTypeConstant.Handicap, "", FilterTypeWrongOddsConstant.BetTeamHome,
-        FilterTypeWrongOddsConstant.FilterOddsTypeRange)]
-    [InlineData(SubIssueTypeConstant.Handicap, "", FilterTypeWrongOddsConstant.BetTeamHome, "")]
-    [InlineData(SubIssueTypeConstant.Handicap, "", FilterTypeWrongOddsConstant.BetTeamAway,
-        FilterTypeWrongOddsConstant.FilterOddsTypeValue)]
-    [InlineData(SubIssueTypeConstant.FirstHalfHandicap, "", "", "")]
-    [InlineData(SubIssueTypeConstant.OverUnder, FilterTypeWrongOddsConstant.FilterOuTypeHome,
-        FilterTypeWrongOddsConstant.BetTeamHome, FilterTypeWrongOddsConstant.FilterOddsTypeRange)]
-    [InlineData(SubIssueTypeConstant.OverUnder, FilterTypeWrongOddsConstant.FilterOuTypeHome,
-        FilterTypeWrongOddsConstant.BetTeamHome, "")]
-    [InlineData(SubIssueTypeConstant.OverUnder, FilterTypeWrongOddsConstant.FilterOuTypeHome,
-        FilterTypeWrongOddsConstant.BetTeamAway, FilterTypeWrongOddsConstant.FilterOddsTypeRange)]
-    [InlineData(SubIssueTypeConstant.OverUnder, FilterTypeWrongOddsConstant.FilterOuTypeAway,
-        FilterTypeWrongOddsConstant.BetTeamAway, "")]
-    [InlineData(SubIssueTypeConstant.OverUnder, "", "", "")]
-    [InlineData(SubIssueTypeConstant.FirstHalfOverUnder, FilterTypeWrongOddsConstant.FilterOuTypeAway,
-        FilterTypeWrongOddsConstant.BetTeamAway, "")]
-    [InlineData(99, "", FilterTypeWrongOddsConstant.BetTeamAway, "")]
-    public void IsValidOddsWrongOdds_ValidData_ReturnFalse(int subIssueTypeId, string filterOuType, string betTeam,
-        string filterOddsType)
+    [Fact]
+    public void IsValidOddsWrongOdds_ValidData_ReturnFalse()
     {
         // Arrange
-        var linkedOddsInfo = new LinkedOddsInfo { Hdp1 = 1, Hdp2 = 1, Odds1a = 2, Odds2a = 2 };
+        var linkedOddsInfo = new LinkedOddsInfo { Odds1a = 4, Odds2a = 8 };
         var getLinkedLogModel = new GetLinkedLogModel
         {
-            SubIssueTypeId = subIssueTypeId,
-            FavoriteValue = "9",
-            BetTeam = betTeam,
-            OddsValue = "8",
-            FromOdds = "11",
-            ToOdds = "22",
-            FilterOuType = filterOuType,
-            FilterOddsType = filterOddsType
+            FromOddsNotVoidHomeOver = "3",
+            ToOddsNotVoidHomeOver = "9",
+            FromOddsNotVoidAwayUnder = "3",
+            ToOddsNotVoidAwayUnder = "9"
         };
         var service = new OddsInfoValidationServiceImp();
 
@@ -220,20 +193,21 @@ public class OddsInfoValidationServiceTests
         Assert.False(actual);
     }
 
-    [Fact]
-    public void IsValidOddsWrongOdds_ValidData_ReturnTrue()
+    [Theory]
+    [InlineData("5", "9", "3", "9")]
+    [InlineData("3", "6", "3", "9")]
+    [InlineData("3", "9", "5", "9")]
+    [InlineData("3", "9", "3", "6")]
+    public void IsValidOddsWrongOdds_ValidData_ReturnTrue(string fromOddsNotVoidHomeOver, string toOddsNotVoidHomeOver, string fromOddsNotVoidAwayUnder, string toOddsNotVoidAwayUnder)
     {
         // Arrange
-        var linkedOddsInfo = new LinkedOddsInfo { Hdp1 = 1, Hdp2 = 1, Odds1a = 10, Odds2a = 2 };
+        var linkedOddsInfo = new LinkedOddsInfo { Odds1a = 4, Odds2a = 8 };
         var getLinkedLogModel = new GetLinkedLogModel
         {
-            SubIssueTypeId = 120,
-            FavoriteValue = "9",
-            OddsValue = "8",
-            FromOdds = "1",
-            ToOdds = "100",
-            FilterOuType = "h",
-            FilterOddsType = FilterTypeWrongOddsConstant.FilterOddsTypeRange
+            FromOddsNotVoidHomeOver = fromOddsNotVoidHomeOver,
+            ToOddsNotVoidHomeOver = toOddsNotVoidHomeOver,
+            FromOddsNotVoidAwayUnder = fromOddsNotVoidAwayUnder,
+            ToOddsNotVoidAwayUnder = toOddsNotVoidAwayUnder
         };
         var service = new OddsInfoValidationServiceImp();
 
