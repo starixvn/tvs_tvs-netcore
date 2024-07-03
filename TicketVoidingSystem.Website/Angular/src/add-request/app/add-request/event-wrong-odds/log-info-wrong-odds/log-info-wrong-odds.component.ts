@@ -46,8 +46,6 @@ export class LogInfoWrongOddsComponent implements OnInit {
   public async getPoolHouseData(query: GetPoolHouseTicketQuery): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfo.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfo, this.filter);
-      query.isLinkGroup1X2 = true;
-      query.isLinkGroupAIO = true;
     const viewModel = await this.addRequestApiService.getPoolHouseTickets(query);
     this.addRequestStore.changeBlockingUiStatus(false);
 

@@ -23,6 +23,7 @@ import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-re
 import { GetChildMatchQuery } from './models/get-child-match.query';
 import { PermissionAddRequest } from './models/permission-add-request.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
+import { MaxBetAndSpreadQuery, MaxBetAndSpreadInfo } from './event-wrong-odds/models/filter-wrong-odds.model';
 
 @Injectable({
   providedIn: 'root'
@@ -140,7 +141,13 @@ export class AddRequestApiService {
     return this.httpService.getJson<PermissionAddRequest>('api/AddRequest/GetPermission');
   }
 
+  /* istanbul ignore next */
   async getBetTeams(): Promise<BetTeamAddRequest[]> {
     return this.httpService.getJson<BetTeamAddRequest[]>('api/AddRequest/GetBetTeams');
+  }
+
+  /* istanbul ignore next */
+  async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MaxBetAndSpreadQuery, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
-import { CommonService } from '../../../../../utility/services/common.service';
+import { AddRequestApiService } from '../../add-request-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +9,12 @@ import { CommonService } from '../../../../../utility/services/common.service';
 export class CalculateOddsService {
 
   constructor(
-    private readonly commonService: CommonService
+    private readonly addRequestApiService: AddRequestApiService
   ) {}
 
   public async updateOddsInfo(oddsInfo: FilterWrongOddsModel, match: MatchModel, subIssueTypeId: string): Promise<void> {
     if(match){
-      const maxBetAndSpreads =  await this.commonService.getMaxBetAndSpreadOfEvent(this.createMaxBetAndSpreadQuery(match));
+      const maxBetAndSpreads =  await this.addRequestApiService.getMaxBetAndSpreadOfEvent(this.createMaxBetAndSpreadQuery(match));
       oddsInfo.maxBetAndSpreadInfo = maxBetAndSpreads;
       this.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
       this.updateAllowanceRate(oddsInfo);

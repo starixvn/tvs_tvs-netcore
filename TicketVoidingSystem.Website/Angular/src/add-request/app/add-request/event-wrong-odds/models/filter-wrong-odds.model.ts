@@ -16,7 +16,7 @@ export class FilterWrongOddsModel {
   toOddsNotVoidHomeOver: string;
   fromOddsNotVoidAwayUnder: string;
   toOddsNotVoidAwayUnder: string;
-  maxBetAndSpreadInfo: MaxBetAndSpread[]
+  maxBetAndSpreadInfo: MaxBetAndSpreadInfo[]
 }
 
 export class FilterFavoriteType {
@@ -31,7 +31,7 @@ export class FilterFavoriteTypeConstant {
   static readonly AWAY = 'a';
 }
 
-export class MaxBetAndSpread {
+export class MaxBetAndSpreadInfo {
   subIssueTypeId: string;
   spread: string;
   maxBet?: number;

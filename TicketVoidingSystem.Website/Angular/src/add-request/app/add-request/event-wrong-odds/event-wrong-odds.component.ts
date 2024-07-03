@@ -15,7 +15,8 @@ import { ValidationService } from './services/validation.service';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { CalculateOddsService } from './services/calculate-odds.service';
 import { CommonService } from '../../../../utility/services/common.service';
-import { MaxBetAndSpread } from './models/filter-wrong-odds.model';
+import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
+import { AddRequestApiService } from '../add-request-api.service';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -44,7 +45,7 @@ export class EventWrongOddsComponent implements OnInit {
     private readonly addRequestStore: AddRequestStore,
     private readonly saveRequestService: SaveRequestService,
     private readonly calculateOddsService: CalculateOddsService,
-    private readonly commonService: CommonService
+    private readonly addRequestApiService: AddRequestApiService
     ) { }
 
   ngOnInit(): void {
@@ -65,9 +66,9 @@ export class EventWrongOddsComponent implements OnInit {
     }
   }
 
-  public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpread[]>{
+  public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpreadInfo[]>{
     const query = this.calculateOddsService.createMaxBetAndSpreadQuery(this.eventLeagueComponent.selectedMatch);
-    return await this.commonService.getMaxBetAndSpreadOfEvent(query);
+    return await this.addRequestApiService.getMaxBetAndSpreadOfEvent(query);
   }
 
   public async clickSearch(): Promise<void> {
