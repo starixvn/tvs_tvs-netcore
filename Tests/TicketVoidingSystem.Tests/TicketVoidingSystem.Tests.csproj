@@ -57,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Analytics\" />
     <Folder Include="TicketVoidingSystem\Web\" />
   </ItemGroup>
 
