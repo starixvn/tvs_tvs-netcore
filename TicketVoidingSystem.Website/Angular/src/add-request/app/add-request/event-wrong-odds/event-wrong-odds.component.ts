@@ -14,7 +14,6 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { CalculateOddsService } from './services/calculate-odds.service';
-import { CommonService } from '../../../../utility/services/common.service';
 import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
 import { AddRequestApiService } from '../add-request-api.service';
 
@@ -87,8 +86,6 @@ export class EventWrongOddsComponent implements OnInit {
     this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
-    this.logInfoEvent.linkedLogsViewModel.isLinkGroup1X2 = true;
-    this.logInfoEvent.linkedLogsViewModel.isLinkGroupAIO = true;
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
     this.primitiveProps.isShowValidation = true;
     this.addRequestStore.changeBlockingUiStatus(false);
@@ -123,9 +120,11 @@ export class EventWrongOddsComponent implements OnInit {
 
   public async changeMatchEvent(): Promise<void> {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-    this.logInfoEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
-    await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds,   
-      this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
+    this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch?.matchId;
+    if(this.eventLeagueComponent.selectedMatch){
+      await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds,   
+        this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
+    }
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.updateMatchId.emit(this.logInfoEvent.matchId)
   }

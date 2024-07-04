@@ -34,10 +34,22 @@ public class OWPHttpClientServiceImp : OWPHttpClientService
         var response = await httpClient.GetAsync(actionName);
         if (response.IsSuccessStatusCode)
         {
+            await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
             return await Helper.DeserializeResponseStream<OWPMaxBetAndSpreadInfo>(response);
         }
 
         await loggingService.ErrorAsync($"URL: {AppSettingService.AppSetting.OWPUrl}{actionName}{Environment.NewLine}Response:{Environment.NewLine}{response}");
         return null;
+    }
+
+    private static async Task<string> CreateLogResponse(string actionName, HttpResponseMessage response)
+    {
+        var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        return $"{AppSettingService.AppSetting.JackTimeCashOutUrl}{actionName}" +
+               $"{Environment.NewLine}RequestContent:{Environment.NewLine}{requestContent}" +
+               $"{Environment.NewLine}Response:{Environment.NewLine}{response}" +
+               $"{Environment.NewLine}ResponseContent:{Environment.NewLine}{responseContent}";
     }
 }

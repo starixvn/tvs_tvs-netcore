@@ -16,7 +16,6 @@ import { CalculateOddsService } from '../services/calculate-odds.service';
 export class FilterWrongOddsComponent {
   @Input() filterWrongOddsModel: FilterWrongOddsModel;
   @Input() isEdit: boolean;
-  @Input() matchId: number;
   @Input() subIssueTypeId: string;
   @Input() isDisabled: boolean;
   @Output() changeFilterEvent = new EventEmitter();
