@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using TicketVoidingSystem.SharedApi.Criteria.Permission;
 using TicketVoidingSystem.SharedApi.Handlers.Permission;
-using TicketVoidingSystem.SharedApi.Models.MessageTemplate;
-using TicketVoidingSystem.SharedApi.ViewModels.MessageTemplate;
 
 namespace TicketVoidingSystem.SharedApi;
 
@@ -10,7 +8,6 @@ public class SharedApiProfile : Profile
 {
     public SharedApiProfile()
     {
-        CreateMap<TemplateModel, MessageTemplateViewModel>();
         CreateMap<CheckTicketsStatusRequest, CheckVoidBetPermissionVoidByBetIdCriteria>();
         CreateMap<CheckTicketsStatusRequest, CheckVoidBetPermissionVoidSingleBetCriteria>();
         CreateMap<CheckTicketsStatusRequest, CheckVoidBetPermissionVoidParlayBetCriteria>();

@@ -18,7 +18,7 @@ public class ListTicketsViewModel
 
     public DateTime? ToCheckTime { get; set; }
 
-    public TemplateContentModel BetTypeNameReplaceMessage { get; set; }
+    public ContentByLanguageModel BetTypeNameReplaceMessage { get; set; }
 
     public string Id { get; set; }
 

@@ -38,7 +38,7 @@ public class MailVoidViewModel : MailViewModel
 
 public class DuplicateTicketsMailVoidViewModel
 {
-    public TemplateContentModel SportType { get; set; }
+    public ContentByLanguageModel SportType { get; set; }
 
     public string TemplatePath { get; set; }
 

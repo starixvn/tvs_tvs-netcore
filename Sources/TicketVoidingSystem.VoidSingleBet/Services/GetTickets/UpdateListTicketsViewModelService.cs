@@ -82,7 +82,7 @@ public class UpdateListTicketsViewModelServiceImp : UpdateListTicketsViewModelSe
     private void UpdateBetTypeName(ListTicketsViewModel model, IList<GetTicketModel> data)
     {
         var ticket = data[0].IsMixParlay ? CreateSubTicketBetList(data[0]) : CreateTicketBetList(data[0]);
-        model.BetTypeNameReplaceMessage = new TemplateContentModel
+        model.BetTypeNameReplaceMessage = new ContentByLanguageModel
         {
             ContentEnglish = betListService.GetBetTypeName(ticket),
             ContentChineseTraditional = betListService.GetBetTypeNameChineseTraditional(ticket),

@@ -29,23 +29,24 @@ public class GetTemplateSettingHandler : IRequestHandler<GetTemplateSettingReque
 
     public async Task<TemplateSettingViewModel> Handle(GetTemplateSettingRequest request, CancellationToken cancellationToken)
     {
-        var templateModels = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria());
+        var templateModels = (await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria())).ToList();
         var templateSettings = await repository.FetchAsync<TemplateSetting>(new GetTemplateSettingCriteria());
-        var messageTemplates = templateModels.Select(MapToMessageTemplateViewModels);
+        UpdateInputTextFromJsonValue(templateModels);
 
         return new TemplateSettingViewModel
         {
-            MessageTemplates = messageTemplates,
+            MessageTemplates = templateModels,
             TemplateSettings = templateSettings
         };
     }
 
-    private MessageTemplateViewModel MapToMessageTemplateViewModels(TemplateModel template)
+    private static void UpdateInputTextFromJsonValue(IEnumerable<TemplateModel> templateModels)
     {
-        var viewModel = mapper.Map<MessageTemplateViewModel>(template);
-        viewModel.InputTexts = string.IsNullOrWhiteSpace(template.JsonValue) ?
-            new List<InputText>() : JsonSerializer.Deserialize<IEnumerable<InputText>>(template.JsonValue);
-
-        return viewModel;
+        foreach (var template in templateModels)
+        {
+            template.InputTexts = string.IsNullOrWhiteSpace(template.JsonValue)
+                ? new List<InputText>()
+                : JsonSerializer.Deserialize<IEnumerable<InputText>>(template.JsonValue);
+        }
     }
 }

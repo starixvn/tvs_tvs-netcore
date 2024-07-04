@@ -31,7 +31,7 @@ public class TicketsViewModel
     public List<BetId> CheckPermissionTickets { get; set; }
     public List<BetId> AllCancelCashOutTickets { get; set; }
     public short GroupPHAffected { get; set; }
-    public TemplateContentModel BetTypeNameReplaceMessage { get; set; }
+    public ContentByLanguageModel BetTypeNameReplaceMessage { get; set; }
 }
 
 public class TicketViewModel

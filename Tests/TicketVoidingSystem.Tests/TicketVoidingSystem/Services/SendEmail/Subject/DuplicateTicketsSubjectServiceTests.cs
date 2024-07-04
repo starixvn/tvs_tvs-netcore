@@ -18,7 +18,7 @@ public class DuplicateTicketsSubjectServiceTests
         // Arrange
         var service = new DuplicateTicketsSubjectServiceImp();
         var mailViewModel = new DuplicateTicketsMailVoidViewModel
-        { SportType = new TemplateContentModel { ContentChineseSimplified = "@@11", ContentEnglish = "@@22" } };
+        { SportType = new ContentByLanguageModel { ContentChineseSimplified = "@@11", ContentEnglish = "@@22" } };
         var site = new SiteEmail { Site = "0" };
         var sites = new List<string> { "0" };
 

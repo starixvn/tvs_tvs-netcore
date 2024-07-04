@@ -9,9 +9,9 @@ namespace TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 
 public interface SpecialBetTypeContentService
 {
-    TemplateContentModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets);
+    ContentByLanguageModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets);
 
-    IEnumerable<TemplateContentModel> GetListSpecialBetType(IEnumerable<TicketEmailModel> tickets);
+    IEnumerable<ContentByLanguageModel> GetListSpecialBetType(IEnumerable<TicketEmailModel> tickets);
 }
 
 public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
@@ -23,10 +23,10 @@ public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
         this.betListService = betListService;
     }
 
-    public TemplateContentModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets)
+    public ContentByLanguageModel GetContentForVoidPage(IEnumerable<TicketEmailModel> tickets)
     {
         var specialBetTypeList = GetListSpecialBetType(tickets);
-        return new TemplateContentModel
+        return new ContentByLanguageModel
         {
             ContentEnglish = string.Join(", ", specialBetTypeList.Select(x => x.ContentEnglish)),
             ContentChineseTraditional = string.Join(", ", specialBetTypeList.Select(x => x.ContentChineseTraditional)),
@@ -35,7 +35,7 @@ public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
         };
     }
 
-    public IEnumerable<TemplateContentModel> GetListSpecialBetType(IEnumerable<TicketEmailModel> tickets)
+    public IEnumerable<ContentByLanguageModel> GetListSpecialBetType(IEnumerable<TicketEmailModel> tickets)
     {
         var ticketsBetList = tickets.Select(x => new Ticket
         {
@@ -43,7 +43,7 @@ public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
             BetId = x.IsMixParlay ? GetBetIdForParlay(x.SubBetCheck) : x.BetId
         }).DistinctBy(x => (x.BetTypeId, x.BetId));
 
-        return ticketsBetList.Select(ticket => new TemplateContentModel
+        return ticketsBetList.Select(ticket => new ContentByLanguageModel
         {
             ContentEnglish = betListService.GetBetTypeName(ticket),
             ContentChineseTraditional = betListService.GetBetTypeNameChineseTraditional(ticket),
