@@ -1,33 +1,18 @@
-import { NgModule } from '@angular/core';
-import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { ModalService } from '../../../utility/components/modal/modal.service';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { IssueType, SubIssueType } from '../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { Result } from '../../../utility/models/result';
-import { HttpService } from '../../../utility/services/http.service';
-import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
 import { AddRequestComponent } from './add-request.component';
-import { AddRequestService } from './add-request.service';
 import { AddRequestStore } from './add-request.store';
-import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
-import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
-import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
-import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
-import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
-import { FilterComponent } from './filter/filter.component';
 import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { ChildMatchModel } from './models/related-event.model';
 import { AddRequestResultModel, RequestModel } from './models/request.model';
-import { OthersComponent } from './others/others.component';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -178,34 +163,6 @@ class Helper {
 }
 
 describe('AddRequestComponent', () => {
-  @NgModule({
-    declarations: [
-      AddRequestComponent,
-      EventEarlyKickOffComponent,
-      EventAbnormalBetComponent,
-      EventDangerAcceptedComponent,
-      EventWrongScoreComponent,
-      AbnormalAccountsComponent,
-      AbnormalAccountOtherComponent,
-      ConfirmAbnormalBetComponent,
-      FilterComponent,
-      OthersComponent,
-      EventRedCardComponent,
-      EventRecoverTicketComponent
-    ],
-    imports: [
-      ToolTipModule,
-      BlockUiModule,
-      BlockFullUiModule
-    ],
-    providers: [
-      HttpService,
-      ModalService,
-      AddRequestService
-    ]
-  })
-  class AppModuleTest { }
-
   beforeEach(() => {
     jest.clearAllMocks();
   });

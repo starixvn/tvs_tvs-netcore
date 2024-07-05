@@ -19,6 +19,7 @@ import { IssueTypes } from './issue-types.model';
 import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { LogAnalysisService } from '../../../../utility/services/log-analysis.service';
 
 class Helper {
   static readonly urlNotAuthorizedPage = 'Home/NotAuthorized';
@@ -421,6 +422,7 @@ describe('FilterComponent', () => {
     // Arrange
     document.body.innerHTML = '<section id="body" user-name="star" user-id="360418"></section>';
     const { instance } = await shallow
+    .mock(LogAnalysisService, { writeLogAccessFunction: jest.fn()})
       .render({
         bind: {
           model: Helper.fakeFilterModel,
@@ -434,7 +436,6 @@ describe('FilterComponent', () => {
     instance.updateSubByIssue = jest.fn();
     instance['updateCurrentAction'] = jest.fn();
     instance.updateModel = jest.fn();
-
     instance.haveIssueTypeFromPermission = jest.fn().mockImplementation(() => true);
     jest.spyOn(window.localStorage.__proto__, 'getItem');
     window.localStorage.__proto__.getItem = jest.fn().mockImplementation(() => '1');

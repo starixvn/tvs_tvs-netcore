@@ -66,17 +66,17 @@ class Helper {
   static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
-    betTeam: 'h',
-    correctOdds: '1',
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
-    filterOddsType: 'value',
-    filterOuType: 'h',
-    fromOdds: '1',
-    oddsValue: '1',
-    ouValue: '1',
     liveIndicator: 0,
-    toOdds: '1'
+    spread: '',
+    maxBet: 0,
+    allowanceRate: '',
+    correctOddsHomeOver: '',
+    correctOddsAwayUnder: '',
+    fromOddsNotVoidHomeOver: '',
+    toOddsNotVoidHomeOver: '',
+    fromOddsNotVoidAwayUnder: '',
+    toOddsNotVoidAwayUnder: '',
+    maxBetAndSpreadInfo: []
   };
   static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
     matchId: Helper.fakeMatchId,
@@ -105,7 +105,7 @@ class Helper {
 
 describe('LogInfoService', () => {
   it('#getLogInfo should call #eventWrongOddsService.getWrongOddsModel', async () => {
-    const eventWrongOddsService = new EventWrongOddsService(null);
+    const eventWrongOddsService = new EventWrongOddsService(null, null);
     eventWrongOddsService.getWrongOddsModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeFilterWrongOddsModel));
     const commonService = new CommonService(null);
     commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
@@ -117,7 +117,7 @@ describe('LogInfoService', () => {
   });
 
   it('#getLogInfo should call #eventWrongOddsService.getWrongOddsModel when isEdit', async () => {
-    const eventWrongOddsService = new EventWrongOddsService(null);
+    const eventWrongOddsService = new EventWrongOddsService(null, null);
     eventWrongOddsService.getWrongOddsModel = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeFilterWrongOddsModel));
     const commonService = new CommonService(null);
     commonService.getLogInfo = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));

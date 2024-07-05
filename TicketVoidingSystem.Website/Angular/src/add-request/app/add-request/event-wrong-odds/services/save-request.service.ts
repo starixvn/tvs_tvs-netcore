@@ -115,7 +115,7 @@ export class SaveRequestService {
     query.issueTypeId = argWrongOdds.filter.issueTypeId;
     query.isTest = argWrongOdds.filter.isTest;
     query.actionId = argWrongOdds.filter.action;
-    query.sportType = argWrongOdds.filter.sportType;
+    query.sportType = argWrongOdds.eventLeagueComponent.selectedMatch.sportType;
     query.isVoided = argWrongOdds.filter.isVoided;
 
     query.mistakenBy = argWrongOdds.others.mistakenBy;

@@ -8,7 +8,7 @@ exports[`EventWrongOddsComponent #EventWrongOddsComponent init should match snap
     <div
       class="mb-3"
     >
-      <league-event-red-card />
+      <event-league />
     </div>
     <filter-wrong-odds />
     <div
