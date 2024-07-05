@@ -116,7 +116,6 @@ export class SaveRequestService {
     query.issueTypeId = argWrongMarketOffered.filter.issueTypeId;
     query.isTest = argWrongMarketOffered.filter.isTest;
     query.actionId = argWrongMarketOffered.filter.action;
-    query.sportType = argWrongMarketOffered.eventLeagueComponent.selectedMatch.sportType;
     query.isVoided = argWrongMarketOffered.filter.isVoided;
 
     query.mistakenBy = argWrongMarketOffered.others.mistakenBy;

@@ -81,7 +81,7 @@ export class SaveRequestService {
     }
 
     if (arg.isEdit && arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;      
+      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
     }
 
     if (arg.isEdit && arg.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
@@ -90,12 +90,12 @@ export class SaveRequestService {
 
     return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
   }
-  
+
   private async executeSaveRequestApi(args: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(args);
     await this.addRequestService.executeSaveRequest(args.isEdit, args.requestId, query, args.addRequestStore);
   }
-  
+
   private async onClickConfirmSave(arg: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
@@ -116,7 +116,6 @@ export class SaveRequestService {
     query.issueTypeId = arg.filter.issueTypeId;
     query.isTest = arg.filter.isTest;
     query.actionId = arg.filter.action;
-    query.sportType = arg.filter.sportType;
     query.isVoided = arg.filter.isVoided;
 
     query.mistakenBy = arg.others.mistakenBy;

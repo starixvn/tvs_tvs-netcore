@@ -13,8 +13,6 @@ public class AddRequestQuery
 
     public string Guid { get; set; }
 
-    public int? SportType { get; set; }
-
     public int SubIssueTypeId { get; set; }
 
     public int ActionId { get; set; }

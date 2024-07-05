@@ -5,7 +5,6 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 public class AddRequestCommand : NonQueryCommand
 {
     public int SessionTime { get; set; }
-    public int SportType { get; set; }
     public int SubIssueTypeId { get; set; }
     public int ActionId { get; set; }
     public string MistakenBy { get; set; }

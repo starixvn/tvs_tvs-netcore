@@ -67,7 +67,7 @@ export class SaveRequestService {
       transInfo: ''
     } as ValidationBusinessRuleOutput;
   }
-  
+
   /* istanbul ignore next */
   private initAddRequestQuery(args: SaveRequestArg): AddRequestQuery {
     const query: AddRequestQuery = new AddRequestQuery();
@@ -78,7 +78,6 @@ export class SaveRequestService {
     query.subIssueTypeId = args.filter.subIssueTypeId;
     query.actionId = args.filter.action;
     query.isTest = args.filter.isTest;
-    query.sportType = args.filter.sportType;
     query.isVoided = args.filter.isVoided;
 
     query.mistakenBy = args.others.mistakenBy;

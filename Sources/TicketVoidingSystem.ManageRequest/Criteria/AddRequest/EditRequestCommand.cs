@@ -18,7 +18,6 @@ public class EditRequestCommand : NonQueryCommand
     public int UserId { get; set; }
     public string IP { get; set; }
     public bool? IsTest { get; set; }
-    public int? SportType { get; set; }
     public int IssueTypeId { get; set; }
     public int MatchId { get; set; }
     public string? TransIds { get; set; }
