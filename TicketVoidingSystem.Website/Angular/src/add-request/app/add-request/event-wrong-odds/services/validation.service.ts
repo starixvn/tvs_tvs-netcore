@@ -73,24 +73,6 @@ export class ValidationService {
     return true;
   }
 
-  private isValidFilterOu(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
-    if (!filter.wrongOU) {
-      tooltip.display(this.OU_INPUT_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    return StaticService.isCorrectFormatMultipleDecimal(filter.wrongOU, this.OU_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS);
-  }
-
-  private isValidFilterFavorite(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
-    if (!filter.favoriteValue) {
-      tooltip.display(this.FAVORITE_INPUT_CLASS, TEXT.REQUIRED_FIELD);
-      return false;
-    }
-
-    return StaticService.isCorrectFormatMultipleDecimal(filter.favoriteValue, this.FAVORITE_INPUT_CLASS, tooltip, TEXT.INVALID_ODDS);
-  }
-
   public isSubTypeOuOr1stOu(subIssueTypeId: string): boolean {
     return this.isSubTypeOu(subIssueTypeId) || this.isSubType1stOu(subIssueTypeId);
   }
@@ -112,10 +94,28 @@ export class ValidationService {
     return isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
 
+  private isValidFilterOu(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
+    if (!filter.wrongOU) {
+      tooltip.display(this.OU_INPUT_CLASS, TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    return StaticService.isCorrectFormatSingleDecimal(filter.wrongOU, this.OU_INPUT_CLASS, tooltip, TEXT.INVALID_INPUT);
+  }
+
+  private isValidFilterFavorite(filter: FilterWrongOddsModel, tooltip: Tooltip): boolean {
+    if (!filter.favoriteValue) {
+      tooltip.display(this.FAVORITE_INPUT_CLASS, TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    return StaticService.isCorrectFormatSingleDecimal(filter.favoriteValue, this.FAVORITE_INPUT_CLASS, tooltip, TEXT.INVALID_INPUT);
+  }
+
   public isValidSpread(spread: string, tooltip: Tooltip){
-    const isCorrectFormatMultipleDecimal = StaticService.isCorrectFormatMultipleDecimal(spread, this.SPREAD_INPUT_CLASS, tooltip, TEXT.REQUIRED_SPREAD);
+    const isCorrectFormatSingleDecimal = StaticService.isCorrectFormatSingleDecimal(spread, this.SPREAD_INPUT_CLASS, tooltip, TEXT.REQUIRED_SPREAD);
     const spreadValue = Number(spread);
-    if(!isCorrectFormatMultipleDecimal || spreadValue < 0 || spreadValue > 1){
+    if(!isCorrectFormatSingleDecimal || spreadValue < 0 || spreadValue > 1){
       tooltip.display(this.SPREAD_INPUT_CLASS, TEXT.REQUIRED_SPREAD);
       return false;
     }
@@ -124,10 +124,10 @@ export class ValidationService {
   }
   
   public isValidFilterCorrectOdds(homeCorrectOdds: string, spread: string, tooltip: Tooltip): boolean {
-    const isCorrectFormatMultipleDecimal = StaticService.isCorrectFormatMultipleDecimal(homeCorrectOdds, this.CORRECT_ODDS_INPUT_CLASS, tooltip, TEXT.REQUIRED_CORRECT_ODDS);
+    const isCorrectFormatSingleDecimal = StaticService.isCorrectFormatSingleDecimal(homeCorrectOdds, this.CORRECT_ODDS_INPUT_CLASS, tooltip, TEXT.REQUIRED_CORRECT_ODDS);
     const homeCorrectOddsValue = Number(homeCorrectOdds);
     const spreadValue = Number(spread);
-    if (!isCorrectFormatMultipleDecimal || Math.abs(Number(homeCorrectOddsValue)) < spreadValue || Math.abs(Number(homeCorrectOddsValue)) > 1) {
+    if (!isCorrectFormatSingleDecimal || Math.abs(Number(homeCorrectOddsValue)) < spreadValue || Math.abs(Number(homeCorrectOddsValue)) > 1) {
       tooltip.display(this.CORRECT_ODDS_INPUT_CLASS, TEXT.REQUIRED_CORRECT_ODDS);
       return false;
     }

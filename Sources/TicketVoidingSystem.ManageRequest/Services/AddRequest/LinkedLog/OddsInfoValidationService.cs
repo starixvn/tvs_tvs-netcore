@@ -100,14 +100,14 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
     {
         return getLinkedLogModel.FilterFavoriteType switch
         {
-            FilterTypeWrongOddsConstant.FilterFavoriteTypeHome => IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp1),
-            FilterTypeWrongOddsConstant.FilterFavoriteTypeAway => IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp2),
+            FilterTypeWrongOddsConstant.FilterFavoriteTypeHome => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp1,
+            FilterTypeWrongOddsConstant.FilterFavoriteTypeAway => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp2,
             _ => false
         };
     }
 
-    private bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return IsContainsValue(getLinkedLogModel.WrongOU, linkedOddsInfo.Hdp1);
+        return decimal.Parse(getLinkedLogModel.WrongOU) == linkedOddsInfo.Odds1a;
     }
 }

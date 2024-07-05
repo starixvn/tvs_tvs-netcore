@@ -42,8 +42,8 @@ export class FilterWrongOddsComponent {
     return StaticService.getDurationTime(this.fromTimeComponent, this.toTimeComponent, this.filterWrongOddsModel.filterFromTransTime, this.filterWrongOddsModel.filterToTransTime);
   }
 
-  public isCorrectFormatMultipleDecimal(value: string, elementClass: string): boolean {
-    return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS);
+  public isCorrectFormatSingleDecimal(value: string, elementClass: string): boolean {
+    return StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_INPUT);
   }
 
   public isSubTypeOuOr1stOu(): boolean {

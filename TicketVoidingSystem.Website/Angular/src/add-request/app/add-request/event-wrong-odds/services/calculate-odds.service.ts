@@ -37,12 +37,10 @@ export class CalculateOddsService {
   }
   
   public updateMaxBetAbsSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
-    if(!oddsInfo.maxBetAndSpreadInfo){
-      return;
+    if(oddsInfo.maxBetAndSpreadInfo?.length > 0){
+      oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.maxBet ?? 0;
+      oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.spread ?? "0";
     }
-
-    oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.maxBet ?? 0;
-    oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.spread ?? "0";
   }
 
   public updateAllowanceRate(oddsInfo: FilterWrongOddsModel): void {
