@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchModel } from '../../../utility/models/match.model';
-import { LogAnalysisService } from '../../../utility/services/log-analysis.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
 import { AddRequestStore } from './add-request.store';
@@ -71,12 +70,10 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   abnormalFilterBySubscription = new Subscription();
   abnormalFilterBy: number;
   parentMatchId: number = null;
-  accessIssueTypeCount = new Map<string,number>();
 
   constructor(
     private readonly addRequestStore: AddRequestStore,
-    private readonly copyRequestInfoService: CopyRequestInfoService,
-    private readonly logAnalysisService:LogAnalysisService
+    private readonly copyRequestInfoService: CopyRequestInfoService
   ) { }
 
   ngOnInit(): void {
@@ -118,8 +115,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.model.others.decidedBy = '';
     }
-
-    await this.logAnalysisService.writeLogAccessFunction(this.isEdit, issueTypeId, this.accessIssueTypeCount);
   }
 
   updateMatchId(matchId: number): void {

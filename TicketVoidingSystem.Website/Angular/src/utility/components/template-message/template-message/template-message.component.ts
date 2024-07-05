@@ -223,14 +223,20 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.NOT_PARTICIPATE,
       IssueTypeId.WRONG_QUARTER_HDP
     ];
+
     const subIssueTypeS = [
       SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
       SubIssueTypeId.TECHNICAL_ERROR
     ];
-    if ((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
-      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE)) {
+
+    const isSpecialIssueType = issueTypes.includes(this.issueTypeId) ||
+      (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId));
+
+    const isDateMismatched = this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE);
+
+    if (isSpecialIssueType && isDateMismatched) {
       return false;
-    };
+    }
 
     const issueTypesHasCheckBoxEarlyEvent = [
       IssueTypeId.WRONG_ODDS,
@@ -240,7 +246,9 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.WRONG_1ST_OU
     ];
 
-    return !(issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && this.value.isCheckedEarlyEvent);
+    const isCheckedEarlyEvent = issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && this.value.isCheckedEarlyEvent;
+
+    return !isCheckedEarlyEvent;
   }
 
   updateInputs() {
@@ -408,8 +416,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() && 
-        (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
+    return this.isVoidSinglePage() &&
+      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
         || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 

@@ -106,7 +106,7 @@ export class TemplateService {
     const isTheSameDay = moment(new Date(value.fromTransTime)).format('DD/MM') === moment(new Date(value.toTransTime)).format('DD/MM');
     const fromTime = moment(new Date(value.fromTransTime)).format(TemplateContentConst.DATE_TIME);
     const toTime = isTheSameDay ?
-      moment(new Date(value.toTransTime)).format('h:mm:ss A')
+      moment(new Date(value.toTransTime)).format('hh:mm:ss A')
       : moment(new Date(value.toTransTime)).format(TemplateContentConst.DATE_TIME);
 
     const timeRange = `${fromTime} - ${toTime} `;

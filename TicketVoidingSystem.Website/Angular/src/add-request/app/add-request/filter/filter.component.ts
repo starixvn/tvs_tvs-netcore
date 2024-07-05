@@ -3,6 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
@@ -51,9 +52,9 @@ export class FilterComponent implements OnInit, OnChanges {
   widthSportControl: number;
   widthDateControl: number;
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
-
   abnormalFilterBySubscription = new Subscription();
   abnormalFilterBy: number;
+  accessIssueTypeCount = new Map<string,number>();
 
   private initialize: boolean;
   private readonly SELECT_SUB_TYPE_TEXT = 'Select Sub Type';
@@ -63,6 +64,7 @@ export class FilterComponent implements OnInit, OnChanges {
     private readonly commonService: CommonService,
     private readonly addRequestStore: AddRequestStore,
     private readonly actionVoidService: ActionVoidService,
+    private readonly logAnalysisService: LogAnalysisService
   ) {
   }
 
@@ -109,15 +111,15 @@ export class FilterComponent implements OnInit, OnChanges {
     subIssueTypeConfig = SubIssueTypeDangerAcceptedConfig;
     for (const category of subIssueTypeConfig) {
       const groupSubIssueType = category.groups.find(group =>
-        group.buttonSelectHomeAway?.some(button =>button.subIssueTypeId === Number(this.model.subIssueTypeId)) ||
+        group.buttonSelectHomeAway?.some(button => button.subIssueTypeId === Number(this.model.subIssueTypeId)) ||
         group.buttonSelectAll?.some(button => button.subIssueTypeId === Number(this.model.subIssueTypeId)));
-        if (groupSubIssueType) {
-          const allowanceTime = new AllowanceTime();
-          allowanceTime.aaTime = Number(groupSubIssueType.aa);
-          allowanceTime.paTime = Number(groupSubIssueType.pa);
-          allowanceTime.saTime = Number(groupSubIssueType.sa);
-          this.addRequestStore.changeAllowanceTime(allowanceTime);
-          break;
+      if (groupSubIssueType) {
+        const allowanceTime = new AllowanceTime();
+        allowanceTime.aaTime = Number(groupSubIssueType.aa);
+        allowanceTime.paTime = Number(groupSubIssueType.pa);
+        allowanceTime.saTime = Number(groupSubIssueType.sa);
+        this.addRequestStore.changeAllowanceTime(allowanceTime);
+        break;
       }
     }
   }
@@ -145,6 +147,7 @@ export class FilterComponent implements OnInit, OnChanges {
       await this.getIssueTypes();
       if (!this.isEdit) {
         this.issueTypes.issueId = this.getIssueTypeIdDefault();
+        await this.logAnalysisService.writeLogAccessFunction(this.isEdit, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
         this.updateSubByIssue();
         this.updateCurrentAction();
         this.updateModel();
@@ -199,7 +202,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.subIssueTypeDialogModel = _.clone(this.subIssueTypeDialogModel);
   }
 
-  onChangeIssueType(): void {
+  async onChangeIssueType(): Promise<void> {
     this.addRequestStore.changeSavingRequestStatus(false);
     if (this.isReducedOver() || this.isAbandoned()) {
       this.model.sportType = SportType.CRICKET;
@@ -211,6 +214,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.updateModel();
     this.setWidthControlByIssueType();
     this.issueTypeChange.emit(this.model.issueTypeId);
+    await this.logAnalysisService.writeLogAccessFunction(this.isEdit, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
   }
 
   onChangeSubIssueType(): void {
@@ -303,6 +307,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.filterIssueTypePermission(data);
     this.issueTypes = new IssueTypes(data);
     this.issueTypesChange.emit(this.issueTypes);
+ 
 
     if (!this.isEdit) {
       if (this.haveAbnormalBetFromPermission()) {
@@ -463,7 +468,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
     //TODO: only remove subtype on UI - feat: 173229
     if (this.isAbnormalBet() || this.isAbnormalAccount()) {
-    this.issueTypes.selectedSubIssueTypes = this.issueTypes.selectedSubIssueTypes.filter(x => x.subIssueTypeId !== 27 && x.subIssueTypeId !== 39 && x.subIssueTypeId !== 41);
+      this.issueTypes.selectedSubIssueTypes = this.issueTypes.selectedSubIssueTypes.filter(x => x.subIssueTypeId !== 27 && x.subIssueTypeId !== 39 && x.subIssueTypeId !== 41);
     }
 
     if (this.isDangerAccepted() || this.isRedCard() || this.isWrongScore()) {
@@ -552,6 +557,6 @@ export class FilterComponent implements OnInit, OnChanges {
       return true;
     }
 
-     return this.model.isVoided;
+    return this.model.isVoided;
   }
 }
