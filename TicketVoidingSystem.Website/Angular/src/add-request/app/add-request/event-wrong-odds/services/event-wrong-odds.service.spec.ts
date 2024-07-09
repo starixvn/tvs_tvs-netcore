@@ -10,6 +10,7 @@ import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { ValidationService } from './validation.service';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -102,32 +103,45 @@ describe('EventWrongOddsService', () => {
   let validationService: ValidationService;
   beforeEach(() => {
     validationService = new ValidationService();
-    validationService.isSubTypeOuOr1stOu = jest.fn().mockReturnValue(false);
     service = new EventWrongOddsService(null, validationService);
   });
 
   it('#assignModelsToEvents should return expected model', async () => {
-    const actual = service.assignModelsToEvents(Helper.fakeWrongOddsModel);
-
-    expect(actual.matchId).toBe(Helper.fakeWrongOddsModel.matchId);
-    expect(actual.poolHouseCheckedBetTypes).toBe(Helper.fakeWrongOddsModel.poolHouseCheckedBetTypes);
+    const inputTest = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.HANDICAP]
+    inputTest.forEach(x => {
+      let inputModel = Helper.fakeWrongOddsModel;
+      inputModel.subIssueTypeId = x;
+      const actual = service.assignModelsToEvents(inputModel);
+      expect(actual.matchId).toBe(Helper.fakeWrongOddsModel.matchId);
+      expect(actual.poolHouseCheckedBetTypes).toBe(Helper.fakeWrongOddsModel.poolHouseCheckedBetTypes);
+    })
   });
 
   it('#getWrongOddsModel should return expected model', async () => {
-    const actual = service.getWrongOddsModel(Helper.fakeFilterModel, Helper.fakeLogInfoWrongOdds);
+    const inputTest = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.HANDICAP]
+    inputTest.forEach(x => {
+      let filter = Helper.fakeFilterModel;
+      filter.subIssueTypeId = x.toString();
+      const actual = service.getWrongOddsModel(filter, Helper.fakeLogInfoWrongOdds);
 
     expect(actual.matchId).toBe(Helper.fakeLogInfoWrongOdds.matchId);
     expect(actual.subIssueTypeId ).toBe(Number(Helper.fakeFilterModel.subIssueTypeId));
+    });  
   });
 
   it('#getLinkedLog should call #addRequestApiService.getLinkedLogs', async () => {
-    const addRequestApiService = new AddRequestApiService(null);
+    const inputTest = [SubIssueTypeConstant.OVER_UNDER, SubIssueTypeConstant.HANDICAP]
+    inputTest.forEach(async x => {
+      let filter = Helper.fakeFilterModel;
+      filter.subIssueTypeId = x.toString();
+      const addRequestApiService = new AddRequestApiService(null);
     addRequestApiService.getLinkedLogs = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeLinkedLogsViewModel));
     const mockService = new EventWrongOddsService(addRequestApiService, validationService);
-    const actual = await mockService.getLinkedLog(Helper.fakeLogInfoWrongOdds, Helper.fakeFilterModel);
+    const actual = await mockService.getLinkedLog(Helper.fakeLogInfoWrongOdds, filter);
 
     expect(addRequestApiService.getLinkedLogs).toHaveBeenCalledTimes(1);
     expect(actual).toBeDefined();
+    });  
   });
 
   it('#initDefaultLogInfoWrongOdds should return expected model', async () => {

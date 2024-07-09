@@ -5,7 +5,6 @@ import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { Result } from '../../../../../utility/models/result';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -134,20 +133,47 @@ describe('ValidationService', () => {
     expect(actual).toBeTruthy();
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterOddsType false', async () => {
+  it('#isValidFilterWrongOdds should return true', async () => {
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const filter = Helper.fakeFilterWrongOddsModel;
+    const actual = service.isValidFilterWrongOdds(filter, tooltip, "7");
+
+    expect(actual).toBeTruthy();
+  });
+
+  it('#isValidFilterWrongOdds should return false when not ValidFilterLiveIndicator', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const filter = new FilterWrongOddsModel();
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, null);
+    service["isValidFilterLiveIndicator"] = jest.fn().mockReturnValue(false);
+    service["isValidFilterFavorite"] = jest.fn().mockReturnValue(true);
+    const actual = service.isValidFilterWrongOdds(filter, tooltip, "7");
 
     expect(actual).toBeFalsy();
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterCorrectValue false', async () => {
+  it('#isValidFilterWrongOdds should return false when not ValidSpread', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const filter = new FilterWrongOddsModel();
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, null);
+    service["isValidSpread"] = jest.fn().mockReturnValue(false);
+    service["isValidFilterFavorite"] = jest.fn().mockReturnValue(true);
+    service["isValidFilterLiveIndicator"] = jest.fn().mockReturnValue(true);
+    const actual = service.isValidFilterWrongOdds(filter, tooltip, "7");
+
+    expect(actual).toBeFalsy();
+  });
+
+  it('#isValidFilterWrongOdds should return false when not ValidFilterCorrectOdds', async () => {
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const filter = new FilterWrongOddsModel();
+    service["isValidFilterCorrectOdds"] = jest.fn().mockReturnValue(false);
+    service["isValidFilterFavorite"] = jest.fn().mockReturnValue(true);
+    service["isValidFilterLiveIndicator"] = jest.fn().mockReturnValue(true);
+    service["isValidSpread"] = jest.fn().mockReturnValue(true);
+    const actual = service.isValidFilterWrongOdds(filter, tooltip, "7");
 
     expect(actual).toBeFalsy();
   });
@@ -156,15 +182,17 @@ describe('ValidationService', () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const filter = new FilterWrongOddsModel();
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
+    service["isValidFilterFavorite"] = jest.fn().mockReturnValue(false);
+    const actual = service.isValidFilterWrongOdds(filter, tooltip, "7");
 
     expect(actual).toBeFalsy();
   });
 
-  it('#isValidFilterWrongOdds should return false when isValidFilterOu false', async () => {
+  it('#isValidFilterWrongOdds should return false when ValidFilterOu false', async () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const filter = new FilterWrongOddsModel();
+    service["ValidFilterOu"] = jest.fn().mockReturnValue(false);
     const actual = service.isValidFilterWrongOdds(filter, tooltip, SubIssueTypeConstant.OVER_UNDER.toString());
 
     expect(actual).toBeFalsy();
@@ -174,21 +202,13 @@ describe('ValidationService', () => {
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
     const filter = new FilterWrongOddsModel();
+    service["isValidFilterFavorite"] = jest.fn().mockReturnValue(true);
     [null, undefined].forEach(x => {
       filter.liveIndicator = x;
       const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
 
       expect(actual).toBeFalsy();
     });
-  });
-
-  it('#isValidFilterWrongOdds should return false when isValidFilterBetTeam false', async () => {
-    const tooltip = new Tooltip();
-    tooltip.display = jest.fn();
-    const filter = new FilterWrongOddsModel();
-    filter.liveIndicator = 1;
-    const actual = service.isValidFilterWrongOdds(filter, tooltip, '1');
-    expect(actual).toBeFalsy();
   });
 
   it('#isValidLogInfoEvent should return false', async () => {
@@ -221,7 +241,6 @@ describe('ValidationService', () => {
   it('#checkCanShowConfirmationWrongOdds should return true', async () => {
     const errorMsg = new ValidationMessage();
     errorMsg.isError = false;
-
     const element = document.createElement('body');
     element.setAttribute("user-id", "2");
     document.getElementById = jest.fn().mockImplementation(() => element);
@@ -237,4 +256,108 @@ describe('ValidationService', () => {
 
     expect(actual).toBeTruthy();
   });
+
+  it('#isValidFilterWrongOdds should return true for valid filterWrongOddsModel', () => {
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const result = service.isValidFilterCorrectOdds("0.7", "0.2", tooltip);
+
+    expect(result).toBeTruthy();
+  });
+  
+  it('#isValidFilterWrongOdds should return false for invalid filterWrongOddsModel', () => {
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const inputTests = [{homeCorrectOdds: "0.7&0.1", spread: "0.2"},
+      {homeCorrectOdds: "2", spread: "0.2"},
+      {homeCorrectOdds: "0.2", spread: "0.6"},
+      {homeCorrectOdds: "-2", spread: "0.6"}
+    ];
+    inputTests.forEach(x => {
+      const result = service.isValidFilterCorrectOdds(x.homeCorrectOdds, x.spread, tooltip);
+      expect(result).toBeFalsy();
+    })
+    
+  });
+
+  it('#isValidFilterOu should return true for valid filter', () => {
+    const filter = Helper.fakeFilterWrongOddsModel;
+    filter.wrongOU = '1.5';
+    const tooltip = new Tooltip();
+    const result = service["isValidFilterOu"](filter, tooltip);
+
+    expect(result).toBeTruthy();
+  });
+
+  it('#isValidFilterOu should return false', () => {
+    const filter = Helper.fakeFilterWrongOddsModel;
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const inputTests = [null, "", "0.", "0.75&0.2"];
+    inputTests.forEach(x => {
+      filter.wrongOU = x;
+      const result = service["isValidFilterOu"](filter, tooltip);
+      expect(result).toBeFalsy();
+    });
+    })
+    
+  it('#isValidSpread should return true for valid filter', () => {
+    const tooltip = new Tooltip();
+    const result = service.isValidSpread("0.2", tooltip);
+
+    expect(result).toBeTruthy();
+  });
+
+  it('#isValidSpread should return false', () => {
+    const tooltip = new Tooltip();
+    tooltip.display = jest.fn();
+    const inputTests = [null, "", "0.", "0.75&0.2"];
+    inputTests.forEach(x => {
+      const result = service.isValidSpread(x, tooltip);
+      expect(result).toBeFalsy();
+    });
+    })
+
+    it('#isValidFilterLiveIndicator should return true for valid filter', () => {
+      const filter = Helper.fakeFilterWrongOddsModel;
+      filter.liveIndicator = 1;
+      const tooltip = new Tooltip();
+      const result = service["isValidFilterLiveIndicator"](filter, tooltip);
+  
+      expect(result).toBeTruthy();
+    });
+
+    it('#isValidFilterLiveIndicator should return false', () => {
+      const filter = Helper.fakeFilterWrongOddsModel;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+      const inputTests = [null, undefined];
+      inputTests.forEach(x => {
+        filter.liveIndicator = x;
+        const result = service["isValidFilterLiveIndicator"](filter, tooltip);
+        expect(result).toBeFalsy();
+      });
+    });
+    
+    it('#isValidFilterFavorite should return true for valid filter', () => {
+      const filter = Helper.fakeFilterWrongOddsModel;
+      filter.favoriteValue = "0.7";
+      const tooltip = new Tooltip();
+      const result = service["isValidFilterFavorite"](filter, tooltip);
+  
+      expect(result).toBeTruthy();
+    });
+
+    it('#isValidFilterFavorite should return false', () => {
+      const filter = Helper.fakeFilterWrongOddsModel;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+      const inputTests = [null, undefined, ""];
+      inputTests.forEach(x => {
+        filter.favoriteValue = x;
+        const result = service["isValidFilterFavorite"](filter, tooltip);
+        expect(result).toBeFalsy();
+      });
+    });
+  
 });
