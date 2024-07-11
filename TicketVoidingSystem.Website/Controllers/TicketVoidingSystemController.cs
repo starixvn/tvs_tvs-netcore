@@ -86,9 +86,8 @@ public class TicketVoidingSystemController : Controller
 
     [HttpGet]
     [Route("Index/{id}")]
-    public async Task<ActionResult> EditRequest(int id)
+    public ActionResult EditRequest(int id)
     {
-        await userActionLogService.LogAccessFunction(nameof(EditRequest));
         return View("~/wwwroot/dist/ticket-voiding-system/edit-request/index.cshtml");
     }
 

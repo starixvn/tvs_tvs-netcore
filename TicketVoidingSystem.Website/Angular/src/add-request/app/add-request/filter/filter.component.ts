@@ -3,7 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { LogAnalysisService } from 'src/utility/services/log-analysis.service';
+import { LogAnalysisService } from '../../../../add-request/app/add-request/services/log-analysis.service';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
@@ -71,6 +71,7 @@ export class FilterComponent implements OnInit, OnChanges {
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model'] && this.isEditOrExternalUrl()) {
       this.initDate();
+
       await this.initData();
       this.updateIssueBySub();
       this.updateCurrentAction();
@@ -82,6 +83,10 @@ export class FilterComponent implements OnInit, OnChanges {
         this.getAllowanceTimeBySubIssueType();
       }
       this.setWidthControlByIssueType();
+
+      if (this.issueTypes.issueId) {
+        await this.logAnalysisService.writeLogAccessFunction(true, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
+      }
     }
   }
 
@@ -147,10 +152,10 @@ export class FilterComponent implements OnInit, OnChanges {
       await this.getIssueTypes();
       if (!this.isEdit) {
         this.issueTypes.issueId = this.getIssueTypeIdDefault();
-        await this.logAnalysisService.writeLogAccessFunction(this.isEdit, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
         this.updateSubByIssue();
         this.updateCurrentAction();
         this.updateModel();
+        await this.logAnalysisService.writeLogAccessFunction(false, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
       }
     }
   }
