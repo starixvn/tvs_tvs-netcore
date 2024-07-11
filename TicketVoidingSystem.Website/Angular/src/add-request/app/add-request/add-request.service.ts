@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
+import moment from 'moment-timezone';
 import { LABELS } from '../../../utility/constants/labels';
 import { Result } from '../../../utility/models/result';
 import { CommonService } from '../../../utility/services/common.service';
@@ -20,34 +21,35 @@ export class AddRequestService {
     private readonly commonService: CommonService
   ) { }
 
-  async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid?: boolean): Promise<void> {
+  async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid = false): Promise<void> {
     if (isEdit) {
       query.requestId = requestId;
       await this.editRequest(query, addRequestStore, isSaveAndVoid);
     } else {
-      await this.addRequest(query, query.issueTypeId, addRequestStore, isSaveAndVoid);
+      await this.addRequest(query, addRequestStore, isSaveAndVoid);
     }
   }
 
-  private async addRequest(query: AddRequestQuery, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
+  private async addRequest(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
     addRequestStore.changeSavingRequestStatus(true);
     query.guid = `AddRequest-${Guid.create().toString()}`;
+    query.sessionTime = this.getTimeFilterTicket(addRequestStore);
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
-      this.handleAfterAddRequest(result, issueTypeId, addRequestStore, isSaveAndVoid);
+      this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore, isSaveAndVoid);
     } else {
-      this.getAddResultCache(query.guid, issueTypeId, addRequestStore, isSaveAndVoid);
+      this.getAddResultCache(query, addRequestStore, isSaveAndVoid);
     }
   }
 
-  private getAddResultCache(guid: string, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private getAddResultCache(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
     let isChecking = false;
     const interval = setInterval(async () => {
       if (!isChecking) {
         isChecking = true;
-        const result = await this.commonService.getResultCache<AddRequestResultModel>(guid);
+        const result = await this.commonService.getResultCache<AddRequestResultModel>(query.guid);
         if (result) {
-          this.handleAfterAddRequest(result, issueTypeId, addRequestStore, isSaveAndVoid);
+          this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore, isSaveAndVoid);
           clearInterval(interval);
         }
         isChecking = false;
@@ -98,5 +100,10 @@ export class AddRequestService {
     return StaticService.isAbnormalAccount(issueTypeId)
       || StaticService.isArchivedTicket(issueTypeId)
       || StaticService.isRecoverTicket(issueTypeId);
+  }
+
+  private getTimeFilterTicket(addRequestStore: AddRequestStore): number {
+    const startTime = addRequestStore.getStartTimeFilterTicket;
+    return moment(new Date()).diff(moment(startTime), 'seconds');
   }
 }

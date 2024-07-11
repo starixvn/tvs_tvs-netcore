@@ -158,6 +158,24 @@ export class CommonService {
   async getMatchInfoAddRequestTvs(matchId: number): Promise<MatchInfoViewModel> {
     return this.httpService.postJson({ matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
+
+  async logAccessFunction(functionName: string): Promise<boolean> {
+    try {
+      return await this.httpService.postJson<any, boolean>({ functionName }, 'api/Analytics/LogAccessFunction');
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async logChangeContent(functionName: string, logContent?: string): Promise<boolean> {
+    try {
+      return await this.httpService.postJson<any, boolean>({ functionName, logContent }, 'api/Analytics/LogChangeContent');
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 }
 
 export class CommonStaticService {

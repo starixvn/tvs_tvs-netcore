@@ -57,9 +57,9 @@ public class SendEmailDuplicateTicketsServiceImp : SendEmailDuplicateTicketsServ
         };
     }
 
-    private TemplateContentModel GetSportTypeReplaceEmail(int sportType)
+    private ContentByLanguageModel GetSportTypeReplaceEmail(int sportType)
     {
-        return new TemplateContentModel
+        return new ContentByLanguageModel
         {
             ContentEnglish = sportType > 0 ? remotingRefWrapperService.GetSportName(sportType.ToString(), LanguageCode.English) : "Mix Parlay",
             ContentChineseSimplified = sportType > 0 ? remotingRefWrapperService.GetSportName(sportType.ToString(), LanguageCode.ChineseSimplified) : "串关"

@@ -11,6 +11,7 @@ import { DateFullTimeNewComponent } from '../../../../utility/components/date-ti
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
@@ -30,7 +31,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -94,9 +94,9 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         await this.getTicketsMainEvent();
         this.mainEvent.templateValue.checkSettled = this.mainEvent.tableTicketsModel.isHasSettledTicket;
       }
-      
+
       this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-      
+
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
@@ -106,6 +106,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public changeMatchEvent(): void {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
@@ -120,7 +121,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     if(this.mainEvent.matchModel){
       this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
     }
-  
+
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -128,7 +129,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowLogInfoEvents = false;
     if (this.kickOffTimeComponent.isTimeValid()) {
       this.allSelectedEvents.forEach(x => {
-        let dateTime = this.kickOffTimeComponent.getDateTime();
+        const dateTime = this.kickOffTimeComponent.getDateTime();
         x.kickOffTime = dateTime;
         x.templateValue.kickOffTime = dateTime;
       });    }

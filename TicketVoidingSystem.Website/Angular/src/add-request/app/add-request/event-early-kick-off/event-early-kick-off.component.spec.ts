@@ -8,6 +8,7 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
@@ -31,7 +32,6 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { TableTicketsModel } from './tickets-list/table-tickets.model';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
-import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 
 class Helper {
   static readonly hourSelector = 'input.hour';
@@ -49,7 +49,7 @@ class Helper {
   }
   static readonly fakeTemplateValue: TemplateValue = {
     matchId: 0,
-    groupPHAffected: 0, 
+    groupPHAffected: 0,
     checkSettled: false,
     kickOffTime: '2019-11-18 12:08:49.737'
   };
@@ -254,6 +254,7 @@ describe('EventEarlyKickOffComponent', () => {
     const { instance } = await shallow
     .mock(LogInfoService, { getTemplateValue: mockGetTemplateValue, resetLogInfoOfEvent: mockResetLogInfoOfEvent})
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: true,
@@ -268,7 +269,7 @@ describe('EventEarlyKickOffComponent', () => {
 
     // Action
     instance.changeMatchEvent();
-  
+
     // Assert
     expect(mockResetLogInfoOfEvent).toHaveBeenCalledTimes(1);
     expect(instance.updateMatchId.emit).toHaveBeenCalledTimes(1);
@@ -280,6 +281,7 @@ describe('EventEarlyKickOffComponent', () => {
     const { instance } = await shallow
     .mock(LogInfoService, { getTemplateValue: jest.fn().mockReturnValue(new TemplateValue()), resetLogInfoOfEvent: mockResetLogInfoOfEvent })
     .mock(EventEarlyKickOffService, { initDefaultMainEvent: mockInitDefaultMainEvent })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: true,

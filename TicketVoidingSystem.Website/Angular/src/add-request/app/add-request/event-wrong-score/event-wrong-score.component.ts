@@ -7,6 +7,7 @@ import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LABELS } from '../../../../utility/constants/labels';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
@@ -25,7 +26,6 @@ import { ValidationBusinessRuleArgs } from './services/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-wrong-score',
@@ -147,6 +147,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   }
 
   public changeMatchEvent(matchInfo: MatchModel) {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     if (matchInfo) {
       this.resetData();
       this.matchId = matchInfo.matchId;

@@ -1,9 +1,9 @@
 <div [ngClass]="isShowTemplateMessage ? 'display-block' : 'display-none'">
     <ng-container *ngIf="totalVoidTickets > 0">
-      <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId" 
+      <template-message #templateMessage [value]="templateValue" [issueTypeId]="issueTypeId"
         [subIssueTypeId]="subIssueTypeId" [voidFunction]="2">
       </template-message>
-      <void-reason [voidReason]="voidReason"></void-reason>
+      <void-reason #reason [voidReason]="voidReason"></void-reason>
     </ng-container>
     <ng-container *ngIf="totalVoidTickets === 0">
       <div class="reason-area">

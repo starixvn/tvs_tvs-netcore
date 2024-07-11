@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import moment from 'moment-timezone';
-import { BetTypeCountModel } from 'src/add-request/app/add-request/models/get-log-info.model';
+import { BetTypeCountModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';

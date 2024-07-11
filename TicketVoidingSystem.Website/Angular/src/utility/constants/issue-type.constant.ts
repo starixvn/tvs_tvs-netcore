@@ -21,4 +21,30 @@ export class IssueTypeConstant {
   static readonly ABANDONED = '23';
   static readonly WRONG_MARKET_OFFERED = '12';
   static readonly TECHNICAL_ERROR = '24';
+  
+  static readonly NAME_WRITE_LOG = new Map<string, string>([
+    [IssueTypeConstant.ABNORMAL_BET, 'ABNORMAL_BET'],
+    [IssueTypeConstant.ABNORMAL_ACCOUNT, 'ABNORMAL_ACCOUNT'],
+    [IssueTypeConstant.EARLY_KICK_OFF, 'EARLY_KICK_OFF'],
+    [IssueTypeConstant.WRONG_KICK_OFF, 'WRONG_KICK_OFF'],
+    [IssueTypeConstant.DANGER_ACCEPTED, 'DANGER_ACCEPTED'],
+    [IssueTypeConstant.RED_CARD, 'RED_CARD'],
+    [IssueTypeConstant.WRONG_ODDS, 'WRONG_ODDS'],
+    [IssueTypeConstant.WRONG_SCORE, 'WRONG_SCORE'],
+    [IssueTypeConstant.WRONG_OU, 'WRONG_OU'],
+    [IssueTypeConstant.WRONG_1ST_OU, 'WRONG_1ST_OU'],
+    [IssueTypeConstant.WRONG_HDP, 'WRONG_HDP'],
+    [IssueTypeConstant.WRONG_1ST_HDP, 'WRONG_1ST_HDP'],
+    [IssueTypeConstant.WRONG_QUARTER_HDP, 'WRONG_QUARTER_HDP'],
+    [IssueTypeConstant.ARCHIVED_TICKET, 'ARCHIVED_TICKET'],
+    [IssueTypeConstant.OTHER_ISSUES, 'OTHER_ISSUES'],
+    [IssueTypeConstant.REDUCED_OVER, 'REDUCED_OVER'],
+    [IssueTypeConstant.DUPLICATE_TICKETS, 'DUPLICATE_TICKETS'],
+    [IssueTypeConstant.NOT_PARTICIPATE, 'NOT_PARTICIPATE'],
+    [IssueTypeConstant.RECOVER_TICKET, 'RECOVER_TICKET'],
+    [IssueTypeConstant.ABANDONED, 'ABANDONED'],
+    [IssueTypeConstant.WRONG_MARKET_OFFERED, 'WRONG_MARKET_OFFERED'],
+    [IssueTypeConstant.TECHNICAL_ERROR, 'TECHNICAL_ERROR']
+  ]) ;
 }
+

@@ -161,7 +161,8 @@ describe('EventWrongMarketOfferedComponent', () => {
     .mock(LogInfoService, { resetLogInfoOfEvent: jest.fn() })
     .mock(AddRequestStore, {
       changeBlockingUiStatus: jest.fn(),
-      changeSavingRequestStatus: jest.fn()
+      changeSavingRequestStatus: jest.fn(),
+      changeStartTimeFilterAnalysis: jest.fn()
      })
     .render({
       bind: {

@@ -215,7 +215,7 @@ describe('AddRequestComponent', () => {
     addRequestStore.savingRequestStatus.subscribe = jest.fn();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
     addRequestStore.getAbnormalFilterBySubject.subscribe = jest.fn();
-    const component = new AddRequestComponent(addRequestStore, null);
+    const component = new AddRequestComponent(addRequestStore, null, null);
     component.isEdit = true;
 
     component.ngOnInit();
@@ -225,7 +225,7 @@ describe('AddRequestComponent', () => {
 
   it('#ngOnDestroy should be call unsubscribe', async () => {
     const addRequestStore = new AddRequestStore();
-    const component = new AddRequestComponent(addRequestStore, null);
+    const component = new AddRequestComponent(addRequestStore, null, null);
     component.savingRequestSubscription = addRequestStore.savingRequestStatus.subscribe(status => {
       component.isDisabledSaveButton = status;
     });
@@ -254,7 +254,7 @@ describe('AddRequestComponent', () => {
   it('#updateModel should assign new object filter', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '1';
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     Helper.initHtml();
 
@@ -266,7 +266,7 @@ describe('AddRequestComponent', () => {
   it('#updateModel should not assign default data for decidedBy when is not abnormal', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '13';
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
 
     component.updateModel(Helper.fakeFilterModel);
@@ -277,7 +277,7 @@ describe('AddRequestComponent', () => {
 
   it('#backToManagePage should assign to page', async () => {
     const fakeRequestModel = new RequestModel();
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
@@ -295,7 +295,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventAbnormalBetComponent = new EventAbnormalBetComponent(null, null, null, null, null);
     eventAbnormalBetComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     component.eventAbnormalBetComponent = eventAbnormalBetComponent;
 
@@ -310,7 +310,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventArchivedTicketComponent = new EventTicket14Component(null, null, null, null);
     eventArchivedTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     component.eventTicket14Component = eventArchivedTicketComponent;
 
@@ -325,7 +325,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const abnormalAccountsComponent = new AbnormalAccountsComponent(null, null, null, null, null);
     abnormalAccountsComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     component.abnormalAccountsComponent = abnormalAccountsComponent;
 
@@ -340,7 +340,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventRecoverTicketComponent = new EventRecoverTicketComponent(null, null, null, null);
     eventRecoverTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     component.eventRecoverTicketComponent = eventRecoverTicketComponent;
 
@@ -355,7 +355,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventDuplicateTicketsComponent = new EventDuplicateTicketsComponent(null, null, null, null, null);
     eventDuplicateTicketsComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.model = fakeRequestModel;
     component.eventDuplicateTicketsComponent = eventDuplicateTicketsComponent;
 
@@ -365,7 +365,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Username"', async () => {
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => true);
     const actual = component.getEventLabel();
 
@@ -373,7 +373,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Ticket Info"', async () => {
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
     component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => true);
     const actual = component.getEventLabel();
@@ -382,7 +382,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Event"', async () => {
-    const component = new AddRequestComponent(null, null);
+    const component = new AddRequestComponent(null, null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
     component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => false);
     const actual = component.getEventLabel();

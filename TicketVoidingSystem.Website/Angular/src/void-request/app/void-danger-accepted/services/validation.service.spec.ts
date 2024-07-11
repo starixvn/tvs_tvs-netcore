@@ -12,6 +12,7 @@ import { VoidedReason } from '../../../../utility/models/reason.model';
 import { SqlResult } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
+import { MessageAreaComponent } from '../../message-area/message-area.component';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { ValidationService } from './validation.service';
@@ -83,8 +84,10 @@ describe('ValidationService', () => {
     // Arrange
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.checkValidation = jest.fn().mockImplementation(() => false);
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
     // Action
-    const result = validationService.checkValidationBeforeVoid([Helper.fakeVoidMatch], [templateMessageComponent]);
+    const result = validationService.checkValidationBeforeVoid([Helper.fakeVoidMatch], [messageAreaComponent]);
 
     // Assert
     expect(result.errorCode).toBe(1);
@@ -95,13 +98,15 @@ describe('ValidationService', () => {
     // Arrange
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.checkValidation = jest.fn().mockImplementation(() => true);
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
     const fakeVoidMatch = _.clone(Helper.fakeVoidMatch);
     fakeVoidMatch.voidReason = new VoidedReason();
     fakeVoidMatch.voidReason.reasonEnglish = '';
     validationService['mapValidMessageToVoidMatch'] = jest.fn();
     
     // Action
-    const result = validationService.checkValidationBeforeVoid([fakeVoidMatch], [templateMessageComponent]);
+    const result = validationService.checkValidationBeforeVoid([fakeVoidMatch], [messageAreaComponent]);
 
     // Assert
     expect(result.errorCode).toBe(1);
@@ -112,6 +117,8 @@ describe('ValidationService', () => {
     // Arrange
     const templateMessageComponent = new TemplateMessageComponent(null, null);
     templateMessageComponent.checkValidation = jest.fn().mockImplementation(() => true);
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = templateMessageComponent;
     const fakeVoidMatch = _.clone(Helper.fakeVoidMatch);
     fakeVoidMatch.voidReason = new VoidedReason();
     fakeVoidMatch.voidReason.reasonEnglish = 'reason';
@@ -119,7 +126,7 @@ describe('ValidationService', () => {
     const expected = ResultModelService.createSuccessResult();
 
     // Action
-    const result = validationService.checkValidationBeforeVoid([Helper.fakeVoidMatch], [templateMessageComponent]);
+    const result = validationService.checkValidationBeforeVoid([Helper.fakeVoidMatch], [messageAreaComponent]);
 
     // Assert
     expect(result.errorCode).toBe(expected.errorCode);

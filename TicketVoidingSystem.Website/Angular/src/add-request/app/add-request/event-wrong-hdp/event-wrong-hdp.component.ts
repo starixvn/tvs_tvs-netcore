@@ -105,6 +105,7 @@ export class EventWrongHdpComponent implements OnInit {
   }
 
   public changeMatchEvent(): void {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);

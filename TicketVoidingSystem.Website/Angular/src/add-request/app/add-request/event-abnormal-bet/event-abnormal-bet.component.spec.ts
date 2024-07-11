@@ -167,6 +167,7 @@ describe('EventAbnormalBetComponent', () => {
   it('#focusOutBetIds should call #getMatchAndCheckValidTransIds', async () => {
     // Arrange
     const { instance } = await shallow
+      .mock(AddRequestStore, {changeStartTimeFilterAnalysis: jest.fn(),})
       .render({
         bind: {
           abnormalBetModel: Helper.fakeAbnormalBetModel,
@@ -188,6 +189,7 @@ describe('EventAbnormalBetComponent', () => {
   it('#focusOutBetIds should not call #getMatchAndCheckValidTransIds', async () => {
     // Arrange
     const { instance } = await shallow
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           abnormalBetModel: Helper.fakeAbnormalBetModel,

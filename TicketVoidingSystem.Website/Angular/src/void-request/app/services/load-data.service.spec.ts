@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from "../../../edit-request/app/request.model";
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from "../models/common-primitive-property.model";
 import { VoidPageCommonItem } from "../models/void-page-common-item.model";
 import { TicketsModel } from '../tickets-list/tickets.model';
@@ -121,39 +122,41 @@ describe('LoadDataService', () => {
   });
 
   it('#checkLoadedFullDataBeforeVoid should called #submitVoidService.submitVoid when isLoadedUnderneathData true and all message initialized', async () => {
-    const templateMessageViewChild = new TemplateMessageComponent(null, null);
-    templateMessageViewChild.initialize = true;
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null);
+    messageAreaComponent.templateMessageComponent.initialize = true;
     const afterLoadUnderneathDataSubscription = new Subscription();
     afterLoadUnderneathDataSubscription.unsubscribe = jest.fn();
     const primitiveProperty = new CommonPrimitiveProperty();
     primitiveProperty.isRunningSubscriptionCallback = false;
     primitiveProperty.isLoadedUnderneathData = true;
-    const submitVoidService = new SubmitVoidService(null, null, null, null);
+    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
     submitVoidService.submitVoid = jest.fn();
     const service = new LoadDataService(submitVoidService, null, null);
     const voidPageCommonItem = [new VoidPageCommonItem()];
     voidPageCommonItem[0].voidTicketsMini = new TicketsModel();
     voidPageCommonItem[0].voidTicketsMini.total = 1;
 
-    await service.checkLoadedFullDataBeforeVoid(voidPageCommonItem, [templateMessageViewChild], primitiveProperty, afterLoadUnderneathDataSubscription);
+    await service.checkLoadedFullDataBeforeVoid(voidPageCommonItem, [messageAreaComponent], primitiveProperty, afterLoadUnderneathDataSubscription);
 
     expect(afterLoadUnderneathDataSubscription.unsubscribe).toHaveBeenCalledTimes(1);
     expect(submitVoidService.submitVoid).toHaveBeenCalledTimes(1);
   });
 
   it('#checkLoadedFullDataBeforeVoid should not called #submitVoidService.submitVoid when isLoadedUnderneathData false and all message initialized', async () => {
-    const templateMessageViewChild = new TemplateMessageComponent(null, null);
-    templateMessageViewChild.initialize = true;
+    const messageAreaComponent = new MessageAreaComponent();
+    messageAreaComponent.templateMessageComponent = new TemplateMessageComponent(null, null);
+    messageAreaComponent.templateMessageComponent.initialize = true;
     const afterLoadUnderneathDataSubscription = new Subscription();
     afterLoadUnderneathDataSubscription.unsubscribe = jest.fn();
     const primitiveProperty = new CommonPrimitiveProperty();
     primitiveProperty.isRunningSubscriptionCallback = false;
     primitiveProperty.isLoadedUnderneathData = false;
-    const submitVoidService = new SubmitVoidService(null, null, null, null);
+    const submitVoidService = new SubmitVoidService(null, null, null, null, null);
     submitVoidService.submitVoid = jest.fn();
     const service = new LoadDataService(submitVoidService, null, null);
 
-    await service.checkLoadedFullDataBeforeVoid(null, [templateMessageViewChild], primitiveProperty, afterLoadUnderneathDataSubscription);
+    await service.checkLoadedFullDataBeforeVoid(null, [messageAreaComponent], primitiveProperty, afterLoadUnderneathDataSubscription);
 
     expect(afterLoadUnderneathDataSubscription.unsubscribe).toHaveBeenCalledTimes(0);
     expect(submitVoidService.submitVoid).toHaveBeenCalledTimes(0);

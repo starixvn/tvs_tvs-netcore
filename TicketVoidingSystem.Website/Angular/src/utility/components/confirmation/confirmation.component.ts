@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { LABELS } from '../../../utility/constants/labels';
+import { VoidedReason } from '../../../utility/models/reason.model';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { Confirmation } from './confirmation';
 
@@ -14,13 +15,15 @@ export class ConfirmationComponent implements OnInit {
   @Output() voidAll = new EventEmitter<boolean>();
   @Input() isDisabledButton = false;
   tooltip = new Tooltip();
+  initialVoidReason = new VoidedReason();
   confirmation: Confirmation = {
     userName: document.body.getAttribute('user-name'),
-    reason: '',
-    reasonSC: '',
-    userPassword: ''
+    userPassword: '',
+    voidReason: {
+      reasonEnglish: '',
+      reasonChineseSimplified: ''
+    } as VoidedReason,
   };
-
   constructor(private readonly element: ElementRef) {
     this.tooltip.element = this.element;
   }
@@ -36,11 +39,11 @@ export class ConfirmationComponent implements OnInit {
   }
 
   checkValidation(): boolean {
-    if (this.confirmation.reason === '') {
+    if (this.confirmation.voidReason.reasonEnglish === '') {
       this.tooltip.display('reason', LABELS.INPUT_REASON);
       return false;
     }
-    if (this.confirmation.reasonSC === '') {
+    if (this.confirmation.voidReason.reasonChineseSimplified === '') {
       this.tooltip.display('reasonSC', LABELS.INPUT_REASON);
       return false;
     }
@@ -53,8 +56,8 @@ export class ConfirmationComponent implements OnInit {
   }
 
   clearData() {
-    this.confirmation.reason = '';
-    this.confirmation.reasonSC = '';
+    this.confirmation.voidReason.reasonEnglish = '';
+    this.confirmation.voidReason.reasonChineseSimplified = '';
     this.confirmation.userPassword = '';
   }
 }

@@ -11,6 +11,7 @@ import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.mo
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
@@ -30,7 +31,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -374,9 +374,8 @@ describe('EventDangerAcceptedComponent', () => {
       .mock(EventDangerAcceptedService, {
         updateSubIssueTypeAndAllowanceTime: mockUpdateSubIssueTypeAndAllowanceTime
       })
-      .mock(LogInfoService, {
-        resetLogInfoOfEvent: mockResetLogInfoOfEvent
-      })
+      .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,
@@ -406,9 +405,8 @@ describe('EventDangerAcceptedComponent', () => {
       .mock(EventDangerAcceptedService, {
         updateSubIssueTypeAndAllowanceTime: mockUpdateSubIssueTypeAndAllowanceTime
       })
-      .mock(LogInfoService, {
-        resetLogInfoOfEvent: mockResetLogInfoOfEvent
-      })
+      .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           filter: Helper.fakeFilterModel,

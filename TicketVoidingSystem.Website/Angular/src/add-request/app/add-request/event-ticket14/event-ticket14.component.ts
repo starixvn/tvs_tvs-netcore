@@ -39,6 +39,7 @@ export class EventTicket14Component {
   }
 
   async afterFocusOutBetIds(): Promise<void> {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
       await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId, this.primitiveProps.permission);

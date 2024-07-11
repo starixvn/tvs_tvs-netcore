@@ -98,6 +98,7 @@ export class EventWrongOddsComponent implements OnInit {
   }
 
   public changeMatchEvent(): void {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.logInfoEvent.matchId = this.leagueEventWrongOddsComponent?.selectedMatch.matchId;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.updateMatchId.emit(this.logInfoEvent.matchId);

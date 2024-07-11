@@ -5,6 +5,6 @@ namespace TicketVoidingSystem.SharedApi.ViewModels.MessageTemplate;
 
 public class TemplateSettingViewModel
 {
-    public IEnumerable<MessageTemplateViewModel> MessageTemplates { get; set; }
+    public IEnumerable<TemplateModel> MessageTemplates { get; set; }
     public IEnumerable<TemplateSetting> TemplateSettings { get; set; }
 }

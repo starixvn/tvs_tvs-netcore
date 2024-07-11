@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
+import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
@@ -37,12 +38,12 @@ export class TemplateMessageComponent implements OnChanges {
   @Input() issueTypeId: number;
   @Input() isShowMessages = true;
   @Input() voidFunction?: number;
-
   @ViewChild('messages') messagesComponent: MessagesComponent;
 
   templates: TemplateModel[] = [];
   selectedTemplated = new TemplateModel();
   message = new Message();
+  initialMessage = new Message();
   templateSettings: TemplateSetting[];
   private readonly hideInputChineseForTemplateId = [
     MESSAGE_TEMPLATE_ID_8,
@@ -78,6 +79,7 @@ export class TemplateMessageComponent implements OnChanges {
     await this.init();
     if ((changes['subIssueTypeId'] || changes['value']) && this.subIssueTypeId) {
       this.updateTemplate();
+      this.initialMessage = _.cloneDeep(this.message);
     }
   }
 
@@ -221,14 +223,20 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.NOT_PARTICIPATE,
       IssueTypeId.WRONG_QUARTER_HDP
     ];
+
     const subIssueTypeS = [
       SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
       SubIssueTypeId.TECHNICAL_ERROR
     ];
-    if ((issueTypes.includes(this.issueTypeId) || (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId)))
-      && this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE)) {
+
+    const isSpecialIssueType = issueTypes.includes(this.issueTypeId) ||
+      (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId));
+
+    const isDateMismatched = this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE);
+
+    if (isSpecialIssueType && isDateMismatched) {
       return false;
-    };
+    }
 
     const issueTypesHasCheckBoxEarlyEvent = [
       IssueTypeId.WRONG_ODDS,
@@ -238,7 +246,9 @@ export class TemplateMessageComponent implements OnChanges {
       IssueTypeId.WRONG_1ST_OU
     ];
 
-    return !(issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && this.value.isCheckedEarlyEvent);
+    const isCheckedEarlyEvent = issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && this.value.isCheckedEarlyEvent;
+
+    return !isCheckedEarlyEvent;
   }
 
   updateInputs() {
@@ -406,8 +416,8 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
-    return this.isVoidSinglePage() && 
-        (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
+    return this.isVoidSinglePage() &&
+      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
         || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 

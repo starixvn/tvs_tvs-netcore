@@ -262,6 +262,7 @@ describe('EventWrongHdpComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: true,
@@ -284,6 +285,7 @@ describe('EventWrongHdpComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
     .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         isEdit: true,

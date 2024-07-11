@@ -1,21 +1,26 @@
-﻿namespace TicketVoidingSystem.SharedApi.Models.MessageTemplate;
+﻿using System.Collections.Generic;
 
-public class TemplateContent
+namespace TicketVoidingSystem.SharedApi.Models.MessageTemplate;
+
+public class InputText
 {
+    public string Name { get; set; }
+    public string Pattern { get; set; }
     public string MsgEnglish { get; set; }
     public string MsgChineseTraditional { get; set; }
     public string MsgChineseSimplified { get; set; }
     public string MsgChineseNewSimplified { get; set; }
 }
 
-public class TemplateModel : TemplateContent
+public class TemplateModel
 {
     public int TemplateId { get; set; }
-    public string JsonValue { get; set; }
-}
+    public string MsgEnglish { get; set; }
+    public string MsgChineseTraditional { get; set; }
+    public string MsgChineseSimplified { get; set; }
+    public string MsgChineseNewSimplified { get; set; }
 
-public class InputText : TemplateContent
-{
-    public string Name { get; set; }
-    public string Pattern { get; set; }
+    public string JsonValue { get; set; }
+
+    public IEnumerable<InputText> InputTexts { get; set; }
 }

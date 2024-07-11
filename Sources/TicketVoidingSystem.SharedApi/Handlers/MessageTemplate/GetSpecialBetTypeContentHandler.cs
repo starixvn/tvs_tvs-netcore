@@ -8,12 +8,12 @@ using TicketVoidingSystem.SharedApi.Services.MessageTemplate;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.MessageTemplate;
 
-public class GetSpecialBetTypeContentRequest : IRequest<TemplateContentModel>
+public class GetSpecialBetTypeContentRequest : IRequest<ContentByLanguageModel>
 {
     public IEnumerable<TicketEmailModel> Tickets { get; set; }
 }
 
-public class GetSpecialBetTypeContentHandler : IRequestHandler<GetSpecialBetTypeContentRequest, TemplateContentModel>
+public class GetSpecialBetTypeContentHandler : IRequestHandler<GetSpecialBetTypeContentRequest, ContentByLanguageModel>
 {
     private readonly SpecialBetTypeContentService specialBetTypeContentService;
 
@@ -22,7 +22,7 @@ public class GetSpecialBetTypeContentHandler : IRequestHandler<GetSpecialBetType
         this.specialBetTypeContentService = specialBetTypeContentService;
     }
 
-    public async Task<TemplateContentModel> Handle(GetSpecialBetTypeContentRequest request, CancellationToken cancellationToken)
+    public async Task<ContentByLanguageModel> Handle(GetSpecialBetTypeContentRequest request, CancellationToken cancellationToken)
     {
         return await Task.FromResult(specialBetTypeContentService.GetContentForVoidPage(request.Tickets));
     }

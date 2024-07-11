@@ -10,6 +10,7 @@ import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { MatchType } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
@@ -26,7 +27,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -263,6 +263,7 @@ describe('EventWrongOuComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
       .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           isEdit: true,
@@ -285,6 +286,7 @@ describe('EventWrongOuComponent', () => {
     const mockResetLogInfoOfEvent = jest.fn();
     const { instance } = await shallow
       .mock(LogInfoService, { resetLogInfoOfEvent: mockResetLogInfoOfEvent })
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           isEdit: true,

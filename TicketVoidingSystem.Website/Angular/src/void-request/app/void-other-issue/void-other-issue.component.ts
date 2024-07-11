@@ -30,6 +30,7 @@ import { MappingModelStaticService } from '../../../utility/services/mapping-mod
 import { PasswordService } from '../../../utility/services/password.service';
 import { StaticService } from '../../../utility/services/static.service';
 import { CheckRequestService } from '../services/check-request.service';
+import { LogChangeContentService } from '../services/log-change-content.service';
 import { ConfirmationComponent } from './../../../utility/components/confirmation/confirmation.component';
 import { IssueInfo } from './../../../utility/models/issue-type.model';
 import { AppService } from './../app.service';
@@ -86,7 +87,8 @@ export class VoidOtherIssueComponent implements OnInit {
     private readonly checkRequestService: CheckRequestService,
     private readonly clipboardService: ClipboardService,
     private readonly element: ElementRef,
-    private readonly passwordService: PasswordService
+    private readonly passwordService: PasswordService,
+    private readonly logChangeContentService: LogChangeContentService
   ) {
     this.tooltip.element = this.element;
   }
@@ -263,8 +265,10 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   updateVoidedReason() {
-    this.confirmationComponent.confirmation.reason = this.reason.reasonEnglish;
-    this.confirmationComponent.confirmation.reasonSC = this.reason.reasonChineseSimplified;
+    this.confirmationComponent.confirmation.voidReason.reasonEnglish = this.reason.reasonEnglish;
+    this.confirmationComponent.confirmation.voidReason.reasonChineseSimplified = this.reason.reasonChineseSimplified;
+    this.confirmationComponent.initialVoidReason.reasonEnglish = _.cloneDeep(this.reason.reasonEnglish);
+    this.confirmationComponent.initialVoidReason.reasonChineseSimplified = _.cloneDeep(this.reason.reasonChineseSimplified);
   }
 
   ticketsChange() {
@@ -334,8 +338,8 @@ export class VoidOtherIssueComponent implements OnInit {
       }),
       userName: this.confirmationComponent.confirmation.userName,
       userPassword: this.passwordService.hash(this.confirmationComponent.confirmation.userPassword),
-      reason: this.confirmationComponent.confirmation.reason,
-      reasonSC: this.confirmationComponent.confirmation.reasonSC,
+      reason: this.confirmationComponent.confirmation.voidReason.reasonEnglish,
+      reasonSC: this.confirmationComponent.confirmation.voidReason.reasonChineseSimplified,
       message: this.messagesComponent?.message,
       matchId: this.match.matchId,
       subIssueTypeId: StaticService.getSubIssueTypeId(this.requestDetail),
@@ -388,6 +392,8 @@ export class VoidOtherIssueComponent implements OnInit {
   async insertQueue() {
     const WRONG_PASSWORD_CODE = 121;
     this.isBlockBetList = true;
+    await this.logChangeContentService.writeLogEditVoidReason(this.requestDetail.requestId,
+      this.confirmationComponent.initialVoidReason, this.confirmationComponent.confirmation.voidReason);
     const result = await this.appService.insertQueue(this.voidQuery);
     this.isBlockBetList = false;
     if (!result.isSuccessful) {

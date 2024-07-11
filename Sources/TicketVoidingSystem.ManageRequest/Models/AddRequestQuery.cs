@@ -9,6 +9,8 @@ public class AddRequestQuery
         OperatorsList = new List<OperatorQuery>();
     }
 
+    public int SessionTime { get; set; }
+
     public string Guid { get; set; }
 
     public int? SportType { get; set; }

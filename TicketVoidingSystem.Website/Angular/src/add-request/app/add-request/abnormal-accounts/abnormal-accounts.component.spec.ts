@@ -227,6 +227,7 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#changeFilter should update isShowAccountWinLost and isShowError to false', async () => {
     const { instance } = await shallow
+      .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
       .render({
         bind: {
           abnormalAccountModel: Helper.fakeAbnormalAccountModel,
@@ -303,10 +304,10 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#handleSearchEvent should called #validationService.checkBusinessRule and update accountTableComponent.isCancelRecalculateAmount to true', async () => {
     const validationOutput = {
-      accountWinlostModels:  [new AccountWinlostModel()]
+      accountWinlostModels: [new AccountWinlostModel()]
     } as ValidationBusinessRuleOutput;
     const mockChangeBlockingUiStatus = jest.fn();
-    const mockCheckBusinessRule  = jest.fn().mockReturnValue(validationOutput);
+    const mockCheckBusinessRule = jest.fn().mockReturnValue(validationOutput);
     const { instance } = await shallow
       .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(false) })
       .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })
@@ -330,10 +331,10 @@ describe('AbnormalAccountsComponent', () => {
 
   it('#handleSearchEvent should not called #validationService.checkBusinessRule', async () => {
     const validationOutput = {
-      accountWinlostModels:  [new AccountWinlostModel()]
+      accountWinlostModels: [new AccountWinlostModel()]
     } as ValidationBusinessRuleOutput;
     const mockChangeBlockingUiStatus = jest.fn();
-    const mockCheckBusinessRule  = jest.fn().mockReturnValue(validationOutput);
+    const mockCheckBusinessRule = jest.fn().mockReturnValue(validationOutput);
     const { instance } = await shallow
       .mock(ValidationService, { isAutoVoidWithPolicy: jest.fn().mockReturnValue(false) })
       .mock(AddRequestStore, { changeBlockingUiStatus: mockChangeBlockingUiStatus })

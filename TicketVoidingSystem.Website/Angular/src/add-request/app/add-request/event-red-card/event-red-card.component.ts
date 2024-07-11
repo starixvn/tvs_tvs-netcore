@@ -5,6 +5,7 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
@@ -27,7 +28,6 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 @Component({
   selector: 'event-red-card',
@@ -44,10 +44,8 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() redCardModels: RedCardModel[] = [];
-
   @Output() redCardModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
-
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
   @ViewChild('leagueEvent') leagueEventRedCardComponent: LeagueEventRedCardComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
@@ -138,6 +136,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   }
 
   changeMatchEvent(): void {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoMainMatch = false;
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);

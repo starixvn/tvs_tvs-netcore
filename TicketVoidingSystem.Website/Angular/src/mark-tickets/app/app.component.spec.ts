@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Shallow } from 'shallow-render';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
+import { CommonService } from '../../utility/services/common.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
@@ -16,8 +17,9 @@ describe('AppComponent', () => {
             TabMarkTicketComponent,
             MarkUnmarkTicketComponent,
             MenuBarComponent,
-            UserLogComponent],
-        providers: [AppService]
+            UserLogComponent
+        ],
+        providers: [AppService, CommonService]
     })
     class AppModuleTest { }
 
@@ -25,7 +27,8 @@ describe('AppComponent', () => {
 
     beforeEach(() => {
         shallow = new Shallow(AppComponent, AppModuleTest)
-            .mock(SignalRService, { initializeConnection: jest.fn() });;
+            .mock(SignalRService, { initializeConnection: jest.fn() })
+            .mock(CommonService, { logAccessFunction: jest.fn() });
     });
 
     ['0', '1'].forEach((tab, index) => {

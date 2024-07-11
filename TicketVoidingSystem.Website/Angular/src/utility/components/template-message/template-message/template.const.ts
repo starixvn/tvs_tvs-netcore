@@ -1,7 +1,7 @@
 ﻿import { TemplateContent } from './template.model';
 
 export class Format {
-  static readonly EVENT_DATE = 'D/M';
+  static readonly EVENT_DATE = 'DD/MM';
 }
 
 export class VoidFunction {
@@ -140,7 +140,7 @@ export class TemplateContentConst {
     msgChineseNewSimplified: '(北京时间)'
   };
 
-  static readonly DATE_TIME = 'D/M h:mm:ss A';
+  static readonly DATE_TIME = 'DD/MM h:mm:ss A';
 
   static readonly ONWARDS: TemplateContent = {
     msgEnglish: 'onwards',

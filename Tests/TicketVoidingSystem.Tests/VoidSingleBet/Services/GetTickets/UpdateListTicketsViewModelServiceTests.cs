@@ -21,7 +21,7 @@ public class UpdateListTicketsViewModelServiceTests
     public void Update_ValidParams_ModelHasUpdated(bool isMixParlay)
     {
         // Arrange
-        var betTypeNameReplaceMessage = new TemplateContentModel
+        var betTypeNameReplaceMessage = new ContentByLanguageModel
         {
             ContentEnglish = "ContentEnglish",
             ContentChineseTraditional = "ContentChineseTraditional",

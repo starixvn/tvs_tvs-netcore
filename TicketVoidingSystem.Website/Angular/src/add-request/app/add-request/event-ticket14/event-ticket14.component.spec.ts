@@ -69,12 +69,9 @@ describe('EventTicket14Component', () => {
   it('#afterFocusOutBetIds should call #checkBusinessRule', async () => {
     const mockCheckBusinessRule = jest.fn();
     const { instance } = await shallow
-    .mock(ValidationService, {
-      checkBusinessRule: mockCheckBusinessRule,
-    })
-    .mock(AddRequestApiService, {
-      getPermissionAddRequest: jest.fn(),
-    })
+    .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
+    .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         eventTicket14Model: Helper.fakeEventTicket14Model,
@@ -93,12 +90,9 @@ describe('EventTicket14Component', () => {
   it('#afterFocusOutBetIds should not call #checkBusinessRule', async () => {
     const mockCheckBusinessRule = jest.fn();
     const { instance } = await shallow
-    .mock(ValidationService, {
-      checkBusinessRule: mockCheckBusinessRule,
-    })
-    .mock(AddRequestApiService, {
-      getPermissionAddRequest: jest.fn(),
-    })
+    .mock(ValidationService, { checkBusinessRule: mockCheckBusinessRule })
+    .mock(AddRequestApiService, { getPermissionAddRequest: jest.fn() })
+    .mock(AddRequestStore, { changeStartTimeFilterAnalysis: jest.fn() })
     .render({
       bind: {
         eventTicket14Model: Helper.fakeEventTicket14Model,

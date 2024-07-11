@@ -10,8 +10,17 @@ export class AddRequestStore {
   private readonly blockingUiStatusSubject: BehaviorSubject<boolean[]> = new BehaviorSubject([]);
   private readonly changeActionWaitingToManualEditPageSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private readonly abnormalFilterBySubject: Subject<number> = new Subject();
+  private startTimeFilterTicket: Date;
 
   constructor() {
+  }
+
+  get getStartTimeFilterTicket(): Date {
+    return this.startTimeFilterTicket;
+  }
+
+  changeStartTimeFilterAnalysis(newValue: Date): void {
+    this.startTimeFilterTicket = newValue;
   }
 
   get savingRequestStatus(): Observable<boolean> {

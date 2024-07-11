@@ -7,6 +7,7 @@ import { Result } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
 import { ResultModelService } from '../../../../utility/services/result-model.service';
 import { StaticService } from '../../../../utility/services/static.service';
+import { MessageAreaComponent } from '../../message-area/message-area.component';
 import { VoidMatch } from '../../models/void-match.model';
 
 @Injectable({
@@ -16,13 +17,13 @@ export class ValidationService {
 
   constructor(private readonly commonService: CommonService) { }
 
-  checkValidationBeforeVoid(matchHasTickets: VoidMatch[], templateMessageComponents: TemplateMessageComponent[]): Result<null> {
+  checkValidationBeforeVoid(matchHasTickets: VoidMatch[], messageAreaComponents: MessageAreaComponent[]): Result<null> {
     if (matchHasTickets.length === 0) {
       return ResultModelService.createFailResult(LABELS.ALL_TICKETS_VOIDED, 1);
     }
 
     for (const item of matchHasTickets) {
-      const messageComponent = templateMessageComponents.find(x => x.value.matchId === item.matchModel.matchId);
+      const messageComponent = messageAreaComponents.map(x => x.templateMessageComponent).find(x => x.value.matchId === item.matchModel.matchId);
       if (!messageComponent) {
         return ResultModelService.createFailResult(`${LABELS.INVALID_TEMPLATE_MESSAGE} (MatchId: ${item.matchModel.matchId})`, 1);
       }

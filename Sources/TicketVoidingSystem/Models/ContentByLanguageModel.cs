@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.Models;
 
-public class TemplateContentModel
+public class ContentByLanguageModel
 {
     public string ContentEnglish { get; set; }
 

@@ -105,6 +105,7 @@ export class EventWrongOuComponent implements OnInit {
   }
 
   public changeMatchEvent(): void {
+    this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoWrongOuService.resetLogInfoOfEvent(this.allSelectedEvents);

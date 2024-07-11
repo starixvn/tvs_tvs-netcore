@@ -6,11 +6,11 @@
         <label for="reason">Reason (EN)</label>
       </td>
       <td>
-        <textarea maxlength="150" class="reason form-control form-control-sm" [(ngModel)]="confirmation.reason"
+        <textarea maxlength="150" class="reason form-control form-control-sm" [(ngModel)]="confirmation.voidReason.reasonEnglish"
           rows="1"></textarea>
       </td>
       <td>
-        <span class="required">&nbsp;&nbsp;(*)</span> <span>Max {{150 - confirmation.reason.length}} characters</span>
+        <span class="required">&nbsp;&nbsp;(*)</span> <span>Max {{150 - confirmation.voidReason.reasonEnglish.length}} characters</span>
       </td>
     </tr>
     <tr>
@@ -18,11 +18,11 @@
         <label for="reasonSC">Reason (SC)</label>
       </td>
       <td>
-        <textarea maxlength="150" class="reasonSC form-control form-control-sm" [(ngModel)]="confirmation.reasonSC"
+        <textarea maxlength="150" class="reasonSC form-control form-control-sm" [(ngModel)]="confirmation.voidReason.reasonChineseSimplified"
           rows="1"></textarea>
       </td>
       <td>
-        <span class="required">&nbsp;&nbsp;(*)</span> <span>Max {{150 - confirmation.reasonSC.length}} characters</span>
+        <span class="required">&nbsp;&nbsp;(*)</span> <span>Max {{150 - confirmation.voidReason.reasonChineseSimplified.length}} characters</span>
       </td>
     </tr>
     <tr>

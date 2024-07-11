@@ -23,6 +23,7 @@ import { RecoverTicketModel } from './recover-ticket.model';
 
 export class AddRequestQuery {
   guid: string;
+  sessionTime: number;
   sportType: number;
   subIssueTypeId: string;
   actionId: string;

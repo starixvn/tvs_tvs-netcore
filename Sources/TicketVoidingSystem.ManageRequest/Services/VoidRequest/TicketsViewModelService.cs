@@ -195,7 +195,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
         model.BetTypeNameReplaceMessage = GetSpecialBetTypeContent(betTypeIds, allTickets);
     }
 
-    private TemplateContentModel GetSpecialBetTypeContent(IEnumerable<int> betTypeIds, IEnumerable<GetTicketModel> allTickets)
+    private ContentByLanguageModel GetSpecialBetTypeContent(IEnumerable<int> betTypeIds, IEnumerable<GetTicketModel> allTickets)
     {
         if (betTypeIds.Count() == 1)
         {
@@ -211,7 +211,7 @@ public class TicketsViewModelServiceImp : TicketsViewModelService
             return specialBetTypeContentService.GetContentForVoidPage(emailTickets);
         }
 
-        return new TemplateContentModel();
+        return new ContentByLanguageModel();
     }
 
     private static void UpdateTimeViewModel(TicketsViewModel model, IEnumerable<GetTicketModel> data)
