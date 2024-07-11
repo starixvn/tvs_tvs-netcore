@@ -38,6 +38,7 @@ export class MatchModel {
   numberOfCorner?: number;
   name?: string;
   parentId?: number;
+  subtype?: number;
 }
 
 export class CheckMatchWithRefNoQuery {

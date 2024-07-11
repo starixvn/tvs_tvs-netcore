@@ -92,6 +92,31 @@ class Helper {
     getLogInfoModels: [Helper.fakeGetLogInfoModel],
     transInfoAddRequestModel: new TransInfoAddRequestModel()
   };
+  static readonly fromDate = '2021-12-18 12:08:49.737';
+  static readonly toDate = '2021-12-21 12:08:49.737';
+  static readonly fakeWrongOddsModel: WrongOddsModel = {
+    filterFromTransTime: Helper.fromDate,
+    filterToTransTime: Helper.toDate,
+    favoriteValue: '1',
+    filterFavoriteType: 'h',
+    liveIndicator: 1,
+    spread: '0.2',
+    allowanceRate: '20',
+    correctOddsHomeOver: '0.8',
+    correctOddsAwayUnder: '0.9',
+    fromOddsNotVoidHomeOver: '0.65',
+    toOddsNotVoidHomeOver: '0.85',
+    fromOddsNotVoidAwayUnder: '0.5',
+    toOddsNotVoidAwayUnder: '0.9',
+    matchId: 0,
+    subIssueTypeId: 0,
+    logInfoDetail: new LogInfoDetail,
+    poolHouseCheckedBetTypes: '',
+    isPoolHouseAffected: false,
+    isLinkGroup1X2: false,
+    isLinkGroupAIO: false,
+    oddsInfo: null
+  };
 }
 
 describe('LogInfoService', () => {
@@ -424,7 +449,7 @@ describe('LogInfoService', () => {
   it('#getLogInfoWrongOdds should get correct info', async () => {
     // Arrange
     const spyCommonServiceGetLogInfo = jest.spyOn(commonService, 'getLogInfo').mockImplementation(() => Promise.resolve(Helper.fakeGetLogInfoViewModel));
-    const wrongOddsModel = new WrongOddsModel();
+    const wrongOddsModel = Helper.fakeWrongOddsModel;
     wrongOddsModel.matchId = Helper.fakeMatchId;
     const detailViewModel = _.clone(Helper.fakeRequestDetailViewModel);
     detailViewModel.wrongOddsModels = [wrongOddsModel];

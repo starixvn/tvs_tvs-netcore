@@ -22,21 +22,25 @@ public class GetLinkedLogModel
 
     public int LiveIndicator { get; set; }
 
-    public string? FilterOddsType { get; set; }
-
     public string? FilterFavoriteType { get; set; }
 
-    public string? FilterOuType { get; set; }
-
-    public string? OddsValue { get; set; }
-
-    public string? FromOdds { get; set; }
-
-    public string? ToOdds { get; set; }
-
-    public string? BetTeam { get; set; }
-
-    public string? OuValue { get; set; }
-
     public string? FavoriteValue { get; set; }
+
+    public string? WrongOU { get; set; }
+
+    public string? Spread { get; set; }
+
+    public string? AllowanceRate { get; set; }
+
+    public string? CorrectOddsHomeOver { get; set; }
+
+    public string? CorrectOddsAwayUnder { get; set; }
+
+    public string? FromOddsNotVoidHomeOver { get; set; }
+
+    public string? ToOddsNotVoidHomeOver { get; set; }
+
+    public string? FromOddsNotVoidAwayUnder { get; set; }
+
+    public string? ToOddsNotVoidAwayUnder { get; set; }
 }

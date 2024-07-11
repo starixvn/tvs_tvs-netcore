@@ -40,6 +40,7 @@ public static class AppSettingService
             FanexRemotingRefServiceUrl = configuration.GetValue<string>(nameof(AppSettingModel.FanexRemotingRefServiceUrl)),
             ServiceName = configuration.GetValue<string>(nameof(AppSettingModel.ServiceName)),
             AmendmentApi = configuration.GetValue<string>(nameof(AppSettingModel.AmendmentApi)),
+            OWPUrl = configuration.GetValue<string>(nameof(AppSettingModel.OWPUrl)),
             EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
             JackTimeCashOutUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeCashOutUrl)),
             LinkedLogUrl = configuration.GetValue<string>(nameof(AppSettingModel.LinkedLogUrl)),

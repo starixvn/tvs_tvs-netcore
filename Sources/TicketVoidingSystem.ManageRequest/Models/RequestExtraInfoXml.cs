@@ -50,36 +50,6 @@ public class RequestExtraInfoXml
     [XmlAttribute(AttributeName = "IsCheckedVar")]
     public bool IsCheckedVar { get; set; }
 
-    [XmlAttribute(AttributeName = "FilterOddsType")]
-    public string FilterOddsType { get; set; }
-
-    [XmlAttribute(AttributeName = "FilterFavoriteType")]
-    public string FilterFavoriteType { get; set; }
-
-    [XmlAttribute(AttributeName = "FilterOuType")]
-    public string FilterOuType { get; set; }
-
-    [XmlAttribute(AttributeName = "OddsValue")]
-    public string OddsValue { get; set; }
-
-    [XmlAttribute(AttributeName = "FromOdds")]
-    public string FromOdds { get; set; }
-
-    [XmlAttribute(AttributeName = "ToOdds")]
-    public string ToOdds { get; set; }
-
-    [XmlAttribute(AttributeName = "CorrectOdds")]
-    public string CorrectOdds { get; set; }
-
-    [XmlAttribute(AttributeName = "BetTeam")]
-    public string BetTeam { get; set; }
-
-    [XmlAttribute(AttributeName = "OuValue")]
-    public string OuValue { get; set; }
-
-    [XmlAttribute(AttributeName = "FavoriteValue")]
-    public string FavoriteValue { get; set; }
-
     [XmlAttribute(AttributeName = "BetTypeIds")]
     public string BetTypeIds { get; set; } // ReducedOver + NotParticipate multiple option
 
@@ -100,4 +70,38 @@ public class RequestExtraInfoXml
 
     [XmlAttribute(AttributeName = "PlayerId")]
     public int PlayerId { get; set; } // NotParticipate
+
+    // value filter Wrong Odds
+    [XmlAttribute(AttributeName = "FilterFavoriteType")]
+    public string FilterFavoriteType { get; set; }
+
+    [XmlAttribute(AttributeName = "FavoriteValue")]
+    public string FavoriteValue { get; set; }
+
+    [XmlAttribute(AttributeName = "WrongOU")]
+    public string WrongOU { get; set; }
+
+    [XmlAttribute(AttributeName = "Spread")]
+    public string Spread { get; set; }
+
+    [XmlAttribute(AttributeName = "AllowanceRate")]
+    public string AllowanceRate { get; set; }
+
+    [XmlAttribute(AttributeName = "CorrectOddsHomeOver")]
+    public string CorrectOddsHomeOver { get; set; }
+
+    [XmlAttribute(AttributeName = "CorrectOddsAwayUnder")]
+    public string CorrectOddsAwayUnder { get; set; }
+
+    [XmlAttribute(AttributeName = "FromOddsNotVoidHomeOver")]
+    public string FromOddsNotVoidHomeOver { get; set; }
+
+    [XmlAttribute(AttributeName = "ToOddsNotVoidHomeOver")]
+    public string ToOddsNotVoidHomeOver { get; set; }
+
+    [XmlAttribute(AttributeName = "FromOddsNotVoidAwayUnder")]
+    public string FromOddsNotVoidAwayUnder { get; set; }
+
+    [XmlAttribute(AttributeName = "ToOddsNotVoidAwayUnder")]
+    public string ToOddsNotVoidAwayUnder { get; set; }
 }

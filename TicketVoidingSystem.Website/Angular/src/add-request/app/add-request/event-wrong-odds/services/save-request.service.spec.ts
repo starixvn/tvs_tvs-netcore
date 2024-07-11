@@ -1,3 +1,4 @@
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
@@ -10,7 +11,7 @@ import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from 
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { OthersModel } from '../../others/others.model';
 import { PopupService } from '../../services/popup.service';
-import { FilterOddsTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
+import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -18,6 +19,7 @@ import { EventWrongOddsService } from './event-wrong-odds.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -73,21 +75,21 @@ class Helper {
   static readonly fakeFilterWrongOddsModel: FilterWrongOddsModel = {
     filterFromTransTime: Helper.fakeFromDateTime,
     filterToTransTime: Helper.fakeToDateTime,
-    betTeam: 'h',
-    correctOdds: '1',
-    favoriteValue: '1',
-    filterFavoriteType: 'h',
-    filterOddsType: 'value',
-    filterOuType: 'h',
-    fromOdds: '1',
-    oddsValue: '1',
-    ouValue: '1',
     liveIndicator: 0,
-    toOdds: '1'
+    spread: '',
+    maxBet: 0,
+    allowanceRate: '',
+    correctOddsHomeOver: '',
+    correctOddsAwayUnder: '',
+    fromOddsNotVoidHomeOver: '',
+    toOddsNotVoidHomeOver: '',
+    fromOddsNotVoidAwayUnder: '',
+    toOddsNotVoidAwayUnder: '',
+    maxBetAndSpreadInfo: []
   };
   static readonly fakeLogInfoWrongOdds: LogInfoWrongOdds = {
     matchId: Helper.fakeMatchId,
-    filterWrongOdds: new FilterWrongOddsModel(),
+    filterWrongOdds: Helper.fakeFilterWrongOddsModel,
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
@@ -150,7 +152,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => true);
-    const eventWrongOddsService = new EventWrongOddsService(null);
+    const eventWrongOddsService = new EventWrongOddsService(null, null);
     eventWrongOddsService.getLinkedLog = jest.fn();
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOddsService);
 
@@ -176,7 +178,7 @@ describe('SaveRequestService', () => {
     const validationService = new ValidationService();
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isValidLogInfoEvent = jest.fn().mockImplementation(() => false);
-    const eventWrongOddsService = new EventWrongOddsService(null);
+    const eventWrongOddsService = new EventWrongOddsService(null, null);
     eventWrongOddsService.getLinkedLog = jest.fn();
     const saveRequestService = new SaveRequestService(validationService, logInfoService, null, null, eventWrongOddsService);
 
@@ -352,6 +354,9 @@ describe('SaveRequestService', () => {
     arg.filter.isVoided = true;
     arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
     arg.primitiveProps = new PrimitiveProperty();
+    arg.eventLeagueComponent = new EventLeagueComponent(null, null);
+    arg.eventLeagueComponent.selectedMatch = new MatchModel();
+    arg.eventLeagueComponent.selectedMatch.sportType = 2;
     service['getWrongOddsInfo'] = jest.fn();
 
     const actual = service['initAddRequestQuery'](arg);
@@ -367,6 +372,9 @@ describe('SaveRequestService', () => {
     arg.others = new OthersModel();
     arg.filter.issueTypeId = IssueTypeConstant.WRONG_ODDS;
     arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
+    arg.eventLeagueComponent = new EventLeagueComponent(null, null);
+    arg.eventLeagueComponent.selectedMatch = new MatchModel();
+    arg.eventLeagueComponent.selectedMatch.sportType = 2;
     arg.primitiveProps = new PrimitiveProperty();
     arg.primitiveProps.transInfoAddRequestModel = new TransInfoAddRequestModel();
     service['getWrongOddsInfo'] = jest.fn();
@@ -383,7 +391,6 @@ describe('SaveRequestService', () => {
     arg.others = new OthersModel();
     arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
     arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    arg.logInfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.VALUE;
     const validationService = new ValidationService();
     validationService.isSubTypeOuOr1stOu = jest.fn().mockImplementation(() => true);
     const saveRequestService = new SaveRequestService(validationService, null, null, null, null);
@@ -399,7 +406,6 @@ describe('SaveRequestService', () => {
     arg.others = new OthersModel();
     arg.filter.issueTypeId = IssueTypeConstant.WRONG_1ST_HDP;
     arg.logInfoEvent = Helper.fakeLogInfoWrongOdds;
-    arg.logInfoEvent.filterWrongOdds.filterOddsType = FilterOddsTypeConstant.RANGE;
     const validationService = new ValidationService();
     validationService.isSubTypeOuOr1stOu = jest.fn().mockImplementation(() => false);
     const saveRequestService = new SaveRequestService(validationService, null, null, null, null);

@@ -5,7 +5,6 @@ import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { PopupService } from '../../services/popup.service';
-import { FilterOddsTypeConstant } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
@@ -25,7 +24,6 @@ export class SaveRequestService {
     private readonly eventWrongOddsService: EventWrongOddsService,
   ) { }
 
-
   async saveRequest(argWrongOdds: SaveRequestArg): Promise<void> {
     const isDataValid = argWrongOdds.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argWrongOdds);
     argWrongOdds.addRequestStore.changeBlockingUiStatus(true);
@@ -42,7 +40,7 @@ export class SaveRequestService {
     this.logInfoWrongOddsService.resetLogInfoOfEvent(argWrongOdds.logInfoEvent);
     argWrongOdds.primitiveProps.isShowValidation = false;
 
-    if (!this.validationService.validateCommonData(argWrongOdds.leagueEventWrongOddsComponent, argWrongOdds.filterWrongOddsComponent)) {
+    if (!this.validationService.validateCommonData(argWrongOdds.eventLeagueComponent, argWrongOdds.filterWrongOddsComponent)) {
       return false;
     }
 
@@ -117,7 +115,7 @@ export class SaveRequestService {
     query.issueTypeId = argWrongOdds.filter.issueTypeId;
     query.isTest = argWrongOdds.filter.isTest;
     query.actionId = argWrongOdds.filter.action;
-    query.sportType = argWrongOdds.filter.sportType;
+    query.sportType = argWrongOdds.eventLeagueComponent.selectedMatch.sportType;
     query.isVoided = argWrongOdds.filter.isVoided;
 
     query.mistakenBy = argWrongOdds.others.mistakenBy;
@@ -141,25 +139,23 @@ export class SaveRequestService {
     model.filterFromTransTime = logInfoWrongOdds.filterWrongOdds.filterFromTransTime;
     model.filterToTransTime = logInfoWrongOdds.filterWrongOdds.filterToTransTime;
     model.liveIndicator = logInfoWrongOdds.filterWrongOdds.liveIndicator;
-    model.filterFavoriteType = logInfoWrongOdds.filterWrongOdds.filterFavoriteType;
-    model.filterOddsType = logInfoWrongOdds.filterWrongOdds.filterOddsType;
-    model.filterOuType = logInfoWrongOdds.filterWrongOdds.filterOuType;
-
-    model.correctOdds = logInfoWrongOdds.filterWrongOdds.correctOdds;
     model.isLinkGroup1X2 = logInfoWrongOdds.linkedLogsViewModel.isLinkGroup1X2;
     model.isLinkGroupAIO = logInfoWrongOdds.linkedLogsViewModel.isLinkGroupAIO;
 
-    if (logInfoWrongOdds.filterWrongOdds.filterOddsType === FilterOddsTypeConstant.VALUE) {
-      model.oddsValue = logInfoWrongOdds.filterWrongOdds.oddsValue;
-    } else {
-      model.fromOdds = logInfoWrongOdds.filterWrongOdds.fromOdds;
-      model.toOdds = logInfoWrongOdds.filterWrongOdds.toOdds;
-    }
+    model.spread = logInfoWrongOdds.filterWrongOdds.spread.toString();
+    model.allowanceRate = logInfoWrongOdds.filterWrongOdds.allowanceRate;
+    model.correctOddsHomeOver = logInfoWrongOdds.filterWrongOdds.correctOddsHomeOver;
+    model.correctOddsAwayUnder = logInfoWrongOdds.filterWrongOdds.correctOddsAwayUnder;
+    
+    model.fromOddsNotVoidHomeOver = logInfoWrongOdds.filterWrongOdds.fromOddsNotVoidHomeOver;
+    model.toOddsNotVoidHomeOver = logInfoWrongOdds.filterWrongOdds.toOddsNotVoidHomeOver;
+    model.fromOddsNotVoidAwayUnder = logInfoWrongOdds.filterWrongOdds.fromOddsNotVoidAwayUnder;
+    model.toOddsNotVoidAwayUnder = logInfoWrongOdds.filterWrongOdds.toOddsNotVoidAwayUnder;
 
     if (this.validationService.isSubTypeOuOr1stOu(subIssueTypeId)) {
-      model.ouValue = logInfoWrongOdds.filterWrongOdds.ouValue;
+      model.wrongOU = logInfoWrongOdds.filterWrongOdds.wrongOU;
     } else {
-      model.betTeam = logInfoWrongOdds.filterWrongOdds.betTeam;
+      model.filterFavoriteType = logInfoWrongOdds.filterWrongOdds.filterFavoriteType;
       model.favoriteValue = logInfoWrongOdds.filterWrongOdds.favoriteValue;
     }
 

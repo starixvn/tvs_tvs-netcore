@@ -54,10 +54,10 @@ export class TemplateValue {
   isCheckedSpecialBetType?: boolean;
   betTypeNameReplaceMessage?: Message;
   match?: MatchModel;
-  betTeam?: string;
-  correctOdds?: string;
-  filterOuType?: string;
-  ouValue?: string;
+  filterFavoriteType?: string;
+  correctOddsHomeOver?: string;
+  correctOddsAwayUnder?: string;
+  wrongOU?: string;
   isCheckedVar?: boolean;
   playerName?: TemplateContent;
   numberOfCorner?: number;

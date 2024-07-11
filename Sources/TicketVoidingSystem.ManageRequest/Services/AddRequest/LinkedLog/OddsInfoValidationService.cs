@@ -84,72 +84,30 @@ public class OddsInfoValidationServiceImp : OddsInfoValidationService
         {
             SubIssueTypeConstant.Handicap => CheckHdpWrongOddsByFavoriteType(linkedOddsInfo, getLinkedLogModel),
             SubIssueTypeConstant.FirstHalfHandicap => CheckHdpWrongOddsByFavoriteType(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.OverUnder => CheckHdpWrongOddsByOuType(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.FirstHalfOverUnder => CheckHdpWrongOddsByOuType(linkedOddsInfo, getLinkedLogModel),
+            SubIssueTypeConstant.OverUnder => CheckHdpWrongOddsByWrongOu(linkedOddsInfo, getLinkedLogModel),
+            SubIssueTypeConstant.FirstHalfOverUnder => CheckHdpWrongOddsByWrongOu(linkedOddsInfo, getLinkedLogModel),
             _ => false
         };
     }
 
     public bool IsValidOddsWrongOdds(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return getLinkedLogModel.SubIssueTypeId switch
-        {
-            SubIssueTypeConstant.Handicap => CheckOddsWrongOddsByBetTeam(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.FirstHalfHandicap => CheckOddsWrongOddsByBetTeam(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.OverUnder => CheckOddsWrongOddsByOuType(linkedOddsInfo, getLinkedLogModel),
-            SubIssueTypeConstant.FirstHalfOverUnder => CheckOddsWrongOddsByOuType(linkedOddsInfo, getLinkedLogModel),
-            _ => false
-        };
+        return decimal.Parse(getLinkedLogModel.FromOddsNotVoidHomeOver) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidHomeOver) < linkedOddsInfo.Odds2a
+            || decimal.Parse(getLinkedLogModel.FromOddsNotVoidAwayUnder) > linkedOddsInfo.Odds1a || decimal.Parse(getLinkedLogModel.ToOddsNotVoidAwayUnder) < linkedOddsInfo.Odds2a;
     }
 
     private bool CheckHdpWrongOddsByFavoriteType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         return getLinkedLogModel.FilterFavoriteType switch
         {
-            FilterTypeWrongOddsConstant.FilterFavoriteTypeHome => IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp1),
-            FilterTypeWrongOddsConstant.FilterFavoriteTypeAway => IsContainsValue(getLinkedLogModel.FavoriteValue, linkedOddsInfo.Hdp2),
+            FilterTypeWrongOddsConstant.FilterFavoriteTypeHome => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp1,
+            FilterTypeWrongOddsConstant.FilterFavoriteTypeAway => decimal.Parse(getLinkedLogModel.FavoriteValue) == linkedOddsInfo.Hdp2,
             _ => false
         };
     }
 
-    private bool CheckHdpWrongOddsByOuType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    private static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return getLinkedLogModel.FilterOuType switch
-        {
-            FilterTypeWrongOddsConstant.FilterOuTypeHome => IsContainsValue(getLinkedLogModel.OuValue, linkedOddsInfo.Hdp1),
-            FilterTypeWrongOddsConstant.FilterOuTypeAway => IsContainsValue(getLinkedLogModel.OuValue, linkedOddsInfo.Hdp2),
-            _ => false
-        };
-    }
-
-    private bool CheckOddsWrongOddsByOuType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
-    {
-        return getLinkedLogModel.FilterOuType switch
-        {
-            FilterTypeWrongOddsConstant.FilterOuTypeHome => CheckOddsWrongOddsByOddsType(getLinkedLogModel, linkedOddsInfo.Odds1a),
-            FilterTypeWrongOddsConstant.FilterOuTypeAway => CheckOddsWrongOddsByOddsType(getLinkedLogModel, linkedOddsInfo.Odds2a),
-            _ => false
-        };
-    }
-
-    private bool CheckOddsWrongOddsByBetTeam(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
-    {
-        return getLinkedLogModel.BetTeam switch
-        {
-            FilterTypeWrongOddsConstant.BetTeamHome => CheckOddsWrongOddsByOddsType(getLinkedLogModel, linkedOddsInfo.Odds1a),
-            FilterTypeWrongOddsConstant.BetTeamAway => CheckOddsWrongOddsByOddsType(getLinkedLogModel, linkedOddsInfo.Odds2a),
-            _ => false
-        };
-    }
-
-    private bool CheckOddsWrongOddsByOddsType(GetLinkedLogModel getLinkedLogModel, decimal? oddsFromApi)
-    {
-        return getLinkedLogModel.FilterOddsType switch
-        {
-            FilterTypeWrongOddsConstant.FilterOddsTypeValue => IsContainsValue(getLinkedLogModel.OddsValue, oddsFromApi),
-            FilterTypeWrongOddsConstant.FilterOddsTypeRange => decimal.Parse(getLinkedLogModel.FromOdds) <= oddsFromApi
-                                                               && decimal.Parse(getLinkedLogModel.ToOdds) >= oddsFromApi,
-            _ => false
-        };
+        return decimal.Parse(getLinkedLogModel.WrongOU) == linkedOddsInfo.Odds1a;
     }
 }

@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
-// import { CheckValidTransIdsQuery } from '../..//add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
-// import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
-// import { GetLogInfoModel } from '../../add-request/app/add-request/models/get-log-info.model';
-// import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
 import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoViewModel } from '../../add-request/app/add-request/models/get-log-info.model';
 import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
@@ -23,6 +19,7 @@ import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models
 import { Result, SqlResult } from '../models/result';
 import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { HttpService } from './http.service';
+
 @Injectable({
   providedIn: 'root'
 })

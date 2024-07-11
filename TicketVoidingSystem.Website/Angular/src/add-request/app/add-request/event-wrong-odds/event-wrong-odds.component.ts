@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, SimpleChanges } from '@angular/core';
 import { PoolHouseTicketValue } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
@@ -13,6 +12,10 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { CalculateOddsService } from './services/calculate-odds.service';
+import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
+import { AddRequestApiService } from '../add-request-api.service';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -29,7 +32,7 @@ export class EventWrongOddsComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOddsModels: WrongOddsModel[] = [];
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventWrongOddsComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('filterWrongOdds') filterWrongOddsComponent: FilterWrongOddsComponent;
   logInfoEvent = new LogInfoWrongOdds();
   primitiveProps = new PrimitiveProperty();
@@ -39,8 +42,9 @@ export class EventWrongOddsComponent implements OnInit {
     private readonly eventWrongOddsService: EventWrongOddsService,
     private readonly logInfoService: LogInfoService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly saveRequestService: SaveRequestService
-
+    private readonly saveRequestService: SaveRequestService,
+    private readonly calculateOddsService: CalculateOddsService,
+    private readonly addRequestApiService: AddRequestApiService
     ) { }
 
   ngOnInit(): void {
@@ -49,6 +53,21 @@ export class EventWrongOddsComponent implements OnInit {
     } else {
       this.logInfoEvent = this.eventWrongOddsService.initDefaultLogInfoWrongOdds();
     }
+  }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if (changes['filter'] && this.filter.isChangeSubTypeManual) {
+      if(!this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo){
+        this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = await this.GetMaxBetAndSpreadOfEvent();
+      }
+
+      this.calculateOddsService.resetOddsInfo(this.filterWrongOddsComponent.filterWrongOddsModel, this.filter.subIssueTypeId);
+    }
+  }
+
+  public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpreadInfo[]>{
+    const query = this.calculateOddsService.createMaxBetAndSpreadQuery(this.eventLeagueComponent.selectedMatch);
+    return await this.addRequestApiService.getMaxBetAndSpreadOfEvent(query);
   }
 
   public async clickSearch(): Promise<void> {
@@ -60,10 +79,11 @@ export class EventWrongOddsComponent implements OnInit {
     this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
-    if (!this.validationService.validateCommonData(this.leagueEventWrongOddsComponent, this.filterWrongOddsComponent)) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsComponent)) {
       return;
     }
 
+    this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
@@ -75,6 +95,7 @@ export class EventWrongOddsComponent implements OnInit {
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.primitiveProps.isShowValidation = false;
+    this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }
@@ -90,18 +111,22 @@ export class EventWrongOddsComponent implements OnInit {
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
     arg.filterWrongOddsComponent = this.filterWrongOddsComponent;
-    arg.leagueEventWrongOddsComponent = this.leagueEventWrongOddsComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
 
     return arg;
   }
 
-  public changeMatchEvent(): void {
+  public async changeMatchEvent(): Promise<void> {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-    this.logInfoEvent.matchId = this.leagueEventWrongOddsComponent?.selectedMatch.matchId;
+    this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch?.matchId;
+    if(this.eventLeagueComponent.selectedMatch){
+      await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds,   
+        this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
+    }
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
-    this.updateMatchId.emit(this.logInfoEvent.matchId);
+    this.updateMatchId.emit(this.logInfoEvent.matchId)
   }
 
   public resetLogInfoOfEvent(): void {

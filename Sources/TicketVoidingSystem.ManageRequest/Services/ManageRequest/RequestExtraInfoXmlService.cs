@@ -38,16 +38,6 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
                 model.IsLinkGroup1X2 = root.IsLinkGroup1X2;
                 model.IsLinkGroupAIO = root.IsLinkGroupAIO;
                 model.LiveIndicator = root.LiveIndicator;
-                model.FilterOddsType = root.FilterOddsType;
-                model.FilterFavoriteType = root.FilterFavoriteType;
-                model.FilterOuType = root.FilterOuType;
-                model.OddsValue = root.OddsValue;
-                model.FromOdds = root.FromOdds;
-                model.ToOdds = root.ToOdds;
-                model.CorrectOdds = root.CorrectOdds;
-                model.BetTeam = root.BetTeam;
-                model.OuValue = root.OuValue;
-                model.FavoriteValue = root.FavoriteValue;
                 model.BetTypeIds = root.BetTypeIds;
                 model.WicketOver = root.WicketOver;
                 model.PlayerIds = root.PlayerIds;
@@ -55,6 +45,17 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
                 model.Live = root.Live;
                 model.NonLive = root.NonLive;
                 model.PlayerId = root.PlayerId;
+                model.FilterFavoriteType = root.FilterFavoriteType;
+                model.FavoriteValue = root.FavoriteValue;
+                model.WrongOU = root.WrongOU;
+                model.Spread = root.Spread;
+                model.AllowanceRate = root.AllowanceRate;
+                model.CorrectOddsHomeOver = root.CorrectOddsHomeOver;
+                model.CorrectOddsAwayUnder = root.CorrectOddsAwayUnder;
+                model.FromOddsNotVoidHomeOver = root.FromOddsNotVoidHomeOver;
+                model.ToOddsNotVoidHomeOver = root.ToOddsNotVoidHomeOver;
+                model.FromOddsNotVoidAwayUnder = root.FromOddsNotVoidAwayUnder;
+                model.ToOddsNotVoidAwayUnder = root.ToOddsNotVoidAwayUnder;
             }
         }
     }

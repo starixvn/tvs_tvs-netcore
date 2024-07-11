@@ -1,33 +1,18 @@
-import { NgModule } from '@angular/core';
-import { BlockFullUiModule } from '../../../utility/components/block-full-ui/block-full-ui.module';
-import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { ModalService } from '../../../utility/components/modal/modal.service';
-import { ToolTipModule } from '../../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { IssueType, SubIssueType } from '../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { Result } from '../../../utility/models/result';
-import { HttpService } from '../../../utility/services/http.service';
-import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
 import { AddRequestComponent } from './add-request.component';
-import { AddRequestService } from './add-request.service';
 import { AddRequestStore } from './add-request.store';
-import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
-import { EventDangerAcceptedComponent } from './event-danger-accepted/event-danger-accepted.component';
 import { EventDuplicateTicketsComponent } from './event-duplicate-tickets/event-duplicate-tickets.component';
-import { EventEarlyKickOffComponent } from './event-early-kick-off/event-early-kick-off.component';
 import { EventRecoverTicketComponent } from './event-recover-ticket/event-recover-ticket.component';
-import { EventRedCardComponent } from './event-red-card/event-red-card.component';
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
-import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
-import { FilterComponent } from './filter/filter.component';
 import { FilterModel } from './filter/filter.model';
 import { IssueTypes } from './filter/issue-types.model';
 import { ChildMatchModel } from './models/related-event.model';
 import { AddRequestResultModel, RequestModel } from './models/request.model';
-import { OthersComponent } from './others/others.component';
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -178,34 +163,6 @@ class Helper {
 }
 
 describe('AddRequestComponent', () => {
-  @NgModule({
-    declarations: [
-      AddRequestComponent,
-      EventEarlyKickOffComponent,
-      EventAbnormalBetComponent,
-      EventDangerAcceptedComponent,
-      EventWrongScoreComponent,
-      AbnormalAccountsComponent,
-      AbnormalAccountOtherComponent,
-      ConfirmAbnormalBetComponent,
-      FilterComponent,
-      OthersComponent,
-      EventRedCardComponent,
-      EventRecoverTicketComponent
-    ],
-    imports: [
-      ToolTipModule,
-      BlockUiModule,
-      BlockFullUiModule
-    ],
-    providers: [
-      HttpService,
-      ModalService,
-      AddRequestService
-    ]
-  })
-  class AppModuleTest { }
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -215,7 +172,7 @@ describe('AddRequestComponent', () => {
     addRequestStore.savingRequestStatus.subscribe = jest.fn();
     addRequestStore.blockingUiStatus.subscribe = jest.fn();
     addRequestStore.getAbnormalFilterBySubject.subscribe = jest.fn();
-    const component = new AddRequestComponent(addRequestStore, null, null);
+    const component = new AddRequestComponent(addRequestStore, null);
     component.isEdit = true;
 
     component.ngOnInit();
@@ -225,7 +182,7 @@ describe('AddRequestComponent', () => {
 
   it('#ngOnDestroy should be call unsubscribe', async () => {
     const addRequestStore = new AddRequestStore();
-    const component = new AddRequestComponent(addRequestStore, null, null);
+    const component = new AddRequestComponent(addRequestStore, null);
     component.savingRequestSubscription = addRequestStore.savingRequestStatus.subscribe(status => {
       component.isDisabledSaveButton = status;
     });
@@ -254,7 +211,7 @@ describe('AddRequestComponent', () => {
   it('#updateModel should assign new object filter', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '1';
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     Helper.initHtml();
 
@@ -266,7 +223,7 @@ describe('AddRequestComponent', () => {
   it('#updateModel should not assign default data for decidedBy when is not abnormal', async () => {
     const fakeRequestModel = new RequestModel();
     fakeRequestModel.filter.issueTypeId = '13';
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
 
     component.updateModel(Helper.fakeFilterModel);
@@ -277,7 +234,7 @@ describe('AddRequestComponent', () => {
 
   it('#backToManagePage should assign to page', async () => {
     const fakeRequestModel = new RequestModel();
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     Object.defineProperty(window, 'location', {
       value: new URL(Helper.url)
@@ -295,7 +252,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventAbnormalBetComponent = new EventAbnormalBetComponent(null, null, null, null, null);
     eventAbnormalBetComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.eventAbnormalBetComponent = eventAbnormalBetComponent;
 
@@ -310,7 +267,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventArchivedTicketComponent = new EventTicket14Component(null, null, null, null);
     eventArchivedTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.eventTicket14Component = eventArchivedTicketComponent;
 
@@ -325,7 +282,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const abnormalAccountsComponent = new AbnormalAccountsComponent(null, null, null, null, null);
     abnormalAccountsComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.abnormalAccountsComponent = abnormalAccountsComponent;
 
@@ -340,7 +297,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventRecoverTicketComponent = new EventRecoverTicketComponent(null, null, null, null);
     eventRecoverTicketComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.eventRecoverTicketComponent = eventRecoverTicketComponent;
 
@@ -355,7 +312,7 @@ describe('AddRequestComponent', () => {
     const mockSaveRequest = jest.fn();
     const eventDuplicateTicketsComponent = new EventDuplicateTicketsComponent(null, null, null, null, null);
     eventDuplicateTicketsComponent.saveRequest = mockSaveRequest;
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.model = fakeRequestModel;
     component.eventDuplicateTicketsComponent = eventDuplicateTicketsComponent;
 
@@ -365,7 +322,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Username"', async () => {
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => true);
     const actual = component.getEventLabel();
 
@@ -373,7 +330,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Ticket Info"', async () => {
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
     component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => true);
     const actual = component.getEventLabel();
@@ -382,7 +339,7 @@ describe('AddRequestComponent', () => {
   });
 
   it('#getEventLabel should return correct "Event"', async () => {
-    const component = new AddRequestComponent(null, null, null);
+    const component = new AddRequestComponent(null, null);
     component.isAbnormalAccount = jest.fn().mockImplementation(() => false);
     component.isArchivedTicketIssueType = jest.fn().mockImplementation(() => false);
     const actual = component.getEventLabel();

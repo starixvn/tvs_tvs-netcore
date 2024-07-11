@@ -9,7 +9,7 @@ exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
       class="row no-gutters mt-2"
     >
       <label
-        class="col-form-label col-form-label-sm log-info-label"
+        class="col-form-label col-form-label-sm log-info-label mr-3"
       >
         Log Info 
       </label>
@@ -17,7 +17,7 @@ exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
         class="col-sm-6 pd-top-8 remark-content"
       >
         <div
-          class="log-info p-2 mb-3"
+          class="log-info p-2"
         >
           <span>
             Live Score: 
@@ -51,6 +51,10 @@ exports[`LogInfoComponent LogInfoComponent init should match snapshot 1`] = `
           </span>
         </div>
       </div>
+    </div>
+    <div
+      class="row no-gutters mt-2"
+    >
     </div>
   </log-info>
 </ng-component>
