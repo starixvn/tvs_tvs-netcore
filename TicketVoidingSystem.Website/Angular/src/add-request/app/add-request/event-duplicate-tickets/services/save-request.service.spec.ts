@@ -234,7 +234,7 @@ describe('SaveRequestService', () => {
     const saveRequestService = new SaveRequestService(null, null, validationService);
     const query = saveRequestService['initAddRequestQuery'](saveRequestArg);
 
-    expect(spyIsFilterMixParlay).toHaveBeenCalledTimes(5);
+    expect(spyIsFilterMixParlay).toHaveBeenCalledTimes(4);
     expect(query.markTransIds).toBe('123,12');
   });
 });

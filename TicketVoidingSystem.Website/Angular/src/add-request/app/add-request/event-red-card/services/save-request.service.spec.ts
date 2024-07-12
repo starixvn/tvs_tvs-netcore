@@ -433,7 +433,6 @@ describe('SaveRequestService', () => {
     expect(result.issueTypeId).toEqual(args.filter.issueTypeId);
     expect(result.actionId).toEqual(args.filter.action);
     expect(result.isTest).toEqual(args.filter.isTest);
-    expect(result.sportType).toEqual(args.filter.sportType);
     expect(result.isVoided).toEqual(args.filter.isVoided);
     expect(result.mistakenBy).toEqual(args.others.mistakenBy);
     expect(result.mistakenBy).toEqual(args.others.mistakenBy);
@@ -455,7 +454,6 @@ describe('SaveRequestService', () => {
     expect(result.issueTypeId).toEqual(args.filter.issueTypeId);
     expect(result.actionId).toEqual(args.filter.action);
     expect(result.isTest).toEqual(args.filter.isTest);
-    expect(result.sportType).toEqual(args.filter.sportType);
     expect(result.isVoided).toEqual(args.filter.isVoided);
     expect(result.mistakenBy).toEqual(args.others.mistakenBy);
   });

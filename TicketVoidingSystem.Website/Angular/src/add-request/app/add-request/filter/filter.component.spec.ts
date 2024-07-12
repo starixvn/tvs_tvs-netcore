@@ -6,20 +6,20 @@ import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
 import { SportInfo } from '../../../../utility/models/event.model';
 import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { LogAnalysisService } from '../services/log-analysis.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
 import { SubIssueTypeDialogComponent } from './sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
-import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { LogAnalysisService } from '../../../../utility/services/log-analysis.service';
 
 class Helper {
   static readonly urlNotAuthorizedPage = 'Home/NotAuthorized';
@@ -110,7 +110,8 @@ describe('FilterComponent', () => {
     providers: [
       AddRequestStore,
       FilterService,
-      CommonService
+      CommonService,
+      LogAnalysisService
     ]
   })
   class AppModuleTest { }
@@ -121,7 +122,8 @@ describe('FilterComponent', () => {
     shallow = new Shallow(FilterComponent, AppModuleTest)
       .dontMock(DateTimeModule)
       .dontMock(NgbModule)
-      .mock(ElementRef, {});
+      .mock(ElementRef, {})
+      .mock(LogAnalysisService, {writeLogAccessFunction: jest.fn()});
   });
 
   it('FilterComponent should init match snapshot', async () => {
