@@ -20,17 +20,16 @@ import { EventInfoComponent } from './event-info/event-info.component';
 import { FilterComponent } from './filter/filter.component';
 import { LogInfoNewComponent } from './log-info-new/log-info-new.component';
 import { LogInfoComponent } from './log-info/log-info.component';
+import { MessageAreaComponent } from './message-area/message-area.component';
+import { VoidReasonComponent } from './message-area/void-reason/void-reason.component';
+import { PasswordAreaComponent } from './password-area/password-area.component';
 import { TicketsListComponent } from './tickets-list/tickets-list.component';
+import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-accepted.component';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
 import { VoidEarlyKickOffComponent } from './void-early-kick-off/void-early-kick-off.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
-import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
-import { VoidAbnormalBetComponent } from './void-abnormal-bet/void-abnormal-bet.component';
-import { VoidReasonComponent } from './message-area/void-reason/void-reason.component';
-import { MessageAreaComponent } from './message-area/message-area.component';
-import { PasswordAreaComponent } from './password-area/password-area.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,6 @@ import { PasswordAreaComponent } from './password-area/password-area.component';
     VoidOtherIssueComponent,
     LogInfoNewComponent,
     VoidDuplicateTicketsComponent,
-    VoidRedCardComponent,
     VoidNotParticipateComponent,
     VoidEarlyKickOffComponent,
     VoidAbnormalBetComponent,

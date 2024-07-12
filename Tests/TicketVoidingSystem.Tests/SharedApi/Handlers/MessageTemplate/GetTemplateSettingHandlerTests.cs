@@ -22,7 +22,7 @@ public class GetTemplateSettingHandlerTests
     {
         repository = Substitute.For<IDynamicRepository>();
         mapper = Substitute.For<IMapper>();
-        handler = new GetTemplateSettingHandler(repository, mapper);
+        handler = new GetTemplateSettingHandler(repository);
     }
 
     [Fact]
