@@ -69,9 +69,8 @@ public class TicketVoidingSystemController : Controller
     [HttpPost]
     [Route("")]
     [AllowAnonymous]
-    public async Task<ActionResult> AddRequestFromCTS(AddRequestFromCTSModel model)
+    public ActionResult AddRequestFromCTS(AddRequestFromCTSModel model)
     {
-        await userActionLogService.LogAccessFunction(nameof(AddRequestFromCTS));
         TempData["AddRequestFromCTS"] = JsonSerializer.Serialize(model);
         var routeValues = new
         {
