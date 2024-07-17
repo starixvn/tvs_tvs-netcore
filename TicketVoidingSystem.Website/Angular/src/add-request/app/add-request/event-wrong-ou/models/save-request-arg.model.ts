@@ -1,10 +1,10 @@
 import { AddRequestStore } from "../../add-request.store";
-import { LeagueEventRedCardComponent } from "../../event-red-card/league-event-red-card/league-event-red-card.component";
 import { FilterModel } from "../../filter/filter.model";
 import { OthersModel } from "../../others/others.model";
 import { LogInfoWrongOuComponent } from "../log-info-wrong-ou/log-info-wrong-ou.component";
 import { LogInfoWrongOu } from "./log-info-wrong-ou.model";
 import { PrimitiveProperty } from "./primitive-property.model";
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 export class SaveRequestArg {
   requestId: number;
@@ -17,7 +17,7 @@ export class SaveRequestArg {
   primitiveProps: PrimitiveProperty;
   allEvents: LogInfoWrongOu[];
   mainEvent: LogInfoWrongOu;
-  leagueEventWrongOuComponent: LeagueEventRedCardComponent;
+  eventLeagueComponent: EventLeagueComponent;
   logInfoComponents: LogInfoWrongOuComponent[];
   addRequestStore: AddRequestStore;
 }

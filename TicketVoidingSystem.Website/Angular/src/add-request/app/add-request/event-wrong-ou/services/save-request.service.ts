@@ -41,7 +41,7 @@ export class SaveRequestService {
     this.logInfoWrongOuService.resetLogInfoOfEvent(arg.allEvents);
     arg.logInfoComponents.forEach(x => x.hideValidationDetail());
 
-    if (!this.validationService.validateCommonData(arg.leagueEventWrongOuComponent, arg.logInfoComponents)) {
+    if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.logInfoComponents)) {
       return false;
     }
 

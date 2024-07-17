@@ -19,6 +19,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-wrong-hdp',
@@ -36,7 +37,7 @@ export class EventWrongHdpComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongHdpModels: WrongHdpModel[] = [];
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventWrongHdpComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoWrongHdpComponent>;
 
   mainEvent = new LogInfoWrongHdp();
@@ -89,7 +90,7 @@ export class EventWrongHdpComponent implements OnInit {
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
     mainLogInfo.hideValidationDetail();
 
-    if (!this.validationService.validateCommonData(this.leagueEventWrongHdpComponent, [mainLogInfo])) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
       return;
     }
 
@@ -109,10 +110,10 @@ export class EventWrongHdpComponent implements OnInit {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.mainEvent.leagueName = this.leagueEventWrongHdpComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchId = this.leagueEventWrongHdpComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventWrongHdpComponent?.selectedMatch.name;
-    this.mainEvent.matchCode = this.leagueEventWrongHdpComponent?.selectedMatch.matchCode;
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -174,7 +175,7 @@ export class EventWrongHdpComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
     arg.allEvents = this.allSelectedEvents;
     arg.mainEvent = this.mainEvent;
-    arg.leagueEventWrongHdpComponent = this.leagueEventWrongHdpComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoComponents = this.logInfoComponents.toArray();
     arg.addRequestStore = this.addRequestStore;
 

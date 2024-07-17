@@ -5,11 +5,11 @@ import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/con
 import { LABELS } from '../../../../../utility/constants/labels';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,8 @@ export class ValidationService {
   constructor() {
   }
 
-  public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, logInfoComponents: LogInfoWrongOuComponent[]): boolean {
-    if (!leagueEventComponent.isMatchIdValid()) {
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, logInfoComponents: LogInfoWrongOuComponent[]): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 

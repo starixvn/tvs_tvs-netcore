@@ -4,7 +4,6 @@ import { AddChildMatchModel } from '../../../../utility/components/add-child-mat
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, PoolHouseTicketValue } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongOuModel } from '../models/event-wrong-ou.model';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -19,6 +18,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-wrong-ou',
@@ -36,7 +36,7 @@ export class EventWrongOuComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOuModels: WrongOuModel[] = [];
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventWrongOuComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoWrongOuComponent>;
 
   mainEvent = new LogInfoWrongOu();
@@ -89,7 +89,7 @@ export class EventWrongOuComponent implements OnInit {
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
     mainLogInfo.hideValidationDetail();
 
-    if (!this.validationService.validateCommonData(this.leagueEventWrongOuComponent, [mainLogInfo])) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
       return;
     }
 
@@ -109,10 +109,10 @@ export class EventWrongOuComponent implements OnInit {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoWrongOuService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.mainEvent.leagueName = this.leagueEventWrongOuComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchId = this.leagueEventWrongOuComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventWrongOuComponent?.selectedMatch.name;
-    this.mainEvent.matchCode = this.leagueEventWrongOuComponent?.selectedMatch.matchCode;
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -167,7 +167,7 @@ export class EventWrongOuComponent implements OnInit {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
-    arg.leagueEventWrongOuComponent = this.leagueEventWrongOuComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoComponents = this.logInfoComponents.toArray();
     arg.allEvents = this.allSelectedEvents;
     arg.mainEvent = this.mainEvent;

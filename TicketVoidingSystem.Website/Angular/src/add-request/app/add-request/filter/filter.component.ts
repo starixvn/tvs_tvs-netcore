@@ -540,7 +540,10 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS,
-      IssueTypeConstant.WRONG_SCORE
+      IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU
     ];
     return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
@@ -555,7 +558,10 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS,
-      IssueTypeConstant.WRONG_SCORE
+      IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU,
+      IssueTypeConstant.WRONG_1ST_OU
     ];
     return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }
