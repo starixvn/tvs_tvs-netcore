@@ -56,5 +56,7 @@ public static class BetTypeConstant
 
     public const int VirtualSport4MatchWinner = 10400;
 
+    public const int VirtualSport5MixParlay = 11099;
+
     public static readonly int[] VirtualSports = { 1231, 1232, 1233, 1237, 1238 };
 }
