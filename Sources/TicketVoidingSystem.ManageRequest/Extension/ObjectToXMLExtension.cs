@@ -371,8 +371,9 @@ public static class ObjectToXMLExtension
         var betTypeCountJson = model.BetTypeCount.Select(x => new BetTypeCountJsonModel
         {
             BetTypeId = x.BetTypeId,
-            BetTypeCount = x.BetTypeCount,
-            BetId = x.BetId
+            TicketsCount = x.TicketsCount,
+            BetId = x.BetId,
+            PlayerName = x.PlayerName
         });
         var stringBuilder = $"<r MatchId = '{model.MatchId}' "
                + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "

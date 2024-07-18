@@ -1,3 +1,4 @@
+import { Item } from 'src/utility/models/item.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { TransInfoAddRequestModel } from './trans-info-add-request.model';
 
@@ -32,9 +33,15 @@ export class TicketRequest {
 
 export class BetTypeCountModel {
   betTypeName: string;
-  betTypeCount: number;
+  ticketsCount: number;
   betTypeId: number;
   betId: number;
+  playerName: string;
+}
+
+export class GroupBetTypeCountModel {
+  name: string;
+  items: Item[];
 }
 
 export class ValidationMatchModel {

@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using Fanex.BetList.Core.Entities;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.BetList;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 
 public interface LogInfoService
 {
@@ -20,30 +18,28 @@ public class LogInfoServiceImp : LogInfoService
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
     private readonly SessionService session;
-    private readonly GetTransInfoService getTransInfoService;
-    private readonly BetListService betListService;
+    private readonly LogInfoHelperService logInfoHelperService;
 
-    public LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, SessionService session, GetTransInfoService getTransInfoService, BetListService betListService)
+    public LogInfoServiceImp(IMapper mapper, IDynamicRepository repository, SessionService session, LogInfoHelperService logInfoHelperService)
     {
         this.mapper = mapper;
         this.repository = repository;
         this.session = session;
-        this.betListService = betListService;
-        this.getTransInfoService = getTransInfoService;
+        this.logInfoHelperService = logInfoHelperService;
     }
 
     public async Task<GetLogInfoViewModel> GetLogInfo(GetLogInfoQuery query)
     {
         var criteria = await GetLogInfoCriteria(query);
-
         var (validations, ticketRequests, logInfoDetails, transInfoAddRequestModels, transInfoJsonList, betTypeCounts) =
-            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeCountModel>(criteria);
+            await repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, string, BetTypeTicketsInfo>(criteria);
         var transInfoAddRequest = transInfoAddRequestModels.FirstOrDefault();
         var transInfoJson = transInfoJsonList.FirstOrDefault();
 
+        var logInfoModels = await GetLogInfoModels(query, validations, ticketRequests, logInfoDetails, betTypeCounts);
         return new GetLogInfoViewModel
         {
-            GetLogInfoModels = GetLogInfoModels(query, validations, ticketRequests, logInfoDetails, betTypeCounts),
+            GetLogInfoModels = logInfoModels,
             TransInfoAddRequestModel = new TransInfoAddRequestModel
             {
                 RemoveTransIds = transInfoAddRequest?.RemoveTransIds,
@@ -54,8 +50,8 @@ public class LogInfoServiceImp : LogInfoService
         };
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
-        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCountModel> betTypeCount)
+    private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoModels(GetLogInfoQuery query, IEnumerable<Validation> validation, // NOSONAR
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
         return query.IssueTypeId switch
         {
@@ -72,8 +68,8 @@ public class LogInfoServiceImp : LogInfoService
             IssueTypeConstant.NotParticipate => GetLogInfoViewModelNotParticipate(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.EarlyKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
             IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validation, ticketRequest, logInfoDetail),
-            IssueTypeConstant.WrongMarketOffered => GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
-            IssueTypeConstant.TechnicalError => GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
+            IssueTypeConstant.WrongMarketOffered => await GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
+            IssueTypeConstant.TechnicalError => await GetLogInfoViewModelWrongMarketOffered(query, validation, ticketRequest, logInfoDetail, betTypeCount),
             _ => GetLogInfoViewModelDefault(validation, ticketRequest, logInfoDetail)
         };
     }
@@ -210,17 +206,10 @@ public class LogInfoServiceImp : LogInfoService
         });
     }
 
-    private IEnumerable<GetLogInfoModel> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
-        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeCountModel> betTypeCount)
+    private async Task<IEnumerable<GetLogInfoModel>> GetLogInfoViewModelWrongMarketOffered(GetLogInfoQuery query, IEnumerable<Validation> validation,
+        IEnumerable<TicketRequest> ticketRequest, IEnumerable<LogInfoDetail> logInfoDetail, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
-        foreach (var item in betTypeCount)
-        {
-            item.BetTypeName = betListService.GetBetTypeName(new Ticket
-            {
-                BetTypeId = item.BetTypeId,
-                BetId = item.BetId,
-            });
-        }
+        await logInfoHelperService.UpdateBetTypeTicketsInfo(query.WrongMarketOfferedModel.MatchId, betTypeCount);
         return new List<GetLogInfoModel>
         {
             new()
@@ -250,7 +239,7 @@ public class LogInfoServiceImp : LogInfoService
 
     private async Task<GetLogInfoCriteria> GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
     {
-        var transInfoJsonList = await GetTransInfoJson(query);
+        var transInfoJsonList = await logInfoHelperService.GetTransInfoJson(query);
         var criteria = mapper.Map<GetLogInfoCriteria>(query);
         criteria.UserId = session.UserId;
         criteria.KickOffInfo = query.EarlyKickOffModels?.ToKickOffInfoXml();
@@ -269,28 +258,5 @@ public class LogInfoServiceImp : LogInfoService
         criteria.TransInfoJson = string.Join(",", transInfoJsonList.Where(x => !string.IsNullOrWhiteSpace(x)));
 
         return criteria;
-    }
-
-    private async Task<IEnumerable<string>> GetTransInfoJson(GetLogInfoQuery query)
-    {
-        var getTransInfoQuery = new GetTransInfoQuery
-        {
-            WrongScoreModels = query.WrongScoreModels,
-            RedCardModels = query.RedCardModels,
-            DangerAcceptedModels = query.DangerAcceptedModels,
-            WrongHdpModels = query.WrongHdpModels,
-            Wrong1stHdpModels = query.Wrong1stHdpModels,
-            WrongOuModels = query.WrongOuModels,
-            Wrong1stOuModels = query.Wrong1stOuModels,
-            WrongOddsModels = query.WrongOddsModels,
-            ReducedOverModels = query.ReducedOverModels,
-            NotParticipateModels = query.NotParticipateModels,
-            EarlyKickOffModels = query.EarlyKickOffModels,
-            WrongMarketOfferedModel = query.WrongMarketOfferedModel,
-            MatchId = query.MatchId,
-            IssueTypeId = query.IssueTypeId
-        };
-
-        return await getTransInfoService.GetTransInfoJson(getTransInfoQuery);
     }
 }

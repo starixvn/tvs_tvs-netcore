@@ -63,15 +63,3 @@ public class RequestInfoForCopy
 
     public int TotalCancelCashOutCount { get; set; }
 }
-
-public class BetTypeTicketsInfo
-{
-    public int BetTypeId { get; set; }
-    public string BetTypeName { get; set; }
-    public string OriginalBetTypeName { get; set; }
-    public long? BetId { get; set; }
-    public string InputtedRuns { get; set; }
-    public string PlayerName { get; set; }
-    public string PlayerAndOdds { get; set; }
-    public int TicketsCount { get; set; }
-}

@@ -10,6 +10,7 @@ using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;

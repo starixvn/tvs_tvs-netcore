@@ -2,6 +2,7 @@
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
 
 namespace TicketVoidingSystem.Website.Utilities.SimpleInjector.AddRequest;
@@ -12,6 +13,7 @@ public static class AddRequestCommon
     {
         services.AddTransient<GetTransInfoService, GetTransInfoServiceImp>();
         services.AddTransient<LogInfoService, LogInfoServiceImp>();
+        services.AddTransient<LogInfoHelperService, LogInfoHelperServiceImp>();
         services.AddTransient<AddRequestService, AddRequestServiceImp>();
         services.AddTransient<InsertAutoVoidRequestQueueService, InsertAutoVoidRequestQueueServiceImp>();
         services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
