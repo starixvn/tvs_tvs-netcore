@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { Item } from 'src/utility/models/item.model';
 import { BetTypeCountModel, GroupBetTypeCountModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { DateTimeFormat } from '../../../../utility/constants/config';
+import { Item } from '../../../../utility/models/item.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../utility/services/static.service';
 

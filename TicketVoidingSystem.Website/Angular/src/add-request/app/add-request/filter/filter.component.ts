@@ -539,7 +539,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.RECOVER_TICKET,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
-      IssueTypeConstant.WRONG_ODDS
+      IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.WRONG_SCORE
     ];
     return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
@@ -553,7 +554,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.RECOVER_TICKET,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
-      IssueTypeConstant.WRONG_ODDS
+      IssueTypeConstant.WRONG_ODDS,
+      IssueTypeConstant.WRONG_SCORE
     ];
     return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }

@@ -66,7 +66,7 @@ export class SaveRequestService {
     if (validation.isValid) {
       await this.executeApiSaveRequest(args);
     } else {
-      this.popupService.showError('There are some invalid Bet ID(s) in this request, please check again!');
+      this.popupService.showError('There are some invalid in this request, please check again!');
     }
     args.addRequestStore.changeBlockingUiStatus(false);
   }

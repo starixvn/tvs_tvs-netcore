@@ -8,23 +8,7 @@ exports[`EventWrongScoreComponent #EventWrongScoreComponent init should match sn
     <div
       class="mb-4"
     >
-      <league-event-red-card />
-      <div>
-        <div
-          class="var-check-selection mt-2"
-        >
-          <label
-            class="border-radius-left bg-not-choose"
-          >
-            NO VAR 
-          </label>
-          <label
-            class="border-radius-right bg-not-choose"
-          >
-            VAR 
-          </label>
-        </div>
-      </div>
+      <event-league />
       <div
         class="mb-3 mt-3 d-flex"
       >
@@ -36,6 +20,44 @@ exports[`EventWrongScoreComponent #EventWrongScoreComponent init should match sn
         </button>
       </div>
       <div>
+        <div>
+          <wrong-score-info />
+        </div>
+        <div>
+          <wrong-score-info />
+        </div>
+      </div>
+      <div
+        class="even-log-info mb-3 margin-left-37"
+      >
+        <br />
+        <label>
+          <strong>
+            Log Info
+          </strong>
+        </label>
+        <div
+          class="Log-info-selected-Scores p-2"
+        >
+           Void Trans Time: 
+          <strong>
+            2020/10/09 09:43:46.361 PM - 2020/10/09 09:44:46.361 PM
+          </strong>
+          <br />
+           Affected Single Count: 
+          <strong>
+            2
+          </strong>
+          , Parlay Count: 
+          <strong>
+            2
+          </strong>
+          <br />
+           Cancel Cash Out: 
+          <strong>
+            2
+          </strong>
+        </div>
       </div>
     </div>
     <tooltip />

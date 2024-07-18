@@ -1,4 +1,6 @@
 export class ConfirmWrongScoreModel {
+  issueTypeName: string;
+  subIssueTypeName: string;
   isOpenDialog: boolean;
   isHasWarningSettledTicket: boolean;
   isHasWarningForWrongScore: boolean;
@@ -6,4 +8,5 @@ export class ConfirmWrongScoreModel {
   isEditingByAnotherUser: boolean;
   requestId: number;
   requestedBy: string;
+  warningExcludedScores: string[];
 }

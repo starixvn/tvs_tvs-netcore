@@ -1,3 +1,5 @@
+@import '../../../../../assets/styles/mixin.scss';
+
 .primary {
   background: #6a6a6a;
   color: #fff;
@@ -33,6 +35,13 @@
   font-size: 12px;
   max-height: 500px;
   overflow: auto;
+  @include scroll-style();
+
+  .warning-content {
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+    margin-bottom: 5px;
+  }
 }
 
 .modal-footer {

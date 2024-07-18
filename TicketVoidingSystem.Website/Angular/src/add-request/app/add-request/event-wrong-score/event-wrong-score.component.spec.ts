@@ -3,7 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
+import { IssueType, SubIssueType } from 'src/utility/models/issue-type.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
 import { AcceptType, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -17,6 +19,7 @@ import { ConfirmAbnormalBetModel } from '../event-abnormal-bet/confirm-abnormal-
 import { ValidationBusinessRuleOutput } from '../event-abnormal-bet/services/validation.model';
 import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { ValidationMessage } from '../models/get-log-info.model';
 import { ConfirmWrongScoreComponent } from './confirm-wrong-score/confirm-wrong-score.component';
@@ -33,7 +36,7 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
 class Helper {
   static readonly fakeTransId = '111102';
   static readonly fakeRequestId = 1212;
-  static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
+  static readonly fakeFromDateTime = '2020-10-09 09:43:46.361 PM';
   static readonly fakeToDateTime = '2020-10-09 09:44:46.361 PM';
   static readonly fakeAllowanceTime: AllowanceTime = {
     aaTime: 1,
@@ -43,12 +46,12 @@ class Helper {
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
-    issueTypeId: '1',
-    subIssueTypeId: '1',
+    issueTypeId: '3',
+    subIssueTypeId: '33',
     action: '1',
     isTest: true,
     isVoided: false,
-    isChangeSubTypeManual: true,
+    isChangeSubTypeManual: false,
     isAbnormal: false
   };
   static readonly fakeLogInfoDetail: LogInfoDetail =
@@ -127,7 +130,24 @@ class Helper {
     element.setAttribute('user-id', '8');
     element.setAttribute('user-name', 'sa');
     document.body.appendChild(element);
-  }
+  };
+  static fakeIssueType: IssueType[] = [{
+    issueTypeId: 3,
+    issueTypeName: "Wrong Score",
+  }];
+  static fakeSubIssueType: SubIssueType[] = [{
+    subIssueTypeId: 33,
+    subIssueTypeName: "Goal",
+    issueTypeId: 3,
+    subIssueTypeNameCS: "Hi"
+  }];
+  static fakeIssueTypes: IssueTypes = {
+    issueTypes: Helper.fakeIssueType,
+    subIssueTypes: Helper.fakeSubIssueType,
+    issueId: 3,
+    selectedSubIssueTypes: Helper.fakeSubIssueType,
+    subIssueId: 33,
+  };
 }
 
 describe('EventWrongScoreComponent', () => {
@@ -136,7 +156,8 @@ describe('EventWrongScoreComponent', () => {
       LeagueEventRedCardComponent,
       ConfirmWrongScoreComponent,
       WrongScoreInfoComponent,
-      FilterWrongScoreComponent
+      FilterWrongScoreComponent,
+      EventLeagueComponent
     ],
     imports: [
       NgbModule,
@@ -430,7 +451,7 @@ describe('EventWrongScoreComponent', () => {
     expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
   });
 
-  it('#saveRequest should call #saveRequestService.saveRequest when request was voided', async () => {
+  it('#saveRequest should call #openConfirmWrongScore when request was voided', async () => {
     // Arrange
     const mockSaveRequest = jest.fn();
     const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
@@ -459,14 +480,14 @@ describe('EventWrongScoreComponent', () => {
           isEdit: true
         }
       });
-    instance['checkIfRequestHasWarning'] = jest.fn();
+    instance['openConfirmWrongScore'] = jest.fn();
     instance['validateVarCheck'] = jest.fn().mockImplementation(() => true);
 
     // Action
     await instance.saveRequest();
 
     // Assert
-    expect(instance['checkIfRequestHasWarning']).toHaveBeenCalledTimes(1);
+    expect(instance['openConfirmWrongScore']).toHaveBeenCalledTimes(1);
   });
 
   it('#saveRequest should call #saveWhenRequestNotVoided when request was not voided', async () => {
@@ -556,25 +577,42 @@ describe('EventWrongScoreComponent', () => {
   it('#openConfirmWrongScore should call update correct #confirmWrongScoreModel', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
+    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
+    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
+    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
+    const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => true);
     const { instance } = await shallow
       .mock(WrongScoreService, {
         getFilterByBaseOnSubIssueType: jest.fn(),
         getSelectedWrongScoreComponents: jest.fn(),
         getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
+      })
+      .mock(ValidationService,
+        {
+          isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false),
+          isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
+          isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
+          isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
+          isEditingByAnotherUser: mockIsEditingByAnotherUser
+        })
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
       .render({
         bind: {
           wrongScoreModels: Helper.fakeWrongScoreModel,
           filter: Helper.fakeFilterModel,
+          issueTypes: Helper.fakeIssueTypes,
           isEdit: true
         }
       });
+    const element = document.createElement('body');
+    element.setAttribute('id', 'body');
+    element.setAttribute('user-id', '8');
+    document.body.appendChild(element);
     instance['createValidationBusinessRuleArgs'] = jest.fn();
     instance.confirmWrongScoreModel = new ConfirmWrongScoreModel();
 
     // Action
-    instance['openConfirmWrongScore'](true, true, true, true);
+    instance['openConfirmWrongScore']();
 
     // Assert
     expect(instance.confirmWrongScoreModel.isOpenDialog).toBeTruthy();
@@ -582,29 +620,17 @@ describe('EventWrongScoreComponent', () => {
     expect(instance.confirmWrongScoreModel.isHasWarningEditTakeNoteRequest).toBeTruthy();
   });
 
-  it('#saveWhenRequestNotVoided should call #openConfirmWrongScore when isHasWarningForWrongScore', async () => {
+  it('#saveWhenRequestNotVoided should call #openConfirmWrongScore', async () => {
     // Arrange
     const mockOpenConfirmWrongScore = jest.fn();
-    const mockGetSelectedWrongScores = jest.fn();
     const mockCheckValidationBeforeSaveRequest = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutputSuccessful));
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
-
     const { instance } = await shallow
       .mock(SaveRequestService, { checkValidationBeforeSaveRequest: mockCheckValidationBeforeSaveRequest, })
       .mock(ValidationService, {
-        isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-        isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-        isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
         isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false),
         isEditingByAnotherUser: jest.fn().mockImplementation(() => false)
       })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: mockGetSelectedWrongScores
-      })
+      .mock(WrongScoreService, { getSelectedWrongScores: jest.fn() })
       .mock(AddRequestStore, { changeSavingRequestStatus: jest.fn() })
       .render({
         bind: {
@@ -613,9 +639,6 @@ describe('EventWrongScoreComponent', () => {
           isEdit: true
         }
       });
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
     instance['createValidationBusinessRuleArgs'] = jest.fn();
     instance['openConfirmWrongScore'] = mockOpenConfirmWrongScore;
 
@@ -625,68 +648,13 @@ describe('EventWrongScoreComponent', () => {
     // Assert
     expect(mockOpenConfirmWrongScore).toHaveBeenCalledTimes(1);
     expect(mockCheckValidationBeforeSaveRequest).toHaveBeenCalledTimes(1);
-    expect(mockIsValidationHasWarningTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsHasWarningEditTakeNoteRequest).toHaveBeenCalledTimes(1);
-    expect(mockGetSelectedWrongScores).toHaveBeenCalled();
+    expect(instance['createValidationBusinessRuleArgs']).toHaveBeenCalledTimes(1);
   });
 
-  it('#saveWhenRequestNotVoided should call #openConfirmWrongScore when isHasWarningForWrongScore & isHasWarningEditTakeNoteRequest not right', async () => {
+  it('#saveWhenRequestNotVoided should call #addRequestStore.changeSavingRequestStatus', async () => {
     // Arrange
-    const mockOpenConfirmWrongScore = jest.fn();
-    const mockCheckValidationBeforeSaveRequest = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutputSuccessful));
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
-    const mockGetSelectedWrongScores = jest.fn();
-
-    const { instance } = await shallow
-      .mock(SaveRequestService, {
-        checkValidationBeforeSaveRequest: mockCheckValidationBeforeSaveRequest,
-      })
-      .mock(ValidationService, {
-        isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-        isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-        isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
-        isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false),
-        isEditingByAnotherUser: jest.fn().mockImplementation(() => false)
-      })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: mockGetSelectedWrongScores
-      })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-    instance['createValidationBusinessRuleArgs'] = jest.fn();
-    instance['openConfirmWrongScore'] = mockOpenConfirmWrongScore;
-
-    // Action
-    await instance['saveWhenRequestNotVoided']();
-
-    // Assert
-    expect(mockOpenConfirmWrongScore).toHaveBeenCalledTimes(1);
-    expect(mockCheckValidationBeforeSaveRequest).toHaveBeenCalledTimes(1);
-    expect(mockIsValidationHasWarningTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsHasWarningEditTakeNoteRequest).toHaveBeenCalledTimes(1);
-    expect(mockGetSelectedWrongScores).toHaveBeenCalled();
-  });
-
-  it('#saveWhenRequestNotVoided should call #openConfirmWrongScore when isHasWarningForWrongScore & isHasWarningEditTakeNoteRequest not right', async () => {
-    // Arrange
-    const mockGetSelectedWrongScores = jest.fn();
     const mockSaveRequest = jest.fn();
-    const mockCheckValidationBeforeSaveRequest = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutputSuccessful));
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => true);
+    const mockCheckValidationBeforeSaveRequest = jest.fn().mockReturnValue({isValid: false} as ValidationBusinessRuleOutput);
     const mockChangeSavingRequestStatus = jest.fn();
 
     const { instance } = await shallow
@@ -694,54 +662,8 @@ describe('EventWrongScoreComponent', () => {
         checkValidationBeforeSaveRequest: mockCheckValidationBeforeSaveRequest,
         saveRequest: mockSaveRequest,
       })
-      .mock(ValidationService, {
-        isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-        isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-        isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
-        isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false),
-        isEditingByAnotherUser: jest.fn().mockImplementation(() => false)
-      })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: mockGetSelectedWrongScores
-      })
+      .mock(WrongScoreService, { getSelectedWrongScores: jest.fn() })
       .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-          isEdit: true
-        }
-      });
-    instance['createValidationBusinessRuleArgs'] = jest.fn();
-    instance['createSaveRequestArg'] = jest.fn();
-    const element = document.createElement('section');
-    element.setAttribute("user-id", "1");
-    document.getElementById = jest.fn().mockImplementation(() => element);
-
-    // Action
-    await instance['saveWhenRequestNotVoided']();
-
-    // Assert
-    expect(mockCheckValidationBeforeSaveRequest).toHaveBeenCalledTimes(1);
-    expect(mockIsValidationHasWarningTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsHasWarningEditTakeNoteRequest).toHaveBeenCalledTimes(1);
-    expect(mockGetSelectedWrongScores).toHaveBeenCalled();
-  });
-
-  it('#saveWhenRequestNotVoided should call #addRequestStore.changeSavingRequestStatus', async () => {
-    // Arrange
-    const mockCheckValidationBeforeSaveRequest = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeValidationBusinessRuleOutputError));
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(SaveRequestService, { checkValidationBeforeSaveRequest: mockCheckValidationBeforeSaveRequest })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      }).mock(ValidationService, { isSubTypeFilterByAcceptedTime: jest.fn().mockImplementation(() => false) })
       .render({
         bind: {
           wrongScoreModels: Helper.fakeWrongScoreModel,
@@ -755,8 +677,9 @@ describe('EventWrongScoreComponent', () => {
     await instance['saveWhenRequestNotVoided']();
 
     // Assert
-    expect(mockCheckValidationBeforeSaveRequest).toBeCalled();
-    expect(mockChangeSavingRequestStatus).toBeCalled();
+    expect(mockCheckValidationBeforeSaveRequest).toHaveBeenCalledTimes(1);
+    expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
+    expect(instance['createValidationBusinessRuleArgs']).toHaveBeenCalledTimes(1);
   });
 
   it('#createSaveRequestArg should call update correct data', async () => {
@@ -973,7 +896,7 @@ describe('EventWrongScoreComponent', () => {
       });
     const actual = instance.displayFullDateTimeFormat(new Date(Helper.fakeFromDateTime));
 
-    expect(actual).toBe('2020/10/08 09:44:46.361 PM');
+    expect(actual).toBe('2020/10/09 09:43:46.361 PM');
   });
 
   it('#isShowLogInfoFilterByAcceptedTime should return true when logInfoDetail not null', async () => {
@@ -1634,140 +1557,6 @@ describe('EventWrongScoreComponent', () => {
     expect(mockChangeSavingRequestStatus).toHaveBeenCalled();
   });
 
-  it('#checkIfRequestHasWarning should call #openConfirmWrongScore when isValidationHasWarningTicket true', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => false);
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => true);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => false);
-    const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(ValidationService, { isHasWarningSettledTicket: mockIsHasWarningSettledTicket })
-      .mock(ValidationService, { isValidationHasWarningTicket: mockIsValidationHasWarningTicket })
-      .mock(ValidationService, { isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest })
-      .mock(ValidationService, { isEditingByAnotherUser: mockIsEditingByAnotherUser })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const element = document.createElement('body');
-    element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
-    document.body.appendChild(element);
-    instance['openConfirmWrongScore'] = jest.fn();
-    instance.primitiveProps = new PrimitiveProperty();
-
-    // Action
-    await instance['checkIfRequestHasWarning']();
-
-    // Assert
-    expect(mockIsHasWarningSettledTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsValidationHasWarningTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsHasWarningEditTakeNoteRequest).toHaveBeenCalledTimes(1);
-    expect(mockIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
-    expect(instance['openConfirmWrongScore']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#checkIfRequestHasWarning should call #openConfirmWrongScore when isHasWarningEditTakeNoteRequest true', async () => {
-    // Arrange
-    const fakeWrongScoreModel = Helper.fakeWrongScoreModel[0];
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => false);
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => true);
-    const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(ValidationService, { isHasWarningSettledTicket: mockIsHasWarningSettledTicket })
-      .mock(ValidationService, { isValidationHasWarningTicket: mockIsValidationHasWarningTicket })
-      .mock(ValidationService, { isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest })
-      .mock(ValidationService, { isEditingByAnotherUser: mockIsEditingByAnotherUser })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: [fakeWrongScoreModel],
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const element = document.createElement('body');
-    element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
-    document.body.appendChild(element);
-    instance['openConfirmWrongScore'] = jest.fn();
-    instance.primitiveProps = new PrimitiveProperty();
-
-    // Action
-    await instance['checkIfRequestHasWarning']();
-
-    // Assert
-    expect(mockIsHasWarningSettledTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsValidationHasWarningTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsHasWarningEditTakeNoteRequest).toHaveBeenCalledTimes(1);
-    expect(mockIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
-    expect(instance['openConfirmWrongScore']).toHaveBeenCalledTimes(1);
-  });
-
-  it('#checkIfRequestHasWarning should call #saveRequestService.saveRequest', async () => {
-    // Arrange
-    const mockIsHasWarningSettledTicket = jest.fn().mockImplementation(() => false);
-    const mockIsValidationHasWarningTicket = jest.fn().mockImplementation(() => false);
-    const mockIsHasWarningEditTakeNoteRequest = jest.fn().mockImplementation(() => false);
-    const mockIsEditingByAnotherUser = jest.fn().mockImplementation(() => false);
-    const mockSaveRequest = jest.fn().mockImplementation(() => false);
-    const mockChangeSavingRequestStatus = jest.fn();
-    const { instance } = await shallow
-      .mock(WrongScoreService, {
-        getFilterByBaseOnSubIssueType: jest.fn(),
-        getSelectedWrongScoreComponents: jest.fn(),
-        getSelectedWrongScores: jest.fn(),
-      })
-      .mock(ValidationService, {
-        isHasWarningSettledTicket: mockIsHasWarningSettledTicket,
-        isValidationHasWarningTicket: mockIsValidationHasWarningTicket,
-        isHasWarningEditTakeNoteRequest: mockIsHasWarningEditTakeNoteRequest,
-        isEditingByAnotherUser: mockIsEditingByAnotherUser
-      })
-      .mock(SaveRequestService, { saveRequest: mockSaveRequest })
-      .mock(AddRequestStore, { changeSavingRequestStatus: mockChangeSavingRequestStatus })
-      .render({
-        bind: {
-          wrongScoreModels: Helper.fakeWrongScoreModel,
-          filter: Helper.fakeFilterModel,
-        }
-      });
-    const element = document.createElement('body');
-    element.setAttribute('id', 'body');
-    element.setAttribute('user-id', '8');
-    document.body.appendChild(element);
-
-    instance.wrongScoreModels = Helper.fakeWrongScoreModel;
-    instance['createSaveRequestArg'] = jest.fn();
-    instance.primitiveProps = new PrimitiveProperty();
-
-    // Action
-    await instance['checkIfRequestHasWarning']();
-
-    // Assert
-    expect(mockIsHasWarningSettledTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsValidationHasWarningTicket).toHaveBeenCalledTimes(1);
-    expect(mockIsHasWarningEditTakeNoteRequest).toHaveBeenCalledTimes(1);
-    expect(mockIsEditingByAnotherUser).toHaveBeenCalledTimes(1);
-    expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-  });
-
   it('#getTimeSelectedScore should return expected time', async () => {
     // Arrange
     const mockChangeSavingRequestStatus = jest.fn();
@@ -1791,7 +1580,7 @@ describe('EventWrongScoreComponent', () => {
     // Action
     const actual = instance.getTimeSelectedScore(Helper.fakeWrongScoreModel);
     // Assert
-    expect(actual).toBe('2020/10/08 09:44:46.361 PM - 2020/10/09 09:44:46.361 PM');
+    expect(actual).toBe('2020/10/09 09:43:46.361 PM - 2020/10/09 09:44:46.361 PM');
   });
 
   it('#getParlayCountSelectedScore should return expected ParlayCount', async () => {

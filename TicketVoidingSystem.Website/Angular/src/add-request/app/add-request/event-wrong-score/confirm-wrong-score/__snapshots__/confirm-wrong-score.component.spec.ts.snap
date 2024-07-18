@@ -48,6 +48,23 @@ exports[`ConfirmWrongScoreComponent ConfirmWrongScoreComponent should match snap
               class="modal-body"
             >
               <div
+                class="mg-bottom-5"
+              >
+                <div>
+                  Please double check below type if correct before proceeding
+                </div>
+                <div
+                  class="ml-2"
+                >
+                  <div>
+                    Issue Type: 
+                  </div>
+                  <div>
+                    Sub Type: 
+                  </div>
+                </div>
+              </div>
+              <div
                 class="mt-2"
               >
                 <i

@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AddRequestStore } from '../../add-request.store';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-score.component';
@@ -20,7 +20,7 @@ export class ValidationService {
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
   private readonly TO_DATE_TIME_CLASS = 'to-date-time';
 
-  public validateCommonData(filter: FilterModel, leagueEventWrongScoreComponent: LeagueEventRedCardComponent, addRequestStore: AddRequestStore,
+  public validateCommonData(filter: FilterModel, leagueEventWrongScoreComponent: EventLeagueComponent, addRequestStore: AddRequestStore,
     filterWrongScoreComponent: FilterWrongScoreComponent, wrongScoreInfoComponents: WrongScoreInfoComponent[]): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
     if (!filter.subIssueTypeId) {
@@ -30,7 +30,7 @@ export class ValidationService {
     if (!leagueEventWrongScoreComponent.isMatchIdValid()) {
       return false;
     }
-    
+
     if (this.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId) && !filterWrongScoreComponent.isValid()) {
       return false;
     }
@@ -38,7 +38,7 @@ export class ValidationService {
     if (!this.isSubTypeFilterByAcceptedTime(filter.subIssueTypeId) && wrongScoreInfoComponents.some(x => (!x.isValidDateTime()))) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -89,8 +89,8 @@ export class ValidationService {
     return true;
   }
 
-  public isCheckedScoresHasError(wrongScores: WrongScoreModel[]): boolean {
-    return wrongScores.some(x => x.messageValidationLogInfo.some(y => y.isError));
+  public isValidAllScores(wrongScores: WrongScoreModel[]): boolean {
+    return wrongScores.some(x => x.messageValidationLogInfo.every(y => !y.isError));
   }
 
   public isHasWarningEditTakeNoteRequest(isEdit: boolean, currentActionId: string, actionIdOfFirstTime: string) {
@@ -136,8 +136,8 @@ export class ValidationService {
 
   public isLastScore(wrongScoreModel: WrongScoreModel, originWrongScoreModels: WrongScoreModel[]): boolean {
     return wrongScoreModel.scoreId === _.last(originWrongScoreModels).scoreId;
-  }  
-  
+  }
+
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
   }

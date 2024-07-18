@@ -1,8 +1,8 @@
-import { MatchModel } from '../../../../../utility/models/match.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestStore } from "../../add-request.store";
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { PrimitiveProperty } from '../event-wrong-score.model';
@@ -62,10 +62,10 @@ describe('SaveRequestService', () => {
     const mockPopupService = new PopupService(null);
     mockPopupService.showError = jest.fn();
     const mockSaveRequestService = new SaveRequestService(null, null, null, mockPopupService);
+    mockSaveRequestService.checkValidationBeforeSaveRequest = jest.fn().mockReturnValue({ isValid: false } as ValidationBusinessRuleOutput);
     const fakeArg = { addRequestStore: new AddRequestStore() } as SaveRequestArg;
     fakeArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    fakeArg.isVoided = true;
-    fakeArg.addRequestStore = addRequestStore;
+    fakeArg.isVoided = false;
 
     await mockSaveRequestService.onYesConfirmAddRequest(fakeArg);
 
@@ -101,7 +101,7 @@ describe('SaveRequestService', () => {
 
   it('#checkValidationBeforeSaveRequest should return false when have not actual score', async () => {
     // Arrange
-    const fakeLeagueEventComponent = new LeagueEventRedCardComponent(null, null);
+    const fakeLeagueEventComponent = new EventLeagueComponent(null, null);
     fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
@@ -113,7 +113,7 @@ describe('SaveRequestService', () => {
       tooltip: tooltip
     } as ValidationBusinessRuleArgs;
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isCheckedScoresHasError = jest.fn().mockImplementation(() => true);
+    validationService.isValidAllScores = jest.fn().mockImplementation(() => true);
 
     const result = await saveRequestService.checkValidationBeforeSaveRequest(fakeValidationBusinessRuleArgs);
 
@@ -122,7 +122,7 @@ describe('SaveRequestService', () => {
 
   it('#checkValidationBeforeSaveRequest should return false', async () => {
     // Arrange
-    const fakeLeagueEventComponent = new LeagueEventRedCardComponent(null, null);
+    const fakeLeagueEventComponent = new EventLeagueComponent(null, null);
     fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
@@ -134,7 +134,7 @@ describe('SaveRequestService', () => {
       tooltip: tooltip
     } as ValidationBusinessRuleArgs;
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isCheckedScoresHasError = jest.fn().mockImplementation(() => true);
+    validationService.isValidAllScores = jest.fn().mockImplementation(() => false);
     const mockLogInfoService = new LogInfoService(null, null);
     mockLogInfoService.clearDataValidation = jest.fn();
     mockLogInfoService.getLogInfo = jest.fn();
@@ -147,7 +147,7 @@ describe('SaveRequestService', () => {
 
   it('#checkValidationBeforeSaveRequest should return true', async () => {
     // Arrange
-    const fakeLeagueEventComponent = new LeagueEventRedCardComponent(null, null);
+    const fakeLeagueEventComponent = new EventLeagueComponent(null, null);
     fakeLeagueEventComponent.selectedMatch = new MatchModel();
     const tooltip = new Tooltip();
     tooltip.display = jest.fn();
@@ -161,7 +161,7 @@ describe('SaveRequestService', () => {
     const component = new WrongScoreInfoComponent(null, null, null, null, null);
     fakeValidationBusinessRuleArgs.wrongScoreInfoComponents = [component];
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
-    validationService.isCheckedScoresHasError = jest.fn().mockImplementation(() => false);
+    validationService.isValidAllScores = jest.fn().mockImplementation(() => true);
     logInfoService.clearDataValidation = jest.fn();
     logInfoService.getLogInfo = jest.fn();
 
