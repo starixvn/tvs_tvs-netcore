@@ -14,7 +14,7 @@
         </th>
       </tr>
     </thead>
-    <tbody [ngClass]="{'collapse': collapse && scroll}">
+    <tbody class="scroller-firefox" [ngClass]="{'collapse': collapse && scroll}">
       <tr *ngFor="let group of model.groupBetTypes; last as isLast;" [ngClass]="{'last-group' : isLast}">
         <td *ngIf="group.isShow && group.betTypes.length > 0">
           <label>

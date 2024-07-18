@@ -34,14 +34,14 @@
     </ng-select>
     <div class="input-group input-group-sm div-input favorite-input">
       <input type="text" [(ngModel)]="filterWrongOddsModel.favoriteValue" (ngModelChange)="changeFilter();isCorrectFormatSingleDecimal($event, 'favorite-input')"
-        class="form-control border-radius-left-0" [disabled]="isDisabled">
+        class="form-control" [disabled]="isDisabled">
     </div>
   </div>
   <div class="filter-ou-type" *ngIf="isSubTypeOuOr1stOu()">
     <span class="input-group-text">Wrong OU</span>
-    <div class="input-group input-group-sm div-input ou-input">
+    <div class="input-group input-group-sm div-input ou-input filter-lable">
       <input type="text" [(ngModel)]="filterWrongOddsModel.wrongOU" (ngModelChange)="changeFilter();isCorrectFormatSingleDecimal($event, 'ou-input')"
-        class="form-control border-radius-left-0" [disabled]="isDisabled">
+        class="form-control" [disabled]="isDisabled">
     </div>
   </div>
   <div class="filter-live-indicator filter-right">
@@ -66,7 +66,7 @@
   <div class="spread">
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
-        <span class="input-group-text">Spread</span>
+        <span class="input-group-text border-radius-right-0">Spread</span>
       </div>
       <div class="input-group-sm div-input spread-input mr-2">
         <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (ngModelChange)="changeFilter();isValidSpread()" (change)="changeSpread()"
@@ -77,7 +77,7 @@
   <div class="allowance-rate">
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
-        <span class="input-group-text filter-right">Allowance Rate</span>
+        <span class="input-group-text filter-right border-radius-right-0">Allowance Rate</span>
       </div>
       <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" 
       (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
@@ -92,7 +92,7 @@
     <span *ngIf="isSubTypeOuOr1stOu()">Over (Malay Odds)</span>
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
-        <span class="input-group-text">
+        <span class="input-group-text border-radius-right-0">
           Correct Odds
         </span>
       </div>
@@ -108,7 +108,7 @@
     <span *ngIf="isSubTypeOuOr1stOu()">Under</span>
     <div class="input-correct-odds d-flex">
       <div class="input-group-prepend">
-        <span class="input-group-text">
+        <span class="input-group-text border-radius-right-0">
           Correct Odds
         </span>
       </div>
