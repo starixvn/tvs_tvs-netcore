@@ -71,3 +71,16 @@
     margin: 0 0 10px 0;
   }
 }
+
+.bettype-ticket-section {
+  grid-row-gap: 5px;
+  display: grid;
+}
+
+.section-header {
+  padding: 5px;
+  background-color: #e7f1ff;
+  border: 1px solid rgba(0,0,0,.125);
+  cursor: pointer;
+  width: 1400px;
+}

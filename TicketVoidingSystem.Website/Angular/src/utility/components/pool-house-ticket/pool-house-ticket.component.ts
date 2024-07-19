@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { PagingModel } from '../../components/paging/paging/paging.model';
 import { PoolHouseTicketValue } from '../../constants/config';
+import { PagingModel } from '../paging/paging/paging.model';
 import { GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
-import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from './pool-house-ticket.model';
+import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
 
 @Component({
@@ -14,13 +14,8 @@ import { TicketsModel } from './tickets/tickets.model';
 export class PoolHouseTicketComponent implements OnChanges {
   @Input() model = new PoolHouseTicketsModel();
   @Output() saveEventOuput = new EventEmitter<PoolHouseTicketsModel>();
-  @Output() pagingEventOuput = new EventEmitter<GetPoolHouseTicketQuery>();
-
-  affectedGroupBetTypesModel: GroupBetTypesModel;
-  othersGroupBetTypesModel: GroupBetTypesModel;
-
-  tickets = new TicketsModel();
-  paging = new PagingModel();
+  poolHouseTicketsSections: PoolHouseTicketsSection[] = [];
+  affectedSection: PoolHouseTicketsSection;
   isBlock: boolean;
   blockBetList: boolean;
 
@@ -36,34 +31,62 @@ export class PoolHouseTicketComponent implements OnChanges {
     this.model.linkedLogsViewModel.poolHouseLinkedLogsData.forEach(x => {
       x.isShow = this.checkCanShowGroupLinkedLog(x.groupName);
     });
-    this.paging.total = this.model.tickets.totalParlay + this.model.tickets.totalSingle;
-    this.affectedGroupBetTypesModel = new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName !== 'Others'), true, 'Affected Bet Types', false);
-    this.othersGroupBetTypesModel = new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName === 'Others'), false, 'Other Bet Types', true);
-    this.tickets.initData(this.model.tickets);
+    this.updatePoolHouseTicketSections();
     this.changeCheckBetTypeAndTicket();
   }
 
-  public async pagingEvent(): Promise<void> {
-    this.model.query.pageIndex = this.paging.page - 1;
-    this.model.query.pageSize = this.paging.pageSize;
-    this.model.checkedBetTypes = this.getCheckedBetTypes();
-    this.pagingEventOuput.emit(this.model.query);
+  private updatePoolHouseTicketSections() {
+    this.poolHouseTicketsSections.push(this.getAffectedSection());
+    this.poolHouseTicketsSections.push(this.getOtherSection());
+  }
+
+  public getAffectedSection(): PoolHouseTicketsSection {
+    const affectedTickets = new TicketsModel();
+    const affectedPaging = new PagingModel();
+    affectedTickets.initData(this.model.affectedTickets);
+    affectedPaging.total = this.model.affectedTickets.totalParlay + this.model.affectedTickets.totalSingle;
+
+    this.affectedSection = {
+      isAffected: true,
+      name: 'Affected Bet Types',
+      groupBetTypesModel: new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName !== 'Others'), true, false),
+      tickets: affectedTickets,
+      isCollapsed: false,
+      paging: affectedPaging
+    };
+    return this.affectedSection;
+  }
+
+  public getOtherSection(): PoolHouseTicketsSection {
+    const otherTickets = new TicketsModel();
+    const otherPaging = new PagingModel();
+    otherTickets.initData(this.model.otherTickets);
+    otherPaging.total = this.model.otherTickets.totalParlay + this.model.otherTickets.totalSingle;
+
+    return {
+      isAffected: false,
+      name: 'Other Bet Types',
+      groupBetTypesModel: new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName === 'Others'), false, true),
+      tickets: otherTickets,
+      isCollapsed: false,
+      paging: otherPaging
+    };
   }
 
   private changeCheckBetTypeAndTicket(): void {
     if (this.model.checkedBetTypes === PoolHouseTicketValue.SELECT_ALL_BETTYPE) {
-      this.affectedGroupBetTypesModel.checkAllBetType();
-      this.tickets.checkAllTickets();
+      this.affectedSection.groupBetTypesModel.checkAllBetType();
+      this.affectedSection.tickets.checkAllTickets();
     } else {
-      this.affectedGroupBetTypesModel.checkBetType(this.model.checkedBetTypes.split(',').map(i => Number(i)));
-      this.tickets.handlecheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
+      this.affectedSection.groupBetTypesModel.checkBetType(this.model.checkedBetTypes.split(',').map(i => Number(i)));
+      this.affectedSection.tickets.handlecheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
     }
-    this.tickets.updateSelectedTickets();
+    this.affectedSection.tickets.updateSelectedTickets();
   }
 
   public changedBetTypes(betTypes: number[]) {
-    this.tickets.handlecheckTicketByBetTypes(betTypes);
-    this.tickets.updateSelectedTickets();
+    this.affectedSection.tickets.handlecheckTicketByBetTypes(betTypes);
+    this.affectedSection.tickets.updateSelectedTickets();
   }
 
   public closeClick(): void {
@@ -78,7 +101,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   private getCheckedBetTypes(): string {
-    const checkedBetTypes = (_.uniq(_.flatten(this.affectedGroupBetTypesModel.groupBetTypes.map(x => x.betTypes))))
+    const checkedBetTypes = (_.uniq(_.flatten(this.affectedSection.groupBetTypesModel.groupBetTypes.map(x => x.betTypes))))
       .filter(x => x.isChecked)
       .map(x => x.id);
 

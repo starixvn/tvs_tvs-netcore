@@ -88,7 +88,8 @@ export class LogInfoWrongHdpComponent {
     this.poolHouseTicketsModel.isAffectedGroup1H1X2 = viewModel.isAffectedGroup1H1X2;
     this.poolHouseTicketsModel.isAffectedGroupAIO = viewModel.isAffectedGroupAIO;
     this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
-    this.poolHouseTicketsModel.tickets = viewModel.tickets;
+    this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
+    this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
     this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
 
     this.addRequestStore.changeBlockingUiStatus(false);
@@ -112,8 +113,6 @@ export class LogInfoWrongHdpComponent {
     query.filterFromTransTime = this.logInfo.filterWithHdp.filterFromTransTime;
     query.filterToTransTime = this.logInfo.filterWithHdp.filterToTransTime;
     query.liveIndicator = this.logInfo.filterWithHdp.liveIndicator;
-    query.pageIndex = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageIndex : 0;
-    query.pageSize = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageSize : 500;
 
     if (this.validationService.isSubTypeWrongHdpOrWrong1stHdp(this.filter.subIssueTypeId)) {
       query.homeFavorite = this.logInfo.filterWithHdp.homeFavorite;

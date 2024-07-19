@@ -68,15 +68,13 @@ export class GroupBetType {
 
 export class GroupBetTypesModel {
   groupBetTypes: GroupBetType[];
-  name: string;
   isChecked: boolean;
   isDisable: boolean;
   isCollapsed: boolean;
 
-  constructor(groups: Array<GroupBetType>, isChecked: boolean, name: string, isDisable: boolean) {
+  constructor(groups: Array<GroupBetType>, isChecked: boolean, isDisable: boolean) {
     this.isChecked = isChecked;
     this.isDisable = isDisable;
-    this.name = name;
     this.groupBetTypes = [];
     groups.forEach(x => {
       const group = new GroupBetType(x.groupName, x.betTypes, isChecked, isDisable);

@@ -3,11 +3,6 @@
     <table>
       <thead>
         <tr>
-          <th scope="col" class="list-check-groups-input col-tb-1">
-          </th>
-          <th scope="col" class="col-tb-2">
-            <div>No</div>
-          </th>
           <th scope="col" class="col-tb-3">
             <div>BetID</div>
           </th>
@@ -52,29 +47,12 @@
     <table>
       <tbody *ngFor="let group of model.groups">
         <tr>
-          <td class="col-tb-1">
-            <div>
-              <input type="checkbox" [(ngModel)]="group.isCheckAll" (ngModelChange)="group.checkAllTickets();
-                                                    model.changeIconCheckBox();
-                                                    changeTickets()" [disabled]="group.isDisabled || isDisableCheckbox" />
-            </div>
-          </td>
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
             <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
             {{group.name}} ({{group.displayTotalTickets}})
           </td>
         </tr>
-        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded}">
-          <td class="col-tb-1">
-            <div>
-              <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketChecked(ticket);
-                                             model.changeIconCheckBox();
-                                             changeTickets()" [disabled]="ticket.isDisable || isDisableCheckbox" />
-            </div>
-          </td>
-          <td class="col-tb-2">
-            <div>{{ticket.no}}</div>
-          </td>
+        <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded || !ticket.isChecked}">
           <td class="col-tb-3">
             <div [innerHTML]="ticket.betId | sanitizeHtml"></div>
           </td>
@@ -122,13 +100,11 @@
       </tbody>
     </table>
   </div>
-
-  <paging [(model)]="paging" (modelChange)="pagingEvent()"></paging>
   <div class="list-check-groups" *ngIf="isShowListCheckGroup">
     <ul [style.top]="model.iconCheckBoxTop">
       <li [ngClass]="{'li-checked':model.iconCheckBox == 2}" (click)="model.checkAllGroupsDropDown()">All</li>
-      <li *ngFor="let group of model.groups" 
-          [ngClass]="{'li-checked':group.isCheckAll}" 
+      <li *ngFor="let group of model.groups"
+          [ngClass]="{'li-checked':group.isCheckAll}"
           (click)="group.isCheckAll = group.isDisabled ? false : !group.isCheckAll;
                 group.checkAllTickets();
                 model.changeIconCheckBox();

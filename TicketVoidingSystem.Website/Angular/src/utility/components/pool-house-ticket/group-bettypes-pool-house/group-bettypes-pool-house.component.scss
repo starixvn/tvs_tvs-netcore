@@ -4,13 +4,6 @@
   width: 1400px;
   @include scroll-style();
 
-  .group-bettype-header {
-    padding: 5px;
-    background-color: #e7f1ff;
-    border: 1px solid rgba(0,0,0,.125);
-    cursor: pointer;
-  }
-
   .group-bettype-body {
     padding: 5px;
     border: 1px solid rgba(0,0,0,.125);

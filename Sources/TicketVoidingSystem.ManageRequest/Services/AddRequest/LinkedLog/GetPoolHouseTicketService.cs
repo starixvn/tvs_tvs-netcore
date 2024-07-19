@@ -25,11 +25,10 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
 
     public TicketsViewModel GetTicketsViewModel(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
     {
-        var groupsHaveTickets = GenerateGroup(originTickets, request)
+        var groupsHaveTickets = GenerateGroup(originTickets)
             .Where(item => item.Tickets.Any());
 
-        var startIndex = request.PageIndex * request.PageSize + 1;
-        var groupViewModels = groupsHaveTickets.Select(group => MapToGroupTicketViewModel(group, ref startIndex, request.IssueTypeId)).ToList();
+        var groupViewModels = groupsHaveTickets.Select(group => MapToGroupTicketViewModel(group, request.IssueTypeId)).ToList();
 
         var viewModel = new TicketsViewModel
         {
@@ -41,15 +40,14 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
         return viewModel;
     }
 
-    private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> originTickets, GetPoolHouseTicketRequest request)
+    private IEnumerable<Group<GetTicketModel>> GenerateGroup(IEnumerable<GetTicketModel> originTickets)
     {
         if (!originTickets.Any())
         {
             return Enumerable.Empty<Group<GetTicketModel>>();
         }
 
-        var afterPagingTickets = pagingService.Paging(originTickets, request.PageIndex, request.PageSize);
-        return GenerateGroupWhenHaveTicket(originTickets, afterPagingTickets);
+        return GenerateGroupWhenHaveTicket(originTickets, originTickets);
     }
 
     private IEnumerable<Group<GetTicketModel>> GenerateGroupWhenHaveTicket(IEnumerable<GetTicketModel> originTickets, IEnumerable<GetTicketModel> afterPagingTickets)
@@ -99,7 +97,7 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
         }
     }
 
-    private Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, ref int startIndex, int issueTypeId)
+    private Group<TicketViewModel> MapToGroupTicketViewModel(Group<GetTicketModel> group, int issueTypeId)
     {
         var tickets = new List<TicketViewModel>();
 
@@ -107,7 +105,6 @@ public class GetPoolHouseTicketServiceImp : GetPoolHouseTicketService
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
-            ticket.No = startIndex++;
             tickets.Add(ticket);
         }
 

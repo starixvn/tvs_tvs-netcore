@@ -55,7 +55,8 @@ export class LogInfoWrongOddsComponent implements OnInit {
     this.poolHouseTicketsModel.isAffectedGroup1H1X2 = viewModel.isAffectedGroup1H1X2;
     this.poolHouseTicketsModel.isAffectedGroupAIO = viewModel.isAffectedGroupAIO;
     this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
-    this.poolHouseTicketsModel.tickets = viewModel.tickets;
+    this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
+    this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
     this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
     this.poolHouseTicketsModel.isOpen = true;
     this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
@@ -74,8 +75,6 @@ export class LogInfoWrongOddsComponent implements OnInit {
     query.filterFromTransTime = this.logInfo.filterWrongOdds.filterFromTransTime;
     query.filterToTransTime = this.logInfo.filterWrongOdds.filterToTransTime;
     query.liveIndicator = this.logInfo.filterWrongOdds.liveIndicator;
-    query.pageIndex = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageIndex : 0;
-    query.pageSize = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageSize : 500;
     query.wrongOddsInfo = [wrongOddsInfo];
 
     return query;

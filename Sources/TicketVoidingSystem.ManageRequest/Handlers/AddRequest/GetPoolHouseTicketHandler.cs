@@ -36,11 +36,13 @@ public class GetPoolHouseTicketHandler : IRequestHandler<GetPoolHouseTicketReque
     {
         var criteria = await CreateGetPoolHouseTicketCriteria(request);
         var (betTypes, tickets) = await repository.FetchMultipleAsync<BetTypeModel, GetTicketModel>(criteria);
-
+        var affectedTickets = tickets.Where(x => x.GroupName != "Others");
+        var otherTickets = tickets.Where(x => x.GroupName is "Others");
         return new GetPoolHouseTicketViewModel
         {
             GroupBetTypes = MappingGroupBetType(betTypes),
-            Tickets = getPoolHouseTicketService.GetTicketsViewModel(tickets, request),
+            AffectedTickets = getPoolHouseTicketService.GetTicketsViewModel(affectedTickets, request),
+            OtherTickets = getPoolHouseTicketService.GetTicketsViewModel(otherTickets, request),
             IsAffectedGroup1X2 = request.IsLinkGroup1X2 && CheckAffectedToGroup1X2(request),
             IsAffectedGroup1H1X2 = request.IsLinkGroup1X2 && CheckAffectedToGroup1H1X2(request),
             IsAffectedGroupAIO = request.IsLinkGroupAIO

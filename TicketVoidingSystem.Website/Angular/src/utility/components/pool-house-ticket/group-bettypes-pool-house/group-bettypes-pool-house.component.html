@@ -1,11 +1,5 @@
 <div *ngFor="let model of displayGroupBetTypesModel; index as i">
   <div *ngIf="isShowGroupBetTypes(model)" class="group-bettypes mb-1">
-    <div class="group-bettype-header" (click)="model.isCollapsed = !model.isCollapsed"
-      [attr.aria-expanded]="!model.isCollapsed">
-      <strong>
-        {{model.name}}
-      </strong>
-    </div>
     <div class="group-bettype-body" #collapse="ngbCollapse" [(ngbCollapse)]="model.isCollapsed">
       <table>
         <thead>

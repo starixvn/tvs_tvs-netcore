@@ -13,16 +13,25 @@
         </div>
         <div class="modal-body" [blockUi]="isBlock">
           <linked-log [hidden]="isHideLinkedLog()" [linkedLogsViewModel]="model.linkedLogsViewModel" ></linked-log>
-          <div *ngIf="tickets.groups.length > 0">
-            <group-bettypes-pool-house
-              [affectedGroupBetTypesModel]="affectedGroupBetTypesModel"
-              [othersGroupBetTypesModel]="othersGroupBetTypesModel"
-              (changedBetTypesEvent)="changedBetTypes($event)">
-            </group-bettypes-pool-house>
-            <tickets [model]="tickets" [(paging)]="paging" [isBlock]="blockBetList" (pagingChange)="pagingEvent()"></tickets>
+          <div class="bettype-ticket-section">
+            <ng-container *ngFor="let section of poolHouseTicketsSections">
+              <div *ngIf="section.tickets.groups.length > 0">
+                <div class="section-header" (click)="section.isCollapsed = !section.isCollapsed"
+                  [attr.aria-expanded]="!section.isCollapsed">
+                  <strong>{{section.name}}</strong>
+                </div>
+                <div class="section-body" [(ngbCollapse)]="section.isCollapsed">
+                  <group-bettypes-pool-house
+                    [affectedGroupBetTypesModel]="section.groupBetTypesModel"
+                    (changedBetTypesEvent)="changedBetTypes($event)">
+                  </group-bettypes-pool-house>
+                  <tickets [model]="section.tickets" [(paging)]="section.paging" [isBlock]="blockBetList"></tickets>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </div>
-        <div class="modal-footer" *ngIf="tickets.groups.length > 0">
+        <div class="modal-footer" *ngIf="affectedSection.tickets.groups.length > 0">
           <button type="button" class="btn btn-primary btn-sm" (click)="saveClick()">Save</button>
           <button type="button" class="btn btn-danger btn-sm" (click)="closeClick()">Cancel</button>
         </div>

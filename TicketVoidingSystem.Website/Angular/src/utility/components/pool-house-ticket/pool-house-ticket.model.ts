@@ -1,11 +1,13 @@
 import { WrongOddsGetLogInfoQuery } from "../../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
-import { GroupBetType } from "./group-bettypes-pool-house/group-bettypes-pool-house.model";
+import { PagingModel } from "../paging/paging/paging.model";
+import { GroupBetType, GroupBetTypesModel } from "./group-bettypes-pool-house/group-bettypes-pool-house.model";
 import { LinkedLogsViewModel } from "./linked-log/linked-log.model";
 import { TicketsModel } from "./tickets/tickets.model";
 
 export class PoolHouseTicketViewModel {
   groupBetTypes: GroupBetType[];
-  tickets: TicketsModel;
+  affectedTickets: TicketsModel;
+  otherTickets: TicketsModel;
   isAffectedGroup1X2: boolean;
   isAffectedGroup1H1X2: boolean;
   isAffectedGroupAIO: boolean;
@@ -15,9 +17,9 @@ export class PoolHouseTicketsModel {
   isOpen: boolean;
   checkedBetTypes: string;
   query: GetPoolHouseTicketQuery;
-
   groupBetTypes: GroupBetType[];
-  tickets: TicketsModel;
+  affectedTickets: TicketsModel;
+  otherTickets: TicketsModel;
   isAffectedGroup1X2: boolean;
   isAffectedGroup1H1X2: boolean;
   isAffectedGroupAIO: boolean;
@@ -40,8 +42,15 @@ export class GetPoolHouseTicketQuery {
   filterFromTransTime: string;
   filterToTransTime: string;
   liveIndicator: number;
-  pageIndex: number;
-  pageSize: number;
 
   wrongOddsInfo: WrongOddsGetLogInfoQuery[];
+}
+
+export class PoolHouseTicketsSection {
+  isAffected: boolean;
+  name: string;
+  groupBetTypesModel: GroupBetTypesModel;
+  tickets: TicketsModel;
+  paging = new PagingModel();
+  isCollapsed: boolean;
 }

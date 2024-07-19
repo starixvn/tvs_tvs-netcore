@@ -92,7 +92,8 @@ export class LogInfoWrongOuComponent implements OnInit {
     this.poolHouseTicketsModel.isAffectedGroup1H1X2 = viewModel.isAffectedGroup1H1X2;
     this.poolHouseTicketsModel.isAffectedGroupAIO = viewModel.isAffectedGroupAIO;
     this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
-    this.poolHouseTicketsModel.tickets = viewModel.tickets;
+    this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
+    this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
     this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
     this.poolHouseTicketsModel.isOpen = true;
     this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
@@ -116,8 +117,6 @@ export class LogInfoWrongOuComponent implements OnInit {
     query.filterFromTransTime = this.logInfo.filterWrongOu.filterFromTransTime;
     query.filterToTransTime = this.logInfo.filterWrongOu.filterToTransTime;
     query.liveIndicator = this.logInfo.filterWrongOu.liveIndicator;
-    query.pageIndex = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageIndex : 0;
-    query.pageSize = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageSize : 500;
 
     return query;
   }
@@ -125,7 +124,6 @@ export class LogInfoWrongOuComponent implements OnInit {
   public async openPoolHouseDetails(): Promise<void> {
     await this.getPoolHouseData(this.initGetPoolHouseTicketQuery());
   }
-
 
   public handleDeleteEvent(matchId: number) {
     this.deleteEvent.emit(matchId);

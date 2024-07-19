@@ -83,7 +83,7 @@ class Helper {
     isAffectedGroup1H1X2: true,
     isAffectedGroup1X2: true,
     isAffectedGroupAIO: true,
-    tickets: new TicketsModel()
+    affectedTickets: new TicketsModel()
   };
   static readonly fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
     checkedBetTypes: '1,2',
