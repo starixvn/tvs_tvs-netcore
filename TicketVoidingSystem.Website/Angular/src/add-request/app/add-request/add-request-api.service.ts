@@ -24,6 +24,8 @@ import { GetChildMatchQuery } from './models/get-child-match.query';
 import { PermissionAddRequest } from './models/permission-add-request.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
 import { MaxBetAndSpreadQuery, MaxBetAndSpreadInfo } from './event-wrong-odds/models/filter-wrong-odds.model';
+import { LiveGameEarlyTicketsRequest } from './models/live-game-early-ticket.model';
+import { TicketsModel } from '../../../manage-request/app/ticket-list/tickets/tickets.model';
 
 @Injectable({
   providedIn: 'root'
@@ -149,5 +151,10 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
     return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
+  }
+
+  /* istanbul ignore next */
+  async GetLiveGameEarlyTickets(query: LiveGameEarlyTicketsRequest): Promise<TicketsModel> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetLiveGameEarlyTickets');
   }
 }

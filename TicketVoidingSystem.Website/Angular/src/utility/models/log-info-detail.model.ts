@@ -24,4 +24,5 @@ export class LogInfoDetail {
     poolHouseInstantlySettleCount?: number;
     minTransId: string;
     actionType: string;
+    transInfoLiveGameEarlyJson?: string;
 }

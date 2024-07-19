@@ -105,4 +105,7 @@ public class AddRequestController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> GetMaxBetAndSpread(GetMaxBetAndSpreadRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetLiveGameEarlyTickets(GetLiveGameEarlyTicketsRequest request) => Ok(await mediator.Send(request));
 }

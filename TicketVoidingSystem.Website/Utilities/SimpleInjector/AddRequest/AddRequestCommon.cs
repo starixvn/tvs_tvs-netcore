@@ -28,6 +28,8 @@ public static class AddRequestCommon
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
         services.AddTransient<NotParticipateBetTypesService, NotParticipateBetTypesServiceImp>();
         services.AddTransient<WrongMarketOfferedService, WrongMarketOfferedServiceImp>();
+        services.AddTransient<GetLiveGameEarlyTicketService, GetLiveGameEarlyTicketServiceImp>();
+        services.AddTransient<DecompressDataService, DecompressDataServiceImp>();
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }
