@@ -23,7 +23,6 @@ public static class AddRequestCommon
         services.AddTransient<GetLinkedLogService, GetLinkedLogServiceImp>();
         services.AddTransient<GetLinkedLogShowUiService, GetLinkedLogShowUiServiceImp>();
         services.AddTransient<GetPoolHouseTicketService, GetPoolHouseTicketServiceImp>();
-        services.AddTransient<LinkedLogApiService, LinkedLogApiServiceImp>();
         services.AddTransient<LinkGroupBettypeService, LinkGroupBettypeServiceImp>();
         services.AddTransient<OddsInfoValidationService, OddsInfoValidationServiceImp>();
         services.AddTransient<MatchInfoAddRequestService, MatchInfoAddRequestServiceImp>();

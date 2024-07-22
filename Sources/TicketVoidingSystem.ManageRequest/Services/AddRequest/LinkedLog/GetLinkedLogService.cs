@@ -19,25 +19,29 @@ public interface GetLinkedLogService
 public class GetLinkedLogServiceImp : GetLinkedLogService
 {
     private readonly LoggingService loggingService;
-    private readonly LinkedLogApiService linkedLogApiService;
+    private readonly LinkedLogHttpClientService linkedLogHttpClientService;
     private readonly LinkGroupBettypeService linkGroupBettypeService;
     private readonly BuildLogsDataService buildLogsDataService;
 
     public GetLinkedLogServiceImp(LoggingService loggingService,
-        LinkedLogApiService linkedLogApiService,
+        LinkedLogHttpClientService linkedLogHttpClientService,
         LinkGroupBettypeService linkGroupBettypeService,
         BuildLogsDataService buildLogsDataService
     )
     {
         this.loggingService = loggingService;
-        this.linkedLogApiService = linkedLogApiService;
+        this.linkedLogHttpClientService = linkedLogHttpClientService;
         this.linkGroupBettypeService = linkGroupBettypeService;
         this.buildLogsDataService = buildLogsDataService;
     }
 
     public async Task<LinkedLogDataViewModel> GetLinkedLogWhenSuccess(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogData> defaultLogData)
     {
-        var resultFromApi = await linkedLogApiService.GetLinkedLog(getLinkedLogModel);
+        var resultFromApi = await linkedLogHttpClientService.GetLinkedLog(new PoolHouseLinkedLogRequest
+        {
+            MatchId = getLinkedLogModel.MatchId,
+            LiveIndicator = getLinkedLogModel.LiveIndicator
+        });
         var linkGroupBettypeValidation = linkGroupBettypeService.CheckAffectedToGroup(getLinkedLogModel, resultFromApi);
         var groupPoolHouseLinkedLog = buildLogsDataService.GenerateGroupPoolHouseLinkedLog(resultFromApi, getLinkedLogModel);
 
