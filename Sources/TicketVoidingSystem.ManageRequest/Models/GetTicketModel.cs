@@ -56,7 +56,7 @@ public class GetTicketModel
 
     public byte WalletType { get; set; }
 
-    public long MainTransId { get; set; }
+    public long? MainTransId { get; set; }
 
     public long? RefCode { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Text;
-using System.Text.Json;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
@@ -28,6 +28,7 @@ public class DecompressDataServiceImp : DecompressDataService
         gs.CopyTo(resultStream);
 
         var json = Encoding.Unicode.GetString(resultStream.ToArray());
-        return JsonSerializer.Deserialize<IEnumerable<T>>(json);
+
+        return Helper.DeserializeObjectIgnoreNullValue<IEnumerable<T>>(json);
     }
 }

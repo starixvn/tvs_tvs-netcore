@@ -10,14 +10,14 @@ import { MultipleSelectionModule } from '../multiple-selection/multiple-selectio
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house/group-bettypes-pool-house.component';
 import { LinkedLogComponent } from './linked-log/linked-log.component';
 import { PoolHouseTicketComponent } from './pool-house-ticket.component';
-import { TicketsComponent } from './tickets/tickets.component';
+import { UtilityModule } from '../../utility.module';
 
 @NgModule({
   declarations: [
     PoolHouseTicketComponent,
     GroupBettypesPoolHouseComponent,
     LinkedLogComponent,
-    TicketsComponent
+    
   ],
   exports: [
     PoolHouseTicketComponent,
@@ -32,7 +32,8 @@ import { TicketsComponent } from './tickets/tickets.component';
     CommonModule,
     PipeModule,
     MultipleSelectionModule,
-    NgbAccordionModule
+    NgbAccordionModule,
+    UtilityModule
   ]
 })
 export class PoolHouseTicketModule { }

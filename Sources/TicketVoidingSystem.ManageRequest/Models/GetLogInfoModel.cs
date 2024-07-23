@@ -49,7 +49,7 @@ public class LogInfoDetail
     public int PoolHouseInstantlySettleCount { get; set; }
 
     // Wrong HDP/1stHDP, Wrong OU/1H OU, Wrong Odds
-    public string? TransInfoLiveGameEarlyJson { get; set; }
+    public string? LiveGameEarlyTicketsJson { get; set; }
 }
 
 public class Validation

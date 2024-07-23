@@ -1,6 +1,6 @@
-import { TicketsModel } from '../../../../manage-request/app/ticket-list/tickets/tickets.model';
+import { TicketsModel } from '../../../../utility/components/pool-house-ticket/tickets/tickets.model';
 
-export class LiveGameEarlyTicketsRequest {
+export class LiveGameEarlyTicketsQuery {
     liveGameEarlyTicketsJson: string;
     pageIndex: number;
     pageSize: number;
@@ -10,6 +10,6 @@ export class LiveGameEarlyTicketsRequest {
 export class LiveGameEarlyTicketsModel {
     isOpen: boolean;
     checkedBetTypes: string;
-    query: LiveGameEarlyTicketsRequest;
+    query: LiveGameEarlyTicketsQuery;
     tickets: TicketsModel;
   }

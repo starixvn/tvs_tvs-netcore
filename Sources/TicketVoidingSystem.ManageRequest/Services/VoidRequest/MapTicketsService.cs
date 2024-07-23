@@ -55,7 +55,7 @@ public class MapTicketsServiceImp : MapTicketsService
         ticket.Currency = item.CurrencyName;
 
         ticket.Value = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString();
-        ticket.MainTransId = item.MainTransId.ToString();
+        ticket.MainTransId = item.MainTransId?.ToString();
         ticket.IsCricket = item.IsCricket;
         ticket.IsParlay = item.IsMixParlay;
         ticket.IsMarked = item.IsMarked;
