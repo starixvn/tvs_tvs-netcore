@@ -19,14 +19,13 @@ public class GetLinkedLogHandler : IRequestHandler<GetLinkedLogRequest, LinkedLo
 
     public async Task<LinkedLogDataViewModel> Handle(GetLinkedLogRequest request, CancellationToken cancellationToken)
     {
-        var defaultLogData = getLinkedLogService.GetDefaultLogData(request);
         try
         {
-            return await getLinkedLogService.GetLinkedLogWhenSuccess(request, defaultLogData);
+            return await getLinkedLogService.GetLinkedLogWhenSuccess(request);
         }
         catch (Exception exception)
         {
-            return await getLinkedLogService.GetLinkedLogWhenError(exception, defaultLogData);
+            return await getLinkedLogService.GetLinkedLogWhenError(exception);
         }
     }
 }

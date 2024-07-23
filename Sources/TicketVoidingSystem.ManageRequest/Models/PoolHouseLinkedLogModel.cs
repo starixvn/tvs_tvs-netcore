@@ -2,11 +2,10 @@
 
 namespace TicketVoidingSystem.ManageRequest.Models;
 
-public class PoolHouseLinkedLogRequest
+public class GroupLinkedLogResponse
 {
-    public int MatchId { get; set; }
-
-    public int LiveIndicator { get; set; }
+    public IEnumerable<PoolHouseLinkedLogResponse> AffectedLog { get; set; }
+    public IEnumerable<PoolHouseLinkedLogResponse> NotAffectedLog { get; set; }
 }
 
 public class PoolHouseLinkedLogResponse
@@ -27,28 +26,17 @@ public class LinkedOddsInfo
     public decimal? Odds2a { get; set; }
 }
 
-public class PoolHouseLinkedLogData
+public class GroupLinkedLogUI
 {
+    public bool IsAffectedGroup { get; set; }
     public string GroupName { get; set; }
     public IEnumerable<string> LogsData { get; set; }
 }
 
-public class PoolHouseLinkedLogDataItem
-{
-    public string GroupName { get; set; }
-    public string LogsData { get; set; }
-}
-
 public class LinkedLogDataViewModel
 {
-    public IEnumerable<PoolHouseLinkedLogData> PoolHouseLinkedLogsData { get; set; }
+    public IEnumerable<GroupLinkedLogUI> GroupLinkedLogs { get; set; }
     public Result Result { get; set; }
-    public bool IsLinkGroup1X2 { get; set; }
-    public bool IsLinkGroupAIO { get; set; }
-}
-
-public class LinkGroupBettypeValidation
-{
     public bool IsLinkGroup1X2 { get; set; }
     public bool IsLinkGroupAIO { get; set; }
 }

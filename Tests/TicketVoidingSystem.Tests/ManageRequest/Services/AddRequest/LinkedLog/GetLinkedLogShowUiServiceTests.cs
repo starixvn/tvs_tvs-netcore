@@ -13,13 +13,13 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class GetLinkedLogShowUiServiceTests
 {
-    private readonly OddsInfoValidationService oddsInfoValidationService;
+    private readonly LinkedLogValidationService linkedLogValidationService;
     private readonly GetLinkedLogShowUiServiceImp service;
 
     public GetLinkedLogShowUiServiceTests()
     {
-        oddsInfoValidationService = Substitute.For<OddsInfoValidationService>();
-        service = new GetLinkedLogShowUiServiceImp(oddsInfoValidationService);
+        linkedLogValidationService = Substitute.For<LinkedLogValidationService>();
+        service = new GetLinkedLogShowUiServiceImp(linkedLogValidationService);
     }
 
     [Theory]
@@ -102,10 +102,10 @@ public class GetLinkedLogShowUiServiceTests
             }
         };
 
-        oddsInfoValidationService
-            .IsValidLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService
+            .IsLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
+        linkedLogValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
 
         // Act
         var actual = service.GetLinkedLogShowUi(getLinkedLogModel, poolHouseLinkedLogResponses);
@@ -149,10 +149,10 @@ public class GetLinkedLogShowUiServiceTests
             }
         };
 
-        oddsInfoValidationService
-            .IsValidLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService
+            .IsLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
+        linkedLogValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
 
         // Act
         var actual = service.GetLinkedLogShowUi(getLinkedLogModel, poolHouseLinkedLogResponses);

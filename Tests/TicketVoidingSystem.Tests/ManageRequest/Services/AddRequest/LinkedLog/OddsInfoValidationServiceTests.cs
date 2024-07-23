@@ -17,7 +17,7 @@ public class OddsInfoValidationServiceTests
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp2 = hdp2, Hdp1 = hdp1 };
         var getLinkedLogModel = new GetLinkedLogModel { AwayFavorite = awayFavorite, HomeFavorite = homeFavorite, SubIssueTypeId = SubIssueTypeConstant.Wrong1stHDP };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
@@ -33,7 +33,7 @@ public class OddsInfoValidationServiceTests
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp2 = 1 };
         var getLinkedLogModel = new GetLinkedLogModel { HdpValue = "1", SubIssueTypeId = SubIssueTypeConstant.WrongHDPAwayVirtualHeadReversed };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
@@ -49,7 +49,7 @@ public class OddsInfoValidationServiceTests
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp2 = 1 };
         var getLinkedLogModel = new GetLinkedLogModel { HdpValue = "1", SubIssueTypeId = SubIssueTypeConstant.OverUnder };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
@@ -67,7 +67,7 @@ public class OddsInfoValidationServiceTests
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo { Hdp1 = 2 };
         var getLinkedLogModel = new GetLinkedLogModel { HomeFavorite = homeFavorite, SubIssueTypeId = SubIssueTypeConstant.Wrong1stHDPHomeVirtualHeadReversed };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidInputHdpForWrongHdp1StHdp(linkedOddsInfo, getLinkedLogModel);
@@ -87,7 +87,7 @@ public class OddsInfoValidationServiceTests
     {
         // Arrange
         var getLinkedLogModel = new GetLinkedLogModel { SubIssueTypeId = subIssueTypeId };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidBetTypeWrongOdds(BetTypeConstant.BitCoinOverUnder, getLinkedLogModel);
@@ -108,10 +108,10 @@ public class OddsInfoValidationServiceTests
         // Arrange
         var linkedLog = new PoolHouseLinkedLogResponse { LinkGroup = 100 };
         var getLinkedLogModel = new GetLinkedLogModel { SubIssueTypeId = subIssueTypeId };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
-        var actual = service.IsValidLinkGroupWrongOdds(linkedLog, getLinkedLogModel);
+        var actual = service.IsLinkGroupWrongOdds(linkedLog, getLinkedLogModel);
 
         // Assert
         Assert.False(actual);
@@ -132,10 +132,10 @@ public class OddsInfoValidationServiceTests
         // Arrange
         var linkedLog = new PoolHouseLinkedLogResponse { LinkGroup = linkGroup };
         var getLinkedLogModel = new GetLinkedLogModel { SubIssueTypeId = subIssueTypeId };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
-        var actual = service.IsValidLinkGroupWrongOdds(linkedLog, getLinkedLogModel);
+        var actual = service.IsLinkGroupWrongOdds(linkedLog, getLinkedLogModel);
 
         // Assert
         Assert.True(actual);
@@ -164,7 +164,7 @@ public class OddsInfoValidationServiceTests
             FavoriteValue = "9",
             WrongOU = "1"
         };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidHdpWrongOdds(linkedOddsInfo, getLinkedLogModel);
@@ -185,10 +185,9 @@ public class OddsInfoValidationServiceTests
             FromOddsNotVoidAwayUnder = "3",
             ToOddsNotVoidAwayUnder = "9"
         };
-        var service = new OddsInfoValidationServiceImp();
 
         // Act
-        var actual = service.IsValidOddsWrongOdds(linkedOddsInfo, getLinkedLogModel);
+        var actual = LinkedLogValidationServiceImp.IsValidOddsWrongOdds(linkedOddsInfo, getLinkedLogModel);
 
         // Assert
         Assert.False(actual);
@@ -210,7 +209,7 @@ public class OddsInfoValidationServiceTests
             FromOddsNotVoidAwayUnder = fromOddsNotVoidAwayUnder,
             ToOddsNotVoidAwayUnder = toOddsNotVoidAwayUnder
         };
-        var service = new OddsInfoValidationServiceImp();
+        var service = new LinkedLogValidationServiceImp();
 
         // Act
         var actual = service.IsValidOddsWrongOdds(linkedOddsInfo, getLinkedLogModel);

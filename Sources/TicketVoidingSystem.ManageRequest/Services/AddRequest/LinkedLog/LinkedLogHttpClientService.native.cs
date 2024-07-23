@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface LinkedLogHttpClientService
 {
-    Task<IEnumerable<PoolHouseLinkedLogResponse>> GetLinkedLog(PoolHouseLinkedLogRequest requestData);
+    Task<IEnumerable<PoolHouseLinkedLogResponse>> GetLinkedLog(int matchId, int liveIndicator);
 }
 
 public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
@@ -24,10 +24,10 @@ public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
         this.httpClient.DefaultRequestHeaders.Add("Accept", MediaTypeNames.Application.Json);
     }
 
-    public async Task<IEnumerable<PoolHouseLinkedLogResponse>> GetLinkedLog(PoolHouseLinkedLogRequest requestData)
+    public async Task<IEnumerable<PoolHouseLinkedLogResponse>> GetLinkedLog(int matchId, int liveIndicator)
     {
         const string actionName = "api/PoolHouse/GetLinkLog";
-        var response = await httpClient.PostAsJsonAsync(actionName, requestData);
+        var response = await httpClient.PostAsJsonAsync(actionName, new { matchId, liveIndicator });
         if (response.IsSuccessStatusCode)
         {
             await loggingService.InfoAsync(await CreateLogResponse(actionName, response));

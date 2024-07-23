@@ -18,13 +18,12 @@ public static class AddRequestCommon
         services.AddTransient<InsertAutoVoidRequestQueueService, InsertAutoVoidRequestQueueServiceImp>();
         services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
         services.AddTransient<SendLetstalkAfterAddService, SendLetstalkAfterAddServiceImp>();
-        services.AddTransient<BuildLogsDataService, BuildLogsDataServiceImp>();
+        services.AddTransient<LinkedLogForUIService, LinkedLogForUIServiceImp>();
         services.AddTransient<FilterLinkedLogService, FilterLinkedLogServiceImp>();
         services.AddTransient<GetLinkedLogService, GetLinkedLogServiceImp>();
-        services.AddTransient<GetLinkedLogShowUiService, GetLinkedLogShowUiServiceImp>();
         services.AddTransient<GetPoolHouseTicketService, GetPoolHouseTicketServiceImp>();
         services.AddTransient<LinkGroupBettypeService, LinkGroupBettypeServiceImp>();
-        services.AddTransient<OddsInfoValidationService, OddsInfoValidationServiceImp>();
+        services.AddTransient<LinkedLogValidationService, LinkedLogValidationServiceImp>();
         services.AddTransient<MatchInfoAddRequestService, MatchInfoAddRequestServiceImp>();
         services.AddTransient<ReducedOverBetTypesService, ReducedOverBetTypesServiceImp>();
         services.AddTransient<NotParticipateBetTypesService, NotParticipateBetTypesServiceImp>();

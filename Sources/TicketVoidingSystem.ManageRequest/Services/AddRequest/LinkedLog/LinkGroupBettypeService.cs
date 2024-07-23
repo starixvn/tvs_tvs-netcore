@@ -6,38 +6,24 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface LinkGroupBettypeService
 {
-    LinkGroupBettypeValidation CheckAffectedToGroup(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses);
+    (bool IsLinkGroup1X2, bool IsLinkGroupAIO) CheckAffectedToGroup(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> affectedLog);
 }
 
 public class LinkGroupBettypeServiceImp : LinkGroupBettypeService
 {
-    private readonly FilterLinkedLogService filterLinkedLogService;
-
-    public LinkGroupBettypeServiceImp(FilterLinkedLogService filterLinkedLogService)
+    public (bool IsLinkGroup1X2, bool IsLinkGroupAIO) CheckAffectedToGroup(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> affectedLog)
     {
-        this.filterLinkedLogService = filterLinkedLogService;
-    }
-
-    public LinkGroupBettypeValidation CheckAffectedToGroup(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
-    {
-        var filterLinkedLogResult = filterLinkedLogService.FilterApiResponse(getLinkedLogModel, apiLinkedLogResponses);
-        var isLinkGroup1X2 = CheckAffectedByGroupId(LinkedLogApiConstant.GroupId1X2, getLinkedLogModel, filterLinkedLogResult);
-        var isLinkGroup1H1X2 = CheckAffectedByGroupId(LinkedLogApiConstant.GroupId1H1X2, getLinkedLogModel, filterLinkedLogResult);
+        var isLinkGroup1X2 = CheckAffectedByGroupId(LinkedLogApiConstant.GroupId1X2, affectedLog);
+        var isLinkGroup1H1X2 = CheckAffectedByGroupId(LinkedLogApiConstant.GroupId1H1X2, affectedLog);
         var combineCheckLinkGroup1X2 = CombineCheckAffectedToGroup1X2(getLinkedLogModel, isLinkGroup1X2, isLinkGroup1H1X2);
-        var isLinkGroupAIO = CheckAffectedByGroupId(LinkedLogApiConstant.GroupIdAio, getLinkedLogModel, filterLinkedLogResult);
+        var isLinkGroupAIO = CheckAffectedByGroupId(LinkedLogApiConstant.GroupIdAio, affectedLog);
 
-        return new LinkGroupBettypeValidation
-        {
-            IsLinkGroup1X2 = combineCheckLinkGroup1X2,
-            IsLinkGroupAIO = isLinkGroupAIO
-        };
+        return (combineCheckLinkGroup1X2, isLinkGroupAIO);
     }
 
-    private static bool CheckAffectedByGroupId(int groupId, GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    private static bool CheckAffectedByGroupId(int groupId, IEnumerable<PoolHouseLinkedLogResponse> affectedLog)
     {
-        return apiLinkedLogResponses
-            .Where(x => x.Time >= getLinkedLogModel.FilterFromTransTime)
-            .Any(x => x.LinkGroup == groupId);
+        return affectedLog.Any(x => x.LinkGroup == groupId);
     }
 
     private static bool CombineCheckAffectedToGroup1X2(GetLinkedLogModel getLinkedLogModel, bool isLinkGroup1X2Validation, bool isLinkGroup1H1X2Validation)

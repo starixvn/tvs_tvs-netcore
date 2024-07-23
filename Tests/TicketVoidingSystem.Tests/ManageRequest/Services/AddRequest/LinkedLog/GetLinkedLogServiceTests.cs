@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class GetLinkedLogServiceTests
 {
-    private readonly BuildLogsDataService buildLogsDataService;
+    private readonly LinkedLogForUIService buildLogsDataService;
     private readonly LinkedLogApiService linkedLogApiService;
     private readonly LinkGroupBettypeService linkGroupBettypeService;
     private readonly GetLinkedLogServiceImp service;
@@ -23,7 +23,7 @@ public class GetLinkedLogServiceTests
         var loggingService = Substitute.For<LoggingService>();
         linkedLogApiService = Substitute.For<LinkedLogApiService>();
         linkGroupBettypeService = Substitute.For<LinkGroupBettypeService>();
-        buildLogsDataService = Substitute.For<BuildLogsDataService>();
+        buildLogsDataService = Substitute.For<LinkedLogForUIService>();
         service = new GetLinkedLogServiceImp(loggingService, linkedLogApiService, linkGroupBettypeService,
             buildLogsDataService);
     }

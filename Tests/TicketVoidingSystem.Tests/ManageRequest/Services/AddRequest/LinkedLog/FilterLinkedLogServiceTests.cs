@@ -12,13 +12,13 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class FilterLinkedLogServiceTests
 {
-    private readonly OddsInfoValidationService oddsInfoValidationService;
+    private readonly LinkedLogValidationService linkedLogValidationService;
     private readonly FilterLinkedLogServiceImp service;
 
     public FilterLinkedLogServiceTests()
     {
-        oddsInfoValidationService = Substitute.For<OddsInfoValidationService>();
-        service = new FilterLinkedLogServiceImp(oddsInfoValidationService);
+        linkedLogValidationService = Substitute.For<LinkedLogValidationService>();
+        service = new FilterLinkedLogServiceImp(linkedLogValidationService);
     }
 
     [Theory]
@@ -58,10 +58,10 @@ public class FilterLinkedLogServiceTests
                 LinkedOddsInfoDic = linkedOddsInfoDic
             }
         };
-        oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidInputHdpForWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsContainsValue(Arg.Any<string>(), 1).Returns(true);
-        oddsInfoValidationService.IsContainsValue(Arg.Any<string>(), 2).Returns(false);
+        linkedLogValidationService.IsContainsValue(Arg.Any<string>(), 1).Returns(true);
+        linkedLogValidationService.IsContainsValue(Arg.Any<string>(), 2).Returns(false);
 
         // Act
         var actual = service.FilterApiResponse(getLinkedLogModel, apiLinkedLogResponses);
@@ -107,9 +107,9 @@ public class FilterLinkedLogServiceTests
                 LinkedOddsInfoDic = linkedOddsInfoDic
             }
         };
-        oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidInputHdpForWrongHdp1StHdp(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(false);
-        oddsInfoValidationService.IsContainsValue(Arg.Any<string>(), Arg.Any<decimal>()).ReturnsForAnyArgs(false);
+        linkedLogValidationService.IsContainsValue(Arg.Any<string>(), Arg.Any<decimal>()).ReturnsForAnyArgs(false);
 
         // Act
         var actual = service.FilterApiResponse(getLinkedLogModel, apiLinkedLogResponses);
@@ -151,14 +151,14 @@ public class FilterLinkedLogServiceTests
                 LinkedOddsInfoDic = linkedOddsInfoDic
             }
         };
-        oddsInfoValidationService
-            .IsValidLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService
+            .IsLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidBetTypeWrongOdds(Arg.Any<int>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidBetTypeWrongOdds(Arg.Any<int>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidHdpWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidHdpWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidOddsWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidOddsWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
 
         // Act
@@ -205,14 +205,14 @@ public class FilterLinkedLogServiceTests
                 LinkedOddsInfoDic = linkedOddsInfoDic
             }
         };
-        oddsInfoValidationService
-            .IsValidLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService
+            .IsLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidBetTypeWrongOdds(Arg.Any<int>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidBetTypeWrongOdds(Arg.Any<int>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(IsValidBetTypeWrongOdds);
-        oddsInfoValidationService.IsValidHdpWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidHdpWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(IsValidHdpWrongOdds);
-        oddsInfoValidationService.IsValidOddsWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService.IsValidOddsWrongOdds(Arg.Any<LinkedOddsInfo>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(IsValidOddsWrongOdds);
 
         // Act
