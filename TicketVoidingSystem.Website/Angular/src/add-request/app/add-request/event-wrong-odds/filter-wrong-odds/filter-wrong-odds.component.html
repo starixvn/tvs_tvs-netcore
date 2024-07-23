@@ -79,7 +79,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text filter-right border-radius-right-0">Allowance Rate</span>
       </div>
-      <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" 
+      <ng-select class="input-group-sm div-input mr-2" [items]="allowanceRates" bindLabel="name" bindValue="value" [disabled]="isDisabled"
       (ngModelChange)="changeFilter()" [(ngModel)]="filterWrongOddsModel.allowanceRate" [clearable]="false" [searchable]="false">
       </ng-select>
     </div>
@@ -97,7 +97,7 @@
         </span>
       </div>
       <div class="input-group-sm div-input correct-odds-input mr-2">
-        <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsHomeOver" 
+        <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsHomeOver" [disabled]="isDisabled"
         (ngModelChange)="changeFilter();isValidFilterCorrectOdds()" (change)="changeCorrectOdds()"
           class="form-control border-radius-left-0">
       </div>

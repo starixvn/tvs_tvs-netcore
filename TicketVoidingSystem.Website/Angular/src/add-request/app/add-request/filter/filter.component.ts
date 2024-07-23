@@ -161,14 +161,18 @@ export class FilterComponent implements OnInit, OnChanges {
 
   getIssueTypeIdDefault(): number {
     const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
+    let issueTypeDefault: number;
     if (this.isExternalUrl) {
-      return Number(this.model.issueTypeId);
+      issueTypeDefault = Number(this.model.issueTypeId);
     } else {
       const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'));
-      return previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
+      issueTypeDefault = previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
         ? Number(previousSelectedIssueType)
         : this.issueTypes.issueId;
     }
+    this.issueTypeChange.emit(issueTypeDefault.toString());
+
+    return issueTypeDefault;
   }
 
   initDate() {
