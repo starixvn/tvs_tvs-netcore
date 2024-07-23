@@ -6,6 +6,7 @@ import { BlockUiModule } from '../../components/block-ui/block-ui.module';
 import { PagingModule } from '../../components/paging/paging.module';
 import { ToolTipModule } from '../../components/tooltip/tooltip.module';
 import { PipeModule } from '../../pipes/pipe.module';
+import { MultipleSelectionModule } from '../multiple-selection/multiple-selection.module';
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house/group-bettypes-pool-house.component';
 import { LinkedLogComponent } from './linked-log/linked-log.component';
 import { PoolHouseTicketComponent } from './pool-house-ticket.component';
@@ -30,6 +31,7 @@ import { TicketsComponent } from './tickets/tickets.component';
     BlockUiModule,
     CommonModule,
     PipeModule,
+    MultipleSelectionModule,
     NgbAccordionModule
   ]
 })

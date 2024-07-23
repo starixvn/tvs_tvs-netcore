@@ -5,6 +5,7 @@ import { RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { DateFullTimeNewComponent } from '../components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
+import { MultipleSelection } from '../components/multiple-selection/multiple-selection';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
@@ -395,5 +396,16 @@ export class StaticService {
     }
 
     return messageList;
+  }
+
+  static initDefaultMultipleSelection(widthPx: string, numberItemsDisplay: number): MultipleSelection {
+    const multipleSelection = new MultipleSelection();
+    multipleSelection.checkAllCheckBoxText = 'All';
+    multipleSelection.allItemsCheckedText = 'All';
+    multipleSelection.noneItemCheckedText = 'Select options';
+    multipleSelection.maxWidth = widthPx;
+    multipleSelection.numberItemsDisplay = numberItemsDisplay;
+
+    return multipleSelection;
   }
 }

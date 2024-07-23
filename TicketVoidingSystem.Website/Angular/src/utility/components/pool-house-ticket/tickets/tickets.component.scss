@@ -171,10 +171,6 @@
             display: none;
         }
     }
-
-    .list-check-groups {
-        @include dropdown-check-all();
-    }
 }
 
 .note-lasted-bettrade {

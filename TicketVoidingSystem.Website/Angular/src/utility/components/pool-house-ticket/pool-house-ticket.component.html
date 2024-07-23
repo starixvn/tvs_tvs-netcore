@@ -25,7 +25,11 @@
                     [affectedGroupBetTypesModel]="section.groupBetTypesModel"
                     (changedBetTypesEvent)="changedBetTypes($event)">
                   </group-bettypes-pool-house>
-                  <tickets [model]="section.tickets" [(paging)]="section.paging" [isBlock]="blockBetList"></tickets>
+                  <ng-container *ngIf="!section.isAffected && section.filterBetTypes">
+                    <multiple-selection class="multiple-selection filter-site-dropdown mb-1 mt-2" [multipleSelect]="section.filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
+                    </multiple-selection>
+                  </ng-container>
+                  <tickets [model]="section.tickets" [isBlock]="blockBetList"></tickets>
                 </div>
               </div>
             </ng-container>

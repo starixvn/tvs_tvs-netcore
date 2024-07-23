@@ -1,5 +1,5 @@
 import { WrongOddsGetLogInfoQuery } from "../../../add-request/app/add-request/event-wrong-odds/models/get-log-info.query";
-import { PagingModel } from "../paging/paging/paging.model";
+import { MultipleSelection } from "../multiple-selection/multiple-selection";
 import { GroupBetType, GroupBetTypesModel } from "./group-bettypes-pool-house/group-bettypes-pool-house.model";
 import { LinkedLogsViewModel } from "./linked-log/linked-log.model";
 import { TicketsModel } from "./tickets/tickets.model";
@@ -42,7 +42,6 @@ export class GetPoolHouseTicketQuery {
   filterFromTransTime: string;
   filterToTransTime: string;
   liveIndicator: number;
-
   wrongOddsInfo: WrongOddsGetLogInfoQuery[];
 }
 
@@ -50,7 +49,7 @@ export class PoolHouseTicketsSection {
   isAffected: boolean;
   name: string;
   groupBetTypesModel: GroupBetTypesModel;
+  filterBetTypes?: MultipleSelection;
   tickets: TicketsModel;
-  paging = new PagingModel();
   isCollapsed: boolean;
 }

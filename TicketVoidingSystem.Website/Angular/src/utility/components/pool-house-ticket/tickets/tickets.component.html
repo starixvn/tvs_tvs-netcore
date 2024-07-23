@@ -100,17 +100,4 @@
       </tbody>
     </table>
   </div>
-  <div class="list-check-groups" *ngIf="isShowListCheckGroup">
-    <ul [style.top]="model.iconCheckBoxTop">
-      <li [ngClass]="{'li-checked':model.iconCheckBox == 2}" (click)="model.checkAllGroupsDropDown()">All</li>
-      <li *ngFor="let group of model.groups"
-          [ngClass]="{'li-checked':group.isCheckAll}"
-          (click)="group.isCheckAll = group.isDisabled ? false : !group.isCheckAll;
-                group.checkAllTickets();
-                model.changeIconCheckBox();
-                changeTickets()">
-        {{group.name}}
-      </li>
-    </ul>
-  </div>
 </div>

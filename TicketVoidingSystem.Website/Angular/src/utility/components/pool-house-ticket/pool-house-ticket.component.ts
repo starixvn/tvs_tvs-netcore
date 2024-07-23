@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
+import { StaticService } from 'src/utility/services/static.service';
 import { PoolHouseTicketValue } from '../../constants/config';
-import { PagingModel } from '../paging/paging/paging.model';
-import { GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
+import { ItemsSelect } from '../multiple-selection/items-select';
+import { MultipleSelection } from '../multiple-selection/multiple-selection';
+import { GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
 
@@ -16,6 +18,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   @Output() saveEventOuput = new EventEmitter<PoolHouseTicketsModel>();
   poolHouseTicketsSections: PoolHouseTicketsSection[] = [];
   affectedSection: PoolHouseTicketsSection;
+  otherSection: PoolHouseTicketsSection;
   isBlock: boolean;
   blockBetList: boolean;
 
@@ -36,41 +39,37 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   private updatePoolHouseTicketSections() {
-    this.poolHouseTicketsSections.push(this.getAffectedSection());
-    this.poolHouseTicketsSections.push(this.getOtherSection());
+    this.poolHouseTicketsSections = [this.getAffectedSection(), this.getOtherSection()];
   }
 
   public getAffectedSection(): PoolHouseTicketsSection {
     const affectedTickets = new TicketsModel();
-    const affectedPaging = new PagingModel();
     affectedTickets.initData(this.model.affectedTickets);
-    affectedPaging.total = this.model.affectedTickets.totalParlay + this.model.affectedTickets.totalSingle;
 
     this.affectedSection = {
       isAffected: true,
       name: 'Affected Bet Types',
       groupBetTypesModel: new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName !== 'Others'), true, false),
       tickets: affectedTickets,
-      isCollapsed: false,
-      paging: affectedPaging
+      isCollapsed: false
     };
     return this.affectedSection;
   }
 
   public getOtherSection(): PoolHouseTicketsSection {
     const otherTickets = new TicketsModel();
-    const otherPaging = new PagingModel();
     otherTickets.initData(this.model.otherTickets);
-    otherPaging.total = this.model.otherTickets.totalParlay + this.model.otherTickets.totalSingle;
-
-    return {
+    const otherGroupBetTypes = this.model.groupBetTypes.filter(x => x.groupName === 'Others');
+    this.otherSection = {
       isAffected: false,
       name: 'Other Bet Types',
-      groupBetTypesModel: new GroupBetTypesModel(this.model.groupBetTypes.filter(x => x.groupName === 'Others'), false, true),
+      filterBetTypes: this.initFilterBetTypes(otherGroupBetTypes),
+      groupBetTypesModel: new GroupBetTypesModel(otherGroupBetTypes, false, true),
       tickets: otherTickets,
-      isCollapsed: false,
-      paging: otherPaging
+      isCollapsed: false
     };
+
+    return this.otherSection;
   }
 
   private changeCheckBetTypeAndTicket(): void {
@@ -122,5 +121,18 @@ export class PoolHouseTicketComponent implements OnChanges {
     }
 
     return false;
+  }
+
+  updateSelectedBetTypes(betTypes: string[]) {
+    this.otherSection.tickets.handlecheckTicketByBetTypes(betTypes.map(i => Number(i)));
+  }
+
+  initFilterBetTypes(groupBetTypes: GroupBetType[]): MultipleSelection {
+    const multipleSelection = StaticService.initDefaultMultipleSelection('280px', 1);
+    multipleSelection.items = groupBetTypes
+      .flatMap(x => x.betTypes)
+      .map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
+
+    return multipleSelection;
   }
 }

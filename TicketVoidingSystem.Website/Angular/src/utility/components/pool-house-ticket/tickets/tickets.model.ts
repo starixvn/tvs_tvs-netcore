@@ -26,11 +26,10 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
   handlecheckTicketByBetTypes(checkedBetTypes: number[]) {
     this.groups.forEach(group => {
       group.tickets.forEach(y => {
-        y.isChecked = group.name === 'Others'
-          ? false
-          : (checkedBetTypes.includes(Number(y.betTypeId)) && !y.isParlay) || (checkedBetTypes.includes(Number(y.subBetTypeId)) && y.isParlay);
+        y.isChecked = (checkedBetTypes.includes(Number(y.betTypeId)) && !y.isParlay) || (checkedBetTypes.includes(Number(y.subBetTypeId)) && y.isParlay);
       });
-      group.isCheckAll = group.tickets.length === group.getCheckedTickets().length;
+      group.displayTotalTickets = group.getCheckedTickets().length;
+      group.isCheckAll = group.tickets.length === group.displayTotalTickets;
     });
   }
   
