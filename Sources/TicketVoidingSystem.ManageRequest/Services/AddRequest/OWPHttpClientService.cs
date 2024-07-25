@@ -52,7 +52,7 @@ public class OWPHttpClientServiceImp : OWPHttpClientService
         var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
         var responseContent = await response.Content.ReadAsStringAsync();
 
-        return $"{AppSettingService.AppSetting.JackTimeCashOutUrl}{actionName}" +
+        return $"{AppSettingService.AppSetting.OWPUrl}{actionName}" +
                $"{Environment.NewLine}RequestContent:{Environment.NewLine}{requestContent}" +
                $"{Environment.NewLine}Response:{Environment.NewLine}{response}" +
                $"{Environment.NewLine}ResponseContent:{Environment.NewLine}{responseContent}";

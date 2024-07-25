@@ -103,13 +103,15 @@ export class SubmitVoidService {
   }
 
   private getWarningInputsInTemplateMessage(voidPageItem: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): string {
-    const matchesHaveWarning = this.getMatchesHaveWarning(voidPageItem, templateMessageComponents);
-    if (matchesHaveWarning.length > 0) {
-      const matchIdList = `- Match Id: ${matchesHaveWarning.join(', ')}`;
-      const warningMessage = `<div><i class="fa fa-exclamation-triangle pt-2 text-warn"></i>There are some message info you do not input in these matches:</div>
-                                  <div>${matchIdList}</div></br>`;
+    if (templateMessageComponents.some(x => x.isHasWarningForDynamicInput())) {
+      const matchesHaveWarning = this.getMatchesHaveWarning(voidPageItem, templateMessageComponents);
+      if (matchesHaveWarning.length > 0) {
+        const matchIdList = `- Match Id: ${matchesHaveWarning.join(', ')}`;
+        const warningMessage = `<div><i class="fa fa-exclamation-triangle pt-2 text-warn"></i>There are some message info you do not input in these matches:</div>
+                                    <div>${matchIdList}</div></br>`;
 
-      return warningMessage;
+        return warningMessage;
+      }
     }
 
     return '';
