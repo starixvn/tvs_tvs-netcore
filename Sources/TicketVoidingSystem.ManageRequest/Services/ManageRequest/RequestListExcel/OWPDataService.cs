@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
@@ -27,7 +27,7 @@ public class OWPDataServiceImp : OWPDataService
     {
         try
         {
-            var matchEventDates = requests.Where(x => x.MatchId > 0 && x.MatchId != BetTypeConstant.SystemParlay)
+            var matchEventDates = requests.Where(x => x.MatchId > 0 && !x.MatchId.Value.IsParlay())
                 .Select(x => new MatchEventDate
                 {
                     MatchId = x.ParentMatchId is not null && x.ParentMatchId > 0 ? x.ParentMatchId.Value : x.MatchId ?? 0,
