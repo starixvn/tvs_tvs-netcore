@@ -8,9 +8,6 @@ export class PoolHouseTicketViewModel {
   groupBetTypes: GroupBetType[];
   affectedTickets: TicketsModel;
   otherTickets: TicketsModel;
-  isAffectedGroup1X2: boolean;
-  isAffectedGroup1H1X2: boolean;
-  isAffectedGroupAIO: boolean;
 }
 
 export class PoolHouseTicketsModel {
@@ -20,10 +17,7 @@ export class PoolHouseTicketsModel {
   groupBetTypes: GroupBetType[];
   affectedTickets: TicketsModel;
   otherTickets: TicketsModel;
-  isAffectedGroup1X2: boolean;
-  isAffectedGroup1H1X2: boolean;
-  isAffectedGroupAIO: boolean;
-
+  
   linkedLogsViewModel: LinkedLogsViewModel;
 }
 

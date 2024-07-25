@@ -84,9 +84,6 @@ export class LogInfoWrongHdpComponent {
 
     this.poolHouseTicketsModel.query = query;
     this.poolHouseTicketsModel.linkedLogsViewModel = this.logInfo.linkedLogsViewModel;
-    this.poolHouseTicketsModel.isAffectedGroup1X2 = viewModel.isAffectedGroup1X2;
-    this.poolHouseTicketsModel.isAffectedGroup1H1X2 = viewModel.isAffectedGroup1H1X2;
-    this.poolHouseTicketsModel.isAffectedGroupAIO = viewModel.isAffectedGroupAIO;
     this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
     this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
     this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;

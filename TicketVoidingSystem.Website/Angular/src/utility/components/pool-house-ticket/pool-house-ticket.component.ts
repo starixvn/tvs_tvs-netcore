@@ -31,9 +31,6 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   private updatePoolHouseTicketModal() {
-    this.model.linkedLogsViewModel.poolHouseLinkedLogsData.forEach(x => {
-      x.isShow = this.checkCanShowGroupLinkedLog(x.groupName);
-    });
     this.updatePoolHouseTicketSections();
     this.changeCheckBetTypeAndTicket();
   }
@@ -105,22 +102,6 @@ export class PoolHouseTicketComponent implements OnChanges {
       .map(x => x.id);
 
     return checkedBetTypes.join(',');
-  }
-
-  public isHideLinkedLog(): boolean {
-    return this.model.isAffectedGroupAIO && (this.model.isAffectedGroup1X2 || this.model.isAffectedGroup1H1X2);
-  }
-
-  private checkCanShowGroupLinkedLog(groupName: string): boolean {
-    if (groupName === '1X2') {
-      return !this.model.isAffectedGroup1X2;
-    } else if (groupName === '1H 1X2') {
-      return !this.model.isAffectedGroup1H1X2;
-    } else if (groupName === 'AIO') {
-      return !this.model.isAffectedGroupAIO;
-    }
-
-    return false;
   }
 
   updateSelectedBetTypes(betTypes: string[]) {

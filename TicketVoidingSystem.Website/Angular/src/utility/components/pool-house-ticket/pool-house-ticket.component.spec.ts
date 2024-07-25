@@ -13,9 +13,9 @@ import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { BlockUiModule } from '../block-ui/block-ui.module';
 import { PagingModel } from '../paging/paging/paging.model';
 import { ToolTipModule } from '../tooltip/tooltip.module';
-import { LinkedLogsViewModel, PoolHouseLinkedLogsData } from './linked-log/linked-log.model';
+import { GroupLinkedLog, LinkedLogsViewModel } from './linked-log/linked-log.model';
 import { PoolHouseTicketComponent } from './pool-house-ticket.component';
-import { PoolHouseTicketViewModel, PoolHouseTicketsModel } from './pool-house-ticket.model';
+import { PoolHouseTicketsModel, PoolHouseTicketViewModel } from './pool-house-ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
 class Helper {
   static readonly inputsSelector = '.form-control';
@@ -55,7 +55,7 @@ class Helper {
     hdpValue: '',
     liveIndicator: 0
   };
-  static readonly fakePoolHouseLinkedLogsData: PoolHouseLinkedLogsData = {
+  static readonly fakePoolHouseLinkedLogsData: GroupLinkedLog = {
     groupName: 'AIO',
     isShow: true,
     logsData: []

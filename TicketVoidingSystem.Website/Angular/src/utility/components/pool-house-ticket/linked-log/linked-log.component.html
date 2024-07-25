@@ -1,61 +1,55 @@
 <div class="container">
   <div *ngIf="linkedLogsViewModel.result?.isSuccessful">
-    <div *ngIf="linkedLogsViewModel.poolHouseLinkedLogsData.length > 0">
-      <div *ngIf="isShowTitle()">
-        {{title}} - Not Affected.
-        <label (click)="isCollapse=!isCollapse">
-          <span class="linked-log-info mr-1">Linked Log</span>
-          <em class="fa" [ngClass]="{'fa-caret-up':!isCollapse, 'fa-caret-down':isCollapse}"></em>
-        </label>
-      </div>
-    
-      <div *ngIf="!isCollapse" class="d-flex flex-wrap">
-        <ng-container *ngFor="let linkLog of linkedLogsViewModel.poolHouseLinkedLogsData">
-          <div *ngIf="linkLog.isShow" class="link-logs mr-3">
-            <div class="link-logs-header">
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col" colspan="2">
-                      <div>
-                        {{linkLog.groupName}}
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            <div class="link-logs-content" *ngIf="linkLog.logsData?.length > 0">
-              <table>    
-                <tbody>
-                  <tr *ngFor="let logsData of linkLog.logsData">
-                    <td>
-                      <div>
-                        {{logsData}}
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="link-logs-content-no-data" *ngIf="linkLog.logsData === null || linkLog.logsData === undefined || linkLog.logsData.length === 0">
-              <table>    
-                <tbody>
-                  <tr>
-                    <td class="no-data d-flex justify-content-center">There is no data</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+    <label>
+      <span class="linked-log-info mr-1">Linked Log</span>
+    </label>
+
+    <div class="d-flex flex-wrap">
+      <ng-container *ngFor="let linkLog of linkedLogsViewModel.groupLinkedLogs">
+        <div class="link-logs mr-3">
+          <div class="link-logs-header">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" colspan="2">
+                    <div>
+                      {{linkLog.groupName}} 
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+            </table>
           </div>
-        </ng-container>
-      </div>
-    </div>
-    <div *ngIf="linkedLogsViewModel.poolHouseLinkedLogsData.length === 0">
-      There is not any link log!!!
+          <div class="link-logs-content" *ngIf="linkLog.logsData?.length > 0">
+            <table>
+              <tbody>
+                <tr *ngFor="let logsData of linkLog.logsData">
+                  <td>
+                    <div>
+                      {{logsData}}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="link-logs-content-no-data"
+            *ngIf="!linkLog.logsData || linkLog.logsData.length === 0">
+            <table>
+              <tbody>
+                <tr>
+                  <td class="no-data d-flex justify-content-center">There is no data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
+  
   <div *ngIf="!linkedLogsViewModel.result?.isSuccessful" class="warning-text d-flex align-items-center mb-2">
-    <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>{{linkedLogsViewModel.result?.errorMsg}}
+    <i class="fa fa-exclamation-triangle icon-warning-message mr-1"
+      aria-hidden="true"></i>{{linkedLogsViewModel.result?.errorMsg}}
   </div>
 </div>

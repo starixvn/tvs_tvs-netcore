@@ -1,20 +1,20 @@
 import { Result } from "../../../models/result";
 
 export class LinkedLogsViewModel {
-  poolHouseLinkedLogsData: PoolHouseLinkedLogsData[];
+  groupLinkedLogs: GroupLinkedLog[];
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
   result: Result<null>;
   
   constructor() {
-    this.poolHouseLinkedLogsData = [];
+    this.groupLinkedLogs = [];
   }
 }
 
-export class PoolHouseLinkedLogsData {
+export class GroupLinkedLog {
   groupName: string;
   logsData: string[];
-  isShow: boolean;
+  isAffected: boolean;
 }
 
 export class GetLinkedLogQuery {

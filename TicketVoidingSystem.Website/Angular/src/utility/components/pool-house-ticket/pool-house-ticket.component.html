@@ -12,7 +12,7 @@
           </button>
         </div>
         <div class="modal-body" [blockUi]="isBlock">
-          <linked-log [hidden]="isHideLinkedLog()" [linkedLogsViewModel]="model.linkedLogsViewModel" ></linked-log>
+          <linked-log [linkedLogsViewModel]="model.linkedLogsViewModel" ></linked-log>
           <div class="bettype-ticket-section">
             <ng-container *ngFor="let section of poolHouseTicketsSections">
               <div *ngIf="section.tickets.groups.length > 0">
