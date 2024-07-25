@@ -19,9 +19,9 @@ import { AppService } from '../../app.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
+import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
-import { TicketsService } from './tickets.service';
 import { VoidPageService } from './void-page.service';
 
 class Helper {
@@ -47,7 +47,8 @@ class Helper {
     isMainMatch: false,
     isPoolHouseAffected: false,
     isAllNonLiveTickets: true,
-    licenseeAffectedList: []
+    licenseeAffectedList: [],
+    detailViewModel: new RequestDetailViewModel()
   };
   static readonly fakeSqlResultError: SqlResult = {
     errCode: 1,
@@ -201,7 +202,9 @@ describe('VoidPageService', () => {
     const spyGetVoidTicketsMini = jest.spyOn(ticketsService, 'getVoidTicketsMini').mockImplementation(() => Promise.resolve(new TicketsModel()));
     const spyGetTemplateValue = jest.spyOn(templateMessageService, 'getTemplateValue').mockImplementation(() => new TemplateValue());
     const spyGetVoidedReason = jest.spyOn(appService, 'getVoidedReason').mockImplementation(() => Promise.resolve(new VoidedReason()));
-    const issueTypeIds = [IssueTypeConstant.ABNORMAL_ACCOUNT, IssueTypeConstant.DANGER_ACCEPTED];
+    const ISSUE_TYPE_ABNORMAL_ACCOUNT = IssueTypeConstant.ABNORMAL_ACCOUNT;
+    const ISSUE_TYPE_DANGER_ACCEPTED = IssueTypeConstant.DANGER_ACCEPTED;
+    const issueTypeIds = [ISSUE_TYPE_ABNORMAL_ACCOUNT, ISSUE_TYPE_DANGER_ACCEPTED];
     // Action
     issueTypeIds.forEach( async issueTypeId => {
       const fakeRequestDetailViewModel = _.cloneDeep(Helper.fakeRequestDetailViewModel);

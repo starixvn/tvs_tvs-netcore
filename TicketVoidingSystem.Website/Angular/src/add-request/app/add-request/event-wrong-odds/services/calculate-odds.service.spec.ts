@@ -1,7 +1,7 @@
-import { CalculateOddsService } from './calculate-odds.service';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
-import { MatchModel } from '../../../../../utility/models/match.model';
+import { CalculateOddsService } from './calculate-odds.service';
 
 describe('CalculateOddsService', () => {
   let service: CalculateOddsService;
@@ -91,7 +91,7 @@ describe('CalculateOddsService', () => {
   });
 
   it('#updateAllowanceRate should update allowance rate default 20 when maxBet & spread is 0', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 0, spread: '0' } as FilterWrongOddsModel;
+    const oddsInfo: FilterWrongOddsModel = { maxBet: 0, spread: '0', maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
 
     service.updateAllowanceRate(oddsInfo);
 
@@ -99,7 +99,7 @@ describe('CalculateOddsService', () => {
   });
 
   it('#updateAllowanceRate should update allowance rate correctly when max bet is >= 80000', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 80000, spread: '0' } as FilterWrongOddsModel;
+    const oddsInfo: FilterWrongOddsModel = { maxBet: 80000, spread: '0', maxBetAndSpreadInfo: [] } as FilterWrongOddsModel;
 
     service.updateAllowanceRate(oddsInfo);
 
@@ -107,7 +107,7 @@ describe('CalculateOddsService', () => {
   });
 
   it('#updateAllowanceRate should update allowance rate correctly when spread is > 0.15', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 70000, spread: '0.2' } as FilterWrongOddsModel;
+    const oddsInfo: FilterWrongOddsModel = { maxBet: 70000, spread: '0.2', maxBetAndSpreadInfo: [{}] } as FilterWrongOddsModel;
 
     service.updateAllowanceRate(oddsInfo);
 
@@ -115,7 +115,7 @@ describe('CalculateOddsService', () => {
   });
 
   it('#updateAllowanceRate should update allowance rate correctly for other cases', () => {
-    const oddsInfo: FilterWrongOddsModel = { maxBet: 70000, spread: '0.1' } as FilterWrongOddsModel;
+    const oddsInfo: FilterWrongOddsModel = { maxBet: 70000, spread: '0.1', maxBetAndSpreadInfo: [{}] } as FilterWrongOddsModel;
 
     service.updateAllowanceRate(oddsInfo);
 

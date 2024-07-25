@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Fanex.Data.Repository;
 using MediatR;
 using TicketVoidingSystem.SharedApi.Criteria.MessageTemplate;
@@ -19,12 +18,10 @@ public class GetTemplateSettingRequest : IRequest<TemplateSettingViewModel>
 public class GetTemplateSettingHandler : IRequestHandler<GetTemplateSettingRequest, TemplateSettingViewModel>
 {
     private readonly IDynamicRepository repository;
-    private readonly IMapper mapper;
 
-    public GetTemplateSettingHandler(IDynamicRepository repository, IMapper mapper)
+    public GetTemplateSettingHandler(IDynamicRepository repository)
     {
         this.repository = repository;
-        this.mapper = mapper;
     }
 
     public async Task<TemplateSettingViewModel> Handle(GetTemplateSettingRequest request, CancellationToken cancellationToken)

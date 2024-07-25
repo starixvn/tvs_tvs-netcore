@@ -1,20 +1,17 @@
 import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
-import { ClipboardService } from 'ngx-clipboard';
-import { Subscription, timer } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
-import { CheckRequestService } from '../services/check-request.service';
-import { PopupService } from './services/popup.service';
-import { SubmitVoidService } from './services/submit-void.service';
-import { TicketsService } from './services/tickets.service';
+import { TicketsService } from '../services/tickets.service';
+import { VoidPageCommonService } from '../services/void-page-common.service';
+
 import { VoidPageService } from './services/void-page.service';
 
 @Component({
@@ -28,20 +25,14 @@ export class VoidDangerAcceptedComponent implements OnInit {
 
   public primitiveProperty = new CommonPrimitiveProperty();
   public voidMatches: VoidMatch[] = [];
-  public isLoadedBasicData = false;
-  public isLoadedUnderneathData = false;
   public issueTypes: IssueTypesModel;
   public tooltip = new Tooltip();
-  private afterLoadUnderneathDataSubscription: Subscription;
-  private readonly observableTimer = timer(0, 100);
-  private isRunningSubscriptionCallback = false;
+  private readonly afterLoadUnderneathDataSubscription: Subscription;
+
   constructor(
     private readonly voidPageService: VoidPageService,
     private readonly ticketsService: TicketsService,
-    private readonly popupService: PopupService,
-    private readonly submitVoidService: SubmitVoidService,
-    private readonly checkRequestService: CheckRequestService,
-    private readonly clipboardService: ClipboardService,
+    private readonly voidPageCommonService: VoidPageCommonService,
     private readonly element: ElementRef) {
     this.tooltip.element = this.element;
   }
@@ -51,27 +42,15 @@ export class VoidDangerAcceptedComponent implements OnInit {
     this.primitiveProperty.userName = document.body.getAttribute('user-name');
     this.issueTypes = await this.voidPageService.getIssueTypes();
     this.voidMatches = await this.voidPageService.getBasicVoidMatchesData(this.issueTypes, this.requestDetail, this.primitiveProperty);
-    this.isLoadedBasicData = true;
+    this.primitiveProperty.isLoadedBasicData = true;
     this.primitiveProperty.isBlockUI = false;
 
     await this.voidPageService.loadUnderneathVoidMatchesData(this.voidMatches, this.requestDetail);
-    this.isLoadedUnderneathData = true;
+    this.primitiveProperty.isLoadedUnderneathData = true;
   }
 
   async onClickShowVoidTickets(voidMatch: VoidMatch): Promise<void> {
-    if (!voidMatch.isShowTicketFull) {
-      this.primitiveProperty.isBlockUI = true;
-      const isRequestModified = await this.checkRequestService.isRequestModified(this.requestDetail.requestId, this.requestDetail.lastModifiedDate);
-      this.primitiveProperty.isBlockUI = false;
-      if (isRequestModified) {
-        return;
-      }
-    }
-
-    this.voidPageService.toggleTicketsArea(voidMatch, this.voidMatches);
-    if (!voidMatch.isLoadedTicketFull) {
-      await this.ticketsService.loadVoidTicketsFullOnFirstTime(voidMatch, this.requestDetail);
-    }
+    this.voidPageCommonService.onClickShowVoidTickets(voidMatch, this.requestDetail, this.primitiveProperty, this.voidMatches);
   }
 
   async onPagingTicketsChange(voidMatch: VoidMatch): Promise<void> {
@@ -79,82 +58,19 @@ export class VoidDangerAcceptedComponent implements OnInit {
   }
 
   async exportTickets(voidMatch: VoidMatch) {
-    const maxPagingItems = 100000;
-    if (voidMatch.pagingVoidTickets.total > maxPagingItems) {
-      this.popupService.showWarningExportExcel();
-    } else {
-      await this.ticketsService.exportTicketsAsExcelFile(voidMatch, this.requestDetail);
-    }
+    this.voidPageCommonService.exportTickets(voidMatch, this.requestDetail);
   }
 
   async onClickShowTemplateMessage(voidMatch: VoidMatch): Promise<void> {
-    if (!voidMatch.isShowTemplateMessage) {
-      this.primitiveProperty.isBlockUI = true;
-      const isRequestModified = await this.checkRequestService.isRequestModified(this.requestDetail.requestId, this.requestDetail.lastModifiedDate);
-      this.primitiveProperty.isBlockUI = false;
-      if (isRequestModified) {
-        return;
-      }
-    }
-
-    if (this.afterLoadUnderneathDataSubscription) {
-      this.afterLoadUnderneathDataSubscription.unsubscribe();
-    }
-
-    this.afterLoadUnderneathDataSubscription = this.observableTimer.subscribe(async () => {
-      await this.checkLoadedFullDataBeforeShowMessageTemplate(voidMatch);
-    });
+    this.voidPageCommonService.onClickShowTemplateMessage(voidMatch, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidMatches);
   }
 
   onClickCopyLicenseesToClipboard(text: string): void {
-    this.clipboardService.copyFromContent(text);
-    alert('The Licensee list has been copied to clipboard.');
+    this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
   }
 
   onClickVoidAllMatches(): void {
-    if (!this.primitiveProperty.userPassword) {
-      this.tooltip.display('password', LABELS.INPUT_PASSWORD);
-      return;
-    }
-
-    if (this.afterLoadUnderneathDataSubscription) {
-      this.afterLoadUnderneathDataSubscription.unsubscribe();
-    }
-
-    this.afterLoadUnderneathDataSubscription = this.observableTimer.subscribe(async () => {
-      await this.checkLoadedFullDataBeforeVoid();
-    });
-  }
-
-  async checkLoadedFullDataBeforeShowMessageTemplate(voidMatch: VoidMatch): Promise<void> {
-    if (this.isRunningSubscriptionCallback) {
-      return;
-    }
-    this.isRunningSubscriptionCallback = true;
-    this.primitiveProperty.isBlockUI = true;
-
-    if (this.isLoadedUnderneathData) {
-      this.voidPageService.toggleTemplateMessageArea(voidMatch, this.voidMatches);
-      this.primitiveProperty.isBlockUI = false;
-      this.afterLoadUnderneathDataSubscription.unsubscribe();
-    }
-
-    this.isRunningSubscriptionCallback = false;
-  }
-
-  async checkLoadedFullDataBeforeVoid(): Promise<void> {
-    if (this.isRunningSubscriptionCallback) {
-      return;
-    }
-
-    this.isRunningSubscriptionCallback = true;
-    this.primitiveProperty.isBlockUI = true;
-    if (this.isLoadedUnderneathData && this.messageAreaComponents.toArray().every(x => x.templateMessageComponent.initialize)) {
-      await this.submitVoidService.voidAllMatches(this.messageAreaComponents.toArray(), this.voidMatches, this.requestDetail, this.primitiveProperty);
-      this.afterLoadUnderneathDataSubscription.unsubscribe();
-    }
-
-    this.isRunningSubscriptionCallback = false;
+    this.voidPageCommonService.onClickVoidAllMatches(this.voidMatches, this.messageAreaComponents.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
 
   public changeCheckBoxEarlyEvent(voidMatch: VoidMatch): void {

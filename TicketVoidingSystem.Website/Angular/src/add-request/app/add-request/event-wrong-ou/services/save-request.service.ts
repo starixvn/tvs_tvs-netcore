@@ -119,7 +119,6 @@ export class SaveRequestService {
     query.issueTypeId = saveRequestArg.filter.issueTypeId;
     query.isTest = saveRequestArg.filter.isTest;
     query.actionId = saveRequestArg.filter.action;
-    query.sportType = saveRequestArg.filter.sportType;
     query.isVoided = saveRequestArg.filter.isVoided;
 
     query.mistakenBy = saveRequestArg.others.mistakenBy;

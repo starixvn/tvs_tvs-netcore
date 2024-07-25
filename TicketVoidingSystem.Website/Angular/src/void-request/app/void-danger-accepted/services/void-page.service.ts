@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
@@ -10,9 +11,8 @@ import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
+import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
-import { TicketsService } from './tickets.service';
-import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class VoidPageService {
     private readonly commonService: CommonService,
     private readonly appService: AppService,
     private readonly ticketsService: TicketsService,
-    private readonly templateMessageService: TemplateMessageService) {
+    private readonly templateMessageService: TemplateMessageService,) {
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
@@ -37,6 +37,7 @@ export class VoidPageService {
     const basicRequestInfo = this.initBasicRequestInfo(issueTypeId, requestDetail);
     for (const element of basicRequestInfo) {
       const voidMatchInfo = new VoidMatch();
+      voidMatchInfo.detailViewModel = requestDetail;
       voidMatchInfo.subIssueType = this.getSubIssueTypeModel(element.subIssueTypeId, issueTypes);
       voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType,
         issueTypes);
@@ -56,15 +57,14 @@ export class VoidPageService {
 
   async loadUnderneathVoidMatchesData(voidMatches: VoidMatch[], requestDetail: RequestDetailViewModel): Promise<void> {
     for (const element of voidMatches) {
-      const ticketQuery = this.ticketsService.initTicketQuery(element.matchModel, requestDetail);
+      const ticketQuery = this.ticketsService.initTicketQuery(requestDetail, element.matchModel);
       element.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
       element.isAllLiveTickets = element.voidTicketsMini.isAllLiveTickets;
       element.isAllNonLiveTickets = element.voidTicketsMini.isAllNonLiveTickets;
       element.isCheckedEarlyEvent = false;
       element.templateValue = this.templateMessageService.getTemplateValue(element, requestDetail);
       element.templateValue.numberOfCorner = element.matchModel.numberOfCorner;
-      const sportTypeId = StaticService.isAbnormalAccount(requestDetail.request.issueTypeId.toString()) ? 0 : element.matchModel.sportType;
-      element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, sportTypeId);
+      element.voidReason = await this.appService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
       element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
     }
@@ -119,6 +119,10 @@ export class VoidPageService {
       query.wrong1stOuModels = MappingModelStaticService.buildWrongOuGetLogInfoModel(requestDetail.wrongOuModels);
     }
 
+    if (StaticService.isRedCard(requestDetail.request.issueTypeId.toString())) {
+      query.redCardModels = MappingModelStaticService.buildRedCardGetLogInfoModel(requestDetail.redCardModels);
+    }
+
     const viewModel = await this.commonService.getLogInfo(query);
     primitiveProperty.isBlockUI = false;
 
@@ -163,6 +167,18 @@ export class VoidPageService {
           isMainMatch: x.isMainMatch,
         };
 
+        return info;
+      });
+    }
+
+    if (StaticService.isRedCard(issueTypeId)) {
+      return requestDetail.redCardModels.map(x => {
+        const info: BasicRequestInfo = {
+          matchId: x.matchId,
+          subIssueTypeId: x.subIssueTypeId,
+          isMainMatch: x.isMainMatch,
+          isCheckedVar: x.isCheckedVar
+        };
         return info;
       });
     }

@@ -30,17 +30,19 @@ export class TemplateMessageService {
     templateValue.isAllNonLiveTickets = voidMatch.voidTicketsMini.isAllNonLiveTickets;
     const issueTypeId = requestDetail.request.issueTypeId.toString();
     if (StaticService.isDangerAccepted(issueTypeId)) {
-      this.initValueForDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.dangerAcceptedModels[0].filterBy, voidMatch.isCheckedVar);
+      this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.dangerAcceptedModels[0].filterBy, voidMatch.isCheckedVar);
     } else if (StaticService.isWrongHDP(issueTypeId) || StaticService.isWrong1stHDP(issueTypeId)) {
       this.initValueForWrongHdp(templateValue, voidMatch, requestDetail.wrongHdpModels);
     } else if (StaticService.isWrongOU(issueTypeId) || StaticService.isWrong1stOU(issueTypeId)) {
       this.initValueForWrongOu(templateValue, voidMatch, requestDetail.wrongOuModels);
+    } else if (StaticService.isRedCard(issueTypeId)) {
+      this.initValueForLikelyDangerAccepted(templateValue, voidMatch.logInfoDetail, requestDetail.redCardModels[0].filterBy, voidMatch.isCheckedVar);
     }
 
     return templateValue;
   }
 
-  private initValueForDangerAccepted(templateValue: TemplateValue, logInfoDetail: LogInfoDetail, filterBy: number, isCheckedVar = false): void {
+  private initValueForLikelyDangerAccepted(templateValue: TemplateValue, logInfoDetail: LogInfoDetail, filterBy: number, isCheckedVar = false): void {
     templateValue.eventType = EventType.LIVE;
     templateValue.score = this.getLiveScoreForTemplateMessage(logInfoDetail.scoreNormalTicket, logInfoDetail.scoreOfMatch);
     templateValue.isCheckTime = filterBy === TVSRequestFilterBy.CHECK_TIME;

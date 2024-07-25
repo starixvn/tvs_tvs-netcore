@@ -37,9 +37,12 @@ public class GetRequestServiceImp : GetRequestService
 
     public async Task<RequestDetailViewModel> GetRequest(GetRequestRequest request)  // NOSONAR
     {
-        var (firstResultSet, secondResultSet, thirdResultSet) = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request);
+        var (firstResultSet, secondResultSet, thirdResultSet)
+            = await repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request);
         var requestInfo = firstResultSet.First();
         requestInfo.Operators = requestExtraInfoXmlService.ParseXmlToOperators(requestInfo.OperatorInfo);
+        requestInfo.SportType = secondResultSet.Select(x => x.SportType).Distinct().Count() == 1
+            ? secondResultSet.First().SportType : null;
         requestExtraInfoXmlService.UpdateRequestDetailProperties(requestInfo.IssueTypeId, secondResultSet);
 
         var viewModel = new RequestDetailViewModel
@@ -87,7 +90,7 @@ public class GetRequestServiceImp : GetRequestService
 
             case IssueTypeConstant.EarlyKickOffTime:
             case IssueTypeConstant.WrongKickOffTime:
-                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, requestInfo.SportType);
+                viewModel.EarlyKickOffModels = MapEventEarlyKickOff(secondResultSet, secondResultSet.First().SportType);
                 break;
 
             case IssueTypeConstant.DuplicateTickets:

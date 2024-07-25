@@ -161,13 +161,13 @@ describe('TemplateMessageService', () => {
     expect(result).toStrictEqual(Helper.fakeTemplateValue);
   });
 
-  it('#initValueForDangerAccepted should update expected model', async () => {
+  it('#initValueForLikelyDangerAccepted should update expected model', async () => {
     // Arrange
     const templateValue = new TemplateValue();
     const filterBy = TVSRequestFilterBy.CHECK_TIME;
 
     // Action
-    templateMessageService['initValueForDangerAccepted'](templateValue, Helper.fakeLogInfoDetail, filterBy);
+    templateMessageService['initValueForLikelyDangerAccepted'](templateValue, Helper.fakeLogInfoDetail, filterBy);
 
     // Assert
     expect(templateValue.isCheckTime).toBeTruthy();

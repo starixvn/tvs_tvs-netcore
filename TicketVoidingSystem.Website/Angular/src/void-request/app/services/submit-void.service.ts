@@ -30,8 +30,7 @@ export class SubmitVoidService {
     const validation = this.checkValidationBeforeVoid(voidPageItems, messageAreaComponents);
     primitiveProperty.errorMessage = validation.errorMsg;
     if (validation.isSuccessful) {
-      this.popupService.showVoidBetConfirm(
-        `<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`,
+      this.popupService.showVoidBetConfirm(this.getConfirmMessage(voidPageItems, messageAreaComponents),
         async () => {
           this.checkRequestModified(voidPageItems, primitiveProperty, messageAreaComponents);
         });
@@ -95,5 +94,32 @@ export class SubmitVoidService {
 
   private mapValidMessageToVoidPageItem(voidPageItem: VoidPageCommonItem, templateMessageComponent: TemplateMessageComponent) {
     voidPageItem.templateMessage = templateMessageComponent.message;
+  }
+
+  private getConfirmMessage(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[]): string {
+    const warningInputs = this.getWarningInputsInTemplateMessage(voidPageItems, messageAreaComponents.map(x => x.templateMessageComponent));
+
+    return `${warningInputs}<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`;
+  }
+
+  private getWarningInputsInTemplateMessage(voidPageItem: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): string {
+    const matchesHaveWarning = this.getMatchesHaveWarning(voidPageItem, templateMessageComponents);
+    if (matchesHaveWarning.length > 0) {
+      const matchIdList = `- Match Id: ${matchesHaveWarning.join(', ')}`;
+      const warningMessage = `<div><i class="fa fa-exclamation-triangle pt-2 text-warn"></i>There are some message info you do not input in these matches:</div>
+                                  <div>${matchIdList}</div></br>`;
+
+      return warningMessage;
+    }
+
+    return '';
+  }
+
+  private getMatchesHaveWarning(voidPageItems: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): number[] {
+    const voidPageItemsHasTickets = voidPageItems.filter(item => item.voidTicketsMini.total > 0);
+    const matchHasWarning = voidPageItemsHasTickets.filter(voidMatch =>
+      templateMessageComponents.find(x => x.value.matchId === voidMatch.matchModel.matchId).isHasWarningForDynamicInput());
+
+    return matchHasWarning.map(x => x.matchModel.matchId);
   }
 }

@@ -46,7 +46,7 @@ export class CalculateOddsService {
   public updateAllowanceRate(oddsInfo: FilterWrongOddsModel): void {
     const maxBetDefault = 80000;
     const spreadDefault = 0.15;
-    if(oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) == 0 && oddsInfo.maxBet == 0)){
+    if(oddsInfo.maxBetAndSpreadInfo.length === 0 || oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) == 0 && oddsInfo.maxBet == 0)){
       oddsInfo.allowanceRate = "20";
     }
     else if(Number(oddsInfo.spread) > spreadDefault){

@@ -87,7 +87,6 @@ export class SaveRequestService {
     query.actionId = args.filter.action;
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
-    query.sportType = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.leagueEventComponent.selectedSportTypeId;
     query.mistakenBy = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.mistakenBy;
     query.operatorsList = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.operatorsList;
     query.provider = this.validationService.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.others.provider;

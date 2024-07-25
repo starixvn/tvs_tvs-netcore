@@ -27,7 +27,7 @@ describe('SubmitVoidService', () => {
     submitVoidService['checkValidationBeforeVoid'] = jest.fn().mockReturnValue(validation);
     submitVoidService['checkRequestModified'] = jest.fn();
 
-    await submitVoidService.submitVoid(null, null, new CommonPrimitiveProperty());
+    await submitVoidService.submitVoid([], [], new CommonPrimitiveProperty());
 
     expect(submitVoidService['checkValidationBeforeVoid']).toHaveBeenCalledTimes(1);
 

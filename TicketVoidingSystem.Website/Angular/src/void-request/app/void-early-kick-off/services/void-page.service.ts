@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
@@ -8,7 +9,6 @@ import { AppService } from '../../app.service';
 import { BasicRequestInfo } from '../../models/basic-request-info.model';
 import { TicketsService } from '../../services/tickets.service';
 import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
-import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class VoidPageService {
     private readonly commonService: CommonService,
     private readonly appService: AppService,
     private readonly ticketsService: TicketsService,
-    private readonly templateService: TemplateService,
+    private readonly templateService: TemplateService
     ) {
   }
 

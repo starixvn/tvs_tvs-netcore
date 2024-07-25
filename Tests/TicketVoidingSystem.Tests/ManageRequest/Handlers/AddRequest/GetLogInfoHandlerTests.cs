@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.LogInfo;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;

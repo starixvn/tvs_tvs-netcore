@@ -16,7 +16,6 @@ import { VoidDangerAcceptedComponent } from './void-danger-accepted/void-danger-
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets/void-duplicate-tickets.component';
 import { VoidNotParticipateComponent } from './void-not-participate/void-not-participate.component';
 import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.component';
-import { VoidRedCardComponent } from './void-red-card/void-red-card.component';
 
 jest.mock('../../utility/services/signal-r.service.native');
 class Helper {
@@ -63,7 +62,6 @@ describe('AppComponent', () => {
       VoidDangerAcceptedComponent,
       VoidOtherIssueComponent,
       VoidAbnormalBetComponent,
-      VoidRedCardComponent,
       VoidNotParticipateComponent,
       VoidDuplicateTicketsComponent,
       VoidOtherIssueComponent

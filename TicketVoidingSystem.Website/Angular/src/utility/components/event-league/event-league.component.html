@@ -1,6 +1,6 @@
 <div class="event-leage">
-  <div class="d-flex flex-wrap justify-content-between">
-    <div class="event col-md-8 col-sm-8 col-12">
+  <div class="d-flex flex-wrap">
+    <div class="event col-md-7 col-sm-7 col-12">
       <label class="col-form-label">Event</label>
       <div>
         <ng-select class="custom-sm match-id" [disabled]="isEdit" [items]="matches" bindLabel="name"
@@ -13,16 +13,17 @@
         </ng-select>
       </div>
     </div>
-    <div class="sport-name col-md-3 col-sm-3">
-      <label class="col-form-label">Sport</label>
-      <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.sportTypeName}}</span>
-    </div>
   </div>
-
-  <div class="league col-md-12 col-sm-12 col-12">
+  <div class="d-flex flex-wrap">
+  <div class="league col-md-7 col-sm-7">
     <label class="col-form-label">League</label>
     <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.leagueName}}</span>
   </div>
+  <div class="sport-name col-md-2 col-sm-2 pl-4">
+    <label class="col-form-label">Sport</label>
+    <span type="text" class="form-control form-control-sm disabled">{{selectedMatch.sportTypeName}}</span>
+  </div>
+</div>
 </div>
 
 <tooltip [tooltip]="tooltip"></tooltip>

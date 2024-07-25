@@ -162,6 +162,7 @@ public class OddsInfoValidationServiceTests
             SubIssueTypeId = subIssueTypeId,
             FilterFavoriteType = filterFavoriteType,
             FavoriteValue = "9",
+            WrongOU = "1"
         };
         var service = new OddsInfoValidationServiceImp();
 

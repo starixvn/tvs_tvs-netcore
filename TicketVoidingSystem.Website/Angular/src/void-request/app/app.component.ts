@@ -49,15 +49,12 @@ export class AppComponent implements OnInit {
       || StaticService.isWrongOU(this.requestDetail.request?.issueTypeId.toString())
       || StaticService.isWrong1stOU(this.requestDetail.request?.issueTypeId.toString())
       || StaticService.isWrongHDP(this.requestDetail.request?.issueTypeId.toString())
+      || StaticService.isRedCard(this.requestDetail.request?.issueTypeId.toString())
       || StaticService.isWrong1stHDP(this.requestDetail.request?.issueTypeId.toString());
   }
 
   isShowVoidDuplicateTickets(): boolean {
     return StaticService.isDuplicateTickets(this.requestDetail.request?.issueTypeId.toString());
-  }
-
-  isShowVoidRedCard(): boolean {
-    return StaticService.isRedCard(this.requestDetail.request?.issueTypeId.toString());
   }
 
   isLikelyVoidNotParticipate(): boolean {
@@ -74,7 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   isShowVoidOtherIssue(): boolean {
-    return !this.isShowVoidDuplicateTickets() && !this.isLikelyVoidDangerAccepted() && !this.isShowVoidRedCard()
+    return !this.isShowVoidDuplicateTickets() && !this.isLikelyVoidDangerAccepted()
       && !this.isLikelyVoidNotParticipate() && !this.isLikelyVoidEarlyKickOff() && !this.isShowVoidAbnormalBet();
   }
 }

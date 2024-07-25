@@ -115,7 +115,6 @@ export class SaveRequestService {
     query.issueTypeId = argWrongOdds.filter.issueTypeId;
     query.isTest = argWrongOdds.filter.isTest;
     query.actionId = argWrongOdds.filter.action;
-    query.sportType = argWrongOdds.eventLeagueComponent.selectedMatch.sportType;
     query.isVoided = argWrongOdds.filter.isVoided;
 
     query.mistakenBy = argWrongOdds.others.mistakenBy;
@@ -146,7 +145,7 @@ export class SaveRequestService {
     model.allowanceRate = logInfoWrongOdds.filterWrongOdds.allowanceRate;
     model.correctOddsHomeOver = logInfoWrongOdds.filterWrongOdds.correctOddsHomeOver;
     model.correctOddsAwayUnder = logInfoWrongOdds.filterWrongOdds.correctOddsAwayUnder;
-    
+
     model.fromOddsNotVoidHomeOver = logInfoWrongOdds.filterWrongOdds.fromOddsNotVoidHomeOver;
     model.toOddsNotVoidHomeOver = logInfoWrongOdds.filterWrongOdds.toOddsNotVoidHomeOver;
     model.fromOddsNotVoidAwayUnder = logInfoWrongOdds.filterWrongOdds.fromOddsNotVoidAwayUnder;

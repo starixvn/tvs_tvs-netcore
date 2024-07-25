@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { MatchInfo } from '../../../../../utility/models/event.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
@@ -34,7 +33,6 @@ export class SaveRequestService {
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
     query.matchId = this.isAbnormalBetMixOrSystemParlay(args) ? 29 : null;
-    query.sportType = this.getSportType(args.abnormalBetModel.matches);
     query.abnormalBetInfo = this.createAbnormalBetModel(args);
 
     query.mistakenBy = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.mistakenBy;
@@ -46,14 +44,6 @@ export class SaveRequestService {
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
 
     return query;
-  }
-
-  private getSportType(matches: MatchInfo[]): number {
-    if (matches?.length > 0) {
-      return new Set(matches.map(x => x.sportType)).size === 1 ? matches[0].sportType : null;
-    }
-
-    return null;
   }
 
   private getTransIdsForSaveRequest(confirmAbnormalBetModel: ConfirmAbnormalBetModel, confirmAbnormalBetComponent: ConfirmAbnormalBetComponent, transIds: string): string {

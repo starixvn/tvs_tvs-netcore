@@ -6,7 +6,7 @@ namespace TicketVoidingSystem.ManageRequest.Models;
 public class RequestDetailModel
 {
     public int RequestId { get; set; }
-    public int SportType { get; set; }
+    public int? SportType { get; set; }
     public int IssueTypeId { get; set; }
     public int ActionId { get; set; }
     public string MistakenBy { get; set; }
@@ -29,6 +29,7 @@ public class RequestDetailModel
 
 public class RequestEventModel
 {
+    public int SportType { get; set; }
     public int MatchId { get; set; }
     public string MatchCode { get; set; }
     public DateTime? EventDate { get; set; }

@@ -9,8 +9,6 @@ public class EditRequestQuery
         OperatorsList = new List<OperatorQuery>();
     }
 
-    public int? SportType { get; set; }
-
     public int IssueTypeId { get; set; }
 
     public int SubIssueTypeId { get; set; }

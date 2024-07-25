@@ -3,7 +3,6 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { LogAnalysisService } from '../../../../utility/services/log-analysis.service';
 import { TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
@@ -14,6 +13,7 @@ import { Selection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestStore } from '../add-request.store';
+import { LogAnalysisService } from '../services/log-analysis.service';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
@@ -82,6 +82,10 @@ export class FilterComponent implements OnInit, OnChanges {
         this.getAllowanceTimeBySubIssueType();
       }
       this.setWidthControlByIssueType();
+
+      if (this.isEdit && this.issueTypes.issueId) {
+        await this.logAnalysisService.writeLogAccessFunction(true, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
+      }
     }
   }
 
@@ -147,24 +151,28 @@ export class FilterComponent implements OnInit, OnChanges {
       await this.getIssueTypes();
       if (!this.isEdit) {
         this.issueTypes.issueId = this.getIssueTypeIdDefault();
-        await this.logAnalysisService.writeLogAccessFunction(this.isEdit, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
         this.updateSubByIssue();
         this.updateCurrentAction();
         this.updateModel();
+        await this.logAnalysisService.writeLogAccessFunction(false, this.issueTypes.issueId.toString(), this.accessIssueTypeCount);
       }
     }
   }
 
   getIssueTypeIdDefault(): number {
     const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
+    let issueTypeDefault: number;
     if (this.isExternalUrl) {
-      return Number(this.model.issueTypeId);
+      issueTypeDefault = Number(this.model.issueTypeId);
     } else {
       const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'));
-      return previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
+      issueTypeDefault = previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
         ? Number(previousSelectedIssueType)
         : this.issueTypes.issueId;
     }
+    this.issueTypeChange.emit(issueTypeDefault.toString());
+
+    return issueTypeDefault;
   }
 
   initDate() {

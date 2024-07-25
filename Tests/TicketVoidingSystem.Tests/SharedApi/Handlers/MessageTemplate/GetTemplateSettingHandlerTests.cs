@@ -22,7 +22,7 @@ public class GetTemplateSettingHandlerTests
     {
         repository = Substitute.For<IDynamicRepository>();
         mapper = Substitute.For<IMapper>();
-        handler = new GetTemplateSettingHandler(repository, mapper);
+        handler = new GetTemplateSettingHandler(repository);
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class GetTemplateSettingHandlerTests
         var templateSettings = new List<TemplateSetting> { new() };
         var expectedViewModel = new TemplateSettingViewModel
         {
-            MessageTemplates = new List<MessageTemplateViewModel>
+            MessageTemplates = new List<TemplateModel>
             {
                 new()
                 {
@@ -46,7 +46,7 @@ public class GetTemplateSettingHandlerTests
 
         repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>()).Returns(templateModels);
         repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>()).Returns(templateSettings);
-        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>()).Returns(new MessageTemplateViewModel());
+        mapper.Map<TemplateModel>(Arg.Any<TemplateModel>()).Returns(new TemplateModel());
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
@@ -72,7 +72,7 @@ public class GetTemplateSettingHandlerTests
         var templateSettings = new List<TemplateSetting> { new() };
         var expectedViewModel = new TemplateSettingViewModel
         {
-            MessageTemplates = new List<MessageTemplateViewModel>
+            MessageTemplates = new List<TemplateModel>
             {
                 new()
                 {
@@ -86,7 +86,8 @@ public class GetTemplateSettingHandlerTests
                             MsgChineseSimplified = "Actual Score (SC)",
                             MsgChineseNewSimplified = "Actual Score (New SC)"
                         }
-                    }
+                    },
+                    JsonValue = templateModels[0].JsonValue
                 }
             },
             TemplateSettings = templateSettings
@@ -94,7 +95,7 @@ public class GetTemplateSettingHandlerTests
 
         repository.FetchAsync<TemplateModel>(Arg.Any<GetTemplatesCriteria>()).Returns(templateModels);
         repository.FetchAsync<TemplateSetting>(Arg.Any<GetTemplateSettingCriteria>()).Returns(templateSettings);
-        mapper.Map<MessageTemplateViewModel>(Arg.Any<TemplateModel>()).Returns(new MessageTemplateViewModel());
+        mapper.Map<TemplateModel>(Arg.Any<TemplateModel>()).Returns(new TemplateModel());
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
