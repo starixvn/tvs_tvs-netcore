@@ -57,7 +57,7 @@ export class EventWrongOddsComponent implements OnInit {
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
-      if(!this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo){
+      if(!this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo && this.eventLeagueComponent.selectedMatch.matchId){
         this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = await this.GetMaxBetAndSpreadOfEvent();
       }
 
@@ -121,10 +121,8 @@ export class EventWrongOddsComponent implements OnInit {
   public async changeMatchEvent(): Promise<void> {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch?.matchId;
-    if(this.eventLeagueComponent.selectedMatch){
-      await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds,   
-        this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
-    }
+    
+    await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds, this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.updateMatchId.emit(this.logInfoEvent.matchId)
   }
