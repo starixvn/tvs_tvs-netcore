@@ -10,10 +10,4 @@ public class GetPoolHouseTicketViewModel
     public TicketsViewModel AffectedTickets { get; set; }
 
     public TicketsViewModel OtherTickets { get; set; }
-
-    public bool IsAffectedGroupAIO { get; set; }
-
-    public bool IsAffectedGroup1X2 { get; set; }
-
-    public bool IsAffectedGroup1H1X2 { get; set; }
 }

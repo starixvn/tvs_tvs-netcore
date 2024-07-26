@@ -59,7 +59,6 @@ export class LogInfoService {
 
   resetLogInfoOfEvent(events: LogInfoWrongHdp[]): void {
     events.forEach(event => {
-      event.isPoolHouseAffected
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
     });

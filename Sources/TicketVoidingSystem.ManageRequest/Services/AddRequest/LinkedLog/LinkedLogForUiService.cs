@@ -13,27 +13,30 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
 {
     public IEnumerable<GroupLinkedLogUI> Build(GroupLinkedLogResponse groupLinkedLogResponse, int issueTypeId, int subIssueTypeId)
     {
-        var groups = new List<GroupLinkedLogUI>
-        {
-            BuildByLinkGroup(true, groupLinkedLogResponse.AffectedLog, issueTypeId, subIssueTypeId),
-            BuildByLinkGroup(false, groupLinkedLogResponse.NotAffectedLog, issueTypeId, subIssueTypeId)
-        }
-        .Where(group => group != null).ToList();
+        var distinctLinkGroupIdAffected = groupLinkedLogResponse.AffectedLog.Select(x => x.LinkGroup).Distinct();
+        var excludedNotAffectedLog = groupLinkedLogResponse.NotAffectedLog.Where(x => !distinctLinkGroupIdAffected.Contains(x.LinkGroup));
 
-        AddDefaultGroupForDisplay(groups, issueTypeId, subIssueTypeId);
-        return groups;
+        var affectedGroups = BuildByLinkGroup(true, groupLinkedLogResponse.AffectedLog, issueTypeId, subIssueTypeId);
+        var notAffectedGroups = BuildByLinkGroup(false, excludedNotAffectedLog, issueTypeId, subIssueTypeId);
+
+        var allGroups = affectedGroups.Concat(notAffectedGroups).ToList();
+
+        AddDefaultGroupForDisplay(allGroups, issueTypeId, subIssueTypeId);
+        return allGroups;
     }
 
-    private static GroupLinkedLogUI BuildByLinkGroup(bool isAffectedGroup, IEnumerable<PoolHouseLinkedLogResponse> responseLogs, int issueTypeId, int subIssueTypeId)
+    private static IEnumerable<GroupLinkedLogUI> BuildByLinkGroup(bool isAffectedGroup, IEnumerable<PoolHouseLinkedLogResponse> responseLogs, int issueTypeId, int subIssueTypeId)
     {
-        return responseLogs
-            .Select(response => new GroupLinkedLogUI
-            {
-                IsAffectedGroup = isAffectedGroup,
-                GroupName = GetGroupNameById(response.LinkGroup),
-                LogsData = new List<string> { BuildLogsData(response, issueTypeId, subIssueTypeId) }
-            })
-            .FirstOrDefault();
+        var groupedLogs = responseLogs.GroupBy(log => log.LinkGroup);
+
+        return groupedLogs.Select(group =>
+                group.Select(response => new GroupLinkedLogUI
+                {
+                    IsAffectedGroup = isAffectedGroup,
+                    GroupName = GetGroupNameById(response.LinkGroup),
+                    LogsData = new List<string> { BuildLogsData(response, issueTypeId, subIssueTypeId) }
+                })
+                .FirstOrDefault());
     }
 
     public static void AddDefaultGroupForDisplay(List<GroupLinkedLogUI> groupLinkedLogUI, int issueTypeId, int subIssueTypeId)
@@ -42,13 +45,19 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         {
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = Get1X2GroupNameForIssueType(issueTypeId, subIssueTypeId) });
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = LinkedLogApiConstant.GroupNameAio });
+            return;
         }
-        else if (groupLinkedLogUI.Exists(x => x.GroupName is LinkedLogApiConstant.GroupName1X2 or LinkedLogApiConstant.GroupName1H1X2)
-                   && groupLinkedLogUI.TrueForAll(x => x.GroupName != LinkedLogApiConstant.GroupNameAio))
+
+        var has1X2Or1H1X2 = groupLinkedLogUI.Exists(x => x.GroupName is LinkedLogApiConstant.GroupName1X2 or LinkedLogApiConstant.GroupName1H1X2);
+        var hasAio = groupLinkedLogUI.Exists(x => x.GroupName == LinkedLogApiConstant.GroupNameAio);
+
+        if (has1X2Or1H1X2 && groupLinkedLogUI.Count == 1)
         {
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = LinkedLogApiConstant.GroupNameAio });
+            return;
         }
-        else
+
+        if (hasAio && groupLinkedLogUI.Count == 1)
         {
             groupLinkedLogUI.Add(new GroupLinkedLogUI { IsAffectedGroup = false, GroupName = Get1X2GroupNameForIssueType(issueTypeId, subIssueTypeId) });
         }

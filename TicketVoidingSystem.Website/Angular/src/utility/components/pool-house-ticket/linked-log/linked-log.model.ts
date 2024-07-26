@@ -14,7 +14,7 @@ export class LinkedLogsViewModel {
 export class GroupLinkedLog {
   groupName: string;
   logsData: string[];
-  isAffected: boolean;
+  isAffectedGroup: boolean;
 }
 
 export class GetLinkedLogQuery {
