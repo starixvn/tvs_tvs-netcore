@@ -62,7 +62,7 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
 
         return new Group<TicketViewModel>
         {
-            Name = string.Empty,
+            Name = tickets.FirstOrDefault()?.BetType,
             Tickets = tickets,
             DisplayTotalTickets = afterPagingTickets.Count()
         };

@@ -13,6 +13,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
+import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
 
 @Component({
   selector: 'log-info-wrong-ou',
@@ -36,7 +37,7 @@ export class LogInfoWrongOuComponent implements OnInit {
   isBlock = false;
   isShowValidation = false;
   poolHouseTicketsModel = new PoolHouseTicketsModel();
-
+  liveGameEarlyTicketsModel = new LiveGameEarlyTicketsModel();
   constructor(
     private readonly modalService: ModalService,
     private readonly addRequestStore: AddRequestStore,
@@ -118,6 +119,33 @@ export class LogInfoWrongOuComponent implements OnInit {
     return query;
   }
 
+  
+  public async getLiveGameEarlyData(query: LiveGameEarlyTicketsQuery): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    const viewModel = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
+    this.liveGameEarlyTicketsModel.query = query;
+    this.liveGameEarlyTicketsModel.tickets = viewModel;
+
+    this.addRequestStore.changeBlockingUiStatus(false);
+
+    this.liveGameEarlyTicketsModel.isOpen = true;
+    this.liveGameEarlyTicketsModel = _.clone(this.liveGameEarlyTicketsModel);
+  }
+
+  public async showLiveGameEarlyTickets(): Promise<void> {
+    let query = {
+      liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+      pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
+      pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
+      issueTypeId: Number(this.filter.issueTypeId)
+    } as LiveGameEarlyTicketsQuery;
+
+    this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
+    this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
+    this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+    this.liveGameEarlyTicketsModel.isOpen = true;
+  }
+  
   public async openPoolHouseDetails(): Promise<void> {
     await this.getPoolHouseData(this.initGetPoolHouseTicketQuery());
   }

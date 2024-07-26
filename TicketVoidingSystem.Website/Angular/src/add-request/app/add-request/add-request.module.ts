@@ -77,6 +77,7 @@ import { SubIssueTypeDialogComponent } from './filter/sub-issue-type-dialog/sub-
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
 import { TemplateMessageModule } from "../../../utility/components/template-message/template-message.module";
+import { AffectedTicketComponent } from './affected-ticket/affected-ticket.component';
 
 @NgModule({
     declarations: [
@@ -135,7 +136,8 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         EventRecoverTicketComponent,
         EventWrongMarketOfferedComponent,
         FilterTimeComponent,
-        LogInfoWrongMarketOfferedComponent
+        LogInfoWrongMarketOfferedComponent,
+        AffectedTicketComponent
     ],
     exports: [
         AddRequestComponent

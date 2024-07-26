@@ -33,7 +33,6 @@ import { NumbersOnlyDirective } from './directives/numbers-only.directive';
 import { PipeModule } from './pipes/pipe.module';
 import { CommonService } from './services/common.service';
 import { HttpService } from './services/http.service';
-import { AffectedTicketComponent } from './components/affected-ticket/affected-ticket.component';
 import { TicketsComponent } from './components/pool-house-ticket/tickets/tickets.component';
 
 @NgModule({
@@ -73,7 +72,6 @@ import { TicketsComponent } from './components/pool-house-ticket/tickets/tickets
     LicenseeAffectedListComponent,
     EventLeagueComponent,
     LogInfoMessageComponent,
-    AffectedTicketComponent,
     TicketsComponent
   ],
   exports: [
@@ -96,7 +94,6 @@ import { TicketsComponent } from './components/pool-house-ticket/tickets/tickets
     LicenseeAffectedListComponent,
     EventLeagueComponent,
     LogInfoMessageComponent,
-    AffectedTicketComponent,
     TicketsComponent
   ],
   providers: [HttpService, CommonService]

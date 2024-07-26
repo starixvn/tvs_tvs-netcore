@@ -9,7 +9,8 @@
           LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
           <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
-          </span><br />
+        </span>
+        <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlySingleCount, 0, 0)" class="ticket-details" (click)="showLiveGameEarlyTickets()">Details</span><br />
         </ng-container>
 
         <ng-container>
@@ -19,7 +20,7 @@
             [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
             </span>,
             Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-            <span *ngIf="!filter.isVoided" class="pool-house-info" (click)="openPoolHouseDetails()">Details</span>
+            <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
           </div>
           
           <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="pool-house-info" (click)="openPoolHouseDetails()">PH Details</span>
@@ -51,3 +52,7 @@
   [model]="poolHouseTicketsModel"
   (saveEventOuput)="recalculatePoolHouseTicket($event)">
 </pool-house-tickets>
+
+<affected-ticket
+  [model]="liveGameEarlyTicketsModel">
+</affected-ticket>
