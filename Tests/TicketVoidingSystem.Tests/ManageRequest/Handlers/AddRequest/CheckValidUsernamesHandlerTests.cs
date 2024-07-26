@@ -5,6 +5,7 @@ using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -47,7 +48,7 @@ public class CheckValidUsernamesHandlerTests
         };
         var checkUsernameService = Substitute.For<CheckUsernameService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
-        var compressDataAddRequestService = Substitute.For<CompressDataAddRequestService>();
+        var compressDataAddRequestService = Substitute.For<CompressDataService>();
         compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);
@@ -100,7 +101,7 @@ public class CheckValidUsernamesHandlerTests
         };
         var checkUsernameService = Substitute.For<CheckUsernameService>();
         var calculateVoidTicketsService = Substitute.For<CalculateVoidTicketsService>();
-        var compressDataAddRequestService = Substitute.For<CompressDataAddRequestService>();
+        var compressDataAddRequestService = Substitute.For<CompressDataService>();
         compressDataAddRequestService.CompressTicket(null).ReturnsForAnyArgs("AAA");
         calculateVoidTicketsService.ExecuteForAbnormalAccountWithPolicy(null, null, null)
             .ReturnsForAnyArgs(calcVoidTicketsResult);

@@ -2,15 +2,18 @@
 using System.Text;
 using System.Text.Json;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
-public interface CompressDataAddRequestService
+public interface CompressDataService
 {
     string CompressTicket(IEnumerable<TicketCalculateWinLostAccount> tickets);
+
+    IEnumerable<GetTicketModel> DecompressTickets(string liveGameEarlyTicketsJson);
 }
 
-public class CompressDataAddRequestServiceImp : CompressDataAddRequestService
+public class CompressDataAddRequestServiceImp : CompressDataService
 {
     public string CompressTicket(IEnumerable<TicketCalculateWinLostAccount> tickets)
     {
@@ -49,5 +52,31 @@ public class CompressDataAddRequestServiceImp : CompressDataAddRequestService
         }
 
         return memoryStream.ToArray();
+    }
+
+    public IEnumerable<GetTicketModel> DecompressTickets(string liveGameEarlyTicketsJson)
+    {
+        try
+        {
+            var compressedBytes = Convert.FromHexString(liveGameEarlyTicketsJson.TrimStart('0', 'x'));
+            var tickets = DecompressJson<GetTicketModel>(compressedBytes);
+            return tickets;
+        }
+        catch
+        {
+            return Enumerable.Empty<GetTicketModel>();
+        }
+    }
+
+    private static IEnumerable<T> DecompressJson<T>(byte[] compressedBytes)
+    {
+        using var memoryStream = new MemoryStream(compressedBytes);
+        using var gs = new GZipStream(memoryStream, CompressionMode.Decompress);
+        using var resultStream = new MemoryStream();
+        gs.CopyTo(resultStream);
+
+        var json = Encoding.Unicode.GetString(resultStream.ToArray());
+
+        return Helper.DeserializeObjectIgnoreNullValue<IEnumerable<T>>(json);
     }
 }

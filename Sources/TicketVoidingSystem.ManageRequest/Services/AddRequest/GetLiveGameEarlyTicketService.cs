@@ -16,18 +16,18 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
 {
     private readonly MapTicketsService mapTicketsService;
     private readonly PagingService pagingService;
-    private readonly DecompressDataService decompressDataService;
+    private readonly CompressDataService compressDataService;
 
-    public GetLiveGameEarlyTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService, DecompressDataService decompressDataService)
+    public GetLiveGameEarlyTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService, CompressDataService compressDataService)
     {
         this.mapTicketsService = mapTicketsService;
         this.pagingService = pagingService;
-        this.decompressDataService = decompressDataService;
+        this.compressDataService = compressDataService;
     }
 
     public TicketsViewModel GetTicketsViewModel(GetLiveGameEarlyTicketsRequest request)
     {
-        var getTicketModels = decompressDataService.DecompressTickets(request.LiveGameEarlyTicketsJson);
+        var getTicketModels = compressDataService.DecompressTickets(request.LiveGameEarlyTicketsJson);
         var viewModel = new TicketsViewModel();
 
         if (!getTicketModels.Any())

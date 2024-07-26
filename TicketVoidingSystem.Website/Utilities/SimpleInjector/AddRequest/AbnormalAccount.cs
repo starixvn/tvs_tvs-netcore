@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.AccountWinLostExcel;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
@@ -24,6 +25,6 @@ public static class AbnormalAccount
 
         services.AddTransient<AccountWinLostService, AccountWinLostServiceImp>();
         services.AddTransient<CheckUsernameService, CheckUsernameServiceImp>();
-        services.AddTransient<CompressDataAddRequestService, CompressDataAddRequestServiceImp>();
+        services.AddTransient<CompressDataService, CompressDataAddRequestServiceImp>();
     }
 }
