@@ -10,6 +10,7 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -46,7 +47,8 @@ export class LogInfoWrongHdpComponent {
     private readonly addRequestStore: AddRequestStore,
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,
-    private readonly eventWrongHdpService: EventWrongHdpService
+    private readonly eventWrongHdpService: EventWrongHdpService,
+    private readonly logAnalysisService: LogAnalysisService
   ) { }
 
   public ngOnInit(): void {
@@ -73,40 +75,6 @@ export class LogInfoWrongHdpComponent {
     }
 
     this.isBlock = false;
-  }
-
-  public async getPoolHouseData(query: GetPoolHouseTicketQuery): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.isMainMatch) {
-      this.logInfo.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.logInfo, this.filter);
-      query.isLinkGroup1X2 = this.logInfo.linkedLogsViewModel.isLinkGroup1X2;
-      query.isLinkGroupAIO = this.logInfo.linkedLogsViewModel.isLinkGroupAIO;
-    }
-    const viewModel = await this.addRequestApiService.getPoolHouseTickets(query);
-
-    this.poolHouseTicketsModel.query = query;
-    this.poolHouseTicketsModel.linkedLogsViewModel = this.logInfo.linkedLogsViewModel;
-    this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
-    this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
-    this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
-    this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
-
-    this.addRequestStore.changeBlockingUiStatus(false);
-
-    this.poolHouseTicketsModel.isOpen = true;
-    this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
-  }
-
-  public async getLiveGameEarlyData(query: LiveGameEarlyTicketsQuery): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    const viewModel = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
-    this.liveGameEarlyTicketsModel.query = query;
-    this.liveGameEarlyTicketsModel.tickets = viewModel;
-
-    this.addRequestStore.changeBlockingUiStatus(false);
-
-    this.liveGameEarlyTicketsModel.isOpen = true;
-    this.liveGameEarlyTicketsModel = _.clone(this.liveGameEarlyTicketsModel);
   }
 
   private initGetPoolHouseTicketQuery(): GetPoolHouseTicketQuery {
@@ -162,9 +130,6 @@ export class LogInfoWrongHdpComponent {
     StaticService.openPopupTransIds(requestId, transIds, this.modalService);
   }
 
-  public async openPoolHouseDetails(): Promise<void> {
-    await this.getPoolHouseData(this.initGetPoolHouseTicketQuery());
-  }
 
   public isHavePoolHouseTicket(singleCount: number, parlayCount: number) {
     return singleCount > 0 || parlayCount > 0;
@@ -183,23 +148,46 @@ export class LogInfoWrongHdpComponent {
   }
 
   public async openLiveGameEarlyDetails(): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
     if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
-      this.addRequestStore.changeBlockingUiStatus(true);
-      let query = {
+      let query: LiveGameEarlyTicketsQuery = {
         liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
         pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
         pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
         issueTypeId: Number(this.filter.issueTypeId)
-      } as LiveGameEarlyTicketsQuery;
+      };
 
       this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
       this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
       this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
-      this.addRequestStore.changeBlockingUiStatus(false);
+
     } else {
       this.liveGameEarlyTicketsModel.tickets = new TicketsModel();
     }
 
+    await this.logAnalysisService.writeLogClickLiveGameDetails(this.filter.issueTypeId);
+    this.addRequestStore.changeBlockingUiStatus(false);
     this.liveGameEarlyTicketsModel.isOpen = true;
+  }
+
+  public async openPoolHouseDetails(): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    const query = this.initGetPoolHouseTicketQuery();
+    this.logInfo.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.logInfo, this.filter);
+    query.isLinkGroup1X2 = this.logInfo.linkedLogsViewModel.isLinkGroup1X2;
+    query.isLinkGroupAIO = this.logInfo.linkedLogsViewModel.isLinkGroupAIO;
+    const viewModel = await this.addRequestApiService.getPoolHouseTickets(query);
+
+    await this.logAnalysisService.writeLogClickPoolHouseDetails(this.filter.issueTypeId);
+    this.addRequestStore.changeBlockingUiStatus(false);
+
+    this.poolHouseTicketsModel.query = query;
+    this.poolHouseTicketsModel.linkedLogsViewModel = this.logInfo.linkedLogsViewModel;
+    this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
+    this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
+    this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
+    this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
+    this.poolHouseTicketsModel.isOpen = true;
+    this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
   }
 }

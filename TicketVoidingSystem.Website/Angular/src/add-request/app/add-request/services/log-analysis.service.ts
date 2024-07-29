@@ -22,4 +22,14 @@ export class LogAnalysisService {
       }
     }
   }
+
+  async writeLogClickLiveGameDetails(issueTypeId: string): Promise<void> {
+    const actionName = 'OpenLGDetails';
+    await this.commonService.logAccessFunction(`${actionName}/${IssueTypeConstant.NAME_WRITE_LOG.get(issueTypeId)}`);
+  }
+
+  async writeLogClickPoolHouseDetails(issueTypeId: string): Promise<void> {
+    const actionName = 'OpenPHDetails';
+    await this.commonService.logAccessFunction(`${actionName}/${IssueTypeConstant.NAME_WRITE_LOG.get(issueTypeId)}`);
+  }
 }
