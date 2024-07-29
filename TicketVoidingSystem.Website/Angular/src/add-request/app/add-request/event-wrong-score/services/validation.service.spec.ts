@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestStore } from '../../add-request.store';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -88,7 +88,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
+    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
     leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => true);
@@ -108,7 +108,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
+    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
     leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
     const service = new ValidationService();
 
@@ -135,7 +135,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
+    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
     leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);
@@ -155,7 +155,7 @@ describe('LogInfoService', () => {
     addRequestStore.checkValidSubIssueTypeInFilter = jest.fn();
     const filter = new FilterModel();
     filter.subIssueTypeId = '10';
-    const leagueEventRedCardComponent = new LeagueEventRedCardComponent(null, null);
+    const leagueEventRedCardComponent = new EventLeagueComponent(null, null);
     leagueEventRedCardComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
     const filterWrongScoreComponent = new FilterWrongScoreComponent(null, null, null, null);
     filterWrongScoreComponent.isValid = jest.fn().mockImplementation(() => false);
@@ -187,20 +187,20 @@ describe('LogInfoService', () => {
     expect(result).toBe(true);
   });
 
-  it('#isCheckedScoresHasError should return true', () => {
+  it('#isValidAllScores should return false', () => {
     const  wrongScoreModel: WrongScoreModel[] = [new WrongScoreModel()];
     wrongScoreModel[0].messageValidationLogInfo = [{isError: true} as ValidationMessage];
-    const result = validationService.isCheckedScoresHasError(wrongScoreModel);
-
-    expect(result).toBe(true);
-  });
-
-  it('#isCheckedScoresHasError should return false', () => {
-    const  wrongScoreModel: WrongScoreModel[] = [new WrongScoreModel()];
-    wrongScoreModel[0].messageValidationLogInfo = [{isError: false} as ValidationMessage];
-    const result = validationService.isCheckedScoresHasError(wrongScoreModel);
+    const result = validationService.isValidAllScores(wrongScoreModel);
 
     expect(result).toBe(false);
+  });
+
+  it('#isValidAllScores should return true', () => {
+    const  wrongScoreModel: WrongScoreModel[] = [new WrongScoreModel()];
+    wrongScoreModel[0].messageValidationLogInfo = [{isError: false} as ValidationMessage];
+    const result = validationService.isValidAllScores(wrongScoreModel);
+
+    expect(result).toBe(true);
   });
 
   it('#isHasWarningEditTakeNoteRequest should return false', () => {

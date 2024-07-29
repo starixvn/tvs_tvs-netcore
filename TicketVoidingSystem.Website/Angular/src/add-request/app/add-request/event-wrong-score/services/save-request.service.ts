@@ -24,11 +24,11 @@ export class SaveRequestService {
 
   async onYesConfirmAddRequest(args: SaveRequestArg): Promise<void> {
     // validate again
-    const validation = args.isVoided ? { isValid: false } as ValidationBusinessRuleOutput : await this.checkValidationBeforeSaveRequest(args as ValidationBusinessRuleArgs);
+    const validation = args.isVoided ? { isValid: true } as ValidationBusinessRuleOutput : await this.checkValidationBeforeSaveRequest(args as ValidationBusinessRuleArgs);
     if (validation.isValid) {
       await this.saveRequest(args);
     } else {
-      this.popupService.showError('There are some invalid Bet ID(s) in this request, please check again!');
+      this.popupService.showError('There are some invalid in this request, please check again!');
       args.addRequestStore.changeSavingRequestStatus(false);
     }
   }
@@ -58,7 +58,7 @@ export class SaveRequestService {
       args.leagueEventWrongScoreComponent.selectedMatch.matchId, args.filter, args.primitiveProps, args.wrongScoreModels);
     args.addRequestStore.changeBlockingUiStatus(false);
 
-    if (this.validationService.isCheckedScoresHasError(args.wrongScoreModels)) {
+    if (!this.validationService.isValidAllScores(args.wrongScoreModels)) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 

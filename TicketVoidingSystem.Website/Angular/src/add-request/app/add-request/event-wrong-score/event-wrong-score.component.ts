@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -11,8 +12,8 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { OthersModel } from '../others/others.model';
 import { ConfirmWrongScoreModel } from './confirm-wrong-score/confirm-wrong-score.model';
@@ -43,8 +44,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongScoreModels: WrongScoreModel[] = [];
+  @Input() issueTypes = new IssueTypes();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
-  @ViewChild('leagueEvent') leagueEventWrongScoreComponent: LeagueEventRedCardComponent;
+  @ViewChild('eventLeague') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('wrongScoreInfo') wrongScoreInfoComponents: QueryList<WrongScoreInfoComponent>;
   @ViewChild('filterWrongScore') filterWrongScoreComponent: FilterWrongScoreComponent;
 
@@ -105,7 +107,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
       this.logInfoService.clearDataValidation(this.wrongScoreModels);
     }
 
-    if (!this.validationService.validateCommonData(this.filter, this.leagueEventWrongScoreComponent, this.addRequestStore, this.filterWrongScoreComponent,
+    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.addRequestStore, this.filterWrongScoreComponent,
       this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents))) {
       return;
     }
@@ -188,7 +190,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
 
     this.primitiveProps.isShowActualScore = true;
     if (this.filter.isVoided) {
-      await this.checkIfRequestHasWarning();
+      this.openConfirmWrongScore();
       return;
     }
 
@@ -207,15 +209,28 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     return this.wrongScoreModels[0].logInfoDetail !== null || this.wrongScoreModels[0].messageValidationLogInfo?.length > 0;
   }
 
-  private openConfirmWrongScore(isHasWarningSettledTicket: boolean, isHasWarningForWrongScore: boolean, isHasWarningEditTakeNoteRequest: boolean,
-    isEditingByAnotherUser: boolean): void {
-    this.confirmWrongScoreModel.isOpenDialog = true;
-    this.confirmWrongScoreModel.isHasWarningSettledTicket = isHasWarningSettledTicket;
-    this.confirmWrongScoreModel.isHasWarningForWrongScore = isHasWarningForWrongScore;
-    this.confirmWrongScoreModel.isHasWarningEditTakeNoteRequest = isHasWarningEditTakeNoteRequest;
-    this.confirmWrongScoreModel.isEditingByAnotherUser = isEditingByAnotherUser;
+  private openConfirmWrongScore(): void {
+    const selectedScores = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
+    this.confirmWrongScoreModel.warningExcludedScores = [];
+    if (!this.filter.isVoided) {
+      this.wrongScoreModels.forEach(y => {
+        y.messageValidationLogInfo?.forEach(t => {
+          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+            this.confirmWrongScoreModel.warningExcludedScores.push(y.wrongScore);
+          }
+        });
+      });
+      this.confirmWrongScoreModel.isHasWarningSettledTicket = this.validationService.isHasWarningSettledTicket(selectedScores);
+      this.confirmWrongScoreModel.isHasWarningForWrongScore = this.validationService.isValidationHasWarningTicket(selectedScores);
+      this.confirmWrongScoreModel.isHasWarningEditTakeNoteRequest = this.validationService.isHasWarningEditTakeNoteRequest(this.isEdit, this.filter.action, this.actionIdOfFirstTimeAccess);
+    }
+
+    this.confirmWrongScoreModel.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(this.isEdit, Number(document.getElementById('body').getAttribute('user-id')), this.userId);
     this.confirmWrongScoreModel.requestId = this.requestId;
     this.confirmWrongScoreModel.requestedBy = this.requestedBy;
+    this.confirmWrongScoreModel.issueTypeName = this.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === this.filter.issueTypeId).issueTypeName;
+    this.confirmWrongScoreModel.subIssueTypeName = this.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === this.filter.subIssueTypeId).subIssueTypeName;
+    this.confirmWrongScoreModel.isOpenDialog = true;
 
     this.confirmWrongScoreModel = _.clone(this.confirmWrongScoreModel);
   }
@@ -227,22 +242,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
   private async saveWhenRequestNotVoided(): Promise<void> {
     const validation = await this.saveRequestService.checkValidationBeforeSaveRequest(this.createValidationBusinessRuleArgs());
     if (validation.isValid) {
-      await this.checkIfRequestHasWarning();
+      this.openConfirmWrongScore();
     } else {
       this.addRequestStore.changeSavingRequestStatus(false);
-    }
-  }
-
-  private async checkIfRequestHasWarning(): Promise<void> {
-    const isHasWarningSettledTicket = this.validationService.isHasWarningSettledTicket(this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels));
-    const isHasWarningForWrongScore = this.validationService.isValidationHasWarningTicket(this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels));
-    const isHasWarningEditTakeNoteRequest = this.validationService.isHasWarningEditTakeNoteRequest(this.isEdit, this.filter.action, this.actionIdOfFirstTimeAccess);
-    const isEditingByAnotherUser =
-      this.validationService.isEditingByAnotherUser(this.isEdit, Number(document.getElementById('body').getAttribute('user-id')), this.userId);
-    if (isHasWarningSettledTicket || isHasWarningForWrongScore || isHasWarningEditTakeNoteRequest) {
-      this.openConfirmWrongScore(isHasWarningSettledTicket, isHasWarningForWrongScore, isHasWarningEditTakeNoteRequest, isEditingByAnotherUser);
-    } else {
-      await this.saveRequestService.saveRequest(this.createSaveRequestArg());
     }
   }
 
@@ -253,10 +255,11 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.isVoided = this.isVoided;
     args.filter = this.filter;
     args.others = this.others;
+    args.issueTypes = this.issueTypes;
     args.primitiveProps = this.primitiveProps;
     args.wrongScoreModels = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
     args.wrongScoreInfoComponents = this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents);
-    args.leagueEventWrongScoreComponent = this.leagueEventWrongScoreComponent;
+    args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;
@@ -272,7 +275,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
     args.primitiveProps = this.primitiveProps;
     args.wrongScoreModels = this.wrongScoreService.getSelectedWrongScores(this.wrongScoreModels);
     args.wrongScoreInfoComponents = this.wrongScoreService.getSelectedWrongScoreComponents(this.wrongScoreInfoComponents);
-    args.leagueEventWrongScoreComponent = this.leagueEventWrongScoreComponent;
+    args.leagueEventWrongScoreComponent = this.eventLeagueComponent;
     args.filterWrongScoreComponent = this.filterWrongScoreComponent;
     args.addRequestStore = this.addRequestStore;
     args.tooltip = this.tooltip;

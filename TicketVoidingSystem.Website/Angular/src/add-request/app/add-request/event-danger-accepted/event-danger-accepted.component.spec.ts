@@ -184,7 +184,7 @@ describe('EventDangerAcceptedComponent', () => {
   it('#EventDangerAcceptedComponent init should match snapshot', async () => {
     // Arrange
     const mockUpdateSubIssueTypeAndAllowanceTime = jest.fn();
-    const { fixture, instance } = await shallow
+    const { fixture } = await shallow
       .mock(EventDangerAcceptedService, {
         updateSubIssueTypeAndAllowanceTime: mockUpdateSubIssueTypeAndAllowanceTime
       })

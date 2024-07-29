@@ -1,4 +1,4 @@
-import { Item } from 'src/utility/models/item.model';
+import { Item } from '../../../../utility/models/item.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { TransInfoAddRequestModel } from './trans-info-add-request.model';
 

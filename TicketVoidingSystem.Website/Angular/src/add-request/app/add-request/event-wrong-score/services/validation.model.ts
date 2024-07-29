@@ -1,6 +1,6 @@
+import { EventLeagueComponent } from "../../../../../utility/components/event-league/event-league.component";
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
-import { LeagueEventRedCardComponent } from "../../event-red-card/league-event-red-card/league-event-red-card.component";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongScoreModel } from "../../models/event-wrong-score.model";
 import { PrimitiveProperty } from "../event-wrong-score.model";
@@ -14,7 +14,7 @@ export class ValidationBusinessRuleArgs {
   wrongScoreModels: WrongScoreModel[];
   tooltip: Tooltip;
   primitiveProps: PrimitiveProperty;
-  leagueEventWrongScoreComponent: LeagueEventRedCardComponent;
+  leagueEventWrongScoreComponent: EventLeagueComponent;
   wrongScoreInfoComponents: WrongScoreInfoComponent[];
   addRequestStore: AddRequestStore;
   filterWrongScoreComponent: FilterWrongScoreComponent;
