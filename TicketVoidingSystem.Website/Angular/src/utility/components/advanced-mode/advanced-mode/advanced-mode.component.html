@@ -342,7 +342,7 @@
             </div>
             <div class="right">
               <div class="dropdown-item-adv" *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
-                <span class="mr-1">{{multiSelection.name}}</span>
+                <span class="mr-1" *ngIf="multiSelection.name !== ''">{{multiSelection.name}}</span>
                 <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                   [multipleSelect]="multiSelection.multipleSelect">
                 </multiple-select>
@@ -357,7 +357,7 @@
                   </div>
                 </div>
                 <div *ngIf="selection.isMultiple" class="dropdown-item-adv">
-                  <span class="mr-1">{{selection.multiSelection.name}}</span>
+                  <span class="mr-1" *ngIf="selection.multiSelection.name !== ''">{{selection.multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                   </multiple-select>
                 </div>
