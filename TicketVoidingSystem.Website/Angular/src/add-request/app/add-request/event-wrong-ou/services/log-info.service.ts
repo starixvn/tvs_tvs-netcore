@@ -59,6 +59,7 @@ export class LogInfoService {
 
   resetLogInfoOfEvent(allSelectedEvents: LogInfoWrongOu[]): void {
     allSelectedEvents.forEach(event => {
+      event.isShowValidation = false;
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
     });

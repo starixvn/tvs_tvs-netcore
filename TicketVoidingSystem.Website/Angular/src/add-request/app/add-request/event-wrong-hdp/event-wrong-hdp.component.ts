@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, PoolHouseTicketValue } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -19,7 +19,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-wrong-hdp',
@@ -88,7 +87,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoService.resetLogInfoOfEvent([this.mainEvent]);
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
-    mainLogInfo.hideValidationDetail();
+    mainLogInfo.logInfo.isShowValidation = false;
 
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
       return;
@@ -97,7 +96,7 @@ export class EventWrongHdpComponent implements OnInit {
     mainLogInfo.isBlock = true;
     this.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.mainEvent, this.filter);
     await this.logInfoService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
-    mainLogInfo.showValidationDetail();
+    mainLogInfo.logInfo.isShowValidation = true;
 
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
     this.primitiveProps.isShowRelatedEvents = true;
@@ -148,7 +147,7 @@ export class EventWrongHdpComponent implements OnInit {
 
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfoComponents.forEach(x => x.hideValidationDetail());
+    this.logInfoComponents.forEach(x => x.logInfo.isShowValidation = false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }

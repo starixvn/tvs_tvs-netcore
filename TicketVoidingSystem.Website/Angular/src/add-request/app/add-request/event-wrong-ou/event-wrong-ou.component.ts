@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, PoolHouseTicketValue } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
@@ -18,7 +19,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-wrong-ou',
@@ -87,7 +87,6 @@ export class EventWrongOuComponent implements OnInit {
     this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoWrongOuService.resetLogInfoOfEvent([this.mainEvent]);
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
-    mainLogInfo.hideValidationDetail();
 
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
       return;
@@ -96,7 +95,7 @@ export class EventWrongOuComponent implements OnInit {
     mainLogInfo.isBlock = true;
     this.mainEvent.linkedLogsViewModel = await this.eventWrongOuService.getLinkedLog(this.mainEvent, this.filter);
     await this.logInfoWrongOuService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
-    mainLogInfo.showValidationDetail();
+    mainLogInfo.logInfo.isShowValidation = true;
 
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
     this.primitiveProps.isShowRelatedEvents = true;
@@ -143,7 +142,7 @@ export class EventWrongOuComponent implements OnInit {
 
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfoComponents.forEach(x => x.hideValidationDetail());
+    this.logInfoComponents.forEach(x => x.logInfo.isShowValidation = false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { TicketsModel } from 'src/utility/components/pool-house-ticket/tickets/tickets.model';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
@@ -8,12 +9,12 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
+import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
-import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
 
 @Component({
   selector: 'log-info-wrong-ou',
@@ -35,7 +36,7 @@ export class LogInfoWrongOuComponent implements OnInit {
 
   isCollapse: boolean;
   isBlock = false;
-  isShowValidation = false;
+
   poolHouseTicketsModel = new PoolHouseTicketsModel();
   liveGameEarlyTicketsModel = new LiveGameEarlyTicketsModel();
   constructor(
@@ -48,7 +49,7 @@ export class LogInfoWrongOuComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.isEdit) {
-      this.isShowValidation = true;
+      this.logInfo.isShowValidation = true;
     }
   }
 
@@ -67,14 +68,12 @@ export class LogInfoWrongOuComponent implements OnInit {
   public async refreshLogInfo(): Promise<void> {
     this.isBlock = true;
     this.clearDataValidation();
-    this.hideValidationDetail();
 
     if (this.filterWrongOuComponent.isValid()) {
       await this.logInfoWrongOuService.getLogInfo([this.logInfo], this.isEdit, this.requestId, this.filter, this.primitiveProps);
-      this.isShowValidation =  true;
+      this.logInfo.isShowValidation = true;
     }
 
-    this.showValidationDetail();
     this.isBlock = false;
   }
   public async getPoolHouseData(query: GetPoolHouseTicketQuery): Promise<void> {
@@ -119,33 +118,27 @@ export class LogInfoWrongOuComponent implements OnInit {
     return query;
   }
 
-  
-  public async getLiveGameEarlyData(query: LiveGameEarlyTicketsQuery): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    const viewModel = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
-    this.liveGameEarlyTicketsModel.query = query;
-    this.liveGameEarlyTicketsModel.tickets = viewModel;
+  public async openLiveGameEarlyDetails(): Promise<void> {
+    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+      this.addRequestStore.changeBlockingUiStatus(true);
+      let query = {
+        liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
+        pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
+        issueTypeId: Number(this.filter.issueTypeId)
+      } as LiveGameEarlyTicketsQuery;
 
-    this.addRequestStore.changeBlockingUiStatus(false);
+      this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
+      this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
+      this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+      this.addRequestStore.changeBlockingUiStatus(false);
+    } else {
+      this.liveGameEarlyTicketsModel.tickets = new TicketsModel();
+    }
 
     this.liveGameEarlyTicketsModel.isOpen = true;
-    this.liveGameEarlyTicketsModel = _.clone(this.liveGameEarlyTicketsModel);
   }
 
-  public async showLiveGameEarlyTickets(): Promise<void> {
-    let query = {
-      liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
-      pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
-      pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
-      issueTypeId: Number(this.filter.issueTypeId)
-    } as LiveGameEarlyTicketsQuery;
-
-    this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
-    this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
-    this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
-    this.liveGameEarlyTicketsModel.isOpen = true;
-  }
-  
   public async openPoolHouseDetails(): Promise<void> {
     await this.getPoolHouseData(this.initGetPoolHouseTicketQuery());
   }
@@ -159,16 +152,9 @@ export class LogInfoWrongOuComponent implements OnInit {
   }
 
   public clearDataValidation(): void {
+    this.logInfo.isShowValidation = false;
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
-  }
-
-  public hideValidationDetail() {
-    this.isShowValidation = false;
-  }
-
-  public showValidationDetail() {
-    this.isShowValidation = true;
   }
 
   public openPopupTransIds(requestId: number, transIds: string): void {

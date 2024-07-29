@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { TicketsModel } from 'src/utility/components/pool-house-ticket/tickets/tickets.model';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
@@ -8,13 +9,13 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
+import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
-import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -36,7 +37,6 @@ export class LogInfoWrongHdpComponent {
 
   isCollapse: boolean;
   isBlock = false;
-  isShowValidation = false;
   poolHouseTicketsModel = new PoolHouseTicketsModel();
   liveGameEarlyTicketsModel = new LiveGameEarlyTicketsModel();
 
@@ -51,7 +51,7 @@ export class LogInfoWrongHdpComponent {
 
   public ngOnInit(): void {
     if (this.isEdit) {
-      this.isShowValidation = true;
+      this.logInfo.isShowValidation = true;
     }
   }
 
@@ -66,12 +66,12 @@ export class LogInfoWrongHdpComponent {
   private async refreshLogInfo(): Promise<void> {
     this.isBlock = true;
     this.clearDataValidation();
-    this.hideValidationDetail();
 
     if (this.filterWithHdpComponent.isValid()) {
       await this.logInfoService.getLogInfo([this.logInfo], this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      this.logInfo.isShowValidation = true;
     }
-    this.showValidationDetail();
+
     this.isBlock = false;
   }
 
@@ -149,16 +149,9 @@ export class LogInfoWrongHdpComponent {
   }
 
   public clearDataValidation(): void {
+    this.logInfo.isShowValidation = false;
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
-  }
-
-  public hideValidationDetail() {
-    this.isShowValidation = false;
-  }
-
-  public showValidationDetail() {
-    this.isShowValidation = true;
   }
 
   public emitSearchEvent(): void {
@@ -189,17 +182,24 @@ export class LogInfoWrongHdpComponent {
     return ticketCount === 0 ? '-' : transId;
   }
 
-  public async showLiveGameEarlyTickets(): Promise<void> {
-    let query = {
-      liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
-      pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
-      pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
-      issueTypeId: Number(this.filter.issueTypeId)
-    } as LiveGameEarlyTicketsQuery;
+  public async openLiveGameEarlyDetails(): Promise<void> {
+    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+      this.addRequestStore.changeBlockingUiStatus(true);
+      let query = {
+        liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
+        pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
+        issueTypeId: Number(this.filter.issueTypeId)
+      } as LiveGameEarlyTicketsQuery;
 
-    this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
-    this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
-    this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+      this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
+      this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
+      this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+      this.addRequestStore.changeBlockingUiStatus(false);
+    } else {
+      this.liveGameEarlyTicketsModel.tickets = new TicketsModel();
+    }
+
     this.liveGameEarlyTicketsModel.isOpen = true;
   }
 }

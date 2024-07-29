@@ -11,4 +11,5 @@ export class LogInfoWrongOdds {
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
   linkedLogsViewModel: LinkedLogsViewModel;
+  isShowValidation: boolean;
 }

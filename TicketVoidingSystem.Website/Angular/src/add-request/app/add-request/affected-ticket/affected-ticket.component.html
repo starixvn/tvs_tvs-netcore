@@ -13,11 +13,7 @@
         </div>
         <div class="modal-body" [blockUi]="isBlock">
           <div class="bettype-ticket-section">
-            <ng-container>
-              <div *ngIf="model.tickets.groups.length > 0">
-                <tickets [model]="model.tickets" [isBlock]="blockBetList"></tickets>
-              </div>
-            </ng-container>
+            <tickets [model]="model.tickets" [isBlock]="blockBetList"></tickets>
           </div>
         </div>
       </div>

@@ -1,16 +1,16 @@
-<div *ngIf="primitiveProps.isShowValidation">
+<div *ngIf="logInfo.isShowValidation">
   <strong>Main Event - Log Info</strong>
   <div class="log-info">
     <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
-      <div *ngIf="primitiveProps.isShowValidation">
+      <div *ngIf="logInfo.isShowValidation">
         <ng-container *ngIf="logInfo.logInfoDetail">
           <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
           Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
           LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
           <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
-        </span>
-        <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlySingleCount, 0, 0)" class="ticket-details" (click)="showLiveGameEarlyTickets()">Details</span><br />
+        </span>&nbsp;
+        <span class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
         </ng-container>
 
         <ng-container>
@@ -23,7 +23,7 @@
             <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
           </div>
           
-          <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="pool-house-info" (click)="openPoolHouseDetails()">PH Details</span>
+          <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
 
           <div *ngIf="logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful" class="warning-text d-flex align-items-center">
             <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>Cannot get link log, please search again.

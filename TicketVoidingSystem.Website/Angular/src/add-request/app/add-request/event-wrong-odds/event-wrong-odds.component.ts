@@ -1,21 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { PoolHouseTicketValue } from '../../../../utility/constants/config';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
+import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { SaveRequestArg } from './models/save-request-arg.model';
+import { CalculateOddsService } from './services/calculate-odds.service';
 import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { CalculateOddsService } from './services/calculate-odds.service';
-import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
-import { AddRequestApiService } from '../add-request-api.service';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -76,7 +76,6 @@ export class EventWrongOddsComponent implements OnInit {
   }
 
   public async handleSearchEvent(): Promise<void> {
-    this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsComponent)) {
@@ -87,14 +86,14 @@ export class EventWrongOddsComponent implements OnInit {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
-    this.primitiveProps.isShowValidation = true;
+    this.logInfoEvent.isShowValidation = true;
     this.addRequestStore.changeBlockingUiStatus(false);
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.primitiveProps.isShowValidation = false;
+    this.logInfoEvent.isShowValidation = false;
     this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
@@ -128,7 +127,6 @@ export class EventWrongOddsComponent implements OnInit {
   }
 
   public resetLogInfoOfEvent(): void {
-    this.primitiveProps.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 }

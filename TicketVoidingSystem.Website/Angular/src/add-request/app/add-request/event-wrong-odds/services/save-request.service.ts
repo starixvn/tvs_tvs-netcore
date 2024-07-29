@@ -38,7 +38,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(argWrongOdds: SaveRequestArg): Promise<boolean> {
     argWrongOdds.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOddsService.resetLogInfoOfEvent(argWrongOdds.logInfoEvent);
-    argWrongOdds.primitiveProps.isShowValidation = false;
+    argWrongOdds.logInfoEvent.isShowValidation = false;
 
     if (!this.validationService.validateCommonData(argWrongOdds.eventLeagueComponent, argWrongOdds.filterWrongOddsComponent)) {
       return false;
@@ -48,7 +48,7 @@ export class SaveRequestService {
     argWrongOdds.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(argWrongOdds.logInfoEvent, argWrongOdds.filter);
     await this.logInfoWrongOddsService.getLogInfo(argWrongOdds.logInfoEvent, argWrongOdds.isEdit, argWrongOdds.requestId, argWrongOdds.filter, argWrongOdds.primitiveProps);
     argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
-    argWrongOdds.primitiveProps.isShowValidation = true;
+    argWrongOdds.logInfoEvent.isShowValidation = true;
 
     if (this.validationService.isValidLogInfoEvent(argWrongOdds.logInfoEvent)) {
       return true;

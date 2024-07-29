@@ -59,6 +59,7 @@ export class LogInfoService {
 
   resetLogInfoOfEvent(events: LogInfoWrongHdp[]): void {
     events.forEach(event => {
+      event.isShowValidation = false;
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
     });

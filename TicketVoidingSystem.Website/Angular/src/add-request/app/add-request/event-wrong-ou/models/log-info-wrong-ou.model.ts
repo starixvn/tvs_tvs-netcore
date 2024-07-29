@@ -15,4 +15,5 @@ export class LogInfoWrongOu {
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
   linkedLogsViewModel: LinkedLogsViewModel;
+  isShowValidation: boolean;
 }

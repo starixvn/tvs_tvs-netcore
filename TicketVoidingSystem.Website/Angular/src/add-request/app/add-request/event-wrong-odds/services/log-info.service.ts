@@ -51,6 +51,7 @@ export class LogInfoService {
   }
 
   resetLogInfoOfEvent(logInfoEvent: LogInfoWrongOdds): void {
+    logInfoEvent.isShowValidation = false;
     logInfoEvent.logInfoDetail = null;
     logInfoEvent.messageValidationLogInfo = null;
   }

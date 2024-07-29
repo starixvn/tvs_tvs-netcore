@@ -39,7 +39,6 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOuService.resetLogInfoOfEvent(arg.allEvents);
-    arg.logInfoComponents.forEach(x => x.hideValidationDetail());
 
     if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.logInfoComponents)) {
       return false;
@@ -49,7 +48,7 @@ export class SaveRequestService {
     arg.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoWrongOuService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     arg.logInfoComponents.forEach(x => {
-      x.showValidationDetail();
+      x.logInfo.isShowValidation = true;
     });
     arg.primitiveProps.isShowRelatedEvents = true;
     arg.addRequestStore.changeBlockingUiStatus(false);

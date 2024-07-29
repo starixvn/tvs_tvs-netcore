@@ -15,4 +15,5 @@ export class LogInfoWrongHdp {
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
   linkedLogsViewModel: LinkedLogsViewModel;
+  isShowValidation: boolean;
 }
