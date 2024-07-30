@@ -1,4 +1,4 @@
-import { Result } from "../../../models/result";
+import { Result } from '../../../../../utility/models/result';
 
 export class LinkedLogsViewModel {
   groupLinkedLogs: GroupLinkedLog[];

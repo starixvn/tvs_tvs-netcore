@@ -1,4 +1,4 @@
-@import '../../../../assets/styles/mixin.scss';
+@import '../../../../../assets/styles/mixin.scss';
 
 
 .tickets-list {
@@ -21,11 +21,11 @@
     }
 
     .li-checked {
-        background: url(../../../../assets/images/icon-check.png) no-repeat right;
+        background: url(../../../../../assets/images/icon-check.png) no-repeat right;
     }
 
     .icon-arrow-white-down {
-        @include icon-arrow-white-down('../../../../assets/images/arrow-down.png');
+        @include icon-arrow-white-down('../../../../../assets/images/arrow-down.png');
     }
 
     .col-tb-1 {

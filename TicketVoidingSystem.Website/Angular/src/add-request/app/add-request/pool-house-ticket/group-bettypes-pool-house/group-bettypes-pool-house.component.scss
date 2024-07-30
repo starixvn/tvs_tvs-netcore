@@ -1,4 +1,4 @@
-@import '../../../../assets/styles/mixin.scss';
+@import '../../../../../assets/styles/mixin.scss';
 
 .group-bettypes {
   width: 1400px;
@@ -14,11 +14,11 @@
     margin-top: 3px;
 
     &plus-bettypes {
-      background: url(../../../../assets/images/sprite.png) no-repeat -7px -142px;
+      background: url(../../../../../assets/images/sprite.png) no-repeat -7px -142px;
     }
 
     &minus-bettypes {
-      background: url(../../../../assets/images/sprite.png) no-repeat -25px -142px;
+      background: url(../../../../../assets/images/sprite.png) no-repeat -25px -142px;
     }
   }
 

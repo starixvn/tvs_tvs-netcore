@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BaseTicketsListComponent } from '../../base-tickets-list/base-tickets-list.component';
+import { BaseTicketsListComponent } from '../../../../../utility/components/base-tickets-list/base-tickets-list.component';
 import { TicketsModel } from './tickets.model';
 
 @Component({

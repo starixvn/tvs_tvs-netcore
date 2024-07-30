@@ -312,11 +312,6 @@ export class FunctionConst {
   static readonly TVS_ADD_PAGE = 4;
 }
 
-export class PoolHouseTicketValue {
-  static readonly SELECT_ALL_BETTYPE = 'All';
-  static readonly NOT_AFFECTED = '-1';
-}
-
 export class SiteDbGroupConstant {
   static readonly CentralDb = 0;
   static readonly SiteDb1 = 1;

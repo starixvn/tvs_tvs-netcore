@@ -1,4 +1,5 @@
-import { CommonTicketsModel } from '../../../models/common.tickets.model';
+
+import { CommonTicketsModel } from '../../../../../utility/models/common.tickets.model';
 import { GroupModel } from './group-tickets.model';
 import { TicketModel } from './ticket.model';
 

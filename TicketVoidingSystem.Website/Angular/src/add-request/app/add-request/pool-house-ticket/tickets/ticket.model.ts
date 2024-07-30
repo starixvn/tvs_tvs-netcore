@@ -1,4 +1,4 @@
-import { CommonTicketModel } from '../../../models/common.ticket.model';
+import { CommonTicketModel } from '../../../../../utility/models/common.ticket.model';
 
 export class TicketModel extends CommonTicketModel {
   isParlay: boolean;

@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import moment from 'moment-timezone';
-import { GetLinkedLogQuery, LinkedLogsViewModel } from "../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model";
-import { AllowanceRate, DateTimeFormat, PoolHouseTicketValue } from "../../../../../utility/constants/config";
+import { AllowanceRate, DateTimeFormat } from "../../../../../utility/constants/config";
 import { AddRequestApiService } from "../../add-request-api.service";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongOddsModel } from "../../models/event-wrong-odds.model";
+import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 import { FilterFavoriteTypeConstant, FilterWrongOddsModel } from "../models/filter-wrong-odds.model";
 import { WrongOddsGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOdds } from "../models/log-info-wrong-odds.model";

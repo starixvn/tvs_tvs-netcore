@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { PoolHouseTicketValue } from '../../constants/config';
-import { ItemsSelect } from '../multiple-selection/items-select';
-import { MultipleSelection } from '../multiple-selection/multiple-selection';
+import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { StaticService } from '../../../../utility/services/static.service';
+
 import { GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
+import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
-import { StaticService } from '../../services/static.service';
+
 
 @Component({
   selector: 'pool-house-tickets',

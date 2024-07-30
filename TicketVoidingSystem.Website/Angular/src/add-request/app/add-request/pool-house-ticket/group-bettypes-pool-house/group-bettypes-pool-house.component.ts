@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import { Tooltip } from '../../tooltip/tooltip.model';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
 
 @Component({

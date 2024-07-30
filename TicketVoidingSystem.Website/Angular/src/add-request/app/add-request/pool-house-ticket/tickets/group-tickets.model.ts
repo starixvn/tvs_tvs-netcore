@@ -1,5 +1,5 @@
-import '../../../extensions/string.extension';
-import { CommonGroupTicketsModel } from '../../../models/common.group-tickets.model';
+import { CommonGroupTicketsModel } from '../../../../../utility/models/common.group-tickets.model';
+
 import { TicketModel } from './ticket.model';
 
 export class GroupModel extends CommonGroupTicketsModel<TicketModel> {

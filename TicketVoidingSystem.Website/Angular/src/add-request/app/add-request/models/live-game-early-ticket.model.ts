@@ -1,4 +1,4 @@
-import { TicketsModel } from '../../../../utility/components/pool-house-ticket/tickets/tickets.model';
+import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 
 export class LiveGameEarlyTicketsQuery {
     liveGameEarlyTicketsJson: string;
