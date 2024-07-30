@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { LinkedLogsViewModel } from './linked-log.model';
 
 @Component({
@@ -6,10 +6,6 @@ import { LinkedLogsViewModel } from './linked-log.model';
   templateUrl: './linked-log.component.html',
   styleUrls: ['./linked-log.component.scss']
 })
-export class LinkedLogComponent implements OnChanges {
+export class LinkedLogComponent {
   @Input() linkedLogsViewModel = new LinkedLogsViewModel();
-
-  ngOnChanges(changes: SimpleChanges): void {
-  }
-
 }

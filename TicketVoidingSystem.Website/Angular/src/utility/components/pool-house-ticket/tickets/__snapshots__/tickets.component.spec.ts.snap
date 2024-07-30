@@ -15,18 +15,6 @@ exports[`TicketsComponent TicketsComponent init should match snapshot 1`] = `
           <thead>
             <tr>
               <th
-                class="list-check-groups-input col-tb-1"
-                scope="col"
-              />
-              <th
-                class="col-tb-2"
-                scope="col"
-              >
-                <div>
-                  No
-                </div>
-              </th>
-              <th
                 class="col-tb-3"
                 scope="col"
               >
@@ -143,7 +131,6 @@ exports[`TicketsComponent TicketsComponent init should match snapshot 1`] = `
           </tbody>
         </table>
       </div>
-      <paging />
     </div>
   </tickets>
 </ng-component>

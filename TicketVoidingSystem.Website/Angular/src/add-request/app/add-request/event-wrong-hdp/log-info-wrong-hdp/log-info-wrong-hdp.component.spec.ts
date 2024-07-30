@@ -60,7 +60,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
 
   static readonly fakeFilterModel: FilterModel = {
@@ -118,23 +119,6 @@ describe('LogInfoWrongHdpComponent', () => {
     });
 
     expect(fixture).toMatchSnapshot();
-  });
-
-  it('#ngOnInit should update isShowValidation True when edit is True', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-
-    instance.ngOnInit();
-
-    expect(instance.isShowValidation).toBeTruthy();
   });
 
   it('refreshLogInfo should call #getLogInfo', async () => {
@@ -221,20 +205,6 @@ describe('LogInfoWrongHdpComponent', () => {
 
     expect(instance.logInfo.logInfoDetail).toBeNull();
     expect(instance.logInfo.messageValidationLogInfo ).toBeNull();
-  });
-
-  it('showValidationDetail should update isShowValidation true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.showValidationDetail();
-
-    expect(instance.isShowValidation).toBeTruthy();
   });
 
   it('emitSearchEvent should emit searchTicketEvent', async () => {
@@ -523,8 +493,6 @@ describe('LogInfoWrongHdpComponent', () => {
       filterFromTransTime: '',
       filterToTransTime: '',
       liveIndicator: 0,
-      pageIndex: 1,
-      pageSize: 1,
       wrongOddsInfo: []
     };
 
@@ -533,11 +501,9 @@ describe('LogInfoWrongHdpComponent', () => {
       checkedBetTypes: '',
       query: fakeQuery,
       groupBetTypes: [],
-      tickets: new TicketsModel(),
-      isAffectedGroup1X2: false,
-      isAffectedGroup1H1X2: false,
-      isAffectedGroupAIO: false,
-      linkedLogsViewModel: new LinkedLogsViewModel
+      linkedLogsViewModel: new LinkedLogsViewModel,
+      affectedTickets: new TicketsModel,
+      otherTickets: new TicketsModel
     };
 
     const { instance } = await shallow
@@ -555,7 +521,5 @@ describe('LogInfoWrongHdpComponent', () => {
 
     expect(actual.homeFavorite).toBe("homeFavorite");
     expect(actual.awayFavorite).toBe("awayFavorite");
-    expect(actual.pageIndex ).toBe(1);
-    expect(actual.pageSize ).toBe(1);
   });
 });

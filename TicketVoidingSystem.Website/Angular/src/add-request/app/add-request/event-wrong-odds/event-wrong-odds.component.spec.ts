@@ -63,7 +63,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeMatch: MatchModel = {
     matchId: 876543,
@@ -347,14 +348,12 @@ describe('EventWrongOddsComponent', () => {
       }
     });
     instance.primitiveProps = new PrimitiveProperty();
-    instance.primitiveProps.isShowValidation = true;
     instance['initSaveRequestInput'] = jest.fn();
     instance.logInfoEvent = Helper.fakeLogInfoWrongOdds;
 
     await instance.saveRequest();
 
     expect(mockSaveRequest).toHaveBeenCalledTimes(1);
-    expect(instance.primitiveProps.isShowValidation).toBeFalsy();
   });
 
   it('#initSaveRequestInput should return expected argument', async () => {

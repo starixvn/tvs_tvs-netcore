@@ -13,7 +13,6 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -27,6 +26,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -63,7 +63,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
@@ -108,7 +109,7 @@ class Helper {
 describe('EventWrongOuComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       LogInfoWrongOuComponent,
       AddChildMatchComponent
     ],
@@ -273,7 +274,7 @@ describe('EventWrongOuComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    instance.leagueEventWrongOuComponent = null;
+    instance.eventLeagueComponent = null;
     instance.updateMatchId.emit = jest.fn();
 
     instance.changeMatchEvent();
@@ -296,9 +297,9 @@ describe('EventWrongOuComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.selectedMatch = new MatchModel();
-    instance.leagueEventWrongOuComponent = leagueEventWrongHdpComponent;
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.selectedMatch = new MatchModel();
+    instance.eventLeagueComponent = eventLeagueComponent;
     instance.updateMatchId.emit = jest.fn();
 
     instance.changeMatchEvent();

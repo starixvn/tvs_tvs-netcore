@@ -8,11 +8,6 @@ import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house.component';
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
 
-class Helper {
-  static readonly inputsSelector = '.form-control';
-  
-}
-
 describe('GroupBettypesPoolHouseComponent', () => { 
   @NgModule({
     declarations: [
@@ -41,7 +36,7 @@ describe('GroupBettypesPoolHouseComponent', () => {
     const { fixture } = await shallow
     .render({
       bind: {
-        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, '', false),
+        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, false),
       }
     });
 
@@ -52,7 +47,7 @@ describe('GroupBettypesPoolHouseComponent', () => {
     const { instance } = await shallow
     .render({
       bind: {
-        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, '', false),
+        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, false),
       }
     });
     instance['renderDisplayGroupBetTypes'] = jest.fn();
@@ -66,7 +61,7 @@ describe('GroupBettypesPoolHouseComponent', () => {
     const { instance } = await shallow
     .render({
       bind: {
-        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, '', false),
+        affectedGroupBetTypesModel: new GroupBetTypesModel([], true, false),
       }
     });
     instance.changedBetTypesEvent.emit = jest.fn();

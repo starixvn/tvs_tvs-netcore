@@ -60,7 +60,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
@@ -112,22 +113,6 @@ describe('LogInfoWrongOddsComponent', () => {
     });
 
     expect(fixture).toMatchSnapshot();
-  });
-
-  it('#ngOnInit should update isShowValidation true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: true,
-        filter: new FilterModel(),
-        logInfo: Helper.fakeLogInfoWrongOdds,
-        primitiveProps: new PrimitiveProperty()
-      }
-    });
-
-    instance.ngOnInit();
-
-    expect(instance.primitiveProps.isShowValidation).toBeTruthy();
   });
 
   it('#recalculatePoolHouseTicket should emit searchEvent', async () => {
@@ -269,47 +254,6 @@ describe('LogInfoWrongOddsComponent', () => {
     await instance.openPoolHouseDetails();
 
     expect(instance.getPoolHouseData).toHaveBeenCalledTimes(1);
-  });
-
-  it('initGetPoolHouseTicketQuery should update pageIndex is 0 when poolHouseTicketsModel.query null', async () => {
-    const fakeLogInfoWrongOdds = _.cloneDeep(Helper.fakeLogInfoWrongOdds);
-    fakeLogInfoWrongOdds.linkedLogsViewModel = new LinkedLogsViewModel();
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, { getWrongOddsModel: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongOdds
-      }
-    });
-    instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-    instance.poolHouseTicketsModel.query = null;
-    const actual = instance['initGetPoolHouseTicketQuery']();
-
-    expect(actual.pageIndex).toBe(0);
-  });
-
-  it('initGetPoolHouseTicketQuery should update pageIndex is 0 when poolHouseTicketsModel.query not null', async () => {
-    const fakeLogInfoWrongOdds = _.cloneDeep(Helper.fakeLogInfoWrongOdds);
-    fakeLogInfoWrongOdds.linkedLogsViewModel = new LinkedLogsViewModel();
-    const { instance } = await shallow
-    .mock(EventWrongOddsService, { getWrongOddsModel: jest.fn() })
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongOdds
-      }
-    });
-    instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-    instance.poolHouseTicketsModel.query = new GetPoolHouseTicketQuery();
-    instance.poolHouseTicketsModel.query.pageIndex = 1;
-    const actual = instance['initGetPoolHouseTicketQuery']();
-
-    expect(actual.pageIndex).toBe(1);
   });
 
   it('getPoolHouseData should call #addRequestApiService.getPoolHouseTickets', async () => {

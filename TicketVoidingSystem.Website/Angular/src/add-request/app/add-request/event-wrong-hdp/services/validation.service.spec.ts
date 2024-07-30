@@ -3,7 +3,6 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { TeamFavorite, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
@@ -13,6 +12,7 @@ import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -28,7 +28,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
@@ -57,36 +58,36 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when invalid match', async () => {
-    const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
 
-    const actual = service.validateCommonData(leagueEventWrongHdpComponent, null);
+    const actual = service.validateCommonData(eventLeagueComponent, null);
 
     expect(actual).toBeFalsy();
   });
 
   it('#validateCommonData should return false when invalid match', async () => {
-    const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => false);
 
-    const actual = service.validateCommonData(leagueEventWrongHdpComponent, [logInfoWrongHdpComponent]);
+    const actual = service.validateCommonData(eventLeagueComponent, [logInfoWrongHdpComponent]);
 
     expect(actual).toBeFalsy();
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent = new FilterWithHdpComponent(null, null);
     logInfoWrongHdpComponent.filterWithHdpComponent.isValid = jest.fn().mockImplementation(() => true);
 
-    const actual = service.validateCommonData(leagueEventWrongHdpComponent, [logInfoWrongHdpComponent]);
+    const actual = service.validateCommonData(eventLeagueComponent, [logInfoWrongHdpComponent]);
 
     expect(actual).toBeTruthy();
   });

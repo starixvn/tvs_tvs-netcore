@@ -6,6 +6,7 @@ exports[`LogInfoWrongOddsComponent #LogInfoWrongOddsComponent init should match 
 >
   <log-info-wrong-odds>
     <pool-house-tickets />
+    <affected-ticket />
   </log-info-wrong-odds>
 </ng-component>
 `;

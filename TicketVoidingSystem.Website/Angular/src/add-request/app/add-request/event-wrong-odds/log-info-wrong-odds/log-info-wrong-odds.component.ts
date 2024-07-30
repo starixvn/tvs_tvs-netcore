@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { TicketsModel } from 'src/utility/components/pool-house-ticket/tickets/tickets.model';
+import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';

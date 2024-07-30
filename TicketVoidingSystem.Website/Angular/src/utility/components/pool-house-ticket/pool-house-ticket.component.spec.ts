@@ -57,14 +57,14 @@ class Helper {
   };
   static readonly fakePoolHouseLinkedLogsData: GroupLinkedLog = {
     groupName: 'AIO',
-    isShow: true,
-    logsData: []
+    logsData: [],
+    isAffectedGroup: false
   };
   static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
-    poolHouseLinkedLogsData: [Helper.fakePoolHouseLinkedLogsData],
     isLinkGroup1X2: true,
     isLinkGroupAIO: true,
-    result: new Result()
+    result: new Result(),
+    groupLinkedLogs: []
   };
   static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
     matchId: 12345,
@@ -76,25 +76,22 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     poolHouseCheckedBetTypes: null,
-    linkedLogsViewModel: Helper.fakeLinkedLogsViewModel
+    linkedLogsViewModel: Helper.fakeLinkedLogsViewModel,
+    isShowValidation: false
   };
   static readonly fakePoolHouseTicketViewModel: PoolHouseTicketViewModel = {
     groupBetTypes: [],
-    isAffectedGroup1H1X2: true,
-    isAffectedGroup1X2: true,
-    isAffectedGroupAIO: true,
-    affectedTickets: new TicketsModel()
+    affectedTickets: new TicketsModel(),
+    otherTickets: new TicketsModel
   };
   static readonly fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
     checkedBetTypes: '1,2',
     isOpen: false,
     groupBetTypes: [],
-    isAffectedGroup1H1X2: true,
-    isAffectedGroup1X2: true,
-    isAffectedGroupAIO: true,
     linkedLogsViewModel: null,
     query: null,
-    tickets: null
+    affectedTickets: new TicketsModel,
+    otherTickets: new TicketsModel
   };
 }
 
@@ -146,27 +143,11 @@ describe('GroupBettypesPoolHouseComponent', () => {
     const changes = {
       'model': new SimpleChange(new PoolHouseTicketsModel(), new PoolHouseTicketsModel(), true)
     };
-    instance.paging = new PagingModel();
     instance['updatePoolHouseTicketModal'] = jest.fn();
 
     await instance.ngOnChanges(changes);
 
     expect(instance['updatePoolHouseTicketModal']).toHaveBeenCalledTimes(1);
-  });
-
-  it('changedBetTypes should call #tickets.handlecheckTicketByBetTypes', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        model: new PoolHouseTicketsModel(),
-      }
-    });
-    instance.tickets = new TicketsModel();
-    instance.tickets.handlecheckTicketByBetTypes = jest.fn();
-
-    instance['changedBetTypes']([]);
-
-    expect(instance.tickets.handlecheckTicketByBetTypes).toHaveBeenCalledTimes(1);
   });
 
   it('closeClick should update model.isOpen false', async () => {
