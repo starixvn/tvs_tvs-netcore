@@ -63,16 +63,8 @@
       "Name": "Group 3",
       "Products": [
         {
-          "Name": "AG Casino",
-          "Value": "11"
-        },
-        {
           "Name": "AllBet",
           "Value": "21"
-        },
-        {
-          "Name": "SA Gaming",
-          "Value": "39"
         },
         {
           "Name": "AE Sexy",
@@ -93,10 +85,6 @@
         {
           "Name": "IBCBet Live Casino",
           "Value": "46"
-        },
-        {
-          "Name": "BBIN",
-          "Value": "47"
         },
         {
           "Name": "PP Live Casino",
@@ -198,6 +186,27 @@
         {
           "Name": "Live22",
           "Value": "79"
+        },
+        {
+          "Name": "Nextspin",
+          "Value": "85"
+        },
+        {
+          "Name": "FastSpin",
+          "Value": "87"
+        }
+      ]
+    },
+    {
+      "Name": "Group 5",
+      "Products": [
+        {
+          "Name": "SA Gaming",
+          "Value": "39"
+        },
+        {
+          "Name": "BBIN",
+          "Value": "47"
         }
       ]
     }

@@ -43,7 +43,7 @@ public static class BetTypeExtension
 
     public static bool IsSabaPromotion(this int id)
     {
-        int[] SportTypeSabaPromotions = { 17003, 17004, 17006 };
+        int[] SportTypeSabaPromotions = { 17000, 17001, 17002, 17003, 17004, 17006, 17007, 17008, 17009, 17010 };
         return SportTypeSabaPromotions.Contains(id);
     }
 
