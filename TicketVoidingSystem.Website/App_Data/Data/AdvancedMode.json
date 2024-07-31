@@ -12113,6 +12113,7 @@
               "Value": "805"
             }
           ],
+          "IsCanSelectInningFromOutside": true,
           "Name": "Inning:",
           "Value": "All",
           "IsMultiple": true,
@@ -12177,6 +12178,7 @@
               "Value": "808"
             }
           ],
+          "IsCanSelectInningFromOutside": true,
           "Name": "Inning:",
           "Value": "All",
           "IsMultiple": true,
@@ -12249,6 +12251,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectInningFromOutside": true,
           "Name": "Inning:",
           "Value": "All",
           "IsMultiple": true,
@@ -12324,6 +12327,7 @@
               "Value": "809"
             }
           ],
+          "IsCanSelectInningFromOutside": true,
           "Name": "Inning:",
           "Value": "All",
           "IsMultiple": true,
@@ -12395,6 +12399,7 @@
               "Value": "808"
             }
           ],
+          "IsCanSelectInningFromOutside": true,
           "Name": "Inning:",
           "Value": "All",
           "IsMultiple": true,

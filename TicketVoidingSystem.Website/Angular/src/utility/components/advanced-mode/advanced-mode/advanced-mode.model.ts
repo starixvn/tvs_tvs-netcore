@@ -30,10 +30,11 @@ export class Selection {
   isCanSelectQuarterFromOutside: boolean;
   isCanSelectSetFromOutside: boolean;
   isCanSelectGameFromOutside: boolean;
+  isCanSelectInningFromOutside: boolean;
 
   constructor(name: string, value: string, items: Selection[], isMultiple: boolean, xmlAttribute: string, //NOSONAR
     isCanSelectMapFromOutside: boolean, isCanSelectRoundFromOutside: boolean, isCanSelectQuarterFromOutside: boolean,
-    isCanSelectSetFromOutside: boolean, isCanSelectGameFromOutside: boolean) {
+    isCanSelectSetFromOutside: boolean, isCanSelectGameFromOutside: boolean, isCanSelectInningFromOutside: boolean) {
     this.name = name;
     this.value = value;
     this.renderItems(items);
@@ -44,6 +45,7 @@ export class Selection {
     this.isCanSelectQuarterFromOutside = isCanSelectQuarterFromOutside;
     this.isCanSelectSetFromOutside = isCanSelectSetFromOutside;
     this.isCanSelectGameFromOutside = isCanSelectGameFromOutside;
+    this.isCanSelectInningFromOutside = isCanSelectInningFromOutside;
   }
 
   renderItems(items: Selection[]) {
@@ -52,7 +54,7 @@ export class Selection {
       items.forEach(item => {
         const temp = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
           item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside, item.isCanSelectQuarterFromOutside,
-          item.isCanSelectSetFromOutside, item.isCanSelectGameFromOutside);
+          item.isCanSelectSetFromOutside, item.isCanSelectGameFromOutside, item.isCanSelectInningFromOutside);
         this.items.push(temp);
       });
     }
@@ -132,7 +134,7 @@ export class BetTeam {
     selections.forEach(item => {
       if (this.isTicketListing &&
         (item.isCanSelectMapFromOutside || item.isCanSelectRoundFromOutside ||item.isCanSelectQuarterFromOutside
-          || item.isCanSelectSetFromOutside || item.isCanSelectGameFromOutside)) {
+          || item.isCanSelectSetFromOutside || item.isCanSelectGameFromOutside || item.isCanSelectInningFromOutside)) {
         this.renderMultipleSelectWithAllBetType(item);
       } else if (item.isMultiple) {
         item.multiSelection = this.renderMultipleSelect(item);
@@ -140,7 +142,7 @@ export class BetTeam {
       } else {
         const selection = new Selection(item.name, item.value, item.items, item.isMultiple, item.xmlAttribute,
           item.isCanSelectMapFromOutside, item.isCanSelectRoundFromOutside, item.isCanSelectQuarterFromOutside,
-          item.isCanSelectSetFromOutside, item.isCanSelectGameFromOutside);
+          item.isCanSelectSetFromOutside, item.isCanSelectGameFromOutside, item.isCanSelectInningFromOutside);
         this.selections.push(selection);
       }
     });
@@ -227,6 +229,8 @@ export class BetTeam {
       multiSelection.type = "set";
     } else if (multi.isCanSelectGameFromOutside) {
       multiSelection.type = "game";
+    } else if (multi.isCanSelectInningFromOutside) {
+      multiSelection.type = "inning";
     }
 
     return multiSelection;
@@ -370,7 +374,8 @@ export class BetTeam {
           || item.name === AdvancedModeConstants.ROUND
           || item.name === AdvancedModeConstants.QUARTER
           || item.name === AdvancedModeConstants.SET
-          || item.name === AdvancedModeConstants.GAME)) {
+          || item.name === AdvancedModeConstants.GAME
+          || item.name === AdvancedModeConstants.INNING)) {
           value = 'All';
         }
         this.updateResult(result, item.xmlAttribute, value);
