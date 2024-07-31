@@ -22,7 +22,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };  
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -59,7 +60,18 @@ describe('EventWrongOuService', () => {
   it('#getLinkedLog should return LinkedLogsViewModel', async () => {
     const mainEvent = _.cloneDeep(Helper.fakeLogInfoWrongOu);
     let viewModel: LinkedLogsViewModel = {
-      poolHouseLinkedLogsData: [],
+      groupLinkedLogs: [
+        {
+          groupName: '1X2',
+          isAffectedGroup: true,
+          logsData: []
+        },
+        {
+          groupName: 'AIO',
+          isAffectedGroup: true,
+          logsData: []
+        },
+      ],
       isLinkGroup1X2: false,
       isLinkGroupAIO: false,
       result: undefined
@@ -82,7 +94,8 @@ describe('EventWrongOuService', () => {
       poolHouseCheckedBetTypes: '',
       filterWrongOu: new FilterWrongOuModel,
       logInfoDetail: new LogInfoDetail,
-      linkedLogsViewModel: new LinkedLogsViewModel
+      linkedLogsViewModel: new LinkedLogsViewModel,
+      isShowValidation: false
     }
     let actual = await service.getWrongOuModel(Helper.fakeFilterModel, [logInfoWrongOu]);
 

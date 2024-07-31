@@ -1,18 +1,11 @@
+import { PipeModule } from './../../../../../utility/pipes/pipe.module';
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { PipeModule } from '../../../pipes/pipe.module';
-import { BlockUiModule } from '../../block-ui/block-ui.module';
-import { PagingModule } from '../../paging/paging.module';
-import { ToolTipModule } from '../../tooltip/tooltip.module';
 import { TicketsComponent } from './tickets.component';
 import { TicketsModel } from './tickets.model';
-
-class Helper {
-  static readonly inputsSelector = '.form-control';
-  
-}
+import { BlockUiModule } from './../../../../../utility/components/block-ui/block-ui.module';
 
 describe('TicketsComponent', () => { 
   @NgModule({
@@ -22,9 +15,7 @@ describe('TicketsComponent', () => {
       NgbModule,
       FormsModule,
       BlockUiModule,
-      PipeModule,
-      ToolTipModule,
-      PagingModule
+      PipeModule
     ],
     providers: [
     ]

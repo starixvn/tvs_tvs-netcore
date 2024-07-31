@@ -210,7 +210,7 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
@@ -244,7 +244,7 @@ describe('EventWrongHdpComponent', () => {
       }
     });
     instance.primitiveProps = new PrimitiveProperty();
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
@@ -406,7 +406,7 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);

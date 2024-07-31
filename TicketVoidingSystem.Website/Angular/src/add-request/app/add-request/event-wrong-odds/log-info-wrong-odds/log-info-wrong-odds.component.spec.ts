@@ -4,9 +4,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { PoolHouseTicketComponent } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.component';
-import { GetPoolHouseTicketQuery, PoolHouseTicketsModel, PoolHouseTicketViewModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -17,6 +14,11 @@ import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from '../services/event-wrong-odds.service';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds.component';
+import { GetPoolHouseTicketQuery, PoolHouseTicketsModel, PoolHouseTicketViewModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -72,6 +74,45 @@ class Helper {
     isTest: true,
     isVoided: false,
     isAbnormal: false
+  };
+  static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
+    matchId: 756352,
+    actionId: 0,
+    requestId: 4638,
+    issueTypeId: 1,
+    subIssueTypeId: 1,
+    homeFavorite: '1.75',
+    awayFavorite: '',
+    hdpValue: '1.5',
+    wrongMarket: '1.75',
+    isLinkGroup1X2: false,
+    isLinkGroupAIO: false,
+    filterFromTransTime: Helper.fakeFromDateTime,
+    filterToTransTime: Helper.fakeToDateTime,
+    liveIndicator: 0,
+    wrongOddsInfo: []
+  };
+  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
+    groupLinkedLogs: [
+      {
+        groupName: '1X2',
+        isAffectedGroup: true,
+        logsData: []
+      },
+      {
+        groupName: 'AIO',
+        isAffectedGroup: true,
+        logsData: []
+      },
+    ],
+    isLinkGroup1X2: false,
+    isLinkGroupAIO: false,
+    result: undefined
+  };
+  static readonly fakePoolHouseTicketViewModel: PoolHouseTicketViewModel = {
+    groupBetTypes: [],
+    affectedTickets: new TicketsModel(),
+    otherTickets: new TicketsModel()
   };
 }
 
@@ -239,32 +280,17 @@ describe('LogInfoWrongOddsComponent', () => {
     expect(actual).toBe('2020/10/08 09:44:46.361 PM');
   });
 
-  it('openPoolHouseDetails should call #getPoolHouseData', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        primitiveProps: new PrimitiveProperty(),
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOdds
-      }
-    });
-    instance['initGetPoolHouseTicketQuery'] = jest.fn();
-    instance.getPoolHouseData = jest.fn();
-    await instance.openPoolHouseDetails();
-
-    expect(instance.getPoolHouseData).toHaveBeenCalledTimes(1);
-  });
-
-  it('getPoolHouseData should call #addRequestApiService.getPoolHouseTickets', async () => {
-    const mockGetPoolHouseTickets = jest.fn().mockImplementation(() => Promise.resolve(new PoolHouseTicketViewModel()));
+  it('openPoolHouseDetails should update poolHouseTicketsModel expected', async () => {
+    let fakeFunctionWriteLog = jest.fn();
+    const mockGetPoolHouseTickets = jest.fn().mockReturnValue(Helper.fakePoolHouseTicketViewModel);
     const mockGetLinkedLog = jest.fn().mockImplementation(() => Promise.resolve(new LinkedLogsViewModel()));
     const fakeLogInfoWrongOdds = _.cloneDeep(Helper.fakeLogInfoWrongOdds);
     fakeLogInfoWrongOdds.linkedLogsViewModel = new LinkedLogsViewModel();
     const { instance } = await shallow
     .mock(EventWrongOddsService, { getLinkedLog: mockGetLinkedLog })
     .mock(AddRequestApiService, { getPoolHouseTickets: mockGetPoolHouseTickets })
-    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
+    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn()})
+    .mock(LogAnalysisService, { writeLogClickPoolHouseDetails: fakeFunctionWriteLog })
     .render({
       bind: {
         isEdit: false,
@@ -273,10 +299,19 @@ describe('LogInfoWrongOddsComponent', () => {
         logInfo: fakeLogInfoWrongOdds
       }
     });
-    instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-    await instance.getPoolHouseData(new GetPoolHouseTicketQuery());
+    instance['initGetPoolHouseTicketQuery'] = jest.fn().mockReturnValue(Helper.fakeGetPoolHouseTicketQuery);
 
-    expect(mockGetLinkedLog).toHaveBeenCalledTimes(1);
-    expect(mockGetPoolHouseTickets).toHaveBeenCalledTimes(1);
+    const poolHouseTicketsModelExpected = {
+    query: Helper.fakeGetPoolHouseTicketQuery,
+    linkedLogsViewModel: instance.logInfo.linkedLogsViewModel,
+    groupBetTypes: Helper.fakePoolHouseTicketViewModel.groupBetTypes,
+    affectedTickets: Helper.fakePoolHouseTicketViewModel.affectedTickets,
+    otherTickets: Helper.fakePoolHouseTicketViewModel.otherTickets,
+    checkedBetTypes: instance.logInfo.poolHouseCheckedBetTypes,
+    isOpen: true} as PoolHouseTicketsModel;
+
+    await instance.openPoolHouseDetails();
+
+    expect(instance.poolHouseTicketsModel).toEqual(poolHouseTicketsModelExpected);
   });
 });

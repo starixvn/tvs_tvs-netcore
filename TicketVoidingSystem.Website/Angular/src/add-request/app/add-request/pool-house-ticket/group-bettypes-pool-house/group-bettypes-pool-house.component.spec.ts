@@ -2,11 +2,10 @@ import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Shallow } from 'shallow-render';
-import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
-import { ToolTipModule } from '../../../../utility/components/tooltip/tooltip.module';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
+
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house.component';
 import { GroupBetTypesModel } from './group-bettypes-pool-house.model';
+import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 
 describe('GroupBettypesPoolHouseComponent', () => { 
   @NgModule({
@@ -15,8 +14,6 @@ describe('GroupBettypesPoolHouseComponent', () => {
     imports: [
       NgbModule,
       FormsModule,
-      BlockUiModule,
-      PipeModule,
       ToolTipModule
     ],
     providers: [

@@ -1,9 +1,4 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { Shallow } from 'shallow-render';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { ValidationService } from '../services/validation.service';
 import { FilterWrongOuComponent } from './filter-wrong-ou.component';

@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { PoolHouseTicketValue } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -11,6 +10,7 @@ import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
 import { LogInfoService } from './log-info.service';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -26,7 +26,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,

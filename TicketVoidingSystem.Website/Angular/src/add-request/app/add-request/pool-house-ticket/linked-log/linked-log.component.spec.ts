@@ -3,11 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
-import { PipeModule } from '../../../../utility/pipes/pipe.module';
-import { BlockUiModule } from '../../block-ui/block-ui.module';
-import { ToolTipModule } from '../../tooltip/tooltip.module';
 import { LinkedLogComponent } from './linked-log.component';
 import { LinkedLogsViewModel } from './linked-log.model';
+import { BlockUiModule } from 'src/utility/components/block-ui/block-ui.module';
 
 describe('LinkedLogComponent ', () => { 
   @NgModule({
@@ -16,9 +14,7 @@ describe('LinkedLogComponent ', () => {
     imports: [
       NgbModule,
       FormsModule,
-      BlockUiModule,
-      PipeModule,
-      ToolTipModule
+      BlockUiModule
     ],
     providers: [
     ]

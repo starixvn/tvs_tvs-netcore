@@ -12,6 +12,7 @@ import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -27,7 +28,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -54,36 +56,37 @@ describe('ValidationService', () => {
   });
 
   it('#validateCommonData should return false when invalid match', async () => {
-    const leagueEventComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => false);
 
-    const actual = service.validateCommonData(leagueEventComponent, null);
+    const actual = service.validateCommonData(eventLeagueComponent, null);
 
     expect(actual).toBeFalsy();
   });
 
   it('#validateCommonData should return false when invalid match', async () => {
-    const leagueEventComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoComponent = new LogInfoWrongOuComponent(null, null, null, null, null);
+
+    const logInfoComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     logInfoComponent.filterWrongOuComponent = new FilterWrongOuComponent(null, null);
     logInfoComponent.filterWrongOuComponent.isValid = jest.fn().mockImplementation(() => false);
 
-    const actual = service.validateCommonData(leagueEventComponent, [logInfoComponent]);
+    const actual = service.validateCommonData(eventLeagueComponent, [logInfoComponent]);
 
     expect(actual).toBeFalsy();
   });
 
   it('#validateCommonData should return true', async () => {
-    const leagueEventComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.isMatchIdValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoComponent = new LogInfoWrongOuComponent(null, null, null, null, null);
+    const logInfoComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     logInfoComponent.filterWrongOuComponent = new FilterWrongOuComponent(null, null);
     logInfoComponent.filterWrongOuComponent.isValid = jest.fn().mockImplementation(() => true);
 
-    const actual = service.validateCommonData(leagueEventComponent, [logInfoComponent]);
+    const actual = service.validateCommonData(eventLeagueComponent, [logInfoComponent]);
 
     expect(actual).toBeTruthy();
   });
