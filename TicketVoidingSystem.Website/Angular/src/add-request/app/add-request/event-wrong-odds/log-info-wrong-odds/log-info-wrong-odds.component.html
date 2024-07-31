@@ -10,7 +10,7 @@
           <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
         </span>&nbsp;
-        <span class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
+        <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
         </ng-container>
 
         <ng-container>

@@ -40,7 +40,7 @@
             <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, 0)" class="text-red"
             [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, 0) | sanitizeHtml">
             </span>&nbsp;
-            <span class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
+            <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
           </ng-container>
 
           <ng-container *ngIf="isMainMatch">
