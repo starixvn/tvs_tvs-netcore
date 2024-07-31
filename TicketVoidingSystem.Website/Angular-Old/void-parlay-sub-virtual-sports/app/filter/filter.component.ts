@@ -90,12 +90,17 @@ export class FilterComponent {
       return sportType !== 188;
     }
 
+    private inValidSportTypeVirtualSport5(sportType: number){
+      return sportType !== 147;
+    }
+
     checkMatch() {
         if (this.match === null) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             this.isSuccessMatch = false;
         }
-        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)) {
+        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)
+          && this.inValidSportTypeVirtualSport5(this.match.sportType)) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             this.isSuccessMatch = false;
         }
@@ -130,7 +135,8 @@ export class FilterComponent {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             return false;
         }
-        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)) {
+        else if (this.inValidSportTypeVirtualSport2(this.match.sportType) && this.inValidSportTypeVirtualSport4(this.match.sportType)
+          && this.inValidSportTypeVirtualSport5(this.match.sportType)) {
             this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
             return false;
         }

@@ -104,7 +104,7 @@
       ]
     },
     {
-      "SportTypes": [ 147, 148 ],
+      "SportTypes": [ 147 ],
       "BetTypes": [
         {
           "Id": 11050,
@@ -121,14 +121,6 @@
         {
           "Id": 11053,
           "Name": "Correct Score"
-        },
-        {
-          "Id": 11054,
-          "Name": "Handicap"
-        },
-        {
-          "Id": 11055,
-          "Name": "Over/Under"
         },
         {
           "Id": 11099,
