@@ -270,7 +270,7 @@ export class RequestListComponent implements OnInit, OnChanges {
     return StaticService.isRecoverTicket(issueTypeId);
   }
 
-  getHtmlClassForCopyDescriptionIcon(isProcessingCopyDescription?: boolean): string {
+  getHtmlClassForCopyDescriptionIcon(isProcessingCopyDescription: boolean): string {
     if (isProcessingCopyDescription) {
       return 'fas fa-spinner fa-spin copy-request-info disable-icon';
     } else {

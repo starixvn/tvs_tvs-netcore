@@ -5,7 +5,7 @@ import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { MarkType } from '../../../utility/constants/config';
+import { ErrorCodeLockMatch, MarkType } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
@@ -166,8 +166,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
   }
 
   private replaceErrorMessageLockMatch(result: Result<null>): string {
-    const ERROR_CODE_LOCK_MATCH = [1000000, 101, 100, 103, 102];
-    if (ERROR_CODE_LOCK_MATCH.includes(result.errorCode)) {
+    if (ErrorCodeLockMatch.ALL_ITEMS.includes(result.errorCode)) {
       return `Some tickets cannot be processed because: ${result.errorMsg}`;
     }
 

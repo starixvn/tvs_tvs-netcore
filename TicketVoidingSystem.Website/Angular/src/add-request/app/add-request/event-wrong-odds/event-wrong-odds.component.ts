@@ -67,7 +67,7 @@ export class EventWrongOddsComponent implements OnInit {
 
   public async GetMaxBetAndSpreadOfEvent(): Promise<MaxBetAndSpreadInfo[]>{
     const query = this.calculateOddsService.createMaxBetAndSpreadQuery(this.eventLeagueComponent.selectedMatch);
-    return await this.addRequestApiService.getMaxBetAndSpreadOfEvent(query);
+    return this.addRequestApiService.getMaxBetAndSpreadOfEvent(query);
   }
 
   public async clickSearch(): Promise<void> {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MaxBetAndSpreadQuery, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +38,8 @@ export class CalculateOddsService {
   
   public updateMaxBetAndSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
     if(oddsInfo.maxBetAndSpreadInfo?.length > 0){
-      oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.maxBet ?? 0;
-      oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.spread ?? "";
+      oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId === subIssueTypeId)?.maxBet ?? 0;
+      oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId === subIssueTypeId)?.spread ?? "";
     }
     else {
       oddsInfo.maxBet = 0;
@@ -50,7 +50,7 @@ export class CalculateOddsService {
   public updateAllowanceRate(oddsInfo: FilterWrongOddsModel): void {
     const maxBetDefault = 80000;
     const spreadDefault = 0.15;
-    if(oddsInfo.maxBetAndSpreadInfo?.length === 0 || oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) == 0 && oddsInfo.maxBet == 0)){
+    if(oddsInfo.maxBetAndSpreadInfo?.length === 0 || oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) === 0 && oddsInfo.maxBet === 0)){
       oddsInfo.allowanceRate = "20";
     }
     else if(Number(oddsInfo.spread) > spreadDefault){

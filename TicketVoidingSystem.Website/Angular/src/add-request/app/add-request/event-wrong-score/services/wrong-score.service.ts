@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { StaticService } from 'src/utility/services/static.service';
 import { DateTimeFormat, TVSRequestFilterBy, TimeZone } from '../../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -130,10 +131,7 @@ export class WrongScoreService {
   public getDurationTime(filterFromTransTime: string, filterToTransTime: string): string {
     const fromTime = moment(filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const durations = toTime.diff(fromTime);
-    const minutes = Math.floor(durations / 60000);
-    const seconds = ((durations % 60000) / 1000).toFixed(0);
 
-    return `${minutes}m${seconds}s`;
+    return StaticService.getDurations(fromTime, toTime);
   }
 }

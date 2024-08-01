@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
+import { ErrorCodeLockMatch } from 'src/utility/constants/config';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
@@ -235,8 +236,7 @@ export class MarkUnmarkTicketComponent {
   }
 
   private replaceErrorMessageLockMatch(result: ResultMarkTicketModel): string {
-    const ERROR_CODE_LOCK_MATCH = [1000000, 101, 100, 103, 102];
-    if (ERROR_CODE_LOCK_MATCH.includes(result.errorCode)) {
+    if (ErrorCodeLockMatch.ALL_ITEMS.includes(result.errorCode)) {
       return `Some tickets cannot be processed because: ${result.errorMsg}`;
     }
 

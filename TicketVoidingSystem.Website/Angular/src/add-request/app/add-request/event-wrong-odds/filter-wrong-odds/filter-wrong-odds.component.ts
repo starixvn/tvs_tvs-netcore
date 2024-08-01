@@ -1,12 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { AllowanceRate, DateTimeFormat } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterFavoriteType, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
-import { ValidationService } from '../services/validation.service';
-import { AllowanceRate } from '../../../../../utility/constants/config';
 import { CalculateOddsService } from '../services/calculate-odds.service';
+import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'filter-wrong-odds',
@@ -39,7 +40,14 @@ export class FilterWrongOddsComponent {
   }
 
   public getDurationTime(): string {
-    return StaticService.getDurationTime(this.fromTimeComponent, this.toTimeComponent, this.filterWrongOddsModel.filterFromTransTime, this.filterWrongOddsModel.filterToTransTime);
+    if (!this.fromTimeComponent?.isTimeValid() || !this.toTimeComponent?.isTimeValid()) {
+      return '-';
+    }
+
+    const fromTime = moment(this.filterWrongOddsModel.filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTime = moment(this.filterWrongOddsModel.filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+
+    return StaticService.getDurations(fromTime, toTime);
   }
 
   public isCorrectFormatSingleDecimal(value: string, elementClass: string): boolean {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MatchInfoViewModel, MatchInfo } from '../../../../utility/models/event.model';
-import { HttpService } from '../../../../utility/services/http.service';
+import { MatchInfo, MatchInfoViewModel } from '../../../../utility/models/event.model';
 import { MatchModel } from '../../../../utility/models/match.model';
+import { HttpService } from '../../../../utility/services/http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class LeagueEventService {
   }
 
   public getMatchInfo(match: MatchModel): MatchInfo {
-    var matchInfo = new MatchInfo();
+    const matchInfo = new MatchInfo();
     matchInfo.matchId = match.matchId;
     matchInfo.name = match.name;
     matchInfo.sportType = match.sportType;

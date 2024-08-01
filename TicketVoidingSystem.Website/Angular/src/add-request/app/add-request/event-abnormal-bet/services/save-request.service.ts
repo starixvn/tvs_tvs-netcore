@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatchIdConstant } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AbnormalBetModel } from '../../models/abnormal-bet.model';
@@ -32,7 +33,7 @@ export class SaveRequestService {
     query.actionId = args.filter.action;
     query.isTest = args.filter.isTest;
     query.isVoided = args.filter.isVoided;
-    query.matchId = this.isAbnormalBetMixOrSystemParlay(args) ? 29 : null;
+    query.matchId = this.isAbnormalBetMixOrSystemParlay(args) ? MatchIdConstant.Parlay : null;
     query.abnormalBetInfo = this.createAbnormalBetModel(args);
 
     query.mistakenBy = this.isAbnormalBetMixOrSystemParlay(args) ? null : args.others.mistakenBy;

@@ -64,7 +64,7 @@ describe('CopyRequestInfoService', () => {
   });
 
   it('#copyLetsTalkRequestInfo should call #commonService.copyRequestInfo', async () => {
-    let requestInfo : RequestInfoForCopy = {
+    const requestInfo : RequestInfoForCopy = {
       requestId: 0,
       matchId: 0,
       globalShowTime: undefined,

@@ -1,8 +1,7 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import moment from 'moment-timezone';
+import moment, { Moment } from 'moment-timezone';
 import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
-import { DateFullTimeNewComponent } from '../components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { MultipleSelection } from '../components/multiple-selection/multiple-selection';
@@ -255,20 +254,6 @@ export class StaticService {
       issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
-  static getDurationTime(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, filterFromTransTime: string, filterToTransTime: string): string {
-    if (!fromTimeComponent?.isTimeValid() || !toTimeComponent?.isTimeValid()) {
-      return '-';
-    }
-
-    const fromTime = moment(filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const toTime = moment(filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const durations = toTime.diff(fromTime);
-    const minutes = Math.floor(durations / 60000);
-    const seconds = ((durations % 60000) / 1000).toFixed(0);
-
-    return `${minutes}m${seconds}s`;
-  }
-
   static isCorrectFormatMultipleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {
     if (!StaticService.isCorrectRegexMultipleDecimal(value)) {
       tooltip.display(element, errorText);
@@ -407,5 +392,14 @@ export class StaticService {
     multipleSelection.numberItemsDisplay = numberItemsDisplay;
 
     return multipleSelection;
+  }
+
+  static getDurations(fromTime: Moment, toTime: Moment): string {
+    const MILLISECONDS_IN_A_MINUTE = 60000;
+    const durations = toTime.diff(fromTime);
+    const minutes = Math.floor(durations / MILLISECONDS_IN_A_MINUTE);
+    const seconds = ((durations % MILLISECONDS_IN_A_MINUTE) / 1000).toFixed(0);
+
+    return `${minutes}m${seconds}s`;
   }
 }
