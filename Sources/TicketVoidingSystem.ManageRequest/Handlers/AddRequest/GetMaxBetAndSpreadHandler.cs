@@ -48,7 +48,7 @@ public class GetMaxBetAndSpreadHandler : IRequestHandler<GetMaxBetAndSpreadReque
         };
     }
 
-    private static decimal GetMaxBetSpreadBySubIssueType(MaxbetSpreadByBetType maxBetSpread, int subIssueTypeId)
+    private static decimal? GetMaxBetSpreadBySubIssueType(MaxbetSpreadByBetType maxBetSpread, int subIssueTypeId)
     {
         return subIssueTypeId switch
         {

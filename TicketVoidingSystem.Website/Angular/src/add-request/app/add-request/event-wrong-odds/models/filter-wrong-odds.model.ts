@@ -34,7 +34,7 @@ export class FilterFavoriteTypeConstant {
 export class MaxBetAndSpreadInfo {
   subIssueTypeId: string;
   spread: string;
-  maxBet?: number;
+  maxBet: number;
 }
 
 export class MaxBetAndSpreadQuery {

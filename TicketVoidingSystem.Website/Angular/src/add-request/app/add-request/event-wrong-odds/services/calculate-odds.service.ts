@@ -16,7 +16,7 @@ export class CalculateOddsService {
     if(match.matchId){
       const maxBetAndSpreads =  await this.addRequestApiService.getMaxBetAndSpreadOfEvent(this.createMaxBetAndSpreadQuery(match));
       oddsInfo.maxBetAndSpreadInfo = maxBetAndSpreads;
-      this.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
+      this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
       this.updateAllowanceRate(oddsInfo);
     };
   }
@@ -30,13 +30,13 @@ export class CalculateOddsService {
   }
 
   public resetOddsInfo(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
-    this.updateMaxBetAbsSpread(oddsInfo, subIssueTypeId);
+    this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
     this.updateAllowanceRate(oddsInfo);
     oddsInfo.correctOddsHomeOver = "";
     oddsInfo.correctOddsAwayUnder = "";
   }
   
-  public updateMaxBetAbsSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
+  public updateMaxBetAndSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
     if(oddsInfo.maxBetAndSpreadInfo?.length > 0){
       oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.maxBet ?? 0;
       oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId == subIssueTypeId)?.spread ?? "";
