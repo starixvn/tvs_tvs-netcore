@@ -107,8 +107,6 @@ export class LogInfoWrongOuComponent implements OnInit {
     if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
       let query: LiveGameEarlyTicketsQuery = {
         liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
-        pageIndex: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageIndex : 0,
-        pageSize: this.liveGameEarlyTicketsModel.query ? this.liveGameEarlyTicketsModel.query.pageSize : 500,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 

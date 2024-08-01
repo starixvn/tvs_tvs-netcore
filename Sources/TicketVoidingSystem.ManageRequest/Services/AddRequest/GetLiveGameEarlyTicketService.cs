@@ -3,7 +3,6 @@ using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
@@ -15,13 +14,11 @@ public interface GetLiveGameEarlyTicketService
 public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
 {
     private readonly MapTicketsService mapTicketsService;
-    private readonly PagingService pagingService;
     private readonly CompressDataService compressDataService;
 
-    public GetLiveGameEarlyTicketServiceImp(MapTicketsService mapTicketsService, PagingService pagingService, CompressDataService compressDataService)
+    public GetLiveGameEarlyTicketServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
     {
         this.mapTicketsService = mapTicketsService;
-        this.pagingService = pagingService;
         this.compressDataService = compressDataService;
     }
 
@@ -35,9 +32,7 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
             return viewModel;
         }
 
-        var startIndex = request.PageIndex * request.PageSize + 1;
-        var afterPagingTickets = pagingService.Paging(getTicketModels, request.PageIndex, request.PageSize);
-        var groupTickets = MapToGroupTicketViewModel(afterPagingTickets, ref startIndex, request.issueTypeId);
+        var groupTickets = MapToGroupTicketViewModel(getTicketModels, request.issueTypeId);
 
         viewModel = new TicketsViewModel
         {
@@ -48,15 +43,14 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
         return viewModel;
     }
 
-    private Group<TicketViewModel> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> afterPagingTickets, ref int startIndex, int issueTypeId)
+    private Group<TicketViewModel> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
         var tickets = new List<TicketViewModel>();
 
-        foreach (var item in afterPagingTickets)
+        foreach (var item in getTicketModels)
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
-            ticket.No = startIndex++;
             tickets.Add(ticket);
         }
 
@@ -64,7 +58,7 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
         {
             Name = tickets.FirstOrDefault()?.BetType,
             Tickets = tickets,
-            DisplayTotalTickets = afterPagingTickets.Count()
+            DisplayTotalTickets = getTicketModels.Count()
         };
     }
 }

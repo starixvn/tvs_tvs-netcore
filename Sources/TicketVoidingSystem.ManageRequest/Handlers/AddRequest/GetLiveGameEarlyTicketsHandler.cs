@@ -8,10 +8,6 @@ public class GetLiveGameEarlyTicketsRequest : IRequest<TicketsViewModel>
 {
     public string LiveGameEarlyTicketsJson { get; init; }
 
-    public int PageIndex { get; set; }
-
-    public int PageSize { get; set; }
-
     public int issueTypeId { get; set; }
 }
 
