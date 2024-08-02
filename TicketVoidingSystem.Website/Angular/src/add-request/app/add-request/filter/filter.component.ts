@@ -541,6 +541,7 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS,
       IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_HDP,
       IssueTypeConstant.WRONG_1ST_HDP,
       IssueTypeConstant.WRONG_OU,
       IssueTypeConstant.WRONG_1ST_OU
@@ -559,6 +560,7 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.TECHNICAL_ERROR,
       IssueTypeConstant.WRONG_ODDS,
       IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_HDP,
       IssueTypeConstant.WRONG_1ST_HDP,
       IssueTypeConstant.WRONG_OU,
       IssueTypeConstant.WRONG_1ST_OU
