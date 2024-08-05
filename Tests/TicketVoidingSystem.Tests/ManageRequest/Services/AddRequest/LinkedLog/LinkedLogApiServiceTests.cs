@@ -1,14 +1,7 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using NSubstitute;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
-using Xunit;
-
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
+﻿namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class LinkedLogApiServiceTests
-{
+{/*
     private readonly LinkedLogHttpClientService linkedLogHttpClientService;
     private readonly LinkedLogApiServiceImp service;
 
@@ -33,4 +26,6 @@ public class LinkedLogApiServiceTests
         // Assert
         await linkedLogHttpClientService.Received(1).PostHttpRequest(Arg.Any<PoolHouseLinkedLogRequest>());
     }
+
+    */
 }

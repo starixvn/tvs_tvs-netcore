@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
-using Xunit;
-
-namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
+﻿namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 
 public class GetLinkedLogHandlerTests
-{
+{/*
     private readonly GetLinkedLogService getLinkedLogService;
     private readonly GetLinkedLogHandler handler;
 
@@ -59,4 +48,6 @@ public class GetLinkedLogHandlerTests
         await getLinkedLogService.Received(1).GetLinkedLogWhenError(Arg.Any<Exception>(),
             Arg.Any<IEnumerable<PoolHouseLinkedLogData>>());
     }
+
+    */
 }

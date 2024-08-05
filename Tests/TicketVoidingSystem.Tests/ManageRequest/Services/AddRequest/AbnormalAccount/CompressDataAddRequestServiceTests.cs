@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.AbnormalAccount;

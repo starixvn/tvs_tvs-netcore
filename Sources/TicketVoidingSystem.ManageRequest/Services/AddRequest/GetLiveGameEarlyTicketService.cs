@@ -32,12 +32,12 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
             return viewModel;
         }
 
-        var groupTickets = MapToGroupTicketViewModel(getTicketModels, request.issueTypeId);
+        var groupTicket = MapToGroupTicketViewModel(getTicketModels, request.issueTypeId);
 
         viewModel = new TicketsViewModel
         {
             TotalSingle = getTicketModels.Count(),
-            Groups = new List<Group<TicketViewModel>> { groupTickets }
+            Groups = new List<Group<TicketViewModel>> { groupTicket }
         };
 
         return viewModel;
@@ -56,7 +56,7 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
 
         return new Group<TicketViewModel>
         {
-            Name = tickets.FirstOrDefault()?.BetType,
+            Name = tickets.FirstOrDefault().BetType,
             Tickets = tickets,
             DisplayTotalTickets = getTicketModels.Count()
         };

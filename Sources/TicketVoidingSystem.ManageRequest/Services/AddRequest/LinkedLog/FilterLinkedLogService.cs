@@ -30,7 +30,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
         };
     }
 
-    private GroupLinkedLogResponse GetLinkedLogWrongHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrongHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         var affectedLog = apiLinkedLogResponses
             .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
@@ -51,7 +51,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
         };
     }
 
-    private GroupLinkedLogResponse GetLinkedLogWrong1stHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrong1stHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         var affectedLog = apiLinkedLogResponses
             .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
@@ -72,7 +72,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
         };
     }
 
-    private GroupLinkedLogResponse GetLinkedLogWrongOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrongOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         var affectedLog = apiLinkedLogResponses
             .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
@@ -93,7 +93,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
         };
     }
 
-    private GroupLinkedLogResponse GetLinkedLogWrong1stOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrong1stOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         var affectedLog = apiLinkedLogResponses
             .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
@@ -114,7 +114,7 @@ public class FilterLinkedLogServiceImp : FilterLinkedLogService
         };
     }
 
-    private GroupLinkedLogResponse GetLinkedLogWrongOdds(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrongOdds(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         var affectedLog = apiLinkedLogResponses
             .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))

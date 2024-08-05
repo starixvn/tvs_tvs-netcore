@@ -25,7 +25,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         return allGroups;
     }
 
-    private static IEnumerable<GroupLinkedLogUI> BuildByLinkGroup(bool isAffectedGroup, IEnumerable<PoolHouseLinkedLogResponse> responseLogs, int issueTypeId, int subIssueTypeId)
+    internal virtual IEnumerable<GroupLinkedLogUI> BuildByLinkGroup(bool isAffectedGroup, IEnumerable<PoolHouseLinkedLogResponse> responseLogs, int issueTypeId, int subIssueTypeId)
     {
         var groupedLogs = responseLogs.GroupBy(log => log.LinkGroup);
 
@@ -39,7 +39,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
                 .FirstOrDefault());
     }
 
-    public static void AddDefaultGroupForDisplay(List<GroupLinkedLogUI> groupLinkedLogUI, int issueTypeId, int subIssueTypeId)
+    internal virtual void AddDefaultGroupForDisplay(List<GroupLinkedLogUI> groupLinkedLogUI, int issueTypeId, int subIssueTypeId)
     {
         if (!groupLinkedLogUI.Any())
         {
@@ -63,7 +63,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         }
     }
 
-    private static string Get1X2GroupNameForIssueType(int issueTypeId, int subIssueTypeId)
+    internal virtual string Get1X2GroupNameForIssueType(int issueTypeId, int subIssueTypeId)
     {
         return issueTypeId switch
         {
@@ -77,7 +77,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         };
     }
 
-    private static string GetGroupNameById(int groupId)
+    internal virtual string GetGroupNameById(int groupId)
     {
         return groupId switch
         {
@@ -88,7 +88,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         };
     }
 
-    private static string BuildLogsData(PoolHouseLinkedLogResponse response, int issueTypeId, int subIssueTypeId)
+    internal virtual string BuildLogsData(PoolHouseLinkedLogResponse response, int issueTypeId, int subIssueTypeId)
     {
         var time = response.Time.ToString("MM/dd/yyyy hh:mm:ss tt");
         var score = $"Score[{response.HomeScore}:{response.AwayScore}]";
@@ -98,19 +98,19 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         return string.Join(", ", time, score, hdp, ou);
     }
 
-    private static string BuildHdp(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDictionary, int issueTypeId, int subIssueTypeId)
+    internal virtual string BuildHdp(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDictionary, int issueTypeId, int subIssueTypeId)
     {
         var oddsInfoHdp = linkedOddsInfoDictionary.Values.FirstOrDefault(x => IsValidBetTypeBuildHdp(x, issueTypeId, subIssueTypeId));
         return oddsInfoHdp == null ? string.Empty : $"HDP[{oddsInfoHdp.Hdp1}:{oddsInfoHdp.Hdp2}]({oddsInfoHdp.Odds1a}:{oddsInfoHdp.Odds2a})";
     }
 
-    private static string BuildOu(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDictionary, int issueTypeId, int subIssueTypeId)
+    internal virtual string BuildOu(Dictionary<int, LinkedOddsInfo> linkedOddsInfoDictionary, int issueTypeId, int subIssueTypeId)
     {
         var oddsInfoOu = linkedOddsInfoDictionary.Values.FirstOrDefault(x => IsValidBetTypeBuildOu(x, issueTypeId, subIssueTypeId));
         return oddsInfoOu == null ? string.Empty : $"OU[{oddsInfoOu.Hdp1}]({oddsInfoOu.Odds1a}:{oddsInfoOu.Odds2a})";
     }
 
-    private static bool IsValidBetTypeBuildHdp(LinkedOddsInfo linkedOddsInfo, int issueTypeId, int subIssueTypeId)
+    internal virtual bool IsValidBetTypeBuildHdp(LinkedOddsInfo linkedOddsInfo, int issueTypeId, int subIssueTypeId)
     {
         return issueTypeId switch
         {
@@ -126,7 +126,7 @@ public class LinkedLogForUIServiceImp : LinkedLogForUIService
         };
     }
 
-    private static bool IsValidBetTypeBuildOu(LinkedOddsInfo linkedOddsInfo, int issueTypeId, int subIssueTypeId)
+    internal virtual bool IsValidBetTypeBuildOu(LinkedOddsInfo linkedOddsInfo, int issueTypeId, int subIssueTypeId)
     {
         return issueTypeId switch
         {

@@ -38,7 +38,7 @@ public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
         return null;
     }
 
-    private static async Task<string> CreateLogResponse(string actionName, HttpResponseMessage response)
+    internal virtual async Task<string> CreateLogResponse(string actionName, HttpResponseMessage response)
     {
         var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
         var responseContent = await response.Content.ReadAsStringAsync();

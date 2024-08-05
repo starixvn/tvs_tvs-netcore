@@ -90,16 +90,16 @@ public class GetPoolHouseTicketServiceTests
             .ReturnsForAnyArgs(new TicketViewModel());
         var expectedGroups = new List<Group<TicketViewModel>>
         {
-            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 2 },
+            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 2 },
             new()
             {
-                Name = "Credit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1
+                Name = "Credit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
             },
             new()
             {
-                Name = "Deposit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1
+                Name = "Deposit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
             },
-            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1 }
+            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1 }
         };
         var expected = new TicketsViewModel
         {

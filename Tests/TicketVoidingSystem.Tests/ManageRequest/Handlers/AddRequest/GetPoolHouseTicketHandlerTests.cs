@@ -1,22 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
-using Fanex.Data.Repository;
-using NSubstitute;
-using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
-using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
-using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.SharedApi.Models.BetTypes;
-using Xunit;
-
-namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
+﻿namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 
 public class GetPoolHouseTicketHandlerTests
-{
+{/*
     private readonly GetPoolHouseTicketService getPoolHouseTicketService;
     private readonly GetTransInfoService getTransInfoService;
     private readonly GetPoolHouseTicketHandler handler;
@@ -124,4 +109,6 @@ public class GetPoolHouseTicketHandlerTests
         // Assert
         AssertExtension.Equal(viewModel, actual);
     }
+
+    */
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -23,6 +23,9 @@
     <ProjectReference Include="..\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />
     <ProjectReference Include="..\TicketVoidingSystem.SharedApi\TicketVoidingSystem.SharedApi.csproj" />
     <ProjectReference Include="..\TicketVoidingSystem\TicketVoidingSystem.csproj" />
+
+    <InternalsVisibleTo Include="TicketVoidingSystem.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
 </Project>

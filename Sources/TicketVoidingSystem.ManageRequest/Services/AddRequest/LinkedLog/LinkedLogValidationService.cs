@@ -80,7 +80,7 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
             .Any(y => y.BetType == BetTypeConstant.FirstHalfHandicap && CheckLinkedOddsForWrongHdp1stHdpBySubIssueType(y, getLinkedLogModel));
     }
 
-    private bool CheckLinkedOddsForWrongHdp1stHdpBySubIssueType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
+    internal virtual bool CheckLinkedOddsForWrongHdp1stHdpBySubIssueType(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
         switch (getLinkedLogModel.SubIssueTypeId)
         {

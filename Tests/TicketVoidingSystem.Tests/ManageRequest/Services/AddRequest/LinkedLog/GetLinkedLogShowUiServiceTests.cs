@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NSubstitute;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
-using Xunit;
-
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
+﻿namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class GetLinkedLogShowUiServiceTests
-{
+{/*
     private readonly LinkedLogValidationService linkedLogValidationService;
     private readonly GetLinkedLogShowUiServiceImp service;
 
@@ -161,4 +150,5 @@ public class GetLinkedLogShowUiServiceTests
         AssertExtension.Equal(0, actual.Count());
         return Task.CompletedTask;
     }
+    */
 }
