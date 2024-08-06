@@ -123,8 +123,7 @@ public class MapTicketServiceImp : MapTicketService
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
         viewModel.Choice = BuildChoice(ticket, ticketHelper, item);
         viewModel.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
-
-        viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
+        viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
         viewModel.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
         viewModel.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();

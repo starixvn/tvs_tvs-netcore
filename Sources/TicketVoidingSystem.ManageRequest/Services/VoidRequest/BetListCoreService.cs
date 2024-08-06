@@ -51,6 +51,7 @@ public class BetListCoreServiceImp : BetListCoreService
             betListService.BuildChoiceExcel(ticket, ticketHelper, null, false) :
             BuildChoice(ticket, ticketHelper, item, issueTypeId);
         viewModel.Handicap = betListService.GetHandicap(ticket, ticketHelper, null, false);
+        viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
 
         return viewModel;
     }

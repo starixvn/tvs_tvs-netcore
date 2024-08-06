@@ -51,7 +51,7 @@ public class MapFromBetListServiceImp : MapFromBetListService
             betListService.BuildChoiceExcel(ticket, ticketHelper, null, false) :
             BuildChoice(ticket, ticketHelper, item, query.IssueTypeId);
         viewModel.BettypeCombination = CombineBetType(ticket, item, viewModel.BetType, ticketHelper);
-        viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
+        viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
         viewModel.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
         viewModel.VoidTime = query.IssueTypeId != IssueTypeConstant.RecoverTicket ? item.VoidedTime?.ToString(FormatKey.LongDateFormatTimeWithSlash) : query.RecoverTime;
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";

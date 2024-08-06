@@ -47,7 +47,6 @@ public class MapTicketsServiceImp : MapTicketsService
     public TicketViewModel MapFromGetTicketModelToTicketViewModel(GetTicketModel item, Match? match, ChoiceType choiceType, int issueTypeId)
     {
         var ticket = betListCoreService.GetTicket(item, match, choiceType, issueTypeId);
-        ticket.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         ticket.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
         ticket.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
         ticket.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();

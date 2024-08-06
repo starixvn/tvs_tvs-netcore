@@ -49,6 +49,8 @@ public interface BetListService
     string GetSportTypeName(int sportType, string languageCode);
 
     string GetHandicap(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
+
+    string GetScoreBetListUi(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore);
 }
 
 public class BetListServiceImp : BetListService
@@ -262,5 +264,12 @@ public class BetListServiceImp : BetListService
         document.LoadHtml(html);
 
         return document.DocumentNode.FirstChild?.InnerText;
+    }
+
+    public string GetScoreBetListUi(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore)
+    {
+        return isLiveIndicator && sportType != SportTypeConstant.Baseball
+            ? $"{liveHomeScore} - {liveAwayScore}"
+            : string.Empty;
     }
 }

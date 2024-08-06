@@ -29,7 +29,7 @@ public class TicketServiceImp : TicketService
         ticket.IsVipMember = item.IsVipMember;
         ticket.OperatorID = item.OperatorID;
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        ticket.Score = item.IsLive && (!item.BetTypeId.HideScore() || item.IsMixParlay)
+        ticket.Score = item.IsLive && (!item.BetTypeId.HideScore() || item.IsMixParlay) && item.SportTypeId != SportTypeConstant.Baseball
             ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         ticket.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.Winlost).ToString("#,##0.##");
         ticket.DepositName = item.UserName2;
