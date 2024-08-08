@@ -29,7 +29,7 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
 
-    if (!this.validationService.validateCommonData(arg.filter, arg.leagueEventDangerAcceptedComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
+    if (!this.validationService.validateCommonData(arg.filter, arg.eventLeagueComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
       return false;
     }
 

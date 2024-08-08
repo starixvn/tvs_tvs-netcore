@@ -3,10 +3,10 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../../filter/filter.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,14 +24,14 @@ export class ValidationService {
     return false;
   }
 
-  validateCommonData(filter: FilterModel, leagueEventDangerAcceptedComponent: LeagueEventRedCardComponent,
+  validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent,
     filterTimeAreaComponent: FilterTimeAreaComponent, logInfoComponents: QueryList<LogInfoRedCardComponent>, addRequestStore: AddRequestStore): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
     if (!filter.subIssueTypeId) {
       return false;
     }
 
-    if (!leagueEventDangerAcceptedComponent.isMatchIdValid()) {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 

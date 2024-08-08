@@ -3,16 +3,16 @@ import { DateFullTimeNewComponent } from '../../../../../utility/components/date
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValidationService {
-  public validateCommonData(leagueEventComponent: LeagueEventRedCardComponent, tooltip: Tooltip, kickOffTimeComponent: DateFullTimeNewComponent): boolean {
-    if (!leagueEventComponent.isMatchIdValid()) {
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, kickOffTimeComponent: DateFullTimeNewComponent): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 

@@ -13,7 +13,6 @@ import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
@@ -31,6 +30,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -49,7 +49,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() issueTypeId: string;
   @Input() others = new OthersModel();
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('kickOffTime') kickOffTimeComponent: DateFullTimeNewComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoEkoComponent>;
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
@@ -111,13 +111,13 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
 
-    this.mainEvent.leagueName = this.leagueEventComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchId = this.leagueEventComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventComponent?.selectedMatch.name;
-    this.mainEvent.matchCode = this.leagueEventComponent?.selectedMatch.matchCode;
-    this.mainEvent.kickOffTime = this.updateKickOffTime(this.leagueEventComponent?.selectedMatch);
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.kickOffTime = this.updateKickOffTime(this.eventLeagueComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
-    this.mainEvent.matchModel = this.leagueEventComponent?.selectedMatch;
+    this.mainEvent.matchModel = this.eventLeagueComponent?.selectedMatch;
     if(this.mainEvent.matchModel){
       this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
     }
@@ -142,7 +142,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
       x.isCollapse = true;
     })
 
-    if (!this.validationService.validateCommonData(this.leagueEventComponent, this.tooltip, this.kickOffTimeComponent)) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.kickOffTimeComponent)) {
       return;
     }
 
@@ -191,7 +191,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
-    arg.leagueEventComponent = this.leagueEventComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.allEvents = this.allSelectedEvents;
     arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;

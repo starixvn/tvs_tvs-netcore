@@ -1,12 +1,12 @@
 import { DateFullTimeNewComponent } from "../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component";
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
-import { LeagueEventRedCardComponent } from "../../event-red-card/league-event-red-card/league-event-red-card.component";
 import { FilterModel } from "../../filter/filter.model";
 import { OthersModel } from "../../others/others.model";
 import { ConfirmEarlyKickOffModel } from "../confirm-eko/confirm-eko.model";
 import { LogInfoEarlyKickOff } from "./log-info-eko.model";
 import { PrimitiveProperty } from "./primitive-property.model";
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 export class SaveRequestArg {
   requestId: number;  
@@ -19,7 +19,7 @@ export class SaveRequestArg {
   primitiveProps: PrimitiveProperty;
   allEvents: LogInfoEarlyKickOff[];
   mainEvent: LogInfoEarlyKickOff;
-  leagueEventComponent: LeagueEventRedCardComponent;
+  eventLeagueComponent: EventLeagueComponent;
   tooltip: Tooltip;
   kickOffTimeComponent: DateFullTimeNewComponent;
   addRequestStore: AddRequestStore;

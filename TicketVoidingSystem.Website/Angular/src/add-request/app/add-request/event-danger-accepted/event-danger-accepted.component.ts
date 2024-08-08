@@ -10,7 +10,6 @@ import { AddRequestStore } from '../add-request.store';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../event-red-card/log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../filter/filter.model';
@@ -28,6 +27,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -47,7 +47,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Output() dangerAcceptedModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
-  @ViewChild('leagueEvent') leagueEventDangerAcceptedComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
 
   tooltip = new Tooltip();
@@ -112,7 +112,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
 
-    if (!this.validationService.validateCommonData(this.filter, this.leagueEventDangerAcceptedComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
+    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
       return;
     }
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
@@ -141,11 +141,11 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.mainEvent.matchId = this.leagueEventDangerAcceptedComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventDangerAcceptedComponent?.selectedMatch.name;
-    this.mainEvent.leagueName = this.leagueEventDangerAcceptedComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchCode = this.leagueEventDangerAcceptedComponent?.selectedMatch.matchCode;
-    this.updateMatchId.emit(this.leagueEventDangerAcceptedComponent?.selectedMatch);
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 
   isExistMatchEvent(): boolean {
@@ -234,7 +234,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     arg.primitiveProps = this.primitiveProps;
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
     arg.allEvents = this.allSelectedEvents;
-    arg.leagueEventDangerAcceptedComponent = this.leagueEventDangerAcceptedComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.filterTimeAreaComponent = this.filterTimeAreaComponent;
     arg.logInfoComponents = this.logInfoComponents;
     arg.confirmDangerAccepted = this.confirmDangerAccepted;
