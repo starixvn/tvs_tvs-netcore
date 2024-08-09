@@ -8,14 +8,17 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { OthersModel } from '../others/others.model';
@@ -30,7 +33,6 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -54,6 +56,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoEkoComponent>;
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
 
+  permission = new PermissionAddRequest();
   transInfoAddRequestModel: TransInfoAddRequestModel;
   mainEvent = new LogInfoEarlyKickOff();
   allSelectedEvents: LogInfoEarlyKickOff[] = [];
@@ -70,9 +73,11 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     private readonly validationService: ValidationService,
     private readonly relatedEventService: RelatedEventService,
     private readonly eventEarlyKickOffService: EventEarlyKickOffService,
-    ) {
-      this.tooltip.element = this.element;
-     }
+    private readonly addRequestApiService: AddRequestApiService
+  ) {
+    this.tooltip.element = this.element;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['issueTypeId'] && !this.isEdit) {
       this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
@@ -82,6 +87,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public async ngOnInit(): Promise<void> {
+    this.permission = await this.addRequestApiService.getPermissionAddRequest();
     if (this.isEdit) {
       this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels, this.filter);
       this.allSelectedEvents.forEach(x => {
@@ -118,7 +124,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.eventLeagueComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
     this.mainEvent.matchModel = this.eventLeagueComponent?.selectedMatch;
-    if(this.mainEvent.matchModel){
+    if (this.mainEvent.matchModel) {
       this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
     }
 
@@ -132,7 +138,8 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         const dateTime = this.kickOffTimeComponent.getDateTime();
         x.kickOffTime = dateTime;
         x.templateValue.kickOffTime = dateTime;
-      });    }
+      });
+    }
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
@@ -151,10 +158,14 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
-    await this.getTicketsMainEvent();
-    this.mainEvent.templateValue.checkSettled = this.mainEvent.tableTicketsModel.isHasSettledTicket;
-    this.primitiveProps.isShowLogInfoEvents = true;
 
+    if (!this.validationService.isAccountHasAddRequestPermission(this.allSelectedEvents, this.permission)) {
+      this.addRequestStore.changeBlockingUiStatus(false);
+      return;
+    }
+
+    await this.getTicketsMainEvent();
+    this.primitiveProps.isShowLogInfoEvents = true;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -231,7 +242,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.allSelectedEvents = this.allSelectedEvents.filter(x =>
       (selectedEvents.some(y => y.matchId === x.matchId)
-      || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+        || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
     const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);

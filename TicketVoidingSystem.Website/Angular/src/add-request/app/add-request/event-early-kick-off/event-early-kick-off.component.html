@@ -20,8 +20,8 @@
 <div class="mb-3">
   <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="handleSearchEvent()">Search</button>
 </div>
-<div>
-  <div class="main-match-log-info mb-3" *ngIf="primitiveProps.isShowLogInfoEvents">
+<div *ngIf="primitiveProps.isShowLogInfoEvents">
+  <div class="main-match-log-info mb-3">
     <label><strong>Main Event - Log Info</strong></label>
     <log-info-eko #logInfo
       [isMainMatch]="true"
@@ -34,7 +34,7 @@
       [filter]="filter">
     </log-info-eko>
   </div>
-  <div class="related-event-log-info mb-3" *ngIf="primitiveProps.isShowLogInfoEvents">
+  <div class="related-event-log-info mb-3">
     <label><strong>Related Event(s) - Log Info</strong></label>
     <div class="d-flex mb-3">
       <div class="input-group input-related-match-id-area align-items-center justify-content-center mr-2">

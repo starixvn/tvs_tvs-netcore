@@ -22,6 +22,8 @@ export class Validation {
   isInvalidTotalTickets: boolean;
   isExistedInOtherRequest: boolean;
   isExistsSecondAccept: boolean;
+  isHasSettledTicket: boolean;
+  isHasInstantlySettledTicket: boolean;
 }
 
 export class TicketRequest {

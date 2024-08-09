@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
+import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
+import { TemplateService } from '../../../../../utility/components/template-message/template-message/template.service';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -11,8 +13,6 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
-import { TemplateService } from '../../../../../utility/components/template-message/template-message/template.service';
-import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +76,8 @@ export class LogInfoService {
       const logInfoModel = logInfoModels.find(x => x.matchId === event.matchId);
       if (logInfoModel) {
         event.isInvalidTotalTickets = logInfoModel.validation.isInvalidTotalTickets;
+        event.isHasSettledTicket = logInfoModel.validation.isHasSettledTicket;
+        event.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
         event.isCollapse = logInfoModel.validation.isInvalidTotalTickets ? false : event.isCollapse;
         if (logInfoModel.validation.isInvalidTotalTickets) {

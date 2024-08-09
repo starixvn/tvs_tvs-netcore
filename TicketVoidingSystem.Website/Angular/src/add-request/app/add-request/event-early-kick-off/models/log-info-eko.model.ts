@@ -1,8 +1,8 @@
 import { PagingModel } from "../../../../../utility/components/paging/paging/paging.model";
+import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 import { MatchModel } from "../../../../../utility/models/match.model";
 import { ValidationMessage } from "../../models/get-log-info.model";
 import { TableTicketsModel } from "../tickets-list/table-tickets.model";
-import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 
 export class LogInfoEarlyKickOff {
   matchId: number;
@@ -20,6 +20,8 @@ export class LogInfoEarlyKickOff {
 
   messageValidationLogInfo?: ValidationMessage[];
   isInvalidTotalTickets: boolean;
+  isHasSettledTicket: boolean;
+  isHasInstantlySettledTicket: boolean;
   isShowValidation: boolean;
   templateValue?: TemplateValue;
 }
