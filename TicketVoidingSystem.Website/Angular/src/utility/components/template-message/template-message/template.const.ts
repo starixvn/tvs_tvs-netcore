@@ -21,6 +21,7 @@ export class MessageTemplateId {
   static readonly NEXT_GOAL = 46;
   static readonly PENALTY_SHOOTOUT = 47;
   static readonly PENALTY_SHOOTOUT_VIRTUAL = 62;
+  static readonly PENALTY_SHOOTOUT_RETAKEN = 67;
 }
 
 export class IssueTypeId {

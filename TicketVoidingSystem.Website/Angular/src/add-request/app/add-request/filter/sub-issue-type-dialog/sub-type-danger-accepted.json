@@ -280,6 +280,34 @@
         ],
         "note":"",
         "noteEditable": false
+      },
+      {
+        "groupId": 10,
+        "name": "Penalty Shootout (Retaken)",
+        "iconClass": "group-penalty-shootout-retaken",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 124,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "0",
+        "pa": "0",
+        "sa": "0",
+        "description": [
+          "Scenario 1:",
+          "➤Penalty Shootout Taken ► Missed ► Reopen live market (0-0) ► Referee [VAR/No VAR] ► Penalty retaken and goal 0-0 to 0-1. (Market offer back after Penalty Missed needed to void tickets due to wrong market offered).",
+          "Message: Wrong market offered caused by penalty retaken.",
+          "<span class='text-danger'>Missed > Retaken > Missed again, all tickets are valid because odds unaffected.</span>",
+          "Scenario 2:",
+          "➤Penalty Shootout Taken ► Goal 0-0 to 0-1 ► open market score 0-1 ► Referee [VAR/No VAR] ► Cancel goal ► penalty retaken then Missed. (Void all wrong score tickets).",
+          "Message:  Wrong market offered caused by penalty retaken.",
+          "<span class='text-danger'>Goal > Retaken > Goal again, all tickets are valid because odds unaffected.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
       }
     ]
   },
