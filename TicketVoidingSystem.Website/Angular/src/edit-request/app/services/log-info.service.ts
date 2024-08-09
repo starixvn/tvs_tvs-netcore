@@ -37,7 +37,7 @@ export class LogInfoService {
 
     for (const { check, handler } of logInfoHandlers) {
       if (check(detailViewModel)) {
-        await handler(args);
+        await handler.call(this, args);
         break; // Exit loop after handling the first valid case
       }
     }
