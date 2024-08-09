@@ -27,6 +27,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   @Input() models: RequestModel[] = [];
   @Input() moveBetDay: Date;
   @Input() permission = new PermissionManage();
+  @Input() isShowMissingInfo: boolean;
   @Input() requestStatusChangeEvent: EventEmitter<RequestStatus[]>;
   @Output() exportExcelEvent = new EventEmitter<boolean>();
   @Output() reload = new EventEmitter<boolean>();
@@ -276,6 +277,9 @@ export class RequestListComponent implements OnInit, OnChanges {
     } else {
       return 'fa fa-paste copy-request-info';
     }
+  }
 
+  isShowIconMissingInfo(value: string): boolean {
+    return this.isShowMissingInfo && (value === null || value === '');
   }
 }

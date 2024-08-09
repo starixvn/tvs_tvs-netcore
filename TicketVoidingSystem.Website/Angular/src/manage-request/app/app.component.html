@@ -6,7 +6,7 @@
 
 <div class="body mg-10" [blockUi]="isBlock">
   <filter #filterComponent [(model)]="filter" [minDate]="minNgbDate" [permission]="permission" (search)="search(false)"
-  [autoRefreshMode]="autoRefreshMode"></filter>
-  <request-list [models]="requests" [moveBetDay]="moveBetDay" [permission]="permission"
+    [autoRefreshMode]="autoRefreshMode" (updateMissingInfo)="updateMissingInfo($event)"></filter>
+  <request-list [models]="requests" [moveBetDay]="moveBetDay" [permission]="permission" [isShowMissingInfo]="isShowMissingInfo"
     (exportExcelEvent)="exportExcel()" (reload)="search(true)" [requestStatusChangeEvent]="signalRService.requestStatusChange"></request-list>
 </div>

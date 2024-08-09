@@ -24,6 +24,7 @@ export class FilterComponent implements OnInit {
   @Input() autoRefreshMode: number;
   @Output() modelChange = new EventEmitter<FilterModel>();
   @Output() search = new EventEmitter();
+  @Output() updateMissingInfo = new EventEmitter<boolean>();
 
   mode = ['MatchId', 'RequestId'];
   filterByMatch = true;
@@ -32,6 +33,7 @@ export class FilterComponent implements OnInit {
   isSelectedAllIssueType = true;
   issueTypeModel: IssueTypesModel;
   issueTypeSelectList: Selection[];
+  selectedIssueTypes: string[];
   subTypeSelectList: Selection[];
   selectedSubIssueTypes: SubIssueType[];
   multipleSelectSubTypeModel: string[];
@@ -42,7 +44,7 @@ export class FilterComponent implements OnInit {
   isShowAutoRefresh: boolean;
   bUDay = new Date();
   markedTicketsCount = 0;
-  
+
   constructor(
     private readonly element: ElementRef,
     private readonly commonService: CommonService
@@ -55,7 +57,7 @@ export class FilterComponent implements OnInit {
     this.isShowAutoRefresh = true;
     this.filterByValue = this.mode[0];
     const userId = document.getElementById('body').getAttribute('user-id');
-    this.createdBySelectList = [{name: 'All', value: '0'}, {name: '<<<< Me >>>>', value: userId}];
+    this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: userId }];
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
@@ -95,7 +97,8 @@ export class FilterComponent implements OnInit {
     this.model.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.status = '-1';
-    this.model.issueTypeId = this.issueTypeSelectList[0].value;
+    this.model.issueTypeId = this.issueTypeSelectList.map(x => x.value).join(',');
+    this.selectedIssueTypes = this.issueTypeSelectList.map(x => x.value);
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
   }
@@ -140,64 +143,41 @@ export class FilterComponent implements OnInit {
   }
 
   private async setIssueTypeSelectList() {
-      this.issueTypeModel = await this.commonService.getIssueTypes();
-      this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
-      this.issueTypeSelectList = [];
-      if (this.issueTypePermissionList.length > 0) {
-        if (this.issueTypePermissionList.length > 1) {
-          this.issueTypeSelectList.push(
-            {
-              name: 'All',
-              value: this.issueTypePermissionList.map(x => x.issueTypeId.toString()).join(',')
-            }
-          );
-        }
-        this.issueTypePermissionList.forEach(x => {
-          this.issueTypeSelectList.push(
-            {
-              name: x.issueTypeName,
-              value: x.issueTypeId.toString()
-            }
-          );
-         });
-        this.model.issueTypeId = this.issueTypeSelectList[0].value;
-      } else {
-        this.issueTypeSelectList.push({ name: 'N/A', value: '-1' });
-        this.model.issueTypeId = '-1';
-      }
-    }
-  
-  updateSubByIssue() {
-    this.subTypeSelectList = [];
-    if (this.model.issueTypeId === '-1') {
-      this.setNoneSubType();
-      this.isNoneSubType = true;
+    this.issueTypeModel = await this.commonService.getIssueTypes();
+    this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
+    this.issueTypeSelectList = [];
+    if (this.issueTypePermissionList.length > 0) {
+      this.issueTypePermissionList.forEach(x => {
+        this.issueTypeSelectList.push(
+          {
+            group: 'All',
+            name: x.issueTypeName,
+            value: x.issueTypeId.toString()
+          }
+        );
+      });
+      this.model.issueTypeId = this.issueTypeSelectList[0].value;
     } else {
-      this.isNoneSubType = false;
-      if (this.model.issueTypeId.split(',').length > 1) {
-        this.getAllSubType();
-      } else {
-        this.getSubTypeList();
-      }
-      this.multipleSelectSubTypeModel = this.subTypeSelectList.map(x => x.value);
+      this.issueTypeSelectList.push({ name: 'N/A', value: '-1' });
+      this.model.issueTypeId = '-1';
     }
   }
 
-  getSubTypeList() {
+  getSubTypeListBySingleIssueType() {
     this.isSelectedAllIssueType = false;
     this.selectedSubIssueTypes =
-        this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === parseInt(this.model.issueTypeId, 10));
+      this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === parseInt(this.model.issueTypeId, 10));
     this.selectedSubIssueTypes.forEach(x => {
       this.addSubTypeSelectItem(x);
     });
   }
 
-  getAllSubType() {
+  getSubTypeByMultipleIssueType() {
     this.isSelectedAllIssueType = true;
     this.issueTypePermissionList.forEach(issueType => {
-        this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === issueType.issueTypeId).forEach(x => {
-          this.addSubTypeSelectItem(x);
-        });
+      this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === issueType.issueTypeId).forEach(x => {
+        this.addSubTypeSelectItem(x);
+      });
     });
   }
 
@@ -214,5 +194,30 @@ export class FilterComponent implements OnInit {
   setNoneSubType() {
     this.isSelectedAllIssueType = true;
     this.multipleSelectSubTypeModel = ['-1'];
+  }
+
+  checkMissingInfo(event: Event) {
+    this.updateMissingInfo.emit(event.currentTarget['checked']);
+  }
+
+  updateSelectedIssueType() {
+    this.model.issueTypeId = this.selectedIssueTypes.join(',');
+    this.updateSubByIssue();
+  }
+
+  updateSubByIssue() {
+    this.subTypeSelectList = [];
+    if (this.model.issueTypeId === '-1') {
+      this.setNoneSubType();
+      this.isNoneSubType = true;
+    } else {
+      this.isNoneSubType = false;
+      if (this.model.issueTypeId.split(',').length > 1) {
+        this.getSubTypeByMultipleIssueType();
+      } else {
+        this.getSubTypeListBySingleIssueType();
+      }
+      this.multipleSelectSubTypeModel = this.subTypeSelectList.map(x => x.value);
+    }
   }
 }
