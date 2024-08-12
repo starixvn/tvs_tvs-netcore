@@ -57,7 +57,7 @@ export class ValidationService {
     if (missingPermissionArrays.length > 0) {
       const errorText = `Your account does not have permission to add ${missingPermissionArrays.join(', ')}. Please change account to add request.`;
 
-      this.popupService.showError(errorText);
+      this.popupService.showPermissionError(errorText);
       return false;
     }
 

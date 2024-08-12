@@ -48,6 +48,10 @@ export class SaveRequestService {
     arg.primitiveProps.isShowLogInfoEvents = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
+    if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
+      return false;
+    }
+    
     if (this.validationService.isAllEventsValid(arg.allEvents)) {
       return true;
     }

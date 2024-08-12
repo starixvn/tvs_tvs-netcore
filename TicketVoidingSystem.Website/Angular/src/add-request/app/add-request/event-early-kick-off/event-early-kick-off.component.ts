@@ -165,6 +165,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     }
 
     await this.getTicketsMainEvent();
+
     this.primitiveProps.isShowLogInfoEvents = true;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
@@ -211,7 +212,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.confirmEarlyKickOff = this.confirmEarlyKickOff;
     arg.others = this.others;
     arg.isSaveAndVoid = isSaveAndVoid;
-
+    arg.permission = this.permission;
     return arg;
   }
 

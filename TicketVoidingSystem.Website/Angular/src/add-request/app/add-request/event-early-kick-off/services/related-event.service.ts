@@ -123,12 +123,12 @@ export class RelatedEventService {
   }
 
   public async getDataWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
-    const eventsGetLogInfo = await this.preparingModelGetLogInfo(relatedEvents, arg);
+    const eventsGetLogInfo = this.preparingModelGetLogInfo(relatedEvents, arg);
     await this.logInfoService.getLogInfo(eventsGetLogInfo, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
     this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.allEvents);
   }
 
-  private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoEarlyKickOff[]> {
+  private preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
     const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
     const newEvents = this.updateEvents(newChildEvents, arg.mainEvent, arg.filter.subIssueTypeId);
     const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
@@ -145,6 +145,9 @@ export class RelatedEventService {
         const event = originalAllEvents.find(y => y.matchId === x.matchId);
         if (event) {
           event.messageValidationLogInfo = x.messageValidationLogInfo;
+          event.isInvalidTotalTickets = x.isInvalidTotalTickets;
+          event.isHasSettledTicket = x.isHasSettledTicket;
+          event.isHasInstantlySettledTicket = x.isHasInstantlySettledTicket;
           event.subIssueTypeId = x.subIssueTypeId;
         }
       }
