@@ -6,7 +6,7 @@ public class GetGeneralInfoCriteria : CriteriaBase
 {
     public int RequestId { get; set; }
 
-    public int? MatchId { get; set; }
+    public string MatchIds { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_GeneralInfo_Select";
 

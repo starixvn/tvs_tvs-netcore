@@ -124,7 +124,7 @@
     <button [disabled]="!permission.isReadMarkTickets" type="submit" class="btn btn-primary btn-sm mr-3" (click)="openMarkTickets()">Marked Tickets ({{markedTicketsCount}})</button>
     <auto-refresh *ngIf="isShowAutoRefresh" [mode]="autoRefreshMode" (countdownEnd)="clickSearch()" class="mr-3"></auto-refresh>
     <div class="custom-control custom-switch d-flex align-items-center">
-      <input type="checkbox" class="custom-control-input" id="radioDisplayMissingInfo" (click)="checkMissingInfo($event)">
+      <input type="checkbox" class="custom-control-input" id="radioDisplayMissingInfo" [(ngModel)]="model.isDisplayMissingInfo" (click)="checkMissingInfo($event)">
       <label class="custom-control-label radio-display-missing-info" for="radioDisplayMissingInfo">Display Request Missing Info</label>
     </div>
   </div>

@@ -40,7 +40,7 @@ public class DescriptionElementServiceImp : DescriptionElementService
 
     public string BuildKoTime(DateTime time)
     {
-        var dateFormat = time.ZoneManila().ToString("yyyy/MM/dd hh:mm:ss tt");
+        var dateFormat = time.ToString("yyyy/MM/dd hh:mm:ss tt");
         return $"<div class=\"ko-time\">KO Time: <span class=\"text-success\">{dateFormat}</span></div>";
     }
 

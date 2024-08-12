@@ -8,7 +8,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
 public interface InsertAutoVoidRequestQueueService
 {
-    Task Execute(int requestId, int actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
+    Task Execute(int requestId, int? actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo);
 }
 
 public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueService
@@ -20,7 +20,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         this.repository = repository;
     }
 
-    public async Task Execute(int requestId, int actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
+    public async Task Execute(int requestId, int? actionId, AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo)
     {
         if (CheckCanInsertAutoVoidRequestQueue(actionId))
         {
@@ -36,7 +36,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         }
     }
 
-    private async Task ExecuteForAutoVoidInstantMultipleMatches(int requestId, int actionId, IEnumerable<int> matchIds)
+    private async Task ExecuteForAutoVoidInstantMultipleMatches(int requestId, int? actionId, IEnumerable<int> matchIds)
     {
         foreach (var matchId in matchIds)
         {
@@ -45,7 +45,7 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         }
     }
 
-    private async Task InsertAutoVoidRequestQueueForAllServer(string broadcastSessionId, int requestId, int actionId, int? matchId)
+    private async Task InsertAutoVoidRequestQueueForAllServer(string broadcastSessionId, int requestId, int? actionId, int? matchId)
     {
         var command = new InsertAutoVoidRequestQueueCommand
         {
@@ -82,9 +82,9 @@ public class InsertAutoVoidRequestQueueServiceImp : InsertAutoVoidRequestQueueSe
         return Enumerable.Empty<int>();
     }
 
-    private static bool CheckCanInsertAutoVoidRequestQueue(int actionId)
+    private static bool CheckCanInsertAutoVoidRequestQueue(int? actionId)
     {
-        var actionAutoVoidInstants = new List<int>
+        var actionAutoVoidInstants = new List<int?>
         {
             ActionVoidRequestConstant.AutoVoidAllInstantId,
             ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId,

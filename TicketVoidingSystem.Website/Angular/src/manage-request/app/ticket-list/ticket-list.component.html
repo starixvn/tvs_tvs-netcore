@@ -11,12 +11,9 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" [blockUi]="isBlock">
-          <match-info *ngIf="isShowMatchInfo(requestDetail)" [match]="match"></match-info>
-          <request-info [model]="requestDetail" [issue]="issue" [generalInfoViewModel]="generalInfoViewModel"
-             [isShowAbnormalAccountInfo]="false" [isShowGeneralInfo]="true"></request-info>
-          <tickets [model]="tickets" [(paging)]="paging" (pagingChange)="pagingEvent()" [isBlock]="blockBetList"
-            (exportExcelEvent)="exportExcel()" [issueTypeId]="requestDetail.request?.issueTypeId"></tickets>
+        <div class="modal-body" [blockUi]="isBlock" >
+          <request-info *ngIf="isShowRequestInfo" [model]="requestDetail" [issue]="issue" [ticketListModal]="modal"
+            [tabInfoRequest]="tabInfoRequest" [selectedMatchId]="this.modal.matchId"></request-info>
         </div>
       </div>
     </div>

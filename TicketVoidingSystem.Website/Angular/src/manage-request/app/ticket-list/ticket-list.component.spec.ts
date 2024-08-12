@@ -1,23 +1,23 @@
 import { NgModule } from '@angular/core';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
+import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 import { RedCardModel } from '../../../add-request/app/add-request/models/event-red-card.model';
 import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../edit-request/app/request.model';
 import { BlockUiModule } from '../../../utility/components/block-ui/block-ui.module';
-import { RequestInfoComponent } from '../../../utility/components/request-info/request-info.component';
-import { GeneralInfo } from '../../../utility/components/request-info/request-info.model';
 import { IssueInfo } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
 import { AppService } from '../app.service';
 import { MatchInfoComponent } from './match-info/match-info.component';
+import { RequestInfoComponent } from './request-info/request-info.component';
+import { GeneralInfo } from './request-info/request-info.model';
 import { TicketListComponent } from './ticket-list.component';
 import { TicketListModal } from './ticket-list.modal';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
 import { TicketsQuery } from './tickets/tickets.query';
-import { AbnormalBetModel } from '../../../add-request/app/add-request/models/abnormal-bet.model';
 
 class Helper {
   static readonly fakeDate = '2019-11-18 12:08:49.737';
@@ -270,7 +270,7 @@ describe('TicketListComponent', () => {
     requestDetailModel.issueTypeId = 11;
     const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
     fakeRequestDetailViewModel.event = new RequestEventModel();
-    fakeRequestDetailViewModel.abnormalBetModel = new AbnormalBetModel(); 
+    fakeRequestDetailViewModel.abnormalBetModel = new AbnormalBetModel();
     const mockGetMatch = jest.fn();
     const mockGetRequestById = jest.fn().mockImplementation(() => fakeRequestDetailViewModel);
     const mockGetIssueInfo = jest.fn().mockImplementation(() => Helper.fakeIssueInfo);

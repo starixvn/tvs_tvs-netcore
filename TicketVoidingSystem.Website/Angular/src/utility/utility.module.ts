@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { RequestInfoModule } from '../manage-request/app/ticket-list/request-info/request-info.module';
 import { AdvancedModeModule } from './components/advanced-mode/advanced-mode.module';
 import { AutoRefreshComponent } from './components/auto-refresh/auto-refresh.component';
 import { BaseTicketsListComponent } from './components/base-tickets-list/base-tickets-list.component';
@@ -24,7 +25,6 @@ import { MessagesResultComponent } from './components/messages-result/messages-r
 import { ModalModule } from './components/modal/modal.module';
 import { NotificationComponent } from './components/notification/notification.component';
 import { PagingModule } from './components/paging/paging.module';
-import { RequestInfoModule } from './components/request-info/request-info.module';
 import { SortingModule } from './components/sorting/sorting.module';
 import { ToolTipModule } from './components/tooltip/tooltip.module';
 import { UsernamesComponent } from './components/user-names/user-names.component';

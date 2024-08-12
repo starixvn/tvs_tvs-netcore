@@ -13,7 +13,7 @@ public class EditRequestQuery
 
     public int SubIssueTypeId { get; set; }
 
-    public int ActionId { get; set; }
+    public int? ActionId { get; set; }
 
     public string? MistakenBy { get; set; }
 
@@ -25,9 +25,11 @@ public class EditRequestQuery
 
     public string? Source { get; set; }
 
+    public string? BriefInfoNote { get; set; }
+
     public string? Remark { get; set; }
 
-    public int Creator { get; set; }
+    public int? Creator { get; set; }
 
     public int? MatchId { get; set; }
 
@@ -35,7 +37,7 @@ public class EditRequestQuery
 
     public int RequestId { get; set; }
 
-    public bool IsTest { get; set; }
+    public bool? IsTest { get; set; }
 
     public string? TransIds { get; set; }
 

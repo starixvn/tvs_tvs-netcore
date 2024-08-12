@@ -80,6 +80,7 @@ export class VoidOtherIssueComponent implements OnInit {
   usernames = '';
   transInfo: string;
   licenseeAffectedList: AffectedLicensee[] = [];
+  issueTypeName: string;
   constructor(
     private readonly commonService: CommonService,
     private readonly appService: AppService,
@@ -111,6 +112,7 @@ export class VoidOtherIssueComponent implements OnInit {
     this.initLiveScore();
     await this.getMatchInfo();
     this.issue = await this.commonService.getIssueInfo(StaticService.getSubIssueTypeId(this.requestDetail));
+    this.issueTypeName = this.issue.name === this.issue.subIssueTypeName ? this.issue.name : `${this.issue.name} - ${this.issue.subIssueTypeName}`;
     this.reason = await this.appService.getVoidedReason(this.issue.subIssueTypeId, this.isHasMatchInfo() ? this.match.sportType : 0);
     await this.initQuery();
     await this.getTickets();
@@ -541,5 +543,23 @@ export class VoidOtherIssueComponent implements OnInit {
 
   public isHasLogInfo(): boolean {
     return this.isWrongScore() || this.isWrongOdds() || this.isReducedOver();
+  }
+
+  getProducts(productIds: string): string {
+    return productIds
+      .replace('1', 'Sportsbook')
+      .replace('2', 'Parlay')
+      .replace('3', 'Bet Builder')
+      .replace('4', 'Outright')
+      .replace('5', 'Saba')
+      .replace('6', 'Non-Sports');
+  }
+
+  getStatus(statusIds: string): string {
+    return statusIds
+      .replace('0,1', 'Running')
+      .replace('112', 'Won')
+      .replace('113', 'Lose')
+      .replace('111', 'Draw');
   }
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GeneralInfoViewModel } from '../../utility/components/request-info/request-info.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
+import { BriefInfo } from './models/brief-info.model';
 import { GetGeneralInfoQuery } from './models/get-general-info.query';
 import { GetRequestsQuery } from './models/get-requests.query';
 import { RequestModel } from './request-list/request.model';
+import { GeneralInfoViewModel } from './ticket-list/request-info/request-info.model';
 import { TicketsModel } from './ticket-list/tickets/tickets.model';
 import { TicketsQuery } from './ticket-list/tickets/tickets.query';
 
@@ -41,5 +42,13 @@ export class AppService {
 
   async getGeneralInfo(query: GetGeneralInfoQuery): Promise<GeneralInfoViewModel> {
     return this.httpService.postJson(query, `api/ManageRequest/GetGeneralInfo`);
+  }
+
+  async GetBriefInfo(query: GetGeneralInfoQuery): Promise<BriefInfo[]> {
+    return this.httpService.postJson(query, `api/ManageRequest/GetBriefInfo`);
+  }
+
+  async SaveBriefInfoNote(requestId: number, briefInfoNote: string): Promise<BriefInfo[]> {
+    return this.httpService.postJson({requestId, briefInfoNote, isVoided: true}, `api/ManageRequest/UpdateRequest`);
   }
 }

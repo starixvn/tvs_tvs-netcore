@@ -29,6 +29,7 @@ export class RequestDetailModel {
   requestedBy: string;
   userId: number;
   voidedBy: string;
+  briefInfoNote: string;
 }
 
 export class RequestEventModel {

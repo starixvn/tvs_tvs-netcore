@@ -77,6 +77,9 @@ public class ManageRequestController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetPermissionManage() => Ok(await mediator.Send(new GetPermissionManageRequest()));
 
+    [HttpPost]
+    public async Task<IActionResult> GetBriefInfo(GetBriefInfoRequest request) => Ok(await mediator.Send(request));
+
     [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> GetExcelVoidedTicketForSendLetstalk(GetExcelVoidedTicketForSendLetstalkRequest request) => Ok(await mediator.Send(request));

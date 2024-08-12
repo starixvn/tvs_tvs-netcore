@@ -15,6 +15,7 @@ public class EditRequestCommand : NonQueryCommand
     public string? Provider { get; set; }
     public string? Source { get; set; }
     public string? Remark { get; set; }
+    public string? BriefInfoNote { get; set; }
     public int UserId { get; set; }
     public string IP { get; set; }
     public bool? IsTest { get; set; }

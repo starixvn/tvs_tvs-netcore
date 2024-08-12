@@ -140,9 +140,15 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.displayedModels = this.models.slice(this.paging.begin - 1, this.paging.end);
   }
 
-  showTickets(requestId: number, matchId: number) {
+  showTickets(request: RequestModel, matchId: number) {
     if (this.isCanClickNoOfTickets()) {
-      this.ticketListModal = { open: true, minimize: false, requestId, matchId };
+      this.ticketListModal = {
+        open: true,
+        minimize: false,
+        requestId: request.requestId,
+        matchId,
+        allMatchIdsInRequest: request.details.map(x => x.matchId).join(','),
+      };
     }
   }
 

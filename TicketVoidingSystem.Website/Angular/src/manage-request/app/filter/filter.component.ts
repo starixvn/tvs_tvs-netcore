@@ -3,6 +3,8 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { LocalStorageCacheConstant } from 'src/utility/constants/local-storage-cache.constant';
+import { TEXT } from 'src/utility/constants/text';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
@@ -44,6 +46,7 @@ export class FilterComponent implements OnInit {
   isShowAutoRefresh: boolean;
   bUDay = new Date();
   markedTicketsCount = 0;
+  userId: string;
 
   constructor(
     private readonly element: ElementRef,
@@ -56,8 +59,8 @@ export class FilterComponent implements OnInit {
   async ngOnInit() {
     this.isShowAutoRefresh = true;
     this.filterByValue = this.mode[0];
-    const userId = document.getElementById('body').getAttribute('user-id');
-    this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: userId }];
+    this.userId = document.getElementById('body').getAttribute('user-id');
+    this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: this.userId }];
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
@@ -65,6 +68,7 @@ export class FilterComponent implements OnInit {
     this.bUDay = new Date(balanceUp.balanceUpDay);
     this.checkAutoRefresh();
     await this.clickSearch();
+    this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
   }
 
   controlFilter(value: string) {
@@ -94,13 +98,24 @@ export class FilterComponent implements OnInit {
 
   initDefaultFilter() {
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
+    this.selectedIssueTypes = this.getIssueTypeIdDefault();
     this.model.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.status = '-1';
-    this.model.issueTypeId = this.issueTypeSelectList.map(x => x.value).join(',');
-    this.selectedIssueTypes = this.issueTypeSelectList.map(x => x.value);
+    this.model.issueTypeId = this.selectedIssueTypes.join(',');
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
+    this.model.isDisplayMissingInfo = localStorage.getItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId) === 'true';
+    this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
+  }
+
+  getIssueTypeIdDefault(): string[] {
+    const previousSelectedIssueTypes = localStorage.getItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId);
+    if (previousSelectedIssueTypes) {
+      return previousSelectedIssueTypes.split(',').filter(x => this.issueTypeSelectList.map(y => y.value).includes(x));
+    }
+
+    return this.issueTypeSelectList.map(x => x.value);
   }
 
   newRequest() {
@@ -117,6 +132,9 @@ export class FilterComponent implements OnInit {
 
   async clickSearch() {
     if (this.validate()) {
+      localStorage.setItem(
+        LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId
+        ,this.model.issueTypeId);
       this.model.subIssueType = this.multipleSelectSubTypeModel.join(',');
       this.search.emit();
       this.markedTicketsCount = await this.commonService.getMarkedTicketsCount();
@@ -136,6 +154,11 @@ export class FilterComponent implements OnInit {
 
     if (!this.filterByMatch && !isNumeric(this.model.requestId)) {
       this.tooltip.display('input-request-id', LABELS.INVALID_REQUESTID);
+      return false;
+    }
+
+    if (!this.model.issueTypeId) {
+      this.tooltip.display('issue-type-dropdown', TEXT.REQUIRED_FIELD);
       return false;
     }
 
@@ -197,7 +220,10 @@ export class FilterComponent implements OnInit {
   }
 
   checkMissingInfo(event: Event) {
-    this.updateMissingInfo.emit(event.currentTarget['checked']);
+    const isChecked = event.currentTarget['checked'];
+    localStorage.setItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId
+      ,isChecked.toString());
+    this.updateMissingInfo.emit(isChecked);
   }
 
   updateSelectedIssueType() {

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SimpleChange } from '@angular/core';
-import { IssueInfo } from '../../models/issue-type.model';
-import { DateTimeModule } from '../date-time/date-time.module';
+import { DateTimeModule } from '../../../../utility/components/date-time/date-time.module';
+import { IssueInfo } from '../../../../utility/models/issue-type.model';
 import { RequestInfoComponent } from './request-info.component';
 
 describe('RequestInfoComponent', () => {

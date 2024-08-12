@@ -146,7 +146,8 @@ export class AppComponent implements OnInit {
       subIssueType: this.filter.subIssueType,
       status: this.filter.status,
       isExcludeTest: this.filter.isExcludeTest,
-      createdBy: this.filter.createdBy
+      createdBy: this.filter.createdBy,
+      isDisplayMissingInfo: this.filter.isDisplayMissingInfo
     };
     this.cacheSubTypeSelectList = this.filterComponent.subTypeSelectList;
     this.cacheMultipleSelectSubTypeModel = this.filterComponent.multipleSelectSubTypeModel;

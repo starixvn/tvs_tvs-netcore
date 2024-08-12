@@ -1,4 +1,4 @@
 export class GetGeneralInfoQuery {
     requestId: number;
-    matchId: number;
+    matchIds: string;
 }

@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { AbnormalFilterBy } from '../../../utility/constants/config';
+import { LocalStorageCacheConstant } from 'src/utility/constants/local-storage-cache.constant';
+import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
@@ -127,8 +128,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   async saveRequest(): Promise<void> { // NOSONAR
     if (!this.isEdit) {
-      const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
-      localStorage.setItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'),
+      localStorage.setItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + document.getElementById('body').getAttribute('user-id'),
         this.model.filter.issueTypeId);
     }
     this.isDisabledSaveButton = true;

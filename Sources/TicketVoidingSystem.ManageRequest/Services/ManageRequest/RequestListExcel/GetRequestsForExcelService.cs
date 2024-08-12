@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Models.Parameters;
 
@@ -120,8 +121,8 @@ public class GetRequestsForExcelServiceImp : GetRequestsForExcelService
         outputRequest.MatchId = param.CurrentViewModel.Details[0].MatchId?.ToString();
         if (param.CurrentViewModel.Details[0].MatchId is not null && param.CurrentViewModel.Details[0].MatchId != BetTypeConstant.SystemParlay)
         {
-            outputRequest.EventDateMatch = param.CurrentViewModel.Details[0].EventDateMatch.ToString(FormatKey.ShortDateFormatWithHyphen);
-            outputRequest.KickOffTimeMatch = param.CurrentViewModel.Details[0].KickOffTimeMatch.ToString(FormatKey.OnlyTimeWithPeriodFormat);
+            outputRequest.EventDateMatch = param.CurrentViewModel.Details[0].EventDateMatch.ZoneManila().ToString(FormatKey.ShortDateFormatWithHyphen);
+            outputRequest.KickOffTimeMatch = param.CurrentViewModel.Details[0].KickOffTimeMatch.ZoneManila().ToString(FormatKey.OnlyTimeWithPeriodFormat);
         }
 
         outputRequest.Trader = param.CurrentViewModel.Details[0].Trader;

@@ -6,7 +6,7 @@ public class SaveAccountWinLostCommand : NonQueryCommand
 {
     public int RequestId { get; set; }
 
-    public int ActionId { get; set; }
+    public int? ActionId { get; set; }
 
     public string AccountWinLostXml { get; set; }
 
