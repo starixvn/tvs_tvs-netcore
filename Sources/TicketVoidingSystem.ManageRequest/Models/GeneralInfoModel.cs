@@ -22,6 +22,8 @@ public class GeneralInfoModel
 
     public int AwayId { get; set; }
 
+    public int SportType { get; set; }
+
     public int Total { get; set; }
 
     public string DecidedBy { get; set; }

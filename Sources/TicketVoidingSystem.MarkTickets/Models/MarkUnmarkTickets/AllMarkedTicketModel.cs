@@ -22,6 +22,8 @@ public class AllMarkedTicketModel
 
     public int AwayId { get; set; }
 
+    public int SportType { get; set; }
+
     public int Total { get; set; }
     public int? ChildMatchId { get; set; }
 }

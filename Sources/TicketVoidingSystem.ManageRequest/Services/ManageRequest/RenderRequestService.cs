@@ -75,9 +75,9 @@ public class RenderRequestServiceImp : RenderRequestService
 
     private void UpdateRequestDescriptionFromRemotingRef(RequestDescription description)
     {
-        description.HomeName = remotingRefWrapperService.GetTeamName(description.HomeId, LanguageCode.English);
-        description.AwayName = remotingRefWrapperService.GetTeamName(description.AwayId, LanguageCode.English);
-        description.LeagueName = remotingRefWrapperService.GetLeagueName(description.LeagueId, LanguageCode.English);
+        description.HomeName = remotingRefWrapperService.GetTeamName(description.SportType, description.HomeId, LanguageCode.English);
+        description.AwayName = remotingRefWrapperService.GetTeamName(description.SportType, description.AwayId, LanguageCode.English);
+        description.LeagueName = remotingRefWrapperService.GetLeagueName(description.SportType, description.LeagueId, LanguageCode.English);
         description.SportTypeName = remotingRefWrapperService.GetSportName(description.SportType.ToString(), LanguageCode.English);
         description.MatchEvent = matchService.GetMatchEvent(description);
     }

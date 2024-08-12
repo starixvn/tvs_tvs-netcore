@@ -153,7 +153,7 @@ public class GetRequestServiceImp : GetRequestService
             MatchId = model.MatchId,
             MatchCode = model.MatchCode,
             Name = GetMatchName(model),
-            LeagueName = remotingRefService.GetLeagueName(model.LeagueId, LanguageCode.English),
+            LeagueName = remotingRefService.GetLeagueName(model.SportType, model.LeagueId, LanguageCode.English),
             IsMainMatch = model.IsMainMatch,
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
@@ -180,7 +180,7 @@ public class GetRequestServiceImp : GetRequestService
             IsLinkGroup1X2 = model.IsLinkGroup1X2,
             IsLinkGroupAIO = model.IsLinkGroupAIO,
             Name = GetMatchName(model),
-            LeagueName = remotingRefService.GetLeagueName(model.LeagueId, LanguageCode.English),
+            LeagueName = remotingRefService.GetLeagueName(model.SportType, model.LeagueId, LanguageCode.English),
             IsMainMatch = model.IsMainMatch,
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
@@ -207,7 +207,7 @@ public class GetRequestServiceImp : GetRequestService
             IsLinkGroup1X2 = model.IsLinkGroup1X2,
             IsLinkGroupAIO = model.IsLinkGroupAIO,
             Name = GetMatchName(model),
-            LeagueName = remotingRefService.GetLeagueName(model.LeagueId, LanguageCode.English),
+            LeagueName = remotingRefService.GetLeagueName(model.SportType, model.LeagueId, LanguageCode.English),
             IsMainMatch = model.IsMainMatch,
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
@@ -287,7 +287,7 @@ public class GetRequestServiceImp : GetRequestService
             MatchId = model.MatchId,
             MatchCode = model.MatchCode,
             Name = GetMatchName(model),
-            LeagueName = remotingRefService.GetLeagueName(model.LeagueId, LanguageCode.English),
+            LeagueName = remotingRefService.GetLeagueName(model.SportType, model.LeagueId, LanguageCode.English),
             IsMainMatch = model.IsMainMatch,
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
@@ -354,7 +354,7 @@ public class GetRequestServiceImp : GetRequestService
             LeagueId = x.LeagueId,
             MatchCode = x.MatchCode,
             Name = GetMatchName(x),
-            LeagueName = remotingRefService.GetLeagueName(x.LeagueId, LanguageCode.English)
+            LeagueName = remotingRefService.GetLeagueName(x.SportType, x.LeagueId, LanguageCode.English)
         });
         return new AbnormalBetViewModel
         {
@@ -386,9 +386,10 @@ public class GetRequestServiceImp : GetRequestService
 
     private string GetMatchName(RequestEventModel requestEventModel)
     {
-        var homeName = requestEventModel.IsNeutral ?
-                 remotingRefService.GetTeamName(requestEventModel.HomeId, LanguageCode.English) + " (N)" : remotingRefService.GetTeamName(requestEventModel.HomeId, LanguageCode.English);
-        var awayName = remotingRefService.GetTeamName(requestEventModel.AwayId, LanguageCode.English);
+        var homeName = requestEventModel.IsNeutral
+            ? remotingRefService.GetTeamName(requestEventModel.SportType, requestEventModel.HomeId, LanguageCode.English) + " (N)"
+            : remotingRefService.GetTeamName(requestEventModel.SportType, requestEventModel.HomeId, LanguageCode.English);
+        var awayName = remotingRefService.GetTeamName(requestEventModel.SportType, requestEventModel.AwayId, LanguageCode.English);
 
         return $"{requestEventModel.MatchId} - {homeName} - vs - {awayName}";
     }

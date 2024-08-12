@@ -17,6 +17,8 @@ public class GetUserLogModel
 
     public int AwayId { get; set; }
 
+    public int SportType { get; set; }
+
     public string LogData { get; set; }
 
     public IEnumerable<string> TransIds { get; set; }
@@ -30,5 +32,4 @@ public class GetUserLogModel
     public DateTime KickOffTime { get; set; }
 
     public int? ChildMatchId { get; set; }
-
 }

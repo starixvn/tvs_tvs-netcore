@@ -27,10 +27,11 @@ public class MatchInfoAddRequestServiceImp : MatchInfoAddRequestService
             return null;
         }
 
-        matchInfo.LeagueName = remotingRefWrapperService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English);
-        matchInfo.HomeName = matchInfo.IsNeutral ?
-            remotingRefWrapperService.GetTeamName(matchInfo.HomeId, LanguageCode.English) + " (N)" : remotingRefWrapperService.GetTeamName(matchInfo.HomeId, LanguageCode.English);
-        matchInfo.AwayName = remotingRefWrapperService.GetTeamName(matchInfo.AwayId, LanguageCode.English);
+        matchInfo.LeagueName = remotingRefWrapperService.GetLeagueName(matchInfo.SportType, matchInfo.LeagueId, LanguageCode.English);
+        matchInfo.HomeName = matchInfo.IsNeutral
+            ? remotingRefWrapperService.GetTeamName(matchInfo.SportType, matchInfo.HomeId, LanguageCode.English) + " (N)"
+            : remotingRefWrapperService.GetTeamName(matchInfo.SportType, matchInfo.HomeId, LanguageCode.English);
+        matchInfo.AwayName = remotingRefWrapperService.GetTeamName(matchInfo.SportType, matchInfo.AwayId, LanguageCode.English);
         matchInfo.MatchEvent = GetMatchEvent(matchInfo);
         matchInfo.Name = $"{matchInfo.MatchId} - {matchInfo.MatchEvent}";
 

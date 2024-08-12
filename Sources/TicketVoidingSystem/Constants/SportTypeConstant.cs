@@ -19,4 +19,6 @@ public static class SportTypeConstant
     public const int Bullfighting = 207;
 
     public const int Baseball = 8;
+    
+    public const int VirtuallySoccer = 147;     // Virtual Sports 5
 }

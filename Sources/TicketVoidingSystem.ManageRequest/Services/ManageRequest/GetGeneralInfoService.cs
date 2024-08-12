@@ -54,14 +54,14 @@ public class GetGeneralInfoServiceImp : GetGeneralInfoService
     private GeneralInfoModel GetGeneralInfoModel(IEnumerable<GeneralInfoModel> generalInfoModel)
     {
         var generalInfo = generalInfoModel.FirstOrDefault() ?? new GeneralInfoModel();
-        generalInfo.LeagueName = remotingRefService.GetLeagueName(generalInfo.LeagueId, LanguageCode.English);
+        generalInfo.LeagueName = remotingRefService.GetLeagueName(generalInfo.SportType, generalInfo.LeagueId, LanguageCode.English);
         generalInfo.VoidedTimeString = generalInfo.VoidedTime.ZoneManila().ToString("dd/MM/yyyy - hh:mm:ss tt");
         generalInfo.RecoveredTimeString = generalInfo.RecoveredTime.ToString(FormatKey.LongDateFormatTimeWithSlash);
         generalInfo.KickOffTimeString = generalInfo.KickOffTime.ToString("hh:mm tt");
         generalInfo.NegativeBalanceUsers = !string.IsNullOrWhiteSpace(generalInfo.NegativeBalanceUsers)
             ? string.Join(", ", generalInfo.NegativeBalanceUsers.Split(',')) : generalInfo.NegativeBalanceUsers;
         generalInfo.MatchEvent = generalInfo.HomeId > 0 && generalInfo.AwayId > 0
-            ? $"{remotingRefService.GetTeamName(generalInfo.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(generalInfo.AwayId, LanguageCode.English)}"
+            ? $"{remotingRefService.GetTeamName(generalInfo.SportType, generalInfo.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(generalInfo.SportType, generalInfo.AwayId, LanguageCode.English)}"
             : generalInfo.MatchEvent;
 
         return generalInfo;

@@ -14,13 +14,13 @@ public interface RemotingRefWrapperService
 
     string GetParentIdByBetTypeId(object betTypeId);
 
-    string GetLeagueName(object leagueId, string language);
+    string GetLeagueName(int sportTypeId, object leagueId, string language);
 
     string GetBFName(int id);
 
     string GetOddsTypeName(object oddsType);
 
-    string GetTeamName(object teamId, string language);
+    string GetTeamName(int sportTypeId, object teamId, string language);
 
     string[] GetComboParlayName(string betTeam, string betCheck, decimal handicap1, decimal handicap2);
 
@@ -58,11 +58,6 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
         return remotingRefService.GetParentIdByBetTypeId(betTypeId.ToString(), betTypeId.ToString());
     }
 
-    public string GetLeagueName(object leagueId, string language)
-    {
-        return remotingRefService.GetLeagueName(ToString(leagueId), language, string.Empty);
-    }
-
     public string GetBFName(int id)
     {
         return remotingRefService.GetTeamName3rd(id.ToString(), LanguageCode.English);
@@ -71,11 +66,6 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
     public string GetOddsTypeName(object oddsType)
     {
         return remotingRefService.GetOddsTypeName(ToString(oddsType), LanguageCode.English);
-    }
-
-    public string GetTeamName(object teamId, string language)
-    {
-        return remotingRefService.GetTeamName(ToString(teamId), language, string.Empty);
     }
 
     public string[] GetComboParlayName(string betTeam, string betCheck, decimal handicap1, decimal handicap2)
@@ -96,5 +86,20 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
     private static string ToString(object item)
     {
         return item is not null && item != DBNull.Value ? item.ToString() : string.Empty;
+    }
+
+    public string GetLeagueName(int sportTypeId, object leagueId, string language)
+    {
+        return IsSportTypeOfVirtualSports5(sportTypeId) ? remotingRefService.GetLeagueName3rd(ToString(leagueId), language, string.Empty) : remotingRefService.GetLeagueName(ToString(leagueId), language, string.Empty);
+    }
+
+    public string GetTeamName(int sportTypeId, object teamId, string language)
+    {
+        return IsSportTypeOfVirtualSports5(sportTypeId) ? remotingRefService.GetTeamName3rd(ToString(teamId), language, string.Empty) : remotingRefService.GetTeamName(ToString(teamId), language, string.Empty);
+    }
+
+    private static bool IsSportTypeOfVirtualSports5(int sportType)
+    {
+        return sportType is SportTypeConstant.VirtuallySoccer;
     }
 }

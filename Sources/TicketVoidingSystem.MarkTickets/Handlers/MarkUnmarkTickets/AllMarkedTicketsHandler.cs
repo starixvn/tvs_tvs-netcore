@@ -57,8 +57,8 @@ public class AllMarkedTicketsHandler : IRequestHandler<AllMarkedTicketsRequest, 
             KickOffTime = itemModel.KickOffTime,
             CreatedDate = itemModel.CreatedDate,
             Total = itemModel.Total,
-            Event = remotingRefWrapperService.GetTeamName(itemModel.HomeId, LanguageCode.English)
-                    + "- vs -" + remotingRefWrapperService.GetTeamName(itemModel.AwayId, LanguageCode.English),
+            Event = remotingRefWrapperService.GetTeamName(itemModel.SportType, itemModel.HomeId, LanguageCode.English)
+                    + "- vs -" + remotingRefWrapperService.GetTeamName(itemModel.SportType, itemModel.AwayId, LanguageCode.English),
             ChildMatchId = itemModel.ChildMatchId
         }).ToList();
     }

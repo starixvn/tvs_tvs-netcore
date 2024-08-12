@@ -34,7 +34,7 @@ public class MapUserLogsServiceImp : MapUserLogsService
             SingleTickets = log.TransIds.Where(id => ticketInfo.SingleTickets.Any(y => y.TransId == id)),
             ParlayTickets = log.TransIds.Where(id => ticketInfo.ParlayTickets.Any(y => y.TransId == id)),
             MatchId = log.MatchId,
-            Event = $"{remotingRefService.GetTeamName(log.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(log.AwayId, LanguageCode.English)}",
+            Event = $"{remotingRefService.GetTeamName(log.SportType, log.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(log.SportType, log.AwayId, LanguageCode.English)}",
             DoneBy = log.DoneBy,
             HTScore = log.HTScore,
             FTScore = log.FTScore,
