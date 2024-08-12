@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
-import { AbnormalFilterBy, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LeagueEventAbnormalComponent } from '../../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
@@ -83,7 +83,7 @@ export class ValidationService {
 
   private async callApiCheckDuplicateTickets(args: SaveRequestArg): Promise<CheckDuplicateTicketsViewModel> {
     const transIds = args.betIdsComponent.getAllBetIds();
-    const matchId = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? args.leagueEventComponent?.selectedMatchId : 29;
+    const matchId = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? args.leagueEventComponent?.selectedMatchId : MatchIdConstant.Parlay;
     const filterBy = !this.isFilterMixParlay(args.duplicateTicketsModel.filterBy) ? null : args.duplicateTicketsModel.filterBy;
     const query: CheckDuplicateTicketsQuery = {
       matchId: matchId,

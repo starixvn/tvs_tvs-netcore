@@ -1,11 +1,12 @@
 ﻿using System.Net.Mime;
+using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface LinkedLogHttpClientService
 {
-    Task<HttpResponseMessage> PostHttpRequest<T>(T requestData);
+    Task<IEnumerable<PoolHouseLinkedLogResponse>> GetLinkedLog(int matchId, int liveIndicator);
 }
 
 public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
@@ -23,21 +24,21 @@ public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
         this.httpClient.DefaultRequestHeaders.Add("Accept", MediaTypeNames.Application.Json);
     }
 
-    public async Task<HttpResponseMessage> PostHttpRequest<T>(T requestData)
+    public async Task<IEnumerable<PoolHouseLinkedLogResponse>> GetLinkedLog(int matchId, int liveIndicator)
     {
         const string actionName = "api/PoolHouse/GetLinkLog";
-        var response = await httpClient.PostAsJsonAsync(actionName, requestData);
+        var response = await httpClient.PostAsJsonAsync(actionName, new { matchId, liveIndicator });
         if (response.IsSuccessStatusCode)
         {
             await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
-            return response;
+            return await response.Content.ReadAsAsync<IEnumerable<PoolHouseLinkedLogResponse>>();
         }
 
         await loggingService.InfoAsync(await CreateLogResponse(actionName, response));
-        return new HttpResponseMessage();
+        return null;
     }
 
-    private static async Task<string> CreateLogResponse(string actionName, HttpResponseMessage response)
+    internal virtual async Task<string> CreateLogResponse(string actionName, HttpResponseMessage response)
     {
         var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
         var responseContent = await response.Content.ReadAsStringAsync();

@@ -74,7 +74,7 @@ export class LogInfoEkoComponent implements OnInit {
   }
 
   public isNotShowTemplateMessage(){
-    return this.logInfo.tableTicketsModel.groups === undefined || this.logInfo.tableTicketsModel.groups.length == 0 
+    return this.logInfo.tableTicketsModel.groups === undefined || this.logInfo.tableTicketsModel.groups.length === 0
     || this.logInfo.tableTicketsModel.groups == null
   }
 }

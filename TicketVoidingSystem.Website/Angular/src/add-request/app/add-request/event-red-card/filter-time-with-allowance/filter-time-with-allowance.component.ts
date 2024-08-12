@@ -118,11 +118,8 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
 
     const fromTime = moment(`${StaticService.convertToFullDate(this.fromDate)} ${this.fromTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toTime = moment(`${StaticService.convertToFullDate(this.toDate)} ${this.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const durations = toTime.diff(fromTime);
-    const minutes = Math.floor(durations / 60000);
-    const seconds = ((durations % 60000) / 1000).toFixed(0);
 
-    return `${minutes}m${seconds}s`;
+    return StaticService.getDurations(fromTime, toTime);
   }
 
   emitChangeAllowanceSettingTimeEvent() {

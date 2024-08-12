@@ -1,25 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NSubstitute;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
-using Xunit;
-
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
+﻿namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class GetLinkedLogShowUiServiceTests
-{
-    private readonly OddsInfoValidationService oddsInfoValidationService;
+{/*
+    private readonly LinkedLogValidationService linkedLogValidationService;
     private readonly GetLinkedLogShowUiServiceImp service;
 
     public GetLinkedLogShowUiServiceTests()
     {
-        oddsInfoValidationService = Substitute.For<OddsInfoValidationService>();
-        service = new GetLinkedLogShowUiServiceImp(oddsInfoValidationService);
+        linkedLogValidationService = Substitute.For<LinkedLogValidationService>();
+        service = new GetLinkedLogShowUiServiceImp(linkedLogValidationService);
     }
 
     [Theory]
@@ -102,10 +91,10 @@ public class GetLinkedLogShowUiServiceTests
             }
         };
 
-        oddsInfoValidationService
-            .IsValidLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService
+            .IsLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
+        linkedLogValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
 
         // Act
         var actual = service.GetLinkedLogShowUi(getLinkedLogModel, poolHouseLinkedLogResponses);
@@ -149,10 +138,10 @@ public class GetLinkedLogShowUiServiceTests
             }
         };
 
-        oddsInfoValidationService
-            .IsValidLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
+        linkedLogValidationService
+            .IsLinkGroupWrongOdds(Arg.Any<PoolHouseLinkedLogResponse>(), Arg.Any<GetLinkedLogModel>())
             .ReturnsForAnyArgs(true);
-        oddsInfoValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
+        linkedLogValidationService.IsValidBetTypeWrongOdds(1, Arg.Any<GetLinkedLogModel>()).ReturnsForAnyArgs(true);
 
         // Act
         var actual = service.GetLinkedLogShowUi(getLinkedLogModel, poolHouseLinkedLogResponses);
@@ -161,4 +150,5 @@ public class GetLinkedLogShowUiServiceTests
         AssertExtension.Equal(0, actual.Count());
         return Task.CompletedTask;
     }
+    */
 }

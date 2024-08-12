@@ -6,11 +6,11 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,8 @@ export class ValidationService {
   constructor() {
   }
 
-  public validateCommonData(leagueEventWrongHdpComponent: LeagueEventRedCardComponent, logInfoComponents: LogInfoWrongHdpComponent[]): boolean {
-    if (!leagueEventWrongHdpComponent.isMatchIdValid()) {
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, logInfoComponents: LogInfoWrongHdpComponent[]): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 
@@ -100,7 +100,6 @@ export class ValidationService {
 
     return true;
   }
-
 
   public isValidHdpWithSubTypeHomeAwayVirtualHedReverse(filterWithHdpModel: FilterWithHdpModel, tooltip: Tooltip): boolean {
     if (!filterWithHdpModel.hdpValue){

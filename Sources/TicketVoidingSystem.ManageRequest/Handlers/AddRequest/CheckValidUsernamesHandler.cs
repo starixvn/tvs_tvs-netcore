@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
 using TicketVoidingSystem.ManageRequest.ViewModels;
@@ -32,9 +33,9 @@ public class CheckValidUsernamesHandler : IRequestHandler<CheckValidUsernamesReq
 {
     private readonly CheckUsernameService checkUsernameService;
     private readonly CalculateVoidTicketsService calculateVoidTicketsService;
-    private readonly CompressDataAddRequestService compressDataAddRequestService;
+    private readonly CompressDataService compressDataAddRequestService;
 
-    public CheckValidUsernamesHandler(CheckUsernameService checkUsernameService, CalculateVoidTicketsService calculateVoidTicketsService, CompressDataAddRequestService compressDataAddRequestService)
+    public CheckValidUsernamesHandler(CheckUsernameService checkUsernameService, CalculateVoidTicketsService calculateVoidTicketsService, CompressDataService compressDataAddRequestService)
     {
         this.checkUsernameService = checkUsernameService;
         this.calculateVoidTicketsService = calculateVoidTicketsService;

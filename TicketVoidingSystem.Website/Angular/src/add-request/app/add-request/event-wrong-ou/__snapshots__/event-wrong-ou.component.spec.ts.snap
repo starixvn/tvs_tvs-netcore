@@ -11,7 +11,7 @@ exports[`EventWrongOuComponent EventWrongOuComponent init should match snapshot 
       <div
         class="mb-3"
       >
-        <league-event-red-card />
+        <event-league />
       </div>
     </div>
     <add-child-match />

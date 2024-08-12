@@ -26,7 +26,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     poolHouseCheckedBetTypes: '',
-    linkedLogsViewModel: null
+    linkedLogsViewModel: null,
+    isShowValidation: false
   };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,

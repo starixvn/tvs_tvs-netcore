@@ -1,85 +1,137 @@
 ﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface FilterLinkedLogService
 {
-    IEnumerable<PoolHouseLinkedLogResponse> FilterApiResponse(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses);
+    GroupLinkedLogResponse GroupBy(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses);
 }
 
 public class FilterLinkedLogServiceImp : FilterLinkedLogService
 {
-    private readonly OddsInfoValidationService oddsInfoValidationService;
+    private readonly LinkedLogValidationService linkedLogValidationService;
 
-    public FilterLinkedLogServiceImp(OddsInfoValidationService oddsInfoValidationService)
+    public FilterLinkedLogServiceImp(LinkedLogValidationService linkedLogValidationService)
     {
-        this.oddsInfoValidationService = oddsInfoValidationService;
+        this.linkedLogValidationService = linkedLogValidationService;
     }
 
-    public IEnumerable<PoolHouseLinkedLogResponse> FilterApiResponse(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    public GroupLinkedLogResponse GroupBy(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
         return getLinkedLogModel.IssueTypeId switch
         {
-            IssueTypeConstant.WrongHDP => GetLinkedLogCheckValidateWrongHdp(getLinkedLogModel, apiLinkedLogResponses),
-            IssueTypeConstant.Wrong1stHDP => GetLinkedLogCheckValidateWrong1StHdp(getLinkedLogModel, apiLinkedLogResponses),
-            IssueTypeConstant.WrongOU => GetLinkedLogCheckValidateWrongOu(getLinkedLogModel, apiLinkedLogResponses),
-            IssueTypeConstant.Wrong1stOU => GetLinkedLogCheckValidateWrong1StOu(getLinkedLogModel, apiLinkedLogResponses),
-            IssueTypeConstant.WrongOdds => GetLinkedLogCheckValidateWrongOdds(getLinkedLogModel, apiLinkedLogResponses),
-            _ => new List<PoolHouseLinkedLogResponse>()
+            IssueTypeConstant.WrongHDP => GetLinkedLogWrongHdp(getLinkedLogModel, apiLinkedLogResponses),
+            IssueTypeConstant.Wrong1stHDP => GetLinkedLogWrong1stHdp(getLinkedLogModel, apiLinkedLogResponses),
+            IssueTypeConstant.WrongOU => GetLinkedLogWrongOu(getLinkedLogModel, apiLinkedLogResponses),
+            IssueTypeConstant.Wrong1stOU => GetLinkedLogWrong1stOu(getLinkedLogModel, apiLinkedLogResponses),
+            IssueTypeConstant.WrongOdds => GetLinkedLogWrongOdds(getLinkedLogModel, apiLinkedLogResponses),
+            _ => new GroupLinkedLogResponse()
         };
     }
 
-    private IEnumerable<PoolHouseLinkedLogResponse> GetLinkedLogCheckValidateWrongHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrongHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
-        return apiLinkedLogResponses
-            .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
-            .Where(x => x.LinkGroup is LinkedLogApiConstant.GroupIdAio or LinkedLogApiConstant.GroupId1X2)
-            .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => y.BetType == BetTypeConstant.Handicap && oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(y, getLinkedLogModel)))
+        var affectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
+            .Where(x => linkedLogValidationService.IsLinkGroupFullTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAffectedLinkedOddsForWrongHdp(x.LinkedOddsInfoDic, getLinkedLogModel))
+            .OrderBy(x => x.Time);
+
+        var notAffectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsNotAffectedLinkTime(x.Time, getLinkedLogModel.FilterFromTransTime))
+            .Where(x => linkedLogValidationService.IsLinkGroupFullTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAnyLinkedOddsByBetType(x.LinkedOddsInfoDic, BetTypeConstant.Handicap))
             .OrderByDescending(x => x.Time);
+
+        return new GroupLinkedLogResponse
+        {
+            AffectedLog = affectedLog,
+            NotAffectedLog = notAffectedLog
+        };
     }
 
-    private IEnumerable<PoolHouseLinkedLogResponse> GetLinkedLogCheckValidateWrong1StHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrong1stHdp(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
-        return apiLinkedLogResponses
-            .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
-            .Where(x => x.LinkGroup is LinkedLogApiConstant.GroupIdAio or LinkedLogApiConstant.GroupId1H1X2)
-            .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => y.BetType == BetTypeConstant.FirstHalfHandicap && oddsInfoValidationService.IsValidInputHdpForWrongHdp1StHdp(y, getLinkedLogModel)))
+        var affectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
+            .Where(x => linkedLogValidationService.IsLinkGroupHalfTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAffectedLinkedOddsForWrong1stHdp(x.LinkedOddsInfoDic, getLinkedLogModel))
+            .OrderBy(x => x.Time);
+
+        var notAffectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsNotAffectedLinkTime(x.Time, getLinkedLogModel.FilterFromTransTime))
+            .Where(x => linkedLogValidationService.IsLinkGroupHalfTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAnyLinkedOddsByBetType(x.LinkedOddsInfoDic, BetTypeConstant.FirstHalfHandicap))
             .OrderByDescending(x => x.Time);
+
+        return new GroupLinkedLogResponse
+        {
+            AffectedLog = affectedLog,
+            NotAffectedLog = notAffectedLog
+        };
     }
 
-    private IEnumerable<PoolHouseLinkedLogResponse> GetLinkedLogCheckValidateWrongOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrongOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
-        return apiLinkedLogResponses
-            .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
-            .Where(x => x.LinkGroup is LinkedLogApiConstant.GroupIdAio or LinkedLogApiConstant.GroupId1X2)
-            .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => y.BetType == BetTypeConstant.OverUnder && oddsInfoValidationService.IsContainsValue(getLinkedLogModel.WrongMarket, y.Hdp1)))
+        var affectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
+            .Where(x => linkedLogValidationService.IsLinkGroupFullTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAffectedLinkedOddsForWrongOU(x.LinkedOddsInfoDic, getLinkedLogModel))
+            .OrderBy(x => x.Time);
+
+        var notAffectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsNotAffectedLinkTime(x.Time, getLinkedLogModel.FilterFromTransTime))
+            .Where(x => linkedLogValidationService.IsLinkGroupFullTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAnyLinkedOddsByBetType(x.LinkedOddsInfoDic, BetTypeConstant.OverUnder))
             .OrderByDescending(x => x.Time);
+
+        return new GroupLinkedLogResponse
+        {
+            AffectedLog = affectedLog,
+            NotAffectedLog = notAffectedLog
+        };
     }
 
-    private IEnumerable<PoolHouseLinkedLogResponse> GetLinkedLogCheckValidateWrong1StOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrong1stOu(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
-        return apiLinkedLogResponses
-            .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
-            .Where(x => x.LinkGroup is LinkedLogApiConstant.GroupIdAio or LinkedLogApiConstant.GroupId1H1X2)
-            .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => y.BetType == BetTypeConstant.FirstHalfOverUnder && oddsInfoValidationService.IsContainsValue(getLinkedLogModel.WrongMarket, y.Hdp1)))
+        var affectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
+            .Where(x => linkedLogValidationService.IsLinkGroupHalfTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAffectedLinkedOddsForWrong1stOU(x.LinkedOddsInfoDic, getLinkedLogModel))
+            .OrderBy(x => x.Time);
+
+        var notAffectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsNotAffectedLinkTime(x.Time, getLinkedLogModel.FilterFromTransTime))
+            .Where(x => linkedLogValidationService.IsLinkGroupHalfTime(x.LinkGroup))
+            .Where(x => linkedLogValidationService.IsAnyLinkedOddsByBetType(x.LinkedOddsInfoDic, BetTypeConstant.FirstHalfOverUnder))
             .OrderByDescending(x => x.Time);
+
+        return new GroupLinkedLogResponse
+        {
+            AffectedLog = affectedLog,
+            NotAffectedLog = notAffectedLog
+        };
     }
 
-    private IEnumerable<PoolHouseLinkedLogResponse> GetLinkedLogCheckValidateWrongOdds(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
+    internal virtual GroupLinkedLogResponse GetLinkedLogWrongOdds(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogResponse> apiLinkedLogResponses)
     {
-        return apiLinkedLogResponses
-            .Where(x => x.Time <= getLinkedLogModel.FilterToTransTime)
-            .Where(x => oddsInfoValidationService.IsValidLinkGroupWrongOdds(x, getLinkedLogModel))
-            .Where(x => x.LinkedOddsInfoDic.Values
-                .Any(y => oddsInfoValidationService.IsValidBetTypeWrongOdds(y.BetType, getLinkedLogModel)
-                          && oddsInfoValidationService.IsValidHdpWrongOdds(y, getLinkedLogModel)
-                          && oddsInfoValidationService.IsValidOddsWrongOdds(y, getLinkedLogModel)))
+        var affectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsAffectedLinkTime(x.Time, getLinkedLogModel))
+            .Where(x => linkedLogValidationService.IsLinkGroupWrongOdds(x.LinkGroup, getLinkedLogModel.SubIssueTypeId))
+            .Where(x => linkedLogValidationService.IsAffectedLinkedOddsForWrongOdds(x.LinkedOddsInfoDic, getLinkedLogModel))
+            .OrderBy(x => x.Time);
+
+        var notAffectedLog = apiLinkedLogResponses
+            .Where(x => linkedLogValidationService.IsNotAffectedLinkTime(x.Time, getLinkedLogModel.FilterFromTransTime))
+            .Where(x => linkedLogValidationService.IsLinkGroupWrongOdds(x.LinkGroup, getLinkedLogModel.SubIssueTypeId))
+            .Where(x => linkedLogValidationService.IsAnyLinkedOddsByBetTypeForWrongOdds(x.LinkedOddsInfoDic, getLinkedLogModel))
             .OrderByDescending(x => x.Time);
+
+        return new GroupLinkedLogResponse
+        {
+            AffectedLog = affectedLog,
+            NotAffectedLog = notAffectedLog
+        };
     }
 }

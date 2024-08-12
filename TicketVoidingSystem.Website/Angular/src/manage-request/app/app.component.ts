@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { ModalType } from '../../utility/components/modal/modal.model';
 import { AutoRefreshMode } from '../../utility/components/auto-refresh/auto-refresh.model';
+import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { LABELS } from '../../utility/constants/labels';
 import { Selection } from '../../utility/models/selection.model';
@@ -60,7 +60,8 @@ export class AppComponent implements OnInit {
   }
 
   private initDate() {
-    const minDate = moment(new Date()).subtract(6, 'months').toDate();
+    const SIX_MONTHS = 6;
+    const minDate = moment(new Date()).subtract(SIX_MONTHS, 'months').toDate();
     this.minNgbDate = new NgbDate(minDate.getFullYear(), minDate.getMonth() + 1, 1);
   }
 

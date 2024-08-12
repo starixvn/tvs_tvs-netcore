@@ -2,12 +2,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
+import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOddsService } from '../services/event-wrong-odds.service';
@@ -25,40 +28,24 @@ export class LogInfoWrongOddsComponent implements OnInit {
   @Input() filter: FilterModel;
   @Output() searchEvent = new EventEmitter<string>();
   poolHouseTicketsModel = new PoolHouseTicketsModel();
+  liveGameEarlyTicketsModel = new LiveGameEarlyTicketsModel();
 
   constructor(private readonly modalService: ModalService,
     private readonly eventWrongOddsService: EventWrongOddsService,
     private readonly addRequestStore: AddRequestStore,
-    private readonly addRequestApiService: AddRequestApiService
-    ) { }
+    private readonly addRequestApiService: AddRequestApiService,
+    private readonly logAnalysisService: LogAnalysisService
+  ) { }
 
   public ngOnInit(): void {
     if (this.isEdit) {
-      this.primitiveProps.isShowValidation = true;
+      this.logInfo.isShowValidation = true;
     }
   }
 
   public recalculatePoolHouseTicket(model: PoolHouseTicketsModel): void {
     this.logInfo.poolHouseCheckedBetTypes = model.checkedBetTypes;
     this.searchEvent.emit();
-  }
-
-  public async getPoolHouseData(query: GetPoolHouseTicketQuery): Promise<void> {
-    this.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfo.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfo, this.filter);
-    const viewModel = await this.addRequestApiService.getPoolHouseTickets(query);
-    this.addRequestStore.changeBlockingUiStatus(false);
-
-    this.poolHouseTicketsModel.query = query;
-    this.poolHouseTicketsModel.linkedLogsViewModel = this.logInfo.linkedLogsViewModel;
-    this.poolHouseTicketsModel.isAffectedGroup1X2 = viewModel.isAffectedGroup1X2;
-    this.poolHouseTicketsModel.isAffectedGroup1H1X2 = viewModel.isAffectedGroup1H1X2;
-    this.poolHouseTicketsModel.isAffectedGroupAIO = viewModel.isAffectedGroupAIO;
-    this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
-    this.poolHouseTicketsModel.tickets = viewModel.tickets;
-    this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
-    this.poolHouseTicketsModel.isOpen = true;
-    this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
   }
 
   private initGetPoolHouseTicketQuery(): GetPoolHouseTicketQuery {
@@ -74,15 +61,9 @@ export class LogInfoWrongOddsComponent implements OnInit {
     query.filterFromTransTime = this.logInfo.filterWrongOdds.filterFromTransTime;
     query.filterToTransTime = this.logInfo.filterWrongOdds.filterToTransTime;
     query.liveIndicator = this.logInfo.filterWrongOdds.liveIndicator;
-    query.pageIndex = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageIndex : 0;
-    query.pageSize = this.poolHouseTicketsModel.query ? this.poolHouseTicketsModel.query.pageSize : 500;
     query.wrongOddsInfo = [wrongOddsInfo];
 
     return query;
-  }
-
-  public async openPoolHouseDetails(): Promise<void> {
-    await this.getPoolHouseData(this.initGetPoolHouseTicketQuery());
   }
 
   public displayFullDateTimeFormat(time: Date): string {
@@ -108,5 +89,45 @@ export class LogInfoWrongOddsComponent implements OnInit {
 
   public isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  public async openLiveGameEarlyDetails(): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+      const query: LiveGameEarlyTicketsQuery = {
+        liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        issueTypeId: Number(this.filter.issueTypeId)
+      };
+
+      this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
+      this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
+      this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+
+    } else {
+      this.liveGameEarlyTicketsModel.tickets = new TicketsModel();
+    }
+
+    await this.logAnalysisService.writeLogClickLiveGameDetails(this.filter.issueTypeId);
+    this.addRequestStore.changeBlockingUiStatus(false);
+    this.liveGameEarlyTicketsModel.isOpen = true;
+  }
+
+  public async openPoolHouseDetails(): Promise<void> {
+    this.addRequestStore.changeBlockingUiStatus(true);
+    const query = this.initGetPoolHouseTicketQuery();
+    this.logInfo.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfo, this.filter);
+    const viewModel = await this.addRequestApiService.getPoolHouseTickets(query);
+
+    await this.logAnalysisService.writeLogClickPoolHouseDetails(this.filter.issueTypeId);
+    this.addRequestStore.changeBlockingUiStatus(false);
+
+    this.poolHouseTicketsModel.query = query;
+    this.poolHouseTicketsModel.linkedLogsViewModel = this.logInfo.linkedLogsViewModel;
+    this.poolHouseTicketsModel.groupBetTypes = viewModel.groupBetTypes;
+    this.poolHouseTicketsModel.affectedTickets = viewModel.affectedTickets;
+    this.poolHouseTicketsModel.otherTickets = viewModel.otherTickets;
+    this.poolHouseTicketsModel.checkedBetTypes = this.logInfo.poolHouseCheckedBetTypes;
+    this.poolHouseTicketsModel.isOpen = true;
+    this.poolHouseTicketsModel = _.clone(this.poolHouseTicketsModel);
   }
 }

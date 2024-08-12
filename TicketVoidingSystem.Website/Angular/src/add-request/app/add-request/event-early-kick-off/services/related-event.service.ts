@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { MatchType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
@@ -12,7 +13,6 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
-import { MatchModel } from '../../../../../utility/models/match.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,7 @@ export class RelatedEventService {
   updateEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
     const newEvents = models
       .map(x => {
-        var matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
+        const matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
         return  {
           matchId: x.matchId,
           matchCode: x.matchCode,

@@ -11,7 +11,7 @@ import { TreeViewComponent } from './tree-view/tree-view.component';
 })
 
 export class MultipleSelectionComponent implements OnInit, OnChanges {
-  @Input() selectedItems: string[];
+  @Input() selectedItems: string[] = [];
   @Input() multipleSelect = new MultipleSelection();
   @Input() isDisabled: boolean;
   @Output() loseFocus = new EventEmitter();

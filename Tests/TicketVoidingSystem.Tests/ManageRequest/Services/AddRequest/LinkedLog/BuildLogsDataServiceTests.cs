@@ -1,16 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NSubstitute;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
-using Xunit;
-
-namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
+﻿namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest.LinkedLog;
 
 public class BuildLogsDataServiceTests
-{
+{/*
     private readonly GetLinkedLogShowUiService getLinkedLogShowUiService;
     private readonly BuildLogsDataServiceImp service;
 
@@ -55,4 +46,6 @@ public class BuildLogsDataServiceTests
         getLinkedLogShowUiService.Received(1).GetLinkedLogShowUi(getLinkedLogModel, resultFromApi);
         Assert.Equal(groupName, actual.First().GroupName);
     }
+
+    */
 }

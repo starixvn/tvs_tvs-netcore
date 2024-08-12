@@ -22,15 +22,15 @@ class Helper {
     isLinkGroup1X2: true,
     isLinkGroupAIO: true,
     result: new Result(),
-    poolHouseLinkedLogsData: [
+    groupLinkedLogs: [
       {
         groupName: '1X2',
-        isShow: true,
+        isAffectedGroup: true,
         logsData: []
       },
       {
         groupName: 'AIO',
-        isShow: true,
+        isAffectedGroup: true,
         logsData: []
       },
     ]
@@ -84,7 +84,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
 }
 

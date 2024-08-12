@@ -3,6 +3,7 @@ import { Guid } from 'guid-typescript';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { AffectedLicensee } from '../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { MessagesResult } from '../../utility/components/messages-result/messages-result';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
@@ -29,7 +30,6 @@ import { Modal } from './modal/modal.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { GroupModel } from './tickets/group.model';
 import { TicketsModel } from './tickets/tickets.model';
-import { AffectedLicensee } from '../../utility/components/licensee-affected-list/licensee-affected-list.model';
 
 @Component({
   selector: 'app-root',

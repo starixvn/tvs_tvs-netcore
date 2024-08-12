@@ -26,35 +26,35 @@
           [isDisabled]="isDisabled"
           (searchTicketEvent)="emitSearchEvent()"
           (refreshEvent)="refreshLogInfoBySearchEvent()"
-          (changeFilterEvent)="clearDataValidation();hideValidationDetail()"
+          (changeFilterEvent)="clearDataValidation();"
           [subIssueTypeId]="filter.subIssueTypeId"
           [isMainMatch]="isMainMatch"
           [filterWithHdpModel]="logInfo.filterWithHdp">
         </filter-with-hdp>
 
-        <div *ngIf="isShowValidation"><hr class="mt-2 mb-2">
+        <div *ngIf="logInfo.isShowValidation"><hr class="mt-2 mb-2">
           <ng-container *ngIf="logInfo.logInfoDetail">
             <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
             Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
             LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
             <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, 0)" class="text-red"
             [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, 0) | sanitizeHtml">
-            </span><br />
+            </span>&nbsp;
+            <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
           </ng-container>
 
           <ng-container *ngIf="isMainMatch">
-            <div *ngIf="logInfo.isPoolHouseAffected && logInfo.logInfoDetail">
+            <div *ngIf="logInfo.logInfoDetail">
               PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
               <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)" class="text-red"
               [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
               </span>,
               Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-              <span *ngIf="!filter.isVoided" class="pool-house-info" (click)="openPoolHouseDetails()">Details</span>
+              <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
             </div>
-            <div *ngIf="!logInfo.isPoolHouseAffected">
-              PH - Not affected.
-              <span *ngIf="!filter.isVoided" class="pool-house-info" (click)="openPoolHouseDetails()">Details</span>
-            </div>
+   
+            <span *ngIf="!logInfo.logInfoDetail && !filter.isVoided" class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
+      
             <div *ngIf="logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful" class="warning-text d-flex align-items-center">
               <i class="fa fa-exclamation-triangle icon-warning-message mr-1" aria-hidden="true"></i>Cannot get link log, please search again.
             </div>
@@ -81,6 +81,9 @@
 
 <pool-house-tickets
   [model]="poolHouseTicketsModel"
-  (saveEventOuput)="recalculatePoolHouseTicket($event)"
-  (pagingEventOuput)="getPoolHouseData($event)">
+  (saveEventOuput)="recalculatePoolHouseTicket($event)">
 </pool-house-tickets>
+
+<affected-ticket
+  [model]="liveGameEarlyTicketsModel">
+</affected-ticket>

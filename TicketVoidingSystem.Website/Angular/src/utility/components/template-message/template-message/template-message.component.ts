@@ -9,7 +9,7 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
 import { MessagesComponent } from './../messages/messages.component';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
-import { Format, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace } from './template.const';
+import { FormatDateTime, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace } from './template.const';
 import { InputText, TemplateContent, TemplateModel, TemplateValue } from './template.model';
 import { TemplateService } from './template.service';
 
@@ -232,7 +232,7 @@ export class TemplateMessageComponent implements OnChanges {
     const isSpecialIssueType = issueTypes.includes(this.issueTypeId) ||
       (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId));
 
-    const isDateMismatched = this.value.eventDate !== moment.utc().tz('America/Caracas').format(Format.EVENT_DATE);
+    const isDateMismatched = this.value.eventDate !== moment.utc().tz('America/Caracas').format(FormatDateTime.EVENT_DATE);
 
     if (isSpecialIssueType && isDateMismatched) {
       return false;

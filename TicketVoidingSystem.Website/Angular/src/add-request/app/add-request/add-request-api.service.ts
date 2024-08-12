@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BetTeamAddRequest } from '../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model';
-import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../../utility/components/pool-house-ticket/pool-house-ticket.model';
 import { Result } from '../../../utility/models/result';
 import { HttpService } from '../../../utility/services/http.service';
 import { AddRequestQuery } from '../add-request/models/add-request.query';
@@ -20,10 +18,14 @@ import { CheckRecoverTicketQuery } from './event-recover-ticket/models/check-rec
 import { ReducedOverBetType } from './event-reduced-over/models/bet-type-reduced-over-json.model';
 import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query';
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
+import { MaxBetAndSpreadInfo, MaxBetAndSpreadQuery } from './event-wrong-odds/models/filter-wrong-odds.model';
 import { GetChildMatchQuery } from './models/get-child-match.query';
+import { LiveGameEarlyTicketsQuery } from './models/live-game-early-ticket.model';
 import { PermissionAddRequest } from './models/permission-add-request.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
-import { MaxBetAndSpreadQuery, MaxBetAndSpreadInfo } from './event-wrong-odds/models/filter-wrong-odds.model';
+import { GetLinkedLogQuery, LinkedLogsViewModel } from './pool-house-ticket/linked-log/linked-log.model';
+import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from './pool-house-ticket/pool-house-ticket.model';
+import { TicketsModel } from './pool-house-ticket/tickets/tickets.model';
 
 @Injectable({
   providedIn: 'root'
@@ -149,5 +151,10 @@ export class AddRequestApiService {
   /* istanbul ignore next */
   async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
     return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
+  }
+
+  /* istanbul ignore next */
+  async GetLiveGameEarlyTickets(query: LiveGameEarlyTicketsQuery): Promise<TicketsModel> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetLiveGameEarlyTickets');
   }
 }

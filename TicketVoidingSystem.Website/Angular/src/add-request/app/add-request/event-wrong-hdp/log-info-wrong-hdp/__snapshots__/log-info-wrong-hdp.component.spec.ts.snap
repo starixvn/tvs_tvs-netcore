@@ -52,6 +52,7 @@ exports[`LogInfoWrongHdpComponent LogInfoWrongHdpComponent init should match sna
       </div>
     </div>
     <pool-house-tickets />
+    <affected-ticket />
   </log-info-wrong-hdp>
 </ng-component>
 `;

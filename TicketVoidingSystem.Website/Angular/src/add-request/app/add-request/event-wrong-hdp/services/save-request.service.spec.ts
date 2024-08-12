@@ -31,7 +31,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeWrongHdpModel: WrongHdpModel = {
     matchId: 122,
@@ -61,7 +62,7 @@ class Helper {
     others: new OthersModel,
     primitiveProps: new PrimitiveProperty,
     allEvents: [],
-    leagueEventWrongHdpComponent: undefined,
+    eventLeagueComponent: undefined,
     logInfoComponents: [],
     addRequestStore: new AddRequestStore,
     mainEvent: new LogInfoWrongHdp()
@@ -88,7 +89,6 @@ describe('SaveRequestService', () => {
   it('#recheckLogInfoBeforeSaveRequest should return false when does not pass validation', async () => {
     logInfoService.resetLogInfoOfEvent = jest.fn();
     const logInfoComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
-    logInfoComponent.hideValidationDetail = jest.fn().mockReturnValue(true);
     const arg = Helper.fakeSaveRequestArg;
     arg.logInfoComponents = [logInfoComponent];
     validationService.validateCommonData = jest.fn().mockReturnValue(false);
@@ -116,7 +116,6 @@ describe('SaveRequestService', () => {
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
 
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
-    logInfoWrongHdpComponent.showValidationDetail = jest.fn();
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponent];
     const eventWrongHdpService = new EventWrongHdpService(null, null);
     eventWrongHdpService.getLinkedLog = jest.fn();
@@ -147,7 +146,6 @@ describe('SaveRequestService', () => {
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
 
     const logInfoWrongHdpComponent = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
-    logInfoWrongHdpComponent.showValidationDetail = jest.fn();
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponent];
     const eventWrongHdpService = new EventWrongHdpService(null, null);
     eventWrongHdpService.getLinkedLog = jest.fn();

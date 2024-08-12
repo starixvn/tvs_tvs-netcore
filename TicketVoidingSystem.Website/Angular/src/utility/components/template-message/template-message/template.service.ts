@@ -5,7 +5,7 @@ import { EventType } from '../../../../utility/constants/sport.constant';
 import { SubIssueTypeConstant } from '../../../../utility/constants/sub-issue-type.constant';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { Message } from './../messages/message';
-import { Format, MessageTemplateId, TemplateContentConst, TemplateReplace } from './template.const';
+import { FormatDateTime, MessageTemplateId, TemplateContentConst, TemplateReplace } from './template.const';
 import { TemplateContent, TemplateValue } from './template.model';
 
 const NUMBER_FIVE = 5;
@@ -49,7 +49,7 @@ export class TemplateService {
         msgChineseSimplified: match.leagueNameSimplified,
         msgChineseNewSimplified: match.leagueNameNewSimplified
       },
-      eventDate: moment(new Date(match.eventDate)).format(Format.EVENT_DATE),
+      eventDate: moment(new Date(match.eventDate)).format(FormatDateTime.EVENT_DATE),
       sportTypeId: match.sportType,
       matchId: match.matchId,
       match: match,
@@ -86,13 +86,13 @@ export class TemplateService {
   replaceEventDate(message: Message, value: string) {
     let kickOffTimeDateGMT8 = new Date(value);
     kickOffTimeDateGMT8.setHours(kickOffTimeDateGMT8.getHours() - 12);
-    let eventDate = moment(kickOffTimeDateGMT8).format(Format.EVENT_DATE);
+    let eventDate = moment(kickOffTimeDateGMT8).format(FormatDateTime.EVENT_DATE);
     this.replaceAll(message, TemplateReplace.EVENT_DATE, eventDate);
   }
 
   replaceKickOffTime(message: Message, time: string) {
     const dateKickOffTime = new Date(time);
-    const kickOffTime = moment(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(TemplateContentConst.DATE_TIME);
+    const kickOffTime = moment(dateKickOffTime.setSeconds(dateKickOffTime.getSeconds() - 1)).format(FormatDateTime.DATE_TIME);
     const replacedContent: TemplateContent = {
       msgEnglish: `${kickOffTime} ${TemplateContentConst.GMT_8.msgEnglish}`,
       msgChineseTraditional: `${kickOffTime} ${TemplateContentConst.GMT_8.msgChineseTraditional}`,
@@ -104,10 +104,10 @@ export class TemplateService {
 
   replaceTime(message: Message, value: TemplateValue, messageTemplateId: number) {
     const isTheSameDay = moment(new Date(value.fromTransTime)).format('DD/MM') === moment(new Date(value.toTransTime)).format('DD/MM');
-    const fromTime = moment(new Date(value.fromTransTime)).format(TemplateContentConst.DATE_TIME);
+    const fromTime = moment(new Date(value.fromTransTime)).format(FormatDateTime.DATE_TIME);
     const toTime = isTheSameDay ?
-      moment(new Date(value.toTransTime)).format(Format.TIME)
-      : moment(new Date(value.toTransTime)).format(TemplateContentConst.DATE_TIME);
+      moment(new Date(value.toTransTime)).format(FormatDateTime.TIME)
+      : moment(new Date(value.toTransTime)).format(FormatDateTime.DATE_TIME);
 
     const timeRange = `${fromTime} - ${toTime} `;
     this.replacePlacedFromTimeRange(message, value, timeRange, messageTemplateId);

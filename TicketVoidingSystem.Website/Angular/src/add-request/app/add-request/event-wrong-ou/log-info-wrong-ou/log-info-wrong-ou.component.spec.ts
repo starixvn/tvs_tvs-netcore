@@ -7,8 +7,6 @@ import { BlockUiModule } from '../../../../../utility/components/block-ui/block-
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
-import { PoolHouseTicketModule } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.module';
 import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { PipeModule } from '../../../../../utility/pipes/pipe.module';
@@ -22,7 +20,7 @@ import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
-import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
+import { PoolHouseTicketsModel, GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../../pool-house-ticket/pool-house-ticket.model';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -59,7 +57,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
@@ -84,9 +83,7 @@ describe('LogInfoWrongOuComponent', () => {
       FormsModule,
       ToolTipModule,
       BlockUiModule,
-      PipeModule,
-      PoolHouseTicketModule
-    ],
+      PipeModule    ],
     providers: [
       ValidationService,
       LogInfoService,
@@ -103,73 +100,6 @@ describe('LogInfoWrongOuComponent', () => {
     shallow = new Shallow(LogInfoWrongOuComponent, AppModuleTest)
       .mock(ElementRef, {})
       .dontMock(NgbModule);
-  });
-
-  it('#ngOnInit should update isShowValidation True when edit is True', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOu,
-        isEdit: true
-      }
-    });
-
-    instance.ngOnInit();
-
-    expect(instance.isShowValidation ).toBeTruthy();
-  });
-
-  it('initGetPoolHouseTicketQuery should update homeFavorite & awayFavorite', async () => {
-    const fakeLogInfoWrongOu = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    fakeLogInfoWrongOu.linkedLogsViewModel = new LinkedLogsViewModel();
-
-    let fakeQuery: GetPoolHouseTicketQuery = {
-      matchId: 0,
-      actionId: 0,
-      requestId: 0,
-      issueTypeId: 0,
-      subIssueTypeId: 0,
-      homeFavorite: '',
-      awayFavorite: '',
-      hdpValue: '',
-      wrongMarket: '',
-      isLinkGroup1X2: false,
-      isLinkGroupAIO: false,
-      filterFromTransTime: '',
-      filterToTransTime: '',
-      liveIndicator: 0,
-      pageIndex: 1,
-      pageSize: 1,
-      wrongOddsInfo: []
-    };
-
-    let fakePoolHouseTicketsModel: PoolHouseTicketsModel = {
-      isOpen: false,
-      checkedBetTypes: '',
-      query: fakeQuery,
-      groupBetTypes: [],
-      tickets: new TicketsModel(),
-      isAffectedGroup1X2: false,
-      isAffectedGroup1H1X2: false,
-      isAffectedGroupAIO: false,
-      linkedLogsViewModel: new LinkedLogsViewModel
-    };
-
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongOu
-      }
-    });
-    instance.poolHouseTicketsModel = fakePoolHouseTicketsModel;
-
-    const actual = instance['initGetPoolHouseTicketQuery']();
-
-    expect(actual.pageIndex ).toBe(1);
-    expect(actual.pageSize ).toBe(1);
   });
 
   it('LogInfoWrongOuComponent init should match snapshot', async () => {
@@ -269,20 +199,6 @@ describe('LogInfoWrongOuComponent', () => {
 
     expect(instance.logInfo.logInfoDetail).toBeNull();
     expect(instance.logInfo.messageValidationLogInfo ).toBeNull();
-  });
-
-  it('showValidationDetail should update isShowValidation true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongOu
-      }
-    });
-    instance.showValidationDetail();
-
-    expect(instance.isShowValidation).toBeTruthy();
   });
 
   it('emitSearchEvent should emit searchTicketEvent', async () => {
@@ -489,24 +405,5 @@ describe('LogInfoWrongOuComponent', () => {
     instance.recalculatePoolHouseTicket(new PoolHouseTicketsModel());
 
     expect(instance.refreshLogInfoByPoolHouseEvent).toHaveBeenCalledTimes(1);
-  });
-
-  it('openPoolHouseDetails should call #getPoolHouseData', async () => {
-    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongOu);
-    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongHdp
-      }
-    });
-    instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-    instance.getPoolHouseData = jest.fn();
-
-    await instance.openPoolHouseDetails();
-
-    expect(instance.getPoolHouseData).toHaveBeenCalledTimes(1);
   });
 });

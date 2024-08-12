@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
-import { IssueType, SubIssueType } from 'src/utility/models/issue-type.model';
+import { IssueType, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { BlockUiModule } from '../../../../utility/components/block-ui/block-ui.module';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { ModalService } from '../../../../utility/components/modal/modal.service';

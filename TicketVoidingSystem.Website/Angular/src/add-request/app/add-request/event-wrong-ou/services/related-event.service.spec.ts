@@ -79,7 +79,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
 }
 

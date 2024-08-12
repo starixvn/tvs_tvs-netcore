@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
+import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../utility/constants/config';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { LeagueEventAbnormalComponent } from '../event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
@@ -120,7 +120,7 @@ export class EventDuplicateTicketsComponent implements OnInit {
 
   private createDuplicateTicketsModel(): DuplicateTicketsModel {
     const model = new DuplicateTicketsModel();
-    model.matchId = this.validationService.isFilterMixParlay(this.duplicateTicketsModel.filterBy) ? 29 : this.leagueEventComponent.selectedMatchId;
+    model.matchId = this.validationService.isFilterMixParlay(this.duplicateTicketsModel.filterBy) ? MatchIdConstant.Parlay : this.leagueEventComponent.selectedMatchId;
     model.transIds = this.betIdsComponent.getAllBetIds();
     model.subIssueTypeId = Number(this.filter.subIssueTypeId);
     model.filterBy = this.duplicateTicketsModel.filterBy;

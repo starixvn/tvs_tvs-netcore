@@ -1,8 +1,9 @@
 ﻿import { TemplateContent } from './template.model';
 
-export class Format {
+export class FormatDateTime {
   static readonly EVENT_DATE = 'D/M';
   static readonly TIME = 'h:mm:ss A';
+  static readonly DATE_TIME = 'D/M h:mm:ss A';
 }
 
 export class VoidFunction {
@@ -140,8 +141,6 @@ export class TemplateContentConst {
     msgChineseSimplified: '(北京时间)',
     msgChineseNewSimplified: '(北京时间)'
   };
-
-  static readonly DATE_TIME = 'D/M h:mm:ss A';
 
   static readonly ONWARDS: TemplateContent = {
     msgEnglish: 'onwards',

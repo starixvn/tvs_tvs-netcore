@@ -20,24 +20,26 @@ export class LogInfoService {
 
   async getLogInfo(primitiveProperty: PrimitiveProperty, detailViewModel: RequestDetailViewModel): Promise<void> {
     const args = this.createLogInfoArg(primitiveProperty, detailViewModel);
-    if (this.validationService.isRedCard(detailViewModel)) {
-      await this.getLogInfoRedCard(args);
-    } else if (this.validationService.isWrongScore(detailViewModel)) {
-      await this.getLogInfoWrongScore(args);
-    } else if (this.validationService.isDangerAccepted(detailViewModel)) {
-      await this.getLogInfoDangerAccepted(args);
-    } else if (this.validationService.isWrongHdp(detailViewModel) || this.validationService.isWrong1stHdp(detailViewModel)) {
-      await this.getLogInfoWrongHdp(args);
-    } else if (this.validationService.isWrongOu(detailViewModel) || this.validationService.isWrong1stOu(detailViewModel)) {
-      await this.getLogInfoWrongOu(args);
-    } else if (this.validationService.isWrongOdds(detailViewModel)) {
-      await this.getLogInfoWrongOdds(args);
-    } else if (this.validationService.isReducedOver(detailViewModel) || this.validationService.isAbandoned(detailViewModel)) {
-      await this.getLogInfoReducedOver(args);
-    } else if (this.validationService.isNotParticipate(detailViewModel)) {
-      await this.getLogInfoNotParticipate(args);
-    } else if (this.validationService.isLikelyWrongMarketOffered(detailViewModel)) {
-      await this.getLogInfoWrongMarketOffered(args);
+    const logInfoHandlers = [
+      { check: this.validationService.isRedCard, handler: this.getLogInfoRedCard },
+      { check: this.validationService.isWrongScore, handler: this.getLogInfoWrongScore },
+      { check: this.validationService.isDangerAccepted, handler: this.getLogInfoDangerAccepted },
+      { check: this.validationService.isWrongHdp, handler: this.getLogInfoWrongHdp },
+      { check: this.validationService.isWrong1stHdp, handler: this.getLogInfoWrongHdp },
+      { check: this.validationService.isWrongOu, handler: this.getLogInfoWrongOu },
+      { check: this.validationService.isWrong1stOu, handler: this.getLogInfoWrongOu },
+      { check: this.validationService.isWrongOdds, handler: this.getLogInfoWrongOdds },
+      { check: this.validationService.isReducedOver, handler: this.getLogInfoReducedOver },
+      { check: this.validationService.isAbandoned, handler: this.getLogInfoReducedOver },
+      { check: this.validationService.isNotParticipate, handler: this.getLogInfoNotParticipate },
+      { check: this.validationService.isLikelyWrongMarketOffered, handler: this.getLogInfoWrongMarketOffered },
+    ];
+
+    for (const { check, handler } of logInfoHandlers) {
+      if (check(detailViewModel)) {
+        await handler.call(this, args);
+        break; // Exit loop after handling the first valid case
+      }
     }
   }
 

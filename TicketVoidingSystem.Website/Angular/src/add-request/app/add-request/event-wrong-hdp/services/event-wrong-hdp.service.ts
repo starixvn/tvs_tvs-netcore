@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import moment from 'moment-timezone';
-import { GetLinkedLogQuery, LinkedLogsViewModel } from "../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model";
-import { DateTimeFormat, PoolHouseTicketValue } from "../../../../../utility/constants/config";
+import { DateTimeFormat } from "../../../../../utility/constants/config";
 import { AddRequestApiService } from "../../add-request-api.service";
 import { FilterModel } from "../../filter/filter.model";
 import { WrongHdpModel } from "../../models/event-wrong-hdp.model";
+import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 import { FilterWithHdpModel } from "../models/filter-with-hdp.model";
 import { WrongHdpGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongHdp } from "../models/log-info-wrong-hdp.model";

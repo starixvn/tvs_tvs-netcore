@@ -312,11 +312,6 @@ export class FunctionConst {
   static readonly TVS_ADD_PAGE = 4;
 }
 
-export class PoolHouseTicketValue {
-  static readonly SELECT_ALL_BETTYPE = 'All';
-  static readonly NOT_AFFECTED = '-1';
-}
-
 export class SiteDbGroupConstant {
   static readonly CentralDb = 0;
   static readonly SiteDb1 = 1;
@@ -450,12 +445,32 @@ export class ActionVoidByIssueTypeConst {
 
 export class AllowanceRate {
   static readonly Twenty = '20';
-  static readonly Twenty_Five = '25';
+  static readonly TwentyFive = '25';
   static readonly Thirty = '30';
   
   static readonly ALLOWANCE_RATE: Selection[] = [
     { value: AllowanceRate.Twenty, name: '20' },
-    { value: AllowanceRate.Twenty_Five, name: '25' },
+    { value: AllowanceRate.TwentyFive, name: '25' },
     { value: AllowanceRate.Thirty, name: '30' }
+  ];
+}
+
+export enum MatchIdConstant {
+  Parlay = 29
+}
+
+export class ErrorCodeLockMatch {
+  static readonly ONE_MILLION = 1000000;
+  static readonly ONE_HUNDRED = 100;
+  static readonly ONE_HUNDRED_ONE = 101;
+  static readonly ONE_HUNDRED_THREE = 103;
+  static readonly ONE_HUNDRED_TWO = 102;
+
+  static readonly ALL_ITEMS: number[] = [
+    ErrorCodeLockMatch.ONE_MILLION,
+    ErrorCodeLockMatch.ONE_HUNDRED,
+    ErrorCodeLockMatch.ONE_HUNDRED_ONE,
+    ErrorCodeLockMatch.ONE_HUNDRED_THREE,
+    ErrorCodeLockMatch.ONE_HUNDRED_TWO
   ];
 }

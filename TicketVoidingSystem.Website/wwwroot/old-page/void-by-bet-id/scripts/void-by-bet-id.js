@@ -395,7 +395,7 @@ var VoidByBetId = {
         VoidByBetId.messageTemplateData = {};
         VoidByBetId.checkSettledTickets();
         $.each(VoidByBetId.messageTemplate, function (index, value) {
-            if (index !== 'jsonValue' && index !== 'templateId') {
+            if (index !== 'jsonValue' && index !== 'templateId' && index !== 'inputTexts') {
                 if (VoidByBetId.matchId != "0") {
                     value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{Home team name}}', 'homeTeamName');
                     value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{Away team name}}', 'awayTeamName');

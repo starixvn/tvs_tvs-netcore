@@ -1,5 +1,4 @@
-﻿using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Models;
+﻿using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 
@@ -7,45 +6,45 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 
 public interface GetLinkedLogService
 {
-    IEnumerable<PoolHouseLinkedLogData> GetDefaultLogData(GetLinkedLogModel getLinkedLogModel);
+    Task<LinkedLogDataViewModel> GetLinkedLogWhenSuccess(GetLinkedLogModel getLinkedLogModel);
 
-    Task<LinkedLogDataViewModel> GetLinkedLogWhenSuccess(GetLinkedLogModel getLinkedLogModel,
-        IEnumerable<PoolHouseLinkedLogData> defaultLogData);
-
-    Task<LinkedLogDataViewModel> GetLinkedLogWhenError(Exception exception,
-        IEnumerable<PoolHouseLinkedLogData> defaultLogData);
+    Task<LinkedLogDataViewModel> GetLinkedLogWhenError(Exception exception);
 }
 
 public class GetLinkedLogServiceImp : GetLinkedLogService
 {
     private readonly LoggingService loggingService;
-    private readonly LinkedLogApiService linkedLogApiService;
+    private readonly LinkedLogHttpClientService linkedLogHttpClientService;
+    private readonly FilterLinkedLogService filterLinkedLogService;
     private readonly LinkGroupBettypeService linkGroupBettypeService;
-    private readonly BuildLogsDataService buildLogsDataService;
+    private readonly LinkedLogForUIService linkedLogForUIService;
 
     public GetLinkedLogServiceImp(LoggingService loggingService,
-        LinkedLogApiService linkedLogApiService,
+        LinkedLogHttpClientService linkedLogHttpClientService,
+        FilterLinkedLogService filterLinkedLogService,
         LinkGroupBettypeService linkGroupBettypeService,
-        BuildLogsDataService buildLogsDataService
+        LinkedLogForUIService linkedLogForUIService
     )
     {
         this.loggingService = loggingService;
-        this.linkedLogApiService = linkedLogApiService;
+        this.linkedLogHttpClientService = linkedLogHttpClientService;
+        this.filterLinkedLogService = filterLinkedLogService;
         this.linkGroupBettypeService = linkGroupBettypeService;
-        this.buildLogsDataService = buildLogsDataService;
+        this.linkedLogForUIService = linkedLogForUIService;
     }
 
-    public async Task<LinkedLogDataViewModel> GetLinkedLogWhenSuccess(GetLinkedLogModel getLinkedLogModel, IEnumerable<PoolHouseLinkedLogData> defaultLogData)
+    public async Task<LinkedLogDataViewModel> GetLinkedLogWhenSuccess(GetLinkedLogModel getLinkedLogModel)
     {
-        var resultFromApi = await linkedLogApiService.GetLinkedLog(getLinkedLogModel);
-        var linkGroupBettypeValidation = linkGroupBettypeService.CheckAffectedToGroup(getLinkedLogModel, resultFromApi);
-        var groupPoolHouseLinkedLog = buildLogsDataService.GenerateGroupPoolHouseLinkedLog(resultFromApi, getLinkedLogModel);
+        var responseFromApi = await linkedLogHttpClientService.GetLinkedLog(getLinkedLogModel.MatchId, getLinkedLogModel.LiveIndicator);
+        var groupLinkedLogResponse = filterLinkedLogService.GroupBy(getLinkedLogModel, responseFromApi);
+        var (isLinkGroup1X2, isLinkGroupAIO) = linkGroupBettypeService.CheckAffectedToGroup(getLinkedLogModel, groupLinkedLogResponse.AffectedLog);
+        var groupLinkedLogs = linkedLogForUIService.Build(groupLinkedLogResponse, getLinkedLogModel.IssueTypeId, getLinkedLogModel.SubIssueTypeId);
 
         return new LinkedLogDataViewModel
         {
-            PoolHouseLinkedLogsData = groupPoolHouseLinkedLog.Any() ? groupPoolHouseLinkedLog : defaultLogData,
-            IsLinkGroup1X2 = linkGroupBettypeValidation.IsLinkGroup1X2,
-            IsLinkGroupAIO = linkGroupBettypeValidation.IsLinkGroupAIO,
+            GroupLinkedLogs = groupLinkedLogs,
+            IsLinkGroup1X2 = isLinkGroup1X2,
+            IsLinkGroupAIO = isLinkGroupAIO,
             Result = new Result
             {
                 ErrorCode = 0,
@@ -54,41 +53,16 @@ public class GetLinkedLogServiceImp : GetLinkedLogService
         };
     }
 
-    public async Task<LinkedLogDataViewModel> GetLinkedLogWhenError(Exception exception, IEnumerable<PoolHouseLinkedLogData> defaultLogData)
+    public async Task<LinkedLogDataViewModel> GetLinkedLogWhenError(Exception exception)
     {
         await loggingService.ErrorAsync("TicketVoidingSystem.ManageRequest.Services.LinkedLog.CallGetLinkedLog", exception);
         return new LinkedLogDataViewModel
         {
-            PoolHouseLinkedLogsData = defaultLogData,
             Result = new Result
             {
                 ErrorCode = 1,
                 ErrorMsg = "Cannot get link log"
             }
-        };
-    }
-
-    public IEnumerable<PoolHouseLinkedLogData> GetDefaultLogData(GetLinkedLogModel getLinkedLogModel)
-    {
-        return new List<PoolHouseLinkedLogData>
-            {
-                new() { GroupName = GetGroupNameDefaultLogData(getLinkedLogModel) },
-                new() { GroupName = "AIO" }
-            };
-    }
-
-    private static string GetGroupNameDefaultLogData(GetLinkedLogModel getLinkedLogModel)
-    {
-        return getLinkedLogModel.IssueTypeId switch
-        {
-            IssueTypeConstant.WrongHDP => "1X2",
-            IssueTypeConstant.WrongOU => "1X2",
-            IssueTypeConstant.Wrong1stHDP => "1H 1X2",
-            IssueTypeConstant.Wrong1stOU => "1H 1X2",
-            IssueTypeConstant.WrongOdds => getLinkedLogModel.SubIssueTypeId is SubIssueTypeConstant.Handicap or SubIssueTypeConstant.OverUnder
-                ? "1X2"
-                : "1H 1X2",
-            _ => string.Empty
         };
     }
 }

@@ -11,7 +11,7 @@ exports[`EventWrongHdpComponent EventWrongHdpComponent init should match snapsho
       <div
         class="mb-3"
       >
-        <league-event-red-card />
+        <event-league />
       </div>
       <add-child-match />
       <tooltip />

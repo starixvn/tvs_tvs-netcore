@@ -30,15 +30,15 @@ class Helper {
     isLinkGroup1X2: true,
     isLinkGroupAIO: true,
     result: new Result(),
-    poolHouseLinkedLogsData: [
+    groupLinkedLogs: [
       {
         groupName: '1X2',
-        isShow: true,
+        isAffectedGroup: true,
         logsData: []
       },
       {
         groupName: 'AIO',
-        isShow: true,
+        isAffectedGroup: true,
         logsData: []
       },
     ]
@@ -94,7 +94,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeGetLogInfoModel: GetLogInfoModel = {
     matchId: Helper.fakeMatchId,
@@ -124,6 +125,7 @@ describe('SaveRequestService', () => {
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
     saveRequestArg.primitiveProps = new PrimitiveProperty();
+    saveRequestArg.logInfoEvent = new LogInfoWrongOdds();
     const logInfoService = new LogInfoService(null, null);
     logInfoService.resetLogInfoOfEvent = jest.fn();
     const validationService = new ValidationService();

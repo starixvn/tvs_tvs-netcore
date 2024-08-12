@@ -15,9 +15,9 @@ import { ModalModule } from '../../../utility/components/modal/modal.module';
 import { MultipleSelectionModule } from '../../../utility/components/multiple-selection/multiple-selection.module';
 import { NgSelectMixtureModule } from '../../../utility/components/ng-select-mixture/ng-select-mixture.module';
 import { PagingModule } from '../../../utility/components/paging/paging.module';
+import { TemplateMessageModule } from "../../../utility/components/template-message/template-message.module";
 import { PipeModule } from '../../../utility/pipes/pipe.module';
 import { UtilityModule } from '../../../utility/utility.module';
-import { PoolHouseTicketModule } from './../../../utility/components/pool-house-ticket/pool-house-ticket.module';
 import { ToolTipModule } from './../../../utility/components/tooltip/tooltip.module';
 import { AbnormalAccountOtherComponent } from './abnormal-accounts/abnormal-accounts-other/abnormal-accounts-other.component';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
@@ -26,6 +26,7 @@ import { ConfirmAbnormalAccountComponent } from './abnormal-accounts/confirm-abn
 import { EventDateFilterComponent } from './abnormal-accounts/event-date-filter/event-date-filter.component';
 import { ProductFilterComponent } from './abnormal-accounts/product-filter/product-filter.component';
 import { AddRequestComponent } from './add-request.component';
+import { AffectedTicketComponent } from './affected-ticket/affected-ticket.component';
 import { ConfirmAbnormalBetComponent } from './event-abnormal-bet/confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { EventAbnormalBetComponent } from './event-abnormal-bet/event-abnormal-bet.component';
 import { LeagueEventAbnormalComponent } from './event-abnormal-bet/league-event-abnormal/league-event-abnormal.component';
@@ -76,7 +77,10 @@ import { FilterService } from './filter/filter.service';
 import { SubIssueTypeDialogComponent } from './filter/sub-issue-type-dialog/sub-issue-type-dialog.component';
 import { OthersComponent } from './others/others.component';
 import { OthersService } from './others/others.service';
-import { TemplateMessageModule } from "../../../utility/components/template-message/template-message.module";
+import { GroupBettypesPoolHouseComponent } from './pool-house-ticket/group-bettypes-pool-house/group-bettypes-pool-house.component';
+import { LinkedLogComponent } from './pool-house-ticket/linked-log/linked-log.component';
+import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.component';
+import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
 
 @NgModule({
     declarations: [
@@ -135,7 +139,12 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         EventRecoverTicketComponent,
         EventWrongMarketOfferedComponent,
         FilterTimeComponent,
-        LogInfoWrongMarketOfferedComponent
+        LogInfoWrongMarketOfferedComponent,
+        AffectedTicketComponent,
+        PoolHouseTicketComponent,
+        GroupBettypesPoolHouseComponent,
+        TicketsComponent,
+        LinkedLogComponent,
     ],
     exports: [
         AddRequestComponent
@@ -161,7 +170,6 @@ import { TemplateMessageModule } from "../../../utility/components/template-mess
         PipeModule,
         FormsModule,
         BlockFullUiModule,
-        PoolHouseTicketModule,
         NgbCollapseModule,
         NgSelectMixtureModule,
         MultipleSelectionModule,

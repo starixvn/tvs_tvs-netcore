@@ -49,7 +49,6 @@ public class GetPoolHouseTicketServiceTests
     public void GetTicketsViewModel_NoHasAfterPagingTickets_ReturnEmptyGroups()
     {
         // Arrange
-        var afterPagingTickets = new List<GetTicketModel>();
         var originTickets = new List<GetTicketModel> { new() };
         var request = new GetPoolHouseTicketRequest();
         var expected = new TicketsViewModel
@@ -58,7 +57,6 @@ public class GetPoolHouseTicketServiceTests
             TotalParlay = 0,
             Groups = Enumerable.Empty<Group<TicketViewModel>>()
         };
-        pagingService.Paging(originTickets, request.PageIndex, request.PageSize).ReturnsForAnyArgs(afterPagingTickets);
 
         // Act
         var actual = service.GetTicketsViewModel(originTickets, request);
@@ -71,14 +69,6 @@ public class GetPoolHouseTicketServiceTests
     public void GetTicketsViewModel_HasAfterPagingTickets_ReturnExpected()
     {
         // Arrange
-        var afterPagingTickets = new List<GetTicketModel>
-        {
-            new() { IsMixParlay = true, GroupName = "Credit (Parlay)" },
-            new() { IsMixParlay = true, GroupName = "Deposit (Parlay)", IsDeposit = true},
-            new() { IsMixParlay = true, GroupName = "1" },
-            new() { IsMixParlay = false, GroupName = "Others" },
-            new() { IsMixParlay = false, GroupName = "1" }
-        };
         var originTickets = new List<GetTicketModel>
         {
             new() { IsMixParlay = true, GroupName = "Credit (Parlay)" },
@@ -94,23 +84,22 @@ public class GetPoolHouseTicketServiceTests
         };
         var groups = new List<Group<GetTicketModel>>
             { new() { Name = "1", Tickets = singleTickets, DisplayTotalTickets = 1 } };
-        pagingService.Paging(originTickets, request.PageIndex, request.PageSize).ReturnsForAnyArgs(afterPagingTickets);
         pagingService.Groups(singleTickets, ticket => ticket.GroupName).ReturnsForAnyArgs(groups);
         mapTicketsService
             .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), null, ChoiceType.None, 1)
             .ReturnsForAnyArgs(new TicketViewModel());
         var expectedGroups = new List<Group<TicketViewModel>>
         {
-            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 2 },
+            new() { Name = "1", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 2 },
             new()
             {
-                Name = "Credit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1
+                Name = "Credit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
             },
             new()
             {
-                Name = "Deposit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1
+                Name = "Deposit (Parlay)", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1
             },
-            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 4 } }, DisplayTotalTickets = 1 }
+            new() { Name = "Others", Tickets = new List<TicketViewModel> { new() { No = 0 } }, DisplayTotalTickets = 1 }
         };
         var expected = new TicketsViewModel
         {

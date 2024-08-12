@@ -5,23 +5,23 @@ import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { BlockUiModule } from '../../../../../utility/components/block-ui/block-ui.module';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { LinkedLogsViewModel } from '../../../../../utility/components/pool-house-ticket/linked-log/linked-log.model';
-import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel, PoolHouseTicketsModel } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.model';
-import { PoolHouseTicketModule } from '../../../../../utility/components/pool-house-ticket/pool-house-ticket.module';
-import { TicketsModel } from '../../../../../utility/components/pool-house-ticket/tickets/tickets.model';
-import { ToolTipModule } from '../../../../../utility/components/tooltip/tooltip.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { PipeModule } from '../../../../../utility/pipes/pipe.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
+import { PoolHouseTicketViewModel, PoolHouseTicketsModel, GetPoolHouseTicketQuery } from '../../pool-house-ticket/pool-house-ticket.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { LinkedLogsViewModel } from '../../pool-house-ticket/linked-log/linked-log.model';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -50,6 +50,23 @@ class Helper {
     hdpValue: '',
     liveIndicator: 0
   };
+  static readonly fakeLinkedLogsViewModel: LinkedLogsViewModel = {
+    groupLinkedLogs: [
+      {
+        groupName: '1X2',
+        isAffectedGroup: true,
+        logsData: []
+      },
+      {
+        groupName: 'AIO',
+        isAffectedGroup: true,
+        logsData: []
+      },
+    ],
+    isLinkGroup1X2: false,
+    isLinkGroupAIO: false,
+    result: undefined
+  }
   static readonly fakeLogInfoWrongHdp: LogInfoWrongHdp = {
     matchId: 12345,
     leagueName: '',
@@ -59,10 +76,10 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
-    linkedLogsViewModel: new LinkedLogsViewModel(),
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false,
+    linkedLogsViewModel: Helper.fakeLinkedLogsViewModel,
   };
-
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
     eventDate: '',
@@ -73,20 +90,41 @@ class Helper {
     isVoided: false,
     isAbnormal: false
   };
+  static readonly fakeGetPoolHouseTicketQuery: GetPoolHouseTicketQuery = {
+    matchId: 75785,
+    actionId: 1,
+    requestId: 64324,
+    issueTypeId: 1,
+    subIssueTypeId: 1,
+    homeFavorite: '1.75',
+    awayFavorite: '',
+    hdpValue: '1.5',
+    wrongMarket: '1.2',
+    isLinkGroup1X2: false,
+    isLinkGroupAIO: false,
+    filterFromTransTime: Helper.fakeFromDateTime,
+    filterToTransTime: Helper.fakeToDateTime,
+    liveIndicator: 1,
+    wrongOddsInfo: []
+  };
+  static readonly fakePoolHouseTicketViewModel: PoolHouseTicketViewModel = {
+    groupBetTypes: [],
+    affectedTickets: new TicketsModel(),
+    otherTickets: new TicketsModel()
+  };
 }
 
 describe('LogInfoWrongHdpComponent', () => {
   @NgModule({
     declarations: [
-      FilterWithHdpComponent
+      FilterWithHdpComponent,
+      PoolHouseTicketComponent,
+      AffectedTicketComponent
     ],
     imports: [
       NgbModule,
       FormsModule,
-      ToolTipModule,
-      BlockUiModule,
-      PipeModule,
-      PoolHouseTicketModule
+      BlockUiModule    
     ],
     providers: [
       ValidationService,
@@ -94,7 +132,8 @@ describe('LogInfoWrongHdpComponent', () => {
       ModalService,
       AddRequestStore,
       AddRequestApiService,
-      EventWrongHdpService
+      EventWrongHdpService,
+      LogAnalysisService
     ]
   })
   class AppModuleTest { }
@@ -104,7 +143,6 @@ describe('LogInfoWrongHdpComponent', () => {
   beforeEach(() => {
     shallow = new Shallow(LogInfoWrongHdpComponent, AppModuleTest)
       .mock(ElementRef, {})
-      .dontMock(NgbModule);
   });
 
   it('LogInfoWrongHdpComponent init should match snapshot', async () => {
@@ -120,24 +158,7 @@ describe('LogInfoWrongHdpComponent', () => {
     expect(fixture).toMatchSnapshot();
   });
 
-  it('#ngOnInit should update isShowValidation True when edit is True', async () => {
-    const mockGetLogInfo = jest.fn();
-    const { instance } = await shallow
-    .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
-    .render({
-      bind: {
-        isEdit: true,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-
-    instance.ngOnInit();
-
-    expect(instance.isShowValidation).toBeTruthy();
-  });
-
-  it('refreshLogInfo should call #getLogInfo', async () => {
+  it('refreshLogInfo should call #getLogInfo when filterWithHdpComponent isValid', async () => {
     const mockGetLogInfo = jest.fn();
     const { instance } = await shallow
     .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
@@ -158,7 +179,7 @@ describe('LogInfoWrongHdpComponent', () => {
     expect(instance.filterWithHdpComponent.isValid).toBeCalledTimes(1);
   });
 
-  it('refreshLogInfo should not call #getLogInfo', async () => {
+  it('refreshLogInfo should not call #getLogInfo when filterWithHdpComponent isInValid', async () => {
     const mockGetLogInfo = jest.fn();
     const { instance } = await shallow
     .mock(LogInfoService, { getLogInfo: mockGetLogInfo })
@@ -221,20 +242,6 @@ describe('LogInfoWrongHdpComponent', () => {
 
     expect(instance.logInfo.logInfoDetail).toBeNull();
     expect(instance.logInfo.messageValidationLogInfo ).toBeNull();
-  });
-
-  it('showValidationDetail should update isShowValidation true', async () => {
-    const { instance } = await shallow
-    .render({
-      bind: {
-        isEdit: false,
-        filter: Helper.fakeFilterModel,
-        logInfo: Helper.fakeLogInfoWrongHdp
-      }
-    });
-    instance.showValidationDetail();
-
-    expect(instance.isShowValidation).toBeTruthy();
   });
 
   it('emitSearchEvent should emit searchTicketEvent', async () => {
@@ -444,24 +451,34 @@ describe('LogInfoWrongHdpComponent', () => {
     expect(instance.refreshLogInfoByPoolHouseEvent).toHaveBeenCalledTimes(1);
   });
 
-  it('openPoolHouseDetails should call #getPoolHouseData', async () => {
-    const fakeLogInfoWrongHdp = _.cloneDeep(Helper.fakeLogInfoWrongHdp);
-    fakeLogInfoWrongHdp.linkedLogsViewModel = new LinkedLogsViewModel();
+  it('openPoolHouseDetails should call #getPoolHouseTickets', async () => {
     const { instance } = await shallow
     .mock(ValidationService, { isSubTypeWrongHdpOrWrong1stHdp: jest.fn().mockImplementation(() => true) })
+    .mock(AddRequestStore, { changeBlockingUiStatus: jest.fn() })
+    .mock(EventWrongHdpService, { getLinkedLog: jest.fn().mockReturnValue(Helper.fakeLinkedLogsViewModel) })
+    .mock(AddRequestApiService, { getPoolHouseTickets: jest.fn().mockReturnValue(Helper.fakePoolHouseTicketViewModel) })
+    .mock(LogAnalysisService, { writeLogClickPoolHouseDetails: jest.fn() })
     .render({
       bind: {
         isEdit: false,
         filter: Helper.fakeFilterModel,
-        logInfo: fakeLogInfoWrongHdp
+        logInfo: Helper.fakeLogInfoWrongHdp
       }
     });
+    instance['initGetPoolHouseTicketQuery'] = jest.fn().mockReturnValue(Helper.fakeGetPoolHouseTicketQuery)
     instance.poolHouseTicketsModel = new PoolHouseTicketsModel();
-    instance.getPoolHouseData = jest.fn();
+    const poolHouseTicketsModelExpected = {
+      query: Helper.fakeGetPoolHouseTicketQuery,
+      linkedLogsViewModel: instance.logInfo.linkedLogsViewModel,
+      groupBetTypes: Helper.fakePoolHouseTicketViewModel.groupBetTypes,
+      affectedTickets: Helper.fakePoolHouseTicketViewModel.affectedTickets,
+      otherTickets: Helper.fakePoolHouseTicketViewModel.otherTickets,
+      checkedBetTypes: instance.logInfo.poolHouseCheckedBetTypes,
+      isOpen: true} as PoolHouseTicketsModel;
 
     await instance.openPoolHouseDetails();
 
-    expect(instance.getPoolHouseData).toHaveBeenCalledTimes(1);
+    expect(instance.poolHouseTicketsModel).toEqual(poolHouseTicketsModelExpected);
   });
 
   it('isHavePoolHouseTicket should return true', async () => {
@@ -523,8 +540,6 @@ describe('LogInfoWrongHdpComponent', () => {
       filterFromTransTime: '',
       filterToTransTime: '',
       liveIndicator: 0,
-      pageIndex: 1,
-      pageSize: 1,
       wrongOddsInfo: []
     };
 
@@ -533,11 +548,9 @@ describe('LogInfoWrongHdpComponent', () => {
       checkedBetTypes: '',
       query: fakeQuery,
       groupBetTypes: [],
-      tickets: new TicketsModel(),
-      isAffectedGroup1X2: false,
-      isAffectedGroup1H1X2: false,
-      isAffectedGroupAIO: false,
-      linkedLogsViewModel: new LinkedLogsViewModel
+      linkedLogsViewModel: new LinkedLogsViewModel,
+      affectedTickets: new TicketsModel,
+      otherTickets: new TicketsModel
     };
 
     const { instance } = await shallow
@@ -555,7 +568,5 @@ describe('LogInfoWrongHdpComponent', () => {
 
     expect(actual.homeFavorite).toBe("homeFavorite");
     expect(actual.awayFavorite).toBe("awayFavorite");
-    expect(actual.pageIndex ).toBe(1);
-    expect(actual.pageSize ).toBe(1);
   });
 });

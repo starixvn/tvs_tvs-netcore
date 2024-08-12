@@ -1,14 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import * as _ from 'lodash';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { MatchType, PoolHouseTicketValue } from '../../../../utility/constants/config';
+import { MatchType } from '../../../../utility/constants/config';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
+import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp/log-info-wrong-hdp.component';
 import { AddRelatedEventArg } from './models/add-related-event-arg.model';
 import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
@@ -36,7 +37,7 @@ export class EventWrongHdpComponent implements OnInit {
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongHdpModels: WrongHdpModel[] = [];
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventWrongHdpComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoWrongHdpComponent>;
 
   mainEvent = new LogInfoWrongHdp();
@@ -87,16 +88,16 @@ export class EventWrongHdpComponent implements OnInit {
     this.mainEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
     this.logInfoService.resetLogInfoOfEvent([this.mainEvent]);
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
-    mainLogInfo.hideValidationDetail();
+    mainLogInfo.logInfo.isShowValidation = false;
 
-    if (!this.validationService.validateCommonData(this.leagueEventWrongHdpComponent, [mainLogInfo])) {
+    if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
       return;
     }
 
     mainLogInfo.isBlock = true;
     this.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(this.mainEvent, this.filter);
     await this.logInfoService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
-    mainLogInfo.showValidationDetail();
+    mainLogInfo.logInfo.isShowValidation = true;
 
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
     this.primitiveProps.isShowRelatedEvents = true;
@@ -109,10 +110,10 @@ export class EventWrongHdpComponent implements OnInit {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.mainEvent.leagueName = this.leagueEventWrongHdpComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchId = this.leagueEventWrongHdpComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventWrongHdpComponent?.selectedMatch.name;
-    this.mainEvent.matchCode = this.leagueEventWrongHdpComponent?.selectedMatch.matchCode;
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -147,7 +148,7 @@ export class EventWrongHdpComponent implements OnInit {
 
   public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.logInfoComponents.forEach(x => x.hideValidationDetail());
+    this.logInfoComponents.forEach(x => x.logInfo.isShowValidation = false);
     await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }
@@ -174,7 +175,7 @@ export class EventWrongHdpComponent implements OnInit {
     arg.primitiveProps = this.primitiveProps;
     arg.allEvents = this.allSelectedEvents;
     arg.mainEvent = this.mainEvent;
-    arg.leagueEventWrongHdpComponent = this.leagueEventWrongHdpComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoComponents = this.logInfoComponents.toArray();
     arg.addRequestStore = this.addRequestStore;
 

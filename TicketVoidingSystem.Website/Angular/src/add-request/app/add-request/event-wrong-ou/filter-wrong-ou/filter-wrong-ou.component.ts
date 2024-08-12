@@ -56,11 +56,8 @@ export class FilterWrongOuComponent {
 
     const fromTime = moment(this.filterWrongOuModel.filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
     const toTime = moment(this.filterWrongOuModel.filterToTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const durations = toTime.diff(fromTime);
-    const minutes = Math.floor(durations / 60000);
-    const seconds = ((durations % 60000) / 1000).toFixed(0);
 
-    return `${minutes}m${seconds}s`;
+    return StaticService.getDurations(fromTime, toTime);
   }
 
   public isValid(): boolean {

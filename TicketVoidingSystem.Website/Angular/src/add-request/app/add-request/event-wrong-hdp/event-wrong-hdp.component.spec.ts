@@ -12,7 +12,6 @@ import { MatchType } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { PipeModule } from '../../../../utility/pipes/pipe.module';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { WrongHdpModel } from '../models/event-wrong-hdp.model';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -27,6 +26,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { MatchModel } from '../../../../utility/models/match.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 class Helper {
   static readonly fakeFromDateTime = '2020-10-08 09:44:46.361 PM';
@@ -65,7 +65,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: false,
     poolHouseCheckedBetTypes: null,
-    linkedLogsViewModel: null
+    linkedLogsViewModel: null,
+    isShowValidation: false
   };
   static readonly fakeFilterModel: FilterModel = {
     sportType: 1,
@@ -110,7 +111,7 @@ class Helper {
 describe('EventWrongHdpComponent', () => {
   @NgModule({
     declarations: [
-      LeagueEventRedCardComponent,
+      EventLeagueComponent,
       LogInfoWrongHdpComponent,
       AddChildMatchComponent
     ],
@@ -209,7 +210,7 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
@@ -243,7 +244,7 @@ describe('EventWrongHdpComponent', () => {
       }
     });
     instance.primitiveProps = new PrimitiveProperty();
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);
@@ -272,7 +273,7 @@ describe('EventWrongHdpComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    instance.leagueEventWrongHdpComponent = null;
+    instance.eventLeagueComponent = null;
     instance.updateMatchId.emit = jest.fn();
 
     instance.changeMatchEvent();
@@ -295,9 +296,9 @@ describe('EventWrongHdpComponent', () => {
     instance.primitiveProps = new PrimitiveProperty();
     instance.allSelectedEvents = [Helper.fakeLogInfoWrongHdp];
     instance.mainEvent = Helper.fakeLogInfoWrongHdp;
-    const leagueEventWrongHdpComponent = new LeagueEventRedCardComponent(null, null);
-    leagueEventWrongHdpComponent.selectedMatch = new MatchModel();
-    instance.leagueEventWrongHdpComponent = leagueEventWrongHdpComponent;
+    const eventLeagueComponent = new EventLeagueComponent(null, null);
+    eventLeagueComponent.selectedMatch = new MatchModel();
+    instance.eventLeagueComponent = eventLeagueComponent;
     instance.updateMatchId.emit = jest.fn();
 
     instance.changeMatchEvent();
@@ -405,7 +406,7 @@ describe('EventWrongHdpComponent', () => {
         filter: Helper.fakeFilterModel,
       }
     });
-    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongHdpComponent(null, null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     const logInfoComponents = new QueryList<LogInfoWrongHdpComponent>();
     logInfoComponents.reset([...logInfoComponents.toArray(), logInfoWrongHdpComponents]);

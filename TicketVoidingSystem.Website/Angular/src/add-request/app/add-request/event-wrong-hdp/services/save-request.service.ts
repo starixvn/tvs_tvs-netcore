@@ -28,16 +28,15 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(arg: SaveRequestArg): Promise<boolean> {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
-    arg.logInfoComponents.forEach(x => x.hideValidationDetail());
 
-    if (!this.validationService.validateCommonData(arg.leagueEventWrongHdpComponent, arg.logInfoComponents)) {
+    if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.logInfoComponents)) {
       return false;
     }
 
     arg.addRequestStore.changeBlockingUiStatus(true);
     arg.mainEvent.linkedLogsViewModel = await this.eventWrongHdpService.getLinkedLog(arg.mainEvent, arg.filter);
     await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
-    arg.logInfoComponents.forEach(x => x.showValidationDetail());
+    arg.logInfoComponents.forEach(x => x.logInfo.isShowValidation = true);
     arg.primitiveProps.isShowRelatedEvents = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 

@@ -32,7 +32,8 @@ class Helper {
     messageValidationLogInfo: [],
     isPoolHouseAffected: true,
     linkedLogsViewModel: null,
-    poolHouseCheckedBetTypes: ''
+    poolHouseCheckedBetTypes: '',
+    isShowValidation: false
   };
   static readonly fakeWrongOuModel: WrongOuModel = {
     matchId: 122,
@@ -62,7 +63,7 @@ describe('SaveRequestService', () => {
     const saveRequestArg = new SaveRequestArg();
     saveRequestArg.addRequestStore = new AddRequestStore();
     saveRequestArg.addRequestStore.changeSavingRequestStatus = jest.fn();
-    const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null);
+    const logInfoWrongHdpComponents = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     logInfoWrongHdpComponents.isMainMatch = true;
     saveRequestArg.logInfoComponents = [logInfoWrongHdpComponents];
     const logInfoService = new LogInfoService(null, null);
@@ -95,8 +96,7 @@ describe('SaveRequestService', () => {
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => false);
 
-    const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null);
-    logInfoWrongOuComponent.showValidationDetail = jest.fn();
+    const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     saveRequestArg.logInfoComponents = [logInfoWrongOuComponent];
     const eventWrongOuService = new EventWrongOuService(null);
     eventWrongOuService.getLinkedLog = jest.fn();
@@ -126,8 +126,7 @@ describe('SaveRequestService', () => {
     validationService.validateCommonData = jest.fn().mockImplementation(() => true);
     validationService.isAllEventsValid = jest.fn().mockImplementation(() => true);
 
-    const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null);
-    logInfoWrongOuComponent.showValidationDetail = jest.fn();
+    const logInfoWrongOuComponent = new LogInfoWrongOuComponent(null, null, null, null, null, null);
     saveRequestArg.logInfoComponents = [logInfoWrongOuComponent];
     const eventWrongOuService = new EventWrongOuService(null);
     eventWrongOuService.getLinkedLog = jest.fn();

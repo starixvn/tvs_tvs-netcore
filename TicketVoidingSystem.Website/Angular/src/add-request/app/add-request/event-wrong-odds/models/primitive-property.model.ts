@@ -2,6 +2,5 @@ import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.mo
 
 export class PrimitiveProperty {
   isBlock: boolean;
-  isShowValidation: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
 }

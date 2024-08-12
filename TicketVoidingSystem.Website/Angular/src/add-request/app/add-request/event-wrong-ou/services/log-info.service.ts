@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PoolHouseTicketValue } from '../../../../../utility/constants/config';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
 import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
@@ -59,6 +59,7 @@ export class LogInfoService {
 
   resetLogInfoOfEvent(allSelectedEvents: LogInfoWrongOu[]): void {
     allSelectedEvents.forEach(event => {
+      event.isShowValidation = false;
       event.logInfoDetail = null;
       event.messageValidationLogInfo = null;
     });

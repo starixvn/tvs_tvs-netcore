@@ -375,10 +375,6 @@ export class FilterComponent implements OnInit {
   }
   
   async getBetTypesVS(query: GetBetTypesQuery) {
-    if(this.query.product !== 2){
-      return;
-    }
-    
     this.blockUIService.start();
     const groupsBetTypes = await this.commonService.getBetTypesVirtualSports(query);
     this.blockUIService.stop();

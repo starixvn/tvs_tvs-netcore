@@ -13,8 +13,6 @@ export class ValidationBusinessRuleArgs {
   confirmAbnormalBetComponent?: ConfirmAbnormalBetComponent;
   permission: PermissionAddRequest;
   issueTypeId: string;
-  //subIssueTypeId: string;
-  //filterBy: number;
   abnormalBetModel: AbnormalBetModel;
   primitiveProps: PrimitiveProperty;
   isValidateFromConfirmPopup: boolean;
