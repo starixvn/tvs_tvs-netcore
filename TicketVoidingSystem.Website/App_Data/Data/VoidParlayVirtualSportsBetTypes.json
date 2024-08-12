@@ -123,6 +123,14 @@
           "Name": "Correct Score"
         },
         {
+          "Id": 11054,
+          "Name": "Handicap"
+        },
+        {
+          "Id": 11055,
+          "Name": "Over/Under"
+        },
+        {
           "Id": 11099,
           "Name": "Mix Parlay"
         }
