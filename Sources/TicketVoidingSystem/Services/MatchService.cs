@@ -99,10 +99,10 @@ public class MatchServiceImp : MatchService
         match.AwayNameSimplified = remotingRefWrapperService.GetTeamName(match.SportType, match.AwayId, LanguageCode.ChineseSimplified);
         match.AwayNameNewSimplified = remotingRefWrapperService.GetTeamName(match.SportType, match.AwayId, LanguageCode.NewChineseSimplified);
         match.AwayNameTraditional = remotingRefWrapperService.GetTeamName(match.SportType, match.AwayId, LanguageCode.ChineseTraditional);
-        match.LeagueName = remotingRefWrapperService.GetTeamName(match.SportType, match.LeagueId, LanguageCode.English);
-        match.LeagueNameSimplified = remotingRefWrapperService.GetTeamName(match.SportType, match.LeagueId, LanguageCode.ChineseSimplified);
-        match.LeagueNameNewSimplified = remotingRefWrapperService.GetTeamName(match.SportType, match.LeagueId, LanguageCode.NewChineseSimplified);
-        match.LeagueNameTraditional = remotingRefWrapperService.GetTeamName(match.SportType, match.LeagueId, LanguageCode.ChineseTraditional);
+        match.LeagueName = remotingRefWrapperService.GetLeagueName(match.SportType, match.LeagueId, LanguageCode.English);
+        match.LeagueNameSimplified = remotingRefWrapperService.GetLeagueName(match.SportType, match.LeagueId, LanguageCode.ChineseSimplified);
+        match.LeagueNameNewSimplified = remotingRefWrapperService.GetLeagueName(match.SportType, match.LeagueId, LanguageCode.NewChineseSimplified);
+        match.LeagueNameTraditional = remotingRefWrapperService.GetLeagueName(match.SportType, match.LeagueId, LanguageCode.ChineseTraditional);
         match.MatchEvent = GetMatchEvent(match);
         match.MatchEventSimplified = GetMatchEventSimplified(match.SportType, match.IsOutright, match.HomeNameSimplified, match.AwayNameSimplified, match.LeagueNameSimplified);
         match.MatchEventNewSimplified = GetMatchEventNewSimplified(match.SportType, match.IsOutright, match.HomeNameNewSimplified, match.AwayNameNewSimplified, match.LeagueNameNewSimplified);

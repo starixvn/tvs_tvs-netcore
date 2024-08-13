@@ -243,7 +243,7 @@ public class BetListServiceImp : BetListService
             return remotingRefWrapperService.GetMatchCodeBetRadar(matchCode);
         }
 
-        return sportType.IsVirtualSport345() ? remotingRefWrapperService.GetMatchCodeVS345(sportType, matchCode) : string.Empty;
+        return sportType.IsVirtualSport345() ? remotingRefWrapperService.GetMatchCodeVS345(sportType, matchCode) : matchCode;
     }
 
     public string GetSportTypeName(int sportType, string languageCode)
