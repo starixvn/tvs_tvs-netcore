@@ -27,7 +27,7 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     const isDataValid = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
     if (isDataValid) {
-      this.proceedSaveRequest(arg);
+      this.showPopupConfirmSave(arg);
     } else {
       arg.addRequestStore.changeSavingRequestStatus(false);
     }
@@ -42,10 +42,14 @@ export class SaveRequestService {
     }
 
     arg.addRequestStore.changeBlockingUiStatus(true);
-    const query = this.logInfoService.initQuery(arg.mainEvent.pagingModel.page - 1, arg.mainEvent.pagingModel.pageSize, arg.mainEvent, arg.filter);
-    await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps); // must be called before getLogInfo
-    await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
+   // const query = this.logInfoService.initQuery(arg.mainEvent.pagingModel.page - 1, arg.mainEvent.pagingModel.pageSize, arg.mainEvent, arg.filter);
+   // await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter); // must be called before getLogInfo
+
+    var getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
+    this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
+    arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
     arg.primitiveProps.isShowLogInfoEvents = true;
+    arg.mainEvent.isCollapse = true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
     if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
@@ -57,14 +61,6 @@ export class SaveRequestService {
     }
 
     return false;
-  }
-
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmationEarlyKickOff(arg)) {
-      this.showPopupConfirmSave(arg);
-    } else {
-      this.executeSaveRequestApi(arg);
-    }
   }
 
   public async onClickConfirmSave(arg: SaveRequestArg) {

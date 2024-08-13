@@ -1,0 +1,57 @@
+import { Injectable } from '@angular/core';
+import _ from 'lodash';
+import { MatchType } from '../../../../../utility/constants/config';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { LogInfoService } from './log-info.service';
+import { RelatedEventService } from './related-event.service';
+import { ValidationService } from './validation.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SearchEventService {
+  constructor(
+    private readonly logInfoService: LogInfoService,
+    private readonly relatedEventService: RelatedEventService,
+    private readonly validationService: ValidationService,
+  ) { }
+
+  public async handleSearchEvent(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<void> {
+    this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
+    arg.allEvents.filter(x => !x.isMainMatch).forEach(x => {
+      x.isCollapse = true;
+    })
+
+    if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.kickOffTimeComponent)) {
+      return;
+    }
+
+    arg.primitiveProps.isShowLogInfoEvents = false;
+
+    await this.getLogInfoForAllEvents(arg, newestRelatedEvents);
+
+    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
+
+    if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
+      arg.addRequestStore.changeBlockingUiStatus(false);
+      return;
+    }
+    // await this.getTicketsMainEvent();
+    arg.primitiveProps.isShowLogInfoEvents = true;
+  }
+
+  public async getLogInfoForAllEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<void> {
+    this.addNewestChildEventsToAllSelectedEvents(arg, newestRelatedEvents);
+    var getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
+    this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
+
+    arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
+  }
+
+  private addNewestChildEventsToAllSelectedEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): void {
+    const newChildEvents = newestRelatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
+    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, arg.mainEvent, arg.filter.subIssueTypeId);
+    arg.allEvents.push(...newEvents);
+  }
+}

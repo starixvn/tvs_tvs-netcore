@@ -2,7 +2,6 @@
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
 import { FilterModel } from "../../filter/filter.model";
-import { ChildMatchModel } from "../../models/related-event.model";
 import { LogInfoEarlyKickOff } from "./log-info-eko.model";
 import { PrimitiveProperty } from "./primitive-property.model";
 
@@ -16,5 +15,4 @@ export class AddRelatedEventArg {
   mainEvent: LogInfoEarlyKickOff;
   addRequestStore: AddRequestStore;
   inputMatchIdClass: string;
-  originalRelatedEvents: ChildMatchModel[];
 }

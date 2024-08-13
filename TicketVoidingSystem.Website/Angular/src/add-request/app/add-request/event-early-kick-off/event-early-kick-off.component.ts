@@ -32,7 +32,7 @@ import { EventEarlyKickOffService } from './services/event-eko.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { SearchEventService } from './services/search-event.service';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -70,9 +70,9 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     private readonly addRequestStore: AddRequestStore,
     private readonly logInfoService: LogInfoService,
     private readonly saveRequestService: SaveRequestService,
-    private readonly validationService: ValidationService,
     private readonly relatedEventService: RelatedEventService,
     private readonly eventEarlyKickOffService: EventEarlyKickOffService,
+    private readonly searchEventService: SearchEventService,
     private readonly addRequestApiService: AddRequestApiService
   ) {
     this.tooltip.element = this.element;
@@ -144,35 +144,15 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public async handleSearchEvent(): Promise<void> {
-    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.allSelectedEvents.filter(x => !x.isMainMatch).forEach(x => {
-      x.isCollapse = true;
-    })
-
-    if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.kickOffTimeComponent)) {
-      return;
-    }
-
-    this.primitiveProps.isShowLogInfoEvents = false;
     this.addRequestStore.changeBlockingUiStatus(true);
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-    await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
-
-    if (!this.validationService.isAccountHasAddRequestPermission(this.allSelectedEvents, this.permission)) {
-      this.addRequestStore.changeBlockingUiStatus(false);
-      return;
-    }
-
-    await this.getTicketsMainEvent();
-
-    this.primitiveProps.isShowLogInfoEvents = true;
+    await this.searchEventService.handleSearchEvent(this.initSaveRequestInput(false), this.relatedEvents);
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   public async getTicketsMainEvent(): Promise<void> {
     const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.mainEvent, this.filter);
-    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter);
   }
 
   public async handleClickAddRelatedEvent(): Promise<void> {
@@ -193,7 +173,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
-  private initSaveRequestInput(isSaveAndVoid: boolean) {
+  private initSaveRequestInput(isSaveAndVoid: boolean): SaveRequestArg {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;
@@ -227,7 +207,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;
     arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
-    arg.originalRelatedEvents = this.relatedEvents;
 
     return arg;
   }
@@ -246,9 +225,10 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
-    const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
+    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
     if (newEvents.length > 0) {
-      await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      var getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter);
+      this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       this.allSelectedEvents.push(...newEvents);
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }

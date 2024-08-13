@@ -1,4 +1,3 @@
-import { TemplateValue } from './../../../../../utility/components/template-message/template-message/template.model';
 import * as _ from 'lodash';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
@@ -16,6 +15,7 @@ import { AddRelatedEventArg } from '../models/add-related-event.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
+import { TemplateValue } from './../../../../../utility/components/template-message/template-message/template.model';
 import { LogInfoService } from './log-info.service';
 import { RelatedEventService } from './related-event.service';
 import { ValidationService } from './validation.service';
@@ -141,7 +141,7 @@ describe('RelatedEventService', () => {
     addRequestApiService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([Helper.fakeChildMatchModel]));
     const mockRelatedEventService = new RelatedEventService(addRequestApiService, null, logInfoService);
 
-    const actual = mockRelatedEventService.updateEvents([Helper.fakeChildMatchModel], Helper.fakeLogInfoEarlyKickOff, '1');
+    const actual = mockRelatedEventService.mapChildMatchesToEvents([Helper.fakeChildMatchModel], Helper.fakeLogInfoEarlyKickOff, '1');
 
     expect(actual).toBeDefined();
     expect(actual[0].messageValidationLogInfo).toBeNull();
@@ -211,14 +211,14 @@ describe('RelatedEventService', () => {
     logInfoService.getLogInfo = jest.fn();
     const mockRelatedEventService = new RelatedEventService(null, validationService, logInfoService);
     mockRelatedEventService.getChildMatches = jest.fn().mockImplementation(() => Promise.resolve([new ChildMatchModel()]));
-    mockRelatedEventService.updateEvents = jest.fn().mockImplementation(() => [Helper.fakeLogInfoEarlyKickOff]);
+    mockRelatedEventService.mapChildMatchesToEvents = jest.fn().mockImplementation(() => [Helper.fakeLogInfoEarlyKickOff]);
 
     await mockRelatedEventService.addRelatedEventByInput(arg);
 
     expect(validationService.isValidInputRelatedEvent).toHaveBeenCalledTimes(1);
     expect(logInfoService.getLogInfo).toHaveBeenCalledTimes(1);
     expect(mockRelatedEventService.getChildMatches).toHaveBeenCalledTimes(1);
-    expect(mockRelatedEventService.updateEvents).toHaveBeenCalledTimes(1);
+    expect(mockRelatedEventService.mapChildMatchesToEvents).toHaveBeenCalledTimes(1);
   });
 
   it('#addNewRelatedEventHaveTicketOrUpdateExistedEvent should add new related event', async () => {

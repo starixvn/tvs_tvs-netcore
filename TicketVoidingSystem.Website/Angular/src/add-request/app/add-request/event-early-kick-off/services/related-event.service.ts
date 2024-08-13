@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { MatchType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -32,10 +31,10 @@ export class RelatedEventService {
     query.isMainMatch = isMainMatch;
     query.sportType = filterModel.sportType;
 
-    return this.addRequestApiService.getChildMatchesInfo(query);
+    return await this.addRequestApiService.getChildMatchesInfo(query);
   }
 
-  updateEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
+  mapChildMatchesToEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
     const newEvents = models
       .map(x => {
         const matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
@@ -55,17 +54,17 @@ export class RelatedEventService {
           matchModel: matchModel,
         } as LogInfoEarlyKickOff;
       });
-      this.updateTemplateForEvents(newEvents);
+    //  this.updateTemplateForEvents(newEvents);
       
       return newEvents;
   }
 
-  private updateTemplateForEvents(events: LogInfoEarlyKickOff[]){
-    events.forEach(x => {
-      x.templateValue = this.logInfoService.getTemplateValue(x);
-      x.templateValue.kickOffTime = x.kickOffTime}
-    );
-  }
+  // private updateTemplateForEvents(events: LogInfoEarlyKickOff[]){
+  //   events.forEach(x => {
+  //     x.templateValue = this.logInfoService.getTemplateValue(x);
+  //     x.templateValue.kickOffTime = x.kickOffTime}
+  //   );
+  // }
   
   public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
     return {
@@ -113,8 +112,9 @@ export class RelatedEventService {
         addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
         return;
       }
-      const newEvents = this.updateEvents(models, addRelatedEventArg.mainEvent, addRelatedEventArg.filter.subIssueTypeId);
-      await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter, addRelatedEventArg.primitiveProps);
+      const newEvents = this.mapChildMatchesToEvents(models, addRelatedEventArg.mainEvent, addRelatedEventArg.filter.subIssueTypeId);
+      var getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter);
+      this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       addRelatedEventArg.allEvents.push(...newEvents);
       addRelatedEventArg.allEvents = _.orderBy(_.uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
       addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
@@ -122,35 +122,5 @@ export class RelatedEventService {
     }
   }
 
-  public async getDataWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
-    const eventsGetLogInfo = this.preparingModelGetLogInfo(relatedEvents, arg);
-    await this.logInfoService.getLogInfo(eventsGetLogInfo, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
-    this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.allEvents);
-  }
 
-  private preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg) {
-    const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
-    const newEvents = this.updateEvents(newChildEvents, arg.mainEvent, arg.filter.subIssueTypeId);
-    const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
-    eventsGetLogInfo.push(...newEvents);
-
-    return eventsGetLogInfo;
-  }
-
-  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoEarlyKickOff[], originalAllEvents: LogInfoEarlyKickOff[]): void {
-    eventsGetLogInfo.forEach(x => {
-      if (!originalAllEvents.some(y => y.matchId === x.matchId) && !x.isInvalidTotalTickets) {
-        originalAllEvents.push(x);
-      } else {
-        const event = originalAllEvents.find(y => y.matchId === x.matchId);
-        if (event) {
-          event.messageValidationLogInfo = x.messageValidationLogInfo;
-          event.isInvalidTotalTickets = x.isInvalidTotalTickets;
-          event.isHasSettledTicket = x.isHasSettledTicket;
-          event.isHasInstantlySettledTicket = x.isHasInstantlySettledTicket;
-          event.subIssueTypeId = x.subIssueTypeId;
-        }
-      }
-    });
-  }
 }

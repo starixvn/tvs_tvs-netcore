@@ -10,7 +10,7 @@ import { LogInfoEarlyKickOff } from "./log-info-eko.model";
 import { PrimitiveProperty } from "./primitive-property.model";
 
 export class SaveRequestArg {
-  requestId: number;  
+  requestId: number;
   requestedBy: string;
   userId: number;
   isEdit: boolean;

@@ -38,7 +38,7 @@ export class LogInfoEkoComponent implements OnInit {
    async pagingEvent() {
     this.isBlock = true;
     const query = this.logInfoService.initQuery(this.logInfo.pagingModel.page - 1, this.logInfo.pagingModel.pageSize, this.logInfo, this.filter);
-    await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+    await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter);
     this.isBlock = false;
   }
 
@@ -47,7 +47,7 @@ export class LogInfoEkoComponent implements OnInit {
     if (!this.logInfo.isCollapse) {
       this.isBlock = true;
       const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.logInfo, this.filter);
-      await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      await this.logInfoService.getTickets(query, this.logInfo, this.isEdit, this.requestId, this.filter);
       this.logInfo.templateValue.checkSettled = this.logInfo.tableTicketsModel.isHasSettledTicket;
       this.isBlock = false;
     }

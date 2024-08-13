@@ -1,4 +1,4 @@
-import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 
 export class PrimitiveProperty {
   inputRelatedMatchId: string;
