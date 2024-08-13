@@ -26,6 +26,8 @@ public interface RemotingRefWrapperService
 
     string GetMatchCodeBetRadar(string matchCode);
 
+    string GetMatchCodeVS345(int sportTypeId, string matchCode);
+
     string GetSportName(string sportTypeId, string languageCode);
 }
 
@@ -76,6 +78,12 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
     public string GetMatchCodeBetRadar(string matchCode)
     {
         return remotingRefService.GetBetRadarMatchCodeFormat(matchCode, LanguageCode.English);
+    }
+
+    public string GetMatchCodeVS345(int sportTypeId, string matchCode)
+    {
+        var refId = SportTypeConstant.RefIdVirtualSports[sportTypeId];
+        return remotingRefService.GetVirtualSportMatchCodeFormat(matchCode, refId, LanguageCode.English);
     }
 
     public string GetSportName(string sportTypeId, string languageCode)

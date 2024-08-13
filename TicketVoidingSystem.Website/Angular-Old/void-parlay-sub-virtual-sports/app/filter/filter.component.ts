@@ -87,7 +87,7 @@ export class FilterComponent {
     }
 
     private inValidSportTypeVirtualSport4(sportType: number){
-      return sportType !== 188;
+      return sportType !== 188 && sportType !== 9908 ;
     }
 
     private inValidSportTypeVirtualSport5(sportType: number){

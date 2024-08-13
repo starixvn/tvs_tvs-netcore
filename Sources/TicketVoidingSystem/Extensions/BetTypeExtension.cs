@@ -76,9 +76,15 @@ public static class BetTypeExtension
         return betTypesVirtualSport5.Contains(id);
     }
 
-    public static bool IsVirtualSport(this int sportTypeId)
+    public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2
     {
-        List<int> VirtualSportsSportTypeIds = new() { 190, 191, 192, 193, 194, 195, 196, 197, 178, 179, 188, 147 };
+        List<int> VirtualSportsSportTypeIds = new() { 190, 191, 192, 193, 194, 195, 196, 197 };
+        return VirtualSportsSportTypeIds.Contains(sportTypeId);
+    }
+
+    public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
+    {
+        List<int> VirtualSportsSportTypeIds = new() { 178, 179, 188, 147 };
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
