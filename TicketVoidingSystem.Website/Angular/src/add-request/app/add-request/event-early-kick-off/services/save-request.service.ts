@@ -42,10 +42,7 @@ export class SaveRequestService {
     }
 
     arg.addRequestStore.changeBlockingUiStatus(true);
-   // const query = this.logInfoService.initQuery(arg.mainEvent.pagingModel.page - 1, arg.mainEvent.pagingModel.pageSize, arg.mainEvent, arg.filter);
-   // await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter); // must be called before getLogInfo
-
-    var getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
+    const getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
     this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
     arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
     arg.primitiveProps.isShowLogInfoEvents = true;

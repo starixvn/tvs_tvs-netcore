@@ -54,18 +54,10 @@ export class RelatedEventService {
           matchModel: matchModel,
         } as LogInfoEarlyKickOff;
       });
-    //  this.updateTemplateForEvents(newEvents);
-      
+        
       return newEvents;
   }
 
-  // private updateTemplateForEvents(events: LogInfoEarlyKickOff[]){
-  //   events.forEach(x => {
-  //     x.templateValue = this.logInfoService.getTemplateValue(x);
-  //     x.templateValue.kickOffTime = x.kickOffTime}
-  //   );
-  // }
-  
   public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
     return {
       sportType: childMatch.sportType,

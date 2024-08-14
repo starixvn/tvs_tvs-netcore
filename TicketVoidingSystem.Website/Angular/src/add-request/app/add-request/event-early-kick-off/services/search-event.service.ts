@@ -17,33 +17,31 @@ export class SearchEventService {
     private readonly validationService: ValidationService,
   ) { }
 
-  public async handleSearchEvent(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<void> {
+  public async searchEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<boolean> {
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
     arg.allEvents.filter(x => !x.isMainMatch).forEach(x => {
       x.isCollapse = true;
     })
 
     if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.kickOffTimeComponent)) {
-      return;
+      return false;
     }
 
     arg.primitiveProps.isShowLogInfoEvents = false;
-
     await this.getLogInfoForAllEvents(arg, newestRelatedEvents);
-
     arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
 
     if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
-      arg.addRequestStore.changeBlockingUiStatus(false);
-      return;
+      return false;
     }
-    // await this.getTicketsMainEvent();
+
     arg.primitiveProps.isShowLogInfoEvents = true;
+    return true;
   }
 
   public async getLogInfoForAllEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): Promise<void> {
     this.addNewestChildEventsToAllSelectedEvents(arg, newestRelatedEvents);
-    var getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
+    const getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
     this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
 
     arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;

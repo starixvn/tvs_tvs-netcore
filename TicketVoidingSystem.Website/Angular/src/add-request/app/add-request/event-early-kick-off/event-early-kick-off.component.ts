@@ -90,19 +90,17 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.permission = await this.addRequestApiService.getPermissionAddRequest();
     if (this.isEdit) {
       this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels, this.filter);
-      this.allSelectedEvents.forEach(x => {
-        x.templateValue = this.logInfoService.getTemplateValue(x);
-        x.templateValue.kickOffTime = x.kickOffTime;
-      });
+      // this.allSelectedEvents.forEach(x => {
+      //   x.templateValue = this.logInfoService.getTemplateValue(x);
+      //   x.templateValue.kickOffTime = x.kickOffTime;
+      // });
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.addRequestStore.changeBlockingUiStatus(true);
       if (!this.filter.isVoided) {
         await this.getTicketsMainEvent();
-        this.mainEvent.templateValue.checkSettled = this.mainEvent.tableTicketsModel.isHasSettledTicket;
       }
 
       this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
@@ -124,9 +122,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.eventLeagueComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
     this.mainEvent.matchModel = this.eventLeagueComponent?.selectedMatch;
-    if (this.mainEvent.matchModel) {
-      this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
-    }
 
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
@@ -146,13 +141,17 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-    await this.searchEventService.handleSearchEvent(this.initSaveRequestInput(false), this.relatedEvents);
+    const isSearchOk = await this.searchEventService.searchEvents(this.initSaveRequestInput(false), this.relatedEvents);
+    if (isSearchOk) {
+      await this.getTicketsMainEvent();
+    }
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   public async getTicketsMainEvent(): Promise<void> {
     const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.mainEvent, this.filter);
     await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter);
+    this.logInfoService.assignTemplateMessageValueToEvent(this.mainEvent);
   }
 
   public async handleClickAddRelatedEvent(): Promise<void> {
@@ -227,13 +226,12 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
     const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
     if (newEvents.length > 0) {
-      var getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter);
+      const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter);
       this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       this.allSelectedEvents.push(...newEvents);
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
     this.addRequestStore.changeBlockingUiStatus(false);
-
   }
 
   public handleDeleteEvent(matchId: number): void {
