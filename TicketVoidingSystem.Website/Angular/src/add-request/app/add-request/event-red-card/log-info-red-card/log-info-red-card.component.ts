@@ -39,6 +39,7 @@ export class LogInfoRedCardComponent {
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
   acceptTypeName = "";
+  isHasWarningRangeTime = false;
 
   constructor(
     private readonly modalService: ModalService,
@@ -153,5 +154,22 @@ export class LogInfoRedCardComponent {
   changeVarCheckValue(isVarChecked: boolean): void {
     this.logInfo.isCheckedVar = isVarChecked;
     this.logInfo.isHighLightVarCheck = false;
+  }
+
+  public getDurationTime(): string {
+    const fromTimeFilter = moment(this.defaultFilterTimeWithAllowance.fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTimeLogInfo = moment(this.logInfo.voidTimeArea.toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+
+    return StaticService.getDurations(fromTimeFilter, toTimeLogInfo);
+  }
+
+  isShowMessageRangeVoidTime() {
+    const MILLISECONDS_IN_A_MINUTE = 60000;
+    let fromTimeFilter = new Date(this.defaultFilterTimeWithAllowance.fromDateTime);
+    let toTimeLogInfo = new Date(this.logInfo.voidTimeArea.toDateTime);
+    let diffMilliseconds = toTimeLogInfo.getTime() - fromTimeFilter.getTime();
+    this.isHasWarningRangeTime = diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
+
+    return this.isHasWarningRangeTime;
   }
 }

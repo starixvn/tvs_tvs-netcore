@@ -51,7 +51,7 @@
           [isUseInLogInfo]="true" [filterTimeWithAllowanceModel]="logInfo.voidTimeArea"
           (refreshLogInfoEvent)="refreshLogInfo()" (changeAllowanceSettingTimeEvent)="hideValidationDetail()">
         </filter-time-with-allowance>
-        <div class="mb-2" *ngIf="isShowValidation && logInfo.logInfoDetail"><hr class="mt-2 mb-2">
+        <div class="mb-1" *ngIf="isShowValidation && logInfo.logInfoDetail"><hr class="mt-2 mb-2">
           <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
           Affected Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
           <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
@@ -61,8 +61,8 @@
           TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfo.logInfoDetail.highlightMinTime)">{{logInfo.logInfoDetail.minTransId}}</strong> {{logInfo.logInfoDetail.actionType}}<br/>
           Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong>
         </div>
+        <span *ngIf="isShowMessageRangeVoidTime()" class="text-red"><strong>Filter time to last accept (Duration: {{getDurationTime()}}) - Please consider using Wrong Score or Red Card issue type</strong></span>
       </div>
-
       <div class="message mt-2" *ngIf="isShowValidation">
         <span *ngFor="let msg of logInfo.messageValidationLogInfo">
           <div *ngIf="msg.isError" class="error-text">

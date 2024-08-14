@@ -74,10 +74,11 @@ export class SaveRequestService {
           }
         });
       });
-      arg.confirmDangerAccepted.isHasWarningSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
+      arg.confirmDangerAccepted.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
       arg.confirmDangerAccepted.isHasWarningEvent = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
       arg.confirmDangerAccepted.isHasWarningEditTakeNoteRequest =
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
+      arg.confirmDangerAccepted.isHasWarningRangeTime = arg.logInfoComponents.some(x => x.isHasWarningRangeTime);
     }
 
     arg.confirmDangerAccepted.requestId = arg.requestId;
