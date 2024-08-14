@@ -31,7 +31,7 @@ export class SearchEventService {
     await this.getLogInfoForAllEvents(arg, newestRelatedEvents);
     arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
 
-    if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
+    if (!this.validationService.isAccountHasAddRequestPermission(arg.filter.action, arg.allEvents, arg.permission)) {
       return false;
     }
 

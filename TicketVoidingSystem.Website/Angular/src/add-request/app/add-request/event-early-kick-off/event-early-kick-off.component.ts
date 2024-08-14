@@ -90,10 +90,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.permission = await this.addRequestApiService.getPermissionAddRequest();
     if (this.isEdit) {
       this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels, this.filter);
-      // this.allSelectedEvents.forEach(x => {
-      //   x.templateValue = this.logInfoService.getTemplateValue(x);
-      //   x.templateValue.kickOffTime = x.kickOffTime;
-      // });
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.addRequestStore.changeBlockingUiStatus(true);
       if (!this.filter.isVoided) {

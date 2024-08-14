@@ -329,7 +329,12 @@ export class SiteDbGroupConstant {
 export class ActionVoidByIssueTypeConst {
   static readonly REDUCED_OVER: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly ABANDONED: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly WRONG_ODDS: number[] = [
@@ -419,7 +424,7 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly NOT_PARTICIPATE: number[] = [
-    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
@@ -428,12 +433,12 @@ export class ActionVoidByIssueTypeConst {
   ];
   static readonly WRONG_MARKET_OFFERED: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+  //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly TECHNICAL_ERROR: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+  //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly ALLOWANCE_RATE: number[] = [

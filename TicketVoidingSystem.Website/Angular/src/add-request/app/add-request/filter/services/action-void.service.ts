@@ -1,110 +1,73 @@
 import { Injectable } from '@angular/core';
+import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../../utility/constants/config';
-
+import { Selection } from '../../../../../utility/models/selection.model';
 @Injectable({
   providedIn: 'root'
 })
 export class ActionVoidService {
-
   constructor(
   ) { }
 
-  /* istanbul ignore next */
-  public getActionVoidReducedOver(): number[] {
-    return ActionVoidByIssueTypeConst.REDUCED_OVER;
+  public getVoidActionsSelectionByIssueType(issueTypeId: number, filterBy: number, isEdit: boolean, currentActionId: string, originActions: Selection[]): Selection[] {
+    if (!issueTypeId) {
+      return originActions;
+    }
+    
+    const actionMapping: { [key: string]: number[] } = {
+      [IssueTypeConstant.REDUCED_OVER]: ActionVoidByIssueTypeConst.REDUCED_OVER,
+      [IssueTypeConstant.ABANDONED]: ActionVoidByIssueTypeConst.ABANDONED,
+      [IssueTypeConstant.WRONG_ODDS]: ActionVoidByIssueTypeConst.WRONG_ODDS,
+      [IssueTypeConstant.DANGER_ACCEPTED]: ActionVoidByIssueTypeConst.DANGER_ACCEPTED,
+      [IssueTypeConstant.WRONG_SCORE]: ActionVoidByIssueTypeConst.WRONG_SCORE,
+      [IssueTypeConstant.WRONG_HDP]: ActionVoidByIssueTypeConst.WRONG_HDP,
+      [IssueTypeConstant.WRONG_1ST_HDP]: ActionVoidByIssueTypeConst.WRONG_1ST_HDP,
+      [IssueTypeConstant.WRONG_OU]: ActionVoidByIssueTypeConst.WRONG_OU,
+      [IssueTypeConstant.WRONG_1ST_OU]: ActionVoidByIssueTypeConst.WRONG_1ST_OU,
+      [IssueTypeConstant.EARLY_KICK_OFF]: ActionVoidByIssueTypeConst.EARLY_KICK_OFF,
+      [IssueTypeConstant.WRONG_KICK_OFF]: ActionVoidByIssueTypeConst.WRONG_KICK_OFF,
+      [IssueTypeConstant.RED_CARD]: ActionVoidByIssueTypeConst.RED_CARD,
+      [IssueTypeConstant.ABNORMAL_ACCOUNT]: ActionVoidByIssueTypeConst.ABNORMAL_ACCOUNT,
+      [IssueTypeConstant.ARCHIVED_TICKET]: ActionVoidByIssueTypeConst.ARCHIVED_TICKET,
+      [IssueTypeConstant.NOT_PARTICIPATE]: ActionVoidByIssueTypeConst.NOT_PARTICIPATE,
+      [IssueTypeConstant.RECOVER_TICKET]: ActionVoidByIssueTypeConst.RECOVER_TICKET,
+      [IssueTypeConstant.WRONG_MARKET_OFFERED]: ActionVoidByIssueTypeConst.WRONG_MARKET_OFFERED,
+      [IssueTypeConstant.TECHNICAL_ERROR]: ActionVoidByIssueTypeConst.TECHNICAL_ERROR,
+      [IssueTypeConstant.ABNORMAL_BET]: [],
+      [IssueTypeConstant.DUPLICATE_TICKETS]: [],
+    };
+
+    let actionIds: number[] = [];
+    if (issueTypeId?.toString() === IssueTypeConstant.ABNORMAL_BET) {
+      actionIds = this.getActionAbnormalBet(filterBy);
+    } else if (issueTypeId?.toString() === IssueTypeConstant.DUPLICATE_TICKETS) {
+      actionIds = this.getActionVoidDuplicateTickets(isEdit, currentActionId);
+    } else {
+      actionIds = actionMapping[issueTypeId];
+    }
+
+    return this.mapActionIdsToSelections(actionIds, originActions);
   }
 
-  /* istanbul ignore next */
-  public getActionVoidWrongOdds(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_ODDS;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidDangerAccepted(): number[] {
-    return ActionVoidByIssueTypeConst.DANGER_ACCEPTED;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidWrongScore(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_SCORE;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidWrongHdp(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_HDP;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidWrong1stHdp(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_1ST_HDP;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidWrongOu(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_OU;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidWrong1stOu(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_1ST_OU;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidEarlyKickOff(): number[] {
-    return ActionVoidByIssueTypeConst.EARLY_KICK_OFF;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidWrongKickOff(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_KICK_OFF;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidRedCard(): number[] {
-    return ActionVoidByIssueTypeConst.RED_CARD;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidAbnormalAccount(): number[] {
-    return ActionVoidByIssueTypeConst.ABNORMAL_ACCOUNT;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidArchivedTicket(): number[] {
-    return ActionVoidByIssueTypeConst.ARCHIVED_TICKET;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidDuplicateTickets(isEdit: boolean, actionId: string): number[] {
-    return isEdit && actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString()
-      ? ActionVoidByIssueTypeConst.DUPLICATE_TICKETS_AUTO_ADD_REQUEST
-      : ActionVoidByIssueTypeConst.DUPLICATE_TICKETS_ADD_REQUEST;
-  }
-
-  /* istanbul ignore next */
-  public getActionAbnormalBet(filterBy: number): number[] {
+  private getActionAbnormalBet(filterBy: number): number[] {
     return filterBy === AbnormalFilterBy.SINGLE
       ? ActionVoidByIssueTypeConst.ABNORMAL_BET_SINGLE
       : ActionVoidByIssueTypeConst.ABNORMAL_BET_MIX_OR_SYSTEM_PARLAY;
   }
 
-  /* istanbul ignore next */
-  public getActionVoidNotParticipate(): number[] {
-    return ActionVoidByIssueTypeConst.NOT_PARTICIPATE;
+  private getActionVoidDuplicateTickets(isEdit: boolean, currentActionId: string): number[] {
+    return isEdit && currentActionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID.toString()
+      ? ActionVoidByIssueTypeConst.DUPLICATE_TICKETS_AUTO_ADD_REQUEST
+      : ActionVoidByIssueTypeConst.DUPLICATE_TICKETS_ADD_REQUEST;
   }
 
-  /* istanbul ignore next */
-  public getActionRecoverTicket(): number[] {
-    return ActionVoidByIssueTypeConst.RECOVER_TICKET;
+  private mapActionIdsToSelections(actionIds: number[], originActions: Selection[]): Selection[] {
+    return actionIds.map(id => {
+      const foundAction = originActions.find((action) => action.value === id.toString());
+      const name = foundAction ? foundAction.name : '';
+      return { value: id.toString(), name };
+    });
   }
 
-  /* istanbul ignore next */
-  public getActionVoidWrongMarketOffered(): number[] {
-    return ActionVoidByIssueTypeConst.WRONG_MARKET_OFFERED;
-  }
-
-  /* istanbul ignore next */
-  public getActionVoidTechnicalError(): number[] {
-    return ActionVoidByIssueTypeConst.TECHNICAL_ERROR;
-  }
 }
+

@@ -29,7 +29,7 @@ export class LogInfoService {
     const getLogInfoResult = await this.getLogInfo([logInfo], isEdit, requestId, filter);
     this.assignResultLogInfoToEvents([logInfo], getLogInfoResult.getLogInfoModels);
     query.transInfoJson = getLogInfoResult.transInfoAddRequestModel.transInfoJson;
-    
+
     const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(query, 'api/VoidRequest/GetTickets');
     logInfo.pagingModel.pageSize = PagingConstant.SIZE_ONE;
     logInfo.tableTicketsModel.initData(data);
@@ -42,7 +42,7 @@ export class LogInfoService {
     eventLogInfo.templateValue = this.templateService.getTemplateValue(eventLogInfo.matchModel);
     eventLogInfo.templateValue.groupPHAffected = eventLogInfo.tableTicketsModel.groupPHAffected;
     eventLogInfo.templateValue.checkSettled = eventLogInfo.tableTicketsModel.isHasSettledTicket;
-    eventLogInfo.templateValue.kickOffTime = eventLogInfo.kickOffTime;    
+    eventLogInfo.templateValue.kickOffTime = eventLogInfo.kickOffTime;
   }
 
   public initQuery(pageIndex: number, pageSize: number, logInfo: LogInfoEarlyKickOff, filter: FilterModel): GetTicketsQuery {
@@ -77,15 +77,15 @@ export class LogInfoService {
     selectedEvents.forEach(event => {
       const logInfoModel = logInfoModels.find(x => x.matchId === event.matchId);
       if (logInfoModel) {
+
         event.isInvalidTotalTickets = logInfoModel.validation.isInvalidTotalTickets;
         event.isHasSettledTicket = logInfoModel.validation.isHasSettledTicket;
         event.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
-       event.isCollapse = logInfoModel.validation.isInvalidTotalTickets ? false : event.isCollapse;
+        event.isCollapse = logInfoModel.validation.isInvalidTotalTickets ? false : event.isCollapse;
         if (logInfoModel.validation.isInvalidTotalTickets) {  // check note***
           event.isShowValidation = true;
         }
-      
       }
     });
   }

@@ -11,5 +11,5 @@ export class FilterModel {
   isVoided: boolean;
   subIssueTypes?: SubIssueType[];
   isChangeSubTypeManual?: boolean;
-  originActions: Selection[];
+  originActions?: Selection[];
 }

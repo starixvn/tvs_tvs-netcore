@@ -44,7 +44,11 @@ export class ValidationService {
     return logInfoEarlyKickOff.every(x => this.isEventMatchValid(x));
   }
 
-  public isAccountHasAddRequestPermission(logInfoEarlyKickOff: LogInfoEarlyKickOff[], permission: PermissionAddRequest): boolean {
+  public isAccountHasAddRequestPermission(currentActionId: string, logInfoEarlyKickOff: LogInfoEarlyKickOff[], permission: PermissionAddRequest): boolean {
+    if (currentActionId === TVSRequestActionType.TAKE_NOTE_ID.toString()) {
+      return true;
+    }
+
     let missingPermissionArrays: string[] = [];
     if (logInfoEarlyKickOff.some(x => x.isHasInstantlySettledTicket && !(permission.isAddInstantlySettledTickets || permission.isAddSettledTickets))) {
       missingPermissionArrays.push('instantly settled ticket');

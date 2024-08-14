@@ -44,13 +44,16 @@ export class SaveRequestService {
     const getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
     this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
     arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
-    arg.primitiveProps.isShowLogInfoEvents = true;
-    arg.mainEvent.isCollapse = true;
-    arg.addRequestStore.changeBlockingUiStatus(false);
 
-    if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
+
+    if (!this.validationService.isAccountHasAddRequestPermission(arg.filter.action, arg.allEvents, arg.permission)) {
+      arg.addRequestStore.changeBlockingUiStatus(false);
       return false;
     }
+
+    arg.primitiveProps.isShowLogInfoEvents = true;
+    arg.mainEvent.isCollapse = arg.mainEvent.isInvalidTotalTickets ? false : true;
+    arg.addRequestStore.changeBlockingUiStatus(false);
 
     if (this.validationService.isAllEventsValid(arg.allEvents)) {
       return true;
