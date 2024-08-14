@@ -3,6 +3,7 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { AddRequestStore } from "../../add-request.store";
 import { FilterModel } from "../../filter/filter.model";
+import { IssueTypes } from '../../filter/issue-types.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { OthersModel } from "../../others/others.model";
 import { ConfirmEarlyKickOffModel } from "../confirm-eko/confirm-eko.model";
@@ -24,7 +25,7 @@ export class SaveRequestArg {
   tooltip: Tooltip;
   kickOffTimeComponent: DateFullTimeNewComponent;
   addRequestStore: AddRequestStore;
-  isSaveAndVoid: boolean;
   confirmEarlyKickOff: ConfirmEarlyKickOffModel;
   permission: PermissionAddRequest;
+  issueTypes: IssueTypes;
 }

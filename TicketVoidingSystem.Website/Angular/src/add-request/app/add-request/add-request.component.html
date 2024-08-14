@@ -234,15 +234,8 @@
         <button type="submit" class="btn btn-primary btn-sm mg-right-10"
           (mousedown)="$event.preventDefault()"
           [disabled]="isDisabledSaveButton"
-          (click)="!isDisabledSaveButton && saveRequest(false)">
+          (click)="!isDisabledSaveButton && saveRequest()">
           Save
-        </button>
-        <button type="submit"class="btn btn-success btn-sm mg-right-10"
-          *ngIf="isShowSaveAndVoidButton()"
-          [disabled]="isDisabledSaveButton"
-          (mousedown)="$event.preventDefault()"
-          (click)="!isDisabledSaveButton && saveRequest(true)">
-          Save & Void
         </button>
         <button type="submit" class="btn btn-danger btn-sm"
           [disabled]="isDisabledSaveButton"

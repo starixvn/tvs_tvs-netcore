@@ -141,7 +141,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-    const isSearchOk = await this.searchEventService.searchEvents(this.initSaveRequestInput(false), this.relatedEvents);
+    const isSearchOk = await this.searchEventService.searchEvents(this.initSaveRequestInput(), this.relatedEvents);
     if (isSearchOk) {
       await this.getTicketsMainEvent();
     }
@@ -158,21 +158,21 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
   }
 
-  public async saveRequest(isSaveAndVoid: boolean): Promise<void> {
+  public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    await this.saveRequestService.saveRequest(this.initSaveRequestInput(isSaveAndVoid));
+    await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   async onClickConfirmSaveRequest() {
-    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput(false));
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
   }
 
   onClickCancelSaveRequest() {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
-  private initSaveRequestInput(isSaveAndVoid: boolean): SaveRequestArg {
+  private initSaveRequestInput(): SaveRequestArg {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;
@@ -190,8 +190,8 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.kickOffTimeComponent = this.kickOffTimeComponent;
     arg.confirmEarlyKickOff = this.confirmEarlyKickOff;
     arg.others = this.others;
-    arg.isSaveAndVoid = isSaveAndVoid;
     arg.permission = this.permission;
+    arg.issueTypes = this.issueTypes;
     return arg;
   }
 

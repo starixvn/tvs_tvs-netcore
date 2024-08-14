@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TVSRequestActionType } from 'src/utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -52,7 +51,7 @@ export class SaveRequestService {
     if (!this.validationService.isAccountHasAddRequestPermission(arg.allEvents, arg.permission)) {
       return false;
     }
-    
+
     if (this.validationService.isAllEventsValid(arg.allEvents)) {
       return true;
     }
@@ -73,7 +72,7 @@ export class SaveRequestService {
   private async executeSaveRequestApi(arg: SaveRequestArg): Promise<void> {
     arg.addRequestStore.changeBlockingUiStatus(true);
     const query = this.initAddRequestQuery(arg);
-    await this.addRequestApiService.executeSaveRequest(arg.isEdit, arg.requestId, query, arg.addRequestStore, arg.isSaveAndVoid);
+    await this.addRequestApiService.executeSaveRequest(arg.isEdit, arg.requestId, query, arg.addRequestStore);
     arg.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -115,22 +114,23 @@ export class SaveRequestService {
     arg.confirmEarlyKickOff.warningRelatedEvents = [];
     if (!arg.filter.isVoided) {
       arg.allEvents.filter(x => !x.isMainMatch).forEach(y => {
-        y.messageValidationLogInfo.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
-            arg.confirmEarlyKickOff.warningRelatedEvents.push(y.eventName);
-          }
-        });
+        if (y.isInvalidTotalTickets) {
+          arg.confirmEarlyKickOff.warningRelatedEvents.push(y.eventName);
+        }
       });
       arg.confirmEarlyKickOff.isHasWarningEvent = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
       arg.confirmEarlyKickOff.isHasWarningEditTakeNoteRequest =
-      (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
+        (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
     }
 
+    arg.confirmEarlyKickOff.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
+    arg.confirmEarlyKickOff.actionName = arg.filter.originActions.find(x => x.value === arg.filter.action).name;
     arg.confirmEarlyKickOff.requestId = arg.requestId;
     arg.confirmEarlyKickOff.requestedBy = arg.requestedBy;
-    arg.confirmEarlyKickOff.isEditingByAnotherUser =
-      this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
+    arg.confirmEarlyKickOff.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
+    arg.confirmEarlyKickOff.isHasSettledTicket = arg.allEvents.some(x => x.isHasSettledTicket);
     arg.confirmEarlyKickOff.isOpenDialog = true;
     arg.confirmEarlyKickOff = _.clone(arg.confirmEarlyKickOff);
   }
+
 }

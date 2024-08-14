@@ -1,5 +1,5 @@
 import { SubIssueType } from '../../../../utility/models/issue-type.model';
-
+import { Selection } from '../../../../utility/models/selection.model';
 export class FilterModel {
   sportType: number;
   eventDate?: string;
@@ -11,4 +11,5 @@ export class FilterModel {
   isVoided: boolean;
   subIssueTypes?: SubIssueType[];
   isChangeSubTypeManual?: boolean;
+  originActions: Selection[];
 }

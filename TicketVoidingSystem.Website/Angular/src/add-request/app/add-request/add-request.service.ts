@@ -21,35 +21,35 @@ export class AddRequestService {
     private readonly commonService: CommonService
   ) { }
 
-  async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid = false): Promise<void> {
+  async executeSaveRequest(isEdit: boolean, requestId: number, query: AddRequestQuery, addRequestStore: AddRequestStore): Promise<void> {
     if (isEdit) {
       query.requestId = requestId;
-      await this.editRequest(query, addRequestStore, isSaveAndVoid);
+      await this.editRequest(query, addRequestStore);
     } else {
-      await this.addRequest(query, addRequestStore, isSaveAndVoid);
+      await this.addRequest(query, addRequestStore);
     }
   }
 
-  private async addRequest(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean): Promise<void> {
+  private async addRequest(query: AddRequestQuery, addRequestStore: AddRequestStore): Promise<void> {
     addRequestStore.changeSavingRequestStatus(true);
     query.guid = `AddRequest-${Guid.create().toString()}`;
     query.sessionTime = this.getTimeFilterTicket(addRequestStore);
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
-      this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore, isSaveAndVoid);
+      this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore);
     } else {
-      this.getAddResultCache(query, addRequestStore, isSaveAndVoid);
+      this.getAddResultCache(query, addRequestStore);
     }
   }
 
-  private getAddResultCache(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private getAddResultCache(query: AddRequestQuery, addRequestStore: AddRequestStore) {
     let isChecking = false;
     const interval = setInterval(async () => {
       if (!isChecking) {
         isChecking = true;
         const result = await this.commonService.getResultCache<AddRequestResultModel>(query.guid);
         if (result) {
-          this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore, isSaveAndVoid);
+          this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore);
           clearInterval(interval);
         }
         isChecking = false;
@@ -57,15 +57,11 @@ export class AddRequestService {
     }, 2000);
   }
 
-  private handleAfterAddRequest(addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private handleAfterAddRequest(addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore) {
     if (addResult.isSuccessful) {
-      if (isSaveAndVoid) {
-        this.goToVoidPage(Number(addResult.data.requestId));
-      } else {
         this.isShowResultWithoutMatches(issueTypeId)
           ? this.popupService.showAddedRequestSuccessful(addResult.data.requestId, () => this.reloadPageOrBackToManagePage(issueTypeId))
           : this.popupService.showAddedRequestSuccessfulWithMatches(addResult.data.requestId, addResult.data.matchId, () => this.reloadPageOrBackToManagePage(issueTypeId));
-      }
     } else {
       this.popupService.showSaveRequestError(addResult.errorMsg, LABELS.ADD_REQUEST_RESULT_TITLE);
     }
@@ -73,7 +69,7 @@ export class AddRequestService {
     addRequestStore.changeSavingRequestStatus(false);
   }
 
-  private async editRequest(query: AddRequestQuery, addRequestStore: AddRequestStore, isSaveAndVoid: boolean) {
+  private async editRequest(query: AddRequestQuery, addRequestStore: AddRequestStore) {
     addRequestStore.changeSavingRequestStatus(true);
 
     const result = await this.addRequestApiService.editRequest(query);
@@ -84,10 +80,6 @@ export class AddRequestService {
     }
 
     addRequestStore.changeSavingRequestStatus(false);
-  }
-
-  private goToVoidPage(requestId: number): void {
-    window.location.assign(`TicketVoidingSystem/VoidRequest/Index/${requestId}`);
   }
 
   private reloadPageOrBackToManagePage(issueTypeId: string) {
