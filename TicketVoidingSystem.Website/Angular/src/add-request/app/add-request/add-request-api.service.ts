@@ -157,4 +157,9 @@ export class AddRequestApiService {
   async GetLiveGameEarlyTickets(query: LiveGameEarlyTicketsQuery): Promise<TicketsModel> {
     return this.httpService.postJson(query, 'api/AddRequest/GetLiveGameEarlyTickets');
   }
+
+  /* istanbul ignore next */
+  async GetDecidedBy(): Promise<string[]> {
+    return this.httpService.getJson('api/AddRequest/GetDecidedBy');
+  }
 }

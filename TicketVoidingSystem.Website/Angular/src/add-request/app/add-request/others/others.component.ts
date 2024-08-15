@@ -4,6 +4,7 @@ import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestStore } from '../add-request.store';
 import { GroupOperator, OperatorDefault, OperatorInfo, OthersModel } from './others.model';
 import { OthersService } from './others.service';
+import { AddRequestApiService } from '../add-request-api.service';
 
 
 @Component({
@@ -22,15 +23,20 @@ export class OthersComponent implements OnChanges, OnInit {
 
   operators: OperatorInfo[] = [];
   groupOperators: GroupOperator[] = [];
+  decidedBys = [];
 
   constructor(
     private readonly othersService: OthersService,
-    private readonly addRequestStore: AddRequestStore
+    private readonly addRequestStore: AddRequestStore,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.operators = [OperatorDefault.TRADER, OperatorDefault.SUSPENDER];
     this.intDefaultValueGroupOperators();
+    if(this.decidedBys.length === 0){
+      this.decidedBys = await this.addRequestApiService.GetDecidedBy();
+    }
   }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -41,7 +47,7 @@ export class OthersComponent implements OnChanges, OnInit {
         await this.initProvider(this.isEdit, this.matchId, this.parentMatchId);
         this.addRequestStore.changeBlockingUiStatus(false);
       } else {
-        this.ngOnInit();
+        this.operators = [OperatorDefault.TRADER, OperatorDefault.SUSPENDER];
       }
 
       this.intDefaultValueGroupOperators();
@@ -107,5 +113,9 @@ export class OthersComponent implements OnChanges, OnInit {
       const provider = await this.othersService.getProvider(id);
       this.model.provider = provider?.providerName;
     }
+  }
+
+  addDecidedBy(decidedBy: string){
+    this.decidedBys.push(decidedBy);
   }
 }

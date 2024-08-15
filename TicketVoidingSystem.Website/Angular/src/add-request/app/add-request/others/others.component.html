@@ -14,15 +14,19 @@
               (change)="updateModel()" maxlength="200">
           </div>
         </div>
-
         <div class="col-6 col-sm-6 col-md-4">
           <label class="col-form-label">Decided By</label>
           <div class="input-area">
-            <input type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" (change)="updateModel()"
-              maxlength="200">
+            <ng-select [items]="decidedBys" [(ngModel)]="model.decidedBy" [addTag]="true" (add)="addDecidedBy($event)" dropdownPosition="bottom">
+              <ng-template let-items="decidedBys" let-clear="clear">
+                <div class="ng-value" *ngFor="let item of decidedBys">
+                  <span class="ng-value-label">{{ item }}</span>
+                  <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true"></span>
+                </div>             
+              </ng-template>
+            </ng-select>
           </div>
         </div>
-
         <div class="col-6 col-sm-6 col-md-4" *ngFor="let group of groupOperators">
           <label class="col-form-label">{{group.name}}</label>
           <div class="operator-list">

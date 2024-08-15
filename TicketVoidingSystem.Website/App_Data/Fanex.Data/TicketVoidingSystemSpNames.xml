@@ -290,6 +290,7 @@
         <Setting Key="TicketVoiding_AccountWinLost_Select" SpName="TicketVoiding_AccountWinLost_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_AccountWinLost_Update" SpName="TicketVoiding_AccountWinLost_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Request_CheckRecoverTicket" SpName="TicketVoiding_Request_CheckRecoverTicket" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_DecidedBy_Select" SpName="TicketVoiding_DecidedBy_Select" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="VirtualSport">
         <Setting Key="DBCTG.NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" SpName="NAP_SpecialDelete_VoidParlaySubVSBetRadar_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />

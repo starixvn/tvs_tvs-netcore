@@ -108,4 +108,7 @@ public class AddRequestController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> GetLiveGameEarlyTickets(GetLiveGameEarlyTicketsRequest request) => Ok(await mediator.Send(request));
+
+    [HttpGet]
+    public async Task<IActionResult> GetDecidedBy() => Ok(await mediator.Send(new GetDecidedByRequest()));
 }

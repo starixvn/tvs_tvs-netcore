@@ -29,6 +29,7 @@ public static class AddRequestCommon
         services.AddTransient<NotParticipateBetTypesService, NotParticipateBetTypesServiceImp>();
         services.AddTransient<WrongMarketOfferedService, WrongMarketOfferedServiceImp>();
         services.AddTransient<GetLiveGameEarlyTicketService, GetLiveGameEarlyTicketServiceImp>();
+        services.AddTransient<GetDecidedByService, GetDecidedByServiceImp>();
         services.RegisterAbnormalBetServices();
         services.RegisterAbnormalAccountServices();
     }
