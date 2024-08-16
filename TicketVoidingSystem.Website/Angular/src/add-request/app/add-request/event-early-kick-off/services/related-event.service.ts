@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import moment from 'moment';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -21,12 +22,12 @@ export class RelatedEventService {
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,
     private readonly logInfoService: LogInfoService
-  ) {}
+  ) { }
 
-  async getChildMatches(mainMatchId: number, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
+  async getChildMatches(mainMatchId: number, eventDate: Date, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(filterModel.issueTypeId);
-    query.eventDate = filterModel.eventDate;
+    query.eventDate = eventDate ? moment(eventDate).format('YYYY/M/D') : null;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
     query.sportType = filterModel.sportType;
@@ -38,7 +39,7 @@ export class RelatedEventService {
     const newEvents = models
       .map(x => {
         const matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
-        return  {
+        return {
           matchId: x.matchId,
           matchCode: x.matchCode,
           leagueName: x.leagueName,
@@ -54,11 +55,11 @@ export class RelatedEventService {
           matchModel: matchModel,
         } as LogInfoEarlyKickOff;
       });
-        
-      return newEvents;
+
+    return newEvents;
   }
 
-  public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
+  public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel {
     return {
       sportType: childMatch.sportType,
       sportTypeName: childMatch.sportTypeName,
@@ -85,9 +86,9 @@ export class RelatedEventService {
       matchCode: childMatch.matchCode,
       leagueGroupId: childMatch.leagueGroupId,
       parentId: childMatch.parentId
-      } as MatchModel;
+    } as MatchModel;
   }
-  
+
 
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {
@@ -98,7 +99,7 @@ export class RelatedEventService {
         return;
       }
       addRelatedEventArg.addRequestStore.changeBlockingUiStatus(true);
-      const models = await this.getChildMatches(matchId, addRelatedEventArg.filter, false);
+      const models = await this.getChildMatches(matchId, addRelatedEventArg.mainEvent.matchModel.eventDate, addRelatedEventArg.filter, false);
       if (models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);

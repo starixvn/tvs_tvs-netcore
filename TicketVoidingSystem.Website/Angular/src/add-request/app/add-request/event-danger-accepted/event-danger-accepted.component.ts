@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -27,7 +28,6 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -145,6 +145,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.matchInfo = this.eventLeagueComponent?.selectedMatch;
     this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 

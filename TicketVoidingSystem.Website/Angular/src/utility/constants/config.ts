@@ -150,7 +150,17 @@ export class TVSRequestActionType {
   static readonly AUTO_VOID_RESULT_KEYED_ID = 9;
   static readonly AUTO_RECOVER_ID = 11;
 
-  static readonly MANUAL_VOID = 'Manual Void';
+  static readonly NAME_MAPPING = {
+    [this.AUTO_VOID_WINNING_ID]: "Auto Void Winning",
+    [this.TAKE_NOTE_ID]:  "Take note",
+    [this.WAITING_ID]:  "Waiting",
+    [this.AUTO_VOID_INSTANT_ID]:  "Auto Void All (Instant)",
+    [this.MANUAL_VOID_ID]:  "Manual Void",
+    [this.AUTO_VOID_INSTANT_WITHOUT_POLICY]:  "Auto Void All (Instant w/o Policy)",
+    [this.AUTO_VOID_RESULT_KEYED_ID]:  "Auto Void All (Result keyed)",
+    [this.AUTO_VOID_INSTANT_WITH_POLICY_ID]:  "Auto Void (Instant with Policy)",
+    [this.AUTO_RECOVER_ID]:  "Auto Recover"
+  };
 }
 
 export class DateTimeFormat {

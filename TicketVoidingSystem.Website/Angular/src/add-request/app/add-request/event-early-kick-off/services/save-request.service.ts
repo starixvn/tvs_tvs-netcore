@@ -127,7 +127,7 @@ export class SaveRequestService {
     }
 
     arg.confirmEarlyKickOff.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
-    arg.confirmEarlyKickOff.actionName = arg.filter.originActions.find(x => x.value === arg.filter.action).name;
+    arg.confirmEarlyKickOff.actionName = TVSRequestActionType.NAME_MAPPING[arg.filter.action];
     arg.confirmEarlyKickOff.requestId = arg.requestId;
     arg.confirmEarlyKickOff.requestedBy = arg.requestedBy;
     arg.confirmEarlyKickOff.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);

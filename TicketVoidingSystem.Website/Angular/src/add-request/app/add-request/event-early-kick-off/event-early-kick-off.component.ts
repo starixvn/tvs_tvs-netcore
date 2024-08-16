@@ -96,7 +96,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         await this.getTicketsMainEvent();
       }
 
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.matchModel.eventDate, this.filter, true);
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
@@ -136,7 +136,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.matchModel.eventDate, this.filter, true);
     const isSearchOk = await this.searchEventService.searchEvents(this.initSaveRequestInput(), this.relatedEvents);
     if (isSearchOk) {
       await this.getTicketsMainEvent();
