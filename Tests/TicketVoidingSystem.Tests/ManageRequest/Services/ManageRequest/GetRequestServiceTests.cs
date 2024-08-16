@@ -191,7 +191,7 @@ public class GetRequestServiceTests
             DangerAcceptedModels = new List<DangerAcceptedViewModel>()
         };
         repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request).ReturnsForAnyArgs(fakeData);
-        remotingRefService.GetTeamName(Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
+        remotingRefService.GetTeamName(147, Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
         // Act
         var actualResult = await service.GetRequest(request);
 
@@ -512,7 +512,7 @@ public class GetRequestServiceTests
                 new List<PlayerName> { new() }
             );
         repository.FetchMultipleAsync<RequestDetailModel, RequestEventModel, PlayerName>(request).ReturnsForAnyArgs(fakeData);
-        remotingRefService.GetTeamName(Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
+        remotingRefService.GetTeamName(147, Arg.Any<string>(), LanguageCode.English).ReturnsForAnyArgs("TeamName");
 
         // Act
         var actualResult = await service.GetRequest(request);

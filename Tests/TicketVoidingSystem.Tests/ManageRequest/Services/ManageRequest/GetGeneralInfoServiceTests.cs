@@ -85,9 +85,9 @@ public class GetGeneralInfoServiceTests
         repository.FetchMultipleAsync<GeneralInfoModel, UserVoidMessage, EmailResultModel>(request)
             .ReturnsForAnyArgs((item1, item2, item3));
 
-        remotingRefService.GetLeagueName(1, "").ReturnsForAnyArgs("Champion League");
-        remotingRefService.GetTeamName(12, LanguageCode.English).Returns("Chen");
-        remotingRefService.GetTeamName(13, LanguageCode.English).Returns("Bat");
+        remotingRefService.GetLeagueName(1, 1, "").ReturnsForAnyArgs("Champion League");
+        remotingRefService.GetTeamName(1, 12, LanguageCode.English).Returns("Chen");
+        remotingRefService.GetTeamName(1, 13, LanguageCode.English).Returns("Bat");
 
         var expected = new GeneralInfoViewModel
         {
@@ -147,9 +147,9 @@ public class GetGeneralInfoServiceTests
         repository.FetchMultipleAsync<GeneralInfoModel, UserVoidMessage, EmailResultModel>(request)
             .ReturnsForAnyArgs((item1, item2, item3));
 
-        remotingRefService.GetLeagueName(1, "").ReturnsForAnyArgs("Champion League");
-        remotingRefService.GetTeamName(12, LanguageCode.English).Returns("Chen");
-        remotingRefService.GetTeamName(13, LanguageCode.English).Returns("Bat");
+        remotingRefService.GetLeagueName(1, 1, "").ReturnsForAnyArgs("Champion League");
+        remotingRefService.GetTeamName(1, 12, LanguageCode.English).Returns("Chen");
+        remotingRefService.GetTeamName(1, 13, LanguageCode.English).Returns("Bat");
 
         var expected = new GeneralInfoViewModel
         {

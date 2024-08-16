@@ -30,7 +30,6 @@ public class GetMatchInfoVoidByCurrencyHandlerTests
         // Assert
         await matchService.Received(1).GetMatchVoidByCurrency(Arg.Any<GetMatchInfoVoidByCurrencyRequest>());
         matchService.Received(1).UpdateMatchInfoFromRemotingRef(null);
-        betListService.Received(0).GetMatchCodeBetradar(Arg.Any<string>());
     }
 
     [Fact]
@@ -47,7 +46,7 @@ public class GetMatchInfoVoidByCurrencyHandlerTests
         _ = await handler.Handle(null, CancellationToken.None);
 
         // Assert
-        betListService.Received(0).GetMatchCodeBetradar(Arg.Any<string>());
+        betListService.Received(0).GetVirtualSportMatchCode(147, Arg.Any<string>());
     }
 
     [Fact]
@@ -57,14 +56,14 @@ public class GetMatchInfoVoidByCurrencyHandlerTests
         var match = new Match { SportType = 190 };
         matchService.GetMatchVoidByCurrency(Arg.Any<GetMatchInfoVoidByCurrencyRequest>()).Returns(match);
         matchService.UpdateMatchInfoFromRemotingRef(Arg.Any<Match>()).Returns(match);
-        betListService.GetMatchCodeBetradar(match.MatchCode).Returns("1");
+        betListService.GetVirtualSportMatchCode(190, match.MatchCode).Returns("1");
         handler = new GetMatchInfoVoidByCurrencyHandler(betListService, matchService);
 
         // Act
         var result = await handler.Handle(null, CancellationToken.None);
 
         // Assert
-        betListService.Received(1).GetMatchCodeBetradar(Arg.Any<string>());
+        betListService.Received(1).GetVirtualSportMatchCode(190, Arg.Any<string>());
         Assert.Equal("1", result.MatchCode);
     }
 }

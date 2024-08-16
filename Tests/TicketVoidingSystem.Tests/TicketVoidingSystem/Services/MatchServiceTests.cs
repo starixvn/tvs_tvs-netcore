@@ -132,8 +132,8 @@ public class MatchServiceTests
     {
         // Arrange
         var query = new Match();
-        remotingRefWrapperService.GetTeamName(default, default).ReturnsForAnyArgs("TeamName");
-        remotingRefWrapperService.GetLeagueName(default, default).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetTeamName(default, default, default).ReturnsForAnyArgs("TeamName");
+        remotingRefWrapperService.GetLeagueName(default, default, default).ReturnsForAnyArgs("LeagueName");
         remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs("SportName");
 
         var expected = new Match
@@ -173,8 +173,8 @@ public class MatchServiceTests
     {
         // Arrange
         var query = new Match { IsOutright = true, IsNeutral = true };
-        remotingRefWrapperService.GetTeamName(default, default).ReturnsForAnyArgs("TeamName");
-        remotingRefWrapperService.GetLeagueName(default, default).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetTeamName(1, default, default).ReturnsForAnyArgs("TeamName");
+        remotingRefWrapperService.GetLeagueName(1, default, default).ReturnsForAnyArgs("LeagueName");
         remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs("SportName");
 
         var expected = new Match
@@ -221,8 +221,8 @@ public class MatchServiceTests
     {
         // Arrange
         var query = new Match { SportType = sportType };
-        remotingRefWrapperService.GetTeamName(default, default).ReturnsForAnyArgs("TeamName");
-        remotingRefWrapperService.GetLeagueName(default, default).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetTeamName(1, default, default).ReturnsForAnyArgs("TeamName");
+        remotingRefWrapperService.GetLeagueName(1, default, default).ReturnsForAnyArgs("LeagueName");
         remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs("SportName");
         remotingRefWrapperService.GetBFName(default).ReturnsForAnyArgs("BFName");
         // Act

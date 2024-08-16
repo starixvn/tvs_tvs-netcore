@@ -268,21 +268,6 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     }
 
     [Fact]
-    public void GetMatchCodeBetradar_ReturnCode()
-    {
-        // Arrange
-        const string expected = "AAA";
-        remotingRefWrapperService.GetMatchCodeBetRadar(default).ReturnsForAnyArgs(expected);
-        service = new BetListServiceImp(remotingRefWrapperService, null);
-
-        // Act
-        var actual = service.GetMatchCodeBetradar(null);
-
-        // Assert
-        Assert.Equal(expected, actual);
-    }
-
-    [Fact]
     public void GetSportTypeName_ReturnName()
     {
         // Arrange
@@ -436,5 +421,50 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
 
         // Assert
         AssertExtension.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData(191, "abc")]
+    [InlineData(190, "xyz")]
+    public void GetVirtualSportMatchCode_CalledGetMatchCodeBetRadar(int sportType, string matchCodeExpected)
+    {
+        // Arrange
+        remotingRefWrapperService.GetMatchCodeBetRadar("1").Returns(matchCodeExpected);
+
+        // Act
+        var result = service.GetVirtualSportMatchCode(sportType, "1");
+
+        // Assert
+        AssertExtension.Equal(matchCodeExpected, result);
+        remotingRefWrapperService.Received(1).GetMatchCodeBetRadar("1");
+    }
+
+    [Theory]
+    [InlineData(178, "abc")]
+    [InlineData(147, "xyz")]
+    public void GetVirtualSportMatchCode_CalledGetMatchCodeVS345(int sportType, string matchCodeExpected)
+    {
+        // Arrange
+        remotingRefWrapperService.GetMatchCodeVS345(sportType, "1").Returns(matchCodeExpected);
+
+        // Act
+        var result = service.GetVirtualSportMatchCode(sportType, "1");
+
+        // Assert
+        AssertExtension.Equal(matchCodeExpected, result);
+        remotingRefWrapperService.Received(1).GetMatchCodeVS345(sportType, "1");
+    }
+
+    [Fact]
+    public void GetVirtualSportMatchCode_RemotingRefWrapperServiceNotCalled()
+    {
+        // Arrange
+        // Act
+        var result = service.GetVirtualSportMatchCode(1, "1");
+
+        // Assert
+        AssertExtension.Equal("1", result);
+        remotingRefWrapperService.Received(0).GetMatchCodeVS345(1, "1");
+        remotingRefWrapperService.Received(0).GetMatchCodeBetRadar("1");
     }
 }

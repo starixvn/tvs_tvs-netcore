@@ -52,9 +52,9 @@ public class MatchInfoAddRequestServiceTests
             MatchCode = "1",
             IsOutright = isOutright
         };
-        remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English).Returns("123");
-        remotingRefService.GetTeamName(matchInfo.AwayId, LanguageCode.English).Returns("456");
-        remotingRefService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English).ReturnsForAnyArgs("123");
+        remotingRefService.GetTeamName(sportType, matchInfo.HomeId, LanguageCode.English).Returns("123");
+        remotingRefService.GetTeamName(sportType, matchInfo.AwayId, LanguageCode.English).Returns("456");
+        remotingRefService.GetLeagueName(sportType, matchInfo.LeagueId, LanguageCode.English).ReturnsForAnyArgs("123");
         remotingRefService.GetBFName(matchInfo.HomeId).Returns("1");
         remotingRefService.GetBFName(matchInfo.AwayId).Returns("2");
         var expected = new MatchInfoAddRequest
@@ -87,9 +87,9 @@ public class MatchInfoAddRequestServiceTests
         // Arrange
         var matchInfo = new MatchInfoAddRequest
         { IsNeutral = true, HomeId = 1, AwayId = 2, MatchId = 1, LeagueId = 1, SportType = 161, MatchCode = "1" };
-        remotingRefService.GetTeamName(matchInfo.HomeId, LanguageCode.English).Returns("123");
-        remotingRefService.GetTeamName(matchInfo.AwayId, LanguageCode.English).Returns("456");
-        remotingRefService.GetLeagueName(matchInfo.LeagueId, LanguageCode.English).ReturnsForAnyArgs("123");
+        remotingRefService.GetTeamName(161, matchInfo.HomeId, LanguageCode.English).Returns("123");
+        remotingRefService.GetTeamName(161, matchInfo.AwayId, LanguageCode.English).Returns("456");
+        remotingRefService.GetLeagueName(161, matchInfo.LeagueId, LanguageCode.English).ReturnsForAnyArgs("123");
         var expected = new MatchInfoAddRequest
         {
             IsNeutral = true,
