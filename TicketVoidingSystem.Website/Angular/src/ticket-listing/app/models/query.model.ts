@@ -43,6 +43,7 @@ export class SendFileQuery extends GetDetailQuery {
   betTypeName: string;
   matchCode: string;
   eventDate: Date;
+  globalShowTime: Date;
   startTime: Date;
   endTime: Date;
   matchEvent: string;

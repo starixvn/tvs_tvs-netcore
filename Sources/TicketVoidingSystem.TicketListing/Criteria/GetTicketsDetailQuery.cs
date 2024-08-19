@@ -22,6 +22,8 @@ public class SendFileQuery : GetDetailQuery
 
     public DateTime EventDate { get; set; }
 
+    public DateTime GlobalShowTime { get; set; }
+
     public string? MatchEvent { get; set; }
 
     public string? Title { get; set; }

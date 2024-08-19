@@ -1,4 +1,5 @@
 ﻿using Fanex.Data.Repository;
+using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
@@ -32,7 +33,7 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
     {
         var criteria = new SendDataOicCriteria
         {
-            EventDate = sendFileQuery.EventDate,
+            GlobalShowTime = sendFileQuery.GlobalShowTime.ZoneCanada(),
             MatchId = sendFileQuery.MatchId,
             TransInfoSendOICJson = ticketsJson.TransInfoSendOICJson
         };
@@ -60,7 +61,7 @@ public class InsertToAmendmentTableStageImp : InsertToAmendmentTableStage
     {
         var criteria = new SendDataOicBackupDbCriteria
         {
-            EventDate = sendFileQuery.EventDate,
+            GlobalShowTime = sendFileQuery.GlobalShowTime.ZoneCanada(),
             MatchId = sendFileQuery.MatchId,
             TransInfoSendOICJson = ticketsJson.TransInfoSendOICJson
         };

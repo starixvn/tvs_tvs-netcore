@@ -17,6 +17,7 @@ export class MatchModel {
   awayNameTraditional?: string;
   matchCode: string;
   eventDate?: Date;
+  globalShowTime?: Date;
   dateTime?: Date;
   leagueId?: number;
   leagueGroupId?: number;
