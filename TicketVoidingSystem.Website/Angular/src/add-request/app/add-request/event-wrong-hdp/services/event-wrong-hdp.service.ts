@@ -19,7 +19,7 @@ export class EventWrongHdpService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService
-  ) {}
+  ) { }
 
   public async getLinkedLog(logInfoWrongHdp: LogInfoWrongHdp, filter: FilterModel): Promise<LinkedLogsViewModel> {
     const query = {
@@ -32,7 +32,7 @@ export class EventWrongHdpService {
       homeFavorite: logInfoWrongHdp.filterWithHdp.homeFavorite,
       hdpValue: logInfoWrongHdp.filterWithHdp.hdpValue,
       liveIndicator: logInfoWrongHdp.filterWithHdp.liveIndicator
-    } as GetLinkedLogQuery ;
+    } as GetLinkedLogQuery;
 
     return this.addRequestApiService.getLinkedLogs(query);
   }
@@ -46,7 +46,7 @@ export class EventWrongHdpService {
       event.isMainMatch = x.isMainMatch;
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
-      event.poolHouseCheckedBetTypes = x.poolHouseCheckedBetTypes ;
+      event.poolHouseCheckedBetTypes = x.poolHouseCheckedBetTypes;
       event.isPoolHouseAffected = x.isPoolHouseAffected;
       event.linkedLogsViewModel = {
         isLinkGroup1X2: x.isLinkGroup1X2,
@@ -62,6 +62,7 @@ export class EventWrongHdpService {
         hdpValue: x.hdpValue,
         liveIndicator: x.liveIndicator
       } as FilterWithHdpModel;
+      event.eventDate = x.eventDate;
 
       allEvents.push(event);
     });

@@ -19,18 +19,18 @@ export class RelatedEventService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,
-  ) {}
+  ) { }
 
-  async getChildMatches(mainMatchId: number, filter: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
+  async getChildMatches(mainMatchId: number, eventDate: Date, filter: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(filter.issueTypeId);
-    query.eventDate = filter.eventDate;
+    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
 
     return this.addRequestApiService.getChildMatches(query);
   }
-  
+
   updateEvents(models: ChildMatchModel[], defaultFilter: FilterWithHdpModel): LogInfoWrongHdp[] {
     const newEvents = models
       .map(x => {
@@ -39,12 +39,12 @@ export class RelatedEventService {
           const currentMoment = moment.utc().tz('America/Caracas');
           filterWithHdp.filterFromTransTime = moment.utc().tz('America/Caracas').millisecond(0).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           filterWithHdp.filterToTransTime = currentMoment.format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
-        } else {          
+        } else {
           filterWithHdp.filterFromTransTime = defaultFilter.filterFromTransTime;
-          filterWithHdp.filterToTransTime = defaultFilter.filterToTransTime; 
+          filterWithHdp.filterToTransTime = defaultFilter.filterToTransTime;
         }
 
-        return  {
+        return {
           matchId: x.matchId,
           matchCode: x.matchCode,
           leagueName: x.leagueName,
@@ -56,19 +56,19 @@ export class RelatedEventService {
         } as LogInfoWrongHdp;
       });
 
-      return newEvents;
+    return newEvents;
   }
-  
+
   async addRelatedEventByInput(model: AddRelatedEventArg): Promise<void> {
     if (!model.primitiveProps.inputRelatedMatchId) {
       model.tooltip.display(model.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
-    } else {      
+    } else {
       const matchId = Number(model.primitiveProps.inputRelatedMatchId);
       if (!this.validationService.isValidInputRelatedEvent(matchId, model.inputMatchIdClass, model.allEvents, model.tooltip)) {
         return;
       }
       model.primitiveProps.isBlock = true;
-      const models = await this.getChildMatches(matchId, model.filter, false);
+      const models = await this.getChildMatches(matchId, model.mainEvent.eventDate, model.filter, false);
       if (models.length === 0) {
         model.tooltip.display(model.inputMatchIdClass, LABELS.INVALID_MATCHID);
         model.primitiveProps.isBlock = false;

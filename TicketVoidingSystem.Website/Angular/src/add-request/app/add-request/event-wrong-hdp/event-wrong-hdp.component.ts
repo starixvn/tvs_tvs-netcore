@@ -76,7 +76,7 @@ export class EventWrongHdpComponent implements OnInit {
     if (this.isEdit) {
       this.eventWrongHdpService.assignModelsToEvents(this.allSelectedEvents, this.wrongHdpModels);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
       this.resetAllData();
@@ -99,7 +99,7 @@ export class EventWrongHdpComponent implements OnInit {
     await this.logInfoService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
     mainLogInfo.logInfo.isShowValidation = true;
 
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
     this.primitiveProps.isShowRelatedEvents = true;
     this.addRequestStore.changeSavingRequestStatus(false);
     mainLogInfo.isBlock = false;
@@ -114,6 +114,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.eventDate =  this.eventLeagueComponent?.selectedMatch.eventDate;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 

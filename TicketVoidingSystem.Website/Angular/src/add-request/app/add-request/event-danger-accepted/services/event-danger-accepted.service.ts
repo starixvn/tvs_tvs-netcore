@@ -19,7 +19,7 @@ import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/
 export class EventDangerAcceptedService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
-  ) {}
+  ) { }
 
   private readonly SUB_TYPE_AUTO_SELECT_LIST = [
     SubIssueTypeConstant.MAIN_CORNER,
@@ -52,6 +52,7 @@ export class EventDangerAcceptedService {
         paTime: x.paTime,
         saTime: x.saTime
       } as FilterTimeWithAllowance;
+      event.eventDate = x.eventDate;
 
       allEvents.push(event);
     });
@@ -106,7 +107,7 @@ export class EventDangerAcceptedService {
     }
   }
 
-  private updateSubIssueType(allEvents: LogInfoRedCard[], subTypeLinkMatches:SubIssueTypeLinkMatch[], linkEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard ): void {
+  private updateSubIssueType(allEvents: LogInfoRedCard[], subTypeLinkMatches: SubIssueTypeLinkMatch[], linkEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard): void {
     allEvents.forEach(x => {
       x.subIssueTypeId = this.getSubIssueTypeId(x.matchId, subTypeLinkMatches, linkEvents, mainEvent);
     });

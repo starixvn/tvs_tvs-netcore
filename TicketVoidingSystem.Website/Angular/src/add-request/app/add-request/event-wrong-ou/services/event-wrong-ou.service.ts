@@ -18,7 +18,7 @@ import { LogInfoWrongOu } from "../models/log-info-wrong-ou.model";
 export class EventWrongOuService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
-  ) {}
+  ) { }
 
   public async getLinkedLog(logInfoWrongOu: LogInfoWrongOu, filter: FilterModel): Promise<LinkedLogsViewModel> {
     const query = {
@@ -57,6 +57,7 @@ export class EventWrongOuService {
         wrongMarket: x.wrongMarket,
         liveIndicator: x.liveIndicator
       } as FilterWrongOuModel;
+      event.eventDate = x.eventDate;
 
       allEvents.push(event);
     });

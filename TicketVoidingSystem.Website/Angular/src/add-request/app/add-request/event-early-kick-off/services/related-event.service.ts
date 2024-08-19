@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -27,7 +28,7 @@ export class RelatedEventService {
   async getChildMatches(mainMatchId: number, eventDate: Date, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(filterModel.issueTypeId);
-    query.eventDate = eventDate ? moment(eventDate).format('YYYY/M/D') : null;
+    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
     query.sportType = filterModel.sportType;

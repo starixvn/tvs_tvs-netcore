@@ -164,6 +164,7 @@ export class TVSRequestActionType {
 }
 
 export class DateTimeFormat {
+  static readonly SHORT_DATE_FORMAT = 'YYYY/M/D';
   static readonly DATE_FORMAT = 'YYYY/MM/DD';
   static readonly DATE_MONTH_YEAR = 'DD MMMM yyyy';
   static readonly TIME_FORMAT = 'hh:mm:ss.SSS A';

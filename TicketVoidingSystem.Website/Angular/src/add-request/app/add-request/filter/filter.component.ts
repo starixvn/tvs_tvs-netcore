@@ -3,7 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { DateTimeFormat, TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
@@ -177,7 +177,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   initDate() {
     const date = this.isEdit ? new Date(this.model.eventDate) :
-      new Date(moment.utc().tz('America/Caracas').format('YYYY/M/D'));
+      new Date(moment.utc().tz('America/Caracas').format(DateTimeFormat.SHORT_DATE_FORMAT));
     this.date = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.setLimitDate();
   }

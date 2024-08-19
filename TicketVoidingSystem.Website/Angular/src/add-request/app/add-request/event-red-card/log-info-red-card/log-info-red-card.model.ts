@@ -1,4 +1,3 @@
-import { MatchModel } from 'src/utility/models/match.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { ValidationMessage } from '../../models/get-log-info.model';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
@@ -15,5 +14,5 @@ export class LogInfoRedCard {
   voidTimeArea = new FilterTimeWithAllowance();
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
-  matchInfo: MatchModel;
+  eventDate?: Date;
 }

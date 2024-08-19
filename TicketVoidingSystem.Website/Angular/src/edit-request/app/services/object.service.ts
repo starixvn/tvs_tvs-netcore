@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { RequestModel } from '../../../add-request/app/add-request/models/request.model';
+import { DateTimeFormat } from '../../../utility/constants/config';
 import { StaticService } from '../../../utility/services/static.service';
 import { MapEventArg } from '../models/map-event.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
@@ -35,7 +36,7 @@ export class ObjectService {
     const eventDate = StaticService.getEventDate(detailViewModel);
     requestModel.filter = {
       sportType: detailViewModel.request.sportType,
-      eventDate: eventDate ? moment(eventDate).format('YYYY/M/D') : null,
+      eventDate: eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null,
       action: detailViewModel.request.actionId.toString(),
       subIssueTypeId: StaticService.getSubIssueTypeId(detailViewModel).toString(),
       isTest: detailViewModel.request.isTest,

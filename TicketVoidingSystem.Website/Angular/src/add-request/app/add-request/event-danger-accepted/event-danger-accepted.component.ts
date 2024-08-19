@@ -95,7 +95,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
       this.eventDangerAcceptedService.assignModelsToEvents(this.allSelectedEvents, this.dangerAcceptedModels, this.primitiveProps, this.addRequestStore);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.eventDangerAcceptedService.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.dangerAcceptedModels);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
       this.primitiveProps.isShowLogInfoMainMatch = true;
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
@@ -121,7 +121,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
@@ -145,7 +145,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
-    this.mainEvent.matchInfo = this.eventLeagueComponent?.selectedMatch;
+    this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
     this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 
