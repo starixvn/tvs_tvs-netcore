@@ -23,6 +23,7 @@ public class LogInfoDetail
     public string? LiveScores { get; set; }
     public DateTime VoidFromTime { get; set; }
     public DateTime VoidToTime { get; set; }
+    public DateTime AcceptVoidToTime { get; set; }
     public int SingleCount { get; set; }
     public int CashOutCount { get; set; }
     public int CancelCashOutCount { get; set; }

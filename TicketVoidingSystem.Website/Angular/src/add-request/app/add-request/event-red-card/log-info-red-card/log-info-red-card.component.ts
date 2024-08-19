@@ -158,16 +158,20 @@ export class LogInfoRedCardComponent {
 
   public getDurationTime(): string {
     const fromTimeFilter = moment(this.defaultFilterTimeWithAllowance.fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const toTimeLogInfo = moment(this.logInfo.voidTimeArea.toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTimeLogInfo = moment(this.logInfo.logInfoDetail.acceptVoidToTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     return StaticService.getDurations(fromTimeFilter, toTimeLogInfo);
   }
 
   isShowMessageRangeVoidTime() {
+    if(!this.logInfo.logInfoDetail?.acceptVoidToTime){
+      return false;
+    }
+
     const MILLISECONDS_IN_A_MINUTE = 60000;
-    let fromTimeFilter = new Date(this.defaultFilterTimeWithAllowance.fromDateTime);
-    let toTimeLogInfo = new Date(this.logInfo.voidTimeArea.toDateTime);
-    let diffMilliseconds = toTimeLogInfo.getTime() - fromTimeFilter.getTime();
+    let fromTimeFilter = moment(this.defaultFilterTimeWithAllowance.fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
+    let toTimeLogInfo = moment(this.logInfo.logInfoDetail.acceptVoidToTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
     this.isHasWarningRangeTime = diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
 
     return this.isHasWarningRangeTime;

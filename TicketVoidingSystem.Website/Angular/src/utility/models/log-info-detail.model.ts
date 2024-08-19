@@ -3,6 +3,7 @@ export class LogInfoDetail {
     liveScores: string;
     voidFromTime: Date;
     voidToTime: Date;
+    acceptVoidToTime: Date;
     singleCount: number;
     cashOutCount: number;
     settleCount: number;
