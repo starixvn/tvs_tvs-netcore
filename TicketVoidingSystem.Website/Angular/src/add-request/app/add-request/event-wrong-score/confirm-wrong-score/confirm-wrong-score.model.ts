@@ -2,7 +2,7 @@ export class ConfirmWrongScoreModel {
   issueTypeName: string;
   subIssueTypeName: string;
   isOpenDialog: boolean;
-  isHasWarningSettledTicket: boolean;
+  isHasSettledTicket: boolean;
   isHasWarningForWrongScore: boolean;
   isHasWarningEditTakeNoteRequest: boolean;
   isEditingByAnotherUser: boolean;

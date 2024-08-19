@@ -20,8 +20,9 @@ public class GetDecidedByServiceImp : GetDecidedByService
     public async Task<string[]> GetDecidedBy(GetDecidedByRequest request)
     {
         var decidedBySelect = await repository.FetchAsync<string>(request);
-        var sortedDecidedBys = decidedBySelect.OrderByDescending(name => name.StartsWith("SSNV")).ThenBy(name => name).ToArray();
+        var sortedDecidedBys = decidedBySelect.OrderByDescending(name => name.StartsWith("SSNV")).ToArray();
 
         return sortedDecidedBys;
     }
+
 }

@@ -3,7 +3,7 @@ export class LogInfoDetail {
     liveScores: string;
     voidFromTime: Date;
     voidToTime: Date;
-    acceptVoidToTime: Date;
+    transVoidToTime: Date;
     singleCount: number;
     cashOutCount: number;
     settleCount: number;
@@ -26,4 +26,5 @@ export class LogInfoDetail {
     minTransId: string;
     actionType: string;
     liveGameEarlyTicketsJson?: string;
+    isHasWarningRangeTime: boolean;
 }

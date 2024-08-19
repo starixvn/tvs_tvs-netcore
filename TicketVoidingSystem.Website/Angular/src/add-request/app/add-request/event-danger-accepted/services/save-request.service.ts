@@ -78,7 +78,7 @@ export class SaveRequestService {
       arg.confirmDangerAccepted.isHasWarningEvent = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
       arg.confirmDangerAccepted.isHasWarningEditTakeNoteRequest =
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
-      arg.confirmDangerAccepted.isHasWarningRangeTime = arg.logInfoComponents.some(x => x.isHasWarningRangeTime);
+      arg.confirmDangerAccepted.isHasWarningRangeTime = arg.allEvents.some(x => x.logInfoDetail?.isHasWarningRangeTime)
     }
 
     arg.confirmDangerAccepted.requestId = arg.requestId;

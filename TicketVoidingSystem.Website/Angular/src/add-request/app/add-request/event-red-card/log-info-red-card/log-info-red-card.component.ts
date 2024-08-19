@@ -39,7 +39,6 @@ export class LogInfoRedCardComponent {
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
   tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
   acceptTypeName = "";
-  isHasWarningRangeTime = false;
 
   constructor(
     private readonly modalService: ModalService,
@@ -158,22 +157,16 @@ export class LogInfoRedCardComponent {
 
   public getDurationTime(): string {
     const fromTimeFilter = moment(this.defaultFilterTimeWithAllowance.fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const toTimeLogInfo = moment(this.logInfo.logInfoDetail.acceptVoidToTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTimeLogInfo = moment(this.logInfo.logInfoDetail.transVoidToTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     return StaticService.getDurations(fromTimeFilter, toTimeLogInfo);
   }
 
   isShowMessageRangeVoidTime() {
-    if(!this.logInfo.logInfoDetail?.acceptVoidToTime){
-      return false;
-    }
+    return this.logInfo.logInfoDetail?.isHasWarningRangeTime && this.isDangerAccepted();
+  }
 
-    const MILLISECONDS_IN_A_MINUTE = 60000;
-    let fromTimeFilter = moment(this.defaultFilterTimeWithAllowance.fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
-    let toTimeLogInfo = moment(this.logInfo.logInfoDetail.acceptVoidToTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
-    this.isHasWarningRangeTime = diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
-
-    return this.isHasWarningRangeTime;
+  isDangerAccepted(): boolean {
+    return StaticService.isDangerAccepted(this.filter.issueTypeId);
   }
 }

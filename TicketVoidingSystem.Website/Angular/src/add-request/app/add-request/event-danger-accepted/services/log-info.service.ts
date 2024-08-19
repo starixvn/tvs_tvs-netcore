@@ -74,10 +74,24 @@ export class LogInfoService {
         if (logInfo.logInfoDetail && this.validationService.isHasAllowanceTime(event)) {
           event.voidTimeArea.toDateTime = moment(logInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           event.voidTimeArea.fromDateTime = moment(logInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+          event.logInfoDetail.isHasWarningRangeTime = this.isHasWarningRangeTime(defaultFilterTimeWithAllowance.fromDateTime, logInfo.logInfoDetail.transVoidToTime);
         }
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfo, defaultFilterTimeWithAllowance.fromDateTime, event.voidTimeArea.saTime);
       }
     });
+  }
+
+  isHasWarningRangeTime(fromDateTime: string, toDateTime: Date) {
+    if(!fromDateTime || !toDateTime){
+      return false;
+    }
+
+    const MILLISECONDS_IN_A_MINUTE = 60000;
+    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
+    let toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
+
+    return diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
   }
 
   public resetLogInfoOfEvent(events: LogInfoRedCard[]): void {

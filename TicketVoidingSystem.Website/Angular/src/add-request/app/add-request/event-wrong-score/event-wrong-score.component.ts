@@ -220,7 +220,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges {
           }
         });
       });
-      this.confirmWrongScoreModel.isHasWarningSettledTicket = this.validationService.isHasWarningSettledTicket(selectedScores);
+      this.confirmWrongScoreModel.isHasSettledTicket = this.validationService.isHasWarningSettledTicket(selectedScores);
       this.confirmWrongScoreModel.isHasWarningForWrongScore = this.validationService.isValidationHasWarningTicket(selectedScores);
       this.confirmWrongScoreModel.isHasWarningEditTakeNoteRequest = this.validationService.isHasWarningEditTakeNoteRequest(this.isEdit, this.filter.action, this.actionIdOfFirstTimeAccess);
     }
