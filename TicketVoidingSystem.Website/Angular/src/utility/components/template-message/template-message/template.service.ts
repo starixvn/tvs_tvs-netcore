@@ -16,8 +16,7 @@ const MESSAGE_TEMPLATE_IDS_HAVE_TIME_RANGE_NC = [
   MessageTemplateId.NEXT_BOOKING,
   MessageTemplateId.NEXT_GOAL,
   MessageTemplateId.PENALTY_SHOOTOUT,
-  MessageTemplateId.PENALTY_SHOOTOUT_VIRTUAL,
-  MessageTemplateId.PENALTY_SHOOTOUT_RETAKEN
+  MessageTemplateId.PENALTY_SHOOTOUT_VIRTUAL
 ];
 
 @Injectable()
