@@ -7,6 +7,8 @@ import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../../filter/filter.model';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +84,18 @@ export class ValidationService {
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
+  }
+
+  isHasWarningRangeTime(fromDateTime: string, toDateTime: Date) {
+    if(!fromDateTime || !toDateTime){
+      return false;
+    }
+
+    const MILLISECONDS_IN_A_MINUTE = 60000;
+    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
+    let toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
+
+    return diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
   }
 }
