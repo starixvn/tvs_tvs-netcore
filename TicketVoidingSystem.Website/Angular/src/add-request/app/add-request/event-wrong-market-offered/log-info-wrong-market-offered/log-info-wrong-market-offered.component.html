@@ -1,12 +1,23 @@
 <div *ngIf="primitiveProps.isShowValidation">
   <strong>Main Event - Log Info</strong>
   <div class="log-info list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
-    <log-info-ticket-count
-      [model]="logInfo.logInfoDetail"
-      [betTypesCount]="logInfo.betTypeCount"
-      [isShowBetTypeCount]="true"
-      [isShowCancelCashOut]="true">
-    </log-info-ticket-count>
+    <div *ngIf="logInfo.logInfoDetail">
+      Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+      Affected Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+      <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
+      [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
+      Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong><br />
+      <span class="btn-bet-type-count" (click)="updateBetTypeCountModel()">Details</span>
+      <div class="bet-type-count pl-4" *ngIf="isShowDetailBetTypeCount">
+        <ng-container *ngFor="let group of groupBetTypesCountModel">
+          <span>{{group.name}}</span><br/>
+          <ng-container *ngFor="let item of group.items">
+            <span class="ml-3">&#x2022; {{item.name}}</span><br/>
+          </ng-container>
+        </ng-container>
+      </div>
+      <span *ngIf="logInfo.logInfoDetail.cancelCashOutCount > 0">Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong></span>
+    </div>
     <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
   </div>
 </div>

@@ -11,10 +11,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" [blockUi]="isBlock">
-          <div class="bettype-ticket-section">
-            <tickets [model]="model.tickets" [isBlock]="blockBetList"></tickets>
-          </div>
+        <div class="modal-body">
+          <tickets [model]="model.tickets"></tickets>
         </div>
       </div>
     </div>

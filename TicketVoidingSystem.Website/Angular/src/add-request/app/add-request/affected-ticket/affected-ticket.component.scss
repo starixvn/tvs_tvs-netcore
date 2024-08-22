@@ -13,13 +13,6 @@
   background: #7e7e7e;
   height: 34px;
 
-  .modal-header-container {
-    height: 34px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-  }
-
   .modal-title {
     line-height: 5px;
     cursor: unset;
@@ -43,44 +36,4 @@
   overflow: auto;
   display: flex;
   flex-direction: column;
-}
-
-.modal-footer {
-  border: none;
-  padding-top: 0px;
-}
-
-.check-all-area {
-  margin-top: -10px;
-  display: flex;
-  align-items: center;
-}
-
-.modal-body-container {
-  border: 1px solid #888;
-  width: 100%;
-  overflow-x: auto;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  @include scroll-style();
-}
-
-::ng-deep group-bettypes-pool-house {
-  .area-filter {
-    margin: 0 0 10px 0;
-  }
-}
-
-.bettype-ticket-section {
-  grid-row-gap: 5px;
-  display: grid;
-}
-
-.section-header {
-  padding: 5px;
-  background-color: #e7f1ff;
-  border: 1px solid rgba(0,0,0,.125);
-  cursor: pointer;
-  width: 1400px;
 }
