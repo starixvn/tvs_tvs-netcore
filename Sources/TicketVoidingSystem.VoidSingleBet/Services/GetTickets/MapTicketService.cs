@@ -58,7 +58,7 @@ public class MapTicketServiceImp : MapTicketService
         viewModel.Choice = BuildChoice(ticketBetList, ticketHelper, item);
         viewModel.Status = betListService.GetStatus(ticketBetList, ticketHelper, null, false);
         viewModel.Handicap = betListService.GetHandicap(ticketBetList, ticketHelper, null, false);
-        viewModel.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
+        viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
         viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "<span class='icon-tick'></span>" : string.Empty;
         viewModel.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";

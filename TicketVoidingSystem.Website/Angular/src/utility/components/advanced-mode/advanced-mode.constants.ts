@@ -113,6 +113,18 @@ export class AdvancedModeConstants {
         new ItemsSelect(0, '804', '4', true, true, true, []),
         new ItemsSelect(0, '805', '5', true, true, true, [])
     ];
+    static readonly INNING_LIST = [
+        new ItemsSelect(0, '801', '1', true, true, true, []),
+        new ItemsSelect(0, '802', '2', true, true, true, []),
+        new ItemsSelect(0, '803', '3', true, true, true, []),
+        new ItemsSelect(0, '804', '4', true, true, true, []),
+        new ItemsSelect(0, '805', '5', true, true, true, []),
+        new ItemsSelect(0, '806', '6', true, true, true, []),
+        new ItemsSelect(0, '807', '7', true, true, true, []),
+        new ItemsSelect(0, '808', '8', true, true, true, []),
+        new ItemsSelect(0, '809', '9', true, true, true, []),
+        new ItemsSelect(0, '810', '10', true, true, true, [])
+    ];
     static readonly ATTRIBUTE_HDP = 'ATTRIBUTE_HDP';
     static readonly ATTRIBUTE_ODDS_SPREAD = 'ATTRIBUTE_ODDS_SPREAD';
 
@@ -121,6 +133,7 @@ export class AdvancedModeConstants {
     static readonly GAME = 'Game:';
     static readonly SET = 'Set:';
     static readonly QUARTER = 'Quarter:';
+    static readonly INNING = 'Inning:';
     static readonly BETTYPES_SABA_TIME_MACHINE = '228,229';
     static readonly BETTYPES_MORE_HDP = '1,7,1303,3,8,183,153,1308,1306,17,701,704,637';
     static readonly BETTYPES_UPDATE_ONLY_GAME_ATTRIBUTE = '613,712,713,3909,3912,3916';

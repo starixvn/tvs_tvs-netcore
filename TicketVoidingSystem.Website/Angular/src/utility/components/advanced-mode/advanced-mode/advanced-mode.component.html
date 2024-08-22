@@ -4,7 +4,7 @@
       <em class="font-small fa"
         [ngClass]="{'fa-minus-circle': isShowContent, 'fa-plus-circle': !isShowContent}"></em>Advanced mode
     </legend>
-    <div *ngIf="isShowAllBetTypeMapRound || isShowAllBetTypeQuarter || isShowAllBetTypeSet || isShowAllBetTypeGame" [hidden]="!isShowContent" class="all-bet-types">
+    <div *ngIf="isShowALLBetTypesSelection()" [hidden]="!isShowContent" class="all-bet-types">
       <div class="bet-team-1">
         <div class="left"><b>All bet types: </b></div>
         <div class="right" *ngIf="isShowAllBetTypeMapRound">
@@ -42,6 +42,14 @@
             <span class="mr-1"><b>Game:</b></span>
             <multiple-select class="multiple-selection-game" [multipleSelect]="gameList"
               (checkedItems)="updateByControlAllBetType($event, 'game')">
+            </multiple-select>
+          </div>
+        </div>
+        <div class="right" *ngIf="isShowAllBetTypeInning">
+          <div class="dropdown-item-adv">
+            <span class="mr-1"><b>Inning:</b></span>
+            <multiple-select class="multiple-selection-inning" [multipleSelect]="inningList"
+              (checkedItems)="updateByControlAllBetType($event, 'inning')">
             </multiple-select>
           </div>
         </div>
@@ -342,7 +350,7 @@
             </div>
             <div class="right">
               <div class="dropdown-item-adv" *ngFor="let multiSelection of betTeam.multiSelectionList; let indexSelection = index">
-                <span class="mr-1">{{multiSelection.name}}</span>
+                <span class="mr-1" *ngIf="multiSelection.name !== ''">{{multiSelection.name}}</span>
                 <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}} float-right"
                   [multipleSelect]="multiSelection.multipleSelect">
                 </multiple-select>
@@ -357,7 +365,7 @@
                   </div>
                 </div>
                 <div *ngIf="selection.isMultiple" class="dropdown-item-adv">
-                  <span class="mr-1">{{selection.multiSelection.name}}</span>
+                  <span class="mr-1" *ngIf="selection.multiSelection.name !== ''">{{selection.multiSelection.name}}</span>
                   <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
                   </multiple-select>
                 </div>

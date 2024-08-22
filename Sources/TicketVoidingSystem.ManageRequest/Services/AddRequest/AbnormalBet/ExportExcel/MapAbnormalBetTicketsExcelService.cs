@@ -113,7 +113,7 @@ public class MapAbnormalBetTicketsExcelServiceImp : MapAbnormalBetTicketsExcelSe
         ticket.WinLoss = item.Status.IsRunningOrWaiting()
             ? "-"
             : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
-        ticket.Score = item.IsLiveIndicator ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
+        ticket.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
         ticket.Remark = RemarkConstant.RemarkList.First(x => x.Id == item.RemarkId).Name;
         ticket.Vip = item.IsVipMember ? "VIP" : string.Empty;
         ticket.Currency = item.CurrencyName;

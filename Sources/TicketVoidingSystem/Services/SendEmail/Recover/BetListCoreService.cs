@@ -14,6 +14,8 @@ public interface BetListCoreService
     TicketRecoverEmailViewModel GetNormalTicket(TicketRecoverEmailModel item);
 
     TicketRecoverEmailViewModel GetMainParlayTicket(TicketRecoverEmailModel item);
+
+    string GetScoreBetListUi(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore);
 }
 
 public class BetListCoreServiceImp : BetListCoreService
@@ -79,5 +81,10 @@ public class BetListCoreServiceImp : BetListCoreService
         ticket.IsLive = item.IsLiveIndicator;
 
         return ticket;
+    }
+
+    public string GetScoreBetListUi(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore)
+    {
+        return betListService.GetScoreBetListUi(sportType, isLiveIndicator, liveHomeScore, liveAwayScore);
     }
 }

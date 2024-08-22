@@ -17,4 +17,6 @@ public static class SportTypeConstant
     public const int Happy5 = 164;
 
     public const int Bullfighting = 207;
+
+    public const int Baseball = 8;
 }

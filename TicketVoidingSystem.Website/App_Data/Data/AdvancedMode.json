@@ -33,8 +33,8 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "1,7,1303,3,8,183,153,1308,1306,17,701,704,637",
-      "BetTypes": "1,7,1303,2,3,8,12,20,1301,153,1308,1305,1306,157,168,183,185,191,17,411,21,425,432,603,604,605,606,607,25,460,468,206,488,207,489,490,208,491,209,492,701,704,635,636,637,3901"
+      "EnableBetTypes": "1,7,1303,3,8,183,153,1308,1306,17,701,704,637,8800",
+      "BetTypes": "1,7,1303,2,3,8,12,20,1301,153,1308,1305,1306,157,168,183,185,191,17,411,21,425,432,603,604,605,606,607,25,460,468,206,488,207,489,490,208,491,209,492,701,704,635,636,637,3901,8800,8821,8827"
     },
     {
       "Selections": [
@@ -246,8 +246,8 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "EnableBetTypes": "18,178,197,198,204,205,401,402,403,404,482,483,484,485,461,462,463,464,702,705,386,387,388,389,638,639,641,3902",
-      "BetTypes": "18,178,197,198,204,205,401,402,403,404,469,482,483,484,485,702,705,386,387,388,389,638,639,641,3902"
+      "EnableBetTypes": "18,178,197,198,204,205,401,402,403,404,482,483,484,485,461,462,463,464,702,705,386,387,388,389,638,639,641,3902,8801,8802,8803,8816",
+      "BetTypes": "18,178,197,198,204,205,401,402,403,404,469,482,483,484,485,702,705,386,387,388,389,638,639,641,3902,8801,8802,8803,8816"
     },
     {
       "Selections": [
@@ -274,7 +274,7 @@
       "Name": "",
       "Value": "",
       "Type": 1,
-      "BetTypes": "210,173,174,188,189,190,211,212,213,214,215,133,134,135,145,146,147,148,149,150,427,433,434,435,436,437,438,439,440,441,390,3914"
+      "BetTypes": "210,173,174,188,189,190,211,212,213,214,215,133,134,135,145,146,147,148,149,150,427,433,434,435,436,437,438,439,440,441,390,3914,8815"
     },
     {
       "Selections": [
@@ -11935,6 +11935,637 @@
       "Value": "",
       "Type": 8,
       "BetTypes": "650"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            },
+            {
+              "Name": "Draw",
+              "Value": "d"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8817,8818"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home/Over",
+              "Value": "ho"
+            },
+            {
+              "Name": "Home/Under",
+              "Value": "hu"
+            },
+            {
+              "Name": "Away/Over",
+              "Value": "ao"
+            },
+            {
+              "Name": "Away/Under",
+              "Value": "au"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Items": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8825"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1 or 2",
+              "Value": "1-2"
+            },
+            {
+              "Name": "3 or 4",
+              "Value": "3-4"
+            },
+            {
+              "Name": "5 or 6",
+              "Value": "5-6"
+            },
+            {
+              "Name": "7 or 8",
+              "Value": "7-8"
+            },
+            {
+              "Name": "9 or 10",
+              "Value": "9-10"
+            },
+            {
+              "Name": "11 or 12",
+              "Value": "11-12"
+            },
+            {
+              "Name": "13 or 14",
+              "Value": "13-14"
+            },
+            {
+              "Name": "15 or More",
+              "Value": "15+"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8826"
+    },
+    {
+      "Items": [
+        {
+          "Name": "Home To Win By 1 Runs",
+          "Value": "h1",
+          "Flag": true,
+          "XmlAttribute": "BetTeam"
+        },
+        {
+          "Name": "Home To Win By 2 Runs",
+          "Value": "h2",
+          "Flag": true
+        },
+        {
+          "Name": "Home To Win By 3 Runs",
+          "Value": "h3",
+          "Flag": true
+        },
+        {
+          "Name": "Home To Win By 4+ Runs",
+          "Value": "h4+",
+          "Flag": true
+        },
+        {
+          "Name": "Away To Win By 1 Runs",
+          "Value": "a1",
+          "Flag": true
+        },
+        {
+          "Name": "Away To Win By 2 Runs",
+          "Value": "a2",
+          "Flag": true
+        },
+        {
+          "Name": "Away To Win By 3 Runs",
+          "Value": "a3",
+          "Flag": true
+        },
+        {
+          "Name": "Away To Win By 4+ Runs",
+          "Value": "a4+",
+          "Flag": true
+        }
+      ],
+      "Name": "Winning Margin:",
+      "Value": "All",
+      "Type": 2,
+      "BetTypes": "8822"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            }
+          ],
+          "IsCanSelectInningFromOutside": true,
+          "Name": "Inning:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8804"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            },
+            {
+              "Name": "6",
+              "Value": "806"
+            },
+            {
+              "Name": "7",
+              "Value": "807"
+            },
+            {
+              "Name": "8",
+              "Value": "808"
+            }
+          ],
+          "IsCanSelectInningFromOutside": true,
+          "Name": "Inning:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            },
+            {
+              "Name": "Draw",
+              "Value": "d"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8805,8810,8819"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            },
+            {
+              "Name": "6",
+              "Value": "806"
+            },
+            {
+              "Name": "7",
+              "Value": "807"
+            },
+            {
+              "Name": "8",
+              "Value": "808"
+            },
+            {
+              "Name": "9",
+              "Value": "809"
+            }
+          ],
+          "IsCanSelectInningFromOutside": true,
+          "Name": "Inning:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Items": [
+        {
+          "Name": "HDP:",
+          "Value": "",
+          "XmlAttribute": "Value"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8806,8811,8823"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            },
+            {
+              "Name": "6",
+              "Value": "806"
+            },
+            {
+              "Name": "7",
+              "Value": "807"
+            },
+            {
+              "Name": "8",
+              "Value": "808"
+            },
+            {
+              "Name": "9",
+              "Value": "809"
+            }
+          ],
+          "IsCanSelectInningFromOutside": true,
+          "Name": "Inning:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Items": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "Value"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8807,8808,8809,8812,8824"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            },
+            {
+              "Name": "6",
+              "Value": "806"
+            },
+            {
+              "Name": "7",
+              "Value": "807"
+            },
+            {
+              "Name": "8",
+              "Value": "808"
+            }
+          ],
+          "IsCanSelectInningFromOutside": true,
+          "Name": "Inning:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "0",
+              "Value": "0"
+            },
+            {
+              "Name": "1",
+              "Value": "1"
+            },
+            {
+              "Name": "2",
+              "Value": "2"
+            },
+            {
+              "Name": "3+",
+              "Value": "3+"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8813"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            },
+            {
+              "Name": "6",
+              "Value": "806"
+            },
+            {
+              "Name": "7",
+              "Value": "807"
+            }
+          ],
+          "Name": "Run:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            },
+            {
+              "Name": "Neither",
+              "Value": "n"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8820"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1",
+              "Value": "801"
+            },
+            {
+              "Name": "2",
+              "Value": "802"
+            },
+            {
+              "Name": "3",
+              "Value": "803"
+            },
+            {
+              "Name": "4",
+              "Value": "804"
+            },
+            {
+              "Name": "5",
+              "Value": "805"
+            },
+            {
+              "Name": "6",
+              "Value": "806"
+            },
+            {
+              "Name": "7",
+              "Value": "807"
+            },
+            {
+              "Name": "8",
+              "Value": "808"
+            },
+            {
+              "Name": "9",
+              "Value": "809"
+            },
+            {
+              "Name": "10",
+              "Value": "810"
+            }
+          ],
+          "Name": "Run:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Set"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Yes",
+              "Value": "y"
+            },
+            {
+              "Name": "No",
+              "Value": "n"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "8814"
     }
   ]
 }

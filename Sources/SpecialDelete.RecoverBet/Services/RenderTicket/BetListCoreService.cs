@@ -45,7 +45,7 @@ public class BetListCoreService : IBetListCoreService
         viewModel.Odds = betListService.GetOdds(ticket, item.BetType.IsParlay());
         viewModel.Stake = betListService.BuildStake(ticket, ticketHelper);
         viewModel.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
-
+        viewModel.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
         return viewModel;
     }
 
