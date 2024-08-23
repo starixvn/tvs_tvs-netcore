@@ -1,6 +1,6 @@
 import { Component, Input} from '@angular/core';
 import * as _ from 'lodash';
-import { LiveGameEarlyTicketsModel } from '../models/live-game-early-ticket.model';
+import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
 
 @Component({
   selector: 'affected-ticket',
@@ -8,12 +8,12 @@ import { LiveGameEarlyTicketsModel } from '../models/live-game-early-ticket.mode
   styleUrls: ['./affected-ticket.component.scss']
 })
 export class AffectedTicketComponent  {
-  @Input() model = new LiveGameEarlyTicketsModel();
+  @Input() model = new AffectedTicketsModel();
 
-  isBlock: boolean;
-  blockBetList: boolean;
+  isShowCaretDown = true;
 
   public closeClick(): void {
     this.model.isOpen = false;
+    this.model.isShowDetailBetTypeCount = false;
   }
 }

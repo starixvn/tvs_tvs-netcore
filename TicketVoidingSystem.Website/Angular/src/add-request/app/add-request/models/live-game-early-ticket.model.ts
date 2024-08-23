@@ -5,8 +5,9 @@ export class LiveGameEarlyTicketsQuery {
     issueTypeId: number;
 }
 
-export class LiveGameEarlyTicketsModel {
+export class AffectedTicketsModel {
     isOpen: boolean;
-    checkedBetTypes: string;
     tickets: TicketsModel;
-  }
+    groupBetTypesCount: string[];
+    isShowDetailBetTypeCount: boolean;
+}

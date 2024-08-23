@@ -32,8 +32,81 @@
 
 .modal-body {
   width: 100%;
-  min-height: 60%;
   overflow: auto;
   display: flex;
   flex-direction: column;
+}
+
+.affected-bet-type-area {
+  width: 100%;
+  border: 5px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.caret {
+  width: 25px;
+  padding-right: 5px;
+  position: absolute;
+  text-align: center;
+  right: 0px;
+}
+
+.caret-down {
+  border-color: #999 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 2.5px;
+  display: inline-block;
+}
+
+.caret-up {
+  top: -2px;
+	border-color: transparent transparent #999;
+  border-width: 0 5px 5px;
+	border-style: solid;
+  display: inline-block;
+}
+
+.caret-down:focus{
+  border-color: #333;
+}
+
+.dropdown-toggle {
+  position: absolute;
+  right: 10px;
+}
+
+.list-group .list-group-item {
+  padding: 8px 12px;
+  border: 2px solid rgba(0, 0, 0, .125);
+}
+
+.other-container {
+  margin-left: -15px;
+}
+
+@media only screen and (min-width: 1134px) {
+  .other-container {
+      width: 1095px;
+  }
+}
+
+.affected-bet-type-text {
+  margin-bottom: 0;
+}
+
+.align-items-start {
+  padding-left: 5px;
+  margin-top: -2px;
+}
+
+.list-group-item-secondary {
+  z-index: 50000;
+}
+
+.affected-bet-type-content {
+  max-height: 212px;
+  overflow: auto;
 }

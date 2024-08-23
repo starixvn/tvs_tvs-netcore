@@ -11,6 +11,26 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        <div class="affected-bet-type-area" *ngIf="model.isShowDetailBetTypeCount">
+          <div class="">
+            <div class="list-group">
+              <div class="list-group-item list-group-item-secondary">
+                <strong>&nbsp;Affected Bet Type</strong>
+                <span class="caret">
+                  <span *ngIf="isShowCaretDown" class="caret-down"></span>
+                </span>
+                <span class="caret">
+                  <span *ngIf="!isShowCaretDown" class="caret-up"></span>
+                </span>   
+              </div>
+              <div class="list-group-item flex-column align-items-start affected-bet-type-content" >
+                <div *ngFor="let group of model.groupBetTypesCount">
+                  <span class="affected-bet-type-text text-right pl-2">{{group}}</span>
+                </div> 
+              </div> 
+            </div>
+          </div>       
+        </div>
         <div class="modal-body">
           <tickets [model]="model.tickets"></tickets>
         </div>
