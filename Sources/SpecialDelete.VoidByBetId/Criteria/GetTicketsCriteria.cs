@@ -16,7 +16,7 @@ public class GetTicketsCriteria : CriteriaBase
 
     public bool IncludeMainParlay { get; set; }
 
-    public bool IsAbnormalBet { get; set; }
+    public byte? AbnormalBetType { get; set; }
 
     public string Products { get; set; }
 

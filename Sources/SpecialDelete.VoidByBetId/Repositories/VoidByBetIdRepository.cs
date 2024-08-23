@@ -115,7 +115,7 @@ public class VoidByBetIdRepositoryImp : VoidByBetIdRepository
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
             Ip = sessionService.GetClientIp(),
-            IsAbnormalBet = query.IsAbnormalBet || !query.IsFilterByBetId,
+            AbnormalBetType = query.AbnormalBetType,
             FilterUserName = query.FilterUserName,
             Products = query.Products,
             StatusIds = query.StatusIds,

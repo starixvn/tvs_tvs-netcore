@@ -29,6 +29,7 @@ var VoidByBetId = {
     voidToDate: "",
     tickets: [],
     matchId: "0",
+    isAbnormalBet: false,
 
     search: function () {
         VoidByBetId.matchInfo = {};
@@ -50,7 +51,7 @@ var VoidByBetId = {
         if (VoidByBetId.isFilterByBetId()) {
             params.TransIds = VoidByBetId.getBetIds();
             params.includeMainParlay = $('#ckbox-include-parlay').is(':checked');
-            params.isAbnormalBet = $('#ckbox-abnormal-bet').is(':checked');
+            params.abnormalBetType = VoidByBetId.getAbnormalBetType();
         }
         else if (VoidByBetId.isFilterByUserName()) {
             var username = $('#txt-username').val();
@@ -132,13 +133,13 @@ var VoidByBetId = {
                 }
 
                 if (rs.MatchId > 0) {
-                    VoidByBetId.getMatch({ matchId: rs.MatchId, isAbnormalBet: params.isAbnormalBet });
+                    VoidByBetId.getMatch({ matchId: rs.MatchId, isAbnormalBet: VoidByBetId.isAbnormalBet });
                 } else {
                     $('#matchInfo').hide();
                     VoidByBetId.loadMessageTemplate();
                 }
 
-                if (!params.isAbnormalBet) {
+                if (!VoidByBetId.isAbnormalBet) {
                     $("#fsAbnormalBetReason").hide();
                 }
                 if (VoidByBetId.TotalItem !== "0" && VoidByBetId.isFilterByUserName()) {
@@ -583,7 +584,7 @@ var VoidByBetId = {
             param.Match = null;
         }
 
-        param.isAbnormalBet = $('#ckbox-abnormal-bet').is(':checked');
+        param.abnormalBetType = VoidByBetId.getAbnormalBetType();
 
         if ($("#fsAbnormalBetReason").is(':visible')) {
             param.IssueTypeId = VoidByBetId.issueType.issueTypeId.toString();
@@ -933,6 +934,7 @@ var VoidByBetId = {
             $(".btn-remove-invalid").hide();
             $('.tab-content').hide();
             $('.tab-content:first').show();
+            $('#radio-abnormal-bet').hide();
             $('.tabs li:first').addClass('active');
             $('.tabs li').click(function (event) {
                 $('.tabs li').removeClass('active');
@@ -998,10 +1000,14 @@ var VoidByBetId = {
         });
 
         $('#ckbox-abnormal-bet').click(function () {
+            VoidByBetId.isAbnormalBet = this.checked;
             if (this.checked) {
                 $('#ckbox-include-parlay').attr('disabled', 'disabled');
+                $('#radio-abnormal-bet').show();
+                $('#radio-abnormal-bet-single').prop('checked', true);
             } else {
                 $('#ckbox-include-parlay').removeAttr('disabled');
+                $('#radio-abnormal-bet').hide();
             }
             self.resetData();
         });
@@ -1100,6 +1106,7 @@ var VoidByBetId = {
         $('#to-date').datepicker('setDate', null);
         $('#txtTransId').val('');
         $('.txt-calendar').val('');
+        $('#radio-abnormal-bet').hide();
     },
 
     resetData: function () {
@@ -1137,7 +1144,16 @@ var VoidByBetId = {
         }
 
         return false;
-    }
+    },
+
+    getAbnormalBetType: function () {
+        if ($('#ckbox-abnormal-bet').is(':checked')) {
+            return $('input[name="abnormal-bet-type"]:checked').val();
+        }
+
+        return null;
+    },
+
 };
 
 $(function () {

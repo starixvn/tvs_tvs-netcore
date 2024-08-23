@@ -43,12 +43,12 @@ public class AfterVoidServiceImp : AfterVoidService
             MatchId = 0,
             Match = query.Match,
             Message = query.Message,
-            IsMessageContentAbnormal = query.IsAbnormalBet || !query.IsFilterByBetId,
+            IsMessageContentAbnormal = query.AbnormalBetType != null || !query.IsFilterByBetId,
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
             IssueTypeId = query.IssueTypeId,
             SubIssueTypeId = query.SubIssueTypeId,
-            IsSendMessageToAdminSite = !query.IsAbnormalBet
+            IsSendMessageToAdminSite = !IsAbnormalBet(query.AbnormalBetType)
         };
         await sendMessageByPlatformService.Execute(param);
     }
@@ -57,7 +57,7 @@ public class AfterVoidServiceImp : AfterVoidService
     {
         var emailModel = mapper.Map<EmailVoidModel>(query);
         emailModel.IsFilterByUsername = !query.IsFilterByBetId;
-        if (query.IsAbnormalBet)
+        if (IsAbnormalBet(query.AbnormalBetType))
         {
             emailModel.Reason = $"{emailModel.Reason}({query.SubIssueTypeName})";
             emailModel.ReasonSC = $"{emailModel.ReasonSC}({query.SubIssueTypeNameCS})";
@@ -69,5 +69,13 @@ public class AfterVoidServiceImp : AfterVoidService
     public async Task<IEnumerable<Result>> SendLetstalk(VoidTicketsQuery query, VoidTicketsModel model)
     {
         return await letstalkService.Send(query, model);
+    }
+
+    public bool IsAbnormalBet(byte? abnormalBetType)
+    {
+        const byte AbnormalBetSingle = 0;
+        const byte AbnormalBetMainParlay = 1;
+
+        return abnormalBetType is AbnormalBetSingle or AbnormalBetMainParlay;
     }
 }
