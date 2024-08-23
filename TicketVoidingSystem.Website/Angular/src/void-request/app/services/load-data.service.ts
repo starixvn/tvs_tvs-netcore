@@ -63,7 +63,8 @@ export class LoadDataService {
     primitiveProperty.isBlockUI = true;
     if (primitiveProperty.isLoadedUnderneathData && messageAreaComponents.every(x => this.isValidTemplcateMessage(x.templateMessageComponent))) {
       const voidPageItemsHaveTickets = voidPageItems.filter(item => item.voidTicketsMini.total > 0);
-      await this.submitVoidService.submitVoid(messageAreaComponents, voidPageItemsHaveTickets, primitiveProperty);
+      const messageAreaHaveTickets = messageAreaComponents.filter(item => item.totalVoidTickets > 0);
+      await this.submitVoidService.submitVoid(messageAreaHaveTickets, voidPageItemsHaveTickets, primitiveProperty);
       afterLoadUnderneathDataSubscription.unsubscribe();
     }
     primitiveProperty.isBlockUI = false;
