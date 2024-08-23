@@ -7,7 +7,7 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
-import { AffectedTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
@@ -94,12 +94,12 @@ export class LogInfoWrongOddsComponent implements OnInit {
   public async openLiveGameEarlyDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
-      const query: LiveGameEarlyTicketsQuery = {
-        liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+      const query: LogInfoTicketsQuery = {
+        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
-      this.affectedTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
+      this.affectedTicketsModel.tickets = await this.addRequestApiService.GetLogInfoTickets(query);
       this.affectedTicketsModel.tickets.groups[0].isExpanded = true;
       this.affectedTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
 

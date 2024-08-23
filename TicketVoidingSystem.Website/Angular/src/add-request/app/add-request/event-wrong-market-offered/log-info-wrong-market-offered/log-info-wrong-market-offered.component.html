@@ -7,7 +7,7 @@
       <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
       [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
       Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong><br />
-      <span class="btn-bet-type-count" (click)="updateBetTypeCountModel()">Details</span>
+      <span class="btn-bet-type-count" (click)="showAffectedTicketsDetails()">Details</span>
       <span *ngIf="logInfo.logInfoDetail.cancelCashOutCount > 0">Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong></span>
     </div>
     <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>

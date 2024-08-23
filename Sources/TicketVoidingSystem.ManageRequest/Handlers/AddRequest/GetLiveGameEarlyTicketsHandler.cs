@@ -4,24 +4,24 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
-public class GetLiveGameEarlyTicketsRequest : IRequest<TicketsViewModel>
+public class GetLogInfoTicketsRequest : IRequest<TicketsViewModel>
 {
-    public string LiveGameEarlyTicketsJson { get; init; }
+    public string LogInfoTicketsJson { get; init; }
 
-    public int issueTypeId { get; set; }
+    public int IssueTypeId { get; set; }
 }
 
-public class GetLiveGameEarlyTicketsHandler : IRequestHandler<GetLiveGameEarlyTicketsRequest, TicketsViewModel>
+public class GetLogInfoTicketsHandler : IRequestHandler<GetLogInfoTicketsRequest, TicketsViewModel>
 {
-    private readonly GetLiveGameEarlyTicketService getLiveGameEarlyTicketService;
+    private readonly GetLogInfoTicketsService GetLogInfoTicketsService;
 
-    public GetLiveGameEarlyTicketsHandler(GetLiveGameEarlyTicketService getLiveGameEarlyTicketService)
+    public GetLogInfoTicketsHandler(GetLogInfoTicketsService GetLogInfoTicketsService)
     {
-        this.getLiveGameEarlyTicketService = getLiveGameEarlyTicketService;
+        this.GetLogInfoTicketsService = GetLogInfoTicketsService;
     }
 
-    public async Task<TicketsViewModel> Handle(GetLiveGameEarlyTicketsRequest request, CancellationToken cancellationToken)
+    public async Task<TicketsViewModel> Handle(GetLogInfoTicketsRequest request, CancellationToken cancellationToken)
     {
-        return getLiveGameEarlyTicketService.GetTicketsViewModel(request);
+        return GetLogInfoTicketsService.GetTicketsViewModel(request);
     }
 }

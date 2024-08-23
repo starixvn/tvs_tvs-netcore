@@ -27,7 +27,8 @@
 <log-info-wrong-market-offered #logInfo
   [isVoided]="filter.isVoided"
   [primitiveProps]="primitivePropertyEvent"
-  [logInfo]="logInfoEvent">
+  [logInfo]="logInfoEvent"
+  [issueTypeId]="filter.issueTypeId">
 </log-info-wrong-market-offered>
 <div class="no-ticket mt-2" *ngIf="primitivePropertyEvent.isShowErrorNoBetType">
   <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>

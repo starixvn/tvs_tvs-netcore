@@ -5,8 +5,9 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import * as _ from 'lodash';
-import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
+import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { AddRequestApiService } from '../../add-request-api.service';
 
 @Component({
   selector: 'log-info-wrong-market-offered',
@@ -17,8 +18,9 @@ export class LogInfoWrongMarketOfferedComponent {
   @Input() isVoided: boolean;
   @Input() logInfo: LogInfoWrongMarketOffered;
   @Input() primitiveProps = new PrimitivePropertyEvent();
-
-  constructor() { }
+  @Input() issueTypeId: string;
+ 
+  constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   groupBetTypesCount: string[] = [];
   isShowDetailBetTypeCount = false;
@@ -48,6 +50,27 @@ export class LogInfoWrongMarketOfferedComponent {
       this.affectedTicketsModel.groupBetTypesCount = this.groupBetTypesCount;
       this.affectedTicketsModel.tickets = new TicketsModel();
       this.affectedTicketsModel.isShowDetailBetTypeCount = true;
-      this.affectedTicketsModel.isOpen = true;
+  }
+
+  public async updateAffectedTickets(){
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
+      const query: LogInfoTicketsQuery = {
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
+        issueTypeId: Number(this.issueTypeId)
+      };
+
+      this.affectedTicketsModel.tickets = await this.addRequestApiService.GetLogInfoTickets(query);
+      this.affectedTicketsModel.tickets.groups[0].isExpanded = true;
+      this.affectedTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+
+    } else {
+      this.affectedTicketsModel.tickets = new TicketsModel();
+    }
+  }
+
+  public async showAffectedTicketsDetails(){
+    this.updateBetTypeCountModel();
+    await this.updateAffectedTickets();
+    this.affectedTicketsModel.isOpen = true;
   }
 }

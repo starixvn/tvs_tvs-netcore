@@ -27,4 +27,5 @@ export class LogInfoDetail {
     actionType: string;
     liveGameEarlyTicketsJson?: string;
     isHasWarningRangeTime: boolean;
+    logInfoTicketsJson?: string;
 }

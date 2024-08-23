@@ -33,7 +33,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() requestId: number;
   @Input() filter: FilterModel;
-  @Input() issueTypeId: string;
   @Input() wrongMarketOfferedModel: WrongMarketOfferedModel;
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;

@@ -1,7 +1,7 @@
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 
-export class LiveGameEarlyTicketsQuery {
-    liveGameEarlyTicketsJson: string;
+export class LogInfoTicketsQuery {
+    logInfoTicketsJson: string;
     issueTypeId: number;
 }
 
