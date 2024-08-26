@@ -2,6 +2,7 @@ import { BetTeamAddRequestResult } from "../../../../../utility/components/advan
 import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
 import { BetTypeCountModel, ValidationMessage } from "../../models/get-log-info.model";
 import { FilterWrongMarketOfferedModel } from "./filter-wrong-market-offered.model";
+import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 
 export class LogInfoWrongMarketOffered {
   matchId: number;
@@ -10,4 +11,5 @@ export class LogInfoWrongMarketOffered {
   messageValidationLogInfo?: ValidationMessage[];
   betTeamsResult: BetTeamAddRequestResult[];
   betTypeCount: BetTypeCountModel[];
+  checkedBetTypes: BetTypeAddRequest[];
 }

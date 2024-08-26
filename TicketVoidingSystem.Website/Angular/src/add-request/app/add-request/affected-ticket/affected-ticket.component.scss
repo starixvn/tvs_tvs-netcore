@@ -67,6 +67,7 @@
   border-width: 0 5px 5px;
 	border-style: solid;
   display: inline-block;
+  position: relative;
 }
 
 .caret-down:focus{
@@ -109,4 +110,16 @@
 .affected-bet-type-content {
   max-height: 212px;
   overflow: auto;
+}
+
+.filter-bet-Types {
+  padding-left: 16px;
+}
+
+::ng-deep .tree-view-content {
+  max-height: 220px !important;
+}
+
+.modal-content {
+  overflow: unset !important;;
 }

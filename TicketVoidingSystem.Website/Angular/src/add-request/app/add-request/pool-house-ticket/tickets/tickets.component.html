@@ -46,7 +46,7 @@
   <div class="ticket-content">
     <table>
       <tbody *ngFor="let group of model.groups">
-        <tr>
+        <tr *ngIf="group.name">
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
             <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
             {{group.name}} ({{group.displayTotalTickets}})

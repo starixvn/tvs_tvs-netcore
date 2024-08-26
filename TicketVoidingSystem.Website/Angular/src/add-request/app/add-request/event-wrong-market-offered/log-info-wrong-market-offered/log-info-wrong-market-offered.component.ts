@@ -8,6 +8,9 @@ import * as _ from 'lodash';
 import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { MultipleSelection } from 'src/utility/components/multiple-selection/multiple-selection';
+import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
 
 @Component({
   selector: 'log-info-wrong-market-offered',
@@ -58,19 +61,33 @@ export class LogInfoWrongMarketOfferedComponent {
         logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.issueTypeId)
       };
-
       this.affectedTicketsModel.tickets = await this.addRequestApiService.GetLogInfoTickets(query);
       this.affectedTicketsModel.tickets.groups[0].isExpanded = true;
       this.affectedTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
-
+      this.affectedTicketsModel.tickets.groups[0].name = null;
     } else {
       this.affectedTicketsModel.tickets = new TicketsModel();
     }
   }
 
+  public updateCheckedBetTypeIds(){
+    this.affectedTicketsModel.checkedBetTypes = this.logInfo.checkedBetTypes;
+    this.affectedTicketsModel.filterBetTypes = this.initFilterBetTypes(this.logInfo.checkedBetTypes);
+  }
+
+  initFilterBetTypes(betTypes: BetTypeAddRequest[]): MultipleSelection{
+    const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
+    filterBetTypes.items = betTypes.map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
+
+    return filterBetTypes;
+  }
+
   public async showAffectedTicketsDetails(){
     this.updateBetTypeCountModel();
     await this.updateAffectedTickets();
+    this.updateCheckedBetTypeIds();
     this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
+
   }
 }

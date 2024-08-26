@@ -24,7 +24,7 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     });
   }
 
-  handlecheckTicketByBetTypes(checkedBetTypes: number[]) {
+  handleCheckTicketByBetTypes(checkedBetTypes: number[]) {
     this.groups.forEach(group => {
       group.tickets.forEach(y => {
         y.isChecked = (checkedBetTypes.includes(Number(y.betTypeId)) && !y.isParlay) || (checkedBetTypes.includes(Number(y.subBetTypeId)) && y.isParlay);

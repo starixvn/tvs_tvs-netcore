@@ -77,13 +77,13 @@ export class PoolHouseTicketComponent implements OnChanges {
       this.affectedSection.tickets.checkAllTickets();
     } else {
       this.affectedSection.groupBetTypesModel.checkBetType(this.model.checkedBetTypes.split(',').map(i => Number(i)));
-      this.affectedSection.tickets.handlecheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
+      this.affectedSection.tickets.handleCheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
     }
     this.affectedSection.tickets.updateSelectedTickets();
   }
 
   public changedBetTypes(betTypes: number[]) {
-    this.affectedSection.tickets.handlecheckTicketByBetTypes(betTypes);
+    this.affectedSection.tickets.handleCheckTicketByBetTypes(betTypes);
     this.affectedSection.tickets.updateSelectedTickets();
   }
 
@@ -107,7 +107,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   updateSelectedBetTypes(betTypes: string[]) {
-    this.otherSection.tickets.handlecheckTicketByBetTypes(betTypes.map(i => Number(i)));
+    this.otherSection.tickets.handleCheckTicketByBetTypes(betTypes.map(i => Number(i)));
   }
 
   initFilterBetTypes(groupBetTypes: GroupBetType[]): MultipleSelection {
