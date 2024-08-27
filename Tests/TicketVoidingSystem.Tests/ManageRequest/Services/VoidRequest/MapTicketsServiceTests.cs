@@ -18,7 +18,7 @@ public class MapTicketsServiceTests
     public MapTicketsServiceTests()
     {
         betListCoreService = Substitute.For<BetListCoreService>();
-        service = new(betListCoreService);
+        service = new MapTicketsServiceImp(betListCoreService);
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class MapTicketsServiceTests
         // Arrange
         var ticket1 = new GetTicketModel
         {
-            TransDate = new(2022, 9, 5, 1, 1, 1),
+            TransDate = new DateTime(2022, 9, 5, 1, 1, 1),
             Status = "done",
             MainTransId = 1,
             SubTransId = 1,
@@ -40,7 +40,7 @@ public class MapTicketsServiceTests
             FollowedId = 1,
             Status = TicketStatus.Running,
             IsMixParlay = true,
-            TransDate = new(2022, 9, 5, 1, 1, 1),
+            TransDate = new DateTime(2022, 9, 5, 1, 1, 1),
             MainTransId = 2,
             SubTransId = 1,
             TransId = 1
@@ -54,8 +54,8 @@ public class MapTicketsServiceTests
         var query = new GroupTicketsMappingParameters
         {
             Group = group,
-            VoidPermission = new(),
-            Match = new(),
+            VoidPermission = new VoidPermission(),
+            Match = new Match(),
             IssueTypeId = 1
         };
 
@@ -70,13 +70,13 @@ public class MapTicketsServiceTests
             new()
             {
                 TransDate = new DateTime(2022, 9, 5, 1, 1, 1).ToString(FormatKey.DateTimeWithMillisecondAndSlash),
-                BetId = "1", Value = "1", MainTransId = "1", WinLoss = "0", Score = "", IsDisable = true
+                BetId = "1", Value = "1", MainTransId = "1", WinLoss = "0", Score = null, IsDisable = true
             },
             new()
             {
                 No = 1, IsParlay = true,
                 TransDate = new DateTime(2022, 9, 5, 1, 1, 1).ToString(FormatKey.DateTimeWithMillisecondAndSlash),
-                BetId = "1<br>(Follow: 1)", Value = "1", MainTransId = "2", WinLoss = "-", Score = "0 - 0", IsDisable = true,
+                BetId = "1<br>(Follow: 1)", Value = "1", MainTransId = "2", WinLoss = "-", Score = null, IsDisable = true,
                 Member = "<br>(Follow: 123)",
             }
         };

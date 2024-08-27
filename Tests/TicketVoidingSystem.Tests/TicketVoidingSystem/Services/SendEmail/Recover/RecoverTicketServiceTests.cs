@@ -38,6 +38,7 @@ public class RecoverTicketServiceTests
         var betListService = Substitute.For<BetListCoreService>();
         betListService.GetMainParlayTicket(item).ReturnsForAnyArgs(ticket);
         betListService.GetNormalTicket(item).ReturnsForAnyArgs(ticket);
+        betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore).Returns(score);
         var service = new RecoverTicketServiceImp(betListService);
 
         // Act

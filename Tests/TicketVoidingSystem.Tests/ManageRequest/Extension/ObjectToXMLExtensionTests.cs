@@ -227,19 +227,18 @@ public class ObjectToXmlExtensionFacts
     public void ToEventDangerAcceptedXml_HasData_ReturnXML()
     {
         // Arrange
-        var expected =
-            "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-            "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-            "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
-            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='' />" + Environment.NewLine +
-            "<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-            "LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
-            "VoidFromTime='' VoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' />" +
-            Environment.NewLine +
-            "<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
-            "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
-            "VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' SingleCount='1' MainParlayCount='1' " +
-            "IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
+        var expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' LiveScores='1-1'" +
+                       " FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' " +
+                       "VoidToTime='2018-10-30 16:20:20.222' TransVoidToTime='0001-01-01 00:00:00.000' SingleCount='1' MainParlayCount='1' IsCheckedVar='' " +
+                       "MinTransId='' ActionType='' MinTime='2018-10-30 16:20:20.222' MinType='' />" + Environment.NewLine +
+                       "<r MatchId='0' AATime='' PATime='' SATime='' FilterBy='' " +
+                       "IsMainMatch='false' SubIssueTypeId='0' LiveScores='' FilterFromTransTime='0001-01-01 00:00:00.000' FilterToTransTime='0001-01-01 00:00:00.000' " +
+                       "VoidFromTime='' VoidToTime='' TransVoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' " +
+                       "MinType='' />" + Environment.NewLine +
+                       "<r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' LiveScores='1-1' " +
+                       "FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' " +
+                       "VoidToTime='2018-10-30 16:20:20.222' TransVoidToTime='0001-01-01 00:00:00.000' SingleCount='1' MainParlayCount='1' IsCheckedVar='' " +
+                       "MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
 
         var logInfoDetail = new LogInfoDetail
         {
@@ -301,11 +300,10 @@ public class ObjectToXmlExtensionFacts
     public void ToEventDangerAcceptedXml_HasVoidTimeIsNull_ReturnXML()
     {
         // Arrange
-        const string expected =
-            "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' "
-            + "SubIssueTypeId='0' LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' "
-            + "FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='' VoidToTime='' SingleCount='1' "
-            + "MainParlayCount='1' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
+        const string expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+                                "LiveScores='1-1' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                                "VoidFromTime='' VoidToTime='' TransVoidToTime='0001-01-01 00:00:00.000' SingleCount='1' MainParlayCount='1' " +
+                                "IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
             MatchId = 123,
@@ -339,11 +337,10 @@ public class ObjectToXmlExtensionFacts
     public void ToEventDangerAcceptedXml_HasLogInfoDetail_ReturnExpected()
     {
         // Arrange
-        const string expected =
-            "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' "
-            + "SubIssueTypeId='0' LiveScores='' FilterFromTransTime='2018-10-30 16:20:20.222' "
-            + "FilterToTransTime='2018-10-30 16:20:20.222' VoidFromTime='' VoidToTime='' SingleCount='' "
-            + "MainParlayCount='' IsCheckedVar='' MinTransId='' ActionType='' MinTime='' MinType='' /></root>";
+        const string expected = "<root><r MatchId='123' AATime='' PATime='' SATime='' FilterBy='' IsMainMatch='false' SubIssueTypeId='0' " +
+                                "LiveScores='' FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                                "VoidFromTime='' VoidToTime='' TransVoidToTime='' SingleCount='' MainParlayCount='' IsCheckedVar='' MinTransId='' " +
+                                "ActionType='' MinTime='' MinType='' /></root>";
 
         var model = new DangerAcceptedViewModel
         {
