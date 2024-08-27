@@ -71,13 +71,12 @@
   </div>
   <div>
     <div class="licensee-info-total-bet mb-2" *ngIf="display">
-      <div class="note">Total Licensee: <strong>{{totalLicensee}}</strong></div>
-      <div class="note">Total Affected Bets Count
+      <div class="note">Total Affected Bets Count: -
         <div>- Credit Total bet: <strong>{{totalBetCountOfCredit}}</strong></div>
-        <div>- Normal Licensee Total bet: <strong>{{totalBetCountOfLicensee}}</strong></div>
-        <div>- CV Licensee Total bet: <strong>{{totalBetCountOfChinaView}}</strong></div>
-        <div>- JS Licensee Total bet: <strong>{{totalBetCountOfJollyView}}</strong></div>
-        <div>- JSCV Licensee Total bet: <strong>{{totalBetCountOfJollySportCv}}</strong></div>
+        <div>- Normal Licensee Total bet: <strong>{{totalBetCountOfNormalLicensee}}</strong>, Total Licensee: <strong>{{totalLicenseeCountOfNormal}}</strong></div>
+        <div>- CV Licensee Total bet: <strong>{{totalBetCountOfChinaView}}</strong>, Total CV Licensee: <strong>{{totalLicenseeCountOfChinaView}}</strong></div>
+        <div>- JS Licensee Total bet: <strong>{{totalBetCountOfJollySport}}</strong>, Total JS Licensee: <strong>{{totalLicenseeCountOfJollySport}}</strong></div>
+        <div>- JSCV Licensee Total bet: <strong>{{totalBetCountOfJollySportCV}}</strong>, Total JSCV Licensee: <strong>{{totalLicenseeCountOfJollySportCV}}</strong></div>
       </div>
       <div class="note">Negative Balance: [Licensee]</div>
     </div>

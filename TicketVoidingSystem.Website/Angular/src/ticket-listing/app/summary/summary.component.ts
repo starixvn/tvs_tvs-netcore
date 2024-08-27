@@ -1,8 +1,8 @@
 ﻿import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { ClipboardService } from 'ngx-clipboard';
-import { SummaryItem } from './summary.model';
 import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
+import { SummaryItem } from './summary.model';
 @Component({
   selector: 'summary-tickets',
   templateUrl: './summary.component.html',
@@ -25,12 +25,16 @@ export class SummaryComponent implements OnChanges {
   jollyViewLicensees = '';
   jollySportCvLicensees = '';
   negativeBalanceUsers = '';
-  totalLicensee = 0;
+
   totalBetCountOfCredit = 0;
+  totalBetCountOfNormalLicensee = 0;
   totalBetCountOfChinaView = 0;
-  totalBetCountOfLicensee = 0;
-  totalBetCountOfJollyView = 0;
-  totalBetCountOfJollySportCv = 0;
+  totalBetCountOfJollySport = 0;
+  totalBetCountOfJollySportCV = 0;
+  totalLicenseeCountOfNormal = 0;  
+  totalLicenseeCountOfChinaView = 0
+  totalLicenseeCountOfJollySport = 0;
+  totalLicenseeCountOfJollySportCV = 0;
 
   constructor(private readonly clipboardService: ClipboardService) { }
 
@@ -102,20 +106,23 @@ export class SummaryComponent implements OnChanges {
     const creditGroups = _.filter(this.itemsGroupByLicensee, { name: 'Credit' });
     this.totalBetCountOfCredit = _.sumBy(creditGroups, 'total');
 
-    const chinaViewGroups = _.filter(this.itemsGroupByLicensee, { isChinaView: true });
-    this.totalBetCountOfChinaView = _.sumBy(chinaViewGroups, 'total');
-
-    const licenseeGroups = _.reject(this.itemsGroupByLicensee, function (o) {
+    const normalLicenseeGroups = _.reject(this.itemsGroupByLicensee, function (o) {
       return o.name === 'Credit' || o.isChinaView || o.specialPlatform === SpecialPlatform.Jolly_Sports || o.specialPlatform === SpecialPlatform.Jolly_Sports_CV;
     });
-    this.totalBetCountOfLicensee = _.sumBy(licenseeGroups, 'total');
-    this.totalLicensee = this.itemsGroupByLicensee.filter(x => x.name !== 'Credit').length;
+    this.totalBetCountOfNormalLicensee = _.sumBy(normalLicenseeGroups, 'total');
+    this.totalLicenseeCountOfNormal = normalLicenseeGroups.length;
 
-    const jollyViewGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 2 });
-    this.totalBetCountOfJollyView = _.sumBy(jollyViewGroups, 'total');
+    const chinaViewGroups = _.filter(this.itemsGroupByLicensee, { isChinaView: true });
+    this.totalBetCountOfChinaView = _.sumBy(chinaViewGroups, 'total');
+    this.totalLicenseeCountOfChinaView = chinaViewGroups.length;
 
-    const jollySportCvGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 3 });
-    this.totalBetCountOfJollySportCv = _.sumBy(jollySportCvGroups, 'total');
+    const jollySportGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 2 });
+    this.totalBetCountOfJollySport = _.sumBy(jollySportGroups, 'total');
+    this.totalLicenseeCountOfJollySport = jollySportGroups.length;
+
+    const jollySportCVGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 3 });
+    this.totalBetCountOfJollySportCV = _.sumBy(jollySportCVGroups, 'total');
+    this.totalLicenseeCountOfJollySportCV = jollySportCVGroups.length;
   }
 
   sendExcelFile() {
