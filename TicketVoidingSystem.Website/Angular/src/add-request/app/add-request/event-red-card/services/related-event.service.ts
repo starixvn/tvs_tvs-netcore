@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { MatchType } from '../../../../../utility/constants/config';
+import { MatchType, DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
@@ -12,6 +12,7 @@ import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
 import { EventRedCardService } from './event-red-card.service';
 import { AddRelatedEventArg } from '../../models/add-related-event.model';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +25,10 @@ export class RelatedEventService {
     private readonly eventRedCardService: EventRedCardService,
   ) {}
 
-  async getChildMatches(mainMatchId: number, filter: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
+  async getChildMatches(mainMatchId: number, eventDate: Date, filter: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(filter.issueTypeId);
-    query.eventDate = filter.eventDate;
+    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
 
@@ -69,7 +70,7 @@ export class RelatedEventService {
         return;
       }
       arg.primitiveProps.isBlock = true;
-      const models = await this.getChildMatches(matchId, arg.filter, false);
+      const models = await this.getChildMatches(matchId, arg.mainEvent.eventDate, arg.filter, false);
       if (models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
