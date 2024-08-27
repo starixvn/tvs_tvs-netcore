@@ -52,13 +52,13 @@ export class TemplateValue {
   hdpValue?: string;
   isCheckedEarlyEvent?: boolean;
   isCheckedSpecialBetType?: boolean;
+  isCheckedVar?: boolean;
   betTypeNameReplaceMessage?: Message;
   match?: MatchModel;
   filterFavoriteType?: string;
   correctOddsHomeOver?: string;
   correctOddsAwayUnder?: string;
   wrongOU?: string;
-  isCheckedVar?: boolean;
   playerName?: TemplateContent;
   numberOfCorner?: number;
   isAllNonLiveTickets?: boolean

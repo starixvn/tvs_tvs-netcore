@@ -612,17 +612,19 @@ export class BetTeam {
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY
     if (AdvancedModeConstants.BETTYPE_MAP_X_FIRST_TO_Y_OVER_UNDER.split(',').includes(betTypeId)) {
+      let mapValues = '';
+      const yValue = this.selections.find(x => x.name === 'Y value:').value;
       if (this.isTicketListing) {
-        this.updateForBetType9089MultipleMapAndRound(result, betTypeId);
+        mapValues = this.multiSelectionList.find(x => x.name === 'Map:').multipleSelect.getValueItems();
       } else {
-        this.updateForBetType9089SingleMapAndRound(result, betTypeId);
+        mapValues = this.selections.find(x => x.name === 'Map:').multiSelection.multipleSelect.getValueItems();
       }
+
+      this.updateSetValueForBetType9089(result, mapValues, yValue);
     }
   }
 
-  private updateForBetType9089MultipleMapAndRound(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY
-    const mapValues = this.multiSelectionList.find(x => x.name === 'Map:').multipleSelect.getValueItems();
-    const yValue = this.selections.find(x => x.name === 'Y value:').value;
+  private updateSetValueForBetType9089(result: BetTeamResult, mapValues: string, yValue: string): void { // format "Set" attribute: 8XXYY
     if (mapValues === 'All' && yValue === 'All') {
       result.set = 'All';
     }
@@ -639,21 +641,6 @@ export class BetTeam {
     });
 
     result.set = tempSets.join(',');
-  }
-
-  private updateForBetType9089SingleMapAndRound(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY
-    const mapValue = this.selections.find(x => x.name === 'Map:').value;
-    const yValue = this.selections.find(x => x.name === 'Y value:').value;
-
-    if (mapValue === 'All' && yValue === 'All') {
-      result.set = 'All';
-    } else if (mapValue === 'All') {
-      result.set = `___${yValue}`;
-    } else if (yValue === 'All') {
-      result.set = `${mapValue}__`;
-    } else {
-      result.set = `${mapValue}${yValue}`;
-    }
   }
 
   private updateForBetTypesCricketWithOverWicket(result: BetTeamResult, betTypeId: string): void { //format "Over: Wicket: Over/Wicket:" value: 8XXX

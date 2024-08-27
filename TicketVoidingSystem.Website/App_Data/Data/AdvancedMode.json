@@ -6587,10 +6587,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6712,6 +6708,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6745,10 +6742,6 @@
       "Selections": [
         {
           "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
             {
               "Name": "1",
               "Value": "801"
@@ -6787,6 +6780,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6828,10 +6822,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6869,6 +6859,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -6910,10 +6901,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -6951,6 +6938,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10101,10 +10089,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10142,6 +10126,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10202,10 +10187,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10243,6 +10224,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10293,10 +10275,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10334,6 +10312,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
@@ -10368,10 +10347,6 @@
         {
           "Items": [
             {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
               "Name": "1",
               "Value": "801"
             },
@@ -10409,6 +10384,7 @@
             }
           ],
           "IsCanSelectMapFromOutside": true,
+          "IsMultiple": true,
           "Name": "Map:",
           "Value": "All",
           "XmlAttribute": "Set"
