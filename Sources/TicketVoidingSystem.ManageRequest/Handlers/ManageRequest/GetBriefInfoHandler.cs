@@ -52,9 +52,9 @@ public class GetBriefInfoHandler : IRequestHandler<GetBriefInfoRequest, IEnumera
         return new BriefInfoModel
         {
             MatchId = matchId,
-            AffectedLicenseeNames = Helper.GetUnionTransIdString(licensees.Select(x => x.AffectedLicenseeNames)),
-            CancelCashOutLicenseesNames = Helper.GetUnionTransIdString(licensees.Select(x => x.CancelCashOutLicenseesNames)),
-            ChinaViewLicenseesNames = Helper.GetUnionTransIdString(licensees.Select(x => x.ChinaViewLicenseesNames)),
+            AffectedLicenseeNames = Helper.GetUnionTransIdString(licensees.Select(x => x.AffectedLicenseeNames), ", "),
+            CancelCashOutLicenseesNames = Helper.GetUnionTransIdString(licensees.Select(x => x.CancelCashOutLicenseesNames), ", "),
+            ChinaViewLicenseesNames = Helper.GetUnionTransIdString(licensees.Select(x => x.ChinaViewLicenseesNames), ", "),
             UserVoidMessages = userVoidMessages
         };
     }

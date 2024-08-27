@@ -41,13 +41,13 @@ public static class Helper
         return string.Join(",", result);
     }
 
-    public static string GetUnionTransIdString(IEnumerable<string> items)
+    public static string GetUnionTransIdString(IEnumerable<string> items, string separator = ",")
     {
         var splitItems = items.Where(x => !string.IsNullOrWhiteSpace(x))
             .Select(x => x.Split(','));
 
         var transIds = splitItems.SelectMany(x => x).Distinct();
-        return string.Join(",", transIds);
+        return string.Join(separator, transIds);
     }
 
     public static string JoinBetIdList(IEnumerable<BetId> items)
