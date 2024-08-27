@@ -7,9 +7,9 @@ import { ConfirmRedCardModel } from '../confirm-red-card/confirm-red-card.model'
 import { PrimitiveProperty } from '../event-red-card.model';
 import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-import { LeagueEventRedCardComponent } from '../league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 
 export class SaveRequestArg {
   requestId: number;
@@ -23,7 +23,7 @@ export class SaveRequestArg {
   primitiveProps: PrimitiveProperty;
   defaultFilterTimeWithAllowance: FilterTimeWithAllowance;
   allEvents: LogInfoRedCard[];
-  leagueEventRedCardComponent: LeagueEventRedCardComponent;
+  eventLeagueComponent: EventLeagueComponent;
   filterTimeAreaComponent: FilterTimeAreaComponent;
   logInfoComponents: QueryList<LogInfoRedCardComponent>;
   confirmRedCard: ConfirmRedCardModel;

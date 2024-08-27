@@ -510,7 +510,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_1ST_OU,
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.EARLY_KICK_OFF,
-      IssueTypeConstant.WRONG_KICK_OFF
+      IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.RED_CARD
     ];
     return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
@@ -532,7 +533,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_1ST_OU,
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.EARLY_KICK_OFF,
-      IssueTypeConstant.WRONG_KICK_OFF
+      IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.RED_CARD
     ];
     return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }
