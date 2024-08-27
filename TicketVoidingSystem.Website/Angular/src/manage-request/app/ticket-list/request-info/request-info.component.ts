@@ -63,7 +63,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     this.paging = new PagingModel();
     this.paging.pageSize = 500;
     this.activeTab = this.selectedMatchId !== null ? this.selectedMatchId.toString() : '0';
-    await this.getDataCurrentTab(this.ticketListModal.matchId.toString());
+    await this.getDataCurrentTab(this.ticketListModal.matchId?.toString());
   }
 
   async getTickets(matchId: number) {
@@ -121,7 +121,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   private async getGeneralInfo(matchIds: string): Promise<void> {
     const generalInfoQuery: GetGeneralInfoQuery = {
       requestId: this.ticketListModal.requestId,
-      matchIds: matchIds
+      matchIds: matchIds === '0' ? null : matchIds
     };
     this.generalInfoViewModel = await this.appService.getGeneralInfo(generalInfoQuery);
   }

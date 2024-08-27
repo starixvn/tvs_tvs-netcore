@@ -41,8 +41,8 @@ export class TicketListComponent implements OnChanges {
 
     for (const matchId of matchIds) {
       this.tabInfoRequest.push({
-        id: matchId !== null && matchId !== '' ? matchId : '0',
-        name: matchId !== null && matchId !== '' && !this.isMatchIdParlay(matchId) ? matchId : 'General Info'
+        id: matchId ? matchId : '0',
+        name: matchId && !this.isMatchIdParlay(matchId) ? matchId : 'General Info'
       });
     }
   }
