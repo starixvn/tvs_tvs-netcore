@@ -6,7 +6,6 @@ import { GroupOperator, OperatorDefault, OperatorInfo, OthersModel } from './oth
 import { OthersService } from './others.service';
 import { AddRequestApiService } from '../add-request-api.service';
 
-
 @Component({
   selector: 'others',
   templateUrl: './others.component.html',
@@ -34,7 +33,7 @@ export class OthersComponent implements OnChanges, OnInit {
   async ngOnInit() {
     this.operators = [OperatorDefault.TRADER, OperatorDefault.SUSPENDER];
     this.intDefaultValueGroupOperators();
-    if(this.decidedBys.length === 0){
+    if(this.decidedBys.length === 0 && this.isIssueTypeSupportSuggestion()){
       this.decidedBys = await this.addRequestApiService.GetDecidedBy();
     }
   }
@@ -107,8 +106,7 @@ export class OthersComponent implements OnChanges, OnInit {
   }
 
   private async initProvider(isEdit: boolean, matchId: number, parentMatchId: number) {
-    if ((StaticService.isDangerAccepted(this.issueTypeId) || StaticService.isRedCard(this.issueTypeId) || StaticService.isWrongScore)
-      && !isEdit) {
+    if (this.isIssueTypeSupportSuggestion() && !isEdit) {
       const id = parentMatchId ? parentMatchId : matchId;
       const provider = await this.othersService.getProvider(id);
       this.model.provider = provider?.providerName;
@@ -117,5 +115,9 @@ export class OthersComponent implements OnChanges, OnInit {
 
   addDecidedBy(decidedBy: string){
     this.decidedBys.push(decidedBy);
+  }
+
+  isIssueTypeSupportSuggestion(){
+    return StaticService.isDangerAccepted(this.issueTypeId) || StaticService.isRedCard(this.issueTypeId) || StaticService.isWrongScore(this.issueTypeId);
   }
 }
