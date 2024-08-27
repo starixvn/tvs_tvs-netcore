@@ -7,6 +7,8 @@ import { FilterTimeAreaComponent } from '../filter-time-area/filter-time-area.co
 import { LeagueEventRedCardComponent } from '../league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../log-info-red-card/log-info-red-card.model';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import moment from 'moment-timezone';
 
 @Injectable({
   providedIn: 'root'
@@ -84,4 +86,16 @@ export class ValidationService {
     return isEdit && editingBy !== createdBy;
   }
 
+  isHasWarningRangeTime(fromDateTime: string, toDateTime: Date) {
+    if(!fromDateTime || !toDateTime){
+      return false;
+    }
+
+    const MILLISECONDS_IN_A_MINUTE = 60000;
+    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
+    let toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
+
+    return diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
+  }
 }

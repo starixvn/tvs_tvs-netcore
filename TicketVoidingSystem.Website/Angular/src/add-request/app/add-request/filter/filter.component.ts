@@ -3,7 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { TVSRequestActionType } from '../../../../utility/constants/config';
+import { DateTimeFormat, TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
@@ -177,7 +177,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   initDate() {
     const date = this.isEdit ? new Date(this.model.eventDate) :
-      new Date(moment.utc().tz('America/Caracas').format('YYYY/M/D'));
+      new Date(moment.utc().tz('America/Caracas').format(DateTimeFormat.SHORT_DATE_FORMAT));
     this.date = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.setLimitDate();
   }
@@ -261,46 +261,9 @@ export class FilterComponent implements OnInit, OnChanges {
     this.widthSportControl = widthValues.sport || 0;
   }
 
-  private updateCurrentAction(): void {
-    const actionMapping: { [key: string]: () => number[] } = {
-      [IssueTypeConstant.REDUCED_OVER]: () => this.actionVoidService.getActionVoidReducedOver(),
-      [IssueTypeConstant.ABANDONED]: () => this.actionVoidService.getActionVoidReducedOver(),
-      [IssueTypeConstant.WRONG_ODDS]: () => this.actionVoidService.getActionVoidWrongOdds(),
-      [IssueTypeConstant.DANGER_ACCEPTED]: () => this.actionVoidService.getActionVoidDangerAccepted(),
-      [IssueTypeConstant.WRONG_SCORE]: () => this.actionVoidService.getActionVoidWrongScore(),
-      [IssueTypeConstant.WRONG_HDP]: () => this.actionVoidService.getActionVoidWrongHdp(),
-      [IssueTypeConstant.WRONG_1ST_HDP]: () => this.actionVoidService.getActionVoidWrong1stHdp(),
-      [IssueTypeConstant.WRONG_OU]: () => this.actionVoidService.getActionVoidWrongOu(),
-      [IssueTypeConstant.WRONG_1ST_OU]: () => this.actionVoidService.getActionVoidWrong1stOu(),
-      [IssueTypeConstant.EARLY_KICK_OFF]: () => this.actionVoidService.getActionVoidEarlyKickOff(),
-      [IssueTypeConstant.WRONG_KICK_OFF]: () => this.actionVoidService.getActionVoidWrongKickOff(),
-      [IssueTypeConstant.RED_CARD]: () => this.actionVoidService.getActionVoidRedCard(),
-      [IssueTypeConstant.ABNORMAL_ACCOUNT]: () => this.actionVoidService.getActionVoidAbnormalAccount(),
-      [IssueTypeConstant.ABNORMAL_BET]: () => this.actionVoidService.getActionAbnormalBet(this.abnormalFilterBy),
-      [IssueTypeConstant.ARCHIVED_TICKET]: () => this.actionVoidService.getActionVoidArchivedTicket(),
-      [IssueTypeConstant.DUPLICATE_TICKETS]: () => this.actionVoidService.getActionVoidDuplicateTickets(this.isEdit, this.model.action),
-      [IssueTypeConstant.NOT_PARTICIPATE]: () => this.actionVoidService.getActionVoidNotParticipate(),
-      [IssueTypeConstant.RECOVER_TICKET]: () => this.actionVoidService.getActionRecoverTicket(),
-      [IssueTypeConstant.WRONG_MARKET_OFFERED]: () => this.actionVoidService.getActionVoidWrongMarketOffered(),
-      [IssueTypeConstant.TECHNICAL_ERROR]: () => this.actionVoidService.getActionVoidTechnicalError()
-    };
-
-    const actionFunction = actionMapping[this.issueTypes.issueId];
-    if (actionFunction) {
-      const selectedActionVoid = actionFunction();
-      this.updateCurrentActionByIssue(selectedActionVoid);
-    } else {
-      this.actions = this.originActions;
-    }
+  private updateCurrentAction(): void { 
+    this.actions = this.actionVoidService.getVoidActionsSelectionByIssueType(this.issueTypes.issueId, this.abnormalFilterBy, this.isEdit, this.model.action, this.originActions);
     this.model.action = this.isEdit || (this.isExternalUrl && this.model.action) ? this.model.action : this.actions[0].value;
-  }
-
-  private updateCurrentActionByIssue(actionIds: number[]): void {
-    this.actions = actionIds.map((id: number) => {
-      const foundAction = this.originActions.find((action) => action.value === id.toString());
-      const name = foundAction ? foundAction.name : '';
-      return { value: id.toString(), name };
-    });
   }
 
   async getIssueTypes() {
@@ -544,7 +507,10 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_HDP,
       IssueTypeConstant.WRONG_1ST_HDP,
       IssueTypeConstant.WRONG_OU,
-      IssueTypeConstant.WRONG_1ST_OU
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.DANGER_ACCEPTED,
+      IssueTypeConstant.EARLY_KICK_OFF,
+      IssueTypeConstant.WRONG_KICK_OFF
     ];
     return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
@@ -563,7 +529,10 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_HDP,
       IssueTypeConstant.WRONG_1ST_HDP,
       IssueTypeConstant.WRONG_OU,
-      IssueTypeConstant.WRONG_1ST_OU
+      IssueTypeConstant.WRONG_1ST_OU,
+      IssueTypeConstant.DANGER_ACCEPTED,
+      IssueTypeConstant.EARLY_KICK_OFF,
+      IssueTypeConstant.WRONG_KICK_OFF
     ];
     return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }

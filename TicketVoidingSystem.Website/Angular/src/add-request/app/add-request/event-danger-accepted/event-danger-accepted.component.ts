@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -10,7 +11,6 @@ import { AddRequestStore } from '../add-request.store';
 import { PrimitiveProperty } from '../event-red-card/event-red-card.model';
 import { FilterTimeAreaComponent } from '../event-red-card/filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from '../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../event-red-card/log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../filter/filter.model';
@@ -47,7 +47,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   @Output() dangerAcceptedModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
-  @ViewChild('leagueEvent') leagueEventDangerAcceptedComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
 
   tooltip = new Tooltip();
@@ -95,7 +95,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
       this.eventDangerAcceptedService.assignModelsToEvents(this.allSelectedEvents, this.dangerAcceptedModels, this.primitiveProps, this.addRequestStore);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.eventDangerAcceptedService.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.dangerAcceptedModels);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
       this.primitiveProps.isShowLogInfoMainMatch = true;
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
@@ -112,7 +112,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
 
-    if (!this.validationService.validateCommonData(this.filter, this.leagueEventDangerAcceptedComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
+    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
       return;
     }
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
@@ -121,7 +121,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
@@ -141,11 +141,12 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.mainEvent.matchId = this.leagueEventDangerAcceptedComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventDangerAcceptedComponent?.selectedMatch.name;
-    this.mainEvent.leagueName = this.leagueEventDangerAcceptedComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchCode = this.leagueEventDangerAcceptedComponent?.selectedMatch.matchCode;
-    this.updateMatchId.emit(this.leagueEventDangerAcceptedComponent?.selectedMatch);
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
+    this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 
   isExistMatchEvent(): boolean {
@@ -234,7 +235,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     arg.primitiveProps = this.primitiveProps;
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
     arg.allEvents = this.allSelectedEvents;
-    arg.leagueEventDangerAcceptedComponent = this.leagueEventDangerAcceptedComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.filterTimeAreaComponent = this.filterTimeAreaComponent;
     arg.logInfoComponents = this.logInfoComponents;
     arg.confirmDangerAccepted = this.confirmDangerAccepted;

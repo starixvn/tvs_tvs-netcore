@@ -154,4 +154,19 @@ export class LogInfoRedCardComponent {
     this.logInfo.isCheckedVar = isVarChecked;
     this.logInfo.isHighLightVarCheck = false;
   }
+
+  public getDurationTime(): string {
+    const fromTimeFilter = moment(this.defaultFilterTimeWithAllowance.fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const toTimeLogInfo = moment(this.logInfo.logInfoDetail.transVoidToTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+
+    return StaticService.getDurations(fromTimeFilter, toTimeLogInfo);
+  }
+
+  isShowMessageRangeVoidTime() {
+    return this.logInfo.logInfoDetail?.isHasWarningRangeTime && this.isDangerAccepted();
+  }
+
+  isDangerAccepted(): boolean {
+    return StaticService.isDangerAccepted(this.filter.issueTypeId);
+  }
 }

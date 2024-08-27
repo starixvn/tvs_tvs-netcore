@@ -23,6 +23,7 @@ public class LogInfoDetail
     public string? LiveScores { get; set; }
     public DateTime VoidFromTime { get; set; }
     public DateTime VoidToTime { get; set; }
+    public DateTime TransVoidToTime { get; set; }
     public int SingleCount { get; set; }
     public int CashOutCount { get; set; }
     public int CancelCashOutCount { get; set; }
@@ -60,4 +61,6 @@ public class Validation
     public bool IsExistedInOtherRequest { get; set; }
     public bool IsPoolHouseAffected { get; set; }
     public bool IsExistsSecondAccept { get; set; }
+    public bool IsHasSettledTicket { get; set; }
+    public bool IsHasInstantlySettledTicket { get; set; }
 }

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
+import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
@@ -125,7 +125,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.matchId = match?.matchId;
     this.parentMatchId = match?.parentId;
   }
-  async saveRequest(isSaveAndVoid: boolean): Promise<void> { // NOSONAR
+  async saveRequest(): Promise<void> { // NOSONAR
     if (!this.isEdit) {
       const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
       localStorage.setItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'),
@@ -138,7 +138,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (this.isEarlyOrWrongKO()) {
-      await this.eventEarlyKickOffComponent.saveRequest(isSaveAndVoid);
+      await this.eventEarlyKickOffComponent.saveRequest();
     }
 
     if (this.isDangerAccepted()) {
@@ -259,11 +259,6 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   isShowOthersFullFields(): boolean {
     return !this.isAbnormalBet() && !this.isAbnormalAccount() && !this.isArchivedTicketIssueType() && !this.isDuplicateTickets()
       && !this.isRecoverTicket() && !this.isShowOthersSimpleFields();
-  }
-
-  isShowSaveAndVoidButton(): boolean {
-    return (this.model.filter.action === TVSRequestActionType.MANUAL_VOID_ID.toString())
-      && this.isEarlyOrWrongKO();
   }
 
   isShowCopyInfoButton(): boolean {

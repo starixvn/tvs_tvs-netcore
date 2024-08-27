@@ -150,10 +150,21 @@ export class TVSRequestActionType {
   static readonly AUTO_VOID_RESULT_KEYED_ID = 9;
   static readonly AUTO_RECOVER_ID = 11;
 
-  static readonly MANUAL_VOID = 'Manual Void';
+  static readonly NAME_MAPPING = {
+    [this.AUTO_VOID_WINNING_ID]: "Auto Void Winning",
+    [this.TAKE_NOTE_ID]:  "Take note",
+    [this.WAITING_ID]:  "Waiting",
+    [this.AUTO_VOID_INSTANT_ID]:  "Auto Void All (Instant)",
+    [this.MANUAL_VOID_ID]:  "Manual Void",
+    [this.AUTO_VOID_INSTANT_WITHOUT_POLICY]:  "Auto Void All (Instant w/o Policy)",
+    [this.AUTO_VOID_RESULT_KEYED_ID]:  "Auto Void All (Result keyed)",
+    [this.AUTO_VOID_INSTANT_WITH_POLICY_ID]:  "Auto Void (Instant with Policy)",
+    [this.AUTO_RECOVER_ID]:  "Auto Recover"
+  };
 }
 
 export class DateTimeFormat {
+  static readonly SHORT_DATE_FORMAT = 'YYYY/M/D';
   static readonly DATE_FORMAT = 'YYYY/MM/DD';
   static readonly DATE_MONTH_YEAR = 'DD MMMM yyyy';
   static readonly TIME_FORMAT = 'hh:mm:ss.SSS A';
@@ -329,7 +340,12 @@ export class SiteDbGroupConstant {
 export class ActionVoidByIssueTypeConst {
   static readonly REDUCED_OVER: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+    TVSRequestActionType.TAKE_NOTE_ID
+  ];
+  static readonly ABANDONED: number[] = [
+    TVSRequestActionType.MANUAL_VOID_ID,
+   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly WRONG_ODDS: number[] = [
@@ -419,7 +435,7 @@ export class ActionVoidByIssueTypeConst {
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly NOT_PARTICIPATE: number[] = [
-    TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
+   // TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID,
     TVSRequestActionType.MANUAL_VOID_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
@@ -428,12 +444,12 @@ export class ActionVoidByIssueTypeConst {
   ];
   static readonly WRONG_MARKET_OFFERED: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+  //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly TECHNICAL_ERROR: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+  //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
   static readonly ALLOWANCE_RATE: number[] = [

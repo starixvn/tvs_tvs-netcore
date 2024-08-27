@@ -67,7 +67,7 @@ export class SaveRequestService {
     arg.confirmRedCard.requestedBy = arg.requestedBy;
     arg.confirmRedCard.isEditingByAnotherUser =
       this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
-    arg.confirmRedCard.isHasWarningSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
+    arg.confirmRedCard.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
     arg.confirmRedCard.isHasWarningForRedCard = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
     arg.confirmRedCard.isHasWarningEditTakeNoteRequest =
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess);

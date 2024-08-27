@@ -3,10 +3,12 @@ import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterTimeAreaComponent } from '../../event-red-card/filter-time-area/filter-time-area.component';
-import { LeagueEventRedCardComponent } from '../../event-red-card/league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from '../../event-red-card/log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
 import { FilterModel } from '../../filter/filter.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 
 @Injectable({
   providedIn: 'root'
@@ -24,14 +26,14 @@ export class ValidationService {
     return false;
   }
 
-  validateCommonData(filter: FilterModel, leagueEventDangerAcceptedComponent: LeagueEventRedCardComponent,
+  validateCommonData(filter: FilterModel, eventLeagueComponent: EventLeagueComponent,
     filterTimeAreaComponent: FilterTimeAreaComponent, logInfoComponents: QueryList<LogInfoRedCardComponent>, addRequestStore: AddRequestStore): boolean {
     addRequestStore.checkValidSubIssueTypeInFilter();
     if (!filter.subIssueTypeId) {
       return false;
     }
 
-    if (!leagueEventDangerAcceptedComponent.isMatchIdValid()) {
+    if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
     }
 
@@ -82,5 +84,18 @@ export class ValidationService {
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {
     return isEdit && editingBy !== createdBy;
+  }
+
+  isHasWarningRangeTime(fromDateTime: string, toDateTime: Date) {
+    if(!fromDateTime || !toDateTime){
+      return false;
+    }
+
+    const MILLISECONDS_IN_A_MINUTE = 60000;
+    let fromTimeFilter = moment(fromDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);;
+    let toTimeLogInfo = moment(toDateTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const diffMilliseconds = toTimeLogInfo.diff(fromTimeFilter);
+
+    return diffMilliseconds > MILLISECONDS_IN_A_MINUTE;
   }
 }

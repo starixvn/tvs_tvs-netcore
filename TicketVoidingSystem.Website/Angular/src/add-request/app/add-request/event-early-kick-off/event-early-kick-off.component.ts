@@ -8,15 +8,17 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AddChildMatchModel } from '../../../../utility/components/add-child-match/add-child-match.model';
 import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { PagingConstant } from '../../../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
 import { MatchModel } from '../../../../utility/models/match.model';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
-import { LeagueEventRedCardComponent } from '../event-red-card/league-event-red-card/league-event-red-card.component';
 import { FilterModel } from '../filter/filter.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
+import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { ChildMatchModel } from '../models/related-event.model';
 import { TransInfoAddRequestModel } from '../models/trans-info-add-request.model';
 import { OthersModel } from '../others/others.model';
@@ -30,7 +32,7 @@ import { EventEarlyKickOffService } from './services/event-eko.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationService } from './services/validation.service';
+import { SearchEventService } from './services/search-event.service';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -49,11 +51,12 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   @Input() issueTypeId: string;
   @Input() others = new OthersModel();
   @Output() updateMatchId = new EventEmitter<number>();
-  @ViewChild('leagueEvent') leagueEventComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('kickOffTime') kickOffTimeComponent: DateFullTimeNewComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoEkoComponent>;
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
 
+  permission = new PermissionAddRequest();
   transInfoAddRequestModel: TransInfoAddRequestModel;
   mainEvent = new LogInfoEarlyKickOff();
   allSelectedEvents: LogInfoEarlyKickOff[] = [];
@@ -67,12 +70,14 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     private readonly addRequestStore: AddRequestStore,
     private readonly logInfoService: LogInfoService,
     private readonly saveRequestService: SaveRequestService,
-    private readonly validationService: ValidationService,
     private readonly relatedEventService: RelatedEventService,
     private readonly eventEarlyKickOffService: EventEarlyKickOffService,
-    ) {
-      this.tooltip.element = this.element;
-     }
+    private readonly searchEventService: SearchEventService,
+    private readonly addRequestApiService: AddRequestApiService
+  ) {
+    this.tooltip.element = this.element;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['issueTypeId'] && !this.isEdit) {
       this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
@@ -82,21 +87,16 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
   }
 
   public async ngOnInit(): Promise<void> {
+    this.permission = await this.addRequestApiService.getPermissionAddRequest();
     if (this.isEdit) {
       this.eventEarlyKickOffService.assignModelsToEvents(this.allSelectedEvents, this.earlyKickOffModels, this.filter);
-      this.allSelectedEvents.forEach(x => {
-        x.templateValue = this.logInfoService.getTemplateValue(x);
-        x.templateValue.kickOffTime = x.kickOffTime;
-      });
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.addRequestStore.changeBlockingUiStatus(true);
       if (!this.filter.isVoided) {
         await this.getTicketsMainEvent();
-        this.mainEvent.templateValue.checkSettled = this.mainEvent.tableTicketsModel.isHasSettledTicket;
       }
 
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.matchModel.eventDate, this.filter, true);
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
@@ -111,16 +111,13 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
 
-    this.mainEvent.leagueName = this.leagueEventComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchId = this.leagueEventComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventComponent?.selectedMatch.name;
-    this.mainEvent.matchCode = this.leagueEventComponent?.selectedMatch.matchCode;
-    this.mainEvent.kickOffTime = this.updateKickOffTime(this.leagueEventComponent?.selectedMatch);
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.kickOffTime = this.updateKickOffTime(this.eventLeagueComponent?.selectedMatch);
     this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
-    this.mainEvent.matchModel = this.leagueEventComponent?.selectedMatch;
-    if(this.mainEvent.matchModel){
-      this.mainEvent.templateValue = this.logInfoService.getTemplateValue(this?.mainEvent);
-    }
+    this.mainEvent.matchModel = this.eventLeagueComponent?.selectedMatch;
 
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
@@ -132,56 +129,46 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         const dateTime = this.kickOffTimeComponent.getDateTime();
         x.kickOffTime = dateTime;
         x.templateValue.kickOffTime = dateTime;
-      });    }
+      });
+    }
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
   public async handleSearchEvent(): Promise<void> {
-    this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.allSelectedEvents.filter(x => !x.isMainMatch).forEach(x => {
-      x.isCollapse = true;
-    })
-
-    if (!this.validationService.validateCommonData(this.leagueEventComponent, this.tooltip, this.kickOffTimeComponent)) {
-      return;
-    }
-
-    this.primitiveProps.isShowLogInfoEvents = false;
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
-    await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
-    await this.getTicketsMainEvent();
-    this.mainEvent.templateValue.checkSettled = this.mainEvent.tableTicketsModel.isHasSettledTicket;
-    this.primitiveProps.isShowLogInfoEvents = true;
-
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.matchModel.eventDate, this.filter, true);
+    const isSearchOk = await this.searchEventService.searchEvents(this.initSaveRequestInput(), this.relatedEvents);
+    if (isSearchOk) {
+      await this.getTicketsMainEvent();
+    }
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   public async getTicketsMainEvent(): Promise<void> {
     const query = this.logInfoService.initQuery(PagingConstant.INDEX_ZERO, PagingConstant.SIZE_ONE, this.mainEvent, this.filter);
-    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+    await this.logInfoService.getTickets(query, this.mainEvent, this.isEdit, this.requestId, this.filter);
+    this.logInfoService.assignTemplateMessageValueToEvent(this.mainEvent);
   }
 
   public async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
   }
 
-  public async saveRequest(isSaveAndVoid: boolean): Promise<void> {
+  public async saveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    await this.saveRequestService.saveRequest(this.initSaveRequestInput(isSaveAndVoid));
+    await this.saveRequestService.saveRequest(this.initSaveRequestInput());
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
   async onClickConfirmSaveRequest() {
-    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput(false));
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
   }
 
   onClickCancelSaveRequest() {
     this.addRequestStore.changeSavingRequestStatus(false);
   }
 
-  private initSaveRequestInput(isSaveAndVoid: boolean) {
+  private initSaveRequestInput(): SaveRequestArg {
     const arg = new SaveRequestArg();
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;
@@ -191,7 +178,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
-    arg.leagueEventComponent = this.leagueEventComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.allEvents = this.allSelectedEvents;
     arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;
@@ -199,8 +186,8 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.kickOffTimeComponent = this.kickOffTimeComponent;
     arg.confirmEarlyKickOff = this.confirmEarlyKickOff;
     arg.others = this.others;
-    arg.isSaveAndVoid = isSaveAndVoid;
-
+    arg.permission = this.permission;
+    arg.issueTypes = this.issueTypes;
     return arg;
   }
 
@@ -215,7 +202,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;
     arg.inputMatchIdClass = this.INPUT_MATCH_ID_CLASS;
-    arg.originalRelatedEvents = this.relatedEvents;
 
     return arg;
   }
@@ -231,17 +217,17 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.allSelectedEvents = this.allSelectedEvents.filter(x =>
       (selectedEvents.some(y => y.matchId === x.matchId)
-      || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+        || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
-    const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
+    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
     if (newEvents.length > 0) {
-      await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter);
+      this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       this.allSelectedEvents.push(...newEvents);
       this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
     this.addRequestStore.changeBlockingUiStatus(false);
-
   }
 
   public handleDeleteEvent(matchId: number): void {

@@ -4,9 +4,10 @@ export class ConfirmDangerAcceptedModel {
   subIssueTypeName: string;
   requestId: number;
   requestedBy: string;
-  isHasWarningSettledTicket: boolean;
+  isHasSettledTicket: boolean;
   isHasWarningEvent: boolean;
   isHasWarningEditTakeNoteRequest: boolean;
   isEditingByAnotherUser: boolean;
   warningRelatedEvents: string[] = [];
+  isHasWarningRangeTime: boolean;
 }

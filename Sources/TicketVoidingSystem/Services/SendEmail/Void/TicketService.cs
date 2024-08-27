@@ -29,13 +29,18 @@ public class TicketServiceImp : TicketService
         ticket.IsVipMember = item.IsVipMember;
         ticket.OperatorID = item.OperatorID;
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
-        ticket.Score = item.IsLive && (!item.BetTypeId.HideScore() || item.IsMixParlay) && item.SportTypeId != SportTypeConstant.Baseball
-            ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
+        ticket.Score = IsTicketHasScore(item) ? $"{item.LiveHomeScore} - {item.LiveAwayScore}" : string.Empty;
         ticket.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.Winlost).ToString("#,##0.##");
         ticket.DepositName = item.UserName2;
         ticket.BetFrom = Helper.GetBetFrom(item.BetFrom);
         ticket.Stake = ticket.Stake.Replace("Rebate", "(Rebate)");
 
         return ticket;
+    }
+
+    private static bool IsTicketHasScore(TicketEmailModel item)
+    {
+        return item.IsLive && (!item.BetTypeId.HideScore() || item.IsMixParlay) &&
+               item.SportTypeId != SportTypeConstant.Baseball;
     }
 }

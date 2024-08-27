@@ -351,6 +351,7 @@ export class StaticService {
         reason: LABELS.NO_VALID_TICKETS_IN_RANGE
       });
     }
+
     if (logInfoModel.validation.isExistsSecondAccept) {
       const toDateTimeExist = new Date(filterFromTime);
       toDateTimeExist.setSeconds(Number(secondAcceptValue) + toDateTimeExist.getSeconds());

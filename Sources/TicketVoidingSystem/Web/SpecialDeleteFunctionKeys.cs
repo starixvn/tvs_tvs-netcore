@@ -40,6 +40,7 @@ public static class SpecialDeleteFunctionKeys
     public const string RecoverSubParlayBet = "RecoverSubParlayBet";
     public const string RecoverVirtualSportsBet = "RecoverVirtualSportsBet";
     public const string RedCard = "RedCard";
+    public const string InstantlySettledTickets = "InstantlySettledTickets";
     public const string SettledTickets = "SettledTickets";
     public const string SportsbookSpecialDelete = "SportsbookSpecialDelete";
     public const string SystemConfiguration = "SystemConfiguration";

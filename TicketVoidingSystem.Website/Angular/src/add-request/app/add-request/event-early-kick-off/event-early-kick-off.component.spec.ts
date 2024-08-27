@@ -462,7 +462,7 @@ describe('EventEarlyKickOffComponent', () => {
     const mockGetLogInfo = jest.fn();
     const mockUpdateEvents = jest.fn().mockReturnValue([]);
     const { instance } = await shallow
-      .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
+      .mock(RelatedEventService, { mapChildMatchesToEvents: mockUpdateEvents })
       .mock(LogInfoService, {
         getLogInfo: mockGetLogInfo,
         resetLogInfoOfEvent: mockResetLogInfoOfEvent,
@@ -524,7 +524,7 @@ describe('EventEarlyKickOffComponent', () => {
     const mockUpdateEvents = jest.fn().mockReturnValue([new LogInfoEarlyKickOff()]);
     const mockGetLogInfo = jest.fn();
     const { instance } = await shallow
-    .mock(RelatedEventService, { updateEvents: mockUpdateEvents })
+    .mock(RelatedEventService, { mapChildMatchesToEvents: mockUpdateEvents })
     .mock(LogInfoService, {
       getLogInfo: mockGetLogInfo,
       resetLogInfoOfEvent: mockResetLogInfoOfEvent,

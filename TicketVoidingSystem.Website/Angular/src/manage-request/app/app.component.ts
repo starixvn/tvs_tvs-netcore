@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { AutoRefreshMode } from '../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../utility/constants/config';
 import { LABELS } from '../../utility/constants/labels';
 import { Selection } from '../../utility/models/selection.model';
 import { RequestStatus } from '../../utility/models/signal-r.model';
@@ -19,7 +20,6 @@ import { RequestModel } from './request-list/request.model';
 
 
 const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
-const SHORT_DATETIME_FORMAT = 'YYYY/M/D';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
@@ -134,9 +134,9 @@ export class AppComponent implements OnInit {
   }
 
   isDateBeforeBUDay(date: NgbDate): boolean {
-    const momentFrom = moment(this.getDateStringFromNgbDate(date), SHORT_DATETIME_FORMAT);
-    const momentBU = moment(this.bUDay).format(SHORT_DATETIME_FORMAT);
-    return momentFrom.isBefore(moment(momentBU, SHORT_DATETIME_FORMAT));
+    const momentFrom = moment(this.getDateStringFromNgbDate(date), DateTimeFormat.SHORT_DATE_FORMAT);
+    const momentBU = moment(this.bUDay).format(DateTimeFormat.SHORT_DATE_FORMAT);
+    return momentFrom.isBefore(moment(momentBU, DateTimeFormat.SHORT_DATE_FORMAT));
   }
 
   cacheFilterData(): void {

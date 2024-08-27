@@ -74,6 +74,7 @@ export class LogInfoService {
         if (logInfo.logInfoDetail && this.validationService.isHasAllowanceTime(event)) {
           event.voidTimeArea.toDateTime = moment(logInfo.logInfoDetail.voidToTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
           event.voidTimeArea.fromDateTime = moment(logInfo.logInfoDetail.voidFromTime).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
+          event.logInfoDetail.isHasWarningRangeTime = this.validationService.isHasWarningRangeTime(defaultFilterTimeWithAllowance.fromDateTime, logInfo.logInfoDetail.transVoidToTime);
         }
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfo, defaultFilterTimeWithAllowance.fromDateTime, event.voidTimeArea.saTime);
       }

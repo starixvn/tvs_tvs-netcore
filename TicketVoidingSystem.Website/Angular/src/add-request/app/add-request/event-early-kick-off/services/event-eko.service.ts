@@ -34,7 +34,7 @@ export class EventEarlyKickOffService {
     mainEvent.isShowValidation = false;
     mainEvent.tableTicketsModel = new TableTicketsModel();
     mainEvent.pagingModel = new PagingModel();
-    mainEvent.isCollapse = false;
+    mainEvent.isCollapse = true;
     mainEvent.subIssueTypeId = Number(subIssueTypeId);
     mainEvent.kickOffTime = moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
     allSelectedEvents.push(mainEvent);

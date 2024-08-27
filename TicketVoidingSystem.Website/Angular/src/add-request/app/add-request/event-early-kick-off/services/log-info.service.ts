@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 import { PagingConstant } from '../../../../../utility/components/paging/paging/paging.model';
+import { TemplateService } from '../../../../../utility/components/template-message/template-message/template.service';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoQuery } from '../../models/add-request.query';
-import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { GetLogInfoModel, GetLogInfoViewModel } from '../../models/get-log-info.model';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
-import { TemplateService } from '../../../../../utility/components/template-message/template-message/template.service';
-import { TemplateValue } from '../../../../../utility/components/template-message/template-message/template.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,17 +24,25 @@ export class LogInfoService {
     private readonly templateService: TemplateService) {
   }
 
-  public async getTickets(query: GetTicketsQuery, logInfo: LogInfoEarlyKickOff, isEdit: boolean,
-    requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
+  public async getTickets(query: GetTicketsQuery, logInfo: LogInfoEarlyKickOff, isEdit: boolean, requestId: number, filter: FilterModel): Promise<void> {
     this.resetLogInfoOfEvent([logInfo]);
-    await this.getLogInfo([logInfo], isEdit, requestId, filter, primitiveProps);
-    query.transInfoJson = primitiveProps.transInfoAddRequestModel.transInfoJson;
-    logInfo.pagingModel.pageSize = PagingConstant.SIZE_ONE;
+    const getLogInfoResult = await this.getLogInfo([logInfo], isEdit, requestId, filter);
+    this.assignResultLogInfoToEvents([logInfo], getLogInfoResult.getLogInfoModels);
+    query.transInfoJson = getLogInfoResult.transInfoAddRequestModel.transInfoJson;
+
     const data = await this.httpService.postJson<GetTicketsQuery, TableTicketsModel>(query, 'api/VoidRequest/GetTickets');
+    logInfo.pagingModel.pageSize = PagingConstant.SIZE_ONE;
     logInfo.tableTicketsModel.initData(data);
     logInfo.isShowValidation = true;
     logInfo.isCollapse = false;
     logInfo.pagingModel.total = data.total;
+  }
+
+  public assignTemplateMessageValueToEvent(eventLogInfo: LogInfoEarlyKickOff): void {
+    eventLogInfo.templateValue = this.templateService.getTemplateValue(eventLogInfo.matchModel);
+    eventLogInfo.templateValue.groupPHAffected = eventLogInfo.tableTicketsModel.groupPHAffected;
+    eventLogInfo.templateValue.checkSettled = eventLogInfo.tableTicketsModel.isHasSettledTicket;
+    eventLogInfo.templateValue.kickOffTime = eventLogInfo.kickOffTime;
   }
 
   public initQuery(pageIndex: number, pageSize: number, logInfo: LogInfoEarlyKickOff, filter: FilterModel): GetTicketsQuery {
@@ -52,16 +58,12 @@ export class LogInfoService {
     return model;
   }
 
-  async getLogInfo(allEvents: LogInfoEarlyKickOff[], isEdit: boolean, requestId: number, filter: FilterModel, primitiveProps: PrimitiveProperty): Promise<void> {
-    const getLogInfoQuery = this.initGetLogInfoEarlyKickOffQuery(isEdit, requestId, filter, allEvents);
-    const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
-
-    primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
-    this.assignResultLogInfoToEvents(allEvents, viewModel.getLogInfoModels);
+  public async getLogInfo(selectedEvents: LogInfoEarlyKickOff[], isEdit: boolean, requestId: number, filter: FilterModel): Promise<GetLogInfoViewModel> {
+    const getLogInfoQuery = this.initGetLogInfoEarlyKickOffQuery(isEdit, requestId, filter, selectedEvents);
+    return await this.commonService.getLogInfo(getLogInfoQuery);
   }
 
-  private initGetLogInfoEarlyKickOffQuery(isEdit: boolean, requestId: number,
-    filter: FilterModel, events: LogInfoEarlyKickOff[]): GetLogInfoQuery {
+  private initGetLogInfoEarlyKickOffQuery(isEdit: boolean, requestId: number, filter: FilterModel, events: LogInfoEarlyKickOff[]): GetLogInfoQuery {
     const query = new GetLogInfoQuery();
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
@@ -71,30 +73,26 @@ export class LogInfoService {
     return query;
   }
 
-  private assignResultLogInfoToEvents(allSelectedEvents: LogInfoEarlyKickOff[], logInfoModels: GetLogInfoModel[]): void {
-    allSelectedEvents.forEach(event => {
+  public assignResultLogInfoToEvents(selectedEvents: LogInfoEarlyKickOff[], logInfoModels: GetLogInfoModel[]): void {
+    selectedEvents.forEach(event => {
       const logInfoModel = logInfoModels.find(x => x.matchId === event.matchId);
       if (logInfoModel) {
+
         event.isInvalidTotalTickets = logInfoModel.validation.isInvalidTotalTickets;
+        event.isHasSettledTicket = logInfoModel.validation.isHasSettledTicket;
+        event.isHasInstantlySettledTicket = logInfoModel.validation.isHasInstantlySettledTicket;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
         event.isCollapse = logInfoModel.validation.isInvalidTotalTickets ? false : event.isCollapse;
-        if (logInfoModel.validation.isInvalidTotalTickets) {
+        if (logInfoModel.validation.isInvalidTotalTickets) {  // check note***
           event.isShowValidation = true;
         }
       }
     });
   }
 
-  resetLogInfoOfEvent(allSelectedEvents: LogInfoEarlyKickOff[]): void {
+  public resetLogInfoOfEvent(allSelectedEvents: LogInfoEarlyKickOff[]): void {
     allSelectedEvents.forEach(event => {
       event.messageValidationLogInfo = null;
     });
-  }
-
-  public getTemplateValue(match: LogInfoEarlyKickOff): TemplateValue {
-    const templateValue = this.templateService.getTemplateValue(match.matchModel);
-    templateValue.groupPHAffected = match.tableTicketsModel.groupPHAffected;
-    templateValue.checkSettled = match.tableTicketsModel.isHasSettledTicket;
-    return templateValue;
   }
 }

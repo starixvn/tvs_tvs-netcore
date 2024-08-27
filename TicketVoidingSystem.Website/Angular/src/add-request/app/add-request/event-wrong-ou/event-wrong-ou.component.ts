@@ -57,7 +57,7 @@ export class EventWrongOuComponent implements OnInit {
     private readonly relatedEventService: RelatedEventService,
     private readonly saveRequestService: SaveRequestService
   ) {
-      this.tooltip.element = this.element;
+    this.tooltip.element = this.element;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -76,7 +76,7 @@ export class EventWrongOuComponent implements OnInit {
     if (this.isEdit) {
       this.eventWrongOuService.assignModelsToEvents(this.allSelectedEvents, this.wrongOuModels);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
       this.resetAllData();
@@ -98,7 +98,7 @@ export class EventWrongOuComponent implements OnInit {
     await this.logInfoWrongOuService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
     mainLogInfo.logInfo.isShowValidation = true;
 
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
     this.primitiveProps.isShowRelatedEvents = true;
     this.addRequestStore.changeSavingRequestStatus(false);
     mainLogInfo.isBlock = false;
@@ -113,6 +113,7 @@ export class EventWrongOuComponent implements OnInit {
     this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -127,7 +128,7 @@ export class EventWrongOuComponent implements OnInit {
     this.primitiveProps.isBlock = true;
     this.allSelectedEvents = this.allSelectedEvents.filter(x =>
       (selectedEvents.some(y => y.matchId === x.matchId)
-      || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
+        || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
     const newEvents = this.relatedEventService.updateEvents(newChildEvents, this.mainEvent.filterWrongOu);

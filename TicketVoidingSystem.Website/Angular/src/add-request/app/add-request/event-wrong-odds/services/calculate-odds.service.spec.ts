@@ -151,6 +151,7 @@ describe('CalculateOddsService', () => {
   });
 
   it('#calculateOddsRange should calculate odds range correctly', () => {
+    // Arrange
     const inputTests = [{ correctOddsHomeOver: '0.7', correctOddsAwayUnder: '-0.90', allowanceRate: '20', toOddsNotVoidHomeOver: '0.90', 
       toOddsNotVoidAwayUnder:'-0.70', fromOddsNotVoidHomeOver:'0.50', fromOddsNotVoidAwayUnder:'0.90'},
       { correctOddsHomeOver: '0.9', correctOddsAwayUnder: '0.96', allowanceRate: '25', toOddsNotVoidHomeOver: '-0.85', 
@@ -162,8 +163,10 @@ describe('CalculateOddsService', () => {
       const oddsInfo: FilterWrongOddsModel = { correctOddsHomeOver: test.correctOddsHomeOver, correctOddsAwayUnder: test.correctOddsAwayUnder, 
         allowanceRate: test.allowanceRate, spread: '0.2'} as FilterWrongOddsModel;
 
+      // Action
       service.calculateOddsRange(oddsInfo);
     
+      // Assert
       expect(oddsInfo.toOddsNotVoidHomeOver).toBe(test.toOddsNotVoidHomeOver);
       expect(oddsInfo.toOddsNotVoidAwayUnder).toBe(test.toOddsNotVoidAwayUnder);
       expect(oddsInfo.fromOddsNotVoidHomeOver).toBe(test.fromOddsNotVoidHomeOver);
@@ -171,11 +174,14 @@ describe('CalculateOddsService', () => {
     })    
   });
   
-  it('#calculateOddsRange should not calculate odds range when correctOddsHomeOver is Undefined', () => {
-    const oddsInfo: FilterWrongOddsModel = { correctOddsAwayUnder: '-0.90', allowanceRate: '20', spread: '0.2'} as FilterWrongOddsModel;
+  it('#calculateOddsRange should not calculate odds range when correctOddsAwayUnder is Undefined', () => {
+    // Arrange
+    const oddsInfo: FilterWrongOddsModel = { correctOddsHomeOver: '-0.90', allowanceRate: '20', spread: '0.2'} as FilterWrongOddsModel;
 
+    // Action
     service.calculateOddsRange(oddsInfo);
 
+    // Assert
     expect(oddsInfo.toOddsNotVoidHomeOver).toBeUndefined();
     expect(oddsInfo.toOddsNotVoidAwayUnder).toBeUndefined();
     expect(oddsInfo.fromOddsNotVoidHomeOver).toBeUndefined();

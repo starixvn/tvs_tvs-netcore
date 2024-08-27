@@ -29,7 +29,7 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
 
-    if (!this.validationService.validateCommonData(arg.filter, arg.leagueEventDangerAcceptedComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
+    if (!this.validationService.validateCommonData(arg.filter, arg.eventLeagueComponent, arg.filterTimeAreaComponent, arg.logInfoComponents, arg.addRequestStore)) {
       return false;
     }
 
@@ -74,10 +74,11 @@ export class SaveRequestService {
           }
         });
       });
-      arg.confirmDangerAccepted.isHasWarningSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
+      arg.confirmDangerAccepted.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
       arg.confirmDangerAccepted.isHasWarningEvent = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
       arg.confirmDangerAccepted.isHasWarningEditTakeNoteRequest =
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
+      arg.confirmDangerAccepted.isHasWarningRangeTime = arg.allEvents.some(x => x.logInfoDetail?.isHasWarningRangeTime)
     }
 
     arg.confirmDangerAccepted.requestId = arg.requestId;

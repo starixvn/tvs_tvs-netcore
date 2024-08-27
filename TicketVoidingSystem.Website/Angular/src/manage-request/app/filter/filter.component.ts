@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { ManageRequestStatus } from '../../../utility/constants/config';
+import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
@@ -12,7 +12,6 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 
-const SHORT_DATETIME_FORMAT = 'YYYY/M/D';
 @Component({
   selector: 'filter',
   templateUrl: './filter.component.html',
@@ -82,9 +81,9 @@ export class FilterComponent implements OnInit {
   }
 
   checkAutoRefresh(): void {
-    const momentFrom = moment(this.getDateStringFromNgbDate(this.model.ngbFromDate), 'YYYY/M/D');
-    const momentBU = moment(this.bUDay).format('YYYY/M/D');
-    this.isShowAutoRefresh = !momentFrom.isBefore(moment(momentBU, SHORT_DATETIME_FORMAT)) || this.filterByMatch === false;
+    const momentFrom = moment(this.getDateStringFromNgbDate(this.model.ngbFromDate), DateTimeFormat.SHORT_DATE_FORMAT);
+    const momentBU = moment(this.bUDay).format(DateTimeFormat.SHORT_DATE_FORMAT);
+    this.isShowAutoRefresh = !momentFrom.isBefore(moment(momentBU, DateTimeFormat.SHORT_DATE_FORMAT)) || this.filterByMatch === false;
   }
 
   private getDateStringFromNgbDate(date: NgbDate): string {

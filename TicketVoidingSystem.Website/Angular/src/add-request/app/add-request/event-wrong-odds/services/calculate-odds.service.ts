@@ -62,37 +62,33 @@ export class CalculateOddsService {
   }
 
   public updateCorrectOddsAwayUnder(oddsInfo: FilterWrongOddsModel): void {
-    const precision = 2; // Define the number of decimal places
-    if(!oddsInfo.correctOddsHomeOver || !oddsInfo.spread){
-      return;
+    const precision = 2;  // Define the number of decimal places
+    if(oddsInfo.correctOddsHomeOver && oddsInfo.spread){
+      const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
+      const spreadNum = Number(oddsInfo.spread);
+      const sum = correctOddsHomeOverNum + spreadNum;
+      const correctOddsAwayUnderNum = sum >= 1 ? 2 - sum : -sum;
+      
+      oddsInfo.correctOddsAwayUnder = correctOddsAwayUnderNum.toFixed(precision);    
     }
-
-    const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
-    const spreadNum = Number(oddsInfo.spread);
-    const sum = correctOddsHomeOverNum + spreadNum;
-    const correctOddsAwayUnderNum = sum >= 1 ? 2 - sum : -sum;
-    
-    oddsInfo.correctOddsAwayUnder = correctOddsAwayUnderNum.toFixed(precision);
   }
 
   public calculateOddsRange(oddsInfo: FilterWrongOddsModel): void {
-    const precision = 2;
-    if(!oddsInfo.correctOddsHomeOver || !oddsInfo.correctOddsAwayUnder){
-      return;
+    const precision = 2;  // Define the number of decimal places
+    if(oddsInfo.correctOddsAwayUnder){
+      const allowanceRateNum = Number(oddsInfo.allowanceRate)/100; 
+      const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
+      const correctOddsAwayUnderNum = Number(oddsInfo.correctOddsAwayUnder);
+  
+      const aboveHomeOver = correctOddsHomeOverNum + allowanceRateNum;
+      const aboveAwayUnder = correctOddsAwayUnderNum + allowanceRateNum;
+      oddsInfo.toOddsNotVoidHomeOver = (aboveHomeOver >= 1 ? -2 + aboveHomeOver : aboveHomeOver).toFixed(precision);
+      oddsInfo.toOddsNotVoidAwayUnder = (aboveAwayUnder >= 1 ? -2 + aboveAwayUnder : aboveAwayUnder).toFixed(precision);
+  
+      const belowHomeOver = correctOddsHomeOverNum - allowanceRateNum;
+      const belowAwayUnder = correctOddsAwayUnderNum - allowanceRateNum;
+      oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver).toFixed(precision);
+      oddsInfo.fromOddsNotVoidAwayUnder = (belowAwayUnder <= -1 ? 2 + belowAwayUnder: belowAwayUnder).toFixed(precision);
     }
-
-    const allowanceRateNum = Number(oddsInfo.allowanceRate)/100; 
-    const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
-    const correctOddsAwayUnderNum = Number(oddsInfo.correctOddsAwayUnder);
-
-    const aboveHomeOver = correctOddsHomeOverNum + allowanceRateNum;
-    const aboveAwayUnder = correctOddsAwayUnderNum + allowanceRateNum;
-    oddsInfo.toOddsNotVoidHomeOver = (aboveHomeOver >= 1 ? -2 + aboveHomeOver : aboveHomeOver).toFixed(precision);
-    oddsInfo.toOddsNotVoidAwayUnder = (aboveAwayUnder >= 1 ? -2 + aboveAwayUnder : aboveAwayUnder).toFixed(precision);
-
-    const belowHomeOver = correctOddsHomeOverNum - allowanceRateNum;
-    const belowAwayUnder = correctOddsAwayUnderNum - allowanceRateNum;
-    oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver).toFixed(precision);
-    oddsInfo.fromOddsNotVoidAwayUnder = (belowAwayUnder <= -1 ? 2 + belowAwayUnder: belowAwayUnder).toFixed(precision);
   }
 }

@@ -76,4 +76,15 @@ export class PopupService {
       onNoCallback
     );
   }
+
+  showPermissionError(errorMessage: string) {
+    this.modalService.open(
+      {
+        title: 'Permission',
+        message: errorMessage,
+        type: ModalType.Error
+      },
+      () => { }
+    );
+  }
 }

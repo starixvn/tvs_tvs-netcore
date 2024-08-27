@@ -21,10 +21,10 @@ export class RelatedEventService {
     private readonly validationService: ValidationService,
   ) {}
 
-  async getChildMatches(mainMatchId: number, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
+  async getChildMatches(mainMatchId: number, eventDate: Date, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(filterModel.issueTypeId);
-    query.eventDate = filterModel.eventDate;
+    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
 
@@ -68,7 +68,7 @@ export class RelatedEventService {
         return;
       }
       addRelatedEventArg.primitiveProps.isBlock = true;
-      const models = await this.getChildMatches(matchId, addRelatedEventArg.filter, false);
+      const models = await this.getChildMatches(matchId, addRelatedEventArg.mainEvent.eventDate, addRelatedEventArg.filter, false);
       if (models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         addRelatedEventArg.primitiveProps.isBlock = false;

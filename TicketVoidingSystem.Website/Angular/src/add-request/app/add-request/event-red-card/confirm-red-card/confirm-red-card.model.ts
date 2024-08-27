@@ -2,7 +2,7 @@ export class ConfirmRedCardModel {
   isOpenDialog: boolean;
   issueTypeName: string;
   subIssueTypeName: string;
-  isHasWarningSettledTicket: boolean;
+  isHasSettledTicket: boolean;
   isHasWarningForRedCard: boolean;
   isHasWarningEditTakeNoteRequest: boolean;
   isEditingByAnotherUser: boolean;

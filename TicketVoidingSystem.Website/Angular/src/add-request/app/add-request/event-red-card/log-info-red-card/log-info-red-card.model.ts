@@ -14,4 +14,5 @@ export class LogInfoRedCard {
   voidTimeArea = new FilterTimeWithAllowance();
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
+  eventDate?: Date;
 }

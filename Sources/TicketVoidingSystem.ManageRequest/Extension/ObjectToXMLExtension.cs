@@ -107,6 +107,7 @@ public static class ObjectToXMLExtension
                 + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"VoidFromTime='{model.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"VoidToTime='{model.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
+                + $"TransVoidToTime='{model.LogInfoDetail?.TransVoidToTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
                 + $"SingleCount='{model.LogInfoDetail?.SingleCount}' "
                 + $"MainParlayCount='{model.LogInfoDetail?.MainParlayCount}' "
                 + $"IsCheckedVar='{model.IsCheckedVar}' "

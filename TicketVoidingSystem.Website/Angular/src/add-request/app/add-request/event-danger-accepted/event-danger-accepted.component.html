@@ -1,11 +1,9 @@
 <div [blockUi]="primitiveProps.isBlock">
-  <league-event-red-card #leagueEvent
+  <event-league #leagueEvent
     [isEdit]="isEdit"
-    [initSportType]="filter.sportType"
-    [eventDate]="filter.eventDate"
-    [initMatchId]="mainEvent.matchId"
+    [matchId]="mainEvent.matchId"
     (changeEvent)="changeMatchEvent()">
-  </league-event-red-card>
+  </event-league>
 
   <div *ngIf="isShowVarCheck()">
 		<div class="var-check-selection mt-2" [ngClass]="{'highlight': mainEvent.isHighLightVarCheck}">

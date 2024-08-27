@@ -12,6 +12,7 @@ import SubIssueTypeDangerAcceptedConfig from '../../filter/sub-issue-type-dialog
 import { RedCardModel } from '../../models/event-red-card.model';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/sub-type-link-match.model';
+import { ValidationService } from './validation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../../models/
 export class EventDangerAcceptedService {
   constructor(
     private readonly addRequestApiService: AddRequestApiService,
-  ) {}
+    private readonly validationService: ValidationService
+  ) { }
 
   private readonly SUB_TYPE_AUTO_SELECT_LIST = [
     SubIssueTypeConstant.MAIN_CORNER,
@@ -45,6 +47,7 @@ export class EventDangerAcceptedService {
       event.isMainMatch = x.isMainMatch;
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
+      event.logInfoDetail.isHasWarningRangeTime = this.validationService.isHasWarningRangeTime(x.filterFromTransTime, x.logInfoDetail.transVoidToTime);
       event.voidTimeArea = {
         fromDateTime: x.voidFromTime,
         toDateTime: x.voidToTime,
@@ -52,6 +55,7 @@ export class EventDangerAcceptedService {
         paTime: x.paTime,
         saTime: x.saTime
       } as FilterTimeWithAllowance;
+      event.eventDate = x.eventDate;
 
       allEvents.push(event);
     });
@@ -106,7 +110,7 @@ export class EventDangerAcceptedService {
     }
   }
 
-  private updateSubIssueType(allEvents: LogInfoRedCard[], subTypeLinkMatches:SubIssueTypeLinkMatch[], linkEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard ): void {
+  private updateSubIssueType(allEvents: LogInfoRedCard[], subTypeLinkMatches: SubIssueTypeLinkMatch[], linkEvents: LogInfoRedCard[], mainEvent: LogInfoRedCard): void {
     allEvents.forEach(x => {
       x.subIssueTypeId = this.getSubIssueTypeId(x.matchId, subTypeLinkMatches, linkEvents, mainEvent);
     });

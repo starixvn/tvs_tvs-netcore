@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TVSRequestActionType } from 'src/utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
@@ -27,7 +26,7 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     const isDataValid = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
     if (isDataValid) {
-      this.proceedSaveRequest(arg);
+      this.showPopupConfirmSave(arg);
     } else {
       arg.addRequestStore.changeSavingRequestStatus(false);
     }
@@ -37,15 +36,23 @@ export class SaveRequestService {
     arg.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoService.resetLogInfoOfEvent(arg.allEvents);
 
-    if (!this.validationService.validateCommonData(arg.leagueEventComponent, arg.tooltip, arg.kickOffTimeComponent)) {
+    if (!this.validationService.validateCommonData(arg.eventLeagueComponent, arg.kickOffTimeComponent)) {
       return false;
     }
 
     arg.addRequestStore.changeBlockingUiStatus(true);
-    const query = this.logInfoService.initQuery(arg.mainEvent.pagingModel.page - 1, arg.mainEvent.pagingModel.pageSize, arg.mainEvent, arg.filter);
-    await this.logInfoService.getTickets(query, arg.mainEvent, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps); // must be called before getLogInfo
-    await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
+    const getLogInfoResult = await this.logInfoService.getLogInfo(arg.allEvents, arg.isEdit, arg.requestId, arg.filter);
+    this.logInfoService.assignResultLogInfoToEvents(arg.allEvents, getLogInfoResult.getLogInfoModels);
+    arg.primitiveProps.transInfoAddRequestModel = getLogInfoResult.transInfoAddRequestModel;
+
+
+    if (!this.validationService.isAccountHasAddRequestPermission(arg.filter.action, arg.allEvents, arg.permission)) {
+      arg.addRequestStore.changeBlockingUiStatus(false);
+      return false;
+    }
+
     arg.primitiveProps.isShowLogInfoEvents = true;
+    arg.mainEvent.isCollapse = arg.mainEvent.isInvalidTotalTickets ? false : true;
     arg.addRequestStore.changeBlockingUiStatus(false);
 
     if (this.validationService.isAllEventsValid(arg.allEvents)) {
@@ -53,14 +60,6 @@ export class SaveRequestService {
     }
 
     return false;
-  }
-
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmationEarlyKickOff(arg)) {
-      this.showPopupConfirmSave(arg);
-    } else {
-      this.executeSaveRequestApi(arg);
-    }
   }
 
   public async onClickConfirmSave(arg: SaveRequestArg) {
@@ -76,7 +75,7 @@ export class SaveRequestService {
   private async executeSaveRequestApi(arg: SaveRequestArg): Promise<void> {
     arg.addRequestStore.changeBlockingUiStatus(true);
     const query = this.initAddRequestQuery(arg);
-    await this.addRequestApiService.executeSaveRequest(arg.isEdit, arg.requestId, query, arg.addRequestStore, arg.isSaveAndVoid);
+    await this.addRequestApiService.executeSaveRequest(arg.isEdit, arg.requestId, query, arg.addRequestStore);
     arg.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -118,22 +117,23 @@ export class SaveRequestService {
     arg.confirmEarlyKickOff.warningRelatedEvents = [];
     if (!arg.filter.isVoided) {
       arg.allEvents.filter(x => !x.isMainMatch).forEach(y => {
-        y.messageValidationLogInfo.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
-            arg.confirmEarlyKickOff.warningRelatedEvents.push(y.eventName);
-          }
-        });
+        if (y.isInvalidTotalTickets) {
+          arg.confirmEarlyKickOff.warningRelatedEvents.push(y.eventName);
+        }
       });
       arg.confirmEarlyKickOff.isHasWarningEvent = arg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));
       arg.confirmEarlyKickOff.isHasWarningEditTakeNoteRequest =
-      (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
+        (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
     }
 
+    arg.confirmEarlyKickOff.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
+    arg.confirmEarlyKickOff.actionName = TVSRequestActionType.NAME_MAPPING[arg.filter.action];
     arg.confirmEarlyKickOff.requestId = arg.requestId;
     arg.confirmEarlyKickOff.requestedBy = arg.requestedBy;
-    arg.confirmEarlyKickOff.isEditingByAnotherUser =
-      this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
+    arg.confirmEarlyKickOff.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
+    arg.confirmEarlyKickOff.isHasSettledTicket = arg.allEvents.some(x => x.isHasSettledTicket);
     arg.confirmEarlyKickOff.isOpenDialog = true;
     arg.confirmEarlyKickOff = _.clone(arg.confirmEarlyKickOff);
   }
+
 }

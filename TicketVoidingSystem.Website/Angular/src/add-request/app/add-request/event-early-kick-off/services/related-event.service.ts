@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import moment from 'moment';
 import { PagingModel } from '../../../../../utility/components/paging/paging/paging.model';
-import { MatchType } from '../../../../../utility/constants/config';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
@@ -22,24 +23,24 @@ export class RelatedEventService {
     private readonly addRequestApiService: AddRequestApiService,
     private readonly validationService: ValidationService,
     private readonly logInfoService: LogInfoService
-  ) {}
+  ) { }
 
-  async getChildMatches(mainMatchId: number, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
+  async getChildMatches(mainMatchId: number, eventDate: Date, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
     const query = new GetChildMatchQuery();
     query.issueTypeId = Number(filterModel.issueTypeId);
-    query.eventDate = filterModel.eventDate;
+    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
     query.matchId = mainMatchId;
     query.isMainMatch = isMainMatch;
     query.sportType = filterModel.sportType;
 
-    return this.addRequestApiService.getChildMatchesInfo(query);
+    return await this.addRequestApiService.getChildMatchesInfo(query);
   }
 
-  updateEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
+  mapChildMatchesToEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
     const newEvents = models
       .map(x => {
         const matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
-        return  {
+        return {
           matchId: x.matchId,
           matchCode: x.matchCode,
           leagueName: x.leagueName,
@@ -55,19 +56,11 @@ export class RelatedEventService {
           matchModel: matchModel,
         } as LogInfoEarlyKickOff;
       });
-      this.updateTemplateForEvents(newEvents);
-      
-      return newEvents;
+
+    return newEvents;
   }
 
-  private updateTemplateForEvents(events: LogInfoEarlyKickOff[]){
-    events.forEach(x => {
-      x.templateValue = this.logInfoService.getTemplateValue(x);
-      x.templateValue.kickOffTime = x.kickOffTime}
-    );
-  }
-  
-  public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel{
+  public mapChildMatchToMatchModel(childMatch: ChildMatchModel, eventDate: string): MatchModel {
     return {
       sportType: childMatch.sportType,
       sportTypeName: childMatch.sportTypeName,
@@ -94,9 +87,9 @@ export class RelatedEventService {
       matchCode: childMatch.matchCode,
       leagueGroupId: childMatch.leagueGroupId,
       parentId: childMatch.parentId
-      } as MatchModel;
+    } as MatchModel;
   }
-  
+
 
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {
@@ -107,14 +100,15 @@ export class RelatedEventService {
         return;
       }
       addRelatedEventArg.addRequestStore.changeBlockingUiStatus(true);
-      const models = await this.getChildMatches(matchId, addRelatedEventArg.filter, false);
+      const models = await this.getChildMatches(matchId, addRelatedEventArg.mainEvent.matchModel.eventDate, addRelatedEventArg.filter, false);
       if (models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
         return;
       }
-      const newEvents = this.updateEvents(models, addRelatedEventArg.mainEvent, addRelatedEventArg.filter.subIssueTypeId);
-      await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter, addRelatedEventArg.primitiveProps);
+      const newEvents = this.mapChildMatchesToEvents(models, addRelatedEventArg.mainEvent, addRelatedEventArg.filter.subIssueTypeId);
+      const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter);
+      this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       addRelatedEventArg.allEvents.push(...newEvents);
       addRelatedEventArg.allEvents = _.orderBy(_.uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
       addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
@@ -122,32 +116,5 @@ export class RelatedEventService {
     }
   }
 
-  public async getDataWhenSearch(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<void> {
-    const eventsGetLogInfo = await this.preparingModelGetLogInfo(relatedEvents, arg);
-    await this.logInfoService.getLogInfo(eventsGetLogInfo, arg.isEdit, arg.requestId, arg.filter, arg.primitiveProps);
-    this.addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo, arg.allEvents);
-  }
 
-  private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoEarlyKickOff[]> {
-    const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
-    const newEvents = this.updateEvents(newChildEvents, arg.mainEvent, arg.filter.subIssueTypeId);
-    const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
-    eventsGetLogInfo.push(...newEvents);
-
-    return eventsGetLogInfo;
-  }
-
-  private addNewRelatedEventHaveTicketOrUpdateExistedEvent(eventsGetLogInfo: LogInfoEarlyKickOff[], originalAllEvents: LogInfoEarlyKickOff[]): void {
-    eventsGetLogInfo.forEach(x => {
-      if (!originalAllEvents.some(y => y.matchId === x.matchId) && !x.isInvalidTotalTickets) {
-        originalAllEvents.push(x);
-      } else {
-        const event = originalAllEvents.find(y => y.matchId === x.matchId);
-        if (event) {
-          event.messageValidationLogInfo = x.messageValidationLogInfo;
-          event.subIssueTypeId = x.subIssueTypeId;
-        }
-      }
-    });
-  }
 }
