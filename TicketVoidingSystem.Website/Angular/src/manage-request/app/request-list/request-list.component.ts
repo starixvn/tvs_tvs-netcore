@@ -35,7 +35,6 @@ export class RequestListComponent implements OnInit, OnChanges {
   paging = new PagingModel();
   actions: Selection[] = [];
   issueTypesModel = new IssueTypesModel();
-  isBlock: boolean;
   ticketListModal = new TicketListModal();
 
   tooltip = new Tooltip();

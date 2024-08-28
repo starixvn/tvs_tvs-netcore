@@ -9,7 +9,7 @@ import { MultipleSelection } from '../../../../utility/components/multiple-selec
 })
 export class AffectedTicketComponent {
   @Input() model = new AffectedTicketsModel();
-
+  
   isShowCaretDown = true;
   filterBetTypes: MultipleSelection;
   checkedBetTypes: number[];

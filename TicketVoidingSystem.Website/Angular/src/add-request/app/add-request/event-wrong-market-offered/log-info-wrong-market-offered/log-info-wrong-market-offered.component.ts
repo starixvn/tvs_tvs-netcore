@@ -23,6 +23,8 @@ export class LogInfoWrongMarketOfferedComponent {
   @Input() primitiveProps = new PrimitivePropertyEvent();
   @Input() issueTypeId: string;
  
+  isBlock: boolean;
+
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   groupBetTypesCount: string[] = [];
@@ -83,9 +85,11 @@ export class LogInfoWrongMarketOfferedComponent {
   }
 
   public async showAffectedTicketsDetails(){
+    this.isBlock = true;
     this.updateBetTypeCountModel();
     await this.updateAffectedTickets();
     this.updateCheckedBetTypeIds();
+    this.isBlock = false;
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
 
