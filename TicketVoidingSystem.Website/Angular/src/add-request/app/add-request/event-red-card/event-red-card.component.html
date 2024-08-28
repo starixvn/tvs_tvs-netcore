@@ -1,12 +1,9 @@
 <div [blockUi]="primitiveProps.isBlock">
-    <league-event-red-card #leagueEvent
-        [isEdit]="isEdit"
-        [initSportType]="filter.sportType"
-        [eventDate]="filter.eventDate"
-        [initMatchId]="mainEvent.matchId"
-        (changeEvent)="changeMatchEvent()">
-    </league-event-red-card>
-
+    <event-league #leagueEvent
+    [isEdit]="isEdit"
+    [matchId]="mainEvent.matchId"
+    (changeEvent)="changeMatchEvent()">
+    </event-league>
     <div *ngIf="isShowVarCheck()">
       <div class="var-check-selection mt-2" [ngClass]="{'highlight': mainEvent.isHighLightVarCheck}">
         <label class="border-radius-left" (click)="!filter.isVoided && changeVarCheckValue(false)"

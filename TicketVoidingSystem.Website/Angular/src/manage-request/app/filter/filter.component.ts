@@ -3,6 +3,8 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { LocalStorageCacheConstant } from 'src/utility/constants/local-storage-cache.constant';
+import { TEXT } from 'src/utility/constants/text';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
@@ -24,6 +26,7 @@ export class FilterComponent implements OnInit {
   @Input() autoRefreshMode: number;
   @Output() modelChange = new EventEmitter<FilterModel>();
   @Output() search = new EventEmitter();
+  @Output() updateMissingInfo = new EventEmitter<boolean>();
 
   mode = ['MatchId', 'RequestId'];
   filterByMatch = true;
@@ -32,6 +35,7 @@ export class FilterComponent implements OnInit {
   isSelectedAllIssueType = true;
   issueTypeModel: IssueTypesModel;
   issueTypeSelectList: Selection[];
+  selectedIssueTypes: string[];
   subTypeSelectList: Selection[];
   selectedSubIssueTypes: SubIssueType[];
   multipleSelectSubTypeModel: string[];
@@ -42,7 +46,8 @@ export class FilterComponent implements OnInit {
   isShowAutoRefresh: boolean;
   bUDay = new Date();
   markedTicketsCount = 0;
-  
+  userId: string;
+
   constructor(
     private readonly element: ElementRef,
     private readonly commonService: CommonService
@@ -54,8 +59,8 @@ export class FilterComponent implements OnInit {
   async ngOnInit() {
     this.isShowAutoRefresh = true;
     this.filterByValue = this.mode[0];
-    const userId = document.getElementById('body').getAttribute('user-id');
-    this.createdBySelectList = [{name: 'All', value: '0'}, {name: '<<<< Me >>>>', value: userId}];
+    this.userId = document.getElementById('body').getAttribute('user-id');
+    this.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: this.userId }];
     await this.setIssueTypeSelectList();
     this.initDefaultFilter();
     this.updateSubByIssue();
@@ -63,6 +68,7 @@ export class FilterComponent implements OnInit {
     this.bUDay = new Date(balanceUp.balanceUpDay);
     this.checkAutoRefresh();
     await this.clickSearch();
+    this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
   }
 
   controlFilter(value: string) {
@@ -92,12 +98,24 @@ export class FilterComponent implements OnInit {
 
   initDefaultFilter() {
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
+    this.selectedIssueTypes = this.getIssueTypeIdDefault();
     this.model.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.ngbToDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
     this.model.status = '-1';
-    this.model.issueTypeId = this.issueTypeSelectList[0].value;
+    this.model.issueTypeId = this.selectedIssueTypes.join(',');
     this.model.isExcludeTest = true;
     this.model.createdBy = this.createdBySelectList[0].value;
+    this.model.isDisplayMissingInfo = localStorage.getItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId) === 'true';
+    this.updateMissingInfo.emit(this.model.isDisplayMissingInfo);
+  }
+
+  getIssueTypeIdDefault(): string[] {
+    const previousSelectedIssueTypes = localStorage.getItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId);
+    if (previousSelectedIssueTypes) {
+      return previousSelectedIssueTypes.split(',').filter(x => this.issueTypeSelectList.map(y => y.value).includes(x));
+    }
+
+    return this.issueTypeSelectList.map(x => x.value);
   }
 
   newRequest() {
@@ -114,6 +132,9 @@ export class FilterComponent implements OnInit {
 
   async clickSearch() {
     if (this.validate()) {
+      localStorage.setItem(
+        LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_MANAGE_REQUEST + this.userId
+        ,this.model.issueTypeId);
       this.model.subIssueType = this.multipleSelectSubTypeModel.join(',');
       this.search.emit();
       this.markedTicketsCount = await this.commonService.getMarkedTicketsCount();
@@ -136,68 +157,50 @@ export class FilterComponent implements OnInit {
       return false;
     }
 
+    if (!this.model.issueTypeId) {
+      this.tooltip.display('issue-type-dropdown', TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
     return true;
   }
 
   private async setIssueTypeSelectList() {
-      this.issueTypeModel = await this.commonService.getIssueTypes();
-      this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
-      this.issueTypeSelectList = [];
-      if (this.issueTypePermissionList.length > 0) {
-        if (this.issueTypePermissionList.length > 1) {
-          this.issueTypeSelectList.push(
-            {
-              name: 'All',
-              value: this.issueTypePermissionList.map(x => x.issueTypeId.toString()).join(',')
-            }
-          );
-        }
-        this.issueTypePermissionList.forEach(x => {
-          this.issueTypeSelectList.push(
-            {
-              name: x.issueTypeName,
-              value: x.issueTypeId.toString()
-            }
-          );
-         });
-        this.model.issueTypeId = this.issueTypeSelectList[0].value;
-      } else {
-        this.issueTypeSelectList.push({ name: 'N/A', value: '-1' });
-        this.model.issueTypeId = '-1';
-      }
-    }
-  
-  updateSubByIssue() {
-    this.subTypeSelectList = [];
-    if (this.model.issueTypeId === '-1') {
-      this.setNoneSubType();
-      this.isNoneSubType = true;
+    this.issueTypeModel = await this.commonService.getIssueTypes();
+    this.issueTypePermissionList = await this.commonService.getIssueTypePermissionList();
+    this.issueTypeSelectList = [];
+    if (this.issueTypePermissionList.length > 0) {
+      this.issueTypePermissionList.forEach(x => {
+        this.issueTypeSelectList.push(
+          {
+            group: 'All',
+            name: x.issueTypeName,
+            value: x.issueTypeId.toString()
+          }
+        );
+      });
+      this.model.issueTypeId = this.issueTypeSelectList[0].value;
     } else {
-      this.isNoneSubType = false;
-      if (this.model.issueTypeId.split(',').length > 1) {
-        this.getAllSubType();
-      } else {
-        this.getSubTypeList();
-      }
-      this.multipleSelectSubTypeModel = this.subTypeSelectList.map(x => x.value);
+      this.issueTypeSelectList.push({ name: 'N/A', value: '-1' });
+      this.model.issueTypeId = '-1';
     }
   }
 
-  getSubTypeList() {
+  getSubTypeListBySingleIssueType() {
     this.isSelectedAllIssueType = false;
     this.selectedSubIssueTypes =
-        this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === parseInt(this.model.issueTypeId, 10));
+      this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === parseInt(this.model.issueTypeId, 10));
     this.selectedSubIssueTypes.forEach(x => {
       this.addSubTypeSelectItem(x);
     });
   }
 
-  getAllSubType() {
+  getSubTypeByMultipleIssueType() {
     this.isSelectedAllIssueType = true;
     this.issueTypePermissionList.forEach(issueType => {
-        this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === issueType.issueTypeId).forEach(x => {
-          this.addSubTypeSelectItem(x);
-        });
+      this.issueTypeModel.subIssueTypes.filter(x => x.issueTypeId === issueType.issueTypeId).forEach(x => {
+        this.addSubTypeSelectItem(x);
+      });
     });
   }
 
@@ -214,5 +217,33 @@ export class FilterComponent implements OnInit {
   setNoneSubType() {
     this.isSelectedAllIssueType = true;
     this.multipleSelectSubTypeModel = ['-1'];
+  }
+
+  checkMissingInfo(event: Event) {
+    const isChecked = event.currentTarget['checked'];
+    localStorage.setItem(LocalStorageCacheConstant.IS_DISPLAY_REQUEST_MISSING_INFO + this.userId
+      ,isChecked.toString());
+    this.updateMissingInfo.emit(isChecked);
+  }
+
+  updateSelectedIssueType() {
+    this.model.issueTypeId = this.selectedIssueTypes.join(',');
+    this.updateSubByIssue();
+  }
+
+  updateSubByIssue() {
+    this.subTypeSelectList = [];
+    if (this.model.issueTypeId === '-1') {
+      this.setNoneSubType();
+      this.isNoneSubType = true;
+    } else {
+      this.isNoneSubType = false;
+      if (this.model.issueTypeId.split(',').length > 1) {
+        this.getSubTypeByMultipleIssueType();
+      } else {
+        this.getSubTypeListBySingleIssueType();
+      }
+      this.multipleSelectSubTypeModel = this.subTypeSelectList.map(x => x.value);
+    }
   }
 }

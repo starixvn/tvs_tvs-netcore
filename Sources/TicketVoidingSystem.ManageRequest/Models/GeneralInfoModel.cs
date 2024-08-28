@@ -2,6 +2,8 @@
 
 public class GeneralInfoModel
 {
+    public int? MatchId { get; set; }
+
     public DateTime VoidedTime { get; set; }
 
     public string VoidedTimeString { get; set; }
@@ -52,6 +54,8 @@ public class GroupUserVoidMessage
 
 public class UserVoidMessage
 {
+    public int MatchId { get; set; }
+
     public string VoidedBy { get; set; }
 
     public string ContentEnglish { get; set; }

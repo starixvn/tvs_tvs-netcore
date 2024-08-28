@@ -36,7 +36,8 @@ export class EventRedCardService {
         paTime: x.paTime,
         saTime: x.saTime
       } as FilterTimeWithAllowance;
-
+      event.eventDate = x.eventDate;
+      
       allEvents.push(event);
     });
 

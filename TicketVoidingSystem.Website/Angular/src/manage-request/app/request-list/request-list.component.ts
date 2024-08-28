@@ -27,6 +27,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   @Input() models: RequestModel[] = [];
   @Input() moveBetDay: Date;
   @Input() permission = new PermissionManage();
+  @Input() isShowMissingInfo: boolean;
   @Input() requestStatusChangeEvent: EventEmitter<RequestStatus[]>;
   @Output() exportExcelEvent = new EventEmitter<boolean>();
   @Output() reload = new EventEmitter<boolean>();
@@ -139,9 +140,15 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.displayedModels = this.models.slice(this.paging.begin - 1, this.paging.end);
   }
 
-  showTickets(requestId: number, matchId: number) {
+  showTickets(request: RequestModel, matchId: number) {
     if (this.isCanClickNoOfTickets()) {
-      this.ticketListModal = { open: true, minimize: false, requestId, matchId };
+      this.ticketListModal = {
+        open: true,
+        minimize: false,
+        requestId: request.requestId,
+        matchId,
+        allMatchIdsInRequest: request.details.map(x => x.matchId).join(','),
+      };
     }
   }
 
@@ -276,6 +283,9 @@ export class RequestListComponent implements OnInit, OnChanges {
     } else {
       return 'fa fa-paste copy-request-info';
     }
+  }
 
+  isShowIconMissingInfo(value: string): boolean {
+    return this.isShowMissingInfo && (value === null || value === '');
   }
 }

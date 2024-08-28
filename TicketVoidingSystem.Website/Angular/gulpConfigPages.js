@@ -133,9 +133,9 @@ const configPages = [
   //abExceptionList,
   //markTickets,
   //ticketListing,
-  voidSingleBet,
-  voidRequest,
-  //manageRequest,
+  //voidSingleBet,
+  //voidRequest,
+  manageRequest,
   //addRequest,
   //editRequest
 ];

@@ -17,13 +17,15 @@ public class RenderRequestServiceImp : RenderRequestService
 {
     private readonly IMapper mapper;
     private readonly DescriptionService descriptionService;
+    private readonly MatchService matchService;
     private readonly RemotingRefWrapperService remotingRefWrapperService;
 
     public RenderRequestServiceImp(IMapper mapper, DescriptionService descriptionService,
-        RemotingRefWrapperService remotingRefWrapperService)
+        RemotingRefWrapperService remotingRefWrapperService, MatchService matchService)
     {
         this.mapper = mapper;
         this.descriptionService = descriptionService;
+        this.matchService = matchService;
         this.remotingRefWrapperService = remotingRefWrapperService;
     }
 
@@ -77,5 +79,6 @@ public class RenderRequestServiceImp : RenderRequestService
         description.AwayName = remotingRefWrapperService.GetTeamName(description.AwayId, LanguageCode.English);
         description.LeagueName = remotingRefWrapperService.GetLeagueName(description.LeagueId, LanguageCode.English);
         description.SportTypeName = remotingRefWrapperService.GetSportName(description.SportType.ToString(), LanguageCode.English);
+        description.MatchEvent = matchService.GetMatchEvent(description);
     }
 }

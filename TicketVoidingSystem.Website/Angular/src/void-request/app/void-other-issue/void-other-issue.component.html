@@ -4,9 +4,14 @@
             Username: <strong>{{usernames}}</strong>
         </div>
         <event-info *ngIf="isHasMatchInfo()" [match]="match"></event-info>
-        <request-info [model]="requestDetail" [issue]="issue" [isShowGeneralInfo]="false"
-            [isShowAbnormalAccountInfo]="isAbnormalAccount()" [isShowVar]="isShowVar">
-        </request-info>
+        <issue-type [issueTypeName]="issueTypeName" [isShowVar]="isShowVar"></issue-type>
+        <div *ngIf="isAbnormalAccount()">
+            <div class="row no-gutters">Product:&nbsp;<strong>{{getProducts(requestDetail.abnormalAccountModel.productIds)}}</strong></div>
+            <div class="row no-gutters">Ticket Status:&nbsp;<strong>{{getProducts(requestDetail.abnormalAccountModel.statusIds)}}</strong></div>
+            <div class="row no-gutters">From/To Event Date:&nbsp;<strong>{{requestDetail.abnormalAccountModel.fromDate | date: 'yyyy/MM/dd'}} -
+            {{requestDetail.abnormalAccountModel.toDate | date: 'yyyy/MM/dd'}}
+            </strong></div>
+        </div>
         <log-info *ngIf="isHasLogInfo()" [logInfoDetails]="logInfoDetails" [correctOddsHomeOver]="correctOddsHomeOver" [correctOddsAwayUnder]="correctOddsAwayUnder"
             [issueTypeId]="requestDetail.request.issueTypeId" [filterBy]="filterBy" [actualScore]="actualScore" [isPoolHouseAffected]="isPoolHouseAffected">
         </log-info>

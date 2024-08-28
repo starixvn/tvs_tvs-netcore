@@ -21,6 +21,8 @@ public interface MatchService
     Task<Match> GetMatchVoidByCurrency(int matchId);
 
     Match UpdateMatchInfoFromRemotingRef(Match match);
+
+    string GetMatchEvent(Match match);
 }
 
 public class MatchServiceImp : MatchService
@@ -97,7 +99,7 @@ public class MatchServiceImp : MatchService
         match.LeagueNameSimplified = remotingRefWrapperService.GetLeagueName(match.LeagueId, LanguageCode.ChineseSimplified);
         match.LeagueNameNewSimplified = remotingRefWrapperService.GetLeagueName(match.LeagueId, LanguageCode.NewChineseSimplified);
         match.LeagueNameTraditional = remotingRefWrapperService.GetLeagueName(match.LeagueId, LanguageCode.ChineseTraditional);
-        match.MatchEvent = GetMatchEvent(match, remotingRefWrapperService);
+        match.MatchEvent = GetMatchEvent(match);
         match.MatchEventSimplified = GetMatchEventSimplified(match.SportType, match.IsOutright, match.HomeNameSimplified, match.AwayNameSimplified, match.LeagueNameSimplified);
         match.MatchEventNewSimplified = GetMatchEventNewSimplified(match.SportType, match.IsOutright, match.HomeNameNewSimplified, match.AwayNameNewSimplified, match.LeagueNameNewSimplified);
         match.SportTypeName = remotingRefWrapperService.GetSportName(match.SportType.ToString(), LanguageCode.English);
@@ -112,7 +114,7 @@ public class MatchServiceImp : MatchService
         return match;
     }
 
-    private static string GetMatchEvent(Match match, RemotingRefWrapperService remotingRefWrapperService)
+    public string GetMatchEvent(Match match)
     {
         return match.SportType switch
         {

@@ -3,6 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
+import { LocalStorageCacheConstant } from 'src/utility/constants/local-storage-cache.constant';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
@@ -160,12 +161,11 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   getIssueTypeIdDefault(): number {
-    const PREVIOUS_SELECTED_ISSUETYPE = 'PreviousSelectedIssueType';
     let issueTypeDefault: number;
     if (this.isExternalUrl) {
       issueTypeDefault = Number(this.model.issueTypeId);
     } else {
-      const previousSelectedIssueType = localStorage.getItem(PREVIOUS_SELECTED_ISSUETYPE + document.getElementById('body').getAttribute('user-id'));
+      const previousSelectedIssueType = localStorage.getItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + document.getElementById('body').getAttribute('user-id'));
       issueTypeDefault = previousSelectedIssueType && this.haveIssueTypeFromPermission(previousSelectedIssueType)
         ? Number(previousSelectedIssueType)
         : this.issueTypes.issueId;
@@ -510,7 +510,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_1ST_OU,
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.EARLY_KICK_OFF,
-      IssueTypeConstant.WRONG_KICK_OFF
+      IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.RED_CARD
     ];
     return !issueTypeNotShowSportType.includes(this.issueTypes.issueId?.toString());
   }
@@ -532,7 +533,8 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_1ST_OU,
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.EARLY_KICK_OFF,
-      IssueTypeConstant.WRONG_KICK_OFF
+      IssueTypeConstant.WRONG_KICK_OFF,
+      IssueTypeConstant.RED_CARD
     ];
     return !issueTypeNotShowEventDate.includes(this.issueTypes.issueId?.toString());
   }

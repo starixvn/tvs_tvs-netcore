@@ -25,6 +25,8 @@ public class RequestDetailModel
     public int UserId { get; set; }
 
     public string VoidedBy { get; set; }
+
+    public string BriefInfoNote { get; set; }
 }
 
 public class RequestEventModel

@@ -3,4 +3,5 @@ export class TicketListModal {
   minimize?: boolean;
   requestId: number;
   matchId: number;
+  allMatchIdsInRequest: string;
 }

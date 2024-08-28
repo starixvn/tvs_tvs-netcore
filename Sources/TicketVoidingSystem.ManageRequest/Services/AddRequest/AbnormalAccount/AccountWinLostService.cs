@@ -7,7 +7,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 
 public interface AccountWinLostService
 {
-    Task SaveAccountWinLost(int requestId, int actionId, IEnumerable<AccountWinlostModel> accountModels);
+    Task SaveAccountWinLost(int requestId, int? actionId, IEnumerable<AccountWinlostModel> accountModels);
 
     Task<IEnumerable<AccountWinlostModel>> GetAccountWinLost(GetAccountWinLostQuery query);
 
@@ -23,7 +23,7 @@ public class AccountWinLostServiceImp : AccountWinLostService
         this.repository = repository;
     }
 
-    public async Task SaveAccountWinLost(int requestId, int actionId, IEnumerable<AccountWinlostModel>? accountModels)
+    public async Task SaveAccountWinLost(int requestId, int? actionId, IEnumerable<AccountWinlostModel>? accountModels)
     {
         var command = new SaveAccountWinLostCommand
         {

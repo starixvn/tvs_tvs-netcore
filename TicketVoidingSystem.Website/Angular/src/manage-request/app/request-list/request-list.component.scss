@@ -79,7 +79,7 @@
     table {
       @include setTable();
       @include setHeaderTable();
-      
+
     }
   }
 
@@ -99,7 +99,7 @@
       }
 
       tbody:hover td[rowspan], tr:hover td {
-        background: #aebad4; 
+        background: #aebad4;
      }
 
       tbody {
@@ -110,7 +110,7 @@
           line-height: 18px;
           overflow: hidden;
           white-space: normal;
-          
+
           .ht-settlement {
             background-color: #003366;
             padding: 1px;
@@ -174,5 +174,15 @@
     display: block;
     margin: 0 auto;
     cursor: pointer;
+  }
+
+  .tooltip-missing-info .tooltip-inner {
+    font-size: 11px;
+    background-color: #aebad4;
+  }
+
+  .icon-missing-info {
+    color: #FDD017;
+    transform: scale(1.3);
   }
 }

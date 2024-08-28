@@ -6,10 +6,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ToastrModule } from 'ngx-toastr';
+import { IssueTypeModule } from 'src/utility/components/issue-type/issue-type.module';
+import { RequestInfoModule } from '../../manage-request/app/ticket-list/request-info/request-info.module';
 import { AdvancedModeModule } from '../../utility/components/advanced-mode/advanced-mode.module';
 import { DateTimeModule } from '../../utility/components/date-time/date-time.module';
 import { PagingModule } from '../../utility/components/paging/paging.module';
-import { RequestInfoModule } from '../../utility/components/request-info/request-info.module';
 import { TemplateMessageModule } from '../../utility/components/template-message/template-message.module';
 import { BlockUiModule } from './../../utility/components/block-ui/block-ui.module';
 import { ToolTipModule } from './../../utility/components/tooltip/tooltip.module';
@@ -64,8 +65,9 @@ import { VoidOtherIssueComponent } from './void-other-issue/void-other-issue.com
     RequestInfoModule,
     TemplateMessageModule,
     ToolTipModule,
+    UtilityModule,
+    IssueTypeModule,
     ToastrModule.forRoot(),
-    UtilityModule
   ],
   providers: [
   ],

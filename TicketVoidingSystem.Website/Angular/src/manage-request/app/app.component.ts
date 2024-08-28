@@ -26,10 +26,8 @@ const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
 })
 export class AppComponent implements OnInit {
   @ViewChild('filterComponent') filterComponent: FilterComponent;
-
   filter = new FilterModel();
   requests: RequestModel[] = [];
-
   minNgbDate: NgbDate;
   moveBetDay: Date;
   bUDay = new Date();
@@ -37,9 +35,8 @@ export class AppComponent implements OnInit {
   isReloading = false;
   autoRefreshMode: number;
   requestStatus: RequestStatus[] = [];
-
   isBlock: boolean;
-
+  isShowMissingInfo: boolean;
   cacheSubTypeSelectList: Selection[];
   cacheFilter = new FilterModel();
   cacheMultipleSelectSubTypeModel: string[];
@@ -149,7 +146,8 @@ export class AppComponent implements OnInit {
       subIssueType: this.filter.subIssueType,
       status: this.filter.status,
       isExcludeTest: this.filter.isExcludeTest,
-      createdBy: this.filter.createdBy
+      createdBy: this.filter.createdBy,
+      isDisplayMissingInfo: this.filter.isDisplayMissingInfo
     };
     this.cacheSubTypeSelectList = this.filterComponent.subTypeSelectList;
     this.cacheMultipleSelectSubTypeModel = this.filterComponent.multipleSelectSubTypeModel;
@@ -177,5 +175,9 @@ export class AppComponent implements OnInit {
         message: 'Export Excel timeout. Please try again!!',
         type: ModalType.Warning
       });
+  }
+
+  updateMissingInfo(isChecked: boolean) {
+    this.isShowMissingInfo = isChecked;
   }
 }

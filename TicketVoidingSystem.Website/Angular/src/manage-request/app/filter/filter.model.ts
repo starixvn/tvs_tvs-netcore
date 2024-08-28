@@ -10,4 +10,5 @@ export class FilterModel {
   status: string;
   createdBy: string;
   isExcludeTest = true;
+  isDisplayMissingInfo = false;
 }

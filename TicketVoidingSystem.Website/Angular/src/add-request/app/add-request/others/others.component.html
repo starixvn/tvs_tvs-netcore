@@ -17,7 +17,9 @@
         <div class="col-6 col-sm-6 col-md-4">
           <label class="col-form-label">Decided By</label>
           <div class="input-area">
-            <ng-select [items]="decidedBys" [(ngModel)]="model.decidedBy" [addTag]="true" (add)="addDecidedBy($event)" dropdownPosition="bottom">
+            <input *ngIf="!isIssueTypeSupportSuggestion()" type="text" class="form-control form-control-sm" [(ngModel)]="model.decidedBy" (change)="updateModel()"
+              maxlength="200">
+            <ng-select *ngIf="isIssueTypeSupportSuggestion()" [items]="decidedBys" [(ngModel)]="model.decidedBy" [addTag]="true" (add)="addDecidedBy($event)" dropdownPosition="bottom">
               <ng-template let-items="decidedBys" let-clear="clear">
                 <div class="ng-value" *ngFor="let item of decidedBys">
                   <span class="ng-value-label">{{ item }}</span>

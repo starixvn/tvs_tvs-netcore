@@ -19,7 +19,6 @@ import { ConfirmRedCardModel } from './confirm-red-card/confirm-red-card.model';
 import { PrimitiveProperty } from './event-red-card.model';
 import { FilterTimeAreaComponent } from './filter-time-area/filter-time-area.component';
 import { FilterTimeWithAllowance } from './filter-time-with-allowance/filter-time-with-allowance.model';
-import { LeagueEventRedCardComponent } from './league-event-red-card/league-event-red-card.component';
 import { LogInfoRedCardComponent } from './log-info-red-card/log-info-red-card.component';
 import { LogInfoRedCard } from './log-info-red-card/log-info-red-card.model';
 import { EventRedCardService } from './services/event-red-card.service';
@@ -28,6 +27,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { EventLeagueComponent } from './../../../../utility/components/event-league/event-league.component';
 
 @Component({
   selector: 'event-red-card',
@@ -47,7 +47,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   @Output() redCardModelsChange = new EventEmitter<RedCardModel[]>();
   @Output() updateMatchId = new EventEmitter<MatchModel>();
   @ViewChild('filterTimeArea') filterTimeAreaComponent: FilterTimeAreaComponent;
-  @ViewChild('leagueEvent') leagueEventRedCardComponent: LeagueEventRedCardComponent;
+  @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoRedCardComponent>;
 
   tooltip = new Tooltip();
@@ -95,7 +95,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
       this.eventRedCardService.assignModelsToEvents(this.allSelectedEvents, this.redCardModels, this.primitiveProps, this.addRequestStore);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.eventRedCardService.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.redCardModels);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
       this.primitiveProps.isShowLogInfoMainMatch = true;
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
@@ -112,7 +112,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfoMainMatch = false;
 
-    if (!this.validationService.validateCommonData(this.filter, this.leagueEventRedCardComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
+    if (!this.validationService.validateCommonData(this.filter, this.eventLeagueComponent, this.filterTimeAreaComponent, this.logInfoComponents, this.addRequestStore)) {
       return;
     }
     if (this.mainEvent.isCheckedVar == null && this.isShowVarCheck()) {
@@ -121,7 +121,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
@@ -141,11 +141,12 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoService.resetLogInfoOfEvent(this.allSelectedEvents);
-    this.mainEvent.matchId = this.leagueEventRedCardComponent?.selectedMatch.matchId;
-    this.mainEvent.eventName = this.leagueEventRedCardComponent?.selectedMatch.name;
-    this.mainEvent.leagueName = this.leagueEventRedCardComponent?.selectedMatch.leagueName;
-    this.mainEvent.matchCode = this.leagueEventRedCardComponent?.selectedMatch.matchCode;
-    this.updateMatchId.emit(this.leagueEventRedCardComponent?.selectedMatch);
+    this.mainEvent.matchId = this.eventLeagueComponent?.selectedMatch.matchId;
+    this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
+    this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
+    this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
+    this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
+    this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 
   isExistMatchEvent(): boolean {
@@ -234,7 +235,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     arg.primitiveProps = this.primitiveProps;
     arg.defaultFilterTimeWithAllowance = this.defaultFilterTimeWithAllowance;
     arg.allEvents = this.allSelectedEvents;
-    arg.leagueEventRedCardComponent = this.leagueEventRedCardComponent;
+    arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.filterTimeAreaComponent = this.filterTimeAreaComponent;
     arg.logInfoComponents = this.logInfoComponents;
     arg.confirmRedCard = this.confirmRedCard;

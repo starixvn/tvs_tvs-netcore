@@ -15,6 +15,7 @@ public class RequestModel
     public int LeagueId { get; set; }
     public int HomeId { get; set; }
     public int AwayId { get; set; }
+    public string MatchCode { get; set; }
     public byte ActionId { get; set; }
     public DateTime CreatedDate { get; set; }
     public string CreatedBy { get; set; }

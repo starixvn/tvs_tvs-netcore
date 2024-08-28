@@ -1,3 +1,4 @@
+
 export class GeneralInfo {
     voidedTimeString: string;
     kickOffTimeString?: string;
@@ -19,6 +20,7 @@ export class GeneralInfo {
 }
 
 export class GroupUserVoidMessage {
+    matchId: number;
     voidedBy: string;
     messages: UserVoidMessage[];
 }
@@ -40,4 +42,9 @@ export class GeneralInfoViewModel {
     userVoidMessages: GroupUserVoidMessage[];
     succeedEmails: string[];
     failedEmails: string[];
+}
+
+export class TabInfoRequest {
+    id: string;
+    name: string;
 }

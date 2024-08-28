@@ -27,7 +27,7 @@
 }
 
 .issue-type-dropdown {
-  width: 150px;
+  width: 190px;
 }
 
 .sub-type-dropdown {
@@ -45,4 +45,15 @@
 
 .filter-by-match {
   row-gap: 5px;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+  color: #fff;
+  background-color: #4e71bb;
+  display: flex;
+}
+
+.custom-control-label::before,
+.custom-control-label::after {
+  margin-top: -2px;
 }
