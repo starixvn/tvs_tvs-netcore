@@ -25,17 +25,17 @@ export class CopyRequestInfoService {
     navigator.clipboard.write(data);
   }
 
-  async copyLetstalkRequestInfo(requestId: number, matchId: number, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]) {
+  async copyLetsTalkRequestInfo(requestId: number, matchId: number, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]) {
     const query: CopyRequestInfoQuery = {
       requestId: requestId,
       matchId: matchId,
       logInfoDetails: logInfoDetail
     };
     const copyRequestResponse = await this.commonService.copyRequestInfo(query);
-    navigator.clipboard.writeText(this.createContentLetstalk(copyRequestResponse, logInfoDetail, operatorsList));
+    navigator.clipboard.writeText(this.createContentLetsTalk(copyRequestResponse, logInfoDetail, operatorsList));
   }
 
-  private createContentLetstalk(copyRequestResponse: CopyRequestInfoResponse, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]): string {
+  private createContentLetsTalk(copyRequestResponse: CopyRequestInfoResponse, logInfoDetail: LogInfoDetail[], operatorsList: OperatorInfo[]): string {
     const momentGlobalShowTime = moment(copyRequestResponse.requestInfo.globalShowTime);
     const content = `Date: ${momentGlobalShowTime.format(DateTimeFormat.DATE_MONTH_YEAR)}\n`
       + `Time (GMT+8): ${momentGlobalShowTime.format(DateTimeFormat.SHORT_TIME_FORMAT)}\n`

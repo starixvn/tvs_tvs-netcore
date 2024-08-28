@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { PagingModel } from 'src/utility/components/paging/paging/paging.model';
-import { MatchModel } from 'src/utility/models/match.model';
-import { CommonService } from 'src/utility/services/common.service';
+import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { CommonService } from '../../../../utility/services/common.service';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
@@ -15,7 +15,6 @@ import { TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { TicketsQuery } from '../tickets/tickets.query';
 import { GeneralInfoViewModel, TabInfoRequest } from './request-info.model';
-
 
 @Component({
   selector: 'request-info',
@@ -101,7 +100,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
     this.isBlock = false;
   }
 
-  public async onlickTabBriefInfo() {
+  public async onClickTabBriefInfo() {
     this.isShowBetList = false;
     this.isBlock = true;
     const generalInfoQuery: GetGeneralInfoQuery = { // same properties with GetGeneralInfoQuery

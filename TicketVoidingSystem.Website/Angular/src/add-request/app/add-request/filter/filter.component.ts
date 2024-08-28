@@ -3,7 +3,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { LocalStorageCacheConstant } from 'src/utility/constants/local-storage-cache.constant';
+import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
@@ -46,7 +46,6 @@ export class FilterComponent implements OnInit, OnChanges {
   issueTypesPermission: IssueType[] = [];
   actionIds: string[] = [];
   isHighlightSubType: boolean;
-
   widthIssueTypeControl: number;
   widthSubIssueTypeControl: number;
   widthActionControl: number;

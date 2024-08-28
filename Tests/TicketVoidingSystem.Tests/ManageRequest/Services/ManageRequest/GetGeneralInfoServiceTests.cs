@@ -80,8 +80,7 @@ public class GetGeneralInfoServiceTests
 
         var request = new GetGeneralInfoCriteria
         {
-            RequestId = 123,
-            MatchId = 123
+            RequestId = 123
         };
         repository.FetchMultipleAsync<GeneralInfoModel, UserVoidMessage, EmailResultModel>(request)
             .ReturnsForAnyArgs((item1, item2, item3));
@@ -143,8 +142,7 @@ public class GetGeneralInfoServiceTests
         var failEmails = new List<string> { "gg" };
         var request = new GetGeneralInfoCriteria
         {
-            RequestId = 123,
-            MatchId = 123,
+            RequestId = 123
         };
         repository.FetchMultipleAsync<GeneralInfoModel, UserVoidMessage, EmailResultModel>(request)
             .ReturnsForAnyArgs((item1, item2, item3));

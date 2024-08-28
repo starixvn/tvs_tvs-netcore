@@ -47,11 +47,7 @@ export class SaveRequestService {
     argWrongMarketOffered.addRequestStore.changeBlockingUiStatus(false);
     argWrongMarketOffered.primitiveProps.isShowValidation = true;
 
-    if (this.validationService.isValidLogInfoEvent(argWrongMarketOffered.logInfoEvent)) {
-      return true;
-    }
-
-    return false;
+    return this.validationService.isValidLogInfoEvent(argWrongMarketOffered.logInfoEvent);
   }
 
   private proceedSaveRequest(arg: SaveRequestArg) {

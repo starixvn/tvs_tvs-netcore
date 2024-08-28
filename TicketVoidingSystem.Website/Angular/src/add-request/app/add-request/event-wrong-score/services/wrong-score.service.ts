@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, QueryList } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { StaticService } from 'src/utility/services/static.service';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { DateTimeFormat, TVSRequestFilterBy, TimeZone } from '../../../../../utility/constants/config';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 import { AddRequestApiService } from '../../add-request-api.service';

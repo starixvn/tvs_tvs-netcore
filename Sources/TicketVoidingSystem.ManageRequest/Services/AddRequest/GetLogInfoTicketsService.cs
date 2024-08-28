@@ -56,7 +56,7 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
 
         return new Group<TicketViewModel>
         {
-            Name = tickets.FirstOrDefault().BetType,
+            Name = tickets.FirstOrDefault()?.BetType,
             Tickets = tickets,
             DisplayTotalTickets = getTicketModels.Count()
         };

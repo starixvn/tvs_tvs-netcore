@@ -15,14 +15,11 @@
           <div class="affected-bet-type-area">
             <div class="">
               <div class="list-group">
-                <div class="list-group-item list-group-item-secondary" (click)="changeShowAffectedBetType()">
-                  <strong>&nbsp;Affected Bet Type</strong>
+                <div class="list-group-item list-group-item-secondary" (click)="isShowCaretDown = !isShowCaretDown">
+                  Affected Bet Type
                   <span class="caret">
-                    <span *ngIf="isShowCaretDown" class="caret-down"></span>
-                  </span>
-                  <span class="caret">
-                    <span *ngIf="!isShowCaretDown" class="caret-up"></span>
-                  </span>   
+                    <span [ngClass]="{'caret-down': isShowCaretDown, 'caret-up': !isShowCaretDown}"></span>
+                  </span>               
                 </div>
                 <div class="list-group-item flex-column align-items-start affected-bet-type-content" *ngIf="!isShowCaretDown">
                   <div *ngFor="let group of model.groupBetTypesCount">

@@ -1,11 +1,9 @@
-import { NgModule } from "@angular/core";
 import { AcceptType } from "../../../../utility/constants/config";
 import { CopyRequestInfoResponse, RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
 import { CommonService } from "../../../../utility/services/common.service";
 import { OperatorInfo, OperatorType } from "../others/others.model";
 import { CopyRequestInfoService } from "./copy-request-info.service";
-
 
 class Helper {
   static readonly url = 'http://localhost:60196/';
@@ -50,13 +48,6 @@ class Helper {
 }
 
 describe('CopyRequestInfoService', () => {
-  @NgModule({
-    providers: [
-      CommonService
-    ]
-  })
-  class AppModuleTest { }
-
   let copyRequestInfoService: CopyRequestInfoService;
 
   beforeEach(() => {
@@ -100,7 +91,7 @@ describe('CopyRequestInfoService', () => {
       const commonService = new CommonService(null);
       commonService.copyRequestInfo = jest.fn().mockReturnValue(copyRequestInfoResponse);
       copyRequestInfoService = new CopyRequestInfoService(commonService);
-      await copyRequestInfoService.copyLetstalkRequestInfo(1, 1, Helper.fakeLogInfoDetail, Helper.fakeOperatorInfo);
+      await copyRequestInfoService.copyLetsTalkRequestInfo(1, 1, Helper.fakeLogInfoDetail, Helper.fakeOperatorInfo);
 
       expect(commonService.copyRequestInfo).toHaveBeenCalledTimes(1);
     })

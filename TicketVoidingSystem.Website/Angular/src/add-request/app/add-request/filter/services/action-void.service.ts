@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
+import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { AbnormalFilterBy, ActionVoidByIssueTypeConst, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { Selection } from '../../../../../utility/models/selection.model';
 @Injectable({
@@ -68,6 +68,5 @@ export class ActionVoidService {
       return { value: id.toString(), name };
     });
   }
-
 }
 

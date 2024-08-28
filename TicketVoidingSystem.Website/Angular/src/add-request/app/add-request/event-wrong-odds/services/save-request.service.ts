@@ -50,11 +50,7 @@ export class SaveRequestService {
     argWrongOdds.addRequestStore.changeBlockingUiStatus(false);
     argWrongOdds.logInfoEvent.isShowValidation = true;
 
-    if (this.validationService.isValidLogInfoEvent(argWrongOdds.logInfoEvent)) {
-      return true;
-    }
-
-    return false;
+    return this.validationService.isValidLogInfoEvent(argWrongOdds.logInfoEvent);
   }
 
   private proceedSaveRequest(arg: SaveRequestArg) {

@@ -25,11 +25,7 @@ export class ValidationService {
   }
 
   public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterWrongOddsComponent: FilterWrongOddsComponent): boolean {
-    if (!eventLeagueComponent.isMatchIdValid() || !filterWrongOddsComponent.isValid()) {
-      return false;
-    }
-
-    return true;
+    return eventLeagueComponent.isMatchIdValid() && filterWrongOddsComponent.isValid();
   }
 
   public isFromTimeSameOrBeforeToTime(filterWrongOddsModel: FilterWrongOddsModel, tooltip: Tooltip): boolean {
@@ -89,7 +85,8 @@ export class ValidationService {
     const isHasWarningTicket = argWrongOdds.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
     const isEditingByAnotherUser = argWrongOdds.isEdit && argWrongOdds.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = argWrongOdds.isEdit
-      && argWrongOdds.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && argWrongOdds.filter.action !== argWrongOdds.actionIdOfFirstTimeAccess;
+      && argWrongOdds.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() 
+      && argWrongOdds.filter.action !== argWrongOdds.actionIdOfFirstTimeAccess;
 
     return isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }
@@ -134,5 +131,4 @@ export class ValidationService {
 
     return true;
   }
-
 }

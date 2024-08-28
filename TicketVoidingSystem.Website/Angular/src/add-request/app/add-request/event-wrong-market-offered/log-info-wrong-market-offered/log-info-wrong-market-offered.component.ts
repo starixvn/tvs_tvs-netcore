@@ -8,28 +8,28 @@ import * as _ from 'lodash';
 import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { MultipleSelection } from 'src/utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
+import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
 
 @Component({
   selector: 'log-info-wrong-market-offered',
   templateUrl: './log-info-wrong-market-offered.component.html',
   styleUrls: ['./log-info-wrong-market-offered.component.scss']
 })
+
 export class LogInfoWrongMarketOfferedComponent {
   @Input() isVoided: boolean;
   @Input() logInfo: LogInfoWrongMarketOffered;
   @Input() primitiveProps = new PrimitivePropertyEvent();
   @Input() issueTypeId: string;
  
-  isBlock: boolean;
-
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   groupBetTypesCount: string[] = [];
   isShowDetailBetTypeCount = false;
   affectedTicketsModel = new AffectedTicketsModel();
+  isBlock: boolean;
 
   public displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
@@ -77,7 +77,7 @@ export class LogInfoWrongMarketOfferedComponent {
     this.affectedTicketsModel.filterBetTypes = this.initFilterBetTypes(this.logInfo.checkedBetTypes);
   }
 
-  initFilterBetTypes(betTypes: BetTypeAddRequest[]): MultipleSelection{
+  private initFilterBetTypes(betTypes: BetTypeAddRequest[]): MultipleSelection{
     const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
     filterBetTypes.items = betTypes.map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
 
@@ -92,6 +92,5 @@ export class LogInfoWrongMarketOfferedComponent {
     this.isBlock = false;
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
-
   }
 }
