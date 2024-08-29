@@ -93,17 +93,21 @@ public class RemotingRefWrapperServiceImp : RemotingRefWrapperService
 
     private static string ToString(object item)
     {
-        return item is not null && item != DBNull.Value ? item.ToString() : string.Empty;
+        return item != null && item != DBNull.Value ? item.ToString() : string.Empty;
     }
 
     public string GetLeagueName(int sportTypeId, object leagueId, string language)
     {
-        return IsSportTypeOfVirtualSports5(sportTypeId) ? remotingRefService.GetLeagueName3rd(ToString(leagueId), language, string.Empty) : remotingRefService.GetLeagueName(ToString(leagueId), language, string.Empty);
+        return IsSportTypeOfVirtualSports5(sportTypeId)
+            ? remotingRefService.GetLeagueName3rd(ToString(leagueId), language, string.Empty)
+            : remotingRefService.GetLeagueName(ToString(leagueId), language, string.Empty);
     }
 
     public string GetTeamName(int sportTypeId, object teamId, string language)
     {
-        return IsSportTypeOfVirtualSports5(sportTypeId) ? remotingRefService.GetTeamName3rd(ToString(teamId), language, string.Empty) : remotingRefService.GetTeamName(ToString(teamId), language, string.Empty);
+        return IsSportTypeOfVirtualSports5(sportTypeId)
+            ? remotingRefService.GetTeamName3rd(ToString(teamId), language, string.Empty)
+            : remotingRefService.GetTeamName(ToString(teamId), language, string.Empty);
     }
 
     private static bool IsSportTypeOfVirtualSports5(int sportType)
