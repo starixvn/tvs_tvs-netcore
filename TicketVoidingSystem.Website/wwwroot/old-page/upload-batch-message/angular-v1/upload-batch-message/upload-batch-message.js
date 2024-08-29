@@ -22,7 +22,7 @@
 
         function getProducts() {
             $http.get("api/UploadBatchMessage/GetProducts").success(function (data) {
-                vm.products = data;    
+                vm.products = data;
             });
         }
 
@@ -149,14 +149,10 @@
         vm.showInvalidTransIds = function (invalidTransIds) {
             var arrayInvalidTransId = invalidTransIds.split(',');
             $('.value-number').each(function () {
-                for (var index = 0; index < arrayInvalidTransId.length; index++) {
-                    var a = arrayInvalidTransId[index];
-                    var b = $(this).text();
-                    if (a === b) {
-                        $(this).removeClass("value-number");
-                        $(this).addClass("value-number-invalid");
-                        break;
-                    }
+                var currentTransId = $(this).text();
+                if (arrayInvalidTransId.some(id => id === currentTransId)) {
+                    $(this).removeClass("value-number");
+                    $(this).addClass("value-number-invalid");
                 }
             });
         };
