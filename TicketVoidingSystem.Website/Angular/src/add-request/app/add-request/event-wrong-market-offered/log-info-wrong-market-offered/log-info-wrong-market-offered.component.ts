@@ -11,6 +11,8 @@ import { AddRequestApiService } from '../../add-request-api.service';
 import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
 import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
+import { Item } from '../../../../../utility/models/item.model';
+import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 
 @Component({
   selector: 'log-info-wrong-market-offered',
@@ -26,7 +28,7 @@ export class LogInfoWrongMarketOfferedComponent {
  
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
-  groupBetTypesCount: string[] = [];
+  groupBetTypesCount: GroupBetTypeCountModel[] = [];
   isShowDetailBetTypeCount = false;
   affectedTicketsModel = new AffectedTicketsModel();
   isBlock: boolean;
@@ -43,18 +45,30 @@ export class LogInfoWrongMarketOfferedComponent {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
 
-  public updateBetTypeCountModel() {
+  private updateBetTypeCountModel() {
     this.groupBetTypesCount = [];
     const groupBetTypes = _.groupBy(this.logInfo.betTypeCount, item => `"${item.betTypeId}+${item.betId}"`);
-      for (const key in groupBetTypes) {
-        const values = groupBetTypes[key];
-        let item = values[0].playerName ? `${values[0].betTypeName}:` : `${values[0].betTypeName} - ${values[0].ticketsCount} ticket(s)`;
-        this.groupBetTypesCount.push(item);
+    for (const key in groupBetTypes) {
+      const values = groupBetTypes[key];
+
+      const childBetTypes = values
+        .filter(item => item.playerName)
+        .map(item => {
+        return {
+          name: `${item.playerName} - ${item.ticketsCount} ticket(s)`
+        } as Item;
+      });
+      const group: GroupBetTypeCountModel = {
+        name: values[0].playerName ? `${values[0].betTypeName}:` : `${values[0].betTypeName} - ${values[0].ticketsCount} ticket(s)`,
+        items: childBetTypes
       };
-      
-      this.affectedTicketsModel.groupBetTypesCount = this.groupBetTypesCount;
-      this.affectedTicketsModel.tickets = new TicketsModel();
-      this.affectedTicketsModel.isShowDetailBetTypeCount = true;
+
+      this.groupBetTypesCount.push(group);
+    };
+
+    this.affectedTicketsModel.groupBetTypesCount = this.groupBetTypesCount;
+    this.affectedTicketsModel.tickets = new TicketsModel();
+    this.affectedTicketsModel.isShowDetailBetTypeCount = true;
   }
 
   public async updateAffectedTickets(){

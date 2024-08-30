@@ -10,28 +10,29 @@ import { MultipleSelection } from '../../../../utility/components/multiple-selec
 export class AffectedTicketComponent {
   @Input() model = new AffectedTicketsModel();
   
-  isShowCaretDown = true;
+  isCollapsed = false;
   filterBetTypes: MultipleSelection;
-  checkedBetTypes: number[];
 
   public closeClick(): void {
+    this.isCollapsed = false;
     this.model.isOpen = false;
   }
 
   updateSelectedBetTypes(betTypes: string[]) {
-    this.checkedBetTypes = betTypes.map(i => Number(i));
-  }
-
-  changeFilter(){
+    let checkedBetTypes = betTypes.map(i => Number(i));
     this.model.tickets.groups.forEach(group => {
       group.tickets.forEach(y => {
-        y.isChecked = this.checkedBetTypes.includes(y.groupBetTypeId);
+        y.isChecked = checkedBetTypes.includes(y.groupBetTypeId);
       });
       group.isCheckAll = group.tickets.length === group.displayTotalTickets;
     });
   }
-
-  changeShowAffectedBetType(){
-    this.isShowCaretDown = !this.isShowCaretDown;
-  }
+  // changeFilter(){
+  //   this.model.tickets.groups.forEach(group => {
+  //     group.tickets.forEach(y => {
+  //       y.isChecked = this.checkedBetTypes.includes(y.groupBetTypeId);
+  //     });
+  //     group.isCheckAll = group.tickets.length === group.displayTotalTickets;
+  //   });
+  // }
 }
