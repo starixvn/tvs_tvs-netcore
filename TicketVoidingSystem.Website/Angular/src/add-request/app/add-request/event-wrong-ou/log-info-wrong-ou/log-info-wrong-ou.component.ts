@@ -110,10 +110,10 @@ export class LogInfoWrongOuComponent implements OnInit {
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
-      this.affectedTicketsModel.tickets = await this.addRequestApiService.GetLogInfoTickets(query);
-      this.affectedTicketsModel.tickets.groups[0].isExpanded = true;
-      this.affectedTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
-
+      var ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      this.affectedTicketsModel.tickets = new TicketsModel();
+      this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
+      this.affectedTicketsModel.tickets.checkAllTickets();
     } else {
       this.affectedTicketsModel.tickets = new TicketsModel();
     }

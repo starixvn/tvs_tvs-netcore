@@ -26,13 +26,4 @@ export class TicketsComponent extends BaseTicketsListComponent<TicketsModel> imp
   public changeTickets() {
     this.ticketsChange.emit(this.model.getNumberOfCheckedTickets());
   }
-
-  public getGlobalIndex(groupIndex: number, ticketIndex: number): number{
-    let no = ticketIndex + 1;
-    for(let i = 0; i < groupIndex; i ++){
-      no += this.model.groups[i].tickets.length;
-    }
-
-    return no;
-  }
 }

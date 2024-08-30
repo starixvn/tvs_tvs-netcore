@@ -1,18 +1,18 @@
 import { Component, Input } from '@angular/core';
-import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
-import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { StaticService } from '../../../../../utility/services/static.service';
 import * as _ from 'lodash';
-import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
-import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import moment from 'moment-timezone';
 import { BetTypeAddRequest } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { Item } from '../../../../../utility/models/item.model';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AddRequestApiService } from '../../add-request-api.service';
 import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
+import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
+import { LogInfoWrongMarketOffered } from '../models/log-info-wrong-market-offered.model';
+import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
 @Component({
   selector: 'log-info-wrong-market-offered',
@@ -77,9 +77,10 @@ export class LogInfoWrongMarketOfferedComponent {
         logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.issueTypeId)
       };
-      this.affectedTicketsModel.tickets = await this.addRequestApiService.GetLogInfoTickets(query);
-      this.affectedTicketsModel.tickets.groups[0].isExpanded = true;
-      this.affectedTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
+      var ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      this.affectedTicketsModel.tickets = new TicketsModel();
+      this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
+      this.affectedTicketsModel.tickets.checkAllTickets();
       this.affectedTicketsModel.tickets.groups[0].name = null;
     } else {
       this.affectedTicketsModel.tickets = new TicketsModel();

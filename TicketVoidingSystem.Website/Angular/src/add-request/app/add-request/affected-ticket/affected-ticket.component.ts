@@ -1,6 +1,6 @@
-import { Component, Input} from '@angular/core';
-import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
+import { Component, Input } from '@angular/core';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
 
 @Component({
   selector: 'affected-ticket',
@@ -20,19 +20,6 @@ export class AffectedTicketComponent {
 
   updateSelectedBetTypes(betTypes: string[]) {
     let checkedBetTypes = betTypes.map(i => Number(i));
-    this.model.tickets.groups.forEach(group => {
-      group.tickets.forEach(y => {
-        y.isChecked = checkedBetTypes.includes(y.groupBetTypeId);
-      });
-      group.isCheckAll = group.tickets.length === group.displayTotalTickets;
-    });
+    this.model.tickets.checkTicketByBetTypesForLGEarlyPopup(checkedBetTypes);
   }
-  // changeFilter(){
-  //   this.model.tickets.groups.forEach(group => {
-  //     group.tickets.forEach(y => {
-  //       y.isChecked = this.checkedBetTypes.includes(y.groupBetTypeId);
-  //     });
-  //     group.isCheckAll = group.tickets.length === group.displayTotalTickets;
-  //   });
-  // }
 }

@@ -58,6 +58,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   public getOtherSection(): PoolHouseTicketsSection {
     const otherTickets = new TicketsModel();
     otherTickets.initData(this.model.otherTickets);
+    otherTickets.checkAllTickets();
     const otherGroupBetTypes = this.model.groupBetTypes.filter(x => x.groupName === 'Others');
     this.otherSection = {
       isAffected: false,
@@ -74,7 +75,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   private changeCheckBetTypeAndTicket(): void {
     if (this.model.checkedBetTypes === PoolHouseTicketValue.SELECT_ALL_BETTYPE) {
       this.affectedSection.groupBetTypesModel.checkAllBetType();
-      this.affectedSection.tickets.checkAllTickets();
+      this.affectedSection.tickets.checkAllTicketsForPoolHousePopup();
     } else {
       this.affectedSection.groupBetTypesModel.checkBetType(this.model.checkedBetTypes.split(',').map(i => Number(i)));
       this.affectedSection.tickets.handleCheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
