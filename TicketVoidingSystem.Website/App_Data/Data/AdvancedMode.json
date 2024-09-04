@@ -64,7 +64,7 @@
       ],
       "Items": [
         {
-          "Name": "HDP:",
+          "Name": "Value:",
           "Value": "",
           "XmlAttribute": "Value"
         }

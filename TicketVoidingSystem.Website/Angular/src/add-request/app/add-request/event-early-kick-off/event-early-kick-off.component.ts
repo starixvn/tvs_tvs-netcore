@@ -101,7 +101,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
       this.resetAllData();
-      this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents, this.filter.subIssueTypeId);
+      this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents);
     }
   }
 
@@ -116,7 +116,6 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.eventLeagueComponent?.selectedMatch);
-    this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
     this.mainEvent.matchModel = this.eventLeagueComponent?.selectedMatch;
 
     this.updateMatchId.emit(this.mainEvent.matchId);
@@ -220,7 +219,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         || this.relatedEvents.find(y => y.matchId === x.matchId)?.matchType !== this.addChildMatchModel.matchType)
       || x.isMainMatch);
     const newChildEvents = selectedEvents.filter(x => !this.allSelectedEvents.some(y => y.matchId === x.matchId));
-    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, this.mainEvent, this.filter.subIssueTypeId);
+    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, this.mainEvent);
     if (newEvents.length > 0) {
       const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter);
       this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);

@@ -21,21 +21,19 @@ export class EventEarlyKickOffService {
       event.isMainMatch = x.isMainMatch;
       event.eventName = x.name;
       event.kickOffTime = x.kickOffTime;
-      event.subIssueTypeId = x.subIssueTypeId;
       event.isCollapse = filter.isVoided || !x.isMainMatch;
       event.matchModel = x.match;
       allEvents.push(event);
     });
   }
 
-  public initDefaultMainEvent(allSelectedEvents: LogInfoEarlyKickOff[], subIssueTypeId: string): LogInfoEarlyKickOff {
+  public initDefaultMainEvent(allSelectedEvents: LogInfoEarlyKickOff[]): LogInfoEarlyKickOff {
     const mainEvent = new LogInfoEarlyKickOff();
     mainEvent.isMainMatch = true;
     mainEvent.isShowValidation = false;
     mainEvent.tableTicketsModel = new TableTicketsModel();
     mainEvent.pagingModel = new PagingModel();
     mainEvent.isCollapse = true;
-    mainEvent.subIssueTypeId = Number(subIssueTypeId);
     mainEvent.kickOffTime = moment().tz('Etc/GMT-8').format('YYYY-MM-DD HH:mm:ss.SSS');
     allSelectedEvents.push(mainEvent);
 

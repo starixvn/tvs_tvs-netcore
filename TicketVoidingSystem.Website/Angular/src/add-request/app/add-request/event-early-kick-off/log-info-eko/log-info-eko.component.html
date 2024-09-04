@@ -39,7 +39,7 @@
         </div>
       </div>
       <template-message *ngIf="!isNotShowTemplateMessage()" #templateMessage [value]="logInfo.templateValue"
-        [issueTypeId]="getIssueTypeId()" [subIssueTypeId]="logInfo.subIssueTypeId"
+        [issueTypeId]="getIssueTypeId()" [subIssueTypeId]="getSubIssueTypeId()"
         [voidFunction]="4">
       </template-message>
   </div>

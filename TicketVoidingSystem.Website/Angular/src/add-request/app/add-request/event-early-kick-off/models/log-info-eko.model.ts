@@ -8,7 +8,6 @@ export class LogInfoEarlyKickOff {
   matchId: number;
   matchCode?: string;
   leagueName: string;
-  subIssueTypeId: number;
   isMainMatch: boolean;
   kickOffTime: string;
   eventName: string;
