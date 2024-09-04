@@ -72,6 +72,10 @@ export class LogInfoEkoComponent implements OnInit {
     return Number(this.filter.issueTypeId);
   }
 
+  public getSubIssueTypeId(): number {
+    return Number(this.filter.subIssueTypeId);
+  }
+
   public isNotShowTemplateMessage() {
     return this.logInfo.tableTicketsModel.groups === undefined || this.logInfo.tableTicketsModel.groups.length === 0
       || this.logInfo.tableTicketsModel.groups == null

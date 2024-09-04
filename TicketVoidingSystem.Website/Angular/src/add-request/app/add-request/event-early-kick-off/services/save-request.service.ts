@@ -96,17 +96,17 @@ export class SaveRequestService {
     query.remark = args.others.remark;
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
     if (!args.filter.isVoided) {
-      query.earlyKickOffInfo = args.allEvents.filter(x => !x.isInvalidTotalTickets).map(x => this.getEarlyKickOffModel(x));
+      query.earlyKickOffInfo = args.allEvents.filter(x => !x.isInvalidTotalTickets).map(x => this.getEarlyKickOffModel(x, args.filter.subIssueTypeId));
     }
 
     return query;
   }
 
-  public getEarlyKickOffModel(event: LogInfoEarlyKickOff): EarlyKickOffModel {
+  public getEarlyKickOffModel(event: LogInfoEarlyKickOff, subIssueTypeId: string): EarlyKickOffModel {
     const model = new EarlyKickOffModel();
     model.isMainMatch = event.isMainMatch;
     model.matchId = event.matchId;
-    model.subIssueTypeId = event.subIssueTypeId;
+    model.subIssueTypeId = Number(subIssueTypeId);
     model.isMainMatch = event.isMainMatch;
     model.kickOffTime = event.kickOffTime;
 

@@ -36,7 +36,7 @@ export class RelatedEventService {
     return await this.addRequestApiService.getChildMatchesInfo(query);
   }
 
-  mapChildMatchesToEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff, defaultSubIssueTypeId: string): LogInfoEarlyKickOff[] {
+  mapChildMatchesToEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff): LogInfoEarlyKickOff[] {
     const newEvents = models
       .map(x => {
         const matchModel = this.mapChildMatchToMatchModel(x, mainEvent.kickOffTime);
@@ -46,7 +46,6 @@ export class RelatedEventService {
           leagueName: x.leagueName,
           isMainMatch: false,
           kickOffTime: mainEvent.kickOffTime,
-          subIssueTypeId: Number(defaultSubIssueTypeId),
           eventName: `${x.matchId} - ${x.matchEvent}`,
           messageValidationLogInfo: null,
           isCollapse: true,
@@ -106,7 +105,7 @@ export class RelatedEventService {
         addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
         return;
       }
-      const newEvents = this.mapChildMatchesToEvents(models, addRelatedEventArg.mainEvent, addRelatedEventArg.filter.subIssueTypeId);
+      const newEvents = this.mapChildMatchesToEvents(models, addRelatedEventArg.mainEvent);
       const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter);
       this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       addRelatedEventArg.allEvents.push(...newEvents);

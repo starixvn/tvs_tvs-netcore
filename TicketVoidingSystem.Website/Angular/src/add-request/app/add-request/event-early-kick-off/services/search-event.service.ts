@@ -49,7 +49,7 @@ export class SearchEventService {
 
   private addNewestChildEventsToAllSelectedEvents(arg: SaveRequestArg, newestRelatedEvents: ChildMatchModel[]): void {
     const newChildEvents = newestRelatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && x.matchType === MatchType.LINK);
-    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, arg.mainEvent, arg.filter.subIssueTypeId);
+    const newEvents = this.relatedEventService.mapChildMatchesToEvents(newChildEvents, arg.mainEvent);
     arg.allEvents.push(...newEvents);
   }
 }
