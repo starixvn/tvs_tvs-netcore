@@ -95,7 +95,7 @@
           "Value": "70"
         },
         {
-          "Name": "Yebet",
+          "Name": "Yeebet",
           "Value": "76"
         },
         {
@@ -194,6 +194,10 @@
         {
           "Name": "FastSpin",
           "Value": "87"
+        },
+        {
+          "Name": "FA CHAI",
+          "Value": "89"
         }
       ]
     },

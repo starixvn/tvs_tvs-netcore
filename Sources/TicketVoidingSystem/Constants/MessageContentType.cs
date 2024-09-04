@@ -11,4 +11,5 @@ public static class MessageContentType
     public const int ReSettle = 107;
     public const int UnCalculate = 108;
     public const int Others = 199;
+    public const int NotSendLicense = 198;
 }
