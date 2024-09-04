@@ -99,7 +99,7 @@ export class LogInfoWrongOddsComponent implements OnInit {
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
-      var ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
       this.affectedTicketsModel.tickets = new TicketsModel();
       this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
       this.affectedTicketsModel.tickets.checkAllTickets();

@@ -35,13 +35,15 @@ public class GetBriefInfoHandler : IRequestHandler<GetBriefInfoRequest, IEnumera
         }
         else
         {
-            foreach (var item in sourceGeneralInfo)
-            {
-                var sourceUserVoidMessageOfMatch = sourceUserVoidMessages.Where(x => x.MatchId == item.MatchId);
-                var licenseInAllServersOfMatch = licenseInAllServers.Where(x => x.MatchId == item.MatchId);
+            briefInfoModels.AddRange(
+               sourceGeneralInfo.Select(item =>
+                {
+                    var sourceUserVoidMessageOfMatch = sourceUserVoidMessages.Where(x => x.MatchId == item.MatchId);
+                    var licenseInAllServersOfMatch = licenseInAllServers.Where(x => x.MatchId == item.MatchId);
 
-                briefInfoModels.Add(GetBriefInfoModel(item.MatchId, licenseInAllServersOfMatch, sourceUserVoidMessageOfMatch));
-            }
+                    return GetBriefInfoModel(item.MatchId, licenseInAllServersOfMatch, sourceUserVoidMessageOfMatch);
+                })
+            );
         }
 
         return briefInfoModels;
@@ -74,7 +76,7 @@ public class GetBriefInfoHandler : IRequestHandler<GetBriefInfoRequest, IEnumera
 
     public async Task<IEnumerable<TicketLicenseeModel>> GetTicketLicenseeTicket(IEnumerable<string> voidingHistoryIds)
     {
-        var getLicenseCriteria = new GetBriefInfoCriteria()
+        var getLicenseCriteria = new GetBriefInfoCriteria
         {
             VoidingHistoryIds = string.Join(",", Helper.GetIntersectTransIdString(voidingHistoryIds))
         };

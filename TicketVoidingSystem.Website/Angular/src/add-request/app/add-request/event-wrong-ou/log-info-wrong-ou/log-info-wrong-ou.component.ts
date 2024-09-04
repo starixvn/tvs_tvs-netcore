@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -110,7 +109,7 @@ export class LogInfoWrongOuComponent implements OnInit {
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
-      var ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
       this.affectedTicketsModel.tickets = new TicketsModel();
       this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
       this.affectedTicketsModel.tickets.checkAllTickets();

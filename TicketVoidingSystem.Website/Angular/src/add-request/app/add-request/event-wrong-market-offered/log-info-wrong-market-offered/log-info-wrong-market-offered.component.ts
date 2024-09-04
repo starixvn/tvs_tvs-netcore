@@ -29,7 +29,6 @@ export class LogInfoWrongMarketOfferedComponent {
   constructor(private readonly addRequestApiService: AddRequestApiService) { }
 
   groupBetTypesCount: GroupBetTypeCountModel[] = [];
-  isShowDetailBetTypeCount = false;
   affectedTicketsModel = new AffectedTicketsModel();
   isBlock: boolean;
 
@@ -77,7 +76,7 @@ export class LogInfoWrongMarketOfferedComponent {
         logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.issueTypeId)
       };
-      var ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
       this.affectedTicketsModel.tickets = new TicketsModel();
       this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
       this.affectedTicketsModel.tickets.checkAllTickets();

@@ -3,12 +3,10 @@ import * as _ from 'lodash';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { StaticService } from '../../../../utility/services/static.service';
-
 import { GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
 import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
-
 
 @Component({
   selector: 'pool-house-tickets',
@@ -17,7 +15,7 @@ import { TicketsModel } from './tickets/tickets.model';
 })
 export class PoolHouseTicketComponent implements OnChanges {
   @Input() model = new PoolHouseTicketsModel();
-  @Output() saveEventOuput = new EventEmitter<PoolHouseTicketsModel>();
+  @Output() saveEventOutput = new EventEmitter<PoolHouseTicketsModel>();
   poolHouseTicketsSections: PoolHouseTicketsSection[] = [];
   affectedSection: PoolHouseTicketsSection;
   otherSection: PoolHouseTicketsSection;
@@ -52,6 +50,7 @@ export class PoolHouseTicketComponent implements OnChanges {
       tickets: affectedTickets,
       isCollapsed: false
     };
+
     return this.affectedSection;
   }
 
@@ -96,7 +95,7 @@ export class PoolHouseTicketComponent implements OnChanges {
     this.model.isOpen = false;
     this.model.checkedBetTypes = this.getCheckedBetTypes();
 
-    this.saveEventOuput.emit(this.model);
+    this.saveEventOutput.emit(this.model);
   }
 
   private getCheckedBetTypes(): string {

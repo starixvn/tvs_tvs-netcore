@@ -28,58 +28,45 @@ export class TicketsModel extends CommonTicketsModel<GroupModel> {
     this.groups.forEach(group => {
       let indexTicket = 0;
       group.tickets.forEach(y => {
-        y.isChecked = (checkedBetTypes.includes(Number(y.betTypeId)) && !y.isParlay) || (checkedBetTypes.includes(Number(y.subBetTypeId)) && y.isParlay);
-        if (y.isChecked) {
-          indexTicket++;
-        }
-        y.no = indexTicket;
+        y.isChecked = this.isCheckedTicket(y, checkedBetTypes);
+        y.no = y.isChecked ? ++indexTicket : indexTicket;
       });
       group.displayTotalTickets = group.getCheckedTickets().length;
       group.isCheckAll = group.tickets.length === group.displayTotalTickets;
     });
   }
 
+  private isCheckedTicket(ticket:  TicketModel,checkedBetTypes: number[]){
+    return (checkedBetTypes.includes(Number(ticket.betTypeId)) && !ticket.isParlay) 
+      || (checkedBetTypes.includes(Number(ticket.subBetTypeId)) && ticket.isParlay)
+  }
+
   checkAllTicketsForPoolHousePopup() {
     this.groups.forEach(group => {
       let indexTicket = 0;
-      if (group.name !== 'Others') {
-        group.tickets.forEach(y => {
-          y.isChecked = true;
-          indexTicket++;
-          y.no = indexTicket;
-        });
-        group.isCheckAll = group.tickets.length === group.getCheckedTickets().length;
-      } else {
-        group.tickets.forEach(y => {
-          y.isChecked = false;
-          indexTicket++;
-          y.no = indexTicket;
-        });
-        group.isCheckAll = false;
-      }
+      group.tickets.forEach(y => {
+        y.isChecked = group.name !== 'Others';
+        y.no = ++indexTicket;
+      });
+      group.isCheckAll = group.tickets.length === group.getCheckedTickets().length;
     });
   }
 
   checkAllTickets() {
     this.groups.forEach(group => {
-      let indexTicket = 0;
-      group.tickets.forEach(y => {
-        y.isChecked = true;
-        indexTicket++;
-        y.no = indexTicket;
-      });
+        group.tickets.forEach((ticket, index) => {
+            ticket.isChecked = true;
+            ticket.no = index + 1;
+        });
     });
-  }
+  } 
 
   checkTicketByBetTypesForLGEarlyPopup(checkedBetTypes: number[]) {
     this.groups.forEach(group => {
       let indexTicket = 0;
       group.tickets.forEach(y => {
         y.isChecked = checkedBetTypes.includes(y.groupBetTypeId);
-        if (y.isChecked) {
-          indexTicket++;
-        }
-        y.no = indexTicket;
+        y.no = y.isChecked ? ++indexTicket: indexTicket;
       });
       group.isCheckAll = group.tickets.length === group.displayTotalTickets;
     });
