@@ -52,7 +52,7 @@
     <PackageReference Include="Fanex.Caching.Redis" Version="2.2.4" />
     <PackageReference Include="Fanex.Caching.Redis.AspNetCore" Version="2.2.4" />
     <PackageReference Include="Fanex.BetList.NumberGame" Version="2.0.0.3" />
-    <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.0.9" />
+    <PackageReference Include="Fanex.BetList.VirtualSports" Version="2.0.1-VS5-08" />
     <PackageReference Include="Fanex.Data.ProxyClient" Version="0.0.4-beta4" />
     <PackageReference Include="Fanex.LetstalkService.Client" Version="1.0.0.20" />
     <PackageReference Include="Fanex.Logging" Version="2.0.1.1" />
