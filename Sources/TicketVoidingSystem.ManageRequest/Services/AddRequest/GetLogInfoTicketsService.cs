@@ -32,7 +32,8 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
             return viewModel;
         }
 
-        var groupTicket = MapToGroupTicketViewModel(getTicketModels, request.IssueTypeId);
+        var voidTickets = getTicketModels.Where(x => !x.IsCancelCashOut);
+        var groupTicket = MapToGroupTicketViewModel(voidTickets, request.IssueTypeId);
 
         viewModel = new TicketsViewModel
         {
