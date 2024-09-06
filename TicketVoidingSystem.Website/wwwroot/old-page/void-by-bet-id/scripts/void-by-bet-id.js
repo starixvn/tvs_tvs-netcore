@@ -278,7 +278,8 @@ var VoidByBetId = {
             if (VoidByBetId.matchId == "0") {
                 const n = 37;
                 VoidByBetId.messageTemplate = VoidByBetId.templatesList.find(t => t.templateId === n);
-                VoidByBetId.generateStatementForMessage()
+                VoidByBetId.generateStatementForMessage();
+                VoidByBetId.generateParlayForMessage();
             }
             else {
                 VoidByBetId.generateMessageTemplateValue(VoidByBetId.matchInfo);
@@ -405,9 +406,12 @@ var VoidByBetId = {
                     eventDate = dateFormat(eventDate, "d/m");
                     value = value.replace('{{Event Date}}', eventDate);
                     value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{Sport type}}', 'sportType');
+                } else if ($('#radio-abnormal-bet-parlay').is(':checked')) {
+                    value = VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{Parlay}}', 'parlay');
+                } else {
+                    value = value.replace('{{Parlay}}', '');
                 }
                 value = VoidByBetId.checkSettled ? VoidByBetId.replaceTemplateValueWithLanguage(value, index, '{{CheckStatement}}', 'checkStatement') : value.replace('{{CheckStatement}}', '');
-                value = value.replace('{{Parlay}}', '');
 
                 VoidByBetId.messageTemplateData[index] = value;
             }
@@ -450,6 +454,15 @@ var VoidByBetId = {
             msgChineseTraditional: NapTicketControl.Helper.checkStatement.msgChineseTraditional,
             msgChineseSimplified: NapTicketControl.Helper.checkStatement.msgChineseSimplified,
             msgChineseNewSimplified: NapTicketControl.Helper.checkStatement.msgChineseNewSimplified
+        }
+    },
+
+    generateParlayForMessage: function () {
+        VoidByBetId.commonTemplateValue.parlay = {
+            msgEnglish: NapTicketControl.Helper.checkParlay.msgEnglish,
+            msgChineseTraditional: NapTicketControl.Helper.checkParlay.msgChineseTraditional,
+            msgChineseSimplified: NapTicketControl.Helper.checkParlay.msgChineseSimplified,
+            msgChineseNewSimplified: NapTicketControl.Helper.checkParlay.msgChineseNewSimplified
         }
     },
 
@@ -518,7 +531,9 @@ var VoidByBetId = {
             parseInt(cell.CssClass.indexOf(ContextMenu.Helper.groupParlay)) === -1 &&
             parseInt(cell.CssClass.indexOf(ContextMenu.Helper.groupPhoneBetting)) === -1;
 
-        checkBoxItem += VoidByBetId.isFilterByUserName() ? " checked='checked'>" : isNotGroupSpecial && !cell.IsDisable ? " checked='checked'>" : ">";
+        checkBoxItem += VoidByBetId.isFilterByUserName() || (VoidByBetId.isFilterByBetId() && ($('#radio-abnormal-bet-parlay').is(':checked')))
+            ? " checked='checked'>" : isNotGroupSpecial && !cell.IsDisable ? " checked='checked'>"
+            : ">";
 
         return checkBoxItem;
     },
@@ -1153,7 +1168,6 @@ var VoidByBetId = {
 
         return null;
     },
-
 };
 
 $(function () {

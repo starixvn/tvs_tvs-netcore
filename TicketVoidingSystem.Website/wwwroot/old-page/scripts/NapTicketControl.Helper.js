@@ -708,7 +708,7 @@ NapTicketControl.Helper = (function ($) {
         isSettledTicket: function (statusTicket) {
             var result = false;
             var status = statusTicket.toLowerCase();
-            var settledStatus = ['won', 'lose', 'draw'];
+            var settledStatus = ['won', 'lose', 'lost', 'draw'];
             for (var i = 0; i < 3; i++) {
                 if (status.indexOf(settledStatus[i]) > -1) {
                     result = true;
