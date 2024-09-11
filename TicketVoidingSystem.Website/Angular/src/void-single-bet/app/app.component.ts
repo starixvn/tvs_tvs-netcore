@@ -455,5 +455,10 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   updateSubIssueType(id: number): void {
     this.subIssueTypeId = id;
+    this.resetDefaultValueCheckBoxVar();
+  }
+
+  resetDefaultValueCheckBoxVar(): void {
+    this.templateValue.isCheckedVar = false;
   }
 }
