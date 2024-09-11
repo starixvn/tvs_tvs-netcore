@@ -7,7 +7,7 @@ export class TicketModel extends CommonTicketModel {
   betTypeId: number;
   subBetTypeId: number;
   isInstantSettlement: boolean;
-
+  groupBetTypeId?: number;
   constructor(item = null) {
     super(item);
   }

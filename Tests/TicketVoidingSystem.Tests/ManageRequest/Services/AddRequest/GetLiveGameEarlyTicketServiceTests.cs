@@ -10,11 +10,11 @@ using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
 {
-    public class GetLiveGameEarlyTicketServiceTests
+    public class GetLogInfoTicketServiceTests
     {
         public MapTicketsService mapTicketsService;
         public CompressDataService compressDataService;
-        public GetLiveGameEarlyTicketService service;
+        public GetLogInfoTicketsService service;
 
         [Fact]
         public void GetTicketsViewModel_ShouldReturnEmptyViewModel_WhenNoTickets()
@@ -22,15 +22,15 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
             // Arrange
             var getTicketModels = Enumerable.Empty<GetTicketModel>();
 
-            var request = new GetLiveGameEarlyTicketsRequest
+            var request = new GetLogInfoTicketsRequest
             {
-                LiveGameEarlyTicketsJson = "",
-                issueTypeId = 1
+                LogInfoTicketsJson = "",
+                IssueTypeId = 1
             };
             compressDataService = Substitute.For<CompressDataService>();
-            compressDataService.DecompressTickets(request.LiveGameEarlyTicketsJson).Returns(getTicketModels);
+            compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
 
-            service = new GetLiveGameEarlyTicketServiceImp(null, compressDataService);
+            service = new GetLogInfoTicketsServiceImp(null, compressDataService);
 
             // Act
             var result = service.GetTicketsViewModel(request);
@@ -45,10 +45,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
         public void GetTicketsViewModel_ShouldReturnViewModelWithTickets_WhenTicketsExist()
         {
             // Arrange
-            var request = new GetLiveGameEarlyTicketsRequest
+            var request = new GetLogInfoTicketsRequest
             {
-                LiveGameEarlyTicketsJson = "compressedData",
-                issueTypeId = 1
+                LogInfoTicketsJson = "compressedData",
+                IssueTypeId = 1
             };
 
             var getTicketModels = new List<GetTicketModel>
@@ -60,10 +60,10 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.AddRequest
 
             compressDataService = Substitute.For<CompressDataService>();
             mapTicketsService = Substitute.For<MapTicketsService>();
-            compressDataService.DecompressTickets(request.LiveGameEarlyTicketsJson).Returns(getTicketModels);
+            compressDataService.DecompressTickets(request.LogInfoTicketsJson).Returns(getTicketModels);
             mapTicketsService.MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), null, ChoiceType.None, 1).Returns(ticket);
 
-            service = new GetLiveGameEarlyTicketServiceImp(mapTicketsService, compressDataService);
+            service = new GetLogInfoTicketsServiceImp(mapTicketsService, compressDataService);
 
             // Act
             var result = service.GetTicketsViewModel(request);

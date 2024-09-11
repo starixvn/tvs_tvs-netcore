@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';

@@ -52,11 +52,11 @@ class Helper {
   };
 }
 describe('MarkUnmarkTicketComponent', () => {
-  it('#copiedAffectLicenseees should call #window.alert', async () => {
+  it('#copiedAffectLicensees should call #window.alert', async () => {
     const component = new MarkUnmarkTicketComponent(null, null, null);
     window.alert = jest.fn();
 
-    component.copiedAffectLicenseees();
+    component.copiedAffectLicensees();
 
     expect(window.alert).toBeCalledTimes(1);
   });

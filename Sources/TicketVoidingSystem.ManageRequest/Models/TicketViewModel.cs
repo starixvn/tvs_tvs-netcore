@@ -60,4 +60,5 @@ public class TicketViewModel
     public bool IsBonus { get; set; }
     public bool IsMarked { get; set; }
     public int SiteDbGroupId { get; set; }
+    public short? GroupBetTypeId { get; set; }
 }

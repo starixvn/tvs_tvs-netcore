@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { LocalStorageCacheConstant } from 'src/utility/constants/local-storage-cache.constant';
-import { AbnormalFilterBy, TVSRequestActionType } from '../../../utility/constants/config';
+import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
+import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
@@ -219,7 +219,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     alert(`Request No.${this.requestId} has been copied to clipboard.`);
   }
 
-  async copyLetstalkRequestInfo() {
+  async copyLetsTalkRequestInfo() {
     let logInfoDetail = [];
     if (this.isRedCard()) {
       logInfoDetail = this.eventRedCardComponent.getLogInfoDetail();
@@ -234,7 +234,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.copyRequestInfoService.copyLetstalkRequestInfo(this.requestId, this.matchId, logInfoDetail, this.model.others.operatorsList);
+    this.copyRequestInfoService.copyLetsTalkRequestInfo(this.requestId, this.matchId, logInfoDetail, this.model.others.operatorsList);
     this.addRequestStore.changeBlockingUiStatus(false);
     alert(`Request No.${this.requestId} has been copied to clipboard.`);
   }

@@ -1,7 +1,6 @@
 import { ElementRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
 import { Shallow } from 'shallow-render';
 import { LinkedLogComponent } from './linked-log.component';
 import { LinkedLogsViewModel } from './linked-log.model';

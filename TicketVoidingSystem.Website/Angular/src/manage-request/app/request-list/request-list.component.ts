@@ -31,14 +31,14 @@ export class RequestListComponent implements OnInit, OnChanges {
   @Input() requestStatusChangeEvent: EventEmitter<RequestStatus[]>;
   @Output() exportExcelEvent = new EventEmitter<boolean>();
   @Output() reload = new EventEmitter<boolean>();
+
   displayedModels: RequestModel[] = [];
   paging = new PagingModel();
   actions: Selection[] = [];
   issueTypesModel = new IssueTypesModel();
-  isBlock: boolean;
   ticketListModal = new TicketListModal();
-
   tooltip = new Tooltip();
+
   constructor(
     private readonly modalService: ModalService,
     private readonly commonService: CommonService,
@@ -86,14 +86,10 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   checkVoided(details: DetailRequestModel[]): boolean {
-    let total = 0;
-    details.forEach(item => {
-      total = total + item.totalSingleProcessed + item.totalParlayProcessed;
-    });
-
+    const total = details.reduce((sum, item) => sum + item.totalSingleProcessed + item.totalParlayProcessed, 0);
     return total > 0;
   }
-
+  
   checkCanEdit(eventDate: Date, issueTypeId: number, createdDate: Date): boolean {
     if (issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET
       || issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT
@@ -234,15 +230,18 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   private isIssueTypeHaveMultipleMatches(issueTypeId: number): boolean {
-    return StaticService.isDangerAccepted(issueTypeId.toString()) ||
-      StaticService.isWrongHDP(issueTypeId.toString()) ||
-      StaticService.isWrongOU(issueTypeId.toString()) ||
-      StaticService.isWrong1stOU(issueTypeId.toString()) ||
-      StaticService.isWrong1stHDP(issueTypeId.toString()) ||
-      StaticService.isRedCard(issueTypeId.toString()) ||
-      StaticService.isEarlyKickOff(issueTypeId.toString()) ||
-      StaticService.isAbnormalBet(issueTypeId.toString()) ||
-      StaticService.isWrongKickOff(issueTypeId.toString());
+    const issueTypeStr = issueTypeId.toString();
+    return [
+        StaticService.isDangerAccepted,
+        StaticService.isWrongHDP,
+        StaticService.isWrongOU,
+        StaticService.isWrong1stOU,
+        StaticService.isWrong1stHDP,
+        StaticService.isRedCard,
+        StaticService.isEarlyKickOff,
+        StaticService.isAbnormalBet,
+        StaticService.isWrongKickOff
+    ].some(fn => fn(issueTypeStr));
   }
 
   public async copyRequestDescription(item: RequestModel): Promise<void> {
@@ -252,10 +251,17 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   public isCanCopyRequestDescription(issueTypeId: number): boolean {
-    return StaticService.isDangerAccepted(issueTypeId.toString()) || StaticService.isRedCard(issueTypeId.toString()) || StaticService.isWrongScore(issueTypeId.toString())
-      || StaticService.isReducedOver(issueTypeId.toString()) || StaticService.isAbandoned(issueTypeId.toString()) || StaticService.isNotParticipate(issueTypeId.toString())
-      || StaticService.isLikelyWrongMarketOffered(issueTypeId.toString());
-  }
+    const issueTypeStr = issueTypeId.toString();
+    return [
+        StaticService.isDangerAccepted,
+        StaticService.isRedCard,
+        StaticService.isWrongScore,
+        StaticService.isReducedOver,
+        StaticService.isAbandoned,
+        StaticService.isNotParticipate,
+        StaticService.isLikelyWrongMarketOffered
+    ].some(fn => fn(issueTypeStr));
+}
 
   public getDetailTotalTickets(issueTypeId: number, detail: DetailRequestModel): string {
     const info: string[] = [];
@@ -277,15 +283,13 @@ export class RequestListComponent implements OnInit, OnChanges {
     return StaticService.isRecoverTicket(issueTypeId);
   }
 
-  getHtmlClassForCopyDescriptionIcon(isProcessingCopyDescription: boolean): string {
-    if (isProcessingCopyDescription) {
-      return 'fas fa-spinner fa-spin copy-request-info disable-icon';
-    } else {
-      return 'fa fa-paste copy-request-info';
-    }
+  public getHtmlClassForCopyDescriptionIcon(isProcessingCopyDescription: boolean): string {
+    return isProcessingCopyDescription 
+      ? 'fas fa-spinner fa-spin copy-request-info disable-icon'
+      : 'fa fa-paste copy-request-info';
   }
 
-  isShowIconMissingInfo(value: string): boolean {
-    return this.isShowMissingInfo && (value === null || value === '');
+  public isShowIconMissingInfo(value: string): boolean {
+    return this.isShowMissingInfo && !value;
   }
 }

@@ -6,25 +6,25 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
-public interface GetLiveGameEarlyTicketService
+public interface GetLogInfoTicketsService
 {
-    public TicketsViewModel GetTicketsViewModel(GetLiveGameEarlyTicketsRequest request);
+    public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request);
 }
 
-public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
+public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
 {
     private readonly MapTicketsService mapTicketsService;
     private readonly CompressDataService compressDataService;
 
-    public GetLiveGameEarlyTicketServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
+    public GetLogInfoTicketsServiceImp(MapTicketsService mapTicketsService, CompressDataService compressDataService)
     {
         this.mapTicketsService = mapTicketsService;
         this.compressDataService = compressDataService;
     }
 
-    public TicketsViewModel GetTicketsViewModel(GetLiveGameEarlyTicketsRequest request)
+    public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
-        var getTicketModels = compressDataService.DecompressTickets(request.LiveGameEarlyTicketsJson);
+        var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);
         var viewModel = new TicketsViewModel();
 
         if (!getTicketModels.Any())
@@ -32,7 +32,8 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
             return viewModel;
         }
 
-        var groupTicket = MapToGroupTicketViewModel(getTicketModels, request.issueTypeId);
+        var voidTickets = getTicketModels.Where(x => !x.IsCancelCashOut);
+        var groupTicket = MapToGroupTicketViewModel(voidTickets, request.IssueTypeId);
 
         viewModel = new TicketsViewModel
         {
@@ -56,7 +57,7 @@ public class GetLiveGameEarlyTicketServiceImp : GetLiveGameEarlyTicketService
 
         return new Group<TicketViewModel>
         {
-            Name = tickets.FirstOrDefault().BetType,
+            Name = tickets.FirstOrDefault()?.BetType,
             Tickets = tickets,
             DisplayTotalTickets = getTicketModels.Count()
         };

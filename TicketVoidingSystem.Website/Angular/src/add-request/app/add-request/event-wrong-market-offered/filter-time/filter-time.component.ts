@@ -17,8 +17,8 @@ export class FilterTimeComponent {
   @Output() refreshEvent = new EventEmitter();
   @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
-  tooltip = new Tooltip();
 
+  tooltip = new Tooltip();
   private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
 
   constructor(
@@ -37,7 +37,7 @@ export class FilterTimeComponent {
         this.filterWrongMarketOfferedModel.toDateTime, this.tooltip, this.FROM_DATE_TIME_CLASS);
   }
 
-  emitRefreshEvent() {
+  public emitRefreshEvent() {
     this.refreshEvent.emit();
   }
 }

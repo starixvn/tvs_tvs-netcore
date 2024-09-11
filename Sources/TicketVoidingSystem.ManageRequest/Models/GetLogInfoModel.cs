@@ -51,6 +51,9 @@ public class LogInfoDetail
 
     // Wrong HDP/1stHDP, Wrong OU/1H OU, Wrong Odds
     public string? LiveGameEarlyTicketsJson { get; set; }
+
+    // Wrong Market Offered & Technical Error
+    public string? LogInfoTicketsJson { get; set; }
 }
 
 public class Validation

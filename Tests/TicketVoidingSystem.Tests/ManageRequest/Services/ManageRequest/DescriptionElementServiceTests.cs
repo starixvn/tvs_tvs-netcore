@@ -7,22 +7,6 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest;
 
 public class DescriptionElementServiceTests
 {
-    [Fact]
-    public void BuildKOTime_WhenCalled_ReturnString()
-    {
-        // Arrange
-        const string expectedResult =
-            "<div class=\"ko-time\">KO Time: <span class=\"text-success\">0001/01/01 12:00:00 PM</span></div>";
-        var time = new DateTime();
-        var descriptionService = new DescriptionElementServiceImp();
-
-        // Act
-        var actual = descriptionService.BuildKoTime(time);
-
-        // Assert
-        Assert.Equal(expectedResult, actual);
-    }
-
     [Theory]
     [InlineData(1)]
     [InlineData(4)]

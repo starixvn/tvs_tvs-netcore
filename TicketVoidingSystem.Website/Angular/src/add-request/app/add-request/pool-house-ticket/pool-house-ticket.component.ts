@@ -3,12 +3,10 @@ import * as _ from 'lodash';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
 import { StaticService } from '../../../../utility/services/static.service';
-
 import { GroupBetType, GroupBetTypesModel } from './group-bettypes-pool-house/group-bettypes-pool-house.model';
 import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsModel } from './tickets/tickets.model';
-
 
 @Component({
   selector: 'pool-house-tickets',
@@ -17,7 +15,7 @@ import { TicketsModel } from './tickets/tickets.model';
 })
 export class PoolHouseTicketComponent implements OnChanges {
   @Input() model = new PoolHouseTicketsModel();
-  @Output() saveEventOuput = new EventEmitter<PoolHouseTicketsModel>();
+  @Output() saveEventOutput = new EventEmitter<PoolHouseTicketsModel>();
   poolHouseTicketsSections: PoolHouseTicketsSection[] = [];
   affectedSection: PoolHouseTicketsSection;
   otherSection: PoolHouseTicketsSection;
@@ -52,12 +50,14 @@ export class PoolHouseTicketComponent implements OnChanges {
       tickets: affectedTickets,
       isCollapsed: false
     };
+
     return this.affectedSection;
   }
 
   public getOtherSection(): PoolHouseTicketsSection {
     const otherTickets = new TicketsModel();
     otherTickets.initData(this.model.otherTickets);
+    otherTickets.checkAllTickets();
     const otherGroupBetTypes = this.model.groupBetTypes.filter(x => x.groupName === 'Others');
     this.otherSection = {
       isAffected: false,
@@ -74,16 +74,16 @@ export class PoolHouseTicketComponent implements OnChanges {
   private changeCheckBetTypeAndTicket(): void {
     if (this.model.checkedBetTypes === PoolHouseTicketValue.SELECT_ALL_BETTYPE) {
       this.affectedSection.groupBetTypesModel.checkAllBetType();
-      this.affectedSection.tickets.checkAllTickets();
+      this.affectedSection.tickets.checkAllTicketsForPoolHousePopup();
     } else {
       this.affectedSection.groupBetTypesModel.checkBetType(this.model.checkedBetTypes.split(',').map(i => Number(i)));
-      this.affectedSection.tickets.handlecheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
+      this.affectedSection.tickets.handleCheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
     }
     this.affectedSection.tickets.updateSelectedTickets();
   }
 
   public changedBetTypes(betTypes: number[]) {
-    this.affectedSection.tickets.handlecheckTicketByBetTypes(betTypes);
+    this.affectedSection.tickets.handleCheckTicketByBetTypes(betTypes);
     this.affectedSection.tickets.updateSelectedTickets();
   }
 
@@ -95,7 +95,7 @@ export class PoolHouseTicketComponent implements OnChanges {
     this.model.isOpen = false;
     this.model.checkedBetTypes = this.getCheckedBetTypes();
 
-    this.saveEventOuput.emit(this.model);
+    this.saveEventOutput.emit(this.model);
   }
 
   private getCheckedBetTypes(): string {
@@ -107,7 +107,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   updateSelectedBetTypes(betTypes: string[]) {
-    this.otherSection.tickets.handlecheckTicketByBetTypes(betTypes.map(i => Number(i)));
+    this.otherSection.tickets.handleCheckTicketByBetTypes(betTypes.map(i => Number(i)));
   }
 
   initFilterBetTypes(groupBetTypes: GroupBetType[]): MultipleSelection {

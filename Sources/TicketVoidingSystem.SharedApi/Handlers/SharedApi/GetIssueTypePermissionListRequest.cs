@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -34,7 +35,8 @@ public class GetIssueTypePermissionListHandler : IRequestHandler<GetIssueTypePer
                 issueTypePermissionList.Add(item.IssueType);
             }
         }
+        var sortedFunctionKeys = issueTypePermissionList.OrderBy(x => x.IssueTypeName).ToList();
 
-        return issueTypePermissionList;
+        return sortedFunctionKeys;
     }
 }

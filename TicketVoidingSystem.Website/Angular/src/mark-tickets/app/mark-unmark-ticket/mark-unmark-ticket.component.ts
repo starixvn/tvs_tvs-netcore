@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import { ErrorCodeLockMatch } from 'src/utility/constants/config';
+import { ErrorCodeLockMatch } from '../../../utility/constants/config';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
@@ -34,7 +34,7 @@ export class MarkUnmarkTicketComponent {
   query = new GetTicketsQuery();
   isBlockTickets: boolean;
   isBlockAllTickets: boolean;
-  isShowAffectLicenseees = false;
+  isShowAffectLicensees = false;
   isShowTickets: boolean;
   isShowMatch: boolean;
   isShowAllTickets: boolean;
@@ -43,7 +43,6 @@ export class MarkUnmarkTicketComponent {
   showLicensees: boolean;
   isBetIdBorder: boolean;
   uncheckedTransIds: string[] = [];
-
   match = new MatchModel();
   ticketsModel = new TicketsModel();
   allMarkedTicketsModel = new Array<AllMarkedTicketModel>();
@@ -59,7 +58,7 @@ export class MarkUnmarkTicketComponent {
     this.getStatus = query.status === '0' ? 'Mark' : 'Unmark';
     this.paging.pageSize = PagingConstant.SIZE_DEFAULT;
     this.query = query;
-    this.isShowAffectLicenseees = false;
+    this.isShowAffectLicensees = false;
     if (query.searchBy === FilterSearchBy.ALL_MARKED) {
       this.isShowAllTickets = true;
       this.isShowTickets = false;
@@ -121,7 +120,7 @@ export class MarkUnmarkTicketComponent {
     }
   }
 
-  copiedAffectLicenseees() {
+  copiedAffectLicensees() {
     alert('The Licensee list has been copied to clipboard.');
   }
 
@@ -168,7 +167,7 @@ export class MarkUnmarkTicketComponent {
   }
 
   async refreshAllMarkedTickets() {
-    this.isShowAffectLicenseees = false;
+    this.isShowAffectLicensees = false;
     this.isShowAllTickets = true;
     this.isShowTickets = false;
     this.isShowMatch = false;
@@ -316,6 +315,7 @@ export class MarkUnmarkTicketComponent {
       }
     );
   }
+
   private getAllMarkedTicketQuery(matches: AllMarkedTicketModel[]) : AllMarkedTicketQuery{
     const query = new AllMarkedTicketQuery();
     query.matches = matches.map(match => {

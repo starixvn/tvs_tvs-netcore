@@ -6,7 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ToastrModule } from 'ngx-toastr';
-import { IssueTypeModule } from 'src/utility/components/issue-type/issue-type.module';
+import { IssueTypeModule } from '../../utility/components/issue-type/issue-type.module';
 import { RequestInfoModule } from '../../manage-request/app/ticket-list/request-info/request-info.module';
 import { AdvancedModeModule } from '../../utility/components/advanced-mode/advanced-mode.module';
 import { DateTimeModule } from '../../utility/components/date-time/date-time.module';

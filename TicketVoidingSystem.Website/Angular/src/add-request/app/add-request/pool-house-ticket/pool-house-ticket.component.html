@@ -22,8 +22,7 @@
                 </div>
                 <div class="section-body" [(ngbCollapse)]="section.isCollapsed">
                   <group-bettypes-pool-house
-                    [affectedGroupBetTypesModel]="section.groupBetTypesModel"
-                    (changedBetTypesEvent)="changedBetTypes($event)">
+                    [affectedGroupBetTypesModel]="section.groupBetTypesModel" (changedBetTypesEvent)="changedBetTypes($event)">                  
                   </group-bettypes-pool-house>
                   <ng-container *ngIf="!section.isAffected && section.filterBetTypes">
                     <multiple-selection class="multiple-selection filter-site-dropdown mb-1 mt-2" [multipleSelect]="section.filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">

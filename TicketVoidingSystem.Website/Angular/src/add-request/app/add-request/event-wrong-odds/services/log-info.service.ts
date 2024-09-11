@@ -55,5 +55,4 @@ export class LogInfoService {
     logInfoEvent.logInfoDetail = null;
     logInfoEvent.messageValidationLogInfo = null;
   }
-
 }

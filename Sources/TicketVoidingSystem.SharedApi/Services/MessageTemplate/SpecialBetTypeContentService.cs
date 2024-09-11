@@ -49,7 +49,7 @@ public class SpecialBetTypeContentServiceImp : SpecialBetTypeContentService
             ContentChineseTraditional = betListService.GetBetTypeNameChineseTraditional(ticket),
             ContentChineseSimplified = betListService.GetBetTypeNameChineseSimplified(ticket),
             ContentNewChineseSimplified = betListService.GetBetTypeNameNewChineseSimplified(ticket)
-        });
+        }).DistinctBy(x => x.ContentEnglish);
     }
 
     private static long? GetBetIdForParlay(string betCheck)

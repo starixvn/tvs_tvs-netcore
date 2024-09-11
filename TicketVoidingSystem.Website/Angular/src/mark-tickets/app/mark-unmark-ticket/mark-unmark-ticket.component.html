@@ -10,14 +10,14 @@
     </all-marked-ticket-list>
     <match-detail [matchDetail]="match" [isShowMatch]="isShowMatch && query.searchBy === '0'"></match-detail>
     <div class="affected-licensees" *ngIf="showLicensees && licenseesName.length > 0">
-        <div class="collapse-licensees fa" (click)="isShowAffectLicenseees = !isShowAffectLicenseees">
-            <em [ngClass]="{'fa-chevron-up':isShowAffectLicenseees, 'fa-chevron-down':!isShowAffectLicenseees}"></em>
+        <div class="collapse-licensees fa" (click)="isShowAffectLicensees = !isShowAffectLicensees">
+            <em [ngClass]="{'fa-chevron-up':isShowAffectLicensees, 'fa-chevron-down':!isShowAffectLicensees}"></em>
         </div>
         <div class="collapse-licensees-content">
             <span class="note">Attn: system will notify affected tickets to these Licensee(s): </span><br />
-            <span [hidden]="!isShowAffectLicenseees" class="affected-licensees-highlight"
+            <span [hidden]="!isShowAffectLicensees" class="affected-licensees-highlight"
                 id="affected-licensees-highlight" ngxClipboard [cbContent]="licenseesName"
-                (click)="copiedAffectLicenseees()">{{licenseesName}}</span>
+                (click)="copiedAffectLicensees()">{{licenseesName}}</span>
         </div>
     </div>
 

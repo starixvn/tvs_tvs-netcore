@@ -3,6 +3,9 @@
     <table>
       <thead>
         <tr>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
           <th scope="col" class="col-tb-3">
             <div>BetID</div>
           </th>
@@ -46,13 +49,14 @@
   <div class="ticket-content">
     <table>
       <tbody *ngFor="let group of model.groups">
-        <tr>
+        <tr *ngIf="group.name">
           <td [attr.colspan]="13" class="group-ticket" (click)="group.isExpanded = !group.isExpanded">
             <span [ngClass]="{'icon-down':group.isExpanded, 'icon-right':!group.isExpanded}"></span>
             {{group.name}} ({{group.displayTotalTickets}})
           </td>
         </tr>
         <tr *ngFor="let ticket of group.tickets" [ngClass]="{'display-none':!group.isExpanded || !ticket.isChecked}">
+          <td class="col-tb-1">{{ticket.no}}</td>
           <td class="col-tb-3">
             <div [innerHTML]="ticket.betId | sanitizeHtml"></div>
           </td>

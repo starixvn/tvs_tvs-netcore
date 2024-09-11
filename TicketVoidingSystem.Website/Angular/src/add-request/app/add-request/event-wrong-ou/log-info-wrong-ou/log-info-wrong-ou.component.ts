@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
-import { LiveGameEarlyTicketsModel, LiveGameEarlyTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
@@ -40,7 +39,7 @@ export class LogInfoWrongOuComponent implements OnInit {
   isBlock = false;
 
   poolHouseTicketsModel = new PoolHouseTicketsModel();
-  liveGameEarlyTicketsModel = new LiveGameEarlyTicketsModel();
+  affectedTicketsModel = new AffectedTicketsModel();
   constructor(
     private readonly modalService: ModalService,
     private readonly addRequestStore: AddRequestStore,
@@ -105,22 +104,22 @@ export class LogInfoWrongOuComponent implements OnInit {
   public async openLiveGameEarlyDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
-      const query: LiveGameEarlyTicketsQuery = {
-        liveGameEarlyTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+      const query: LogInfoTicketsQuery = {
+        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 
-      this.liveGameEarlyTicketsModel.tickets = await this.addRequestApiService.GetLiveGameEarlyTickets(query);
-      this.liveGameEarlyTicketsModel.tickets.groups[0].isExpanded = true;
-      this.liveGameEarlyTicketsModel.tickets.groups[0].tickets.forEach(x => x.isChecked = true);
-
+      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      this.affectedTicketsModel.tickets = new TicketsModel();
+      this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
+      this.affectedTicketsModel.tickets.checkAllTickets();
     } else {
-      this.liveGameEarlyTicketsModel.tickets = new TicketsModel();
+      this.affectedTicketsModel.tickets = new TicketsModel();
     }
 
     await this.logAnalysisService.writeLogClickLiveGameDetails(this.filter.issueTypeId);
     this.addRequestStore.changeBlockingUiStatus(false);
-    this.liveGameEarlyTicketsModel.isOpen = true;
+    this.affectedTicketsModel.isOpen = true;
   }
 
   public async openPoolHouseDetails(): Promise<void> {

@@ -166,25 +166,17 @@ export class UsernamesComponent implements OnChanges {
 
   checkValidItems(): boolean {
     const validIndex = this.groupUsername.checkValidItems();
-    let result = true;
-    switch (validIndex) {
-      case 1:
-        this.tooltip.display(this.errorTooltipClassName, LABELS.REQUIRED_USERNAME);
-        result = false;
-        break;
-      case 2:
-        this.tooltip.display(this.errorTooltipClassName, LABELS.INVALID_USERNAMES);
-        result = false;
-        break;
-      case 3:
-        this.tooltip.display(this.errorTooltipClassName, LABELS.MAX_USERNAME_EXCEEDED);
-        result = false;
-        break;
-      case 0:
-        result = true;
-        break;
+    const tooltipMessages = {
+      1: LABELS.REQUIRED_USERNAME,
+      2: LABELS.INVALID_USERNAMES,
+      3: LABELS.MAX_USERNAME_EXCEEDED,
+    };
+    if (validIndex in tooltipMessages) {
+      this.tooltip.display(this.errorTooltipClassName, tooltipMessages[validIndex]);
+      return false;
     }
-    return result;
+  
+    return true;
   }
 
   clearUsernames() {
@@ -210,8 +202,8 @@ export class UsernamesComponent implements OnChanges {
 
   removeInvalidUserNames(){
     this.groupUsername.removeExistedUsernames();
-    var usernames = this.groupUsername.getAllValue();
-    var duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
+    let usernames = this.groupUsername.getAllValue();
+    let duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
     this.groupUsername.removeInvalidUsernames();
     duplicatedItems.forEach(x => this.addItem(x, true))
   }

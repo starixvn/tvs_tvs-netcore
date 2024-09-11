@@ -10,9 +10,6 @@ import { SaveRequestArg } from '../models/save-request-arg.model';
   providedIn: 'root'
 })
 export class ValidationService {
-  private readonly PLAYER_CLASS = 'player-dropdown';
-  private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';
-
   public validateCommonData(eventLeague: EventLeagueComponent, filterTimeComponent: FilterTimeComponent, advancedMode?: AdvancedModeAddRequestComponent): boolean {
     if (!eventLeague.isMatchIdValid()) {
       return false;
@@ -38,7 +35,8 @@ export class ValidationService {
     const isHasWarningTicket = argWrongMarketOffered.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
     const isEditingByAnotherUser = argWrongMarketOffered.isEdit && argWrongMarketOffered.userId !== Number(document.getElementById('body').getAttribute('user-id'));
     const isHasWarningTakenNote = argWrongMarketOffered.isEdit
-      && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && argWrongMarketOffered.filter.action !== argWrongMarketOffered.actionIdOfFirstTimeAccess;
+      && argWrongMarketOffered.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() 
+      && argWrongMarketOffered.filter.action !== argWrongMarketOffered.actionIdOfFirstTimeAccess;
 
     return isHasWarningSettledTicket || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
   }

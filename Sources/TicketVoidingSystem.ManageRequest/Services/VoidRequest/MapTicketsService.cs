@@ -52,7 +52,6 @@ public class MapTicketsServiceImp : MapTicketsService
         ticket.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();
         ticket.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
         ticket.Currency = item.CurrencyName;
-
         ticket.Value = item.IsMixParlay ? item.SubTransId.ToString() : item.TransId.ToString();
         ticket.MainTransId = item.MainTransId.ToString();
         ticket.IsCricket = item.IsCricket;
@@ -62,6 +61,7 @@ public class MapTicketsServiceImp : MapTicketsService
         ticket.BetTypeId = item.BetType;
         ticket.IsBonus = item.WalletType > 0;
         ticket.IsCancelCashOut = item.IsCancelCashOut;
+        ticket.GroupBetTypeId = item.GroupBetTypeId;
         return ticket;
     }
 }

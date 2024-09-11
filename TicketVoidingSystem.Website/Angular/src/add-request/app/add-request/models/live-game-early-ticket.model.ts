@@ -1,12 +1,18 @@
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { BetTypeAddRequest } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { GroupBetTypeCountModel } from './get-log-info.model';
 
-export class LiveGameEarlyTicketsQuery {
-    liveGameEarlyTicketsJson: string;
+export class LogInfoTicketsQuery {
+    logInfoTicketsJson: string;
     issueTypeId: number;
 }
 
-export class LiveGameEarlyTicketsModel {
+export class AffectedTicketsModel {
     isOpen: boolean;
-    checkedBetTypes: string;
     tickets: TicketsModel;
-  }
+    groupBetTypesCount: GroupBetTypeCountModel[];
+    isShowDetailBetTypeCount: boolean;
+    checkedBetTypes?: BetTypeAddRequest[];
+    filterBetTypes?: MultipleSelection;
+}

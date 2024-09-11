@@ -15,16 +15,16 @@ public class RenderRequestServiceTests
     private readonly DescriptionService descriptionService;
     private readonly RenderRequestServiceImp manageRequestService;
     private readonly IMapper mapper;
+    private readonly MatchService matchService;
     private readonly RemotingRefWrapperService remotingRefWrapperService;
 
     public RenderRequestServiceTests()
     {
         descriptionService = Substitute.For<DescriptionService>();
-
         mapper = Substitute.For<IMapper>();
-
+        matchService = Substitute.For<MatchService>();
         remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
-        manageRequestService = new RenderRequestServiceImp(mapper, descriptionService, remotingRefWrapperService);
+        manageRequestService = new RenderRequestServiceImp(mapper, descriptionService, remotingRefWrapperService, matchService);
     }
 
     [Fact]
@@ -46,6 +46,7 @@ public class RenderRequestServiceTests
         descriptionService.Build(Arg.Any<RequestDescription>()).ReturnsForAnyArgs("abc");
         mapper.Map<RequestViewModel>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(requestViewModel);
         mapper.Map<RequestDescription>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(requestDescription);
+        matchService.GetMatchEvent(Arg.Any<RequestDescription>()).Returns("A - B");
 
         // Act
         _ = manageRequestService.Render(groupRequestModel);
@@ -67,6 +68,7 @@ public class RenderRequestServiceTests
         remotingRefWrapperService.GetLeagueName(default, default).ReturnsForAnyArgs("bb");
         mapper.Map<RequestEventViewModel>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(detail);
         descriptionService.Build(Arg.Any<RequestDescription>()).ReturnsForAnyArgs("abc");
+        matchService.GetMatchEvent(Arg.Any<RequestDescription>()).Returns("A - B");
         mapper.Map<RequestDescription>(Arg.Any<RequestModel>()).ReturnsForAnyArgs(requestDescription);
 
         // Act

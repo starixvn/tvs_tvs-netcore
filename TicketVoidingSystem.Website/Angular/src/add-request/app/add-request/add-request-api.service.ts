@@ -20,7 +20,7 @@ import { CheckTicket14Query } from './event-ticket14/models/check-ticket14.query
 import { CheckTickets14Result } from './event-ticket14/models/check-tickets14-result.model';
 import { MaxBetAndSpreadInfo, MaxBetAndSpreadQuery } from './event-wrong-odds/models/filter-wrong-odds.model';
 import { GetChildMatchQuery } from './models/get-child-match.query';
-import { LiveGameEarlyTicketsQuery } from './models/live-game-early-ticket.model';
+import { LogInfoTicketsQuery } from './models/live-game-early-ticket.model';
 import { PermissionAddRequest } from './models/permission-add-request.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from './models/sub-type-note.model';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from './pool-house-ticket/linked-log/linked-log.model';
@@ -154,8 +154,8 @@ export class AddRequestApiService {
   }
 
   /* istanbul ignore next */
-  async GetLiveGameEarlyTickets(query: LiveGameEarlyTicketsQuery): Promise<TicketsModel> {
-    return this.httpService.postJson(query, 'api/AddRequest/GetLiveGameEarlyTickets');
+  async GetLogInfoTickets(query: LogInfoTicketsQuery): Promise<TicketsModel> {
+    return this.httpService.postJson(query, 'api/AddRequest/GetLogInfoTickets');
   }
 
   /* istanbul ignore next */
