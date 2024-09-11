@@ -8,16 +8,16 @@ var subTicketParlay = {
             RefNo: refNo
         };
 
-        var subTicket = $('#divEvent_' + subTransId);
+        var subTicket = $(`#divEvent_${subTransId}`);
 
         if (subTicket.html() !== '') {
             var display = subTicket.css('display');
             if (display === 'block') {
                 subTicket.hide();
-                $('#dvFavorite_' + subTransId).show();
+                $(`#dvFavorite_${subTransId}`).show();
             } else {
                 subTicket.show();
-                $('#dvFavorite_' + subTransId).hide();
+                $(`#dvFavorite_${subTransId}`).hide();
             }
 
             return;
@@ -43,8 +43,8 @@ var subTicketParlay = {
                     }
                 }
 
-                $('#divEvent_' + subTransId).html(arrChoice.join('')).show();
-                $('#dvFavorite_' + subTransId).hide();
+                $(`#divEvent_${subTransId}`).html(arrChoice.join('')).show();
+                $(`#dvFavorite_${subTransId}`).hide();
             },
             error: function () {
             },
@@ -66,18 +66,18 @@ var subTicketParlay = {
             Handicap2: handicap2
         };
 
-        var subTicket = $('#divEvent_' + subTransId);
+        var subTicket = $(`#divEvent_${subTransId}`);
 
         if (subTicket.html() !== '') {
             var display = subTicket.css('display');
             if (display === 'block') {
                 subTicket.hide();
-                $('#dvFavorite_' + subTransId).show();
-                $('#combinationOfferName_' + subTransId + transIndex).find('div').show();
+                $(`#dvFavorite_${subTransId}`).show();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').show();
             } else {
                 subTicket.show();
-                $('#dvFavorite_' + subTransId).hide();
-                $('#combinationOfferName_' + subTransId + transIndex).find('div').hide();
+                $(`#dvFavorite_${subTransId}`).hide();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
             }
 
             return;
@@ -106,9 +106,9 @@ var subTicketParlay = {
                     }
                 }
 
-                $('#divEvent_' + subTransId).html(arrChoice.join('')).show();
-                $('#dvFavorite_' + subTransId).hide();
-                $('#combinationOfferName_' + subTransId + transIndex).find('div').hide();
+                $(`#divEvent_${subTransId}`).html(arrChoice.join('')).show();
+                $(`#dvFavorite_${subTransId}`).hide();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
             },
             error: function () {
             },
@@ -129,7 +129,7 @@ var mainTicketParlay = {
             TransId: subTransId
         };
 
-        var subTicket = $('#divEvent_' + refNo);
+        var subTicket = $(`#divEvent_${refNo}`);
 
         if (subTicket.html() !== '') {
             var display = subTicket.css('display');
@@ -158,7 +158,7 @@ var mainTicketParlay = {
                     arrChoice.push('<div class="line">' + row.choice + '</div>');
                 }
 
-                $('#divEvent_' + refNo).html(arrChoice.join('')).show();
+                $(`#divEvent_${refNo}`).html(arrChoice.join('')).show();
             },
             error: function () {
             },
@@ -181,16 +181,16 @@ var mainTicketParlay = {
             Handicap2: handicap2
         };
 
-        var subTicket = $('#divEvent_' + refNo + transIndex);
+        var subTicket = $(`#divEvent_${refNo}${transIndex}`);
 
         if (subTicket.html() !== '') {
             var display = subTicket.css('display');
             if (display === 'block') {
                 subTicket.hide();
-                $('#combinationOfferName_' + refNo + transIndex).find('div').show();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').show();
             } else {
                 subTicket.show();
-                $('#combinationOfferName_' + refNo + transIndex).find('div').hide();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').hide();
             }
 
             return;
@@ -217,8 +217,8 @@ var mainTicketParlay = {
                     }
                 }
 
-                $('#divEvent_' + +refNo + transIndex).html(arrChoice.join('')).show();
-                $('#combinationOfferName_' + refNo + transIndex).find('div').hide();
+                $(`#divEvent_${refNo}${transIndex}`).html(arrChoice.join('')).show();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').hide();
             },
             error: function () {
             },
@@ -360,7 +360,7 @@ $(function () {
 function showSingleMatchParlayDetail(transId, cusId, status, index) {
     var param = { TransId: transId };
 
-    var subTicket = $('#divEvent_' + transId + index);
+    var subTicket = $(`#divEvent_${transId}${index}`);
 
     if (subTicket.html() !== '') {
         var display = subTicket.css('display');
@@ -382,7 +382,7 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
             Helper.disableInput();
         },
         success: function (rs) {
-            $('#divEvent_' + transId + index).html(rs).show();
+            $(`#divEvent_${transId}${index}`).html(rs).show();
         },
         error: function () {
         },

@@ -11,7 +11,7 @@ var mainTicketParlay = {
             TransId: subTransId
         };
 
-        var subTicket = $('#divEvent_' + refNo);
+        var subTicket = $(`#divEvent_${refNo}`);
 
         if (subTicket.html() !== '') {
             var display = subTicket.css('display');
@@ -41,7 +41,7 @@ var mainTicketParlay = {
                     arrChoice.push('<div class="line">' + row.choice + '</div>');
                 }
 
-                $('#divEvent_' + refNo).html(arrChoice.join('')).show();
+                $(`#divEvent_${refNo}`).html(arrChoice.join('')).show();
                 $("#ticketInfo").fanexGrid('resizeGrid');
             },
             error: function () {
@@ -65,16 +65,16 @@ var mainTicketParlay = {
             Handicap2: handicap2
         };
 
-        var subTicket = $('#divEvent_' + refNo + transIndex);
+        var subTicket = $(`#divEvent_${refNo}${transIndex}`);
 
         if (subTicket.html() !== '') {
             var display = subTicket.css('display');
             if (display === 'block') {
                 subTicket.hide();
-                $('#combinationOfferName_' + refNo + transIndex).find('div').show();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').show();
             } else {
                 subTicket.show();
-                $('#combinationOfferName_' + refNo + transIndex).find('div').hide();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').hide();
             }
 
             $("#ticketInfo").fanexGrid('resizeGrid');
@@ -101,9 +101,8 @@ var mainTicketParlay = {
                         arrChoice.push('<div class="line">' + row.choice + '</div>');
                     }
                 }
-
-                $('#divEvent_' + +refNo + transIndex).html(arrChoice.join('')).show();
-                $('#combinationOfferName_' + refNo + transIndex).find('div').hide();
+                $(`#divEvent_${refNo}${transIndex}`).html(arrChoice.join('')).show();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').hide();
                 $("#ticketInfo").fanexGrid('resizeGrid');
             },
             error: function () {
@@ -133,7 +132,7 @@ function showNewCombMP(subTransId, transIndex, refNo, handicap1, handicap2, betc
 function showSingleMatchParlayDetail(transId, cusId, status, index) {
     var param = { TransId: transId };
 
-    var subTicket = $('#divEvent_' + transId + index);
+    var subTicket = $(`#divEvent_${transId}${index}`);
 
     if (subTicket.html() !== '') {
         var display = subTicket.css('display');
@@ -157,7 +156,7 @@ function showSingleMatchParlayDetail(transId, cusId, status, index) {
             NapTicketControl.disableInput();
         },
         success: function (rs) {
-            $('#divEvent_' + transId + index).html(rs).show();
+            $(`#divEvent_${transId}${index}`).html(rs).show();
             $("#ticketInfo").fanexGrid('resizeGrid');
         },
         error: function () {
