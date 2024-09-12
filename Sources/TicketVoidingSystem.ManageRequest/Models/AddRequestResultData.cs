@@ -4,4 +4,7 @@ public class AddRequestResultData
 {
     public string MatchId { get; set; }
     public int RequestId { get; set; }
+
+    public int TotalTicketsMarkedSuccessful { get; set; }
+    public string TicketsMarkedSuccessful { get; set; }
 }

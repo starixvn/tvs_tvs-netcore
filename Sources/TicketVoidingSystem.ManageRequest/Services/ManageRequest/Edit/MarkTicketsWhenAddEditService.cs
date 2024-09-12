@@ -1,4 +1,5 @@
 ﻿using TicketVoidingSystem.ManageRequest.Constants;
+using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
 
@@ -34,12 +35,12 @@ public class MarkTicketsWhenAddEditServiceImp : MarkTicketsWhenAddEditService
         return results;
     }
 
-    private async Task<IEnumerable<Result>> ExecuteMarkTickets(int issueTypeId, string markTransIds)
+    private async Task<MarkTicketsResult> ExecuteMarkTickets(int issueTypeId, string markTransIds)
     {
         return await markTicketsService.MarkTicketsInTVS(markTransIds, issueTypeId, MarkTypeConstant.ExecuteMarkTickets);
     }
 
-    private async Task<IEnumerable<Result>> ExecuteUnMarkTickets(int issueTypeId, string unMarkTransIds)
+    private async Task<MarkTicketsResult> ExecuteUnMarkTickets(int issueTypeId, string unMarkTransIds)
     {
         return await markTicketsService.MarkTicketsInTVS(unMarkTransIds, issueTypeId, MarkTypeConstant.ExecuteUnMarkTickets);
     }
