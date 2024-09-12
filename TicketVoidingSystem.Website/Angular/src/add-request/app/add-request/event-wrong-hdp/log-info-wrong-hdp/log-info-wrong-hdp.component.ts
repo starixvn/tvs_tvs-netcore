@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
@@ -17,6 +17,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
+import { LogInfoDetailViewModel } from '../../a/log-info-detail-view-model.model';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -40,6 +41,7 @@ export class LogInfoWrongHdpComponent {
   isBlock = false;
   poolHouseTicketsModel = new PoolHouseTicketsModel();
   affectedTicketsModel = new AffectedTicketsModel();
+  logInfoDetailViewModel: LogInfoDetailViewModel;
 
   constructor(
     private readonly modalService: ModalService,
@@ -54,6 +56,14 @@ export class LogInfoWrongHdpComponent {
   public ngOnInit(): void {
     if (this.isEdit) {
       this.logInfo.isShowValidation = true;
+      this.logInfoDetailViewModel.isShowValidation = true;
+      this.logInfoDetailViewModel = new LogInfoDetailViewModel(this.logInfo.logInfoDetail);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['logInfo']) {
+      this.logInfoDetailViewModel = new LogInfoDetailViewModel(this.logInfo.logInfoDetail);
     }
   }
 
@@ -71,7 +81,9 @@ export class LogInfoWrongHdpComponent {
 
     if (this.filterWithHdpComponent.isValid()) {
       await this.logInfoService.getLogInfo([this.logInfo], this.isEdit, this.requestId, this.filter, this.primitiveProps);
+      this.logInfoDetailViewModel = new LogInfoDetailViewModel(this.logInfo.logInfoDetail);
       this.logInfo.isShowValidation = true;
+      this.logInfoDetailViewModel.isShowValidation = true;
     }
 
     this.isBlock = false;
@@ -147,11 +159,11 @@ export class LogInfoWrongHdpComponent {
     return ticketCount === 0 ? '-' : transId;
   }
 
-  public async openLiveGameEarlyDetails(): Promise<void> {
+  public async openTicketDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 

@@ -405,8 +405,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' " +
                                 "FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' " +
-                                "IsLinkGroupAIO ='False' LiveGameEarlySingleCount ='0' LiveGameEarlyCashOutCount='0' LiveGameEarlySettleCount='0' " +
-                                "LiveGameEarlyInstantlySettleCount='0' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' PoolHouseMainParlayCount='0' " +
+                                "IsLinkGroupAIO ='False' SingleCount ='0' CashOutCount='0' SettleCount='0' " +
+                                "InstantlySettleCount='0' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' PoolHouseMainParlayCount='0' " +
                                 "PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidFromTime='2018-10-30 16:20:20.222' VoidToTime='2018-10-30 16:20:20.222' " +
                                 "LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' /></root>";
         var logInfoDetail = new LogInfoDetail
@@ -444,8 +444,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' " +
                                 "FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' " +
-                                "IsLinkGroupAIO ='False' LiveGameEarlySingleCount ='' LiveGameEarlyCashOutCount='' LiveGameEarlySettleCount='' " +
-                                "LiveGameEarlyInstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' PoolHouseMainParlayCount='' " +
+                                "IsLinkGroupAIO ='False' SingleCount ='' CashOutCount='' SettleCount='' " +
+                                "InstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' PoolHouseMainParlayCount='' " +
                                 "PoolHouseInstantlySettleCount='' PoolHouseCheckedBetTypes='' VoidFromTime='' VoidToTime='' " +
                                 "LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' /></root>";
 
@@ -473,8 +473,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' " +
                                 "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' " +
-                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' LiveGameEarlySingleCount ='0' LiveGameEarlyCashOutCount='0' " +
-                                "LiveGameEarlySettleCount='0' LiveGameEarlyInstantlySettleCount='0' PoolHouseSingleCount='0' " +
+                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='0' CashOutCount='0' " +
+                                "SettleCount='0' InstantlySettleCount='0' PoolHouseSingleCount='0' " +
                                 "PoolHouseCashOutCount='0' PoolHouseMainParlayCount='0' PoolHouseInstantlySettleCount='0' " +
                                 "PoolHouseCheckedBetTypes='' VoidToTime='2018-10-30 16:20:20.222' VoidFromTime='2018-10-30 16:20:20.222' " +
                                 "LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
@@ -513,8 +513,8 @@ public class ObjectToXmlExtensionFacts
         // Arrange
         const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' " +
                                 "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' " +
-                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' LiveGameEarlySingleCount ='' " +
-                                "LiveGameEarlyCashOutCount='' LiveGameEarlySettleCount='' LiveGameEarlyInstantlySettleCount='' " +
+                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='' " +
+                                "CashOutCount='' SettleCount='' InstantlySettleCount='' " +
                                 "PoolHouseSingleCount='' PoolHouseCashOutCount='' PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' " +
                                 "PoolHouseCheckedBetTypes='' VoidToTime='' VoidFromTime='' LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
 
@@ -958,10 +958,10 @@ public class ObjectToXmlExtensionFacts
                 LogInfoDetail = new LogInfoDetail
                 {
                     LiveScores = "1",
-                    LiveGameEarlySingleCount = 1,
-                    LiveGameEarlyCashOutCount = 1,
-                    LiveGameEarlySettleCount = 1,
-                    LiveGameEarlyInstantlySettleCount = 1,
+                    SingleCount = 1,
+                    CashOutCount = 1,
+                    SettleCount = 1,
+                    InstantlySettleCount = 1,
                     PoolHouseSingleCount = 1,
                     PoolHouseCashOutCount = 1,
                     PoolHouseMainParlayCount = 1,
@@ -979,10 +979,10 @@ public class ObjectToXmlExtensionFacts
                                 "FilterFromTransTime='2022-02-02 02:02:02.000' " +
                                 "IsLinkGroup1X2='True' " +
                                 "IsLinkGroupAIO ='False' " +
-                                "LiveGameEarlySingleCount ='1' " +
-                                "LiveGameEarlyCashOutCount='1' " +
-                                "LiveGameEarlySettleCount='1' " +
-                                "LiveGameEarlyInstantlySettleCount='1' " +
+                                "SingleCount ='1' " +
+                                "CashOutCount='1' " +
+                                "SettleCount='1' " +
+                                "InstantlySettleCount='1' " +
                                 "PoolHouseSingleCount='1' " +
                                 "PoolHouseCashOutCount='1' " +
                                 "PoolHouseMainParlayCount='1' " +

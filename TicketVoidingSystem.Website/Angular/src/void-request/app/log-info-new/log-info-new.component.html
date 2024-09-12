@@ -13,9 +13,9 @@
         <span *ngIf="isHaveCancelCashOut()">Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
     </ng-container>
     <ng-container *ngIf="isShowPoolHouseTickets()">
-        LG/Early - Single Count: <strong>{{logInfoDetail.liveGameEarlySingleCount}}</strong>
-        <span *ngIf="isShowCountInfo(logInfoDetail.liveGameEarlyCashOutCount, logInfoDetail.liveGameEarlySettleCount, logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
-        [innerHTML]="countInfoContent(logInfoDetail.liveGameEarlyCashOutCount, logInfoDetail.liveGameEarlySettleCount, logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
+        LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+        <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
+        [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
         </span><br />
         <ng-container *ngIf="isMainMatch">
         <div *ngIf="isPoolHouseAffected">

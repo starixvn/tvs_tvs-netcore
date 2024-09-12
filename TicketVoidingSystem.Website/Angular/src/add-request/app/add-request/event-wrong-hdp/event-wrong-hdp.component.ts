@@ -20,6 +20,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { SportType } from '../../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'event-wrong-hdp',
@@ -115,6 +116,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.eventDate =  this.eventLeagueComponent?.selectedMatch.eventDate;
+    this.mainEvent.isSportTypeSoccer = this.eventLeagueComponent?.selectedMatch.sportType === SportType.SOCCER;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 

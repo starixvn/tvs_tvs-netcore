@@ -6,11 +6,11 @@
         <ng-container *ngIf="logInfo.logInfoDetail">
           <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
           Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
-          LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
-          <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
-          [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
+          LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+          <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
+          [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml">
         </span>&nbsp;
-        <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openLiveGameEarlyDetails()">Details</span><br />
+        <span *ngIf="!filter.isVoided" class="ticket-details" (click)="openTicketDetails()">Details</span><br />
         </ng-container>
 
         <ng-container>

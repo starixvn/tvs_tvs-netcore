@@ -101,11 +101,11 @@ export class LogInfoWrongOuComponent implements OnInit {
     return query;
   }
 
-  public async openLiveGameEarlyDetails(): Promise<void> {
+  public async openTicketDetails(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    if (this.logInfo.logInfoDetail.liveGameEarlyTicketsJson) {
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
-        logInfoTicketsJson: this.logInfo.logInfoDetail.liveGameEarlyTicketsJson,
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
         issueTypeId: Number(this.filter.issueTypeId)
       };
 

@@ -15,9 +15,9 @@
         </ng-container>
 
         <ng-container *ngIf="isWrongOdds()">
-          LG/Early - Single Count: <strong>{{item.liveGameEarlySingleCount}}</strong>
-          <span *ngIf="isShowCountInfo(item.liveGameEarlyCashOutCount, item.liveGameEarlySettleCount, item.liveGameEarlyInstantlySettleCount)" class="text-red"
-          [innerHTML]="countInfoContent(item.liveGameEarlyCashOutCount, item.liveGameEarlySettleCount, item.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
+          LG/Early - Single Count: <strong>{{item.singleCount}}</strong>
+          <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
+          [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
           </span><br />
           <div *ngIf="isPoolHouseAffected">
             PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
