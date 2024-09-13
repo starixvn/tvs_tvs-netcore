@@ -224,5 +224,6 @@ export class GetBetTypesQuery {
     matchId: number;
     betTypes?: string;
     fromTransDate?: string;
-    toTransDate ?: string;
+    toTransDate?: string;
+    isGetCancelCashOut: boolean;
 }

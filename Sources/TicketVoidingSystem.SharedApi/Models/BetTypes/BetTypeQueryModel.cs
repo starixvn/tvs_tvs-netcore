@@ -13,4 +13,6 @@ public class BetTypeQueryModel
     public DateTime? FromTransDate { get; set; }
 
     public DateTime? ToTransDate { get; set; }
+
+    public bool IsGetCancelCashOut { get; set; }
 }

@@ -83,7 +83,8 @@ export class EventWrongMarketOfferedComponent implements OnInit {
       mode: ModeType.SPORT_BOOK,
       matchId: this.eventLeague?.selectedMatch.matchId,
       fromTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.fromDateTime,
-      toTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.toDateTime
+      toTransDate: this.logInfoEvent.filterWrongMarketOfferedModel.toDateTime,
+      isGetCancelCashOut: true
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
