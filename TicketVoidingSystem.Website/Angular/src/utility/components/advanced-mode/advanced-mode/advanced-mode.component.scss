@@ -20,6 +20,9 @@
     >multiple-select {
       width: 100%;
     }
+    span, label {
+      white-space: nowrap;
+    }
   }
 
   .input-item-adv {
@@ -33,6 +36,9 @@
       height: 20px;
       padding: 1px 2px;
       border-radius: 0;
+    }
+    span, label {
+      white-space: nowrap;
     }
   }
 
