@@ -59,6 +59,9 @@ import { OthersWrongHdpComponent } from './event-wrong-hdp/others-wrong-hdp/othe
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
 import { FilterTimeComponent } from './event-wrong-market-offered/filter-time/filter-time.component';
 import { LogInfoWrongMarketOfferedComponent } from './event-wrong-market-offered/log-info-wrong-market-offered/log-info-wrong-market-offered.component';
+import { EventWrongOddsSportsBookSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
+import { FilterWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
+import { LogInfoWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/log-info-wrong-odds-sports-book/log-info-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { FilterWrongOddsComponent } from './event-wrong-odds/filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './event-wrong-odds/log-info-wrong-odds/log-info-wrong-odds.component';
@@ -142,6 +145,9 @@ import { TicketCountOtherSportsModule } from './ticket-count-other-sports/ticket
         GroupBettypesPoolHouseComponent,
         TicketsComponent,
         LinkedLogComponent,
+        EventWrongOddsSportsBookSportsBookComponent,
+        FilterWrongOddsSportsBookComponent,
+        LogInfoWrongOddsSportsBookComponent,
     ],
     exports: [
         AddRequestComponent

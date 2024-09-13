@@ -105,6 +105,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.WRONG_MARKET_OFFERED || issueTypeId === IssueTypeConstant.TECHNICAL_ERROR;
   }
 
+  static isWrongOddsSportsBook(issueTypeId: string): boolean {
+    return issueTypeId === IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK;
+  }
+
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
   }

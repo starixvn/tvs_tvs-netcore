@@ -247,4 +247,24 @@ public static class LogInfoExtension
                 + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                 + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}'/></root>";
     }
+
+    public static string ToWrongOddsSportsBookInfoXml(this WrongOddsSportsBookViewModel model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNameCaseInsensitive = true
+        };
+        return $"<root><r MatchId = '{model.MatchId}' "
+            + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
+            + $"SubIssueTypeId='{model.SubIssueTypeId}' "
+            + $"LiveIndicator='{model.LiveIndicator}' "
+            + $"FilterOddsType='{SecurityElement.Escape(model.FilterOddsType)}' "
+            + $"OddsValue='{SecurityElement.Escape(model.OddsValue)}' "
+            + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
+            + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
+            + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
+            + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}'/></root>";
+    }
 }

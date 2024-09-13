@@ -36,7 +36,7 @@ export class EventLeagueComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    if (this.matchId && (changes['matchId'])) {
+    if (this.isEdit && this.matchId && (changes['matchId'])) {
       await this.getMatchInEditPage(this.matchId);
     }
   }

@@ -1,0 +1,29 @@
+<div *ngIf="primitiveProps.isShowValidation">
+  <strong>Main Event - Log Info</strong>
+  <div class="log-info">
+    <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
+      <div *ngIf="logInfo.logInfoDetail">
+        <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
+        Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+        LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
+        <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
+        [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
+        </span><br />
+      </div>
+
+      <ng-container *ngIf="logInfo.messageValidationLogInfo && logInfo.messageValidationLogInfo.length > 0">
+        <div class="message">
+          <span *ngFor="let msg of logInfo.messageValidationLogInfo">
+            <div *ngIf="msg.isError" class="error-text">
+              <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
+            </div>
+            <div *ngIf="!msg.isError" [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
+              (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
+              <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}
+            </div>
+          </span>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

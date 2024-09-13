@@ -9,6 +9,7 @@ export class TEXT {
     static readonly INVALID_OU = 'Invalid OU!';
     static readonly INVALID_INPUT = 'Invalid Input.';
     static readonly INVALID_RUNS = 'Invalid Runs!';
+    static readonly INVALID_ODDS = 'Invalid Odds!';
     static readonly INVALID_WICKET_OVER = 'Invalid Wicket/Over!';
     static readonly REQUIRED_CORRECT_ODDS = 'Invalid Correct Odds.';
     static readonly REQUIRED_SPREAD = 'Invalid Spread.';

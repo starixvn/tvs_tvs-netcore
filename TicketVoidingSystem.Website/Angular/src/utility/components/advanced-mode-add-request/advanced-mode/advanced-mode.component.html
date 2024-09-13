@@ -6,7 +6,7 @@
   </div>
   <div class="advanced-mode-body border-bottom-radius" [hidden]="isCollapse">
     <div *ngFor="let betTeam of betTeams">
-      <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isChecked">
+      <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isShow">
         <div *ngSwitchCase="1" class="bet-team">
           <div class="bet-team-1">
             <div class="left mg-right-10">
@@ -39,6 +39,43 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div *ngSwitchCase="2" class="bet-team">
+          <div class="bet-team-2">
+            <div class="flex-start">
+              <label class="mr-3">
+                <input type="checkbox" [(ngModel)]="betTeam.isCheckedAllItems" (ngModelChange)="betTeam.checkItems()"
+                  class="mr-1 bet-team-{{betTeam.index}}" />
+                {{betTeam.name}}
+              </label>
+            </div>
+            <table>
+              <tbody>
+                <tr>
+                  <ng-template ngFor let-item [ngForOf]="betTeam.items" let-e="even">
+                    <td *ngIf="e || item.isRowSpan" [attr.rowspan]="item.isRowSpan?2:1">
+                      <label>
+                        <input class="mr-1" type="checkbox" [(ngModel)]="item.isChecked"
+                          (ngModelChange)="betTeam.controlIsChecked()" />
+                        {{item.name}}
+                      </label>
+                    </td>
+                  </ng-template>
+                </tr>
+                <tr>
+                  <ng-template ngFor let-item [ngForOf]="betTeam.items" let-e="even">
+                    <td *ngIf="!e && !item.isRowSpan">
+                      <label>
+                        <input class="mr-1" type="checkbox" [(ngModel)]="item.isChecked"
+                          (ngModelChange)="betTeam.controlIsChecked()" />
+                        {{item.name}}
+                      </label>
+                    </td>
+                  </ng-template>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -38,7 +38,6 @@ export class FilterComponent implements OnInit, OnChanges {
   issueTypesPermission: IssueType[] = [];
   actionIds: string[] = [];
   isHighlightSubType: boolean;
-  widthIssueTypeControl: number;
   widthSubIssueTypeControl: number;
   widthActionControl: number;
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
@@ -192,29 +191,29 @@ export class FilterComponent implements OnInit, OnChanges {
 
   private setWidthControlByIssueType(): void {
     const widthMapping: { [key: number]: { [key: string]: number } } = {
-      [IssueTypeConstant.DANGER_ACCEPTED]: { issueType: 180, subIssueType: 300, action: 150 },
-      [IssueTypeConstant.EARLY_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170 },
-      [IssueTypeConstant.WRONG_KICK_OFF]: { issueType: 180, subIssueType: 150, action: 170 },
-      [IssueTypeConstant.ABNORMAL_ACCOUNT]: { issueType: 180, subIssueType: 170, action: 210 },
-      [IssueTypeConstant.RED_CARD]: { issueType: 180, subIssueType: 285, action: 150 },
-      [IssueTypeConstant.WRONG_HDP]: { issueType: 180, subIssueType: 220, action: 150 },
-      [IssueTypeConstant.WRONG_1ST_HDP]: { issueType: 180, subIssueType: 220, action: 150 },
-      [IssueTypeConstant.WRONG_OU]: { issueType: 180, subIssueType: 220, action: 150 },
-      [IssueTypeConstant.WRONG_1ST_OU]: { issueType: 180, subIssueType: 220, action: 150 },
-      [IssueTypeConstant.ABNORMAL_BET]: { issueType: 180, subIssueType: 170, action: 250 },
-      [IssueTypeConstant.WRONG_SCORE]: { issueType: 180, subIssueType: 380, action: 150 },
-      [IssueTypeConstant.WRONG_ODDS]: { issueType: 180, subIssueType: 150, action: 150 },
-      [IssueTypeConstant.ARCHIVED_TICKET]: { issueType: 180, action: 150 },
-      [IssueTypeConstant.REDUCED_OVER]: { issueType: 180, action: 200 },
-      [IssueTypeConstant.ABANDONED]: { issueType: 180, action: 200 },
-      [IssueTypeConstant.DUPLICATE_TICKETS]: { issueType: 180, action: 170 },
-      [IssueTypeConstant.NOT_PARTICIPATE]: { issueType: 180, action: 200 },
-      [IssueTypeConstant.WRONG_MARKET_OFFERED]: { issueType: 180, action: 170 },
-      [IssueTypeConstant.TECHNICAL_ERROR]: { issueType: 180, action: 170 }
+      [IssueTypeConstant.DANGER_ACCEPTED]: {subIssueType: 300, action: 150, sport: 150 },
+      [IssueTypeConstant.EARLY_KICK_OFF]: {subIssueType: 150, action: 170, sport: 220 },
+      [IssueTypeConstant.WRONG_KICK_OFF]: {subIssueType: 150, action: 170, sport: 220 },
+      [IssueTypeConstant.ABNORMAL_ACCOUNT]: {subIssueType: 170, action: 210 },
+      [IssueTypeConstant.RED_CARD]: {subIssueType: 285, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_HDP]: {subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_1ST_HDP]: {subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_OU]: {subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_1ST_OU]: {subIssueType: 220, action: 150, sport: 150 },
+      [IssueTypeConstant.ABNORMAL_BET]: {subIssueType: 170, action: 250, sport: 150 },
+      [IssueTypeConstant.WRONG_SCORE]: {subIssueType: 380, action: 150, sport: 150 },
+      [IssueTypeConstant.WRONG_ODDS]: {subIssueType: 150, action: 150 },
+      [IssueTypeConstant.ARCHIVED_TICKET]: {action: 150 },
+      [IssueTypeConstant.REDUCED_OVER]: {action: 200, sport: 150 },
+      [IssueTypeConstant.ABANDONED]: {action: 200, sport: 150 },
+      [IssueTypeConstant.DUPLICATE_TICKETS]: {action: 170, sport: 150 },
+      [IssueTypeConstant.NOT_PARTICIPATE]: {action: 200, sport: 150 },
+      [IssueTypeConstant.WRONG_MARKET_OFFERED]: {action: 170 },
+      [IssueTypeConstant.TECHNICAL_ERROR]: {action: 170 },
+      [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: {action: 170 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
-    this.widthIssueTypeControl = widthValues.issueType || 0;
     this.widthSubIssueTypeControl = widthValues.subIssueType || 0;
     this.widthActionControl = widthValues.action || 0;
   }

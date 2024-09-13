@@ -34,6 +34,8 @@ public class GetLogInfoCriteria : CriteriaBase
 
     public string? WrongOddsInfo { get; set; }
 
+    public string? WrongOddsSportsBookInfo { get; set; }
+
     public string ReducedOverInfo { get; set; }
 
     public string NotParticipateInfo { get; set; }

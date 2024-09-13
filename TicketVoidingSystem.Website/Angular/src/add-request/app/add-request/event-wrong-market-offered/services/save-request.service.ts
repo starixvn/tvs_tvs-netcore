@@ -119,7 +119,7 @@ export class SaveRequestService {
     query.remark = argWrongMarketOffered.others.remark;
 
     if (!argWrongMarketOffered.filter.isVoided) {
-      query.WrongMarketOfferedInfo = this.eventWrongMarketOfferedService.getWrongMarketOfferedModel(Number(argWrongMarketOffered.filter.subIssueTypeId), argWrongMarketOffered.logInfoEvent);
+      query.wrongMarketOfferedInfo = this.eventWrongMarketOfferedService.getWrongMarketOfferedModel(Number(argWrongMarketOffered.filter.subIssueTypeId), argWrongMarketOffered.logInfoEvent);
     }
 
     return query;

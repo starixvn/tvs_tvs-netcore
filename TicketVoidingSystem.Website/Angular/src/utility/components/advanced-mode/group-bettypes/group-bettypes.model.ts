@@ -225,5 +225,5 @@ export class GetBetTypesQuery {
     betTypes?: string;
     fromTransDate?: string;
     toTransDate?: string;
-    isGetCancelCashOut: boolean;
+    isGetCancelCashOut?: boolean;
 }

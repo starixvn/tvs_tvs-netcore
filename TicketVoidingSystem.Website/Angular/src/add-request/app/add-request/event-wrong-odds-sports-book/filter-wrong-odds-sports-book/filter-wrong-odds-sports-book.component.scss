@@ -1,0 +1,72 @@
+.filter {
+  padding: 12px;
+  background: #daecff;
+  border: 1px solid #b3c8df;
+  box-sizing: border-box;
+  border-radius: 3px;
+
+  .border-radius-left-0 {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  .border-radius-right-0 {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  ::ng-deep .ng-select .ng-select-container {
+    width: 130px;
+    min-height: auto;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-right: 0;
+  }
+
+  .filter-odds-type {
+    display: flex;
+    margin-right: 37px;
+
+    .filter-odds-type-input {
+      width: 153px;
+    }
+  }
+
+  .filter-correct-odds {
+    display: flex;
+    width: auto;
+    flex-wrap: nowrap;
+
+    >div {
+      width: 130px;
+
+      span {
+        width: 100%;
+      }
+    }
+
+    .div-input {
+      width: 153px !important;
+    }
+  }
+
+  .filter-live-indicator {
+    padding: 0 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 1134px) {
+  .filter {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1134px) {
+  .filter {
+    width: 1065px;
+  }
+}

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
 
@@ -10,18 +10,18 @@ public class GetBetTeamsRequest : IRequest<IEnumerable<BetTeamAddRequest>>
 
 public class GetBetTeamsHandler : IRequestHandler<GetBetTeamsRequest, IEnumerable<BetTeamAddRequest>>
 {
-    private readonly WrongMarketOfferedService betTeamsService;
+    private readonly AdvancedModeService advancedModeService;
 
-    public GetBetTeamsHandler(WrongMarketOfferedService betTeamsService)
+    public GetBetTeamsHandler(AdvancedModeService advancedModeService)
     {
-        this.betTeamsService = betTeamsService;
+        this.advancedModeService = advancedModeService;
     }
 
     private static IEnumerable<BetTeamAddRequest> BetTeams { get; set; }
 
     public async Task<IEnumerable<BetTeamAddRequest>> Handle(GetBetTeamsRequest request, CancellationToken cancellationToken)
     {
-        BetTeams ??= betTeamsService.GetBetTeams();
+        BetTeams ??= advancedModeService.GetBetTeams();
         return await Task.FromResult(BetTeams);
     }
 }

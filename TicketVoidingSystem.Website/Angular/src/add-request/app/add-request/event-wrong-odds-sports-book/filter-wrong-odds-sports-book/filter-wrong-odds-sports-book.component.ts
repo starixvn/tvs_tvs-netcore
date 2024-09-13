@@ -1,0 +1,79 @@
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterOddsType, FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { ValidationService } from '../services/validation.service';
+
+@Component({
+  selector: 'filter-wrong-odds-sports-book',
+  templateUrl: './filter-wrong-odds-sports-book.component.html',
+  styleUrls: ['./filter-wrong-odds-sports-book.component.scss']
+})
+export class FilterWrongOddsSportsBookComponent {
+  @Input() filterWrongOddsSportsBookModel: FilterWrongOddsSportsBookModel;
+  @Input() isEdit: boolean;
+  @Input() matchId: number;
+  @Input() subIssueTypeId: string;
+  @Input() isVoided: boolean;
+  @Output() changeFilterEvent = new EventEmitter();
+  @Output() refreshEvent = new EventEmitter();
+  @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
+  @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
+
+  tooltip = new Tooltip();
+  filterOddsType = new FilterOddsType();
+
+  constructor(
+    private readonly element: ElementRef,
+    private readonly validationService: ValidationService) {
+    this.tooltip.element = this.element;
+  }
+
+  public changeFilter(): void {
+    this.changeFilterEvent.emit();
+  }
+
+  public isValidMultipleOdds(value: string, elementClass: string): boolean {
+    if (!StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
+      return false;
+    }
+
+    return this.validationService.isValidOddsValueHaveNotZero(value, this.tooltip, elementClass);
+  }
+
+  public isValidSingleOdds(value: string, elementClass: string): boolean {
+    if (!StaticService.isCorrectFormatSingleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS)) {
+      return false;
+    }
+
+    return this.validationService.isValidOddsValueHaveNotZero(value, this.tooltip, elementClass);
+  }
+
+  public isCorrectFormatMultipleDecimal(value: string, elementClass: string): boolean {
+    return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, TEXT.INVALID_ODDS);
+  }
+
+  public setFilterOddsType(type: string): void {
+    this.filterWrongOddsSportsBookModel.filterOddsType = type;
+  }
+
+  public isValidity(): boolean {
+    return this.isValidDateTime() && this.isValidFilter();
+  }
+
+  private isValidDateTime(): boolean {
+    return this.fromTimeComponent.validateWithTooltip()
+      && this.toTimeComponent.validateWithTooltip()
+      && this.validationService.isFromTimeSameOrBeforeToTime(this.filterWrongOddsSportsBookModel, this.tooltip);
+  }
+
+  private isValidFilter(): boolean {
+    return this.validationService.isValidFilterWrongOddsSportsBook(this.filterWrongOddsSportsBookModel, this.tooltip, this.subIssueTypeId);
+  }
+
+  public emitRefreshEvent() {
+    this.refreshEvent.emit();
+  }
+}

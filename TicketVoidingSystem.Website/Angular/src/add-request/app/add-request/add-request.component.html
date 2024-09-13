@@ -206,6 +206,19 @@
             [others]="model.others"
             (updateMatchId)="updateMatchId($event)">
           </event-wrong-market-offered>
+
+          <event-wrong-odds-sports-book #eventWrongOddsSportsBook
+            *ngIf="isWrongOddsSportsBook()"
+            [userId]="userId"
+            [requestedBy]="requestedBy"
+            [isEdit]="isEdit"
+            [requestId]="requestId"
+            [filter]="model.filter"
+            [actionIdOfFirstTimeAccess]="actionIdOfFirstTimeAccess"
+            [wrongOddsSportsBookModel]="model.wrongOddsSportsBookModel"
+            [others]="model.others"
+            (updateMatchId)="updateMatchId($event)">
+          </event-wrong-odds-sports-book>
         </div>
       </div>
     </div>

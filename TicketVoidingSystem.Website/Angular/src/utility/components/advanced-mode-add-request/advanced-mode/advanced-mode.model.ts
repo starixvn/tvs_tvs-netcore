@@ -5,19 +5,21 @@ export class Item {
   index: number;
   name: string;
   value: string;
+  isRowSpan: boolean;
   isDisabled: boolean;
   isChecked: boolean;
   isMultiple: boolean;
   xmlAttribute: string;
   format: string;
 
-  constructor(index: number, name: string, value: string, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string) {
+  constructor(index: number, name: string, value: string, isRowSpan: boolean, isDisabled: boolean, isMultiple: boolean, xmlAttribute: string, format: string, isChecked: boolean) {
     this.index = index;
     this.name = name;
     this.value = value;
+    this.isRowSpan = isRowSpan;
     this.isDisabled = isDisabled;
     this.isMultiple = isMultiple;
-    this.isChecked = false;
+    this.isChecked = isChecked;
     this.xmlAttribute = xmlAttribute;
     this.format = format;
   }
@@ -90,14 +92,17 @@ export class BetTeamAddRequest {
   value: string;
   type: number;
   betTypes: string;
-  selections: Selection[];
-  inputs: Item[];
-  isChecked: boolean;
+  selections: Selection[]; // for dropdown
+  inputs: Item[]; // for input
+  items: Item[]; // for checkbox table
+  isShow: boolean;
+  isCheckedAllItems: boolean;
 
   constructor(
     commonInfo: [number, string, string, number, string],
     selections: Selection[],
     inputs: Item[],
+    items: Item[],
     isChecked: boolean) {
     this.index = commonInfo[0];
     this.name = commonInfo[1];
@@ -106,7 +111,8 @@ export class BetTeamAddRequest {
     this.betTypes = commonInfo[4];
     this.renderSelections(selections);
     this.renderInputs(inputs);
-    this.isChecked = isChecked;
+    this.renderItems(items);
+    this.isShow = isChecked;
   }
 
   renderSelections(selections: Selection[]) {
@@ -163,13 +169,26 @@ export class BetTeamAddRequest {
     this.inputs = [];
     if (inputs !== null) {
       for (const [index, input] of inputs.entries()) {
-        const temp = new Item(index, input.name, input.value, input.isDisabled, input.isMultiple, input.xmlAttribute, input.format);
+        const temp = new Item(index, input.name, input.value, input.isRowSpan, input.isDisabled, input.isMultiple, input.xmlAttribute, input.format, false);
         this.inputs.push(temp);
       }
     }
   }
+
+  private renderItems(items: Item[]) {
+    this.items = [];
+    this.isCheckedAllItems = true;
+    if (items !== null) {
+      for (const [index, item] of items.entries()) {
+        const temp = new Item(index, item.name, item.value, item.isRowSpan, item.isDisabled, item.isMultiple, item.xmlAttribute, item.format, true);
+        this.items.push(temp);
+      }
+      console.log(this.items);
+    }
+  }
+
   resetChecked() {
-    this.isChecked = true;
+    this.isShow = true;
     this.resetSelections();
   }
 
@@ -183,6 +202,7 @@ export class BetTeamAddRequest {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
+    this.updateByItems(result);
     result.id = betTypes;
     return result;
   }
@@ -202,6 +222,16 @@ export class BetTeamAddRequest {
         this.updateResult(result, input.xmlAttribute, input.value ?? '');
       });
     }
+  }
+
+  updateByItems(result: BetTeamAddRequestResult) {
+    if (this.items.length > 0) {
+      this.updateResult(result, this.items[0].xmlAttribute, this.getItemsValue());
+    }
+  }
+
+  getItemsValue(): string {
+    return this.items.filter(item => item.isChecked).map(item => item.value).join(',');
   }
 
   updateResult(result: BetTeamAddRequestResult, attribute: string, value: string) { // NOSONAR
@@ -272,5 +302,19 @@ export class BetTeamAddRequest {
       .filter(Boolean)
       .map(y => y ? y.padStart(2, '0') : '__')
       .join('&');
+  }
+
+  checkItems() {
+    this.items.forEach(item => {
+      item.isChecked = this.isCheckedAllItems;
+    });
+  }
+
+  controlIsChecked() {
+    let temp = true;
+    for (let i = 0; i < this.items.length && temp; i++) {
+      temp = this.items[i].isChecked;
+    }
+    this.isCheckedAllItems = temp;
   }
 }

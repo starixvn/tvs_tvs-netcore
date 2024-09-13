@@ -289,17 +289,17 @@ export class AdvancedModeComponent implements OnChanges {
       if (betTeam.getItemsValue() === '' && betTeam.type !== AdvancedModeConstants.BETTEAM_TYPE_4) {
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`bet-team-${i}`, LABELS.NO_BET_TEAM);
+        this.tooltip.display(`bet-team-${i}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       } else if (this.checkMultiSelectionListBetTeam(betTeam) && result) {
         const invalidSelection = betTeam.multiSelectionList.find(x => x.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, LABELS.NO_BET_TEAM);
+        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.multiSelectionList.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       } else if (this.checkMultiSelectionInSelection(betTeam) && result) {
         const invalidSelection = betTeam.selections.find(x => x.multiSelection.multipleSelect.getValueItems() === '')
         result = false;
         this.isShowContent = true;
-        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.NO_BET_TEAM);
+        this.tooltip.display(`multiple-selection-${i}-selection-${betTeam.selections.indexOf(invalidSelection)}`, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       }
     }
 

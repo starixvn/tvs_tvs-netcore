@@ -74,7 +74,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
       betTeamsResult: betTeamsResult,
       checkedBetTypes: checkedBetTypes
     };
-    this.primitivePropertyEvent.isShowFilterArea = true;
     this.primitivePropertyEvent.isShowValidation = true;
   }
 
@@ -165,7 +164,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
   public async changeMatchEvent(): Promise<void> {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
-    this.primitivePropertyEvent.isShowFilterArea = false;
     this.primitivePropertyEvent.isShowValidation = false;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
@@ -173,7 +171,6 @@ export class EventWrongMarketOfferedComponent implements OnInit {
       this.logInfoEvent.matchId = this.eventLeague.selectedMatch.matchId;
       this.addRequestStore.changeSavingRequestStatus(true);
       this.resetBetTypeAndAdvancedMode();
-      this.primitivePropertyEvent.isShowFilterArea = true;
       this.primitivePropertyEvent.isShowErrorNoBetType = false;
     }
   }
@@ -182,6 +179,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     this.advancedMode?.clearBetTeam();
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
   }
+
   private initSaveRequestInput() {
     if (!this.filter.isVoided) {
       this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();

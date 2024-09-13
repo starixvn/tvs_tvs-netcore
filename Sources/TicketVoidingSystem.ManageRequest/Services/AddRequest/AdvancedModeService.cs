@@ -4,9 +4,9 @@ using TicketVoidingSystem.SharedApi.Models.BetTypes;
 using TicketVoidingSystem.SharedApi.Services.BetTypes;
 using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
+namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
-public interface WrongMarketOfferedService
+public interface AdvancedModeService
 {
     IEnumerable<BetTeamAddRequest> GetBetTeams();
 
@@ -15,19 +15,19 @@ public interface WrongMarketOfferedService
     Task<IEnumerable<GroupBetTypeModel>> GetGroupBetTypes(int matchId, string betTypeIds);
 }
 
-public class WrongMarketOfferedServiceImp : WrongMarketOfferedService
+public class AdvancedModeServiceImp : AdvancedModeService
 {
     private readonly BetTypesRepository betTypesRepository;
 
-    public WrongMarketOfferedServiceImp(BetTypesRepository betTypesRepository)
+    public AdvancedModeServiceImp(BetTypesRepository betTypesRepository)
     {
         this.betTypesRepository = betTypesRepository;
     }
 
     public IEnumerable<BetTeamAddRequest> GetBetTeams()
     {
-        const string jsonPath = "App_Data/Data/WrongMarketOfferedAdvancedMode.json";
-        return Helper.DeserializeJsonFileToObject<WrongMarketOfferedAdvancedMode>(jsonPath).BetTeams;
+        const string jsonPath = "App_Data/Data/AddRequestAdvancedMode.json";
+        return Helper.DeserializeJsonFileToObject<AdvancedModeAddRequestModel>(jsonPath).BetTeams;
     }
 
     public IEnumerable<BetTeamAddRequestResult> GetBetTypesAdvancedMode(string betTypesAdvancedModeJson)

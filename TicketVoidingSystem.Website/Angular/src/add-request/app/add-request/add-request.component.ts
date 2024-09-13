@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { LocalStorageCacheConstant } from '../../../utility/constants/local-storage-cache.constant';
 import { MatchModel } from '../../../utility/models/match.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { AbnormalAccountsComponent } from './abnormal-accounts/abnormal-accounts.component';
@@ -19,6 +19,7 @@ import { EventReducedOverComponent } from './event-reduced-over/event-reduced-ov
 import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { EventWrongMarketOfferedComponent } from './event-wrong-market-offered/event-wrong-market-offered.component';
+import { EventWrongOddsSportsBookSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 import { EventWrongScoreComponent } from './event-wrong-score/event-wrong-score.component';
@@ -55,6 +56,7 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('eventWrongHDP') eventWrongHdpComponent: EventWrongHdpComponent;
   @ViewChild('eventWrongOU') eventWrongOuComponent: EventWrongOuComponent;
   @ViewChild('eventWrongOdds') eventWrongOddsComponent: EventWrongOddsComponent;
+  @ViewChild('eventWrongOddsSportsBook') eventWrongOddsSportsBookComponent: EventWrongOddsSportsBookSportsBookComponent;
   @ViewChild('eventReducedOver') eventReducedOverComponent: EventReducedOverComponent;
   @ViewChild('eventDuplicateTickets') eventDuplicateTicketsComponent: EventDuplicateTicketsComponent;
   @ViewChild('eventNotParticipate') eventNotParticipateComponent: EventNotParticipateComponent;
@@ -126,72 +128,46 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
     this.matchId = match?.matchId;
     this.parentMatchId = match?.parentId;
   }
-  
+
   async saveRequest(): Promise<void> { // NOSONAR
-    if (!this.isEdit) {
-      localStorage.setItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + document.getElementById('body').getAttribute('user-id'),
-        this.model.filter.issueTypeId);
-    }
+    this.cachingIssueType();
     this.isDisabledSaveButton = true;
 
-    if (this.isAbnormalBet()) {
-      await this.eventAbnormalBetComponent.saveRequest();
-    }
+    const saveTasks = [
+      { condition: this.isAbnormalBet(), component: this.eventAbnormalBetComponent },
+      { condition: this.isEarlyOrWrongKO(), component: this.eventEarlyKickOffComponent },
+      { condition: this.isDangerAccepted(), component: this.eventDangerAcceptedComponent },
+      { condition: this.isRedCard(), component: this.eventRedCardComponent },
+      { condition: this.isAbnormalAccount(), component: this.abnormalAccountsComponent },
+      { condition: this.isWrongScoreIssueType(), component: this.eventWrongScoreComponent },
+      { condition: this.isArchivedTicketIssueType(), component: this.eventTicket14Component },
+      { condition: this.isWrongHDP() || this.isWrong1stHDP(), component: this.eventWrongHdpComponent },
+      { condition: this.isWrongOU() || this.isWrong1stOU(), component: this.eventWrongOuComponent },
+      { condition: this.isWrongOdds(), component: this.eventWrongOddsComponent },
+      { condition: this.isWrongOddsSportsBook(), component: this.eventWrongOddsSportsBookComponent },
+      { condition: this.isReducedOver() || this.isAbandoned(), component: this.eventReducedOverComponent },
+      { condition: this.isDuplicateTickets(), component: this.eventDuplicateTicketsComponent },
+      { condition: this.isNotParticipate(), component: this.eventNotParticipateComponent },
+      { condition: this.isRecoverTicket(), component: this.eventRecoverTicketComponent },
+      { condition: this.isLikelyWrongMarketOffered(), component: this.eventWrongMarketOfferedComponent }
+    ];
 
-    if (this.isEarlyOrWrongKO()) {
-      await this.eventEarlyKickOffComponent.saveRequest();
+    for (const task of saveTasks) {
+      if (task.condition) {
+        await task.component.saveRequest();
+      }
     }
+  }
 
-    if (this.isDangerAccepted()) {
-      await this.eventDangerAcceptedComponent.saveRequest();
-    }
-
-    if (this.isRedCard()) {
-      await this.eventRedCardComponent.saveRequest();
-    }
-
-    if (this.isAbnormalAccount()) {
-      await this.abnormalAccountsComponent.saveRequest();
-    }
-
-    if (this.isWrongScoreIssueType()) {
-      await this.eventWrongScoreComponent.saveRequest();
-    }
-
-    if (this.isArchivedTicketIssueType()) {
-      await this.eventTicket14Component.saveRequest();
-    }
-
-    if (this.isWrongHDP() || this.isWrong1stHDP()) {
-      await this.eventWrongHdpComponent.saveRequest();
-    }
-
-    if (this.isWrongOU() || this.isWrong1stOU()) {
-      await this.eventWrongOuComponent.saveRequest();
-    }
-
-    if (this.isWrongOdds()) {
-      await this.eventWrongOddsComponent.saveRequest();
-    }
-
-    if (this.isReducedOver() || this.isAbandoned()) {
-      await this.eventReducedOverComponent.saveRequest();
-    }
-
-    if (this.isDuplicateTickets()) {
-      await this.eventDuplicateTicketsComponent.saveRequest();
-    }
-
-    if (this.isNotParticipate()) {
-      await this.eventNotParticipateComponent.saveRequest();
-    }
-
-    if (this.isRecoverTicket()) {
-      await this.eventRecoverTicketComponent.saveRequest();
-    }
-
-    if (this.isLikelyWrongMarketOffered()) {
-      await this.eventWrongMarketOfferedComponent.saveRequest();
+  cachingIssueType(): void {
+    if (!this.isEdit) {
+      const userId = document.getElementById('body')?.getAttribute('user-id');
+      if (userId) {
+        localStorage.setItem(
+          LocalStorageCacheConstant.PREVIOUS_SELECTED_ISSUETYPE_ADD_REQUEST + userId,
+          this.model.filter.issueTypeId
+        );
+      }
     }
   }
 
@@ -346,5 +322,9 @@ export class AddRequestComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isLikelyWrongMarketOffered(): boolean {
     return StaticService.isLikelyWrongMarketOffered(this.model.filter.issueTypeId);
+  }
+
+  isWrongOddsSportsBook(): boolean {
+    return StaticService.isWrongOddsSportsBook(this.model.filter.issueTypeId);
   }
 }

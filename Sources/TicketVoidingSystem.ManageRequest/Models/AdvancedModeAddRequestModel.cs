@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
-public class WrongMarketOfferedAdvancedMode
+public class AdvancedModeAddRequestModel
 {
     public List<BetTeamAddRequest> BetTeams { get; set; }
 }
@@ -9,6 +9,7 @@ public class Item
 {
     public string Name { get; set; }
     public string Value { get; set; }
+    public bool IsRowSpan { get; set; }
     public bool IsDisable { get; set; }
     public bool IsMultiple { get; set; }
     public string XmlAttribute { get; set; }
@@ -27,6 +28,7 @@ public class BetTeamAddRequest
 {
     public List<Selection> Selections { get; set; }
     public List<Item> Inputs { get; set; }
+    public List<Item> Items { get; set; }
     public string Name { get; set; }
     public string Value { get; set; }
     public byte Type { get; set; }

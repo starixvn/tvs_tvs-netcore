@@ -3,7 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest.WrongMarketOffered;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -20,17 +20,17 @@ public class GetRequestServiceImp : GetRequestService
     private readonly IDynamicRepository repository;
     private readonly RemotingRefWrapperService remotingRefService;
     private readonly MatchService matchService;
-    private readonly WrongMarketOfferedService wrongMarketOfferedService;
+    private readonly AdvancedModeService advancedModeService;
     private readonly RequestExtraInfoXmlService requestExtraInfoXmlService;
     private readonly IMapper mapper;
 
     public GetRequestServiceImp(IDynamicRepository repository, RemotingRefWrapperService remotingRefService, MatchService matchService
-        , IMapper mapper, WrongMarketOfferedService wrongMarketOfferedService, RequestExtraInfoXmlService requestExtraInfoXmlService)
+        , IMapper mapper, AdvancedModeService advancedModeService, RequestExtraInfoXmlService requestExtraInfoXmlService)
     {
         this.repository = repository;
         this.remotingRefService = remotingRefService;
         this.matchService = matchService;
-        this.wrongMarketOfferedService = wrongMarketOfferedService;
+        this.advancedModeService = advancedModeService;
         this.mapper = mapper;
         this.requestExtraInfoXmlService = requestExtraInfoXmlService;
     }
@@ -369,8 +369,8 @@ public class GetRequestServiceImp : GetRequestService
     private async Task<WrongMarketOfferedViewModel> MapEventWrongMarketOffered(IEnumerable<RequestEventModel> requestEventModels)
     {
         var model = requestEventModels.First();
-        var betTypesAdvancedMode = wrongMarketOfferedService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
-        var groupBetTypes = await wrongMarketOfferedService.GetGroupBetTypes(model.MatchId,
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
             string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
         return new WrongMarketOfferedViewModel
         {
@@ -380,6 +380,31 @@ public class GetRequestServiceImp : GetRequestService
             VoidFromTime = model.VoidFromTime,
             VoidToTime = model.VoidToTime,
             SubIssueTypeId = model.SubIssueTypeId,
+            BetTeamsResult = betTypesAdvancedMode,
+            GroupBetTypes = groupBetTypes
+        };
+    }
+
+    private async Task<WrongOddsSportsBookViewModel> MapEventWrongOddsSportsBook(IEnumerable<RequestEventModel> requestEventModels)
+    {
+        var model = requestEventModels.First();
+        var betTypesAdvancedMode = advancedModeService.GetBetTypesAdvancedMode(model.AdvancedExtraInfo);
+        var groupBetTypes = await advancedModeService.GetGroupBetTypes(model.MatchId,
+            string.Join(",", betTypesAdvancedMode.Select(x => x.Id)));
+        return new WrongOddsSportsBookViewModel
+        {
+            MatchId = model.MatchId,
+            FilterFromTransTime = model.FilterFromTransTime,
+            FilterToTransTime = model.FilterToTransTime,
+            VoidFromTime = model.VoidFromTime,
+            VoidToTime = model.VoidToTime,
+            SubIssueTypeId = model.SubIssueTypeId,
+            LiveIndicator = model.LiveIndicator,
+            FilterOddsType = model.FilterOddsType,
+            OddsValue = model.OddsValue,
+            FromOdds = model.FromOdds,
+            ToOdds = model.ToOdds,
+            CorrectOdds = model.CorrectOdds,
             BetTeamsResult = betTypesAdvancedMode,
             GroupBetTypes = groupBetTypes
         };

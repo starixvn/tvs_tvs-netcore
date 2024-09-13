@@ -1,4 +1,6 @@
 import * as _ from "lodash";
+import { WrongOddsSportsBookGetLogInfoQuery } from "src/add-request/app/add-request/event-wrong-odds-sports-book/models/get-log-info.query";
+import { WrongOddsSportsBookModel } from "src/add-request/app/add-request/models/event-wrong-odds-sports-book.model";
 import { EarlyKickOffGetLogInfoQuery } from "../../add-request/app/add-request/event-early-kick-off/models/get-log-info.query";
 import { NotParticipateGetLogInfoQuery } from "../../add-request/app/add-request/event-not-participate/models/get-log-info.query";
 import { ReducedOverGetLogInfoQuery } from "../../add-request/app/add-request/event-reduced-over/models/get-log-info.query";
@@ -173,5 +175,19 @@ export class MappingModelStaticService {
       filterToTransTime: model.voidToTime,
       betTeamsResult: model.betTeamsResult
     } as WrongMarketOfferedGetLogInfoQuery;
+  }
+
+  static buildWrongOddsSportsBookGetLogInfoModel(model:  WrongOddsSportsBookModel): WrongOddsSportsBookGetLogInfoQuery {
+    if (_.isNull(model) || _.isUndefined(model)) {
+      return null;
+    }
+
+    return {
+      matchId: model.matchId,
+      subIssueTypeId: model.subIssueTypeId,
+      filterFromTransTime: model.voidFromTime,
+      filterToTransTime: model.voidToTime,
+      betTeamsResult: model.betTeamsResult
+    } as WrongOddsSportsBookGetLogInfoQuery;
   }
 }

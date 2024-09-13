@@ -104,4 +104,21 @@ public class RequestExtraInfoXml
 
     [XmlAttribute(AttributeName = "ToOddsNotVoidAwayUnder")]
     public string ToOddsNotVoidAwayUnder { get; set; }
+
+
+    // Wrong Odds Sports Book
+    [XmlAttribute(AttributeName = "FilterOddsType")]
+    public string FilterOddsType { get; set; }
+
+    [XmlAttribute(AttributeName = "OddsValue")]
+    public string OddsValue { get; set; }
+
+    [XmlAttribute(AttributeName = "FromOdds")]
+    public string FromOdds { get; set; }
+
+    [XmlAttribute(AttributeName = "ToOdds")]
+    public string ToOdds { get; set; }
+
+    [XmlAttribute(AttributeName = "CorrectOdds")]
+    public string CorrectOdds { get; set; }
 }

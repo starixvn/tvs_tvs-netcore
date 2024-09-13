@@ -452,9 +452,8 @@ export class ActionVoidByIssueTypeConst {
   //  TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
-  static readonly ALLOWANCE_RATE: number[] = [
+  static readonly WRONG_ODDS_SPORTS_BOOK: number[] = [
     TVSRequestActionType.MANUAL_VOID_ID,
-    TVSRequestActionType.AUTO_VOID_INSTANT_ID,
     TVSRequestActionType.TAKE_NOTE_ID
   ];
 }

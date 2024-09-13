@@ -9,7 +9,7 @@ import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
-import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
+import { BetTeamAddRequest, BetTeamAddRequestResult, Item, Selection } from './advanced-mode.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -55,7 +55,7 @@ export class AdvancedModeComponent {
   public async getBetTeamAndRenderValue(matchId: number): Promise<void> {
     await this.getBetTeam();
     this.baseBetTeams.forEach(x => {
-      x.isChecked = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
+      x.isShow = this.changedBetTypes.some(y => y.id.toString() === x.betTypes);
     })
     await this.getSpecialBetTeamCricket(matchId);
     this.renderBetTeams(this.baseBetTeams);
@@ -79,7 +79,7 @@ export class AdvancedModeComponent {
 
   unckeckedAllBetTeam() {
     this.betTeams.forEach(x => {
-      x.isChecked = false;
+      x.isShow = false;
     });
   }
 
@@ -94,23 +94,39 @@ export class AdvancedModeComponent {
     checkedBetTypesAddRequest.forEach(x => {
       const betTeam = this.betTeams.find(y => y.betTypes === x.id);
       if (betTeam) {
-        betTeam.isChecked = true;
-        betTeam.selections.forEach(y => {
-          y.isDisabled = x.isDisabled;
-          if(y.isMultiple) {
-            const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
-            y.multiSelection.updateItemChecked(value.split(','));
-            y.multiSelection.updateDisabledStatus(x.isDisabled);
-          } else {
-            y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x);
-          }
-        });
-        betTeam.inputs.forEach(y => {
-          y.isDisabled = x.isDisabled;
-          y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, x)
-        });
+        betTeam.isShow = true;
+        this.updateSelectionsByCheckedValue(betTeam, x);
+        this.updateInputsByCheckedValue(betTeam, x);
+        this.updateItemsByCheckedValue(betTeam, x);
       }
     })
+  }
+
+  private updateSelectionsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
+    betTeam.selections.forEach(y => {
+      y.isDisabled = checkedBetType.isDisabled;
+      if(y.isMultiple) {
+        const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
+        y.multiSelection.updateItemChecked(value.split(','));
+        y.multiSelection.updateDisabledStatus(checkedBetType.isDisabled);
+      } else {
+        y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType);
+      }
+    });
+  }
+
+  private updateInputsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
+    betTeam.inputs.forEach(y => {
+      y.isDisabled = checkedBetType.isDisabled;
+      y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
+    });
+  }
+
+  private updateItemsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
+    betTeam.items.forEach(y => {
+      y.isDisabled = checkedBetType.isDisabled;
+      y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
+    });
   }
 
   private getValueUpdateControlFilterByAttribute(attribute: string, checkedBetType: BetTeamAddRequestResult): string { //NOSONAR
@@ -143,7 +159,7 @@ export class AdvancedModeComponent {
         await this.handleBetTeam(betType);
       }
     }
-    this.isShowAdvancedModeFilter = this.betTeams.some(x => x.isChecked);
+    this.isShowAdvancedModeFilter = this.betTeams.some(x => x.isShow);
   }
 
   private async handleBetTeam(betType: BetTypeAddRequest) {
@@ -154,8 +170,8 @@ export class AdvancedModeComponent {
   }
 
   private async changeBetTeam(betType: BetTypeAddRequest, betTeam: BetTeamAddRequest) {
-    betTeam.isChecked = betType.isChecked;
-    if (betTeam.isChecked) {
+    betTeam.isShow = betType.isChecked;
+    if (betTeam.isShow) {
       await this.changeCheckedBetTypes(betType, betTeam);
     } else {
       betTeam.name = "";
@@ -175,7 +191,7 @@ export class AdvancedModeComponent {
     this.betTeams = [];
     for (const [index, item] of data.entries()) {
       const betteam = new BetTeamAddRequest([index, item.name, item.value, item.type, item.betTypes],
-        item.selections, item.inputs, item.isChecked);
+        item.selections, item.inputs, item.items, item.isShow);
       this.betTeams.push(betteam);
     }
   }
@@ -190,7 +206,7 @@ export class AdvancedModeComponent {
 
   getCheckedBetTypeModels(): BetTeamAddRequestResult[] {
     return this.betTeams
-      .filter(x => x.isChecked)
+      .filter(x => x.isShow)
       .map(y => y.getResult(y.betTypes));
   }
 
@@ -248,8 +264,8 @@ export class AdvancedModeComponent {
 
   isValidity(): boolean {
     return this.betTeams
-      .filter(x => x.isChecked)
-      .every(x => this.isValidSelections(x) && this.isValidInputs(x));
+      .filter(x => x.isShow)
+      .every(x => this.isValidSelections(x) && this.isValidInputs(x) && this.isValidItems(x));
   }
 
   isValidSelections(betTeam: BetTeamAddRequest): boolean {
@@ -260,10 +276,14 @@ export class AdvancedModeComponent {
     return betTeam.inputs.every(x => this.isValidInputWithToolTip(betTeam.index, x.index, x.isMultiple, x.value));
   }
 
+  isValidItems(betTeam: BetTeamAddRequest): boolean {
+    return this.isValidItemWithToolTip(betTeam.index, betTeam.items);
+  }
+
   private isValidSelectionWithToolTip(betTeamIndex: number, selection: Selection): boolean {
     if (!this.isValidSelectionValue(selection)) {
       const className = `bet-team-${betTeamIndex}-selection-${selection.index}`;
-      this.tooltip.display(className, LABELS.NO_BET_TEAM);
+      this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
 
@@ -274,6 +294,16 @@ export class AdvancedModeComponent {
     if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
       const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
       this.tooltip.display(className, LABELS.INVALID_VALUE);
+      return false;
+    }
+
+    return true;
+  }
+
+  private isValidItemWithToolTip(betTeamIndex: number, items: Item[]): boolean {
+    if (items.every(x => !x.isChecked)) {
+      const className = `bet-team-${betTeamIndex}`;
+      this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
 
@@ -293,6 +323,6 @@ export class AdvancedModeComponent {
   }
 
   public isScrollStype(): boolean {
-    return this.betTeams.filter(x => x.isChecked).length > 10;
+    return this.betTeams.filter(x => x.isShow).length > 10;
   }
 }

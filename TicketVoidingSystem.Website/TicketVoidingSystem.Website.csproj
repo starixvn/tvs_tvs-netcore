@@ -35,12 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="App_Data\Data\AddRequestAdvancedMode.json" />
     <Content Remove="app_data\data\CricketBetTypesAdvancedMode.json" />
   </ItemGroup>
     
   <ItemGroup>
     <Content Remove="App_Data\Data\VoidParlayVirtualSportsBetTypes.json" />
-    <Content Remove="App_Data\Data\WrongMarketOfferedAdvancedMode.json" />
   </ItemGroup>
     
     <ItemGroup>
