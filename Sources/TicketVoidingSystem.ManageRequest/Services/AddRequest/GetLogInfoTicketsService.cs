@@ -25,41 +25,63 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
     public TicketsViewModel GetTicketsViewModel(GetLogInfoTicketsRequest request)
     {
         var getTicketModels = compressDataService.DecompressTickets(request.LogInfoTicketsJson);
-        var viewModel = new TicketsViewModel();
-
         if (!getTicketModels.Any())
         {
-            return viewModel;
+            return new TicketsViewModel();
         }
 
         var voidTickets = getTicketModels.Where(x => !x.IsCancelCashOut);
         var groupTicket = MapToGroupTicketViewModel(voidTickets, request.IssueTypeId);
 
-        viewModel = new TicketsViewModel
+        var viewModel = new TicketsViewModel
         {
-            TotalSingle = getTicketModels.Count(),
-            Groups = new List<Group<TicketViewModel>> { groupTicket }
+            TotalSingle = groupTicket.FirstOrDefault()?.DisplayTotalTickets ?? 0,
+            TotalParlay = groupTicket.FirstOrDefault(x => x.Name == "Parlay")?.DisplayTotalTickets ?? 0,
+            Groups = groupTicket
         };
 
         return viewModel;
     }
 
-    private Group<TicketViewModel> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
+    private List<Group<TicketViewModel>> MapToGroupTicketViewModel(IEnumerable<GetTicketModel> getTicketModels, int issueTypeId)
     {
-        var tickets = new List<TicketViewModel>();
+        var singleTickets = new List<TicketViewModel>();
+        var parlayTickets = new List<TicketViewModel>();
 
         foreach (var item in getTicketModels)
         {
             var ticket = mapTicketsService.MapFromGetTicketModelToTicketViewModel(item, null, ChoiceType.None, issueTypeId);
             ticket.SubBetTypeId = (short)item.SubBetType;
-            tickets.Add(ticket);
+            if (ticket.IsParlay)
+            {
+                parlayTickets.Add(ticket);
+            }
+            else
+            {
+                singleTickets.Add(ticket);
+            }
         }
 
-        return new Group<TicketViewModel>
+        var groups = new List<Group<TicketViewModel>>();
+        if (singleTickets.Any())
         {
-            Name = tickets.FirstOrDefault()?.BetType,
-            Tickets = tickets,
-            DisplayTotalTickets = getTicketModels.Count()
-        };
+            groups.Add(new Group<TicketViewModel>
+            {
+                Name = singleTickets[0].BetType,
+                Tickets = singleTickets,
+                DisplayTotalTickets = singleTickets.Count
+            });
+        }
+        if (parlayTickets.Any())
+        {
+            groups.Add(new Group<TicketViewModel>
+            {
+                Name = "Parlay",
+                Tickets = parlayTickets,
+                DisplayTotalTickets = parlayTickets.Count
+            });
+        }
+
+        return groups;
     }
 }

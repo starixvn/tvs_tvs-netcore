@@ -81,6 +81,7 @@ import { GroupBettypesPoolHouseComponent } from './pool-house-ticket/group-betty
 import { LinkedLogComponent } from './pool-house-ticket/linked-log/linked-log.component';
 import { PoolHouseTicketComponent } from './pool-house-ticket/pool-house-ticket.component';
 import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component';
+import { TicketCountOtherSportsComponent } from './ticket-count-other-sports/ticket-count-other-sports.component';
 
 @NgModule({
     declarations: [
@@ -145,6 +146,7 @@ import { TicketsComponent } from './pool-house-ticket/tickets/tickets.component'
         GroupBettypesPoolHouseComponent,
         TicketsComponent,
         LinkedLogComponent,
+        TicketCountOtherSportsComponent,
     ],
     exports: [
         AddRequestComponent

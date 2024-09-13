@@ -1,0 +1,10 @@
+<div class="other-sports">
+    <ng-container>
+      Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+      <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, 0)" class="text-red"
+      [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, 0) | sanitizeHtml">
+      </span>,&nbsp;
+      Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>&nbsp;
+      <span *ngIf="!isVoided" class="ticket-details" (click)="clickOpenTicketDetails()">Details</span>
+    </ng-container>       
+</div>
