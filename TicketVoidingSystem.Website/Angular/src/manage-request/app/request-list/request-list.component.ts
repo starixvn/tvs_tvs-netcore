@@ -208,7 +208,7 @@ export class RequestListComponent implements OnInit, OnChanges {
       if (request) {
         request.status = x.status;
         if (x.simpleInfo) {
-          if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId)) {
+          if (this.isIssueTypeHaveMultipleMatches(request.issueTypeId, request.filterBy)) {
             const detail = request.details.find(y => y.matchId === x.simpleInfo.matchId);
             request.lastPerformedBy = x.simpleInfo.lastPerformedBy;
             detail.totalSingleProcessed = x.simpleInfo.totalSingleProcessed;
@@ -229,19 +229,28 @@ export class RequestListComponent implements OnInit, OnChanges {
     this.changeDetectorRef.detectChanges();
   }
 
-  private isIssueTypeHaveMultipleMatches(issueTypeId: number): boolean {
-    const issueTypeStr = issueTypeId.toString();
-    return [
-        StaticService.isDangerAccepted,
-        StaticService.isWrongHDP,
-        StaticService.isWrongOU,
-        StaticService.isWrong1stOU,
-        StaticService.isWrong1stHDP,
-        StaticService.isRedCard,
-        StaticService.isEarlyKickOff,
-        StaticService.isAbnormalBet,
-        StaticService.isWrongKickOff
-    ].some(fn => fn(issueTypeStr));
+  private isIssueTypeHaveMultipleMatches(issueTypeId: number, filterBy: number): boolean {
+     return this.isSimpleMatch(issueTypeId) || this.isConditionalMatch(issueTypeId, filterBy);
+  }
+
+  public isSimpleMatch(issueTypeId: number): boolean {
+    const simpleIssueChecks = [
+      StaticService.isDangerAccepted,
+      StaticService.isWrongHDP,
+      StaticService.isWrongOU,
+      StaticService.isWrong1stOU,
+      StaticService.isWrong1stHDP,
+      StaticService.isRedCard,
+      StaticService.isEarlyKickOff,
+      StaticService.isWrongKickOff
+    ];
+    const issueTypeString = issueTypeId.toString();
+
+    return simpleIssueChecks.some(check => check(issueTypeString));
+  }
+
+  public isConditionalMatch(issueTypeId: number, filterBy: number): boolean {
+    return filterBy === null && StaticService.isAbnormalBet(issueTypeId.toString());
   }
 
   public async copyRequestDescription(item: RequestModel): Promise<void> {

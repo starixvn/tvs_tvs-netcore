@@ -18,6 +18,7 @@ export class RequestModel {
   status: string;
   details: DetailRequestModel[];
   isProcessingCopyDescription?: boolean;
+  filterBy?: number;
 }
 
 export class DetailRequestModel {

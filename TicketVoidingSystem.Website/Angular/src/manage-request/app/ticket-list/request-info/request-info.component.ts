@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
-import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { CommonService } from '../../../../utility/services/common.service';
 import { RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { PagingModel } from '../../../../utility/components/paging/paging/paging.model';
 import { AbnormalFilterBy } from '../../../../utility/constants/config';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AppService } from '../../app.service';
 import { BriefInfo } from '../../models/brief-info.model';
@@ -158,9 +158,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   public async saveBriefInfoNote() {
-    if (this.model.request.briefInfoNote) {
-      await this.appService.SaveBriefInfoNote(this.model.request.requestId, this.model.request.briefInfoNote);
-    }
+    await this.appService.SaveBriefInfoNote(this.model.request.requestId, this.model.request.briefInfoNote);
   }
 
   private updateIssue() {
