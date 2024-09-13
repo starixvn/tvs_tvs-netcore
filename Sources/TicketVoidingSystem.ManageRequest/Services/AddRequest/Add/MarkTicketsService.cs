@@ -32,8 +32,8 @@ public class MarkTicketsServiceImp : MarkTicketsService
 
         return new MarkTicketsResult
         {
-            MarkResults = tasksResults.SelectMany(x => x.MarkResults),
-            MarkTransId = tasksResults.SelectMany(x => x.MarkTransId)
+            MarkedResults = tasksResults.SelectMany(x => x.MarkedResults),
+            MarkedTickets = tasksResults.SelectMany(x => x.MarkedTickets)
         };
     }
 
@@ -56,8 +56,8 @@ public class MarkTicketsServiceImp : MarkTicketsService
 
             return new MarkTicketsResult
             {
-                MarkResults = results,
-                MarkTransId = transIds
+                MarkedResults = results,
+                MarkedTickets = transIds
             };
         }
         catch (Exception e)
@@ -65,8 +65,8 @@ public class MarkTicketsServiceImp : MarkTicketsService
             await loggingService.ErrorAsync(e);
             return new MarkTicketsResult
             {
-                MarkResults = new List<Result> { new() { ErrorCode = 1, ErrorMsg = e.Message } },
-                MarkTransId = Enumerable.Empty<long>()
+                MarkedResults = new List<Result> { new() { ErrorCode = 1, ErrorMsg = e.Message } },
+                MarkedTickets = Enumerable.Empty<long>()
             };
         }
     }

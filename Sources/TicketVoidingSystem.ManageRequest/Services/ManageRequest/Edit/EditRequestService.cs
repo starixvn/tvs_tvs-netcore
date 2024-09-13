@@ -1,8 +1,6 @@
-﻿using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.ManageRequest.Models;
+﻿using TicketVoidingSystem.ManageRequest.Models;
+using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
@@ -13,60 +11,36 @@ public interface EditRequestService
 
 public class EditRequestServiceImp : EditRequestService
 {
-    private readonly LoggingService loggingService;
     private readonly MarkTicketsWhenAddEditService marketTicketsWhenEditService;
     private readonly ReCalculateTicketsService reCalculateTicketsService;
     private readonly UpdateRequestProcessStage updateRequestProcessStage;
+    private readonly GetUpdateResultService getUpdateResultService;
 
-    public EditRequestServiceImp(
-        LoggingService loggingService,
-        MarkTicketsWhenAddEditService marketTicketsWhenEditService,
-        ReCalculateTicketsService reCalculateTicketsService,
-        UpdateRequestProcessStage updateRequestProcessStage)
+    public EditRequestServiceImp(MarkTicketsWhenAddEditService marketTicketsWhenEditService, ReCalculateTicketsService reCalculateTicketsService,
+        UpdateRequestProcessStage updateRequestProcessStage, GetUpdateResultService getUpdateResultService)
     {
-        this.loggingService = loggingService;
         this.marketTicketsWhenEditService = marketTicketsWhenEditService;
         this.reCalculateTicketsService = reCalculateTicketsService;
         this.updateRequestProcessStage = updateRequestProcessStage;
+        this.getUpdateResultService = getUpdateResultService;
     }
 
     public async Task<Result> UpdateRequest(EditRequestQuery query)
     {
-        try
+        var markTicketResult = await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
+        var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets);
+        if (markTicketError != null)
         {
-            var markTicketResults = new List<Result>();
-            if (!query.IssueTypeId.IsArchivedTicket() && !query.IssueTypeId.RecoverTicket())
-            {
-                markTicketResults = (await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds)).ToList();
-            }
-
-            return markTicketResults.TrueForAll(x => x.IsSuccessful)
-                ? await ExecuteReCalculateAndUpdateRequest(query)
-                : markTicketResults.First(x => !x.IsSuccessful);
-        }
-        catch (Exception exception)
-        {
-            await loggingService.ErrorAsync(exception);
-
-            return new Result
-            {
-                ErrorCode = 1,
-                ErrorMsg = exception.Message
-            };
-        }
-    }
-
-    private async Task<Result> ExecuteReCalculateAndUpdateRequest(EditRequestQuery query)
-    {
-        var reCalcTicketsAbnormalResults = Enumerable.Empty<Result>();
-        if (query.IssueTypeId.IsAbnormalBet() && !string.IsNullOrWhiteSpace(query.RemoveTransIds) && query.AbnormalBetInfo.IsConfirmCalculator)
-        {
-            var matchId = query.AbnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay ? 29 : 0;
-            reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(matchId, query.RemoveTransIds);
+            return markTicketError;
         }
 
-        return reCalcTicketsAbnormalResults.All(x => x.IsSuccessful)
-            ? await updateRequestProcessStage.Execute(query)
-            : reCalcTicketsAbnormalResults.First(x => !x.IsSuccessful);
+        var reCalcTicketsAbnormalResults = await reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds);
+        var reCalcTicketError = getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService), markTicketResult.MarkedTickets);
+        if (reCalcTicketError != null)
+        {
+            return reCalcTicketError;
+        }
+
+        return await updateRequestProcessStage.Execute(query, markTicketResult.MarkedTickets);
     }
 }

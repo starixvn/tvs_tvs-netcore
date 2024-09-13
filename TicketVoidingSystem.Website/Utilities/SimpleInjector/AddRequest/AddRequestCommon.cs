@@ -15,8 +15,11 @@ public static class AddRequestCommon
         services.AddTransient<LogInfoService, LogInfoServiceImp>();
         services.AddTransient<LogInfoHelperService, LogInfoHelperServiceImp>();
         services.AddTransient<AddRequestService, AddRequestServiceImp>();
+        services.AddTransient<AddRequestProcessStage, AddRequestProcessStageImp>();
+        services.AddTransient<GetUpdateResultService, GetUpdateResultServiceImp>();
         services.AddTransient<InsertAutoVoidRequestQueueService, InsertAutoVoidRequestQueueServiceImp>();
         services.AddTransient<MarkTicketsService, MarkTicketsServiceImp>();
+        services.AddTransient<MarkTicketsWhenAddEditService, MarkTicketsWhenAddEditServiceImp>();
         services.AddTransient<SendLetstalkAfterAddService, SendLetstalkAfterAddServiceImp>();
         services.AddTransient<LinkedLogForUIService, LinkedLogForUIServiceImp>();
         services.AddTransient<FilterLinkedLogService, FilterLinkedLogServiceImp>();

@@ -12,7 +12,7 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
 public interface UpdateRequestProcessStage
 {
-    Task<Result> Execute(EditRequestQuery query);
+    Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful);
 }
 
 public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
@@ -20,37 +20,43 @@ public class UpdateRequestProcessStageImp : UpdateRequestProcessStage
     private readonly IMapper mapper;
     private readonly IDynamicRepository repository;
     private readonly SessionService sessionService;
+    private readonly LoggingService loggingService;
     private readonly AccountWinLostService accountWinLostService;
     private readonly InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService;
+    private readonly GetUpdateResultService getUpdateResultService;
 
     public UpdateRequestProcessStageImp(IMapper mapper,
-        IDynamicRepository repository, AccountWinLostService accountWinLostService,
-        SessionService sessionService, InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService)
+        IDynamicRepository repository, LoggingService loggingService, AccountWinLostService accountWinLostService,
+        SessionService sessionService, InsertAutoVoidRequestQueueService insertAutoVoidRequestQueueService, GetUpdateResultService getUpdateResultService)
     {
         this.mapper = mapper;
         this.repository = repository;
         this.sessionService = sessionService;
+        this.loggingService = loggingService;
         this.accountWinLostService = accountWinLostService;
         this.insertAutoVoidRequestQueueService = insertAutoVoidRequestQueueService;
+        this.getUpdateResultService = getUpdateResultService;
     }
 
-    public async Task<Result> Execute(EditRequestQuery query)
+    public async Task<Result> Execute(EditRequestQuery query, IEnumerable<long> markedTicketsSuccessful)
     {
-        var command = CreateEditRequestCommand(query);
-        await repository.ExecuteAsync(command);
-        await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
-        if (query.IssueTypeId.IsAbnormalAccount())
+        try
         {
-            await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
-        }
-        return new Result
-        {
-            Data = new
+            var command = CreateEditRequestCommand(query);
+            await repository.ExecuteAsync(command);
+            await insertAutoVoidRequestQueueService.Execute(query.RequestId, query.ActionId, query.AbnormalBetInfo, query.EarlyKickOffInfo);
+            if (query.IssueTypeId.IsAbnormalAccount())
             {
-                query.MatchId,
-                command.RequestId
+                await accountWinLostService.SaveAccountWinLost(command.RequestId, query.ActionId, query.AbnormalAccountInfo.AccountWinlostModels);
             }
-        };
+
+            return getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString(), markedTicketsSuccessful);
+        }
+        catch (Exception exception)
+        {
+            await loggingService.ErrorAsync(exception);
+            return getUpdateResultService.CreateErrorResult(exception, markedTicketsSuccessful);
+        }
     }
 
     private EditRequestCommand CreateEditRequestCommand(EditRequestQuery query)  // NOSONAR
