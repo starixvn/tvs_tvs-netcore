@@ -36,7 +36,7 @@ export class AddRequestService {
     query.sessionTime = this.getTimeFilterTicket(addRequestStore);
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
-      this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore);
+      this.handleAfterAddRequest(query, result, addRequestStore);
     } else {
       this.getAddResultCache(query, addRequestStore);
     }
@@ -49,7 +49,7 @@ export class AddRequestService {
         isChecking = true;
         const result = await this.commonService.getResultCache<AddRequestResultModel>(query.guid);
         if (result) {
-          this.handleAfterAddRequest(result, query.issueTypeId, addRequestStore);
+          this.handleAfterAddRequest(query, result, addRequestStore);
           clearInterval(interval);
         }
         isChecking = false;
@@ -57,13 +57,11 @@ export class AddRequestService {
     }, 2000);
   }
 
-  private handleAfterAddRequest(addResult: Result<AddRequestResultModel>, issueTypeId: string, addRequestStore: AddRequestStore) {
+  private handleAfterAddRequest(query: AddRequestQuery, addResult: Result<AddRequestResultModel>, addRequestStore: AddRequestStore) {
     if (addResult.isSuccessful) {
-        this.isShowResultWithoutMatches(issueTypeId)
-          ? this.popupService.showAddedRequestSuccessful(addResult.data.requestId, () => this.reloadPageOrBackToManagePage(issueTypeId))
-          : this.popupService.showAddedRequestSuccessfulWithMatches(addResult.data.requestId, addResult.data.matchId, () => this.reloadPageOrBackToManagePage(issueTypeId));
+      this.popupService.showAddedRequestSuccessful(query, addResult.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId))
     } else {
-      this.popupService.showSaveRequestError(addResult.errorMsg, LABELS.ADD_REQUEST_RESULT_TITLE);
+      this.popupService.showSaveRequestError(query, addResult, LABELS.ADD_REQUEST_RESULT_TITLE);
     }
 
     addRequestStore.changeSavingRequestStatus(false);
@@ -74,9 +72,9 @@ export class AddRequestService {
 
     const result = await this.addRequestApiService.editRequest(query);
     if (result.isSuccessful) {
-      this.popupService.showEditedRequestSuccessful(query.requestId, () => this.reloadPageOrBackToManagePage(query.issueTypeId));
+      this.popupService.showEditedRequestSuccessful(query, result.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId));
     } else {
-      this.popupService.showSaveRequestError(result.errorMsg, LABELS.EDIT_REQUEST_RESULT_TITLE);
+      this.popupService.showSaveRequestError(query, result, LABELS.EDIT_REQUEST_RESULT_TITLE);
     }
 
     addRequestStore.changeSavingRequestStatus(false);
@@ -86,12 +84,6 @@ export class AddRequestService {
     StaticService.isAbnormalBet(issueTypeId)
       ? window.location.reload()
       : window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
-  }
-
-  private isShowResultWithoutMatches(issueTypeId: string): boolean {
-    return StaticService.isAbnormalAccount(issueTypeId)
-      || StaticService.isArchivedTicket(issueTypeId)
-      || StaticService.isRecoverTicket(issueTypeId);
   }
 
   private getTimeFilterTicket(addRequestStore: AddRequestStore): number {

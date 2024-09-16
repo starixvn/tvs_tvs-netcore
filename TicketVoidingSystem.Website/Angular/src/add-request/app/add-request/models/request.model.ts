@@ -1,3 +1,4 @@
+import { Result } from '../../../../utility/models/result';
 import { FilterModel } from '../filter/filter.model';
 import { OthersModel } from '../others/others.model';
 import { AbnormalAccountModel } from './abnormal-account.model';
@@ -71,5 +72,9 @@ export class CheckValidTransIdModel {
 export class AddRequestResultModel {
   matchId: string;
   requestId: number;
+
+  logResults: Result<null>[];
+  logStageName: string;
+  markedTicketsSuccessful: number[];
 }
 
