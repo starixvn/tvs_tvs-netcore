@@ -36,7 +36,7 @@ public class GetLogInfoTicketsServiceImp : GetLogInfoTicketsService
         var viewModel = new TicketsViewModel
         {
             TotalSingle = groupTicket.FirstOrDefault()?.DisplayTotalTickets ?? 0,
-            TotalParlay = groupTicket.FirstOrDefault(x => x.Name == "Parlay")?.DisplayTotalTickets ?? 0,
+            TotalParlay = groupTicket.Find(x => x.Name == "Parlay")?.DisplayTotalTickets ?? 0,
             Groups = groupTicket
         };
 
