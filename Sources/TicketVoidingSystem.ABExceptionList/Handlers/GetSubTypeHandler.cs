@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using MediatR;
 using TicketVoidingSystem.ABExceptionList.Criteria;
 using TicketVoidingSystem.ABExceptionList.Models;
+using TicketVoidingSystem.Constants;
 
 namespace TicketVoidingSystem.ABExceptionList.Handlers;
 
@@ -23,6 +25,8 @@ public class GetSubTypeHandler : IRequestHandler<GetSubTypeRequest, IEnumerable<
 
     public async Task<IEnumerable<AbExceptionSubTypeViewModel>> Handle(GetSubTypeRequest request, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<AbExceptionSubTypeViewModel>(request);
+        var results = await repository.FetchAsync<AbExceptionSubTypeViewModel>(request);
+
+        return results.Where(x => !SubIssueTypeConstant.RemovedList.Contains(int.Parse(x.SubIssueTypeIds)));
     }
 }

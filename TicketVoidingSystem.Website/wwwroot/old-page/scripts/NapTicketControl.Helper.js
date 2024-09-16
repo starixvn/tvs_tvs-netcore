@@ -10,7 +10,7 @@ NapTicketControl.Helper = (function ($) {
 
     return {
         authorizedMsg: 'You do not have permission on this function',
-        issueTypeAbnormalBet: '27',
+        issueTypeAbnormalBet: '30',
         MaxTransIdPerBatch: 100,
         MaxHeightAllBettypes: 116,
         NotSupportBetTypes: ['22', '11'],
