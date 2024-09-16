@@ -404,9 +404,9 @@ public class ObjectToXmlExtensionFacts
     {
         // Arrange
         const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' " +
-                                "FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='1' CashOutCount='1' " +
-                                "SettleCount='0' InstantlySettleCount='1' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' PoolHouseMainParlayCount='0' " +
-                                "PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidFromTime='2018-10-30 16:20:20.222' " +
+                                "FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='1' " +
+                                "MainParlayCount ='1' CashOutCount='1' SettleCount='0' InstantlySettleCount='1' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' " +
+                                "PoolHouseMainParlayCount='0' PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidFromTime='2018-10-30 16:20:20.222' " +
                                 "VoidToTime='2018-10-30 16:20:20.222' LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
@@ -441,11 +441,10 @@ public class ObjectToXmlExtensionFacts
     public void ToEventWrongHdpXml_HasLogInfoDetailIsNull_ReturnXML()
     {
         // Arrange
-        const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' " +
-                                "FilterFromTransTime='2018-10-30 16:20:20.222' FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' " +
-                                "IsLinkGroupAIO ='False' SingleCount ='' CashOutCount='' SettleCount='' " +
-                                "InstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' PoolHouseMainParlayCount='' " +
-                                "PoolHouseInstantlySettleCount='' PoolHouseCheckedBetTypes='' VoidFromTime='' VoidToTime='' " +
+        const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' FilterFromTransTime='2018-10-30 16:20:20.222' " +
+                                "FilterToTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='' " +
+                                "MainParlayCount ='' CashOutCount='' SettleCount='' InstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' " +
+                                "PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' PoolHouseCheckedBetTypes='' VoidFromTime='' VoidToTime='' " +
                                 "LiveIndicator='0' HomeFavorite='' AwayFavorite='' ActualMarket='' HdpValue='' /></root>";
 
         var model = new WrongHdpViewModel
@@ -470,11 +469,10 @@ public class ObjectToXmlExtensionFacts
     public void ToEventWrongOuXml_HasData_ReturnXML()
     {
         // Arrange
-        const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' " +
-                                "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' " +
-                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='1' CashOutCount='1' SettleCount='0' " +
-                                "InstantlySettleCount='1' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' PoolHouseMainParlayCount='0' " +
-                                "PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidToTime='2018-10-30 16:20:20.222' " +
+        const string expected = "<root><r MatchId='123' LiveScores='1-1' IsMainMatch='false' SubIssueTypeId='0' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                                "FilterFromTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='1' " +
+                                "MainParlayCount ='1' CashOutCount='1' SettleCount='0' InstantlySettleCount='1' PoolHouseSingleCount='0' PoolHouseCashOutCount='0' " +
+                                "PoolHouseMainParlayCount='0' PoolHouseInstantlySettleCount='0' PoolHouseCheckedBetTypes='' VoidToTime='2018-10-30 16:20:20.222' " +
                                 "VoidFromTime='2018-10-30 16:20:20.222' LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
         var logInfoDetail = new LogInfoDetail
         {
@@ -509,12 +507,11 @@ public class ObjectToXmlExtensionFacts
     public void ToEventWrongOuXml_HasLogInfoDetailIsNull_ReturnExpected()
     {
         // Arrange
-        const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' " +
-                                "FilterToTransTime='2018-10-30 16:20:20.222' FilterFromTransTime='2018-10-30 16:20:20.222' " +
-                                "IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='' " +
-                                "CashOutCount='' SettleCount='' InstantlySettleCount='' " +
-                                "PoolHouseSingleCount='' PoolHouseCashOutCount='' PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' " +
-                                "PoolHouseCheckedBetTypes='' VoidToTime='' VoidFromTime='' LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
+        const string expected = "<root><r MatchId='123' LiveScores='' IsMainMatch='false' SubIssueTypeId='0' FilterToTransTime='2018-10-30 16:20:20.222' " +
+                                "FilterFromTransTime='2018-10-30 16:20:20.222' IsLinkGroup1X2='False' IsLinkGroupAIO ='False' SingleCount ='' " +
+                                "MainParlayCount ='' CashOutCount='' SettleCount='' InstantlySettleCount='' PoolHouseSingleCount='' PoolHouseCashOutCount='' " +
+                                "PoolHouseMainParlayCount='' PoolHouseInstantlySettleCount='' PoolHouseCheckedBetTypes='' VoidToTime='' VoidFromTime='' " +
+                                "LiveIndicator='0' ActualMarket='' WrongMarket='' /></root>";
 
         var model = new WrongOuViewModel
         {
@@ -970,36 +967,13 @@ public class ObjectToXmlExtensionFacts
             }
         };
 
-        const string expected = "<root><r MatchId='1' " +
-                                "LiveScores='1' " +
-                                "SubIssueTypeId='1' " +
-                                "FilterToTransTime='2022-02-02 02:02:02.000' " +
-                                "FilterFromTransTime='2022-02-02 02:02:02.000' " +
-                                "IsLinkGroup1X2='True' " +
-                                "IsLinkGroupAIO ='False' " +
-                                "SingleCount ='1' " +
-                                "CashOutCount='1' " +
-                                "SettleCount='1' " +
-                                "InstantlySettleCount='1' " +
-                                "PoolHouseSingleCount='1' " +
-                                "PoolHouseCashOutCount='1' " +
-                                "PoolHouseMainParlayCount='1' " +
-                                "PoolHouseInstantlySettleCount='1' " +
-                                "PoolHouseCheckedBetTypes='1' " +
-                                "VoidToTime='2022-02-02 02:02:02.000' " +
-                                "VoidFromTime='2022-02-02 02:02:02.000' " +
-                                "LiveIndicator='1' " +
-                                "FilterFavoriteType='h' " +
-                                "FavoriteValue='1' " +
-                                "WrongOU='' " +
-                                "Spread='0.8' " +
-                                "AllowanceRate='25' " +
-                                "CorrectOddsHomeOver='0.8' " +
-                                "CorrectOddsAwayUnder='-0.9' " +
-                                "FromOddsNotVoidHomeOver='0.65' " +
-                                "ToOddsNotVoidHomeOver='0.9' " +
-                                "FromOddsNotVoidAwayUnder='0.45' " +
-                                "ToOddsNotVoidAwayUnder='0.8' /></root>";
+        const string expected = "<root><r MatchId='1' LiveScores='1' SubIssueTypeId='1' FilterToTransTime='2022-02-02 02:02:02.000' " +
+                                "FilterFromTransTime='2022-02-02 02:02:02.000' IsLinkGroup1X2='True' IsLinkGroupAIO ='False' SingleCount ='1' " +
+                                "MainParlayCount ='0' CashOutCount='1' SettleCount='1' InstantlySettleCount='1' PoolHouseSingleCount='1' " +
+                                "PoolHouseCashOutCount='1' PoolHouseMainParlayCount='1' PoolHouseInstantlySettleCount='1' PoolHouseCheckedBetTypes='1' " +
+                                "VoidToTime='2022-02-02 02:02:02.000' VoidFromTime='2022-02-02 02:02:02.000' LiveIndicator='1' FilterFavoriteType='h' " +
+                                "FavoriteValue='1' WrongOU='' Spread='0.8' AllowanceRate='25' CorrectOddsHomeOver='0.8' CorrectOddsAwayUnder='-0.9' " +
+                                "FromOddsNotVoidHomeOver='0.65' ToOddsNotVoidHomeOver='0.9' FromOddsNotVoidAwayUnder='0.45' ToOddsNotVoidAwayUnder='0.8' /></root>";
 
         // Act
         var actual = models.ToEventWrongOddsXml();
