@@ -24,14 +24,12 @@
       ],
       "Inputs": [
         {
-          "Name": "Hdp:",
+          "Name": "Value:",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "Hdp"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "1"
     },
@@ -59,14 +57,300 @@
       ],
       "Inputs": [
         {
-          "Name": "Hdp:",
+          "Name": "Value:",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "Hdp"
         }
       ],
-      "Name": "",
-      "Value": "",
+      "Type": 1,
+      "BetTypes": "1"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "h"
+            },
+            {
+              "Name": "Even",
+              "Value": "a"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "2"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp1"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "3"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1-0",
+              "Value": "1:0"
+            },
+            {
+              "Name": "0-1",
+              "Value": "0:1"
+            },
+            {
+              "Name": "2-0",
+              "Value": "2:0"
+            },
+            {
+              "Name": "0-2",
+              "Value": "0:2"
+            },
+            {
+              "Name": "2-1",
+              "Value": "2:1"
+            },
+            {
+              "Name": "1-2",
+              "Value": "1:2"
+            },
+            {
+              "Name": "3-0",
+              "Value": "3:0"
+            },
+            {
+              "Name": "0-3",
+              "Value": "0:3"
+            },
+            {
+              "Name": "3-1",
+              "Value": "3:1"
+            },
+            {
+              "Name": "1-3",
+              "Value": "1:3"
+            },
+            {
+              "Name": "3-2",
+              "Value": "3:2"
+            },
+            {
+              "Name": "2-3",
+              "Value": "2:3"
+            },
+            {
+              "Name": "4-0",
+              "Value": "4:0"
+            },
+            {
+              "Name": "0-4",
+              "Value": "0:4"
+            },
+            {
+              "Name": "4-0 UP",
+              "Value": "4:0up"
+            },
+            {
+              "Name": "0-4 UP",
+              "Value": "0:4up"
+            },
+            {
+              "Name": "4-1",
+              "Value": "4:1"
+            },
+            {
+              "Name": "1-4",
+              "Value": "1:4"
+            },
+            {
+              "Name": "4-2",
+              "Value": "4:2"
+            },
+            {
+              "Name": "2-4",
+              "Value": "2:4"
+            },
+            {
+              "Name": "4-3",
+              "Value": "4:3"
+            },
+            {
+              "Name": "3-4",
+              "Value": "3:4"
+            },
+            {
+              "Name": "5-0 UP",
+              "Value": "5:0"
+            },
+            {
+              "Name": "0-5 UP",
+              "Value": "0:5"
+            },
+            {
+              "Name": "0-0",
+              "Value": "0:0"
+            },
+            {
+              "Name": "1-1",
+              "Value": "1:1"
+            },
+            {
+              "Name": "2-2",
+              "Value": "2:2"
+            },
+            {
+              "Name": "3-3",
+              "Value": "3:3"
+            },
+            {
+              "Name": "4-4",
+              "Value": "4:4"
+            },
+            {
+              "Name": "AOS",
+              "Value": "aos"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "4"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "1",
+              "Value": "1"
+            },
+            {
+              "Name": "X",
+              "Value": "x"
+            },
+            {
+              "Name": "2",
+              "Value": "2"
+            }
+          ],
+          "Name": "1X2:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "5"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "0-1",
+              "Value": "0-1"
+            },
+            {
+              "Name": "2-3",
+              "Value": "2-3"
+            },
+            {
+              "Name": "4+",
+              "Value": "4-over"
+            },
+            {
+              "Name": "4-6",
+              "Value": "4-6"
+            },
+            {
+              "Name": "7+",
+              "Value": "7-over"
+            }
+          ],
+          "Name": "Total Goal:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "6"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
       "Type": 1,
       "BetTypes": "7"
     },
@@ -79,6 +363,148 @@
               "Value": "All"
             },
             {
+              "Name": "Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp1"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "8"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "h"
+            },
+            {
+              "Name": "Even",
+              "Value": "a"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "12"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home First",
+              "Value": "1:1"
+            },
+            {
+              "Name": "Home Last",
+              "Value": "1:2"
+            },
+            {
+              "Name": "Away First",
+              "Value": "2:1"
+            },
+            {
+              "Name": "Away Last",
+              "Value": "2:2"
+            },
+            {
+              "Name": "No Goal",
+              "Value": "0:0"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "14"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "H-H",
+              "Value": "1:1"
+            },
+            {
+              "Name": "H-D",
+              "Value": "1:0"
+            },
+            {
+              "Name": "H-A",
+              "Value": "1:2"
+            },
+            {
+              "Name": "D-H",
+              "Value": "0:1"
+            },
+            {
+              "Name": "D-D",
+              "Value": "0:0"
+            },
+            {
+              "Name": "D-A",
+              "Value": "0:2"
+            },
+            {
+              "Name": "A-H",
+              "Value": "2:1"
+            },
+            {
+              "Name": "A-D",
+              "Value": "2:0"
+            },
+            {
+              "Name": "A-A",
+              "Value": "2:2"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "16"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
               "Name": "Home",
               "Value": "h"
             },
@@ -94,16 +520,765 @@
       ],
       "Inputs": [
         {
-          "Name": "Hdp:",
+          "Name": "Value:",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "Hdp"
         }
       ],
+      "Type": 1,
+      "BetTypes": "17"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "18"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "20"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "21"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "1",
+              "Value": "1"
+            },
+            {
+              "Name": "X",
+              "Value": "x"
+            },
+            {
+              "Name": "2",
+              "Value": "2"
+            }
+          ],
+          "Name": "1X2:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "22"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home/Draw",
+              "Value": "1X,HD",
+              "XmlAttribute": "BetTeam"
+            },
+            {
+              "Name": "Away/Draw",
+              "Value": "2X,DA"
+            },
+            {
+              "Name": "Home/Away",
+              "Value": "12,HA"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "24"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "25"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "1-0",
+              "Value": "1:0"
+            },
+            {
+              "Name": "0-1",
+              "Value": "0:1"
+            },
+            {
+              "Name": "2-0",
+              "Value": "2:0"
+            },
+            {
+              "Name": "0-2",
+              "Value": "0:2"
+            },
+            {
+              "Name": "2-1",
+              "Value": "2:1"
+            },
+            {
+              "Name": "1-2",
+              "Value": "1:2"
+            },
+            {
+              "Name": "3-0",
+              "Value": "3:0"
+            },
+            {
+              "Name": "0-3",
+              "Value": "0:3"
+            },
+            {
+              "Name": "3-1",
+              "Value": "3:1"
+            },
+            {
+              "Name": "1-3",
+              "Value": "1:3"
+            },
+            {
+              "Name": "3-2",
+              "Value": "3:2"
+            },
+            {
+              "Name": "2-3",
+              "Value": "2:3"
+            },
+            {
+              "Name": "4-0",
+              "Value": "4:0"
+            },
+            {
+              "Name": "0-4",
+              "Value": "0:4"
+            },
+            {
+              "Name": "4-0 UP",
+              "Value": "4:0up"
+            },
+            {
+              "Name": "0-4 UP",
+              "Value": "0:4up"
+            },
+            {
+              "Name": "4-1",
+              "Value": "4:1"
+            },
+            {
+              "Name": "1-4",
+              "Value": "1:4"
+            },
+            {
+              "Name": "4-2",
+              "Value": "4:2"
+            },
+            {
+              "Name": "2-4",
+              "Value": "2:4"
+            },
+            {
+              "Name": "4-3",
+              "Value": "4:3"
+            },
+            {
+              "Name": "3-4",
+              "Value": "3:4"
+            },
+            {
+              "Name": "5-0 UP",
+              "Value": "5:0"
+            },
+            {
+              "Name": "0-5 UP",
+              "Value": "0:5"
+            },
+            {
+              "Name": "0-0",
+              "Value": "0:0"
+            },
+            {
+              "Name": "1-1",
+              "Value": "1:1"
+            },
+            {
+              "Name": "2-2",
+              "Value": "2:2"
+            },
+            {
+              "Name": "3-3",
+              "Value": "3:3"
+            },
+            {
+              "Name": "4-4",
+              "Value": "4:4"
+            },
+            {
+              "Name": "AOS",
+              "Value": "aos"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "30"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "0-1",
+              "Value": "0-1"
+            },
+            {
+              "Name": "2-3",
+              "Value": "2-3"
+            },
+            {
+              "Name": "4+",
+              "Value": "4-over,4&amp;over"
+            },
+            {
+              "Name": "4-6",
+              "Value": "4-6"
+            },
+            {
+              "Name": "7+",
+              "Value": "7-over,7&amp;over"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "126"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home First",
+              "Value": "1:1"
+            },
+            {
+              "Name": "Home Last",
+              "Value": "1:2"
+            },
+            {
+              "Name": "Away First",
+              "Value": "2:1"
+            },
+            {
+              "Name": "Away Last",
+              "Value": "2:2"
+            },
+            {
+              "Name": "No Goal",
+              "Value": "0:0"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "127"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Odd/Odd",
+              "Value": "oo"
+            },
+            {
+              "Name": "Odd/Even",
+              "Value": "oe"
+            },
+            {
+              "Name": "Even/Odd",
+              "Value": "eo"
+            },
+            {
+              "Name": "Even/Even",
+              "Value": "ee"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "128"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "No Goals",
+              "Value": "0"
+            },
+            {
+              "Name": "1 Goal",
+              "Value": "1"
+            },
+            {
+              "Name": "2 Goals",
+              "Value": "2"
+            },
+            {
+              "Name": "3 Goals",
+              "Value": "3"
+            },
+            {
+              "Name": "4 Goals",
+              "Value": "4"
+            },
+            {
+              "Name": "5+",
+              "Value": "5&amp;Over"
+            },
+            {
+              "Name": "5 Goals",
+              "Value": "5"
+            },
+            {
+              "Name": "6 Goals",
+              "Value": "6"
+            },
+            {
+              "Name": "7+",
+              "Value": "7&amp;Over"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "129"
+    },
+
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "No Goals",
+              "Value": "0"
+            },
+            {
+              "Name": "1 Goal",
+              "Value": "1"
+            },
+            {
+              "Name": "2 Goals",
+              "Value": "2"
+            },
+            {
+              "Name": "3 Goals",
+              "Value": "3"
+            },
+            {
+              "Name": "4 Goals",
+              "Value": "4"
+            },
+            {
+              "Name": "5+",
+              "Value": "5&amp;Over"
+            },
+            {
+              "Name": "5 Goals",
+              "Value": "5"
+            },
+            {
+              "Name": "6 Goals",
+              "Value": "6"
+            },
+            {
+              "Name": "7+",
+              "Value": "7&amp;Over"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "130"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "0-1",
+              "Value": "0-1"
+            },
+            {
+              "Name": "2-3",
+              "Value": "2-3"
+            },
+            {
+              "Name": "4+",
+              "Value": "4-over"
+            },
+            {
+              "Name": "4-6",
+              "Value": "4-6"
+            },
+            {
+              "Name": "7+",
+              "Value": "7-over"
+            }
+          ],
+          "Name": "Total Goal:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "131"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "0-1",
+              "Value": "0-1"
+            },
+            {
+              "Name": "2-3",
+              "Value": "2-3"
+            },
+            {
+              "Name": "4+",
+              "Value": "4-over"
+            },
+            {
+              "Name": "4-6",
+              "Value": "4-6"
+            },
+            {
+              "Name": "7+",
+              "Value": "7-over"
+            }
+          ],
+          "Name": "Total Goal:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "132"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "h"
+            },
+            {
+              "Name": "Even",
+              "Value": "a"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
       "Name": "",
       "Value": "",
       "Type": 1,
-      "BetTypes": "17"
+      "BetTypes": "136"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "h"
+            },
+            {
+              "Name": "Even",
+              "Value": "a"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "137"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "h"
+            },
+            {
+              "Name": "Even",
+              "Value": "a"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "138"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Odd",
+              "Value": "h"
+            },
+            {
+              "Name": "Even",
+              "Value": "a"
+            }
+          ],
+          "Name": "Odd/Even:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "139"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home/Over",
+              "Value": "ho"
+            },
+            {
+              "Name": "Home/Under",
+              "Value": "hu"
+            },
+            {
+              "Name": "Draw/Over",
+              "Value": "do"
+            },
+            {
+              "Name": "Draw/Under",
+              "Value": "du"
+            },
+            {
+              "Name": "Away/Over",
+              "Value": "ao"
+            },
+            {
+              "Name": "Away/Under",
+              "Value": "au"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "143"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "Home/Over",
+              "Value": "ho"
+            },
+            {
+              "Name": "Home/Under",
+              "Value": "hu"
+            },
+            {
+              "Name": "Draw/Over",
+              "Value": "do"
+            },
+            {
+              "Name": "Draw/Under",
+              "Value": "du"
+            },
+            {
+              "Name": "Away/Over",
+              "Value": "ao"
+            },
+            {
+              "Name": "Away/Under",
+              "Value": "au"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "144"
     },
     {
       "Selections": [
@@ -135,13 +1310,30 @@
           "XmlAttribute": "Hdp"
         }
       ],
-      "Name": "",
-      "Value": "",
       "Type": 1,
       "BetTypes": "153"
     },
     {
       "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        },
         {
           "Items": [
             {
@@ -228,7 +1420,7 @@
       ],
       "Inputs": [
         {
-          "Name": "Hdp:",
+          "Name": "Value:",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "Hdp"
@@ -241,6 +1433,25 @@
     },
     {
       "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        },
         {
           "Items": [
             {
@@ -268,6 +1479,14 @@
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "BetIdX"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
         }
       ],
       "Name": "",
@@ -343,6 +1562,25 @@
         {
           "Items": [
             {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        },
+        {
+          "Items": [
+            {
               "Name": "1",
               "Value": "801"
             },
@@ -369,10 +1607,845 @@
           "XmlAttribute": "BetIdX"
         }
       ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
       "Name": "",
       "Value": "",
       "Type": 1,
       "BetTypes": "220"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "h"
+            },
+            {
+              "Name": "Under",
+              "Value": "a"
+            }
+          ],
+          "Name": "Over/Under:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        },
+        {
+          "Items": [
+            {
+              "Name": "01",
+              "Value": "0"
+            },
+            {
+              "Name": "02",
+              "Value": "1"
+            },
+            {
+              "Name": "03",
+              "Value": "2"
+            },
+            {
+              "Name": "04",
+              "Value": "3"
+            },
+            {
+              "Name": "05",
+              "Value": "4"
+            },
+            {
+              "Name": "06",
+              "Value": "5"
+            },
+            {
+              "Name": "07",
+              "Value": "6"
+            },
+            {
+              "Name": "08",
+              "Value": "7"
+            },
+            {
+              "Name": "09",
+              "Value": "8"
+            },
+            {
+              "Name": "10",
+              "Value": "9"
+            },
+            {
+              "Name": "11",
+              "Value": "10"
+            },
+            {
+              "Name": "12",
+              "Value": "11"
+            },
+            {
+              "Name": "13",
+              "Value": "12"
+            },
+            {
+              "Name": "14",
+              "Value": "13"
+            },
+            {
+              "Name": "15",
+              "Value": "14"
+            },
+            {
+              "Name": "16",
+              "Value": "15"
+            },
+            {
+              "Name": "17",
+              "Value": "16"
+            },
+            {
+              "Name": "18",
+              "Value": "17"
+            },
+            {
+              "Name": "19",
+              "Value": "18"
+            },
+            {
+              "Name": "20",
+              "Value": "19"
+            },
+            {
+              "Name": "21",
+              "Value": "20"
+            },
+            {
+              "Name": "22",
+              "Value": "21"
+            },
+            {
+              "Name": "23",
+              "Value": "22"
+            },
+            {
+              "Name": "24",
+              "Value": "23"
+            },
+            {
+              "Name": "25",
+              "Value": "24"
+            },
+            {
+              "Name": "26",
+              "Value": "25"
+            },
+            {
+              "Name": "27",
+              "Value": "26"
+            },
+            {
+              "Name": "28",
+              "Value": "27"
+            },
+            {
+              "Name": "29",
+              "Value": "28"
+            },
+            {
+              "Name": "30",
+              "Value": "29"
+            },
+            {
+              "Name": "31",
+              "Value": "30"
+            },
+            {
+              "Name": "32",
+              "Value": "31"
+            },
+            {
+              "Name": "33",
+              "Value": "32"
+            },
+            {
+              "Name": "34",
+              "Value": "33"
+            },
+            {
+              "Name": "35",
+              "Value": "34"
+            },
+            {
+              "Name": "36",
+              "Value": "35"
+            },
+            {
+              "Name": "37",
+              "Value": "36"
+            },
+            {
+              "Name": "38",
+              "Value": "37"
+            },
+            {
+              "Name": "39",
+              "Value": "38"
+            },
+            {
+              "Name": "40",
+              "Value": "39"
+            },
+            {
+              "Name": "41",
+              "Value": "40"
+            },
+            {
+              "Name": "42",
+              "Value": "41"
+            },
+            {
+              "Name": "43",
+              "Value": "42"
+            },
+            {
+              "Name": "44",
+              "Value": "43"
+            },
+            {
+              "Name": "45",
+              "Value": "44"
+            },
+            {
+              "Name": "46",
+              "Value": "45"
+            },
+            {
+              "Name": "47",
+              "Value": "46"
+            },
+            {
+              "Name": "48",
+              "Value": "47"
+            },
+            {
+              "Name": "49",
+              "Value": "48"
+            },
+            {
+              "Name": "50",
+              "Value": "49"
+            },
+            {
+              "Name": "51",
+              "Value": "50"
+            },
+            {
+              "Name": "52",
+              "Value": "51"
+            },
+            {
+              "Name": "53",
+              "Value": "52"
+            },
+            {
+              "Name": "54",
+              "Value": "53"
+            },
+            {
+              "Name": "55",
+              "Value": "54"
+            },
+            {
+              "Name": "56",
+              "Value": "55"
+            },
+            {
+              "Name": "57",
+              "Value": "56"
+            },
+            {
+              "Name": "58",
+              "Value": "57"
+            },
+            {
+              "Name": "59",
+              "Value": "58"
+            },
+            {
+              "Name": "60",
+              "Value": "59"
+            },
+            {
+              "Name": "61",
+              "Value": "60"
+            },
+            {
+              "Name": "62",
+              "Value": "61"
+            },
+            {
+              "Name": "63",
+              "Value": "62"
+            },
+            {
+              "Name": "64",
+              "Value": "63"
+            },
+            {
+              "Name": "65",
+              "Value": "64"
+            },
+            {
+              "Name": "66",
+              "Value": "65"
+            },
+            {
+              "Name": "67",
+              "Value": "66"
+            },
+            {
+              "Name": "68",
+              "Value": "67"
+            },
+            {
+              "Name": "69",
+              "Value": "68"
+            },
+            {
+              "Name": "70",
+              "Value": "69"
+            },
+            {
+              "Name": "71",
+              "Value": "70"
+            },
+            {
+              "Name": "72",
+              "Value": "71"
+            },
+            {
+              "Name": "73",
+              "Value": "72"
+            },
+            {
+              "Name": "74",
+              "Value": "73"
+            },
+            {
+              "Name": "75",
+              "Value": "74"
+            },
+            {
+              "Name": "76",
+              "Value": "75"
+            },
+            {
+              "Name": "77",
+              "Value": "76"
+            },
+            {
+              "Name": "78",
+              "Value": "77"
+            },
+            {
+              "Name": "79",
+              "Value": "78"
+            },
+            {
+              "Name": "80",
+              "Value": "79"
+            },
+            {
+              "Name": "81",
+              "Value": "80"
+            },
+            {
+              "Name": "82",
+              "Value": "81"
+            },
+            {
+              "Name": "83",
+              "Value": "82"
+            },
+            {
+              "Name": "84",
+              "Value": "83"
+            },
+            {
+              "Name": "85",
+              "Value": "84"
+            },
+            {
+              "Name": "86",
+              "Value": "85"
+            },
+            {
+              "Name": "87",
+              "Value": "86"
+            },
+            {
+              "Name": "88",
+              "Value": "87"
+            },
+            {
+              "Name": "89",
+              "Value": "88"
+            },
+            {
+              "Name": "90",
+              "Value": "89"
+            }
+          ],
+          "Name": "Minute",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp1"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "228"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        },
+        {
+          "Items": [
+            {
+              "Name": "01",
+              "Value": "0"
+            },
+            {
+              "Name": "02",
+              "Value": "1"
+            },
+            {
+              "Name": "03",
+              "Value": "2"
+            },
+            {
+              "Name": "04",
+              "Value": "3"
+            },
+            {
+              "Name": "05",
+              "Value": "4"
+            },
+            {
+              "Name": "06",
+              "Value": "5"
+            },
+            {
+              "Name": "07",
+              "Value": "6"
+            },
+            {
+              "Name": "08",
+              "Value": "7"
+            },
+            {
+              "Name": "09",
+              "Value": "8"
+            },
+            {
+              "Name": "10",
+              "Value": "9"
+            },
+            {
+              "Name": "11",
+              "Value": "10"
+            },
+            {
+              "Name": "12",
+              "Value": "11"
+            },
+            {
+              "Name": "13",
+              "Value": "12"
+            },
+            {
+              "Name": "14",
+              "Value": "13"
+            },
+            {
+              "Name": "15",
+              "Value": "14"
+            },
+            {
+              "Name": "16",
+              "Value": "15"
+            },
+            {
+              "Name": "17",
+              "Value": "16"
+            },
+            {
+              "Name": "18",
+              "Value": "17"
+            },
+            {
+              "Name": "19",
+              "Value": "18"
+            },
+            {
+              "Name": "20",
+              "Value": "19"
+            },
+            {
+              "Name": "21",
+              "Value": "20"
+            },
+            {
+              "Name": "22",
+              "Value": "21"
+            },
+            {
+              "Name": "23",
+              "Value": "22"
+            },
+            {
+              "Name": "24",
+              "Value": "23"
+            },
+            {
+              "Name": "25",
+              "Value": "24"
+            },
+            {
+              "Name": "26",
+              "Value": "25"
+            },
+            {
+              "Name": "27",
+              "Value": "26"
+            },
+            {
+              "Name": "28",
+              "Value": "27"
+            },
+            {
+              "Name": "29",
+              "Value": "28"
+            },
+            {
+              "Name": "30",
+              "Value": "29"
+            },
+            {
+              "Name": "31",
+              "Value": "30"
+            },
+            {
+              "Name": "32",
+              "Value": "31"
+            },
+            {
+              "Name": "33",
+              "Value": "32"
+            },
+            {
+              "Name": "34",
+              "Value": "33"
+            },
+            {
+              "Name": "35",
+              "Value": "34"
+            },
+            {
+              "Name": "36",
+              "Value": "35"
+            },
+            {
+              "Name": "37",
+              "Value": "36"
+            },
+            {
+              "Name": "38",
+              "Value": "37"
+            },
+            {
+              "Name": "39",
+              "Value": "38"
+            },
+            {
+              "Name": "40",
+              "Value": "39"
+            },
+            {
+              "Name": "41",
+              "Value": "40"
+            },
+            {
+              "Name": "42",
+              "Value": "41"
+            },
+            {
+              "Name": "43",
+              "Value": "42"
+            },
+            {
+              "Name": "44",
+              "Value": "43"
+            },
+            {
+              "Name": "45",
+              "Value": "44"
+            },
+            {
+              "Name": "46",
+              "Value": "45"
+            },
+            {
+              "Name": "47",
+              "Value": "46"
+            },
+            {
+              "Name": "48",
+              "Value": "47"
+            },
+            {
+              "Name": "49",
+              "Value": "48"
+            },
+            {
+              "Name": "50",
+              "Value": "49"
+            },
+            {
+              "Name": "51",
+              "Value": "50"
+            },
+            {
+              "Name": "52",
+              "Value": "51"
+            },
+            {
+              "Name": "53",
+              "Value": "52"
+            },
+            {
+              "Name": "54",
+              "Value": "53"
+            },
+            {
+              "Name": "55",
+              "Value": "54"
+            },
+            {
+              "Name": "56",
+              "Value": "55"
+            },
+            {
+              "Name": "57",
+              "Value": "56"
+            },
+            {
+              "Name": "58",
+              "Value": "57"
+            },
+            {
+              "Name": "59",
+              "Value": "58"
+            },
+            {
+              "Name": "60",
+              "Value": "59"
+            },
+            {
+              "Name": "61",
+              "Value": "60"
+            },
+            {
+              "Name": "62",
+              "Value": "61"
+            },
+            {
+              "Name": "63",
+              "Value": "62"
+            },
+            {
+              "Name": "64",
+              "Value": "63"
+            },
+            {
+              "Name": "65",
+              "Value": "64"
+            },
+            {
+              "Name": "66",
+              "Value": "65"
+            },
+            {
+              "Name": "67",
+              "Value": "66"
+            },
+            {
+              "Name": "68",
+              "Value": "67"
+            },
+            {
+              "Name": "69",
+              "Value": "68"
+            },
+            {
+              "Name": "70",
+              "Value": "69"
+            },
+            {
+              "Name": "71",
+              "Value": "70"
+            },
+            {
+              "Name": "72",
+              "Value": "71"
+            },
+            {
+              "Name": "73",
+              "Value": "72"
+            },
+            {
+              "Name": "74",
+              "Value": "73"
+            },
+            {
+              "Name": "75",
+              "Value": "74"
+            },
+            {
+              "Name": "76",
+              "Value": "75"
+            },
+            {
+              "Name": "77",
+              "Value": "76"
+            },
+            {
+              "Name": "78",
+              "Value": "77"
+            },
+            {
+              "Name": "79",
+              "Value": "78"
+            },
+            {
+              "Name": "80",
+              "Value": "79"
+            },
+            {
+              "Name": "81",
+              "Value": "80"
+            },
+            {
+              "Name": "82",
+              "Value": "81"
+            },
+            {
+              "Name": "83",
+              "Value": "82"
+            },
+            {
+              "Name": "84",
+              "Value": "83"
+            },
+            {
+              "Name": "85",
+              "Value": "84"
+            },
+            {
+              "Name": "86",
+              "Value": "85"
+            },
+            {
+              "Name": "87",
+              "Value": "86"
+            },
+            {
+              "Name": "88",
+              "Value": "87"
+            },
+            {
+              "Name": "89",
+              "Value": "88"
+            },
+            {
+              "Name": "90",
+              "Value": "89"
+            }
+          ],
+          "Name": "Minute",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp1"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "Hdp"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "229"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Home",
+              "Value": "h"
+            },
+            {
+              "Name": "Away",
+              "Value": "a"
+            }
+          ],
+          "Name": "Team:",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Type": 1,
+      "BetTypes": "376"
     },
     {
       "Selections": [
