@@ -3,8 +3,7 @@ import { AbnormalBetModel } from '../../models/abnormal-bet.model';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
-import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { AbnormalBetTicketViewModel, PrimitiveProperty } from '../event-abnormal-bet.model';
+import { AbnormalBetTicketViewModel, PrimitiveProperty, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 
 export class ValidationBusinessRuleArgs {
   requestId?: number;
@@ -20,7 +19,7 @@ export class ValidationBusinessRuleArgs {
 
 export class ValidationBusinessRuleOutput {
   isValid: boolean;
-  warningModel: ConfirmAbnormalBetModel;
+  warningModel: ValidationAbnormalBet;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   abnormalBetTicketRequests: AbnormalBetTicketViewModel[];
 }

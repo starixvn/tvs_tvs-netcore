@@ -45,8 +45,6 @@ export class ValidationAbnormalBet {
   abWhiteListTransIds: string;
   isHasWarningRemovedTickets: boolean;
   isHasUusTickets: boolean;
-  listBetteam: string;
-  listBettype: string;
 }
 
 

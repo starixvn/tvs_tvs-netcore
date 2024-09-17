@@ -65,7 +65,8 @@ public class MarkTicketsServiceImp : MarkTicketsService
 
         criteria.SiteDbGroupId = siteDbGroupId;
         criteria.TransIds = Helper.JoinBetIdList(ticketsInServer);
-        var results = await repository.FetchAsync<Result>(criteria);
+        var (results, _) = await repository.FetchMultipleAsync<Result, long>(criteria);
+
         return results;
     }
 }

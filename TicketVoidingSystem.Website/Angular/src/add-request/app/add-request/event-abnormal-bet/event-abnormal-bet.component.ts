@@ -1,18 +1,19 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
-import { AbnormalFilterBy } from '../../../../utility/constants/config';
+import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { AbnormalBetModel } from '../models/abnormal-bet.model';
 import { PermissionAddRequest } from '../models/permission-add-request.model';
 import { OthersModel } from '../others/others.model';
 import { PopupService } from '../services/popup.service';
 import { ConfirmAbnormalBetComponent } from './confirm-abnormal-bet/confirm-abnormal-bet.component';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { AbnormalBetTicketViewModel, PrimitiveProperty } from './event-abnormal-bet.model';
+import { AbnormalBetTicketViewModel, PrimitiveProperty, ValidationAbnormalBet } from './event-abnormal-bet.model';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './services/validation.model';
@@ -27,6 +28,7 @@ export class EventAbnormalBetComponent implements OnInit {
   @Input() isEdit: boolean;
   @Input() requestId?: number;
   @Input() filter: FilterModel;
+  @Input() issueTypes = new IssueTypes();
   @Input() userId: number;
   @Input() requestedBy: string;
   @Input() others = new OthersModel();
@@ -88,7 +90,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.updateAbnormalBetModel();
     this.addRequestStore.changeBlockingUiStatus(true);
     if (this.filter.isVoided) {
-      await this.checkIfRequestHasWarning(new ConfirmAbnormalBetModel());
+      this.openConfirmAbnormalBet(new ValidationAbnormalBet());
       this.addRequestStore.changeBlockingUiStatus(false);
 
       return;
@@ -124,44 +126,34 @@ export class EventAbnormalBetComponent implements OnInit {
 
     const validation = await this.checkValidBusinessRule(false);
     if (validation.isValid) {
-      this.confirmAbnormalBetModel = validation.warningModel;
-      await this.checkIfRequestHasWarning(validation.warningModel);
+      this.openConfirmAbnormalBet(validation.warningModel);
     } else {
       this.addRequestStore.changeSavingRequestStatus(false);
     }
   }
 
-  private async checkIfRequestHasWarning(warningModel: ConfirmAbnormalBetModel): Promise<void> {
-    let isHasWarningForAbnormalBet = false;
-    let isHasWarningEditTakeNoteRequest = false;
-
-    if (!this.filter.isVoided) {
-      isHasWarningForAbnormalBet = this.validationService.isValidationHasWarningTicket(this.permission, warningModel);
-      isHasWarningEditTakeNoteRequest = this.validationService.isHasWarningEditTakeNoteRequest(this.isEdit, this.filter.action, this.actionIdOfFirstTimeAccess);
-    }
-
-    warningModel.isEditingByAnotherUser =
-      this.validationService.isEditingByAnotherUser(this.isEdit, Number(document.getElementById('body').getAttribute('user-id')), this.userId);
-    if (isHasWarningForAbnormalBet || isHasWarningEditTakeNoteRequest || warningModel.isEditingByAnotherUser || warningModel.isHasWarningRemovedTickets) {
-      this.openConfirmAbnormalBet(isHasWarningForAbnormalBet, isHasWarningEditTakeNoteRequest, this.betIdsComponent.getAllBetIds(), warningModel);
-    } else {
-      await this.executeApiSaveRequest();
-    }
-  }
-
-  private openConfirmAbnormalBet(isHasWarningForAbnormalBet: boolean, isHasWarningEditTakeNoteRequest: boolean, transIds: string, warningModel: ConfirmAbnormalBetModel): void {
-    this.confirmAbnormalBetModel = warningModel;
+  private openConfirmAbnormalBet(validationResult: ValidationAbnormalBet): void {
+    this.confirmAbnormalBetModel = new ConfirmAbnormalBetModel();
     this.confirmAbnormalBetModel.isOpenDialog = true;
-    this.confirmAbnormalBetModel.isHasWarningForAbnormalBet = isHasWarningForAbnormalBet;
-    this.confirmAbnormalBetModel.isHasWarningEditTakeNoteRequest = isHasWarningEditTakeNoteRequest;
-    this.confirmAbnormalBetModel.isHasWarningRemovedTickets = warningModel.isHasWarningRemovedTickets;
-    this.confirmAbnormalBetModel.transIds = transIds;
+    this.confirmAbnormalBetModel.issueTypeName = this.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === this.filter.issueTypeId).issueTypeName;
+    this.confirmAbnormalBetModel.subIssueTypeName = this.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === this.filter.subIssueTypeId).subIssueTypeName;
+    this.confirmAbnormalBetModel.actionName = TVSRequestActionType.NAME_MAPPING[this.filter.action];
+
+    this.confirmAbnormalBetModel.isHasWarningForAbnormalBet = !this.filter.isVoided ? this.validationService.isValidationHasWarningTicket(this.permission, validationResult) : false;
+    this.confirmAbnormalBetModel.isHasWarningEditTakeNoteRequest = !this.filter.isVoided ? this.validationService.isHasWarningEditTakeNoteRequest(this.isEdit, this.filter.action, this.actionIdOfFirstTimeAccess) : false;
+    this.confirmAbnormalBetModel.settledTickets = validationResult.settledTransIds;
+    this.confirmAbnormalBetModel.ticketsOfVIPCustomer = validationResult.transIdsOfVIPCustomer;
+    this.confirmAbnormalBetModel.ticketsOfCustomerClass201 = validationResult.transIdsOfCustomerClass201;
+    this.confirmAbnormalBetModel.ticketsOfCustomerClass4K = validationResult.transIdsOfCustomerClass4K;
+    this.confirmAbnormalBetModel.isHasWarningRemovedTickets = validationResult.isHasWarningRemovedTickets;
+    this.confirmAbnormalBetModel.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(this.isEdit, Number(document.getElementById('body').getAttribute('user-id')), this.userId);
+    this.confirmAbnormalBetModel.transIds = this.betIdsComponent.getAllBetIds();
     this.confirmAbnormalBetModel.requestId = this.requestId;
     this.confirmAbnormalBetModel.requestedBy = this.requestedBy;
     this.confirmAbnormalBetModel = _.clone(this.confirmAbnormalBetModel);
   }
 
-  initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup: boolean): ValidationBusinessRuleArgs{
+  initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup: boolean): ValidationBusinessRuleArgs {
     const args = new ValidationBusinessRuleArgs();
     args.actionId = this.filter.action;
     args.requestId = this.requestId;

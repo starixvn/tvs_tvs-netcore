@@ -12,6 +12,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="mg-bottom-5 double-check-area">
+                        <div>Please double check below type if correct before proceeding</div>
+                        <div class="ml-2">
+                          <div>Issue Type: <strong>{{model.issueTypeName}}</strong></div>
+                          <div>Sub Type: <strong>{{model.subIssueTypeName}}</strong></div>
+                          <div>Action: <strong>{{model.actionName}}</strong></div>
+                        </div>
+                    </div>
                     <ng-container *ngIf="model.isHasWarningForAbnormalBet">
                         <div><i class="fa fa-exclamation-triangle pt-2 text-warn"></i> HAVE TICKET(S) ON REQUEST AS
                             BELOW:</div>
@@ -36,14 +44,13 @@
                       <span *ngIf="isShowErrorCannotRemoveAllTickets" class="text-error">Cannot remove all tickets from request</span>
                     </ng-container>
                     <ng-container *ngIf="model.isHasWarningEditTakeNoteRequest || model.isHasWarningRemovedTickets">
-                        <div>Take note or removed ticket(s) will be unmarked</div>
+                        <div>Take note or removed ticket(s) will be unmarked.</div>
                         <div class="mg-left-17 mg-top-10" *ngIf="isEdit">
                             <label><input type="checkbox" [(ngModel)]="isConfirmCalculator"/> Auto calculate ticket(s) if possible</label>
                         </div>
                     </ng-container>
                     <div class="text-red" *ngIf="model.isEditingByAnotherUser">Please remind this request {{model.requestId}} is confirmed by {{model.requestedBy}}.</div>
-                    <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO
-                        PROCESS WITH ABOVE INFO?</div>
+                    <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>                   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn confirm" (click)="saveClick()">OK</button>

@@ -106,7 +106,7 @@ export class PopupService {
     const totalTicketsMarked = addRequestResult.markedTicketsSuccessful.length;
     if (StaticService.isAbnormalBet(query.issueTypeId) && totalTicketsMarked) {
       const totalTicketsInputted = query.abnormalBetInfo.transIds.split(',').length;
-      return `<div>Marked Ticket(s): <strong>${totalTicketsMarked}/${totalTicketsInputted}</strong></div>`;
+      return `<div class="mt-1">Marked Ticket(s): <strong>${totalTicketsMarked}/${totalTicketsInputted}</strong></div>`;
     }
 
     return '';
