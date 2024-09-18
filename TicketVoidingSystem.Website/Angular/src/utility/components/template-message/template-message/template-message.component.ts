@@ -143,6 +143,11 @@ export class TemplateMessageComponent implements OnChanges {
       (defaultTemplateWhenSportNull ? defaultTemplateWhenSportNull.templateId : 9999);
   }
 
+  updateCheckBoxVarMessage() {
+    this.updateTemplate();
+    this.initialMessage = _.cloneDeep(this.message);
+  }
+
   updateMessage() {
     this.resetMessage();
     this.replaceEventType();
@@ -252,21 +257,23 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   updateInputs() {
-    if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
-      this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
-        this.selectedTemplated.inputTexts[0].msgEnglishValue);
-      this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
-        this.selectedTemplated.inputTexts[1].msgEnglishValue);
-    } else {
-      this.selectedTemplated.inputTexts.forEach(item => {
-        const text: TemplateContent = {
-          msgEnglish: item.msgEnglishValue,
-          msgChineseTraditional: item.msgChineseTraditionalValue,
-          msgChineseSimplified: item.msgChineseSimplifiedValue,
-          msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
-        };
-        this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
-      });
+    if (this.selectedTemplated.inputTexts?.length > 0) {
+      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
+        this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
+          this.selectedTemplated.inputTexts[0].msgEnglishValue);
+        this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
+          this.selectedTemplated.inputTexts[1].msgEnglishValue);
+      } else {
+        this.selectedTemplated.inputTexts.forEach(item => {
+          const text: TemplateContent = {
+            msgEnglish: item.msgEnglishValue,
+            msgChineseTraditional: item.msgChineseTraditionalValue,
+            msgChineseSimplified: item.msgChineseSimplifiedValue,
+            msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
+          };
+          this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
+        });
+      }
     }
   }
 
@@ -444,6 +451,12 @@ export class TemplateMessageComponent implements OnChanges {
     return this.isShowMessages && this.issueTypeUpdateSpecialBetTypeVoidSingleBet();
   }
 
+  isShowCheckBoxVarMessage(): boolean {
+    return this.isShowMessages
+      && this.isVoidSinglePage() && (this.isDangerAccepted() || this.isRedCard() || this.isWrongScore())
+      && this.templateSettings.some(x => x.subIssueTypeId === this.subIssueTypeId && x.isCheckedVar);
+  }
+
   isShowAioCheckBoxMessage(): boolean {
     return this.isShowMessages && this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds());
   }
@@ -474,6 +487,14 @@ export class TemplateMessageComponent implements OnChanges {
 
   isWrongScore(): boolean {
     return StaticService.isWrongScore(this.issueTypeId?.toString());
+  }
+
+  isDangerAccepted(): boolean {
+    return StaticService.isDangerAccepted(this.issueTypeId?.toString());
+  }
+
+  isRedCard(): boolean {
+    return StaticService.isRedCard(this.issueTypeId?.toString());
   }
 
   isTVSVoidPage(): boolean {
