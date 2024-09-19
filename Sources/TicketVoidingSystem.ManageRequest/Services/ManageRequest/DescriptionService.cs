@@ -42,7 +42,8 @@ public class DescriptionServiceImp : DescriptionService
                 {IssueTypeConstant.NotParticipate, BuildMatchLeague},
                 {IssueTypeConstant.RecoverTicket, BuildProducts},
                 {IssueTypeConstant.WrongMarketOffered, BuildMatchLeague},
-                {IssueTypeConstant.TechnicalError, BuildMatchLeague}
+                {IssueTypeConstant.TechnicalError, BuildMatchLeague},
+                {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTimeMatchLeague},
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);

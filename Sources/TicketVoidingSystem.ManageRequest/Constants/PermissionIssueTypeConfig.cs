@@ -30,7 +30,8 @@ public static class PermissionIssueTypeConfig
                     new() { FunctionKey = SpecialDeleteFunctionKeys.NotParticipate, IssueTypeId = IssueTypeConstant.NotParticipate },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.RecoverTicket, IssueTypeId = IssueTypeConstant.RecoverTicket },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.WrongMarketOffered, IssueTypeId = IssueTypeConstant.WrongMarketOffered },
-                    new() { FunctionKey = SpecialDeleteFunctionKeys.TechnicalError, IssueTypeId = IssueTypeConstant.TechnicalError }
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.TechnicalError, IssueTypeId = IssueTypeConstant.TechnicalError },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.WrongOddsSportsBook, IssueTypeId = IssueTypeConstant.WrongOddsSportsBook }
                 };
             return permission;
         }
