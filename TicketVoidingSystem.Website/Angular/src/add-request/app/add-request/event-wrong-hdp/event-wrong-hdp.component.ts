@@ -20,7 +20,9 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { SportType } from '../../../../utility/constants/sport.constant';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../utility/constants/config';
 
 @Component({
   selector: 'event-wrong-hdp',
@@ -77,12 +79,23 @@ export class EventWrongHdpComponent implements OnInit {
     if (this.isEdit) {
       this.eventWrongHdpService.assignModelsToEvents(this.allSelectedEvents, this.wrongHdpModels);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
       this.resetAllData();
       this.mainEvent = this.eventWrongHdpService.initDefaultMainEvent(this.allSelectedEvents);
     }
+  }
+
+  private createGetChildMatchesQuery(): GetChildMatchQuery{
+    const query = new GetChildMatchQuery();
+    query.issueTypeId = Number(this.filter.issueTypeId);
+    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent.matchId;
+    query.isMainMatch = true;
+    query.sportType = this.mainEvent.sportType;
+
+    return query;
   }
 
   public async handleSearchEvent(): Promise<void> {
@@ -100,7 +113,7 @@ export class EventWrongHdpComponent implements OnInit {
     await this.logInfoService.getLogInfo([this.mainEvent], this.isEdit, this.requestId, this.filter, this.primitiveProps);
     mainLogInfo.logInfo.isShowValidation = true;
 
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
     this.primitiveProps.isShowRelatedEvents = true;
     this.addRequestStore.changeSavingRequestStatus(false);
     mainLogInfo.isBlock = false;
@@ -116,7 +129,7 @@ export class EventWrongHdpComponent implements OnInit {
     this.mainEvent.eventName = this.eventLeagueComponent?.selectedMatch.name;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.eventDate =  this.eventLeagueComponent?.selectedMatch.eventDate;
-    this.mainEvent.isSportTypeSoccer = this.eventLeagueComponent?.selectedMatch.sportType === SportType.SOCCER;
+    this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 

@@ -13,5 +13,5 @@ export class LogInfoWrongOdds {
   messageValidationLogInfo?: ValidationMessage[];
   linkedLogsViewModel: LinkedLogsViewModel;
   isShowValidation: boolean;
-  isSportTypeSoccer: boolean;
+  sportType: number;
 }

@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterModel } from '../../filter/filter.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
@@ -21,16 +20,10 @@ export class RelatedEventService {
     private readonly validationService: ValidationService,
   ) {}
 
-  async getChildMatches(mainMatchId: number, eventDate: Date, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
-    const query = new GetChildMatchQuery();
-    query.issueTypeId = Number(filterModel.issueTypeId);
-    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = mainMatchId;
-    query.isMainMatch = isMainMatch;
-
+  async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);
   }
-  
+
   updateEvents(models: ChildMatchModel[], filterWrongOuModel: FilterWrongOuModel): LogInfoWrongOu[] {
     const newEvents = models
       .map(x => {
@@ -68,7 +61,14 @@ export class RelatedEventService {
         return;
       }
       addRelatedEventArg.primitiveProps.isBlock = true;
-      const models = await this.getChildMatches(matchId, addRelatedEventArg.mainEvent.eventDate, addRelatedEventArg.filter, false);
+      const query = new GetChildMatchQuery();
+      query.issueTypeId = Number(addRelatedEventArg.filter.issueTypeId);
+      query.eventDate = addRelatedEventArg.mainEvent.eventDate ? moment(addRelatedEventArg.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+      query.matchId = matchId
+      query.isMainMatch = false;
+      query.sportType = addRelatedEventArg.mainEvent.sportType;
+      
+      const models = await this.getChildMatches(query);
       if (models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         addRelatedEventArg.primitiveProps.isBlock = false;

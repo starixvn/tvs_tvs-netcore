@@ -45,4 +45,6 @@ public class WrongHdpViewModel
     public int LiveIndicator { get; set; }
 
     public LogInfoDetail? LogInfoDetail { get; set; }
+
+    public int SportType { get; set; }
 }

@@ -63,6 +63,7 @@ export class EventWrongHdpService {
         liveIndicator: x.liveIndicator
       } as FilterWithHdpModel;
       event.eventDate = x.eventDate;
+      event.sportType = x.sportType;
 
       allEvents.push(event);
     });

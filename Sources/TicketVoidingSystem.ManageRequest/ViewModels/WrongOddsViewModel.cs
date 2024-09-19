@@ -28,4 +28,5 @@ public class WrongOddsViewModel
     public string FromOddsNotVoidAwayUnder { get; set; }
     public string ToOddsNotVoidAwayUnder { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
+    public int SportType { get; set; }
 }

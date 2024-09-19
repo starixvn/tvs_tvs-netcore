@@ -22,4 +22,5 @@ export class WrongHdpModel {
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
   liveIndicator: number;
+  sportType: number;
 }

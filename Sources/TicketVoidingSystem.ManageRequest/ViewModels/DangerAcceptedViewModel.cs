@@ -23,4 +23,5 @@ public class DangerAcceptedViewModel
     public int? SATime { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
     public bool? IsCheckedVar { get; set; }
+    public int SportType { get; set; }
 }

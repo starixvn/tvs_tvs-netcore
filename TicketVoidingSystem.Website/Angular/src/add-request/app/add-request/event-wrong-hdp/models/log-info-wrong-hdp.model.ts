@@ -17,5 +17,5 @@ export class LogInfoWrongHdp {
   linkedLogsViewModel: LinkedLogsViewModel;
   isShowValidation: boolean;
   eventDate?: Date;
-  isSportTypeSoccer: boolean;
+  sportType: number;
 }

@@ -28,6 +28,9 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
+import moment from 'moment-timezone';
+import { DateTimeFormat } from '../../../../utility/constants/config';
 
 @Component({
   selector: 'event-danger-accepted',
@@ -95,7 +98,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
       this.eventDangerAcceptedService.assignModelsToEvents(this.allSelectedEvents, this.dangerAcceptedModels, this.primitiveProps, this.addRequestStore);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
       this.eventDangerAcceptedService.updateDefaultFilterTime(this.defaultFilterTimeWithAllowance, this.dangerAcceptedModels);
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
       this.primitiveProps.isShowLogInfoMainMatch = true;
       this.primitiveProps.isShowRelatedEvents = true;
     } else {
@@ -121,7 +124,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     }
 
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.eventDate, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
@@ -135,6 +138,17 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
+  private createGetChildMatchesQuery(): GetChildMatchQuery{
+    const query = new GetChildMatchQuery();
+    query.issueTypeId = Number(this.filter.issueTypeId);
+    query.eventDate = this.mainEvent.eventDate ? moment(this.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent.matchId;
+    query.isMainMatch = true;
+    query.sportType = this.mainEvent.sportType;
+
+    return query;
+  }
+  
   changeMatchEvent(): void {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitiveProps.isShowLogInfoMainMatch = false;
@@ -146,6 +160,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.eventDate = this.eventLeagueComponent?.selectedMatch.eventDate;
+    this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     this.updateMatchId.emit(this.eventLeagueComponent?.selectedMatch);
   }
 

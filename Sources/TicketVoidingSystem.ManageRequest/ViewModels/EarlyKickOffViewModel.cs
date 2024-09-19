@@ -26,4 +26,6 @@ public class EarlyKickOffViewModel
     public DateTime? EventDate { get; set; }
 
     public Match Match { get; set; }
+
+    public int SportType { get; set; }
 }

@@ -16,7 +16,6 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { SportType } from '../../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'event-wrong-odds',
@@ -121,7 +120,7 @@ export class EventWrongOddsComponent implements OnInit {
   public async changeMatchEvent(): Promise<void> {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch?.matchId;
-    this.logInfoEvent.isSportTypeSoccer = this.eventLeagueComponent?.selectedMatch.sportType === SportType.SOCCER;
+    this.logInfoEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds, this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.updateMatchId.emit(this.logInfoEvent.matchId)

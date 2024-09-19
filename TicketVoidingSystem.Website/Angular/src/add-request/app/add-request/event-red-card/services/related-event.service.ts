@@ -5,7 +5,6 @@ import { LABELS } from '../../../../../utility/constants/labels';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { LogInfoRedCard } from '../../event-red-card/log-info-red-card/log-info-red-card.model';
-import { FilterModel } from '../../filter/filter.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { LogInfoService } from './log-info.service';
@@ -25,13 +24,7 @@ export class RelatedEventService {
     private readonly eventRedCardService: EventRedCardService,
   ) {}
 
-  async getChildMatches(mainMatchId: number, eventDate: Date, filter: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
-    const query = new GetChildMatchQuery();
-    query.issueTypeId = Number(filter.issueTypeId);
-    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = mainMatchId;
-    query.isMainMatch = isMainMatch;
-
+  async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
     return this.addRequestApiService.getChildMatches(query);
   }
 
@@ -70,7 +63,14 @@ export class RelatedEventService {
         return;
       }
       arg.primitiveProps.isBlock = true;
-      const models = await this.getChildMatches(matchId, arg.mainEvent.eventDate, arg.filter, false);
+      const query = new GetChildMatchQuery();
+      query.issueTypeId = Number(arg.filter.issueTypeId);
+      query.eventDate = arg.mainEvent.eventDate ? moment(arg.mainEvent.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+      query.matchId = matchId
+      query.isMainMatch = false;
+      query.sportType = arg.mainEvent.sportType;
+      
+      const models = await this.getChildMatches(query);
       if (models.length === 0) {
         arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;

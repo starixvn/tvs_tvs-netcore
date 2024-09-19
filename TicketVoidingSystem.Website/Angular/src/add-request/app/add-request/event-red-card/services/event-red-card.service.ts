@@ -37,6 +37,7 @@ export class EventRedCardService {
         saTime: x.saTime
       } as FilterTimeWithAllowance;
       event.eventDate = x.eventDate;
+      event.sportType = x.sportType;
       
       allEvents.push(event);
     });

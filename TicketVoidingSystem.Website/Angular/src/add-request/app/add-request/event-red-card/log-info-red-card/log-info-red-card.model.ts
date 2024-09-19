@@ -15,4 +15,5 @@ export class LogInfoRedCard {
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
   eventDate?: Date;
+  sportType: number;
 }

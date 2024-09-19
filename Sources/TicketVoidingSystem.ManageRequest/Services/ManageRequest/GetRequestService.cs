@@ -165,7 +165,8 @@ public class GetRequestServiceImp : GetRequestService
             AATime = model.AATime,
             PATime = model.PATime,
             SATime = model.SATime,
-            IsCheckedVar = model.IsCheckedVar
+            IsCheckedVar = model.IsCheckedVar,
+            SportType = model.SportType
         });
     }
 
@@ -191,7 +192,8 @@ public class GetRequestServiceImp : GetRequestService
             AwayFavorite = model.AwayFavorite,
             ActualMarket = model.ActualMarket,
             HdpValue = model.HdpValue,
-            LiveIndicator = model.LiveIndicator
+            LiveIndicator = model.LiveIndicator,
+            SportType = model.SportType
         });
     }
 
@@ -215,7 +217,8 @@ public class GetRequestServiceImp : GetRequestService
             VoidToTime = model.VoidToTime,
             ActualMarket = model.ActualMarket,
             WrongMarket = model.WrongMarket,
-            LiveIndicator = model.LiveIndicator
+            LiveIndicator = model.LiveIndicator,
+            SportType = model.SportType
         });
     }
 
@@ -288,7 +291,8 @@ public class GetRequestServiceImp : GetRequestService
             SubIssueTypeId = model.SubIssueTypeId,
             EventDate = model.EventDate,
             KickOffTime = model.KickOffTime,
-            Match = GetMatchModel(model, sportType)
+            Match = GetMatchModel(model, sportType),
+            SportType = model.SportType
         });
     }
 

@@ -33,6 +33,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { SearchEventService } from './services/search-event.service';
+import { GetChildMatchQuery } from '../models/get-child-match.query';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -96,13 +97,24 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
         await this.getTicketsMainEvent();
       }
 
-      this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.matchModel.eventDate, this.filter, true);
+      this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
       this.primitiveProps.isShowLogInfoEvents = true;
       this.addRequestStore.changeBlockingUiStatus(false);
     } else {
       this.resetAllData();
       this.mainEvent = this.eventEarlyKickOffService.initDefaultMainEvent(this.allSelectedEvents);
     }
+  }
+
+  private createGetChildMatchesQuery(): GetChildMatchQuery{
+    const query = new GetChildMatchQuery();
+    query.issueTypeId = Number(this.filter.issueTypeId);
+    query.eventDate = this.mainEvent.matchModel.eventDate ? moment(this.mainEvent.matchModel.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+    query.matchId = this.mainEvent.matchId;
+    query.isMainMatch = true;
+    query.sportType = this.mainEvent.sportType;
+
+    return query;
   }
 
   public changeMatchEvent(): void {
@@ -117,7 +129,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.mainEvent.matchCode = this.eventLeagueComponent?.selectedMatch.matchCode;
     this.mainEvent.kickOffTime = this.updateKickOffTime(this.eventLeagueComponent?.selectedMatch);
     this.mainEvent.matchModel = this.eventLeagueComponent?.selectedMatch;
-
+    this.mainEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     this.updateMatchId.emit(this.mainEvent.matchId);
   }
 
@@ -135,7 +147,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
 
   public async handleSearchEvent(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.relatedEvents = await this.relatedEventService.getChildMatches(this.mainEvent.matchId, this.mainEvent.matchModel.eventDate, this.filter, true);
+    this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
     const isSearchOk = await this.searchEventService.searchEvents(this.initSaveRequestInput(), this.relatedEvents);
     if (isSearchOk) {
       await this.getTicketsMainEvent();

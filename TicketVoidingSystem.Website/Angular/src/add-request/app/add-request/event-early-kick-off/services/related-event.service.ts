@@ -6,7 +6,6 @@ import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { AddRequestApiService } from '../../add-request-api.service';
-import { FilterModel } from '../../filter/filter.model';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
 import { AddRelatedEventArg } from '../models/add-related-event.model';
@@ -25,15 +24,8 @@ export class RelatedEventService {
     private readonly logInfoService: LogInfoService
   ) { }
 
-  async getChildMatches(mainMatchId: number, eventDate: Date, filterModel: FilterModel, isMainMatch: boolean): Promise<ChildMatchModel[]> {
-    const query = new GetChildMatchQuery();
-    query.issueTypeId = Number(filterModel.issueTypeId);
-    query.eventDate = eventDate ? moment(eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
-    query.matchId = mainMatchId;
-    query.isMainMatch = isMainMatch;
-    query.sportType = filterModel.sportType;
-
-    return await this.addRequestApiService.getChildMatchesInfo(query);
+  async getChildMatches(query: GetChildMatchQuery): Promise<ChildMatchModel[]> {
+    return this.addRequestApiService.getChildMatches(query);
   }
 
   mapChildMatchesToEvents(models: ChildMatchModel[], mainEvent: LogInfoEarlyKickOff): LogInfoEarlyKickOff[] {
@@ -89,7 +81,6 @@ export class RelatedEventService {
     } as MatchModel;
   }
 
-
   async addRelatedEventByInput(addRelatedEventArg: AddRelatedEventArg): Promise<void> {
     if (!addRelatedEventArg.primitiveProps.inputRelatedMatchId) {
       addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
@@ -99,7 +90,14 @@ export class RelatedEventService {
         return;
       }
       addRelatedEventArg.addRequestStore.changeBlockingUiStatus(true);
-      const models = await this.getChildMatches(matchId, addRelatedEventArg.mainEvent.matchModel.eventDate, addRelatedEventArg.filter, false);
+      const query = new GetChildMatchQuery();
+      query.issueTypeId = Number(addRelatedEventArg.filter.issueTypeId);
+      query.eventDate = addRelatedEventArg.mainEvent.matchModel.eventDate ? moment(addRelatedEventArg.mainEvent.matchModel.eventDate).format(DateTimeFormat.SHORT_DATE_FORMAT) : null;
+      query.matchId = matchId
+      query.isMainMatch = false;
+      query.sportType = addRelatedEventArg.mainEvent.sportType;
+      
+      const models = await this.getChildMatches(query);
       if (models.length === 0) {
         addRelatedEventArg.tooltip.display(addRelatedEventArg.inputMatchIdClass, LABELS.INVALID_MATCHID);
         addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
@@ -114,6 +112,4 @@ export class RelatedEventService {
       addRelatedEventArg.primitiveProps.inputRelatedMatchId = null;
     }
   }
-
-
 }

@@ -58,7 +58,8 @@ export class EventWrongOuService {
         liveIndicator: x.liveIndicator
       } as FilterWrongOuModel;
       event.eventDate = x.eventDate;
-
+      event.sportType = x.sportType;
+      
       allEvents.push(event);
     });
   }
