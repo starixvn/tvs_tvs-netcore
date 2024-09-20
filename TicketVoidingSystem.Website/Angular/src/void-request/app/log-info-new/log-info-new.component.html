@@ -3,29 +3,40 @@
     <span>Live Score: </span><strong>{{logInfoDetail.liveScores}}</strong>.
     Void time (GMT-4): <strong>{{displayFullDateTimeFormat(logInfoDetail.voidFromTime)}} -
         {{displayFullDateTimeFormat(logInfoDetail.voidToTime)}}</strong><br />
-    <ng-container *ngIf="!isShowPoolHouseTickets()">
-        Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-        <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red" 
-        [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-        </span>,
-        Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong><span *ngIf="logInfoDetail.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>,
-        <span *ngIf="isHaveCancelCashOut()">TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{logInfoDetail.minTransId}}</strong> {{logInfoDetail.actionType}}</span><br/>
-        <span *ngIf="isHaveCancelCashOut()">Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
-    </ng-container>
-    <ng-container *ngIf="isShowPoolHouseTickets()">
-        LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-        <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
-        [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-        </span><br />
-        <ng-container *ngIf="isMainMatch">
-        <div *ngIf="isPoolHouseAffected">
-            PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
-            <span *ngIf="isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)" class="text-red" 
-            [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+    <div *ngIf="isSportTypeSoccer()" class="soccer">
+        <ng-container *ngIf="!isShowPoolHouseTickets()">
+            Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+            <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red" 
+            [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
             </span>,
-            Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-        </div>
-        <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
+            Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong><span *ngIf="logInfoDetail.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{displayMinTime(logInfoDetail.highlightMinTime)}}</strong></span>,
+            <span *ngIf="isHaveCancelCashOut()">TransId: <strong [ngClass]="getHighlightMinTimeClass(logInfoDetail.highlightMinTime)">{{logInfoDetail.minTransId}}</strong> {{logInfoDetail.actionType}}</span><br/>
+            <span *ngIf="isHaveCancelCashOut()">Cancel Cash Out: <strong>{{logInfoDetail.cancelCashOutCount}}</strong></span>
         </ng-container>
-    </ng-container>
+        <ng-container *ngIf="isShowPoolHouseTickets()">
+            LG/Early - Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+            <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
+            [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+            </span><br />
+            <ng-container *ngIf="isMainMatch">
+            <div *ngIf="isPoolHouseAffected">
+                PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
+                <span *ngIf="isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)" class="text-red" 
+                [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+                </span>,
+                Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
+            </div>
+            <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div *ngIf="!isSportTypeSoccer()" class="other-sports">
+        <ng-container>
+          Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+          <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
+          [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
+          </span>,&nbsp;
+          Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>&nbsp;
+        </ng-container>       
+    </div>
 </div>

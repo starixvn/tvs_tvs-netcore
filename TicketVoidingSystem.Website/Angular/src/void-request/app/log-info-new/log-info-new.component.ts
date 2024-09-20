@@ -5,6 +5,7 @@ import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../utility/services/static.service';
+import { SportType } from '../../../utility/constants/sport.constant';
 
 @Component({
   selector: 'log-info-new',
@@ -16,6 +17,7 @@ export class LogInfoNewComponent {
   @Input() isMainMatch: boolean;
   @Input() isPoolHouseAffected: boolean;
   @Input() logInfoDetail: LogInfoDetail;
+  @Input() sportType: number;
   acceptTypeName = "";
 
   displayFullDateTimeFormat(time: Date): string {
@@ -76,5 +78,9 @@ export class LogInfoNewComponent {
 
   isHaveCancelCashOut(): boolean {
     return StaticService.isHaveCancelCashOutTicket(this.issueTypeId?.toString());
+  }
+
+  public isSportTypeSoccer(): boolean{
+    return this.sportType === SportType.SOCCER;
   }
 }
