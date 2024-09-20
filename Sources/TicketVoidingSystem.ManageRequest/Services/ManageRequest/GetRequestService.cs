@@ -247,7 +247,8 @@ public class GetRequestServiceImp : GetRequestService
             FromOddsNotVoidHomeOver = model.FromOddsNotVoidHomeOver,
             ToOddsNotVoidHomeOver = model.ToOddsNotVoidHomeOver,
             FromOddsNotVoidAwayUnder = model.FromOddsNotVoidAwayUnder,
-            ToOddsNotVoidAwayUnder = model.ToOddsNotVoidAwayUnder
+            ToOddsNotVoidAwayUnder = model.ToOddsNotVoidAwayUnder,
+            SportType = model.SportType
         });
     }
 
