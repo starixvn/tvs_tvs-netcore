@@ -46,6 +46,7 @@ export class RelatedEventService {
           filterWrongOu: filter,
           logInfoDetail: null,
           messageValidationLogInfo: null,
+          sportType: x.sportType
         } as LogInfoWrongOu;
       });
 

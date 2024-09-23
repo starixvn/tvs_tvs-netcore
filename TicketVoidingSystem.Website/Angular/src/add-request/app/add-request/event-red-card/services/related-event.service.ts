@@ -48,6 +48,7 @@ export class RelatedEventService {
           voidTimeArea: voidTimeArea,
           logInfoDetail: null,
           messageValidationLogInfo: null,
+          sportType: x.sportType
         } as LogInfoRedCard;
       });
 
@@ -115,6 +116,7 @@ export class RelatedEventService {
           event.messageValidationLogInfo = x.messageValidationLogInfo;
           event.voidTimeArea = x.voidTimeArea;
           event.subIssueTypeId = x.subIssueTypeId;
+          event.sportType = x.sportType;
         }
       }
     });

@@ -45,6 +45,7 @@ export class RelatedEventService {
           pagingModel: new PagingModel(),
           tableTicketsModel: new TableTicketsModel(),
           matchModel: matchModel,
+          sportType: x.sportType
         } as LogInfoEarlyKickOff;
       });
 

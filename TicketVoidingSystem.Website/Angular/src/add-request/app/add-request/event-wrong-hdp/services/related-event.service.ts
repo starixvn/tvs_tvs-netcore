@@ -46,6 +46,7 @@ export class RelatedEventService {
           filterWithHdp: filterWithHdp,
           logInfoDetail: null,
           messageValidationLogInfo: null,
+          sportType: x.sportType
         } as LogInfoWrongHdp;
       });
 
