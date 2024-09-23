@@ -97,7 +97,6 @@ export class AdvancedModeComponent {
         betTeam.isShow = true;
         this.updateSelectionsByCheckedValue(betTeam, x);
         this.updateInputsByCheckedValue(betTeam, x);
-        this.updateItemsByCheckedValue(betTeam, x);
       }
     })
   }
@@ -117,13 +116,6 @@ export class AdvancedModeComponent {
 
   private updateInputsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
     betTeam.inputs.forEach(y => {
-      y.isDisabled = checkedBetType.isDisabled;
-      y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
-    });
-  }
-
-  private updateItemsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
-    betTeam.items.forEach(y => {
       y.isDisabled = checkedBetType.isDisabled;
       y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
     });
@@ -150,6 +142,10 @@ export class AdvancedModeComponent {
       case 'yy':
       case 'betidy':
         return checkedBetType.betIdY;
+      case 'firstvalue':
+        return checkedBetType.firstValue;
+      case 'secondvalue':
+        return checkedBetType.secondValue;
     }
   }
 
@@ -224,8 +220,6 @@ export class AdvancedModeComponent {
       const groupsOdds = _.groupBy(odds, 'oddsId');
       for (const oddsId in groupsOdds) {
         const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');
-
-
         for (const [index, x] of groupsOdds[oddsId].entries()) {
           items.push(
             new Selection(index, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)
@@ -265,7 +259,7 @@ export class AdvancedModeComponent {
   isValidity(): boolean {
     return this.betTeams
       .filter(x => x.isShow)
-      .every(x => this.isValidSelections(x) && this.isValidInputs(x) && this.isValidItems(x));
+      .every(x => this.isValidSelections(x) && this.isValidInputs(x));
   }
 
   isValidSelections(betTeam: BetTeamAddRequest): boolean {
@@ -274,10 +268,6 @@ export class AdvancedModeComponent {
 
   isValidInputs(betTeam: BetTeamAddRequest): boolean {
     return betTeam.inputs.every(x => this.isValidInputWithToolTip(betTeam.index, x.index, x.isMultiple, x.value));
-  }
-
-  isValidItems(betTeam: BetTeamAddRequest): boolean {
-    return this.isValidItemWithToolTip(betTeam.index, betTeam.items);
   }
 
   private isValidSelectionWithToolTip(betTeamIndex: number, selection: Selection): boolean {

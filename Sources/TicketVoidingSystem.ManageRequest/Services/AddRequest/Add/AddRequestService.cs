@@ -24,7 +24,6 @@ public class AddRequestServiceImp : AddRequestService
     public async Task<Result> Execute(AddRequestQuery query)
     {
         var markTicketResult = await marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds);
-        command.WrongOddsSportsBookInfo = query.WrongOddsSportsBookInfo?.ToEventWrongOddsSportsBookXml();
 
         var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService), markTicketResult.MarkedTickets);
         if (markTicketError != null)

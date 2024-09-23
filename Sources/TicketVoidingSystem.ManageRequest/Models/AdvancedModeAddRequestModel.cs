@@ -28,7 +28,6 @@ public class BetTeamAddRequest
 {
     public List<Selection> Selections { get; set; }
     public List<Item> Inputs { get; set; }
-    public List<Item> Items { get; set; }
     public string Name { get; set; }
     public string Value { get; set; }
     public byte Type { get; set; }
@@ -58,8 +57,7 @@ public class BetTeamAddRequestResult
     public string FilterBetIdY { get; set; }
 
     // Add common key for all bet types
-    public string First { get; set; }
+    public string FirstValue { get; set; }
 
-    public string Second { get; set; }
-    public string Third { get; set; }
+    public string SecondValue { get; set; }
 }

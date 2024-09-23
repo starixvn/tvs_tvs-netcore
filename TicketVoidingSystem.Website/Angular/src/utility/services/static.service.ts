@@ -337,7 +337,7 @@ export class StaticService {
     }
 
     return text;
-}
+  }
 
   static openPopupTransIds(requestId: number, transIds: string, modalService: ModalService): void {
     modalService.open(

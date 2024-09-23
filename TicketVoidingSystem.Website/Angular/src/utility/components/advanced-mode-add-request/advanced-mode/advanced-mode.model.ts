@@ -89,9 +89,8 @@ export class BetTeamAddRequestResult {
   filterBetIdY: string;
 
   // Add common key for all bet types
-  first: string;
-  second: string;
-  third: string;
+  firstValue: string;
+  secondValue: string;
 }
 
 export class BetTeamAddRequest {
@@ -282,6 +281,12 @@ export class BetTeamAddRequest {
         result.betIdY = value;
         result.filterBetIdY = value;
         break;
+      case 'firstvalue':
+        result.firstValue = value;
+        break;
+      case 'secondvalue':
+        result.secondValue = value;
+        break;
     }
   }
 
@@ -318,42 +323,19 @@ export class BetTeamAddRequest {
       .join('&');
   }
 
-
-  // TODO: Remove for type 2
-  checkItems() {
-    this.items.forEach(item => {
-      item.isChecked = this.isCheckedAllItems;
-    });
-  }
-
-  // TODO: Remove for type 2
-  controlIsChecked() {
-    let temp = true;
-    for (let i = 0; i < this.items.length && temp; i++) {
-      temp = this.items[i].isChecked;
-    }
-    this.isCheckedAllItems = temp;
-  }
-
-
   updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId) {
     if (betTypeId === AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE
         || betTypeId === AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE_AOS) {
+      const [selection1, selection2] = this.selections;
       let temp = '';
-      if (this.selections[0].value === 'All' && this.selections[1].value === 'All') {
+      if (selection1.value === 'All' && selection2.value === 'All') {
         temp = 'All';
-      } else if (this.selections[0].value === 'All') {
-        for (let i = 1; i < this.selections[0].items.length; i++) {
-          const value = this.selections[0].items[i].value + '/' + this.selections[1].value;
-          temp = temp === '' ? value : temp + ',' + value;
-        }
-      } else if (this.selections[1].value === 'All') {
-        for (let i = 1; i < this.selections[1].items.length; i++) {
-          const value = this.selections[0].value + '/' + this.selections[1].items[i].value;
-          temp = temp === '' ? value : temp + ',' + value;
-        }
+      } else if (selection1.value === 'All') {
+        temp = selection1.items.slice(1).map(item => `${item.value}/${selection2.value}`).join(',');
+      } else if (selection2.value === 'All') {
+        temp = selection2.items.slice(1).map(item => `${selection1.value}/${item.value}`).join(',');
       } else {
-        temp = this.selections[0].value + '/' + this.selections[1].value;
+        temp = `${selection1.value}/${selection2.value}`;
       }
 
       result.team = temp;
@@ -362,7 +344,7 @@ export class BetTeamAddRequest {
 
   private updateForPenaltyShootoutCombo376(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (betTypeId === AdvancedModeConstants.BETTYPE_PENALTY_SHOOTOUT_COMBO) {
-      const newBetTeam = `${result.first}-${result.second}`;
+      const newBetTeam = `${result.firstValue}-${result.secondValue}`;
       result.team = newBetTeam;
     }
   }
@@ -370,20 +352,18 @@ export class BetTeamAddRequest {
   private updateForBetTypesCricketWithFancy(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_FANCY.split(',').includes(betTypeId)) {
       if (result.team === 'n') {
-        result.hdp1 = result.first;
+        result.hdp1 = result.firstValue;
       } else if (result.team === 'y') {
-        result.hdp2 = result.first;
+        result.hdp2 = result.firstValue;
       }
-      delete result.first;
     }
   }
 
   private updateForBetTypesWithRuns(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (AdvancedModeConstants.BETTYPE_OVER_X_EXACT_RUNS.split(',').includes(betTypeId)) {
-      const runesTransform = AdvancedModeConstants.RUNS_SELECTION.find(x => x.value === result.first);
+      const runesTransform = AdvancedModeConstants.RUNS_SELECTION.find(x => x.value === result.firstValue);
       result.team = runesTransform.betTeam;
       result.hdp1 = runesTransform.valueHdp1;
-      delete result.first;
     }
   }
 }
