@@ -1,3 +1,4 @@
+import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection';
 
@@ -76,6 +77,8 @@ export class BetTeamAddRequestResult {
   isDisabled: boolean;
   team: string;
   hdp: string;
+  hdp1: string;
+  hdp2: string;
   wicket: string;
   over: string;
   player: string;
@@ -84,6 +87,11 @@ export class BetTeamAddRequestResult {
   betIdY: string;
   filterBetIdX: string;
   filterBetIdY: string;
+
+  // Add common key for all bet types
+  first: string;
+  second: string;
+  third: string;
 }
 
 export class BetTeamAddRequest {
@@ -198,12 +206,18 @@ export class BetTeamAddRequest {
     });
   }
 
-  getResult(betTypes: string): BetTeamAddRequestResult {
+  getResult(betTypeId: string): BetTeamAddRequestResult {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
     this.updateByItems(result);
-    result.id = betTypes;
+
+    this.updateBetTypeHalfFullTimeCorrectScore(result, betTypeId)
+    this.updateForPenaltyShootoutCombo376(result, betTypeId);
+    this.updateForBetTypesCricketWithFancy(result, betTypeId);
+    this.updateForBetTypesWithRuns(result, betTypeId);
+
+    result.id = betTypeId;
     return result;
   }
 
@@ -304,17 +318,72 @@ export class BetTeamAddRequest {
       .join('&');
   }
 
+
+  // TODO: Remove for type 2
   checkItems() {
     this.items.forEach(item => {
       item.isChecked = this.isCheckedAllItems;
     });
   }
 
+  // TODO: Remove for type 2
   controlIsChecked() {
     let temp = true;
     for (let i = 0; i < this.items.length && temp; i++) {
       temp = this.items[i].isChecked;
     }
     this.isCheckedAllItems = temp;
+  }
+
+
+  updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId) {
+    if (betTypeId === AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE
+        || betTypeId === AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE_AOS) {
+      let temp = '';
+      if (this.selections[0].value === 'All' && this.selections[1].value === 'All') {
+        temp = 'All';
+      } else if (this.selections[0].value === 'All') {
+        for (let i = 1; i < this.selections[0].items.length; i++) {
+          const value = this.selections[0].items[i].value + '/' + this.selections[1].value;
+          temp = temp === '' ? value : temp + ',' + value;
+        }
+      } else if (this.selections[1].value === 'All') {
+        for (let i = 1; i < this.selections[1].items.length; i++) {
+          const value = this.selections[0].value + '/' + this.selections[1].items[i].value;
+          temp = temp === '' ? value : temp + ',' + value;
+        }
+      } else {
+        temp = this.selections[0].value + '/' + this.selections[1].value;
+      }
+
+      result.team = temp;
+    }
+  }
+
+  private updateForPenaltyShootoutCombo376(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (betTypeId === AdvancedModeConstants.BETTYPE_PENALTY_SHOOTOUT_COMBO) {
+      const newBetTeam = `${result.first}-${result.second}`;
+      result.team = newBetTeam;
+    }
+  }
+
+  private updateForBetTypesCricketWithFancy(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_FANCY.split(',').includes(betTypeId)) {
+      if (result.team === 'n') {
+        result.hdp1 = result.first;
+      } else if (result.team === 'y') {
+        result.hdp2 = result.first;
+      }
+      delete result.first;
+    }
+  }
+
+  private updateForBetTypesWithRuns(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (AdvancedModeConstants.BETTYPE_OVER_X_EXACT_RUNS.split(',').includes(betTypeId)) {
+      const runesTransform = AdvancedModeConstants.RUNS_SELECTION.find(x => x.value === result.first);
+      result.team = runesTransform.betTeam;
+      result.hdp1 = runesTransform.valueHdp1;
+      delete result.first;
+    }
   }
 }

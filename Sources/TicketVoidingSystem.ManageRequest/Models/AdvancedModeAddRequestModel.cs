@@ -56,4 +56,10 @@ public class BetTeamAddRequestResult
     public string FilterBetIdX { get; set; }
 
     public string FilterBetIdY { get; set; }
+
+    // Add common key for all bet types
+    public string First { get; set; }
+
+    public string Second { get; set; }
+    public string Third { get; set; }
 }
