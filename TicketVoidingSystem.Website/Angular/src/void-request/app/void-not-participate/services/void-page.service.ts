@@ -69,7 +69,8 @@ export class VoidPageService {
       } as TemplateContent;
     }
 
-    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+    if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())
+    || StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
       templateValue.isCheckedSpecialBetType = true;
       templateValue.betTypeNameReplaceMessage = voidPageItem.voidTicketsMini.betTypeNameReplaceMessage;
       templateValue.totalTickets = voidPageItem.voidTicketsMini.total;
@@ -94,6 +95,13 @@ export class VoidPageService {
       return {
         matchId: requestDetail.wrongMarketOfferedModel.matchId,
         subIssueTypeId: requestDetail.wrongMarketOfferedModel.subIssueTypeId
+      } as BasicRequestInfo;
+    }
+
+    if (StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+      return {
+        matchId: requestDetail.wrongOddsSportsBookModel.matchId,
+        subIssueTypeId: requestDetail.wrongOddsSportsBookModel.subIssueTypeId
       } as BasicRequestInfo;
     }
   }

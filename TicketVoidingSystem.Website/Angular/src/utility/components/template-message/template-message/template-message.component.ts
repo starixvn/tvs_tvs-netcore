@@ -542,6 +542,7 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isLikelyWrongMarketOffered(): boolean {
-    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString());
+    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString()) 
+    || StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
   }
 }

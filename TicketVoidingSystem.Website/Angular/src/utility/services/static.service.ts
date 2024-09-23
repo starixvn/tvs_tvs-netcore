@@ -153,6 +153,8 @@ export class StaticService {
       return requestDetail.abnormalBetModel.subIssueTypeId;
     } else if (this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
       return requestDetail.wrongMarketOfferedModel.subIssueTypeId;
+    } else if (this.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+      return requestDetail.wrongOddsSportsBookModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
     }
