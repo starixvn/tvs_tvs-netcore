@@ -3,9 +3,9 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
-import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
 import { DateTimeFormat, TVSRequestActionType } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
+import { LocalStorageCacheConstant } from '../../../../utility/constants/local-storage-cache.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
 import { AllowanceTime } from '../../../../utility/models/allowance-time.model';
 import { SportInfo } from '../../../../utility/models/event.model';
@@ -436,11 +436,6 @@ export class FilterComponent implements OnInit, OnChanges {
 
   updateSubByIssue() {
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
-    //TODO: only remove subtype on UI - feat: 173229
-    if (this.isAbnormalBet() || this.isAbnormalAccount()) {
-      this.issueTypes.selectedSubIssueTypes = this.issueTypes.selectedSubIssueTypes.filter(x => x.subIssueTypeId !== 27 && x.subIssueTypeId !== 39 && x.subIssueTypeId !== 41);
-    }
-
     if (this.isDangerAccepted() || this.isRedCard() || this.isWrongScore()) {
       this.issueTypes.subIssueId = null;
     } else {
@@ -453,11 +448,6 @@ export class FilterComponent implements OnInit, OnChanges {
     this.issueTypes.issueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
     this.issueTypes.subIssueId = _.isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;
     this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => x.issueTypeId === this.issueTypes.issueId);
-
-    //TODO: only remove subtype on UI - feat: 173229
-    if (this.isAbnormalBet() || this.isAbnormalAccount()) {
-      this.issueTypes.selectedSubIssueTypes = this.issueTypes.selectedSubIssueTypes.filter(x => x.subIssueTypeId !== 27 && x.subIssueTypeId !== 39 && x.subIssueTypeId !== 41);
-    }
   }
 
   changeActionWaitingToManualVoid(): void {

@@ -31,7 +31,8 @@ public class GetTemplateAbnormalBetHandler : IRequestHandler<GetTemplateAbnormal
         var templates = await repository.FetchAsync<TemplateModel>(new GetTemplatesCriteria()).ConfigureAwait(false);
 
         var abnormalIssueType = new IssueType { IssueTypeId = IssueTypeConstant.AbnormalBet };
-        var abnormalSubIssueTypes = subIssueTypes.Where(x => x.IssueTypeId == IssueTypeConstant.AbnormalBet);
+        var abnormalSubIssueTypes = subIssueTypes.Where(x => x.IssueTypeId == IssueTypeConstant.AbnormalBet)
+                                                                        .Where(x => !SubIssueTypeConstant.RemovedList.Contains(x.SubIssueTypeId));
         var abnormalTemplateSettings = templateSettings.Where(x => abnormalSubIssueTypes.Any(s => s.SubIssueTypeId == x.SubIssueTypeId));
         var abnormalTemplates = templates.Where(x => abnormalTemplateSettings.Any(s => s.TemplateId == x.TemplateId));
 

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using MediatR;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.SharedApi.Criteria.SharedApi;
 using TicketVoidingSystem.ViewModels;
@@ -26,6 +27,7 @@ public class GetIssueTypesHandler : IRequestHandler<GetIssueTypesRequest, IssueT
     {
         var issueTypes = await repository.FetchAsync<IssueType>(new GetIssueTypeCriteria());
         var subIssueTypes = await repository.FetchAsync<SubIssueType>(new GetSubIssueTypeCriteria());
+        subIssueTypes = subIssueTypes.Where(x => !SubIssueTypeConstant.RemovedList.Contains(x.SubIssueTypeId));
 
         return new IssueTypesViewModel
         {

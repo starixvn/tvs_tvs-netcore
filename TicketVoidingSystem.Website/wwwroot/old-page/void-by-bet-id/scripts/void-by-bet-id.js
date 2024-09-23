@@ -197,7 +197,7 @@ var VoidByBetId = {
             success: function (data) {
                 if (data !== null) {
                     VoidByBetId.issueType = data.issueType;
-                    VoidByBetId.subIssueTypes = data.subIssueTypes.filter(x => x.subIssueTypeId !== 27);
+                    VoidByBetId.subIssueTypes = data.subIssueTypes;
                     VoidByBetId.getAbnormalBetReason();
                     VoidByBetId.templateSettings = data.templateSettings;
                     VoidByBetId.templatesList = data.templates;

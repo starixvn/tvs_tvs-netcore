@@ -33,6 +33,7 @@
   font-size: 12px;
   max-height: 500px;
   overflow: auto;
+
   p.cursor-pointer {
     cursor: pointer;
   }
@@ -79,4 +80,9 @@
 
 .text-red {
   color: red;
+}
+
+.double-check-area {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
 }

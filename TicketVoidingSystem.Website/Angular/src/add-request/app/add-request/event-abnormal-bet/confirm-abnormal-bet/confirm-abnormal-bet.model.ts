@@ -11,6 +11,8 @@ export class ConfirmAbnormalBetModel {
     settledTickets: string;
     ticketsOfCustomerClass201: string;
     ticketsOfCustomerClass4K: string;
-    listBetType: string;
-    listBetTeam: string;
+    
+    issueTypeName: string;
+    subIssueTypeName: string;
+    actionName: string;
 }

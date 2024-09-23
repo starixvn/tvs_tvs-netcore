@@ -39,7 +39,6 @@ public static class ManageRequest
         services.AddTransient<GetRequestsForExcelService, GetRequestsForExcelServiceImp>();
         services.AddTransient<WorkSheetService<SelectRequestsQuery>, RequestListWorksheetService>();
         services.AddTransient<EditRequestService, EditRequestServiceImp>();
-        services.AddTransient<MarkTicketsWhenAddEditService, MarkTicketsWhenAddEditServiceImp>();
         services.AddTransient<ReCalculateTicketsService, ReCalculateTicketsServiceImp>();
         services.AddTransient<UpdateRequestProcessStage, UpdateRequestProcessStageImp>();
         services.AddTransient<OWPDataService, OWPDataServiceImp>();
