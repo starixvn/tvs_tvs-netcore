@@ -30,13 +30,6 @@
             </ng-container>
         </ng-container>
     </div>
-    <div *ngIf="!isSportTypeSoccer()" class="other-sports">
-        <ng-container>
-          Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
-          <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
-          [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
-          </span>,&nbsp;
-          Parlay Count: <strong>{{logInfoDetail.mainParlayCount}}</strong>&nbsp;
-        </ng-container>       
-    </div>
+    <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="logInfoDetail" [isVoided]="true">
+    </ticket-count-other-sports>
 </div>

@@ -2,44 +2,35 @@
     <label class="col-form-label col-form-label-sm log-info-label mr-3">Log Info </label>
     <div class="col-sm-6 pd-top-8 remark-content">
       <div *ngFor="let item of logInfoDetails" class="log-info p-2">
-          <span *ngIf="!isReducedOver()">{{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.</span>
-          {{displayVoidTimeLabel(filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
-          <div *ngIf="isSportTypeSoccer()" class="soccer">
-            <ng-container *ngIf="!isWrongOdds()">
-              Affected Single Count: <strong>{{item.singleCount}}</strong>
-              <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
-              [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+        <span *ngIf="!isReducedOver()">{{displayScoreLabel(filterBy)}}<strong>{{item.liveScores}}</strong>.</span>
+        {{displayVoidTimeLabel(filterBy)}}<strong>{{displayFullDateTimeFormat(item.voidFromTime)}} - {{displayFullDateTimeFormat(item.voidToTime)}}</strong><br />
+        <div *ngIf="isSportTypeSoccer()" class="soccer">
+          <ng-container *ngIf="!isWrongOdds()">
+            Affected Single Count: <strong>{{item.singleCount}}</strong>
+            <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
+            [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+            </span>,
+            Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
+            <span *ngIf="isWrongScore()">, TransId: <strong [ngClass]="getHighlightMinTimeClass(item)">{{item.minTransId}}</strong> {{item.actionType}}</span>
+            <span *ngIf="!isReducedOver()"><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
+          </ng-container>
+          <ng-container *ngIf="isWrongOdds()">
+            LG/Early - Single Count: <strong>{{item.singleCount}}</strong>
+            <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
+            [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
+            </span><br />
+            <div *ngIf="isPoolHouseAffected">
+              PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
+              <span *ngIf="isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)" class="text-red"
+              [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
               </span>,
-              Parlay Count: <strong>{{item.mainParlayCount}}</strong><span *ngIf="item.highlightMinTime">, Min Time: <strong [ngClass]="getHighlightMinTimeClass(item)">{{displayMinTime(item.highlightMinTime)}}</strong></span>
-              <span *ngIf="isWrongScore()">, TransId: <strong [ngClass]="getHighlightMinTimeClass(item)">{{item.minTransId}}</strong> {{item.actionType}}</span>
-              <span *ngIf="!isReducedOver()"><br/>Cancel Cash Out: <strong>{{item.cancelCashOutCount}}</strong></span>
-            </ng-container>
-            <ng-container *ngIf="isWrongOdds()">
-              LG/Early - Single Count: <strong>{{item.singleCount}}</strong>
-              <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
-              [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
-              </span><br />
-              <div *ngIf="isPoolHouseAffected">
-                PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
-                <span *ngIf="isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)" class="text-red"
-                [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
-                </span>,
-                Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
-              </div>
-              <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
-            </ng-container>
-          </div>
-          <div *ngIf="!isSportTypeSoccer()" class="other-sports">
-            <ng-container>
-              Single Count: <strong>{{item.singleCount}}</strong>
-              <span *ngIf="isShowCountInfo(item.cashOutCount, item.settleCount, item.instantlySettleCount)" class="text-red"
-              [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
-              </span>,&nbsp;
-              Parlay Count: <strong>{{item.mainParlayCount}}</strong>&nbsp;
-            </ng-container>       
+              Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
+            </div>
+            <div *ngIf="!isPoolHouseAffected">PH - Not affected.</div>
+          </ng-container>
         </div>
-      <div>
-        </div>
+        <ticket-count-other-sports *ngIf="!isSportTypeSoccer()" [logInfoDetail]="item" [isVoided]="true">
+        </ticket-count-other-sports>
       </div> 
     </div>
   </div>

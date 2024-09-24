@@ -1,6 +1,6 @@
 <div class="other-sports">
     <ng-container>
-      Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
+      Affected Single Count: <strong>{{logInfoDetail.singleCount}}</strong>
       <span *ngIf="isShowCountInfo(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount)" class="text-red"
       [innerHTML]="countInfoContent(logInfoDetail.cashOutCount, logInfoDetail.settleCount, logInfoDetail.instantlySettleCount) | sanitizeHtml">
       </span>,&nbsp;
