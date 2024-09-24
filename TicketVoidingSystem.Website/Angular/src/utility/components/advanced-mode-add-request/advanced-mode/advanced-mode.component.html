@@ -15,14 +15,14 @@
             <div class="right">
               <ng-container *ngFor="let selection of betTeam.selections">
                 <div class="dropdown-item-adv" *ngIf="!selection.isMultiple">
-                  <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}</span>
+                  <span class="mr-1" *ngIf="selection.name !== ''">{{selection.name}}:</span>
                   <select [(ngModel)]="selection.value" (ngModelChange)="changeFilter()" [disabled]="selection.isDisabled"
                     class="bet-team-{{betTeam.index}}-selection-{{selection.index}}">
                     <option *ngFor="let item of selection.items" [attr.value]="item.value">{{item.name}}</option>
                   </select>
                 </div>
                 <div class="dropdown-item-adv" *ngIf="selection.isMultiple">
-                  <span class="mr-1" *ngIf="selection.name !== ''">{{selection.multiSelection.name}}</span>
+                  <span class="mr-1" *ngIf="selection.name !== ''">{{selection.multiSelection.name}}:</span>
                   <multiple-select class="multiple-selection bet-team-{{betTeam.index}}-selection-{{selection.index}}"
                     [multipleSelect]="selection.multiSelection.multipleSelect" (checkedItems)="changeFilter()">
                   </multiple-select>
@@ -30,9 +30,10 @@
               </ng-container>
               <div class="d-flex" *ngIf="betTeam.inputs?.length > 0">
                 <div class="input-item-adv" *ngFor="let item of betTeam.inputs">
-                  <span class="mr-1" *ngIf="item.name !== ''">{{item.name}}</span>
+                  <span class="mr-1" *ngIf="item.name !== ''">{{item.name}}:</span>
                   <input class="bet-team-{{betTeam.index}}-input-{{item.index}}" type="text" [(ngModel)]="item.value"
                     [disabled]="item.isDisabled"
+                    [placeholder]="item.isMultiple ? 'Ex: 0.75&1&1.25' : ''"
                     (ngModelChange)="onChangeInputMultipleDecimal(betTeam.index, item.index,
                       item.isMultiple, $event); changeFilter()"
                     triggers="manual" multipleDecimal />

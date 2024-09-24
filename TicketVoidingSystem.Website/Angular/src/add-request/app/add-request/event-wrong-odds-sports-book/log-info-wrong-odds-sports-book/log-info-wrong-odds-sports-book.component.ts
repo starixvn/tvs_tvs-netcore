@@ -1,9 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as _ from 'lodash';
 import * as moment from 'moment-timezone';
+import { BetTypeAddRequest } from 'src/utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import { ItemsSelect } from 'src/utility/components/multiple-selection/items-select';
+import { MultipleSelection } from 'src/utility/components/multiple-selection/multiple-selection';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { FilterModel } from '../../filter/filter.model';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 
@@ -17,10 +23,14 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   @Input() requestId: number;
   @Input() isEdit: boolean;
   @Input() primitiveProps: PrimitiveProperty;
-  @Input() filter: FilterModel;
+  @Input() issueTypeId: string;
   @Output() searchEvent = new EventEmitter<string>();
 
-  constructor(private readonly modalService: ModalService
+  affectedTicketsModel = new AffectedTicketsModel();
+  isBlock: boolean;
+
+  constructor(private readonly modalService: ModalService,
+    private readonly addRequestApiService: AddRequestApiService
   ) { }
 
   ngOnInit(): void {
@@ -53,4 +63,41 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   public isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
+
+  public async updateAffectedTickets(){
+    if (this.logInfo.logInfoDetail.logInfoTicketsJson) {
+      const query: LogInfoTicketsQuery = {
+        logInfoTicketsJson: this.logInfo.logInfoDetail.logInfoTicketsJson,
+        issueTypeId: Number(this.issueTypeId)
+      };
+      let ticketsLogInfo = await this.addRequestApiService.GetLogInfoTickets(query);
+      this.affectedTicketsModel.tickets = new TicketsModel();
+      this.affectedTicketsModel.tickets.initData(ticketsLogInfo);
+      this.affectedTicketsModel.tickets.checkAllTickets();
+      this.affectedTicketsModel.tickets.groups[0].name = null;
+    } else {
+      this.affectedTicketsModel.tickets = new TicketsModel();
+    }
+  }
+
+  public updateCheckedBetTypeIds(){
+    this.affectedTicketsModel.checkedBetTypes = this.logInfo.checkedBetTypes;
+    this.affectedTicketsModel.filterBetTypes = this.initFilterBetTypes(this.logInfo.checkedBetTypes);
+  }
+
+  private initFilterBetTypes(betTypes: BetTypeAddRequest[]): MultipleSelection{
+    const filterBetTypes = StaticService.initDefaultMultipleSelection('280px', 1);
+    filterBetTypes.items = betTypes.map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
+
+    return filterBetTypes;
+  }
+
+   public async showAffectedTicketsDetails(){
+    this.isBlock = true;
+    await this.updateAffectedTickets();
+    this.updateCheckedBetTypeIds();
+    this.isBlock = false;
+    this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
+   }
 }

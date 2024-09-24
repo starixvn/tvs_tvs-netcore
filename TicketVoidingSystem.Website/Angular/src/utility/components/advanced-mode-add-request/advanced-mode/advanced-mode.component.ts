@@ -187,7 +187,7 @@ export class AdvancedModeComponent {
     this.betTeams = [];
     for (const [index, item] of data.entries()) {
       const betteam = new BetTeamAddRequest([index, item.name, item.value, item.type, item.betTypes],
-        item.selections, item.inputs, item.items, item.isShow);
+        item.selections, item.inputs, item.isShow);
       this.betTeams.push(betteam);
     }
   }

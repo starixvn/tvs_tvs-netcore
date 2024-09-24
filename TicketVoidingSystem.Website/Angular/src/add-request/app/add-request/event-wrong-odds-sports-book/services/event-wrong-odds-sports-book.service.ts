@@ -72,6 +72,14 @@ export class EventWrongOddsSportsBookService {
     model.filterFromTransTime = logInfo.filterWrongOddsSportsBook.fromDateTime;
     model.filterToTransTime = logInfo.filterWrongOddsSportsBook.toDateTime;
     model.betTeamsResult = logInfo.betTeamsResult;
+    model.correctOdds = logInfo.filterWrongOddsSportsBook.correctOdds;
+    model.filterOddsType = logInfo.filterWrongOddsSportsBook.filterOddsType;
+    if (logInfo.filterWrongOddsSportsBook.filterOddsType === FilterOddsTypeConstant.VALUE) {
+      model.oddsValue = logInfo.filterWrongOddsSportsBook.oddsValue;
+    } else {
+      model.fromOdds = logInfo.filterWrongOddsSportsBook.fromOdds;
+      model.toOdds = logInfo.filterWrongOddsSportsBook.toOdds;
+    }
     return model;
   }
 }

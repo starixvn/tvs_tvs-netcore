@@ -662,7 +662,7 @@
               "Value": "12,HA"
             }
           ],
-          "Name": "Team",
+          "Name": "Double Chance",
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "Team"
@@ -855,7 +855,7 @@
               "Value": "7-over,7&amp;over"
             }
           ],
-          "Name": "",
+          "Name": "Total Goal",
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "Team"
@@ -3074,7 +3074,7 @@
               "Value": "n"
             }
           ],
-          "Name": "",
+          "Name": "Yes/No",
           "Value": "All",
           "XmlAttribute": "Team"
         }
@@ -3392,8 +3392,9 @@
               "Value": "NG"
             }
           ],
-          "Name": "1X2",
+          "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -6603,7 +6604,7 @@
               "Value": "AOS"
             }
           ],
-          "Name": "Team",
+          "Name": "",
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "Team"
@@ -6761,7 +6762,7 @@
               "Value": "AOS"
             }
           ],
-          "Name": "Team",
+          "Name": "",
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "Team"
@@ -9210,6 +9211,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -12538,15 +12540,15 @@
               "Value": "All"
             },
             {
-              "Name": "Over",
-              "Value": "o"
+              "Name": "Home",
+              "Value": "h"
             },
             {
-              "Name": "Under",
-              "Value": "u"
+              "Name": "Away",
+              "Value": "a"
             }
           ],
-          "Name": "Over/Under",
+          "Name": "Team",
           "Value": "All",
           "XmlAttribute": "Team"
         },
@@ -14759,6 +14761,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -14950,6 +14953,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -15003,6 +15007,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -15923,7 +15928,7 @@
       ],
       "Inputs": [
         {
-          "Name": "Value",
+          "Name": "Tier",
           "Value": "",
           "IsMultiple": true,
           "XmlAttribute": "YY"
@@ -22944,6 +22949,25 @@
           "Value": "All",
           "IsMultiple": true,
           "XmlAttribute": "BetIdX"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Yes",
+              "Value": "y"
+            },
+            {
+              "Name": "No",
+              "Value": "n"
+            }
+          ],
+          "Name": "Yes/No",
+          "Value": "All",
+          "XmlAttribute": "Team"
         }
       ],
       "Type": 1,

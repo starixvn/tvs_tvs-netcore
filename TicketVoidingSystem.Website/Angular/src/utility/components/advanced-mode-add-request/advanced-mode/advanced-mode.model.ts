@@ -101,7 +101,6 @@ export class BetTeamAddRequest {
   betTypes: string;
   selections: Selection[]; // for dropdown
   inputs: Item[]; // for input
-  items: Item[]; // for checkbox table
   isShow: boolean;
   isCheckedAllItems: boolean;
 
@@ -109,7 +108,6 @@ export class BetTeamAddRequest {
     commonInfo: [number, string, string, number, string],
     selections: Selection[],
     inputs: Item[],
-    items: Item[],
     isChecked: boolean) {
     this.index = commonInfo[0];
     this.name = commonInfo[1];
@@ -118,7 +116,6 @@ export class BetTeamAddRequest {
     this.betTypes = commonInfo[4];
     this.renderSelections(selections);
     this.renderInputs(inputs);
-    this.renderItems(items);
     this.isShow = isChecked;
   }
 
@@ -182,18 +179,6 @@ export class BetTeamAddRequest {
     }
   }
 
-  private renderItems(items: Item[]) {
-    this.items = [];
-    this.isCheckedAllItems = true;
-    if (items !== null) {
-      for (const [index, item] of items.entries()) {
-        const temp = new Item(index, item.name, item.value, item.isRowSpan, item.isDisabled, item.isMultiple, item.xmlAttribute, item.format, true);
-        this.items.push(temp);
-      }
-      console.log(this.items);
-    }
-  }
-
   resetChecked() {
     this.isShow = true;
     this.resetSelections();
@@ -209,7 +194,6 @@ export class BetTeamAddRequest {
     const result = new BetTeamAddRequestResult();
     this.updateBySelection(result);
     this.updateByInputs(result);
-    this.updateByItems(result);
 
     this.updateBetTypeHalfFullTimeCorrectScore(result, betTypeId)
     this.updateForPenaltyShootoutCombo376(result, betTypeId);
@@ -235,16 +219,6 @@ export class BetTeamAddRequest {
         this.updateResult(result, input.xmlAttribute, input.value ?? '');
       });
     }
-  }
-
-  updateByItems(result: BetTeamAddRequestResult) {
-    if (this.items.length > 0) {
-      this.updateResult(result, this.items[0].xmlAttribute, this.getItemsValue());
-    }
-  }
-
-  getItemsValue(): string {
-    return this.items.filter(item => item.isChecked).map(item => item.value).join(',');
   }
 
   updateResult(result: BetTeamAddRequestResult, attribute: string, value: string) { // NOSONAR

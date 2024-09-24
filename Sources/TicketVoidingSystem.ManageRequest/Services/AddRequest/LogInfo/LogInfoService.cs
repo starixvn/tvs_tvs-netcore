@@ -231,7 +231,7 @@ public class LogInfoServiceImp : LogInfoService
         {
             new()
             {
-                MatchId = query.WrongMarketOfferedModel.MatchId,
+                MatchId = query.WrongOddsSportsBookModel.MatchId,
                 Validation = validation.FirstOrDefault(),
                 TicketRequest = ticketRequest,
                 LogInfoDetail = logInfoDetail.FirstOrDefault(),
@@ -267,7 +267,7 @@ public class LogInfoServiceImp : LogInfoService
         criteria.WrongOuInfo = query.WrongOuModels?.ToWrongOuInfoXml();
         criteria.Wrong1stOuInfo = query.Wrong1stOuModels?.ToWrongOuInfoXml();
         criteria.WrongOddsInfo = query.WrongOddsModels?.ToWrongOddsInfoXml();
-        criteria.WrongOddsSportsBookInfo = query.WrongOddsSportsBookModel?.ToWrongOddsSportsBookInfoXml();
+        criteria.WrongOddsSBInfo = query.WrongOddsSportsBookModel?.ToWrongOddsSportsBookInfoXml();
         criteria.ReducedOverInfo = query.ReducedOverModels?.ToReducedOverInfoXml();
         criteria.NotParticipateInfo = query.NotParticipateModels?.ToNotParticipateInfoXml();
         criteria.WrongMarketOfferedInfo = query.IssueTypeId.IsWrongMarketOffered() ? query.WrongMarketOfferedModel?.ToWrongMarketOfferedInfoXml() : null;

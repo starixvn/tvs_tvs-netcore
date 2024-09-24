@@ -31,7 +31,7 @@ public class AddRequestCommand : NonQueryCommand
     public string WrongOuInfo { get; set; }
     public string Wrong1stOuInfo { get; set; }
     public string WrongOddsInfo { get; set; }
-    public string WrongOddsSportsBookInfo { get; set; }
+    public string WrongOddsSBInfo { get; set; }
     public string ReducedOverInfo { get; set; }
     public string NotParticipateInfo { get; set; }
     public string KickOffInfo { get; set; }

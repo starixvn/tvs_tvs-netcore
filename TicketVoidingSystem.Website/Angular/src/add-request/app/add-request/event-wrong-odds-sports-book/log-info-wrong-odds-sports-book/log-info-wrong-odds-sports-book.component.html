@@ -3,27 +3,16 @@
   <div class="log-info">
     <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
       <div *ngIf="logInfo.logInfoDetail">
-        <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
         Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} - {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
-        LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.liveGameEarlySingleCount}}</strong>
-        <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount)" class="text-red"
-        [innerHTML]="countInfoContent(logInfo.logInfoDetail.liveGameEarlyCashOutCount, logInfo.logInfoDetail.liveGameEarlySettleCount, logInfo.logInfoDetail.liveGameEarlyInstantlySettleCount) | sanitizeHtml">
-        </span><br />
+        Affected Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+        <span *ngIf="isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount)" class="text-red"
+        [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>,
+        Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}} </strong>
+        <span class="bet-type-count" (click)="showAffectedTicketsDetails()">Details</span><br />
+        <span *ngIf="logInfo.logInfoDetail.cancelCashOutCount > 0">Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong></span>
       </div>
-
-      <ng-container *ngIf="logInfo.messageValidationLogInfo && logInfo.messageValidationLogInfo.length > 0">
-        <div class="message">
-          <span *ngFor="let msg of logInfo.messageValidationLogInfo">
-            <div *ngIf="msg.isError" class="error-text">
-              <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>{{msg.reason}}
-            </div>
-            <div *ngIf="!msg.isError" [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'"
-              (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
-              <i class="fa fa-exclamation-triangle icon-warning-message" aria-hidden="true"></i>{{msg.reason}}
-            </div>
-          </span>
-        </div>
-      </ng-container>
+      <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
     </div>
   </div>
 </div>
+<affected-ticket [blockUi]="isBlock" [model]="affectedTicketsModel"></affected-ticket>

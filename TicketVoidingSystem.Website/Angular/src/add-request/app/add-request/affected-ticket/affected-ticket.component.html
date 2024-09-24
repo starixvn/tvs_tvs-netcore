@@ -11,8 +11,8 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div *ngIf="model.isShowDetailBetTypeCount">
-          <div class="affected-bet-type-area">
+        <div class="modal-body">
+          <div class="affected-bet-type-area mb-2" *ngIf="model.isShowDetailBetTypeCount">
             <div class="list-group">
               <div class="section-header" (click)="isCollapsed = !isCollapsed"
                 [attr.aria-expanded]="!isCollapsed">
@@ -28,12 +28,10 @@
               </div> 
             </div>
           </div>
-          <div class="filter-bet-Types">
+          <div class="filter-bet-Types mb-2">
             <multiple-selection class="multiple-selection" [multipleSelect]="model.filterBetTypes" (checkedItems)="updateSelectedBetTypes($event)">
             </multiple-selection>
           </div>
-        </div>
-        <div class="modal-body">
           <tickets [model]="model.tickets"></tickets>
         </div>
       </div>

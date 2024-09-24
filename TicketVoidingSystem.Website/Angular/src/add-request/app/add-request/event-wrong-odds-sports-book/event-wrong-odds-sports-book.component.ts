@@ -62,7 +62,6 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
     }
   }
 
-
   public updateDataWhenEditRequest(): void {
     const groupBetTypes = this.wrongOddsSportsBookModel.groupBetTypes;
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
@@ -103,11 +102,11 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
 
     this.addRequestStore.changeBlockingUiStatus(true);
     await this.logInfoService.getLogInfo(this.logInfoEvent, this.isEdit, this.requestId, this.filter, this.primitiveProps);
+    this.logInfoEvent.checkedBetTypes = this.groupBetTypesModel.getCheckedBetTypes();
     this.primitiveProps.isShowValidation = true;
     this.addRequestStore.changeBlockingUiStatus(false);
     this.addRequestStore.changeSavingRequestStatus(false);
   }
-
 
   async getGroupBetTypes() {
     const query: GetBetTypesQuery = {

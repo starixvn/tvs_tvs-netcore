@@ -32,10 +32,8 @@
 
 .affected-bet-type-area {
   width: 100%;
-  border: 5px;
   overflow: auto;
   display: flex;
-  padding: 16px;
 }
 
 .caret {
@@ -89,10 +87,6 @@
 .section-body {
   max-height: 212px;
   overflow: auto;
-}
-
-.filter-bet-Types {
-  padding-left: 16px;
 }
 
 ::ng-deep .tree-view-content {
