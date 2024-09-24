@@ -21,7 +21,9 @@ using TicketVoidingSystem.Web;
 
 namespace TicketVoidingSystem.Website.Controllers;
 
+using System.Runtime;
 using Fanex.Caching;
+using Fanex.Data;
 
 [SkipLogging]
 public class HomeController : Controller
@@ -80,22 +82,42 @@ public class HomeController : Controller
     [AllowAnonymous]
     [HttpGet]
     [SkipUMFilter]
-    public string Info()
+    public IActionResult Gc()
     {
-        using var currentProcess = Process.GetCurrentProcess();
+        GC.Collect(2, GCCollectionMode.Aggressive | GCCollectionMode.Forced, true, true);
+        const int megabyte = 1024 * 1024;
         var stringBuilder = new StringBuilder();
+        var sw = Stopwatch.StartNew();
+        sw.Start();
 
-        stringBuilder.Append($"GC.GetTotalMemory(false): {GC.GetTotalMemory(false):n0}\n");
-        stringBuilder.Append($"VirtualMemorySize64 is: {currentProcess.VirtualMemorySize64:n0}\n");
-        stringBuilder.Append($"PrivateMemorySize64 is: {currentProcess.PrivateMemorySize64:n0}\n");
-        stringBuilder.Append($"WorkingSet64 is: {currentProcess.WorkingSet64:n0}\n");
-        stringBuilder.Append($"PagedMemorySize64 is: {currentProcess.PagedMemorySize64:n0}\n");
-        stringBuilder.Append($"NonpagedSystemMemorySize64 is: {currentProcess.NonpagedSystemMemorySize64:n0}\n");
-        stringBuilder.Append($"NonpagedSystemMemorySize64 is: {currentProcess.NonpagedSystemMemorySize64:n0}\n");
-        stringBuilder.AppendLine($@"Threads.Count: {currentProcess.Threads.Count}");
-        stringBuilder.AppendLine($@"ThreadPool.PendingWorkItemCount: {ThreadPool.PendingWorkItemCount}");
+        using var currentProcess = Process.GetCurrentProcess();
+        currentProcess.Refresh();
+        var memory = currentProcess.WorkingSet64 / megabyte;
 
-        return stringBuilder.ToString();
+        stringBuilder.AppendFormat("Total memory - Before GC.Collect: {0} Mb", memory);
+
+        GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive | GCCollectionMode.Forced, true, true);
+        GC.WaitForPendingFinalizers();
+        GC.WaitForFullGCComplete();
+
+        currentProcess.Refresh();
+        memory = currentProcess.WorkingSet64 / megabyte;
+
+        var duration = sw.ElapsedMilliseconds;
+        stringBuilder.AppendFormat("GC.Collected. Usage memory = {0}. Duration: {1} milliseconds", memory, duration);
+
+        return Ok(stringBuilder.ToString());
+    }
+
+    [AllowAnonymous]
+    [HttpGet]
+    [SkipUMFilter]
+    public async Task<IActionResult> ClearCache(int count = 10)
+    {
+        var result = await CacheManager.ClearCache(count);
+
+        return Ok(result);
     }
 
 #if DEBUG
