@@ -20,6 +20,7 @@ public class RequestViewModel
     public IEnumerable<string> BettypeNames { get; set; }
     public DateTime? CalcHalfTime { get; set; }
     public DateTime? CalcFullTime { get; set; }
+    public int? FilterBy { get; set; }
 }
 
 public class RequestEventViewModel

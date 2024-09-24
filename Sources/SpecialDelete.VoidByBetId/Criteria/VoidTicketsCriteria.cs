@@ -20,7 +20,7 @@ public class VoidTicketsCriteria : CriteriaBase
 
     public string ReasonSC { get; set; }
 
-    public bool IsAbnormalBet { get; set; }
+    public byte? AbnormalBetType { get; set; }
 
     public string FilterUserName { get; set; }
 

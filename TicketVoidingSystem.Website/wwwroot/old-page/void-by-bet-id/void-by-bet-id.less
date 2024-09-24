@@ -1,6 +1,5 @@
 ﻿@import "../content/base/styles.less";
 
-
 .filter-bar {
     .filter-bar-inner {
         i {
@@ -180,17 +179,28 @@ body.rtl .formError .formErrorMoveBetArrow {
 
 .abnormal-bet {
     margin-left: 110px;
-}
-
-.ckbox-abnormal-bet {
-    font-weight: bold;
-    width: 435px;
     display: flex;
-    align-items: center;
-}
 
-.ckbox-abnormal-bet input {
-    margin: 0px;
+    .radio-abnormal-bet {
+        display: flex;
+        align-items: center;
+
+        label {
+            display: flex;
+            margin-right: 5px;
+        }
+    }
+
+    .ckbox-abnormal-bet {
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+    }
+
+    input {
+        margin: 0px;
+    }
 }
 
 .include-parlay {

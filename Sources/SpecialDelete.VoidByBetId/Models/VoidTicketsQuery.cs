@@ -53,5 +53,5 @@ public class VoidTicketsQuery
 
     public bool IsFilterByBetId { get; set; }
 
-    public bool IsAbnormalBet { get; set; }
+    public byte? AbnormalBetType { get; set; }
 }
