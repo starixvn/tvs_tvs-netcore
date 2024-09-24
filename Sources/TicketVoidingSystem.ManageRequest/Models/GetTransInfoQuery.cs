@@ -18,7 +18,7 @@ public class GetTransInfoQuery
     public IEnumerable<WrongOuViewModel>? WrongOuModels { get; set; }
     public IEnumerable<WrongOuViewModel>? Wrong1stOuModels { get; set; }
     public IEnumerable<WrongOddsViewModel>? WrongOddsModels { get; set; }
-    public IEnumerable<WrongOddsSportsBookViewModel>? WrongOddsSportsBookModels { get; set; }
+    public WrongOddsSportsBookViewModel? WrongOddsSportsBookModels { get; set; }
     public IEnumerable<ReducedOverViewModel>? ReducedOverModels { get; set; }
     public IEnumerable<NotParticipateViewModel>? NotParticipateModels { get; set; }
     public IEnumerable<EarlyKickOffViewModel>? EarlyKickOffModels { get; set; }

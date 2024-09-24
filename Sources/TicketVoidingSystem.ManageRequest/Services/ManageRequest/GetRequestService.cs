@@ -114,6 +114,10 @@ public class GetRequestServiceImp : GetRequestService
                 viewModel.WrongMarketOfferedModel = await MapEventWrongMarketOffered(secondResultSet);
                 break;
 
+            case IssueTypeConstant.WrongOddsSportsBook:
+                viewModel.WrongOddsSportsBookModel = await MapEventWrongOddsSportsBook(secondResultSet);
+                break;
+
             default:
                 viewModel.Event = secondResultSet.FirstOrDefault();
 
@@ -406,7 +410,8 @@ public class GetRequestServiceImp : GetRequestService
             ToOdds = model.ToOdds,
             CorrectOdds = model.CorrectOdds,
             BetTeamsResult = betTypesAdvancedMode,
-            GroupBetTypes = groupBetTypes
+            GroupBetTypes = groupBetTypes,
+            ActualMarket = model.ActualMarket
         };
     }
 

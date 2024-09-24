@@ -37,6 +37,7 @@ public class LogInfoHelperServiceImp : LogInfoHelperService
             WrongOuModels = query.WrongOuModels,
             Wrong1stOuModels = query.Wrong1stOuModels,
             WrongOddsModels = query.WrongOddsModels,
+            WrongOddsSportsBookModels = query.WrongOddsSportsBookModel,
             ReducedOverModels = query.ReducedOverModels,
             NotParticipateModels = query.NotParticipateModels,
             EarlyKickOffModels = query.EarlyKickOffModels,
