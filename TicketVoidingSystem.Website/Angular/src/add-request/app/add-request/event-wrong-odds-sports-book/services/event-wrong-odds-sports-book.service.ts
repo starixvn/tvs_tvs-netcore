@@ -29,6 +29,7 @@ export class EventWrongOddsSportsBookService {
   public getWrongOddsSportsBookModel(logInfoWrongOddsSportsBook: LogInfoWrongOddsSportsBook, subIssueTypeId: string): WrongOddsSportsBookModel {
     const model = new WrongOddsSportsBookModel();
     model.matchId = logInfoWrongOddsSportsBook.matchId;
+    model.betTeamsResult = logInfoWrongOddsSportsBook.betTeamsResult;
     model.logInfoDetail = logInfoWrongOddsSportsBook.logInfoDetail;
     model.subIssueTypeId = Number(subIssueTypeId);
     model.filterFromTransTime = logInfoWrongOddsSportsBook.filterWrongOddsSportsBook.fromDateTime;

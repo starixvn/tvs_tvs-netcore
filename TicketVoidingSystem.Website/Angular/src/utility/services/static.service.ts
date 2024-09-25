@@ -184,7 +184,8 @@ export class StaticService {
       || this.isRecoverTicket(requestDetail.request.issueTypeId.toString())
       || this.isDuplicateTickets(requestDetail.request.issueTypeId.toString())
       || this.isAbnormalBet(requestDetail.request.issueTypeId.toString())
-      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())) {
+      || this.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())
+      || this.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
       return null;
     } else {
       return requestDetail.event.eventDate;

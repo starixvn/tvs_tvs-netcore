@@ -187,7 +187,13 @@ export class MappingModelStaticService {
       subIssueTypeId: model.subIssueTypeId,
       filterFromTransTime: model.voidFromTime,
       filterToTransTime: model.voidToTime,
-      betTeamsResult: model.betTeamsResult
+      betTeamsResult: model.betTeamsResult,
+      filterOddsType: model.filterOddsType,
+      correctOdds: model.correctOdds,
+      oddsValue: model.oddsValue,
+      fromOdds: model.fromOdds,
+      toOdds: model.toOdds,
+      liveIndicator: model.liveIndicator
     } as WrongOddsSportsBookGetLogInfoQuery;
   }
 }

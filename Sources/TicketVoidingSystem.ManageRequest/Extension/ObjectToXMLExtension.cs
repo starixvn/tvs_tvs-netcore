@@ -403,7 +403,6 @@ public static class ObjectToXMLExtension
         };
 
         var stringBuilder = $"<r MatchId = '{model.MatchId}' "
-            + $"LiveScores='{model.LogInfoDetail.LiveScores}' "
             + $"SubIssueTypeId='{model.SubIssueTypeId}' "
             + $"FilterToTransTime='{model.FilterToTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
             + $"FilterFromTransTime='{model.FilterFromTransTime.ToString(FormatKey.DateTimeWithMillisecond)}' "
@@ -416,7 +415,9 @@ public static class ObjectToXMLExtension
             + $"OddsValue='{SecurityElement.Escape(model.OddsValue)}' "
             + $"FromOdds='{SecurityElement.Escape(model.FromOdds)}' "
             + $"ToOdds='{SecurityElement.Escape(model.ToOdds)}' "
-            + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' />";
+            + $"CorrectOdds='{SecurityElement.Escape(model.CorrectOdds)}' "
+            + $"AdvancedExtraInfo='{SecurityElement.Escape(JsonSerializer.Serialize(model.BetTeamsResult, options))}' />";
+
 
         return $"<root>{stringBuilder.Trim()}</root>";
     }

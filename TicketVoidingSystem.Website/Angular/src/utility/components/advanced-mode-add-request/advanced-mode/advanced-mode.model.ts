@@ -235,23 +235,19 @@ export class BetTeamAddRequest {
       case 'playerandodds':
         result.playerAndOdds = value;
         break;
-      case '_xxx':
+      case '_xxx': // ex: 8001
         result.betIdX = value;
         result.filterBetIdX = this.getValueBetIdTypeXxx(value);
         break;
-      case '_xx':
-        result.betIdX = value;
-        result.filterBetIdX = this.getValueBetIdTypeXx(value);
-        break;
-      case 'yy':
+      case 'yy': // ex: 80102 (8XXYY)
         result.betIdY = value;
         result.filterBetIdY = this.getValueBetIdTypeYy(value);
         break;
-      case 'betidx':
+      case 'betidx': // ex: 801
         result.betIdX = value;
         result.filterBetIdX = value;
         break;
-      case 'betidy':
+      case 'betidy': // ex: 01
         result.betIdY = value;
         result.filterBetIdY = value;
         break;
@@ -272,17 +268,6 @@ export class BetTeamAddRequest {
     return value.split('&')
       .filter(Boolean)
       .map(x => `_${x.padStart(3, '0')}`)
-      .join('&');
-  }
-
-  getValueBetIdTypeXx(value: string): string {
-    if (!value) {
-      return '___';
-    }
-
-    return value.split('&')
-      .filter(Boolean)
-      .map(x => `_${x.padStart(2, '0')}`)
       .join('&');
   }
 

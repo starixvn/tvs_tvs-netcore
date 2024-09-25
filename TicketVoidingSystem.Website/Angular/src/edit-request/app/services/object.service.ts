@@ -84,6 +84,8 @@ export class ObjectService {
       args.requestModel.recoverTicketModel = args.detailViewModel.recoverTicketModel;
     } else if (this.validationService.isLikelyWrongMarketOffered(args.detailViewModel)) {
       args.requestModel.wrongMarketOfferedModel = args.detailViewModel.wrongMarketOfferedModel;
+    } else if (this.validationService.isWrongOddsSportsBook(args.detailViewModel)) {
+      args.requestModel.wrongOddsSportsBookModel = args.detailViewModel.wrongOddsSportsBookModel;
     }
   }
 

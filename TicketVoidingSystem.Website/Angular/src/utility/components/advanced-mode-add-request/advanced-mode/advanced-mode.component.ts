@@ -136,7 +136,6 @@ export class AdvancedModeComponent {
       case 'playerandodds':
         return checkedBetType.playerAndOdds;
       case '_xxx':
-      case '_xx':
       case 'betidx':
         return checkedBetType.betIdX;
       case 'yy':

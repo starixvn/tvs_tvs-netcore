@@ -56,7 +56,7 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
 
   ngOnInit() {
     if (this.isEdit) {
-      this.logInfoEvent = this.eventWrongOddsSportsBookService.assignModelsToEvents(this.wrongOddsSportsBookModel);
+      this.updateDataWhenEditRequest();
     } else {
       this.logInfoEvent = this.eventWrongOddsSportsBookService.initDefaultLogInfoWrongOddsSportsBook();
     }
@@ -152,6 +152,9 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
 
   initSaveRequestInput() {
     const arg = new SaveRequestArg();
+    if (!this.filter.isVoided) {
+      this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
+    }
     arg.requestId = this.requestId;
     arg.requestedBy = this.requestedBy;
     arg.isEdit = this.isEdit;

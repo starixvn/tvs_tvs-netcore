@@ -5523,6 +5523,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -5552,6 +5553,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -8928,6 +8930,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -9080,6 +9083,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -9133,6 +9137,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -9182,6 +9187,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -11645,6 +11651,7 @@
           ],
           "Name": "Team",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -12117,6 +12124,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -15193,6 +15201,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -15273,6 +15282,7 @@
           ],
           "Name": "Team",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -15306,6 +15316,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -20385,6 +20396,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
@@ -22277,6 +22289,7 @@
           ],
           "Name": "",
           "Value": "All",
+          "IsMultiple": true,
           "XmlAttribute": "Team"
         }
       ],
