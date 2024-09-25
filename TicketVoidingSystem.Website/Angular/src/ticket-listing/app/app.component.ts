@@ -15,6 +15,7 @@ import { Notification } from '../../utility/components/notification/notification
 import { PagingModel } from '../../utility/components/paging/paging/paging.model';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { Product } from '../../utility/constants/config';
+import { SpecialPlatform } from '../../utility/constants/special-platform.constant';
 import { SportType } from '../../utility/constants/sport.constant';
 import { CONFIG, TEXT } from '../../utility/constants/text';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
@@ -26,7 +27,6 @@ import { AmendmentReponse, CommonQuery, ExportExcelQuery, GetTicketsDetailQuery,
 import { SummaryComponent } from './summary/summary.component';
 import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
 import { TicketsModel } from './tickets/ticket.model';
-import { SpecialPlatform } from '../../utility/constants/special-platform.constant';
 
 @Component({
   selector: 'app-root',
@@ -208,6 +208,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       matchCode: this.matchViewModel.matchCode,
       matchEvent: this.matchViewModel.matchEvent,
       eventDate: this.matchViewModel.eventDate,
+      globalShowTime: this.matchViewModel.globalShowTime,
       startTime: this.matchViewModel.startTime,
       endTime: this.matchViewModel.endTime,
       totalCreditTickets: item.total,
@@ -258,6 +259,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         licenseeName: item.licenseeName,
         isChinaView: item.isChinaView,
         eventDate: this.matchViewModel.eventDate,
+        globalShowTime: this.matchViewModel.globalShowTime,
         title: titleAmendmentOic,
         matchCode: null,
         matchEvent: null,

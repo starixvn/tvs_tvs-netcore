@@ -6,7 +6,7 @@ public class SendDataOicCriteria : NonQueryCommand
 {
     public int MatchId { get; set; }
 
-    public DateTime EventDate { get; set; }
+    public DateTime GlobalShowTime { get; set; }
 
     public string TransInfoSendOICJson { get; set; }
 

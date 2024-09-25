@@ -80,5 +80,4 @@ public class CellServiceImp : CellService
             range.Style.Fill.BackgroundColor.SetColor(Color.LemonChiffon);
         }
     }
-
 }
