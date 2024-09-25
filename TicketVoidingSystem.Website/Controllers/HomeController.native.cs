@@ -84,7 +84,6 @@ public class HomeController : Controller
     [SkipUMFilter]
     public IActionResult Gc()
     {
-        GC.Collect(2, GCCollectionMode.Aggressive | GCCollectionMode.Forced, true, true);
         const int megabyte = 1024 * 1024;
         var stringBuilder = new StringBuilder();
         var sw = Stopwatch.StartNew();
