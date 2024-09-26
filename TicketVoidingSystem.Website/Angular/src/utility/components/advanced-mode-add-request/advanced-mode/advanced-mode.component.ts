@@ -9,7 +9,7 @@ import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
-import { BetTeamAddRequest, BetTeamAddRequestResult, Item, Selection } from './advanced-mode.model';
+import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
 
 @Component({
   selector: 'advanced-mode',
@@ -85,7 +85,7 @@ export class AdvancedModeComponent {
 
   public async getSpecialBetTeamCricket(matchId: number): Promise<void> {
     if (this.matchId && (this.baseSpecialBetTypeCricket === undefined || this.baseSpecialBetTypeCricket.length === 0)) {
-      const data = await this.commonService.GetOddsInfoSpecialBetTypes({matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
+      const data = await this.commonService.GetOddsInfoSpecialBetTypes({ matchId: matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER });
       this.updatePlayerCricket(data);
     }
   }
@@ -104,7 +104,7 @@ export class AdvancedModeComponent {
   private updateSelectionsByCheckedValue(betTeam: BetTeamAddRequest, checkedBetType: BetTeamAddRequestResult) {
     betTeam.selections.forEach(y => {
       y.isDisabled = checkedBetType.isDisabled;
-      if(y.isMultiple) {
+      if (y.isMultiple) {
         const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
         y.multiSelection.updateItemChecked(value.split(','));
         y.multiSelection.updateDisabledStatus(checkedBetType.isDisabled);
@@ -214,44 +214,30 @@ export class AdvancedModeComponent {
   }
 
   private getItemsPlayerSelection(betTypeId: string, odds: OddsInfo[]): Selection[] {
-    const items: Selection[] = [];
-    if (AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId)) {
-      const groupsOdds = _.groupBy(odds, 'oddsId');
-      for (const oddsId in groupsOdds) {
-        const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');
-        for (const [index, x] of groupsOdds[oddsId].entries()) {
-          items.push(
-            new Selection(index, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)
-          );
-        }
-      }
-    } else {
-      for (const [index, x] of odds.entries()) {
-        items.push(new Selection(index, x.playerName, x.playerId.toString(), null, true, null));
-      }
+    const isNextManOut = AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId);
+    if (isNextManOut) {
+      return odds.reduce((acc, current, index) => {
+        const group = odds.filter(x => x.oddsId === current.oddsId);
+        const oddsName = group.map(x => x.playerName).join(' & ');
+        return acc.concat(group.map((x, i) => new Selection(i, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)));
+      }, []);
     }
 
-    return items;
+    return odds.map((x, index) => new Selection(index, x.playerName, x.playerId.toString(), null, true, null));
   }
 
   private renderSelectionCricketWithPlayer(betTeam: BetTeamAddRequest, baseBetType: Selection[]): void {
     const playerSelection = betTeam.selections.find(x => x.name === 'Player:');
     if (playerSelection.multiSelection?.multipleSelect.items.length === 0) {
-      const items: Selection[] = [];
-      baseBetType.forEach(x => {
-        if (betTeam.betTypes.includes(x.value)) {
-          items.push(...x.items);
-        }
-      });
-      if (playerSelection) {
-        playerSelection.items = [];
-        playerSelection.items.push(..._.uniqWith(items, _.isEqual));
-      }
-      betTeam.selections.forEach(x => {
-        if (x.name === 'Player:') {
-          x.multiSelection = betTeam.renderMultipleSelection(x);
-        }
-      });
+      const validItems = baseBetType
+        .filter(x => betTeam.betTypes.includes(x.value))
+        .flatMap(x => x.items);
+
+      playerSelection.items = _.uniqWith(validItems, _.isEqual);
+
+      betTeam.selections
+        .filter(x => x.name === 'Player:')
+        .forEach(x => x.multiSelection = betTeam.renderMultipleSelection(x));
     }
   }
 
@@ -289,16 +275,6 @@ export class AdvancedModeComponent {
     return true;
   }
 
-  private isValidItemWithToolTip(betTeamIndex: number, items: Item[]): boolean {
-    if (items.every(x => !x.isChecked)) {
-      const className = `bet-team-${betTeamIndex}`;
-      this.tooltip.display(className, LABELS.SELECT_AT_LEAST_ONE_OPTION);
-      return false;
-    }
-
-    return true;
-  }
-
   private isValidInputDecimalValue(isMultiple: boolean, value: string): boolean {
     return isMultiple
       ? StaticService.isCorrectRegexMultipleDecimal(value)
@@ -309,9 +285,5 @@ export class AdvancedModeComponent {
     return selection.isMultiple
       ? selection.multiSelection.multipleSelect.getValueItems() !== ''
       : selection.value !== '';
-  }
-
-  public isScrollStype(): boolean {
-    return this.betTeams.filter(x => x.isShow).length > 10;
   }
 }

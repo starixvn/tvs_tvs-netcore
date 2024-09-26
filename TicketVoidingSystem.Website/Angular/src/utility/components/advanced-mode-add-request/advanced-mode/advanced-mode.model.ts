@@ -281,30 +281,32 @@ export class BetTeamAddRequest {
       .map(y => y ? y.padStart(2, '0') : '__')
       .join('&');
   }
-
-  updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId) {
-    if (betTypeId === AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE
-        || betTypeId === AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE_AOS) {
+  
+  private updateBetTypeHalfFullTimeCorrectScore(result: BetTeamAddRequestResult, betTypeId: string): void {
+    if (this.isHalfFullTimeCorrectScoreBet(betTypeId)) {
       const [selection1, selection2] = this.selections;
-      let temp = '';
-      if (selection1.value === 'All' && selection2.value === 'All') {
-        temp = 'All';
-      } else if (selection1.value === 'All') {
-        temp = selection1.items.slice(1).map(item => `${item.value}/${selection2.value}`).join(',');
-      } else if (selection2.value === 'All') {
-        temp = selection2.items.slice(1).map(item => `${selection1.value}/${item.value}`).join(',');
-      } else {
-        temp = `${selection1.value}/${selection2.value}`;
-      }
-
-      result.team = temp;
+      const team = this.getCombinedSelectionValueBetTypeFullTimeCorrectScore(selection1, selection2);
+      result.team = team;
     }
+  }
+
+  private isHalfFullTimeCorrectScoreBet(betTypeId: string) {
+    return [
+      AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE,
+      AdvancedModeConstants.BETTYPE_HALF_FULL_TIME_CORRECT_SCORE_AOS,
+    ].includes(betTypeId);
+  }
+
+  private getCombinedSelectionValueBetTypeFullTimeCorrectScore(selection1: Selection, selection2: Selection) {
+    if (selection1.value === 'All' && selection2.value === 'All') return 'All';
+    if (selection1.value === 'All') return selection1.items.slice(1).map(item1 => `${item1.value}/${selection2.value}`).join(',');
+    if (selection2.value === 'All') return selection2.items.slice(1).map(item2 => `${selection1.value}/${item2.value}`).join(',');
+    return `${selection1.value}/${selection2.value}`;
   }
 
   private updateForPenaltyShootoutCombo376(result: BetTeamAddRequestResult, betTypeId: string): void {
     if (betTypeId === AdvancedModeConstants.BETTYPE_PENALTY_SHOOTOUT_COMBO) {
-      const newBetTeam = `${result.firstValue}-${result.secondValue}`;
-      result.team = newBetTeam;
+      result.team = `${result.firstValue}-${result.secondValue}`;
     }
   }
 
