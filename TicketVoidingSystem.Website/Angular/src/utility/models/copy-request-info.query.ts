@@ -35,6 +35,12 @@ export class RequestInfoForCopy {
   totalSingleCount: number;
   totalParlayCount: number;
   totalCancelCashOutCount: number;
+
+  filterOddsType: string;
+  oddsValue: string;
+  fromOdds: string;
+  toOdds: string;
+  correctOdds: string;
 }
 
 export class BetTypeTicketsInfo {

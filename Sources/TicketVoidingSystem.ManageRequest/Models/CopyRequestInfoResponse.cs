@@ -62,4 +62,10 @@ public class RequestInfoForCopy
     public int TotalParlayCount { get; set; }
 
     public int TotalCancelCashOutCount { get; set; }
+
+    public string FilterOddsType { get; set; }
+    public string OddsValue { get; set; }
+    public string FromOdds { get; set; }
+    public string ToOdds { get; set; }
+    public string CorrectOdds { get; set; }
 }
