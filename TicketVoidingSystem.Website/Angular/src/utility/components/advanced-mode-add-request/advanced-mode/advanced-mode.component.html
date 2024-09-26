@@ -4,7 +4,7 @@
     <em class="fa mr-1" [ngClass]="{'fa-angle-up':!isCollapse, 'fa-angle-down':isCollapse}"></em>
     <strong>Advanced Mode</strong>
   </div>
-  <div class="advanced-mode-body border-bottom-radius" [hidden]="isCollapse">
+  <div class="advanced-mode-body border-bottom-radius" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapse">
     <div *ngFor="let betTeam of betTeams">
       <div [ngSwitch]="betTeam.type" *ngIf="betTeam.isShow">
         <div *ngSwitchCase="1" class="bet-team">

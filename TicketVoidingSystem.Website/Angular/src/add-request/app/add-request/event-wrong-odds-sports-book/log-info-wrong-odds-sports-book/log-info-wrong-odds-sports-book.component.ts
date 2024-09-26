@@ -8,6 +8,7 @@ import { ModalService } from '../../../../../utility/components/modal/modal.serv
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestApiService } from '../../add-request-api.service';
+import { AddRequestStore } from '../../add-request.store';
 import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { TicketsModel } from '../../pool-house-ticket/tickets/tickets.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
@@ -25,11 +26,11 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   @Input() primitiveProps: PrimitiveProperty;
   @Input() issueTypeId: string;
   @Output() searchEvent = new EventEmitter<string>();
-
   affectedTicketsModel = new AffectedTicketsModel();
-  isBlock: boolean;
 
-  constructor(private readonly modalService: ModalService,
+  constructor(
+    private readonly modalService: ModalService,
+    private readonly addRequestStore: AddRequestStore,
     private readonly addRequestApiService: AddRequestApiService
   ) { }
 
@@ -93,10 +94,11 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   }
 
    public async showAffectedTicketsDetails(){
-    this.isBlock = true;
+    this.addRequestStore.changeBlockingUiStatus(true);
     await this.updateAffectedTickets();
     this.updateCheckedBetTypeIds();
-    this.isBlock = false;
+    this.addRequestStore.changeBlockingUiStatus(false);
+
     this.affectedTicketsModel.isOpen = true;
     this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
    }

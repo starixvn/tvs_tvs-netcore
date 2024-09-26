@@ -13,7 +13,6 @@ import { BetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-typ
 })
 export class AdvancedModeAddRequestComponent implements OnInit {
   @Input() matchId: number;
-  @Input() isShowAdvancedModeFilter: boolean;
   @Input() model: AdvancedModeAddRequestModel;
   @Input() groupBetTypes = new GroupBetTypesAddRequestModel([], false, '', false);
   @Output() checkExistBetTypeEvent = new EventEmitter<boolean>();

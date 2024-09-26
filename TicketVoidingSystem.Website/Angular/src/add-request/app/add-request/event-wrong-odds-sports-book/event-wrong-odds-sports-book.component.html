@@ -15,7 +15,6 @@
 <advanced-mode-add-request #advancedMode
   [matchId]="logInfoEvent.matchId"
   [groupBetTypes]="groupBetTypesModel"
-  [isShowAdvancedModeFilter]="isEdit"
   (changeFilterEvent)="resetLogInfo()"
   (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
   [model]="advancedModeAddRequestModel">

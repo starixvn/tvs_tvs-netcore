@@ -18,7 +18,6 @@ import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advance
 })
 export class AdvancedModeComponent {
   @Input() matchId: number;
-  @Input() isShowAdvancedModeFilter: boolean;
   @Input() changedBetTypes: BetTypeAddRequest[] = [];
   @Input() advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   @Output() changeFilterEvent = new EventEmitter();
@@ -28,9 +27,9 @@ export class AdvancedModeComponent {
   betTypesMoreHDP = AdvancedModeConstants.BETTYPES_MORE_HDP;
   baseSpecialBetTypeCricket: Selection[] = [];
   baseBetTeams: BetTeamAddRequest[] = [];
+  isShowAdvancedModeFilter: boolean;
 
   constructor(
-
     private readonly service: AdvancedModeService,
     private readonly commonService: CommonService,
     private readonly element: ElementRef) {

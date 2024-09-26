@@ -75,6 +75,7 @@ export class EventWrongOddsSportsBookService {
     model.betTeamsResult = logInfo.betTeamsResult;
     model.correctOdds = logInfo.filterWrongOddsSportsBook.correctOdds;
     model.filterOddsType = logInfo.filterWrongOddsSportsBook.filterOddsType;
+    model.liveIndicator = logInfo.filterWrongOddsSportsBook.liveIndicator;
     if (logInfo.filterWrongOddsSportsBook.filterOddsType === FilterOddsTypeConstant.VALUE) {
       model.oddsValue = logInfo.filterWrongOddsSportsBook.oddsValue;
     } else {
