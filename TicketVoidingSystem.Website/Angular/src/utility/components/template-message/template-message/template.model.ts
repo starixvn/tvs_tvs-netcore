@@ -62,4 +62,5 @@ export class TemplateValue {
   playerName?: TemplateContent;
   numberOfCorner?: number;
   isAllNonLiveTickets?: boolean
+  actualMarketSportsBook?: TemplateContent;
 }

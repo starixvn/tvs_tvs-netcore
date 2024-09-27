@@ -166,6 +166,9 @@ export class TemplateMessageComponent implements OnChanges {
     } else if (this.isTVSVoidPage() && this.isWrongOdds()) {
       this.selectedTemplated.inputTexts = [];
       this.updateActualMarketTvsWrongOdds();
+    } else if (this.isWrongOddsSportsBook()) {
+      this.selectedTemplated.inputTexts = [];
+      this.updateActualMarketTVS();
     } else {
       this.updateInputs();
     }
@@ -332,9 +335,12 @@ export class TemplateMessageComponent implements OnChanges {
         msgChineseNewSimplified: `${this.value.actualMarket}`
       };
       this.templateService.replaceEachLanguage(this.message, TemplateReplace.ACTUAL_MARKET, content);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.ACTUAL_MARKET, '');
+    } else if (this.value.actualMarketSportsBook)  {
+      this.templateService.replaceEachLanguage(this.message, TemplateReplace.ACTUAL_MARKET, this.value.actualMarketSportsBook);
     }
+    else{
+      this.templateService.replaceAll(this.message, TemplateReplace.ACTUAL_MARKET, '');
+    } 
   }
 
   updateHdpTVS() {
@@ -544,5 +550,9 @@ export class TemplateMessageComponent implements OnChanges {
   isLikelyWrongMarketOffered(): boolean {
     return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString()) 
     || StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
+  }
+
+  isWrongOddsSportsBook(): boolean {
+    return StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
   }
 }

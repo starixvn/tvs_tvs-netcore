@@ -246,7 +246,8 @@ export class TemplateService {
   }
 
   private replaceActualMarketSubTypeHdp(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
-    const prfixSubType = this.getPrefixSubType(subIssueTypeId);
+    const isFirstHalf = subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER;
+    const prfixSubType = this.getPrefixSubType(isFirstHalf);
     const replacedContent: TemplateContent = {
       msgEnglish: `${prfixSubType.msgEnglish}${this.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${this.getCorrectOdds(templateValue)}`,
       msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${this.getCorrectOdds(templateValue)}`,
@@ -258,7 +259,8 @@ export class TemplateService {
   }
 
   private replaceActualMarketSubTypeOu(message: Message, subIssueTypeId: number, templateValue: TemplateValue) {
-    const prefixSubType = this.getPrefixSubType(subIssueTypeId);
+    const isFirstHalf = subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER;
+    const prefixSubType = this.getPrefixSubType(isFirstHalf);
     const replacedContent: TemplateContent = {
       msgEnglish: `${prefixSubType.msgEnglish}${TemplateContentConst.OVER.msgEnglish}-${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgEnglish} ${templateValue.correctOddsHomeOver}`,
       msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${TemplateContentConst.OVER.msgChineseTraditional}-${templateValue.wrongOU}@${TemplateContentConst.ODDS.msgChineseTraditional} ${templateValue.correctOddsHomeOver}`,
@@ -273,31 +275,34 @@ export class TemplateService {
     return templateValue.filterFavoriteType === 'h' ? templateValue.correctOddsHomeOver : templateValue.correctOddsAwayUnder;
   }
 
-  private getPrefixSubType(subIssueTypeId: number): TemplateContent {
-    const isSubTypeFirstHalf = subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_HANDICAP || subIssueTypeId === SubIssueTypeConstant.FIRST_HALF_OVER_UNDER;
+  private getInputtedOvenUnder(templateValue: TemplateValue){
+    return templateValue.filterFavoriteType === 'h' ? templateValue.correctOddsHomeOver : templateValue.correctOddsAwayUnder;
+  }
+
+  public getPrefixSubType(isFirstHalf: boolean): TemplateContent {
     const prfixSubType: TemplateContent = {
-      msgEnglish: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgEnglish : ''}`,
-      msgChineseTraditional: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseTraditional : ''}`,
-      msgChineseSimplified: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseSimplified : ''}`,
-      msgChineseNewSimplified: `${isSubTypeFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseNewSimplified : ''}`,
+      msgEnglish: `${isFirstHalf ? TemplateContentConst.FIRST_HALF.msgEnglish : ''}`,
+      msgChineseTraditional: `${isFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseTraditional : ''}`,
+      msgChineseSimplified: `${isFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseSimplified : ''}`,
+      msgChineseNewSimplified: `${isFirstHalf ? TemplateContentConst.FIRST_HALF.msgChineseNewSimplified : ''}`,
     }
 
     return prfixSubType;
   }
 
-  private getTeamName(templateValue: TemplateValue): string {
+  public getTeamName(templateValue: TemplateValue): string {
     return templateValue.filterFavoriteType === 'h' ? templateValue.match?.homeName : templateValue.match?.awayName;
   }
 
-  private getTeamNameTraditional(templateValue: TemplateValue): string {
+  public getTeamNameTraditional(templateValue: TemplateValue): string {
     return templateValue.filterFavoriteType === 'h' ? templateValue.match?.homeNameTraditional : templateValue.match?.awayNameTraditional;
   }
 
-  private getTeamNameSimplified(templateValue: TemplateValue): string {
+  public getTeamNameSimplified(templateValue: TemplateValue): string {
     return templateValue.filterFavoriteType === 'h' ? templateValue.match?.homeNameSimplified : templateValue.match?.awayNameSimplified;
   }
 
-  private getTeamNameNewSimplified(templateValue: TemplateValue): string {
+  public getTeamNameNewSimplified(templateValue: TemplateValue): string {
     return templateValue.filterFavoriteType === 'h' ? templateValue.match?.homeNameNewSimplified : templateValue.match?.awayNameNewSimplified;
   }
 }
