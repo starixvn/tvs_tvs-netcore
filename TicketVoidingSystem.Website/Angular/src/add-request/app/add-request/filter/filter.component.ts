@@ -33,7 +33,6 @@ export class FilterComponent implements OnInit, OnChanges {
   @Output() modelChange = new EventEmitter<FilterModel>();
   @Output() issueTypeChange = new EventEmitter<string>();
 
-  actions: Selection[] = [];
   originActions: Selection[] = [];
   issueTypesPermission: IssueType[] = [];
   actionIds: string[] = [];
@@ -218,9 +217,9 @@ export class FilterComponent implements OnInit, OnChanges {
     this.widthActionControl = widthValues.action || 0;
   }
 
-  private updateCurrentAction(): void { 
-    this.actions = this.actionVoidService.getVoidActionsSelectionByIssueType(this.issueTypes.issueId, this.abnormalFilterBy, this.isEdit, this.model.action, this.originActions);
-    this.model.action = this.isEdit || (this.isExternalUrl && this.model.action) ? this.model.action : this.actions[0].value;
+  private updateCurrentAction(): void {
+    this.model.actions = this.actionVoidService.getVoidActionsSelectionByIssueType(this.issueTypes.issueId, this.abnormalFilterBy, this.isEdit, this.model.action, this.originActions);
+    this.model.action = this.isEdit || (this.isExternalUrl && this.model.action) ? this.model.action : this.model.actions[0].value;
   }
 
   async getIssueTypes() {
@@ -235,7 +234,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.filterIssueTypePermission(data);
     this.issueTypes = new IssueTypes(data);
     this.issueTypesChange.emit(this.issueTypes);
- 
+
     if (!this.isEdit) {
       if (this.haveAbnormalBetFromPermission()) {
         this.issueTypes.issueId = Number(IssueTypeConstant.ABNORMAL_BET);

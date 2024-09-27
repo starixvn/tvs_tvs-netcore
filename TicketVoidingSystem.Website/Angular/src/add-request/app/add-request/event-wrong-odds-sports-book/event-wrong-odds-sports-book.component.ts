@@ -8,7 +8,9 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { ModeType } from '../../../../utility/constants/config';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AddRequestStore } from '../add-request.store';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { WrongOddsSportsBookModel } from '../models/event-wrong-odds-sports-book.model';
 import { OthersModel } from '../others/others.model';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
@@ -33,6 +35,7 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
   @Input() filter: FilterModel;
   @Input() issueTypeId: string;
   @Input() others = new OthersModel();
+  @Input() issueTypes = new IssueTypes();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOddsSportsBookModel: WrongOddsSportsBookModel;
   @Output() updateMatchId = new EventEmitter<number>();
@@ -43,6 +46,7 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
   groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   logInfoEvent = new LogInfoWrongOddsSportsBook();
+  confirmAddRequest = new ConfirmAddRequestModel();
   primitiveProps = new PrimitiveProperty();
 
   constructor(
@@ -163,9 +167,12 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
     arg.others = this.others;
     arg.filter = this.filter;
     arg.primitiveProps = this.primitiveProps;
+    arg.issueTypes = this.issueTypes;
     arg.filterWrongOddsSportsBookComponent = this.filterWrongOddsSportsBookComponent;
     arg.eventLeagueComponent = this.eventLeagueComponent;
+    arg.advancedModeComponent = this.advancedMode;
     arg.logInfoEvent = this.logInfoEvent;
+    arg.confirmAddRequest = this.confirmAddRequest;
     arg.addRequestStore = this.addRequestStore;
 
     return arg;
@@ -187,6 +194,14 @@ export class EventWrongOddsSportsBookSportsBookComponent implements OnInit {
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+  }
+
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 
   resetLogInfoOfEvent(): void {

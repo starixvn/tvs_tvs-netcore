@@ -322,24 +322,6 @@ export class StaticService {
     return `${PREFIX}${value}`;
   }
 
-  static undoConvertStringToBetId8xxx(text: string): string {
-    if (!text) {
-      return null;
-    }
-
-    // Remove the prefix '8'
-    if (text.startsWith('8')) {
-      text = text.substring(1);
-    }
-
-    // Remove leading '0's
-    while (text.startsWith('0')) {
-      text = text.substring(1);
-    }
-
-    return text;
-  }
-
   static openPopupTransIds(requestId: number, transIds: string, modalService: ModalService): void {
     modalService.open(
       {
@@ -409,5 +391,14 @@ export class StaticService {
     const seconds = ((durations % MILLISECONDS_IN_A_MINUTE) / 1000).toFixed(0);
 
     return `${minutes}m${seconds}s`;
+  }
+
+  static isEditingByAnotherUser(isEdit: boolean, createdBy: number): boolean {
+    const editingBy = Number(document.getElementById('body').getAttribute('user-id'));
+    return isEdit && editingBy !== createdBy;
+  }
+  
+  static isHasWarningTakenNote(currentAction: string, actionIdOfFirstTimeAccess: string): boolean {
+    return currentAction === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentAction !== actionIdOfFirstTimeAccess;
   }
 }

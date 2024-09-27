@@ -79,8 +79,6 @@ export class BetTeamAddRequestResult {
   hdp: string;
   hdp1: string;
   hdp2: string;
-  wicket: string;
-  over: string;
   player: string;
   playerAndOdds: string;
   betIdX: string;

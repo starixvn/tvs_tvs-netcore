@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { AdvancedModeAddRequestComponent } from 'src/utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
+import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';

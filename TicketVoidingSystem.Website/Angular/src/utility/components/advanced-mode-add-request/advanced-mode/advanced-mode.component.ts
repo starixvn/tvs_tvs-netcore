@@ -126,10 +126,6 @@ export class AdvancedModeComponent {
         return checkedBetType.team;
       case 'hdp':
         return checkedBetType.hdp;
-      case 'wicket':
-        return StaticService.undoConvertStringToBetId8xxx(checkedBetType.wicket);
-      case 'over':
-        return checkedBetType.over;
       case 'player':
         return checkedBetType.player;
       case 'playerandodds':
