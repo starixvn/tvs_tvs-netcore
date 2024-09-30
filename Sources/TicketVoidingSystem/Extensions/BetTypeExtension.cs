@@ -78,7 +78,7 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2
     {
-        List<int> VirtualSportsSportTypeIds = new() { 190, 191, 192, 193, 194, 195, 196, 197 };
+        List<int> VirtualSportsSportTypeIds = new() { 177, 190, 191, 192, 193, 194, 195, 196, 197, 198 };
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 

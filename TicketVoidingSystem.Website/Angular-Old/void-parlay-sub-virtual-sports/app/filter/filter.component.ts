@@ -83,7 +83,7 @@ export class FilterComponent {
     }
 
     private inValidSportTypeVirtualSport2(sportType: number){
-      return (sportType < 190 || sportType > 199);
+      return (sportType < 190 || sportType > 199 || sportType !== 177);
     }
 
     private inValidSportTypeVirtualSport4(sportType: number){
