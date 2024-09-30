@@ -3,8 +3,8 @@ import _ from 'lodash';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { EventType, SportType } from '../../../../utility/constants/sport.constant';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
@@ -16,8 +16,6 @@ import { CommonPrimitiveProperty } from '../../models/common-primitive-property.
 import { TicketsService } from '../../services/tickets.service';
 import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
-import { SpecialSportsBookBetTypes } from '../special-bettypes.constant';
-import { TemplateContentConst } from 'src/utility/components/template-message/template-message/template.const';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +56,7 @@ export class VoidPageService {
   }
 
   private getTemplateValue(voidPageItem: VoidNotParticipateModel, requestDetail: RequestDetailViewModel): TemplateValue {
-    const templateValue = voidPageItem.matchModel ? this.templateService.getTemplateValue(voidPageItem.matchModel) : new TemplateValue();
+    const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;
     templateValue.eventType = voidPageItem.voidTicketsMini.isAllLiveTickets ? EventType.LIVE : null;
@@ -72,7 +70,7 @@ export class VoidPageService {
     }
 
     if (StaticService.isLikelyWrongMarketOffered(requestDetail.request.issueTypeId.toString())
-    || StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
+      || StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())) {
       templateValue.isCheckedSpecialBetType = true;
       templateValue.betTypeNameReplaceMessage = voidPageItem.voidTicketsMini.betTypeNameReplaceMessage;
       templateValue.totalTickets = voidPageItem.voidTicketsMini.total;
@@ -80,18 +78,20 @@ export class VoidPageService {
       templateValue.toTransTime = voidPageItem.voidTicketsMini.toTime;
     }
 
-    if(StaticService.isWrongOddsSportsBook(requestDetail.request.issueTypeId.toString())){
-      templateValue.actualMarketSportsBook = this.createActualMarketSportsBook(requestDetail, templateValue);
-      
-      if(this.isSportTypeSoccer(requestDetail.request.sportType)){
+    if (StaticService.isWrongOddsSportsBookNumber(requestDetail.request.issueTypeId)) {
+      templateValue.totalBetTypesSelected = requestDetail.wrongOddsSportsBookModel.betTeamsResult.length;
+      templateValue.uniqueBetTypeSelected = templateValue.totalBetTypesSelected === 1 ? requestDetail.wrongOddsSportsBookModel.betTeamsResult[0] : null;
+      templateValue.correctOdds = requestDetail.wrongOddsSportsBookModel.correctOdds;
+      if (this.isSportTypeSoccer(requestDetail.request.sportType)) {
         templateValue.score = this.getLiveScoreForTemplateMessage(requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreNormalTicket, requestDetail.wrongOddsSportsBookModel.logInfoDetail.scoreOfMatch);
       }
     }
 
+
     return templateValue;
   }
-  
-  public isSportTypeSoccer(sportType: number): boolean{
+
+  public isSportTypeSoccer(sportType: number): boolean {
     return sportType === SportType.SOCCER;
   }
 
@@ -163,71 +163,5 @@ export class VoidPageService {
     primitiveProperty.isBlockUI = false;
 
     return viewModel.getLogInfoModels[0];
-  }
-
-  private createActualMarketSportsBook(requestDetail: RequestDetailViewModel, templateValue: TemplateValue) {
-    if(requestDetail.wrongOddsSportsBookModel.betTeamsResult.length === 1){
-      let betTypeSelected = requestDetail.wrongOddsSportsBookModel.betTeamsResult[0];
-
-      if(this.isHandicapBetType(betTypeSelected.id)){
-        templateValue.filterFavoriteType = betTypeSelected.team;
-        return this.createActualMarketBetTypeHdp(requestDetail.wrongOddsSportsBookModel.correctOdds, betTypeSelected.id, templateValue);
-      }
-  
-      if(this.isOverUnderBetType(betTypeSelected.id)){      
-        return this.createActualMarketBetTypeOu(requestDetail.wrongOddsSportsBookModel.correctOdds, betTypeSelected.id, betTypeSelected.hdp1);
-      }
-    }
-    
-    return templateValue.actualMarketSportsBook = this.createActualMarketOtherBetType(requestDetail.wrongOddsSportsBookModel.correctOdds);
-  }
-  
-  private isHandicapBetType(betTypeId: string): boolean {
-    return [SpecialSportsBookBetTypes.Handicap, SpecialSportsBookBetTypes._1HHandicap].includes(betTypeId);
-  }
-
-  private isOverUnderBetType(betTypeId: string): boolean {
-      return [SpecialSportsBookBetTypes.OverUnder, SpecialSportsBookBetTypes._1HOverUnder].includes(betTypeId);
-  }
-
-  private isFirstHalfBetType(betTypeId: string): boolean {
-    return [SpecialSportsBookBetTypes._1HHandicap, SpecialSportsBookBetTypes._1HOverUnder].includes(betTypeId);
-  }
-
-  private createActualMarketBetTypeHdp(correctOdds: string, betTypeId: string, templateValue: TemplateValue) {
-    const isFirstHalf = this.isFirstHalfBetType(betTypeId);
-    const prfixSubType = this.templateService.getPrefixSubType(isFirstHalf);
-    const actualMarket: TemplateContent = {
-      msgEnglish: `${prfixSubType.msgEnglish}${this.templateService.getTeamName(templateValue)}@${TemplateContentConst.ODDS.msgEnglish} ${correctOdds}`,
-      msgChineseTraditional: `${prfixSubType.msgChineseTraditional}${this.templateService.getTeamNameTraditional(templateValue)}@${TemplateContentConst.ODDS.msgChineseTraditional} ${correctOdds}`,
-      msgChineseSimplified: `${prfixSubType.msgChineseSimplified}${this.templateService.getTeamNameSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
-      msgChineseNewSimplified: `${prfixSubType.msgChineseNewSimplified}${this.templateService.getTeamNameNewSimplified(templateValue)}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${correctOdds}`
-    };
-
-    return actualMarket;
-  }
-
-  private createActualMarketBetTypeOu(correctOdds: string, betTypeId: string, inputOverUnder: string) {
-    const isFirstHalf = this.isFirstHalfBetType(betTypeId);    
-    const prefixSubType = this.templateService.getPrefixSubType(isFirstHalf);
-    const actualMarket: TemplateContent = {
-      msgEnglish: `${prefixSubType.msgEnglish}${TemplateContentConst.OVER.msgEnglish}-${inputOverUnder}@${TemplateContentConst.ODDS.msgEnglish} ${correctOdds}`,
-      msgChineseTraditional: `${prefixSubType.msgChineseTraditional}${TemplateContentConst.OVER.msgChineseTraditional}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseTraditional} ${correctOdds}`,
-      msgChineseSimplified: `${prefixSubType.msgChineseSimplified}${TemplateContentConst.OVER.msgChineseSimplified}${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
-      msgChineseNewSimplified: `${prefixSubType.msgChineseNewSimplified}${TemplateContentConst.OVER.msgChineseNewSimplified}-${inputOverUnder}@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${correctOdds}`
-    };
-
-    return actualMarket;
-  }
-
-  private createActualMarketOtherBetType(correctOdds: string) {
-    const actualMarket: TemplateContent = {
-      msgEnglish: `@${TemplateContentConst.ODDS.msgEnglish} ${correctOdds}`,
-      msgChineseTraditional: `@${TemplateContentConst.ODDS.msgChineseTraditional} ${correctOdds}`,
-      msgChineseSimplified: `@${TemplateContentConst.ODDS.msgChineseSimplified} ${correctOdds}`,
-      msgChineseNewSimplified: `@${TemplateContentConst.ODDS.msgChineseNewSimplified} ${correctOdds}`
-    };
-
-    return actualMarket;
   }
 }

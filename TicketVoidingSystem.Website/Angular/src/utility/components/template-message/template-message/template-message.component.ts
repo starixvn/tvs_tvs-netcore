@@ -1,17 +1,22 @@
 import { Component, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import moment from 'moment-timezone';
-import { AbnormalFilterBy, FunctionConst, SubIssueTypeGroup } from '../../../../utility/constants/config';
-import { OrdinalNumberConstant } from '../../../../utility/constants/ordinal-number.constant';
+import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
+import { AbnormalFilterBy, FunctionConst } from '../../../../utility/constants/config';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { HttpService } from '../../../../utility/services/http.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { Message } from '../messages/message';
 import { MessagesComponent } from './../messages/messages.component';
+import { ReplaceAIOMessageService } from './services/replace-aio-message.serivce';
+import { ReplaceCommonValuesService } from './services/replace-common-values.service';
+import { ReplaceEventTypeService } from './services/replace-event-type.service';
+import { ReplacePlacedFromTimeRangeService } from './services/replace-placed-from-time-range.service';
+import { ReplaceScoreService } from './services/replace-score.service';
+import { ReplaceSpecialBetTypeService } from './services/replace-special-bet-type.service';
+import { TemplateInputsForTVSService } from './services/template-inputs-for-tvs.service';
+import { TemplateInputsService } from './services/template-inputs.service';
 import { TemplateSetting, TemplateSettings } from './template-setting.model';
-import { FormatDateTime, IssueTypeId, SubIssueTypeId, TemplateContentConst, TemplateReplace } from './template.const';
-import { InputText, TemplateContent, TemplateModel, TemplateValue } from './template.model';
-import { TemplateService } from './template.service';
+import { InputText, TemplateModel, TemplateValue } from './template.model';
 
 const MESSAGE_TEMPLATE_ID_8 = 8;
 const MESSAGE_TEMPLATE_ID_9 = 9;
@@ -60,19 +65,25 @@ export class TemplateMessageComponent implements OnChanges {
   ];
 
   private readonly autoBindingChineseForIssueId = [
-    IssueTypeId.WRONG_HDP,
-    IssueTypeId.WRONG_1ST_HDP,
-    IssueTypeId.WRONG_OU,
-    IssueTypeId.WRONG_1ST_OU,
-    IssueTypeId.WRONG_SCORE,
-    IssueTypeId.WRONG_MARKET_OFFERED
+    IssueTypeConstant.WRONG_HDP,
+    IssueTypeConstant.WRONG_1ST_HDP,
+    IssueTypeConstant.WRONG_OU,
+    IssueTypeConstant.WRONG_1ST_OU,
+    IssueTypeConstant.WRONG_SCORE,
+    IssueTypeConstant.WRONG_MARKET_OFFERED
   ];
 
   public initialize: boolean;
 
   constructor(private readonly httpService: HttpService,
-
-    private readonly templateService: TemplateService,
+    private readonly replaceEventTypeService: ReplaceEventTypeService,
+    private readonly replaceCommonValuesService: ReplaceCommonValuesService,
+    private readonly replacePlacedFromTimeRangeService: ReplacePlacedFromTimeRangeService,
+    private readonly replaceScoreService: ReplaceScoreService,
+    private readonly replaceAIOMessageService: ReplaceAIOMessageService,
+    private readonly replaceSpecialBetTypeService: ReplaceSpecialBetTypeService,
+    private readonly templateInputsService: TemplateInputsService,
+    private readonly templateInputsServiceForTVS: TemplateInputsForTVSService
   ) { }
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
@@ -112,14 +123,14 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   setChineseInput(item: InputText) {
-    if (this.autoBindingChineseForIssueId.indexOf(this.issueTypeId) > -1) {
+    if (this.autoBindingChineseForIssueId.includes(this.issueTypeId?.toString())) {
       item.msgChineseTraditionalValue = item.msgChineseSimplifiedValue = item.msgChineseNewSimplifiedValue = item.msgEnglishValue;
     }
   }
 
   updateTemplate() {
     let templateId = 0;
-    if (this.isAbnormalAccount() || this.isAbnormalBetMixOrSystemParlay()) {
+    if (StaticService.isAbnormalAccountNumber(this.issueTypeId) || this.isAbnormalBetMixOrSystemParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_37;
     } else if (this.isDuplicateTicketsMixParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_65;
@@ -127,7 +138,6 @@ export class TemplateMessageComponent implements OnChanges {
       templateId = this.findTemplateId(this.subIssueTypeId, this.value.sportTypeId, this.value.isCheckedVar);
     }
     this.selectedTemplated = this.templates.find(x => x.templateId === templateId);
-    this.updateInputsNextCorner();
     this.updateMessage();
   }
 
@@ -139,10 +149,16 @@ export class TemplateMessageComponent implements OnChanges {
     const settingBySportType = settingsBySubType.find(x => x.sportType === filterSportType && x.isCheckedVar === filterVar);
     const defaultTemplateWhenSportNull = settingsBySubType.find(x => x.sportType === null && x.isCheckedVar === filterVar);
 
-    return settingBySportType ? settingBySportType.templateId :
-      (defaultTemplateWhenSportNull ? defaultTemplateWhenSportNull.templateId : 9999);
+    if (settingBySportType) {
+      return settingBySportType.templateId;
+    }
+
+    return (defaultTemplateWhenSportNull ? defaultTemplateWhenSportNull.templateId : 9999);
   }
 
+  /**
+   * Because Check VAR has other template, so we need to update Template again
+   */
   updateCheckBoxVarMessage() {
     this.updateTemplate();
     this.initialMessage = _.cloneDeep(this.message);
@@ -150,288 +166,44 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateMessage() {
     this.resetMessage();
-    this.replaceEventType();
-    this.replaceValue();
-    if (this.isTVSVoidPage() && this.isWrongScore()) {
-      this.updateMessageForWrongScore();
-    } else if (this.isTVSVoidPage() && (this.isWrongHDP() || this.isWrong1stHDP())) {
-      this.selectedTemplated.inputTexts = [];
-      this.updateWrongMarketTVS();
-      this.updateActualMarketTVS();
-      this.updateHdpTVS();
-    } else if (this.isTVSVoidPage() && (this.isWrongOU() || this.isWrong1stOU())) {
-      this.selectedTemplated.inputTexts = [];
-      this.updateWrongMarketTVS();
-      this.updateActualMarketTVS();
-    } else if (this.isTVSVoidPage() && this.isWrongOdds()) {
-      this.selectedTemplated.inputTexts = [];
-      this.updateActualMarketTvsWrongOdds();
-    } else if (this.isWrongOddsSportsBook()) {
-      this.selectedTemplated.inputTexts = [];
-      this.updateActualMarketTVS();
+
+    this.replaceEventTypeService.execute(this.value, this.issueTypeId, this.subIssueTypeId, this.message);
+    this.replaceCommonValuesService.replaceSportType(this.value, this.message);
+    this.replaceCommonValuesService.replaceHomeTeamName(this.value, this.message);
+    this.replaceCommonValuesService.replaceAwayTeamName(this.value, this.message);
+    this.replaceCommonValuesService.replaceLeagueName(this.value, this.message);
+    this.replaceCommonValuesService.replaceEventDate(this.value, this.message);
+    this.replacePlacedFromTimeRangeService.execute(this.value, this.message, this.selectedTemplated.templateId);
+    this.replaceCommonValuesService.replaceKickOffTime(this.value, this.message);
+    this.replaceCommonValuesService.replacePlayerName(this.value, this.message);
+
+    this.templateInputsService.updateOrdinalNumberForInputsNextCorner(this.issueTypeId, this.selectedTemplated, this.value);
+    if (this.isTVSVoidPage()) {
+      this.templateInputsServiceForTVS.replaceInputsByIssueType(this.issueTypeId, this.subIssueTypeId, this.value, this.message);
     } else {
-      this.updateInputs();
+      this.templateInputsService.replaceInputs(this.subIssueTypeId, this.selectedTemplated, this.message);
     }
 
-    this.value.isUpdateScoreHaveText ? this.updateScoreHaveText() : this.updateScore();
-    this.updateParlay();
-    this.updateCheckStatement();
-    this.updateAIOMessage();
-    this.updateSpecialBetType();
-    this.updateActualMarketTvsWrongOdds();
+    this.replaceScoreService.execute(this.value, this.message);
+    this.replaceCommonValuesService.replaceParlay(this.isAbnormalBetMixOrSystemParlay(), this.message);
+    this.replaceCommonValuesService.replaceCheckStatement(this.value, this.message);
+    this.replaceAIOMessageService.execute(this.isVoidSinglePage(), this.value, this.message);
+    this.replaceSpecialBetTypeService.execute(this.isLikelyWrongMarketOffered(), this.issueTypeUpdateSpecialBetTypeVoidSingleBet(), this.value, this.message);
+
     this.message.isTVSAddOrEditPage = this.isTVSAddOrEditPage();
   }
 
-  resetMessage() {
+  private resetMessage(): void {
     this.message.contentEnglish = this.selectedTemplated.msgEnglish;
     this.message.contentChineseTraditional = this.selectedTemplated.msgChineseTraditional;
     this.message.contentChineseSimplified = this.selectedTemplated.msgChineseSimplified;
     this.message.contentNewChineseSimplified = this.selectedTemplated.msgChineseNewSimplified;
   }
 
-  replaceValue() {
-    this.templateService.replaceEachLanguage(this.message, TemplateReplace.SPORT_TYPE, this.value.sportType);
-    this.templateService.replaceEachLanguage(this.message, TemplateReplace.HOME_TEAM_NAME, this.value.homeTeamName);
-    this.templateService.replaceEachLanguage(this.message, TemplateReplace.AWAY_TEAM_NAME, this.value.awayTeamName);
-    this.templateService.replaceEachLanguage(this.message, TemplateReplace.LEAGUE_NAME, this.value.leagueName);
-    this.templateService.replaceEventDate(this.message, this.value.match?.kickOffTime);
-    this.templateService.replaceTime(this.message, this.value, this.selectedTemplated.templateId);
-    this.templateService.replaceKickOffTime(this.message, this.value?.kickOffTime);
-    this.templateService.replaceEachLanguage(this.message, TemplateReplace.PLAYER_NAME, this.value.playerName);
-  }
-
-  replaceEventType(): void {
-    if (this.value.eventType === EventType.LIVE) {
-      this.value.isCheckedEarlyEvent = false;
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.EVENT_TYPE, TemplateContentConst.LIVE);
-      return;
-    }
-
-    if (this.value.isCheckedEarlyEvent) {
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.EVENT_TYPE, TemplateContentConst.EARLY);
-      return;
-    }
-
-    if (this.checkCanUpdateEventTypeToBlank()) {
-      this.templateService.replaceAll(this.message, TemplateReplace.EVENT_TYPE, '');
-    } else {
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.EVENT_TYPE, TemplateContentConst.EARLY);
-    }
-  }
-
-  checkCanUpdateEventTypeToBlank(): boolean {
-    const issueTypes = [
-      IssueTypeId.DANGER_ACCEPTED,
-      IssueTypeId.WRONG_SCORE,
-      IssueTypeId.RED_CARD,
-      IssueTypeId.WRONG_MARKET_OFFERED,
-      IssueTypeId.REDUCED_OVER,
-      IssueTypeId.ABANDONED,
-      IssueTypeId.MATCH_COMPLETED,
-      IssueTypeId.NOT_PARTICIPATE,
-      IssueTypeId.WRONG_QUARTER_HDP
-    ];
-
-    const subIssueTypeS = [
-      SubIssueTypeId.GAME_CRASHED_VOID_LIVE,
-      SubIssueTypeId.TECHNICAL_ERROR
-    ];
-
-    const isSpecialIssueType = issueTypes.includes(this.issueTypeId) ||
-      (this.issueTypeId === IssueTypeId.OTHER_ISSUES && subIssueTypeS.includes(this.subIssueTypeId));
-
-    const isDateMismatched = this.value.eventDate !== moment.utc().tz('America/Caracas').format(FormatDateTime.EVENT_DATE);
-
-    if (isSpecialIssueType && isDateMismatched) {
-      return false;
-    }
-
-    const issueTypesHasCheckBoxEarlyEvent = [
-      IssueTypeId.WRONG_ODDS,
-      IssueTypeId.WRONG_HDP,
-      IssueTypeId.WRONG_1ST_HDP,
-      IssueTypeId.WRONG_OU,
-      IssueTypeId.WRONG_1ST_OU
-    ];
-
-    const isCheckedEarlyEvent = issueTypesHasCheckBoxEarlyEvent.includes(this.issueTypeId) && this.value.isCheckedEarlyEvent;
-
-    return !isCheckedEarlyEvent;
-  }
-
-  updateInputs() {
-    if (this.selectedTemplated.inputTexts?.length > 0) {
-      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
-        this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
-          this.selectedTemplated.inputTexts[0].msgEnglishValue);
-        this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
-          this.selectedTemplated.inputTexts[1].msgEnglishValue);
-      } else {
-        this.selectedTemplated.inputTexts.forEach(item => {
-          const text: TemplateContent = {
-            msgEnglish: item.msgEnglishValue,
-            msgChineseTraditional: item.msgChineseTraditionalValue,
-            msgChineseSimplified: item.msgChineseSimplifiedValue,
-            msgChineseNewSimplified: item.msgChineseNewSimplifiedValue
-          };
-          this.templateService.replaceEachLanguage(this.message, `{{${item.name}}}`, text);
-        });
-      }
-    }
-  }
-
-  updateInputsNextCorner() {
-    for (const element of this.selectedTemplated.inputTexts) {
-      if (this.issueTypeId === IssueTypeId.DANGER_ACCEPTED && this.value.numberOfCorner && element.msgEnglish === "Next Corner") {
-        const nextCorner = OrdinalNumberConstant.ORDINAL_NUMBER.find(x => x.value === this.value.numberOfCorner.toString());
-        element.msgEnglishValue = nextCorner.englishValue;
-        element.msgChineseTraditionalValue = `第${nextCorner.chineseTraditionalValue}`;
-        element.msgChineseSimplifiedValue = `第${nextCorner.chineseSimplifiedValue}`;
-        element.msgChineseNewSimplifiedValue = `第${nextCorner.chineseSimplifiedValue}`;
-      }
-    }
-  }
-
-  updateMessageForWrongScore() {
-    if (this.issueTypeId === IssueTypeId.WRONG_SCORE) {
-      if (SubIssueTypeGroup.SUBTYPE_ONWARDS.includes(this.subIssueTypeId)) {
-        this.templateService.replaceWrongScoreOfWrongScoreIssueType(this.message,
-          this.value.wrongScore);
-        this.templateService.replaceActualScoreOfWrongScoreIssueType(this.message,
-          this.value.actualScore);
-      } else {
-        const replacedContent: TemplateContent = {
-          msgEnglish: `${this.value.actualScore}`,
-          msgChineseTraditional: `${this.value.actualScore}`,
-          msgChineseSimplified: `${this.value.actualScore}`,
-          msgChineseNewSimplified: `${this.value.actualScore}`
-        };
-
-        this.templateService.replaceEachLanguage(this.message, TemplateReplace.ACTUAL_SCORE, replacedContent);
-      }
-    }
-  }
-
-  updateWrongMarketTVS() {
-    if (this.value.wrongMarket) {
-      const content: TemplateContent = {
-        msgEnglish: `${this.value.wrongMarket}`,
-        msgChineseTraditional: `${this.value.wrongMarket}`,
-        msgChineseSimplified: `${this.value.wrongMarket}`,
-        msgChineseNewSimplified: `${this.value.wrongMarket}`
-      };
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.WRONG_MARKET, content);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.WRONG_MARKET, '');
-    }
-  }
-
-  updateActualMarketTVS() {
-    if (this.value.actualMarket) {
-      const content: TemplateContent = {
-        msgEnglish: `${this.value.actualMarket}`,
-        msgChineseTraditional: `${this.value.actualMarket}`,
-        msgChineseSimplified: `${this.value.actualMarket}`,
-        msgChineseNewSimplified: `${this.value.actualMarket}`
-      };
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.ACTUAL_MARKET, content);
-    } else if (this.value.actualMarketSportsBook)  {
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.ACTUAL_MARKET, this.value.actualMarketSportsBook);
-    }
-    else{
-      this.templateService.replaceAll(this.message, TemplateReplace.ACTUAL_MARKET, '');
-    } 
-  }
-
-  updateHdpTVS() {
-    if (this.value.hdpValue) {
-      const content: TemplateContent = {
-        msgEnglish: `${this.value.hdpValue}`,
-        msgChineseTraditional: `${this.value.hdpValue}`,
-        msgChineseSimplified: `${this.value.hdpValue}`,
-        msgChineseNewSimplified: `${this.value.hdpValue}`
-      };
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.HDP_VALUE, content);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.HDP_VALUE, '');
-    }
-  }
-
-  updateScore() {
-    if (this.value.score !== undefined && this.value.score.length > 0 && !this.value?.isAllNonLiveTickets) {
-      const score: TemplateContent = {
-        msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score}) `,
-        msgChineseTraditional: `(${TemplateContentConst.SCORE.msgChineseTraditional} ${this.value.score}) `,
-        msgChineseSimplified: `(${TemplateContentConst.SCORE.msgChineseSimplified} ${this.value.score}) `,
-        msgChineseNewSimplified: `(${TemplateContentConst.SCORE.msgChineseNewSimplified} ${this.value.score}) `
-      };
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.SCORE, score);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.SCORE, '');
-    }
-  }
-
-  updateScoreHaveText() {
-    if (this.value.score !== undefined && this.value.score.length > 0 && !this.value?.isAllNonLiveTickets) {
-      const score: TemplateContent = {
-        msgEnglish: `(${TemplateContentConst.SCORE.msgEnglish} ${this.value.score} ${TemplateContentConst.ONWARDS.msgEnglish}) `,
-        msgChineseTraditional:
-          `(${TemplateContentConst.SCORE.msgChineseTraditional} ${this.value.score} ${TemplateContentConst.ONWARDS.msgChineseTraditional}) `,
-        msgChineseSimplified:
-          `(${TemplateContentConst.SCORE.msgChineseSimplified} ${this.value.score} ${TemplateContentConst.ONWARDS.msgChineseSimplified}) `,
-        msgChineseNewSimplified:
-          `(${TemplateContentConst.SCORE.msgChineseNewSimplified} ${this.value.score} ${TemplateContentConst.ONWARDS.msgChineseNewSimplified}) `
-      };
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.SCORE, score);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.SCORE, '');
-    }
-  }
-
-  updateCheckStatement() {
-    if (this.value.checkSettled) {
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.CHECK_STATEMENT, TemplateContentConst.CHECK_STATEMENT);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.CHECK_STATEMENT, '');
-    }
-  }
-
-  updateAIOMessage() {
-    if ((this.isVoidSinglePage() && this.value.checkAIOMessage) || this.value.groupPHAffected !== 0) {
-      this.templateService.replaceAOIMessage(this.message, this.value.groupPHAffected);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.AOI_MESSAGE, '');
-    }
-  }
-
-  updateParlay() {
-    if (this.isAbnormalBetMixOrSystemParlay()) {
-      this.templateService.replaceEachLanguage(this.message, TemplateReplace.PARLAY, TemplateContentConst.PARLAY);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.PARLAY, '');
-    }
-  }
-
-  updateSpecialBetType() {
-    if (this.value.isCheckedSpecialBetType && (this.isLikelyWrongMarketOffered() || this.issueTypeUpdateSpecialBetTypeVoidSingleBet())) {
-      this.templateService.replaceSpecialBetType(this.message, this.value.betTypeNameReplaceMessage);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.SPECIAL_BET_TYPE, '');
-    }
-  }
-
-  updateActualMarketTvsWrongOdds() {
-    if (this.isTVSVoidPage() && this.isWrongOdds()) {
-      this.templateService.replaceActualMarketTvsWrongOdds(this.message, this.subIssueTypeId, this.value);
-    } else {
-      this.templateService.replaceAll(this.message, TemplateReplace.ACTUAL_MARKET, '');
-    }
-  }
-
   issueTypeUpdateSpecialBetTypeVoidSingleBet(): boolean {
     return this.isVoidSinglePage() &&
-      (this.isWrongHDP() || this.isWrongQuarterHDP() || this.isWrongOdds() || this.isLikelyWrongMarketOffered()
-        || (this.isWrongOU() && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
+      (StaticService.isWrongHDPNumber(this.issueTypeId) || StaticService.isWrongQuarterHDPNumber(this.issueTypeId) || StaticService.isWrongOddsNumber(this.issueTypeId)
+        || this.isLikelyWrongMarketOffered() || (StaticService.isWrongOUNumber(this.issueTypeId) && this.selectedTemplated.templateId !== MESSAGE_TEMPLATE_ID_38));
   }
 
   checkValidation(): boolean {
@@ -459,48 +231,32 @@ export class TemplateMessageComponent implements OnChanges {
 
   isShowCheckBoxVarMessage(): boolean {
     return this.isShowMessages
-      && this.isVoidSinglePage() && (this.isDangerAccepted() || this.isRedCard() || this.isWrongScore())
+      && this.isVoidSinglePage() && (StaticService.isDangerAcceptedNumber(this.issueTypeId) || StaticService.isRedCardNumber(this.issueTypeId) || StaticService.isWrongScoreNumber(this.issueTypeId))
       && this.templateSettings.some(x => x.subIssueTypeId === this.subIssueTypeId && x.isCheckedVar);
   }
 
   isShowAioCheckBoxMessage(): boolean {
-    return this.isShowMessages && this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU() || this.isWrongOdds());
+    return this.isShowMessages && this.isVoidSinglePage()
+      && (StaticService.isWrongHDPNumber(this.issueTypeId) || StaticService.isWrong1stHDPNumber(this.issueTypeId)
+        || StaticService.isWrongOUNumber(this.issueTypeId) || StaticService.isWrong1stOUNumber(this.issueTypeId) || StaticService.isWrongOddsNumber(this.issueTypeId));
   }
 
   isShowEarlyEventCheckBoxMessage(): boolean {
-    return this.isShowMessages && (this.issueTypeShowEarlyEventCheckBox() || this.isWrongOdds());
+    return this.isShowMessages && (this.issueTypeShowEarlyEventCheckBox() || StaticService.isWrongOddsNumber(this.issueTypeId));
   }
 
   issueTypeShowEarlyEventCheckBox(): boolean {
-    return this.isVoidSinglePage() && (this.isWrongHDP() || this.isWrong1stHDP() || this.isWrongOU() || this.isWrong1stOU());
+    return this.isVoidSinglePage()
+      && (StaticService.isWrongHDPNumber(this.issueTypeId) || StaticService.isWrong1stHDPNumber(this.issueTypeId)
+        || StaticService.isWrongOUNumber(this.issueTypeId) || StaticService.isWrong1stOUNumber(this.issueTypeId));
   }
 
   isAbnormalBetMixOrSystemParlay(): boolean {
-    return this.isAbnormalBet() && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
+    return StaticService.isAbnormalBetNumber(this.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
   }
 
   isDuplicateTicketsMixParlay(): boolean {
-    return StaticService.isDuplicateTickets(this.issueTypeId?.toString()) && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
-  }
-
-  isAbnormalAccount(): boolean {
-    return StaticService.isAbnormalAccount(this.issueTypeId?.toString());
-  }
-
-  isAbnormalBet(): boolean {
-    return StaticService.isAbnormalBet(this.issueTypeId?.toString());
-  }
-
-  isWrongScore(): boolean {
-    return StaticService.isWrongScore(this.issueTypeId?.toString());
-  }
-
-  isDangerAccepted(): boolean {
-    return StaticService.isDangerAccepted(this.issueTypeId?.toString());
-  }
-
-  isRedCard(): boolean {
-    return StaticService.isRedCard(this.issueTypeId?.toString());
+    return StaticService.isDuplicateTicketsNumber(this.issueTypeId) && this.value.filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
 
   isTVSVoidPage(): boolean {
@@ -516,40 +272,15 @@ export class TemplateMessageComponent implements OnChanges {
   }
 
   isShowDynamicInputs(): boolean {
-    return this.isVoidSinglePage() || (this.isTVSVoidPage() && !this.isWrongScore() && !this.isWrongOdds());
-  }
-
-  isWrongOdds(): boolean {
-    return StaticService.isWrongOdds(this.issueTypeId?.toString());
-  }
-
-  isWrongHDP(): boolean {
-    return StaticService.isWrongHDP(this.issueTypeId?.toString());
-  }
-
-  isWrong1stHDP(): boolean {
-    return StaticService.isWrong1stHDP(this.issueTypeId?.toString());
-  }
-
-  isWrongQuarterHDP(): boolean {
-    return StaticService.isWrongQuarterHDP(this.issueTypeId?.toString());
-  }
-
-  isWrongOU(): boolean {
-    return StaticService.isWrongOU(this.issueTypeId?.toString());
-  }
-
-  isWrong1stOU(): boolean {
-    return StaticService.isWrong1stOU(this.issueTypeId?.toString());
-  }
-
-  isOtherIssues(): boolean {
-    return StaticService.isOtherIssues(this.issueTypeId?.toString());
+    return this.isVoidSinglePage()
+      || (this.isTVSVoidPage() && !StaticService.isWrongScoreNumber(this.issueTypeId) && !StaticService.isWrongOddsNumber(this.issueTypeId) && !this.isWrongOddsSportsBook()
+        && !StaticService.isWrongHDPNumber(this.issueTypeId) && !StaticService.isWrong1stHDPNumber(this.issueTypeId)
+        && !StaticService.isWrongOUNumber(this.issueTypeId) && !StaticService.isWrong1stOUNumber(this.issueTypeId));
   }
 
   isLikelyWrongMarketOffered(): boolean {
-    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString()) 
-    || StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
+    return StaticService.isLikelyWrongMarketOffered(this.issueTypeId?.toString())
+      || StaticService.isWrongOddsSportsBook(this.issueTypeId?.toString());
   }
 
   isWrongOddsSportsBook(): boolean {

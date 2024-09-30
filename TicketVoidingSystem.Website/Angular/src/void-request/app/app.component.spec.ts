@@ -3,7 +3,7 @@ import { Shallow } from 'shallow-render';
 import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
 import { BlockUiModule } from '../../utility/components/block-ui/block-ui.module';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { TemplateService } from '../../utility/components/template-message/template-message/template.service';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { ToolTipModule } from '../../utility/components/tooltip/tooltip.module';
 import { IssueTypeConstant } from '../../utility/constants/issue-type.constant';
 import { HttpService } from '../../utility/services/http.service';

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
@@ -20,7 +20,7 @@ export class VoidPageService {
     private readonly appService: AppService,
     private readonly ticketsService: TicketsService,
     private readonly templateService: TemplateService
-    ) {
+  ) {
   }
 
   async getIssueTypes(): Promise<IssueTypesModel> {
@@ -57,14 +57,14 @@ export class VoidPageService {
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo[] {
-      return requestDetail.earlyKickOffModels.map(x => {
-        const info: BasicRequestInfo = {
-          matchId: x.matchId,
-          subIssueTypeId: x.subIssueTypeId,
-          isMainMatch: x.isMainMatch,
-        };
-        return info;
-      });
+    return requestDetail.earlyKickOffModels.map(x => {
+      const info: BasicRequestInfo = {
+        matchId: x.matchId,
+        subIssueTypeId: x.subIssueTypeId,
+        isMainMatch: x.isMainMatch,
+      };
+      return info;
+    });
   }
 
   private getSubIssueTypeModel(subIssueTypeId: number, issueTypes: IssueTypesModel): SubIssueType {
@@ -80,7 +80,7 @@ export class VoidPageService {
   }
 
   private getTemplateValue(voidMatch: VoidPageEarlyKickOffModel): TemplateValue {
-    const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
+    const templateValue = this.templateService.initializeTemplateValue(voidMatch.matchModel);
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
     return templateValue;
   }

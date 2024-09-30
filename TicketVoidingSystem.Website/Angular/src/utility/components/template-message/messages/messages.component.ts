@@ -85,8 +85,7 @@ export class MessagesComponent {
       this.tooltip.display('spanish', LABELS.INVALID_SPANISH);
       return false;
     }
-
-
+    
     return true;
   }
 

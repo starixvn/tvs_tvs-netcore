@@ -25,20 +25,40 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.ABNORMAL_BET;
   }
 
+  static isAbnormalBetNumber(issueTypeId: number): boolean {
+    return this.isAbnormalBet(issueTypeId?.toString());
+  }
+
   static isDangerAccepted(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.DANGER_ACCEPTED;
+  }
+
+  static isDangerAcceptedNumber(issueTypeId: number): boolean {
+    return this.isDangerAccepted(issueTypeId?.toString());
   }
 
   static isRedCard(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.RED_CARD;
   }
 
+  static isRedCardNumber(issueTypeId: number): boolean {
+    return this.isRedCard(issueTypeId?.toString());
+  }
+
   static isWrongScore(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_SCORE;
   }
 
+  static isWrongScoreNumber(issueTypeId: number): boolean {
+    return this.isWrongScore(issueTypeId?.toString());
+  }
+
   static isAbnormalAccount(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.ABNORMAL_ACCOUNT;
+  }
+
+  static isAbnormalAccountNumber(issueTypeId: number): boolean {
+    return this.isAbnormalAccount(issueTypeId?.toString());
   }
 
   static isEarlyKickOff(issueTypeId: string): boolean {
@@ -53,24 +73,48 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.WRONG_ODDS;
   }
 
+  static isWrongOddsNumber(issueTypeId: number): boolean {
+    return this.isWrongOdds(issueTypeId?.toString());
+  }
+
   static isWrongHDP(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_HDP;
+  }
+
+  static isWrongHDPNumber(issueTypeId: number): boolean {
+    return this.isWrongHDP(issueTypeId?.toString());
   }
 
   static isWrong1stHDP(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_1ST_HDP;
   }
 
+  static isWrong1stHDPNumber(issueTypeId: number): boolean {
+    return this.isWrong1stHDP(issueTypeId?.toString());
+  }
+
   static isWrongQuarterHDP(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_QUARTER_HDP;
+  }
+
+  static isWrongQuarterHDPNumber(issueTypeId: number): boolean {
+    return this.isWrongQuarterHDP(issueTypeId?.toString());
   }
 
   static isWrongOU(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_OU;
   }
 
+  static isWrongOUNumber(issueTypeId: number): boolean {
+    return this.isWrongOU(issueTypeId?.toString());
+  }
+
   static isWrong1stOU(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_1ST_OU;
+  }
+
+  static isWrong1stOUNumber(issueTypeId: number): boolean {
+    return this.isWrong1stOU(issueTypeId?.toString());
   }
 
   static isArchivedTicket(issueTypeId: string): boolean {
@@ -93,6 +137,10 @@ export class StaticService {
     return issueTypeId === IssueTypeConstant.DUPLICATE_TICKETS;
   }
 
+  static isDuplicateTicketsNumber(issueTypeId: number): boolean {
+    return this.isDuplicateTickets(issueTypeId?.toString());
+  }
+
   static isNotParticipate(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.NOT_PARTICIPATE;
   }
@@ -107,6 +155,10 @@ export class StaticService {
 
   static isWrongOddsSportsBook(issueTypeId: string): boolean {
     return issueTypeId === IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK;
+  }
+
+  static isWrongOddsSportsBookNumber(issueTypeId: number): boolean {
+    return this.isWrongOddsSportsBook(issueTypeId?.toString());
   }
 
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
@@ -397,7 +449,7 @@ export class StaticService {
     const editingBy = Number(document.getElementById('body').getAttribute('user-id'));
     return isEdit && editingBy !== createdBy;
   }
-  
+
   static isHasWarningTakenNote(currentAction: string, actionIdOfFirstTimeAccess: string): boolean {
     return currentAction === TVSRequestActionType.TAKE_NOTE_ID.toString() && currentAction !== actionIdOfFirstTimeAccess;
   }

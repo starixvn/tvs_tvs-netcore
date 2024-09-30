@@ -1,4 +1,5 @@
 import { MatchModel } from "../../../models/match.model";
+import { BetTeamAddRequestResult } from '../../advanced-mode-add-request/advanced-mode/advanced-mode.model';
 import { Message } from "../messages/message";
 
 export class TemplateContent {
@@ -62,5 +63,9 @@ export class TemplateValue {
   playerName?: TemplateContent;
   numberOfCorner?: number;
   isAllNonLiveTickets?: boolean
-  actualMarketSportsBook?: TemplateContent;
+
+  // for template wrong odds sport book
+  totalBetTypesSelected?: number;
+  uniqueBetTypeSelected?: BetTeamAddRequestResult;
+  correctOdds?: string; 
 }

@@ -13,9 +13,9 @@ import { AffectedLicensee } from '../../../utility/components/licensee-affected-
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging/paging.model';
+import { TemplateService } from '../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../utility/components/template-message/template-message/template.service';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ModeType, SubIssueTypeGroup, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { LABELS } from '../../../utility/constants/labels';
@@ -149,8 +149,8 @@ export class VoidOtherIssueComponent implements OnInit {
     }
 
     if (this.isWrongOdds()) {
-       this.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
-       this.correctOddsAwayUnder = this.requestDetail.wrongOddsModels[0].correctOddsAwayUnder;
+      this.correctOddsHomeOver = this.requestDetail.wrongOddsModels[0].correctOddsHomeOver;
+      this.correctOddsAwayUnder = this.requestDetail.wrongOddsModels[0].correctOddsAwayUnder;
     }
   }
 
@@ -248,7 +248,7 @@ export class VoidOtherIssueComponent implements OnInit {
     if (this.isArchivedTickets()) {
       return;
     }
-    this.templateValue = this.templateService.getTemplateValue(this.query.match);
+    this.templateValue = this.templateService.initializeTemplateValue(this.query.match);
     this.templateValue.groupPHAffected = this.ticketsModel.groupPHAffected;
     this.templateValue.checkSettled = this.checkSettled();
     this.templateValue.fromTransTime = this.ticketsModel.fromTime;
@@ -451,8 +451,8 @@ export class VoidOtherIssueComponent implements OnInit {
   }
 
   isReducedOver() {
-    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId.toString()) 
-    || StaticService.isAbandoned(this.requestDetail.request.issueTypeId.toString());
+    return StaticService.isReducedOver(this.requestDetail.request.issueTypeId.toString())
+      || StaticService.isAbandoned(this.requestDetail.request.issueTypeId.toString());
   }
 
   async getGroupBetTypes(): Promise<void> {

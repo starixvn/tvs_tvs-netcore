@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
+import { WrongOddsSportsBookModel } from '../../../../add-request/app/add-request/models/event-wrong-odds-sports-book.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/template.service';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { EventType } from '../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
@@ -20,7 +21,7 @@ export class TemplateMessageService {
   }
 
   getTemplateValue(voidMatch: VoidMatch, requestDetail: RequestDetailViewModel): TemplateValue {
-    const templateValue = this.templateService.getTemplateValue(voidMatch.matchModel);
+    const templateValue = this.templateService.initializeTemplateValue(voidMatch.matchModel);
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidMatch.voidTicketsMini.isHasSettledTicket;
     templateValue.fromTransTime = voidMatch.voidTicketsMini.fromTime;
