@@ -32174,41 +32174,6 @@
       ],
       "Type": 1,
       "BetTypes": "9739"
-    },
-    {
-      "Selections": [
-        {
-          "Items": [
-            {
-              "Name": "All",
-              "Value": "All"
-            },
-            {
-              "Name": "Home",
-              "Value": "h"
-            },
-            {
-              "Name": "Away",
-              "Value": "a"
-            }
-          ],
-          "Name": "Team:",
-          "Value": "All",
-          "XmlAttribute": "Team"
-        }
-      ],
-      "Inputs": [
-        {
-          "Name": "Hdp:",
-          "Value": "",
-          "IsMultiple": true,
-          "XmlAttribute": "Hdp"
-        }
-      ],
-      "Name": "",
-      "Value": "",
-      "Type": 1,
-      "BetTypes": "8829"
     }
   ]
 }
