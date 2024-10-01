@@ -81,10 +81,10 @@ export class BetTeamAddRequestResult {
   hdp2: string;
   player: string;
   playerAndOdds: string;
-  betIdX: string;
-  betIdY: string;
-  filterBetIdX: string;
-  filterBetIdY: string;
+  betIdX: string; // store selected value
+  betIdY: string; // store selected value
+  filterBetIdX: string; // filter data in SPs only
+  filterBetIdY: string; // filter data in SPs only
 
   // Add common key for all bet types
   firstValue: string;
@@ -233,19 +233,19 @@ export class BetTeamAddRequest {
       case 'playerandodds':
         result.playerAndOdds = value;
         break;
-      case '_xxx': // ex: 8001
+      case '_xxx': // use for input: XXX value in betid type 8XXX, 8XXXYY; link to column betId
         result.betIdX = value;
-        result.filterBetIdX = this.getValueBetIdTypeXxx(value);
+        result.filterBetIdX = this.getValueBetIdTypeXxx(value); // value = 1 => _001; value = 11 => _011; value = 1111 => _1111
         break;
-      case 'yy': // ex: 80102 (8XXYY)
+      case 'yy': // use for input: YY value in betid type (8XXYY, 8XXXYY); link to column betId
         result.betIdY = value;
-        result.filterBetIdY = this.getValueBetIdTypeYy(value);
+        result.filterBetIdY = this.getValueBetIdTypeYy(value); // value = 1 => 01; value = 11 => 11; value = 111 => 111
         break;
-      case 'betidx': // ex: 801
+      case 'betidx': // use for selection: value is configured in the json file; link to column betId
         result.betIdX = value;
         result.filterBetIdX = value;
         break;
-      case 'betidy': // ex: 01
+      case 'betidy': // use for selection: value is configured in the json file; link to column betId
         result.betIdY = value;
         result.filterBetIdY = value;
         break;
